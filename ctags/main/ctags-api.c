@@ -15,10 +15,13 @@
 #include "types.h"
 #include "routines.h"
 #include "error.h"
-#include "output.h"
-#include "parse.h"
-#include "options.h"
+#include "mio.h"
+#include "writer_p.h"
+#include "parse_p.h"
+#include "options_p.h"
 #include "trashbox.h"
+#include "field.h"
+#include "xtag.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -43,16 +46,17 @@ static bool nofatalErrorPrinter (const errorSelection selection,
 
 extern void ctagsInit(void)
 {
+	initDefaultTrashBox ();
+
 	setErrorPrinter (nofatalErrorPrinter, NULL);
-	setTagWriter (&ctagsWriter);
+	setTagWriter (WRITER_U_CTAGS);
 
 	checkRegex ();
-	initFieldDescs ();
+	initFieldObjects ();
+	initXtagObjects ();
 
 	initializeParsing ();
 	initOptions ();
-
-	initDefaultTrashBox ();
 
 	/* make sure all parsers are initialized */
 	initializeParser (LANG_AUTO);

@@ -13,10 +13,11 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
-
 #include "types.h"
-#include "vstring.h"
 
+/*
+*   MACROS
+*/
 #define KEYWORD_NONE -1
 
 /*
@@ -25,9 +26,5 @@
 extern void addKeyword (const char *const string, langType language, int value);
 extern int lookupKeyword (const char *const string, langType language);
 extern int lookupCaseKeyword (const char *const string, langType language);
-extern void freeKeywordTable (void);
-#ifdef DEBUG
-extern void printKeywordTable (void);
-#endif
 
 #endif  /* CTAGS_MAIN_KEYWORD_H */

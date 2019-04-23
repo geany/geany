@@ -13,6 +13,8 @@
 #define CTAGS_MAIN_FIELD_H
 
 #include "general.h"
+#include "colprint_p.h"
+#include "writer_p.h"
 #include "types.h"
 
 #include "vstring.h"
@@ -42,35 +44,47 @@ typedef enum eFieldType { /* extension field content control */
 	FIELD_KIND_KEY,
 
 	/* EXTENSION FIELDS NEWLY INTRODUCED IN UCTAGS */
-	FIELD_ROLE,
+	FIELD_ROLES,
 	FIELD_REF_MARK,
 	FIELD_SCOPE_KEY,
-	FIELD_EXTRA,
+	FIELD_EXTRAS,
 	FIELD_XPATH,
 	FIELD_SCOPE_KIND_LONG,
-	FIELD_END,
-	FIELD_BUILTIN_LAST = FIELD_END,
+	FIELD_END_LINE,
+	FIELD_BUILTIN_LAST = FIELD_END_LINE,
 } fieldType ;
 
 typedef const char* (* renderEscaped) (const tagEntryInfo *const tag,
 				       const char *value,
-				       vString * buffer);
+				       vString * buffer,
+					   bool *rejected);
 typedef bool (* isValueAvailable) (const struct sTagEntryInfo *const tag);
 
+#define fieldDataTypeFalgs "sib" /* used in --list-fields */
+typedef enum eFieldDataType {
+	FIELDTYPE_STRING  = 1 << 0,
+	FIELDTYPE_INTEGER = 1 << 1,
+	FIELDTYPE_BOOL    = 1 << 2,
+
+	/* used in --list-fields */
+	FIELDTYPE_END_MARKER = 1 << 3,
+} fieldDataType;
+
 #define FIELD_LETTER_NO_USE '\0'
-typedef struct sFieldDefinition {
-	/* lettern, and ftype are initialized in the main part,
+struct sFieldDefinition {
+	/* letter, and ftype are initialized in the main part,
 	   not in a parser. */
 #define NUL_FIELD_LETTER '\0'
 	unsigned char letter;
 	const char* name;
 	const char* description;
 	bool enabled;
-	renderEscaped renderEscaped;
+	renderEscaped renderEscaped [WRITER_COUNT];
 	isValueAvailable isValueAvailable;
+	fieldDataType dataType; /* used in json output */
 
 	unsigned int ftype;	/* Given from the main part */
-} fieldDefinition;
+};
 
 
 extern fieldType getFieldTypeForOption (char letter);
@@ -93,19 +107,30 @@ extern bool enableField (fieldType type, bool state, bool warnIfFixedField);
 extern bool isCommonField (fieldType type);
 extern int     getFieldOwner (fieldType type);
 extern const char* getFieldName (fieldType type);
+extern unsigned int getFieldDataType (fieldType type);
 extern void printFields (int language);
 
+/* Whether the field specified with TYPE has a
+   method for rendering in the current format. */
 extern bool isFieldRenderable (fieldType type);
 
 extern bool doesFieldHaveValue (fieldType type, const tagEntryInfo *tag);
-extern const char* renderFieldEscaped (fieldType type, const tagEntryInfo *tag, int index);
+extern const char* renderFieldEscaped (writerType writer, fieldType type, const tagEntryInfo *tag, int index,
+									   bool *rejected);
 
-extern void initFieldDescs (void);
+extern void initFieldObjects (void);
 extern int countFields (void);
 
 /* language should be typed to langType.
    Use int here to avoid circular dependency */
 extern int defineField (fieldDefinition *spec, langType language);
 extern fieldType nextSiblingField (fieldType type);
+
+/* --list-fields implementation. LANGUAGE must be initialized. */
+extern struct colprintTable * fieldColprintTableNew (void);
+extern void fieldColprintAddCommonLines (struct colprintTable *table);
+extern void fieldColprintAddLanguageLines (struct colprintTable *table, langType language);
+extern void fieldColprintTablePrint (struct colprintTable *table,
+									 bool withListHeader, bool machinable, FILE *fp);
 
 #endif	/* CTAGS_MAIN_FIELD_H */

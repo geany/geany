@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include "entry.h"
+#include "promise.h"
 #include "options.h"
 #include "read.h"
 #include "routines.h"

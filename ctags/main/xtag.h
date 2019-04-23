@@ -13,6 +13,8 @@
 #define CTAGS_MAIN_XTAG_H
 
 #include "general.h"
+#include "colprint_p.h"
+
 
 typedef enum eXtagType { /* extra tag content control */
 	XTAG_UNKNOWN = -1,
@@ -22,14 +24,19 @@ typedef enum eXtagType { /* extra tag content control */
 	XTAG_PSEUDO_TAGS,
 	XTAG_QUALIFIED_TAGS,
 	XTAG_REFERENCE_TAGS,
-	XTAG_TAGS_GENERATED_BY_SUB_PARSERS,
+	XTAG_TAGS_GENERATED_BY_GUEST_PARSERS,
+	XTAG_TAGS_GENERATED_BY_SUBPARSER,
+	XTAG_SUBWORD,
 	XTAG_ANONYMOUS,
 
 	XTAG_COUNT
 } xtagType;
 
-typedef struct sXtagDesc {
+struct sXtagDefinition {
 	bool enabled;
+	/* letter, and ftype are initialized in the main part,
+	   not in a parser. */
+#define NUL_XTAG_LETTER '\0'
 	unsigned char letter;
 	const char* name;	 /* used in extra: field */
 	const char* description;  /* displayed in --list-extra output */
@@ -39,18 +46,38 @@ typedef struct sXtagDesc {
 
 	   "enabled" field of Pseudo extra tag depends on where
 	   the output stream is connected to. If it is connected
-	   to standared output, the tag is disabled by default.
+	   to standard output, the tag is disabled by default.
 	   If it is connected to a regular file, the tag is enabled
 	   by default. */
-	bool (* isEnabled) (struct sXtagDesc *desc);
-} xtagDesc;
+	bool (* isEnabled) (struct sXtagDefinition *def);
+	bool (* isFixed)   (struct sXtagDefinition *def);
+	void (* enable)    (struct sXtagDefinition *def, bool state);
 
-extern xtagDesc* getXtagDesc (xtagType type);
+	unsigned int xtype;	/* Given from the main part */
+};
+
+extern xtagDefinition* getXtagDefinition (xtagType type);
 extern xtagType  getXtagTypeForLetter (char letter);
-extern xtagType  getXtagTypeForName (const char *name);
+extern xtagType  getXtagTypeForNameAndLanguage (const char *name, langType language);
 extern bool isXtagEnabled (xtagType type);
 extern bool enableXtag (xtagType type, bool state);
+extern bool isXtagFixed (xtagType type);
+extern bool isCommonXtag (xtagType type);
+extern int  getXtagOwner (xtagType type);
+
 const char* getXtagName (xtagType type);
-extern void printXtags (void);
+
+extern void initXtagObjects (void);
+extern int countXtags (void);
+
+extern int defineXtag (xtagDefinition *def, langType language);
+extern xtagType nextSiblingXtag (xtagType type);
+
+/* --list-extras implementation. LANGUAGE must be initialized. */
+extern struct colprintTable * xtagColprintTableNew (void);
+extern void xtagColprintAddCommonLines (struct colprintTable *table);
+extern void xtagColprintAddLanguageLines (struct colprintTable *table, langType language);
+extern void xtagColprintTablePrint (struct colprintTable *table,
+									bool withListHeader, bool machinable, FILE *fp);
 
 #endif	/* CTAGS_MAIN_FIELD_H */

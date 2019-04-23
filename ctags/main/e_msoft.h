@@ -27,12 +27,13 @@
 #define HAVE_STRSTR 1
 #define HAVE_STRERROR 1
 #define HAVE_FINDNEXT 1
-#define HAVE_TEMPNAM 1
+#define HAVE_MKSTEMP 1
 #define HAVE_FNMATCH 1
 #define HAVE_FNMATCH_H 1
 #define HAVE_PUTENV 1
-#define tempnam(dir,pfx) _tempnam(dir,pfx)
 #define TMPDIR "\\"
+
+int mkstemp (char *template_name);
 
 #ifdef _MSC_VER
 
@@ -58,13 +59,16 @@ typedef enum { false, true } bool;
 
 # include <_mingw.h>
 # define HAVE_STDBOOL_H 1
-# define HAVE_DIR_H 1
 # define HAVE_DIRENT_H 1
 # define HAVE__FINDFIRST 1
 # define findfirst_t long
 # define ffblk _finddata_t
 # define FA_DIREC _A_SUBDIR
 # define ff_name name
+
+# if defined(__USE_MINGW_ANSI_STDIO) && defined(__MINGW64_VERSION_MAJOR)
+#  define HAVE_ASPRINTF 1
+# endif
 
 #endif
 

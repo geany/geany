@@ -54,7 +54,9 @@ parsers = \
 
 libctags_la_SOURCES = \
 	main/args.c \
-	main/args.h \
+	main/args_p.h \
+	main/colprint.c \
+	main/colprint_p.h \
 	main/ctags.h \
 	main/ctags-api.c \
 	main/ctags-api.h \
@@ -64,29 +66,35 @@ libctags_la_SOURCES = \
 	main/dependency.c \
 	main/e_msoft.h \
 	main/entry.c \
+	main/entry_private.c \
 	main/entry.h \
+	main/entry_p.h \
 	main/error.c \
 	main/error.h \
 	main/field.c \
 	main/field.h \
 	main/flags.c \
-	main/flags.h \
+	main/flags_p.h \
 	main/fmt.c \
-	main/fmt.h \
+	main/fmt_p.h \
 	main/gcc-attr.h \
 	main/general.h \
+	main/gvars.h \
 	main/htable.c \
 	main/htable.h \
 	main/inline.h \
 	main/keyword.c \
 	main/keyword.h \
+	main/keyword_p.h \
 	main/kind.c \
 	main/kind.h \
 	main/lcpp.c \
 	main/lcpp.h \
 	main/lregex.c \
-	main/lxcmd.c \
+	main/lregex.h \
+	main/lregex_p.h \
 	main/lxpath.c \
+	main/lxpath.h \
 	main/main.c \
 	main/main.h \
 	main/mbcs.h \
@@ -100,17 +108,20 @@ libctags_la_SOURCES = \
 	main/objpool.h \
 	main/options.c \
 	main/options.h \
-	main/output-ctags.c \
-	main/output.h \
+	main/options_p.h \
+	main/param.c \
+	main/param.h \
 	main/parse.c \
 	main/parse.h \
+	main/parse_p.h \
 	main/parsers.h \
 	main/pcoproc.c \
 	main/pcoproc.h \
 	main/promise.c \
 	main/promise.h \
+	main/promise_p.h \
 	main/ptag.c \
-	main/ptag.h \
+	main/ptag_p.h \
 	main/ptrarray.c \
 	main/ptrarray.h \
 	main/read.c \
@@ -119,18 +130,22 @@ libctags_la_SOURCES = \
 	main/repoinfo.h \
 	main/routines.c \
 	main/routines.h \
+	main/routines_p.h \
 	main/selectors.c \
 	main/selectors.h \
 	main/sort.c \
 	main/sort.h \
 	main/strlist.c \
 	main/strlist.h \
+	main/subparser.h \
 	main/trace.h \
 	main/trashbox.c \
 	main/trashbox.h \
 	main/types.h \
 	main/vstring.c \
 	main/vstring.h \
+	main/writer.c \
+	main/writer_p.h \
 	main/xtag.h \
 	main/xtag.c \
 	$(parsers)

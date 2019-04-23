@@ -19,7 +19,7 @@
 #include "entry.h"
 #include "lcpp.h"
 #include "kind.h"
-#include "options.h"
+#include "options_p.h"
 #include "read.h"
 #include "vstring.h"
 #include "parse.h"
@@ -305,8 +305,7 @@ static bool pushConditional (const bool firstBranchChosen)
 		ifdef->singleBranch      = Cpp.resolveRequired;
 		ifdef->branchChosen      = firstBranchChosen;
 		ifdef->ignoring = (bool) (ignoreAllBranches || (
-				! firstBranchChosen  &&  ! BraceFormat  &&
-				(ifdef->singleBranch || !Option.if0)));
+				! firstBranchChosen  &&  ! BraceFormat));
 		ignoreBranch = ifdef->ignoring;
 	}
 	return ignoreBranch;

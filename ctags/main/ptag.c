@@ -13,21 +13,16 @@
 
 #include "general.h"  /* must always come first */
 
+#include "colprint_p.h"
 #include "ctags.h"
 #include "debug.h"
-#include "options.h"
-#include "parse.h"
-#include "ptag.h"
-#include "output.h"
+#include "entry_p.h"
+#include "options_p.h"
+#include "parse_p.h"
+#include "ptag_p.h"
+#include "writer_p.h"
 #include <string.h>
 
-
-static bool writePseudoTagForXcmdData (ptagDesc *desc,
-					  struct ptagXcmdData *pdata)
-{
-	return writePseudoTag (desc,
-			       pdata->fileName,  pdata->pattern, pdata->language);
-}
 
 static bool ptagMakeFormat (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
 {
@@ -52,37 +47,22 @@ static bool ptagMakeHowSorted (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
 			       NULL);
 }
 
-static bool ptagMakeAuthor (ptagDesc *desc, void *data)
+static bool ptagMakeAuthor (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
 {
-	struct ptagXcmdData *pdata = data;
-
-	if (pdata)
-		return writePseudoTagForXcmdData (desc, data);
-	else
-		return writePseudoTag (desc,
-				       AUTHOR_NAME,  "", NULL);
+	return writePseudoTag (desc,
+						   AUTHOR_NAME,  "", NULL);
 }
 
-static bool ptagMakeProgName (ptagDesc *desc, void *data)
+static bool ptagMakeProgName (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
 {
-	struct ptagXcmdData *pdata = data;
-
-	if (pdata)
-		return writePseudoTagForXcmdData (desc, data);
-	else
-		return writePseudoTag (desc,
-				PROGRAM_NAME,  "Derived from Exuberant Ctags", NULL);
+	return writePseudoTag (desc,
+						   PROGRAM_NAME,  "Derived from Exuberant Ctags", NULL);
 }
 
-static bool ptagMakeProgURL (ptagDesc *desc, void *data)
+static bool ptagMakeProgURL (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
 {
-	struct ptagXcmdData *pdata = data;
-
-	if (pdata)
-		return writePseudoTagForXcmdData (desc, data);
-	else
-		return writePseudoTag (desc,
-				       PROGRAM_URL, "official site", NULL);
+	return writePseudoTag (desc,
+						   PROGRAM_URL, "official site", NULL);
 }
 
 static bool ptagMakeProgVersion (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
@@ -115,6 +95,8 @@ static bool ptagMakeKindDescriptions (ptagDesc *desc, void *data)
 }
 
 static ptagDesc ptagDescs [] = {
+/* GEANY DIFF */
+#if 0
 	{
 	  /* The prefix is not "TAG_".
 	     Only --output-format=json use this ptag. */
@@ -122,6 +104,8 @@ static ptagDesc ptagDescs [] = {
 	  "the version of json output stream format",
 	  ptagMakeJsonOutputVersion,
 	  true },
+#endif
+/* GEANY DIFF END */
 	{ true, "TAG_FILE_FORMAT",
 	  "the version of tags file format",
 	  ptagMakeFormat,
@@ -160,6 +144,10 @@ static ptagDesc ptagDescs [] = {
 	  "the letters, names and descriptions of kinds in a parser",
 	  ptagMakeKindDescriptions,
 	  false },
+	{ true, "TAG_OUTPUT_MODE",
+	  "the output mode: u-ctags or e-ctags",
+	  ptagMakeCtagsOutputMode,
+	  true },
 };
 
 extern bool makePtagIfEnabled (ptagType type, void *data)
@@ -225,10 +213,30 @@ extern bool isPtagCommonInParsers  (ptagType type)
 	return pdesc->commonInParsers;
 }
 
-extern void printPtag (ptagType type)
+static int ptagCompare (struct colprintLine *a, struct colprintLine *b)
 {
-	printf("%s\t%s\t%s\n",
-	       ptagDescs[type].name,
-	       ptagDescs[type].description? ptagDescs[type].description: "NONE",
-	       ptagDescs[type].enabled? "on": "off");
+	const char *a_name = colprintLineGetColumn (a, 0);
+	const char *b_name = colprintLineGetColumn (b, 0);
+	return strcmp(a_name, b_name);
+}
+
+extern void printPtags (bool withListHeader, bool machinable, FILE *fp)
+{
+	struct colprintTable *table = colprintTableNew ("L:NAME",
+													"L:ENABLED",
+													"L:DESCRIPTION",
+													NULL);
+	for (unsigned int i = 0; i < PTAG_COUNT; i++)
+	{
+		struct colprintLine *line = colprintTableGetNewLine (table);
+		colprintLineAppendColumnCString (line, ptagDescs[i].name);
+		colprintLineAppendColumnCString (line, ptagDescs[i].enabled
+										 ? "on"
+										 : "off");
+		colprintLineAppendColumnCString (line, ptagDescs[i].description);
+	}
+
+	colprintTableSort (table, ptagCompare);
+	colprintTablePrint (table, 0, withListHeader, machinable, fp);
+	colprintTableDelete (table);
 }

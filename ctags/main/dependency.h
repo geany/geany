@@ -15,7 +15,7 @@
 #include "general.h"
 
 #include "types.h"
-
+#include "kind.h"
 
 typedef enum eDepType {
 	DEPTYPE_KIND_OWNER,
@@ -23,23 +23,41 @@ typedef enum eDepType {
 	COUNT_DEPTYPES,
 } depType;
 
-typedef struct sParserDependency {
+struct sParserDependency {
 	depType type;
 	const char *upperParser;
 	void *data;
-} parserDependency;
-
-extern void linkDependencyAtInitializeParsing (depType dtype,
-					       parserDefinition *const masterParser,
-					       parserDefinition *const slaveParser);
-
-typedef struct sSubparser subparser;
-struct sSubparser {
-	langType id;
-	subparser *next;
 };
 
-extern void initializeSubparsers (const parserDefinition *parser);
-extern void finalizeSubparsers (parserDefinition *parser);
+struct sSlaveParser {
+	depType type;
+	langType id;
+	void *data;
+	slaveParser *next;
+};
+
+struct slaveControlBlock;	/* Opaque data type for parse.c */
+
+
+extern void linkDependencyAtInitializeParsing (depType dtype,
+						   parserDefinition *const master,
+						   struct slaveControlBlock *masterSCB,
+						   struct kindControlBlock *masterKCB,
+						   parserDefinition *const slave,
+						   struct kindControlBlock *slaveKCB,
+						   void *data);
+
+extern struct slaveControlBlock *allocSlaveControlBlock (parserDefinition *parser);
+extern void freeSlaveControlBlock (struct slaveControlBlock *cb);
+extern void initializeDependencies (parserDefinition *parser,
+									struct slaveControlBlock *cb);
+extern void finalizeDependencies (parserDefinition *parser,
+								  struct slaveControlBlock *cb);
+
+extern slaveParser *getFirstSlaveParser(struct slaveControlBlock *controlBlock);
+extern slaveParser *getNextSlaveParser(slaveParser *last);
+#define foreachSlaveParser(VAR)			\
+	VAR = NULL;								\
+	while ((VAR = getNextSlaveParser (VAR)) != NULL)
 
 #endif	/* CTAGS_MAIN_DEPENDENCY_H */

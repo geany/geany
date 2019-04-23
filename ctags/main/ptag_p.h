@@ -22,7 +22,11 @@ typedef enum ePtagType { /* pseudo tag content control */
 	PTAG_UNKNOWN = -1,
 	/* Only --output-format=json use this ptag.
 	   Applications of the output may expect this comes first in the output. */
+/* GEANY DIFF */
+/*
 	PTAG_JSON_OUTPUT_VERSION,
+*/
+/* GEANY DIFF END */
 
 	PTAG_FILE_FORMAT,
 	PTAG_FILE_SORTED,
@@ -35,6 +39,7 @@ typedef enum ePtagType { /* pseudo tag content control */
 #endif
 	PTAG_KIND_SEPARATOR,
 	PTAG_KIND_DESCRIPTION,
+	PTAG_OUTPUT_MODE,
 	PTAG_COUNT
 } ptagType;
 
@@ -46,16 +51,10 @@ struct sPtagDesc {
 	bool commonInParsers;
 };
 
-struct ptagXcmdData {
-	const char *fileName;
-	const char *pattern;
-	const char *language;
-};
-
 extern bool makePtagIfEnabled (ptagType type, void *data);
 extern ptagDesc* getPtagDesc (ptagType type);
 extern ptagType  getPtagTypeForName (const char *name);
-extern void printPtag (ptagType type);
+extern void printPtags (bool withListHeader, bool machinable, FILE *fp);
 extern bool isPtagEnabled (ptagType type);
 extern bool isPtagCommonInParsers  (ptagType type);
 extern bool enablePtag (ptagType type, bool state);

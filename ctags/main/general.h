@@ -14,9 +14,6 @@
 */
 #if defined (HAVE_CONFIG_H)
 # include <config.h>
-#if (defined (HAVE_FORK) && defined (HAVE_WAITPID) && defined (HAVE_EXECV) && defined (HAVE_PIPE))
-#define HAVE_COPROC
-#endif
 #elif defined (WIN32)
 # include "e_msoft.h"
 #endif
@@ -68,6 +65,16 @@ extern void *unlink (const char *);
 
 #ifdef NEED_PROTO_GETENV
 extern char *getenv (const char *);
+#endif
+
+/*
+*   HACK for #1610.
+*/
+
+#ifdef ICONV_USE_LIB_PREFIX
+#define iconv libiconv
+#define iconv_open libiconv_open
+#define iconv_close libiconv_close
 #endif
 
 #endif  /* CTAGS_MAIN_GENERAL_H */

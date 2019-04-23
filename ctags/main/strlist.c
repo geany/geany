@@ -13,9 +13,11 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
-/* GEANY DIFF
+/* GEANY DIFF */
+/*
 #include <fnmatch.h>
- * GEANY DIFF END */
+*/
+/* GEANY DIFF END */
 
 #include "debug.h"
 #include "read.h"
@@ -109,13 +111,13 @@ extern void stringListDelete (stringList *const current)
 static bool compareString (
 		const char *const string, vString *const itm)
 {
-	return (bool) (strcmp (string, vStringValue (itm)) == 0);
+	return (strcmp (string, vStringValue (itm)) == 0);
 }
 
 static bool compareStringInsensitive (
 		const char *const string, vString *const itm)
 {
-	return (bool) (strcasecmp (string, vStringValue (itm)) == 0);
+	return (strcasecmp (string, vStringValue (itm)) == 0);
 }
 
 static int stringListIndex (
@@ -137,7 +139,7 @@ static int stringListIndex (
 extern bool stringListHas (
 		const stringList *const current, const char *const string)
 {
-	bool result = false;
+	bool result;
 	Assert (current != NULL);
 	result = stringListIndex (current, string, compareString) != -1;
 	return result;
@@ -162,7 +164,7 @@ static vString* stringListFinds (
 extern bool stringListHasInsensitive (
 		const stringList *const current, const char *const string)
 {
-	bool result = false;
+	bool result;
 	Assert (current != NULL);
 	Assert (string != NULL);
 	result = stringListIndex (current, string, compareStringInsensitive) != -1;
@@ -218,8 +220,6 @@ static bool fileNameMatched (
 		const vString* const vpattern, const char* const fileName)
 {
 /* GEANY DIFF */
-/*	const char* const pattern = vStringValue (vpattern);
-	return (bool) (fnmatch (pattern, fileName, 0) == 0); */
 	return false;
 /* GEANY DIFF END */
 }
@@ -236,11 +236,24 @@ extern vString* stringListFileFinds (
 	vString* vstr = NULL;
 	bool matched = false;
 	unsigned int i;
+	const char * normalized = fileName;
+
+#if defined (WIN32)
+	vString *tmp = vStringNewInit (fileName);
+	vStringTranslate (tmp, '\\', '/');
+	normalized = vStringValue (tmp);
+#endif
+
 	for (i = 0  ;  ! matched  &&  i < stringListCount (current)  ;  ++i)
 	{
 		vstr = stringListItem (current, i);
-		matched = fileNameMatched (vstr, fileName);
+		matched = fileNameMatched (vstr, normalized);
 	}
+
+#if defined (WIN32) && defined (UNIX_PATH_SEPARATOR)
+	vStringDelete (tmp);
+#endif
+
 	return matched? vstr: NULL;
 }
 
@@ -255,4 +268,59 @@ extern void stringListPrint (const stringList *const current, FILE *fp)
 extern void stringListReverse (const stringList *const current)
 {
 	ptrArrayReverse (current);
+}
+
+extern stringList *stringListNewBySplittingWordIntoSubwords (const char* originalWord)
+{
+	stringList *list = stringListNew ();
+
+	vString *subword = vStringNew();
+	for (const char *cursor = originalWord; *cursor != '\0'; cursor++)
+	{
+		if (islower(*cursor))
+		{
+			if (vStringLength (subword) > 1 &&
+				isupper(vStringLast(subword)) &&
+				isupper(vStringItem(subword, vStringLength (subword) - 2)))
+			{
+				/* ABC + d => AB, Cd */
+				char last = vStringLast(subword);
+				vStringTruncate (subword, vStringLength (subword) - 1);
+				stringListAdd (list, subword);
+				subword = vStringNew();
+				vStringPut(subword, last);
+			}
+			/* A + b => Ab,
+			   a + b => ab */
+			vStringPut(subword, *cursor);
+		}
+		else if (isupper(*cursor))
+		{
+			/* a + B => a, B */
+			if (vStringLength (subword) > 0 && islower(vStringLast(subword)))
+			{
+				stringListAdd (list, subword);
+				subword = vStringNew();
+			}
+			/* A + B => AB */
+			vStringPut(subword, *cursor);
+		}
+		else if (isdigit(*cursor))
+			vStringPut(subword, *cursor);
+		else
+		{
+			if (vStringLength(subword) > 0)
+			{
+				stringListAdd (list, subword);
+				subword = vStringNew();
+			}
+		}
+	}
+
+	if (vStringLength(subword) > 0)
+		stringListAdd (list, subword);
+	else
+		vStringDelete(subword);
+
+	return list;
 }

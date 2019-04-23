@@ -19,6 +19,7 @@
 #include "options.h"
 #include "read.h"
 #include "main.h"
+#include "parse.h"
 #include "vstring.h"
 #include "routines.h"
 #include "debug.h"

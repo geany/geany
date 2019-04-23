@@ -56,24 +56,31 @@
 #ifdef HAVE_DIRECT_H
 # include <direct.h>  /* to _getcwd() */
 #endif
-#ifdef HAVE_DIR_H
-# include <dir.h>  /* to declare findfirst() and findnext */
-#endif
 #ifdef HAVE_IO_H
 # include <io.h>  /* to declare _findfirst() */
 #endif
 
 
+#include "ctags.h"
 #include "debug.h"
-#include "entry.h"
+#include "entry_p.h"
 #include "error.h"
 #include "field.h"
-#include "keyword.h"
+#include "keyword_p.h"
 #include "main.h"
-#include "options.h"
-#include "output.h"
+#include "options_p.h"
+#include "parse_p.h"
 #include "read.h"
-#include "routines.h"
+#include "routines_p.h"
+#include "trace.h"
+#include "trashbox.h"
+#include "writer_p.h"
+
+#ifdef HAVE_JANSSON
+#include "interactive_p.h"
+#include <jansson.h>
+#include <errno.h>
+#endif
 
 /*
 *   MACROS
@@ -113,11 +120,14 @@ extern bool isDestinationStdout (void)
 {
 	bool toStdout = false;
 
-	if (outpuFormatUsedStdoutByDefault() ||  Option.filter  ||
+	if (Option.filter || Option.interactive ||
 		(Option.tagFileName != NULL  &&  (strcmp (Option.tagFileName, "-") == 0
 						  || strcmp (Option.tagFileName, "/dev/stdout") == 0
 		)))
 		toStdout = true;
+	else if (Option.tagFileName == NULL && NULL == outputDefaultFileName ())
+		toStdout = true;
+
 	return toStdout;
 }
 
@@ -143,10 +153,10 @@ static bool recurseUsingOpendir (const char *const dirName)
 				if (strcmp (dirName, ".") == 0)
 					filePath = entry->d_name;
 				else
-				  {
+				{
 					filePath = combinePathAndFile (dirName, entry->d_name);
 					free_p = true;
-				  }
+				}
 				resize |= createTagsForEntry (filePath);
 				if (free_p)
 					eFree (filePath);
@@ -157,7 +167,7 @@ static bool recurseUsingOpendir (const char *const dirName)
 	return resize;
 }
 
-#elif defined (HAVE_FINDFIRST) || defined (HAVE__FINDFIRST)
+#elif defined (HAVE__FINDFIRST)
 
 static bool createTagsForWildcardEntry (
 		const char *const pattern, const size_t dirLength,
@@ -180,16 +190,7 @@ static bool createTagsForWildcardUsingFindfirst (const char *const pattern)
 {
 	bool resize = false;
 	const size_t dirLength = baseFilename (pattern) - pattern;
-#if defined (HAVE_FINDFIRST)
-	struct ffblk fileInfo;
-	int result = findfirst (pattern, &fileInfo, FA_DIREC);
-	while (result == 0)
-	{
-		const char *const entry = (const char *) fileInfo.ff_name;
-		resize |= createTagsForWildcardEntry (pattern, dirLength, entry);
-		result = findnext (&fileInfo);
-	}
-#elif defined (HAVE__FINDFIRST)
+#if defined (HAVE__FINDFIRST)
 	struct _finddata_t fileInfo;
 	findfirst_t hFile = _findfirst (pattern, &fileInfo);
 	if (hFile != -1L)
@@ -227,7 +228,7 @@ static bool recurseIntoDirectory (const char *const dirName)
 		verbose ("RECURSING into directory \"%s\"\n", dirName);
 #if defined (HAVE_OPENDIR)
 		resize = recurseUsingOpendir (dirName);
-#elif defined (HAVE_FINDFIRST) || defined (HAVE__FINDFIRST)
+#elif defined (HAVE__FINDFIRST)
 		{
 			vString *const pattern = vStringNew ();
 			vStringCopyS (pattern, dirName);
@@ -275,9 +276,9 @@ static bool createTagsForWildcardArg (const char *const arg)
 	vString *const pattern = vStringNewInit (arg);
 	char *patternS = vStringValue (pattern);
 
-#if defined (HAVE_FINDFIRST) || defined (HAVE__FINDFIRST)
+#if defined (HAVE__FINDFIRST)
 	/*  We must transform the "." and ".." forms into something that can
-	 *  be expanded by the findfirst/_findfirst functions.
+	 *  be expanded by the _findfirst function.
 	 */
 	if (Option.recurse  &&
 		(strcmp (patternS, ".") == 0  ||  strcmp (patternS, "..") == 0))
@@ -490,6 +491,102 @@ static void batchMakeTags (cookedArgs *args, void *user CTAGS_ATTR_UNUSED)
 #undef timeStamp
 }
 
+#ifdef HAVE_JANSSON
+void interactiveLoop (cookedArgs *args CTAGS_ATTR_UNUSED, void *user)
+{
+	struct interactiveModeArgs *iargs = user;
+
+	if (iargs->sandbox) {
+		/* As of jansson 2.6, the object hashing is seeded off
+		   of /dev/urandom, so trigger the hash seeding
+		   before installing the syscall filter.
+		*/
+		json_t * tmp = json_object ();
+		json_decref (tmp);
+
+		if (installSyscallFilter ()) {
+			error (FATAL, "install_syscall_filter failed");
+			/* The explicit exit call is needed because
+			   "error (FATAL,..." just prints a message in
+			   interactive mode. */
+			exit (1);
+		}
+	}
+
+	char buffer[1024];
+	json_t *request;
+
+	fputs ("{\"_type\": \"program\", \"name\": \"" PROGRAM_NAME "\", \"version\": \"" PROGRAM_VERSION "\"}\n", stdout);
+	fflush (stdout);
+
+	while (fgets (buffer, sizeof(buffer), stdin))
+	{
+		if (buffer[0] == '\n')
+			continue;
+
+		request = json_loads (buffer, JSON_DISABLE_EOF_CHECK, NULL);
+		if (! request)
+		{
+			error (FATAL, "invalid json");
+			goto next;
+		}
+
+		json_t *command = json_object_get (request, "command");
+		if (! command)
+		{
+			error (FATAL, "command name not found");
+			goto next;
+		}
+
+		if (!strcmp ("generate-tags", json_string_value (command)))
+		{
+			json_int_t size = -1;
+			const char *filename;
+
+			if (json_unpack (request, "{ss}", "filename", &filename) == -1)
+			{
+				error (FATAL, "invalid generate-tags request");
+				goto next;
+			}
+
+			json_unpack (request, "{sI}", "size", &size);
+
+			openTagFile ();
+			if (size == -1)
+			{					/* read from disk */
+				if (iargs->sandbox) {
+					error (FATAL,
+						   "invalid request in sandbox submode: reading file contents from a file is limited");
+					goto next;
+				}
+
+				createTagsForEntry (filename);
+			}
+			else
+			{					/* read nbytes from stream */
+				unsigned char *data = eMalloc (size);
+				size = fread (data, 1, size, stdin);
+				MIO *mio = mio_new_memory (data, size, eRealloc, eFree);
+				parseFileWithMio (filename, mio);
+				mio_free (mio);
+			}
+
+			closeTagFile (false);
+			fputs ("{\"_type\": \"completed\", \"command\": \"generate-tags\"}\n", stdout);
+			fflush(stdout);
+		}
+		else
+		{
+			error (FATAL, "unknown command name");
+			goto next;
+		}
+
+	next:
+		json_decref (request);
+	}
+}
+#endif
+
 static bool isSafeVar (const char* var)
 {
 	const char *safe_vars[] = {
@@ -508,17 +605,21 @@ static bool isSafeVar (const char* var)
 
 static void sanitizeEnviron (void)
 {
-	char **e = NULL;
+	char **e;
 	int i;
 
 #if HAVE_DECL___ENVIRON
 	e = __environ;
 #elif HAVE_DECL__NSGETENVIRON
-{
-	char ***ep = _NSGetEnviron();
-	if (ep)
-		e = *ep;
-}
+	{
+		char ***ep = _NSGetEnviron();
+		if (ep)
+			e = *ep;
+		else
+			e = NULL;
+	}
+#else
+	e = NULL;
 #endif
 
 	if (!e)
@@ -551,15 +652,20 @@ extern int main (int argc CTAGS_ATTR_UNUSED, char **argv)
 {
 	cookedArgs *args;
 
+	initDefaultTrashBox ();
+
+	DEBUG_INIT();
+
 	setErrorPrinter (stderrDefaultErrorPrinter, NULL);
 	setMainLoop (batchMakeTags, NULL);
-	setTagWriter (&ctagsWriter);
+	setTagWriter (WRITER_U_CTAGS);
 
 	setCurrentDirectory ();
 	setExecutableName (*argv++);
 	sanitizeEnviron ();
 	checkRegex ();
-	initFieldDescs ();
+	initFieldObjects ();
+	initXtagObjects ();
 
 	args = cArgNewFromArgv (argv);
 	previewFirstOption (args);
@@ -573,6 +679,14 @@ extern int main (int argc CTAGS_ATTR_UNUSED, char **argv)
 
 	runMainLoop (args);
 
+
+	BEGIN_VERBOSE_IF(Option.mtablePrintTotals, vfp);
+	{
+		for (unsigned int i = 0; i < countParsers(); i++)
+			printLanguageMultitableStatistics (i, vfp);
+	}
+	END_VERBOSE();
+
 	/*  Clean up.
 	 */
 	cArgDelete (args);
@@ -583,10 +697,11 @@ extern int main (int argc CTAGS_ATTR_UNUSED, char **argv)
 	freeOptionResources ();
 	freeParserResources ();
 	freeRegexResources ();
-	freeXcmdResources ();
 #ifdef HAVE_ICONV
 	freeEncodingResources ();
 #endif
+
+	finiDefaultTrashBox();
 
 	if (Option.printLanguage)
 		return (Option.printLanguage == true)? 0: 1;

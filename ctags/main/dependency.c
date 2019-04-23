@@ -12,91 +12,340 @@
 
 #include "general.h"  /* must always come first */
 
+#include "debug.h"
 #include "dependency.h"
-#include "parse.h"
+#include "options.h"
+#include "parse_p.h"
+#include "read.h"
+#include "routines.h"
+#include "subparser.h"
+#include "xtag.h"
 
 #include <string.h>
 
+struct slaveControlBlock {
+	slaveParser *slaveParsers;	/* The parsers on this list must be initialized when
+								   this parser is initialized. */
+	subparser   *subparsersDefault;
+	subparser   *subparsersInUse;
+	langType     owner;
+};
 
-static void linkKinds (kindDefinition *masterKind, kindDefinition *slaveKind)
+extern void linkDependencyAtInitializeParsing (depType dtype,
+						   parserDefinition *const master,
+						   struct slaveControlBlock *masterSCB,
+						   struct kindControlBlock *masterKCB,
+						   parserDefinition *const slave,
+						   struct kindControlBlock *slaveKCB,
+						   void *data)
 {
-	kindDefinition *tail;
-
-	slaveKind->master = masterKind;
-
-	tail = slaveKind;
-	while (tail->slave)
+	if (dtype == DEPTYPE_KIND_OWNER)
+		linkKindDependency (masterKCB, slaveKCB);
+	else if (dtype == DEPTYPE_SUBPARSER)
 	{
-		tail->enabled = masterKind->enabled;
-		tail = tail->slave;
-	}
+		slaveParser *s = xMalloc (1, slaveParser);
 
-	tail->slave = masterKind->slave;
-	masterKind->slave = slaveKind;
+		s->type = dtype;
+		s->id = slave->id;
+		s->data = data;
+
+		s->next = masterSCB->slaveParsers;
+		masterSCB->slaveParsers = s;
+	}
 }
 
-static void linkKindDependency (parserDefinition *const masterParser,
-				parserDefinition *const slaveParser)
+static void attachSubparser (struct slaveControlBlock *base_sb, subparser *subparser)
 {
-	unsigned int k_slave, k_master;
-	kindDefinition *kind_slave, *kind_master;
+	   subparser->next = base_sb->subparsersDefault;
+	   base_sb->subparsersDefault = subparser;
+}
 
-	for (k_slave = 0; k_slave < slaveParser->kindCount; k_slave++)
+
+extern struct slaveControlBlock *allocSlaveControlBlock (parserDefinition *parser)
+{
+	struct slaveControlBlock *cb;
+
+	cb = xMalloc (1, struct slaveControlBlock);
+	cb->slaveParsers = NULL;
+	cb->subparsersDefault = NULL;
+	cb->subparsersInUse = NULL;
+	cb->owner = parser->id;
+
+	return cb;
+}
+
+extern void freeSlaveControlBlock (struct slaveControlBlock *cb)
+{
+	eFree (cb);
+}
+
+extern void initializeDependencies (parserDefinition *parser,
+									struct slaveControlBlock *cb)
+{
+	unsigned int i;
+	slaveParser *sp;
+
+	/* Initialize slaves */
+	sp = cb->slaveParsers;
+	while (sp != NULL)
 	{
-		if (slaveParser->kindTable [k_slave].syncWith == LANG_AUTO)
+		if (sp->type == DEPTYPE_SUBPARSER)
 		{
-			kind_slave = slaveParser->kindTable + k_slave;
-			for (k_master = 0; k_master < masterParser->kindCount; k_master++)
+			subparser *sub;
+
+			sub = (subparser *)sp->data;
+			sub->slaveParser = sp;
+		}
+
+		if (sp->type == DEPTYPE_KIND_OWNER
+			|| (sp->type == DEPTYPE_SUBPARSER &&
+				(((subparser *)sp->data)->direction & SUBPARSER_BASE_RUNS_SUB)))
+		{
+			initializeParser (sp->id);
+			if (sp->type == DEPTYPE_SUBPARSER
+				&& isXtagEnabled (XTAG_TAGS_GENERATED_BY_SUBPARSER))
 			{
-				kind_master = masterParser->kindTable + k_master;
-				if ((kind_slave->letter == kind_master->letter)
-				    && (strcmp (kind_slave->name, kind_master->name) == 0))
-				{
-					linkKinds (kind_master, kind_slave);
-					kind_slave->syncWith = masterParser->id;
-					kind_master->syncWith = masterParser->id;
-					break;
-				}
+				subparser *subparser = sp->data;
+				attachSubparser (cb, subparser);
 			}
+		}
+		sp = sp->next;
+	}
+
+	/* Initialize masters that act as base parsers. */
+	for (i = 0; i < parser->dependencyCount; i++)
+	{
+		parserDependency *d = parser->dependencies + i;
+		if (d->type == DEPTYPE_SUBPARSER &&
+			((subparser *)(d->data))->direction & SUBPARSER_SUB_RUNS_BASE)
+		{
+			langType baseParser;
+			baseParser = getNamedLanguage (d->upperParser, 0);
+			Assert (baseParser != LANG_IGNORE);
+			initializeParser (baseParser);
 		}
 	}
 }
 
-extern void linkDependencyAtInitializeParsing (depType dtype,
-					       parserDefinition *const masterParser,
-					       parserDefinition *const slaveParser)
+extern void finalizeDependencies (parserDefinition *parser,
+								  struct slaveControlBlock *cb)
 {
-	if (dtype == DEPTYPE_KIND_OWNER)
-		linkKindDependency (masterParser, slaveParser);
-	else if (dtype == DEPTYPE_SUBPARSER)
+	while (cb->slaveParsers)
 	{
-		subparser *s = xMalloc (1, subparser);
-
-		s->id = slaveParser->id;
-		s->next = masterParser->subparsers;
-		masterParser->subparsers = s;
+		slaveParser *sp = cb->slaveParsers;
+		cb->slaveParsers = sp->next;
+		sp->next = NULL;
+		eFree (sp);
 	}
 }
 
-extern void initializeSubparsers (const parserDefinition *parser)
+extern void notifyInputStart (void)
 {
-	subparser *sp;
+	subparser *s;
 
-	for (sp = parser->subparsers; sp; sp = sp->next)
-		initializeParser (sp->id);
+	foreachSubparser(s, false)
+	{
+		langType lang = getSubparserLanguage (s);
+		notifyLanguageRegexInputStart (lang);
+
+		if (s->inputStart)
+		{
+			enterSubparser(s);
+			s->inputStart (s);
+			leaveSubparser();
+		}
+	}
 }
 
-extern void finalizeSubparsers (parserDefinition *parser)
+extern void notifyInputEnd   (void)
 {
-	subparser *sp;
+	subparser *s;
+
+	foreachSubparser(s, false)
+	{
+		if (s->inputEnd)
+		{
+			enterSubparser(s);
+			s->inputEnd (s);
+			leaveSubparser();
+		}
+
+		langType lang = getSubparserLanguage (s);
+		notifyLanguageRegexInputEnd (lang);
+	}
+}
+
+extern void notifyMakeTagEntry (const tagEntryInfo *tag, int corkIndex)
+{
+	subparser *s;
+
+	foreachSubparser(s, false)
+	{
+		if (s->makeTagEntryNotify)
+		{
+			enterSubparser(s);
+			s->makeTagEntryNotify (s, tag, corkIndex);
+			leaveSubparser();
+		}
+	}
+}
+
+extern langType getSubparserLanguage (subparser *s)
+{
+	return s->slaveParser->id;
+}
+
+extern void chooseExclusiveSubparser (subparser *s, void *data)
+{
+	if (s->exclusiveSubparserChosenNotify)
+	{
+		s->chosenAsExclusiveSubparser = true;
+		enterSubparser(s);
+		s->exclusiveSubparserChosenNotify (s, data);
+		verbose ("%s is chosen as exclusive subparser\n",
+				 getLanguageName (getSubparserLanguage (s)));
+		leaveSubparser();
+	}
+}
+
+extern subparser *getFirstSubparser(struct slaveControlBlock *controlBlock)
+{
+	if (controlBlock)
+		return controlBlock->subparsersInUse;
+	return NULL;
+}
+
+extern void useDefaultSubparsers (struct slaveControlBlock *controlBlock)
+{
+	controlBlock->subparsersInUse = controlBlock->subparsersDefault;
+}
+
+extern void useSpecifiedSubparser (struct slaveControlBlock *controlBlock, subparser *s)
+{
+	s->schedulingBaseparserExplicitly = true;
+	controlBlock->subparsersInUse = s;
+}
+
+extern void setupSubparsersInUse (struct slaveControlBlock *controlBlock)
+{
+	if (!controlBlock->subparsersInUse)
+		useDefaultSubparsers(controlBlock);
+}
+
+extern subparser* teardownSubparsersInUse (struct slaveControlBlock *controlBlock)
+{
 	subparser *tmp;
+	subparser *s = NULL;
 
-	for (sp = parser->subparsers; sp;)
+	tmp = controlBlock->subparsersInUse;
+	controlBlock->subparsersInUse = NULL;
+
+	if (tmp && tmp->schedulingBaseparserExplicitly)
 	{
-		tmp = sp;
-		sp = sp->next;
-		tmp->next = NULL;
-		eFree (tmp);
+		tmp->schedulingBaseparserExplicitly = false;
+		s = tmp;
 	}
-	parser->subparsers = NULL;
+
+	if (s)
+		return s;
+
+	while (tmp)
+	{
+		if (tmp->chosenAsExclusiveSubparser)
+		{
+			s = tmp;
+		}
+		tmp = tmp->next;
+	}
+
+	return s;
+}
+
+
+static int subparserDepth;
+
+extern void enterSubparser(subparser *subparser)
+{
+	subparserDepth++;
+	pushLanguage (getSubparserLanguage (subparser));
+}
+
+extern void leaveSubparser(void)
+{
+	popLanguage ();
+	subparserDepth--;
+}
+
+extern bool doesSubparserRun (void)
+{
+	return subparserDepth;
+}
+
+extern slaveParser *getFirstSlaveParser (struct slaveControlBlock *scb)
+{
+	if (scb)
+		return scb->slaveParsers;
+	return NULL;
+}
+
+extern struct colprintTable * subparserColprintTableNew (void)
+{
+	return colprintTableNew ("L:NAME", "L:BASEPARSER", "L:DIRECTIONS", NULL);
+}
+
+extern void subparserColprintAddSubparsers (struct colprintTable *table,
+											struct slaveControlBlock *scb)
+{
+	slaveParser *tmp;
+
+	pushLanguage (scb->owner);
+	foreachSlaveParser(tmp)
+	{
+		struct colprintLine *line = colprintTableGetNewLine(table);
+
+		colprintLineAppendColumnCString (line, getLanguageName (tmp->id));
+		colprintLineAppendColumnCString (line, getLanguageName (scb->owner));
+
+		const char *direction;
+		switch (((subparser *)tmp->data)->direction)
+		{
+		case SUBPARSER_BASE_RUNS_SUB:
+			direction = "base => sub {shared}";
+			break;
+		case SUBPARSER_SUB_RUNS_BASE:
+			direction = "base <= sub {dedicated}";
+			break;
+		case SUBPARSER_BI_DIRECTION:
+			direction = "base <> sub {bidirectional}";
+			break;
+		default:
+			direction  = "UNKNOWN(INTERNAL BUG)";
+			break;
+		}
+		colprintLineAppendColumnCString (line, direction);
+	}
+	popLanguage ();
+}
+
+static int subparserColprintCompareLines (struct colprintLine *a , struct colprintLine *b)
+{
+	const char *a_name = colprintLineGetColumn (a, 0);
+	const char *b_name = colprintLineGetColumn (b, 0);
+
+	int r;
+	r = strcmp (a_name, b_name);
+	if (r != 0)
+		return r;
+
+	const char *a_baseparser = colprintLineGetColumn (a, 1);
+	const char *b_baseparser = colprintLineGetColumn (b, 1);
+
+	return strcmp(a_baseparser, b_baseparser);
+}
+
+extern void subparserColprintTablePrint (struct colprintTable *table,
+										 bool withListHeader, bool machinable, FILE *fp)
+{
+	colprintTableSort (table, subparserColprintCompareLines);
+	colprintTablePrint (table, 0, withListHeader, machinable, fp);
 }

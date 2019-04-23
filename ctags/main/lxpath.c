@@ -12,7 +12,7 @@
 #include "debug.h"
 #include "entry.h"
 #include "options.h"
-#include "parse.h"
+#include "parse_p.h"
 #include "read.h"
 #include "routines.h"
 #include "xtag.h"
@@ -95,10 +95,10 @@ static void findXMLTagsCore (xmlXPathContext *ctx, xmlNode *root,
 #if 0
 		/* Older version of libxml2 doesn't have xmlXPathSetContextNode. */
 		if (xmlXPathSetContextNode (root, ctx) != 0)
-		  {
-		    error (WARNING, "Failed to set node to XpathContext");
-		    return;
-		  }
+		{
+			error (WARNING, "Failed to set node to XpathContext");
+			return;
+		}
 #else
 		ctx->node = root;
 #endif
@@ -132,7 +132,7 @@ static xmlDocPtr makeXMLDoc (void)
 {
 	const unsigned char* data;
 	size_t size;
-	xmlDocPtr doc = NULL;
+	xmlDocPtr doc;
 
 	doc = getInputFileUserData ();
 	if (doc)

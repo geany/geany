@@ -53,14 +53,12 @@
 #ifdef HAVE_DIRECT_H
 # include <direct.h>  /* to _getcwd */
 #endif
-#ifdef HAVE_DIR_H
-# include <dir.h>  /* to declare findfirst() and findnext() */
-#endif
 #ifdef HAVE_IO_H
 # include <io.h>  /* to declare open() */
 #endif
 #include "debug.h"
 #include "routines.h"
+#include "routines_p.h"
 #ifdef HAVE_ICONV
 # include "mbcs.h"
 #endif
@@ -68,7 +66,7 @@
 # include <errno.h>
 #endif
 
-#include "options.h"
+#include "vstring.h"
 
 /*
 *   MACROS
@@ -137,7 +135,6 @@
 #  define stat    _stat
 #  define getcwd  _getcwd
 #  define currentdrive() (_getdrive() + 'A' - 1)
-#  define PATH_MAX  _MAX_PATH
 # else
 #  define currentdrive() 'C'
 # endif
@@ -177,6 +174,12 @@ extern int lstat (const char *, struct stat *);
 # define lstat(fn,buf) stat(fn,buf)
 #endif
 
+static bool isPathSeparator (const int c);
+static char *strSeparator (const char *s);
+static char *strRSeparator (const char *s);
+static void canonicalizePath (char *const path);
+
+
 /*
 *   FUNCTION DEFINITIONS
 */
@@ -201,6 +204,18 @@ extern const char *getExecutableName (void)
 extern const char *getExecutablePath (void)
 {
 	return ExecutableProgram;
+}
+
+/*
+ *  compare file/dirname characters with platform-correct case sensitivity
+ */
+static bool fnmChEq (int c1, int c2)
+{
+#ifdef WIN32
+	return tolower( c1 ) == tolower( c2 );  /* case-insensitive */
+#else
+	return          c1   ==          c2  ;  /* case-  sensitive */
+#endif
 }
 
 /*
@@ -245,6 +260,15 @@ extern void eFree (void *const ptr)
 {
 	Assert (ptr != NULL);
 	free (ptr);
+}
+
+extern void eFreeIndirect(void **ptr)
+{
+	if (ptr && *ptr)
+	{
+		eFree (*ptr);
+		*ptr = NULL;
+	}
 }
 
 /*
@@ -312,8 +336,8 @@ extern char* eStrdup (const char* str)
 extern char* eStrndup (const char* str, size_t len)
 {
 	char* result = xMalloc (len + 1, char);
-	memset(result, 0, len + 1);
 	strncpy (result, str, len);
+	result [len] = '\0';
 	return result;
 }
 
@@ -413,7 +437,7 @@ extern bool strToInt(const char *const str, int base, int *value)
  * File system functions
  */
 
-extern void setCurrentDirectory (void)
+extern void setCurrentDirectory (void) /* TODO */
 {
 	char* buf;
 	if (CurrentDirectory == NULL)
@@ -421,12 +445,12 @@ extern void setCurrentDirectory (void)
 	buf = getcwd (CurrentDirectory, PATH_MAX);
 	if (buf == NULL)
 		perror ("");
-	if (CurrentDirectory [strlen (CurrentDirectory) - (size_t) 1] !=
-			PATH_SEPARATOR)
+	if (! isPathSeparator (CurrentDirectory [strlen (CurrentDirectory) - (size_t) 1]))
 	{
 		sprintf (CurrentDirectory + strlen (CurrentDirectory), "%c",
 				OUTPUT_PATH_SEPARATOR);
 	}
+	canonicalizePath (CurrentDirectory);
 }
 
 /* For caching of stat() calls */
@@ -489,11 +513,11 @@ extern bool isRecursiveLink (const char* const dirName)
 	if (status->isSymbolicLink)
 	{
 		char* const path = absoluteFilename (dirName);
-		while (path [strlen (path) - 1] == PATH_SEPARATOR)
+		while (isPathSeparator (path [strlen (path) - 1]))
 			path [strlen (path) - 1] = '\0';
 		while (! result  &&  strlen (path) > (size_t) 1)
 		{
-			char *const separator = strrchr (path, PATH_SEPARATOR);
+			char *const separator = strRSeparator (path);
 			if (separator == NULL)
 				break;
 			else if (separator == path)  /* backed up to root directory */
@@ -522,7 +546,30 @@ static bool isPathSeparator (const int c)
 	return result;
 }
 
-#if ! defined (HAVE_STAT_ST_INO)
+static char *strSeparator (const char *s)
+{
+#if defined (MSDOS_STYLE_PATH)
+	return strpbrk (s, PathDelimiters);
+#else
+	return strchr (s, PATH_SEPARATOR);
+#endif
+}
+
+static char *strRSeparator (const char *s)
+{
+#if defined (MSDOS_STYLE_PATH)
+	const char *last = NULL;
+
+	while (( s = strSeparator (s) ))
+	{
+		last = s;
+		s++;
+	}
+	return (char*) last;
+#else
+	return strrchr (s, PATH_SEPARATOR);
+#endif
+}
 
 static void canonicalizePath (char *const path CTAGS_ATTR_UNUSED)
 {
@@ -530,11 +577,9 @@ static void canonicalizePath (char *const path CTAGS_ATTR_UNUSED)
 	char *p;
 	for (p = path  ;  *p != '\0'  ;  ++p)
 		if (isPathSeparator (*p)  &&  *p != ':')
-			*p = PATH_SEPARATOR;
+			*p = OUTPUT_PATH_SEPARATOR;
 # endif
 }
-
-#endif
 
 extern bool isSameFile (const char *const name1, const char *const name2)
 {
@@ -555,8 +600,8 @@ extern bool isSameFile (const char *const name1, const char *const name2)
 # else
 		result = (bool) (strcmp (n1, n2) == 0);
 # endif
-		free (n1);
-		free (n2);
+		eFree (n1);
+		eFree (n2);
 	}
 #endif
 	return result;
@@ -594,7 +639,7 @@ extern const char *baseFilename (const char *const filePath)
 # endif
 	}
 #else
-	const char *tail = strrchr (filePath, PATH_SEPARATOR);
+	const char *tail = strRSeparator (filePath);
 #endif
 	if (tail == NULL)
 		tail = filePath;
@@ -607,7 +652,7 @@ extern const char *baseFilename (const char *const filePath)
 extern const char *fileExtension (const char *const fileName)
 {
 	const char *extension;
-	const char *pDelimiter = NULL;
+	const char *pDelimiter;
 	const char *const base = baseFilename (fileName);
 
 	pDelimiter = strrchr (base, '.');
@@ -623,7 +668,7 @@ extern const char *fileExtension (const char *const fileName)
 extern char* baseFilenameSansExtensionNew (const char *const fileName,
 					   const char *const templateExt)
 {
-	const char *pDelimiter = NULL;
+	const char *pDelimiter;
 	const char *const base = baseFilename (fileName);
 	char* shorten_base;
 
@@ -640,7 +685,7 @@ extern char* baseFilenameSansExtensionNew (const char *const fileName,
 
 extern bool isAbsolutePath (const char *const path)
 {
-	bool result = false;
+	bool result;
 #if defined (MSDOS_STYLE_PATH)
 	if (isPathSeparator (path [0]))
 		result = true;
@@ -649,13 +694,18 @@ extern bool isAbsolutePath (const char *const path)
 		if (isPathSeparator (path [2]))
 			result = true;
 		else
+		{
+			result = false;
 			/*  We don't support non-absolute file names with a drive
 			 *  letter, like `d:NAME' (it's too much hassle).
 			 */
 			error (FATAL,
 				"%s: relative file names with drive letters not supported",
 				path);
+		}
 	}
+	else
+		result = false;
 #else
 	result = isPathSeparator (path [0]);
 #endif
@@ -721,13 +771,13 @@ extern char* absoluteFilename (const char *file)
 		res = concat (CurrentDirectory, file, "");
 
 	/* Delete the "/dirname/.." and "/." substrings. */
-	slashp = strchr (res, PATH_SEPARATOR);
+	slashp = strSeparator (res);
 	while (slashp != NULL  &&  slashp [0] != '\0')
 	{
 		if (slashp[1] == '.')
 		{
 			if (slashp [2] == '.' &&
-				(slashp [3] == PATH_SEPARATOR || slashp [3] == '\0'))
+				(isPathSeparator (slashp [3]) || slashp [3] == '\0'))
 			{
 				cp = slashp;
 				do
@@ -740,24 +790,28 @@ extern char* absoluteFilename (const char *file)
 				 * so the luser could say `d:/../NAME'. We silently treat this
 				 * as `d:/NAME'.
 				 */
-				else if (cp [0] != PATH_SEPARATOR)
+				else if (!isPathSeparator (cp [0]))
 					cp = slashp;
 #endif
 				memmove (cp, slashp + 3, strlen (slashp + 3) + 1);
 				slashp = cp;
 				continue;
 			}
-			else if (slashp [2] == PATH_SEPARATOR  ||  slashp [2] == '\0')
+			else if (isPathSeparator (slashp [2])  ||  slashp [2] == '\0')
 			{
 				memmove (slashp, slashp + 2, strlen (slashp + 2) + 1);
 				continue;
 			}
 		}
-		slashp = strchr (slashp + 1, PATH_SEPARATOR);
+		slashp = strSeparator (slashp + 1);
 	}
 
 	if (res [0] == '\0')
-		return eStrdup ("/");
+	{
+		const char root [] = {OUTPUT_PATH_SEPARATOR, '\0'};
+		eFree (res);
+		res = eStrdup (root);
+	}
 	else
 	{
 #ifdef MSDOS_STYLE_PATH
@@ -765,9 +819,9 @@ extern char* absoluteFilename (const char *file)
 		if (res [1] == ':'  &&  islower (res [0]))
 			res [0] = toupper (res [0]);
 #endif
-
-		return res;
 	}
+	canonicalizePath (res);
+	return res;
 }
 
 /* Return a newly allocated string containing the absolute file name of dir
@@ -778,7 +832,7 @@ extern char* absoluteDirname (char *file)
 {
 	char *slashp, *res;
 	char save;
-	slashp = strrchr (file, PATH_SEPARATOR);
+	slashp = strRSeparator (file);
 	if (slashp == NULL)
 		res = eStrdup (CurrentDirectory);
 	else
@@ -805,7 +859,7 @@ extern char* relativeFilename (const char *file, const char *dir)
 	absdir = absoluteFilename (file);
 	fp = absdir;
 	dp = dir;
-	while (*fp++ == *dp++)
+	while (fnmChEq (*fp++, *dp++))
 		continue;
 	fp--;
 	dp--;  /* back to the first differing char */
@@ -815,21 +869,24 @@ extern char* relativeFilename (const char *file, const char *dir)
 			return absdir;  /* first char differs, give up */
 		fp--;
 		dp--;
-	} while (*fp != PATH_SEPARATOR);
+	} while (!isPathSeparator (*fp));
 
 	/* Build a sequence of "../" strings for the resulting relative file name.
 	 */
 	i = 0;
-	while ((dp = strchr (dp + 1, PATH_SEPARATOR)) != NULL)
+	while ((dp = strSeparator (dp + 1)) != NULL)
 		i += 1;
 	res = xMalloc (3 * i + strlen (fp + 1) + 1, char);
 	res [0] = '\0';
 	while (i-- > 0)
-		strcat (res, "../");
+	{
+		const char parent [] = {'.', '.', OUTPUT_PATH_SEPARATOR, '\0'};
+		strcat (res, parent);
+	}
 
 	/* Add the file name relative to the common root of file and dir. */
 	strcat (res, fp + 1);
-	free (absdir);
+	eFree (absdir);
 
 	return res;
 }
@@ -874,7 +931,7 @@ extern MIO *tempFile (const char *const mode, char **const pName)
 	fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
 #endif
 	if (fd == -1)
-		error (FATAL | PERROR, "cannot open temporary file");
+		error (FATAL | PERROR, "cannot open temporary file: %s", name);
 	fp = fdopen (fd, mode);
 	if (fp == NULL)
 		error (FATAL | PERROR, "cannot open temporary file");

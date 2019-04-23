@@ -12,9 +12,9 @@
 
 #include "general.h"
 #include "debug.h"
-#include "fmt.h"
+#include "entry_p.h"
+#include "fmt_p.h"
 #include "field.h"
-#include "options.h"
 #include "parse.h"
 #include "routines.h"
 #include <string.h>
@@ -25,6 +25,7 @@ typedef union uFmtSpec {
 	struct {
 		fieldType ftype;
 		int width;
+		char *raw_fmtstr;
 	} field;
 } fmtSpec;
 
@@ -59,31 +60,33 @@ static int printTagField (fmtSpec* fspec, MIO* fp, const tagEntryInfo * tag)
 	ftype = fspec->field.ftype;
 
 	if (isCommonField (ftype))
-		str = renderFieldEscaped (ftype, tag, NO_PARSER_FIELD);
+		/* TODO: Don't use WRITER_XREF directly */
+		str = renderFieldEscaped (WRITER_XREF, ftype, tag, NO_PARSER_FIELD, NULL);
 	else
 	{
 		unsigned int findex;
+		const tagField *f;
 
 		for (findex = 0; findex < tag->usedParserFields; findex++)
 		{
-			if (isParserFieldCompatibleWithFtype (tag->parserFields + findex, ftype))
+			f = getParserField(tag, findex);
+			if (isParserFieldCompatibleWithFtype (f, ftype))
 				break;
 		}
 
 		if (findex == tag->usedParserFields)
 			str = "";
-		else if (isFieldEnabled (tag->parserFields [findex].ftype))
-			str = renderFieldEscaped (tag->parserFields [findex].ftype,
-						  tag, findex);
+		else if (isFieldEnabled (f->ftype))
+			/* TODO: Don't use WRITER_XREF directly */
+			str = renderFieldEscaped (WRITER_XREF, f->ftype,
+						  tag, findex, NULL);
 	}
 
 	if (str == NULL)
 		str = "";
 
-	if (width < 0)
-		i = mio_printf (fp, "%-*s", -1 * width, str);
-	else if (width > 0)
-		i = mio_printf (fp, "%*s", width, str);
+	if (width)
+		i = mio_printf (fp, fspec->field.raw_fmtstr, width, str);
 	else
 	{
 		mio_puts (fp, str);
@@ -159,8 +162,8 @@ static langType getLanguageComponentInFieldName (const char *fullName,
 	return language;
 }
 
-static fmtElement** queueTagField (fmtElement **last, long width, char field_letter,
-				   const char *field_name)
+static fmtElement** queueTagField (fmtElement **last, long width, bool truncation,
+								   char field_letter, const char *field_name)
 {
 	fieldType ftype;
 	fmtElement *cur;
@@ -199,6 +202,16 @@ static fmtElement** queueTagField (fmtElement **last, long width, char field_let
 
 	cur->spec.field.width = width;
 	cur->spec.field.ftype = ftype;
+
+	if (width < 0)
+	{
+		cur->spec.field.width *= -1;
+		cur->spec.field.raw_fmtstr = (truncation? "%-.*s": "%-*s");
+	}
+	else if (width > 0)
+		cur->spec.field.raw_fmtstr = (truncation? "%.*s": "%*s");
+	else
+		cur->spec.field.raw_fmtstr = NULL;
 
 	enableField (ftype, true, false);
 	if (language == LANG_AUTO)
@@ -241,6 +254,7 @@ extern fmtElement *fmtNew (const char*  fmtString)
 			else
 			{
 				int justification_right = 1;
+				bool truncation = false;
 				vString *width = NULL;
 				if (literal)
 				{
@@ -256,6 +270,14 @@ extern fmtElement *fmtNew (const char*  fmtString)
 					if (cursor [i] == '\0')
 						error (FATAL, "unexpectedly terminated just after '-': \"%s\"", fmtString);
 
+				}
+				if (cursor [i] == '.')
+				{
+					truncation = true;
+					i++;
+
+					if (cursor [i] == '\0')
+						error (FATAL, "unexpectedly terminated just after '.': \"%s\"", fmtString);
 				}
 
 				while ( '0' <= cursor[i] && cursor[i] <= '9' )
@@ -276,7 +298,7 @@ extern fmtElement *fmtNew (const char*  fmtString)
 				if (width)
 				{
 					if(!strToLong (vStringValue (width), 0, &column_width))
-						error (FATAL | PERROR, "coverting failed: %s", vStringValue (width));
+						error (FATAL | PERROR, "converting failed: %s", vStringValue (width));
 					vStringDelete (width);
 					width = NULL;
 					column_width *= justification_right;
@@ -290,13 +312,14 @@ extern fmtElement *fmtNew (const char*  fmtString)
 					for (; cursor[i] != '}'; i++)
 						vStringPut (field_name, cursor[i]);
 
-					last = queueTagField (last, column_width, NUL_FIELD_LETTER,
-							      vStringValue (field_name));
+					last = queueTagField (last, column_width, truncation,
+										  NUL_FIELD_LETTER, vStringValue (field_name));
 
 					vStringDelete (field_name);
 				}
 				else
-					last = queueTagField (last, column_width, cursor[i], NULL);
+					last = queueTagField (last, column_width, truncation,
+										  cursor[i], NULL);
 			}
 
 		}

@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include "parse.h"
+#include "types.h"
 #include "vstring.h"
 #include "mio.h"
 
@@ -58,21 +58,28 @@ extern unsigned long getInputLineNumber (void);
 extern int getInputLineOffset (void);
 extern const char *getInputFileName (void);
 extern MIOPos getInputFilePosition (void);
-extern MIOPos getInputFilePositionForLine (int line);
+extern MIOPos getInputFilePositionForLine (unsigned int line);
 extern langType getInputLanguage (void);
 extern const char *getInputLanguageName (void);
 extern const char *getInputFileTagPath (void);
 extern bool isInputLanguage (langType lang);
 extern bool isInputHeaderFile (void);
 extern bool isInputLanguageKindEnabled (int kindIndex);
+
+extern bool isInputLanguageRoleEnabled (int kindIndex, int roleIndex);
+extern unsigned int countInputLanguageKinds (void);
+extern unsigned int countInputLanguageRoles (int kindIndex);
+
 extern bool doesInputLanguageAllowNullTag (void);
-extern kindDefinition *getInputLanguageFileKind (void);
 extern bool doesInputLanguageRequestAutomaticFQTag (void);
+extern bool doesParserRunAsGuest (void);
+extern bool doesSubparserRun (void);
+extern bool isParserMarkedNoEmission (void);
 
 extern void freeInputFileResources (void);
 extern const unsigned char *getInputFileData (size_t *size);
 
-/* Stream opend by getMio can be passed to openInputFile as the 3rd
+/* Stream opened by getMio can be passed to openInputFile as the 3rd
    argument. If the 3rd argument is NULL, openInputFile calls getMio
    internally. The 3rd argument is introduced for reusing mio object
    created in parser guessing stage. */
@@ -103,22 +110,27 @@ extern const char *getSourceFileTagPath (void);
 extern langType getSourceLanguage (void);
 extern unsigned long getSourceLineNumber (void);
 
-/* Raw: reading from given a parameter, fp */
-extern char *readLineRaw           (vString *const vLine, MIO *const mio);
-extern char* readLineRawWithNoSeek (vString *const vline, FILE *const pp);
+/* Raw: reading from given a parameter, mio */
+extern char *readLineRaw (vString *const vLine, MIO *const mio);
 
 /* Bypass: reading from fp in inputFile WITHOUT updating fields in input fields */
 extern char *readLineFromBypass (vString *const vLine, MIOPos location, long *const pSeekValue);
-extern char *readLineFromBypassSlow (vString *const vLine, unsigned long lineNumber,
-				     const char *pattern, long *const pSeekValue);
 
-extern void   pushNarrowedInputStream (const langType language,
-				       unsigned long startLine, int startCharOffset,
-				       unsigned long endLine, int endCharOffset,
-				       unsigned long sourceLineOffset);
+extern void   pushNarrowedInputStream (
+				       unsigned long startLine, long startCharOffset,
+				       unsigned long endLine, long endCharOffset,
+				       unsigned long sourceLineOffset,
+				       int promise);
 extern void   popNarrowedInputStream  (void);
 
 extern void     pushLanguage(const langType language);
 extern langType popLanguage (void);
+
+extern unsigned long getInputLineNumberForFileOffset(long offset);
+
+#define THIN_STREAM_SPEC 0, 0, 0, 0, 0
+extern bool isThinStreamSpec(unsigned long startLine, long startCharOffset,
+							 unsigned long endLine, long endCharOffset,
+							 unsigned long sourceLineOffset);
 
 #endif  /* CTAGS_MAIN_READ_H */
