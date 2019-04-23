@@ -14,7 +14,7 @@
 
 #include <string.h>
 /* GEANY_CTAGS_DIFF */
-/*
+/* We don't have fnmatch in Geany
 #include <fnmatch.h>
 */
 /* GEANY_CTAGS_DIFF_END */
@@ -220,6 +220,22 @@ static bool fileNameMatched (
 		const vString* const vpattern, const char* const fileName)
 {
 /* GEANY_CTAGS_DIFF */
+/* We don't have fnmatch in Geany
+	const char* const pattern = vStringValue (vpattern);
+
+#ifdef CASE_INSENSITIVE_FILENAMES
+	{
+		char* const p = newUpperString (pattern);
+		char* const f = newUpperString (fileName);
+		bool r = (fnmatch (p, f, 0) == 0);
+		eFree (f);
+		eFree (p);
+		return r;
+	}
+#else
+	return (fnmatch (pattern, fileName, 0) == 0);
+#endif
+*/
 	return false;
 /* GEANY_CTAGS_DIFF_END */
 }
