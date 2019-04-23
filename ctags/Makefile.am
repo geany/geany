@@ -146,6 +146,10 @@ libctags_la_SOURCES = \
 	main/vstring.h \
 	main/writer.c \
 	main/writer_p.h \
+	main/writer-ctags.c \
+	main/writer-etags.c \
+	main/writer-json.c \
+	main/writer-xref.c \
 	main/xtag.h \
 	main/xtag.c \
 	$(parsers)

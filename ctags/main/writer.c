@@ -11,65 +11,11 @@
 #include "entry_p.h"
 #include "writer_p.h"
 
-/* GEANY_CTAGS_DIFF */
-/* Dummy definitions of writers as we don't need them */
-
-tagWriter uCtagsWriter = {
-	.writeEntry = NULL,
-	.writePtagEntry = NULL,
-	.preWriteEntry = NULL,
-	.postWriteEntry = NULL,
-	.buildFqTagCache = NULL,
-	.defaultFileName = NULL,
-	.private = NULL,
-	.type = WRITER_DEFAULT,
-};
-
-tagWriter eCtagsWriter = {
-	.writeEntry = NULL,
-	.writePtagEntry = NULL,
-	.preWriteEntry = NULL,
-	.postWriteEntry = NULL,
-	.buildFqTagCache = NULL,
-	.defaultFileName = NULL,
-	.private = NULL,
-	.type = WRITER_DEFAULT,
-};
-
-tagWriter etagsWriter = {
-	.writeEntry = NULL,
-	.writePtagEntry = NULL,
-	.preWriteEntry = NULL,
-	.postWriteEntry = NULL,
-	.buildFqTagCache = NULL,
-	.defaultFileName = NULL,
-	.private = NULL,
-	.type = WRITER_DEFAULT,
-};
-
-tagWriter xrefWriter = {
-	.writeEntry = NULL,
-	.writePtagEntry = NULL,
-	.preWriteEntry = NULL,
-	.postWriteEntry = NULL,
-	.buildFqTagCache = NULL,
-	.defaultFileName = NULL,
-	.private = NULL,
-	.type = WRITER_DEFAULT,
-};
-
-tagWriter jsonWriter = {
-	.writeEntry = NULL,
-	.writePtagEntry = NULL,
-	.preWriteEntry = NULL,
-	.postWriteEntry = NULL,
-	.buildFqTagCache = NULL,
-	.defaultFileName = NULL,
-	.private = NULL,
-	.type = WRITER_DEFAULT,
-};
-
-/* GEANY_CTAGS_DIFF_END */
+extern tagWriter uCtagsWriter;
+extern tagWriter eCtagsWriter;
+extern tagWriter etagsWriter;
+extern tagWriter xrefWriter;
+extern tagWriter jsonWriter;
 
 static tagWriter *writerTable [WRITER_COUNT] = {
 	[WRITER_U_CTAGS] = &uCtagsWriter,
