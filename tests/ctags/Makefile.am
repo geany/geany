@@ -270,6 +270,7 @@ test_sources = \
 	shebang.js						\
 	signature.cpp					\
 	simple.abc						\
+	simple.as						\
 	simple.asciidoc					\
 	simple.bas						\
 	simple.cbl						\

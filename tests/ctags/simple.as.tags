@@ -1,0 +1,20 @@
+# format=tagmanager
+ActionScript is deadÌ524288Ö0
+AlarmClock ()Ì1Ö0
+FilledCircle ():voidÌ16Ö0
+FilledCircle (extends Sprite )Ì1Ö0
+IEventDispatcher ()Ì32Ö0
+MODE_AUDIO :Ì65536Ö0
+MODE_BOTH :Ì65536Ö0
+MODE_VISUAL :Ì65536Ö0
+MyPackageÌ512Ö0
+addEventListener (type:String, listener:Function,Ì16Ö0
+circle : SpriteÌ16384Ö0
+dispatchEvent (event:Event):Boolean;Ì16Ö0
+fixmeÌ524288Ö0
+hasEventListener (type:String):Boolean;Ì16Ö0
+myValue getÌ8Ö0
+myValue setÌ8Ö0
+player : PlayerÌ16384Ö0
+removeEventListener (type:String, listener:Function,Ì16Ö0
+willTrigger (type:String):Boolean;Ì16Ö0
