@@ -3201,7 +3201,7 @@ static bool createTagsWithFallback1 (const langType language,
 
 #ifdef GEANY_CTAGS_LIB
 
-extern void createTagsWithFallbackGeany(unsigned char *buffer, size_t bufferSize,
+extern void geanyCreateTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
 	void *userData)
@@ -3216,7 +3216,7 @@ extern void createTagsWithFallbackGeany(unsigned char *buffer, size_t bufferSize
 		/* keep in sync with parseFileWithMio() and createTagsWithFallback() */
 		setupAnon ();
 		initParserTrashBox ();
-		setTagEntryFunction(tagCallback, userData);
+		geanySetTagEntryFunction(tagCallback, userData);
 		geanyPassCallback = passCallback;
 		geanyUserData = userData;
 		createTagsWithFallback1 (language, NULL);
@@ -3229,7 +3229,7 @@ extern void createTagsWithFallbackGeany(unsigned char *buffer, size_t bufferSize
 		error (WARNING, "Unable to open %s", fileName);
 }
 
-extern const parserDefinition *getParserDefinition (langType language)
+extern const parserDefinition *geanyGetParserDefinition (langType language)
 {
 	Assert (0 <= language  &&  language < (int) LanguageCount);
 	return LanguageTable[language].def;

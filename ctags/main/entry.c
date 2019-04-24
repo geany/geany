@@ -1214,16 +1214,16 @@ static bool isTagWritable(const tagEntryInfo *const tag)
 
 #ifdef GEANY_CTAGS_LIB
 
-static tagEntryFunction TagEntryFunction = NULL;
-static void *TagEntryUserData = NULL;
+static tagEntryFunction geanyTagEntryFunction = NULL;
+static void *geanyTagEntryUserData = NULL;
 
-extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data)
+extern void geanySetTagEntryFunction(tagEntryFunction entry_function, void *user_data)
 {
-	TagEntryFunction = entry_function;
-	TagEntryUserData = user_data;
+	geanyTagEntryFunction = entry_function;
+	geanyTagEntryUserData = user_data;
 }
 
-static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
+static void geanyInitCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
 {
 	tag->name = info->name;
 	tag->signature = info->extensionFields.signature;
@@ -1262,12 +1262,12 @@ static void writeTagEntry (const tagEntryInfo *const tag, bool checkingNeeded)
 #ifdef GEANY_CTAGS_LIB
 	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
 
-	if (TagEntryFunction != NULL)
+	if (geanyTagEntryFunction != NULL)
 	{
 		ctagsTag t;
 
-		initCtagsTag(&t, tag);
-		length = TagEntryFunction(&t, TagEntryUserData);
+		geanyInitCtagsTag(&t, tag);
+		length = geanyTagEntryFunction(&t, geanyTagEntryUserData);
 	}
 #else
 	length = writerWriteTag (TagFile.mio, tag);

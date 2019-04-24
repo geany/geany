@@ -152,7 +152,7 @@ CTAGS_INLINE roleBitsType makeRoleBit(int roleIndex)
 
 #ifdef GEANY_CTAGS_LIB
 #include "ctags-api.h"
-extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
+extern void geanySetTagEntryFunction(tagEntryFunction entry_function, void *user_data);
 #endif /* GEANY_CTAGS_LIB */
 
 #endif  /* CTAGS_MAIN_ENTRY_H */

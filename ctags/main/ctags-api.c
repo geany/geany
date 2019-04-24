@@ -44,6 +44,7 @@ static bool nofatalErrorPrinter (const errorSelection selection,
 	return false;
 }
 
+/* keep in sync with ctags main() - use only things interesting for us */
 extern void ctagsInit(void)
 {
 	initDefaultTrashBox ();
@@ -75,7 +76,7 @@ extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 		return;
 	}
 
-	createTagsWithFallbackGeany(buffer, bufferSize, fileName, language,
+	geanyCreateTagsWithFallback(buffer, bufferSize, fileName, language,
 		tagCallback, passCallback, userData);
 }
 
@@ -94,7 +95,7 @@ extern int ctagsGetNamedLang(const char *name)
 
 extern const char *ctagsGetLangKinds(int lang)
 {
-	const parserDefinition *def = getParserDefinition(lang);
+	const parserDefinition *def = geanyGetParserDefinition(lang);
 	unsigned int i;
 	static char kinds[257];
 
@@ -108,7 +109,7 @@ extern const char *ctagsGetLangKinds(int lang)
 
 extern const char *ctagsGetKindName(char kind, int lang)
 {
-	const parserDefinition *def = getParserDefinition(lang);
+	const parserDefinition *def = geanyGetParserDefinition(lang);
 	unsigned int i;
 
 	for (i = 0; i < def->kindCount; i++)
@@ -122,7 +123,7 @@ extern const char *ctagsGetKindName(char kind, int lang)
 
 extern char ctagsGetKindFromName(const char *name, int lang)
 {
-	const parserDefinition *def = getParserDefinition(lang);
+	const parserDefinition *def = geanyGetParserDefinition(lang);
 	unsigned int i;
 
 	for (i = 0; i < def->kindCount; i++)
@@ -136,7 +137,7 @@ extern char ctagsGetKindFromName(const char *name, int lang)
 
 extern bool ctagsIsUsingRegexParser(int lang)
 {
-	return getParserDefinition(lang)->method & METHOD_REGEX;
+	return geanyGetParserDefinition(lang)->method & METHOD_REGEX;
 }
 
 
