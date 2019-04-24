@@ -156,6 +156,7 @@ extern const char *tagFileName (void)
 extern void abort_if_ferror(MIO *const mio)
 {
 #ifndef GEANY_CTAGS_LIB
+/* to be sure some error doesn't terminate Geany */
 	if (mio_error (mio))
 		error (FATAL | PERROR, "cannot write tag file");
 #endif /* GEANY_CTAGS_LIB */

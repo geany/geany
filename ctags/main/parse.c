@@ -3381,6 +3381,7 @@ extern const char *getLanguageEncoding (const langType language)
 #endif
 
 #ifndef GEANY_CTAGS_LIB
+/* just to eliminate warning about unused function */
 static void addParserPseudoTags (langType language)
 {
 	parserObject *parser = LanguageTable + language;
@@ -3936,7 +3937,7 @@ extern void anonGenerate (vString *buffer, const char *prefix, int kind)
 	vStringCopyS(buffer, prefix);
 
 /* GEANY_CTAGS_DIFF */
-/*
+/* we want to see numbers for anon functions in the tree view instead of the hash
 	char buf [9];
 	anonHashString (getInputFileName(), buf);
 	sprintf(szNum,"%s%02x%02x",buf,parser -> anonymousIdentiferId, kind);
@@ -4174,6 +4175,7 @@ extern void addLanguageTagMultiTableRegex(const langType language,
 }
 
 #ifndef GEANY_CTAGS_LIB
+/* just to eliminate warning about unused functions */
 /*
  * A parser for CTagsSelfTest (CTST)
  */
