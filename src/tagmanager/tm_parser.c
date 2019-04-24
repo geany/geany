@@ -423,7 +423,7 @@ static TMParserMapEntry map_R[] = {
 
 static TMParserMapEntry map_COBOL[] = {
 	{'d', tm_tag_variable_t},
-	{'f', tm_tag_function_t},
+	{'e', tm_tag_function_t},
 	{'g', tm_tag_struct_t},
 	{'p', tm_tag_macro_t},
 	{'P', tm_tag_class_t},

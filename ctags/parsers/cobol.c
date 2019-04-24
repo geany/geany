@@ -21,7 +21,7 @@ static tagRegexTable cobolTagRegexTable[] = {
 	 ")", "\\1",
 	 "d,data,data items", "i", NULL},
 	{"^[ \t]*[FSR]D[ \t]+([A-Z0-9][A-Z0-9-]*)\\.", "\\1",
-	 "f,file,file descriptions (FD, SD, RD)", "i", NULL},
+	 "e,desc,file descriptions (FD, SD, RD)", "i", NULL},
 	{"^[ \t]*[0-9]+[ \t]+([A-Z0-9][A-Z0-9-]*)\\.", "\\1",
 	 "g,group,group items", "i", NULL},
 	{"^[ \t]*([A-Z0-9][A-Z0-9-]*)\\.", "\\1",
