@@ -168,12 +168,12 @@ extern int ctagsGetNamedLang(const char *name)
 
 extern const char *ctagsGetLangKinds(int lang)
 {
-	const parserDefinition *def = geanyGetParserDefinition(lang);
-	unsigned int i;
+	unsigned int kindNum = countLanguageKinds(lang);
 	static char kinds[257];
+	unsigned int i;
 
-	for (i = 0; i < def->kindCount; i++)
-		kinds[i] = def->kindTable[i].letter;
+	for (i = 0; i < kindNum; i++)
+		kinds[i] = getLanguageKind(lang, i)->letter;
 	kinds[i] = '\0';
 
 	return kinds;
@@ -182,35 +182,21 @@ extern const char *ctagsGetLangKinds(int lang)
 
 extern const char *ctagsGetKindName(char kind, int lang)
 {
-	const parserDefinition *def = geanyGetParserDefinition(lang);
-	unsigned int i;
-
-	for (i = 0; i < def->kindCount; i++)
-	{
-		if (def->kindTable[i].letter == kind)
-			return def->kindTable[i].name;
-	}
-	return "unknown";
+	kindDefinition *def = getLanguageKindForLetter (lang, kind);
+	return def ? def->name : "unknown";
 }
 
 
 extern char ctagsGetKindFromName(const char *name, int lang)
 {
-	const parserDefinition *def = geanyGetParserDefinition(lang);
-	unsigned int i;
-
-	for (i = 0; i < def->kindCount; i++)
-	{
-		if (strcmp(def->kindTable[i].name, name) == 0)
-			return def->kindTable[i].letter;
-	}
-	return '-';
+	kindDefinition *def = getLanguageKindForName (lang, name);
+	return def ? def->letter : '-';
 }
 
 
 extern bool ctagsIsUsingRegexParser(int lang)
 {
-	return geanyGetParserDefinition(lang)->method & METHOD_REGEX;
+	return geanyIsParserRegex(lang);
 }
 
 

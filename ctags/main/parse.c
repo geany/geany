@@ -3279,10 +3279,10 @@ extern void geanyCreateTags(unsigned char *buffer, size_t bufferSize,
 	teardownWriter(fileName);
 }
 
-extern const parserDefinition *geanyGetParserDefinition (langType language)
+extern const bool geanyIsParserRegex (langType language)
 {
 	Assert (0 <= language  &&  language < (int) LanguageCount);
-	return LanguageTable[language].def;
+	return LanguageTable[language].def->method & METHOD_REGEX;
 }
 
 #endif /* GEANY_CTAGS_LIB */
