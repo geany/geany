@@ -1391,11 +1391,9 @@ extern int makeTagEntry (const tagEntryInfo *const tag)
 	int r = CORK_NIL;
 	Assert (tag->name != NULL);
 
-#ifndef GEANY_CTAGS_LIB
 	if (!TagFile.cork)
 		if (!isTagWritable (tag))
 			goto out;
-#endif /* GEANY_CTAGS_LIB */
 
 	if (tag->name [0] == '\0' && (!tag->placeholder))
 	{

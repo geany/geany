@@ -44,6 +44,23 @@ static bool nofatalErrorPrinter (const errorSelection selection,
 	return false;
 }
 
+static void enableAllLangKinds()
+{
+	unsigned int lang;
+
+	for (lang = 0; lang < countParsers(); lang++)
+	{
+		unsigned int kindNum = countLanguageKinds(lang);
+		unsigned int kind;
+
+		for (kind = 0; kind < kindNum; kind++)
+		{
+			kindDefinition *def = getLanguageKind(lang, kind);
+			enableKind(def, true);
+		}
+	}
+}
+
 /* keep in sync with ctags main() - use only things interesting for us */
 extern void ctagsInit(void)
 {
@@ -64,6 +81,9 @@ extern void ctagsInit(void)
 
 	/* change default value which is false */
 	enableXtag(XTAG_TAGS_GENERATED_BY_GUEST_PARSERS, true);
+
+	/* some kinds we are interested in are disabled by default */
+	enableAllLangKinds();
 }
 
 
