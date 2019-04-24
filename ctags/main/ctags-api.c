@@ -61,6 +61,9 @@ extern void ctagsInit(void)
 
 	/* make sure all parsers are initialized */
 	initializeParser (LANG_AUTO);
+
+	/* change default value which is false */
+	enableXtag(XTAG_TAGS_GENERATED_BY_GUEST_PARSERS, true);
 }
 
 
