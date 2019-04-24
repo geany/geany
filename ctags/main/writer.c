@@ -27,6 +27,13 @@ static tagWriter *writerTable [WRITER_COUNT] = {
 
 static tagWriter *writer;
 
+#ifdef GEANY_CTAGS_LIB
+extern void geanySetTagWriter(tagWriter *w)
+{
+	writer = w;
+}
+#endif /* GEANY_CTAGS_LIB */
+
 extern void setTagWriter (writerType wtype)
 {
 	writer = writerTable [wtype];

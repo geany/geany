@@ -1213,34 +1213,6 @@ static bool isTagWritable(const tagEntryInfo *const tag)
 	return true;
 }
 
-#ifdef GEANY_CTAGS_LIB
-
-static tagEntryFunction geanyTagEntryFunction = NULL;
-static void *geanyTagEntryUserData = NULL;
-
-extern void geanySetTagEntryFunction(tagEntryFunction entry_function, void *user_data)
-{
-	geanyTagEntryFunction = entry_function;
-	geanyTagEntryUserData = user_data;
-}
-
-static void geanyInitCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
-{
-	tag->name = info->name;
-	tag->signature = info->extensionFields.signature;
-	tag->scopeName = info->extensionFields.scopeName;
-	tag->inheritance = info->extensionFields.inheritance;
-	tag->varType = info->extensionFields.typeRef[1];
-	tag->access = info->extensionFields.access;
-	tag->implementation = info->extensionFields.implementation;
-	tag->kindLetter = getLanguageKind(info->langType, info->kindIndex)->letter;
-	tag->isFileScope = info->isFileScope;
-	tag->lineNumber = info->lineNumber;
-	tag->lang = info->langType;
-}
-
-#endif /* GEANY_CTAGS_LIB */
-
 static void writeTagEntry (const tagEntryInfo *const tag, bool checkingNeeded)
 {
 	int length = 0;
@@ -1260,19 +1232,7 @@ static void writeTagEntry (const tagEntryInfo *const tag, bool checkingNeeded)
 		writerBuildFqTagCache ( (tagEntryInfo *const)tag);
 	}
 
-#ifdef GEANY_CTAGS_LIB
-	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
-
-	if (geanyTagEntryFunction != NULL)
-	{
-		ctagsTag t;
-
-		geanyInitCtagsTag(&t, tag);
-		length = geanyTagEntryFunction(&t, geanyTagEntryUserData);
-	}
-#else
 	length = writerWriteTag (TagFile.mio, tag);
-#endif /* GEANY_CTAGS_LIB */
 
 	++TagFile.numTags.added;
 	rememberMaxLengths (strlen (tag->name), (size_t) length);

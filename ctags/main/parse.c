@@ -3207,8 +3207,7 @@ static bool createTagsWithFallback1 (const langType language,
 #ifdef GEANY_CTAGS_LIB
 
 extern void geanyCreateTagsWithFallback(unsigned char *buffer, size_t bufferSize,
-	const char *fileName, const langType language,
-	tagEntryFunction tagCallback, passStartCallback passCallback,
+	const char *fileName, const langType language, passStartCallback passCallback,
 	void *userData)
 {
 	MIO *mio = NULL;
@@ -3221,7 +3220,6 @@ extern void geanyCreateTagsWithFallback(unsigned char *buffer, size_t bufferSize
 		/* keep in sync with parseFileWithMio() and createTagsWithFallback() */
 		setupAnon ();
 		initParserTrashBox ();
-		geanySetTagEntryFunction(tagCallback, userData);
 		geanyPassCallback = passCallback;
 		geanyUserData = userData;
 		geanyNarrowedContext = false;

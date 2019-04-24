@@ -51,6 +51,9 @@ struct sTagWriter {
 
 };
 
+#ifdef GEANY_CTAGS_LIB
+extern void geanySetTagWriter(tagWriter *w);
+#endif /* GEANY_CTAGS_LIB */
 extern void setTagWriter (writerType otype);
 extern void writerSetup  (MIO *mio);
 extern bool writerTeardown (MIO *mio, const char *filename);

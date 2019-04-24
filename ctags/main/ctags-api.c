@@ -22,10 +22,28 @@
 #include "trashbox.h"
 #include "field.h"
 #include "xtag.h"
+#include "entry_p.h"
 
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+
+static int writeEntry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag);
+
+tagWriter geanyWriter = {
+	.writeEntry = writeEntry,
+	.writePtagEntry = NULL, /* no pseudo-tags */
+	.preWriteEntry = NULL,
+	.postWriteEntry = NULL,
+	.buildFqTagCache = NULL,
+	.defaultFileName = "geany_tags_file_which_should_never_appear_anywhere",
+	.private = NULL,
+	.type = WRITER_U_CTAGS /* not really but we must use some of the builtin types */
+};
+
+static tagEntryFunction geanyTagEntryFunction = NULL;
+static void *geanyTagEntryUserData = NULL;
+
 
 static bool nofatalErrorPrinter (const errorSelection selection,
 					  const char *const format,
@@ -44,6 +62,7 @@ static bool nofatalErrorPrinter (const errorSelection selection,
 	return false;
 }
 
+
 static void enableAllLangKinds()
 {
 	unsigned int lang;
@@ -61,13 +80,43 @@ static void enableAllLangKinds()
 	}
 }
 
+
+static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
+{
+	tag->name = info->name;
+	tag->signature = info->extensionFields.signature;
+	tag->scopeName = info->extensionFields.scopeName;
+	tag->inheritance = info->extensionFields.inheritance;
+	tag->varType = info->extensionFields.typeRef[1];
+	tag->access = info->extensionFields.access;
+	tag->implementation = info->extensionFields.implementation;
+	tag->kindLetter = getLanguageKind(info->langType, info->kindIndex)->letter;
+	tag->isFileScope = info->isFileScope;
+	tag->lineNumber = info->lineNumber;
+	tag->lang = info->langType;
+}
+
+
+static int writeEntry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag)
+{
+	ctagsTag t;
+
+	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
+	initCtagsTag(&t, tag);
+	geanyTagEntryFunction(&t, geanyTagEntryUserData);
+
+	/* output length - we don't write anything to the MIO */
+	return 0;
+}
+
+
 /* keep in sync with ctags main() - use only things interesting for us */
 extern void ctagsInit(void)
 {
 	initDefaultTrashBox ();
 
 	setErrorPrinter (nofatalErrorPrinter, NULL);
-	setTagWriter (WRITER_U_CTAGS);
+	geanySetTagWriter (&geanyWriter);
 
 	checkRegex ();
 	initFieldObjects ();
@@ -87,7 +136,6 @@ extern void ctagsInit(void)
 }
 
 
-
 extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
@@ -99,8 +147,10 @@ extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 		return;
 	}
 
+	geanyTagEntryFunction = tagCallback;
+	geanyTagEntryUserData = userData;
 	geanyCreateTagsWithFallback(buffer, bufferSize, fileName, language,
-		tagCallback, passCallback, userData);
+		passCallback, userData);
 }
 
 
