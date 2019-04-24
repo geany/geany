@@ -135,7 +135,7 @@ extern void initializeParser (langType language);
 
 #ifdef GEANY_CTAGS_LIB
 #include "ctags-api.h"
-extern void geanyCreateTagsWithFallback(unsigned char *buffer, size_t bufferSize,
+extern void geanyCreateTags(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language, passStartCallback passCallback,
 	void *userData);
 extern const parserDefinition *geanyGetParserDefinition (langType language);

@@ -3194,43 +3194,6 @@ static bool createTagsWithFallback1 (const langType language,
 	return tagFileResized;
 }
 
-#ifdef GEANY_CTAGS_LIB
-
-extern void geanyCreateTagsWithFallback(unsigned char *buffer, size_t bufferSize,
-	const char *fileName, const langType language, passStartCallback passCallback,
-	void *userData)
-{
-	MIO *mio = NULL;
-
-	if (buffer)
-		mio = mio_new_memory (buffer, bufferSize, NULL, NULL);
-
-	if (openInputFile (fileName, language, mio))
-	{
-		/* keep in sync with parseFileWithMio() and createTagsWithFallback() */
-		setupAnon ();
-		initParserTrashBox ();
-		geanyPassCallback = passCallback;
-		geanyUserData = userData;
-		geanyNarrowedContext = false;
-		createTagsWithFallback1 (language, NULL);
-		forcePromises ();
-		closeInputFile ();
-		finiParserTrashBox ();
-		teardownAnon ();
-	}
-	else
-		error (WARNING, "Unable to open %s", fileName);
-}
-
-extern const parserDefinition *geanyGetParserDefinition (langType language)
-{
-	Assert (0 <= language  &&  language < (int) LanguageCount);
-	return LanguageTable[language].def;
-}
-
-#endif /* GEANY_CTAGS_LIB */
-
 extern bool runParserInNarrowedInputStream (const langType language,
 					       unsigned long startLine, long startCharOffset,
 					       unsigned long endLine, long endCharOffset,
@@ -3288,6 +3251,41 @@ static bool createTagsWithFallback (
 
 	return tagFileResized;
 }
+
+#ifdef GEANY_CTAGS_LIB
+
+extern void geanyCreateTags(unsigned char *buffer, size_t bufferSize,
+	const char *fileName, const langType language, passStartCallback passCallback,
+	void *userData)
+{
+	MIO *mio = NULL;
+
+	if (buffer)
+		mio = mio_new_memory (buffer, bufferSize, NULL, NULL);
+
+	geanyPassCallback = passCallback;
+	geanyUserData = userData;
+	geanyNarrowedContext = false;
+
+	/* keep in sync with parseFileWithMio() */
+	setupWriter ();
+	setupAnon ();
+	initParserTrashBox ();
+
+	createTagsWithFallback (fileName, language, mio);
+
+	finiParserTrashBox ();
+	teardownAnon ();
+	teardownWriter(fileName);
+}
+
+extern const parserDefinition *geanyGetParserDefinition (langType language)
+{
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+	return LanguageTable[language].def;
+}
+
+#endif /* GEANY_CTAGS_LIB */
 
 static void printGuessedParser (const char* const fileName, langType language)
 {

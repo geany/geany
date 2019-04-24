@@ -149,7 +149,7 @@ extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 
 	geanyTagEntryFunction = tagCallback;
 	geanyTagEntryUserData = userData;
-	geanyCreateTagsWithFallback(buffer, bufferSize, fileName, language,
+	geanyCreateTags(buffer, bufferSize, fileName, language,
 		passCallback, userData);
 }
 
