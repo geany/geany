@@ -3108,6 +3108,7 @@ static subparser* teardownLanguageSubparsersInUse (const langType language)
 #ifdef GEANY_CTAGS_LIB
 static passStartCallback geanyPassCallback;
 static void *geanyUserData;
+static bool geanyNarrowedContext;
 #endif /* GEANY_CTAGS_LIB */
 
 static bool createTagsWithFallback1 (const langType language,
@@ -3141,7 +3142,8 @@ static bool createTagsWithFallback1 (const langType language,
 	anonResetMaybe (parser);
 
 #ifdef GEANY_CTAGS_LIB
-	geanyPassCallback(geanyUserData);
+	if (!geanyNarrowedContext)
+		geanyPassCallback(geanyUserData);
 #endif /* GEANY_CTAGS_LIB */
 	while ( ( whyRescan =
 		  createTagsForFile (language, ++passCount) )
@@ -3175,10 +3177,13 @@ static bool createTagsWithFallback1 (const langType language,
 		}
 
 #ifdef GEANY_CTAGS_LIB
-		if (passCount < 3)
-			geanyPassCallback(geanyUserData);
-		else
-			break;
+		if (!geanyNarrowedContext)
+		{
+			if (passCount < 3)
+				geanyPassCallback(geanyUserData);
+			else
+				break;
+		}
 #endif /* GEANY_CTAGS_LIB */
 	}
 
@@ -3219,6 +3224,7 @@ extern void geanyCreateTagsWithFallback(unsigned char *buffer, size_t bufferSize
 		geanySetTagEntryFunction(tagCallback, userData);
 		geanyPassCallback = passCallback;
 		geanyUserData = userData;
+		geanyNarrowedContext = false;
 		createTagsWithFallback1 (language, NULL);
 		forcePromises ();
 		closeInputFile ();
@@ -3260,20 +3266,10 @@ extern bool runParserInNarrowedInputStream (const langType language,
 				 endLine, endCharOffset,
 				 sourceLineOffset,
 				 promise);
-#ifndef GEANY_CTAGS_LIB
+#ifdef GEANY_CTAGS_LIB
+	geanyNarrowedContext = true;
+#endif
 	tagFileResized = createTagsWithFallback1 (language, NULL);
-#else
-	/* Simple parsing without rescans - not used by any sub-parsers anyway */
-	initializeParser (language);
-	parserObject *parser = &(LanguageTable [language]);
-	bool useCork = doesParserUseCork(parser->def);
-	if (useCork)
-		corkTagFile();
-	createTagsForFile (language, 1);
-	if (useCork)
-		uncorkTagFile();
-	tagFileResized = false;
-#endif /* GEANY_CTAGS_LIB */
 	popNarrowedInputStream  ();
 	return tagFileResized;
 
