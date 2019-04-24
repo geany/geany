@@ -3201,25 +3201,17 @@ static bool createTagsWithFallback1 (const langType language,
 
 #ifdef GEANY_CTAGS_LIB
 
-static bool bufferOpen (const char *const fileName, const langType language,
-						unsigned char *buffer, size_t buffer_size)
-{
-	MIO *mio;
-	bool opened;
-
-	mio = mio_new_memory (buffer, buffer_size, NULL, NULL);
-	opened = openInputFile (fileName, language, mio);
-	mio_free (mio);
-	return opened;
-}
-
 extern void createTagsWithFallbackGeany(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
 	void *userData)
 {
-	if ((!buffer && openInputFile (fileName, language, NULL)) ||
-		(buffer && bufferOpen (fileName, language, buffer, bufferSize)))
+	MIO *mio = NULL;
+
+	if (buffer)
+		mio = mio_new_memory (buffer, bufferSize, NULL, NULL);
+
+	if (openInputFile (fileName, language, mio))
 	{
 		/* keep in sync with parseFileWithMio() and createTagsWithFallback() */
 		setupAnon ();
