@@ -92,9 +92,7 @@ typedef struct sParserObject {
  */
 
 static void lazyInitialize (langType language);
-#ifndef GEANY_CTAGS_LIB
 static void addParserPseudoTags (langType language);
-#endif /* GEANY_CTAGS_LIB */
 static void installKeywordTable (const langType language);
 static void installTagRegexTable (const langType language);
 static void installTagXpathTable (const langType language);
@@ -3115,10 +3113,8 @@ static bool createTagsWithFallback1 (const langType language,
 									 langType *exclusive_subparser)
 {
 	bool tagFileResized = false;
-#ifndef GEANY_CTAGS_LIB
 	unsigned long numTags	= numTagsAdded ();
 	MIOPos tagfpos;
-#endif /* GEANY_CTAGS_LIB */
 	int lastPromise = getLastPromise ();
 	unsigned int passCount = 0;
 	rescanReason whyRescan;
@@ -3134,10 +3130,8 @@ static bool createTagsWithFallback1 (const langType language,
 	if (useCork)
 		corkTagFile();
 
-#ifndef GEANY_CTAGS_LIB
 	addParserPseudoTags (language);
 	tagFilePosition (&tagfpos);
-#endif /* GEANY_CTAGS_LIB */
 
 	anonResetMaybe (parser);
 
@@ -3160,19 +3154,15 @@ static bool createTagsWithFallback1 (const langType language,
 		{
 			/*  Restore prior state of tag file.
 			*/
-#ifndef GEANY_CTAGS_LIB
 			setTagFilePosition (&tagfpos);
 			setNumTagsAdded (numTags);
 			tagFileResized = true;
-#endif /* GEANY_CTAGS_LIB */
 			breakPromisesAfter(lastPromise);
 		}
 		else if (whyRescan == RESCAN_APPEND)
 		{
-#ifndef GEANY_CTAGS_LIB
 			tagFilePosition (&tagfpos);
 			numTags = numTagsAdded ();
-#endif /* GEANY_CTAGS_LIB */
 			lastPromise = getLastPromise ();
 		}
 
@@ -3378,8 +3368,6 @@ extern const char *getLanguageEncoding (const langType language)
 }
 #endif
 
-#ifndef GEANY_CTAGS_LIB
-/* just to eliminate warning about unused function */
 static void addParserPseudoTags (langType language)
 {
 	parserObject *parser = LanguageTable + language;
@@ -3391,7 +3379,6 @@ static void addParserPseudoTags (langType language)
 		parser->pseudoTagPrinted = 1;
 	}
 }
-#endif /* GEANY_CTAGS_LIB */
 
 extern bool doesParserRequireMemoryStream (const langType language)
 {

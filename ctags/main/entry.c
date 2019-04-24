@@ -156,7 +156,7 @@ extern const char *tagFileName (void)
 extern void abort_if_ferror(MIO *const mio)
 {
 #ifndef GEANY_CTAGS_LIB
-/* to be sure some error doesn't terminate Geany */
+/* TagFile.mio is NULL so this would terminate Geany */
 	if (mio_error (mio))
 		error (FATAL | PERROR, "cannot write tag file");
 #endif /* GEANY_CTAGS_LIB */
@@ -1663,12 +1663,18 @@ extern void invalidatePatternCache(void)
 
 extern void tagFilePosition (MIOPos *p)
 {
-	mio_getpos (TagFile.mio, p);
+#ifdef GEANY_CTAGS_LIB /* TODO: do the same upstream */
+	if (TagFile.mio)
+#endif /* GEANY_CTAGS_LIB */
+		mio_getpos (TagFile.mio, p);
 }
 
 extern void setTagFilePosition (MIOPos *p)
 {
-	mio_setpos (TagFile.mio, p);
+#ifdef GEANY_CTAGS_LIB /* TODO: do the same upstream */
+	if (TagFile.mio)
+#endif /* GEANY_CTAGS_LIB */
+		mio_setpos (TagFile.mio, p);
 }
 
 extern const char* getTagFileDirectory (void)
