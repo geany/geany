@@ -92,7 +92,9 @@ typedef struct sParserObject {
  */
 
 static void lazyInitialize (langType language);
+#ifndef GEANY_CTAGS_LIB
 static void addParserPseudoTags (langType language);
+#endif /* GEANY_CTAGS_LIB */
 static void installKeywordTable (const langType language);
 static void installTagRegexTable (const langType language);
 static void installTagXpathTable (const langType language);
@@ -3103,12 +3105,19 @@ static subparser* teardownLanguageSubparsersInUse (const langType language)
 	return teardownSubparsersInUse ((LanguageTable + language)->slaveControlBlock);
 }
 
+#ifdef GEANY_CTAGS_LIB
+static passStartCallback geanyPassCallback;
+static void *geanyUserData;
+#endif /* GEANY_CTAGS_LIB */
+
 static bool createTagsWithFallback1 (const langType language,
 									 langType *exclusive_subparser)
 {
 	bool tagFileResized = false;
+#ifndef GEANY_CTAGS_LIB
 	unsigned long numTags	= numTagsAdded ();
 	MIOPos tagfpos;
+#endif /* GEANY_CTAGS_LIB */
 	int lastPromise = getLastPromise ();
 	unsigned int passCount = 0;
 	rescanReason whyRescan;
@@ -3124,11 +3133,16 @@ static bool createTagsWithFallback1 (const langType language,
 	if (useCork)
 		corkTagFile();
 
+#ifndef GEANY_CTAGS_LIB
 	addParserPseudoTags (language);
 	tagFilePosition (&tagfpos);
+#endif /* GEANY_CTAGS_LIB */
 
 	anonResetMaybe (parser);
 
+#ifdef GEANY_CTAGS_LIB
+	geanyPassCallback(geanyUserData);
+#endif /* GEANY_CTAGS_LIB */
 	while ( ( whyRescan =
 		  createTagsForFile (language, ++passCount) )
 		!= RESCAN_NONE)
@@ -3144,17 +3158,28 @@ static bool createTagsWithFallback1 (const langType language,
 		{
 			/*  Restore prior state of tag file.
 			*/
+#ifndef GEANY_CTAGS_LIB
 			setTagFilePosition (&tagfpos);
 			setNumTagsAdded (numTags);
 			tagFileResized = true;
+#endif /* GEANY_CTAGS_LIB */
 			breakPromisesAfter(lastPromise);
 		}
 		else if (whyRescan == RESCAN_APPEND)
 		{
+#ifndef GEANY_CTAGS_LIB
 			tagFilePosition (&tagfpos);
 			numTags = numTagsAdded ();
+#endif /* GEANY_CTAGS_LIB */
 			lastPromise = getLastPromise ();
 		}
+
+#ifdef GEANY_CTAGS_LIB
+		if (passCount < 3)
+			geanyPassCallback(geanyUserData);
+		else
+			break;
+#endif /* GEANY_CTAGS_LIB */
 	}
 
 	/* Force filling allLines buffer and kick the multiline regex parser */
@@ -3175,62 +3200,6 @@ static bool createTagsWithFallback1 (const langType language,
 }
 
 #ifdef GEANY_CTAGS_LIB
-
-/* keep in sync with createTagsWithFallback1() above */
-static bool createTagsWithFallback1Geany (const langType language,
-	passStartCallback passCallback, void *userData)
-{
-	int lastPromise = getLastPromise ();
-	unsigned int passCount = 0;
-	rescanReason whyRescan;
-	parserObject *parser;
-	bool useCork;
-
-	initializeParser (language);
-	parser = &(LanguageTable [language]);
-
-	setupLanguageSubparsersInUse (language);
-
-	useCork = doesParserUseCork(parser->def);
-	if (useCork)
-		corkTagFile();
-
-	anonResetMaybe (parser);
-
-	passCallback(userData);
-	while ( ( whyRescan =
-		  createTagsForFile (language, ++passCount) )
-		!= RESCAN_NONE)
-	{
-		if (useCork)
-		{
-			uncorkTagFile();
-			corkTagFile();
-		}
-
-		if (whyRescan == RESCAN_FAILED)
-			breakPromisesAfter(lastPromise);
-		else if (whyRescan == RESCAN_APPEND)
-			lastPromise = getLastPromise ();
-
-		if (passCount < 3)
-			passCallback(userData);
-		else
-			break;
-	}
-
-	/* Force filling allLines buffer and kick the multiline regex parser */
-	if (hasLanguageMultilineRegexPatterns (language))
-		while (readLineFromInputFile () != NULL)
-			; /* Do nothing */
-
-	if (useCork)
-		uncorkTagFile();
-
-	teardownLanguageSubparsersInUse (language);
-
-	return false;
-}
 
 static bool bufferOpen (const char *const fileName, const langType language,
 						unsigned char *buffer, size_t buffer_size)
@@ -3256,7 +3225,9 @@ extern void createTagsWithFallbackGeany(unsigned char *buffer, size_t bufferSize
 		setupAnon ();
 		initParserTrashBox ();
 		setTagEntryFunction(tagCallback, userData);
-		createTagsWithFallback1Geany (language, passCallback, userData);
+		geanyPassCallback = passCallback;
+		geanyUserData = userData;
+		createTagsWithFallback1 (language, NULL);
 		forcePromises ();
 		closeInputFile ();
 		finiParserTrashBox ();
@@ -3421,6 +3392,7 @@ extern const char *getLanguageEncoding (const langType language)
 }
 #endif
 
+#ifndef GEANY_CTAGS_LIB
 static void addParserPseudoTags (langType language)
 {
 	parserObject *parser = LanguageTable + language;
@@ -3432,6 +3404,7 @@ static void addParserPseudoTags (langType language)
 		parser->pseudoTagPrinted = 1;
 	}
 }
+#endif /* GEANY_CTAGS_LIB */
 
 extern bool doesParserRequireMemoryStream (const langType language)
 {
