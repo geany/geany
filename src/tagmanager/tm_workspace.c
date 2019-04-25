@@ -79,7 +79,7 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->typename_array = g_ptr_array_new();
 	theWorkspace->global_typename_array = g_ptr_array_new();
 
-	ctagsInit();
+	tm_ctags_init();
 	tm_parser_verify_type_mappings();
 
 	return TRUE;

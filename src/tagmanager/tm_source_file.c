@@ -375,7 +375,7 @@ static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *f
 				const gchar *kind = value ? value : key;
 
 				if (kind[0] && kind[1])
-					tag->type = tm_parser_get_tag_type(ctagsGetKindFromName(kind, lang), lang);
+					tag->type = tm_parser_get_tag_type(tm_ctags_get_kind_from_name(kind, lang), lang);
 				else
 					tag->type = tm_parser_get_tag_type(*kind, lang);
 			}
@@ -598,7 +598,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	if (name == NULL)
 		source_file->lang = TM_PARSER_NONE;
 	else
-		source_file->lang = ctagsGetNamedLang(name);
+		source_file->lang = tm_ctags_get_named_lang(name);
 
 	return TRUE;
 }
@@ -715,7 +715,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 
 	tm_tags_array_free(source_file->tags_array, FALSE);
 
-	ctagsParse(use_buffer ? text_buf : NULL, buf_size, file_name,
+	tm_ctags_parse(use_buffer ? text_buf : NULL, buf_size, file_name,
 		source_file->lang, source_file);
 
 	return !retry;
@@ -727,7 +727,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 */
 const gchar *tm_source_file_get_lang_name(TMParserType lang)
 {
-	return ctagsGetLangName(lang);
+	return tm_ctags_get_lang_name(lang);
 }
 
 /* Gets the language index for \a name.
@@ -736,5 +736,5 @@ const gchar *tm_source_file_get_lang_name(TMParserType lang)
 */
 TMParserType tm_source_file_get_named_lang(const gchar *name)
 {
-	return ctagsGetNamedLang(name);
+	return tm_ctags_get_named_lang(name);
 }

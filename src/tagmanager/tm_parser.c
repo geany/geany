@@ -669,23 +669,23 @@ void tm_parser_verify_type_mappings(void)
 {
 	TMParserType lang;
 
-	if (TM_PARSER_COUNT > ctagsGetLangCount())
+	if (TM_PARSER_COUNT > tm_ctags_get_lang_count())
 		g_error("More parsers defined in Geany than in ctags");
 
 	for (lang = 0; lang < TM_PARSER_COUNT; lang++)
 	{
-		const gchar *kinds = ctagsGetLangKinds(lang);
+		const gchar *kinds = tm_ctags_get_lang_kinds(lang);
 		TMParserMap *map = &parser_map[lang];
 		gchar presence_map[256];
 		guint i;
 
 		if (! map->entries || map->size < 1)
 			g_error("No tag types in TM for %s, is the language listed in parser_map?",
-					ctagsGetLangName(lang));
+					tm_ctags_get_lang_name(lang));
 
 		if (map->size != strlen(kinds))
 			g_error("Different number of tag types in TM (%d) and ctags (%d) for %s",
-				map->size, (int)strlen(kinds), ctagsGetLangName(lang));
+				map->size, (int)strlen(kinds), tm_ctags_get_lang_name(lang));
 
 		memset(presence_map, 0, sizeof(presence_map));
 		for (i = 0; i < map->size; i++)
@@ -707,10 +707,10 @@ void tm_parser_verify_type_mappings(void)
 			}
 			if (!ctags_found)
 				g_error("Tag type '%c' found in TM but not in ctags for %s",
-					map->entries[i].kind, ctagsGetLangName(lang));
+					map->entries[i].kind, tm_ctags_get_lang_name(lang));
 			if (!tm_found)
 				g_error("Tag type '%c' found in ctags but not in TM for %s",
-					kinds[i], ctagsGetLangName(lang));
+					kinds[i], tm_ctags_get_lang_name(lang));
 
 			presence_map[(unsigned char) map->entries[i].kind]++;
 		}
@@ -719,7 +719,7 @@ void tm_parser_verify_type_mappings(void)
 		{
 			if (presence_map[i] > 1)
 				g_error("Duplicate tag type '%c' found for %s",
-					(gchar)i, ctagsGetLangName(lang));
+					(gchar)i, tm_ctags_get_lang_name(lang));
 		}
 	}
 }

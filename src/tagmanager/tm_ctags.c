@@ -4,7 +4,7 @@
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License version 2 or (at your option) any later version.
 *
-*   Defines ctags API when compiled as a library.
+*   Encapsulates ctags so it is isolated from the rest of Geany.
 */
 
 #include "general.h"  /* must always come first */
@@ -31,15 +31,15 @@
 #define CTAGS_LANG(x) ((x) >= 0 ? (x) + 1 : (x))
 #define GEANY_LANG(x) ((x) >= 1 ? (x) - 1 : (x))
 
-static int writeEntry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag);
-static void rescanFailed (tagWriter *writer, unsigned long validTagNum);
+static gint write_entry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag);
+static void rescan_failed (tagWriter *writer, gulong valid_tag_num);
 
 tagWriter geanyWriter = {
-	.writeEntry = writeEntry,
+	.writeEntry = write_entry,
 	.writePtagEntry = NULL, /* no pseudo-tags */
 	.preWriteEntry = NULL,
 	.postWriteEntry = NULL,
-	.rescanFailedEntry = rescanFailed,
+	.rescanFailedEntry = rescan_failed,
 	.buildFqTagCache = NULL,
 	.defaultFileName = "geany_tags_file_which_should_never_appear_anywhere",
 	.private = NULL,
@@ -49,8 +49,8 @@ tagWriter geanyWriter = {
 static TMSourceFile *current_source_file = NULL;
 
 
-static bool nofatalErrorPrinter (const errorSelection selection,
-					  const char *const format,
+static bool nonfatal_error_printer (const errorSelection selection,
+					  const gchar *const format,
 					  va_list ap, void *data CTAGS_ATTR_UNUSED)
 {
 	fprintf (stderr, "%s: ", (selection & WARNING) ? "Warning: " : "Error");
@@ -67,16 +67,16 @@ static bool nofatalErrorPrinter (const errorSelection selection,
 }
 
 
-static void enableAllLangKinds()
+static void enable_all_lang_kinds()
 {
-	unsigned int lang;
+	TMParserType lang;
 
 	for (lang = 0; lang < countParsers(); lang++)
 	{
-		unsigned int kindNum = countLanguageKinds(lang);
-		unsigned int kind;
+		guint kind_num = countLanguageKinds(lang);
+		guint kind;
 
-		for (kind = 0; kind < kindNum; kind++)
+		for (kind = 0; kind < kind_num; kind++)
 		{
 			kindDefinition *def = getLanguageKind(lang, kind);
 			enableKind(def, true);
@@ -147,7 +147,7 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source_file)
 {
 	guint i;
-	const char *parent_tag_name;
+	const gchar *parent_tag_name;
 
 	if (tag->type != tm_tag_method_t || tag->scope == NULL ||
 		g_strcmp0(tag->name, "__init__") != 0)
@@ -173,7 +173,7 @@ static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source
 }
 
 
-static int writeEntry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag)
+static gint write_entry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag)
 {
 	TMTag *tm_tag = tm_tag_new();
 
@@ -195,7 +195,7 @@ static int writeEntry (tagWriter *writer, MIO * mio, const tagEntryInfo *const t
 }
 
 
-static void rescanFailed (tagWriter *writer, unsigned long valid_tag_num)
+static void rescan_failed (tagWriter *writer, gulong valid_tag_num)
 {
 	GPtrArray *tags_array = current_source_file->tags_array;
 
@@ -210,11 +210,11 @@ static void rescanFailed (tagWriter *writer, unsigned long valid_tag_num)
 
 
 /* keep in sync with ctags main() - use only things interesting for us */
-extern void ctagsInit(void)
+void tm_ctags_init(void)
 {
 	initDefaultTrashBox ();
 
-	setErrorPrinter (nofatalErrorPrinter, NULL);
+	setErrorPrinter (nonfatal_error_printer, NULL);
 	geanySetTagWriter (&geanyWriter);
 
 	checkRegex ();
@@ -231,14 +231,14 @@ extern void ctagsInit(void)
 	enableXtag(XTAG_TAGS_GENERATED_BY_GUEST_PARSERS, true);
 
 	/* some kinds we are interested in are disabled by default */
-	enableAllLangKinds();
+	enable_all_lang_kinds();
 }
 
 
-extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
-	const char *fileName, const int language, TMSourceFile *source_file)
+void tm_ctags_parse(guchar *buffer, gsize buffer_size,
+	const gchar *file_name, TMParserType language, TMSourceFile *source_file)
 {
-	if (buffer == NULL && fileName == NULL)
+	if (buffer == NULL && file_name == NULL)
 	{
 		error(FATAL, "Neither buffer nor file provided to ctagsParse()");
 		return;
@@ -246,29 +246,29 @@ extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 
 	current_source_file = source_file;
 
-	geanyCreateTags(buffer, bufferSize, fileName, CTAGS_LANG(language));
+	geanyCreateTags(buffer, buffer_size, file_name, CTAGS_LANG(language));
 }
 
 
-extern const char *ctagsGetLangName(int lang)
+const gchar *tm_ctags_get_lang_name(TMParserType lang)
 {
 	return getLanguageName(CTAGS_LANG(lang));
 }
 
 
-extern int ctagsGetNamedLang(const char *name)
+TMParserType tm_ctags_get_named_lang(const gchar *name)
 {
 	return GEANY_LANG(getNamedLanguage(name, 0));
 }
 
 
-extern const char *ctagsGetLangKinds(int lang)
+const gchar *tm_ctags_get_lang_kinds(TMParserType lang)
 {
-	unsigned int kindNum = countLanguageKinds(CTAGS_LANG(lang));
-	static char kinds[257];
-	unsigned int i;
+	guint kind_num = countLanguageKinds(CTAGS_LANG(lang));
+	static gchar kinds[257];
+	guint i;
 
-	for (i = 0; i < kindNum; i++)
+	for (i = 0; i < kind_num; i++)
 		kinds[i] = getLanguageKind(CTAGS_LANG(lang), i)->letter;
 	kinds[i] = '\0';
 
@@ -276,21 +276,21 @@ extern const char *ctagsGetLangKinds(int lang)
 }
 
 
-extern const char *ctagsGetKindName(char kind, int lang)
+const gchar *tm_ctags_get_kind_name(gchar kind, TMParserType lang)
 {
 	kindDefinition *def = getLanguageKindForLetter (CTAGS_LANG(lang), kind);
 	return def ? def->name : "unknown";
 }
 
 
-extern char ctagsGetKindFromName(const char *name, int lang)
+gchar tm_ctags_get_kind_from_name(const gchar *name, TMParserType lang)
 {
 	kindDefinition *def = getLanguageKindForName (CTAGS_LANG(lang), name);
 	return def ? def->letter : '-';
 }
 
 
-extern unsigned int ctagsGetLangCount(void)
+guint tm_ctags_get_lang_count(void)
 {
 	return GEANY_LANG(countParsers());
 }
