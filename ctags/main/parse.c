@@ -3099,12 +3099,6 @@ static subparser* teardownLanguageSubparsersInUse (const langType language)
 	return teardownSubparsersInUse ((LanguageTable + language)->slaveControlBlock);
 }
 
-#ifdef GEANY_CTAGS_LIB
-static passStartCallback geanyPassCallback;
-static void *geanyUserData;
-static bool geanyNarrowedContext;
-#endif /* GEANY_CTAGS_LIB */
-
 static bool createTagsWithFallback1 (const langType language,
 									 langType *exclusive_subparser)
 {
@@ -3131,10 +3125,6 @@ static bool createTagsWithFallback1 (const langType language,
 
 	anonResetMaybe (parser);
 
-#ifdef GEANY_CTAGS_LIB
-	if (!geanyNarrowedContext)
-		geanyPassCallback(geanyUserData);
-#endif /* GEANY_CTAGS_LIB */
 	while ( ( whyRescan =
 		  createTagsForFile (language, ++passCount) )
 		!= RESCAN_NONE)
@@ -3152,6 +3142,9 @@ static bool createTagsWithFallback1 (const langType language,
 			*/
 			setTagFilePosition (&tagfpos);
 			setNumTagsAdded (numTags);
+#ifdef GEANY_CTAGS_LIB
+			writerRescanFailed (numTags);
+#endif /* GEANY_CTAGS_LIB */
 			tagFileResized = true;
 			breakPromisesAfter(lastPromise);
 		}
@@ -3161,16 +3154,6 @@ static bool createTagsWithFallback1 (const langType language,
 			numTags = numTagsAdded ();
 			lastPromise = getLastPromise ();
 		}
-
-#ifdef GEANY_CTAGS_LIB
-		if (!geanyNarrowedContext)
-		{
-			if (passCount < 3)
-				geanyPassCallback(geanyUserData);
-			else
-				break;
-		}
-#endif /* GEANY_CTAGS_LIB */
 	}
 
 	/* Force filling allLines buffer and kick the multiline regex parser */
@@ -3213,9 +3196,6 @@ extern bool runParserInNarrowedInputStream (const langType language,
 				 endLine, endCharOffset,
 				 sourceLineOffset,
 				 promise);
-#ifdef GEANY_CTAGS_LIB
-	geanyNarrowedContext = true;
-#endif
 	tagFileResized = createTagsWithFallback1 (language, NULL);
 	popNarrowedInputStream  ();
 	return tagFileResized;
@@ -3251,17 +3231,12 @@ static bool createTagsWithFallback (
 #ifdef GEANY_CTAGS_LIB
 
 extern void geanyCreateTags(unsigned char *buffer, size_t bufferSize,
-	const char *fileName, const langType language, passStartCallback passCallback,
-	void *userData)
+	const char *fileName, const langType language)
 {
 	MIO *mio = NULL;
 
 	if (buffer)
 		mio = mio_new_memory (buffer, bufferSize, NULL, NULL);
-
-	geanyPassCallback = passCallback;
-	geanyUserData = userData;
-	geanyNarrowedContext = false;
 
 	/* keep in sync with parseFileWithMio() */
 	setupWriter ();

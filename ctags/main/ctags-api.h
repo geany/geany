@@ -34,15 +34,14 @@ typedef struct {
  * currently unused. */
 typedef bool (*tagEntryFunction) (const ctagsTag *const tag, void *userData);
 
-/* Callback invoked at the beginning of every parsing pass. The return value is
- * currently unused */
-typedef bool (*passStartCallback) (void *userData);
+/* Callback invoked when rescan fails telling us how many of the passed tags are valid */
+typedef void (*rescanFailedFunction) (unsigned long validTagNum, void *userData);
 
 
 extern void ctagsInit(void);
 extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const int language,
-	tagEntryFunction tagCallback, passStartCallback passCallback,
+	tagEntryFunction tagCallback, rescanFailedFunction rescanCallback,
 	void *userData);
 extern const char *ctagsGetLangName(int lang);
 extern int ctagsGetNamedLang(const char *name);

@@ -33,6 +33,9 @@ tagWriter etagsWriter = {
 	.writePtagEntry = NULL,
 	.preWriteEntry = beginEtagsFile,
 	.postWriteEntry = endEtagsFile,
+#ifdef GEANY_CTAGS_LIB
+	.rescanFailedEntry = NULL,
+#endif /* GEANY_CTAGS_LIB */
 	.defaultFileName = ETAGS_FILE,
 };
 

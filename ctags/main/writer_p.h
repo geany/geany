@@ -41,6 +41,9 @@ struct sTagWriter {
 	/* Returning TRUE means the output file may be shrunk.
 	   In such case the callee may do truncate output file. */
 	bool (* postWriteEntry)  (tagWriter *writer, MIO * mio, const char* filename);
+#ifdef GEANY_CTAGS_LIB
+	void (* rescanFailedEntry) (tagWriter *writer, unsigned long validTagNum);
+#endif /* GEANY_CTAGS_LIB */
 	void (* buildFqTagCache) (tagWriter *writer, tagEntryInfo *const tag);
 	const char *defaultFileName;
 
@@ -51,9 +54,6 @@ struct sTagWriter {
 
 };
 
-#ifdef GEANY_CTAGS_LIB
-extern void geanySetTagWriter(tagWriter *w);
-#endif /* GEANY_CTAGS_LIB */
 extern void setTagWriter (writerType otype);
 extern void writerSetup  (MIO *mio);
 extern bool writerTeardown (MIO *mio, const char *filename);
@@ -64,6 +64,10 @@ int writerWritePtag (MIO * mio,
 					 const char *const fileName,
 					 const char *const pattern,
 					 const char *const parserName);
+#ifdef GEANY_CTAGS_LIB
+extern void geanySetTagWriter(tagWriter *w);
+void writerRescanFailed (unsigned long validTagNum);
+#endif
 
 extern void writerBuildFqTagCache (tagEntryInfo *const tag);
 

@@ -79,6 +79,14 @@ extern int writerWritePtag (MIO * mio,
 
 }
 
+#ifdef GEANY_CTAGS_LIB
+extern void writerRescanFailed (unsigned long validTagNum)
+{
+	if (writer->rescanFailedEntry)
+		writer->rescanFailedEntry(writer, validTagNum);
+}
+#endif /* GEANY_CTAGS_LIB */
+
 extern void writerBuildFqTagCache (tagEntryInfo *const tag)
 {
 	if (writer->buildFqTagCache)

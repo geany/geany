@@ -134,10 +134,8 @@ extern kindDefinition* getLanguageKindForLetter (const langType language, char k
 extern void initializeParser (langType language);
 
 #ifdef GEANY_CTAGS_LIB
-#include "ctags-api.h"
 extern void geanyCreateTags(unsigned char *buffer, size_t bufferSize,
-	const char *fileName, const langType language, passStartCallback passCallback,
-	void *userData);
+	const char *fileName, const langType language);
 #endif /* GEANY_CTAGS_LIB */
 
 #ifdef HAVE_ICONV

@@ -43,6 +43,9 @@ tagWriter jsonWriter = {
 	.writePtagEntry = writeJsonPtagEntry,
 	.preWriteEntry = NULL,
 	.postWriteEntry = NULL,
+#ifdef GEANY_CTAGS_LIB
+	.rescanFailedEntry = NULL,
+#endif /* GEANY_CTAGS_LIB */
 	.buildFqTagCache = buildJsonFqTagCache,
 	.defaultFileName = NULL,
 };

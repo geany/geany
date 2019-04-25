@@ -32,12 +32,14 @@
 #define GEANY_LANG(x) ((x) >= 1 ? (x) - 1 : (x))
 
 static int writeEntry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag);
+static void rescanFailed (tagWriter *writer, unsigned long validTagNum);
 
 tagWriter geanyWriter = {
 	.writeEntry = writeEntry,
 	.writePtagEntry = NULL, /* no pseudo-tags */
 	.preWriteEntry = NULL,
 	.postWriteEntry = NULL,
+	.rescanFailedEntry = rescanFailed,
 	.buildFqTagCache = NULL,
 	.defaultFileName = "geany_tags_file_which_should_never_appear_anywhere",
 	.private = NULL,
@@ -45,7 +47,8 @@ tagWriter geanyWriter = {
 };
 
 static tagEntryFunction geanyTagEntryFunction = NULL;
-static void *geanyTagEntryUserData = NULL;
+static rescanFailedFunction geanyRescanFailedFunction = NULL;
+static void *geanyUserData = NULL;
 
 
 static bool nofatalErrorPrinter (const errorSelection selection,
@@ -106,10 +109,16 @@ static int writeEntry (tagWriter *writer, MIO * mio, const tagEntryInfo *const t
 
 	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
 	initCtagsTag(&t, tag);
-	geanyTagEntryFunction(&t, geanyTagEntryUserData);
+	geanyTagEntryFunction(&t, geanyUserData);
 
 	/* output length - we don't write anything to the MIO */
 	return 0;
+}
+
+
+static void rescanFailed (tagWriter *writer, unsigned long validTagNum)
+{
+	geanyRescanFailedFunction (validTagNum, geanyUserData);
 }
 
 
@@ -141,7 +150,7 @@ extern void ctagsInit(void)
 
 extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const int language,
-	tagEntryFunction tagCallback, passStartCallback passCallback,
+	tagEntryFunction tagCallback, rescanFailedFunction rescanCallback,
 	void *userData)
 {
 	if (buffer == NULL && fileName == NULL)
@@ -151,9 +160,10 @@ extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 	}
 
 	geanyTagEntryFunction = tagCallback;
-	geanyTagEntryUserData = userData;
-	geanyCreateTags(buffer, bufferSize, fileName, CTAGS_LANG(language),
-		passCallback, userData);
+	geanyRescanFailedFunction = rescanCallback;
+	geanyUserData = userData;
+
+	geanyCreateTags(buffer, bufferSize, fileName, CTAGS_LANG(language));
 }
 
 

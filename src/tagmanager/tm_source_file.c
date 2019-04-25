@@ -642,13 +642,19 @@ static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source
 	}
 }
 
-/* new parsing pass ctags callback function */
-static bool ctags_pass_start(void *user_data)
+/* callback function informing us about rescan failure */
+static void ctags_rescan_failed(unsigned long valid_tag_num, void *user_data)
 {
 	TMSourceFile *current_source_file = user_data;
+	GPtrArray *tags_array = current_source_file->tags_array;
 
-	tm_tags_array_free(current_source_file->tags_array, FALSE);
-	return TRUE;
+	if (tags_array->len > valid_tag_num)
+	{
+		guint i;
+		for (i = valid_tag_num; i < tags_array->len; i++)
+			tm_tag_unref(tags_array->pdata[i]);
+		g_ptr_array_set_size(tags_array, valid_tag_num);
+	}
 }
 
 /* new tag ctags callback function */
@@ -827,7 +833,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 	tm_tags_array_free(source_file->tags_array, FALSE);
 
 	ctagsParse(use_buffer ? text_buf : NULL, buf_size, file_name,
-		source_file->lang, ctags_new_tag, ctags_pass_start, source_file);
+		source_file->lang, ctags_new_tag, ctags_rescan_failed, source_file);
 
 	return !retry;
 }

@@ -40,6 +40,9 @@ tagWriter uCtagsWriter = {
 	.writePtagEntry = writeCtagsPtagEntry,
 	.preWriteEntry = NULL,
 	.postWriteEntry = NULL,
+#ifdef GEANY_CTAGS_LIB
+	.rescanFailedEntry = NULL,
+#endif /* GEANY_CTAGS_LIB */
 	.buildFqTagCache = buildCtagsFqTagCache,
 	.defaultFileName = CTAGS_FILE,
 };
@@ -64,6 +67,9 @@ tagWriter eCtagsWriter = {
 	.writePtagEntry = writeCtagsPtagEntry,
 	.preWriteEntry = beginECtagsFile,
 	.postWriteEntry = endECTagsFile,
+#ifdef GEANY_CTAGS_LIB
+	.rescanFailedEntry = NULL,
+#endif /* GEANY_CTAGS_LIB */
 	.buildFqTagCache = buildCtagsFqTagCache,
 	.defaultFileName = CTAGS_FILE,
 };

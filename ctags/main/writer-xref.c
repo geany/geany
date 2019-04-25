@@ -25,6 +25,9 @@ tagWriter xrefWriter = {
 	.writePtagEntry = NULL,
 	.preWriteEntry = NULL,
 	.postWriteEntry = NULL,
+#ifdef GEANY_CTAGS_LIB
+	.rescanFailedEntry = NULL,
+#endif /* GEANY_CTAGS_LIB */
 	.buildFqTagCache = buildXrefFqTagCache,
 	.defaultFileName = NULL,
 };
