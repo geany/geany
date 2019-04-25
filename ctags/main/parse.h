@@ -138,7 +138,6 @@ extern void initializeParser (langType language);
 extern void geanyCreateTags(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language, passStartCallback passCallback,
 	void *userData);
-extern const bool geanyIsParserRegex (langType language);
 #endif /* GEANY_CTAGS_LIB */
 
 #ifdef HAVE_ICONV

@@ -683,11 +683,6 @@ void tm_parser_verify_type_mappings(void)
 			g_error("No tag types in TM for %s, is the language listed in parser_map?",
 					ctagsGetLangName(lang));
 
-		/* TODO: check also regex parser mappings. At the moment there's no way
-		 * to access regex parser definitions in ctags */
-		if (ctagsIsUsingRegexParser(lang))
-			continue;
-
 		if (map->size != strlen(kinds))
 			g_error("Different number of tag types in TM (%d) and ctags (%d) for %s",
 				map->size, (int)strlen(kinds), ctagsGetLangName(lang));

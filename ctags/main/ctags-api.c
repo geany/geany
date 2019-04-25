@@ -194,12 +194,6 @@ extern char ctagsGetKindFromName(const char *name, int lang)
 }
 
 
-extern bool ctagsIsUsingRegexParser(int lang)
-{
-	return geanyIsParserRegex(lang);
-}
-
-
 extern unsigned int ctagsGetLangCount(void)
 {
 	return countParsers();

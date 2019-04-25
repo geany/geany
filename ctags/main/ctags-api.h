@@ -49,7 +49,6 @@ extern int ctagsGetNamedLang(const char *name);
 extern const char *ctagsGetLangKinds(int lang);
 extern const char *ctagsGetKindName(char kind, int lang);
 extern char ctagsGetKindFromName(const char *name, int lang);
-extern bool ctagsIsUsingRegexParser(int lang);
 extern unsigned int ctagsGetLangCount(void);
 
 #endif /* GEANY_CTAGS_LIB */
