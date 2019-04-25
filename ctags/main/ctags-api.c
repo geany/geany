@@ -28,6 +28,9 @@
 #include <string.h>
 #include <errno.h>
 
+#define CTAGS_LANG(x) ((x) >= 0 ? (x) + 1 : (x))
+#define GEANY_LANG(x) ((x) >= 1 ? (x) - 1 : (x))
+
 static int writeEntry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag);
 
 tagWriter geanyWriter = {
@@ -93,7 +96,7 @@ static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
 	tag->kindLetter = getLanguageKind(info->langType, info->kindIndex)->letter;
 	tag->isFileScope = info->isFileScope;
 	tag->lineNumber = info->lineNumber;
-	tag->lang = info->langType;
+	tag->lang = GEANY_LANG(info->langType);
 }
 
 
@@ -137,7 +140,7 @@ extern void ctagsInit(void)
 
 
 extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
-	const char *fileName, const langType language,
+	const char *fileName, const int language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
 	void *userData)
 {
@@ -149,31 +152,31 @@ extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 
 	geanyTagEntryFunction = tagCallback;
 	geanyTagEntryUserData = userData;
-	geanyCreateTags(buffer, bufferSize, fileName, language,
+	geanyCreateTags(buffer, bufferSize, fileName, CTAGS_LANG(language),
 		passCallback, userData);
 }
 
 
 extern const char *ctagsGetLangName(int lang)
 {
-	return getLanguageName(lang);
+	return getLanguageName(CTAGS_LANG(lang));
 }
 
 
 extern int ctagsGetNamedLang(const char *name)
 {
-	return getNamedLanguage(name, 0);
+	return GEANY_LANG(getNamedLanguage(name, 0));
 }
 
 
 extern const char *ctagsGetLangKinds(int lang)
 {
-	unsigned int kindNum = countLanguageKinds(lang);
+	unsigned int kindNum = countLanguageKinds(CTAGS_LANG(lang));
 	static char kinds[257];
 	unsigned int i;
 
 	for (i = 0; i < kindNum; i++)
-		kinds[i] = getLanguageKind(lang, i)->letter;
+		kinds[i] = getLanguageKind(CTAGS_LANG(lang), i)->letter;
 	kinds[i] = '\0';
 
 	return kinds;
@@ -182,21 +185,21 @@ extern const char *ctagsGetLangKinds(int lang)
 
 extern const char *ctagsGetKindName(char kind, int lang)
 {
-	kindDefinition *def = getLanguageKindForLetter (lang, kind);
+	kindDefinition *def = getLanguageKindForLetter (CTAGS_LANG(lang), kind);
 	return def ? def->name : "unknown";
 }
 
 
 extern char ctagsGetKindFromName(const char *name, int lang)
 {
-	kindDefinition *def = getLanguageKindForName (lang, name);
+	kindDefinition *def = getLanguageKindForName (CTAGS_LANG(lang), name);
 	return def ? def->letter : '-';
 }
 
 
 extern unsigned int ctagsGetLangCount(void)
 {
-	return countParsers();
+	return GEANY_LANG(countParsers());
 }
 
 #endif /* GEANY_CTAGS_LIB */

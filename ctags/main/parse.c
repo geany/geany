@@ -103,13 +103,9 @@ static void teardownAnon (void);
 /*
 *   DATA DEFINITIONS
 */
-#ifndef GEANY_CTAGS_LIB
 static parserDefinition *CTagsSelfTestParser (void);
-#endif /* GEANY_CTAGS_LIB */
 static parserDefinitionFunc* BuiltInParsers[] = {
-#ifndef GEANY_CTAGS_LIB
 	CTagsSelfTestParser,
-#endif /* GEANY_CTAGS_LIB */
 	PARSER_LIST,
 	XML_PARSER_LIST
 #ifdef HAVE_LIBXML
@@ -4151,8 +4147,6 @@ extern void addLanguageTagMultiTableRegex(const langType language,
 						   name, kinds, flags, disabled);
 }
 
-#ifndef GEANY_CTAGS_LIB
-/* just to eliminate warning about unused functions */
 /*
  * A parser for CTagsSelfTest (CTST)
  */
@@ -4390,4 +4384,3 @@ static parserDefinition *CTagsSelfTestParser (void)
 	def->useCork = true;
 	return def;
 }
-#endif /* GEANY_CTAGS_LIB */
