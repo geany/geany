@@ -6,12 +6,8 @@
 *
 *   Defines ctags API when compiled as a library.
 */
-#ifndef CTAGS_API_H
-#define CTAGS_API_H
-
-#include "general.h"  /* must always come first */
-
-#ifdef GEANY_CTAGS_LIB
+#ifndef TM_CTAGS_H
+#define TM_CTAGS_H
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -50,6 +46,4 @@ extern const char *ctagsGetKindName(char kind, int lang);
 extern char ctagsGetKindFromName(const char *name, int lang);
 extern unsigned int ctagsGetLangCount(void);
 
-#endif /* GEANY_CTAGS_LIB */
-
-#endif  /* CTAGS_API_H */
+#endif /* TM_CTAGS_H */

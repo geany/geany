@@ -58,8 +58,6 @@ libctags_la_SOURCES = \
 	main/colprint.c \
 	main/colprint_p.h \
 	main/ctags.h \
-	main/ctags-api.c \
-	main/ctags-api.h \
 	main/debug.h \
 	main/debug.c \
 	main/dependency.h \

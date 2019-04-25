@@ -19,7 +19,7 @@
  */
 
 #include "tm_parser.h"
-#include "ctags-api.h"
+#include "tm_ctags.h"
 
 #include <string.h>
 

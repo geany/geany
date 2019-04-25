@@ -9,9 +9,7 @@
 
 #include "general.h"  /* must always come first */
 
-#ifdef GEANY_CTAGS_LIB
-
-#include "ctags-api.h"
+#include "tm_ctags.h"
 #include "types.h"
 #include "routines.h"
 #include "error.h"
@@ -211,5 +209,3 @@ extern unsigned int ctagsGetLangCount(void)
 {
 	return GEANY_LANG(countParsers());
 }
-
-#endif /* GEANY_CTAGS_LIB */

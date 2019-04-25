@@ -31,7 +31,7 @@
 #include "tm_source_file.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
-#include "ctags-api.h"
+#include "tm_ctags.h"
 
 typedef struct
 {

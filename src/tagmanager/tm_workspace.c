@@ -32,7 +32,7 @@
 #include <glib/gstdio.h>
 
 #include "tm_workspace.h"
-#include "ctags-api.h"
+#include "tm_ctags.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
 
