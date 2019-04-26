@@ -114,8 +114,6 @@ libctags_la_SOURCES = \
 	main/parse.h \
 	main/parse_p.h \
 	main/parsers.h \
-	main/pcoproc.c \
-	main/pcoproc.h \
 	main/promise.c \
 	main/promise.h \
 	main/promise_p.h \
