@@ -50,7 +50,7 @@
 	GLSLParser, \
 	MatLabParser, \
 	ValaParser, \
-	ActionScriptParser, \
+	FlexParser, \
 	NsisParser, \
 	MarkdownParser, \
 	Txt2tagsParser, \

@@ -15,6 +15,13 @@ test_sources = \
 	3470609.js						\
 	3526726.tex						\
 	68hc11.asm						\
+	actionscript/as-first-token.as	\
+	actionscript/classes.as			\
+	actionscript/const2.as			\
+	actionscript/const.as			\
+	actionscript/method-attributes.as	\
+	actionscript/packages.as		\
+	actionscript/sampler.as			\
 	angle_bracket.cpp				\
 	anonymous_functions.php			\
 	arraylist.js					\

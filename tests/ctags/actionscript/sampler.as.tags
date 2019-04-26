@@ -1,0 +1,16 @@
+# format=tagmanager
+assertÌ128ÎsampleTypesÖ0
+bÌ16384ÎsampleTypesÖ0
+cpuSamplesÌ16384ÎsampleTypes.sampleTypesÖ0
+delSamplesÌ16384ÎsampleTypes.sampleTypesÖ0
+dosÌ16384ÎsampleTypes.sampleTypesÖ0
+flash.display.SpriteÌ32768Ö0
+flash.sampler.*Ì32768Ö0
+flash.system.*Ì32768Ö0
+flash.utils.*Ì32768Ö0
+idsÌ16384ÎsampleTypes.sampleTypesÖ0
+lastTimeÌ16384ÎsampleTypes.sampleTypesÖ0
+newSamplesÌ16384ÎsampleTypes.sampleTypesÖ0
+nosÌ16384ÎsampleTypes.sampleTypesÖ0
+sampleTypesÌ1Ö0
+sampleTypesÌ128ÎsampleTypesÖ0
