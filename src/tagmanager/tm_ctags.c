@@ -227,8 +227,9 @@ void tm_ctags_init(void)
 	/* make sure all parsers are initialized */
 	initializeParser (LANG_AUTO);
 
-	/* change default value which is false */
+	/* change default values which are false */
 	enableXtag(XTAG_TAGS_GENERATED_BY_GUEST_PARSERS, true);
+	enableXtag(XTAG_REFERENCE_TAGS, true);
 
 	/* some kinds we are interested in are disabled by default */
 	enable_all_lang_kinds();
