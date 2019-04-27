@@ -53,15 +53,7 @@ static bool nonfatal_error_printer (const errorSelection selection,
 					  const gchar *const format,
 					  va_list ap, void *data CTAGS_ATTR_UNUSED)
 {
-	fprintf (stderr, "%s: ", (selection & WARNING) ? "Warning: " : "Error");
-	vfprintf (stderr, format, ap);
-	if (selection & PERROR)
-#ifdef HAVE_STRERROR
-		fprintf (stderr, " : %s", strerror (errno));
-#else
-		perror (" ");
-#endif
-	fputs ("\n", stderr);
+	g_logv(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING, format, ap);
 
 	return false;
 }
