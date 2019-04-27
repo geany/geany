@@ -423,11 +423,13 @@ static TMParserMapEntry map_R[] = {
 
 static TMParserMapEntry map_COBOL[] = {
 	{'d', tm_tag_variable_t},
+	{'D', tm_tag_interface_t},
 	{'f', tm_tag_function_t},
 	{'g', tm_tag_struct_t},
 	{'p', tm_tag_macro_t},
 	{'P', tm_tag_class_t},
 	{'s', tm_tag_namespace_t},
+	{'S', tm_tag_externvar_t},
 };
 
 static TMParserMapEntry map_OBJC[] = {
@@ -768,6 +770,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_C:
 		case TM_PARSER_CPP:
 		case TM_PARSER_CSHARP:
+		case TM_PARSER_COBOL:
 		case TM_PARSER_D:
 		case TM_PARSER_FERITE:
 		case TM_PARSER_GLSL:
