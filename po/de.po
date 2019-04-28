@@ -2,16 +2,16 @@
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 # Enrico Tröger <enrico.troeger@uvena.de> 2006 - 2009
-# Frank Lanitz <frank@frank.uvena.de> 2006 - 2018
+# Frank Lanitz <frank@frank.uvena.de> 2006 - 2019
 # Dominic Hopf <dh@dmaphy.de> 2008 - 2009
 #
 # Basic guidelines for this translation: http://wiki.xfce.org/de/translations
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.34\n"
+"Project-Id-Version: Geany 1.35\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-15 17:13+0200\n"
+"POT-Creation-Date: 2019-04-28 10:44+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -112,11 +112,11 @@ msgstr "_Suchen"
 msgid "Open Selected F_ile"
 msgstr "_Markierte Datei öffnen"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2615
+#: ../data/geany.glade.h:19 ../src/symbols.c:2617
 msgid "Find _Usage"
 msgstr "A_uftreten finden"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2620
+#: ../data/geany.glade.h:20 ../src/symbols.c:2622
 msgid "Find _Document Usage"
 msgstr "_Auftreten im Dokument finden"
 
@@ -1832,7 +1832,7 @@ msgstr "_Nächstes"
 msgid "Find _Previous"
 msgstr "_Vorheriges"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2625
+#: ../data/geany.glade.h:381 ../src/symbols.c:2627
 msgid "Find in F_iles..."
 msgstr "In _Dateien suchen…"
 
@@ -2288,53 +2288,53 @@ msgstr ""
 "Copyright (c) 2005\n"
 "Die Geany-Contributoren"
 
-#: ../src/about.c:169
+#: ../src/about.c:170
 msgid "About Geany"
 msgstr "Über Geany"
 
-#: ../src/about.c:213
+#: ../src/about.c:214
 msgid "A fast and lightweight IDE"
 msgstr "Eine kleine und schnelle Entwicklungsumgebung"
 
-#: ../src/about.c:235
+#: ../src/about.c:236
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(kompiliert am %s oder später)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:267
+#: ../src/about.c:268
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:283
+#: ../src/about.c:284
 msgid "Developers"
 msgstr "Entwickler"
 
-#: ../src/about.c:290
+#: ../src/about.c:291
 msgid "maintainer"
 msgstr "Hauptentwickler"
 
-#: ../src/about.c:298 ../src/about.c:306 ../src/about.c:314
+#: ../src/about.c:299 ../src/about.c:307 ../src/about.c:315
 msgid "developer"
 msgstr "Entwickler"
 
-#: ../src/about.c:322
+#: ../src/about.c:323
 msgid "translation maintainer"
 msgstr "Übersetzungskoordinator"
 
-#: ../src/about.c:331
+#: ../src/about.c:332
 msgid "Translators"
 msgstr "Übersetzer"
 
-#: ../src/about.c:351
+#: ../src/about.c:352
 msgid "Previous Translators"
 msgstr "Ehemalige Übersetzer"
 
-#: ../src/about.c:372
+#: ../src/about.c:373
 msgid "Contributors"
 msgstr "Mitwirkende"
 
-#: ../src/about.c:382
+#: ../src/about.c:383
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -2342,15 +2342,15 @@ msgstr ""
 "Einige der vielen Leute, die an Geany mitgearbeitet haben (eine "
 "detailliertere Liste findet sich in der Datei %s):"
 
-#: ../src/about.c:408
+#: ../src/about.c:409
 msgid "Credits"
 msgstr "Credits"
 
-#: ../src/about.c:425
+#: ../src/about.c:426
 msgid "License"
 msgstr "Lizenz"
 
-#: ../src/about.c:434
+#: ../src/about.c:435
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2466,12 +2466,12 @@ msgstr "Keine weiteren Fehlermeldungen."
 msgid "Set menu item label"
 msgstr "Bezeichnung für den Menüeintrag definieren"
 
-#: ../src/build.c:1785 ../src/symbols.c:520 ../src/tools.c:396
+#: ../src/build.c:1785 ../src/symbols.c:522 ../src/tools.c:396
 msgid "Label"
 msgstr "Label"
 
 #. command column, holding status and command display
-#: ../src/build.c:1786 ../src/symbols.c:515 ../src/tools.c:381
+#: ../src/build.c:1786 ../src/symbols.c:517 ../src/tools.c:381
 msgid "Command"
 msgstr "Kommando"
 
@@ -2747,7 +2747,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2429 ../src/symbols.c:2445 ../src/ui_utils.c:287
+#: ../src/symbols.c:2431 ../src/symbols.c:2447 ../src/ui_utils.c:287
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -3302,7 +3302,7 @@ msgstr "Gehe zu"
 msgid "View"
 msgstr "Ansicht"
 
-#: ../src/keybindings.c:321 ../src/symbols.c:641
+#: ../src/keybindings.c:321 ../src/symbols.c:643
 msgid "Document"
 msgstr "Dokument"
 
@@ -3347,7 +3347,7 @@ msgstr "Speichern unter"
 msgid "Save all"
 msgstr "Alle speichern"
 
-#: ../src/keybindings.c:350 ../src/symbols.c:725
+#: ../src/keybindings.c:350 ../src/symbols.c:727
 msgid "Properties"
 msgstr "Eigenschaften"
 
@@ -4139,11 +4139,11 @@ msgstr "Tasten festlegen"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Welche Tastenkombination soll für »%s« genutzt werden?"
 
-#: ../src/prefs.c:226 ../src/symbols.c:2583 ../src/sidebar.c:751
+#: ../src/prefs.c:226 ../src/symbols.c:2585 ../src/sidebar.c:751
 msgid "_Expand All"
 msgstr "Alle a_usklappen"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2588 ../src/sidebar.c:757
+#: ../src/prefs.c:231 ../src/symbols.c:2590 ../src/sidebar.c:757
 msgid "_Collapse All"
 msgstr "Alle _einklappen"
 
@@ -4705,11 +4705,11 @@ msgstr "Unbekannter Fehler beim Ausführen des Kind-Prozess aufgetreten."
 msgid "Value"
 msgstr "Wert"
 
-#: ../src/symbols.c:471 ../src/symbols.c:521 ../src/symbols.c:631
+#: ../src/symbols.c:471 ../src/symbols.c:523 ../src/symbols.c:633
 msgid "Chapter"
 msgstr "Kapitel"
 
-#: ../src/symbols.c:472 ../src/symbols.c:517 ../src/symbols.c:632
+#: ../src/symbols.c:472 ../src/symbols.c:519 ../src/symbols.c:634
 msgid "Section"
 msgstr "Abschnitt"
 
@@ -4729,21 +4729,21 @@ msgstr "Sect3"
 msgid "Appendix"
 msgstr "Anhang"
 
-#: ../src/symbols.c:477 ../src/symbols.c:522 ../src/symbols.c:547
-#: ../src/symbols.c:563 ../src/symbols.c:578 ../src/symbols.c:589
-#: ../src/symbols.c:690 ../src/symbols.c:701 ../src/symbols.c:714
-#: ../src/symbols.c:728 ../src/symbols.c:740 ../src/symbols.c:752
-#: ../src/symbols.c:769 ../src/symbols.c:798 ../src/symbols.c:830
+#: ../src/symbols.c:477 ../src/symbols.c:524 ../src/symbols.c:549
+#: ../src/symbols.c:565 ../src/symbols.c:580 ../src/symbols.c:591
+#: ../src/symbols.c:692 ../src/symbols.c:703 ../src/symbols.c:716
+#: ../src/symbols.c:730 ../src/symbols.c:742 ../src/symbols.c:754
+#: ../src/symbols.c:771 ../src/symbols.c:800 ../src/symbols.c:832
 msgid "Other"
 msgstr "Sonstiges"
 
-#: ../src/symbols.c:483 ../src/symbols.c:760 ../src/symbols.c:808
+#: ../src/symbols.c:483 ../src/symbols.c:762 ../src/symbols.c:810
 msgid "Module"
 msgstr "Modul"
 
-#: ../src/symbols.c:484 ../src/symbols.c:574 ../src/symbols.c:686
-#: ../src/symbols.c:738 ../src/symbols.c:750 ../src/symbols.c:765
-#: ../src/symbols.c:779
+#: ../src/symbols.c:484 ../src/symbols.c:576 ../src/symbols.c:688
+#: ../src/symbols.c:740 ../src/symbols.c:752 ../src/symbols.c:767
+#: ../src/symbols.c:781
 msgid "Types"
 msgstr "Typen"
 
@@ -4751,11 +4751,11 @@ msgstr "Typen"
 msgid "Type constructors"
 msgstr "Typkonstruktoren"
 
-#: ../src/symbols.c:486 ../src/symbols.c:508 ../src/symbols.c:529
-#: ../src/symbols.c:546 ../src/symbols.c:558 ../src/symbols.c:571
-#: ../src/symbols.c:586 ../src/symbols.c:600 ../src/symbols.c:610
-#: ../src/symbols.c:674 ../src/symbols.c:724 ../src/symbols.c:747
-#: ../src/symbols.c:792 ../src/symbols.c:816
+#: ../src/symbols.c:486 ../src/symbols.c:510 ../src/symbols.c:531
+#: ../src/symbols.c:548 ../src/symbols.c:560 ../src/symbols.c:573
+#: ../src/symbols.c:588 ../src/symbols.c:602 ../src/symbols.c:612
+#: ../src/symbols.c:676 ../src/symbols.c:726 ../src/symbols.c:749
+#: ../src/symbols.c:794 ../src/symbols.c:818
 msgid "Functions"
 msgstr "Funktionen"
 
@@ -4763,266 +4763,274 @@ msgstr "Funktionen"
 msgid "Program"
 msgstr "Programm"
 
-#: ../src/symbols.c:493 ../src/symbols.c:501 ../src/symbols.c:507
+#: ../src/symbols.c:493
+msgid "Divisions"
+msgstr "Bereiche (Divisions)"
+
+#: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
 msgstr "Abschnitte"
 
-#: ../src/symbols.c:494
+#: ../src/symbols.c:495
 msgid "Paragraph"
 msgstr "Absatz"
 
-#: ../src/symbols.c:495
+#: ../src/symbols.c:496
 msgid "Group"
 msgstr "Gruppe"
 
-#: ../src/symbols.c:496
+#: ../src/symbols.c:497
 msgid "Data"
 msgstr "Daten"
 
-#: ../src/symbols.c:502
+#: ../src/symbols.c:498
+msgid "Copies"
+msgstr "Kopien (Copies)"
+
+#: ../src/symbols.c:504
 msgid "Keys"
 msgstr "Indizes"
 
-#: ../src/symbols.c:509 ../src/symbols.c:560 ../src/symbols.c:576
-#: ../src/symbols.c:602 ../src/symbols.c:675 ../src/symbols.c:700
-#: ../src/symbols.c:726 ../src/symbols.c:739 ../src/symbols.c:748
-#: ../src/symbols.c:764 ../src/symbols.c:799 ../src/symbols.c:828
+#: ../src/symbols.c:511 ../src/symbols.c:562 ../src/symbols.c:578
+#: ../src/symbols.c:604 ../src/symbols.c:677 ../src/symbols.c:702
+#: ../src/symbols.c:728 ../src/symbols.c:741 ../src/symbols.c:750
+#: ../src/symbols.c:766 ../src/symbols.c:801 ../src/symbols.c:830
 msgid "Variables"
 msgstr "Variablen"
 
-#: ../src/symbols.c:516
+#: ../src/symbols.c:518
 msgid "Environment"
 msgstr "Umgebung"
 
-#: ../src/symbols.c:518 ../src/symbols.c:633
+#: ../src/symbols.c:520 ../src/symbols.c:635
 msgid "Subsection"
 msgstr "Unterabschnitt"
 
-#: ../src/symbols.c:519 ../src/symbols.c:634
+#: ../src/symbols.c:521 ../src/symbols.c:636
 msgid "Subsubsection"
 msgstr "Unterunterabschnitt"
 
-#: ../src/symbols.c:530 ../src/symbols.c:555
+#: ../src/symbols.c:532 ../src/symbols.c:557
 msgid "Structures"
 msgstr "Strukturen"
 
-#: ../src/symbols.c:537
+#: ../src/symbols.c:539
 msgid "Parts"
 msgstr "Parts"
 
-#: ../src/symbols.c:538
+#: ../src/symbols.c:540
 msgid "Assembly"
 msgstr "Assembly"
 
-#: ../src/symbols.c:539
+#: ../src/symbols.c:541
 msgid "Steps"
 msgstr "Steps"
 
-#: ../src/symbols.c:554 ../src/symbols.c:652 ../src/symbols.c:698
+#: ../src/symbols.c:556 ../src/symbols.c:654 ../src/symbols.c:700
 msgid "Modules"
 msgstr "Module"
 
-#: ../src/symbols.c:556 ../src/symbols.c:603
+#: ../src/symbols.c:558 ../src/symbols.c:605
 msgid "Traits"
 msgstr "Charakteristika"
 
-#: ../src/symbols.c:557
+#: ../src/symbols.c:559
 msgid "Implementations"
 msgstr "Implementierungen"
 
-#: ../src/symbols.c:559 ../src/symbols.c:819
+#: ../src/symbols.c:561 ../src/symbols.c:821
 msgid "Typedefs / Enums"
 msgstr "Typendefinition und Enumerates"
 
-#: ../src/symbols.c:561 ../src/symbols.c:777 ../src/symbols.c:786
-#: ../src/symbols.c:825
+#: ../src/symbols.c:563 ../src/symbols.c:779 ../src/symbols.c:788
+#: ../src/symbols.c:827
 msgid "Macros"
 msgstr "Makros"
 
-#: ../src/symbols.c:562 ../src/symbols.c:655 ../src/symbols.c:664
-#: ../src/symbols.c:673 ../src/symbols.c:711 ../src/symbols.c:737
+#: ../src/symbols.c:564 ../src/symbols.c:657 ../src/symbols.c:666
+#: ../src/symbols.c:675 ../src/symbols.c:713 ../src/symbols.c:739
 msgid "Methods"
 msgstr "Methoden"
 
-#: ../src/symbols.c:570 ../src/symbols.c:585 ../src/symbols.c:683
-#: ../src/symbols.c:708 ../src/symbols.c:721
+#: ../src/symbols.c:572 ../src/symbols.c:587 ../src/symbols.c:685
+#: ../src/symbols.c:710 ../src/symbols.c:723
 msgid "Package"
 msgstr "Package"
 
-#: ../src/symbols.c:572 ../src/symbols.c:598 ../src/symbols.c:709
-#: ../src/symbols.c:722 ../src/symbols.c:735 ../src/symbols.c:762
-#: ../src/symbols.c:815
+#: ../src/symbols.c:574 ../src/symbols.c:600 ../src/symbols.c:711
+#: ../src/symbols.c:724 ../src/symbols.c:737 ../src/symbols.c:764
+#: ../src/symbols.c:817
 msgid "Interfaces"
 msgstr "Interfaces"
 
-#: ../src/symbols.c:573 ../src/symbols.c:818
+#: ../src/symbols.c:575 ../src/symbols.c:820
 msgid "Structs"
 msgstr "Strukturen"
 
-#: ../src/symbols.c:575 ../src/symbols.c:588 ../src/symbols.c:601
-#: ../src/symbols.c:727 ../src/symbols.c:749
+#: ../src/symbols.c:577 ../src/symbols.c:590 ../src/symbols.c:603
+#: ../src/symbols.c:729 ../src/symbols.c:751
 msgid "Constants"
 msgstr "Konstanten"
 
-#: ../src/symbols.c:577 ../src/symbols.c:712 ../src/symbols.c:817
+#: ../src/symbols.c:579 ../src/symbols.c:714 ../src/symbols.c:819
 msgid "Members"
 msgstr "Instanzvariablen"
 
-#: ../src/symbols.c:587 ../src/symbols.c:751 ../src/symbols.c:776
+#: ../src/symbols.c:589 ../src/symbols.c:753 ../src/symbols.c:778
 msgid "Labels"
 msgstr "Label"
 
-#: ../src/symbols.c:597 ../src/symbols.c:662 ../src/symbols.c:811
+#: ../src/symbols.c:599 ../src/symbols.c:664 ../src/symbols.c:813
 msgid "Namespaces"
 msgstr "Namensräume"
 
-#: ../src/symbols.c:599 ../src/symbols.c:621 ../src/symbols.c:653
-#: ../src/symbols.c:663 ../src/symbols.c:672 ../src/symbols.c:710
-#: ../src/symbols.c:723 ../src/symbols.c:736 ../src/symbols.c:814
+#: ../src/symbols.c:601 ../src/symbols.c:623 ../src/symbols.c:655
+#: ../src/symbols.c:665 ../src/symbols.c:674 ../src/symbols.c:712
+#: ../src/symbols.c:725 ../src/symbols.c:738 ../src/symbols.c:816
 msgid "Classes"
 msgstr "Klassen"
 
-#: ../src/symbols.c:611
+#: ../src/symbols.c:613
 msgid "Anchors"
 msgstr "Anker"
 
-#: ../src/symbols.c:612
+#: ../src/symbols.c:614
 msgid "H1 Headings"
 msgstr "Überschrift (H1)"
 
-#: ../src/symbols.c:613
+#: ../src/symbols.c:615
 msgid "H2 Headings"
 msgstr "Überschrift (H2)"
 
-#: ../src/symbols.c:614
+#: ../src/symbols.c:616
 msgid "H3 Headings"
 msgstr "Überschrift (H3)"
 
-#: ../src/symbols.c:622
+#: ../src/symbols.c:624
 msgid "ID Selectors"
 msgstr "ID"
 
-#: ../src/symbols.c:623
+#: ../src/symbols.c:625
 msgid "Type Selectors"
 msgstr "Typ"
 
-#: ../src/symbols.c:642
+#: ../src/symbols.c:644
 msgid "Section Level 1"
 msgstr "Überschrift Ebene 1"
 
-#: ../src/symbols.c:643
+#: ../src/symbols.c:645
 msgid "Section Level 2"
 msgstr "Überschrift Ebene 2"
 
-#: ../src/symbols.c:644
+#: ../src/symbols.c:646
 msgid "Section Level 3"
 msgstr "Überschrift Ebene 3"
 
-#: ../src/symbols.c:645
+#: ../src/symbols.c:647
 msgid "Section Level 4"
 msgstr "Überschrift Ebene 4"
 
-#: ../src/symbols.c:654
+#: ../src/symbols.c:656
 msgid "Singletons"
 msgstr "Singletons"
 
-#: ../src/symbols.c:665 ../src/symbols.c:793
+#: ../src/symbols.c:667 ../src/symbols.c:795
 msgid "Procedures"
 msgstr "Prozeduren"
 
-#: ../src/symbols.c:676
+#: ../src/symbols.c:678
 msgid "Imports"
 msgstr "Importe"
 
-#: ../src/symbols.c:684
+#: ../src/symbols.c:686
 msgid "Entities"
 msgstr "Entitäten"
 
-#: ../src/symbols.c:685
+#: ../src/symbols.c:687
 msgid "Architectures"
 msgstr "Architekturen"
 
-#: ../src/symbols.c:687
+#: ../src/symbols.c:689
 msgid "Functions / Procedures"
 msgstr "Funktionen/Prozeduren"
 
-#: ../src/symbols.c:688
+#: ../src/symbols.c:690
 msgid "Variables / Signals"
 msgstr "Variablen/Signale"
 
-#: ../src/symbols.c:689
+#: ../src/symbols.c:691
 msgid "Processes / Blocks / Components"
 msgstr "Prozesse/Blöcke/Komponenten"
 
-#: ../src/symbols.c:697
+#: ../src/symbols.c:699
 msgid "Events"
 msgstr "Ereignisse"
 
-#: ../src/symbols.c:699
+#: ../src/symbols.c:701
 msgid "Functions / Tasks"
 msgstr "Funktionen"
 
-#: ../src/symbols.c:713 ../src/symbols.c:768
+#: ../src/symbols.c:715 ../src/symbols.c:770
 msgid "Enums"
 msgstr "Enums"
 
-#: ../src/symbols.c:761
+#: ../src/symbols.c:763
 msgid "Programs"
 msgstr "Programme"
 
-#: ../src/symbols.c:763
+#: ../src/symbols.c:765
 msgid "Functions / Subroutines"
 msgstr "Funktionen/Prozeduren"
 
-#: ../src/symbols.c:766
+#: ../src/symbols.c:768
 msgid "Components"
 msgstr "Komponenten"
 
-#: ../src/symbols.c:767
+#: ../src/symbols.c:769
 msgid "Blocks"
 msgstr "Blöcke"
 
-#: ../src/symbols.c:778
+#: ../src/symbols.c:780
 msgid "Defines"
 msgstr "Definitionen"
 
-#: ../src/symbols.c:785
+#: ../src/symbols.c:787
 msgid "Targets"
 msgstr "Targets"
 
-#: ../src/symbols.c:794
+#: ../src/symbols.c:796
 msgid "Indexes"
 msgstr "Indizies"
 
-#: ../src/symbols.c:795
+#: ../src/symbols.c:797
 msgid "Tables"
 msgstr "Tabellen"
 
-#: ../src/symbols.c:796
+#: ../src/symbols.c:798
 msgid "Triggers"
 msgstr "Trigger"
 
-#: ../src/symbols.c:797
+#: ../src/symbols.c:799
 msgid "Views"
 msgstr "Ansichten"
 
-#: ../src/symbols.c:829
+#: ../src/symbols.c:831
 msgid "Extern Variables"
 msgstr "Externe Variablen"
 
-#: ../src/symbols.c:1646
+#: ../src/symbols.c:1648
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Unbekannte Dateierweiterung für »%s«.\n"
 
-#: ../src/symbols.c:1672
+#: ../src/symbols.c:1674
 #, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
 "Die Tag-Datei konnte nicht erstellt werden -- Möglicherweise konnten keine "
 "Symbole gefunden werden.\n"
 
-#: ../src/symbols.c:1679
+#: ../src/symbols.c:1681
 #, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -5031,7 +5039,7 @@ msgstr ""
 "Verwendung: %s -g <Tag-Datei> <Datei-Liste>\n"
 "\n"
 
-#: ../src/symbols.c:1680
+#: ../src/symbols.c:1682
 #, c-format
 msgid ""
 "Example:\n"
@@ -5042,52 +5050,52 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1694
+#: ../src/symbols.c:1696
 msgid "Load Tags File"
 msgstr "Tag-Datei laden"
 
-#: ../src/symbols.c:1701
+#: ../src/symbols.c:1703
 msgid "Geany tags file (*.*.tags)"
 msgstr "Geany Tag-Datei (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1721
+#: ../src/symbols.c:1723
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s Tag-Datei »%s« geladen."
 
-#: ../src/symbols.c:1724
+#: ../src/symbols.c:1726
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Konnte Tag-Datei »%s« nicht laden."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1967
+#: ../src/symbols.c:1969
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1970
+#: ../src/symbols.c:1972
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:2180
+#: ../src/symbols.c:2182
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "(Vorwärts-)Deklaration von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2182
+#: ../src/symbols.c:2184
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definition von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2598
+#: ../src/symbols.c:2600
 msgid "Sort by _Name"
 msgstr "Nach _Namen sortieren"
 
-#: ../src/symbols.c:2605
+#: ../src/symbols.c:2607
 msgid "Sort by _Appearance"
 msgstr "Nach _Auftreten sortieren"
 
