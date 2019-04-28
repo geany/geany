@@ -569,7 +569,7 @@ class CaseConverter : public ICaseConverter {
 	enum { maxConversionLength=6 };
 	struct ConversionString {
 		char conversion[maxConversionLength+1];
-		ConversionString() : conversion{} {
+		ConversionString() noexcept : conversion{} {
 		}
 	};
 	// Conversions are initially store in a vector of structs but then decomposed into
@@ -591,10 +591,10 @@ class CaseConverter : public ICaseConverter {
 	std::vector<ConversionString> conversions;
 
 public:
-	CaseConverter() {
+	CaseConverter() noexcept {
 	}
 	virtual ~CaseConverter() = default;
-	bool Initialised() const {
+	bool Initialised() const noexcept {
 		return !characters.empty();
 	}
 	void Add(int character, const char *conversion) {
@@ -771,7 +771,7 @@ void SetupConversions(enum CaseConversion conversion) {
 	}
 }
 
-CaseConverter *ConverterForConversion(enum CaseConversion conversion) {
+CaseConverter *ConverterForConversion(enum CaseConversion conversion) noexcept {
 	switch (conversion) {
 	case CaseConversionFold:
 		return &caseConvFold;

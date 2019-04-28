@@ -14,7 +14,7 @@ struct PrintParameters {
 	int magnification;
 	int colourMode;
 	WrapMode wrapState;
-	PrintParameters();
+	PrintParameters() noexcept;
 };
 
 /**
@@ -54,7 +54,7 @@ public:
 	int tabWidthMinimumPixels;
 
 	bool hideSelection;
-	bool drawOverstrikeCaret;
+	bool drawOverstrikeCaret; // used by the curses platform
 
 	/** In bufferedDraw mode, graphics operations are drawn to a pixmap and then copied to
 	* the screen. This avoids flashing but is about 30% slower. */
@@ -97,11 +97,11 @@ public:
 	void operator=(EditView &&) = delete;
 	virtual ~EditView();
 
-	bool SetTwoPhaseDraw(bool twoPhaseDraw);
-	bool SetPhasesDraw(int phases);
-	bool LinesOverlap() const;
+	bool SetTwoPhaseDraw(bool twoPhaseDraw) noexcept;
+	bool SetPhasesDraw(int phases) noexcept;
+	bool LinesOverlap() const noexcept;
 
-	void ClearAllTabstops();
+	void ClearAllTabstops() noexcept;
 	XYPOSITION NextTabstopPos(Sci::Line line, XYPOSITION x, XYPOSITION tabWidth) const;
 	bool ClearTabstops(Sci::Line line);
 	bool AddTabstop(Sci::Line line, int x);
@@ -165,7 +165,7 @@ public:
 	AutoLineLayout(AutoLineLayout &&) = delete;
 	AutoLineLayout &operator=(const AutoLineLayout &) = delete;
 	AutoLineLayout &operator=(AutoLineLayout &&) = delete;
-	~AutoLineLayout() {
+	~AutoLineLayout() noexcept {
 		llc.Dispose(ll);
 		ll = nullptr;
 	}
@@ -175,7 +175,7 @@ public:
 	operator LineLayout *() const noexcept {
 		return ll;
 	}
-	void Set(LineLayout *ll_) {
+	void Set(LineLayout *ll_) noexcept {
 		llc.Dispose(ll);
 		ll = ll_;
 	}

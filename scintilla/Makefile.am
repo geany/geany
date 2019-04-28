@@ -148,6 +148,7 @@ src/Style.h \
 src/UniConversion.cxx \
 src/UniConversion.h \
 src/UnicodeFromUTF8.h \
+src/UniqueString.cxx \
 src/UniqueString.h \
 src/ViewStyle.cxx \
 src/ViewStyle.h \

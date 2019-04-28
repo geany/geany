@@ -176,7 +176,7 @@ int CallTip::PaintContents(Surface *surfaceWindow, bool draw) {
 	PRectangle rcClient(1.0f, 1.0f, rcClientSize.right - 1, rcClientSize.bottom - 1);
 
 	// To make a nice small call tip window, it is only sized to fit most normal characters without accents
-	const int ascent = static_cast<int>(lround(surfaceWindow->Ascent(font) - surfaceWindow->InternalLeading(font)));
+	const int ascent = static_cast<int>(round(surfaceWindow->Ascent(font) - surfaceWindow->InternalLeading(font)));
 
 	// For each line...
 	// Draw the definition in three parts: before highlight, highlighted, after highlight

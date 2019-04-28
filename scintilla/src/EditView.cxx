@@ -9,7 +9,6 @@
 #include <cstdlib>
 #include <cassert>
 #include <cstring>
-#include <cctype>
 #include <cstdio>
 #include <cmath>
 
@@ -31,6 +30,7 @@
 
 #include "StringCopy.h"
 #include "CharacterSet.h"
+#include "CharacterCategory.h"
 #include "Position.h"
 #include "IntegerRectangle.h"
 #include "UniqueString.h"
@@ -64,7 +64,7 @@ static inline bool IsControlCharacter(int ch) {
 	return ch >= 0 && ch < ' ';
 }
 
-PrintParameters::PrintParameters() {
+PrintParameters::PrintParameters() noexcept {
 	magnification = 0;
 	colourMode = SC_PRINT_NORMAL;
 	wrapState = eWrapWord;
@@ -194,25 +194,25 @@ EditView::EditView() {
 EditView::~EditView() {
 }
 
-bool EditView::SetTwoPhaseDraw(bool twoPhaseDraw) {
+bool EditView::SetTwoPhaseDraw(bool twoPhaseDraw) noexcept {
 	const PhasesDraw phasesDrawNew = twoPhaseDraw ? phasesTwo : phasesOne;
 	const bool redraw = phasesDraw != phasesDrawNew;
 	phasesDraw = phasesDrawNew;
 	return redraw;
 }
 
-bool EditView::SetPhasesDraw(int phases) {
+bool EditView::SetPhasesDraw(int phases) noexcept {
 	const PhasesDraw phasesDrawNew = static_cast<PhasesDraw>(phases);
 	const bool redraw = phasesDraw != phasesDrawNew;
 	phasesDraw = phasesDrawNew;
 	return redraw;
 }
 
-bool EditView::LinesOverlap() const {
+bool EditView::LinesOverlap() const noexcept {
 	return phasesDraw == phasesMultiple;
 }
 
-void EditView::ClearAllTabstops() {
+void EditView::ClearAllTabstops() noexcept {
 	ldTabstops.reset();
 }
 
@@ -280,7 +280,7 @@ void EditView::AllocateGraphics(const ViewStyle &vsDraw) {
 		pixmapIndentGuideHighlight.reset(Surface::Allocate(vsDraw.technology));
 }
 
-static const char *ControlCharacterString(unsigned char ch) {
+static const char *ControlCharacterString(unsigned char ch) noexcept {
 	const char * const reps[] = {
 		"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL",
 		"BS", "HT", "LF", "VT", "FF", "CR", "SO", "SI",
@@ -649,7 +649,7 @@ Range EditView::RangeDisplayLine(Surface *surface, const EditModel &model, Sci::
 
 SelectionPosition EditView::SPositionFromLocation(Surface *surface, const EditModel &model, PointDocument pt, bool canReturnInvalid, bool charPosition, bool virtualSpace, const ViewStyle &vs) {
 	pt.x = pt.x - vs.textStart;
-	Sci::Line visibleLine = static_cast<int>(floor(pt.y / vs.lineHeight));
+	Sci::Line visibleLine = static_cast<int>(std::floor(pt.y / vs.lineHeight));
 	if (!canReturnInvalid && (visibleLine < 0))
 		visibleLine = 0;
 	const Sci::Line lineDoc = model.pcs->DocFromDisplay(visibleLine);
@@ -763,7 +763,7 @@ Sci::Position EditView::StartEndDisplayLine(Surface *surface, const EditModel &m
 	return posRet;
 }
 
-static ColourDesired SelectionBackground(const ViewStyle &vsDraw, bool main, bool primarySelection) {
+static ColourDesired SelectionBackground(const ViewStyle &vsDraw, bool main, bool primarySelection) noexcept {
 	return main ?
 		(primarySelection ? vsDraw.selColours.back : vsDraw.selBackground2) :
 		vsDraw.selAdditionalBackground;
@@ -816,7 +816,7 @@ static void DrawTextBlob(Surface *surface, const ViewStyle &vsDraw, PRectangle r
 		surface->FillRectangle(rcSegment, textBack);
 	}
 	FontAlias ctrlCharsFont = vsDraw.styles[STYLE_CONTROLCHAR].font;
-	const int normalCharHeight = static_cast<int>(ceil(vsDraw.styles[STYLE_CONTROLCHAR].capitalHeight));
+	const int normalCharHeight = static_cast<int>(std::ceil(vsDraw.styles[STYLE_CONTROLCHAR].capitalHeight));
 	PRectangle rcCChar = rcSegment;
 	rcCChar.left = rcCChar.left + 1;
 	rcCChar.top = rcSegment.top + vsDraw.maxAscent - normalCharHeight;
@@ -985,7 +985,7 @@ void EditView::DrawEOL(Surface *surface, const EditModel &model, const ViewStyle
 		rcSegment.left = rcLine.left;
 	rcSegment.right = rcLine.right;
 
-	const bool fillRemainder = !lastSubLine || model.foldDisplayTextStyle == SC_FOLDDISPLAYTEXT_HIDDEN || !model.pcs->GetFoldDisplayTextShown(line);
+	const bool fillRemainder = !lastSubLine || !model.GetFoldDisplayText(line);
 	if (fillRemainder) {
 		// Fill the remainder of the line
 		FillLineRemainder(surface, model, vsDraw, ll, line, rcSegment, subLine);
@@ -1105,11 +1105,12 @@ void EditView::DrawFoldDisplayText(Surface *surface, const EditModel &model, con
 	if (!lastSubLine)
 		return;
 
-	if ((model.foldDisplayTextStyle == SC_FOLDDISPLAYTEXT_HIDDEN) || !model.pcs->GetFoldDisplayTextShown(line))
+	const char *text = model.GetFoldDisplayText(line);
+	if (!text)
 		return;
 
 	PRectangle rcSegment = rcLine;
-	const char *foldDisplayText = model.pcs->GetFoldDisplayText(line);
+	const char *foldDisplayText = text;
 	const int lengthFoldDisplayText = static_cast<int>(strlen(foldDisplayText));
 	FontAlias fontText = vsDraw.styles[STYLE_FOLDDISPLAYTEXT].font;
 	const int widthFoldDisplayText = static_cast<int>(surface->WidthText(fontText, foldDisplayText, lengthFoldDisplayText));
@@ -1129,7 +1130,6 @@ void EditView::DrawFoldDisplayText(Surface *surface, const EditModel &model, con
 	rcSegment.right = rcSegment.left + static_cast<XYPOSITION>(widthFoldDisplayText);
 
 	const ColourOptional background = vsDraw.Background(model.pdoc->GetMark(line), model.caret.active, ll->containsCaret);
-	FontAlias textFont = vsDraw.styles[STYLE_FOLDDISPLAYTEXT].font;
 	ColourDesired textFore = vsDraw.styles[STYLE_FOLDDISPLAYTEXT].fore;
 	if (eolInSelection && (vsDraw.selColours.fore.isSet)) {
 		textFore = (eolInSelection == 1) ? vsDraw.selColours.fore : vsDraw.selAdditionalForeground;
@@ -1158,11 +1158,11 @@ void EditView::DrawFoldDisplayText(Surface *surface, const EditModel &model, con
 
 	if (phase & drawText) {
 		if (phasesDraw != phasesOne) {
-			surface->DrawTextTransparent(rcSegment, textFont,
+			surface->DrawTextTransparent(rcSegment, fontText,
 				rcSegment.top + vsDraw.maxAscent, foldDisplayText,
 				lengthFoldDisplayText, textFore);
 		} else {
-			surface->DrawTextNoClip(rcSegment, textFont,
+			surface->DrawTextNoClip(rcSegment, fontText,
 				rcSegment.top + vsDraw.maxAscent, foldDisplayText,
 				lengthFoldDisplayText, textFore, textBack);
 		}
@@ -1332,7 +1332,7 @@ void EditView::DrawCarets(Surface *surface, const EditModel &model, const ViewSt
 	for (size_t r = 0; (r<model.sel.Count()) || drawDrag; r++) {
 		const bool mainCaret = r == model.sel.Main();
 		SelectionPosition posCaret = (drawDrag ? model.posDrag : model.sel.Range(r).caret);
-		if (vsDraw.caretStyle == CARETSTYLE_BLOCK && !drawDrag && posCaret > model.sel.Range(r).anchor) {
+		if ((vsDraw.IsBlockCaretStyle() || imeCaretBlockOverride) && !drawDrag && posCaret > model.sel.Range(r).anchor) {
 			if (posCaret.VirtualSpace() > 0)
 				posCaret.SetVirtualSpace(posCaret.VirtualSpace() - 1);
 			else
@@ -1351,7 +1351,7 @@ void EditView::DrawCarets(Surface *surface, const EditModel &model, const ViewSt
 			const bool caretBlinkState = (model.caret.active && model.caret.on) || (!additionalCaretsBlink && !mainCaret);
 			const bool caretVisibleState = additionalCaretsVisible || mainCaret;
 			if ((xposCaret >= 0) && (vsDraw.caretWidth > 0) && (vsDraw.caretStyle != CARETSTYLE_INVISIBLE) &&
-				((model.posDrag.IsValid()) || (caretBlinkState && caretVisibleState))) {
+				(drawDrag || (caretBlinkState && caretVisibleState))) {
 				bool caretAtEOF = false;
 				bool caretAtEOL = false;
 				bool drawBlockCaret = false;
@@ -1375,16 +1375,17 @@ void EditView::DrawCarets(Surface *surface, const EditModel &model, const ViewSt
 				if (xposCaret > 0)
 					caretWidthOffset = 0.51f;	// Move back so overlaps both character cells.
 				xposCaret += xStart;
-				if (model.posDrag.IsValid()) {
+				const ViewStyle::CaretShape caretShape = drawDrag ? ViewStyle::CaretShape::line : vsDraw.CaretShapeForMode(model.inOverstrike);
+				if (drawDrag) {
 					/* Dragging text, use a line caret */
 					rcCaret.left = round(xposCaret - caretWidthOffset);
 					rcCaret.right = rcCaret.left + vsDraw.caretWidth;
-				} else if (model.inOverstrike && drawOverstrikeCaret) {
+				} else if ((caretShape == ViewStyle::CaretShape::bar) && drawOverstrikeCaret) {
 					/* Overstrike (insert mode), use a modified bar caret */
 					rcCaret.top = rcCaret.bottom - 2;
 					rcCaret.left = xposCaret + 1;
 					rcCaret.right = rcCaret.left + widthOverstrikeCaret - 1;
-				} else if ((vsDraw.caretStyle == CARETSTYLE_BLOCK) || imeCaretBlockOverride) {
+				} else if ((caretShape == ViewStyle::CaretShape::block) || imeCaretBlockOverride) {
 					/* Block caret */
 					rcCaret.left = xposCaret;
 					if (!caretAtEOL && !caretAtEOF && (ll->chars[offset] != '\t') && !(IsControlCharacter(ll->chars[offset]))) {
@@ -1711,7 +1712,7 @@ void EditView::DrawForeground(Surface *surface, const EditModel &model, const Vi
 							indentCount <= (ll->positions[i + 1] - epsilon) / indentWidth;
 							indentCount++) {
 							if (indentCount > 0) {
-								const XYPOSITION xIndent = floor(indentCount * indentWidth);
+								const XYPOSITION xIndent = std::floor(indentCount * indentWidth);
 								DrawIndentGuide(surface, lineVisible, vsDraw.lineHeight, xIndent + xStart, rcSegment,
 									(ll->xHighlightGuide == xIndent));
 							}
@@ -1791,7 +1792,7 @@ void EditView::DrawForeground(Surface *surface, const EditModel &model, const Vi
 									indentCount <= (ll->positions[cpos + ts.start + 1] - epsilon) / indentWidth;
 									indentCount++) {
 									if (indentCount > 0) {
-										const XYPOSITION xIndent = floor(indentCount * indentWidth);
+										const XYPOSITION xIndent = std::floor(indentCount * indentWidth);
 										DrawIndentGuide(surface, lineVisible, vsDraw.lineHeight, xIndent + xStart, rcSegment,
 											(ll->xHighlightGuide == xIndent));
 									}
@@ -1868,7 +1869,7 @@ void EditView::DrawIndentGuidesOverEmpty(Surface *surface, const EditModel &mode
 		}
 
 		for (int indentPos = model.pdoc->IndentSize(); indentPos < indentSpace; indentPos += model.pdoc->IndentSize()) {
-			const XYPOSITION xIndent = floor(indentPos * vsDraw.spaceWidth);
+			const XYPOSITION xIndent = std::floor(indentPos * vsDraw.spaceWidth);
 			if (xIndent < xStartText) {
 				DrawIndentGuide(surface, lineVisible, vsDraw.lineHeight, xIndent + xStart, rcLine,
 					(ll->xHighlightGuide == xIndent));
@@ -2198,7 +2199,7 @@ void EditView::FillLineRemainder(Surface *surface, const EditModel &model, const
 // Space (3 space characters) between line numbers and text when printing.
 #define lineNumberPrintSpace "   "
 
-static ColourDesired InvertedLight(ColourDesired orig) {
+static ColourDesired InvertedLight(ColourDesired orig) noexcept {
 	unsigned int r = orig.GetRed();
 	unsigned int g = orig.GetGreen();
 	unsigned int b = orig.GetBlue();

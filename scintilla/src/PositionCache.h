@@ -86,7 +86,7 @@ public:
 	void operator=(LineLayout &&) = delete;
 	virtual ~LineLayout();
 	void Resize(int maxLineLength_);
-	void Free();
+	void Free() noexcept;
 	void Invalidate(validLevel validity_);
 	int LineStart(int line) const;
 	enum class Scope { visibleOnly, includeEnd };
@@ -121,7 +121,7 @@ public:
 	void operator=(const LineLayoutCache &) = delete;
 	void operator=(LineLayoutCache &&) = delete;
 	virtual ~LineLayoutCache();
-	void Deallocate();
+	void Deallocate() noexcept;
 	enum {
 		llcNone=SC_CACHE_NONE,
 		llcCaret=SC_CACHE_CARET,
@@ -129,11 +129,11 @@ public:
 		llcDocument=SC_CACHE_DOCUMENT
 	};
 	void Invalidate(LineLayout::validLevel validity_);
-	void SetLevel(int level_);
-	int GetLevel() const { return level; }
+	void SetLevel(int level_) noexcept;
+	int GetLevel() const noexcept { return level; }
 	LineLayout *Retrieve(Sci::Line lineNumber, Sci::Line lineCaret, int maxChars, int styleClock_,
 		Sci::Line linesOnScreen, Sci::Line linesInDoc);
-	void Dispose(LineLayout *ll);
+	void Dispose(LineLayout *ll) noexcept;
 };
 
 class PositionCacheEntry {
@@ -142,7 +142,7 @@ class PositionCacheEntry {
 	unsigned int clock:16;
 	std::unique_ptr<XYPOSITION []> positions;
 public:
-	PositionCacheEntry();
+	PositionCacheEntry() noexcept;
 	// Copy constructor not currently used, but needed for being element in std::vector.
 	PositionCacheEntry(const PositionCacheEntry &);
 	// PositionCacheEntry objects should not be moved but MSVC 2015 requires this.
@@ -151,11 +151,11 @@ public:
 	void operator=(PositionCacheEntry &&) = delete;
 	~PositionCacheEntry();
 	void Set(unsigned int styleNumber_, const char *s_, unsigned int len_, const XYPOSITION *positions_, unsigned int clock_);
-	void Clear();
+	void Clear() noexcept;
 	bool Retrieve(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_) const;
-	static unsigned int Hash(unsigned int styleNumber_, const char *s, unsigned int len_);
-	bool NewerThan(const PositionCacheEntry &other) const;
-	void ResetClock();
+	static unsigned int Hash(unsigned int styleNumber_, const char *s, unsigned int len_) noexcept;
+	bool NewerThan(const PositionCacheEntry &other) const noexcept;
+	void ResetClock() noexcept;
 };
 
 class Representation {
@@ -171,7 +171,7 @@ class SpecialRepresentations {
 	MapRepresentation mapReprs;
 	short startByteHasReprs[0x100];
 public:
-	SpecialRepresentations();
+	SpecialRepresentations() noexcept;
 	void SetRepresentation(const char *charBytes, const char *value);
 	void ClearRepresentation(const char *charBytes);
 	const Representation *RepresentationFromCharacter(const char *charBytes, size_t len) const;
@@ -220,7 +220,7 @@ public:
 	void operator=(BreakFinder &&) = delete;
 	~BreakFinder();
 	TextSegment Next();
-	bool More() const;
+	bool More() const noexcept;
 };
 
 class PositionCache {
@@ -235,9 +235,9 @@ public:
 	void operator=(const PositionCache &) = delete;
 	void operator=(PositionCache &&) = delete;
 	~PositionCache();
-	void Clear();
+	void Clear() noexcept;
 	void SetSize(size_t size_);
-	size_t GetSize() const { return pces.size(); }
+	size_t GetSize() const noexcept { return pces.size(); }
 	void MeasureWidths(Surface *surface, const ViewStyle &vstyle, unsigned int styleNumber,
 		const char *s, unsigned int len, XYPOSITION *positions, const Document *pdoc);
 };

@@ -476,7 +476,7 @@ void Document::ClearLevels() {
 	Levels()->ClearLevels();
 }
 
-static bool IsSubordinate(int levelStart, int levelTry) {
+static bool IsSubordinate(int levelStart, int levelTry) noexcept {
 	if (levelTry & SC_FOLDLEVELWHITEFLAG)
 		return true;
 	else
@@ -1092,7 +1092,7 @@ int Document::DBCSDrawBytes(const char *text, int len) const noexcept {
 	}
 }
 
-static inline bool IsSpaceOrTab(int ch) noexcept {
+static constexpr bool IsSpaceOrTab(int ch) noexcept {
 	return ch == ' ' || ch == '\t';
 }
 
@@ -1438,7 +1438,7 @@ void Document::DelCharBack(Sci::Position pos) {
 	}
 }
 
-static Sci::Position NextTab(Sci::Position pos, Sci::Position tabSize) noexcept {
+static constexpr Sci::Position NextTab(Sci::Position pos, Sci::Position tabSize) noexcept {
 	return ((pos / tabSize) + 1) * tabSize;
 }
 
@@ -1710,7 +1710,7 @@ CharClassify::cc Document::WordCharacterClass(unsigned int ch) const {
 	if (dbcsCodePage && (!UTF8IsAscii(ch))) {
 		if (SC_CP_UTF8 == dbcsCodePage) {
 			// Use hard coded Unicode class
-			const CharacterCategory cc = CategoriseCharacter(ch);
+			const CharacterCategory cc = charMap.CategoryFor(ch);
 			switch (cc) {
 
 				// Separator, Line/Paragraph
@@ -2169,6 +2169,14 @@ int Document::GetCharsOfClass(CharClassify::cc characterClass, unsigned char *bu
     return charClass.GetCharsOfClass(characterClass, buffer);
 }
 
+void Document::SetCharacterCategoryOptimization(int countCharacters) {
+	charMap.Optimize(countCharacters);
+}
+
+int Document::CharacterCategoryOptimization() const noexcept {
+	return charMap.Size();
+}
+
 void SCI_METHOD Document::StartStyling(Sci_Position position, char) {
 	endStyled = position;
 }
@@ -2554,7 +2562,7 @@ Sci::Position Document::WordPartRight(Sci::Position pos) const {
 	return pos;
 }
 
-static bool IsLineEndChar(char c) noexcept {
+static constexpr bool IsLineEndChar(char c) noexcept {
 	return (c == '\n' || c == '\r');
 }
 
@@ -3061,16 +3069,9 @@ Sci::Position Cxx11RegexFindText(const Document *doc, Sci::Position minPos, Sci:
 
 		bool matched = false;
 		if (SC_CP_UTF8 == doc->dbcsCodePage) {
-			const size_t lenS = strlen(s);
-			std::vector<wchar_t> ws(lenS + 1);
-#if WCHAR_T_IS_16
-			const size_t outLen = UTF16FromUTF8(s, lenS, &ws[0], lenS);
-#else
-			const size_t outLen = UTF32FromUTF8(s, lenS, reinterpret_cast<unsigned int *>(&ws[0]), lenS);
-#endif
-			ws[outLen] = 0;
+			const std::wstring ws = WStringFromUTF8(s, strlen(s));
 			std::wregex regexp;
-			regexp.assign(&ws[0], flagsRe);
+			regexp.assign(ws, flagsRe);
 			matched = MatchOnLines<UTF8Iterator>(doc, regexp, resr, search);
 
 		} else {
