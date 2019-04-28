@@ -25,6 +25,7 @@ Rename LATEST-IS-... to the new version number in
 /srv/www/download.geany.org/ and /srv/www/www.geany.org/files.
 Execute (as user geany) /home/geany/md5sums to update
 /srv/www/download.geany.org/MD5SUMS.
+You can use the script /home/geany/publish-release.
 Make sure the public part of the GPG key used to sign the archives
 can be found on the download page.
 
@@ -32,8 +33,7 @@ Windows builds (enrico?).
 
 Create a signed tag for the release in Git with 'git tag -s <version>'.
 
-Website: update Releases, Documentation links, Release Notes, ChangeLog
-and add a News item.
+Website: update Releases, Release Notes, ChangeLog and add a News item.
 Use the /home/geany/update-manual script to update the manual data and links
 in the filesystem at /srv/www/www.geany.org/manual, and to update
 current/hacking.html.
