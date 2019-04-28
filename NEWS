@@ -1,5 +1,38 @@
 Geany 1.35 (unreleased)
 
+    General
+    * Start synchronization with Universal-CTags (Jiří Techet, PR#1263,
+      PR#2018).
+
+    Bug fixes
+    * Improve IPC socket handling (Issue#641, PR#2111).
+    * Fix loading the default open encoding option (PR#1326).
+    * Fix VTE path following after reset (Issue#352, PR#2116).
+
+    Interface
+    * Show variable type in a tooltip in symbol tree (Jiří Techet, PR#2036).
+
+    Editor
+    * Update Scintilla to version 3.10.2 (Issue#971, Issue#1947, Issue#2076,
+      PR#2045).
+    * Drastically speed up huge bulk replacements (Issue#2092, PR#2097).
+    * Fix accessibility information reported upon deletion.
+    * Fix garbage data insertion when moving lines up or down (Issue#2066).
+    * Don't perform line breaking in rectangular selection mode (Issue#2051,
+      PR#2135).
+
+    Filetypes
+    * Allow stripping trailing spaces from custom filetypes based on the Diff
+      lexer (Cristian Ciocaltea, Issue#2041, PR#2043).
+    * Improve JavaScript symbols parsing (Issue#1329, Issue#1891, Issue#1933,
+      part of PR#2018).
+    * Improve HTML symbols parsing (part of PR#2018).
+    * Improve COBOL symbols parsing (PR#2128).
+    * Improve ActionScript symbols parsing (PR#2134).
+
+    Windows
+    * Installer: only install GTK translations if selected (Issue#2090).
+
     Internationalization
     * Updated translations: da, de, es, fr, ja, lv, pt, ru, sk, zh_CN
 
