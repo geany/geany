@@ -26,9 +26,9 @@ public:
 	explicit XPM(const char *textForm);
 	explicit XPM(const char *const *linesForm);
 	XPM(const XPM &) = default;
-	XPM(XPM &&) noexcept = default;
+	XPM(XPM &&) = default;
 	XPM &operator=(const XPM &) = default;
-	XPM &operator=(XPM &&) noexcept = default;
+	XPM &operator=(XPM &&) = default;
 	~XPM();
 	void Init(const char *textForm);
 	void Init(const char *const *linesForm);
@@ -53,9 +53,9 @@ public:
 	RGBAImage(int width_, int height_, float scale_, const unsigned char *pixels_);
 	explicit RGBAImage(const XPM &xpm);
 	RGBAImage(const RGBAImage &) = default;
-	RGBAImage(RGBAImage &&) noexcept = default;
+	RGBAImage(RGBAImage &&) = default;
 	RGBAImage &operator=(const RGBAImage &) = default;
-	RGBAImage &operator=(RGBAImage &&) noexcept = default;
+	RGBAImage &operator=(RGBAImage &&) = default;
 	virtual ~RGBAImage();
 	int GetHeight() const { return height; }
 	int GetWidth() const { return width; }
