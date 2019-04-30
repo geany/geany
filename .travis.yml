@@ -2,13 +2,12 @@
 language: cpp
 cache: ccache
 env:
-  global:
-    - GTK3=no BINRELOC=no
-    - GTK3=yes BINRELOC=no
-    - GTK3=no BINRELOC=yes
-    - GTK3=yes BINRELOC=yes
-    - GTK3=no MINGW=yes
-    - GTK3=yes MINGW=yes
+  - GTK3=no BINRELOC=no
+  - GTK3=yes BINRELOC=no
+  - GTK3=no BINRELOC=yes
+  - GTK3=yes BINRELOC=yes
+  - GTK3=no MINGW=yes
+  - GTK3=yes MINGW=yes
   matrix:
     include:
       - os: linux
