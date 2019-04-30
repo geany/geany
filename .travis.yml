@@ -9,6 +9,7 @@ env:
   - GTK3=no MINGW=yes
   - GTK3=yes MINGW=yes
 matrix:
+# gcc
   include:
     - os: linux
       addons:
@@ -50,6 +51,17 @@ matrix:
             - g++-8
       env:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+
+# clang        
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+      env:
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
 before_install:
   - eval "${MATRIX_EVAL}"
