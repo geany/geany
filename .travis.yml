@@ -1,25 +1,57 @@
 # we use both C and C++, so advertize C++
 language: cpp
 cache: ccache
-dist: trusty
-compiler:
-  - gcc
 env:
   - GTK3=no BINRELOC=no
   - GTK3=yes BINRELOC=no
   - GTK3=no BINRELOC=yes
   - GTK3=yes BINRELOC=yes
-  - GTK3=no BINRELOC=no GCC_VER=7
-  - GTK3=yes BINRELOC=no GCC_VER=7
-  - GTK3=no BINRELOC=yes GCC_VER=7
-  - GTK3=yes BINRELOC=yes GCC_VER=7
-  - GTK3=no BINRELOC=no GCC_VER=8
-  - GTK3=yes BINRELOC=no GCC_VER=8
-  - GTK3=no BINRELOC=yes GCC_VER=8
-  - GTK3=yes BINRELOC=yes GCC_VER=8
   - GTK3=no MINGW=yes
   - GTK3=yes MINGW=yes
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+
 before_install:
+  - eval "${MATRIX_EVAL}"
   - sudo apt-get update -qq
 install:
   - sudo apt-get install -y intltool libtool
@@ -33,14 +65,6 @@ install:
   - sudo apt-get install -y python-lxml
 before_script:
   - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=implicit-function-declaration"
-  - if [ -n "$GCC_VER" ]; then
-      export CC=gcc-$GCC_VER;
-      export CXX=g++-$GCC_VER;
-      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157 &&
-      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test &&
-      sudo apt-get update &&
-      sudo apt-get -y install gcc-$GCC_VER g++-$GCC_VER;
-    fi
 script:
   - NOCONFIGURE=1 ./autogen.sh
   - >
