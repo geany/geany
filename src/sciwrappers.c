@@ -149,7 +149,7 @@ void sci_set_symbol_margin(ScintillaObject *sci, gboolean set)
 {
 	if (set)
 	{
-		SSM(sci, SCI_SETMARGINWIDTHN, 1, 16);
+		SSM(sci, SCI_SETMARGINWIDTHN, 1, common_style_set.styling[SCI_SYMBOL_FOLDING_MARGIN_WIDTH]);
 		SSM(sci, SCI_SETMARGINSENSITIVEN, 1, TRUE);
 	}
 	else

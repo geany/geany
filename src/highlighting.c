@@ -96,7 +96,8 @@ enum	/* Geany common styling */
 	GCS_LINE_HEIGHT,
 	GCS_CALLTIPS,
 	GCS_INDICATOR_ERROR,
-	GCS_MAX
+	GCS_MAX,
+	SCI_SYMBOL_FOLDING_MARGIN_WIDTH
 };
 
 static struct
@@ -581,6 +582,9 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars, GEANY_WORDCHARS);
 	g_free(whitespace_chars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
+
+	get_keyfile_int(config, config_home, "scintilla_settings", "sci_symbol_folding_margin_width",
+		0, 0, &common_style_set.styling[SCI_SYMBOL_FOLDING_MARGIN_WIDTH]);
 }
 
 
