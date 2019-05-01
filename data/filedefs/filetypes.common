@@ -176,3 +176,6 @@ entity=default
 line_added=0x34b034;0xffffff;false;false
 line_removed=0xff2727;0xffffff;false;false
 line_changed=0x7f007f;0xffffff;false;false
+
+[scintilla_settings]
+sci_symbol_folding_margin_width=16
