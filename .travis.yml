@@ -1,6 +1,8 @@
 # we use both C and C++, so advertize C++
 language: cpp
 cache: ccache
+dist: trusty
+compiler: gcc
 env:
   - GTK3=no BINRELOC=no
   - GTK3=yes BINRELOC=no
@@ -12,6 +14,8 @@ matrix:
 # gcc
   include:
     - os: linux
+      dist: trusty
+      compiler: gcc
       addons:
         apt:
           sources:
@@ -20,8 +24,9 @@ matrix:
             - g++-5
       env:
          - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
-
     - os: linux
+      dist: trusty
+      compiler: gcc
       addons:
         apt:
           sources:
@@ -30,8 +35,9 @@ matrix:
             - g++-6
       env:
         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
-
     - os: linux
+      dist: trusty
+      compiler: gcc
       addons:
         apt:
           sources:
@@ -41,8 +47,10 @@ matrix:
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
+# Using xenial for more recent versions of gcc
     - os: linux
       dist: xenial
+      compiler: gcc
       addons:
         apt:
           sources:
@@ -54,6 +62,8 @@ matrix:
 
 # clang        
     - os: linux
+      dist: trusty
+      compiler: clang
       addons:
         apt:
           sources:
