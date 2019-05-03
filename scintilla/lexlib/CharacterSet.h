@@ -82,16 +82,20 @@ public:
 	}
 	void AddString(const char *setToAdd) {
 		for (const char *cp=setToAdd; *cp; cp++) {
-			int val = static_cast<unsigned char>(*cp);
-			assert(val >= 0);
-			assert(val < size);
-			bset[val] = true;
+			const unsigned char uch = *cp;
+			assert(uch < size);
+			bset[uch] = true;
 		}
 	}
 	bool Contains(int val) const {
 		assert(val >= 0);
 		if (val < 0) return false;
 		return (val < size) ? bset[val] : valueAfter;
+	}
+	bool Contains(char ch) const {
+		// Overload char as char may be signed
+		const unsigned char uch = ch;
+		return Contains(uch);
 	}
 };
 
