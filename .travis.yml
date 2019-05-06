@@ -61,9 +61,9 @@ matrix:
 
 # clang        
     - os: linux
-      dist: xenial
+      dist: trusty
       compiler: clang
-      env: CLANG="xenial default"
+      env: CLANG="trusty default"
 
 before_install:
   - eval "${MATRIX_EVAL}"
