@@ -1,7 +1,9 @@
 # we use both C and C++, so advertize C++
 language: cpp
 cache: ccache
-dist: trusty
+os: linux
+dist: xenial
+# gcc 5 is the default on xenial
 compiler: gcc
 env:
   - GTK3=no BINRELOC=no
@@ -10,22 +12,22 @@ env:
   - GTK3=yes BINRELOC=yes
   - GTK3=no MINGW=yes
   - GTK3=yes MINGW=yes
-  - DISTCHECK_ONLY="yes" GTK3=no BINRELOC=no
+  - DISTCHECK_ONLY=yes GTK3=no BINRELOC=no
 matrix:
 # gcc
   include:
     - os: linux
-      dist: trusty
+      dist: xenial
       compiler: gcc
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5
-      env: MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+            - g++-4.8
+      env: MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
     - os: linux
-      dist: trusty
+      dist: xenial
       compiler: gcc
       addons:
         apt:
@@ -35,7 +37,7 @@ matrix:
             - g++-6
       env: MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
     - os: linux
-      dist: trusty
+      dist: xenial
       compiler: gcc
       addons:
         apt:
@@ -59,12 +61,12 @@ matrix:
 
 # clang        
     - os: linux
-      dist: trusty
+      dist: xenial
       compiler: clang
       addons:
         apt:
           sources:
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
           packages:
             - clang-5.0
       env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
