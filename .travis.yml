@@ -62,19 +62,24 @@ matrix:
 # clang
     - os: linux
       dist: trusty
-      compiler: clang
-      env: CLANG="trusty default"
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-3.5
+          packages:
+            - clang-3.5
+      env: MATRIX_EVAL="CC=clang-3.5 && CXX=clang++-3.5"
     - os: linux
-      dist: trusty
+      dist: xenial
       compiler: clang
       addons:
         apt:
           sources:
-            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-xenial-5.0
           packages:
             - clang-5.0
       env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
-      
+
 before_install:
   - eval "${MATRIX_EVAL}"
   - sudo apt-get update -qq
