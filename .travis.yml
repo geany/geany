@@ -2,7 +2,7 @@
 language: cpp
 # caching may give unexpected results when making frequent changes
 # to .travis.yml.
-#cache: ccache
+cache: ccache
 os: linux
 dist: xenial
 # gcc 5 is the default on xenial
@@ -68,7 +68,6 @@ matrix:
             - llvm-toolchain-trusty-3.5
           packages:
             - clang-3.5
-            - libc++-dev
       env: MATRIX_EVAL="CC=clang-3.5 && CXX=clang++-3.5"
     - os: linux
       dist: xenial
@@ -79,7 +78,6 @@ matrix:
             - llvm-toolchain-xenial-5.0
           packages:
             - clang-5.0
-            - libc++-dev
       env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
 before_install:
@@ -97,6 +95,9 @@ install:
   - sudo apt-get install -y python-lxml
 before_script:
   - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=implicit-function-declaration"
+  - if [ "$TRAVIS_COMPILER" = "clang" ]; then
+      CFLAGS="$CFLAGS -std=c++11";
+    fi
   - $CC --version
   - $CXX --version
 script:
