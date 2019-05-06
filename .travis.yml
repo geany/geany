@@ -1,6 +1,8 @@
 # we use both C and C++, so advertize C++
 language: cpp
-cache: ccache
+# caching may give unexpected results when making frequent changes
+# to .travis.yml.
+#cache: ccache
 os: linux
 dist: xenial
 # gcc 5 is the default on xenial
@@ -57,7 +59,11 @@ matrix:
             - g++-8
       env: MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
 
-# clang        
+# clang
+    - os: linux
+      dist: trusty
+      compiler: clang
+      env: CLANG="trusty default"
     - os: linux
       dist: trusty
       compiler: clang
@@ -69,9 +75,6 @@ matrix:
             - clang-5.0
       env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
       
-  allow_failures:
-  - compiler: clang
-
 before_install:
   - eval "${MATRIX_EVAL}"
   - sudo apt-get update -qq
@@ -87,6 +90,8 @@ install:
   - sudo apt-get install -y python-lxml
 before_script:
   - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=implicit-function-declaration"
+  - $CC --version
+  - $CXX --version
 script:
   - NOCONFIGURE=1 ./autogen.sh
   - if [ -n "$MINGW" ]; then
