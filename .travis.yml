@@ -74,7 +74,9 @@ matrix:
             - llvm-toolchain-trusty-3.8
           packages:
             - clang-3.8
-      env: MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8"
+      env:
+        - MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8"
+        - TARGETS="all check"
 
 before_install:
   - eval "${MATRIX_EVAL}"
