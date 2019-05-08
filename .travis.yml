@@ -59,6 +59,7 @@ matrix:
 # clang
     - os: linux
       dist: trusty
+      compiler: clang
       addons:
         apt:
           sources:
