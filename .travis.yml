@@ -66,22 +66,22 @@ matrix:
 
 # clang
     - os: linux
-      dist: precise
-      # precise has clang 3.4
+      dist: xenial
+      # xenial has clang 7
       compiler: clang
       env:
         - TARGETS="all check"
     - os: linux
       dist: trusty
-      # trusty has clang 3.5
       compiler: clang
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-6.0
+          packages:
+            - clang-6.0
       env:
-        - TARGETS="all check"
-    - os: linux
-      dist: xenial
-      # xenial has clang 7
-      compiler: clang
-      env:
+        - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
         - TARGETS="all check"
 
 before_install:
