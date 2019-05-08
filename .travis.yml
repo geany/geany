@@ -97,5 +97,7 @@ script:
       mkdir _build                        &&
       cd _build                           &&
       { ../configure $CONFIGURE_FLAGS || { cat config.log; exit 1; } ; } &&
-      make -j2 ${TARGETS:-all check distcheck} DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS";
+      make -j2 all DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" &&
+      make -j2 check DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" &&
+      make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS";
     fi
