@@ -59,13 +59,14 @@ matrix:
 # clang
     - os: linux
       dist: trusty
+      compiler: clang
       addons:
         apt:
           sources:
-            - llvm-toolchain-trusty-3.8
+            - llvm-toolchain-trusty-3.5
           packages:
-            - clang-3.8
-      env: MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8"
+            - clang-3.5
+      env: MATRIX_EVAL="CC=clang-3.5 && CXX=clang++-3.5"
 
 before_install:
   - eval "${MATRIX_EVAL}"
