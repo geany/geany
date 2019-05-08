@@ -1,7 +1,5 @@
 # we use both C and C++, so advertize C++
 language: cpp
-# caching may give unexpected results when making frequent changes
-# to .travis.yml.
 cache: ccache
 os: linux
 dist: xenial
@@ -14,7 +12,6 @@ env:
   - GTK3=yes BINRELOC=yes
   - GTK3=no MINGW=yes
   - GTK3=yes MINGW=yes
-  - DISTCHECK_ONLY=yes GTK3=no BINRELOC=no
 matrix:
 # gcc
   include:
@@ -27,7 +24,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-4.8
-      env: MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
+      env: MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8" DISTCHECK_ONLY=yes
     - os: linux
       dist: xenial
       compiler: gcc
@@ -65,20 +62,10 @@ matrix:
       addons:
         apt:
           sources:
-            - llvm-toolchain-trusty-3.5
+            - llvm-toolchain-trusty-3.8
           packages:
-            - clang-3.5
-      env: MATRIX_EVAL="CC=clang-3.5 && CXX=clang++-3.5"
-    - os: linux
-      dist: xenial
-      compiler: clang
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-xenial-5.0
-          packages:
-            - clang-5.0
-      env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+            - clang-3.8
+      env: MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8"
 
 before_install:
   - eval "${MATRIX_EVAL}"
@@ -95,9 +82,6 @@ install:
   - sudo apt-get install -y python-lxml
 before_script:
   - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=implicit-function-declaration"
-  - if [ "$TRAVIS_COMPILER" = "clang" ]; then
-      CFLAGS="$CFLAGS -std=c++11";
-    fi
   - echo $CFLAGS
   - $CC --version
   - $CXX --version
@@ -112,10 +96,9 @@ script:
       mkdir _build                        &&
       cd _build                           &&
       { ../configure $CONFIGURE_FLAGS || { cat config.log; exit 1; } ; } &&
-      if [ -z "$DISTCHECK_ONLY" ]; then
-        make -j2 VERBOSE=1 -n                           &&
-        make -j2 check;
-      else
+      make -j2        &&
+      make -j2 check  &&
+      if [ -n "$DISTCHECK_ONLY" ]; then
         make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS";
       fi;
     fi
