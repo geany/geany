@@ -521,6 +521,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 {
 	gchar *base_filename;
 	GeanyFiletype *ft;
+	guint i;
 
 	ft = detect_filetype_conf_file(utf8_filename);
 	if (ft)
@@ -533,12 +534,25 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	SETPTR(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	for (guint i = 0; i < filetypes_array->len; i++)
+	for (i = 0; i < filetypes_array->len; i++)
 	{
 		if (match_basename(filetypes[i], base_filename))
 		{
 			ft = filetypes[i];
 			break;
+		}
+	}
+	// check if user config overrides found ft
+	if (ft && !ft->priv->user_extensions)
+	{
+		for (i++; i < filetypes_array->len; i++)
+		{
+			if (filetypes[i]->priv->user_extensions &&
+				match_basename(filetypes[i], base_filename))
+			{
+				ft = filetypes[i];
+				break;
+			}
 		}
 	}
 	if (ft == NULL)
@@ -1386,6 +1400,7 @@ static void read_extensions(GKeyFile *sysconfig, GKeyFile *userconfig)
 		gchar **list = g_key_file_get_string_list(
 			(userset) ? userconfig : sysconfig, "Extensions", filetypes[i]->name, &len, NULL);
 
+		filetypes[i]->priv->user_extensions = userset;
 		g_strfreev(filetypes[i]->pattern);
 		/* Note: we allow 'Foo=' to remove all patterns */
 		if (!list)
