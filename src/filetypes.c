@@ -463,26 +463,8 @@ void filetypes_init(void)
 }
 
 
-/* Find a filetype that predicate returns TRUE for, otherwise return NULL. */
-GeanyFiletype *filetypes_find(GCompareFunc predicate, gpointer user_data)
+static gboolean match_basename(const GeanyFiletype *ft, const gchar *base_filename)
 {
-	guint i;
-
-	for (i = 0; i < filetypes_array->len; i++)
-	{
-		GeanyFiletype *ft = filetypes[i];
-
-		if (predicate(ft, user_data))
-			return ft;
-	}
-	return NULL;
-}
-
-
-static gboolean match_basename(gconstpointer pft, gconstpointer user_data)
-{
-	const GeanyFiletype *ft = pft;
-	const gchar *base_filename = user_data;
 	gint j;
 	gboolean ret = FALSE;
 
@@ -505,7 +487,7 @@ static gboolean match_basename(gconstpointer pft, gconstpointer user_data)
 }
 
 
-static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
+static GeanyFiletype *detect_filetype_conf_file(const gchar *utf8_filename)
 {
 	gchar *lfn = NULL;
 	gchar *path;
@@ -540,7 +522,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	gchar *base_filename;
 	GeanyFiletype *ft;
 
-	ft = check_builtin_filenames(utf8_filename);
+	ft = detect_filetype_conf_file(utf8_filename);
 	if (ft)
 		return ft;
 
@@ -551,7 +533,14 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	SETPTR(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	ft = filetypes_find(match_basename, base_filename);
+	for (guint i = 0; i < filetypes_array->len; i++)
+	{
+		if (match_basename(filetypes[i], base_filename))
+		{
+			ft = filetypes[i];
+			break;
+		}
+	}
 	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
