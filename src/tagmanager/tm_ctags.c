@@ -130,7 +130,7 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 
 
 /* add argument list of __init__() Python methods to the class tag */
-static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source_file)
+static void update_python_arglist(const TMTag *tag, TMSourceFile *source_file)
 {
 	guint i;
 	const gchar *parent_tag_name;
@@ -146,9 +146,9 @@ static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source
 		parent_tag_name = tag->scope;
 
 	/* going in reverse order because the tag was added recently */
-	for (i = current_source_file->tags_array->len; i > 0; i--)
+	for (i = source_file->tags_array->len; i > 0; i--)
 	{
-		TMTag *prev_tag = (TMTag *) current_source_file->tags_array->pdata[i - 1];
+		TMTag *prev_tag = (TMTag *) source_file->tags_array->pdata[i - 1];
 		if (g_strcmp0(prev_tag->name, parent_tag_name) == 0)
 		{
 			g_free(prev_tag->arglist);
@@ -161,21 +161,21 @@ static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source
 
 static gint write_entry(tagWriter *writer, MIO * mio, const tagEntryInfo *const tag, void *user_data)
 {
-	TMSourceFile *current_source_file = user_data;
+	TMSourceFile *source_file = user_data;
 	TMTag *tm_tag = tm_tag_new();
 
 	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
 
-	if (!init_tag(tm_tag, current_source_file, tag))
+	if (!init_tag(tm_tag, source_file, tag))
 	{
 		tm_tag_unref(tm_tag);
 		return 0;
 	}
 
 	if (tm_tag->lang == TM_PARSER_PYTHON)
-		update_python_arglist(tm_tag, current_source_file);
+		update_python_arglist(tm_tag, source_file);
 
-	g_ptr_array_add(current_source_file->tags_array, tm_tag);
+	g_ptr_array_add(source_file->tags_array, tm_tag);
 
 	/* output length - we don't write anything to the MIO */
 	return 0;
@@ -184,8 +184,8 @@ static gint write_entry(tagWriter *writer, MIO * mio, const tagEntryInfo *const 
 
 static void rescan_failed(tagWriter *writer, gulong valid_tag_num, void *user_data)
 {
-	TMSourceFile *current_source_file = user_data;
-	GPtrArray *tags_array = current_source_file->tags_array;
+	TMSourceFile *source_file = user_data;
+	GPtrArray *tags_array = source_file->tags_array;
 
 	if (tags_array->len > valid_tag_num)
 	{
