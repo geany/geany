@@ -29,6 +29,8 @@ parsers = \
 	parsers/html.c \
 	parsers/jscript.c \
 	parsers/json.c \
+	parsers/lcpp.c \
+	parsers/lcpp.h \
 	parsers/lua.c \
 	parsers/make.c \
 	parsers/markdown.c \
@@ -90,8 +92,6 @@ libctags_la_SOURCES = \
 	main/kind.c \
 	main/kind.h \
 	main/kind_p.h \
-	main/lcpp.c \
-	main/lcpp.h \
 	main/lregex.c \
 	main/lregex.h \
 	main/lregex_p.h \
