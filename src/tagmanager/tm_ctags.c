@@ -43,7 +43,7 @@ tagWriter geanyWriter = {
 };
 
 
-static bool nonfatal_error_printer (const errorSelection selection,
+static bool nonfatal_error_printer(const errorSelection selection,
 					  const gchar *const format,
 					  va_list ap, void *data CTAGS_ATTR_UNUSED)
 {
@@ -200,20 +200,20 @@ static void rescan_failed(tagWriter *writer, gulong valid_tag_num, void *user_da
 /* keep in sync with ctags main() - use only things interesting for us */
 void tm_ctags_init(void)
 {
-	initDefaultTrashBox ();
+	initDefaultTrashBox();
 
-	setErrorPrinter (nonfatal_error_printer, NULL);
-	setTagWriter (WRITER_CUSTOM, &geanyWriter);
+	setErrorPrinter(nonfatal_error_printer, NULL);
+	setTagWriter(WRITER_CUSTOM, &geanyWriter);
 
-	checkRegex ();
-	initFieldObjects ();
-	initXtagObjects ();
+	checkRegex();
+	initFieldObjects();
+	initXtagObjects();
 
-	initializeParsing ();
-	initOptions ();
+	initializeParsing();
+	initOptions();
 
 	/* make sure all parsers are initialized */
-	initializeParser (LANG_AUTO);
+	initializeParser(LANG_AUTO);
 
 	/* change default values which are false */
 	enableXtag(XTAG_TAGS_GENERATED_BY_GUEST_PARSERS, true);
@@ -265,14 +265,14 @@ const gchar *tm_ctags_get_lang_kinds(TMParserType lang)
 
 const gchar *tm_ctags_get_kind_name(gchar kind, TMParserType lang)
 {
-	kindDefinition *def = getLanguageKindForLetter (CTAGS_LANG(lang), kind);
+	kindDefinition *def = getLanguageKindForLetter(CTAGS_LANG(lang), kind);
 	return def ? def->name : "unknown";
 }
 
 
 gchar tm_ctags_get_kind_from_name(const gchar *name, TMParserType lang)
 {
-	kindDefinition *def = getLanguageKindForName (CTAGS_LANG(lang), name);
+	kindDefinition *def = getLanguageKindForName(CTAGS_LANG(lang), name);
 	return def ? def->letter : '-';
 }
 

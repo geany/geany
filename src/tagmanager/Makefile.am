@@ -17,7 +17,7 @@ tagmanager_include_HEADERS = \
 	tm_parser.h
 
 
-libtagmanager_la_SOURCES =\
+libtagmanager_la_SOURCES = \
 	tm_ctags.h \
 	tm_ctags.c \
 	tm_parser.h \
