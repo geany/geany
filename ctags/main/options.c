@@ -25,16 +25,15 @@
 
 #include "ctags.h"
 #include "debug.h"
-#include "field.h"
+#include "field_p.h"
 #include "gvars.h"
-#include "keyword.h"
-#include "main.h"
+#include "keyword_p.h"
 #include "parse_p.h"
 #include "ptag_p.h"
 #include "routines_p.h"
-#include "xtag.h"
-#include "param.h"
-#include "error.h"
+#include "xtag_p.h"
+#include "param_p.h"
+#include "error_p.h"
 #include "interactive_p.h"
 #include "writer_p.h"
 #include "trace.h"
@@ -195,6 +194,7 @@ static OptionLoadingStage Stage = OptionLoadingStageNone;
 */
 
 static optionDescription LongOptionDescription [] = {
+ {1,"  -?   Print this option summary."},
  {1,"  -a   Append the tags to an existing tag file."},
 #ifdef DEBUG
  {1,"  -b <line>"},
@@ -242,7 +242,7 @@ static optionDescription LongOptionDescription [] = {
  {1,"      Include reference to 'file' in Emacs-style tag file (requires -e)."},
  {1,"  --exclude=pattern"},
  {1,"      Exclude files and directories matching 'pattern'."},
- {0,"  --excmd=number|pattern|mix"},
+ {0,"  --excmd=number|pattern|mix|combine"},
 #ifdef MACROS_USE_PATTERNS
  {0,"       Uses the specified type of EX command to locate tags [pattern]."},
 #else
@@ -250,12 +250,12 @@ static optionDescription LongOptionDescription [] = {
 #endif
  {1,"  --extras=[+|-]flags"},
  {1,"      Include extra tag entries for selected information (flags: \"fFgpqrs\") [F]."},
- {1,"  --extras-<LANG|*>=[+|-]flags"},
+ {1,"  --extras-<LANG|all>=[+|-]flags"},
  {1,"      Include <LANG> own extra tag entries for selected information"},
  {1,"      (flags: see the output of --list-extras=<LANG> option)."},
  {1,"  --fields=[+|-]flags"},
  {1,"      Include selected extension fields (flags: \"aCeEfFikKlmnNpPrRsStxzZ\") [fks]."},
- {1,"  --fields-<LANG|*>=[+|-]flags"},
+ {1,"  --fields-<LANG|all>=[+|-]flags"},
  {1,"      Include selected <LANG> own extension fields"},
  {1,"      (flags: see the output of --list-fields=<LANG> option)."},
  {1,"  --file-scope=[yes|no]"},
@@ -473,8 +473,13 @@ static optionDescription ExperimentalLongOptionDescription [] = {
  {1,"       Define multitable regular expression for locating tags in specific language."},
  {1,"  --_mtable-totals=[yes|no]"},
  {1,"       Print statistics about mtable usage [no]."},
+ {1,"  --_pretend-<NEWLANG>=<OLDLANG>"},
+ {1,"       Make NEWLANG parser pretend OLDLANG parser in lang: field."},
  {1,"  --_roledef-<LANG>=kind_letter.role_name,role_desc"},
  {1,"       Define new role for kind specified with <kind_letter> in <LANG>."},
+ {1,"  --_scopesep-<LANG>=[parent_kind_letter]/child_kind_letter:separator"},
+ {1,"       Specify scope separator between <PARENT_KIND> and <KIND>."},
+ {1,"       * as a kind letter matches any kind."},
  {1,"  --_tabledef-<LANG>=name"},
  {1,"       Define new regex table for <LANG>."},
 #ifdef DO_TRACING
@@ -557,6 +562,10 @@ static struct Feature {
 #endif
 #ifdef HAVE_ASPELL
 	{"aspell", "linked with code for spell checking (internal use)"},
+#endif
+#ifdef HAVE_PACKCC
+	/* The test harnesses use this as hints for skipping test cases */
+	{"packcc", "has peg based parser(s)"},
 #endif
 	{NULL,}
 };
@@ -745,8 +754,9 @@ extern void checkOptions (void)
 	}
 }
 
-extern langType getLanguageComponentInOption (const char *const option,
-											  const char *const prefix)
+extern langType getLanguageComponentInOptionFull (const char *const option,
+												  const char *const prefix,
+												  bool noPretending)
 {
 	size_t prefix_len;
 	langType language;
@@ -771,11 +781,17 @@ extern langType getLanguageComponentInOption (const char *const option,
 	colon = strchr (lang, ':');
 	if (colon)
 		lang_len = colon - lang;
-	language = getNamedLanguage (lang, lang_len);
+	language = getNamedLanguageFull (lang, lang_len, noPretending);
 	if (language == LANG_IGNORE)
 		error (FATAL, "Unknown language \"%s\" in \"%s\" option", lang, option);
 
 	return language;
+}
+
+extern langType getLanguageComponentInOption (const char *const option,
+											  const char *const prefix)
+{
+	return getLanguageComponentInOptionFull (option, prefix, false);
 }
 
 static void setEtagsMode (void)
@@ -784,7 +800,7 @@ static void setEtagsMode (void)
 	Option.sorted = SO_UNSORTED;
 	Option.lineDirectives = false;
 	Option.tagRelative = TREL_YES;
-	setTagWriter (WRITER_ETAGS);
+	setTagWriter (WRITER_ETAGS, NULL);
 }
 
 extern void testEtagsInvocation (void)
@@ -807,7 +823,7 @@ extern void testEtagsInvocation (void)
 static void setXrefMode (void)
 {
 	Option.xref = true;
-	setTagWriter (WRITER_XREF);
+	setTagWriter (WRITER_XREF, NULL);
 }
 
 #ifdef HAVE_JANSSON
@@ -816,7 +832,7 @@ static void setJsonMode (void)
 	enablePtag (PTAG_JSON_OUTPUT_VERSION, true);
 	enablePtag (PTAG_OUTPUT_MODE, false);
 	enablePtag (PTAG_FILE_FORMAT, false);
-	setTagWriter (WRITER_JSON);
+	setTagWriter (WRITER_JSON, NULL);
 }
 #endif
 
@@ -1164,7 +1180,10 @@ static void processExcmdOption (
 		case 'n': Option.locate = EX_LINENUM; break;
 		case 'p': Option.locate = EX_PATTERN; break;
 		default:
-			error (FATAL, "Invalid value for \"%s\" option", option);
+			if (strcmp(parameter, "combine") == 0)
+				Option.locate = EX_COMBINE;
+			else
+				error (FATAL, "Invalid value for \"%s\" option", option);
 			break;
 	}
 }
@@ -1607,7 +1626,7 @@ static void processInteractiveOption (
 	Option.sorted = SO_UNSORTED;
 	setMainLoop (interactiveLoop, &args);
 	setErrorPrinter (jsonErrorPrinter, NULL);
-	setTagWriter (WRITER_JSON);
+	setTagWriter (WRITER_JSON, NULL);
 	enablePtag (PTAG_JSON_OUTPUT_VERSION, true);
 
 	json_set_alloc_funcs (eMalloc, eFree);
@@ -2318,7 +2337,7 @@ static void processOutputFormat (const char *const option CTAGS_ATTR_UNUSED,
 	if (strcmp (parameter, "u-ctags") == 0)
 		;
 	else if (strcmp (parameter, "e-ctags") == 0)
-		setTagWriter (WRITER_E_CTAGS);
+		setTagWriter (WRITER_E_CTAGS, NULL);
 	else if (strcmp (parameter, "etags") == 0)
 		setEtagsMode ();
 	else if (strcmp (parameter, "xref") == 0)
@@ -3181,6 +3200,10 @@ static void processLongOption (
 #endif
 	else if (processRoledefOption (option, parameter))
 		;
+	else if (processScopesepOption (option, parameter))
+		;
+	else if (processPretendOption (option, parameter))
+		;
 	else
 		error (FATAL, "Unknown option: --%s", option);
 }
@@ -3745,4 +3768,19 @@ extern bool inSandbox (void)
 extern bool canUseLineNumberAsLocator (void)
 {
 	return (Option.locate != EX_PATTERN);
+}
+
+extern bool isDestinationStdout (void)
+{
+	bool toStdout = false;
+
+	if (Option.filter || Option.interactive ||
+		(Option.tagFileName != NULL  &&  (strcmp (Option.tagFileName, "-") == 0
+						  || strcmp (Option.tagFileName, "/dev/stdout") == 0
+		)))
+		toStdout = true;
+	else if (Option.tagFileName == NULL && NULL == outputDefaultFileName ())
+		toStdout = true;
+
+	return toStdout;
 }

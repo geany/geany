@@ -53,7 +53,8 @@ typedef struct sCookedArgs {
 typedef enum eLocate {
 	EX_MIX,      /* line numbers for defines, patterns otherwise */
 	EX_LINENUM,  /* -n  only line numbers in tag file */
-	EX_PATTERN   /* -N  only patterns in tag file */
+	EX_PATTERN,  /* -N  only patterns in tag file */
+	EX_COMBINE,  /* Combine linenum and pattern with `;'*/
 } exCmd;
 
 typedef enum sortType {
@@ -163,6 +164,8 @@ extern void freeOptionResources (void);
 
 extern langType getLanguageComponentInOption (const char *const option,
 					      const char *const prefix);
+extern langType getLanguageComponentInOptionFull (const char *const option,
+					      const char *const prefix, bool noPretending);
 
 extern void processLanguageDefineOption (const char *const option, const char *const parameter);
 extern bool processMapOption (const char *const option, const char *const parameter);
@@ -177,6 +180,10 @@ extern bool processTabledefOption (const char *const option, const char *const p
 extern bool processLanguageEncodingOption (const char *const option, const char *const parameter);
 #endif
 extern bool processRoledefOption (const char *const option, const char *const parameter);
+extern bool processScopesepOption (const char *const option, const char *const parameter);
+extern bool processPretendOption (const char *const option, const char *const parameter);
+
+extern bool isDestinationStdout (void);
 
 extern void setMainLoop (mainLoopFunc func, void *data);
 

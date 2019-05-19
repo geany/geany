@@ -13,7 +13,7 @@
 #include "general.h"  /* must always come first */
 
 #ifdef HAVE_STDLIB_H
-# include <stdlib.h>  /* to declare malloc (), realloc () */
+# include <stdlib.h>  /* to declare malloc (), realloc (), mbcs() */
 #endif
 #include <ctype.h>
 #include <string.h>
@@ -59,9 +59,6 @@
 #include "debug.h"
 #include "routines.h"
 #include "routines_p.h"
-#ifdef HAVE_ICONV
-# include "mbcs.h"
-#endif
 #ifdef HAVE_ERRNO_H
 # include <errno.h>
 #endif
@@ -259,6 +256,11 @@ extern void *eRealloc (void *const ptr, const size_t size)
 extern void eFree (void *const ptr)
 {
 	Assert (ptr != NULL);
+	free (ptr);
+}
+
+extern void eFreeNoNullCheck (void *const ptr)
+{
 	free (ptr);
 }
 

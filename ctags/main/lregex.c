@@ -27,16 +27,19 @@
 
 #include "debug.h"
 #include "colprint_p.h"
-#include "entry.h"
+#include "entry_p.h"
+#include "field_p.h"
 #include "flags_p.h"
 #include "htable.h"
 #include "kind.h"
 #include "options.h"
 #include "parse_p.h"
 #include "read.h"
+#include "read_p.h"
 #include "routines.h"
 #include "routines_p.h"
 #include "trashbox.h"
+#include "xtag_p.h"
 
 static bool regexAvailable = false;
 
@@ -131,6 +134,8 @@ typedef struct {
 
 	char *pattern_string;
 
+	char *anonymous_tag_prefix;
+
 	struct {
 		errorSelection selection;
 		char *message_string;
@@ -222,6 +227,9 @@ static void deletePattern (regexPattern *p)
 
 	if (p->message.message_string)
 		eFree (p->message.message_string);
+
+	if (p->anonymous_tag_prefix)
+		eFree (p->anonymous_tag_prefix);
 
 	eFree (p);
 }
@@ -794,6 +802,31 @@ static void common_flag_role_long (const char* const s, const char* const v, voi
 	ptrn->u.tag.roleBits |= makeRoleBit(role->id);
 }
 
+static void common_flag_anonymous_long (const char* const s, const char* const v, void* data)
+{
+	struct commonFlagData * cdata = data;
+	regexPattern *ptrn = cdata->ptrn;
+
+	Assert (ptrn);
+
+	if (ptrn->anonymous_tag_prefix)
+	{
+		error (WARNING, "an anonymous tag prefix for this pattern (%s) is already given: %s",
+			   ptrn->pattern_string? ptrn->pattern_string: "",
+			   ptrn->anonymous_tag_prefix);
+		return;
+	}
+
+	if (!v)
+	{
+		error (WARNING, "no PREFIX for anonymous regex flag is given (pattern == %s)",
+			   ptrn->pattern_string? ptrn->pattern_string: "");
+		return;
+	}
+
+	ptrn->anonymous_tag_prefix = eStrdup (v);
+}
+
 static flagDefinition commonSpecFlagDef[] = {
 	{ '\0',  "fatal", NULL, common_flag_msg_long ,
 	  "\"MESSAGE\"", "print the given MESSAGE and exit"},
@@ -806,6 +839,8 @@ static flagDefinition commonSpecFlagDef[] = {
 	  "FIELD:VALUE", "record the matched string(VALUE) to parser own FIELD of the tag"},
 	{ '\0',  EXPERIMENTAL "role", NULL, common_flag_role_long,
 	  "ROLE", "set the given ROLE to the roles field"},
+	{ '\0',  EXPERIMENTAL "anonymous", NULL, common_flag_anonymous_long,
+	  "PREFIX", "make an anonymous tag with PREFIX"},
 };
 
 
@@ -1157,8 +1192,13 @@ static void matchTagPattern (struct lregexControlBlock *lcb,
 		const regmatch_t* const pmatch,
 			     off_t offset)
 {
-	vString *const name = substitute (line,
-			patbuf->u.tag.name_pattern, BACK_REFERENCE_COUNT, pmatch);
+	vString *const name =
+		(patbuf->u.tag.name_pattern[0] != '\0') ? substitute (line,
+															  patbuf->u.tag.name_pattern,
+															  BACK_REFERENCE_COUNT, pmatch):
+		(patbuf->anonymous_tag_prefix) ? anonGenerateNew (patbuf->anonymous_tag_prefix,
+														  patbuf->u.tag.kindIndex):
+		vStringNewInit ("");
 	bool placeholder = !!((patbuf->scopeActions & SCOPE_PLACEHOLDER) == SCOPE_PLACEHOLDER);
 	unsigned long scope = CORK_NIL;
 	int n;
@@ -1257,6 +1297,10 @@ static void matchTagPattern (struct lregexControlBlock *lcb,
 					assignRole (&e, roleIndex);
 			}
 		}
+
+		if (patbuf->anonymous_tag_prefix)
+			markTagExtraBit (&e, XTAG_ANONYMOUS);
+
 		n = makeTagEntry (&e);
 
 		trashBoxMakeEmpty(field_trashbox);
@@ -1409,12 +1453,12 @@ static bool matchMultilineRegexPattern (struct lregexControlBlock *lcb,
 				 : pmatch [patbuf->mgroup.forNextScanning].rm_eo);
 		if (delta == 0)
 		{
-			unsigned int offset = current - start;
+			unsigned int pos = current - start;
 			error (WARNING,
 				   "a multi line regex pattern doesn't advance the input cursor: %s",
 				   patbuf->pattern_string);
 			error (WARNING, "Language: %s, input file: %s, pos: %u",
-				   getLanguageName (lcb->owner), getInputFileName(), offset);
+				   getLanguageName (lcb->owner), getInputFileName(), pos);
 			break;
 		}
 		current += delta;
@@ -1589,6 +1633,7 @@ static regexPattern *addTagRegexInternal (struct lregexControlBlock *lcb,
 		if (*name == '\0')
 		{
 			if (rptr->exclusive || rptr->scopeActions & SCOPE_PLACEHOLDER
+				|| rptr->anonymous_tag_prefix
 				|| regptype == REG_PARSER_MULTI_TABLE)
 				rptr->accept_empty_name = true;
 			else
@@ -1735,7 +1780,7 @@ extern void processTagRegexOption (struct lregexControlBlock *lcb,
 				if (vStringLength (regex) > 1 && vStringValue (regex)[0] != '\n')
 					addTagRegexOption (lcb, regptype, vStringValue (regex));
 			}
-			mio_free (mio);
+			mio_unref (mio);
 			vStringDelete (regex);
 		}
 	}

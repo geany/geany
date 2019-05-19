@@ -25,37 +25,44 @@ typedef enum eWriterType {
 	WRITER_ETAGS,
 	WRITER_XREF,
 	WRITER_JSON,
+	WRITER_CUSTOM,
 	WRITER_COUNT,
 } writerType;
 
 struct sTagWriter;
 typedef struct sTagWriter tagWriter;
 struct sTagWriter {
-	int (* writeEntry) (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag);
+	int (* writeEntry) (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag,
+						void *clientData);
 	int (* writePtagEntry) (tagWriter *writer, MIO * mio, const ptagDesc *desc,
 							const char *const fileName,
 							const char *const pattern,
-							const char *const parserName);
-	void * (* preWriteEntry) (tagWriter *writer, MIO * mio);
+							const char *const parserName,
+							void *clientData);
+	void * (* preWriteEntry) (tagWriter *writer, MIO * mio,
+							  void *clientData);
 
 	/* Returning TRUE means the output file may be shrunk.
 	   In such case the callee may do truncate output file. */
-	bool (* postWriteEntry)  (tagWriter *writer, MIO * mio, const char* filename);
-#ifdef GEANY_CTAGS_LIB
-	void (* rescanFailedEntry) (tagWriter *writer, unsigned long validTagNum);
-#endif /* GEANY_CTAGS_LIB */
-	void (* buildFqTagCache) (tagWriter *writer, tagEntryInfo *const tag);
+	bool (* postWriteEntry)  (tagWriter *writer, MIO * mio, const char* filename,
+							  void *clientData);
+	void (* rescanFailedEntry) (tagWriter *writer, unsigned long validTagNum,
+								void *clientData);
+	bool (* treatFieldAsFixed) (int fieldType);
 	const char *defaultFileName;
 
 	/* The value returned from preWriteEntry is stored `private' field.
 	   The value must be released in postWriteEntry. */
 	void *private;
 	writerType type;
-
+	/* The value passed as the second argument for writerSetup iss
+	 * stored here. Unlink `private' field, ctags does nothing more. */
+	void *clientData;
 };
 
-extern void setTagWriter (writerType otype);
-extern void writerSetup  (MIO *mio);
+/* customWriter is used only if otype is WRITER_CUSTOM */
+extern void setTagWriter (writerType otype, tagWriter *customWriter);
+extern void writerSetup  (MIO *mio, void *clientData);
 extern bool writerTeardown (MIO *mio, const char *filename);
 
 int writerWriteTag (MIO * mio, const tagEntryInfo *const tag);
@@ -64,12 +71,8 @@ int writerWritePtag (MIO * mio,
 					 const char *const fileName,
 					 const char *const pattern,
 					 const char *const parserName);
-#ifdef GEANY_CTAGS_LIB
-extern void geanySetTagWriter(tagWriter *w);
-void writerRescanFailed (unsigned long validTagNum);
-#endif
 
-extern void writerBuildFqTagCache (tagEntryInfo *const tag);
+void writerRescanFailed (unsigned long validTagNum);
 
 extern const char *outputDefaultFileName (void);
 
@@ -81,5 +84,6 @@ extern bool ptagMakeJsonOutputVersion (ptagDesc *desc, void *data CTAGS_ATTR_UNU
 extern bool ptagMakeCtagsOutputMode (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED);
 
 extern bool writerCanPrintPtag (void);
+extern bool writerDoesTreatFieldAsFixed (int fieldType);
 
 #endif	/* CTAGS_MAIN_WRITER_PRIVATE_H */

@@ -12,6 +12,10 @@
 #ifndef CTAGS_MAIN_PARSERS_H
 #define CTAGS_MAIN_PARSERS_H
 
+#define XML_PARSER_LIST
+#define YAML_PARSER_LIST
+#define PEG_PARSER_LIST
+
 /* Add the name of any new parser definition function here */
 /* keep src/tagmanager/tm_parser.h in sync */
 #define PARSER_LIST \
@@ -66,8 +70,5 @@
 	JsonParser, \
 	ZephirParser, \
 	PowerShellParser
-
-#define XML_PARSER_LIST
-#define YAML_PARSER_LIST
 
 #endif  /* CTAGS_MAIN_PARSERS_H */

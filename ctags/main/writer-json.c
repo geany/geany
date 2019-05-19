@@ -11,9 +11,11 @@
 
 #include "debug.h"
 #include "entry_p.h"
+#include "field_p.h"
 #include "mio.h"
 #include "options_p.h"
 #include "read.h"
+#include "routines.h"
 #include "ptag_p.h"
 #include "writer_p.h"
 
@@ -29,31 +31,41 @@
 
 
 static int writeJsonEntry  (tagWriter *writer CTAGS_ATTR_UNUSED,
-				MIO * mio, const tagEntryInfo *const tag);
+				MIO * mio, const tagEntryInfo *const tag,
+				void *clientData);
 
 static int writeJsonPtagEntry (tagWriter *writer CTAGS_ATTR_UNUSED,
 				MIO * mio, const ptagDesc *desc,
 				const char *const fileName,
 				const char *const pattern,
-				const char *const parserName);
-static void buildJsonFqTagCache (tagWriter *writer, tagEntryInfo *const tag);
+				const char *const parserName,
+				void *clientData);
 
 tagWriter jsonWriter = {
 	.writeEntry = writeJsonEntry,
 	.writePtagEntry = writeJsonPtagEntry,
 	.preWriteEntry = NULL,
 	.postWriteEntry = NULL,
-#ifdef GEANY_CTAGS_LIB
 	.rescanFailedEntry = NULL,
-#endif /* GEANY_CTAGS_LIB */
-	.buildFqTagCache = buildJsonFqTagCache,
+	.treatFieldAsFixed = NULL,
 	.defaultFileName = NULL,
 };
 
+static const char* escapeFieldValueRaw (const tagEntryInfo * tag, fieldType ftype, int fieldIndex)
+{
+	const char *v;
+	if (doesFieldHaveRenderer(ftype, true))
+		v = renderFieldNoEscaping (ftype, tag, fieldIndex);
+	else
+		v = renderField (ftype, tag, fieldIndex);
+
+	return v;
+}
 
 static json_t* escapeFieldValue (const tagEntryInfo * tag, fieldType ftype, bool returnEmptyStringAsNoValue)
 {
-	const char *str = renderFieldEscaped (jsonWriter.type, ftype, tag, NO_PARSER_FIELD, NULL);
+	const char *str = escapeFieldValueRaw (tag, ftype, NO_PARSER_FIELD);
+
 	if (str)
 	{
 		unsigned int dt = getFieldDataType(ftype);
@@ -92,7 +104,7 @@ static void renderExtensionFieldMaybe (int xftype, const tagEntryInfo *const tag
 {
 	const char *fname = getFieldName (xftype);
 
-	if (fname && isFieldRenderable (xftype) && isFieldEnabled (xftype) && doesFieldHaveValue (xftype, tag))
+	if (fname && doesFieldHaveRenderer (xftype, false) && isFieldEnabled (xftype) && doesFieldHaveValue (xftype, tag))
 	{
 		switch (xftype)
 		{
@@ -114,15 +126,16 @@ static void renderExtensionFieldMaybe (int xftype, const tagEntryInfo *const tag
 static void addParserFields (json_t *response, const tagEntryInfo *const tag)
 {
 	unsigned int i;
-	unsigned int ftype;
 
 	for (i = 0; i < tag->usedParserFields; i++)
 	{
-		ftype = tag->parserFields [i].ftype;
+		const tagField *f = getParserField(tag, i);
+		fieldType ftype = f->ftype;
 		if (! isFieldEnabled (ftype))
 			continue;
 
-		json_object_set_new (response, getFieldName (ftype), json_string (tag->parserFields [i].value));
+		const char *str = escapeFieldValueRaw (tag, ftype, i);
+		json_object_set_new (response, getFieldName (ftype), json_string (str));
 	}
 }
 
@@ -151,15 +164,26 @@ static void addExtensionFields (json_t *response, const tagEntryInfo *const tag)
 }
 
 static int writeJsonEntry (tagWriter *writer CTAGS_ATTR_UNUSED,
-			       MIO * mio, const tagEntryInfo *const tag)
+			       MIO * mio, const tagEntryInfo *const tag,
+				   void *clientData CTAGS_ATTR_UNUSED)
 {
-	json_t *pat = escapeFieldValue(tag, FIELD_PATTERN, true);
-	json_t *response = json_pack ("{ss ss ss sO}",
-		"_type", "tag",
-		"name", tag->name,
-		"path", tag->sourceFileName,
-		"pattern", pat);
-	json_decref (pat);
+	int length = 0;
+	json_t *response = json_pack ("{ss}", "_type", "tag");
+
+	if (isFieldEnabled (FIELD_NAME))
+	{
+		json_t *name = json_string (tag->name);
+		if (name == NULL)
+			goto out;
+		json_object_set_new (response, "name", name);
+	}
+	if (isFieldEnabled (FIELD_INPUT_FILE))
+		json_object_set_new (response, "path", json_string (tag->sourceFileName));
+	if (isFieldEnabled (FIELD_PATTERN))
+	{
+		json_t *pat = escapeFieldValue(tag, FIELD_PATTERN, true);
+		json_object_set_new (response, "pattern", pat);
+	}
 
 	if (includeExtensionFlags ())
 	{
@@ -167,11 +191,11 @@ static int writeJsonEntry (tagWriter *writer CTAGS_ATTR_UNUSED,
 		addParserFields (response, tag);
 	}
 
-	int length = 0;
-	char *buf = json_dumps (response, JSON_PRESERVE_ORDER);
-	if (!buf)
+	/* Print nothing if RESPONSE has only "_type" field. */
+	if (json_object_size (response) == 1)
 		goto out;
 
+	char *buf = json_dumps (response, JSON_PRESERVE_ORDER);
 	length = mio_printf (mio, "%s\n", buf);
 
 	free (buf);
@@ -181,19 +205,12 @@ static int writeJsonEntry (tagWriter *writer CTAGS_ATTR_UNUSED,
 	return length;
 }
 
-static void buildJsonFqTagCache (tagWriter *writer, tagEntryInfo *const tag)
-{
-	renderFieldEscaped (writer->type, FIELD_SCOPE_KIND_LONG, tag,
-			    NO_PARSER_FIELD, NULL);
-	renderFieldEscaped (writer->type, FIELD_SCOPE, tag,
-			    NO_PARSER_FIELD, NULL);
-}
-
 static int writeJsonPtagEntry (tagWriter *writer CTAGS_ATTR_UNUSED,
 			       MIO * mio, const ptagDesc *desc,
 			       const char *const fileName,
 			       const char *const pattern,
-			       const char *const parserName)
+			       const char *const parserName,
+				   void *clientData CTAGS_ATTR_UNUSED)
 {
 #define OPT(X) ((X)?(X):"")
 	json_t *response;

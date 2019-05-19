@@ -30,20 +30,6 @@
 
 #include <string.h>
 
-/*  To provide timings features if available.
- */
-#ifdef HAVE_CLOCK
-# ifdef HAVE_TIME_H
-#  include <time.h>
-# endif
-#else
-# ifdef HAVE_TIMES
-#  ifdef HAVE_SYS_TIMES_H
-#   include <sys/times.h>
-#  endif
-# endif
-#endif
-
 /*  To provide directory searching for recursion feature.
  */
 
@@ -64,17 +50,19 @@
 #include "ctags.h"
 #include "debug.h"
 #include "entry_p.h"
-#include "error.h"
-#include "field.h"
+#include "error_p.h"
+#include "field_p.h"
 #include "keyword_p.h"
-#include "main.h"
+#include "main_p.h"
 #include "options_p.h"
 #include "parse_p.h"
-#include "read.h"
+#include "read_p.h"
 #include "routines_p.h"
+#include "stats_p.h"
 #include "trace.h"
-#include "trashbox.h"
+#include "trashbox_p.h"
 #include "writer_p.h"
+#include "xtag_p.h"
 
 #ifdef HAVE_JANSSON
 #include "interactive_p.h"
@@ -83,14 +71,8 @@
 #endif
 
 /*
-*   MACROS
-*/
-#define plural(value)  (((unsigned long)(value) == 1L) ? "" : "s")
-
-/*
 *   DATA DEFINITIONS
 */
-static struct { long files, lines, bytes; } Totals = { 0, 0, 0 };
 static mainLoopFunc mainLoop;
 static void *mainData;
 
@@ -102,30 +84,6 @@ static bool createTagsForEntry (const char *const entryName);
 /*
 *   FUNCTION DEFINITIONS
 */
-
-extern void addTotals (
-		const unsigned int files, const long unsigned int lines,
-		const long unsigned int bytes)
-{
-	Totals.files += files;
-	Totals.lines += lines;
-	Totals.bytes += bytes;
-}
-
-extern bool isDestinationStdout (void)
-{
-	bool toStdout = false;
-
-	if (Option.filter || Option.interactive ||
-		(Option.tagFileName != NULL  &&  (strcmp (Option.tagFileName, "-") == 0
-						  || strcmp (Option.tagFileName, "/dev/stdout") == 0
-		)))
-		toStdout = true;
-	else if (Option.tagFileName == NULL && NULL == outputDefaultFileName ())
-		toStdout = true;
-
-	return toStdout;
-}
 
 #if defined (HAVE_OPENDIR)
 static bool recurseUsingOpendir (const char *const dirName)
@@ -354,69 +312,6 @@ static bool createTagsFromListFile (const char *const fileName)
 	return resize;
 }
 
-#if defined (HAVE_CLOCK)
-# define CLOCK_AVAILABLE
-# ifndef CLOCKS_PER_SEC
-#  define CLOCKS_PER_SEC		1000000
-# endif
-#elif defined (HAVE_TIMES)
-# define CLOCK_AVAILABLE
-# define CLOCKS_PER_SEC	60
-static clock_t clock (void)
-{
-	struct tms buf;
-
-	times (&buf);
-	return (buf.tms_utime + buf.tms_stime);
-}
-#else
-# define clock()  (clock_t)0
-#endif
-
-static void printTotals (const clock_t *const timeStamps)
-{
-	const unsigned long totalTags = numTagsTotal();
-	const unsigned long addedTags = numTagsAdded();
-
-	fprintf (stderr, "%ld file%s, %ld line%s (%ld kB) scanned",
-			Totals.files, plural (Totals.files),
-			Totals.lines, plural (Totals.lines),
-			Totals.bytes/1024L);
-#ifdef CLOCK_AVAILABLE
-	{
-		const double interval = ((double) (timeStamps [1] - timeStamps [0])) /
-								CLOCKS_PER_SEC;
-
-		fprintf (stderr, " in %.01f seconds", interval);
-		if (interval != (double) 0.0)
-			fprintf (stderr, " (%lu kB/s)",
-					(unsigned long) (Totals.bytes / interval) / 1024L);
-	}
-#endif
-	fputc ('\n', stderr);
-
-	fprintf (stderr, "%lu tag%s added to tag file",
-			addedTags, plural(addedTags));
-	if (Option.append)
-		fprintf (stderr, " (now %lu tags)", totalTags);
-	fputc ('\n', stderr);
-
-	if (totalTags > 0  &&  Option.sorted != SO_UNSORTED)
-	{
-		fprintf (stderr, "%lu tag%s sorted", totalTags, plural (totalTags));
-#ifdef CLOCK_AVAILABLE
-		fprintf (stderr, " in %.02f seconds",
-				((double) (timeStamps [2] - timeStamps [1])) / CLOCKS_PER_SEC);
-#endif
-		fputc ('\n', stderr);
-	}
-
-#ifdef DEBUG
-	fprintf (stderr, "longest tag line = %lu\n",
-		 (unsigned long) maxTagsLine ());
-#endif
-}
-
 static bool etagsInclude (void)
 {
 	return (bool)(Option.etags && Option.etagsInclude != NULL);
@@ -481,7 +376,7 @@ static void batchMakeTags (cookedArgs *args, void *user CTAGS_ATTR_UNUSED)
 	timeStamp (2);
 
 	if (Option.printTotals)
-		printTotals (timeStamps);
+		printTotals (timeStamps, Option.append, Option.sorted);
 #undef timeStamp
 }
 
@@ -561,8 +456,8 @@ void interactiveLoop (cookedArgs *args CTAGS_ATTR_UNUSED, void *user)
 				unsigned char *data = eMalloc (size);
 				size = fread (data, 1, size, stdin);
 				MIO *mio = mio_new_memory (data, size, eRealloc, eFree);
-				parseFileWithMio (filename, mio);
-				mio_free (mio);
+				parseFileWithMio (filename, mio, NULL);
+				mio_unref (mio);
 			}
 
 			closeTagFile (false);
@@ -642,11 +537,7 @@ static void sanitizeEnviron (void)
  *		Start up code
  */
 
-#ifndef GEANY_CTAGS_LIB
-extern int main (int argc CTAGS_ATTR_UNUSED, char **argv)
-#else
-extern int ctags_main (int argc CTAGS_ATTR_UNUSED, char **argv)
-#endif /* GEANY_CTAGS_LIB */
+extern int ctags_cli_main (int argc CTAGS_ATTR_UNUSED, char **argv)
 {
 	cookedArgs *args;
 
@@ -656,7 +547,7 @@ extern int ctags_main (int argc CTAGS_ATTR_UNUSED, char **argv)
 
 	setErrorPrinter (stderrDefaultErrorPrinter, NULL);
 	setMainLoop (batchMakeTags, NULL);
-	setTagWriter (WRITER_U_CTAGS);
+	setTagWriter (WRITER_U_CTAGS, NULL);
 
 	setCurrentDirectory ();
 	setExecutableName (*argv++);

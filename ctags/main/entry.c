@@ -43,21 +43,21 @@
 #include "field.h"
 #include "fmt_p.h"
 #include "kind.h"
-#include "main.h"
 #include "nestlevel.h"
 #include "options_p.h"
 #include "ptag_p.h"
 #include "read.h"
+#include "read_p.h"
 #include "routines.h"
 #include "routines_p.h"
 #include "parse_p.h"
 #include "ptrarray.h"
-#include "sort.h"
+#include "sort_p.h"
 #include "strlist.h"
-#include "subparser.h"
+#include "subparser_p.h"
 #include "trashbox.h"
 #include "writer_p.h"
-#include "xtag.h"
+#include "xtag_p.h"
 
 /*
 *   MACROS
@@ -155,11 +155,8 @@ extern const char *tagFileName (void)
 
 extern void abort_if_ferror(MIO *const mio)
 {
-#ifndef GEANY_CTAGS_LIB
-/* TagFile.mio is NULL so this would terminate Geany */
-	if (mio_error (mio))
+	if (mio != NULL && mio_error (mio))
 		error (FATAL | PERROR, "cannot write tag file");
-#endif /* GEANY_CTAGS_LIB */
 }
 
 static void rememberMaxLengths (const size_t nameLength, const size_t lineLength)
@@ -372,7 +369,7 @@ static bool isTagFile (const char *const filename)
 			ok = true;
 		else
 			ok = (bool) (isCtagsLine (line) || isEtagsLine (line));
-		mio_free (mio);
+		mio_unref (mio);
 	}
 	return ok;
 }
@@ -432,7 +429,7 @@ extern void openTagFile (void)
 				if (TagFile.mio != NULL)
 				{
 					TagFile.numTags.prev = updatePseudoTags (TagFile.mio);
-					mio_free (TagFile.mio);
+					mio_unref (TagFile.mio);
 					TagFile.mio = mio_new_file (TagFile.name, "a+");
 				}
 			}
@@ -490,9 +487,9 @@ static void copyFile (const char *const from, const char *const to, const long s
 		else
 		{
 			copyBytes (fromMio, toMio, size);
-			mio_free (toMio);
+			mio_unref (toMio);
 		}
-		mio_free (fromMio);
+		mio_unref (fromMio);
 	}
 }
 
@@ -503,7 +500,7 @@ static int replacementTruncate (const char *const name, const long size)
 #define WHOLE_FILE  -1L
 	char *tempName = NULL;
 	MIO *mio = tempFile ("w", &tempName);
-	mio_free (mio);
+	mio_unref (mio);
 	copyFile (name, tempName, size);
 	copyFile (tempName, name, WHOLE_FILE);
 	remove (tempName);
@@ -538,7 +535,7 @@ static void internalSortTagFile (void)
 			  TagFile.numTags.added + TagFile.numTags.prev);
 
 	if (! TagsToStdout)
-		mio_free (mio);
+		mio_unref (mio);
 }
 #endif
 
@@ -614,7 +611,7 @@ extern void closeTagFile (const bool resize)
 
 	if ((TagsToStdout && (Option.sorted == SO_UNSORTED)))
 	{
-		if (mio_free (TagFile.mio) != 0)
+		if (mio_unref (TagFile.mio) != 0)
 			error (FATAL | PERROR, "cannot close tag file");
 		goto out;
 	}
@@ -625,7 +622,7 @@ extern void closeTagFile (const bool resize)
 	size = mio_tell (TagFile.mio);
 	if (! TagsToStdout)
 		/* The tag file should be closed before resizing. */
-		if (mio_free (TagFile.mio) != 0)
+		if (mio_unref (TagFile.mio) != 0)
 			error (FATAL | PERROR, "cannot close tag file");
 
 	if (resize  &&  desiredSize < size)
@@ -638,7 +635,7 @@ extern void closeTagFile (const bool resize)
 	sortTagFile ();
 	if (TagsToStdout)
 	{
-		if (mio_free (TagFile.mio) != 0)
+		if (mio_unref (TagFile.mio) != 0)
 			error (FATAL | PERROR, "cannot close tag file");
 		remove (tagFileName ());  /* remove temporary file */
 	}
@@ -708,12 +705,12 @@ static int vstring_putc (char c, void *data)
 static int vstring_puts (const char* s, void *data)
 {
 	vString *str = data;
-	int len = vStringLength (str);
+	size_t len = vStringLength (str);
 	vStringCatS (str, s);
-	return vStringLength (str) - len;
+	return (int) (vStringLength (str) - len);
 }
 
-#if DEBUG
+#ifdef DEBUG
 static bool isPosSet(MIOPos pos)
 {
 	char * p = (char *)&pos;
@@ -756,6 +753,7 @@ static char* getFullQualifiedScopeNameFromCorkQueue (const tagEntryInfo * inner_
 	int kindIndex = KIND_GHOST_INDEX;
 	langType lang;
 	const tagEntryInfo *scope = inner_scope;
+	const tagEntryInfo *root_scope = NULL;
 	stringList *queue = stringListNew ();
 	vString *v;
 	vString *n;
@@ -778,10 +776,15 @@ static char* getFullQualifiedScopeNameFromCorkQueue (const tagEntryInfo * inner_
 			kindIndex = scope->kindIndex;
 			lang = scope->langType;
 		}
+		root_scope = scope;
 		scope =  getEntryInCorkQueue (scope->extensionFields.scopeIndex);
 	}
 
 	n = vStringNew ();
+	sep = scopeSeparatorFor (root_scope->langType, root_scope->kindIndex, KIND_GHOST_INDEX);
+	if (sep)
+		vStringCatS(n, sep);
+
 	while ((c = stringListCount (queue)) > 0)
 	{
 		v = stringListLast (queue);
@@ -973,7 +976,11 @@ extern void attachParserFieldToCorkEntry (int index,
 	Assert (tag != NULL);
 
 	v = eStrdup (value);
+
+	bool dynfields_allocated = tag->parserFieldsDynamic? true: false;
 	attachParserFieldGeneric (tag, ftype, v, true);
+	if (!dynfields_allocated && tag->parserFieldsDynamic)
+		PARSER_TRASH_BOX_TAKE_BACK(tag->parserFieldsDynamic);
 }
 
 extern const tagField* getParserField (const tagEntryInfo * tag, int index)
@@ -1151,9 +1158,9 @@ static unsigned int queueTagEntry(const tagEntryInfo *const tag)
 }
 
 
-extern void setupWriter (void)
+extern void setupWriter (void *writerClientData)
 {
-	writerSetup (TagFile.mio);
+	writerSetup (TagFile.mio, writerClientData);
 }
 
 extern bool teardownWriter (const char *filename)
@@ -1213,6 +1220,11 @@ static bool isTagWritable(const tagEntryInfo *const tag)
 	return true;
 }
 
+static void buildFqTagCache (tagEntryInfo *const tag)
+{
+	getTagScopeInformation (tag, NULL, NULL);
+}
+
 static void writeTagEntry (const tagEntryInfo *const tag, bool checkingNeeded)
 {
 	int length = 0;
@@ -1226,17 +1238,22 @@ static void writeTagEntry (const tagEntryInfo *const tag, bool checkingNeeded)
 
 	if (includeExtensionFlags ()
 	    && isXtagEnabled (XTAG_QUALIFIED_TAGS)
-	    && doesInputLanguageRequestAutomaticFQTag ())
+	    && doesInputLanguageRequestAutomaticFQTag ()
+		&& !isTagExtraBitMarked (tag, XTAG_QUALIFIED_TAGS)
+		&& !tag->skipAutoFQEmission)
 	{
 		/* const is discarded to update the cache field of TAG. */
-		writerBuildFqTagCache ( (tagEntryInfo *const)tag);
+		buildFqTagCache ( (tagEntryInfo *const)tag);
 	}
 
 	length = writerWriteTag (TagFile.mio, tag);
 
-	++TagFile.numTags.added;
-	rememberMaxLengths (strlen (tag->name), (size_t) length);
-	DebugStatement ( mio_flush (TagFile.mio); )
+	if (length > 0)
+	{
+		++TagFile.numTags.added;
+		rememberMaxLengths (strlen (tag->name), (size_t) length);
+	}
+	DebugStatement ( if (TagFile.mio) mio_flush (TagFile.mio); )
 
 	abort_if_ferror (TagFile.mio);
 }
@@ -1286,11 +1303,17 @@ extern void uncorkTagFile(void)
 	{
 		tagEntryInfo *tag = TagFile.corkQueue.queue + i;
 		writeTagEntry (tag, true);
+
 		if (doesInputLanguageRequestAutomaticFQTag ()
 		    && isXtagEnabled (XTAG_QUALIFIED_TAGS)
-		    && (tag->extensionFields.scopeKindIndex != KIND_GHOST_INDEX)
-		    && tag->extensionFields.scopeName
-		    && tag->extensionFields.scopeIndex)
+			&& !isTagExtraBitMarked (tag, XTAG_QUALIFIED_TAGS)
+			&& !tag->skipAutoFQEmission
+			&& ((tag->extensionFields.scopeKindIndex != KIND_GHOST_INDEX
+				 && tag->extensionFields.scopeName != NULL
+				 && tag->extensionFields.scopeIndex != CORK_NIL)
+				|| (tag->extensionFields.scopeKindIndex == KIND_GHOST_INDEX
+					&& tag->extensionFields.scopeName == NULL
+					&& tag->extensionFields.scopeIndex == CORK_NIL)))
 			makeQualifiedTagEntry (tag);
 	}
 	for (i = 1; i < TagFile.corkQueue.count; i++)
@@ -1350,6 +1373,7 @@ extern int makeTagEntry (const tagEntryInfo *const tag)
 {
 	int r = CORK_NIL;
 	Assert (tag->name != NULL);
+	Assert(tag->lineNumber > 0);
 
 	if (!TagFile.cork)
 		if (!isTagWritable (tag))
@@ -1663,17 +1687,13 @@ extern void invalidatePatternCache(void)
 
 extern void tagFilePosition (MIOPos *p)
 {
-#ifdef GEANY_CTAGS_LIB /* TODO: do the same upstream */
 	if (TagFile.mio)
-#endif /* GEANY_CTAGS_LIB */
 		mio_getpos (TagFile.mio, p);
 }
 
 extern void setTagFilePosition (MIOPos *p)
 {
-#ifdef GEANY_CTAGS_LIB /* TODO: do the same upstream */
 	if (TagFile.mio)
-#endif /* GEANY_CTAGS_LIB */
 		mio_setpos (TagFile.mio, p);
 }
 

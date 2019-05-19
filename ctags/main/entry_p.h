@@ -30,7 +30,7 @@ extern void freeTagFileResources (void);
 extern const char *tagFileName (void);
 extern void openTagFile (void);
 extern void closeTagFile (const bool resize);
-extern void  setupWriter (void);
+extern void  setupWriter (void *writerClientData);
 extern bool  teardownWriter (const char *inputFilename);
 
 extern unsigned long numTagsAdded(void);
@@ -64,5 +64,14 @@ void          uncorkTagFile(void);
 extern void makeFileTag (const char *const fileName);
 
 extern const tagField* getParserField (const tagEntryInfo * tag, int index);
+
+
+CTAGS_INLINE roleBitsType makeRoleBit(int roleIndex)
+{
+	if (roleIndex == ROLE_INDEX_DEFINITION)
+		return 0;
+	else
+		return ((roleBitsType)1) << roleIndex;
+}
 
 #endif	/* CTAGS_PRIVATE_ENTRY_H */

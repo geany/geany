@@ -10,6 +10,7 @@
 #include "general.h"  /* must always come first */
 
 #include "entry.h"
+#include "field_p.h"
 #include "fmt_p.h"
 #include "mio.h"
 #include "options_p.h"
@@ -17,23 +18,22 @@
 
 
 static int writeXrefEntry  (tagWriter *writer CTAGS_ATTR_UNUSED,
-							MIO * mio, const tagEntryInfo *const tag);
-static void buildXrefFqTagCache (tagWriter *writer, tagEntryInfo *const tag);
+							MIO * mio, const tagEntryInfo *const tag,
+							void *clientData CTAGS_ATTR_UNUSED);
 
 tagWriter xrefWriter = {
 	.writeEntry = writeXrefEntry,
 	.writePtagEntry = NULL,
 	.preWriteEntry = NULL,
 	.postWriteEntry = NULL,
-#ifdef GEANY_CTAGS_LIB
 	.rescanFailedEntry = NULL,
-#endif /* GEANY_CTAGS_LIB */
-	.buildFqTagCache = buildXrefFqTagCache,
+	.treatFieldAsFixed = NULL,
 	.defaultFileName = NULL,
 };
 
 static int writeXrefEntry (tagWriter *writer CTAGS_ATTR_UNUSED,
-						   MIO * mio, const tagEntryInfo *const tag)
+						   MIO * mio, const tagEntryInfo *const tag,
+						   void *clientData CTAGS_ATTR_UNUSED)
 {
 	int length;
 	static fmtElement *fmt1;
@@ -64,12 +64,4 @@ static int writeXrefEntry (tagWriter *writer CTAGS_ATTR_UNUSED,
 	length++;
 
 	return length;
-}
-
-static void buildXrefFqTagCache (tagWriter *writer, tagEntryInfo *const tag)
-{
-	renderFieldEscaped (writer->type, FIELD_SCOPE_KIND_LONG, tag,
-			    NO_PARSER_FIELD, NULL);
-	renderFieldEscaped (writer->type, FIELD_SCOPE, tag,
-			    NO_PARSER_FIELD, NULL);
 }

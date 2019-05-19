@@ -13,11 +13,7 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
-/* GEANY_CTAGS_DIFF */
-/* We don't have fnmatch in Geany
 #include <fnmatch.h>
-*/
-/* GEANY_CTAGS_DIFF_END */
 
 #include "debug.h"
 #include "read.h"
@@ -77,7 +73,7 @@ extern stringList* stringListNewFromFile (const char* const fileName)
 			else
 				vStringDelete (str);
 		}
-		mio_free (mio);
+		mio_unref (mio);
 	}
 	return result;
 }
@@ -219,8 +215,6 @@ extern vString* stringListExtensionFinds (
 static bool fileNameMatched (
 		const vString* const vpattern, const char* const fileName)
 {
-/* GEANY_CTAGS_DIFF */
-/* We don't have fnmatch in Geany
 	const char* const pattern = vStringValue (vpattern);
 
 #ifdef CASE_INSENSITIVE_FILENAMES
@@ -235,9 +229,6 @@ static bool fileNameMatched (
 #else
 	return (fnmatch (pattern, fileName, 0) == 0);
 #endif
-*/
-	return false;
-/* GEANY_CTAGS_DIFF_END */
 }
 
 extern bool stringListFileMatched (

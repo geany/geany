@@ -16,7 +16,7 @@
 #include "kind.h"
 #include "lregex_p.h"
 #include "parse.h"
-#include "parsers.h"  /* contains list of parsers */
+#include "parsers_p.h"  /* contains list of parsers */
 #include "strlist.h"
 
 /*
@@ -48,9 +48,14 @@ extern parserDefinitionFunc XML_PARSER_LIST;
 #ifdef HAVE_LIBYAML
 extern parserDefinitionFunc YAML_PARSER_LIST;
 #endif
+#ifdef HAVE_PACKCC
+extern parserDefinitionFunc PEG_PARSER_LIST;
+#endif
 
 extern bool doesLanguageAllowNullTag (const langType language);
 extern bool doesLanguageRequestAutomaticFQTag (const langType language);
+
+extern langType getNamedLanguageFull (const char *const name, size_t len, bool noPretending);
 
 extern kindDefinition* getLanguageKind(const langType language, int kindIndex);
 extern kindDefinition* getLanguageKindForName (const langType language, const char *kindName);
@@ -109,7 +114,10 @@ extern void printLangdefFlags (bool withListHeader, bool machinable, FILE *fp);
 extern void printKinddefFlags (bool withListHeader, bool machinable, FILE *fp);
 extern bool doesParserRequireMemoryStream (const langType language);
 extern bool parseFile (const char *const fileName);
-extern bool parseFileWithMio (const char *const fileName, MIO *mio);
+extern bool parseFileWithMio (const char *const fileName, MIO *mio, void *clientData);
+extern bool parseRawBuffer(const char *fileName, unsigned char *buffer,
+			    size_t bufferSize, const langType language, void *clientData);
+
 extern bool runParserInNarrowedInputStream (const langType language,
 					       unsigned long startLine, long startCharOffset,
 					       unsigned long endLine, long endCharOffset,
@@ -143,6 +151,8 @@ extern void processLanguageMultitableExtendingOption (langType language, const c
 
 extern unsigned int   getXpathFileSpecCount (const langType language);
 extern xpathFileSpec* getXpathFileSpec (const langType language, unsigned int nth);
+
+const tagXpathTableTable *getXpathTableTable (const langType language, unsigned int nth);
 
 extern bool makeKindSeparatorsPseudoTags (const langType language,
 					     const ptagDesc *pdesc);

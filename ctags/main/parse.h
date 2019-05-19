@@ -18,6 +18,7 @@
 #include "kind.h"
 #include "lregex.h"
 #include "lxpath.h"
+#include "vstring.h"
 
 /*
 *   MACROS
@@ -100,6 +101,10 @@ struct sParserDefinition {
 	xpathFileSpec *xpathFileSpecs;
 	unsigned int xpathFileSpecCount;
 
+	/* Following two fields are used in a parser using cork. */
+	const char *defaultScopeSeparator;
+	const char *defaultRootScopeSeparator;
+
 	/* used internally */
 	langType id;		    /* id assigned to language */
 	unsigned int enabled:1;	       /* currently enabled? */
@@ -133,11 +138,6 @@ extern kindDefinition* getLanguageKindForLetter (const langType language, char k
 
 extern void initializeParser (langType language);
 
-#ifdef GEANY_CTAGS_LIB
-extern void geanyCreateTags(unsigned char *buffer, size_t bufferSize,
-	const char *fileName, const langType language);
-#endif /* GEANY_CTAGS_LIB */
-
 #ifdef HAVE_ICONV
 extern const char *getLanguageEncoding (const langType language);
 #endif
@@ -158,6 +158,7 @@ extern void addLanguageTagMultiTableRegex(const langType language,
 										  bool *disabled);
 
 extern void anonGenerate (vString *buffer, const char *prefix, int kind);
+extern vString *anonGenerateNew (const char *prefix, int kind);
 extern void anonHashString (const char *filename, char buf[9]);
 
 #endif  /* CTAGS_MAIN_PARSE_H */

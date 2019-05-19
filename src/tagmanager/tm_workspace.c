@@ -17,8 +17,6 @@
  and a set of individual source files.
 */
 
-#include "general.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

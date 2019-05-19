@@ -61,6 +61,7 @@ libctags_la_SOURCES = \
 	main/debug.h \
 	main/debug.c \
 	main/dependency.h \
+	main/dependency_p.h \
 	main/dependency.c \
 	main/e_msoft.h \
 	main/entry.c \
@@ -68,9 +69,10 @@ libctags_la_SOURCES = \
 	main/entry.h \
 	main/entry_p.h \
 	main/error.c \
-	main/error.h \
+	main/error_p.h \
 	main/field.c \
 	main/field.h \
+	main/field_p.h \
 	main/flags.c \
 	main/flags_p.h \
 	main/fmt.c \
@@ -87,6 +89,7 @@ libctags_la_SOURCES = \
 	main/keyword_p.h \
 	main/kind.c \
 	main/kind.h \
+	main/kind_p.h \
 	main/lcpp.c \
 	main/lcpp.h \
 	main/lregex.c \
@@ -94,9 +97,12 @@ libctags_la_SOURCES = \
 	main/lregex_p.h \
 	main/lxpath.c \
 	main/lxpath.h \
+	main/lxpath_p.h \
 	main/main.c \
-	main/main.h \
+	main/main_p.h \
+	main/mbcs.c \
 	main/mbcs.h \
+	main/mbcs_p.h \
 	main/mio.c \
 	main/mio.h \
 	main/nestlevel.c \
@@ -110,6 +116,7 @@ libctags_la_SOURCES = \
 	main/options_p.h \
 	main/param.c \
 	main/param.h \
+	main/param_p.h \
 	main/parse.c \
 	main/parse.h \
 	main/parse_p.h \
@@ -131,14 +138,23 @@ libctags_la_SOURCES = \
 	main/selectors.c \
 	main/selectors.h \
 	main/sort.c \
-	main/sort.h \
+	main/sort_p.h \
+	main/stats.c \
+	main/stats_p.h \
 	main/strlist.c \
 	main/strlist.h \
 	main/subparser.h \
+	main/subparser_p.h \
+	main/tokeninfo.c \
+	main/tokeninfo.h \
+	main/trace.c \
 	main/trace.h \
 	main/trashbox.c \
 	main/trashbox.h \
+	main/trashbox_p.h \
 	main/types.h \
+	main/unwindi.c \
+	main/unwindi.h \
 	main/vstring.c \
 	main/vstring.h \
 	main/writer.c \
@@ -147,6 +163,7 @@ libctags_la_SOURCES = \
 	main/writer-etags.c \
 	main/writer-json.c \
 	main/writer-xref.c \
-	main/xtag.h \
 	main/xtag.c \
+	main/xtag.h \
+	main/xtag_p.h \
 	$(parsers)

@@ -20,6 +20,8 @@
 #include "field.h"
 #include "xtag.h"
 #include "mio.h"
+#include "ptrarray.h"
+#include "nestlevel.h"
 
 /*
 *   MACROS
@@ -46,6 +48,8 @@ struct sTagEntryInfo {
 	unsigned int placeholder    :1;	 /* This is just a part of scope context.
 					    Put this entry to cork queue but
 					    don't print it to tags file. */
+	unsigned int skipAutoFQEmission:1; /* If a parser makes a fq tag for the
+										  current tag by itself, set this. */
 
 	unsigned long lineNumber;     /* line number of tag */
 	const char* pattern;	      /* pattern for locating input line
@@ -141,13 +145,5 @@ extern bool isTagExtraBitMarked (const tagEntryInfo *const tag, xtagType extra);
 
 extern void attachParserField (tagEntryInfo *const tag, fieldType ftype, const char* value);
 extern void attachParserFieldToCorkEntry (int index, fieldType ftype, const char* value);
-
-CTAGS_INLINE roleBitsType makeRoleBit(int roleIndex)
-{
-	if (roleIndex == ROLE_INDEX_DEFINITION)
-		return 0;
-	else
-		return ((roleBitsType)1) << roleIndex;
-}
 
 #endif  /* CTAGS_MAIN_ENTRY_H */

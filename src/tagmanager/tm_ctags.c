@@ -7,22 +7,18 @@
 *   Encapsulates ctags so it is isolated from the rest of Geany.
 */
 
-#include "general.h"  /* must always come first */
-
 #include "tm_ctags.h"
-#include "types.h"
-#include "routines.h"
-#include "error.h"
-#include "mio.h"
-#include "writer_p.h"
-#include "parse_p.h"
-#include "options_p.h"
-#include "trashbox.h"
-#include "field.h"
-#include "xtag.h"
-#include "entry_p.h"
-
 #include "tm_tag.h"
+
+#include "general.h"  /* must always come before the rest of ctags headers */
+#include "entry_p.h"
+#include "error_p.h"
+#include "field_p.h"
+#include "options_p.h"
+#include "parse_p.h"
+#include "trashbox_p.h"
+#include "writer_p.h"
+#include "xtag_p.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -31,8 +27,8 @@
 #define CTAGS_LANG(x) ((x) >= 0 ? (x) + 1 : (x))
 #define GEANY_LANG(x) ((x) >= 1 ? (x) - 1 : (x))
 
-static gint write_entry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag);
-static void rescan_failed (tagWriter *writer, gulong valid_tag_num);
+static gint write_entry(tagWriter *writer, MIO * mio, const tagEntryInfo *const tag, void *user_data);
+static void rescan_failed(tagWriter *writer, gulong valid_tag_num, void *user_data);
 
 tagWriter geanyWriter = {
 	.writeEntry = write_entry,
@@ -40,13 +36,11 @@ tagWriter geanyWriter = {
 	.preWriteEntry = NULL,
 	.postWriteEntry = NULL,
 	.rescanFailedEntry = rescan_failed,
-	.buildFqTagCache = NULL,
+	.treatFieldAsFixed = NULL,
 	.defaultFileName = "geany_tags_file_which_should_never_appear_anywhere",
 	.private = NULL,
 	.type = WRITER_U_CTAGS /* not really but we must use some of the builtin types */
 };
-
-static TMSourceFile *current_source_file = NULL;
 
 
 static bool nonfatal_error_printer (const errorSelection selection,
@@ -165,8 +159,9 @@ static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source
 }
 
 
-static gint write_entry (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag)
+static gint write_entry(tagWriter *writer, MIO * mio, const tagEntryInfo *const tag, void *user_data)
 {
+	TMSourceFile *current_source_file = user_data;
 	TMTag *tm_tag = tm_tag_new();
 
 	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
@@ -187,8 +182,9 @@ static gint write_entry (tagWriter *writer, MIO * mio, const tagEntryInfo *const
 }
 
 
-static void rescan_failed (tagWriter *writer, gulong valid_tag_num)
+static void rescan_failed(tagWriter *writer, gulong valid_tag_num, void *user_data)
 {
+	TMSourceFile *current_source_file = user_data;
 	GPtrArray *tags_array = current_source_file->tags_array;
 
 	if (tags_array->len > valid_tag_num)
@@ -207,7 +203,7 @@ void tm_ctags_init(void)
 	initDefaultTrashBox ();
 
 	setErrorPrinter (nonfatal_error_printer, NULL);
-	geanySetTagWriter (&geanyWriter);
+	setTagWriter (WRITER_CUSTOM, &geanyWriter);
 
 	checkRegex ();
 	initFieldObjects ();
@@ -237,9 +233,7 @@ void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 		return;
 	}
 
-	current_source_file = source_file;
-
-	geanyCreateTags(buffer, buffer_size, file_name, CTAGS_LANG(language));
+	parseRawBuffer(file_name, buffer, buffer_size, CTAGS_LANG(language), source_file);
 }
 
 

@@ -19,18 +19,20 @@
 
 #define FILE_WRITE
 #include "read.h"
+#include "read_p.h"
 #include "debug.h"
 #include "entry_p.h"
-#include "main.h"
 #include "routines.h"
 #include "routines_p.h"
 #include "options_p.h"
 #include "parse_p.h"
 #include "promise_p.h"
+#include "stats_p.h"
 #include "trace.h"
 #include "trashbox.h"
 #ifdef HAVE_ICONV
 # include "mbcs.h"
+# include "mbcs_p.h"
 #endif
 
 /*
@@ -162,8 +164,20 @@ extern MIOPos getInputFilePosition (void)
 
 extern MIOPos getInputFilePositionForLine (unsigned int line)
 {
-	return File.lineFposMap.pos[(((File.lineFposMap.count > (line - 1)) \
-				      && (line > 0))? (line - 1): 0)].pos;
+	int index;
+	if (line > 0)
+	{
+		if (File.lineFposMap.count > (line - 1))
+			index = line - 1;
+		else if (File.lineFposMap.count != 0)
+			index = File.lineFposMap.count - 1;
+		else
+			index = 0;
+	}
+	else
+		index = 0;
+
+	return File.lineFposMap.pos[index].pos;
 }
 
 extern langType getInputLanguage (void)
@@ -648,7 +662,7 @@ extern bool openInputFile (const char *const fileName, const langType language,
 	 */
 	if (File.mio != NULL)
 	{
-		mio_free (File.mio);  /* close any open input file */
+		mio_unref (File.mio);  /* close any open input file */
 		File.mio = NULL;
 	}
 
@@ -750,7 +764,7 @@ extern void closeInputFile (void)
 			fileStatus *status = eStat (vStringValue (File.input.name));
 			addTotals (0, File.input.lineNumber - 1L, status->size);
 		}
-		mio_free (File.mio);
+		mio_unref (File.mio);
 		File.mio = NULL;
 		freeLineFposMap (&File.lineFposMap);
 	}
@@ -946,6 +960,19 @@ extern int skipToCharacterInInputFile (int c)
 	return d;
 }
 
+extern int skipToCharacterInInputFile2 (int c0, int c1)
+{
+	int d;
+	do
+	{
+		skipToCharacterInInputFile(c0);
+		do
+			d = getcFromInputFile ();
+		while (d == c0 && d != c1);
+	} while (d != EOF && d != c1);
+	return d;
+}
+
 /*  An alternative interface to getcFromInputFile (). Do not mix use of readLineFromInputFile()
  *  and getcFromInputFile() for the same file. The returned string does not contain
  *  the terminating newline. A NULL return value means that all lines in the
@@ -1100,7 +1127,7 @@ extern void   popNarrowedInputStream  (void)
 		verbose ("CLEARING thin flag(%d)\n", File.thinDepth);
 		return;
 	}
-	mio_free (File.mio);
+	mio_unref (File.mio);
 	File = BackupFile;
 	memset (&BackupFile, 0, sizeof (BackupFile));
 }

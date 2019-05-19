@@ -10,7 +10,6 @@
 #include "entry.h"
 #include "keyword.h"
 #include "read.h"
-#include "main.h"
 #include "parse.h"
 #include "routines.h"
 #include "vstring.h"

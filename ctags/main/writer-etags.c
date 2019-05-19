@@ -16,6 +16,7 @@
 #include "mio.h"
 #include "options_p.h"
 #include "read.h"
+#include "routines.h"
 #include "routines_p.h"
 #include "vstring.h"
 #include "writer_p.h"
@@ -24,18 +25,20 @@
 #define ETAGS_FILE  "TAGS"
 
 
-static int writeEtagsEntry  (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag);
-static void *beginEtagsFile (tagWriter *writer, MIO * mio);
-static bool  endEtagsFile   (tagWriter *writer, MIO * mio, const char* filename);
+static int writeEtagsEntry  (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag,
+							 void *clientData CTAGS_ATTR_UNUSED);
+static void *beginEtagsFile (tagWriter *writer, MIO * mio,
+							 void *clientData CTAGS_ATTR_UNUSED);
+static bool  endEtagsFile   (tagWriter *writer, MIO * mio, const char* filename,
+							 void *clientData CTAGS_ATTR_UNUSED);
 
 tagWriter etagsWriter = {
 	.writeEntry = writeEtagsEntry,
 	.writePtagEntry = NULL,
 	.preWriteEntry = beginEtagsFile,
 	.postWriteEntry = endEtagsFile,
-#ifdef GEANY_CTAGS_LIB
 	.rescanFailedEntry = NULL,
-#endif /* GEANY_CTAGS_LIB */
+	.treatFieldAsFixed = NULL,
 	.defaultFileName = ETAGS_FILE,
 };
 
@@ -48,7 +51,8 @@ struct sEtags {
 
 
 
-static void *beginEtagsFile (tagWriter *writer CTAGS_ATTR_UNUSED, MIO *mio CTAGS_ATTR_UNUSED)
+static void *beginEtagsFile (tagWriter *writer CTAGS_ATTR_UNUSED, MIO *mio CTAGS_ATTR_UNUSED,
+							 void *clientData CTAGS_ATTR_UNUSED)
 {
 	static struct sEtags etags = { NULL, NULL, 0, NULL };
 
@@ -59,7 +63,8 @@ static void *beginEtagsFile (tagWriter *writer CTAGS_ATTR_UNUSED, MIO *mio CTAGS
 }
 
 static bool endEtagsFile (tagWriter *writer,
-						  MIO *mainfp, const char *filename)
+						  MIO *mainfp, const char *filename,
+						  void *clientData CTAGS_ATTR_UNUSED)
 {
 	const char *line;
 	struct sEtags *etags = writer->private;
@@ -75,7 +80,7 @@ static bool endEtagsFile (tagWriter *writer,
 			mio_puts (mainfp, line);
 
 		vStringDelete (etags->vLine);
-		mio_free (etags->mio);
+		mio_unref (etags->mio);
 		remove (etags->name);
 		eFree (etags->name);
 		etags->vLine = NULL;
@@ -86,7 +91,8 @@ static bool endEtagsFile (tagWriter *writer,
 }
 
 static int writeEtagsEntry (tagWriter *writer,
-							MIO * mio, const tagEntryInfo *const tag)
+							MIO * mio, const tagEntryInfo *const tag,
+							void *clientData CTAGS_ATTR_UNUSED)
 {
 	int length;
 	struct sEtags *etags = writer->private;
