@@ -20,10 +20,6 @@
 #include "writer_p.h"
 #include "xtag_p.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
 #define CTAGS_LANG(x) ((x) >= 0 ? (x) + 1 : (x))
 #define GEANY_LANG(x) ((x) >= 1 ? (x) - 1 : (x))
 
@@ -227,11 +223,7 @@ void tm_ctags_init(void)
 void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 	const gchar *file_name, TMParserType language, TMSourceFile *source_file)
 {
-	if (buffer == NULL && file_name == NULL)
-	{
-		error(FATAL, "Neither buffer nor file provided to ctagsParse()");
-		return;
-	}
+	g_return_if_fail(buffer != NULL || file_name != NULL);
 
 	parseRawBuffer(file_name, buffer, buffer_size, CTAGS_LANG(language), source_file);
 }
