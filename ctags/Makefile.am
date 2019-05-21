@@ -54,22 +54,23 @@ parsers = \
 	parsers/verilog.c \
 	parsers/vhdl.c
 
+# skip cmd.c and mini-geany.c which define main()
 libctags_la_SOURCES = \
 	main/args.c \
 	main/args_p.h \
 	main/colprint.c \
 	main/colprint_p.h \
 	main/ctags.h \
-	main/debug.h \
 	main/debug.c \
+	main/debug.h \
+	main/dependency.c \
 	main/dependency.h \
 	main/dependency_p.h \
-	main/dependency.c \
 	main/e_msoft.h \
 	main/entry.c \
-	main/entry_private.c \
 	main/entry.h \
 	main/entry_p.h \
+	main/entry_private.c \
 	main/error.c \
 	main/error_p.h \
 	main/field.c \
@@ -120,7 +121,9 @@ libctags_la_SOURCES = \
 	main/parse.c \
 	main/parse.h \
 	main/parse_p.h \
-	main/parsers.h \
+	main/parsers_p.h \
+	main/portable-dirent_p.h \
+	main/portable-scandir.c \
 	main/promise.c \
 	main/promise.h \
 	main/promise_p.h \
@@ -130,11 +133,13 @@ libctags_la_SOURCES = \
 	main/ptrarray.h \
 	main/read.c \
 	main/read.h \
+	main/read_p.h \
 	main/repoinfo.c \
 	main/repoinfo.h \
 	main/routines.c \
 	main/routines.h \
 	main/routines_p.h \
+	main/seccomp.c \
 	main/selectors.c \
 	main/selectors.h \
 	main/sort.c \
@@ -157,12 +162,12 @@ libctags_la_SOURCES = \
 	main/unwindi.h \
 	main/vstring.c \
 	main/vstring.h \
-	main/writer.c \
-	main/writer_p.h \
 	main/writer-ctags.c \
 	main/writer-etags.c \
 	main/writer-json.c \
 	main/writer-xref.c \
+	main/writer.c \
+	main/writer_p.h \
 	main/xtag.c \
 	main/xtag.h \
 	main/xtag_p.h \
