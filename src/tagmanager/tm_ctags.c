@@ -35,7 +35,7 @@ tagWriter geanyWriter = {
 	.treatFieldAsFixed = NULL,
 	.defaultFileName = "geany_tags_file_which_should_never_appear_anywhere",
 	.private = NULL,
-	.type = WRITER_U_CTAGS /* not really but we must use some of the builtin types */
+	.type = WRITER_CUSTOM
 };
 
 
