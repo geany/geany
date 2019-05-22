@@ -29,6 +29,8 @@
 #include "trashbox.h"
 #include "unwindi.h"
 
+#include <string.h>
+
 typedef struct sUugcChar {
 	int c;
 	/* lineNumber before reading the char (frontLineNumber).
@@ -42,6 +44,8 @@ typedef struct sUugcChar {
 static ptrArray *uugcInputFile;
 static uugcChar *uugcCurrentChar;
 static objPool  *uugcCharPool;
+
+static struct sUwiStats uwiStats;
 
 static void deleteChar (void *c)
 {
@@ -203,20 +207,44 @@ CTAGS_INLINE MIOPos uugcGetFilePosition (void)
 		return getInputFilePosition ();
 }
 
-static ptrArray *uwiMarkerStack;
-static ptrArray *uwiCurrentMarker;
-extern void uwiActivate   (void)
+static ptrArray *uwiBuffer;
+static unsigned int *uwiMarkerStack;
+static unsigned int uwiMarkerStackLength;
+static unsigned int *uwiCurrentMarker;
+
+extern void uwiActivate (unsigned int stackLength)
 {
-	Assert (!uwiMarkerStack);
+	Assert (stackLength > 0);
 
 	uugcActivate ();
-	uwiMarkerStack = ptrArrayNew ((ptrArrayDeleteFunc)ptrArrayDelete);
+	uwiBuffer = ptrArrayNew ((ptrArrayDeleteFunc)uugcDeleteC);
+	uwiMarkerStackLength = stackLength;
+	uwiMarkerStack = xMalloc (stackLength, unsigned int);
+	uwiCurrentMarker = NULL;
+
+	uwiStatsInit (&uwiStats);
 }
 
-extern void uwiDeactivate (void)
+extern void uwiDeactivate (struct sUwiStats *statsToBeUpdated)
 {
+	Assert (uwiBuffer);
 	Assert (uwiMarkerStack);
-	ptrArrayDelete (uwiMarkerStack);
+
+	if (statsToBeUpdated)
+	{
+		if (statsToBeUpdated->maxLength < uwiStats.maxLength)
+			statsToBeUpdated->maxLength = uwiStats.maxLength;
+		if (!statsToBeUpdated->overflow)
+			statsToBeUpdated->overflow = uwiStats.overflow;
+		if (!statsToBeUpdated->underflow)
+			statsToBeUpdated->underflow = uwiStats.underflow;
+	}
+
+	ptrArrayDelete (uwiBuffer);
+	eFree (uwiMarkerStack);
+	uwiBuffer = NULL;
+	uwiMarkerStack = NULL;
+	uwiMarkerStackLength = 0;
 	uugcDeactive();
 }
 
@@ -228,7 +256,10 @@ extern int uwiGetC ()
 	c = chr->c;
 
 	if (uwiCurrentMarker)
-		ptrArrayAdd (uwiCurrentMarker, chr);
+	{
+		*uwiCurrentMarker += 1;
+		ptrArrayAdd (uwiBuffer, chr);
+	}
 	else
 	{
 		uugcCurrentChar = NULL;
@@ -256,37 +287,72 @@ extern MIOPos uwiGetFilePosition (void)
 
 extern void uwiPushMarker (void)
 {
-	Assert (uwiMarkerStack);
 
-	if (uwiCurrentMarker)
-		ptrArrayAdd (uwiMarkerStack, uwiCurrentMarker);
+	if (uwiStats.maxLength < (uwiCurrentMarker - uwiMarkerStack) + 1)
+		uwiStats.maxLength = (uwiCurrentMarker - uwiMarkerStack) + 1;
 
-	uwiCurrentMarker = ptrArrayNew ((ptrArrayDeleteFunc)uugcDeleteC);
+	if (uwiCurrentMarker - uwiMarkerStack >= ( uwiMarkerStackLength - 1 )) {
+		error (WARNING,
+			"trying to add too many markers during parsing: %s "
+			"(this is a bug, please consider filing an issue)", getInputFileName());
+		uwiCurrentMarker = NULL;
+		uwiStats.overflow = true;
+	}
+
+	if (uwiCurrentMarker) uwiCurrentMarker++;
+	else uwiCurrentMarker = uwiMarkerStack;
+
+	*uwiCurrentMarker = 0;
 }
 
-extern void uwiPopMarker (int upto)
+extern void uwiPopMarker (const int upto, const bool revertChars)
+{
+	if (uwiCurrentMarker - uwiMarkerStack < 0) {
+		error (WARNING,
+				"trying to drop too many markers during parsing: %s "
+				"(this is a bug, please consider filing an issue)", getInputFileName());
+
+		uwiCurrentMarker = NULL;
+		uwiStats.underflow = true;
+		return;
+	}
+
+	uwiClearMarker (upto, revertChars);
+
+	if (uwiCurrentMarker == uwiMarkerStack) uwiCurrentMarker = NULL;
+	else uwiCurrentMarker--;
+}
+
+extern void uwiClearMarker (const int upto, const bool revertChars)
 {
 	Assert (uwiCurrentMarker);
+	int count = (upto <= 0)? *uwiCurrentMarker : upto;
+	void (*charHandler)(uugcChar *) = revertChars ? uugcUngetC : uugcDeleteC;
 
-	int count = (upto < 0)? ptrArrayCount (uwiCurrentMarker): upto;
-	while (count > 0)
+	while (count-- > 0)
 	{
-		uugcUngetC (ptrArrayLast (uwiCurrentMarker));
-		ptrArrayRemoveLast (uwiCurrentMarker);
-		count--;
-	}
-
-	ptrArrayDelete (uwiCurrentMarker);
-
-	uwiCurrentMarker = NULL;
-	if (ptrArrayCount (uwiMarkerStack) > 0)
-	{
-		uwiCurrentMarker = ptrArrayLast (uwiMarkerStack);
-		ptrArrayRemoveLast (uwiMarkerStack);
+		charHandler (ptrArrayLast (uwiBuffer));
+		ptrArrayRemoveLast (uwiBuffer);
+		*uwiCurrentMarker -= 1;
 	}
 }
 
-extern void	 uwiDropMaker ()
+extern void uwiDropMaker ()
 {
-	uwiPopMarker  (0);
+	uwiPopMarker (0, false);
+}
+
+extern void uwiStatsInit (struct sUwiStats *stats)
+{
+	memset (stats, 0, sizeof (*stats));
+}
+
+extern void uwiStatsPrint (struct sUwiStats *stats)
+{
+	fprintf(stderr, "Unwinding the longest input stream stack usage: %d\n",
+			stats->maxLength);
+	fprintf(stderr, "Unwinding input stream stack overflow incidence: %s\n",
+			stats->overflow? "yes": "no");
+	fprintf(stderr, "Unwinding input stream stack underflow incidence: %s\n",
+			stats->underflow? "yes": "no");
 }

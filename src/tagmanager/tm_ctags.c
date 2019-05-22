@@ -20,9 +20,6 @@
 #include "writer_p.h"
 #include "xtag_p.h"
 
-#define CTAGS_LANG(x) ((x) >= 0 ? (x) + 1 : (x))
-#define GEANY_LANG(x) ((x) >= 1 ? (x) - 1 : (x))
-
 static gint write_entry(tagWriter *writer, MIO * mio, const tagEntryInfo *const tag, void *user_data);
 static void rescan_failed(tagWriter *writer, gulong valid_tag_num, void *user_data);
 
@@ -85,7 +82,7 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	if (!tag_entry)
 		return FALSE;
 
-	lang = GEANY_LANG(tag_entry->langType);
+	lang = tag_entry->langType;
 	kind_letter = getLanguageKind(tag_entry->langType, tag_entry->kindIndex)->letter;
 	type = tm_parser_get_tag_type(kind_letter, lang);
 	if (file->lang != lang)  /* this is a tag from a subparser */
@@ -225,30 +222,30 @@ void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 {
 	g_return_if_fail(buffer != NULL || file_name != NULL);
 
-	parseRawBuffer(file_name, buffer, buffer_size, CTAGS_LANG(language), source_file);
+	parseRawBuffer(file_name, buffer, buffer_size, language, source_file);
 }
 
 
 const gchar *tm_ctags_get_lang_name(TMParserType lang)
 {
-	return getLanguageName(CTAGS_LANG(lang));
+	return getLanguageName(lang);
 }
 
 
 TMParserType tm_ctags_get_named_lang(const gchar *name)
 {
-	return GEANY_LANG(getNamedLanguage(name, 0));
+	return getNamedLanguage(name, 0);
 }
 
 
 const gchar *tm_ctags_get_lang_kinds(TMParserType lang)
 {
-	guint kind_num = countLanguageKinds(CTAGS_LANG(lang));
+	guint kind_num = countLanguageKinds(lang);
 	static gchar kinds[257];
 	guint i;
 
 	for (i = 0; i < kind_num; i++)
-		kinds[i] = getLanguageKind(CTAGS_LANG(lang), i)->letter;
+		kinds[i] = getLanguageKind(lang, i)->letter;
 	kinds[i] = '\0';
 
 	return kinds;
@@ -257,19 +254,19 @@ const gchar *tm_ctags_get_lang_kinds(TMParserType lang)
 
 const gchar *tm_ctags_get_kind_name(gchar kind, TMParserType lang)
 {
-	kindDefinition *def = getLanguageKindForLetter(CTAGS_LANG(lang), kind);
+	kindDefinition *def = getLanguageKindForLetter(lang, kind);
 	return def ? def->name : "unknown";
 }
 
 
 gchar tm_ctags_get_kind_from_name(const gchar *name, TMParserType lang)
 {
-	kindDefinition *def = getLanguageKindForName(CTAGS_LANG(lang), name);
+	kindDefinition *def = getLanguageKindForName(lang, name);
 	return def ? def->letter : '-';
 }
 
 
 guint tm_ctags_get_lang_count(void)
 {
-	return GEANY_LANG(countParsers());
+	return countParsers();
 }

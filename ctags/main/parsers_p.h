@@ -12,63 +12,136 @@
 #ifndef CTAGS_MAIN_PARSERS_H
 #define CTAGS_MAIN_PARSERS_H
 
+#ifdef HAVE_LIBXML
+#define XML_PARSER_LIST \
+	DbusIntrospectParser, \
+	GladeParser,  \
+	Maven2Parser, \
+	PlistXMLParser, \
+	RelaxNGParser, \
+	SvgParser, \
+	XmlParser, \
+	XsltParser
+#else
 #define XML_PARSER_LIST
+#endif
+
+#ifdef HAVE_LIBYAML
+#define YAML_PARSER_LIST						\
+	YamlParser,									\
+	AnsiblePlaybookParser
+#else
 #define YAML_PARSER_LIST
+#endif
+
+#ifdef HAVE_PACKCC
+#define PEG_PARSER_LIST						\
+	VarlinkParser
+#else
 #define PEG_PARSER_LIST
+#endif
 
 /* Add the name of any new parser definition function here */
-/* keep src/tagmanager/tm_parser.h in sync */
 #define PARSER_LIST \
+	AdaParser, \
+	AntParser, \
+	AsciidocParser, \
+	AsmParser, \
+	AspParser, \
+	AutoconfParser, \
+	AutoItParser, \
+	AutomakeParser, \
+	AwkParser, \
+	BasicParser, \
+	BetaParser, \
+	ClojureParser, \
+	CMakeParser, \
 	CParser, \
 	CppParser, \
+	CPreProParser, \
+	CssParser, \
+	CsharpParser, \
+	CtagsParser, \
+	CobolParser, \
+	CUDAParser, \
+	DParser, \
+	DiffParser, \
+	DtdParser, \
+	DTSParser, \
+	DosBatchParser, \
+	EiffelParser, \
+	ElixirParser, \
+	ElmParser, \
+	ErlangParser, \
+	FalconParser, \
+	FlexParser, \
+	FortranParser, \
+	FyppParser,	   \
+	GdbinitParser, \
+	GoParser, \
+	HtmlParser, \
+	IniconfParser, \
+	InkoParser, \
+	ITclParser, \
 	JavaParser, \
+	JavaPropertiesParser, \
+	JavaScriptParser, \
+	JsonParser, \
+	LdScriptParser, \
+	LispParser, \
+	LuaParser, \
+	M4Parser, \
+	ManParser, \
 	MakefileParser, \
+	MarkdownParser, \
+	MatLabParser, \
+	MooseParser, \
+	MyrddinParser, \
+	ObjcParser, \
+	OldCppParser, \
+	OldCParser, \
+	OcamlParser, \
+	PasswdParser, \
 	PascalParser, \
 	PerlParser, \
+	Perl6Parser, \
 	PhpParser, \
+	PodParser, \
+	ProtobufParser, \
+	PuppetManifestParser, \
 	PythonParser, \
-	TexParser, \
-	AsmParser, \
-	ConfParser, \
-	SqlParser, \
-	DocBookParser, \
-	ErlangParser, \
-	CssParser, \
-	RubyParser, \
-	TclParser, \
-	ShParser, \
-	DParser, \
-	FortranParser, \
-	FeriteParser, \
-	DiffParser, \
-	VhdlParser, \
-	LuaParser, \
-	JavaScriptParser, \
-	HaskellParser, \
-	CsharpParser, \
-	BasicParser,\
-	HaxeParser,\
-	RstParser, \
-	HtmlParser, \
-	F77Parser, \
-	GLSLParser, \
-	MatLabParser, \
-	ValaParser, \
-	ActionScriptParser, \
-	NsisParser, \
-	MarkdownParser, \
-	Txt2tagsParser, \
-	AbcParser, \
-	VerilogParser, \
+	PythonLoggingConfigParser, \
+	QemuHXParser, \
+	QtMocParser, \
 	RParser, \
-	CobolParser, \
-	ObjcParser, \
-	AsciidocParser, \
-	AbaqusParser, \
+	RSpecParser, \
+	RexxParser, \
+	RobotParser, \
+	RpmSpecParser, \
+	RstParser, \
+	RubyParser, \
 	RustParser, \
-	GoParser, \
-	JsonParser, \
-	ZephirParser, \
-	PowerShellParser
+	SchemeParser, \
+	ShParser, \
+	SlangParser, \
+	SmlParser, \
+	SqlParser, \
+	SystemdUnitParser, \
+	SystemTapParser, \
+	TclParser, \
+	TclOOParser, \
+	TexParser, \
+	TTCNParser, \
+	TypeScriptParser, \
+	VeraParser, \
+	VerilogParser, \
+	SystemVerilogParser, \
+	UCtagsAspellParser, \
+	VhdlParser, \
+	VimParser, \
+	WindResParser, \
+	YaccParser, \
+	YumRepoParser, \
+	ZephirParser
 
 #endif  /* CTAGS_MAIN_PARSERS_H */

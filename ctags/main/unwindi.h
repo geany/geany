@@ -55,10 +55,22 @@
 #include "general.h"
 
 /*
+*   DATA DECLARATIONS
+*/
+struct sUwiStats {
+	int maxLength;
+	bool overflow;
+	bool underflow;
+};
+
+/*
 *   FUNCTION PROTOTYPES
 */
-extern void uwiActivate   (void);
-extern void uwiDeactivate (void);
+extern void uwiActivate   (unsigned int);
+extern void uwiDeactivate (struct sUwiStats *statsToBeUpdated);
+
+extern void uwiStatsInit  (struct sUwiStats *stats);
+extern void uwiStatsPrint (struct sUwiStats *stats);
 
 extern int uwiGetC (void);
 extern void uwiUngetC (int c);
@@ -66,6 +78,7 @@ extern unsigned long uwiGetLineNumber (void);
 extern MIOPos uwiGetFilePosition (void);
 
 extern void uwiPushMarker (void);
-extern void uwiPopMarker (int count);
+extern void uwiClearMarker (const int count, const bool revertChars);
+extern void uwiPopMarker (const int count, const bool revertChars);
 extern void	uwiDropMaker (void);
 #endif	/* CTAGS_MAIN_UNWINDI_H */

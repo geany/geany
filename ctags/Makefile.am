@@ -1,6 +1,7 @@
 AM_CPPFLAGS = \
 	-I$(srcdir)/main \
 	-I$(srcdir)/parsers \
+	-DEXTERNAL_PARSER_LIST_FILE=\"$(top_srcdir)/src/tagmanager/tm_parsers.h\" \
 	-DG_LOG_DOMAIN=\"CTags\"
 AM_CFLAGS = \
 	$(GTK_CFLAGS) \
