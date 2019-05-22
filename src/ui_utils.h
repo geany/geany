@@ -72,6 +72,7 @@ typedef struct GeanyInterfacePrefs
 	/** whether to show a warning when closing a project to open a new one */
 	gboolean		warn_on_project_close;
 	gint			openfiles_path_mode;
+	gint 			search_bar_position;                    /**< search bar position */
 }
 GeanyInterfacePrefs;
 
@@ -367,6 +368,15 @@ gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo);
 gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc);
 
 gchar *ui_get_project_directory(const gchar *path);
+
+/* Get search bar sbox - container for entry, buttons, checkboxes. */
+GtkWidget* get_search_bar_sbox(GeanyDocument *doc);
+
+/* Emits entry what_to_search in search bar changed if visible. */
+void ui_emit_search_bar_entry_changed(GeanyDocument *doc);
+
+/* Emits button_close in search bar clicked if visible. */
+void ui_emit_search_bar_close_button_clicked(GeanyDocument *doc);
 
 #endif /* GEANY_PRIVATE */
 

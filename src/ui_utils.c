@@ -3229,3 +3229,48 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 	}
 	return FALSE;
 }
+
+GtkWidget* get_search_bar_sbox(GeanyDocument *doc)
+{
+	GtkWidget *page, *vbox;
+	page = GTK_WIDGET(doc->editor->sci);
+	vbox = gtk_widget_get_parent(page);
+	GList *vbox_children = gtk_container_get_children(GTK_CONTAINER(vbox));
+	GtkWidget *sbox;
+	if (interface_prefs.search_bar_position == SEARCH_BAR_POSITION_TOP)
+	{
+		sbox = (GtkWidget*)vbox_children->data;
+	}
+	else
+	{
+		sbox = (GtkWidget*)((GList*)g_list_last(vbox_children))->data;
+	}
+	g_list_free(vbox_children);
+	return sbox;
+}
+
+void ui_emit_search_bar_entry_changed(GeanyDocument *doc)
+{
+	GtkWidget *sbox, *entry_what_to_search;
+	sbox = get_search_bar_sbox(doc);
+	if (gtk_widget_get_visible(sbox))
+	{
+		GList *sbox_children = gtk_container_get_children(GTK_CONTAINER(sbox));
+		entry_what_to_search = (GtkWidget*)sbox_children->data;
+		g_list_free(sbox_children);
+		g_signal_emit_by_name(entry_what_to_search, "changed");
+	}
+}
+
+void ui_emit_search_bar_close_button_clicked(GeanyDocument *doc)
+{
+	GtkWidget *sbox, *button_close;
+	sbox = get_search_bar_sbox(doc);
+	if (gtk_widget_get_visible(sbox))
+	{
+		GList *sbox_children = gtk_container_get_children(GTK_CONTAINER(sbox));
+		button_close = (GtkWidget*)g_list_last(sbox_children)->data;
+		g_list_free(sbox_children);
+		gtk_button_clicked(GTK_BUTTON(button_close));
+	}
+}
