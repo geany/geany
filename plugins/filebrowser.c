@@ -68,8 +68,6 @@ enum
 	FILEVIEW_N_COLUMNS
 };
 
-static GtkWidget *popup_menu = NULL;
-
 static gboolean fb_set_project_base_path = FALSE;
 static gboolean fb_follow_path = FALSE;
 static gboolean show_hidden_files = FALSE;
@@ -688,7 +686,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	item = gtk_check_menu_item_new_with_mnemonic(_("Show _Hidden Files"));
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),show_hidden_files);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), show_hidden_files);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hidden_files_clicked), NULL);
@@ -739,6 +737,8 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 	}
 	else if (event->button == 3)
 	{
+		static GtkWidget *popup_menu = NULL;
+
 		if (popup_menu == NULL)
 			popup_menu = create_popup_menu();
 
