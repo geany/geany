@@ -68,8 +68,6 @@ enum
 	FILEVIEW_N_COLUMNS
 };
 
-static GtkWidget *popup_menu = NULL;
-
 static gboolean fb_set_project_base_path = FALSE;
 static gboolean fb_follow_path = FALSE;
 static gboolean show_hidden_files = FALSE;
@@ -739,6 +737,8 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 	}
 	else if (event->button == 3)
 	{
+		static GtkWidget *popup_menu = NULL;
+
 		if (popup_menu == NULL)
 			popup_menu = create_popup_menu();
 
