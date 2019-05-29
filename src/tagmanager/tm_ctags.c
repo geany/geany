@@ -120,7 +120,7 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	tag->name = g_strdup(tag_entry->name);
 	tag->type = type;
 	tag->local = tag_entry->isFileScope;
-	tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
+	tag->flags = 0;
 	tag->line = tag_entry->lineNumber;
 	if (NULL != tag_entry->extensionFields.signature)
 		tag->arglist = g_strdup(tag_entry->extensionFields.signature);

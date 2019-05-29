@@ -228,7 +228,7 @@ gboolean tm_tags_equal(const TMTag *a, const TMTag *b)
 			strcmp(FALLBACK(a->name, ""), FALLBACK(b->name, "")) == 0 &&
 			a->type == b->type &&
 			a->local == b->local &&
-			a->pointerOrder == b->pointerOrder &&
+			a->flags == b->flags &&
 			a->access == b->access &&
 			a->impl == b->impl &&
 			a->lang == b->lang &&

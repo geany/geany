@@ -65,7 +65,7 @@ enum
 	TA_IMPL,
 	TA_LANG,
 	TA_INACTIVE, /* Obsolete */
-	TA_POINTER
+	TA_FLAGS
 };
 
 
@@ -219,8 +219,8 @@ static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 				case TA_SCOPE:
 					tag->scope = g_strdup((gchar*)start + 1);
 					break;
-				case TA_POINTER:
-					tag->pointerOrder = atoi((gchar*)start + 1);
+				case TA_FLAGS:
+					tag->flags = atoi((gchar*)start + 1);
 					break;
 				case TA_VARTYPE:
 					tag->var_type = g_strdup((gchar*)start + 1);
@@ -463,8 +463,8 @@ static gboolean write_tag(TMTag *tag, FILE *fp, TMTagAttrType attrs)
 		fprintf(fp, "%c%s", TA_SCOPE, tag->scope);
 	if ((attrs & tm_tag_attr_inheritance_t) && (NULL != tag->inheritance))
 		fprintf(fp, "%c%s", TA_INHERITS, tag->inheritance);
-	if (attrs & tm_tag_attr_pointer_t)
-		fprintf(fp, "%c%d", TA_POINTER, tag->pointerOrder);
+	if (attrs & tm_tag_attr_flags_t)
+		fprintf(fp, "%c%d", TA_FLAGS, tag->flags);
 	if ((attrs & tm_tag_attr_vartype_t) && (NULL != tag->var_type))
 		fprintf(fp, "%c%s", TA_VARTYPE, tag->var_type);
 	if ((attrs & tm_tag_attr_access_t) && (TAG_ACCESS_UNKNOWN != tag->access))
@@ -551,7 +551,7 @@ gboolean tm_source_file_write_tags_file(const gchar *tags_file, GPtrArray *tags_
 
 		ret = write_tag(tag, fp, tm_tag_attr_type_t
 		  | tm_tag_attr_scope_t | tm_tag_attr_arglist_t | tm_tag_attr_vartype_t
-		  | tm_tag_attr_pointer_t);
+		  | tm_tag_attr_flags_t);
 
 		if (!ret)
 			break;
