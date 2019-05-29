@@ -120,7 +120,9 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	tag->name = g_strdup(tag_entry->name);
 	tag->type = type;
 	tag->local = tag_entry->isFileScope;
-	tag->flags = 0;
+	tag->flags = tm_tag_flag_none_t;
+	if (isTagExtraBitMarked(tag_entry, XTAG_ANONYMOUS))
+		tag->flags = tm_tag_flag_anon_t;
 	tag->line = tag_entry->lineNumber;
 	if (NULL != tag_entry->extensionFields.signature)
 		tag->arglist = g_strdup(tag_entry->extensionFields.signature);

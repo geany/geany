@@ -81,6 +81,13 @@ typedef enum
 #define TAG_IMPL_VIRTUAL 'v' /**< Virtual implementation */
 #define TAG_IMPL_UNKNOWN 'x' /**< Unknown implementation */
 
+enum
+{
+	tm_tag_flag_none_t = 0, /**< No flags */
+	tm_tag_flag_anon_t = 1, /**< Anonymous tag */
+	tm_tag_flag_max_t = 1, /**< Maximum value */
+};
+
 /**
  * The TMTag structure represents a single tag in the tag manager.
  **/
