@@ -463,27 +463,21 @@ void filetypes_init(void)
 }
 
 
-static gboolean match_basename(const GeanyFiletype *ft, const gchar *base_filename)
+static guint match_basename(const GeanyFiletype *ft, const gchar *base_filename)
 {
-	gint j;
-	gboolean ret = FALSE;
-
 	if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
-		return FALSE;
+		return 0;
 
-	for (j = 0; ft->pattern[j] != NULL; j++)
+	for (guint j = 0; ft->pattern[j] != NULL; j++)
 	{
-		GPatternSpec *pattern = g_pattern_spec_new(ft->pattern[j]);
-
-		if (g_pattern_match_string(pattern, base_filename))
+		gchar *pat = ft->pattern[j];
+		
+		if (g_pattern_match_simple(pat, base_filename))
 		{
-			ret = TRUE;
-			g_pattern_spec_free(pattern);
-			break;
+			return strlen(pat);
 		}
-		g_pattern_spec_free(pattern);
 	}
-	return ret;
+	return 0;
 }
 
 
@@ -521,7 +515,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 {
 	gchar *base_filename;
 	GeanyFiletype *ft;
-	guint i;
+	guint plen = 0;
 
 	ft = detect_filetype_conf_file(utf8_filename);
 	if (ft)
@@ -534,25 +528,19 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	SETPTR(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	for (i = 0; i < filetypes_array->len; i++)
+	for (guint i = 0; i < filetypes_array->len; i++)
 	{
-		if (match_basename(filetypes[i], base_filename))
-		{
+		guint mlen = match_basename(filetypes[i], base_filename);
+		
+		if (mlen > plen)
+		{	// longest pattern match wins
+			plen = mlen;
 			ft = filetypes[i];
-			break;
 		}
-	}
-	// check if user config overrides found ft
-	if (ft && !ft->priv->user_extensions)
-	{
-		for (i++; i < filetypes_array->len; i++)
-		{
-			if (filetypes[i]->priv->user_extensions &&
-				match_basename(filetypes[i], base_filename))
-			{
-				ft = filetypes[i];
-				break;
-			}
+		else if (mlen == plen && ft && !ft->priv->user_extensions &&
+			filetypes[i]->priv->user_extensions)
+		{	// user config overrides system if pattern len same
+			ft = filetypes[i];
 		}
 	}
 	if (ft == NULL)
