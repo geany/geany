@@ -561,11 +561,17 @@ static const char *findVariable(const char *line)
 	 * Assignment to a tuple 'x, y = 2, 3' not supported.
 	 * TODO: ignore duplicate tags from reassignment statements. */
 	const char *cp, *sp, *eq, *start;
+	int offset = 2;
 
-	cp = strstr(line, "=");
-	if (!cp)
-		return NULL;
-	eq = cp + 1;
+	cp = strstr(line, ":=");
+	if (!cp){
+		cp = strstr(line, "=");
+		if (!cp){
+			return NULL;
+		}
+		--offset;
+	}
+	eq = cp + offset;
 	while (*eq)
 	{
 		if (*eq == '=')
@@ -586,7 +592,7 @@ static const char *findVariable(const char *line)
 	sp = start;
 	while (sp >= line && isspace ((int) *sp))
 		--sp;
-	if ((sp + 1) != line)	/* the line isn't a simple variable assignment */
+	if ((sp + 1) != line && offset == 1)	/* the line isn't a simple variable assignment */
 		return NULL;
 	/* the line is valid, parse the variable name */
 	++start;
