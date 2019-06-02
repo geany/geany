@@ -64,6 +64,7 @@ filetypes = \
 	filedefs/filetypes.Scala.conf \
 	filedefs/filetypes.sh \
 	filedefs/filetypes.sql \
+	filedefs/filetypes.Solidity.conf \
 	filedefs/filetypes.Swift.conf \
 	filedefs/filetypes.tcl \
 	filedefs/filetypes.txt2tags \
