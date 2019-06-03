@@ -4691,6 +4691,8 @@ should look like::
 
 Filetype group membership
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+Filetype groups are used in the `Document->Set Filetype` menu.
+
 Group membership is also stored in ``filetype_extensions.conf``. This
 file is used to store information Geany needs at startup, whereas the
 separate filetype definition files hold information only needed when
@@ -4709,6 +4711,11 @@ The key names cannot be configured.
 
 .. note::
     Group membership is only read at startup.
+
+.. tip::
+    You can make commonly used filetypes appear in the top-level of the 
+    filetype menu by adding them to the `None` group, e.g. 
+    `None=C;Python`.
 
 Preferences file format
 -----------------------
