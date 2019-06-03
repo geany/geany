@@ -2334,14 +2334,12 @@ void ui_init_prefs(void)
 	StashGroup *group = stash_group_new(PACKAGE);
 
 	/* various prefs */
-	configuration_add_various_pref_group(group);
+	configuration_add_various_pref_group(group, "interface");
 
 	stash_group_add_boolean(group, &interface_prefs.show_symbol_list_expanders,
 		"show_symbol_list_expanders", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.compiler_tab_autoscroll,
 		"compiler_tab_autoscroll", TRUE);
-	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
-		"allow_always_save", FALSE);
 	stash_group_add_string(group, &ui_prefs.statusbar_template,
 		"statusbar_template", _(DEFAULT_STATUSBAR_TEMPLATE));
 	stash_group_add_boolean(group, &ui_prefs.new_document_after_close,
