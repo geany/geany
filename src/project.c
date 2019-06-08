@@ -286,8 +286,9 @@ static void run_open_dialog(GtkDialog *dialog)
 	{
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
+		if (app->project && !project_close(FALSE)) {}
 		/* try to load the config */
-		if (! project_load_file_with_session(filename))
+		else if (! project_load_file_with_session(filename))
 		{
 			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
@@ -307,16 +308,15 @@ void project_open(void)
 {
 	const gchar *dir = local_prefs.project_file_path;
 
-	if (! project_ask_close()) return;
-
 #ifdef G_OS_WIN32
 	if (interface_prefs.use_native_windows_dialogs)
 	{
 		gchar *file = win32_show_project_open_dialog(main_widgets.window, _("Open Project"), dir, FALSE, TRUE);
 		if (file != NULL)
 		{
+			if (app->project && !project_close(FALSE)) {}
 			/* try to load the config */
-			if (! project_load_file_with_session(file))
+			else if (! project_load_file_with_session(file))
 			{
 				SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
 			}
