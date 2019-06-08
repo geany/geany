@@ -49,6 +49,7 @@ filetypes = \
 	filedefs/filetypes.makefile \
 	filedefs/filetypes.markdown \
 	filedefs/filetypes.matlab \
+	filedefs/filetypes.Nim.conf \
 	filedefs/filetypes.nsis \
 	filedefs/filetypes.objectivec \
 	filedefs/filetypes.pascal \
