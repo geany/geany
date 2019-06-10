@@ -463,26 +463,8 @@ void filetypes_init(void)
 }
 
 
-/* Find a filetype that predicate returns TRUE for, otherwise return NULL. */
-GeanyFiletype *filetypes_find(GCompareFunc predicate, gpointer user_data)
+static gboolean match_basename(const GeanyFiletype *ft, const gchar *base_filename)
 {
-	guint i;
-
-	for (i = 0; i < filetypes_array->len; i++)
-	{
-		GeanyFiletype *ft = filetypes[i];
-
-		if (predicate(ft, user_data))
-			return ft;
-	}
-	return NULL;
-}
-
-
-static gboolean match_basename(gconstpointer pft, gconstpointer user_data)
-{
-	const GeanyFiletype *ft = pft;
-	const gchar *base_filename = user_data;
 	gint j;
 	gboolean ret = FALSE;
 
@@ -505,7 +487,7 @@ static gboolean match_basename(gconstpointer pft, gconstpointer user_data)
 }
 
 
-static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
+static GeanyFiletype *detect_filetype_conf_file(const gchar *utf8_filename)
 {
 	gchar *lfn = NULL;
 	gchar *path;
@@ -539,8 +521,9 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 {
 	gchar *base_filename;
 	GeanyFiletype *ft;
+	guint i;
 
-	ft = check_builtin_filenames(utf8_filename);
+	ft = detect_filetype_conf_file(utf8_filename);
 	if (ft)
 		return ft;
 
@@ -551,7 +534,27 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	SETPTR(base_filename, g_utf8_strdown(base_filename, -1));
 #endif
 
-	ft = filetypes_find(match_basename, base_filename);
+	for (i = 0; i < filetypes_array->len; i++)
+	{
+		if (match_basename(filetypes[i], base_filename))
+		{
+			ft = filetypes[i];
+			break;
+		}
+	}
+	// check if user config overrides found ft
+	if (ft && !ft->priv->user_extensions)
+	{
+		for (i++; i < filetypes_array->len; i++)
+		{
+			if (filetypes[i]->priv->user_extensions &&
+				match_basename(filetypes[i], base_filename))
+			{
+				ft = filetypes[i];
+				break;
+			}
+		}
+	}
 	if (ft == NULL)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
@@ -1397,6 +1400,7 @@ static void read_extensions(GKeyFile *sysconfig, GKeyFile *userconfig)
 		gchar **list = g_key_file_get_string_list(
 			(userset) ? userconfig : sysconfig, "Extensions", filetypes[i]->name, &len, NULL);
 
+		filetypes[i]->priv->user_extensions = userset;
 		g_strfreev(filetypes[i]->pattern);
 		/* Note: we allow 'Foo=' to remove all patterns */
 		if (!list)
