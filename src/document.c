@@ -284,7 +284,7 @@ static GtkWidget *document_get_notebook_child(GeanyDocument *doc)
 
 /** Gets the notebook page index for a document.
  * @param doc The document.
- * @return The index.
+ * @return The index, or -1 if @a doc is invalid.
  * @since 0.19 */
 GEANY_API_SYMBOL
 gint document_get_notebook_page(GeanyDocument *doc)
@@ -354,11 +354,9 @@ GeanyDocument *document_get_from_page(guint page_num)
 {
 	GtkWidget *parent;
 
-	if (page_num >= documents_array->len)
-		return NULL;
-
 	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
-
+	if (!parent)
+		return NULL;
 	return document_get_from_notebook_child(parent);
 }
 
