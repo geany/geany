@@ -37,6 +37,7 @@ filetypes = \
 	filedefs/filetypes.glsl \
 	filedefs/filetypes.go \
 	filedefs/filetypes.Graphviz.conf \
+	filedefs/filetypes.Groovy.conf \
 	filedefs/filetypes.haskell \
 	filedefs/filetypes.haxe \
 	filedefs/filetypes.html \
