@@ -46,6 +46,7 @@ filetypes = \
 	filedefs/filetypes.latex \
 	filedefs/filetypes.lisp \
 	filedefs/filetypes.lua \
+	filedefs/filetypes.Kotlin.conf \
 	filedefs/filetypes.makefile \
 	filedefs/filetypes.markdown \
 	filedefs/filetypes.matlab \
