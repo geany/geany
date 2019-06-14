@@ -297,6 +297,11 @@ static void main_init(void)
 	gtk_widget_set_name(ui_lookup_widget(main_widgets.window, "menubar1"), "GeanyMenubar");
 	gtk_widget_set_name(main_widgets.toolbar, "GeanyToolbar");
 
+	GdkGeometry hints;
+	hints.min_width = GEANY_WINDOW_MINIMAL_WIDTH;
+	hints.min_height = GEANY_WINDOW_MINIMAL_HEIGHT;
+	gtk_window_set_geometry_hints(GTK_WINDOW(main_widgets.window),main_widgets.window,
+		&hints,(GdkWindowHints)(GDK_HINT_MIN_SIZE));
 	gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
 		GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 }
