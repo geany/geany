@@ -883,7 +883,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			filetypes_reload();
 
 		if (interface_prefs.sidebar_pos != old_sidebar_pos)
-			ui_swap_sidebar_pos();
+			ui_swap_sidebar_pos(0);
 
 		widget = ui_lookup_widget(main_widgets.window, "vpaned1");
 		gtk_orientable_set_orientation(GTK_ORIENTABLE(widget), interface_prefs.msgwin_orientation);

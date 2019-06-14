@@ -160,8 +160,10 @@ typedef struct UIPrefs
 	gint		geometry[5];	/* 0:x, 1:y, 2:width, 3:height, flag for maximized state */
 	gboolean	fullscreen;
 	gboolean	sidebar_visible;
+	gint		sidebar_width;	/* sidebar width */
 	gint		sidebar_page;
 	gboolean	msgwindow_visible;
+	gint		msgwindow_width;	/* messsage window width */
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 	gchar		*statusbar_template;
 	gboolean	new_document_after_close;
@@ -348,7 +350,7 @@ void ui_toggle_editor_features(GeanyUIEditorFeatures feature);
 
 void ui_update_view_editor_menu_items(void);
 
-void ui_swap_sidebar_pos(void);
+void ui_swap_sidebar_pos(gint);
 
 GIcon *ui_get_mime_icon(const gchar *mime_type);
 

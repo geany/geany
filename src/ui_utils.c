@@ -2237,25 +2237,30 @@ void ui_init_toolbar_widgets(void)
 	widgets.undo_items[2] = toolbar_get_widget_by_name("Undo");
 }
 
-
-void ui_swap_sidebar_pos(void)
+/* sw == 1 indicate initial set up */
+void ui_swap_sidebar_pos(gint sw)
 {
 	GtkWidget *pane = ui_lookup_widget(main_widgets.window, "hpaned1");
 	GtkWidget *left = gtk_paned_get_child1(GTK_PANED(pane));
 	GtkWidget *right = gtk_paned_get_child2(GTK_PANED(pane));
-
+	gboolean left_resize,left_shrink,right_resize,right_shrink;
+	gtk_container_child_get(GTK_CONTAINER(pane),left,"resize",&left_resize,"shrink",&left_shrink,NULL);
+	gtk_container_child_get(GTK_CONTAINER(pane),right,"resize",&right_resize,"shrink",&right_shrink,NULL);
 	g_object_ref(left);
 	g_object_ref(right);
 	gtk_container_remove (GTK_CONTAINER (pane), left);
 	gtk_container_remove (GTK_CONTAINER (pane), right);
-	/* only scintilla notebook should expand */
-	gtk_paned_pack1(GTK_PANED(pane), right, right == main_widgets.notebook, TRUE);
-	gtk_paned_pack2(GTK_PANED(pane), left, left == main_widgets.notebook, TRUE);
+	/* only scintilla notebook should expand main_widgets.notebook */
+	/* keep childs' properties unchanged */
+	gtk_paned_pack1(GTK_PANED(pane), right, right_resize, right_shrink);
+	gtk_paned_pack2(GTK_PANED(pane), left, left_resize, left_shrink);
 	g_object_unref(left);
 	g_object_unref(right);
 
-	gtk_paned_set_position(GTK_PANED(pane), gtk_widget_get_allocated_width(pane)
-		- gtk_paned_get_position(GTK_PANED(pane)));
+	gint tmp=gtk_widget_get_allocated_width(pane);
+	if (__builtin_expect(sw,0)) {tmp=ui_prefs.geometry[2];}
+	tmp-=gtk_paned_get_position(GTK_PANED(pane));
+	gtk_paned_set_position(GTK_PANED(pane), tmp);
 }
 
 

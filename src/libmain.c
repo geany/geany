@@ -155,7 +155,7 @@ static void setup_window_position(void)
 	{
 		if (ui_prefs.geometry[2] != -1 && ui_prefs.geometry[3] != -1)
 		{
-			gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
+			gtk_window_resize(GTK_WINDOW(main_widgets.window),
 				ui_prefs.geometry[2], ui_prefs.geometry[3]);
 		}
 	}
@@ -225,8 +225,14 @@ static void apply_settings(void)
 			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
 	}
 
+	/* minimize all paned in order to correctly update paned width after. */
+	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), 0);
+	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")),
+		(interface_prefs.msgwin_orientation==GTK_ORIENTATION_VERTICAL)?
+			GEANY_WINDOW_DEFAULT_HEIGHT:GEANY_WINDOW_DEFAULT_WIDTH);
+
 	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
-		ui_swap_sidebar_pos();
+		ui_swap_sidebar_pos(1);
 
 	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
 		interface_prefs.msgwin_orientation);
@@ -1037,6 +1043,11 @@ static void setup_gtk2_styles(void)
 }
 #endif
 
+void main_update_ui(void)
+{
+	g_idle_add_full(G_PRIORITY_LOW, (GSourceFunc)(gtk_main_quit), NULL, NULL);
+	gtk_main();
+}
 
 GEANY_EXPORT_SYMBOL
 gint main_lib(gint argc, gchar **argv)
@@ -1239,6 +1250,7 @@ gint main_lib(gint argc, gchar **argv)
 	document_grab_focus(doc);
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
+	main_update_ui();
 
 	configuration_apply_settings();
 
