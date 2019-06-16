@@ -1071,6 +1071,20 @@ static void load_ui_prefs(GKeyFile *config)
 	g_free(geo);
 	ui_prefs.sidebar_width = utils_get_setting_integer(config, PACKAGE, "treeview_position", GEANY_SIDEBAR_WIDTH);
 	ui_prefs.msgwindow_width = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", GEANY_MSGWIN_HEIGHT);
+
+	if (!prefs.save_winpos)
+	{
+		ui_prefs.geometry[0] = -1;
+		ui_prefs.geometry[1] = -1;
+		ui_prefs.sidebar_width=GEANY_SIDEBAR_WIDTH;
+		ui_prefs.msgwindow_width=GEANY_MSGWIN_HEIGHT;
+	}
+	if (!prefs.save_wingeom)
+	{
+		ui_prefs.geometry[2] = GEANY_WINDOW_DEFAULT_WIDTH;
+		ui_prefs.geometry[3] = GEANY_WINDOW_DEFAULT_HEIGHT;
+		ui_prefs.geometry[4] = 0;
+	}
 }
 
 
