@@ -578,29 +578,38 @@ static void save_ui_prefs(GKeyFile *config)
 	if (prefs.save_winpos || prefs.save_wingeom)
 	{
 		GdkWindowState wstate;
-		gint width,height,pos1,pos2,sw;
-		main_update_ui();
+		gint width, height, pos1, pos2, sw;
+
+		main_update_ui(); /* force update ui to get the current real position */
+
 		wstate = gdk_window_get_state(gtk_widget_get_window(main_widgets.window));
 		ui_prefs.geometry[4] = (wstate & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
-		gtk_window_get_size(GTK_WINDOW(main_widgets.window),&width,&height);
-		if ((width>=GEANY_WINDOW_MINIMAL_WIDTH)&&(height>=GEANY_WINDOW_MINIMAL_HEIGHT))
+		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &width, &height);
+
+		/* If window's geometry is invalid, the caculation below may be incorrect.
+		 * So we save the data which guaranteed to be correct. (Function 'load_ui_prefs' is responsible for this) */
+		if ((width >= GEANY_WINDOW_MINIMAL_WIDTH) && (height >= GEANY_WINDOW_MINIMAL_HEIGHT))
 		{
-			sw=(interface_prefs.sidebar_pos!=GTK_POS_LEFT)|
-				((interface_prefs.msgwin_orientation!=GTK_ORIENTATION_VERTICAL)<<1);
+			/* get current orientation and position of panes */
+			sw = (interface_prefs.sidebar_pos!=GTK_POS_LEFT) |
+				((interface_prefs.msgwin_orientation != GTK_ORIENTATION_VERTICAL) << 1);
 			pos1=gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")));
 			pos2=gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")));
-			if (sw&1) {pos1=width-pos1;}
-			pos2=((sw&2)?width:height)-pos2;
-			pos1-=(sw==3)?pos2:0;
-			ui_prefs.sidebar_width=pos1;
-			ui_prefs.msgwindow_width=pos2;
-			if (ui_prefs.geometry[4]==0)
+			/* caculate current width of panes */
+			if (sw & 1) {pos1 = width - pos1;}
+			pos2 = ((sw & 2) ? width : height) - pos2;
+			pos1 -= (sw == 3) ? pos2 : 0;
+			ui_prefs.sidebar_width = pos1;
+			ui_prefs.msgwindow_width = pos2;
+			/* It's meaningless to save maximized window's geometry. */
+			if (ui_prefs.geometry[4] == 0)
 			{
 				gtk_window_get_position(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
-				ui_prefs.geometry[2]=width;
-				ui_prefs.geometry[3]=height;
+				ui_prefs.geometry[2] = width;
+				ui_prefs.geometry[3] = height;
 			}
 		}
+		/* save window's geometry and width of panes */
 		g_key_file_set_integer(config, PACKAGE, "treeview_position",ui_prefs.sidebar_width);
 		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",ui_prefs.msgwindow_width);
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", ui_prefs.geometry, 5);
@@ -1053,7 +1062,7 @@ static void load_ui_prefs(GKeyFile *config)
 	{
 		ui_prefs.geometry[0] = -1;
 		ui_prefs.geometry[1] = -1;
-		ui_prefs.geometry[2] = GEANY_WINDOW_DEFAULT_WIDTH;
+		ui_prefs.geometry[2] = GEANY_WINDOW_DEFAULT_WIDTH; /* ui_swap_sidebar_pos need this value at initial setup */
 		ui_prefs.geometry[3] = GEANY_WINDOW_DEFAULT_HEIGHT;
 		ui_prefs.geometry[4] = 0;
 	}
@@ -1064,20 +1073,21 @@ static void load_ui_prefs(GKeyFile *config)
 		/* quitting when minimized can make pos -32000, -32000 on Windows! */
 		ui_prefs.geometry[0] = MAX(-1, geo[0]);
 		ui_prefs.geometry[1] = MAX(-1, geo[1]);
-		ui_prefs.geometry[2] = (geo[2]<GEANY_WINDOW_MINIMAL_WIDTH)?GEANY_WINDOW_DEFAULT_WIDTH:geo[2];
-		ui_prefs.geometry[3] = (geo[3]<GEANY_WINDOW_MINIMAL_HEIGHT)?GEANY_WINDOW_DEFAULT_HEIGHT:geo[3];
+		ui_prefs.geometry[2] = (geo[2] < GEANY_WINDOW_MINIMAL_WIDTH) ? GEANY_WINDOW_DEFAULT_WIDTH : geo[2];
+		ui_prefs.geometry[3] = (geo[3] < GEANY_WINDOW_MINIMAL_HEIGHT) ? GEANY_WINDOW_DEFAULT_HEIGHT : geo[3];
 		ui_prefs.geometry[4] = geo[4] != 0;
 	}
 	g_free(geo);
 	ui_prefs.sidebar_width = utils_get_setting_integer(config, PACKAGE, "treeview_position", GEANY_SIDEBAR_WIDTH);
 	ui_prefs.msgwindow_width = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", GEANY_MSGWIN_HEIGHT);
 
+	/* Change settings read from keyfile to default, if save_winpos/save_wingeom is not set */
 	if (!prefs.save_winpos)
 	{
 		ui_prefs.geometry[0] = -1;
 		ui_prefs.geometry[1] = -1;
-		ui_prefs.sidebar_width=GEANY_SIDEBAR_WIDTH;
-		ui_prefs.msgwindow_width=GEANY_MSGWIN_HEIGHT;
+		ui_prefs.sidebar_width = GEANY_SIDEBAR_WIDTH;
+		ui_prefs.msgwindow_width = GEANY_MSGWIN_HEIGHT;
 	}
 	if (!prefs.save_wingeom)
 	{
@@ -1302,6 +1312,7 @@ void configuration_open_files(void)
 	main_status.opening_session_files = FALSE;
 }
 
+
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */
 void configuration_apply_settings(void)
@@ -1319,22 +1330,28 @@ void configuration_apply_settings(void)
 	g_free(scribble_text);
 
 	/* set the position of the hpaned and vpaned */
-	if (1)//if (prefs.save_winpos)
 	{
-		gint pos1,pos2,sw,width,height;
-		sw=(interface_prefs.sidebar_pos!=GTK_POS_LEFT)|
-			((interface_prefs.msgwin_orientation!=GTK_ORIENTATION_VERTICAL)<<1);
-		gtk_window_get_size(GTK_WINDOW(main_widgets.window),&width,&height);
-		pos1=ui_prefs.sidebar_width;
-		pos2=ui_prefs.msgwindow_width;
-		if (sw&1) {pos1=width-pos1;}
-		/* vpaned1's position change is prior to hpaned1 */
-		//pos1-=(sw==3)?pos2:0; //this is the final postion
-		pos1-=(sw==3)?6:0;
-		pos2=((sw&2)?width:height)-pos2;
+		gint pos1, pos2, sw, width, height;
+
+		/* get the geometry of main window and the width settings of panes */
+		sw = (interface_prefs.sidebar_pos != GTK_POS_LEFT) |
+			((interface_prefs.msgwin_orientation != GTK_ORIENTATION_VERTICAL) << 1);
+		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &width, &height);
+		pos1 = ui_prefs.sidebar_width;
+		pos2 = ui_prefs.msgwindow_width;
+
+		/* caculate postion's of panes from their width */
+		if (sw & 1) {pos1 = width - pos1;}
+		/* Since change of hpaned1's position is prior to vpaned1,
+		 * if msgwin and sidebar are both on the right side,
+		 * msgwin expand will move hpaned1's position to incorrect location. */
+		pos1 -= (sw == 3) ? 6 : 0;
+		pos2 = ((sw & 2) ? width : height) - pos2;
+
+		/* set positions */
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), pos2);
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), pos1);
-		geany_debug("Apply geometry %d, %d\n",pos1,pos2);
+		geany_debug("Apply panes' positions: hpaned1 <- %d, vpaned1 <- %d\n", pos1, pos2);
 	}
 
 	/* set fullscreen after initial draw so that returning to normal view is the right size.

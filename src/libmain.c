@@ -155,7 +155,7 @@ static void setup_window_position(void)
 	{
 		if (ui_prefs.geometry[2] != -1 && ui_prefs.geometry[3] != -1)
 		{
-			gtk_window_resize(GTK_WINDOW(main_widgets.window),
+			gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
 				ui_prefs.geometry[2], ui_prefs.geometry[3]);
 		}
 	}
@@ -225,11 +225,14 @@ static void apply_settings(void)
 			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
 	}
 
-	/* minimize all paned in order to correctly update paned width after. */
+	/* If paned's postion which we'd like to change to exceeds its boundary,
+	 * one of the paned's children will be set to zero width.
+	 * This would happen if msgwin and sidebar were on the same side and msgwin was too wide.
+	 * Minimizing both msgwin and sidebar can mitigate this problem. */
 	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), 0);
 	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")),
-		(interface_prefs.msgwin_orientation==GTK_ORIENTATION_VERTICAL)?
-			GEANY_WINDOW_DEFAULT_HEIGHT:GEANY_WINDOW_DEFAULT_WIDTH);
+		(interface_prefs.msgwin_orientation == GTK_ORIENTATION_VERTICAL) ?
+			GEANY_WINDOW_DEFAULT_HEIGHT : GEANY_WINDOW_DEFAULT_WIDTH);
 
 	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
 		ui_swap_sidebar_pos(1);
@@ -303,11 +306,13 @@ static void main_init(void)
 	gtk_widget_set_name(ui_lookup_widget(main_widgets.window, "menubar1"), "GeanyMenubar");
 	gtk_widget_set_name(main_widgets.toolbar, "GeanyToolbar");
 
+	/* Set main window's minimal geometry */
 	GdkGeometry hints;
 	hints.min_width = GEANY_WINDOW_MINIMAL_WIDTH;
 	hints.min_height = GEANY_WINDOW_MINIMAL_HEIGHT;
-	gtk_window_set_geometry_hints(GTK_WINDOW(main_widgets.window),main_widgets.window,
-		&hints,(GdkWindowHints)(GDK_HINT_MIN_SIZE));
+	gtk_window_set_geometry_hints(GTK_WINDOW(main_widgets.window), main_widgets.window,
+		&hints, (GdkWindowHints)(GDK_HINT_MIN_SIZE));
+
 	gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
 		GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 }
@@ -1043,11 +1048,13 @@ static void setup_gtk2_styles(void)
 }
 #endif
 
+/* force update ui */
 void main_update_ui(void)
 {
 	g_idle_add_full(G_PRIORITY_LOW, (GSourceFunc)(gtk_main_quit), NULL, NULL);
 	gtk_main();
 }
+
 
 GEANY_EXPORT_SYMBOL
 gint main_lib(gint argc, gchar **argv)
