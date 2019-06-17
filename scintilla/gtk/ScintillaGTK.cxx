@@ -650,6 +650,8 @@ void ScintillaGTK::Init() {
 		caret.period = 0;
 	}
 
+	g_signal_connect(PWidget(wMain), "button-press-event", G_CALLBACK(ScintillaGTK::OnButtonPress), NULL);
+
 	for (TickReason tr = tickCaret; tr <= tickDwell; tr = static_cast<TickReason>(tr + 1)) {
 		timers[tr].reason = tr;
 		timers[tr].scintilla = this;
@@ -2189,6 +2191,18 @@ gboolean ScintillaGTK::KeyRelease(GtkWidget *widget, GdkEventKey *event) {
 	if (gtk_im_context_filter_keypress(sciThis->im_context, event)) {
 		return TRUE;
 	}
+	return FALSE;
+}
+
+gboolean ScintillaGTK::OnButtonPress(GtkWidget *widget, GdkEvent *event, gpointer user_data) {
+	ScintillaGTK *sciThis = FromWidget(widget);
+
+	if (sciThis->im_context) {
+		PreEditString pes(sciThis->im_context);
+		if (strlen(pes.str) > 0)
+			gtk_im_context_reset(sciThis->im_context);
+	}
+
 	return FALSE;
 }
 

@@ -193,6 +193,7 @@ private:
 	gboolean KeyThis(GdkEventKey *event);
 	static gboolean KeyPress(GtkWidget *widget, GdkEventKey *event);
 	static gboolean KeyRelease(GtkWidget *widget, GdkEventKey *event);
+	static gboolean OnButtonPress(GtkWidget *widget, GdkEvent *event, gpointer user_data);
 #if GTK_CHECK_VERSION(3,0,0)
 	gboolean DrawPreeditThis(GtkWidget *widget, cairo_t *cr);
 	static gboolean DrawPreedit(GtkWidget *widget, cairo_t *cr, ScintillaGTK *sciThis);
