@@ -96,8 +96,8 @@ enum	/* Geany common styling */
 	GCS_LINE_HEIGHT,
 	GCS_CALLTIPS,
 	GCS_INDICATOR_ERROR,
-	GCS_MAX,
-	SCI_SYMBOL_FOLDING_MARGIN_WIDTH
+	GCS_SYMBOL_FOLDING_MARGIN_WIDTH,
+	GCS_MAX
 };
 
 static struct
@@ -583,8 +583,8 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 	g_free(whitespace_chars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
 
-	get_keyfile_int(config, config_home, "scintilla_settings", "sci_symbol_folding_margin_width",
-		0, 0, &common_style_set.styling[SCI_SYMBOL_FOLDING_MARGIN_WIDTH]);
+	get_keyfile_ints(config, config_home, "scintilla_settings", "sci_symbol_folding_margin_width",
+		1, 0, &common_style_set.styling[GCS_SYMBOL_FOLDING_MARGIN_WIDTH].background, NULL);
 }
 
 
@@ -682,6 +682,8 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	/* 2 -> folding marker, other folding settings */
 	SSM(sci, SCI_SETMARGINTYPEN, 2, SC_MARGIN_SYMBOL);
 	SSM(sci, SCI_SETMARGINMASKN, 2, SC_MASK_FOLDERS);
+
+	SSM(sci, SCI_SETMARGINWIDTHN, common_style_set.styling[GCS_SYMBOL_FOLDING_MARGIN_WIDTH].background, 0);
 
 	/* drawing a horizontal line when text if folded */
 	switch (common_style_set.fold_draw_line)
