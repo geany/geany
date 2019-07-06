@@ -26,6 +26,8 @@
 ; Do a Cyclic Redundancy Check to make sure the installer was not corrupted by the download
 CRCCheck force
 RequestExecutionLevel highest ; set execution level for Windows Vista
+; NSIS 3 Unicode support
+Unicode true
 
 ;;;;;;;;;;;;;;;;;;;
 ; helper defines  ;
@@ -53,13 +55,14 @@ VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "LegalCopyright" "Copyright 2005 The Geany contributors"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
-BrandingText "$(^NAME) installer (NSIS 2.51)"
+BrandingText "$(^NAME) installer (NSIS 3.04)"
 InstallDir "$PROGRAMFILES\Geany"
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 SetCompressor /SOLID lzma
 ShowInstDetails hide
 ShowUnInstDetails hide
 XPStyle on
+ManifestSupportedOS all
 !ifdef INCLUDE_GTK
 OutFile "geany-${PRODUCT_VERSION}_setup.exe"
 !else
@@ -77,10 +80,10 @@ Var UNINSTDIR
 !include "MUI2.nsh"
 
 ;Reserve files used in .onInit, for faster start-up
-ReserveFile "${NSISDIR}\Plugins\System.dll"
-ReserveFile "${NSISDIR}\Plugins\UserInfo.dll"
-ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
-ReserveFile "${NSISDIR}\Plugins\LangDLL.dll"
+ReserveFile "${NSISDIR}\Plugins\x86-unicode\System.dll"
+ReserveFile "${NSISDIR}\Plugins\x86-unicode\UserInfo.dll"
+ReserveFile "${NSISDIR}\Plugins\x86-unicode\InstallOptions.dll"
+ReserveFile "${NSISDIR}\Plugins\x86-unicode\LangDLL.dll"
 
 !define MUI_ABORTWARNING
 !define MUI_ICON "icons\geany.ico"
