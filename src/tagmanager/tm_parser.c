@@ -124,6 +124,13 @@ static TMParserMapEntry map_LATEX[] = {
 	{'n', tm_tag_namespace_t},
 	{'s', tm_tag_struct_t},
 };
+static TMParserMapEntry map_BIBTEX[] = {
+	{'f', tm_tag_function_t},
+	{'c', tm_tag_class_t},
+	{'m', tm_tag_member_t},
+	{'v', tm_tag_variable_t},
+	{'s', tm_tag_struct_t},
+};
 
 static TMParserMapEntry map_ASM[] = {
 	{'d', tm_tag_macro_t},
@@ -531,6 +538,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(PHP),
 	MAP_ENTRY(PYTHON),
 	MAP_ENTRY(LATEX),
+	MAP_ENTRY(BIBTEX),
 	MAP_ENTRY(ASM),
 	MAP_ENTRY(CONF),
 	MAP_ENTRY(SQL),

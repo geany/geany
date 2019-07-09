@@ -160,6 +160,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( SQL,        SQL,          "SQL",              NULL,                      FILE,        MISC     );
 	FT_INIT( COBOL,      COBOL,        "COBOL",            NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( LATEX,      LATEX,        "LaTeX",            NULL,                      SOURCE_FILE, MARKUP   );
+	FT_INIT( BIBTEX,     BIBTEX,       "BibTeX",           NULL,                      SOURCE_FILE, MARKUP   );
 	FT_INIT( VHDL,       VHDL,         "VHDL",             NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( VERILOG,    VERILOG,      "Verilog",          NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( DIFF,       DIFF,         "Diff",             NULL,                      FILE,        MISC     );

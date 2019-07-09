@@ -14,6 +14,7 @@ parsers = \
 	parsers/asciidoc.c \
 	parsers/asm.c \
 	parsers/basic.c \
+	parsers/bibtex.c \
 	parsers/c.c \
 	parsers/cobol.c \
 	parsers/iniconf.c \
