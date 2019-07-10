@@ -19,6 +19,9 @@ margin_linenumber=margin_line_number
 margin_folding=margin_folding
 fold_symbol_highlight=fold_symbol_highlight
 
+# width of the folding margin on the right of the line numbers
+folding_margin_width=12
+
 # background colour of the current line, only the second and third argument is interpreted
 # use the third argument to enable or disable the highlighting of the current line (has to be true/false)
 current_line=current_line
@@ -176,6 +179,3 @@ entity=default
 line_added=0x34b034;0xffffff;false;false
 line_removed=0xff2727;0xffffff;false;false
 line_changed=0x7f007f;0xffffff;false;false
-
-[scintilla_settings]
-sci_symbol_folding_margin_width=16
