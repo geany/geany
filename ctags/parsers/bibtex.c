@@ -52,7 +52,7 @@ static int getBibWord(const char * ref, const char **ptr)
 {
 	const char *p = *ptr;
 
-	while ((*ref != '\0') && (*p != '\0') && (*ref == *p))
+	while ((*ref != '\0') && (*p != '\0') && (tolower(*ref) == tolower(*p)))
 		ref++, p++;
 
 
@@ -79,7 +79,7 @@ static void createBibTag(int flags, BibKind kind, const char * l)
 		{
 			vStringPut(name, (int) *l);
 			++l;
-		} while ((*l != '\0') && (*l != ','));
+		} while ((*l != '\0') && (*l != ',') && (*l != '}'));
 		if (name->buffer[0] != ',')
 			makeSimpleTag(name, kind);
 	}

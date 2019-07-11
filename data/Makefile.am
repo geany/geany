@@ -11,6 +11,7 @@ filetypes = \
 	filedefs/filetypes.asciidoc \
 	filedefs/filetypes.asm \
 	filedefs/filetypes.batch \
+	filedefs/filetypes.bibtex \
 	filedefs/filetypes.c \
 	filedefs/filetypes.caml \
 	filedefs/filetypes.Clojure.conf \
