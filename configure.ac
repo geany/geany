@@ -145,12 +145,14 @@ AM_COND_IF([MINGW],
 AC_SUBST([GEANY_DATA_DIR], [$(eval echo $(eval echo $pkgdatadir))])
 AC_SUBST([pkgdatadir])
 
-# The default Python command
+# The default Python command.  On Windows, use the `py` launcher by default
 AC_ARG_WITH([python-command],
 			[AS_HELP_STRING([--with-python-command],
-							[the default Python command [default=python]])],
+							[the default Python command [defaults to "py" on Windows and "python" otherwise]])],
 			[with_python_command=$withval],
-			[with_python_command=python])
+			[with_python_command=auto])
+AS_IF([test "x$with_python_command" = xauto],
+	  [AM_COND_IF([MINGW], [with_python_command=py], [with_python_command=python])])
 AC_SUBST([PYTHON_COMMAND], [$with_python_command])
 
 # Documentation tools
