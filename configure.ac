@@ -145,6 +145,14 @@ AM_COND_IF([MINGW],
 AC_SUBST([GEANY_DATA_DIR], [$(eval echo $(eval echo $pkgdatadir))])
 AC_SUBST([pkgdatadir])
 
+# The default Python command
+AC_ARG_WITH([python-command],
+			[AS_HELP_STRING([--with-python-command],
+							[the default Python command [default=python]])],
+			[with_python_command=$withval],
+			[with_python_command=python])
+AC_SUBST([PYTHON_COMMAND], [$with_python_command])
+
 # Documentation tools
 GEANY_CHECK_DOCUTILS
 GEANY_CHECK_DOXYGEN
@@ -176,6 +184,7 @@ AC_CONFIG_FILES([
 		plugins/Makefile
 		po/Makefile.in
 		data/Makefile
+		data/filedefs/filetypes.python
 		doc/Makefile
 		doc/geany.1
 		geany.pc
