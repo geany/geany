@@ -9,26 +9,25 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-15 17:13+0200\n"
-"PO-Revision-Date: 2012-02-08 11:28-0000\n"
+"PO-Revision-Date: 2019-07-18 14:34+0300\n"
 "Last-Translator: فيصل شامخ <ziryan@gmail.com>\n"
 "Language-Team: فيصل شامخ <ziryan@gmail.com>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Arabic\n"
-"X-Poedit-Country: ALGERIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
-msgstr "Geany"
+msgstr "جێنی"
 
 #: ../geany.desktop.in.h:2
 msgid "Integrated Development Environment"
-msgstr "بيئة التطوير المتكاملة"
+msgstr "دەوروبەری پەرەپێدانی تەواوکاری"
 
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK+"
@@ -2834,6 +2833,10 @@ msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../src/document.c:3619
 msgid "Do you want to reload it?"
@@ -4393,6 +4396,10 @@ msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../src/search.c:1426
 #, c-format
@@ -4437,6 +4444,10 @@ msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../src/search.c:1880
 msgid "No matches found."
@@ -5752,6 +5763,10 @@ msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #. initialize the dialog
 #: ../plugins/saveactions.c:441
