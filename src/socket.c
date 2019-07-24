@@ -443,22 +443,20 @@ static gint socket_fd_open_unix(const gchar *path)
 
 	/* Try to place the socket in XDG_RUNTIME_DIR, according to XDG Base
 	 * Directory Specification, see
-	 * https://specifications.freedesktop.org/basedir-spec/latest */
+	 * https://specifications.freedesktop.org/basedir-spec/latest.
+	 * If that fails, we try to use /tmp as a fallback. The last resort
+	 * is the configuration directory. But the other directories
+	 * are preferred in case the configuration directory is located on
+	 * a network file system or any other file system which doesn't
+	 * support sockets (see #1888561). Append a random int to
+	 * prevent clashes with other instances on the system. */
 	real_dir = g_build_filename(g_get_user_runtime_dir(), "geany", NULL);
-	if (g_mkdir_with_parents(real_dir, 0755) == 0)
-	{
-		basename = g_path_get_basename(path);
+	val = utils_mkdir(real_dir, FALSE);
+	basename = g_strdup_printf("geany_socket.%08x", g_random_int());
+	if (val == 0 || val == EEXIST)
 		real_path = g_build_filename(real_dir, basename, NULL);
-	}
 	else
-	{ 	/* Try writing to /tmp directly as a fallback. This is preferred
-		 * over the configuration directory in case it's on a net located on
-		 * a network file system or any other file system which doesn't
-		 * support sockets (see #1888561). Append a random int to
-		 * prevent clashes with instances of other users on the system. */
-		basename = g_strdup_printf("geany_socket.%08x", g_random_int());
 		real_path = g_build_filename(g_get_tmp_dir(), basename, NULL);
-	}
 	g_free(basename);
 	g_free(real_dir);
 
