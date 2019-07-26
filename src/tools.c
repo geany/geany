@@ -350,11 +350,13 @@ static void cc_show_dialog_custom_commands(void)
 	GtkWidget *dialog, *label, *vbox, *scroll, *buttonbox;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
+	gint response;
 	guint i;
 	struct cc_dialog cc;
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Custom Commands"), GTK_WINDOW(main_widgets.window),
 						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_window_set_default_size(GTK_WINDOW(dialog), 300, 300); /* give a reasonable minimal default size */
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
@@ -453,7 +455,10 @@ static void cc_show_dialog_custom_commands(void)
 
 	gtk_widget_show_all(vbox);
 
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	while ((response = gtk_dialog_run(GTK_DIALOG(dialog))) == GTK_RESPONSE_HELP)
+		utils_open_help("#custom-commands-dialog");
+
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		GSList *cmd_list = NULL;
 		GSList *lbl_list = NULL;

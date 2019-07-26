@@ -151,6 +151,7 @@ void project_new(void)
 
 	e.dialog = gtk_dialog_new_with_buttons(_("New Project"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
+										 GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
 	gtk_widget_set_name(e.dialog, "GeanyDialogProject");
@@ -227,7 +228,11 @@ void project_new(void)
 
 	while (1)
 	{
-		if (gtk_dialog_run(GTK_DIALOG(e.dialog)) != GTK_RESPONSE_OK)
+		gint response = gtk_dialog_run(GTK_DIALOG(e.dialog));
+
+		if (response == GTK_RESPONSE_HELP)
+			utils_open_help("#new-project-dialog");
+		else if (response != GTK_RESPONSE_OK)
 		{
 			// any open docs were meant to be moved into the project
 			// rewrite default session because it was cleared
@@ -242,7 +247,7 @@ void project_new(void)
 			break;
 		}
 		// dialog confirmed
-		if (update_config(&e, TRUE))
+		else if (update_config(&e, TRUE))
 		{
 			// app->project is now set
 			if (!write_config())
@@ -498,6 +503,13 @@ static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 }
 
 
+static void page_set_help_url(GtkWidget *widget, const gchar *suffix)
+{
+	gchar *uri = utils_get_help_url(suffix);
+	g_object_set_data_full(G_OBJECT(widget), "geany-help-uri", uri, g_free);
+}
+
+
 static void insert_build_page(PropertyDialogElements *e)
 {
 	GtkWidget *build_table, *label;
@@ -512,6 +524,17 @@ static void insert_build_page(PropertyDialogElements *e)
 	label = gtk_label_new(_("Build"));
 	e->build_page_num = gtk_notebook_append_page(GTK_NOTEBOOK(e->notebook),
 		build_table, label);
+
+	page_set_help_url(build_table, "#set-build-commands-dialog");
+}
+
+
+static void on_project_properties_switch_page(GtkNotebook *notebook, GtkWidget *page,
+		guint page_num, GtkDialog *dialog)
+{
+	const gchar *uri = g_object_get_data(G_OBJECT(page), "geany-help-uri");
+
+	gtk_dialog_set_response_sensitive(dialog, GTK_RESPONSE_HELP, uri != NULL);
 }
 
 
@@ -554,6 +577,13 @@ static void create_properties_dialog(PropertyDialogElements *e)
 				G_CALLBACK(on_radio_long_line_custom_toggled),
 				ui_lookup_widget(e->dialog, "spin_long_line_project"));
 	}
+
+	page_set_help_url(ui_lookup_widget(e->dialog, "project_dialog_page_project"), "#project-dialog-project");
+	page_set_help_url(ui_lookup_widget(e->dialog, "project_dialog_page_indentation"), "#project-dialog-indentation");
+	page_set_help_url(ui_lookup_widget(e->dialog, "project_dialog_page_editor"), "#project-dialog-editor");
+	page_set_help_url(ui_lookup_widget(e->dialog, "project_dialog_page_files"), "#project-dialog-files");
+
+	g_signal_connect(e->notebook, "switch-page", G_CALLBACK(on_project_properties_switch_page), e->dialog);
 }
 
 
@@ -566,6 +596,7 @@ static void show_project_properties(gboolean show_build)
 	GSList *node;
 	gchar *entry_text;
 	GtkTextBuffer *buffer;
+	gint response;
 
 	g_return_if_fail(app->project != NULL);
 
@@ -613,9 +644,11 @@ static void show_project_properties(gboolean show_build)
 	else
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), 0);
 
-	while (gtk_dialog_run(GTK_DIALOG(e.dialog)) == GTK_RESPONSE_OK)
+	do
 	{
-		if (update_config(&e, FALSE))
+		response = gtk_dialog_run(GTK_DIALOG(e.dialog));
+
+		if (response == GTK_RESPONSE_OK && update_config(&e, FALSE))
 		{
 			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e.notebook);
 			if (!write_config())
@@ -626,7 +659,21 @@ static void show_project_properties(gboolean show_build)
 				break;
 			}
 		}
+		else if (response == GTK_RESPONSE_HELP)
+		{
+			gint current_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(e.notebook));
+			GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(e.notebook), current_page);
+
+			if (page)
+			{
+				const gchar *uri = g_object_get_data(G_OBJECT(page), "geany-help-uri");
+
+				if (uri)
+					utils_open_browser(uri);
+			}
+		}
 	}
+	while (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_HELP);
 
 	build_free_fields(e.build_properties);
 	g_signal_emit_by_name(geany_object, "project-dialog-close", e.notebook);

@@ -1927,6 +1927,16 @@ gchar *utils_get_help_url(const gchar *suffix)
 }
 
 
+void utils_open_help(const gchar *suffix)
+{
+	gchar *uri;
+
+	uri = utils_get_help_url(suffix);
+	utils_open_browser(uri);
+	g_free(uri);
+}
+
+
 static gboolean str_in_array(const gchar **haystack, const gchar *needle)
 {
 	const gchar **p;

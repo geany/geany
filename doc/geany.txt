@@ -873,6 +873,8 @@ location". This makes it easier to navigate in e.g.  foreign code
 and between different files.
 
 
+.. _custom-commands-dialog:
+
 Sending text through custom commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1179,6 +1181,8 @@ the toolbar. This performs a case-insensitive search in the current
 document whilst you type. Pressing Enter will search again, and pressing
 Shift-Enter will search backwards.
 
+.. _find-dialog:
+
 Find
 ^^^^
 
@@ -1282,6 +1286,8 @@ shown in the Messages tab of the Message Window.
     menu.
 
 
+.. _find-in-files-dialog:
+
 Find in files
 ^^^^^^^^^^^^^
 
@@ -1348,6 +1354,8 @@ SVN Example: ``--exclude=*.svn-base``
 
 The --exclude argument only matches the file name part, not the path.
 
+
+.. _replace-dialog:
 
 Replace
 ^^^^^^^
@@ -2046,6 +2054,8 @@ Icon size
     The choice System default uses whatever icon size is set by GTK.
 
 
+.. _project-dialog-editor:
+
 Editor Features preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2094,6 +2104,8 @@ Comment toggle marker
     A string which is added when toggling a line comment in a source file.
     It is used to mark the comment as toggled.
 
+
+.. _project-dialog-indentation:
 
 Editor Indentation preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2361,6 +2373,8 @@ Default end of line characters
     On Windows systems, you generally want to use CR/LF which are the common
     characters to mark line breaks.
     On Unix-like systems, LF is default and CR is used on MAC systems.
+
+.. _project-dialog-files:
 
 Saving files
 ````````````
@@ -2779,6 +2793,8 @@ file that was in use at the end of the last session will be reopened.
 The project menu items are detailed below.
 
 
+.. _new-project-dialog:
+
 New project
 ^^^^^^^^^^^
 
@@ -2791,6 +2807,8 @@ The Base path text field is setup to use ``~/projects/name``. This
 can safely be set to any existing path -- it will not touch the file
 structure contained in it.
 
+
+.. _project-dialog-project:
 
 Project properties
 ^^^^^^^^^^^^^^^^^^
@@ -3122,6 +3140,8 @@ The following notes on the table reference cells by coordinate as (group,source)
   editing the appropriate file, see `Preferences file format`_ and `Project file
   format`_.
 
+.. _set-build-commands-dialog:
+
 Build menu commands dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -3163,6 +3183,8 @@ The clear buttons remove the definition from the configuration source you are ed
 When you do this the command from the next lower priority source will be shown.
 To hide lower priority menu items without having anything show in the menu
 configure with a nothing in the label but at least one character in the command.
+
+.. _build-command-substitutions:
 
 Substitutions in commands and working directories
 `````````````````````````````````````````````````

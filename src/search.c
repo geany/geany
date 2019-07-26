@@ -464,6 +464,7 @@ static void create_find_dialog(void)
 
 	find_dlg.dialog = gtk_dialog_new_with_buttons(_("Find"),
 		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(find_dlg.dialog));
 	gtk_widget_set_name(find_dlg.dialog, "GeanyDialogSearch");
@@ -617,6 +618,7 @@ static void create_replace_dialog(void)
 
 	replace_dlg.dialog = gtk_dialog_new_with_buttons(_("Replace"),
 		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(replace_dlg.dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 9);
@@ -866,6 +868,7 @@ static void create_fif_dialog(void)
 
 	fif_dlg.dialog = gtk_dialog_new_with_buttons(
 		_("Find in Files"), GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(fif_dlg.dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 9);
@@ -1299,6 +1302,8 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 		gtk_widget_hide(find_dlg.dialog);
+	else if (response == GTK_RESPONSE_HELP)
+		utils_open_help("#find-dialog");
 	else
 	{
 		GeanyDocument *doc = document_get_current();
@@ -1449,6 +1454,11 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 	{
 		gtk_widget_hide(replace_dlg.dialog);
+		return;
+	}
+	else if (response == GTK_RESPONSE_HELP)
+	{
+		utils_open_help("#replace-dialog");
 		return;
 	}
 
@@ -1631,6 +1641,8 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		else
 			ui_set_statusbar(FALSE, _("No text to find."));
 	}
+	else if (response == GTK_RESPONSE_HELP)
+		utils_open_help("#find-in-files-dialog");
 	else
 		gtk_widget_hide(fif_dlg.dialog);
 }

@@ -306,6 +306,8 @@ GSList *utils_get_config_files(const gchar *subdir);
 
 gchar *utils_get_help_url(const gchar *suffix);
 
+void utils_open_help(const gchar *suffix);
+
 gboolean utils_str_has_upper(const gchar *str);
 
 gint utils_is_file_writable(const gchar *locale_filename);
