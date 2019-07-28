@@ -264,6 +264,40 @@ void project_new(void)
 }
 
 
+/** Controls whether currently opened files are stored in the project file.
+ *
+ *  If @a save is @c TRUE, this causes the opened files to be persisted when
+ *  the project is closed and re-opened, or when @c FALSE none of the
+ *  opened files will be re-opened when a project is re-opened.
+ *
+ *  @param save Whether or not to persist the list of open files in the project file.
+ *
+ *  @see project_get_save_open_files_list
+ *  @see project_close
+ *  @since 1.36 (240)
+ */
+GEANY_API_SYMBOL
+void project_set_save_open_files_list(gboolean save)
+{
+	project_prefs.project_session = save;
+}
+
+
+/** Returns if opened project files shall be restored or not.
+ *
+ *  See @ref project_set_save_open_files_list for documentation.
+ *
+ *  @returns @c TRUE if open files are restored or @c FALSE if not.
+ *  @see project_close
+ *  @since 1.36 (240)
+ */
+GEANY_API_SYMBOL
+gboolean project_get_save_open_files_list(void)
+{
+	return project_prefs.project_session;
+}
+
+
 gboolean project_load_file_with_session(const gchar *locale_file_name)
 {
 	if (project_load_file(locale_file_name))
@@ -397,7 +431,13 @@ static void remove_foreach_project_filetype(gpointer data, gpointer user_data)
 }
 
 
-/* open_default will make function reload default session files on close */
+/** Closes the project and eventually reloads default session files on close.
+ *
+ *  @param open_default Load default session files?
+ *  @returns @c TRUE on success and @c FALSE on error (error on closing docs)
+ *  @since 1.36 (240)
+ */
+GEANY_API_SYMBOL
 gboolean project_close(gboolean open_default)
 {
 	g_return_val_if_fail(app->project != NULL, FALSE);
@@ -1001,6 +1041,13 @@ static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget 
 }
 
 
+/** Open a project file
+ *
+ *  @param locale_file_name File path of the project to open
+ *  @returns @c TRUE on success and @c FALSE otherwise (config file could not be loaded)
+ *  @since 1.36 (240)
+ */
+GEANY_API_SYMBOL
 gboolean project_load_file(const gchar *locale_file_name)
 {
 	g_return_val_if_fail(locale_file_name != NULL, FALSE);
