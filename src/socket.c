@@ -421,7 +421,7 @@ static gint socket_fd_open_unix(const gchar *path)
 {
 	gint sock;
 	struct sockaddr_un addr;
-	gint val;
+	gint val, err;
 	gchar *real_dir;
 	gchar *real_path;
 	gchar *basename;
@@ -451,9 +451,9 @@ static gint socket_fd_open_unix(const gchar *path)
 	 * support sockets (see #1888561). Append a random int to
 	 * prevent clashes with other instances on the system. */
 	real_dir = g_build_filename(g_get_user_runtime_dir(), "geany", NULL);
-	val = utils_mkdir(real_dir, FALSE);
+	err = utils_mkdir(real_dir, FALSE);
 	basename = g_strdup_printf("geany_socket.%08x", g_random_int());
-	if (val == 0 || val == EEXIST)
+	if (err == 0 || err == EEXIST)
 		real_path = g_build_filename(real_dir, basename, NULL);
 	else
 		real_path = g_build_filename(g_get_tmp_dir(), basename, NULL);
@@ -467,7 +467,7 @@ static gint socket_fd_open_unix(const gchar *path)
 		SETPTR(real_path, g_strdup(path));
 	}
 	/* create a symlink in e.g. ~/.config/geany/geany_socket_hostname__0 to
-	 * /var/run/user/1000/geany/geany_socket_hostname__0 */
+	 * /var/run/user/1000/geany/geany_socket.* */
 	else if (symlink(real_path, path) != 0)
 	{
 		gint saved_errno = errno;
