@@ -1,0 +1,65 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment
+string=string
+number=number_1
+table=class
+
+# README :
+
+#1) Ce qui suit (keyword_1, function, operator, etc.) est definit dans "data/filedefs/filetypes.common"
+#       ou dans les fichiers de colorations speciaux (data/colorshemes/*.conf)
+
+#2) La meme syntaxe doit etre reprise dans "scintilla/include/SciLexer.h" et dans "src/highlightingmappings.h"
+
+#3) C'est dans "scintilla/lexers/LexGIBIANE.cxx", que l'on dit que :
+#       keywords1 <=> word => coloration keyword_1 definit dans filetypes.common ou .conf
+#       keywords2 <=> word2 => coloration keyword_2 definit dans filetypes.common ou .conf
+#       keywords3 <=> word3 => coloration backticks definit dans filetypes.common ou .conf
+#       keywords4 <=> word4 => coloration function definit dans filetypes.common ou .conf
+#       ...
+
+word=keyword_1
+word2=keyword_2
+word3=keyword_1
+word4=function
+word5=keyword_3
+word6=function
+word7=function
+word8=operator
+
+
+[keywords]
+# all items must be in one line and in lowercase
+conditional=si sinon sino finsi fins
+test1=cos cosh acos acoh sin sinh asin asih tan tanh atg atah erf exp factorie fonc log mini maxi enti entier flot flottant sign signe alea abs
+loop=repe repet repete repeter quit iter itere iterer fin
+task=debp debpr debpro debproc finp finpr finpro finproc debm debme debmet debmeth finm finme finmet finmeth
+element=poi1 seg2 seg3 tri3 tri4 tri6 tri7 qua4 qua5 qua8 qua9 rac2 rac3 cub8 cu20 pri6 pr15 lia3 lia4 lia6 lia8 mult tet4 te10 pyr5 py13 atta supe rap3 lip6 lip8 poly cu27 pr21 te15 py19 seg4 qu16 tr12 pr18 seg6 tr21 qu36 c216 p126 te56 py91 sure
+function1=@A1DDL accdchi1 accdchi2 accevite acier acti3 @afevozt affiche aft1 aft2 aft ajuste @algsta @ana_lim analyser anime animgks anlimtre annoimp arcgau @arr asparam autopilo balourd bif bili_efz bili_moy biovol boa boite broche bruche @b_tpo2d calactiv calcdisp calcp calctrac calculer callm calmu campbell @carene @cartoon ccdonchi @cdg @CFD10 @CFS10 ch2clim chamint chanolii chanuobj chanvcom chanvesp chanvsos charther @CHCOTAE chdclim @chflec chitrnsp @CHREP chtgau ch_theta ch_thetx chtitr cinema cinemb cinimod @circons @clch @cldhc @cldh @clim clinc @clmi1c @clmi2c @clpc @clpd codenorm coller1 coller2 coller con_calc condens continu contseg3 convt coq2mas @corigi corman cormasse @couplan @couple coupler cour3d courspec @coutor1 @coutor2 creer_3d @cripl critloc ctod darcysat darcytra ddfour deadfonc deadjaco deadktan deadresi deadutil deconv3D deconv dedans deduadap @deduire @defa2dl @defa2dp @defpl depou descour @deslis destra diffanis donchi1 donchi2 drexus dupont2 dynamic dynamod2 dynamod3 dynamode ec8acsis effmarti elecneut @enca enceinte enermode enrichis epaifut @EVN_IDT @EVN_MNG exac @excel1 exec execrxt exic explorer factorie fcourant fdens fiabili filc filtreke finvrepa @FIS_1 @FIS_2 @FIS_3DS @FIS_3 fixhc @fix flambage floquet forbloc for_cont fornod four2tri fpal frctrace @frenet frepart freqperi fronabs f_s2pi ftran gam1 @gattpar g_calcul gdflim1 @global gresp g_theta1 g_theta g_ulti2D g_ultifr hasofer hauban hbm_post hbm h_b @helice @HISTOGR hrayo hrcav htc_chbw htc_per htctran htc_wtr htc_www ht_pro idbht identi images impchi1 impchi2 @inclusi indibeta indiobje inductio inichi1 inichi2 inichimi inimur ininlin initEFMH @initia initou
+function2=initVF in_mini int_comp @INTLIN @isosurf issleq jeu @keff kepsilon kresp kr_pro kuet kweib1 @lacalc @lacrit @lafail @lagraph @lakappa @lalist @lamass @lamat @laread @larig @lasiep @laverg @lavis lch2clim lch2delp lch2eps lch2fion lch2iaff lch2impr lch2itma lch2itso lch2logc lch2mdel lch2nfi lch2nite lch2nty4 lch2prep lch2sort lch2temp lch2tot lespcomp lespityp lesplogk lespstoe libdd lichxmx licochar licomnom liespece liliden liliech limemeca linbiden linvcomp @lireent lireflot @lireris lirsoso @LISPA16 @lisse litemper lsosfrac lsossoli mag_nlin mailstru mailvoro @MATETHM mayoto m_dampin m_damp_K mdnris mdrecomb @mesu @mistpar @mod @MODTRI montagne moyespec mrcfram1 mrcfram2 mrcfram3 mrcfram4 mrcframe mrcshell mrctrace mulc multidec multirec @m_voro nataf newmark nocomchi noespchi normalim norv1 nsclim orbite @ortho @otcoque @otpout ouvfiss parastat parmchi2 pasapas pas_defa pas_epth pas_etat pas_helm @pashist pas_init pas_mate pas_rayo pas_repr pas_resu pas_verm @p_boit2 @PCPT peche pencechi pfluage phasage @plotpri pmpb pointcyl @pointir pointsph @polo polyno @pomi postddi1 postddi postou postvibr pot_scal pot_vect pout2mas ppre @PRCA1 @PRCA2 @PRCA3 @PRCA4 @PRCA5 prepaenc probabrs probdens prochext prodt projgril propag psatt @p_voro quadratu ramberg @rayo ray @rccmco2 @rccm @rccmtrv rdiv recentre recompom recompos @relief @rempcou @rempfat @rempgro repart @repere repix reseau reso_asy respowns respowsp retrait retsat rosent rota_imp rvsat rvst2 @SATURAT satutils sge shfdt sif signcorr signderi signenve signsynt @sigref silam sissib solvEFMH solvVF SPAL spplanc @statio @stat @stbl @syslin TABLO2D TABLO3D takm_efz takm_moy tension @test thermic t_ipol @tole2 @tole3 topochan topocrit topofilt topomate topoptim toporstr toposauv toposurf @toro @total t_piteta trac3d_2 trac3d trachis trachit tracmeca tracpart tractufi traduire trangeol transfer transgen transit0 transit1 transit2 transit3 translin transnon trc trtrajec unilater unpas updaEFMH updaVF valnom valspe vapdif varihc varihcsu @vecoul vertytab @vis3d @visor vitetfor viteunil vnimp vtimp weibull xbif @zacplus @zacpro1 @zacpro2 @zacpro3 @zacpro4 @zacpro5 @zacpro6 @zacpro7 @zacpro8 zigzag zonfis
+operator=opti fin born dens droi lapl cerc mota quel inte para souc et poin plus moin tran rota trac inve cote elem cont diff chan list surf conf info tour homo affi syme incl elim titr racc tass sort lire bary dall orie manu oubl comp cout pave comm noeu mot nbel nbno noti face coor norm temp volu lect sauf prog + - * / ** flot enti log exp depl psca pvec pmix liai regl hook sols reso date rigi bloq depi hota stru text proj venv elst jonc reco mass clst sigm rela forc mome vloc base dime extr vers vibr maxi xtmx ytmx < eg <eg ou ega non neg mult pjba crit diag xtx uniq bsig deda max1 mots repe quit si sino fins ipol abs sin cos atg enve isov detr enle remp inse coli tria tabl redu symt anti resu pres exco nomc saut defo appu inva prin vmis ksig sign suit valp ordo tire rege dess amor char coul chpo afco evol orth thet comb deve vect pica capi/ data mdir2/copi dimn sauv rest cara mate gene capa elfe jaco plas gree mode finp xty debp ktan form mess nnor cubp cubt cer3 fdt seis ener epsi intg cour reac supe zero depb exci kp acti elas erre cong lump obte vari modi masq exis mini grad ense ifre dfou sigs mapp somm brui rten dspr tfr tote graf tres type osci spo inde chsp tagr perm cabl fofi work qulx debi cmoy comt cond flux rimp filt tfri conc iter acqu sour conv acoh psmo asih ecou mena synt argu atah dyne fonc resp plac vale proi exce aret calp indi act3 biot dedu conn nloc chai cosi cvol diad hann insi lsqf ltl pert prns psrs siar spon visa cneq ccon mesu pile simp util menu cosh sinh tanh deg3 aide racp refe ksof veri nske kmab noel doma fpu gmv eqpr eqex vibc avct kdia kmtp kmf mdia dfdt tcrr tcnm sqtp somt nlin cmct kcht lapn raft klop kres cson fimp/ data mdir3/nuag weip khis kops fsur flam elno dbit ns toim fimp kmbt kbbt dudw frot tsca konv kcha mhyb matp hdeb hvit hybp smtp divu mocu chau tail erf sens impo dans impf ntab fron fuit epth fpt kfpt fpa kfpa echi qond kpro ffor raye rayn vsur traj aju1 aju2 frig excf nomm prec erfc onde cfl dedo dcov parc pola chi1 chi2 pent pret meth xxt cblo genj zleg mesm fion neut logk coac resi mutu sore diri lign obje debm finm heri deco exte dmmu dmtd bmtd ssch mrem assi fiss prim annu prob sais choi deto part clmi pmat excp prop phaj alea gnfl mpro sste adve bgmo ecfe coup verm dfer gyro cori kent fant itrc reto ijet impe moca levm ravc idli raff cfnd adet psip acos asin tan trie gane hist etg oter xfem rfco vide voro prra posi mise misl coll pod
+
+[settings]
+# default extension used when saving files
+extension=dgibi
+comment_single=*
+
+# set to false if a comment character/string should start at column 0 of a line, true uses any
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
+  #command_example();
+# setting to false would generate this
+# command_example();
+# This setting works only for single line comments
+comment_use_indent=false
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+run_cmd=castem19 "%f"

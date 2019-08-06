@@ -51,7 +51,7 @@ const TMWorkspace *tm_get_workspace(void);
 gboolean tm_workspace_load_global_tags(const char *tags_file, TMParserType mode);
 
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
-	int includes_count, const char *tags_file, TMParserType lang);
+	int includes_count, const char *tags_file, TMParserType lang, gchar *pattern0);
 
 GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
 	TMTagAttrType *attrs, TMParserType lang);

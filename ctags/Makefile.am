@@ -50,7 +50,8 @@ parsers = \
 	parsers/tex.c \
 	parsers/txt2tags.c \
 	parsers/verilog.c \
-	parsers/vhdl.c
+	parsers/vhdl.c \
+	parsers/GIBIANE.c
 
 libctags_la_SOURCES = \
 	main/args.c \

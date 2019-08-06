@@ -1051,6 +1051,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(XML);
 		init_styleset_case(YAML);
 		init_styleset_case(ZEPHIR);
+		init_styleset_case(GIBIANE);
 		default:
 			if (ft->lexer_filetype)
 				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
@@ -1139,6 +1140,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(XML);
 		styleset_case(YAML);
 		styleset_case(ZEPHIR);
+		styleset_case(GIBIANE);
 		case GEANY_FILETYPES_NONE:
 		default:
 			styleset_default(sci, ft->id);
@@ -1841,6 +1843,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_MARKDOWN:
 			/* there is no comment type in those lexers, listing here just for completeness */
 			return FALSE;
+
+		case SCLEX_GIBIANE:
+			return (style == SCE_GIBIANE_COMMENT);
+
 	}
 	return FALSE;
 }

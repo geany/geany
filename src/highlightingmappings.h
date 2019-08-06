@@ -1625,6 +1625,38 @@ static const HLKeyword highlighting_keywords_YAML[] =
 #define highlighting_keywords_ZEPHIR	highlighting_keywords_PHP
 #define highlighting_properties_ZEPHIR	highlighting_properties_PHP
 
+/* GIBIANE */
+#define highlighting_lexer_GIBIANE		SCLEX_GIBIANE
+static const HLStyle highlighting_styles_GIBIANE[] =
+{
+	{ SCE_GIBIANE_DEFAULT,			"default",			FALSE },
+	{ SCE_GIBIANE_COMMENT,			"comment",			FALSE },
+	{ SCE_GIBIANE_STRING,			"string",			FALSE },
+	{ SCE_GIBIANE_NUMBER,			"number",			FALSE },
+	{ SCE_GIBIANE_TABLE,			"table",			FALSE },
+	{ SCE_GIBIANE_WORD,				"word",				FALSE },
+	{ SCE_GIBIANE_WORD2,			"word2",			FALSE },
+	{ SCE_GIBIANE_WORD3,			"word3",			FALSE },
+	{ SCE_GIBIANE_WORD4,			"word4",			FALSE },
+	{ SCE_GIBIANE_WORD5,			"word5",			FALSE },
+	{ SCE_GIBIANE_WORD6,			"word6",			FALSE },
+	{ SCE_GIBIANE_WORD7,			"word7",			FALSE },
+	{ SCE_GIBIANE_WORD8,			"word8",			FALSE }
+};
+
+static const HLKeyword highlighting_keywords_GIBIANE[] =
+{
+	{ 0, "conditional",	FALSE },
+	{ 1, "test1",		FALSE },
+	{ 2, "loop",		FALSE },
+	{ 3, "task",	    FALSE },
+	{ 4, "element",		FALSE },
+	{ 5, "function1",	FALSE },
+	{ 6, "function2",	FALSE },
+	{ 7, "operator",	FALSE }
+};
+#define highlighting_properties_GIBIANE	    EMPTY_PROPERTIES
+
 G_END_DECLS
 
 #endif /* GEANY_HIGHLIGHTING_MAPPINGS_H */

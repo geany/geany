@@ -74,14 +74,16 @@ filetypes = \
 	filedefs/filetypes.vhdl \
 	filedefs/filetypes.xml \
 	filedefs/filetypes.yaml \
-	filedefs/filetypes.zephir
+	filedefs/filetypes.zephir \
+	filedefs/filetypes.gibiane
 
 tagfiles = \
 	tags/std99.c.tags \
 	tags/std.php.tags \
 	tags/std.py.tags \
 	tags/std.pas.tags \
-	tags/entities.html.tags
+	tags/entities.html.tags \
+	tags/std.dgibi.tags
 
 template_files = \
 	templates/files/file.html \
