@@ -2291,6 +2291,22 @@ static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint 
 }
 
 
+/* set GeanyBuildCommand if it doesn't already exist and there is a command */
+static void assign_cmd(GeanyBuildCommand *type, guint id,
+		const gchar *label, gchar *value)
+{
+	if (!EMPTY(value) && ! type[GBO_TO_CMD(id)].exists)
+	{
+		type[GBO_TO_CMD(id)].exists = TRUE;
+		SETPTR(type[GBO_TO_CMD(id)].label, g_strdup(label));
+		SETPTR(type[GBO_TO_CMD(id)].command, value);
+		SETPTR(type[GBO_TO_CMD(id)].working_dir, NULL);
+		type[GBO_TO_CMD(id)].old = TRUE;
+	}
+	else
+		g_free(value);
+}
+
 /* for the specified source load new format build menu items or try to make some sense of
  * old format setings, not done perfectly but better than ignoring them */
 void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
@@ -2367,21 +2383,6 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 
 	/* load old [build_settings] values if there is no value defined by [build-menu] */
 
-	/* set GeanyBuildCommand if it doesn't already exist and there is a command */
-/* TODO: rewrite as function */
-#define ASSIGNIF(type, id, string, value)								\
-	do {																\
-		gchar *ASSIGNF__value = (value);								\
-		if (!EMPTY(ASSIGNF__value) && ! type[GBO_TO_CMD(id)].exists) {	\
-			type[GBO_TO_CMD(id)].exists = TRUE;							\
-			SETPTR(type[GBO_TO_CMD(id)].label, g_strdup(string));		\
-			SETPTR(type[GBO_TO_CMD(id)].command, ASSIGNF__value);		\
-			SETPTR(type[GBO_TO_CMD(id)].working_dir, NULL);				\
-			type[GBO_TO_CMD(id)].old = TRUE;							\
-		} else															\
-			g_free(ASSIGNF__value);										\
-	} while (0)
-
 	switch (src)
 	{
 		case GEANY_BCS_FT:
@@ -2391,21 +2392,21 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			{
 				if (ft->priv->filecmds == NULL)
 					ft->priv->filecmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
-				ASSIGNIF(ft->priv->filecmds, GEANY_GBO_COMPILE, _("_Compile"), value);
+				assign_cmd(ft->priv->filecmds, GEANY_GBO_COMPILE, _("_Compile"), value);
 			}
 			value = g_key_file_get_string(config, "build_settings", "linker", NULL);
 			if (value != NULL)
 			{
 				if (ft->priv->filecmds == NULL)
 					ft->priv->filecmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
-				ASSIGNIF(ft->priv->filecmds, GEANY_GBO_BUILD, _("_Build"), value);
+				assign_cmd(ft->priv->filecmds, GEANY_GBO_BUILD, _("_Build"), value);
 			}
 			value = g_key_file_get_string(config, "build_settings", "run_cmd", NULL);
 			if (value != NULL)
 			{
 				if (ft->priv->execcmds == NULL)
 					ft->priv->execcmds = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
-				ASSIGNIF(ft->priv->execcmds, GEANY_GBO_EXEC, _("_Execute"), value);
+				assign_cmd(ft->priv->execcmds, GEANY_GBO_EXEC, _("_Execute"), value);
 			}
 			if (ft->error_regex_string == NULL)
 				ft->error_regex_string = g_key_file_get_string(config, "build_settings", "error_regex", NULL);
@@ -2450,11 +2451,11 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			{
 				if (non_ft_pref == NULL)
 					non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
-				ASSIGNIF(non_ft_pref, GEANY_GBO_CUSTOM, _("Make Custom _Target..."),
+				assign_cmd(non_ft_pref, GEANY_GBO_CUSTOM, _("Make Custom _Target..."),
 						g_strdup_printf("%s ", value));
-				ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_OBJECT, _("Make _Object"),
+				assign_cmd(non_ft_pref, GEANY_GBO_MAKE_OBJECT, _("Make _Object"),
 						g_strdup_printf("%s %%e.o",value));
-				ASSIGNIF(non_ft_pref, GEANY_GBO_MAKE_ALL, _("_Make"), value);
+				assign_cmd(non_ft_pref, GEANY_GBO_MAKE_ALL, _("_Make"), value);
 			}
 			break;
 		default:
