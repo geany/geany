@@ -4297,26 +4297,30 @@ type
     =====   =======================
 
 
+[build-menu] filetype section
+`````````````````````````````
+This supports the same keys as the ``geany.conf`` `[build-menu] section`_.
+
+Example::
+
+    FT_00_LB=_Compile
+    FT_00_CM=gcc -c "%f"
+    FT_00_WD=
+    FT_01_LB=_Build
+    FT_01_CM=gcc -o "%e" "%f"
+    FT_01_WD=
+    EX_00_LB=_Execute
+    EX_00_CM="./%e"
+    EX_00_WD=
+    error_regex=^([^:]+):([0-9]+):
+
 [build_settings] section
 ````````````````````````
-
-As of Geany 0.19 this section is supplemented by the `[build-menu] section`_.
+As of Geany 0.19 this section is for legacy support.
 Values that are set in the [build-menu] section will override those in this section.
 
 error_regex
-    This is a Perl-compatible regular expression (PCRE) to parse a filename
-    (absolute or relative) and line number from the build output.
-    If undefined, Geany will fall back to its default error message parsing.
-
-    Only the first two match groups will be read by Geany. These groups can
-    occur in any order: the match group consisting of only digits will be used
-    as the line number, and the other group as the filename.  In no group
-    consists of only digits, the match will fail.
-
-    *Example:* ``error_regex=^(.+):([0-9]+):[0-9]+``
-
-    This will parse a message such as:
-    ``test.py:7:24: E202 whitespace before ']'``
+    See [build-menu] section for details.
 
 **Build commands**
 
@@ -4734,6 +4738,8 @@ section for details.  All the settings can be configured from the dialogs
 except the execute command in filetype files and filetype definitions in
 the project file, so these are the only ones which need hand editing.
 
+Menu commands
+`````````````
 The build-menu section stores one entry for each setting for each menu item that
 is configured.  The keys for these settings have the format:
 
@@ -4754,6 +4760,25 @@ where:
   - LB for label
   - CM for command
   - WD for working directory
+
+See `[build-menu] filetype section`_ for an example.
+
+Error regular expression
+````````````````````````
+error_regex
+    This is a Perl-compatible regular expression (PCRE) to parse a filename
+    (absolute or relative) and line number from the build output.
+    If undefined, Geany will fall back to its default error message parsing.
+
+    Only the first two match groups will be read by Geany. These groups can
+    occur in any order: the match group consisting of only digits will be used
+    as the line number, and the other group as the filename.  In no group
+    consists of only digits, the match will fail.
+
+    *Example:* ``error_regex=^(.+):([0-9]+):[0-9]+``
+
+    This will parse a message such as:
+    ``test.py:7:24: E202 whitespace before ']'``
 
 
 Project file format
