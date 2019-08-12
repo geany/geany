@@ -429,7 +429,7 @@ msgstr "名前"
 
 #: ../data/geany.glade.h:84
 msgid "Appearance"
-msgstr "外観"
+msgstr "出現"
 
 #: ../data/geany.glade.h:85
 msgid "Show documents list"
