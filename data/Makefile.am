@@ -86,6 +86,7 @@ tagfiles = \
 template_files = \
 	templates/files/file.html \
 	templates/files/file_html5.html \
+	templates/files/file.css \
 	templates/files/file.php \
 	templates/files/file.rb \
 	templates/files/file.tex \
