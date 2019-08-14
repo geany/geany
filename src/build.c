@@ -125,6 +125,7 @@ static void show_build_result_message(gboolean failure);
 static void process_build_output_line(gchar *msg, gint color);
 static void show_build_commands_dialog(void);
 static void on_build_menu_item(GtkWidget *w, gpointer user_data);
+static void load_old_menu(GKeyFile *config, GeanyBuildSource src, gpointer p);
 
 void build_finalize(void)
 {
@@ -2291,31 +2292,13 @@ static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint 
 }
 
 
-/* set GeanyBuildCommand if it doesn't already exist and there is a command */
-static void assign_cmd(GeanyBuildCommand *type, guint id,
-		const gchar *label, gchar *value)
-{
-	if (!EMPTY(value) && ! type[GBO_TO_CMD(id)].exists)
-	{
-		type[GBO_TO_CMD(id)].exists = TRUE;
-		SETPTR(type[GBO_TO_CMD(id)].label, g_strdup(label));
-		SETPTR(type[GBO_TO_CMD(id)].command, value);
-		SETPTR(type[GBO_TO_CMD(id)].working_dir, NULL);
-		type[GBO_TO_CMD(id)].old = TRUE;
-	}
-	else
-		g_free(value);
-}
-
 /* for the specified source load new format build menu items or try to make some sense of
- * old format setings, not done perfectly but better than ignoring them */
+ * old format settings, not done perfectly but better than ignoring them */
 void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 {
 	GeanyFiletype *ft;
 	GeanyProject *pj;
 	gchar **ftlist;
-	gchar *value, *basedir, *makebasedir;
-	gboolean bvalue = FALSE;
 
 	if (g_key_file_has_group(config, build_grp_name))
 	{
@@ -2380,8 +2363,32 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 				break;
 		}
 	}
-
 	/* load old [build_settings] values if there is no value defined by [build-menu] */
+	load_old_menu(config, src, p);
+}
+
+
+/* set GeanyBuildCommand if it doesn't already exist and there is a command */
+static void assign_cmd(GeanyBuildCommand *type, guint id,
+		const gchar *label, gchar *value)
+{
+	if (!EMPTY(value) && ! type[GBO_TO_CMD(id)].exists)
+	{
+		type[GBO_TO_CMD(id)].exists = TRUE;
+		SETPTR(type[GBO_TO_CMD(id)].label, g_strdup(label));
+		SETPTR(type[GBO_TO_CMD(id)].command, value);
+		SETPTR(type[GBO_TO_CMD(id)].working_dir, NULL);
+		type[GBO_TO_CMD(id)].old = TRUE;
+	}
+	else
+		g_free(value);
+}
+
+static void load_old_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
+{
+	GeanyFiletype *ft;
+	gchar *value, *basedir, *makebasedir;
+	gboolean bvalue = FALSE;
 
 	switch (src)
 	{
