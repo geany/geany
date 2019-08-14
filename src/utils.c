@@ -1308,12 +1308,10 @@ void utils_free_pointers(gsize arg_count, ...)
 }
 
 
-/* currently unused */
-#if 0
 /* Creates a string array deep copy of a series of non-NULL strings.
- * The first argument is nothing special.
- * The list must be ended with NULL.
- * If first is NULL, NULL is returned. */
+ * The first argument is nothing special and must not be NULL.
+ * The list must be terminated with NULL. */
+GEANY_EXPORT_SYMBOL
 gchar **utils_strv_new(const gchar *first, ...)
 {
 	gsize strvlen, i;
@@ -1343,7 +1341,6 @@ gchar **utils_strv_new(const gchar *first, ...)
 	strv[i] = NULL;
 	return strv;
 }
-#endif
 
 
 /**
@@ -2053,7 +2050,8 @@ gchar **utils_strv_join(gchar **first, gchar **second)
  * @return The common prefix that is part of all strings (maybe empty), or NULL if an empty list
  *         was passed in.
  */
-static gchar *utils_strv_find_common_prefix(gchar **strv, gssize strv_len)
+GEANY_EXPORT_SYMBOL
+gchar *utils_strv_find_common_prefix(gchar **strv, gssize strv_len)
 {
 	gsize num;
 
@@ -2087,7 +2085,8 @@ static gchar *utils_strv_find_common_prefix(gchar **strv, gssize strv_len)
  *
  * @return The common prefix that is part of all strings.
  */
-static gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len)
+GEANY_EXPORT_SYMBOL
+gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len)
 {
 	gchar *first, *_sub, *sub;
 	gsize num;
