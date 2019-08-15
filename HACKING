@@ -219,6 +219,10 @@ Coding
   ``gint``, use a ``gchar`` for individual (ASCII/UTF-8) string
   characters rather than ``gint``, and use a ``guint`` for integers
   which cannot be negative rather than ``gint``.
+* Avoid using untyped pointers (e.g. gpointer) where practical.
+* Prefer loops to calling *_foreach() with a non-NULL untyped 
+  ``user_data`` pointer parameter, unless external iteration is not 
+  supported (e.g. for tree structures).
 * Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
   add noise to the code with little real benefit.
 
