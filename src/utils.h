@@ -302,7 +302,7 @@ gchar **utils_strv_join(gchar **first, gchar **second) G_GNUC_WARN_UNUSED_RESULT
 
 gchar *utils_strv_find_common_prefix(gchar **strv, gssize strv_len) G_GNUC_WARN_UNUSED_RESULT;
 
-gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len) G_GNUC_WARN_UNUSED_RESULT;
+gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len, const gchar *delim) G_GNUC_WARN_UNUSED_RESULT;
 
 gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len);
 
