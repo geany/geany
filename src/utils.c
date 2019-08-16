@@ -2086,7 +2086,7 @@ gchar *utils_strv_find_common_prefix(gchar **strv, gssize strv_len)
  * @return The common prefix that is part of all strings.
  */
 GEANY_EXPORT_SYMBOL
-gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len)
+gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len, const gchar *delim)
 {
 	gchar *first, *_sub, *sub;
 	gsize num;
@@ -2112,8 +2112,18 @@ gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len)
 		/* No point in continuing if the remainder is too short */
 		if (max > chars_left)
 			break;
+		/* If delimiters are given, we only need to compare substrings which start and
+		 * end with one of them, so skip any non-delim chars at front ... */
+		if (NZV(delim) && (strchr(delim, _sub[0]) == NULL))
+			continue;
 		for (n_chars = 1; n_chars <= chars_left; n_chars++)
 		{
+			if (NZV(delim))
+			{	/* ... and advance to the next delim char at the end, if any */
+				if (!_sub[n_chars] || strchr(delim, _sub[n_chars]) == NULL)
+					continue;
+				n_chars += 1;
+			}
 			g_strlcpy(sub, _sub, n_chars+1);
 			found = 1;
 			for (gsize i = 1; i < num; i++)
@@ -2199,7 +2209,7 @@ gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len)
 	}
 
 	lcs_len = 0;
-	substring = (i == num) ? utils_strv_find_lcs(names, num) : NULL;
+	substring = (i == num) ? utils_strv_find_lcs(names, num, G_DIR_SEPARATOR_S"/") : NULL;
 	if (NZV(substring))
 	{
 		/* Strip leading component. */

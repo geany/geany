@@ -106,51 +106,86 @@ static void test_utils_strv_find_common_prefix(void)
 	g_strfreev(data);
 }
 
+#define DIR_SEP "\\/"
 void test_utils_strv_find_lcs(void)
 {
 	gchar **data, *s;
 
-	s = utils_strv_find_lcs(NULL, 0);
+	s = utils_strv_find_lcs(NULL, 0, "");
 	g_assert_null(s);
 
 	data = utils_strv_new("", NULL);
-	s = utils_strv_find_lcs(data, -1);
+	s = utils_strv_find_lcs(data, -1, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "");
 	g_free(s);
 	g_strfreev(data);
 
 	data = utils_strv_new("1", "2", "3", NULL);
-	s = utils_strv_find_lcs(data, -1);
+	s = utils_strv_find_lcs(data, -1, "");
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "");
 	g_free(s);
 	g_strfreev(data);
 
 	data = utils_strv_new("abc", "amn", "axy", NULL);
-	s = utils_strv_find_lcs(data, -1);
+	s = utils_strv_find_lcs(data, -1, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "a");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "");
+	g_free(s);
+	g_strfreev(data);
+
+	data = utils_strv_new("bca", "mna", "xya", NULL);
+	s = utils_strv_find_lcs(data, -1, "");
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "a");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "");
 	g_free(s);
 	g_strfreev(data);
 
 	data = utils_strv_new("abc", "", "axy", NULL);
-	s = utils_strv_find_lcs(data, -1);
+	s = utils_strv_find_lcs(data, -1, "");
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "");
+	g_free(s);
+	g_strfreev(data);
+
+	data = utils_strv_new("a123b", "b123c", "c123d", NULL);
+	s = utils_strv_find_lcs(data, -1, "");
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "123");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "");
 	g_free(s);
 	g_strfreev(data);
 
 	data = utils_strv_new("22", "23", "33", NULL);
-	s = utils_strv_find_lcs(data, 1);
+	s = utils_strv_find_lcs(data, 1, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "22");
 	g_free(s);
-	s = utils_strv_find_lcs(data, 2);
+	s = utils_strv_find_lcs(data, 2, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "2");
 	g_free(s);
-	s = utils_strv_find_lcs(data, 3);
+	s = utils_strv_find_lcs(data, 3, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "");
 	g_free(s);
@@ -163,47 +198,76 @@ void test_utils_strv_find_lcs(void)
 	                      "/home/user/src/geany/src/main.c",
 	                      "/home/user/src/geany-plugins/addons/src/addons.c",
 	                      NULL);
-	s = utils_strv_find_lcs(data, 4);
+	s = utils_strv_find_lcs(data, 4, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "/home/user/src/geany/src/s");
 	g_free(s);
-	s = utils_strv_find_lcs(data, 5);
+	s = utils_strv_find_lcs(data, 4, DIR_SEP);
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "/home/user/src/geany/src/");
 	g_free(s);
-	s = utils_strv_find_lcs(data, -1);
+	s = utils_strv_find_lcs(data, 5, "");
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "/home/user/src/geany/src/");
+	g_free(s);
+	s = utils_strv_find_lcs(data, 5, DIR_SEP);
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "/home/user/src/geany/src/");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "/home/user/src/geany");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "/home/user/src/");
 	g_free(s);
 	g_strfreev(data);
 
 	data = utils_strv_new("/src/a/app-1.2.3/src/lib/module/source.c",
 	                      "/src/b/app-2.2.3/src/module/source.c", NULL);
-	s = utils_strv_find_lcs(data, -1);
+	s = utils_strv_find_lcs(data, -1, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "/module/source.c");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "/module/");
+	g_free(s);
+	g_strfreev(data);
+
+	data = utils_strv_new("/src/a/app-1.2.3/src/lib/module\\source.c",
+	                      "/src/b/app-2.2.3/src/module\\source.c", NULL);
+	s = utils_strv_find_lcs(data, -1, "");
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "/module\\source.c");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "/module\\");
 	g_free(s);
 	g_strfreev(data);
 
 	data = utils_strv_new("/src/a/app-1.2.3/src/lib/module/",
 	                      "/src/b/app-2.2.3/src/module/", NULL);
-	s = utils_strv_find_lcs(data, -1);
+	s = utils_strv_find_lcs(data, -1, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, ".2.3/src/");
 	g_free(s);
-	g_strfreev(data);
-
-	data = utils_strv_new("a123b", "b123c", "c123d", NULL);
-	s = utils_strv_find_lcs(data, -1);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
 	g_assert_nonnull(s);
-	g_assert_cmpstr(s, ==, "123");
+	g_assert_cmpstr(s, ==, "/module/");
 	g_free(s);
 	g_strfreev(data);
 
 	data = utils_strv_new("/usr/local/bin/geany", "/usr/bin/geany", "/home/user/src/geany/src/geany", NULL);
-	s = utils_strv_find_lcs(data, -1);
+	s = utils_strv_find_lcs(data, -1, "");
 	g_assert_nonnull(s);
 	g_assert_cmpstr(s, ==, "/geany");
+	g_free(s);
+	s = utils_strv_find_lcs(data, -1, DIR_SEP);
+	g_assert_nonnull(s);
+	g_assert_cmpstr(s, ==, "");
 	g_free(s);
 	g_strfreev(data);
 }
@@ -333,21 +397,11 @@ void test_utils_strv_shorten_file_list(void)
 	g_strfreev(result);
 	g_strfreev(data);
 
-	/* This case shows a weakness. It would be better to elipsize "module". Instead,
-	 * nothing is elipsized as the code determines ".2.3/src/" to be the
-	 * longest common substring. Then it reduces it to directory components, so "src" remains.
-	 * This is shorter than the threshold of 5 chars and consequently not elipsized
-	 *
-	 * Plain utils_strv_find_lcs() actually finds /module/source.c,
-	 * but utils_strv_shorten_file_list() calls it without the file name part, so
-	 * ".2.3/src/" is longer than "/module/". This is illustrated in the test
-	 * test_utils_strv_find_lcs()
-	 */
 	data = utils_strv_new("/src/a/app-1.2.3/src/lib/module/source.c",
 	                      "/src/b/app-2.2.3/src/module/source.c", NULL);
 	result = utils_strv_shorten_file_list(data, -1);
-	expected = utils_strv_new("a/app-1.2.3/src/lib/module/source.c",
-	                          "b/app-2.2.3/src/module/source.c", NULL);
+	expected = utils_strv_new("a/app-1.2.3/src/lib/.../source.c",
+	                          "b/app-2.2.3/src/.../source.c", NULL);
 	g_assert_true(strv_eq(result, expected));
 	g_strfreev(expected);
 	g_strfreev(result);
