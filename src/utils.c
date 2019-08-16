@@ -2055,7 +2055,7 @@ gchar *utils_strv_find_common_prefix(gchar **strv, gssize strv_len)
 {
 	gsize num;
 
-	if (!NZV(strv))
+	if (strv_len == 0)
 		return NULL;
 
 	num = (strv_len == -1) ? g_strv_length(strv) : (gsize) strv_len;
@@ -2096,9 +2096,10 @@ gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len, const gchar *delim)
 	char *lcs;
 	gsize found;
 
-	num = (strv_len == -1) ? g_strv_length(strv) : (gsize) strv_len;
-	if (num < 1)
+	if (strv_len == 0)
 		return NULL;
+
+	num = (strv_len == -1) ? g_strv_length(strv) : (gsize) strv_len;
 
 	first = strv[0];
 	len = strlen(first);
@@ -2168,86 +2169,71 @@ gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len)
 {
 	gsize num;
 	gsize i;
-	gchar *prefix, *substring, *lcs;
-	gchar *start, *end;
+	gchar *prefix, *lcs, *end;
 	gchar **names;
-	gsize prefix_len, lcs_len;
+	gsize prefix_len = 0, lcs_len = 0;
 
-	/* We don't dereference file_names if file_names_len == 0. */
-	g_return_val_if_fail(file_names_len == 0 || file_names != NULL, NULL);
+	if (file_names_len == 0)
+		return g_new0(gchar *, 1);
 
-	/* The return value shall have exactly the same size as the input. If the input is a
-	 * GStrv (last element is NULL), the output will follow suit. */
+	g_return_val_if_fail(file_names != NULL, NULL);
+
 	num = (file_names_len == -1) ? g_strv_length(file_names) : (gsize) file_names_len;
+	/* Always include a terminating NULL, enables easy freeing with g_strfreev()
+	 * We just copy the pointers so we can advance them here. But don't
+	 * forget to duplicate the strings before returning.
+	 */
+	names = g_new(gchar *, num + 1);
+	memcpy(names, file_names, num * sizeof(gchar *));
 	/* Always include a terminating NULL, enables easy freeing with g_strfreev() */
-	names = g_new0(gchar *, num + 1);
+	names[num] = NULL;
 
-	prefix = utils_strv_find_common_prefix(file_names, num);
 	/* First: determine the common prefix, that will be stripped.
-	 * Don't strip single-letter prefixes, such as '/' */
-	prefix_len = 0;
-	if (NZV(prefix) && prefix[1])
+	/* We only want to strip full path components, including the trailing slash.
+	 * Except if the component is just "/".
+	 */
+	prefix = utils_strv_find_common_prefix(names, num);
+	end = strrchr(prefix, G_DIR_SEPARATOR);
+	if (end && end > prefix)
 	{
-		/* Only strip directory components, include trailing '/' */
-		start = strrchr(prefix, G_DIR_SEPARATOR);
-		if (start)
-			prefix_len = start - prefix + 1;
+		prefix_len = end - prefix + 1; /* prefix_len includes the trailing slash */
+		for (i = 0; i < num; i++)
+			names[i] += prefix_len;
 	}
 
-	/* Second: determine the longest common substring (lcs), that will be ellipsized. Look
-	 * only at the directory parts since we don't want the file name to be detected as the lcs.
-	 * Also, the first component cannot be common (since it would be part of the common prefix),
-	 * so ignore that as well.
-	 * Surround with dir separators so that we can easily determine the boundaries for ellipsizing. */
-	for (i = 0; i < num; i++) {
-		start = strchr(file_names[i] + prefix_len, G_DIR_SEPARATOR);
-		end = start ? strrchr(start+1, G_DIR_SEPARATOR) : NULL;
-		/* Breaking out early will also skip looking for lcs (wouldn't succeed anyway). */
-		if (!start || !end)
-			break;
-		names[i] = g_strndup(start, end-start+1);
-	}
-
-	lcs_len = 0;
-	substring = (i == num) ? utils_strv_find_lcs(names, num, G_DIR_SEPARATOR_S"/") : NULL;
-	if (NZV(substring))
+	/* Second: determine the longest common substring (lcs), that will be ellipsized. Again,
+	 * we look only for full path compnents so that we ellipsize between separators. This implies
+	 * that the file name cannot be ellipsized which is desirable anyway.
+	 */
+	lcs = utils_strv_find_lcs(names, num, G_DIR_SEPARATOR_S"/");
+	if (lcs)
 	{
-		/* Strip leading component. */
-		start = strchr(substring, G_DIR_SEPARATOR);
-		if (start)
-		{
-			lcs = start + 1;
-			/* Strip trailing components (perhaps empty). */
-			end = strrchr(lcs, G_DIR_SEPARATOR);
-			if (end)
-			{
-				*end = '\0';
-				lcs_len = strlen(lcs);
-				/* Don't bother for tiny common parts (which are often just "." or "/"). */
-				if (lcs_len < 5)
-					lcs_len = 0;
-			}
-		}
+		lcs_len = strlen(lcs);
+		/* Don't bother for tiny common parts (which are often just "." or "/"). Beware
+		 * that lcs includes the enclosing dir separators so the part must be at least 5 chars
+		 * to be eligible for ellipsizing.
+		 */
+		if (lcs_len < 7)
+			lcs_len = 0;
 	}
 
-	/* Finally build the shortened list of unique file names */
+	/* Last: build the shortened list of unique file names */
 	for (i = 0; i < num; i++)
 	{
-		start = file_names[i] + prefix_len;
 		if (lcs_len == 0)
 		{	/* no lcs, copy without prefix */
-			SETPTR(names[i], g_strdup(start));
+			names[i] = g_strdup(names[i]);
 		}
 		else
 		{
-			const gchar *lcs_start = strstr(start, lcs);
+			const gchar *lcs_start = strstr(names[i], lcs);
 			const gchar *lcs_end = lcs_start + lcs_len;
-			/* Maybe replace with unicode's "…" ? */
-			SETPTR(names[i], g_strdup_printf("%.*s...%s", (int)(lcs_start - start), start, lcs_end));
+			/* Dir seperators are included in lcs but shouldn't be elipsized. */
+			names[i] = g_strdup_printf("%.*s...%s", (int)(lcs_start - names[i] + 1), names[i], lcs_end - 1);
 		}
 	}
 
-	g_free(substring);
+	g_free(lcs);
 	g_free(prefix);
 
 	return names;
