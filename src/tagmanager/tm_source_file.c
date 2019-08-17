@@ -84,7 +84,7 @@ static int get_path_max(const char *path)
 }
 
 
-#ifdef G_OS_WIN32
+#if defined(G_OS_WIN32) && !defined(HAVE_REALPATH)
 /* realpath implementation for Windows found at http://bugzilla.gnome.org/show_bug.cgi?id=342926
  * this one is better than e.g. liberty's lrealpath because this one uses Win32 API and works
  * with special chars within the filename */
