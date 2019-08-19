@@ -2231,8 +2231,8 @@ you open them. For instance, you type a ``(`` and Geany will automatically
 insert ``)``. With the following options, you can define for which
 characters this should work.
 
-Parenthesis ( )
-    Auto-close parenthesis when typing an opening one
+Parentheses ( )
+    Auto-close parentheses when typing an opening one
 
 Curly brackets { }
     Auto-close curly brackets (braces) when typing an opening one
@@ -3481,6 +3481,10 @@ Select current line(s)          Alt-Shift-L               Selects the current li
 Select to previous word part                              (Extend) selection to previous word part boundary.
 
 Select to next word part                                  (Extend) selection to next word part boundary.
+
+Select to enclosing bracket     Ctrl-Shift-B              Selects the text between the innermost brackets
+                                                          enclosing the cursor position.
+                                                          Works for parentheses, braces and square brackets.
 =============================== ========================= ==================================================
 
 
@@ -3636,6 +3640,7 @@ Goto matching brace             Ctrl-B                    If the cursor is ahead
                                                           is moved to the brace which belongs to the current
                                                           one. If this keyboard shortcut is pressed again,
                                                           the cursor is moved back to the first brace.
+                                                          Also works for parentheses and square brackets.
 
 Toggle marker                   Ctrl-M                    Set a marker on the current line, or clear the
                                                           marker if there already is one.
