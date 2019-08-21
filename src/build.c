@@ -81,6 +81,39 @@ static RunInfo *run_info;
 static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.sh";
 #endif
 
+/* * Convert @c GeanyBuildType to @c GeanyBuildGroup.
+ *
+ * This macro converts @c GeanyBuildType enum values (the "known" commands)
+ * to the group they are part of.
+ *
+ * @param gbo the @c GeanyBuildType value.
+ *
+ * @return the @c GeanyBuildGroup group that @a gbo is in.
+ *
+ * Note this is a macro so that it can be used in static initialisers.
+ **/
+#define GBO_TO_GBG(gbo) \
+	((gbo) > GEANY_GBO_EXEC ? GEANY_GBG_COUNT : \
+		((gbo) >= GEANY_GBO_EXEC ? GEANY_GBG_EXEC : \
+			 ((gbo) >= GEANY_GBO_MAKE_ALL ? GEANY_GBG_NON_FT : GEANY_GBG_FT)))
+
+/* * Convert @c GeanyBuildType to command index.
+ *
+ * This macro converts @c GeanyBuildType enum values (the "known" commands)
+ * to the index within the group.
+ *
+ * @param gbo the @c GeanyBuildType value.
+ *
+ * @return the index of the @a gbo command in its group.
+ *
+ * Note this is a macro so that it can be used in static initialisers.
+ **/
+#define GBO_TO_CMD(gbo) \
+	((gbo) >= GEANY_GBO_COUNT ? (gbo) - GEANY_GBO_COUNT : \
+		((gbo) >= GEANY_GBO_EXEC ? (gbo) - GEANY_GBO_EXEC : \
+			 ((gbo) >= GEANY_GBO_MAKE_ALL ? \
+				(gbo) - GEANY_GBO_MAKE_ALL : (gbo))))
+
 /* pack group (<8) and command (<32) into a user_data pointer */
 #define GRP_CMD_TO_POINTER(grp, cmd) GUINT_TO_POINTER((((grp)&7) << 5) | ((cmd)&0x1f))
 #define GBO_TO_POINTER(gbo) (GRP_CMD_TO_POINTER(GBO_TO_GBG(gbo), GBO_TO_CMD(gbo)))
@@ -2730,3 +2763,59 @@ void build_init(void)
 	/* set the submenu to the toolbar item */
 	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(widgets.build_action), toolmenu);
 }
+
+
+gboolean build_keybinding(guint key_id)
+{
+	GtkWidget *item;
+	BuildMenuItems *menu_items;
+	GeanyDocument *doc = document_get_current();
+
+	if (doc == NULL)
+		return TRUE;
+
+	if (!gtk_widget_is_sensitive(ui_lookup_widget(main_widgets.window, "menu_build1")))
+		return TRUE;
+
+	menu_items = build_get_menu_items(doc->file_type->id);
+	/* TODO make it a table??*/
+	switch (key_id)
+	{
+		case GEANY_KEYS_BUILD_COMPILE:
+			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_COMPILE)];
+			break;
+		case GEANY_KEYS_BUILD_LINK:
+			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_BUILD)];
+			break;
+		case GEANY_KEYS_BUILD_MAKE:
+			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_MAKE_ALL)];
+			break;
+		case GEANY_KEYS_BUILD_MAKEOWNTARGET:
+			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_CUSTOM)];
+			break;
+		case GEANY_KEYS_BUILD_MAKEOBJECT:
+			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)];
+			break;
+		case GEANY_KEYS_BUILD_NEXTERROR:
+			item = menu_items->menu_item[GBG_FIXED][GBF_NEXT_ERROR];
+			break;
+		case GEANY_KEYS_BUILD_PREVIOUSERROR:
+			item = menu_items->menu_item[GBG_FIXED][GBF_PREV_ERROR];
+			break;
+		case GEANY_KEYS_BUILD_RUN:
+			item = menu_items->menu_item[GEANY_GBG_EXEC][GBO_TO_CMD(GEANY_GBO_EXEC)];
+			break;
+		case GEANY_KEYS_BUILD_OPTIONS:
+			item = menu_items->menu_item[GBG_FIXED][GBF_COMMANDS];
+			break;
+		default:
+			item = NULL;
+	}
+	/* Note: For Build menu items it's OK (at the moment) to assume they are in the correct
+	 * sensitive state, but some other menus don't update the sensitive status until
+	 * they are redrawn. */
+	if (item && gtk_widget_is_sensitive(item))
+		gtk_menu_item_activate(GTK_MENU_ITEM(item));
+	return TRUE;
+}
+

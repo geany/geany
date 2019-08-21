@@ -89,7 +89,6 @@ static gboolean cb_func_search_action(guint key_id);
 static gboolean cb_func_goto_action(guint key_id);
 static gboolean cb_func_switch_action(guint key_id);
 static gboolean cb_func_clipboard_action(guint key_id);
-static gboolean cb_func_build_action(guint key_id);
 static gboolean cb_func_document_action(guint key_id);
 static gboolean cb_func_view_action(guint key_id);
 
@@ -320,7 +319,7 @@ static void init_default_kb(void)
 	ADD_KB_GROUP(GEANY_KEY_GROUP_VIEW, _("View"), cb_func_view_action);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_DOCUMENT, _("Document"), cb_func_document_action);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_PROJECT, _("Project"), cb_func_project_action);
-	ADD_KB_GROUP(GEANY_KEY_GROUP_BUILD, _("Build"), cb_func_build_action);
+	ADD_KB_GROUP(GEANY_KEY_GROUP_BUILD, _("Build"), build_keybinding);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_TOOLS, _("Tools"), NULL);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_HELP, _("Help"), NULL);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_FOCUS, _("Focus"), cb_func_switch_action);
@@ -1650,61 +1649,6 @@ static void cb_func_menu_messagewindow(G_GNUC_UNUSED guint key_id)
 		ui_lookup_widget(main_widgets.window, "menu_show_messages_window1"));
 
 	gtk_check_menu_item_set_active(c, ! gtk_check_menu_item_get_active(c));
-}
-
-
-static gboolean cb_func_build_action(guint key_id)
-{
-	GtkWidget *item;
-	BuildMenuItems *menu_items;
-	GeanyDocument *doc = document_get_current();
-
-	if (doc == NULL)
-		return TRUE;
-
-	if (!gtk_widget_is_sensitive(ui_lookup_widget(main_widgets.window, "menu_build1")))
-		return TRUE;
-
-	menu_items = build_get_menu_items(doc->file_type->id);
-	/* TODO make it a table??*/
-	switch (key_id)
-	{
-		case GEANY_KEYS_BUILD_COMPILE:
-			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_COMPILE)];
-			break;
-		case GEANY_KEYS_BUILD_LINK:
-			item = menu_items->menu_item[GEANY_GBG_FT][GBO_TO_CMD(GEANY_GBO_BUILD)];
-			break;
-		case GEANY_KEYS_BUILD_MAKE:
-			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_MAKE_ALL)];
-			break;
-		case GEANY_KEYS_BUILD_MAKEOWNTARGET:
-			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_CUSTOM)];
-			break;
-		case GEANY_KEYS_BUILD_MAKEOBJECT:
-			item = menu_items->menu_item[GEANY_GBG_NON_FT][GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)];
-			break;
-		case GEANY_KEYS_BUILD_NEXTERROR:
-			item = menu_items->menu_item[GBG_FIXED][GBF_NEXT_ERROR];
-			break;
-		case GEANY_KEYS_BUILD_PREVIOUSERROR:
-			item = menu_items->menu_item[GBG_FIXED][GBF_PREV_ERROR];
-			break;
-		case GEANY_KEYS_BUILD_RUN:
-			item = menu_items->menu_item[GEANY_GBG_EXEC][GBO_TO_CMD(GEANY_GBO_EXEC)];
-			break;
-		case GEANY_KEYS_BUILD_OPTIONS:
-			item = menu_items->menu_item[GBG_FIXED][GBF_COMMANDS];
-			break;
-		default:
-			item = NULL;
-	}
-	/* Note: For Build menu items it's OK (at the moment) to assume they are in the correct
-	 * sensitive state, but some other menus don't update the sensitive status until
-	 * they are redrawn. */
-	if (item && gtk_widget_is_sensitive(item))
-		gtk_menu_item_activate(GTK_MENU_ITEM(item));
-	return TRUE;
 }
 
 

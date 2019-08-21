@@ -94,34 +94,6 @@ typedef enum
 /* include the fixed widgets in an array indexed by groups */
 #define GBG_FIXED GEANY_GBG_COUNT
 
-/* * Convert @c GeanyBuildType to @c GeanyBuildGroup.
- *
- * This macro converts @c GeanyBuildType enum values (the "known" commands)
- * to the group they are part of.
- *
- * @param gbo the @c GeanyBuildType value.
- *
- * @return the @c GeanyBuildGroup group that @a gbo is in.
- *
- * Note this is a macro so that it can be used in static initialisers.
- **/
-#define GBO_TO_GBG(gbo) ((gbo)>GEANY_GBO_EXEC?GEANY_GBG_COUNT:((gbo)>=GEANY_GBO_EXEC?GEANY_GBG_EXEC: \
-						 ((gbo) >= GEANY_GBO_MAKE_ALL ? GEANY_GBG_NON_FT : GEANY_GBG_FT)))
-
-/* * Convert @c GeanyBuildType to command index.
- *
- * This macro converts @c GeanyBuildType enum values (the "known" commands)
- * to the index within the group.
- *
- * @param gbo the @c GeanyBuildType value.
- *
- * @return the index of the @a gbo command in its group.
- *
- * Note this is a macro so that it can be used in static initialisers.
- **/
-#define GBO_TO_CMD(gbo) ((gbo)>=GEANY_GBO_COUNT?(gbo)-GEANY_GBO_COUNT:((gbo)>=GEANY_GBO_EXEC?(gbo)-GEANY_GBO_EXEC: \
-						 ((gbo) >= GEANY_GBO_MAKE_ALL ? (gbo)-GEANY_GBO_MAKE_ALL : (gbo))))
-
 enum GeanyBuildFixedMenuItems
 {
 	GBF_NEXT_ERROR,
@@ -210,6 +182,8 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src);
 void build_set_group_count(GeanyBuildGroup grp, gint count);
 
 gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
+
+gboolean build_keybinding(guint key_id);
 
 #endif /* GEANY_PRIVATE */
 
