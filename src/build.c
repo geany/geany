@@ -972,8 +972,8 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		if (spawn_async(working_dir, locale_term_cmd, NULL, NULL, &(run_info[cmdindex].pid),
 			&error))
 		{
-			g_child_watch_add(run_info[cmdindex].pid, (GChildWatchFunc) run_exit_cb,
-								(gpointer) &(run_info[cmdindex]));
+			g_child_watch_add(run_info[cmdindex].pid, run_exit_cb,
+				&(run_info[cmdindex]));
 			build_menu_update(doc);
 		}
 		else
@@ -1585,7 +1585,6 @@ void build_menu_update(GeanyDocument *doc)
 
 	/* show the stop command if a program is running from execute 0 , otherwise show run command */
 	set_stop_button(run_running);
-
 }
 
 
@@ -1596,8 +1595,8 @@ static void set_stop_button(gboolean stop)
 	GtkToolButton *run_button;
 
 	run_button = GTK_TOOL_BUTTON(toolbar_get_widget_by_name("Run"));
-	if (run_button != NULL)
-		button_stock_id = gtk_tool_button_get_stock_id(run_button);
+	if (!run_button) return;
+	button_stock_id = gtk_tool_button_get_stock_id(run_button);
 
 	if (stop && utils_str_equal(button_stock_id, GTK_STOCK_STOP))
 		return;
@@ -1605,16 +1604,8 @@ static void set_stop_button(gboolean stop)
 		return;
 
 	 /* use the run button also as stop button  */
-	if (stop)
-	{
-		if (run_button != NULL)
-			gtk_tool_button_set_stock_id(run_button, GTK_STOCK_STOP);
-	}
-	else
-	{
-		if (run_button != NULL)
-			gtk_tool_button_set_stock_id(run_button, GTK_STOCK_EXECUTE);
-	}
+	gtk_tool_button_set_stock_id(run_button,
+		stop ? GTK_STOCK_STOP : GTK_STOCK_EXECUTE);
 }
 
 
