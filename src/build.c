@@ -1026,6 +1026,12 @@ static void process_build_output_line(gchar *msg, gint color)
 		}
 		build_info.message_count++;
 		color = COLOR_RED;	/* error message parsed on the line */
+
+		if (build_info.message_count == 1)
+		{
+			gtk_widget_set_sensitive(build_get_menu_items(-1)->menu_item[GBG_FIXED][GBF_NEXT_ERROR], TRUE);
+			gtk_widget_set_sensitive(build_get_menu_items(-1)->menu_item[GBG_FIXED][GBF_PREV_ERROR], TRUE);
+		}
 	}
 	g_free(filename);
 
