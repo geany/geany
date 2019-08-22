@@ -1471,7 +1471,9 @@ void build_menu_update(GeanyDocument *doc)
 		doc = document_get_current();
 	have_path = doc != NULL && doc->file_name != NULL;
 	build_running =  build_info.pid > (GPid) 1;
-	have_errors = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_compiler), NULL) > 0;
+	// note: compiler list store may have been cleared since last build
+	have_errors = build_info.message_count > 0 &&
+		gtk_tree_model_iter_n_children(GTK_TREE_MODEL(msgwindow.store_compiler), NULL) > 0;
 	for (i = 0; build_menu_specs[i].build_grp != MENU_DONE; ++i)
 	{
 		struct BuildMenuItemSpec *bs = &(build_menu_specs[i]);
