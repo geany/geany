@@ -81,6 +81,22 @@ static RunInfo *run_info;
 static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.sh";
 #endif
 
+/* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
+/* * Geany Known Build Commands.
+ * These commands are named after their default use.
+ * Only these commands can currently have keybindings.
+ **/
+typedef enum
+{
+	GEANY_GBO_COMPILE,		/* *< default compile file */
+	GEANY_GBO_BUILD,		/* *< default build file */
+	GEANY_GBO_MAKE_ALL,		/* *< default make */
+	GEANY_GBO_CUSTOM,		/* *< default make user specified target */
+	GEANY_GBO_MAKE_OBJECT,	/* *< default make object, make %e.o */
+	GEANY_GBO_EXEC,			/* *< default execute ./%e */
+	GEANY_GBO_COUNT			/* *< count of how many */
+} GeanyBuildType;
+
 /* * Convert @c GeanyBuildType to @c GeanyBuildGroup.
  *
  * This macro converts @c GeanyBuildType enum values (the "known" commands)
