@@ -185,18 +185,6 @@ void build_finalize(void)
 }
 
 
-/* note: copied from keybindings.c, may be able to go away */
-static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
-	GtkAccelGroup *accel_group, GtkWidget *menuitem)
-{
-	GeanyKeyBinding *kb = keybindings_get_item(group, kb_id);
-
-	if (kb->key != 0)
-		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
-			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
-}
-
-
 /* convenience routines to access parts of GeanyBuildCommand */
 static gchar *id_to_str(GeanyBuildCommand *bc, gint id)
 {
@@ -1374,7 +1362,14 @@ static void create_build_menu_item(GtkWidget *menu, GeanyKeyGroup *group, GtkAcc
 	}
 	gtk_widget_show(item);
 	if (bs->key_binding >= 0)
-		add_menu_accel(group, (guint) bs->key_binding, ag, item);
+	{
+		GeanyKeyBinding *kb = keybindings_get_item(group,
+			(guint) bs->key_binding);
+
+		if (kb->key != 0)
+			gtk_widget_add_accelerator(item, "activate", ag,
+				kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+	}
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	if (bs->cb != NULL)
 	{
