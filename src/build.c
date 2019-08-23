@@ -2566,10 +2566,11 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 			if (pj->priv->build_filetypes_list != NULL)
 			{
 				GPtrArray *ft_names = g_ptr_array_new();
-				guint i;
+				const GPtrArray *build_fts = pj->priv->build_filetypes_list;
 				
-				foreach_ptr_array(ft, i, pj->priv->build_filetypes_list)
+				for (guint i = 0; i < build_fts->len; i++)
 				{
+					ft = build_fts->pdata[i];
 					if (save_project_filetype(ft, config))
 						g_ptr_array_add(ft_names, ft->name);
 				}
