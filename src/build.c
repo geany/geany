@@ -184,12 +184,6 @@ static void set_command(GeanyBuildCommand *bc, gint id, gchar *str)
 }
 
 
-static const gchar *config_keys[GEANY_BC_CMDENTRIES_COUNT] = {
-	"LB", /* label */
-	"CM", /* command */
-	"WD"  /* working directory */
-};
-
 /*-----------------------------------------------------
  *
  * Execute commands and handle results
@@ -2240,36 +2234,53 @@ static const gchar *build_grp_name = "build-menu";
  * where gg = FT, NF, EX for the command group
  *       nn = 2 digit command number
  *       xx = LB for label, CM for command and WD for working dir */
-static const gchar *groups[GEANY_GBG_COUNT] = { "FT", "NF", "EX" };
 static const gchar *fixedkey="xx_xx_xx";
 
-#define set_key_grp(key, grp) (key[prefixlen + 0] = grp[0], key[prefixlen + 1] = grp[1])
-#define set_key_cmd(key, cmd) (key[prefixlen + 3] = cmd[0], key[prefixlen + 4] = cmd[1])
-#define set_key_fld(key, fld) (key[prefixlen + 6] = fld[0], key[prefixlen + 7] = fld[1])
+static void set_key_ids(gchar *pattern, guint group_id, guint cmd)
+{
+	const gchar *groups[GEANY_GBG_COUNT] = { "FT", "NF", "EX" };
+	gchar cmdbuf[4] = "  ";
+	
+	g_return_if_fail(cmd < 100);
+
+	strncpy(pattern, groups[group_id], 2);
+	sprintf(cmdbuf, "%02u", cmd);
+	strncpy(pattern + 3, cmdbuf, 2);
+}
+
+static void set_key_type(gchar *pattern, guint entry_id)
+{
+	const gchar *types[GEANY_BC_CMDENTRIES_COUNT] = {
+		"LB", /* label */
+		"CM", /* command */
+		"WD"  /* working directory */
+	};
+
+	strncpy(pattern + 6, types[entry_id], 2);
+}
+
 
 static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint grp,
 								gchar *prefix, gboolean loc)
 {
 	guint cmd;
-	gsize prefixlen; /* NOTE prefixlen used in macros above */
+	gsize prefixlen;
 	GeanyBuildCommand *dstcmd;
 	gchar *key;
-	static gchar cmdbuf[4] = "  ";
 
 	if (*dst == NULL)
 		*dst = g_new0(GeanyBuildCommand, build_groups_count[grp]);
 	dstcmd = *dst;
 	prefixlen = prefix == NULL ? 0 : strlen(prefix);
 	key = g_strconcat(prefix == NULL ? "" : prefix, fixedkey, NULL);
+	gchar *pattern = key + prefixlen;
 	for (cmd = 0; cmd < build_groups_count[grp]; ++cmd)
 	{
 		gchar *label;
 		if (cmd >= 100)
 			break; /* ensure no buffer overflow */
-		sprintf(cmdbuf, "%02u", cmd);
-		set_key_grp(key, groups[grp]);
-		set_key_cmd(key, cmdbuf);
-		set_key_fld(key, "LB");
+		set_key_ids(pattern, grp, cmd);
+		set_key_type(pattern, GEANY_BC_LABEL);
 		if (loc)
 			label = g_key_file_get_locale_string(config, build_grp_name, key, NULL, NULL);
 		else
@@ -2278,10 +2289,10 @@ static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint 
 		{
 			dstcmd[cmd].exists = TRUE;
 			SETPTR(dstcmd[cmd].label, label);
-			set_key_fld(key,"CM");
+			set_key_type(pattern, GEANY_BC_COMMAND);
 			SETPTR(dstcmd[cmd].command,
 					g_key_file_get_string(config, build_grp_name, key, NULL));
-			set_key_fld(key,"WD");
+			set_key_type(pattern, GEANY_BC_WORKING_DIR);
 			SETPTR(dstcmd[cmd].working_dir,
 					g_key_file_get_string(config, build_grp_name, key, NULL));
 		}
@@ -2467,7 +2478,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 static guint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint grp, gchar *prefix)
 {
 	guint cmd;
-	gsize prefixlen; /* NOTE prefixlen used in macros above */
+	gsize prefixlen;
 	gchar *key;
 	guint count = 0;
 	enum GeanyBuildCmdEntries i;
@@ -2476,32 +2487,23 @@ static guint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint 
 		return 0;
 	prefixlen = prefix == NULL ? 0 : strlen(prefix);
 	key = g_strconcat(prefix == NULL ? "" : prefix, fixedkey, NULL);
+	gchar *pattern = key + prefixlen;
 	for (cmd = 0; cmd < build_groups_count[grp]; ++cmd)
 	{
 		if (src[cmd].exists) ++count;
 		if (src[cmd].changed)
 		{
-			static gchar cmdbuf[4] = "   ";
 			if (cmd >= 100)
 				break; /* ensure no buffer overflow */
-			sprintf(cmdbuf, "%02u", cmd);
-			set_key_grp(key, groups[grp]);
-			set_key_cmd(key, cmdbuf);
-			if (src[cmd].exists)
+			set_key_ids(pattern, grp, cmd);
+			for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 			{
-				for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
-				{
-					set_key_fld(key, config_keys[i]);
-					g_key_file_set_string(config, build_grp_name, key, id_to_str(&src[cmd], i));
-				}
-			}
-			else
-			{
-				for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
-				{
-					set_key_fld(key, config_keys[i]);
+				set_key_type(pattern, i);
+				if (src[cmd].exists)
+					g_key_file_set_string(config, build_grp_name, key,
+						id_to_str(&src[cmd], i));
+				else
 					g_key_file_remove_key(config, build_grp_name, key, NULL);
-				}
 			}
 		}
 	}
