@@ -2559,41 +2559,29 @@ static guint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint 
 }
 
 
-typedef struct ForEachData
+static gboolean save_project_filetype(GeanyFiletype *ft, GKeyFile *config)
 {
-	GKeyFile *config;
-	GPtrArray *ft_names;
-} ForEachData;
-
-
-static void foreach_project_filetype(gpointer data, gpointer user_data)
-{
-	GeanyFiletype *ft = data;
-	ForEachData *d = user_data;
 	guint i = 0;
 	gchar *regkey = g_strdup_printf("%serror_regex", ft->name);
 
-	i += build_save_menu_grp(d->config, ft->priv->projfilecmds, GEANY_GBG_FT, ft->name);
-	i += build_save_menu_grp(d->config, ft->priv->projexeccmds, GEANY_GBG_EXEC, ft->name);
+	i += build_save_menu_grp(config, ft->priv->projfilecmds, GEANY_GBG_FT, ft->name);
+	i += build_save_menu_grp(config, ft->priv->projexeccmds, GEANY_GBG_EXEC, ft->name);
 	if (!EMPTY(ft->priv->projerror_regex_string))
 	{
-		g_key_file_set_string(d->config, build_grp_name, regkey, ft->priv->projerror_regex_string);
+		g_key_file_set_string(config, build_grp_name, regkey, ft->priv->projerror_regex_string);
 		i++;
 	}
 	else
-		g_key_file_remove_key(d->config, build_grp_name, regkey, NULL);
+		g_key_file_remove_key(config, build_grp_name, regkey, NULL);
 	g_free(regkey);
-	if (i > 0)
-		g_ptr_array_add(d->ft_names, ft->name);
+	return (i > 0);
 }
-
 
 /* TODO: untyped ptr is too ugly (also for build_load_menu) */
 void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 {
 	GeanyFiletype *ft;
 	GeanyProject *pj;
-	ForEachData data;
 
 	switch (src)
 	{
@@ -2626,15 +2614,21 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
 			if (pj->priv->build_filetypes_list != NULL)
 			{
-				data.config = config;
-				data.ft_names = g_ptr_array_new();
-				g_ptr_array_foreach(pj->priv->build_filetypes_list, foreach_project_filetype, (gpointer)(&data));
-				if (data.ft_names->pdata != NULL)
+				GPtrArray *ft_names = g_ptr_array_new();
+				const GPtrArray *build_fts = pj->priv->build_filetypes_list;
+				
+				for (guint i = 0; i < build_fts->len; i++)
+				{
+					ft = build_fts->pdata[i];
+					if (save_project_filetype(ft, config))
+						g_ptr_array_add(ft_names, ft->name);
+				}
+				if (ft_names->pdata != NULL)
 					g_key_file_set_string_list(config, build_grp_name, "filetypes",
-								(const gchar**)(data.ft_names->pdata), data.ft_names->len);
+						(const gchar**)ft_names->pdata, ft_names->len);
 				else
 					g_key_file_remove_key(config, build_grp_name, "filetypes", NULL);
-				g_ptr_array_free(data.ft_names, TRUE);
+				g_ptr_array_free(ft_names, TRUE);
 			}
 			break;
 		default: /* defaults and GEANY_BCS_FT can't save */
