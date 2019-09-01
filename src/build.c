@@ -1590,9 +1590,10 @@ static void set_stop_button(gboolean stop)
 	GtkToolButton *run_button;
 
 	run_button = GTK_TOOL_BUTTON(toolbar_get_widget_by_name("Run"));
-	if (!run_button) return;
+	if (!run_button)
+		return;
+		
 	button_stock_id = gtk_tool_button_get_stock_id(run_button);
-
 	if (stop && utils_str_equal(button_stock_id, GTK_STOCK_STOP))
 		return;
 	if (! stop && utils_str_equal(button_stock_id, GTK_STOCK_EXECUTE))
