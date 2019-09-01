@@ -827,7 +827,6 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	const gchar *cmd_working_dir;
 	gboolean autoclose = FALSE;
 	gchar *cmd_string_utf8, *working_dir_utf8, *run_cmd, *cmd_string;
-	GError *error = NULL;
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
@@ -874,6 +873,7 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	run_cmd = g_strdup_printf("\"%s\" \"%s\" %d %s", helper, *working_dir, autoclose ? 1 : 0, cmd_string);
 	g_free(helper);
 #else
+	GError *error = NULL;
 	run_cmd = build_create_shellscript(*working_dir, cmd_string, autoclose, &error);
 	if (!run_cmd)
 	{
