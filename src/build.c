@@ -349,84 +349,76 @@ static void printfcmds(void)
 }
 
 
-/* macros to save typing and make the logic visible */
-#define return_cmd_if(src, cmds)\
-	if (cmds != NULL && cmds[cmdindex].exists && below>src)\
-	{ \
-		*fr=src; \
-		if (printbuildcmds) \
-			printf("cmd[%u,%u]=%u\n",cmdgrp,cmdindex,src); \
-		return &(cmds[cmdindex]); \
+// Note: reads below and cmdindex parameters
+#define BREAK_IF_CMD(src, cmds, outsrc, outcmds) \
+	if ((src) < (below) && (cmds) != NULL && (cmds)[cmdindex].exists) \
+	{	outsrc = src; \
+		outcmds = cmds; \
+		break; \
 	}
 
-#define return_ft_cmd_if(src, cmds)\
-	if (ft != NULL && ft->priv->cmds != NULL \
-		&& ft->priv->cmds[cmdindex].exists && below>src)\
-		{ \
-			*fr=src; \
-			if (printbuildcmds) \
-				printf("cmd[%u,%u]=%u\n",cmdgrp,cmdindex,src); \
-			return &(ft->priv->cmds[cmdindex]); \
-		}
-
-
-/* get the next lowest command taking priority into account */
-static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, guint cmdgrp, guint cmdindex,
-											 guint below, guint *from)
+/* get the next lowest command taking priority into account
+ * below = only consider GeanyBuildSource values less than this parameter
+ * psrc = Address to write GeanyBuildSource */
+static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc,
+	guint cmdgrp, guint cmdindex, guint below, guint *psrc)
 {
-	/* Note: parameter below used in macros above */
-	GeanyFiletype *ft = NULL;
-	guint sink, *fr = &sink;
-
 	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
 
 	if (printbuildcmds)
 		printfcmds();
 	if (cmdgrp >= GEANY_GBG_COUNT)
 		return NULL;
-	if (from != NULL)
-		fr = from;
 	if (doc == NULL)
 		doc = document_get_current();
-	if (doc != NULL)
-		ft = doc->file_type;
+	
+	GeanyFiletypePrivate empty_ftp = {}, *ftp =
+		doc ? doc->file_type->priv : &empty_ftp; // avoid checking for null
+	GeanyBuildSource src;
+	GeanyBuildCommand *cmds = NULL;
 
 	switch (cmdgrp)
 	{
 		case GEANY_GBG_FT: /* order proj ft, home ft, ft, defft */
-			if (ft != NULL)
-			{
-				return_ft_cmd_if(GEANY_BCS_PROJ, projfilecmds);
-				return_ft_cmd_if(GEANY_BCS_PREF, homefilecmds);
-				return_ft_cmd_if(GEANY_BCS_FT, filecmds);
-			}
-			return_cmd_if(GEANY_BCS_DEF, ft_def);
+			BREAK_IF_CMD(GEANY_BCS_PROJ,	ftp->projfilecmds,	src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_PREF,	ftp->homefilecmds,	src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_FT,		ftp->filecmds,		src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_DEF,		ft_def,				src, cmds);
 			break;
 		case GEANY_GBG_NON_FT: /* order proj, pref, def */
-			return_cmd_if(GEANY_BCS_PROJ, non_ft_proj);
-			return_cmd_if(GEANY_BCS_PREF, non_ft_pref);
-			return_ft_cmd_if(GEANY_BCS_FT, ftdefcmds);
-			return_cmd_if(GEANY_BCS_DEF, non_ft_def);
+			BREAK_IF_CMD(GEANY_BCS_PROJ,	non_ft_proj,		src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_PREF,	non_ft_pref,		src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_FT,		ftp->ftdefcmds,		src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_DEF,		non_ft_def,			src, cmds);
 			break;
 		case GEANY_GBG_EXEC: /* order proj, proj ft, pref, home ft, ft, def */
-			return_cmd_if(GEANY_BCS_PROJ, exec_proj);
-			return_ft_cmd_if(GEANY_BCS_PROJ_FT, projexeccmds);
-			return_cmd_if(GEANY_BCS_PREF, exec_pref);
-			return_ft_cmd_if(GEANY_BCS_FT, homeexeccmds);
-			return_ft_cmd_if(GEANY_BCS_FT, execcmds);
-			return_cmd_if(GEANY_BCS_DEF, exec_def);
+			BREAK_IF_CMD(GEANY_BCS_PROJ,	exec_proj,			src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_PROJ_FT,	ftp->projexeccmds,	src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_PREF,	exec_pref,			src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_FT,		ftp->homeexeccmds,	src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_FT,		ftp->execcmds,		src, cmds);
+			BREAK_IF_CMD(GEANY_BCS_DEF,		exec_def,			src, cmds);
 			break;
 		default:
-			break;
+			return NULL;
+	}
+	if (cmds != NULL)
+	{
+		if (psrc)
+			*psrc = src;
+		if (printbuildcmds)
+			printf("cmd[%u,%u]=%u\n", cmdgrp, cmdindex, src);
+		return &(cmds[cmdindex]);
 	}
 	return NULL;
 }
 
 
 /* shortcut to start looking at the top */
-static GeanyBuildCommand *get_build_cmd(GeanyDocument *doc, guint grp, guint cmdindex, guint *from)
+// Note: could remove psrc parameter, only passed once
+static GeanyBuildCommand *get_build_cmd(GeanyDocument *doc, guint grp, guint cmdindex, guint *psrc)
 {
-	return get_next_build_cmd(doc, grp, cmdindex, GEANY_BCS_COUNT, from);
+	return get_next_build_cmd(doc, grp, cmdindex, GEANY_BCS_COUNT, psrc);
 }
 
 
