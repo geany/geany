@@ -138,14 +138,18 @@ GdkAtom ScintillaGTK::atomDROPFILES_DND = nullptr;
 
 static const GtkTargetEntry clipboardCopyTargets[] = {
 	{ (gchar *) "UTF8_STRING", 0, TARGET_UTF8_STRING },
+	{ (gchar *) "text/plain;charset=utf-8", 0, TARGET_UTF8_STRING },
 	{ (gchar *) "STRING", 0, TARGET_STRING },
+	{ (gchar *) "text/plain", 0, TARGET_STRING },
 };
 static const gint nClipboardCopyTargets = ELEMENTS(clipboardCopyTargets);
 
 static const GtkTargetEntry clipboardPasteTargets[] = {
 	{ (gchar *) "text/uri-list", 0, TARGET_URI },
 	{ (gchar *) "UTF8_STRING", 0, TARGET_UTF8_STRING },
+	{ (gchar *) "text/plain;charset=utf-8", 0, TARGET_UTF8_STRING },
 	{ (gchar *) "STRING", 0, TARGET_STRING },
+	{ (gchar *) "text/plain", 0, TARGET_STRING },
 };
 static const gint nClipboardPasteTargets = ELEMENTS(clipboardPasteTargets);
 
