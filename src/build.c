@@ -349,14 +349,13 @@ static void printfcmds(void)
 }
 
 
-// Note: reads below and cmdindex parameters
-#define BREAK_IF_CMD(src, cmds, outsrc, outcmds) \
-	if ((src) < (below) && (cmds) != NULL && (cmds)[cmdindex].exists) \
-	{	outsrc = src; \
-		outcmds = cmds; \
-		break; \
-	}
+typedef struct CommandSet
+{
+	GeanyBuildSource src;
+	GeanyBuildCommand *cmds;
+} CommandSet;
 
+// Note: Could return CommandSet instead of using psrc
 /* get the next lowest command taking priority into account
  * below = only consider GeanyBuildSource values less than this parameter
  * psrc = Address to write GeanyBuildSource */
@@ -374,41 +373,61 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc,
 	
 	GeanyFiletypePrivate empty_ftp = {}, *ftp =
 		doc ? doc->file_type->priv : &empty_ftp; // avoid checking for null
-	GeanyBuildSource src;
-	GeanyBuildCommand *cmds = NULL;
+	CommandSet overloads[6] = {};
 
 	switch (cmdgrp)
 	{
-		case GEANY_GBG_FT: /* order proj ft, home ft, ft, defft */
-			BREAK_IF_CMD(GEANY_BCS_PROJ,	ftp->projfilecmds,	src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_PREF,	ftp->homefilecmds,	src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_FT,		ftp->filecmds,		src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_DEF,		ft_def,				src, cmds);
+		case GEANY_GBG_FT: /* order proj ft, home ft, ft, def ft */
+		{
+			CommandSet cs[] = {
+				{GEANY_BCS_PROJ,	ftp->projfilecmds},
+				{GEANY_BCS_PREF,	ftp->homefilecmds},
+				{GEANY_BCS_FT,		ftp->filecmds},
+				{GEANY_BCS_DEF,		ft_def},
+			};
+			memcpy(overloads, cs, sizeof(cs));
 			break;
+		}
 		case GEANY_GBG_NON_FT: /* order proj, pref, def */
-			BREAK_IF_CMD(GEANY_BCS_PROJ,	non_ft_proj,		src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_PREF,	non_ft_pref,		src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_FT,		ftp->ftdefcmds,		src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_DEF,		non_ft_def,			src, cmds);
+		{
+			CommandSet cs[] = {
+				{GEANY_BCS_PROJ,	non_ft_proj},
+				{GEANY_BCS_PREF,	non_ft_pref},
+				{GEANY_BCS_FT,		ftp->ftdefcmds},
+				{GEANY_BCS_DEF,		non_ft_def},
+			};
+			memcpy(overloads, cs, sizeof(cs));
 			break;
+		}
 		case GEANY_GBG_EXEC: /* order proj, proj ft, pref, home ft, ft, def */
-			BREAK_IF_CMD(GEANY_BCS_PROJ,	exec_proj,			src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_PROJ_FT,	ftp->projexeccmds,	src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_PREF,	exec_pref,			src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_FT,		ftp->homeexeccmds,	src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_FT,		ftp->execcmds,		src, cmds);
-			BREAK_IF_CMD(GEANY_BCS_DEF,		exec_def,			src, cmds);
+		{
+			CommandSet cs[] = {
+				{GEANY_BCS_PROJ,	exec_proj},
+				{GEANY_BCS_PROJ_FT,	ftp->projexeccmds},
+				{GEANY_BCS_PREF,	exec_pref},
+				{GEANY_BCS_FT,		ftp->homeexeccmds},
+				{GEANY_BCS_FT,		ftp->execcmds},
+				{GEANY_BCS_DEF,		exec_def},
+			};
+			memcpy(overloads, cs, sizeof(cs));
 			break;
+		}
 		default:
 			return NULL;
 	}
-	if (cmds != NULL)
+	for (guint i = 0; i < G_N_ELEMENTS(overloads); i++)
 	{
-		if (psrc)
-			*psrc = src;
-		if (printbuildcmds)
-			printf("cmd[%u,%u]=%u\n", cmdgrp, cmdindex, src);
-		return &(cmds[cmdindex]);
+		GeanyBuildCommand *cmds = overloads[i].cmds;
+		guint src = overloads[i].src;
+		
+		if (cmds != NULL && cmds[cmdindex].exists && src < below)
+		{
+			if (psrc)
+				*psrc = src;
+			if (printbuildcmds)
+				printf("cmd[%u,%u]=%u\n", cmdgrp, cmdindex, src);
+			return &(cmds[cmdindex]);
+		}
 	}
 	return NULL;
 }
