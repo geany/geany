@@ -155,7 +155,7 @@ static struct
 }
 widgets;
 
-static guint build_groups_count[GEANY_GBG_COUNT] = { 3, 4, 2 };
+static guint build_groups_count[GEANY_GBG_COUNT] = { 3, 4, 2, 2 };
 static guint build_items_count = 9;
 
 static void build_exit_cb(GPid pid, gint status, gpointer user_data);
@@ -399,15 +399,22 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc,
 			memcpy(overloads, cs, sizeof(cs));
 			break;
 		}
-		case GEANY_GBG_EXEC: /* order proj, proj ft, pref, home ft, ft, def */
+		case GEANY_GBG_EXEC: /* order proj ft, home ft, ft, def */
 		{
 			CommandSet cs[] = {
-				{GEANY_BCS_PROJ,	exec_proj},
 				{GEANY_BCS_PROJ_FT,	ftp->projexeccmds},
-				{GEANY_BCS_PREF,	exec_pref},
 				{GEANY_BCS_FT,		ftp->homeexeccmds},
 				{GEANY_BCS_FT,		ftp->execcmds},
 				{GEANY_BCS_DEF,		exec_def},
+			};
+			memcpy(overloads, cs, sizeof(cs));
+			break;
+		}
+		case GEANY_GBG_EXEC_IND: /* order proj, pref */
+		{
+			CommandSet cs[] = {
+				{GEANY_BCS_PROJ,	exec_proj},
+				{GEANY_BCS_PREF,	exec_pref},
 			};
 			memcpy(overloads, cs, sizeof(cs));
 			break;
@@ -516,14 +523,21 @@ static GeanyBuildCommand **get_build_group_pointer(const GeanyBuildSource src, c
 				case GEANY_BCS_FT:	  return ft ? &(ft->priv->execcmds): NULL;
 				case GEANY_BCS_HOME_FT: return ft ? &(ft->priv->homeexeccmds): NULL;
 				case GEANY_BCS_PROJ_FT: return ft ? &(ft->priv->projexeccmds): NULL;
+				default: return NULL;
+			}
+			break;
+		case GEANY_GBG_EXEC_IND:
+			switch (src)
+			{
 				case GEANY_BCS_PREF:	return &(exec_pref);
 				case GEANY_BCS_PROJ:	return &(exec_proj);
 				default: return NULL;
 			}
 			break;
 		default:
-			return NULL;
+			break;
 	}
+	return NULL;
 }
 
 
@@ -1406,6 +1420,7 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 	build_menu_items->menu_item[GEANY_GBG_FT] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_FT]);
 	build_menu_items->menu_item[GEANY_GBG_NON_FT] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_NON_FT]);
 	build_menu_items->menu_item[GEANY_GBG_EXEC] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_EXEC]);
+	build_menu_items->menu_item[GEANY_GBG_EXEC_IND] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_EXEC_IND]);
 	build_menu_items->menu_item[GBG_FIXED] = g_new0(GtkWidget*, GBF_COUNT);
 
 	for (i = 0; build_menu_specs[i].build_grp != MENU_DONE; ++i)
