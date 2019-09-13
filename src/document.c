@@ -36,6 +36,7 @@
 #include "encodings.h"
 #include "encodingsprivate.h"
 #include "filetypesprivate.h"
+#include "build.h"
 #include "geany.h" /* FIXME: why is this needed for DOC_FILENAME()? should come from documentprivate.h/document.h */
 #include "geanyobject.h"
 #include "geanywraplabel.h"

@@ -36,6 +36,7 @@
 #include "callbacks.h" /* FIXME: for ignore_callback */
 #include "document.h"
 #include "filetypesprivate.h"
+#include "build.h"
 #include "geany.h"
 #include "geanyobject.h"
 #include "highlighting.h"
