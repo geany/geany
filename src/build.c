@@ -858,15 +858,12 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
  * the command; otherwise the command itself is returned. working_dir is a pointer
  * to the working directory from which the command is executed. Both strings are
  * in the locale encoding. */
-static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmdindex)
+static gchar *prepare_run_cmd(GeanyDocument *doc, GeanyBuildCommand *cmd, gchar **working_dir)
 {
-	GeanyBuildCommand *cmd = NULL;
 	const gchar *cmd_working_dir;
 	gboolean autoclose = FALSE;
 	gchar *cmd_string_utf8, *working_dir_utf8, *run_cmd, *cmd_string;
 	GError *error = NULL;
-
-	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
 	cmd_string_utf8 = build_replace_placeholder(doc, cmd->command);
 	cmd_working_dir =  cmd->working_dir;
@@ -925,15 +922,18 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 }
 
 
-static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
+static void build_run_cmd(GeanyDocument *doc, guint group, guint cmdindex)
 {
 	gchar *working_dir;
 	gchar *run_cmd = NULL;
 
 	if (! DOC_VALID(doc) || doc->file_name == NULL)
 		return;
-
-	run_cmd = prepare_run_cmd(doc, &working_dir, cmdindex);
+	GeanyBuildCommand *cmd = get_build_cmd(doc, group, cmdindex, NULL);
+	if (!cmd)
+		return;
+	
+	run_cmd = prepare_run_cmd(doc, cmd, &working_dir);
 	if (run_cmd == NULL)
 		return;
 
@@ -1319,7 +1319,7 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 			g_free(uri);
 		}
 		else
-			build_run_cmd(doc, cmd);
+			build_run_cmd(doc, grp, cmd);
 	}
 	else
 		build_command(doc, grp, cmd, NULL);
@@ -2841,6 +2841,11 @@ gboolean build_keybinding(guint key_id)
 		case GEANY_KEYS_BUILD_RUN:
 			item = menu_items->menu_item[GEANY_GBG_EXEC][GBO_TO_CMD(GEANY_GBO_EXEC)];
 			break;
+		case GEANY_KEYS_BUILD_RUNINDEPENDENT:
+		{
+			build_run_cmd(doc, GEANY_GBG_EXEC_IND, 0);
+			return TRUE;
+		}
 		case GEANY_KEYS_BUILD_OPTIONS:
 			item = menu_items->menu_item[GBG_FIXED][GBF_COMMANDS];
 			break;

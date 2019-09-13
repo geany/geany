@@ -704,6 +704,8 @@ static void init_default_kb(void)
 		0, 0, "build_previouserror", _("Previous error"), NULL);
 	add_kb(group, GEANY_KEYS_BUILD_RUN, NULL,
 		GDK_F5, 0, "build_run", _("Run"), NULL);
+	add_kb(group, GEANY_KEYS_BUILD_RUNINDEPENDENT, NULL,
+		GDK_F5, GDK_SHIFT_MASK, "build_run_ind", _("_Independent Run"), NULL);
 	add_kb(group, GEANY_KEYS_BUILD_OPTIONS, NULL,
 		0, 0, "build_options", _("Build options"), NULL);
 
