@@ -22,11 +22,11 @@
 #ifndef GEANY_FILETYPES_PRIVATE_H
 #define GEANY_FILETYPES_PRIVATE_H 1
 
-#include "build.h"
-
 #include "gtkcompat.h"
 
 G_BEGIN_DECLS
+
+struct GeanyBuildCommand;
 
 /* Private GeanyFiletype fields */
 typedef struct GeanyFiletypePrivate
@@ -42,14 +42,14 @@ typedef struct GeanyFiletypePrivate
 	gboolean	warn_color_scheme;
 	gboolean	user_extensions;	// true if extensions were read from user config file
 
-	/* TODO: move to structure in build.h and only put a pointer here */
-	GeanyBuildCommand *filecmds;
-	GeanyBuildCommand *ftdefcmds;
-	GeanyBuildCommand *execcmds;
-	GeanyBuildCommand *homefilecmds;
-	GeanyBuildCommand *homeexeccmds;
-	GeanyBuildCommand *projfilecmds;
-	GeanyBuildCommand *projexeccmds;
+	// build fields
+	struct GeanyBuildCommand *filecmds;
+	struct GeanyBuildCommand *ftdefcmds;
+	struct GeanyBuildCommand *execcmds;
+	struct GeanyBuildCommand *homefilecmds;
+	struct GeanyBuildCommand *homeexeccmds;
+	struct GeanyBuildCommand *projfilecmds;
+	struct GeanyBuildCommand *projexeccmds;
 	gint			 project_list_entry;
 	gchar			 *projerror_regex_string;
 	gchar			 *homeerror_regex_string;
