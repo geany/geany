@@ -15,7 +15,6 @@ Note: features included in brackets have lower priority.
 	  programming languages (done for C-like filetypes using
 	  filetypes.common named styles)
 	o asynchronous build commands on Windows
-	o (filetype-independent run command in build dialog & keybinding)
 	o (better custom filetype support)
 	o (custom template insertion - so user can add licenses, etc)
 	o (selectable menu of arguments to use for Make, from Make Custom)
