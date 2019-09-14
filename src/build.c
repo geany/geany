@@ -69,14 +69,6 @@ GeanyBuildInfo build_info = {GEANY_GBG_FT, 0, 0, NULL, GEANY_FILETYPES_NONE, NUL
 
 static gchar *current_dir_entered = NULL;
 
-typedef struct RunInfo
-{
-	GPid pid;
-	gint file_type_id;
-} RunInfo;
-
-static RunInfo *run_info;
-
 #ifndef G_OS_WIN32
 static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.sh";
 #endif
@@ -922,6 +914,16 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, GeanyBuildCommand *cmd, gchar 
 }
 
 
+// array of filetype run IDs followed by independent run IDs
+static GPid *run_pids = NULL;
+
+static GPid *get_run_pid(GeanyBuildGroup grp, guint cmd)
+{
+	if (grp == GEANY_GBG_EXEC_IND)
+		cmd += build_groups_count[GEANY_GBG_EXEC];
+	return &run_pids[cmd];
+}
+
 static void build_run_cmd(GeanyDocument *doc, guint group, guint cmdindex)
 {
 	gchar *working_dir;
@@ -936,8 +938,6 @@ static void build_run_cmd(GeanyDocument *doc, guint group, guint cmdindex)
 	run_cmd = prepare_run_cmd(doc, cmd, &working_dir);
 	if (run_cmd == NULL)
 		return;
-
-	run_info[cmdindex].file_type_id = doc->file_type->id;
 
 #ifdef HAVE_VTE
 	if (vte_info.have_vte && vc->run_in_vte)
@@ -968,7 +968,7 @@ static void build_run_cmd(GeanyDocument *doc, guint group, guint cmdindex)
 		gtk_widget_grab_focus(vc->vte);
 		msgwin_show_hide(TRUE);
 
-		run_info[cmdindex].pid = 1;
+		*get_run_pid(group, cmdindex) = 1;
 		g_free(vte_cmd);
 	}
 	else
@@ -994,11 +994,11 @@ static void build_run_cmd(GeanyDocument *doc, guint group, guint cmdindex)
 
 		utils_str_replace_all(&locale_term_cmd, "%c", run_cmd);
 
-		if (spawn_async(working_dir, locale_term_cmd, NULL, NULL, &(run_info[cmdindex].pid),
+		GPid *pid = get_run_pid(group, cmdindex);
+		if (spawn_async(working_dir, locale_term_cmd, NULL, NULL, pid,
 			&error))
 		{
-			g_child_watch_add(run_info[cmdindex].pid, (GChildWatchFunc) run_exit_cb,
-								(gpointer) &(run_info[cmdindex]));
+			g_child_watch_add(*pid, run_exit_cb, pid);
 			build_menu_update(doc);
 		}
 		else
@@ -1011,10 +1011,9 @@ static void build_run_cmd(GeanyDocument *doc, guint group, guint cmdindex)
 #ifndef G_OS_WIN32
 			g_unlink(run_cmd);
 #endif
-			run_info[cmdindex].pid = (GPid) 0;
+			*get_run_pid(group, cmdindex) = (GPid) 0;
 		}
 	}
-
 	g_free(working_dir);
 	g_free(run_cmd);
 }
@@ -1152,11 +1151,11 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
-	RunInfo *run_info_data = user_data;
+	GPid *pid = user_data;
 
 	g_spawn_close_pid(child_pid);
 
-	run_info_data->pid = 0;
+	*pid = 0;
 	/* reset the stop button and menu item to the original meaning */
 	build_menu_update(NULL);
 }
@@ -1301,9 +1300,10 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 	}
 	else if (grp == GEANY_GBG_EXEC)
 	{
-		if (run_info[cmd].pid > (GPid) 1)
+		GPid *pid = get_run_pid(grp, cmd);
+		if (*pid > (GPid) 1)
 		{
-			kill_process(&run_info[cmd].pid);
+			kill_process(pid);
 			return;
 		}
 		bc = get_build_cmd(doc, grp, cmd, NULL);
@@ -1553,7 +1553,7 @@ void build_menu_update(GeanyDocument *doc)
 					else
 					{
 						GtkWidget *image;
-						exec_running = run_info[cmd].pid > (GPid) 1;
+						exec_running = *get_run_pid(grp, cmd) > (GPid) 1;
 						cmd_sensitivity = (bc != NULL) || exec_running;
 						gtk_widget_set_sensitive(menu_item, cmd_sensitivity);
 						if (cmd == GBO_TO_CMD(GEANY_GBO_EXEC))
@@ -2729,7 +2729,8 @@ void build_init(void)
 	ft_def = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_FT]);
 	non_ft_def = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
 	exec_def = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
-	run_info = g_new0(RunInfo, build_groups_count[GEANY_GBG_EXEC]);
+	run_pids = g_new0(GPid, build_groups_count[GEANY_GBG_EXEC] +
+		build_groups_count[GEANY_GBG_EXEC_IND]);
 
 	for (cmdindex = 0; default_cmds[cmdindex].command != NULL; ++cmdindex)
 	{
