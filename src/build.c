@@ -2239,7 +2239,7 @@ void build_read_project(GeanyFiletype *ft, BuildTableData build_properties)
 		menu_dst.fileregexstr = NULL;
 	}
 	menu_dst.dst[GEANY_GBG_NON_FT] = &non_ft_proj;
-	menu_dst.dst[GEANY_GBG_EXEC] = &exec_proj;
+	menu_dst.dst[GEANY_GBG_EXEC_IND] = &exec_proj;
 	menu_dst.nonfileregexstr = &regex_proj;
 
 	build_read_commands(&menu_dst, build_properties, GTK_RESPONSE_ACCEPT);
@@ -2315,7 +2315,7 @@ static const gchar *build_grp_name = "build-menu";
  * where gg = FT, NF, EX for the command group
  *       nn = 2 digit command number
  *       xx = LB for label, CM for command and WD for working dir */
-static const gchar *groups[GEANY_GBG_COUNT] = { "FT", "NF", "EX" };
+static const gchar *groups[GEANY_GBG_COUNT] = { "FT", "NF", "EX", "EX" };
 static const gchar *fixedkey="xx_xx_xx";
 
 #define set_key_grp(key, grp) (key[prefixlen + 0] = grp[0], key[prefixlen + 1] = grp[1])
@@ -2417,12 +2417,12 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 				break;
 			case GEANY_BCS_PREF:
 				build_load_menu_grp(config, &non_ft_pref, GEANY_GBG_NON_FT, NULL, FALSE);
-				build_load_menu_grp(config, &exec_pref, GEANY_GBG_EXEC, NULL, FALSE);
+				build_load_menu_grp(config, &exec_pref, GEANY_GBG_EXEC_IND, NULL, FALSE);
 				SETPTR(regex_pref, g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
 				break;
 			case GEANY_BCS_PROJ:
 				build_load_menu_grp(config, &non_ft_proj, GEANY_GBG_NON_FT, NULL, FALSE);
-				build_load_menu_grp(config, &exec_proj, GEANY_GBG_EXEC, NULL, FALSE);
+				build_load_menu_grp(config, &exec_proj, GEANY_GBG_EXEC_IND, NULL, FALSE);
 				SETPTR(regex_proj, g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
 				pj = (GeanyProject*)p;
 				if (p == NULL)
@@ -2507,7 +2507,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 			if (!EMPTY(value))
 			{
 				if (exec_proj == NULL)
-					exec_proj = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC]);
+					exec_proj = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_EXEC_IND]);
 				if (! exec_proj[GBO_TO_CMD(GEANY_GBO_EXEC)].exists)
 				{
 					exec_proj[GBO_TO_CMD(GEANY_GBO_EXEC)].exists = TRUE;
@@ -2624,7 +2624,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 			break;
 		case GEANY_BCS_PREF:
 			build_save_menu_grp(config, non_ft_pref, GEANY_GBG_NON_FT, NULL);
-			build_save_menu_grp(config, exec_pref, GEANY_GBG_EXEC, NULL);
+			build_save_menu_grp(config, exec_pref, GEANY_GBG_EXEC_IND, NULL);
 			if (!EMPTY(regex_pref))
 				g_key_file_set_string(config, build_grp_name, "error_regex", regex_pref);
 			else
@@ -2633,7 +2633,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 		case GEANY_BCS_PROJ:
 			pj = (GeanyProject*)ptr;
 			build_save_menu_grp(config, non_ft_proj, GEANY_GBG_NON_FT, NULL);
-			build_save_menu_grp(config, exec_proj, GEANY_GBG_EXEC, NULL);
+			build_save_menu_grp(config, exec_proj, GEANY_GBG_EXEC_IND, NULL);
 			if (!EMPTY(regex_proj))
 				g_key_file_set_string(config, build_grp_name, "error_regex", regex_proj);
 			else
