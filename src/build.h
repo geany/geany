@@ -88,6 +88,7 @@ enum GeanyBuildFixedMenuItems
 	GBF_SEP_2,
 	GBF_SEP_3,
 	GBF_SEP_4,
+	GBF_SEP_5,
 	GBF_COUNT
 };
 

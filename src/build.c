@@ -1298,7 +1298,7 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 		}
 		return;
 	}
-	else if (grp == GEANY_GBG_EXEC)
+	else if (grp == GEANY_GBG_EXEC || grp == GEANY_GBG_EXEC_IND)
 	{
 		GPid *pid = get_run_pid(grp, cmd);
 		if (*pid > (GPid) 1)
@@ -1333,6 +1333,7 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 #define MENU_FT_REST	 (GEANY_GBG_COUNT + GEANY_GBG_FT)
 #define MENU_NON_FT_REST (GEANY_GBG_COUNT + GEANY_GBG_NON_FT)
 #define MENU_EXEC_REST   (GEANY_GBG_COUNT + GEANY_GBG_EXEC)
+#define MENU_EXEC_IND_REST (GEANY_GBG_COUNT + GEANY_GBG_EXEC_IND)
 /* the separator */
 #define MENU_SEPARATOR   (2*GEANY_GBG_COUNT)
 /* the fixed items */
@@ -1378,6 +1379,12 @@ static struct BuildMenuItemSpec {
 		GBO_TO_CMD(GEANY_GBO_EXEC), NULL, on_build_menu_item},
 	{NULL, -1, MENU_EXEC_REST,
 		GBO_TO_CMD(GEANY_GBO_EXEC) + 1, NULL, on_build_menu_item},
+	{NULL, -1, MENU_SEPARATOR,
+		GBF_SEP_5, NULL, NULL},
+	{GTK_STOCK_EXECUTE, GEANY_KEYS_BUILD_RUNINDEPENDENT, GEANY_GBG_EXEC_IND,
+		0, NULL, on_build_menu_item},
+	{NULL, -1, MENU_EXEC_IND_REST,
+		1, NULL, on_build_menu_item},
 	{NULL, -1, MENU_SEPARATOR,
 		GBF_SEP_4, NULL, NULL},
 	{GTK_STOCK_PREFERENCES, GEANY_KEYS_BUILD_OPTIONS, MENU_COMMANDS,
@@ -2699,6 +2706,15 @@ static void on_project_close(void)
 {
 	/* remove project regexen */
 	SETPTR(regex_proj, NULL);
+	
+	guint n = build_groups_count[GEANY_GBG_EXEC_IND];
+	for (guint i = 0; i < n; i++)
+	{
+		g_free(exec_proj[i].label);
+		g_free(exec_proj[i].command);
+		g_free(exec_proj[i].working_dir);
+	}
+	memset(exec_proj, 0, sizeof(GeanyBuildCommand) * n);
 }
 
 
@@ -2843,10 +2859,8 @@ gboolean build_keybinding(guint key_id)
 			item = menu_items->menu_item[GEANY_GBG_EXEC][GBO_TO_CMD(GEANY_GBO_EXEC)];
 			break;
 		case GEANY_KEYS_BUILD_RUNINDEPENDENT:
-		{
-			build_run_cmd(doc, GEANY_GBG_EXEC_IND, 0);
-			return TRUE;
-		}
+			item = menu_items->menu_item[GEANY_GBG_EXEC_IND][0];
+			break;
 		case GEANY_KEYS_BUILD_OPTIONS:
 			item = menu_items->menu_item[GBG_FIXED][GBF_COMMANDS];
 			break;
