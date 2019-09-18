@@ -214,11 +214,15 @@ Coding
   to will not be mutated within the function.
 * Don't let variable names shadow outer variables - use gcc's -Wshadow
   option.
-* Use the strictest possible data type where practical. For example
-  for an enumeration, use the actual enum type rather than just a
+* Use the strictest possible data type where practical.
+  Avoid using untyped pointers (e.g. gpointer) where practical.
+  For an enumeration, use the actual enum type rather than just a
   ``gint``, use a ``gchar`` for individual (ASCII/UTF-8) string
   characters rather than ``gint``, and use a ``guint`` for integers
   which cannot be negative rather than ``gint``.
+* Prefer loops to calling ``some_type_foreach()`` with a ``user_data``
+  argument. (Note: Some containers don't support external iteration,
+  e.g. for tree structures, so ``*_foreach`` is fine for those).
 * Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
   add noise to the code with little real benefit.
 

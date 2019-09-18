@@ -75,52 +75,8 @@ guint build_get_group_count(const GeanyBuildGroup grp);
 
 #ifdef GEANY_PRIVATE
 
-/* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
-/* * Geany Known Build Commands.
- * These commands are named after their default use.
- * Only these commands can currently have keybindings.
- **/
-typedef enum
-{
-	GEANY_GBO_COMPILE,		/* *< default compile file */
-	GEANY_GBO_BUILD,		/* *< default build file */
-	GEANY_GBO_MAKE_ALL,		/* *< default make */
-	GEANY_GBO_CUSTOM,		/* *< default make user specified target */
-	GEANY_GBO_MAKE_OBJECT,	/* *< default make object, make %e.o */
-	GEANY_GBO_EXEC,			/* *< default execute ./%e */
-	GEANY_GBO_COUNT			/* *< count of how many */
-} GeanyBuildType;
-
 /* include the fixed widgets in an array indexed by groups */
 #define GBG_FIXED GEANY_GBG_COUNT
-
-/* * Convert @c GeanyBuildType to @c GeanyBuildGroup.
- *
- * This macro converts @c GeanyBuildType enum values (the "known" commands)
- * to the group they are part of.
- *
- * @param gbo the @c GeanyBuildType value.
- *
- * @return the @c GeanyBuildGroup group that @a gbo is in.
- *
- * Note this is a macro so that it can be used in static initialisers.
- **/
-#define GBO_TO_GBG(gbo) ((gbo)>GEANY_GBO_EXEC?GEANY_GBG_COUNT:((gbo)>=GEANY_GBO_EXEC?GEANY_GBG_EXEC: \
-						 ((gbo) >= GEANY_GBO_MAKE_ALL ? GEANY_GBG_NON_FT : GEANY_GBG_FT)))
-
-/* * Convert @c GeanyBuildType to command index.
- *
- * This macro converts @c GeanyBuildType enum values (the "known" commands)
- * to the index within the group.
- *
- * @param gbo the @c GeanyBuildType value.
- *
- * @return the index of the @a gbo command in its group.
- *
- * Note this is a macro so that it can be used in static initialisers.
- **/
-#define GBO_TO_CMD(gbo) ((gbo)>=GEANY_GBO_COUNT?(gbo)-GEANY_GBO_COUNT:((gbo)>=GEANY_GBO_EXEC?(gbo)-GEANY_GBO_EXEC: \
-						 ((gbo) >= GEANY_GBO_MAKE_ALL ? (gbo)-GEANY_GBO_MAKE_ALL : (gbo))))
 
 enum GeanyBuildFixedMenuItems
 {
@@ -210,6 +166,8 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src);
 void build_set_group_count(GeanyBuildGroup grp, gint count);
 
 gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
+
+gboolean build_keybinding(guint key_id);
 
 #endif /* GEANY_PRIVATE */
 

@@ -2539,7 +2539,7 @@ documents before restart.
 ================================  ===========================================  ==========  ===========
 Key                               Description                                  Default     Applies
 ================================  ===========================================  ==========  ===========
-**Editor related**
+**``editor`` group**
 use_gtk_word_boundaries           Whether to look for the end of a word        true        to new
                                   when using word-boundary related                         documents
                                   Scintilla commands (see `Scintilla
@@ -2560,17 +2560,10 @@ indent_hard_tab_width             The size of a tab character. Don't change    8
 editor_ime_interaction            Input method editor (IME)'s candidate        0           to new
                                   window behaviour. May be 0 (windowed) or                 documents
                                   1 (inline)
-**Interface related**
+**``interface`` group**
 show_symbol_list_expanders        Whether to show or hide the small            true        to new
                                   expander icons on the symbol list                        documents
                                   treeview.
-allow_always_save                 Whether files can be saved always, even      false       immediately
-                                  if they don't have any changes.
-                                  By default, the Save button and menu
-                                  item are disabled when a file is
-                                  unchanged. When setting this option to
-                                  true, the Save button and menu item are
-                                  always active and files can be saved.
 compiler_tab_autoscroll           Whether to automatically scroll to the       true        immediately
                                   last line of the output in the Compiler
                                   tab.
@@ -2586,7 +2579,7 @@ msgwin_messages_visible           Whether to show the Messages tab in the      t
                                   Messages Window
 msgwin_scribble_visible           Whether to show the Scribble tab in the      true        immediately
                                   Messages Window
-**VTE related**
+**``terminal`` group**
 send_selection_unsafe             By default, Geany strips any trailing        false       immediately
                                   newline characters from the current
                                   selection before sending it to the terminal
@@ -2604,7 +2597,14 @@ send_cmd_prefix                   String with which prefix the commands sent   E
                                   setting this to a space.  Note that leading
                                   spaces must be escaped using `\s` in the
                                   configuration file.
-**File related**
+**``files`` group**
+allow_always_save                 Whether files can be saved always, even      false       immediately
+                                  if they don't have any changes.
+                                  By default, the Save button and menu
+                                  item are disabled when a file is
+                                  unchanged. When setting this option to
+                                  true, the Save button and menu item are
+                                  always active and files can be saved.
 use_atomic_file_saving            Defines the mode how Geany saves files to    false       immediately
                                   disk. If disabled, Geany directly writes
                                   the content of the document to disk. This
@@ -2636,17 +2636,16 @@ reload_clean_doc_on_file_change   Whether to automatically reload documents    f
                                   on disk.
                                   If unsaved changes exist then the user is
                                   prompted to reload manually.
-**Filetype related**
-extract_filetype_regex            Regex to extract filetype name from file     See below.  immediately
+extract_filetype_regex            Regex to extract filetype name from file     See link    immediately
                                   via capture group one.
-**Search related**
+                                  See `ft_regex`_ for default.
+**``search`` group**
 find_selection_type               See `Find selection`_.                       0           immediately
-**Replace related**
 replace_and_find_by_default       Set ``Replace & Find`` button as default so  true        immediately
                                   it will be activated when the Enter key is
                                   pressed while one of the text fields has
                                   focus.
-**Build Menu related**
+**``build`` group**
 number_ft_menu_items              The maximum number of menu items in the      2           on restart
                                   filetype section of the Build menu.
 number_non_ft_menu_items          The maximum number of menu items in the      3           on restart
@@ -2654,8 +2653,6 @@ number_non_ft_menu_items          The maximum number of menu items in the      3
 number_exec_menu_items            The maximum number of menu items in the      2           on restart
                                   execute section of the Build menu.
 ================================  ===========================================  ==========  ===========
-
-The extract_filetype_regex has the default value GEANY_DEFAULT_FILETYPE_REGEX.
 
 Statusbar Templates
 ```````````````````
@@ -4300,26 +4297,30 @@ type
     =====   =======================
 
 
+[build-menu] filetype section
+`````````````````````````````
+This supports the same keys as the ``geany.conf`` `[build-menu] section`_.
+
+Example::
+
+    FT_00_LB=_Compile
+    FT_00_CM=gcc -c "%f"
+    FT_00_WD=
+    FT_01_LB=_Build
+    FT_01_CM=gcc -o "%e" "%f"
+    FT_01_WD=
+    EX_00_LB=_Execute
+    EX_00_CM="./%e"
+    EX_00_WD=
+    error_regex=^([^:]+):([0-9]+):
+
 [build_settings] section
 ````````````````````````
-
-As of Geany 0.19 this section is supplemented by the `[build-menu] section`_.
+As of Geany 0.19 this section is for legacy support.
 Values that are set in the [build-menu] section will override those in this section.
 
 error_regex
-    This is a Perl-compatible regular expression (PCRE) to parse a filename
-    (absolute or relative) and line number from the build output.
-    If undefined, Geany will fall back to its default error message parsing.
-
-    Only the first two match groups will be read by Geany. These groups can
-    occur in any order: the match group consisting of only digits will be used
-    as the line number, and the other group as the filename.  In no group
-    consists of only digits, the match will fail.
-
-    *Example:* ``error_regex=^(.+):([0-9]+):[0-9]+``
-
-    This will parse a message such as:
-    ``test.py:7:24: E202 whitespace before ']'``
+    See [build-menu] section for details.
 
 **Build commands**
 
@@ -4737,6 +4738,8 @@ section for details.  All the settings can be configured from the dialogs
 except the execute command in filetype files and filetype definitions in
 the project file, so these are the only ones which need hand editing.
 
+Menu commands
+`````````````
 The build-menu section stores one entry for each setting for each menu item that
 is configured.  The keys for these settings have the format:
 
@@ -4757,6 +4760,25 @@ where:
   - LB for label
   - CM for command
   - WD for working directory
+
+See `[build-menu] filetype section`_ for an example.
+
+Error regular expression
+````````````````````````
+error_regex
+    This is a Perl-compatible regular expression (PCRE) to parse a filename
+    (absolute or relative) and line number from the build output.
+    If undefined, Geany will fall back to its default error message parsing.
+
+    Only the first two match groups will be read by Geany. These groups can
+    occur in any order: the match group consisting of only digits will be used
+    as the line number, and the other group as the filename.  In no group
+    consists of only digits, the match will fail.
+
+    *Example:* ``error_regex=^(.+):([0-9]+):[0-9]+``
+
+    This will parse a message such as:
+    ``test.py:7:24: E202 whitespace before ']'``
 
 
 Project file format
@@ -5468,6 +5490,8 @@ GEANY_MAX_AUTOCOMPLETE_WORDS    How many autocompletion suggestions should    30
 GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   See below.
                                 files.
 ==============================  ============================================  ==================
+
+.. _ft_regex:
 
 The GEANY_DEFAULT_FILETYPE_REGEX default value is  -\\*-\\s*([^\\s]+)\\s*-\\*- which finds Emacs filetypes.
 

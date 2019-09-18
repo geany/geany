@@ -132,11 +132,13 @@ void configuration_add_pref_group(struct StashGroup *group, gboolean for_prefs_d
 }
 
 
-/* The group will be free'd on quitting. */
-void configuration_add_various_pref_group(struct StashGroup *group)
+/* The group will be free'd on quitting.
+ * prefix can be NULL to use group name */
+void configuration_add_various_pref_group(struct StashGroup *group,
+	const gchar *prefix)
 {
 	configuration_add_pref_group(group, TRUE);
-	stash_group_set_various(group, TRUE);
+	stash_group_set_various(group, TRUE, prefix);
 }
 
 
@@ -225,7 +227,7 @@ static void init_pref_groups(void)
 
 	/* various geany prefs */
 	group = stash_group_new(PACKAGE);
-	configuration_add_various_pref_group(group);
+	configuration_add_various_pref_group(group, "editor");
 
 	stash_group_add_boolean(group, &editor_prefs.show_scrollbars,
 		"show_editor_scrollbars", TRUE);
@@ -235,6 +237,15 @@ static void init_pref_groups(void)
 		"use_gtk_word_boundaries", TRUE);
 	stash_group_add_boolean(group, &editor_prefs.complete_snippets_whilst_editing,
 		"complete_snippets_whilst_editing", FALSE);
+	/* for backwards-compatibility */
+	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
+		"indent_hard_tab_width", 8);
+	stash_group_add_integer(group, &editor_prefs.ime_interaction,
+		"editor_ime_interaction", SC_IME_WINDOWED);
+
+	group = stash_group_new(PACKAGE);
+	configuration_add_various_pref_group(group, "files");
+
 	stash_group_add_boolean(group, &file_prefs.use_safe_file_saving,
 		atomic_file_saving_key, FALSE);
 	stash_group_add_boolean(group, &file_prefs.gio_unsafe_save_backup,
@@ -247,23 +258,25 @@ static void init_pref_groups(void)
 		"show_keep_edit_history_on_reload_msg", TRUE);
 	stash_group_add_boolean(group, &file_prefs.reload_clean_doc_on_file_change,
 		"reload_clean_doc_on_file_change", FALSE);
-	/* for backwards-compatibility */
-	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
-		"indent_hard_tab_width", 8);
-	stash_group_add_integer(group, (gint*)&search_prefs.find_selection_type,
-		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
 	stash_group_add_string(group, &file_prefs.extract_filetype_regex,
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
+	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
+		"allow_always_save", FALSE);
+
+	group = stash_group_new(PACKAGE);
+	configuration_add_various_pref_group(group, "search");
+
+	stash_group_add_integer(group, (gint*)&search_prefs.find_selection_type,
+		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
 	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
 		"replace_and_find_by_default", TRUE);
-	stash_group_add_integer(group, &editor_prefs.ime_interaction,
-		"editor_ime_interaction", SC_IME_WINDOWED);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
 	/* various build-menu prefs */
+	// Warning: don't move PACKAGE group name items here 
 	group = stash_group_new("build-menu");
-	configuration_add_various_pref_group(group);
+	configuration_add_various_pref_group(group, "build");
 
 	stash_group_add_integer(group, &build_menu_prefs.number_ft_menu_items,
 		"number_ft_menu_items", 0);
@@ -903,7 +916,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		 * this can't be done in init_pref_groups() because we need to know the value of
 		 * vte_info.load_vte, and `vc` to be initialized */
 		group = stash_group_new("VTE");
-		configuration_add_various_pref_group(group);
+		configuration_add_various_pref_group(group, "terminal");
 
 		stash_group_add_string(group, &vc->send_cmd_prefix, "send_cmd_prefix", "");
 		stash_group_add_boolean(group, &vc->send_selection_unsafe, "send_selection_unsafe", FALSE);

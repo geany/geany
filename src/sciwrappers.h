@@ -216,6 +216,8 @@ gint				sci_text_width				(ScintillaObject *sci, gint styleNumber, const gchar *
 void				sci_move_selected_lines_down    (ScintillaObject *sci);
 void				sci_move_selected_lines_up      (ScintillaObject *sci);
 
+void				sci_set_font_fractional		(ScintillaObject *sci, gint style, const gchar *font, gdouble size);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

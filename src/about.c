@@ -43,6 +43,7 @@
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
+#define RUNTIME BUILDDATE
 #define COPYRIGHT _("Copyright (c) 2005\nThe Geany contributors")
 
 static const gchar *translators[][2] = {
@@ -143,6 +144,7 @@ static GtkWidget *create_dialog(void)
 	GtkWidget *label_info;
 	GtkWidget *codename_label;
 	GtkWidget *builddate_label;
+	GtkWidget *runtime_label;
 	GtkWidget *url_button;
 	GtkWidget *cop_label;
 	GtkWidget *label;
@@ -240,6 +242,21 @@ static GtkWidget *create_dialog(void)
 	gtk_misc_set_padding(GTK_MISC(builddate_label), 2, 2);
 	gtk_widget_show(builddate_label);
 	gtk_box_pack_start(GTK_BOX(info_box), builddate_label, FALSE, FALSE, 0);
+
+	/* GTK+/GLib runtime version label */
+	runtime_label = gtk_label_new(NULL);
+	gtk_label_set_justify(GTK_LABEL(runtime_label), GTK_JUSTIFY_CENTER);
+	gtk_label_set_selectable(GTK_LABEL(runtime_label), TRUE);
+	gtk_label_set_use_markup(GTK_LABEL(runtime_label), TRUE);
+	g_snprintf(buffer2, sizeof(buffer2),
+		_("Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"),
+		gtk_major_version, gtk_minor_version, gtk_micro_version,
+		glib_major_version, glib_minor_version, glib_micro_version);
+	g_snprintf(buffer, sizeof(buffer), RUNTIME, buffer2);
+	gtk_label_set_markup(GTK_LABEL(runtime_label), buffer);
+	gtk_misc_set_padding(GTK_MISC(runtime_label), 2, 2);
+	gtk_widget_show(runtime_label);
+	gtk_box_pack_start(GTK_BOX(info_box), runtime_label, FALSE, FALSE, 0);
 
 	box = gtk_hbutton_box_new();
 	url_button = gtk_button_new();
