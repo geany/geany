@@ -528,11 +528,14 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_BIBTEX:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Journal Articles"), ICON_NONE,
+				&(tv_iters.tag_function), _("Articles"), ICON_NONE,
+				&(tv_iters.tag_macro), _("Book Chapters"), ICON_NONE,
 				&(tv_iters.tag_class), _("Books & Conference Proceedings"), ICON_NONE,
 				&(tv_iters.tag_member), _("Conference Papers"), ICON_NONE,
 				&(tv_iters.tag_variable), _("Theses"), ICON_NONE,
-				&(tv_iters.tag_struct), _("Other"), ICON_NONE,
+				&(tv_iters.tag_namespace), _("Strings"), ICON_NONE,
+				&(tv_iters.tag_externvar), _("Unpublished"), ICON_NONE,
+				&(tv_iters.tag_other), _("Other"), ICON_NONE,
 				NULL);
 			break;
 		}

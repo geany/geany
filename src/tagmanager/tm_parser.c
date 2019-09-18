@@ -125,11 +125,21 @@ static TMParserMapEntry map_LATEX[] = {
 	{'s', tm_tag_struct_t},
 };
 static TMParserMapEntry map_BIBTEX[] = {
-	{'f', tm_tag_function_t},
-	{'c', tm_tag_class_t},
-	{'m', tm_tag_member_t},
-	{'v', tm_tag_variable_t},
-	{'s', tm_tag_struct_t},
+	{'a', tm_tag_function_t},
+	{'b', tm_tag_class_t},
+	{'B', tm_tag_class_t},
+	{'c', tm_tag_member_t},
+	{'i', tm_tag_macro_t},
+	{'I', tm_tag_macro_t},
+	{'j', tm_tag_member_t},
+	{'m', tm_tag_other_t},
+	{'M', tm_tag_variable_t},
+	{'n', tm_tag_other_t},
+	{'p', tm_tag_variable_t},
+	{'P', tm_tag_class_t},
+	{'s', tm_tag_namespace_t},
+	{'t', tm_tag_other_t},
+	{'u', tm_tag_externvar_t},
 };
 
 static TMParserMapEntry map_ASM[] = {
