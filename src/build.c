@@ -2238,11 +2238,13 @@ void build_read_project(GeanyFiletype *ft, BuildTableData build_properties)
 	if (ft != NULL)
 	{
 		menu_dst.dst[GEANY_GBG_FT] = &(ft->priv->projfilecmds);
+		menu_dst.dst[GEANY_GBG_EXEC] = &ft->priv->projexeccmds;
 		menu_dst.fileregexstr = &(ft->priv->projerror_regex_string);
 	}
 	else
 	{
 		menu_dst.dst[GEANY_GBG_FT] = NULL;
+		menu_dst.dst[GEANY_GBG_EXEC] = NULL;
 		menu_dst.fileregexstr = NULL;
 	}
 	menu_dst.dst[GEANY_GBG_NON_FT] = &non_ft_proj;
@@ -2277,6 +2279,7 @@ static void show_build_commands_dialog(void)
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 
 	prefdsts.dst[GEANY_GBG_NON_FT] = &non_ft_pref;
+	prefdsts.dst[GEANY_GBG_EXEC_IND] = NULL;
 	if (ft != NULL)
 	{
 		prefdsts.dst[GEANY_GBG_FT] = &(ft->priv->homefilecmds);
