@@ -117,6 +117,7 @@ static struct
 	gint number_ft_menu_items;
 	gint number_non_ft_menu_items;
 	gint number_exec_menu_items;
+	gint number_exec_ind_menu_items;
 }
 build_menu_prefs;
 
@@ -284,6 +285,8 @@ static void init_pref_groups(void)
 		"number_non_ft_menu_items", 0);
 	stash_group_add_integer(group, &build_menu_prefs.number_exec_menu_items,
 		"number_exec_menu_items", 0);
+	stash_group_add_integer(group, &build_menu_prefs.number_exec_ind_menu_items,
+		"number_exec_ind_menu_items", 0);
 }
 
 
@@ -1000,6 +1003,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
 	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
 	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
+	build_set_group_count(GEANY_GBG_EXEC_IND, build_menu_prefs.number_exec_ind_menu_items);
 	build_load_menu(config, GEANY_BCS_PREF, NULL);
 }
 

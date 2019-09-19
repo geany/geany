@@ -2652,6 +2652,8 @@ number_non_ft_menu_items          The maximum number of menu items in the      3
                                   independent build section.
 number_exec_menu_items            The maximum number of menu items in the      2           on restart
                                   execute section of the Build menu.
+number_exec_ind_menu_items        The maximum number of menu items in the      2           on restart
+                                  independent execute section.
 ================================  ===========================================  ==========  ===========
 
 Statusbar Templates
