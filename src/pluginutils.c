@@ -723,7 +723,7 @@ void plugin_set_document_data(struct GeanyPlugin *plugin, struct GeanyDocument *
  * void on_document_save(GObject *unused, GeanyDocument *doc, GeanyPlugin *plugin)
  * {
  *     const gchar *some_data = plugin_get_document_data(plugin, doc, "my-data");
- *     g_print("my-data: %s", some_data);
+ *     g_print("my-data: %s\n", some_data);
  * }
  *
  * gboolean plugin_init(GeanyPlugin *plugin, gpointer unused)

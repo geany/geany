@@ -75,10 +75,10 @@ void geany_debug(gchar const *format, ...)
 
 static void handler_print(const gchar *msg)
 {
-	printf("%s\n", msg);
+	printf("%s", msg);
 	if (G_LIKELY(log_buffer != NULL))
 	{
-		g_string_append_printf(log_buffer, "%s\n", msg);
+		g_string_append_printf(log_buffer, "%s", msg);
 		update_dialog();
 	}
 }
