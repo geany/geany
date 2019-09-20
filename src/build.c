@@ -2233,19 +2233,13 @@ static gboolean build_read_commands(BuildDestination *dst, BuildTableData table_
 
 void build_read_project(GeanyFiletype *ft, BuildTableData build_properties)
 {
-	BuildDestination menu_dst;
+	BuildDestination menu_dst = {0};
 
 	if (ft != NULL)
 	{
 		menu_dst.dst[GEANY_GBG_FT] = &(ft->priv->projfilecmds);
 		menu_dst.dst[GEANY_GBG_EXEC] = &ft->priv->projexeccmds;
 		menu_dst.fileregexstr = &(ft->priv->projerror_regex_string);
-	}
-	else
-	{
-		menu_dst.dst[GEANY_GBG_FT] = NULL;
-		menu_dst.dst[GEANY_GBG_EXEC] = NULL;
-		menu_dst.fileregexstr = NULL;
 	}
 	menu_dst.dst[GEANY_GBG_NON_FT] = &non_ft_proj;
 	menu_dst.dst[GEANY_GBG_EXEC_IND] = &exec_proj;
@@ -2263,7 +2257,6 @@ static void show_build_commands_dialog(void)
 	const gchar *title = _("Set Build Commands");
 	gint response;
 	BuildTableData table_data;
-	BuildDestination prefdsts;
 
 	if (doc != NULL)
 		ft = doc->file_type;
@@ -2278,19 +2271,13 @@ static void show_build_commands_dialog(void)
 	/* run modally to prevent user changing idx filetype */
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 
+	BuildDestination prefdsts = {0};
 	prefdsts.dst[GEANY_GBG_NON_FT] = &non_ft_pref;
-	prefdsts.dst[GEANY_GBG_EXEC_IND] = NULL;
 	if (ft != NULL)
 	{
 		prefdsts.dst[GEANY_GBG_FT] = &(ft->priv->homefilecmds);
 		prefdsts.fileregexstr = &(ft->priv->homeerror_regex_string);
 		prefdsts.dst[GEANY_GBG_EXEC] = &(ft->priv->homeexeccmds);
-	}
-	else
-	{
-		prefdsts.dst[GEANY_GBG_FT] = NULL;
-		prefdsts.fileregexstr = NULL;
-		prefdsts.dst[GEANY_GBG_EXEC] = NULL;
 	}
 	prefdsts.nonfileregexstr = &regex_pref;
 	if (build_read_commands(&prefdsts, table_data, response) && ft != NULL)
