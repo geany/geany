@@ -443,6 +443,7 @@ static void destroy_project(gboolean open_default)
 	/* remove project non filetype build menu items */
 	build_remove_menu_item(GEANY_BCS_PROJ, GEANY_GBG_NON_FT, -1);
 	build_remove_menu_item(GEANY_BCS_PROJ, GEANY_GBG_EXEC, -1);
+	build_remove_menu_item(GEANY_BCS_PROJ, GEANY_GBG_EXEC_IND, -1);
 
 	g_free(app->project->name);
 	g_free(app->project->description);

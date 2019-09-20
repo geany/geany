@@ -2709,15 +2709,6 @@ static void on_project_close(void)
 {
 	/* remove project regexen */
 	SETPTR(regex_proj, NULL);
-	
-	guint n = build_groups_count[GEANY_GBG_EXEC_IND];
-	for (guint i = 0; i < n; i++)
-	{
-		g_free(exec_proj[i].label);
-		g_free(exec_proj[i].command);
-		g_free(exec_proj[i].working_dir);
-	}
-	memset(exec_proj, 0, sizeof(GeanyBuildCommand) * n);
 }
 
 
