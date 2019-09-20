@@ -371,9 +371,9 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc,
 	if (doc == NULL)
 		doc = document_get_current();
 	
-	GeanyFiletypePrivate empty_ftp = {}, *ftp =
+	GeanyFiletypePrivate empty_ftp = {0}, *ftp =
 		doc ? doc->file_type->priv : &empty_ftp; // avoid checking for null
-	CommandSet overloads[6] = {};
+	CommandSet overloads[6] = {0};
 
 	switch (cmdgrp)
 	{
@@ -383,7 +383,7 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc,
 				{GEANY_BCS_PROJ,	ftp->projfilecmds},
 				{GEANY_BCS_PREF,	ftp->homefilecmds},
 				{GEANY_BCS_FT,		ftp->filecmds},
-				{GEANY_BCS_DEF,		ft_def},
+				{GEANY_BCS_DEF,		ft_def}
 			};
 			memcpy(overloads, cs, sizeof(cs));
 			break;
@@ -394,7 +394,7 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc,
 				{GEANY_BCS_PROJ,	non_ft_proj},
 				{GEANY_BCS_PREF,	non_ft_pref},
 				{GEANY_BCS_FT,		ftp->ftdefcmds},
-				{GEANY_BCS_DEF,		non_ft_def},
+				{GEANY_BCS_DEF,		non_ft_def}
 			};
 			memcpy(overloads, cs, sizeof(cs));
 			break;
@@ -407,7 +407,7 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc,
 				{GEANY_BCS_PREF,	exec_pref},
 				{GEANY_BCS_FT,		ftp->homeexeccmds},
 				{GEANY_BCS_FT,		ftp->execcmds},
-				{GEANY_BCS_DEF,		exec_def},
+				{GEANY_BCS_DEF,		exec_def}
 			};
 			memcpy(overloads, cs, sizeof(cs));
 			break;
