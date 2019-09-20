@@ -424,7 +424,7 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc,
 			if (psrc)
 				*psrc = src;
 			if (printbuildcmds)
-				printf("cmd[%u,%u]=%u\n", cmdgrp, cmdindex, src);
+				g_print("cmd[%u,%u]=%u below=%u; %s\n", cmdgrp, cmdindex, src, below, cmds[cmdindex].command);
 			return &(cmds[cmdindex]);
 		}
 	}
