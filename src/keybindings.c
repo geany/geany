@@ -2562,8 +2562,7 @@ static void select_brackets(ScintillaObject *sci)
 		end = sci_find_text(sci, SCFIND_REGEXP, &ttf);
 		if (end < 0) return;
 		start = sci_find_matching_brace(sci, end);
-		if (start < 0) return;
-		if (start <= cur) break;
+		if (start >= 0 && start < cur) break;
 		ttf.chrg.cpMin = end + 1;
 	}
 	sci_set_selection(sci, end, start + 1);
