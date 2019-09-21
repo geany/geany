@@ -2556,7 +2556,7 @@ static void select_brackets(ScintillaObject *sci)
 	cur = sci_get_current_position(sci);
 	ttf.chrg.cpMin = cur;
 	ttf.chrg.cpMax = sci_get_length(sci);
-	ttf.lpstrText = "[])}]";
+	ttf.lpstrText = editor_prefs.brace_match_ltgt ? "[])}>]" : "[])}]";
 	while (1)
 	{
 		end = sci_find_text(sci, SCFIND_REGEXP, &ttf);
