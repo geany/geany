@@ -2372,13 +2372,13 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 
 		if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &err))
 		{
-			g_printerr("Unable to open new window: %s", err->message);
+			g_printerr("Unable to open new window: %s\n", err->message);
 			g_error_free(err);
 		}
 		g_free(exec_path);
 	}
 	else
-		g_printerr("Unable to find 'geany'");
+		g_printerr("Unable to find 'geany'\n");
 }
 
 
