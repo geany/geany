@@ -86,10 +86,10 @@ static void handler_print(const gchar *msg)
 
 static void handler_printerr(const gchar *msg)
 {
-	fprintf(stderr, "%s\n", msg);
+	fprintf(stderr, "%s", msg);
 	if (G_LIKELY(log_buffer != NULL))
 	{
-		g_string_append_printf(log_buffer, "%s\n", msg);
+		g_string_append_printf(log_buffer, "%s", msg);
 		update_dialog();
 	}
 }
