@@ -24,7 +24,6 @@
 	PhpParser, \
 	PythonParser, \
 	TexParser, \
-	BibtexParser, \
 	AsmParser, \
 	ConfParser, \
 	SqlParser, \
@@ -66,6 +65,7 @@
 	GoParser, \
 	JsonParser, \
 	ZephirParser, \
-	PowerShellParser
+	PowerShellParser, \
+	BibtexParser
 
 #endif  /* CTAGS_MAIN_PARSERS_H */
