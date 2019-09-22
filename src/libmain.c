@@ -1178,6 +1178,7 @@ gint main_lib(gint argc, gchar **argv)
 		ui_set_statusbar(TRUE, message, g_strerror(config_dir_result));
 		g_warning(message, g_strerror(config_dir_result));
 	}
+#ifdef HAVE_SOCKET
 	if (socket_info.lock_socket == -1)
 	{
 		const gchar *message =
@@ -1185,6 +1186,7 @@ gint main_lib(gint argc, gchar **argv)
 		ui_set_statusbar(TRUE, "%s", message);
 		g_warning("%s", message);
 	}
+#endif
 
 	/* apply all configuration options */
 	apply_settings();
