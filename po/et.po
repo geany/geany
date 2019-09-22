@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-15 17:13+0200\n"
+"POT-Creation-Date: 2019-09-22 11:56+0200\n"
 "PO-Revision-Date: 2012-12-27 16:38+0300\n"
 "Last-Translator: Andreas Ots <andreasots@gmail.com>\n"
 "Language-Team: Estonian\n"
@@ -94,7 +94,7 @@ msgstr "nähtamatu"
 msgid "_Insert \"include <...>\""
 msgstr "_Lisa \"include <...>\""
 
-#: ../data/geany.glade.h:16 ../src/keybindings.c:514
+#: ../data/geany.glade.h:16 ../src/keybindings.c:513
 msgid "Insert Alternative _White Space"
 msgstr "_Lisa teistsugune tühimärk"
 
@@ -106,11 +106,11 @@ msgstr "_Otsi"
 msgid "Open Selected F_ile"
 msgstr "Ava valitud fa_il"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2615
+#: ../data/geany.glade.h:19 ../src/symbols.c:2618
 msgid "Find _Usage"
 msgstr "Otsi _kasutamist"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2620
+#: ../data/geany.glade.h:20 ../src/symbols.c:2623
 msgid "Find _Document Usage"
 msgstr "Otsi _dokumendi kasutamist"
 
@@ -132,7 +132,7 @@ msgstr "_Kontekstipõhine toiming"
 #. *   [5] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
 #. * --------------------------------------------------------------------------------------------------------------------------
 #. *       [0]         [1]           [2]                 [3]                        [4]          [5]
-#: ../data/geany.glade.h:23 ../src/filetypes.c:127 ../src/filetypes.c:1534
+#: ../data/geany.glade.h:23 ../src/filetypes.c:127 ../src/filetypes.c:1526
 msgid "None"
 msgstr "Puudub"
 
@@ -164,7 +164,7 @@ msgstr ""
 msgid "Bottom"
 msgstr "all"
 
-#: ../data/geany.glade.h:31 ../src/keybindings.c:524
+#: ../data/geany.glade.h:31 ../src/keybindings.c:523
 msgid "Preferences"
 msgstr "Eelistused"
 
@@ -410,7 +410,7 @@ msgstr ""
 msgid "Default sorting mode:"
 msgstr "Vaikimisi kodeering uutele failidele:"
 
-#: ../data/geany.glade.h:83 ../src/stash.c:1169
+#: ../data/geany.glade.h:83 ../src/stash.c:1177
 msgid "Name"
 msgstr "Nimi"
 
@@ -1086,7 +1086,7 @@ msgstr "<b>Virtuaalsed tühikud</b>"
 msgid "Display"
 msgstr "Kuvamine"
 
-#: ../data/geany.glade.h:235 ../src/keybindings.c:312 ../src/prefs.c:1608
+#: ../data/geany.glade.h:235 ../src/keybindings.c:311 ../src/prefs.c:1608
 msgid "Editor"
 msgstr "Redaktor"
 
@@ -1164,7 +1164,7 @@ msgstr "Lõputühikud eemaldatakse"
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Rea lõpud puhastatakse tühikutest ja tabeldusmärkidest"
 
-#: ../data/geany.glade.h:253 ../src/keybindings.c:671
+#: ../data/geany.glade.h:253 ../src/keybindings.c:670
 msgid "Replace tabs with space"
 msgstr "Asenda tabeldusmärgid tühikutega"
 
@@ -1242,7 +1242,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Käsud</b>"
 
-#: ../data/geany.glade.h:272 ../src/keybindings.c:324 ../src/prefs.c:1612
+#: ../data/geany.glade.h:272 ../src/keybindings.c:323 ../src/prefs.c:1612
 msgid "Tools"
 msgstr "Tööriistad"
 
@@ -1606,27 +1606,27 @@ msgstr "_Sulge kõik"
 msgid "Co_mmands"
 msgstr "_Käsud"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:437
+#: ../data/geany.glade.h:357 ../src/keybindings.c:436
 msgid "Cu_t Current Line(s)"
 msgstr "_Lõika aktiivne rida/aktiivsed read"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:434
+#: ../data/geany.glade.h:358 ../src/keybindings.c:433
 msgid "_Copy Current Line(s)"
 msgstr "_Kopeeri aktiivne rida/aktiivsed read"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:387
+#: ../data/geany.glade.h:359 ../src/keybindings.c:386
 msgid "_Delete Current Line(s)"
 msgstr "_Kustuta aktiivne rida/aktiivsed read"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:384
+#: ../data/geany.glade.h:360 ../src/keybindings.c:383
 msgid "D_uplicate Line or Selection"
 msgstr "_Paljunda rida või valikut"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:447
+#: ../data/geany.glade.h:361 ../src/keybindings.c:446
 msgid "S_elect Current Line(s)"
 msgstr "_Vali aktiivne rida/aktiivsed read"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:450
+#: ../data/geany.glade.h:362 ../src/keybindings.c:449
 msgid "Se_lect Current Paragraph"
 msgstr "_Vali aktiivne lõik"
 
@@ -1638,15 +1638,15 @@ msgstr "_Liiguta rida/read üles"
 msgid "M_ove Line(s) Down"
 msgstr "_Liiguta rida/read alla"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:501
+#: ../data/geany.glade.h:365 ../src/keybindings.c:500
 msgid "_Send Selection to Terminal"
 msgstr "_Saada valik terminali"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:503
+#: ../data/geany.glade.h:366 ../src/keybindings.c:502
 msgid "_Reflow Lines/Block"
 msgstr ""
 
-#: ../data/geany.glade.h:367 ../src/keybindings.c:461
+#: ../data/geany.glade.h:367 ../src/keybindings.c:460
 msgid "T_oggle Case of Selection"
 msgstr ""
 
@@ -1670,7 +1670,7 @@ msgstr "_Suurenda taanet"
 msgid "_Decrease Indent"
 msgstr "_Vähenda taanet"
 
-#: ../data/geany.glade.h:373 ../src/keybindings.c:480
+#: ../data/geany.glade.h:373 ../src/keybindings.c:479
 msgid "S_mart Line Indent"
 msgstr ""
 
@@ -1686,7 +1686,7 @@ msgstr ""
 msgid "Preference_s"
 msgstr "_Eelistused"
 
-#: ../data/geany.glade.h:377 ../src/keybindings.c:527
+#: ../data/geany.glade.h:377 ../src/keybindings.c:526
 msgid "P_lugin Preferences"
 msgstr "P_luginate eelistused"
 
@@ -1703,7 +1703,7 @@ msgstr "Otsi _järgmist"
 msgid "Find _Previous"
 msgstr "Otsi _eelmist"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2625
+#: ../data/geany.glade.h:381 ../src/symbols.c:2628
 #, fuzzy
 msgid "Find in F_iles..."
 msgstr "_Failides otsimine"
@@ -1721,11 +1721,11 @@ msgstr "Järgmine _sõnum"
 msgid "Pr_evious Message"
 msgstr "_Eelmine sõnum"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:576
+#: ../data/geany.glade.h:385 ../src/keybindings.c:575
 msgid "Go to Ne_xt Marker"
 msgstr "_Mine järmise tähise juurde"
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:579
+#: ../data/geany.glade.h:386 ../src/keybindings.c:578
 msgid "Go to Pre_vious Marker"
 msgstr "_Mine eelmise tähise juurde"
 
@@ -1734,15 +1734,15 @@ msgstr "_Mine eelmise tähise juurde"
 msgid "_Go to Line..."
 msgstr "_Mine reale"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:539
+#: ../data/geany.glade.h:388 ../src/keybindings.c:538
 msgid "Find Next _Selection"
 msgstr "Otsi _järgmine valik"
 
-#: ../data/geany.glade.h:389 ../src/keybindings.c:541
+#: ../data/geany.glade.h:389 ../src/keybindings.c:540
 msgid "Find Pre_vious Selection"
 msgstr "Otsi _eelmine valik"
 
-#: ../data/geany.glade.h:390 ../src/keybindings.c:558
+#: ../data/geany.glade.h:390 ../src/keybindings.c:557
 msgid "_Mark All"
 msgstr "_Märgi kõik"
 
@@ -1901,11 +1901,11 @@ msgstr ""
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr ""
 
-#: ../data/geany.glade.h:429 ../src/keybindings.c:667
+#: ../data/geany.glade.h:429 ../src/keybindings.c:666
 msgid "_Clone"
 msgstr "_Klooni"
 
-#: ../data/geany.glade.h:430 ../src/keybindings.c:669
+#: ../data/geany.glade.h:430 ../src/keybindings.c:668
 msgid "_Strip Trailing Spaces"
 msgstr "_Realõputühikute eemaldamine"
 
@@ -1960,7 +1960,7 @@ msgid "_Apply Default Indentation"
 msgstr "_Rakenda vaikimisi taane"
 
 #. build the code
-#: ../data/geany.glade.h:443 ../src/build.c:2401 ../src/build.c:2678
+#: ../data/geany.glade.h:443 ../src/build.c:2451 ../src/build.c:2722
 msgid "_Build"
 msgstr "_Ehitamine"
 
@@ -2084,7 +2084,7 @@ msgid ""
 "project filename."
 msgstr ""
 
-#: ../data/geany.glade.h:471 ../src/keybindings.c:322
+#: ../data/geany.glade.h:471 ../src/keybindings.c:321
 msgid "Project"
 msgstr "Projekt"
 
@@ -2167,73 +2167,78 @@ msgstr "Grupp:"
 msgid "Other:"
 msgstr "Teised:"
 
-#: ../src/about.c:46
+#: ../src/about.c:47
 msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
 
-#: ../src/about.c:169
+#: ../src/about.c:172
 msgid "About Geany"
 msgstr "Geany teave"
 
-#: ../src/about.c:213
+#: ../src/about.c:216
 msgid "A fast and lightweight IDE"
 msgstr "Kiire ja väike IDE GTK+ põhjal"
 
-#: ../src/about.c:235
+#: ../src/about.c:238
 #, c-format
 msgid "(built on or after %s)"
 msgstr ""
 
+#: ../src/about.c:252
+#, c-format
+msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
+msgstr ""
+
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:267
+#: ../src/about.c:285
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:283
+#: ../src/about.c:301
 msgid "Developers"
 msgstr "Arendajad"
 
-#: ../src/about.c:290
+#: ../src/about.c:308
 msgid "maintainer"
 msgstr "hooldaja"
 
-#: ../src/about.c:298 ../src/about.c:306 ../src/about.c:314
+#: ../src/about.c:316 ../src/about.c:324 ../src/about.c:332
 msgid "developer"
 msgstr "arendaja"
 
-#: ../src/about.c:322
+#: ../src/about.c:340
 msgid "translation maintainer"
 msgstr "tõlkimiste hooldaja"
 
-#: ../src/about.c:331
+#: ../src/about.c:349
 msgid "Translators"
 msgstr "Tõlkijad"
 
-#: ../src/about.c:351
+#: ../src/about.c:369
 msgid "Previous Translators"
 msgstr "Endised tõlkijad"
 
-#: ../src/about.c:372
+#: ../src/about.c:390
 msgid "Contributors"
 msgstr "Kaasautorid"
 
-#: ../src/about.c:382
+#: ../src/about.c:400
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 
-#: ../src/about.c:408
+#: ../src/about.c:426
 msgid "Credits"
 msgstr "Autorid"
 
-#: ../src/about.c:425
+#: ../src/about.c:443
 msgid "License"
 msgstr "Litsens"
 
-#: ../src/about.c:434
+#: ../src/about.c:452
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2242,188 +2247,188 @@ msgstr ""
 "aadressilhttp://www.gnu.org/licenses/gpl-2.0.txt"
 
 #. fall back to %d
-#: ../src/build.c:708
+#: ../src/build.c:757
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr ""
 
-#: ../src/build.c:736
+#: ../src/build.c:785
 msgid "Process failed, no working directory"
 msgstr ""
 
-#: ../src/build.c:748
+#: ../src/build.c:797
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr ""
 
-#: ../src/build.c:773
+#: ../src/build.c:822
 #, c-format
 msgid "Process failed (%s)"
 msgstr ""
 
-#: ../src/build.c:807
+#: ../src/build.c:856
 #, fuzzy, c-format
 msgid "Invalid working directory \"%s\""
 msgstr "Kausta \"%s\" liikumine nurjus"
 
-#: ../src/build.c:843
+#: ../src/build.c:892
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
 msgstr "\"%s\" käivitamine ebaõnnestus (käivitusskripti loomine nurjus: %s)"
 
-#: ../src/build.c:885
+#: ../src/build.c:934
 msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
 
-#: ../src/build.c:933
+#: ../src/build.c:982
 #, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
 
-#: ../src/build.c:1044
+#: ../src/build.c:1093
 msgid "Compilation failed."
 msgstr "Kompileerimine ebaõnnestus."
 
-#: ../src/build.c:1058
+#: ../src/build.c:1107
 msgid "Compilation finished successfully."
 msgstr "Kompileerimine edukalt lõpetatud."
 
-#: ../src/build.c:1218
+#: ../src/build.c:1267
 msgid "Custom Text"
 msgstr "Kohandatud teks"
 
-#: ../src/build.c:1219
+#: ../src/build.c:1268
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr "Sisesta kohandatud tekst siia. Sisestatud tekst lisatakse käsu lõppu."
 
-#: ../src/build.c:1298
+#: ../src/build.c:1347
 msgid "_Next Error"
 msgstr "_Järgmine viga"
 
-#: ../src/build.c:1300
+#: ../src/build.c:1349
 msgid "_Previous Error"
 msgstr "_Eelmine viga"
 
 #. arguments
-#: ../src/build.c:1310 ../src/build.c:2718
+#: ../src/build.c:1359 ../src/build.c:2762
 msgid "_Set Build Commands"
 msgstr "_Määra ehitamise käsud"
 
-#: ../src/build.c:1585 ../src/toolbar.c:375
+#: ../src/build.c:1634 ../src/toolbar.c:375
 msgid "Build the current file"
 msgstr "Ehita aktiivne fail"
 
-#: ../src/build.c:1596
+#: ../src/build.c:1645
 msgid "Build the current file with Make and the default target"
 msgstr "Ehita aktiivne fail Make'i ja vaikimisi sihtmärgiga"
 
-#: ../src/build.c:1598
+#: ../src/build.c:1647
 msgid "Build the current file with Make and the specified target"
 msgstr "Ehita aktiivne fail Make'i ja määratud sihtmärgiga"
 
-#: ../src/build.c:1600
+#: ../src/build.c:1649
 msgid "Compile the current file with Make"
 msgstr "Ehita aktiivne fail Make'iga"
 
-#: ../src/build.c:1619
+#: ../src/build.c:1668
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr ""
 
-#: ../src/build.c:1633 ../src/build.c:1645
+#: ../src/build.c:1682 ../src/build.c:1694
 msgid "No more build errors."
 msgstr "Ehitamisel rohkem vigu ei olnud."
 
-#: ../src/build.c:1758 ../src/build.c:1760
+#: ../src/build.c:1807 ../src/build.c:1809
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1785 ../src/symbols.c:520 ../src/tools.c:396
+#: ../src/build.c:1834 ../src/symbols.c:522 ../src/tools.c:396
 msgid "Label"
 msgstr "Silt"
 
 #. command column, holding status and command display
-#: ../src/build.c:1786 ../src/symbols.c:515 ../src/tools.c:381
+#: ../src/build.c:1835 ../src/symbols.c:517 ../src/tools.c:381
 msgid "Command"
 msgstr "Käsk"
 
-#: ../src/build.c:1787
+#: ../src/build.c:1836
 msgid "Working directory"
 msgstr "Töökataloog"
 
-#: ../src/build.c:1788
+#: ../src/build.c:1837
 msgid "Reset"
 msgstr "Lähtesta"
 
-#: ../src/build.c:1845
+#: ../src/build.c:1894
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1929 ../src/build.c:1931
+#: ../src/build.c:1978 ../src/build.c:1980
 #, c-format
 msgid "%s commands"
 msgstr ""
 
-#: ../src/build.c:1931
+#: ../src/build.c:1980
 msgid "No filetype"
 msgstr "Failitüüp puudub"
 
-#: ../src/build.c:1940 ../src/build.c:1975
+#: ../src/build.c:1989 ../src/build.c:2024
 #, fuzzy
 msgid "Error regular expression:"
 msgstr "Vigane regulaaravaldis:"
 
-#: ../src/build.c:1968
+#: ../src/build.c:2017
 msgid "Independent commands"
 msgstr ""
 
-#: ../src/build.c:2000
+#: ../src/build.c:2049
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:2009
+#: ../src/build.c:2058
 msgid "Execute commands"
 msgstr "Käivita käsud"
 
-#: ../src/build.c:2021
+#: ../src/build.c:2070
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
 
-#: ../src/build.c:2179
+#: ../src/build.c:2228
 msgid "Set Build Commands"
 msgstr ""
 
-#: ../src/build.c:2394
+#: ../src/build.c:2444
 msgid "_Compile"
 msgstr "_Kompileeri"
 
-#: ../src/build.c:2408 ../src/build.c:2438 ../src/build.c:2646
+#: ../src/build.c:2458 ../src/build.c:2488 ../src/build.c:2690
 msgid "_Execute"
 msgstr "_Käivita"
 
 #. build the code with make custom
-#: ../src/build.c:2453 ../src/build.c:2644 ../src/build.c:2698
+#: ../src/build.c:2503 ../src/build.c:2688 ../src/build.c:2742
 #, fuzzy
 msgid "Make Custom _Target..."
 msgstr "Kohandatud teks"
 
 #. build the code with make object
-#: ../src/build.c:2455 ../src/build.c:2645 ../src/build.c:2706
+#: ../src/build.c:2505 ../src/build.c:2689 ../src/build.c:2750
 msgid "Make _Object"
 msgstr ""
 
-#: ../src/build.c:2457 ../src/build.c:2643
+#: ../src/build.c:2507 ../src/build.c:2687
 msgid "_Make"
 msgstr ""
 
 #. build the code with make all
-#: ../src/build.c:2690
+#: ../src/build.c:2734
 msgid "_Make All"
 msgstr ""
 
@@ -2434,7 +2439,7 @@ msgid_plural "%d files saved."
 msgstr[0] "%d fail salvestatud."
 msgstr[1] "%d faili salvestatud."
 
-#: ../src/callbacks.c:899 ../src/keybindings.c:567
+#: ../src/callbacks.c:899 ../src/keybindings.c:566
 msgid "Go to Line"
 msgstr "Mine reale"
 
@@ -2614,7 +2619,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2429 ../src/symbols.c:2445 ../src/ui_utils.c:287
+#: ../src/symbols.c:2432 ../src/symbols.c:2448 ../src/ui_utils.c:288
 msgid "unknown"
 msgstr "tundmatu"
 
@@ -2623,7 +2628,7 @@ msgstr "tundmatu"
 msgid "%s Properties"
 msgstr "Omadused"
 
-#: ../src/dialogs.c:1251 ../src/ui_utils.c:291
+#: ../src/dialogs.c:1251 ../src/ui_utils.c:292
 msgid "(with BOM)"
 msgstr "(koos BOMiga)"
 
@@ -2857,7 +2862,7 @@ msgstr ""
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 
-#: ../src/editor.c:4667
+#: ../src/editor.c:4668
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
@@ -3076,17 +3081,17 @@ msgstr "_Märkekeeled"
 msgid "M_iscellaneous"
 msgstr "M_uud"
 
-#: ../src/filetypes.c:1194 ../src/win32.c:155
+#: ../src/filetypes.c:1185 ../src/win32.c:155
 msgid "All Source"
 msgstr ""
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1219 ../src/project.c:349 ../src/win32.c:145
+#: ../src/filetypes.c:1210 ../src/project.c:349 ../src/win32.c:145
 #: ../src/win32.c:190 ../src/win32.c:211 ../src/win32.c:216
 msgid "All files"
 msgstr "Kõik failid"
 
-#: ../src/filetypes.c:1268
+#: ../src/filetypes.c:1259
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr ""
@@ -3118,569 +3123,569 @@ msgid "Color Schemes"
 msgstr "Värviskeemid"
 
 #. visual group order
-#: ../src/keybindings.c:311 ../src/symbols.c:492
+#: ../src/keybindings.c:310 ../src/symbols.c:492
 msgid "File"
 msgstr "Fail"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:312
 msgid "Clipboard"
 msgstr "Lõikepuhver"
 
-#: ../src/keybindings.c:314
+#: ../src/keybindings.c:313
 msgid "Select"
 msgstr "Vali"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:314
 msgid "Format"
 msgstr "Vorming"
 
-#: ../src/keybindings.c:316
+#: ../src/keybindings.c:315
 msgid "Insert"
 msgstr "Lisamine"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:316
 msgid "Settings"
 msgstr "Seadistused"
 
-#: ../src/keybindings.c:318
+#: ../src/keybindings.c:317
 msgid "Search"
 msgstr "Otsimine"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:318
 msgid "Go to"
 msgstr "Navigeerimine"
 
-#: ../src/keybindings.c:320
+#: ../src/keybindings.c:319
 msgid "View"
 msgstr "Vaade"
 
-#: ../src/keybindings.c:321 ../src/symbols.c:641
+#: ../src/keybindings.c:320 ../src/symbols.c:643
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/keybindings.c:323 ../src/keybindings.c:694 ../src/project.c:512
-#: ../src/ui_utils.c:2213
+#: ../src/keybindings.c:322 ../src/keybindings.c:693 ../src/project.c:512
+#: ../src/ui_utils.c:2224
 msgid "Build"
 msgstr "Ehitamine"
 
-#: ../src/keybindings.c:325 ../src/keybindings.c:719
+#: ../src/keybindings.c:324 ../src/keybindings.c:718
 msgid "Help"
 msgstr "Abi"
 
-#: ../src/keybindings.c:326
+#: ../src/keybindings.c:325
 msgid "Focus"
 msgstr "Fookus"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:326
 msgid "Notebook tab"
 msgstr "Märkmiku kaardid"
 
-#: ../src/keybindings.c:336 ../src/keybindings.c:368
+#: ../src/keybindings.c:335 ../src/keybindings.c:367
 msgid "New"
 msgstr "Uus"
 
-#: ../src/keybindings.c:338 ../src/keybindings.c:370
+#: ../src/keybindings.c:337 ../src/keybindings.c:369
 msgid "Open"
 msgstr "Ava"
 
-#: ../src/keybindings.c:341
+#: ../src/keybindings.c:340
 msgid "Open selected file"
 msgstr "Ava valitud fail"
 
-#: ../src/keybindings.c:343
+#: ../src/keybindings.c:342
 msgid "Save"
 msgstr "Salvesta"
 
-#: ../src/keybindings.c:345 ../src/toolbar.c:58
+#: ../src/keybindings.c:344 ../src/toolbar.c:58
 msgid "Save as"
 msgstr "Salvesta kui"
 
-#: ../src/keybindings.c:347
+#: ../src/keybindings.c:346
 msgid "Save all"
 msgstr "Salvesta kõik"
 
-#: ../src/keybindings.c:350 ../src/symbols.c:725
+#: ../src/keybindings.c:349 ../src/symbols.c:728
 msgid "Properties"
 msgstr "Omadused"
 
-#: ../src/keybindings.c:352
+#: ../src/keybindings.c:351
 msgid "Print"
 msgstr "Trüki"
 
-#: ../src/keybindings.c:354 ../src/keybindings.c:375
+#: ../src/keybindings.c:353 ../src/keybindings.c:374
 msgid "Close"
 msgstr "Sulge"
 
-#: ../src/keybindings.c:356
+#: ../src/keybindings.c:355
 msgid "Close all"
 msgstr "Sulge kõik"
 
-#: ../src/keybindings.c:359
+#: ../src/keybindings.c:358
 msgid "Reload file"
 msgstr "Laadi fail uuesti"
 
-#: ../src/keybindings.c:361
+#: ../src/keybindings.c:360
 msgid "Re-open last closed tab"
 msgstr "Ava viimati suletud kaart"
 
-#: ../src/keybindings.c:363
+#: ../src/keybindings.c:362
 msgid "Quit"
 msgstr ""
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:379
 msgid "Undo"
 msgstr "Võta tagasi"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:381
 msgid "Redo"
 msgstr "Tee uuesti"
 
-#: ../src/keybindings.c:391
+#: ../src/keybindings.c:390
 msgid "Delete to line end"
 msgstr "Kustuta siit rea lõpuni"
 
-#: ../src/keybindings.c:394
+#: ../src/keybindings.c:393
 #, fuzzy
 msgid "Delete to beginning of line"
 msgstr "Kustuta siit rea lõpuni"
 
-#: ../src/keybindings.c:397
+#: ../src/keybindings.c:396
 msgid "_Transpose Current Line"
 msgstr ""
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:398
 msgid "Scroll to current line"
 msgstr "Keri aktiivse reani"
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:400
 msgid "Scroll up the view by one line"
 msgstr "Keri üles ühe rea võrra"
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:402
 msgid "Scroll down the view by one line"
 msgstr "Keri alla ühe rea võrra"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:404
 msgid "Complete snippet"
 msgstr "Lõpeta tekstijupp"
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:406
 msgid "Move cursor in snippet"
 msgstr ""
 
-#: ../src/keybindings.c:409
+#: ../src/keybindings.c:408
 msgid "Suppress snippet completion"
 msgstr "Ära lõpeta tekstijuppi"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:410
 msgid "Context Action"
 msgstr ""
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:412
 msgid "Complete word"
 msgstr ""
 
-#: ../src/keybindings.c:415
+#: ../src/keybindings.c:414
 msgid "Show calltip"
 msgstr ""
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:416
 msgid "Word part completion"
 msgstr ""
 
-#: ../src/keybindings.c:420
+#: ../src/keybindings.c:419
 msgid "Move line(s) up"
 msgstr "Liiguta rida/ridu üles"
 
-#: ../src/keybindings.c:423
+#: ../src/keybindings.c:422
 msgid "Move line(s) down"
 msgstr "Liiguta rida/ridu alla"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:427
 msgid "Cut"
 msgstr "Lõika"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:429
 msgid "Copy"
 msgstr "Kopeeri"
 
-#: ../src/keybindings.c:432
+#: ../src/keybindings.c:431
 msgid "Paste"
 msgstr "Aseta"
 
-#: ../src/keybindings.c:443
+#: ../src/keybindings.c:442
 msgid "Select All"
 msgstr "Vali kõik"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:444
 msgid "Select current word"
 msgstr "Vali aktiivne sõna"
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:452
 msgid "Select to previous word part"
 msgstr ""
 
-#: ../src/keybindings.c:455
+#: ../src/keybindings.c:454
 msgid "Select to next word part"
 msgstr ""
 
-#: ../src/keybindings.c:463
+#: ../src/keybindings.c:462
 msgid "Toggle line commentation"
 msgstr ""
 
-#: ../src/keybindings.c:466
+#: ../src/keybindings.c:465
 msgid "Comment line(s)"
 msgstr ""
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:467
 msgid "Uncomment line(s)"
 msgstr ""
 
-#: ../src/keybindings.c:470
+#: ../src/keybindings.c:469
 msgid "Increase indent"
 msgstr "Suurenda taanet"
 
-#: ../src/keybindings.c:473
+#: ../src/keybindings.c:472
 msgid "Decrease indent"
 msgstr "Vähenda taanet"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:475
 msgid "Increase indent by one space"
 msgstr "Suurenda taanet ühe tühiku võrra"
 
-#: ../src/keybindings.c:478
+#: ../src/keybindings.c:477
 msgid "Decrease indent by one space"
 msgstr "Vähenda taanet ühe tühiku võrra"
 
-#: ../src/keybindings.c:482
+#: ../src/keybindings.c:481
 msgid "Send to Custom Command 1"
 msgstr ""
 
-#: ../src/keybindings.c:484
+#: ../src/keybindings.c:483
 msgid "Send to Custom Command 2"
 msgstr ""
 
-#: ../src/keybindings.c:486
+#: ../src/keybindings.c:485
 msgid "Send to Custom Command 3"
 msgstr ""
 
-#: ../src/keybindings.c:488
+#: ../src/keybindings.c:487
 #, fuzzy
 msgid "Send to Custom Command 4"
 msgstr "_Määra ehitamise käsud"
 
-#: ../src/keybindings.c:490
+#: ../src/keybindings.c:489
 #, fuzzy
 msgid "Send to Custom Command 5"
 msgstr "_Määra ehitamise käsud"
 
-#: ../src/keybindings.c:492
+#: ../src/keybindings.c:491
 #, fuzzy
 msgid "Send to Custom Command 6"
 msgstr "_Määra ehitamise käsud"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:493
 #, fuzzy
 msgid "Send to Custom Command 7"
 msgstr "_Määra ehitamise käsud"
 
-#: ../src/keybindings.c:496
+#: ../src/keybindings.c:495
 #, fuzzy
 msgid "Send to Custom Command 8"
 msgstr "_Määra ehitamise käsud"
 
-#: ../src/keybindings.c:498
+#: ../src/keybindings.c:497
 #, fuzzy
 msgid "Send to Custom Command 9"
 msgstr "_Määra ehitamise käsud"
 
-#: ../src/keybindings.c:506
+#: ../src/keybindings.c:505
 msgid "Join lines"
 msgstr "Ühenda read"
 
-#: ../src/keybindings.c:511
+#: ../src/keybindings.c:510
 msgid "Insert date"
 msgstr "Sisesta kuupäev"
 
-#: ../src/keybindings.c:517
+#: ../src/keybindings.c:516
 msgid "Insert New Line Before Current"
 msgstr "Sisesta uus rida aktiivse rea ette"
 
-#: ../src/keybindings.c:519
+#: ../src/keybindings.c:518
 msgid "Insert New Line After Current"
 msgstr "Sisesta uus rida peale aktiivset rida"
 
-#: ../src/keybindings.c:532 ../src/search.c:465
+#: ../src/keybindings.c:531 ../src/search.c:465
 msgid "Find"
 msgstr "Otsi"
 
-#: ../src/keybindings.c:534
+#: ../src/keybindings.c:533
 msgid "Find Next"
 msgstr "Otsi järgmist"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:535
 msgid "Find Previous"
 msgstr "Otsi eelmist"
 
-#: ../src/keybindings.c:543 ../src/search.c:618
+#: ../src/keybindings.c:542 ../src/search.c:618
 msgid "Replace"
 msgstr "Asenda"
 
-#: ../src/keybindings.c:545 ../src/search.c:868
+#: ../src/keybindings.c:544 ../src/search.c:868
 msgid "Find in Files"
 msgstr "Otsi failidest"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:547
 msgid "Next Message"
 msgstr "Järgmine teade"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:549
 msgid "Previous Message"
 msgstr "Eelmine teade"
 
-#: ../src/keybindings.c:553
+#: ../src/keybindings.c:552
 msgid "Find Usage"
 msgstr "Otsi kasutamist"
 
-#: ../src/keybindings.c:556
+#: ../src/keybindings.c:555
 msgid "Find Document Usage"
 msgstr ""
 
-#: ../src/keybindings.c:563 ../src/toolbar.c:69
+#: ../src/keybindings.c:562 ../src/toolbar.c:69
 msgid "Navigate back a location"
 msgstr ""
 
-#: ../src/keybindings.c:565 ../src/toolbar.c:70
+#: ../src/keybindings.c:564 ../src/toolbar.c:70
 msgid "Navigate forward a location"
 msgstr ""
 
-#: ../src/keybindings.c:570
+#: ../src/keybindings.c:569
 msgid "Go to matching brace"
 msgstr ""
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:572
 msgid "Toggle marker"
 msgstr "Lülita tähist"
 
-#: ../src/keybindings.c:582
+#: ../src/keybindings.c:581
 #, fuzzy
 msgid "Go to Symbol Definition"
 msgstr "Mine sildi definitsiooni juurde"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:584
 #, fuzzy
 msgid "Go to Symbol Declaration"
 msgstr "Mine sildi deklaratsiooni juurde"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:586
 msgid "Go to Start of Line"
 msgstr "Mine rea algusesse"
 
-#: ../src/keybindings.c:589
+#: ../src/keybindings.c:588
 msgid "Go to End of Line"
 msgstr "Mine rea lõppu"
 
-#: ../src/keybindings.c:591
+#: ../src/keybindings.c:590
 msgid "Go to Start of Display Line"
 msgstr ""
 
-#: ../src/keybindings.c:593
+#: ../src/keybindings.c:592
 msgid "Go to End of Display Line"
 msgstr ""
 
-#: ../src/keybindings.c:595
+#: ../src/keybindings.c:594
 msgid "Go to Previous Word Part"
 msgstr ""
 
-#: ../src/keybindings.c:597
+#: ../src/keybindings.c:596
 msgid "Go to Next Word Part"
 msgstr ""
 
-#: ../src/keybindings.c:602
+#: ../src/keybindings.c:601
 msgid "Toggle All Additional Widgets"
 msgstr ""
 
-#: ../src/keybindings.c:605
+#: ../src/keybindings.c:604
 msgid "Fullscreen"
 msgstr "Täisekraan"
 
-#: ../src/keybindings.c:607
+#: ../src/keybindings.c:606
 msgid "Toggle Messages Window"
 msgstr "Lülita teadeteakent"
 
-#: ../src/keybindings.c:610
+#: ../src/keybindings.c:609
 msgid "Toggle Sidebar"
 msgstr "Lülita külgriba"
 
-#: ../src/keybindings.c:612
+#: ../src/keybindings.c:611
 msgid "Zoom In"
 msgstr "Suurenda"
 
-#: ../src/keybindings.c:614
+#: ../src/keybindings.c:613
 msgid "Zoom Out"
 msgstr "Vähenda"
 
-#: ../src/keybindings.c:616
+#: ../src/keybindings.c:615
 msgid "Zoom Reset"
 msgstr "Algsuurendus"
 
-#: ../src/keybindings.c:621
+#: ../src/keybindings.c:620
 msgid "Switch to Editor"
 msgstr "Lülitu redaktorile"
 
-#: ../src/keybindings.c:623
+#: ../src/keybindings.c:622
 msgid "Switch to Search Bar"
 msgstr "Lülitu otsinguribale"
 
-#: ../src/keybindings.c:625
+#: ../src/keybindings.c:624
 msgid "Switch to Message Window"
 msgstr "Lülitu teadeteaknale"
 
-#: ../src/keybindings.c:627
+#: ../src/keybindings.c:626
 msgid "Switch to Compiler"
 msgstr "Lülitu kompilaatorile"
 
-#: ../src/keybindings.c:629
+#: ../src/keybindings.c:628
 msgid "Switch to Messages"
 msgstr "Lülitu teadetele"
 
-#: ../src/keybindings.c:631
+#: ../src/keybindings.c:630
 msgid "Switch to Scribble"
 msgstr "Lülitu sodile"
 
-#: ../src/keybindings.c:633
+#: ../src/keybindings.c:632
 msgid "Switch to VTE"
 msgstr "Lülitu virtuaalterminalile"
 
-#: ../src/keybindings.c:635
+#: ../src/keybindings.c:634
 msgid "Switch to Sidebar"
 msgstr "Lülitu külgribale"
 
-#: ../src/keybindings.c:637
+#: ../src/keybindings.c:636
 msgid "Switch to Sidebar Symbol List"
 msgstr "Mine külgribal sümbolite nimekirja"
 
-#: ../src/keybindings.c:639
+#: ../src/keybindings.c:638
 msgid "Switch to Sidebar Document List"
 msgstr "Mine külgribal dokumentide nimekirja"
 
-#: ../src/keybindings.c:644
+#: ../src/keybindings.c:643
 msgid "Switch to left document"
 msgstr "Lülitu vasakule dokumendile"
 
-#: ../src/keybindings.c:646
+#: ../src/keybindings.c:645
 msgid "Switch to right document"
 msgstr "Lülitu paremale dokumendile"
 
-#: ../src/keybindings.c:648
+#: ../src/keybindings.c:647
 msgid "Switch to last used document"
 msgstr "Lülitu viimati kasutatud dokumendile"
 
-#: ../src/keybindings.c:651
+#: ../src/keybindings.c:650
 msgid "Move document left"
 msgstr "Liiguta dokumenti vasakule"
 
-#: ../src/keybindings.c:654
+#: ../src/keybindings.c:653
 msgid "Move document right"
 msgstr "Liiguta dokumenti paremale"
 
-#: ../src/keybindings.c:656
+#: ../src/keybindings.c:655
 msgid "Move document first"
 msgstr "Vii dokument esimeseks"
 
-#: ../src/keybindings.c:658
+#: ../src/keybindings.c:657
 msgid "Move document last"
 msgstr "Vii dokument viimaseks"
 
-#: ../src/keybindings.c:663
+#: ../src/keybindings.c:662
 msgid "Toggle Line wrapping"
 msgstr ""
 
-#: ../src/keybindings.c:665
+#: ../src/keybindings.c:664
 msgid "Toggle Line breaking"
 msgstr ""
 
-#: ../src/keybindings.c:673
+#: ../src/keybindings.c:672
 msgid "Replace spaces with tabs"
 msgstr "Asenda tühikud tabeldusmärkidega"
 
-#: ../src/keybindings.c:675
+#: ../src/keybindings.c:674
 msgid "Toggle current fold"
 msgstr "Lülita aktiivset volti"
 
-#: ../src/keybindings.c:677
+#: ../src/keybindings.c:676
 msgid "Fold all"
 msgstr "Voldi kõik"
 
-#: ../src/keybindings.c:679
+#: ../src/keybindings.c:678
 msgid "Unfold all"
 msgstr "Voldi kõik lahti"
 
-#: ../src/keybindings.c:681
+#: ../src/keybindings.c:680
 msgid "Reload symbol list"
 msgstr "Lae sümbolite nimekiri uuesti"
 
-#: ../src/keybindings.c:683
+#: ../src/keybindings.c:682
 msgid "Remove Markers"
 msgstr "Eemalda tähised"
 
-#: ../src/keybindings.c:685
+#: ../src/keybindings.c:684
 msgid "Remove Error Indicators"
 msgstr "Eemalda vigade allajoonimine"
 
-#: ../src/keybindings.c:687
+#: ../src/keybindings.c:686
 msgid "Remove Markers and Error Indicators"
 msgstr "Eemalda tähised ja vigade allajoonimine"
 
-#: ../src/keybindings.c:692 ../src/toolbar.c:71
+#: ../src/keybindings.c:691 ../src/toolbar.c:71
 msgid "Compile"
 msgstr "Kompileeri"
 
-#: ../src/keybindings.c:696
+#: ../src/keybindings.c:695
 msgid "Make all"
 msgstr ""
 
-#: ../src/keybindings.c:699
+#: ../src/keybindings.c:698
 msgid "Make custom target"
 msgstr ""
 
-#: ../src/keybindings.c:701
+#: ../src/keybindings.c:700
 msgid "Make object"
 msgstr ""
 
-#: ../src/keybindings.c:703
+#: ../src/keybindings.c:702
 msgid "Next error"
 msgstr "Järgmine viga"
 
-#: ../src/keybindings.c:705
+#: ../src/keybindings.c:704
 msgid "Previous error"
 msgstr "Eelmine viga"
 
-#: ../src/keybindings.c:707
+#: ../src/keybindings.c:706
 msgid "Run"
 msgstr "Käivita"
 
-#: ../src/keybindings.c:709
+#: ../src/keybindings.c:708
 msgid "Build options"
 msgstr ""
 
-#: ../src/keybindings.c:714
+#: ../src/keybindings.c:713
 msgid "Show Color Chooser"
 msgstr "Näita värvivalijat"
 
-#: ../src/keybindings.c:997
+#: ../src/keybindings.c:996
 msgid "Keyboard Shortcuts"
 msgstr "Kiirklahvid"
 
-#: ../src/keybindings.c:1009
+#: ../src/keybindings.c:1008
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Need kiirklahvid on muudetavad:"
 
-#: ../src/keyfile.c:1034
+#: ../src/keyfile.c:1047
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 
-#: ../src/keyfile.c:1261
+#: ../src/keyfile.c:1274
 msgid "Failed to load one or more session files."
 msgstr "Ühe või rohkema sessioonifaili laadimine ebaõnnestus."
 
@@ -3967,11 +3972,11 @@ msgstr ""
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 
-#: ../src/prefs.c:226 ../src/symbols.c:2583 ../src/sidebar.c:751
+#: ../src/prefs.c:226 ../src/symbols.c:2586 ../src/sidebar.c:751
 msgid "_Expand All"
 msgstr "_Ava kõik"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2588 ../src/sidebar.c:757
+#: ../src/prefs.c:231 ../src/symbols.c:2591 ../src/sidebar.c:757
 msgid "_Collapse All"
 msgstr "_Sulge kõik"
 
@@ -4499,15 +4504,15 @@ msgstr ""
 msgid "Unknown error executing child process"
 msgstr ""
 
-#: ../src/stash.c:1176
+#: ../src/stash.c:1184
 msgid "Value"
 msgstr "Väärtus"
 
-#: ../src/symbols.c:471 ../src/symbols.c:521 ../src/symbols.c:631
+#: ../src/symbols.c:471 ../src/symbols.c:523 ../src/symbols.c:633
 msgid "Chapter"
 msgstr "Peatükk"
 
-#: ../src/symbols.c:472 ../src/symbols.c:517 ../src/symbols.c:632
+#: ../src/symbols.c:472 ../src/symbols.c:519 ../src/symbols.c:634
 msgid "Section"
 msgstr "Sektsioon"
 
@@ -4527,21 +4532,21 @@ msgstr ""
 msgid "Appendix"
 msgstr "Lisa"
 
-#: ../src/symbols.c:477 ../src/symbols.c:522 ../src/symbols.c:547
-#: ../src/symbols.c:563 ../src/symbols.c:578 ../src/symbols.c:589
-#: ../src/symbols.c:690 ../src/symbols.c:701 ../src/symbols.c:714
-#: ../src/symbols.c:728 ../src/symbols.c:740 ../src/symbols.c:752
-#: ../src/symbols.c:769 ../src/symbols.c:798 ../src/symbols.c:830
+#: ../src/symbols.c:477 ../src/symbols.c:524 ../src/symbols.c:549
+#: ../src/symbols.c:565 ../src/symbols.c:580 ../src/symbols.c:591
+#: ../src/symbols.c:692 ../src/symbols.c:703 ../src/symbols.c:716
+#: ../src/symbols.c:731 ../src/symbols.c:743 ../src/symbols.c:755
+#: ../src/symbols.c:772 ../src/symbols.c:801 ../src/symbols.c:833
 msgid "Other"
 msgstr "Muu"
 
-#: ../src/symbols.c:483 ../src/symbols.c:760 ../src/symbols.c:808
+#: ../src/symbols.c:483 ../src/symbols.c:763 ../src/symbols.c:811
 msgid "Module"
 msgstr "Moodul"
 
-#: ../src/symbols.c:484 ../src/symbols.c:574 ../src/symbols.c:686
-#: ../src/symbols.c:738 ../src/symbols.c:750 ../src/symbols.c:765
-#: ../src/symbols.c:779
+#: ../src/symbols.c:484 ../src/symbols.c:576 ../src/symbols.c:688
+#: ../src/symbols.c:741 ../src/symbols.c:753 ../src/symbols.c:768
+#: ../src/symbols.c:782
 msgid "Types"
 msgstr "Tüübid"
 
@@ -4549,11 +4554,11 @@ msgstr "Tüübid"
 msgid "Type constructors"
 msgstr "Tüübikonstruktorid"
 
-#: ../src/symbols.c:486 ../src/symbols.c:508 ../src/symbols.c:529
-#: ../src/symbols.c:546 ../src/symbols.c:558 ../src/symbols.c:571
-#: ../src/symbols.c:586 ../src/symbols.c:600 ../src/symbols.c:610
-#: ../src/symbols.c:674 ../src/symbols.c:724 ../src/symbols.c:747
-#: ../src/symbols.c:792 ../src/symbols.c:816
+#: ../src/symbols.c:486 ../src/symbols.c:510 ../src/symbols.c:531
+#: ../src/symbols.c:548 ../src/symbols.c:560 ../src/symbols.c:573
+#: ../src/symbols.c:588 ../src/symbols.c:602 ../src/symbols.c:612
+#: ../src/symbols.c:676 ../src/symbols.c:727 ../src/symbols.c:750
+#: ../src/symbols.c:795 ../src/symbols.c:819
 msgid "Functions"
 msgstr "Funktsioonid"
 
@@ -4561,273 +4566,281 @@ msgstr "Funktsioonid"
 msgid "Program"
 msgstr "Programm"
 
-#: ../src/symbols.c:493 ../src/symbols.c:501 ../src/symbols.c:507
+#: ../src/symbols.c:493
+msgid "Divisions"
+msgstr ""
+
+#: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
 msgstr "Sektsioonid"
 
-#: ../src/symbols.c:494
+#: ../src/symbols.c:495
 msgid "Paragraph"
 msgstr "Lõik"
 
-#: ../src/symbols.c:495
+#: ../src/symbols.c:496
 msgid "Group"
 msgstr "Grupp"
 
-#: ../src/symbols.c:496
+#: ../src/symbols.c:497
 msgid "Data"
 msgstr "Andmed"
 
-#: ../src/symbols.c:502
+#: ../src/symbols.c:498
+msgid "Copies"
+msgstr ""
+
+#: ../src/symbols.c:504
 msgid "Keys"
 msgstr "Võtmed"
 
-#: ../src/symbols.c:509 ../src/symbols.c:560 ../src/symbols.c:576
-#: ../src/symbols.c:602 ../src/symbols.c:675 ../src/symbols.c:700
-#: ../src/symbols.c:726 ../src/symbols.c:739 ../src/symbols.c:748
-#: ../src/symbols.c:764 ../src/symbols.c:799 ../src/symbols.c:828
+#: ../src/symbols.c:511 ../src/symbols.c:562 ../src/symbols.c:578
+#: ../src/symbols.c:604 ../src/symbols.c:677 ../src/symbols.c:702
+#: ../src/symbols.c:729 ../src/symbols.c:742 ../src/symbols.c:751
+#: ../src/symbols.c:767 ../src/symbols.c:802 ../src/symbols.c:831
 msgid "Variables"
 msgstr "Muutujad"
 
-#: ../src/symbols.c:516
+#: ../src/symbols.c:518
 msgid "Environment"
 msgstr "Keskkond"
 
-#: ../src/symbols.c:518 ../src/symbols.c:633
+#: ../src/symbols.c:520 ../src/symbols.c:635
 msgid "Subsection"
 msgstr "Alamsektsioon"
 
-#: ../src/symbols.c:519 ../src/symbols.c:634
+#: ../src/symbols.c:521 ../src/symbols.c:636
 msgid "Subsubsection"
 msgstr "Alamalamsektsioon"
 
-#: ../src/symbols.c:530 ../src/symbols.c:555
+#: ../src/symbols.c:532 ../src/symbols.c:557
 msgid "Structures"
 msgstr "Struktuurid"
 
-#: ../src/symbols.c:537
+#: ../src/symbols.c:539
 msgid "Parts"
 msgstr ""
 
-#: ../src/symbols.c:538
+#: ../src/symbols.c:540
 msgid "Assembly"
 msgstr ""
 
-#: ../src/symbols.c:539
+#: ../src/symbols.c:541
 msgid "Steps"
 msgstr ""
 
-#: ../src/symbols.c:554 ../src/symbols.c:652 ../src/symbols.c:698
+#: ../src/symbols.c:556 ../src/symbols.c:654 ../src/symbols.c:700
 msgid "Modules"
 msgstr "Moodulid"
 
-#: ../src/symbols.c:556 ../src/symbols.c:603
+#: ../src/symbols.c:558 ../src/symbols.c:605
 msgid "Traits"
 msgstr ""
 
-#: ../src/symbols.c:557
+#: ../src/symbols.c:559
 #, fuzzy
 msgid "Implementations"
 msgstr "Pärib:"
 
-#: ../src/symbols.c:559 ../src/symbols.c:819
+#: ../src/symbols.c:561 ../src/symbols.c:822
 msgid "Typedefs / Enums"
 msgstr "Tüübidefinitsioon / Väärtustikud"
 
-#: ../src/symbols.c:561 ../src/symbols.c:777 ../src/symbols.c:786
-#: ../src/symbols.c:825
+#: ../src/symbols.c:563 ../src/symbols.c:780 ../src/symbols.c:789
+#: ../src/symbols.c:828
 msgid "Macros"
 msgstr "Makrod"
 
-#: ../src/symbols.c:562 ../src/symbols.c:655 ../src/symbols.c:664
-#: ../src/symbols.c:673 ../src/symbols.c:711 ../src/symbols.c:737
+#: ../src/symbols.c:564 ../src/symbols.c:657 ../src/symbols.c:666
+#: ../src/symbols.c:675 ../src/symbols.c:713 ../src/symbols.c:740
 msgid "Methods"
 msgstr "Meetodid"
 
-#: ../src/symbols.c:570 ../src/symbols.c:585 ../src/symbols.c:683
-#: ../src/symbols.c:708 ../src/symbols.c:721
+#: ../src/symbols.c:572 ../src/symbols.c:587 ../src/symbols.c:685
+#: ../src/symbols.c:710 ../src/symbols.c:724
 msgid "Package"
 msgstr "Pakid"
 
-#: ../src/symbols.c:572 ../src/symbols.c:598 ../src/symbols.c:709
-#: ../src/symbols.c:722 ../src/symbols.c:735 ../src/symbols.c:762
-#: ../src/symbols.c:815
+#: ../src/symbols.c:574 ../src/symbols.c:600 ../src/symbols.c:711
+#: ../src/symbols.c:725 ../src/symbols.c:738 ../src/symbols.c:765
+#: ../src/symbols.c:818
 msgid "Interfaces"
 msgstr "Liidesed"
 
-#: ../src/symbols.c:573 ../src/symbols.c:818
+#: ../src/symbols.c:575 ../src/symbols.c:821
 msgid "Structs"
 msgstr "Struktuurid"
 
-#: ../src/symbols.c:575 ../src/symbols.c:588 ../src/symbols.c:601
-#: ../src/symbols.c:727 ../src/symbols.c:749
+#: ../src/symbols.c:577 ../src/symbols.c:590 ../src/symbols.c:603
+#: ../src/symbols.c:730 ../src/symbols.c:752
 msgid "Constants"
 msgstr "Konstandid"
 
-#: ../src/symbols.c:577 ../src/symbols.c:712 ../src/symbols.c:817
+#: ../src/symbols.c:579 ../src/symbols.c:714 ../src/symbols.c:820
 msgid "Members"
 msgstr "Liikmed"
 
-#: ../src/symbols.c:587 ../src/symbols.c:751 ../src/symbols.c:776
+#: ../src/symbols.c:589 ../src/symbols.c:754 ../src/symbols.c:779
 msgid "Labels"
 msgstr "Sildid"
 
-#: ../src/symbols.c:597 ../src/symbols.c:662 ../src/symbols.c:811
+#: ../src/symbols.c:599 ../src/symbols.c:664 ../src/symbols.c:814
 msgid "Namespaces"
 msgstr "Nimeruumid"
 
-#: ../src/symbols.c:599 ../src/symbols.c:621 ../src/symbols.c:653
-#: ../src/symbols.c:663 ../src/symbols.c:672 ../src/symbols.c:710
-#: ../src/symbols.c:723 ../src/symbols.c:736 ../src/symbols.c:814
+#: ../src/symbols.c:601 ../src/symbols.c:623 ../src/symbols.c:655
+#: ../src/symbols.c:665 ../src/symbols.c:674 ../src/symbols.c:712
+#: ../src/symbols.c:726 ../src/symbols.c:739 ../src/symbols.c:817
 msgid "Classes"
 msgstr "Klassid"
 
-#: ../src/symbols.c:611
+#: ../src/symbols.c:613
 msgid "Anchors"
 msgstr "Ankrud"
 
-#: ../src/symbols.c:612
+#: ../src/symbols.c:614
 msgid "H1 Headings"
 msgstr "H1 pealkirjad"
 
-#: ../src/symbols.c:613
+#: ../src/symbols.c:615
 msgid "H2 Headings"
 msgstr "H2 pealkirjad"
 
-#: ../src/symbols.c:614
+#: ../src/symbols.c:616
 msgid "H3 Headings"
 msgstr "H3 pealkirjad"
 
-#: ../src/symbols.c:622
+#: ../src/symbols.c:624
 msgid "ID Selectors"
 msgstr "ID valijad"
 
-#: ../src/symbols.c:623
+#: ../src/symbols.c:625
 msgid "Type Selectors"
 msgstr "Tüübivalijad"
 
-#: ../src/symbols.c:642
+#: ../src/symbols.c:644
 #, fuzzy
 msgid "Section Level 1"
 msgstr "Sektsioon"
 
-#: ../src/symbols.c:643
+#: ../src/symbols.c:645
 #, fuzzy
 msgid "Section Level 2"
 msgstr "Sektsioon"
 
-#: ../src/symbols.c:644
+#: ../src/symbols.c:646
 #, fuzzy
 msgid "Section Level 3"
 msgstr "Sektsioon"
 
-#: ../src/symbols.c:645
+#: ../src/symbols.c:647
 #, fuzzy
 msgid "Section Level 4"
 msgstr "Sektsioon"
 
-#: ../src/symbols.c:654
+#: ../src/symbols.c:656
 msgid "Singletons"
 msgstr "Singletonid"
 
-#: ../src/symbols.c:665 ../src/symbols.c:793
+#: ../src/symbols.c:667 ../src/symbols.c:796
 msgid "Procedures"
 msgstr "Protseduurid"
 
-#: ../src/symbols.c:676
+#: ../src/symbols.c:678 ../src/symbols.c:723
 msgid "Imports"
 msgstr "Impordid"
 
-#: ../src/symbols.c:684
+#: ../src/symbols.c:686
 msgid "Entities"
 msgstr "Olemid"
 
-#: ../src/symbols.c:685
+#: ../src/symbols.c:687
 msgid "Architectures"
 msgstr "Arhitektuurid"
 
-#: ../src/symbols.c:687
+#: ../src/symbols.c:689
 msgid "Functions / Procedures"
 msgstr "Funktsioonid / Protseduurid"
 
-#: ../src/symbols.c:688
+#: ../src/symbols.c:690
 msgid "Variables / Signals"
 msgstr "Muutujad / Signaalid"
 
-#: ../src/symbols.c:689
+#: ../src/symbols.c:691
 msgid "Processes / Blocks / Components"
 msgstr "Protsessid / Plokid / Komponendid"
 
-#: ../src/symbols.c:697
+#: ../src/symbols.c:699
 msgid "Events"
 msgstr "Sündmused"
 
-#: ../src/symbols.c:699
+#: ../src/symbols.c:701
 msgid "Functions / Tasks"
 msgstr "Funktsioonid / Ülesanded"
 
-#: ../src/symbols.c:713 ../src/symbols.c:768
+#: ../src/symbols.c:715 ../src/symbols.c:771
 msgid "Enums"
 msgstr ""
 
-#: ../src/symbols.c:761
+#: ../src/symbols.c:764
 #, fuzzy
 msgid "Programs"
 msgstr "Programm"
 
-#: ../src/symbols.c:763
+#: ../src/symbols.c:766
 #, fuzzy
 msgid "Functions / Subroutines"
 msgstr "Funktsioonid / Protseduurid"
 
-#: ../src/symbols.c:766
+#: ../src/symbols.c:769
 #, fuzzy
 msgid "Components"
 msgstr "Lõpetamised"
 
-#: ../src/symbols.c:767
+#: ../src/symbols.c:770
 msgid "Blocks"
 msgstr "Plokid"
 
-#: ../src/symbols.c:778
+#: ../src/symbols.c:781
 msgid "Defines"
 msgstr "Definitsioonid"
 
-#: ../src/symbols.c:785
+#: ../src/symbols.c:788
 msgid "Targets"
 msgstr "Sihtmärgid"
 
-#: ../src/symbols.c:794
+#: ../src/symbols.c:797
 msgid "Indexes"
 msgstr "Indeksid"
 
-#: ../src/symbols.c:795
+#: ../src/symbols.c:798
 msgid "Tables"
 msgstr "Tabelid"
 
-#: ../src/symbols.c:796
+#: ../src/symbols.c:799
 msgid "Triggers"
 msgstr "Päästikud"
 
-#: ../src/symbols.c:797
+#: ../src/symbols.c:800
 msgid "Views"
 msgstr "Vaated"
 
-#: ../src/symbols.c:829
+#: ../src/symbols.c:832
 #, fuzzy
 msgid "Extern Variables"
 msgstr "Muutujad"
 
-#: ../src/symbols.c:1646
+#: ../src/symbols.c:1649
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr ""
 
-#: ../src/symbols.c:1672
+#: ../src/symbols.c:1675
 #, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
 
-#: ../src/symbols.c:1679
+#: ../src/symbols.c:1682
 #, fuzzy, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -4836,7 +4849,7 @@ msgstr ""
 "Kasutamine: %s -g <Sildifail> <Failide nimekiri>\n"
 "\n"
 
-#: ../src/symbols.c:1680
+#: ../src/symbols.c:1683
 #, c-format
 msgid ""
 "Example:\n"
@@ -4847,54 +4860,54 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1694
+#: ../src/symbols.c:1697
 #, fuzzy
 msgid "Load Tags File"
 msgstr "Lae sildid"
 
-#: ../src/symbols.c:1701
+#: ../src/symbols.c:1704
 #, fuzzy
 msgid "Geany tags file (*.*.tags)"
 msgstr "Geany sildifaild (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1721
+#: ../src/symbols.c:1724
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr ""
 
-#: ../src/symbols.c:1724
+#: ../src/symbols.c:1727
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Sildifaili '%s' laadimine ebaõnnestus."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1967
+#: ../src/symbols.c:1970
 #, fuzzy, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>Kuvamine</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1970
+#: ../src/symbols.c:1973
 #, c-format
 msgid "%s: %lu"
 msgstr ""
 
-#: ../src/symbols.c:2180
+#: ../src/symbols.c:2183
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Eeldeklaratsiooni \"%s\" ei leitud."
 
-#: ../src/symbols.c:2182
+#: ../src/symbols.c:2185
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "\"%s\" definitsiooni ei leitud."
 
-#: ../src/symbols.c:2598
+#: ../src/symbols.c:2601
 msgid "Sort by _Name"
 msgstr "Sorteeri _nime järgi"
 
-#: ../src/symbols.c:2605
+#: ../src/symbols.c:2608
 msgid "Sort by _Appearance"
 msgstr "Sorteeri _välimuse järgi"
 
@@ -5160,7 +5173,7 @@ msgstr "Otsi _failidest"
 msgid "Show _Paths"
 msgstr ""
 
-#: ../src/ui_utils.c:62
+#: ../src/ui_utils.c:63
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
@@ -5169,140 +5182,140 @@ msgstr ""
 "kodeering: %e      failitüüp: %f      skoop: %S"
 
 #. L = lines
-#: ../src/ui_utils.c:238
+#: ../src/ui_utils.c:239
 #, c-format
 msgid "%dL"
 msgstr ""
 
 #. RO = read-only
-#: ../src/ui_utils.c:248 ../src/ui_utils.c:255
+#: ../src/ui_utils.c:249 ../src/ui_utils.c:256
 msgid "RO "
 msgstr "KK"
 
 #. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:250
+#: ../src/ui_utils.c:251
 msgid "OVR"
 msgstr "ÜLE"
 
-#: ../src/ui_utils.c:250
+#: ../src/ui_utils.c:251
 msgid "INS"
 msgstr "LIS"
 
-#: ../src/ui_utils.c:264
+#: ../src/ui_utils.c:265
 msgid "TAB"
 msgstr "TAB"
 
 #. SP = space
-#: ../src/ui_utils.c:267
+#: ../src/ui_utils.c:268
 msgid "SP"
 msgstr "TÜH"
 
 #. T/S = tabs and spaces
-#: ../src/ui_utils.c:270
+#: ../src/ui_utils.c:271
 msgid "T/S"
 msgstr "TAB/TÜH"
 
-#: ../src/ui_utils.c:278
+#: ../src/ui_utils.c:279
 msgid "MOD"
 msgstr "MOD"
 
-#: ../src/ui_utils.c:406
+#: ../src/ui_utils.c:407
 msgid " (new instance)"
 msgstr "(uus isend)"
 
-#: ../src/ui_utils.c:436
+#: ../src/ui_utils.c:437
 #, c-format
 msgid "Font updated (%s)."
 msgstr "Font uuendatud (%s)."
 
-#: ../src/ui_utils.c:687
+#: ../src/ui_utils.c:688
 msgid "C Standard Library"
 msgstr "C standardteek"
 
-#: ../src/ui_utils.c:688
+#: ../src/ui_utils.c:689
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:689
+#: ../src/ui_utils.c:690
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C standardteek)"
 
-#: ../src/ui_utils.c:690
+#: ../src/ui_utils.c:691
 msgid "C++ Standard Library"
 msgstr "C++ standardteek"
 
-#: ../src/ui_utils.c:691
+#: ../src/ui_utils.c:692
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:713 ../src/ui_utils.c:791
+#: ../src/ui_utils.c:714 ../src/ui_utils.c:792
 msgid "dd.mm.yyyy"
 msgstr "pp.kk.aaaa"
 
-#: ../src/ui_utils.c:715 ../src/ui_utils.c:792
+#: ../src/ui_utils.c:716 ../src/ui_utils.c:793
 msgid "mm.dd.yyyy"
 msgstr "kk.pp.aaaa"
 
-#: ../src/ui_utils.c:717 ../src/ui_utils.c:793
+#: ../src/ui_utils.c:718 ../src/ui_utils.c:794
 msgid "yyyy/mm/dd"
 msgstr "aaaa/kk/pp"
 
-#: ../src/ui_utils.c:719 ../src/ui_utils.c:802
+#: ../src/ui_utils.c:720 ../src/ui_utils.c:803
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "pp.kk.aaaa hh:mm:ss"
 
-#: ../src/ui_utils.c:721 ../src/ui_utils.c:803
+#: ../src/ui_utils.c:722 ../src/ui_utils.c:804
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "kk.pp.aaaa hh:mm:ss"
 
-#: ../src/ui_utils.c:723 ../src/ui_utils.c:804
+#: ../src/ui_utils.c:724 ../src/ui_utils.c:805
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "aaaa/kk/pp hh:mm:ss"
 
-#: ../src/ui_utils.c:725 ../src/ui_utils.c:813
+#: ../src/ui_utils.c:726 ../src/ui_utils.c:814
 msgid "_Use Custom Date Format"
 msgstr "_Kasuta kohandatud kuupäeva vormingut"
 
-#: ../src/ui_utils.c:729
+#: ../src/ui_utils.c:730
 msgid "Custom Date Format"
 msgstr "Kohandatud kuupäeva vorming"
 
-#: ../src/ui_utils.c:730
+#: ../src/ui_utils.c:731
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 
-#: ../src/ui_utils.c:751
+#: ../src/ui_utils.c:752
 msgid "Date format string could not be converted (possibly too long)."
 msgstr ""
 
-#: ../src/ui_utils.c:826
+#: ../src/ui_utils.c:827
 msgid "_Set Custom Date Format"
 msgstr "_Kohandatud kuupäeva vorming"
 
-#: ../src/ui_utils.c:2014
+#: ../src/ui_utils.c:2015
 msgid "Select Folder"
 msgstr "Vali _kaust"
 
-#: ../src/ui_utils.c:2014
+#: ../src/ui_utils.c:2015
 msgid "Select File"
 msgstr "Vali _fail"
 
-#: ../src/ui_utils.c:2174
+#: ../src/ui_utils.c:2185
 #, fuzzy
 msgid "_Filetype Configuration"
 msgstr "_Seadistuste taaslaadimine"
 
-#: ../src/ui_utils.c:2211
+#: ../src/ui_utils.c:2222
 msgid "Save All"
 msgstr "Salvesta kõik"
 
-#: ../src/ui_utils.c:2212
+#: ../src/ui_utils.c:2223
 msgid "Close All"
 msgstr "Sule kõik"
 
-#: ../src/ui_utils.c:2446
+#: ../src/ui_utils.c:2455
 msgid "Geany cannot start!"
 msgstr ""
 
@@ -5342,24 +5355,24 @@ msgstr ""
 msgid "LF"
 msgstr ""
 
-#: ../src/vte.c:584
+#: ../src/vte.c:585
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr ""
 
-#: ../src/vte.c:765
+#: ../src/vte.c:766
 msgid "_Set Path From Document"
 msgstr ""
 
-#: ../src/vte.c:770
+#: ../src/vte.c:771
 msgid "_Restart Terminal"
 msgstr "_Taaskäivita terminal"
 
-#: ../src/vte.c:803
+#: ../src/vte.c:804
 msgid "_Input Methods"
 msgstr "_Sisestusmeetodid"
 
-#: ../src/vte.c:895
+#: ../src/vte.c:896
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
