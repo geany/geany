@@ -4,12 +4,12 @@
 # Jean-Philippe Moal <skateinmars@skateinmars.net>, 2006 - 2011
 # Roland Baudin <roland.baudin@thalesaleniaspace.com>, 2008
 # Lionel Fuentes <funto66@gmail.com>, 2009
-# Colomban Wendling <colomban@geany.org>, 2011
+# Colomban Wendling <colomban@geany.org>, 2011 - 2019
 # Benjamin Ballet <benjamin.ballet@gmail.com>, 2011
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.30\n"
+"Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
 "PO-Revision-Date: 2019-09-22 12:35+0200\n"
