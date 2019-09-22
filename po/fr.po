@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2018-12-06 22:12+0100\n"
+"PO-Revision-Date: 2019-09-22 12:35+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -2317,7 +2317,7 @@ msgstr "(construit le %s ou ultérieurement)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "Utilisant les bibliothèques GTK v%u.%u.%u et GLib v%u.%u.%u"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -4783,7 +4783,7 @@ msgstr "Programme"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Divisions"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4803,7 +4803,7 @@ msgstr "Données"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Copies"
 
 #: ../src/symbols.c:504
 msgid "Keys"
