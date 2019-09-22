@@ -6,7 +6,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.35\n"
+"Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
 "PO-Revision-Date: 2014-11-09 13:26+0900\n"
@@ -2232,7 +2232,7 @@ msgstr "(%s 以降にビルド)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "GTK+ v%u.%u.%u と GLib v%u.%u.%u 実行時ライブラリを使用"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -4643,7 +4643,7 @@ msgstr "プログラム"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "ディビジョン"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4663,7 +4663,7 @@ msgstr "データ"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "コピー"
 
 #: ../src/symbols.c:504
 msgid "Keys"
@@ -4774,15 +4774,15 @@ msgstr "アンカー"
 
 #: ../src/symbols.c:614
 msgid "H1 Headings"
-msgstr "見出し (H1)"
+msgstr "H1 見出し"
 
 #: ../src/symbols.c:615
 msgid "H2 Headings"
-msgstr "見出し (H2)"
+msgstr "H2 見出し"
 
 #: ../src/symbols.c:616
 msgid "H3 Headings"
-msgstr "見出し (H3)"
+msgstr "H3 見出し "
 
 #: ../src/symbols.c:624
 msgid "ID Selectors"
