@@ -803,6 +803,15 @@ static void prefs_init_dialog(void)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->cursor_blinks);
 	}
 #endif
+	// note some widgets are only *optionally* overridden, don't include them
+	const gchar *proj_overrides[] = {
+		"vbox6"
+	};
+	for (guint i = 0; i < G_N_ELEMENTS(proj_overrides); i++)
+	{
+		GtkWidget *w = ui_lookup_widget(ui_widgets.prefs_dialog, proj_overrides[i]);
+		gtk_widget_set_sensitive(w, !app->project);
+	}
 }
 
 
