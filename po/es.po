@@ -7,10 +7,10 @@
 # Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.35\n"
+"Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2019-04-16 11:34+0200\n"
+"POT-Creation-Date: 2019-09-22 02:11+0000\n"
+"PO-Revision-Date: 2019-09-22 15:30+0200\n"
 "Last-Translator: Lucas Vieites Fariña <lucas@codexion.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Geany / PoHelper 1.34\n"
+"X-Generator: Geany / PoHelper 1.35\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -2297,7 +2297,7 @@ msgstr "(compilado el día %s o después)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "Mediante las bibliotecas en tiempo de ejecución GTK+ v%u.%u.%u y GLib v%u.%u.%u"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -4698,15 +4698,15 @@ msgstr "Sección"
 
 #: ../src/symbols.c:473
 msgid "Sect1"
-msgstr "Sec1"
+msgstr "Secc1"
 
 #: ../src/symbols.c:474
 msgid "Sect2"
-msgstr "Sec2"
+msgstr "Secc2"
 
 #: ../src/symbols.c:475
 msgid "Sect3"
-msgstr "Sec3"
+msgstr "Secc3"
 
 #: ../src/symbols.c:476
 msgid "Appendix"
@@ -4748,7 +4748,7 @@ msgstr "Programa"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Divisiones"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4768,7 +4768,7 @@ msgstr "Fecha"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Copias"
 
 #: ../src/symbols.c:504
 msgid "Keys"
