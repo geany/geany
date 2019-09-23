@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2018-12-09 08:16+0000\n"
+"PO-Revision-Date: 2019-09-22 12:31+0100\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team: geany-i18n@uvena.de\n"
 "Language: it\n"
@@ -188,8 +188,8 @@ msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
 "disable it if you do not need it"
 msgstr ""
-"Imposta il caricamento dell'emulatore del terminale virtuale (VTE) "
-"all'avvio. Disabilitarla se non necessaria."
+"Se caricare l'emulatore del terminale virtuale (VTE) all'avvio, disabilitare "
+"se non necessario"
 
 #: ../data/geany.glade.h:36
 msgid "Enable plugin support"
@@ -221,7 +221,7 @@ msgstr "Conferma l'uscita"
 
 #: ../data/geany.glade.h:43
 msgid "Shows a confirmation dialog on exit"
-msgstr "Mostra un dialogo di conferma all'uscita."
+msgstr "Mostra una richiesta di conferma all'uscita"
 
 #: ../data/geany.glade.h:44
 msgid "<b>Shutdown</b>"
@@ -278,8 +278,8 @@ msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
 "finished"
 msgstr ""
-"Emette un suono in caso di errore o quando il processo di compilazione è "
-"terminato."
+"Se emettere un suono in caso di errore o quando il processo di compilazione "
+"è terminato"
 
 #: ../data/geany.glade.h:55
 msgid "Switch to status message list at new message"
@@ -291,7 +291,7 @@ msgid ""
 "new status message arrives"
 msgstr ""
 "Passa alla scheda dei messaggi di stato (nella finestra del blocco note in "
-"basso) in caso di arrivo di un nuovo messaggio di stato."
+"basso) in caso di arrivo di un nuovo messaggio di stato"
 
 #: ../data/geany.glade.h:57
 msgid "Suppress status messages in the status bar"
@@ -364,7 +364,7 @@ msgid ""
 "Replace dialog and there is no selection"
 msgstr ""
 "Usa la parola in corrispondenza del cursore all'apertura della finestra di "
-"Ricerca, Ricerca nei file e Sostituisci e non è stato selezionato del testo."
+"Ricerca, Ricerca nei file e Sostituisci e non è stato selezionato del testo"
 
 #: ../data/geany.glade.h:70
 msgid "Use the current file's directory for Find in Files"
@@ -383,8 +383,8 @@ msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project"
 msgstr ""
-"Per salvare i file della sessione del progetto e aprirli alla riapertura del "
-"progetto."
+"Se salvare i file della sessione del progetto e aprirli alla riapertura del "
+"progetto"
 
 #: ../data/geany.glade.h:74
 msgid "Store project file inside the project base directory"
@@ -500,7 +500,7 @@ msgstr "Mostra barra di stato"
 
 #: ../data/geany.glade.h:99
 msgid "Whether to show the status bar at the bottom of the main window"
-msgstr "Mostra/Nasconde la barra di stato nella finestra principale in basso."
+msgstr "Se mostrare la barra di stato nella finestra principale in basso"
 
 #: ../data/geany.glade.h:100 ../src/prefs.c:1604
 msgid "Interface"
@@ -684,7 +684,7 @@ msgid ""
 msgstr ""
 "Disabilita completamente il Drag and Drop nella finestra dell'editor, in "
 "modo che non sarà possibile trascinare alcuna selezione all'interno o "
-"all'esterno della finestra dell'editor."
+"all'esterno della finestra dell'editor"
 
 #: ../data/geany.glade.h:138
 msgid "Code folding"
@@ -712,8 +712,8 @@ msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
 msgstr ""
-"Usa o meno gli indicatori (una sottolineatura ondulata) per evidenziare le "
-"righe dove il compilatore ha trovato un warning o un errore."
+"Se utilizzare gli indicatori (una sottolineatura ondulata) per evidenziare "
+"le righe dove il compilatore ha trovato un warning o un errore"
 
 #: ../data/geany.glade.h:143
 msgid "Newline strips trailing spaces"
@@ -721,7 +721,7 @@ msgstr "L'andata a capo elimina gli spazi in coda"
 
 #: ../data/geany.glade.h:144
 msgid "Enable newline to strip the trailing spaces on the previous line"
-msgstr "Abilita l'eliminazione degli spazi in coda alla riga precedente."
+msgstr "Abilita l'eliminazione degli spazi in coda alla riga precedente"
 
 #: ../data/geany.glade.h:145
 msgid "Line breaking column:"
@@ -776,8 +776,8 @@ msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr ""
-"Per determinare il tipo di indentazione dal contenuto del file alla sua "
-"apertura."
+"Se determinare il tipo di indentazione dal contenuto del file alla sua "
+"apertura"
 
 #: ../data/geany.glade.h:156
 msgid "T_abs and spaces"
@@ -833,7 +833,7 @@ msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 "La pressione del tasto tab/shift-tab aumenta/diminuisce l'indentazione "
-"invece di inserire un carattere di tabulazione."
+"invece di inserire un carattere di tabulazione"
 
 #: ../data/geany.glade.h:167
 msgid "<b>Indentation</b>"
@@ -853,7 +853,7 @@ msgid ""
 "string using a single keypress"
 msgstr ""
 "Digitare una breve sequenza di caratteri predefinita e trasformarla in una "
-"stringa più complessa con la pressione di un solo tasto."
+"stringa più complessa con la pressione di un solo tasto"
 
 #: ../data/geany.glade.h:171
 msgid "XML/HTML tag auto-closing"
@@ -872,8 +872,8 @@ msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
 msgstr ""
-"Continua automaticamente i commenti multiriga in linguaggi come C, C++ e "
-"Java quando si va a capo in un commento di questo tipo."
+"Continua automaticamente i commenti multi-riga in linguaggi come C, C++ e "
+"Java quando si va a capo in un commento di questo tipo"
 
 #: ../data/geany.glade.h:175
 msgid "Autocomplete symbols"
@@ -991,7 +991,7 @@ msgstr "Virgolette doppie \" \""
 msgid "Auto-close double quote when typing an opening one"
 msgstr ""
 "Chiude automaticamente le virgolette doppie quando si digitano quelle di "
-"apertura."
+"apertura"
 
 #: ../data/geany.glade.h:198
 msgid "<b>Auto-close quotes and brackets</b>"
@@ -1530,7 +1530,7 @@ msgstr "Font:"
 
 #: ../data/geany.glade.h:312
 msgid "Sets the font for the terminal widget"
-msgstr "Imposta il carattere per il terminale."
+msgstr "Imposta il carattere per il terminale"
 
 #: ../data/geany.glade.h:313
 msgid "Choose Terminal Font"
@@ -2036,7 +2036,7 @@ msgstr "Sostituisci le tabulazioni con spa_zi"
 
 #: ../data/geany.glade.h:432
 msgid "_Replace Spaces with Tabs..."
-msgstr "Sostituisci Spazi con _Tab"
+msgstr "Sostituisci Spazi con _Tab..."
 
 #: ../data/geany.glade.h:433
 msgid "_Fold All"
@@ -2300,6 +2300,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"Collaboratori di Geany"
 
 #: ../src/about.c:172
 msgid "About Geany"
@@ -2317,7 +2319,7 @@ msgstr "(generato il o dopo il %s)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "Con librerie GTK+ v%u.%u.%u e GLib v%u.%u.%u"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -2380,7 +2382,7 @@ msgstr ""
 #: ../src/build.c:757
 #, c-format
 msgid "failed to substitute %%p, no project active"
-msgstr "Sostituzione fallita %%p, nessun progetto attivo"
+msgstr "sostituzione fallita %%p, nessun progetto attivo"
 
 #: ../src/build.c:785
 msgid "Process failed, no working directory"
@@ -3016,7 +3018,7 @@ msgstr "Ricaricare il file?"
 
 #: ../src/editor.c:4461
 msgid "Enter Tab Width"
-msgstr "Ampiezza delle tabulazioni:"
+msgstr "Ampiezza delle tabulazioni"
 
 #: ../src/editor.c:4462
 msgid "Enter the amount of spaces which should be replaced by a tab character."
@@ -3413,7 +3415,7 @@ msgstr "Cancella fino a inizio riga"
 
 #: ../src/keybindings.c:396
 msgid "_Transpose Current Line"
-msgstr "_Trasporre la riga corrente "
+msgstr "_Trasporre la riga corrente"
 
 #: ../src/keybindings.c:398
 msgid "Scroll to current line"
@@ -3965,7 +3967,7 @@ msgstr "Notifica bug a https://github.com/geany/geany/issues."
 #: ../src/libmain.c:571
 #, c-format
 msgid "built on %s with "
-msgstr "generato il %s con"
+msgstr "generato il %s con "
 
 #: ../src/libmain.c:664
 msgid "Move it now?"
@@ -4021,6 +4023,7 @@ msgstr "Impossibile creare la cartella di configurazione (%s)."
 #: ../src/libmain.c:1184
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
+"Errore in creazione socket IPC, vedi Aiuto->Messaggi di debug per dettagli."
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
@@ -4784,7 +4787,7 @@ msgstr "Programma"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Divisioni"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4804,7 +4807,7 @@ msgstr "Dati"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Copie"
 
 #: ../src/symbols.c:504
 msgid "Keys"
@@ -5196,7 +5199,7 @@ msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette"
 msgstr ""
 "Apre una finestra di selezione colore, per scegliere i colori da una "
-"tavolozza in modo interattivo."
+"tavolozza in modo interattivo"
 
 #: ../src/toolbar.c:74
 msgid "Zoom in the text"
@@ -5417,7 +5420,7 @@ msgstr "%dR"
 #. RO = read-only
 #: ../src/ui_utils.c:249 ../src/ui_utils.c:256
 msgid "RO "
-msgstr "RO"
+msgstr "RO "
 
 # Ho visto su OpenOffice, li' usa SSC per SovraSCrivi e INS e' uguale
 #. OVR = overwrite/overtype, INS = insert
@@ -5449,7 +5452,7 @@ msgstr "MOD"
 
 #: ../src/ui_utils.c:407
 msgid " (new instance)"
-msgstr "(nuova istanza)"
+msgstr " (nuova istanza)"
 
 #: ../src/ui_utils.c:437
 #, c-format
@@ -5825,7 +5828,7 @@ msgstr "Sostituzione _HTML"
 
 #: ../plugins/htmlchars.c:758
 msgid "_Auto-replace Special Characters"
-msgstr "_Auto-sostituzione dei caratteri speciali."
+msgstr "_Auto-sostituzione dei caratteri speciali"
 
 #: ../plugins/htmlchars.c:767
 msgid "_Replace Characters in Selection"
