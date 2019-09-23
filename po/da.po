@@ -1,13 +1,13 @@
 # Danish translation for Geany
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the geany package.
-# scootergrisen, 2018.
+# scootergrisen, 2018-2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 1.35\n"
+"Project-Id-Version: geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2019-04-15 23:17+0200\n"
+"PO-Revision-Date: 2019-09-22 16:03+0200\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
 "Language: da\n"
@@ -823,7 +823,7 @@ msgstr "Indrykning"
 
 #: ../data/geany.glade.h:169
 msgid "Snippet completion"
-msgstr "Fuldførsel af snippet"
+msgstr "Fuldførelse af snippet"
 
 #: ../data/geany.glade.h:170
 msgid ""
@@ -862,7 +862,7 @@ msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
 msgstr ""
-"Automatisk fuldførsel af kendte symboler i åbne filer (funktionsnavne, "
+"Automatisk fuldførelse af kendte symboler i åbne filer (funktionsnavne, "
 "globale variabler...)"
 
 #: ../data/geany.glade.h:177
@@ -871,7 +871,7 @@ msgstr "Autofuldfør alle ord i dokument"
 
 #: ../data/geany.glade.h:178
 msgid "Drop rest of word on completion"
-msgstr "Drop resten af ordet ved fuldførsel"
+msgstr "Drop resten af ordet ved fuldførelse"
 
 #: ../data/geany.glade.h:179
 msgid "Max. symbol name suggestions:"
@@ -879,11 +879,11 @@ msgstr "Maks. forslag i symbolnavn:"
 
 #: ../data/geany.glade.h:180
 msgid "Completion list height:"
-msgstr "Højde på fuldførselsliste:"
+msgstr "Højde på fuldførelsesliste:"
 
 #: ../data/geany.glade.h:181
 msgid "Characters to type for autocompletion:"
-msgstr "Tegn som der skal skrives for autofuldførsel:"
+msgstr "Tegn som der skal skrives for autofuldførelse:"
 
 #: ../data/geany.glade.h:182
 msgid ""
@@ -917,7 +917,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:187
 msgid "<b>Completions</b>"
-msgstr "<b>Fuldførsel</b>"
+msgstr "<b>Fuldførelser</b>"
 
 #: ../data/geany.glade.h:188
 msgid "Parenthesis ( )"
@@ -1761,7 +1761,7 @@ msgstr "_Præferencer"
 
 #: ../data/geany.glade.h:377 ../src/keybindings.c:526
 msgid "P_lugin Preferences"
-msgstr "Plugin-p_ræferencer"
+msgstr "Pluginp_ræferencer"
 
 #: ../data/geany.glade.h:378
 msgid "_Find..."
@@ -2246,7 +2246,7 @@ msgstr "(bygget %s eller efter)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "Med afviklingsbibliotekerne GTK+ v%u.%u.%u og GLib v%u.%u.%u"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -3350,7 +3350,7 @@ msgstr "Flyt markør i snippet"
 
 #: ../src/keybindings.c:408
 msgid "Suppress snippet completion"
-msgstr "Undertryk fuldførsel af snippet"
+msgstr "Undertryk fuldførelse af snippet"
 
 #: ../src/keybindings.c:410
 msgid "Context Action"
@@ -3366,7 +3366,7 @@ msgstr "Vis kaldtip"
 
 #: ../src/keybindings.c:416
 msgid "Word part completion"
-msgstr "Fuldførsel af orddel"
+msgstr "Fuldførelse af orddel"
 
 #: ../src/keybindings.c:419
 msgid "Move line(s) up"
@@ -3820,7 +3820,7 @@ msgstr "Vis ikke meddelelsesvinduet ved opstart"
 
 #: ../src/libmain.c:133
 msgid "Don't load auto completion data (see documentation)"
-msgstr "Indlæs ikke autofuldførselsdata (se dokumentationen)"
+msgstr "Indlæs ikke autofuldførelsesdata (se dokumentationen)"
 
 #: ../src/libmain.c:135
 msgid "Don't load plugins"
@@ -3990,7 +3990,7 @@ msgstr ""
 
 #: ../src/plugins.c:1270
 msgid "_Plugin Manager"
-msgstr "_Plugin-håndtering"
+msgstr "_Pluginhåndtering"
 
 #: ../src/plugins.c:1649
 msgid ""
@@ -4354,7 +4354,7 @@ msgstr ""
 
 #: ../src/search.c:324
 msgid "Use multi-line matchin_g"
-msgstr "Brug _multilinje matchning"
+msgstr "Brug _multilinje-matchning"
 
 #: ../src/search.c:329
 msgid ""
@@ -4673,7 +4673,7 @@ msgstr "Program"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Divisioner"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4693,7 +4693,7 @@ msgstr "Data"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Kopier"
 
 #: ../src/symbols.c:504
 msgid "Keys"
@@ -4888,7 +4888,7 @@ msgstr "Programmer"
 
 #: ../src/symbols.c:766
 msgid "Functions / Subroutines"
-msgstr "Funktioner/underroutiner"
+msgstr "Funktioner/underrutiner"
 
 #: ../src/symbols.c:769
 msgid "Components"
@@ -5655,7 +5655,7 @@ msgstr "Diverse tegn"
 #: ../plugins/htmlchars.c:365 ../plugins/filebrowser.c:1202
 #: ../plugins/saveactions.c:537
 msgid "Plugin configuration directory could not be created."
-msgstr "Kunne ikke oprette plugin-konfigurationsmappe."
+msgstr "Kunne ikke oprette pluginkonfigurationsmappe."
 
 #: ../plugins/htmlchars.c:486
 msgid "Special Characters"
@@ -5708,7 +5708,7 @@ msgstr "Erstat specialtegn"
 
 #: ../plugins/htmlchars.c:789
 msgid "Toggle plugin status"
-msgstr "Skift plugin-status"
+msgstr "Skift pluginstatus"
 
 #: ../plugins/export.c:36
 msgid "Export"
