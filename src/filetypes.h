@@ -196,9 +196,6 @@ extern GPtrArray *filetypes_array;
 extern GSList *filetypes_by_title;
 
 
-GeanyFiletype *filetypes_find(GCompareFunc predicate, gpointer user_data);
-
-
 void filetypes_init(void);
 
 void filetypes_init_types(void);

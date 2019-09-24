@@ -28,6 +28,7 @@
 #endif
 
 #include "PropSetSimple.h"
+#include "CharacterCategory.h"
 
 #ifdef SCI_LEXER
 #include "LexerModule.h"
@@ -275,9 +276,7 @@ void ScintillaBase::AutoCompleteStart(Sci::Position lenEntered, const char *list
 		pt = PointMainCaret();
 	}
 	if (wMargin.Created()) {
-		const Point ptOrigin = GetVisibleOriginInMain();
-		pt.x += ptOrigin.x;
-		pt.y += ptOrigin.y;
+		pt = pt + GetVisibleOriginInMain();
 	}
 	PRectangle rcac;
 	rcac.left = pt.x - ac.lb->CaretFromEdge();
@@ -462,9 +461,7 @@ void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 		ct.SetForeBack(vs.styles[STYLE_CALLTIP].fore, vs.styles[STYLE_CALLTIP].back);
 	}
 	if (wMargin.Created()) {
-		const Point ptOrigin = GetVisibleOriginInMain();
-		pt.x += ptOrigin.x;
-		pt.y += ptOrigin.y;
+		pt = pt + GetVisibleOriginInMain();
 	}
 	PRectangle rc = ct.CallTipStart(sel.MainCaret(), pt,
 		vs.lineHeight,

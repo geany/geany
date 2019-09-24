@@ -490,10 +490,12 @@ static void add_top_level_items(GeanyDocument *doc)
 			tag_list_add_groups(tag_store,
 				&tv_iters.tag_class, _("Program"), ICON_CLASS,
 				&tv_iters.tag_function, _("File"), ICON_METHOD,
+				&tv_iters.tag_interface, _("Divisions"), ICON_NAMESPACE,
 				&tv_iters.tag_namespace, _("Sections"), ICON_NAMESPACE,
 				&tv_iters.tag_macro, _("Paragraph"), ICON_OTHER,
 				&tv_iters.tag_struct, _("Group"), ICON_STRUCT,
 				&tv_iters.tag_variable, _("Data"), ICON_VAR,
+				&tv_iters.tag_externvar, _("Copies"), ICON_NAMESPACE,
 				NULL);
 			break;
 		case GEANY_FILETYPES_CONF:
@@ -718,6 +720,7 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_AS:
 		{
 			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_externvar), _("Imports"), ICON_NAMESPACE,
 				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
 				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
 				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,

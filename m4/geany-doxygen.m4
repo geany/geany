@@ -5,7 +5,7 @@ AC_DEFUN([GEANY_CHECK_DOXYGEN],
 [
 	AC_ARG_ENABLE([api-docs],
 			[AS_HELP_STRING([--enable-api-docs],
-					[generate API documentation using Doxygen [default=no]])],
+					[generate API documentation using Doxygen [default=auto]])],
 			[geany_with_doxygen="$enableval"],
 			[geany_with_doxygen="auto"])
 

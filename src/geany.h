@@ -41,7 +41,7 @@ G_BEGIN_DECLS
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_TAGS_SUBDIR				"tags"
-#define GEANY_CODENAME					"Siralt"
+#define GEANY_CODENAME					"Poliff"
 #define GEANY_HOMEPAGE					"https://www.geany.org/"
 #define GEANY_WIKI						"https://wiki.geany.org/"
 #define GEANY_BUG_REPORT				"https://www.geany.org/Support/Bugs"

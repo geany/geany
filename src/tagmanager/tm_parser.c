@@ -371,14 +371,16 @@ static TMParserMapEntry map_VALA[] = {
 /* not in universal-ctags */
 static TMParserMapEntry map_ACTIONSCRIPT[] = {
 	{'f', tm_tag_function_t},
-	{'l', tm_tag_field_t},
-	{'v', tm_tag_variable_t},
-	{'m', tm_tag_macro_t},
 	{'c', tm_tag_class_t},
 	{'i', tm_tag_interface_t},
-	{'p', tm_tag_package_t},
-	{'o', tm_tag_other_t},
-	{'r', tm_tag_prototype_t},
+	{'P', tm_tag_package_t},
+	{'m', tm_tag_method_t},
+	{'p', tm_tag_member_t},
+	{'v', tm_tag_variable_t},
+	{'l', tm_tag_variable_t},
+	{'C', tm_tag_macro_t},
+	{'I', tm_tag_externvar_t},
+	{'x', tm_tag_other_t},
 };
 
 /* not in universal-ctags */
@@ -423,11 +425,13 @@ static TMParserMapEntry map_R[] = {
 
 static TMParserMapEntry map_COBOL[] = {
 	{'d', tm_tag_variable_t},
+	{'D', tm_tag_interface_t},
 	{'f', tm_tag_function_t},
 	{'g', tm_tag_struct_t},
 	{'p', tm_tag_macro_t},
 	{'P', tm_tag_class_t},
 	{'s', tm_tag_namespace_t},
+	{'S', tm_tag_externvar_t},
 };
 
 static TMParserMapEntry map_OBJC[] = {
@@ -628,7 +632,7 @@ static void add_subparser(TMParserType lang, TMParserType sublang, TMSubparserMa
 
 #define SUBPARSER_MAP_ENTRY(lang, sublang, map) add_subparser(TM_PARSER_##lang, TM_PARSER_##sublang, map, G_N_ELEMENTS(map))
 
-static void init_subparser_map()
+static void init_subparser_map(void)
 {
 	SUBPARSER_MAP_ENTRY(HTML, JAVASCRIPT, subparser_HTML_javascript_map);
 }
@@ -765,9 +769,11 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 	switch (lang)
 	{
 		/* These parsers include full hierarchy in the tag scope, separated by tm_parser_context_separator() */
+		case TM_PARSER_ACTIONSCRIPT:
 		case TM_PARSER_C:
 		case TM_PARSER_CPP:
 		case TM_PARSER_CSHARP:
+		case TM_PARSER_COBOL:
 		case TM_PARSER_D:
 		case TM_PARSER_FERITE:
 		case TM_PARSER_GLSL:

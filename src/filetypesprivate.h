@@ -40,6 +40,7 @@ typedef struct GeanyFiletypePrivate
 	gboolean	xml_indent_tags; /* XML tag autoindentation, for HTML and XML filetypes */
 	GSList		*tag_files;
 	gboolean	warn_color_scheme;
+	gboolean	user_extensions;	// true if extensions were read from user config file
 
 	/* TODO: move to structure in build.h and only put a pointer here */
 	GeanyBuildCommand *filecmds;

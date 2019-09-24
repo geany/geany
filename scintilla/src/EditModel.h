@@ -40,6 +40,7 @@ public:
 
 	int foldFlags;
 	int foldDisplayTextStyle;
+	UniqueString defaultFoldDisplayText;
 	std::unique_ptr<IContractionState> pcs;
 	// Hotspot support
 	Range hotspot;
@@ -60,7 +61,10 @@ public:
 	virtual Sci::Line TopLineOfMain() const = 0;
 	virtual Point GetVisibleOriginInMain() const = 0;
 	virtual Sci::Line LinesOnScreen() const = 0;
-	virtual Range GetHotSpotRange() const = 0;
+	virtual Range GetHotSpotRange() const noexcept = 0;
+	void SetDefaultFoldDisplayText(const char *text);
+	const char *GetDefaultFoldDisplayText() const noexcept;
+	const char *GetFoldDisplayText(Sci::Line lineDoc) const;
 };
 
 }

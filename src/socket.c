@@ -421,8 +421,10 @@ static gint socket_fd_open_unix(const gchar *path)
 {
 	gint sock;
 	struct sockaddr_un addr;
-	gint val;
+	gint val, err;
+	gchar *real_dir;
 	gchar *real_path;
+	gchar *basename;
 
 	sock = socket(PF_UNIX, SOCK_STREAM, 0);
 	if (sock < 0)
@@ -439,12 +441,24 @@ static gint socket_fd_open_unix(const gchar *path)
 		return -1;
 	}
 
-	/* fix for #1888561:
-	 * in case the configuration directory is located on a network file system or any other
-	 * file system which doesn't support sockets, we just link the socket there and create the
-	 * real socket in the system's tmp directory assuming it supports sockets */
-	real_path = g_strdup_printf("%s%cgeany_socket.%08x",
-		g_get_tmp_dir(), G_DIR_SEPARATOR, g_random_int());
+	/* Try to place the socket in XDG_RUNTIME_DIR, according to XDG Base
+	 * Directory Specification, see
+	 * https://specifications.freedesktop.org/basedir-spec/latest.
+	 * If that fails, we try to use /tmp as a fallback. The last resort
+	 * is the configuration directory. But the other directories
+	 * are preferred in case the configuration directory is located on
+	 * a network file system or any other file system which doesn't
+	 * support sockets (see #1888561). Append a random int to
+	 * prevent clashes with other instances on the system. */
+	real_dir = g_build_filename(g_get_user_runtime_dir(), "geany", NULL);
+	err = utils_mkdir(real_dir, FALSE);
+	basename = g_strdup_printf("geany_socket.%08x", g_random_int());
+	if (err == 0 || err == EEXIST)
+		real_path = g_build_filename(real_dir, basename, NULL);
+	else
+		real_path = g_build_filename(g_get_tmp_dir(), basename, NULL);
+	g_free(basename);
+	g_free(real_dir);
 
 	if (utils_is_file_writable(real_path) != 0)
 	{	/* if real_path is not writable for us, fall back to ~/.config/geany/geany_socket_*_* */
@@ -452,7 +466,8 @@ static gint socket_fd_open_unix(const gchar *path)
 		g_warning("Socket %s could not be written, using %s as fallback.", real_path, path);
 		SETPTR(real_path, g_strdup(path));
 	}
-	/* create a symlink in e.g. ~/.config/geany/geany_socket_hostname__0 to /tmp/geany_socket.499602d2 */
+	/* create a symlink in e.g. ~/.config/geany/geany_socket_hostname__0 to
+	 * /var/run/user/1000/geany/geany_socket.* */
 	else if (symlink(real_path, path) != 0)
 	{
 		gint saved_errno = errno;

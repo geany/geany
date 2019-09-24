@@ -1,9 +1,6 @@
 
 dist_check_SCRIPTS = runner.sh
 
-# Disabled tests:
-#	simple.cbl
-
 NULL =
 test_sources = \
 	1795612.js						\
@@ -15,6 +12,13 @@ test_sources = \
 	3470609.js						\
 	3526726.tex						\
 	68hc11.asm						\
+	actionscript/as-first-token.as	\
+	actionscript/classes.as			\
+	actionscript/const2.as			\
+	actionscript/const.as			\
+	actionscript/method-attributes.as	\
+	actionscript/packages.as		\
+	actionscript/sampler.as			\
 	angle_bracket.cpp				\
 	anonymous_functions.php			\
 	arraylist.js					\
@@ -117,6 +121,11 @@ test_sources = \
 	case_sensitivity.php			\
 	char-selector.f90				\
 	classes.php						\
+	cobol/helloworld.cbl			\
+	cobol/helloworld2.cbl			\
+	cobol/levels.cbl				\
+	cobol/quoted-program-id.cbl		\
+	cobol/simple.cbl				\
 	common.f						\
 	complex-return.js				\
 	continuation.f90				\

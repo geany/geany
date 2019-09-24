@@ -93,7 +93,8 @@ void stash_group_free_settings(StashGroup *group);
 
 #ifdef GEANY_PRIVATE
 
-void stash_group_set_various(StashGroup *group, gboolean write_once);
+void stash_group_set_various(StashGroup *group, gboolean various,
+	const gchar *prefix);
 
 void stash_group_set_use_defaults(StashGroup *group, gboolean use_defaults);
 

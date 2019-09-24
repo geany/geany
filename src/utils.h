@@ -212,6 +212,8 @@ const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
 gchar *utils_get_real_path(const gchar *file_name);
 
+gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len);
+
 #ifdef GEANY_PRIVATE
 
 typedef enum
@@ -300,7 +302,9 @@ gchar **utils_strv_new(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
 gchar **utils_strv_join(gchar **first, gchar **second) G_GNUC_WARN_UNUSED_RESULT;
 
-gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len);
+gchar *utils_strv_find_common_prefix(gchar **strv, gssize strv_len) G_GNUC_WARN_UNUSED_RESULT;
+
+gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len, const gchar *delim) G_GNUC_WARN_UNUSED_RESULT;
 
 GSList *utils_get_config_files(const gchar *subdir);
 
