@@ -4609,7 +4609,8 @@
                       <object class="GtkHBox" id="hbox6">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">These preferences can be overridden when a project is open</property>
+                        <property name="tooltip_text" translatable="yes">These preferences can be overridden by project properties.
+Click the info icon to force editing.</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkLabel" id="label19">
@@ -4625,11 +4626,18 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkImage" id="image7">
+                          <object class="GtkEventBox" id="eventbox2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="stock">gtk-info</property>
-                            <property name="icon-size">1</property>
+                            <signal name="button-press-event" handler="on_prefs_edit_override" swapped="no"/>
+                            <child>
+                              <object class="GtkImage" id="image7">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="stock">gtk-info</property>
+                                <property name="icon-size">2</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">True</property>
