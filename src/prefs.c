@@ -395,7 +395,8 @@ static void kb_init(KbData *kbdata)
 
 // pref dialog widget names that should start off disabled when project open
 const gchar *proj_overrides[] = {
-	"vbox6"
+	"vbox6", "table13", "check_line_wrapping", "hbox14",
+	"check_auto_multiline", "table7"
 };
 
 /* note: new 'simple' prefs should use Stash code in keyfile.c */
