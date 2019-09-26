@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2019-04-19 15:54+0300\n"
+"POT-Creation-Date: 2019-09-23 02:11+0000\n"
+"PO-Revision-Date: 2019-09-24 18:41+0300\n"
 "Last-Translator: Ingmārs Dīriņš <melhiors14@gmail.com>\n"
 "Language-Team: \n"
 "Language: lv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -1189,7 +1189,7 @@ msgstr "Noklusējuma kodējums (esošajām ne-Unicode datnēm):"
 
 #: ../data/geany.glade.h:245
 msgid "Sets the default encoding for opening existing non-Unicode files"
-msgstr "Iestata noklusējuma iekodējumu pastāvošu ne-Unicode datņu atvēršanai"
+msgstr "Iestata noklusējuma kodējumu pastāvošu ne-Unicode datņu atvēršanai"
 
 #: ../data/geany.glade.h:246
 msgid "<b>Encodings</b>"
@@ -2254,12 +2254,12 @@ msgstr "Ātra un viegla IDE"
 #: ../src/about.c:238
 #, c-format
 msgid "(built on or after %s)"
-msgstr "(būvēts uz vai pēc %s)"
+msgstr "(būvēts %s vai vēlāk)"
 
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "Lietojot izpildlaika bibliotēkas GTK+ v. %u.%u.%u un GLib v. %u.%u.%u"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -4508,7 +4508,7 @@ msgstr "_Datņu katalogs:"
 
 #: ../src/search.c:940
 msgid "E_ncoding:"
-msgstr "_Iekodējums:"
+msgstr "_Kodējums:"
 
 #: ../src/search.c:964
 msgid "See grep's manual page for more information"
@@ -4699,7 +4699,7 @@ msgstr "Programma"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Iedalījumi"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4719,7 +4719,7 @@ msgstr "Dati"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Kopijas"
 
 #: ../src/symbols.c:504
 msgid "Keys"
