@@ -3122,11 +3122,12 @@ The following notes on the table may reference cells by coordinate as *(group, s
 Set Build Commands dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^
  
-Most of the configuration of the build menu is done through the *Set Build Commands* dialog.
-When no project is open, you can edit the configuration sourced from user preferences
-using the *Build->Set Build Commands* menu item. You can edit the
-configuration sourced from a project in the *Build* tab of the `Project Properties`_
-dialog. The former menu item also shows the project dialog when a project is open.
+Most of the configuration of the build menu is done through the *Set 
+Build Commands* dialog. When no project is open, you can edit the 
+configuration sourced from user preferences using the *Build->Set Build 
+Commands* menu item. You can edit the configuration sourced from a 
+project in the *Build* tab of the `Project Properties`_ dialog. The 
+former menu item also shows the project dialog when a project is open. 
 Both use the same form shown below.
 
 .. image:: ./images/build_menu_commands_dialog.png
@@ -3163,8 +3164,9 @@ configure with nothing in the label but at least one character in the command.
 Substitutions in commands and working directories
 `````````````````````````````````````````````````
 
-Before the command is run, the first occurrence of each of the following two character sequences in each of the
-command and working directory fields is substituted by the items specified below:
+Before the command is run, the first occurrence of each of the following 
+two character sequences in each of the command and working directory 
+fields is substituted by the items specified below:
 
 * %d - the absolute path to the directory of the current file.
 * %e - the name of the current file without the extension or path.
@@ -4316,9 +4318,11 @@ Example::
 As of Geany 0.19 this section is for legacy support.
 Values that are set in the [build-menu] section will override those in this section.
 
-If any build menu item settings have been configured in the `Set Build Commands dialog`_ (or the *Build* tab of the `Project Properties`_ dialog), then these
-settings are stored in the [build-menu] section and will override the settings in
-this section for that item.
+If any build menu item settings have been configured in the
+`Set Build Commands dialog`_ (or the *Build* tab of the 
+`Project Properties`_ dialog), then these settings are stored in the 
+[build-menu] section and will override the settings in this section for 
+that item.
 
 error_regex
     See the [build-menu] section for details.
