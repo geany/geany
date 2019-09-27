@@ -2647,9 +2647,9 @@ replace_and_find_by_default       Set ``Replace & Find`` button as default so  t
                                   focus.
 **``build`` group**
 number_ft_menu_items              The maximum number of menu items in the      2           on restart
-                                  filetype section of the Build menu.
+                                  filetype build section of the Build menu.
 number_non_ft_menu_items          The maximum number of menu items in the      3           on restart
-                                  independent section of the Build menu.
+                                  independent build section.
 number_exec_menu_items            The maximum number of menu items in the      2           on restart
                                   execute section of the Build menu.
 ================================  ===========================================  ==========  ===========
@@ -3064,20 +3064,20 @@ be used. The sources in decreasing priority are:
 * The defaults
 
 The detailed relationships between sources and the configurable menu item groups
-is shown in the following table.
+is shown in the following table:
 
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
 | Group        | Project File        | Preferences              | System Filetype   |  Defaults                     |
 +==============+=====================+==========================+===================+===============================+
 | Filetype     | Loads From: project | Loads From:              | Loads From:       | None                          |
-|              | file                | filetypes.xxx file in    | filetypes.xxx in  |                               |
+| Build        | file                | filetypes.xxx file in    | filetypes.xxx in  |                               |
 |              |                     | ~/.config/geany/filedefs | Geany install     |                               |
 |              | Saves To: project   |                          |                   |                               |
 |              | file                | Saves to: as above,      | Saves to: as user |                               |
 |              |                     | creating if needed.      | preferences left. |                               |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
-| Filetype     | Loads From: project | Loads From:              | Loads From:       | 1:                            |
-| Independent  | file                | geany.conf file in       | filetypes.xxx in  |   Label: _Make                |
+| Independent  | Loads From: project | Loads From:              | Loads From:       | 1:                            |
+| Build        | file                | geany.conf file in       | filetypes.xxx in  |   Label: _Make                |
 |              |                     | ~/.config/geany          | Geany install     |   Command: make               |
 |              | Saves To: project   |                          |                   |                               |
 |              | file                | Saves to: as above,      | Saves to: as user | 2:                            |
@@ -3099,25 +3099,25 @@ is shown in the following table.
 |              |                     | ~/.config/geany/filedefs |                   |                               |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
 
-The following notes on the table reference cells by coordinate as (group,source):
+The following notes on the table may reference cells by coordinate as *(group, source)*:
 
-* General - for filetypes.xxx substitute the appropriate extension for
+* Filetype filenames - for filetypes.xxx substitute the appropriate extension for
   the filetype of the current document for xxx - see `filenames`_.
 
 * System Filetypes - Labels loaded from these sources are locale sensitive
   and can contain translations.
 
-* (Filetype, Project File) and (Filetype, Preferences) - preferences use a full
+* *(Filetype build, Project and Preferences)* - preferences use a full
   filetype file so that users can configure all other filetype preferences
   as well.  Projects can only configure menu items per filetype.  Saving
   in the project file means that there is only one file per project not
   a whole directory.
 
-* (Filetype-Independent, System Filetype) - although conceptually strange, defining
+* *(Filetype-Independent build, System Filetype)* - although conceptually strange, defining
   filetype-independent commands in a filetype file, this provides the ability to
   define filetype dependent default menu items.
 
-* (Execute, Project File) and (Execute, Preferences) - the project independent
+* *(Execute, Project and Preferences)* - the project independent
   execute and preferences independent execute commands can only be set by hand
   editing the appropriate file, see `Preferences file format`_ and `Project file
   format`_.
@@ -3139,7 +3139,7 @@ The dialog is divided into three sections:
 * Independent build commands (available regardless of filetype).
 * Filetype execute commands.
 
-The filetype and independent sections also each contain a field for the regular
+The filetype and independent build sections also each contain a field for the regular
 expression used for parsing command output for error and warning messages.
 
 The columns in the first three sections allow setting of the label, command,
@@ -3188,8 +3188,13 @@ before the command is run.
 Build menu keyboard shortcuts
 `````````````````````````````
 
-Keyboard shortcuts can be defined for the first two filetype menu items, the first three
-independent menu items, the first execute menu item and the fixed menu items.
+Keyboard shortcuts can be defined for:
+
+* the first two filetype build menu items
+* the first three independent build menu items
+* the first execute menu item 
+* the fixed menu items (Next/Previous Error, Set Commands)
+
 In the keybindings configuration dialog (see `Keybinding preferences`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
 
@@ -4749,8 +4754,8 @@ where:
 
 * GG - is the menu item group,
 
-  - FT for filetype
-  - NF for independent (non-filetype)
+  - FT for filetype build
+  - NF for independent (non-filetype) build
   - EX for execute
 
 * NN - is a two decimal digit number of the item within the group,
