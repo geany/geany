@@ -128,6 +128,7 @@ libgeany_la_LIBADD = \
 
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
 nodist_EXTRA_libgeany_la_SOURCES = dummy1.cxx
+nodist_EXTRA_geany_SOURCES = dummy2.cxx
 
 CLEANFILES =
 
