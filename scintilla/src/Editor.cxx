@@ -56,7 +56,6 @@
 #include "EditView.h"
 #include "Editor.h"
 #include "ElapsedPeriod.h"
-#include "Scintilla.h"
 
 using namespace Scintilla;
 
