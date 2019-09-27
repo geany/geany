@@ -2855,8 +2855,8 @@ warnings or errors are marked in the source, see `Indicators`_ below.
 
 .. tip::
     If Geany's default error message parsing does not parse errors for
-    the tool you're using, you can set a custom regex in the Build Commands
-    Dialog, see `Build Menu Configuration`_.
+    the tool you're using, you can set a custom regex in the
+    `Set Build Commands dialog`_, see `Build Menu Configuration`_.
 
 Indicators
 ^^^^^^^^^^
@@ -2967,7 +2967,7 @@ Execute
 
 Execute will run the corresponding executable file, shell script or
 interpreted script in a terminal window. The command set in the
-"Set Build Commands" dialog is run in a script to ensure the terminal
+`Set Build Commands dialog`_ is run in a script to ensure the terminal
 stays open after execution completes.  Note: see `Terminal emulators`_
 below for the command format.  Alternatively the built-in VTE can be used
 if it is available - see `Virtual terminal emulator widget (VTE)`_.
@@ -3001,8 +3001,7 @@ execute the terminal program and to pass it the name of the Geany run
 script that it should execute in a Bourne compatible shell (eg /bin/sh).
 The marker "%c" is substituted with the name of the Geany run script,
 which is created in the temporary directory and which changes the working
-directory to the directory set in the Build commands dialog, see
-`Build menu commands dialog`_ for details.
+directory to the directory set in the `Set Build Commands dialog`_.
 
 As an example the default (Linux) command is::
 
@@ -3122,14 +3121,14 @@ The following notes on the table may reference cells by coordinate as *(group, s
   editing the appropriate file, see `Preferences file format`_ and `Project file
   format`_.
 
-Build menu commands dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Most of the configuration of the build menu is done through the Build Menu
-Commands Dialog.  You edit the configuration sourced from preferences in the
-dialog opened from the Build->Build Menu Commands item and you edit the
-configuration from the project in the build tab of the project preferences
-dialog.  Both use the same form shown below.
+Set Build Commands dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+Most of the configuration of the build menu is done through the *Set Build Commands* dialog.
+The configuration sourced from user preferences can be edited in the
+dialog opened from the *Build->Set Build Commands* menu item. The
+configuration sourced from the project can be edited in the *Build* tab of the `Project Properties`_
+dialog. The former menu item also shows the project dialog when a project is open.  Both use the same form shown below.
 
 .. image:: ./images/build_menu_commands_dialog.png
 
@@ -3212,8 +3211,7 @@ preferences and filetype file settings and will attempt to map them into the new
 configuration format.  There is not a simple clean mapping between the formats.
 The mapping used produces the most sensible results for the majority of cases.
 However, if they do not map the way you want, you may have to manually
-configure some settings using the Build Commands
-Dialog or the Build tab of the project preferences dialog.
+configure some settings using the `Set Build Commands dialog`_.
 
 Any setting configured in either of these dialogs will override settings mapped from
 older format configuration files.
@@ -4324,15 +4322,14 @@ Example::
 As of Geany 0.19 this section is for legacy support.
 Values that are set in the [build-menu] section will override those in this section.
 
+If any build menu item settings have been configured in the `Set Build Commands dialog`_ (or the *Build* tab of the `Project Properties`_ dialog), then these
+settings are stored in the [build-menu] section and will override the settings in
+this section for that item.
+
 error_regex
-    See [build-menu] section for details.
+    See the [build-menu] section for details.
 
 **Build commands**
-
-If any build menu item settings have been configured in the Build Menu Commands
-dialog or the Build tab of the project preferences dialog then these
-settings are stored in the [build-menu] section and override the settings in
-this section for that item.
 
 compiler
     This item specifies the command to compile source code files. But
