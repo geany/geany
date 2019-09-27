@@ -2651,7 +2651,7 @@ number_ft_menu_items              The maximum number of menu items in the      2
 number_non_ft_menu_items          The maximum number of menu items in the      3           on restart
                                   independent build section.
 number_exec_menu_items            The maximum number of menu items in the      2           on restart
-                                  execute section of the Build menu.
+                                  filetype execute section.
 number_exec_ind_menu_items        The maximum number of menu items in the      2           on restart
                                   independent execute section.
 ================================  ===========================================  ==========  ===========
@@ -3029,24 +3029,26 @@ in to be configured. For example, if you change one of the default make
 commands to run say 'waf' you can also change the label to match.
 These settings are saved automatically when Geany is shut down.
 
-The build menu is divided into four groups of items each with different
+The build menu has four configurable groups of items each with different
 behaviors:
 
-* Filetype build commands - are configurable and depend on the filetype of the
-  current document; they capture output in the compiler tab and parse it for
+- *Filetype build commands* - these depend on the filetype of the
+  current document. They capture output in the compiler tab and parse it for
   errors.
-* Independent build commands - are configurable and mostly don't depend on the
-  filetype of the current document; they also capture output in the
-  compiler tab and parse it for errors.
-* Execute commands - are configurable and intended for executing your
-  program or other long running programs.  The output is not parsed for 
-  errors and is directed to the terminal command selected in `Tools 
-  preferences`_.
-* Fixed commands - these perform built-in actions:
+- *Independent build commands* - these (mostly) don't depend on the
+  current filetype. They also capture and parse the output.
+- *Filetype execute commands* - these depend on the current filetype 
+  and they are intended for executing your program or other long running 
+  programs.  The output is not parsed for errors and is directed to the 
+  terminal command selected in `Tools preferences`_.
+- *Independent execute commands* - as above but not dependent on the 
+  current filetype.
 
-  * Go to the next error.
-  * Go to the previous error.
-  * Show the build menu commands dialog.
+The menu also has fixed commands - these perform built-in actions:
+
+* Go to the next error.
+* Go to the previous error.
+* Show the build menu commands dialog.
 
 The maximum numbers of items in each of the configurable groups can be
 configured in `Various preferences`_. Even though the maximum number of
@@ -3087,15 +3089,18 @@ is shown in the following table:
 |              |                     |                          |                   |    Label: Make _Object        |
 |              |                     |                          |                   |    Command: make %e.o         |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
-| Execute      | Loads From: project | Loads From:              | Loads From:       | Label: _Execute               |
-|              | file or else        | geany.conf file in       | filetypes.xxx in  | Command: ./%e                 |
-|              | filetype defined in | ~/.config/geany or else  | Geany install     |                               |
-|              | project file        | filetypes.xxx file in    |                   |                               |
-|              |                     | ~/.config/geany/filedefs | Saves To: as user |                               |
-|              | Saves To:           |                          | preferences left. |                               |
-|              | project file        | Saves To:                |                   |                               |
-|              |                     | filetypes.xxx file in    |                   |                               |
-|              |                     | ~/.config/geany/filedefs |                   |                               |
+| Filetype     | Loads From:         | Loads From:              | Loads From:       | Label: _Execute               |
+| Execute      | filetype setting    | filetypes.xxx file in    | filetypes.xxx in  | Command: ./%e                 |
+|              | stored in           | ~/.config/geany/filedefs | Geany install     |                               |
+|              | project file        |                          |                   |                               |
+|              |                     | Saves To: Same           | Saves To: as user |                               |
+|              | Saves To: Same      |                          | preferences left. |                               |
++--------------+---------------------+--------------------------+-------------------+-------------------------------+
+| Independent  | Loads From: project | Loads From:              | None              | None                          |
+| Execute      | file                | geany.conf file in       |                   |                               |
+|              |                     | ~/.config/geany          |                   |                               |
+|              | Saves To: Same      |                          |                   |                               |
+|              |                     | Saves To: Same           |                   |                               |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
 
 The following notes on the table may reference cells by coordinate as *(group, source)*:
@@ -3116,10 +3121,9 @@ The following notes on the table may reference cells by coordinate as *(group, s
   filetype-independent commands in a filetype file, this provides the ability to
   define filetype dependent default menu items.
 
-* *(Execute, Project and Preferences)* - the project independent
-  execute and preferences independent execute commands can only be set by hand
-  editing the appropriate file, see `Preferences file format`_ and `Project file
-  format`_.
+* Independent execute - the project and preferences independent execute
+  commands can only be set by hand editing the appropriate file, see 
+  `Preferences file format`_ and `Project file format`_.
 
 Set Build Commands dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3192,7 +3196,8 @@ Keyboard shortcuts can be defined for:
 
 * the first two filetype build menu items
 * the first three independent build menu items
-* the first execute menu item 
+* the first filetype execute menu item 
+* the first independent execute menu item 
 * the fixed menu items (Next/Previous Error, Set Commands)
 
 In the keybindings configuration dialog (see `Keybinding preferences`_)
