@@ -3022,12 +3022,10 @@ Build menu configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 The build menu has considerable flexibility and configurability, allowing
-both menu labels the commands they execute and the directory they execute
+menu labels, the commands they execute and the directory they execute
 in to be configured.
-
 For example, if you change one of the default make commands to run say 'waf'
 you can also change the label to match.
-
 These settings are saved automatically when Geany is shut down.
 
 The build menu is divided into four groups of items each with different
@@ -3041,16 +3039,16 @@ behaviors:
   compiler tab and parse it for errors.
 * Execute commands - are configurable and intended for executing your
   program or other long running programs.  The output is not parsed for errors
-  and is directed to the terminal command selected in preferences.
+  and is directed to the terminal command selected in *Preferences*.
 * Fixed commands - these perform built-in actions:
 
-  * Go to the next error.
-  * Go to the previous error.
-  * Show the build menu commands dialog.
+* Go to the next error.
+* Go to the previous error.
+* Show the build menu commands dialog.
 
 The maximum numbers of items in each of the configurable groups can be
-configured in the `Various preferences`_. Even though the maximum number of
-items may have been increased, only those menu items that have values
+configured in `Various preferences`_. Even though the maximum number of
+items may have been increased, only those menu items that have commands
 configured are shown in the menu.
 
 The groups of menu items obtain their configuration from four potential
@@ -3143,9 +3141,7 @@ expression used for parsing command output for error and warning messages.
 
 The columns in the first three sections allow setting of the label, command,
 and working directory to run the command in.
-
 An item with an empty label will not be shown in the menu.
-
 An empty working directory will default to the directory of the current document.
 If there is no current document then the command will not run.
 
@@ -3160,24 +3156,23 @@ with the project source but can with the preferences source dialog.
 
 The clear buttons remove the definition from the configuration source you are editing.
 When you do this the command from the next lower priority source will be shown.
-To hide lower priority menu items without having anything show in the menu
-configure with a nothing in the label but at least one character in the command.
+To hide lower priority menu items without having anything show in the menu,
+configure with nothing in the label but at least one character in the command.
 
 Substitutions in commands and working directories
 `````````````````````````````````````````````````
 
-The first occurrence of each of the following character sequences in each of the
-command and working directory fields is substituted by the items specified below
-before the command is run.
+Before the command is run, the first occurrence of each of the following two character sequences in each of the
+command and working directory fields is substituted by the items specified below:
 
-* %d - substituted by the absolute path to the directory of the current file.
-* %e - substituted by the name of the current file without the extension or path.
-* %f - substituted by the name of the current file without the path.
-* %p - if a project is open, substituted by the base path from the project.
-* %l - substituted by the line number at the current cursor position.
+* %d - the absolute path to the directory of the current file.
+* %e - the name of the current file without the extension or path.
+* %f - the name of the current file without the path.
+* %p - if a project is open, the base path from the project.
+* %l - the line number at the current cursor position.
 
 .. note::
-   If the basepath set in the project preferences is not an absolute path , then it is
+   If the base path set in `Project Properties`_ is not an absolute path, then it is
    taken as relative to the directory of the project file.  This allows a project file
    stored in the source tree to specify all commands and working directories relative
    to the tree itself, so that the whole tree including the project file, can be moved
@@ -3198,12 +3193,10 @@ In the keybindings configuration dialog (see `Keybinding preferences`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
 
 It is currently not possible to bind keyboard shortcuts to more than these menu items.
-
 You can also use underlines in the labels to set mnemonic characters.
 
 Old settings
 ````````````
-
 The configurable Build Menu capability was introduced in Geany 0.19 and
 required a new section to be added to the configuration files (See
 `Preferences file format`_).  Geany will still load older format project,
