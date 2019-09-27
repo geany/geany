@@ -164,7 +164,7 @@ Editor::Editor() : durationWrapOneLine(0.00001, 0.000001, 0.0001) {
 	mouseSelectionRectangularSwitch = false;
 	multipleSelection = false;
 	additionalSelectionTyping = false;
-	multiPasteMode = SC_MULTIPASTE_ONCE;
+	multiPasteMode = SC_MULTIPASTE_EACH;
 	virtualSpaceOptions = SCVS_NONE;
 
 	targetStart = 0;
