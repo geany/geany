@@ -3123,10 +3123,11 @@ Set Build Commands dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^
  
 Most of the configuration of the build menu is done through the *Set Build Commands* dialog.
-The configuration sourced from user preferences can be edited in the
-dialog opened from the *Build->Set Build Commands* menu item. The
-configuration sourced from the project can be edited in the *Build* tab of the `Project Properties`_
-dialog. The former menu item also shows the project dialog when a project is open.  Both use the same form shown below.
+When no project is open, you can edit the configuration sourced from user preferences
+using the *Build->Set Build Commands* menu item. You can edit the
+configuration sourced from a project in the *Build* tab of the `Project Properties`_
+dialog. The former menu item also shows the project dialog when a project is open.
+Both use the same form shown below.
 
 .. image:: ./images/build_menu_commands_dialog.png
 
