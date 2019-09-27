@@ -56,6 +56,7 @@
 #include "EditView.h"
 #include "Editor.h"
 #include "ElapsedPeriod.h"
+#include "Scintilla.h"
 
 using namespace Scintilla;
 
@@ -164,7 +165,7 @@ Editor::Editor() : durationWrapOneLine(0.00001, 0.000001, 0.0001) {
 	mouseSelectionRectangularSwitch = false;
 	multipleSelection = false;
 	additionalSelectionTyping = false;
-	multiPasteMode = SC_MULTIPASTE_EACH;
+	multiPasteMode = SC_MULTIPASTE_ONCE;
 	virtualSpaceOptions = SCVS_NONE;
 
 	targetStart = 0;

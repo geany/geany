@@ -93,6 +93,10 @@ sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject
 }
 #endif
 
+ /* Set multi paste setting (at 3104 scintilla defaults to SC_MULTIPASTE_ONCE) */ 
+void sci_set_multipaste(ScintillaObject *sci, gint mpval) { 
+	SSM(sci, SCI_SETMULTIPASTE, SC_MULTIPASTE_EACH, 0); 
+}
 
 /* line numbers visibility */
 void sci_set_line_numbers(ScintillaObject *sci, gboolean set)

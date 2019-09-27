@@ -39,6 +39,7 @@ sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject
 # endif
 #endif
 
+void                sci_set_multipaste          (ScintillaObject *sci, gint mpval);
 void 				sci_set_text				(ScintillaObject *sci,  const gchar *text);
 gboolean			sci_has_selection			(ScintillaObject *sci);
 void 				sci_end_undo_action			(ScintillaObject *sci);

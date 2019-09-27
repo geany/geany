@@ -5017,8 +5017,9 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	editor->line_wrapping = get_project_pref(line_wrapping);
 	editor->scroll_percent = -1.0F;
 	editor->line_breaking = FALSE;
-
+	
 	editor->sci = editor_create_widget(editor);
+	sci_set_multipaste(editor->sci, SC_MULTIPASTE_EACH);
 	return editor;
 }
 
