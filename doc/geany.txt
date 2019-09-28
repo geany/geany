@@ -3038,13 +3038,14 @@ behaviors:
   filetype of the current document; they also capture output in the
   compiler tab and parse it for errors.
 * Execute commands - are configurable and intended for executing your
-  program or other long running programs.  The output is not parsed for errors
-  and is directed to the terminal command selected in *Preferences*.
+  program or other long running programs.  The output is not parsed for 
+  errors and is directed to the terminal command selected in `Tools 
+  preferences`_.
 * Fixed commands - these perform built-in actions:
 
-* Go to the next error.
-* Go to the previous error.
-* Show the build menu commands dialog.
+  * Go to the next error.
+  * Go to the previous error.
+  * Show the build menu commands dialog.
 
 The maximum numbers of items in each of the configurable groups can be
 configured in `Various preferences`_. Even though the maximum number of
@@ -3122,8 +3123,8 @@ The following notes on the table may reference cells by coordinate as *(group, s
 Set Build Commands dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^
  
-Most of the configuration of the build menu is done through the *Set 
-Build Commands* dialog. When no project is open, you can edit the 
+Most of the configuration of the build menu is done through the `Set 
+Build Commands dialog`_. When no project is open, you can edit the 
 configuration sourced from user preferences using the *Build->Set Build 
 Commands* menu item. You can edit the configuration sourced from a 
 project in the *Build* tab of the `Project Properties`_ dialog. The 
