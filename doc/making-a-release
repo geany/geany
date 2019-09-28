@@ -18,14 +18,9 @@ Run 'make distcheck'.
 Delete the created archive and run 'make dist' and 'make dist-bzip2'.
 Sign the archives with 'make sign'.
 
-Put the resulting tarballs and signature files on geany.org - upload
-to home directory and after the upload is finished move them into
-/srv/www/download.geany.org/.
-Rename LATEST-IS-... to the new version number in
-/srv/www/download.geany.org/ and /srv/www/www.geany.org/files.
-Execute (as user geany) /home/geany/md5sums to update
-/srv/www/download.geany.org/MD5SUMS.
-You can use the script /home/geany/publish-release.
+Upload the resulting tarballs and signature files to your home directory on
+geany.org.  Use the script /home/geany/publish-release, passing it the new
+version number (e.g. `/home/geany/publish-release 1.36`).
 Make sure the public part of the GPG key used to sign the archives
 can be found on the download page.
 
@@ -33,10 +28,8 @@ Windows builds (enrico?).
 
 Create a signed tag for the release in Git with 'git tag -s <version>'.
 
-Website: update Releases, Release Notes, ChangeLog and add a News item.
-Use the /home/geany/update-manual script to update the manual data and links
-in the filesystem at /srv/www/www.geany.org/manual, and to update
-current/hacking.html.
+Website: update Latest Version (https://www.geany.org/admin/latest_version/latestversion/)
+and add a News item.
 
 Announce on geany, devel, i18n mailing lists (check you're subscribed).
 Put a news item on SourceForge (https://sourceforge.net/p/geany/news/)
@@ -48,5 +41,5 @@ Update the topic on the IRC channel (/msg chanserv op #geany).
 For non-master releases, merge NEWS into master and any branch-only
 commits that need to merged.
 
-For merge releases, bump version strings and codename (use scripts/version-bump)
-and merge unstable branch if any.
+For merge releases, bump version strings and codename (use scripts/version-bump,
+e.g. `scripts/version-bump 1.37 Wolbam`) and merge unstable branch if any.
