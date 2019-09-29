@@ -127,6 +127,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	complete_snippets_whilst_editing;	/* hidden pref */
 	gint		line_break_column;
 	gboolean	auto_continue_multiline;
+	gboolean	auto_continue_multiline_auto_indent;
 	gchar		*comment_toggle_mark;
 	guint		autocompletion_max_entries;
 	guint		autoclose_chars;

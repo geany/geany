@@ -482,6 +482,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_newline_strip", editor_prefs.newline_strip);
 	g_key_file_set_integer(config, PACKAGE, "line_break_column", editor_prefs.line_break_column);
 	g_key_file_set_boolean(config, PACKAGE, "auto_continue_multiline", editor_prefs.auto_continue_multiline);
+	g_key_file_set_boolean(config, PACKAGE, "auto_continue_multiline_auto_indent", editor_prefs.auto_continue_multiline_auto_indent);
 	g_key_file_set_string(config, PACKAGE, "comment_toggle_mark", editor_prefs.comment_toggle_mark);
 	g_key_file_set_boolean(config, PACKAGE, "scroll_stop_at_last_line", editor_prefs.scroll_stop_at_last_line);
 	g_key_file_set_integer(config, PACKAGE, "autoclose_chars", editor_prefs.autoclose_chars);
@@ -822,6 +823,8 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.newline_strip = utils_get_setting_boolean(config, PACKAGE, "pref_editor_newline_strip", FALSE);
 	editor_prefs.line_break_column = utils_get_setting_integer(config, PACKAGE, "line_break_column", 72);
 	editor_prefs.auto_continue_multiline = utils_get_setting_boolean(config, PACKAGE, "auto_continue_multiline", TRUE);
+	editor_prefs.auto_continue_multiline_auto_indent = (
+		utils_get_setting_boolean(config, PACKAGE, "auto_continue_multiline_auto_indent", TRUE));
 	editor_prefs.comment_toggle_mark = utils_get_setting_string(config, PACKAGE, "comment_toggle_mark", GEANY_TOGGLE_MARK);
 	editor_prefs.autoclose_chars = utils_get_setting_integer(config, PACKAGE, "autoclose_chars", 0);
 

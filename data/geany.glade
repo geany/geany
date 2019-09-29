@@ -3417,6 +3417,28 @@
                                   </packing>
                                 </child>
                                 <child>
+                                  <object class="GtkAlignment" id="alignment18">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="left_padding">12</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="check_auto_multiline_auto_indent">
+                                        <property name="label" translatable="yes">Auto-indent after continuation</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <object class="GtkCheckButton" id="check_symbol_auto_completion">
                                     <property name="label" translatable="yes">Autocomplete symbols</property>
                                     <property name="visible">True</property>
@@ -3429,7 +3451,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">3</property>
+                                    <property name="position">4</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3444,7 +3466,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">4</property>
+                                    <property name="position">5</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3459,7 +3481,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">5</property>
+                                    <property name="position">6</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3614,7 +3636,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">6</property>
+                                    <property name="position">7</property>
                                   </packing>
                                 </child>
                               </object>
@@ -9128,14 +9150,47 @@
                         <property name="can_focus">False</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkCheckButton" id="check_auto_multiline1">
-                            <property name="label" translatable="yes">Automatic continuation of multi-line comments</property>
+                          <object class="GtkVBox" id="vbox46">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment</property>
-                            <property name="use_underline">True</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkCheckButton" id="check_auto_multiline1">
+                                <property name="label" translatable="yes">Automatic continuation of multi-line comments</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="tooltip_text" translatable="yes">Continue automatically multi-line comments in languages like C, C++ and Java when a new line is entered inside such a comment</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="alignment19">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="check_auto_multiline1_auto_indent">
+                                    <property name="label" translatable="yes">Auto-indent after continuation</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                         </child>
                       </object>
