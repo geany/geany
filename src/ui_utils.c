@@ -2237,8 +2237,9 @@ void ui_init_toolbar_widgets(void)
 	widgets.undo_items[2] = toolbar_get_widget_by_name("Undo");
 }
 
-
-void ui_swap_sidebar_pos(void)
+/* sw == 1 indicate call from main_lib
+ * sw == 0 otherwise */
+void ui_swap_sidebar_pos(gint sw)
 {
 	GtkWidget *pane = ui_lookup_widget(main_widgets.window, "hpaned1");
 	GtkWidget *left = gtk_paned_get_child1(GTK_PANED(pane));
@@ -2254,8 +2255,10 @@ void ui_swap_sidebar_pos(void)
 	g_object_unref(left);
 	g_object_unref(right);
 
-	gtk_paned_set_position(GTK_PANED(pane), gtk_widget_get_allocated_width(pane)
-		- gtk_paned_get_position(GTK_PANED(pane)));
+	gint tmp = gtk_widget_get_allocated_width(pane);
+	if (sw) {tmp = ui_prefs.geometry[2];}
+	tmp -= gtk_paned_get_position(GTK_PANED(pane));
+	gtk_paned_set_position(GTK_PANED(pane), tmp);
 }
 
 
