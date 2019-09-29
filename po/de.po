@@ -390,7 +390,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:74
 msgid "Store project file inside the project base directory"
-msgstr "Projektdatei im Projektbasisverzeichnis erstelle"
+msgstr "Projektdatei im Projektbasisverzeichnises erstellen"
 
 #	: ../data/geany.glade.h:75
 msgid ""
@@ -399,10 +399,9 @@ msgid ""
 "directory. You can still change the path of the project file in the New "
 "Project dialog."
 msgstr ""
-"Wenn diese Option eingeschaltet ist, wird beim Erzeugen eines neuen Projekts "
-"die Projektdatei standardmäßig innerhalb des Basisverzeichnis des Projekts "
-"angelegt, ansonsten wird die Datei ein Verzeichnis über dem Basisverzeichnis "
-"angelegt. Der Pfad kann im »Neues Projekt«-Dialog geändert werden."
+"Wenn diese Option eingeschaltet ist, wird eine neue Projektdatei beim Erzeugen normalerweise im  "
+"Projekt-Basisverzeichnis angelegt, sonst ein Verzeichnis über dem Basisverzeichnis. "
+"Den Pfad kann im »Neues Projekt«-Dialog ändern."
 
 #: ../data/geany.glade.h:76
 msgid "<b>Projects</b>"
