@@ -1385,3 +1385,4 @@ gint sci_word_end_position(ScintillaObject *sci, gint position, gboolean onlyWor
 {
 	return SSM(sci, SCI_WORDENDPOSITION, position, onlyWordCharacters);
 }
+
