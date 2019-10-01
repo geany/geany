@@ -5001,6 +5001,7 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 		editor->indent_width = old_indent_width;
 		editor->sci = old;
 	}
+	SSM(sci, SCI_SETMULTIPASTE, SC_MULTIPASTE_EACH, 0);
 	return sci;
 }
 
@@ -5019,7 +5020,6 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	editor->line_breaking = FALSE;
 	
 	editor->sci = editor_create_widget(editor);
-	sci_set_multipaste(editor->sci, SC_MULTIPASTE_EACH);
 	return editor;
 }
 
