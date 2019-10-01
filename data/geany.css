@@ -22,6 +22,7 @@
 }
 #geany-search-entry-no-match:selected /* GTK < 3.20 */,
 #geany-search-entry-no-match selection /* GTK >= 3.20 */ {
+	color: #fff;
 	background-color: #771111;
 }
 
