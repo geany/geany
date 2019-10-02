@@ -2013,9 +2013,9 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 		entry_x_padding, sep_padding);
 	
 	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
-		txt = g_strdup_printf(_("%s build commands"), ft->name);
+		txt = g_strdup_printf(_("%s commands"), ft->name);
 	else
-		txt = g_strdup_printf(_("No filetype build commands"));
+		txt = g_strdup_printf(_("No filetype commands"));
 	label = ui_label_new_bold(txt);
 	g_free(txt);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
@@ -2051,7 +2051,7 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL,
 		entry_x_padding, sep_padding);
 	++row;
-	label = ui_label_new_bold(_("Independent build commands"));
+	label = ui_label_new_bold(_("Independent commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL,
 		entry_x_padding, entry_y_padding);
@@ -2109,9 +2109,9 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 		entry_x_padding, sep_padding);
 
 	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
-		txt = g_strdup_printf(_("%s execute commands"), ft->name);
+		txt = g_strdup_printf(_("%s commands"), ft->name);
 	else
-		txt = g_strdup_printf(_("No filetype execute commands"));
+		txt = g_strdup_printf(_("No filetype commands"));
 	label = ui_label_new_bold(txt);
 	g_free(txt);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
@@ -2123,7 +2123,7 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL,
 		entry_x_padding, sep_padding);
 	++row;
-	label = ui_label_new_bold(_("Independent execute commands"));
+	label = ui_label_new_bold(_("Independent commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL,
 		entry_x_padding, entry_y_padding);
