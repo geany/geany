@@ -1961,7 +1961,8 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	}
 	if (bc != NULL && (dst > src))
 		set_row_color(roww, &insensitive_color);
-	if (bc != NULL && (src > dst || (grp == GEANY_GBG_FT && (doc == NULL || doc->file_type == NULL))))
+	if (bc != NULL && (src > dst || ((grp == GEANY_GBG_FT || grp == GEANY_GBG_EXEC) &&
+		(doc == NULL || doc->file_type == NULL))))
 	{
 		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
 			gtk_widget_set_sensitive(roww->entries[i], FALSE);
@@ -1995,7 +1996,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gboolean sensitivity;
 	guint sep_padding = entry_y_padding + 3;
 
-	table = GTK_TABLE(gtk_table_new(build_items_count + 12, 5, FALSE));
+	table = GTK_TABLE(gtk_table_new(build_items_count + 13, 5, FALSE));
 	fields = g_new0(BuildTableFields, 1);
 	fields->rows = g_new0(RowWidgets*, build_items_count);
 	for (ch = colheads, col = 0; *ch != NULL; ch++, col++)
@@ -2008,9 +2009,9 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, sep, 0, DC_N_COL, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
-		txt = g_strdup_printf(_("%s commands"), ft->name);
+		txt = g_strdup_printf(_("%s build commands"), ft->name);
 	else
-		txt = g_strdup_printf(_("%s commands"), _("No filetype"));
+		txt = g_strdup_printf(_("No filetype build commands"));
 
 	label = ui_label_new_bold(txt);
 	g_free(txt);
@@ -2047,7 +2048,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
-	label = ui_label_new_bold(_("Independent commands"));
+	label = ui_label_new_bold(_("Independent build commands"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
@@ -2088,12 +2089,29 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
-	label = ui_label_new_bold(_("Execute commands"));
+	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
+		txt = g_strdup_printf(_("%s execute commands"), ft->name);
+	else
+		txt = g_strdup_printf(_("No filetype execute commands"));
+	label = ui_label_new_bold(txt);
+	g_free(txt);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
 	for (++row, cmd = 0; cmd < build_groups_count[GEANY_GBG_EXEC]; ++row, ++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(doc, table, row, dst, GEANY_GBG_EXEC, cmd, TRUE);
+	sep = gtk_hseparator_new();
+	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
+		entry_x_padding, sep_padding);
+	++row;
+	label = ui_label_new_bold(_("Independent execute commands"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
+		entry_x_padding, entry_y_padding);
+	for (++row, cmd = 0; cmd < build_groups_count[GEANY_GBG_EXEC_IND]; ++row, ++cmdindex, ++cmd)
+		fields->rows[cmdindex] = build_add_dialog_row(
+			doc, table, row, dst, GEANY_GBG_EXEC_IND, cmd, TRUE);
+	++row;
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
@@ -2224,6 +2242,8 @@ static gboolean build_read_commands(BuildDestination *dst, BuildTableData table_
 			changed |= read_row(dst, table_data, cmdindex, GEANY_GBG_NON_FT, cmd);
 		for (cmd = 0; cmd < build_groups_count[GEANY_GBG_EXEC]; ++cmdindex, ++cmd)
 			changed |= read_row(dst, table_data, cmdindex, GEANY_GBG_EXEC, cmd);
+		for (cmd = 0; cmd < build_groups_count[GEANY_GBG_EXEC_IND]; ++cmdindex, ++cmd)
+			changed |= read_row(dst, table_data, cmdindex, GEANY_GBG_EXEC_IND, cmd);
 		changed |= read_regex(table_data->fileregex, table_data->fileregexstring, dst->fileregexstr);
 		changed |= read_regex(table_data->nonfileregex, table_data->nonfileregexstring, dst->nonfileregexstr);
 	}
@@ -2273,6 +2293,7 @@ static void show_build_commands_dialog(void)
 
 	BuildDestination prefdsts = {0};
 	prefdsts.dst[GEANY_GBG_NON_FT] = &non_ft_pref;
+	prefdsts.dst[GEANY_GBG_EXEC_IND] = &exec_pref;
 	if (ft != NULL)
 	{
 		prefdsts.dst[GEANY_GBG_FT] = &(ft->priv->homefilecmds);
