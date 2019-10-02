@@ -148,7 +148,7 @@ static struct
 widgets;
 
 static guint build_groups_count[GEANY_GBG_COUNT] = { 3, 4, 2, 2 };
-static guint build_items_count = 9;
+static guint build_items_count = 11;
 
 static void build_exit_cb(GPid pid, gint status, gpointer user_data);
 static void build_iofunc(GString *string, GIOCondition condition, gpointer data);
