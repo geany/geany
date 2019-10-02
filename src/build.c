@@ -2001,6 +2001,7 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 
 	fields = g_new0(BuildTableFields, 1);
 	fields->rows = g_new0(RowWidgets*, build_items_count);
+	
 	for (ch = colheads, col = 0; *ch != NULL; ch++, col++)
 	{
 		label = gtk_label_new(_(*ch));
@@ -2010,11 +2011,11 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 	sep = gtk_hseparator_new();
 	gtk_table_attach(table, sep, 0, DC_N_COL, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
+	
 	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
 		txt = g_strdup_printf(_("%s build commands"), ft->name);
 	else
 		txt = g_strdup_printf(_("No filetype build commands"));
-
 	label = ui_label_new_bold(txt);
 	g_free(txt);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
@@ -2091,6 +2092,22 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
+	
+	label = gtk_label_new(_("Build"));
+	gtk_notebook_append_page(nb, GTK_WIDGET(table), label);
+	
+	table = GTK_TABLE(gtk_table_new(build_items_count + 13, 5, FALSE));
+	gtk_container_set_border_width(GTK_CONTAINER(table), 6);
+	for (ch = colheads, col = 0; *ch != NULL; ch++, col++)
+	{
+		label = gtk_label_new(_(*ch));
+		gtk_table_attach(table, label, col, col + 1, 0, 1,
+			GTK_FILL, GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
+	}
+	sep = gtk_hseparator_new();
+	gtk_table_attach(table, sep, 0, DC_N_COL, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND,
+		entry_x_padding, sep_padding);
+
 	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
 		txt = g_strdup_printf(_("%s execute commands"), ft->name);
 	else
@@ -2126,10 +2143,11 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 		entry_x_padding, entry_y_padding);
 	/*printf("%d extra rows in dialog\n", row-build_items_count);*/
 	++row;
-	*table_data = fields;
 	
-	label = gtk_label_new(_("Build"));
+	label = gtk_label_new(_("Run"));
 	gtk_notebook_append_page(nb, GTK_WIDGET(table), label);
+
+	*table_data = fields;
 }
 
 

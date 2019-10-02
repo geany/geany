@@ -635,6 +635,8 @@ static void show_project_properties(gboolean show_build)
 
 	build_free_fields(e.build_properties);
 	g_signal_emit_by_name(geany_object, "project-dialog-close", e.notebook);
+	// remove build & run tabs
+	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
 	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
 	gtk_widget_hide(e.dialog);
 }
