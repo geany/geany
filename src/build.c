@@ -1982,8 +1982,8 @@ typedef struct BuildTableFields
 } BuildTableFields;
 
 
-GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildTableData *table_data,
-								GeanyFiletype *ft)
+void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
+	GeanyBuildSource dst, BuildTableData *table_data, GeanyFiletype *ft)
 {
 	GtkWidget *label, *sep, *clearicon, *clear;
 	BuildTableFields *fields;
@@ -1997,6 +1997,8 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	guint sep_padding = entry_y_padding + 3;
 
 	table = GTK_TABLE(gtk_table_new(build_items_count + 13, 5, FALSE));
+	gtk_container_set_border_width(GTK_CONTAINER(table), 6);
+
 	fields = g_new0(BuildTableFields, 1);
 	fields->rows = g_new0(RowWidgets*, build_items_count);
 	for (ch = colheads, col = 0; *ch != NULL; ch++, col++)
@@ -2125,7 +2127,9 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	/*printf("%d extra rows in dialog\n", row-build_items_count);*/
 	++row;
 	*table_data = fields;
-	return GTK_WIDGET(table);
+	
+	label = gtk_label_new(_("Build"));
+	gtk_notebook_append_page(nb, GTK_WIDGET(table), label);
 }
 
 
@@ -2271,7 +2275,7 @@ void build_read_project(GeanyFiletype *ft, BuildTableData build_properties)
 
 static void show_build_commands_dialog(void)
 {
-	GtkWidget *dialog, *table, *vbox;
+	GtkWidget *dialog, *vbox, *nb;
 	GeanyDocument *doc = document_get_current();
 	GeanyFiletype *ft = NULL;
 	const gchar *title = _("Set Build Commands");
@@ -2280,13 +2284,16 @@ static void show_build_commands_dialog(void)
 
 	if (doc != NULL)
 		ft = doc->file_type;
+
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	table = build_commands_table(doc, GEANY_BCS_PREF, &table_data, ft);
+	nb = gtk_notebook_new();
+	build_setup_dialog(GTK_NOTEBOOK(nb), doc, GEANY_BCS_PREF, &table_data, ft);
+
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), nb, TRUE, TRUE, 0);
 	gtk_widget_show_all(dialog);
 	/* run modally to prevent user changing idx filetype */
 	response = gtk_dialog_run(GTK_DIALOG(dialog));

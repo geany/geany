@@ -508,18 +508,15 @@ static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 
 static void insert_build_page(PropertyDialogElements *e)
 {
-	GtkWidget *build_table, *label;
 	GeanyDocument *doc = document_get_current();
 	GeanyFiletype *ft = NULL;
 
 	if (doc != NULL)
 		ft = doc->file_type;
 
-	build_table = build_commands_table(doc, GEANY_BCS_PROJ, &(e->build_properties), ft);
-	gtk_container_set_border_width(GTK_CONTAINER(build_table), 6);
-	label = gtk_label_new(_("Build"));
-	e->build_page_num = gtk_notebook_append_page(GTK_NOTEBOOK(e->notebook),
-		build_table, label);
+	GtkNotebook *nb = GTK_NOTEBOOK(e->notebook);
+	e->build_page_num = gtk_notebook_get_n_pages(nb);
+	build_setup_dialog(nb, doc, GEANY_BCS_PROJ, &(e->build_properties), ft);
 }
 
 

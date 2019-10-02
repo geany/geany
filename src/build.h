@@ -141,7 +141,8 @@ void build_init(void);
 void build_finalize(void);
 
 /* menu configuration dialog functions */
-GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildTableData *data, GeanyFiletype *ft);
+void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
+	GeanyBuildSource dst, BuildTableData *table_data, GeanyFiletype *ft);
 
 void build_read_project(GeanyFiletype *ft, BuildTableData build_properties);
 
