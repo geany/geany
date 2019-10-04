@@ -2092,6 +2092,12 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL,
 		entry_x_padding, sep_padding);
 	++row;
+	label = gtk_label_new(NULL);
+	ui_label_set_markup(GTK_LABEL(label), "<i>%s</i>",
+		_("%d, %e, %f, %p, %l are substituted in command and directory fields, see manual for details."));
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL,
+		entry_x_padding, entry_y_padding);
 	
 	label = gtk_label_new(_("Build"));
 	gtk_notebook_append_page(nb, GTK_WIDGET(table), label);
@@ -2142,9 +2148,10 @@ void build_setup_dialog(GtkNotebook *nb, GeanyDocument *doc,
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL,
 		entry_x_padding, entry_y_padding);
 	/*printf("%d extra rows in dialog\n", row-build_items_count);*/
-	++row;
-	
-	label = gtk_label_new(_("Run"));
+
+	txt = utils_str_remove_chars(g_strdup(_("_Execute")), "_");
+	label = gtk_label_new(txt);
+	g_free(txt);
 	gtk_notebook_append_page(nb, GTK_WIDGET(table), label);
 
 	*table_data = fields;
