@@ -1145,6 +1145,18 @@ applications, in that you'll need to continue to hold down the Ctrl and Shift
 keys while typing the code point hex digits (and the Enter or Return to finish the code point).
 
 
+Inserting color values
+^^^^^^^^^^^^^^^^^^^^^^
+
+You can insert a color value by selecting *Tools->Color Chooser* from the menu.
+A dialog appears to select the wanted color. If the cursor is placed inside a
+*#RRGGBB* format color value then the dialog will show that color after opening.
+On clicking on *Apply* or *Select* the code for the chosen color will be inserted
+in the format *#RRGGBB*. If text is selected, then it will be replaced with the
+color code on the first click on *Apply* or *Select*. If no text is selected or
+on subsequent clicks the color code is inserted at the current cursor position.
+
+
 Search, replace and go to
 -------------------------
 
