@@ -365,7 +365,7 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc,
 	
 	GeanyFiletypePrivate empty_ftp = {}, *ftp =
 		doc ? doc->file_type->priv : &empty_ftp; // avoid checking for null
-	CommandSet overloads[6] = {};
+	CommandSet overloads[4] = {};
 
 	switch (cmdgrp)
 	{
@@ -1887,7 +1887,6 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	GtkWidget *label, *clear, *clearicon;
 	RowWidgets *roww;
 	GeanyBuildCommand *bc;
-	guint src;
 	enum GeanyBuildCmdEntries i;
 	guint column = 0;
 	gchar *text;
@@ -1942,6 +1941,8 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	g_signal_connect(clear, "clicked", G_CALLBACK(on_clear_dialog_row), roww);
 	gtk_table_attach(table, clear, column, column + 1, row, row + 1, GTK_FILL,
 		GTK_FILL, entry_x_padding, entry_y_padding);
+	
+	guint src = GEANY_BCS_COUNT;
 	roww->cmdsrc = bc = get_build_cmd(doc, grp, cmd, &src);
 	if (bc != NULL)
 		roww->src = src;
