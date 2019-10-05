@@ -2693,6 +2693,9 @@ Placeholder   Description
   ``%r``      Shows whether the document is read-only (RO) or nothing.
   ``%Y``      The Scintilla style number at the caret position. This is
               useful if you're debugging color schemes or related code.
+  ``%z``      Shows ``Zoom: (zoomlevel)%`` if the document's current zoom
+              level is not 100%. If the zoom level gets back to 100%
+              then nothing will be displayed for ``%z``.
 ============  ===========================================================
 
 Terminal (VTE) preferences

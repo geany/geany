@@ -1187,6 +1187,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		case SCN_ZOOM:
 			/* recalculate line margin width */
 			sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+			ui_update_statusbar(doc, -1);
 			break;
 	}
 	/* we always return FALSE here to let plugins handle the event too */

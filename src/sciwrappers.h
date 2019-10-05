@@ -132,6 +132,7 @@ void 				sci_set_eol_mode			(ScintillaObject *sci, gint eolmode);
 void 				sci_zoom_in					(ScintillaObject *sci);
 void 				sci_zoom_out				(ScintillaObject *sci);
 void 				sci_zoom_off				(ScintillaObject *sci);
+gint 				sci_get_zoom				(ScintillaObject *sci);
 void				sci_toggle_marker_at_line	(ScintillaObject *sci, gint line, gint marker);
 gint				sci_marker_next				(ScintillaObject *sci, gint line, gint marker_mask, gboolean wrap);
 gint				sci_marker_previous			(ScintillaObject *sci, gint line, gint marker_mask, gboolean wrap);
@@ -217,6 +218,8 @@ void				sci_move_selected_lines_down    (ScintillaObject *sci);
 void				sci_move_selected_lines_up      (ScintillaObject *sci);
 
 void				sci_set_font_fractional		(ScintillaObject *sci, gint style, const gchar *font, gdouble size);
+
+gdouble				sci_get_font_size			(ScintillaObject *sci, gint style);
 
 #endif /* GEANY_PRIVATE */
 
