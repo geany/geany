@@ -3023,9 +3023,8 @@ Build menu configuration
 
 The build menu has considerable flexibility and configurability, allowing
 menu labels, the commands they execute and the directory they execute
-in to be configured.
-For example, if you change one of the default make commands to run say 'waf'
-you can also change the label to match.
+in to be configured. For example, if you change one of the default make 
+commands to run say 'waf' you can also change the label to match.
 These settings are saved automatically when Geany is shut down.
 
 The build menu is divided into four groups of items each with different
@@ -3143,9 +3142,10 @@ The filetype and independent build sections also each contain a field for the re
 expression used for parsing command output for error and warning messages.
 
 The columns in the first three sections allow setting of the label, command,
-and working directory to run the command in.
-An item with an empty label will not be shown in the menu.
-An empty working directory will default to the directory of the current document.
+and working directory to run the command in. An item with an empty 
+label will not be shown in the menu. An empty working directory will 
+default to the directory of the current document.
+
 If there is no current document then the command will not run.
 
 The dialog will always show the command selected by priority, not just the
