@@ -141,7 +141,8 @@ signal void (*document_close)(GObject *obj, GeanyDocument *doc, gpointer user_da
 signal void (*project_open)(GObject *obj, GKeyFile *config, gpointer user_data);
 
 /** Sent when a project is saved (happens when the project is created, the properties
- *  dialog is closed, before the project is closed, or when Geany is exited).
+ *  dialog is closed, before the project is closed, when Geany automatically
+ *  saves its configuration by opening/closing documents or when Geany is exited).
  *  This signal is emitted shortly before Geany will write the contents of the
  *  GKeyFile to the disc.
  *
