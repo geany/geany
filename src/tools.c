@@ -792,7 +792,7 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 		{
 			GeanyDocument *doc = document_get_current();
 			g_return_if_fail(doc != NULL);
-#if (GTK_MAJOR_VERSION == 3)
+#if GTK_CHECK_VERSION(3, 4, 0)
 			GdkRGBA color;
 			char hex[8] = { 0 };
 
