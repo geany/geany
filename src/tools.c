@@ -827,7 +827,7 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 /* This shows the color selection dialog to choose a color. */
 void tools_color_chooser(const gchar *color)
 {
-#if (GTK_MAJOR_VERSION < 3)
+#if !GTK_CHECK_VERSION(3, 4, 0)
 	GdkColor gc;
 	GtkWidget *colorsel;
 #endif
@@ -842,7 +842,7 @@ void tools_color_chooser(const gchar *color)
 
 	if (ui_widgets.open_colorsel == NULL)
 	{
-#if (GTK_MAJOR_VERSION == 3)	
+#if GTK_CHECK_VERSION(3, 4, 0)
 		ui_widgets.open_colorsel = gtk_color_chooser_dialog_new(_("Color Chooser"), GTK_WINDOW(main_widgets.window));
 #else
 		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
@@ -860,7 +860,7 @@ void tools_color_chooser(const gchar *color)
 						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	}
 
-#if (GTK_MAJOR_VERSION == 3)
+#if GTK_CHECK_VERSION(3, 4, 0)
 	g_object_set((gpointer)ui_widgets.open_colorsel, "show-editor", TRUE, NULL);
 #else
 	else
