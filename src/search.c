@@ -2145,10 +2145,9 @@ gint search_find_text(ScintillaObject *sci, GeanyFindFlags flags, struct Sci_Tex
 
 static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, GeanyFindFlags flags)
 {
-	gchar *buffer, *short_file_name;
+	gchar *short_file_name;
 	struct Sci_TextToFind ttf;
 	gint count = 0;
-	gint prev_line = -1;
 	GSList *match, *matches;
 
 	g_return_val_if_fail(DOC_VALID(doc), 0);
@@ -2164,17 +2163,14 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, Ge
 	{
 		GeanyMatchInfo *info = match->data;
 		gint line = sci_get_line_from_position(doc->editor->sci, info->start);
-
-		if (line != prev_line)
-		{
-			buffer = sci_get_line(doc->editor->sci, line);
-			msgwin_msg_add(COLOR_BLACK, line + 1, doc,
-				"%s:%d: %s", short_file_name, line + 1, g_strstrip(buffer));
-			g_free(buffer);
-			prev_line = line;
-		}
+		gchar *buffer = sci_get_line(doc->editor->sci, line);
+		gchar *markup = g_markup_printf_escaped("<u>%s:%d:</u> %s",
+			short_file_name, line + 1, g_strstrip(buffer));
+			
+		g_free(buffer);
+		msgwin_msg_add_markup(COLOR_BLACK, line + 1, doc, markup);
+		g_free(markup);
 		count++;
-
 		geany_match_info_free(info);
 	}
 	g_slist_free(matches);
