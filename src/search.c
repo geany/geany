@@ -2180,7 +2180,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, Ge
 		gchar *pre = g_strndup(buffer, info->start);
 		gchar *mid = g_strndup(buffer + info->start, info->end - info->start);
 		const gchar *post = buffer + info->end;
-		gchar *markup = g_markup_printf_escaped("<u>%s:%d:</u> %s<b>%s</b>%s",
+		gchar *markup = g_markup_printf_escaped("<i>%s:%d:</i> %s<b>%s</b>%s",
 			short_file_name, line + 1, pre, mid, post);
 			
 		msgwin_msg_add_markup(COLOR_BLACK, line + 1, doc, markup);
