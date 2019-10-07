@@ -2148,6 +2148,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, Ge
 	gchar *short_file_name;
 	struct Sci_TextToFind ttf;
 	gint count = 0;
+	gint prev_line = -1;
 	GSList *match, *matches;
 
 	g_return_val_if_fail(DOC_VALID(doc), 0);
@@ -2163,13 +2164,27 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, Ge
 	{
 		GeanyMatchInfo *info = match->data;
 		gint line = sci_get_line_from_position(doc->editor->sci, info->start);
+		
+		if (line == prev_line)
+		{
+			geany_match_info_free(info);
+			continue;
+		}
+		prev_line = line;
+		gint lpos = sci_get_position_from_line(doc->editor->sci, line);
 		gchar *buffer = sci_get_line(doc->editor->sci, line);
-		gchar *markup = g_markup_printf_escaped("<u>%s:%d:</u> %s",
-			short_file_name, line + 1, g_strstrip(buffer));
+		g_strchomp(buffer);
+		info->start -= lpos;
+		info->end -= lpos;
+
+		gchar *pre = g_strndup(buffer, info->start);
+		gchar *mid = g_strndup(buffer + info->start, info->end - info->start);
+		const gchar *post = buffer + info->end;
+		gchar *markup = g_markup_printf_escaped("<u>%s:%d:</u> %s<b>%s</b>%s",
+			short_file_name, line + 1, pre, mid, post);
 			
-		g_free(buffer);
 		msgwin_msg_add_markup(COLOR_BLACK, line + 1, doc, markup);
-		g_free(markup);
+		utils_free_pointers(4, buffer, pre, mid, markup, NULL);
 		count++;
 		geany_match_info_free(info);
 	}
