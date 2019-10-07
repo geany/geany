@@ -70,7 +70,7 @@ enum
 	MSG_COL_LINE = 0,
 	MSG_COL_DOC_ID,
 	MSG_COL_COLOR,
-	MSG_COL_STRING,
+	MSG_COL_MARKUP,
 	MSG_COL_COUNT
 };
 
@@ -243,7 +243,7 @@ static void prepare_msg_tree_view(void)
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
-		"foreground-gdk", MSG_COL_COLOR, "text", MSG_COL_STRING, NULL);
+		"foreground-gdk", MSG_COL_COLOR, "markup", MSG_COL_MARKUP, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
@@ -463,6 +463,8 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 		tmp = g_strndup(string, 1024);
 	else
 		tmp = g_strdup(string);
+	
+	SETPTR(tmp, g_markup_escape_text(tmp, -1));
 
 	if (! g_utf8_validate(tmp, -1, NULL))
 		utf8_msg = utils_get_utf8_from_locale(tmp);
@@ -472,7 +474,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter,
 		MSG_COL_LINE, line, MSG_COL_DOC_ID, doc ? doc->id : 0, MSG_COL_COLOR,
-		color, MSG_COL_STRING, utf8_msg, -1);
+		color, MSG_COL_MARKUP, utf8_msg, -1);
 
 	g_free(tmp);
 	if (utf8_msg != tmp)
@@ -576,7 +578,7 @@ on_compiler_treeview_copy_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 		case MSG_MESSAGE:
 		tv = msgwindow.tree_msg;
-		str_idx = MSG_COL_STRING;
+		str_idx = MSG_COL_MARKUP;
 		break;
 	}
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
@@ -586,6 +588,12 @@ on_compiler_treeview_copy_activate(GtkMenuItem *menuitem, gpointer user_data)
 		gchar *string;
 
 		gtk_tree_model_get(model, &iter, str_idx, &string, -1);
+		if (str_idx == MSG_COL_MARKUP)
+		{
+			gchar *text = NULL;
+			pango_parse_markup(string, -1, 0, NULL, &text, NULL, NULL);
+			SETPTR(string, text);
+		}
 		if (!EMPTY(string))
 		{
 			gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)),
@@ -617,7 +625,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 
 		case MSG_MESSAGE:
 		store = msgwindow.store_msg;
-		str_idx = MSG_COL_STRING;
+		str_idx = MSG_COL_MARKUP;
 		break;
 	}
 
@@ -628,6 +636,12 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 		gchar *line;
 
 		gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, str_idx, &line, -1);
+		if (str_idx == MSG_COL_MARKUP)
+		{
+			gchar *text = NULL;
+			pango_parse_markup(line, -1, 0, NULL, &text, NULL, NULL);
+			SETPTR(line, text);
+		}
 		if (!EMPTY(line))
 		{
 			g_string_append(str, line);
@@ -1198,7 +1212,7 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 		GeanyDocument *old_doc = document_get_current();
 
 		gtk_tree_model_get(model, &iter,
-			MSG_COL_LINE, &line, MSG_COL_DOC_ID, &id, MSG_COL_STRING, &string, -1);
+			MSG_COL_LINE, &line, MSG_COL_DOC_ID, &id, MSG_COL_MARKUP, &string, -1);
 		if (line >= 0 && id > 0)
 		{
 			/* check doc is still open */
@@ -1218,6 +1232,10 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 		else if (line < 0 && string != NULL)
 		{
 			gchar *filename;
+			gchar *text = NULL;
+
+			pango_parse_markup(string, -1, 0, NULL, &text, NULL, NULL);
+			SETPTR(string, text);
 
 			/* try with a file:line parsing */
 			msgwin_parse_generic_line(string, &filename, &line);
