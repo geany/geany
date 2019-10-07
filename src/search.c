@@ -2150,6 +2150,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, Ge
 	gint count = 0;
 	gint prev_line = -1;
 	GSList *match, *matches;
+	GStringChunk *chunk;
 
 	g_return_val_if_fail(DOC_VALID(doc), 0);
 
@@ -2159,6 +2160,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, Ge
 	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
 
+	chunk = g_string_chunk_new(1024);
 	matches = find_range(doc->editor->sci, flags, &ttf);
 	foreach_slist (match, matches)
 	{
@@ -2177,18 +2179,22 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, Ge
 		info->start -= lpos;
 		info->end -= lpos;
 
-		gchar *pre = g_strndup(buffer, info->start);
-		gchar *mid = g_strndup(buffer + info->start, info->end - info->start);
+		g_string_chunk_clear(chunk);
+		gchar *pre = g_string_chunk_insert_len(chunk, buffer, info->start);
+		gchar *mid = g_string_chunk_insert_len(chunk, buffer + info->start,
+			info->end - info->start);
 		const gchar *post = buffer + info->end;
 		gchar *markup = g_markup_printf_escaped("<i>%s:%d:</i> %s<b>%s</b>%s",
 			short_file_name, line + 1, pre, mid, post);
 			
 		msgwin_msg_add_markup(COLOR_BLACK, line + 1, doc, markup);
-		utils_free_pointers(4, buffer, pre, mid, markup, NULL);
+		g_free(buffer);
+		g_free(markup);
 		count++;
 		geany_match_info_free(info);
 	}
 	g_slist_free(matches);
+	g_string_chunk_free(chunk);
 	g_free(short_file_name);
 	return count;
 }
