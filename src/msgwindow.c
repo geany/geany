@@ -440,11 +440,33 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
  * @param string    Message to be added.
  *
  * @see msgwin_msg_add()
- *
  * @since 1.34 (API 236)
  **/
 GEANY_API_SYMBOL
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
+{
+	gchar *tmp = g_markup_escape_text(string, -1);
+	
+	msgwin_msg_add_markup(msg_color, line, doc, tmp);
+	g_free(tmp);
+}
+
+
+/* *
+ * Adds a new message in the messages tab treeview in the messages window.
+ *
+ * If @a line and @a doc are set, clicking on this line jumps into the
+ * file which is specified by @a doc into the line specified with @a line.
+ *
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param line      The document's line where the message belongs to. Set to @c -1 to ignore.
+ * @param doc       @nullable The document. Set to @c NULL to ignore.
+ * @param markup    Marked up text to be added.
+ *
+ * @see msgwin_msg_add_string()
+ * @since ???
+ **/
+void msgwin_msg_add_markup(gint msg_color, gint line, GeanyDocument *doc, const gchar *markup)
 {
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
@@ -458,14 +480,12 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
 	 * cut the string to a maximum of 1024 bytes and discard the rest */
 	/* TODO: find the real cause for the display problem / if it is GtkTreeView file a bug report */
-	len = strlen(string);
+	len = strlen(markup);
 	if (len > 1024)
-		tmp = g_strndup(string, 1024);
+		tmp = g_strndup(markup, 1024);
 	else
-		tmp = g_strdup(string);
+		tmp = g_strdup(markup);
 	
-	SETPTR(tmp, g_markup_escape_text(tmp, -1));
-
 	if (! g_utf8_validate(tmp, -1, NULL))
 		utf8_msg = utils_get_utf8_from_locale(tmp);
 	else
