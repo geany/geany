@@ -465,11 +465,10 @@ static void close_folder_action(GeanyDocument *cur_doc, gboolean other_folders)
 		return;
 
 	gchar *dir = g_dirname(cur_doc->real_path);
-	guint i;
 
-	foreach_document(i)
+	for (gint i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); i++)
 	{
-		GeanyDocument *doc = documents[i];
+		GeanyDocument *doc = document_get_from_page(i);
 
 		if (!doc->real_path)
 			continue;
@@ -479,6 +478,7 @@ static void close_folder_action(GeanyDocument *cur_doc, gboolean other_folders)
 			continue;
 		if (! document_close(doc))
 			break;
+		i--; // cancel next increment after close
 	}
 	g_free(dir);
 }
