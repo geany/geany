@@ -438,6 +438,7 @@ static gboolean has_tabs_on_right(GeanyDocument *doc)
 }
 
 
+// simple implementation (vs. close all which doesn't close documents if cancelled)
 static void on_close_documents_right_activate(GtkMenuItem *menuitem, GeanyDocument *doc)
 {
 	g_return_if_fail(has_tabs_on_right(doc));
@@ -455,9 +456,46 @@ static void on_close_documents_right_activate(GtkMenuItem *menuitem, GeanyDocume
 }
 
 
+// simple implementation (vs. close all which doesn't close documents if cancelled)
+static void close_folder_action(GeanyDocument *cur_doc, gboolean other_folders)
+{
+	if (cur_doc == NULL)
+		cur_doc = document_get_current();
+	if (!cur_doc->real_path)
+		return;
+
+	gchar *dir = g_dirname(cur_doc->real_path);
+	guint i;
+
+	foreach_document(i)
+	{
+		GeanyDocument *doc = documents[i];
+
+		if (!doc->real_path)
+			continue;
+		if (other_folders && g_str_has_prefix(doc->real_path, dir))
+			continue;
+		if (!other_folders && !g_str_has_prefix(doc->real_path, dir))
+			continue;
+		if (! document_close(doc))
+			break;
+	}
+	g_free(dir);
+}
+
+static void on_close_folder(GtkMenuItem *menuitem, gpointer user_data)
+{
+	close_folder_action(user_data, FALSE);
+}
+
+static void on_close_other_folders(GtkMenuItem *menuitem, gpointer user_data)
+{
+	close_folder_action(user_data, TRUE);
+}
+
 static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 {
-	GtkWidget *menu_item;
+	GtkWidget *menu_item, *sub;
 	static GtkWidget *menu = NULL;
 
 	if (menu == NULL)
@@ -476,8 +514,22 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	g_signal_connect(menu_item, "activate",
 		G_CALLBACK(on_open_in_new_window_activate), doc);
 	/* disable if not on disk */
-	if (doc == NULL || !doc->real_path)
-		gtk_widget_set_sensitive(menu_item, FALSE);
+	gtk_widget_set_sensitive(menu_item, doc && doc->real_path);
+
+	menu_item = ui_image_menu_item_new(GTK_STOCK_DIRECTORY, _("Documents in _Folder"));
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	sub = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item), sub);
+	gtk_widget_set_sensitive(menu_item, doc && doc->real_path);
+
+	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE, NULL);
+	gtk_container_add(GTK_CONTAINER(sub), menu_item);
+	g_signal_connect(menu_item, "activate",
+		G_CALLBACK(on_close_folder), doc);
+
+	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Ot_her Documents"));
+	gtk_container_add(GTK_CONTAINER(sub), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_folders), doc);
 
 	menu_item = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
@@ -497,7 +549,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_documents_right_activate), doc);
 	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), doc != NULL && has_tabs_on_right(doc));
 
-	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("C_lose All"));
+	menu_item = ui_image_menu_item_new(GEANY_STOCK_CLOSE_ALL, _("C_lose All"));
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);
 
