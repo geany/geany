@@ -184,6 +184,20 @@ static void create_default_tag_tree(void)
 }
 
 
+/* changes the tree view to the given one, trying not to do useless changes */
+static void change_tree(GtkWidget *child, GtkWidget *new_child, GeanyDocument *doc)
+{
+	/* only change the tag tree if it's actually not the same (to avoid flickering) and if
+	 * it's the one of the current document (to avoid problems when e.g. reloading
+	 * configuration files */
+	if (child != new_child && doc == document_get_current())
+	{
+		if (child)
+			gtk_container_remove(GTK_CONTAINER(tag_window), child);
+		gtk_container_add(GTK_CONTAINER(tag_window), new_child);
+	}
+}
+
 /* update = rescan the tags for doc->filename */
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
@@ -197,27 +211,13 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) != TREEVIEW_SYMBOL)
 		return; /* don't bother updating symbol tree if we don't see it */
 
-	/* changes the tree view to the given one, trying not to do useless changes */
-	#define CHANGE_TREE(new_child) \
-		G_STMT_START { \
-			/* only change the tag tree if it's actually not the same (to avoid flickering) and if
-			 * it's the one of the current document (to avoid problems when e.g. reloading
-			 * configuration files */ \
-			if (child != new_child && doc == document_get_current()) \
-			{ \
-				if (child) \
-					gtk_container_remove(GTK_CONTAINER(tag_window), child); \
-				gtk_container_add(GTK_CONTAINER(tag_window), new_child); \
-			} \
-		} G_STMT_END
-
 	if (tv.default_tag_tree == NULL)
 		create_default_tag_tree();
 
 	/* show default empty tag tree if there are no tags */
 	if (doc == NULL || doc->file_type == NULL || ! filetype_has_tags(doc->file_type))
 	{
-		CHANGE_TREE(tv.default_tag_tree);
+		change_tree(child, tv.default_tag_tree, doc);
 		return;
 	}
 
@@ -232,21 +232,18 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 			gtk_widget_show(doc->priv->tag_tree);
 			g_object_ref((gpointer)doc->priv->tag_tree);	/* to hold it after removing */
 		}
-
 		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
 		doc->priv->tag_tree_dirty = FALSE;
 	}
 
 	if (doc->has_tags)
 	{
-		CHANGE_TREE(doc->priv->tag_tree);
+		change_tree(child, doc->priv->tag_tree, doc);
 	}
 	else
 	{
-		CHANGE_TREE(tv.default_tag_tree);
+		change_tree(child, tv.default_tag_tree, doc);
 	}
-
-	#undef CHANGE_TREE
 }
 
 
