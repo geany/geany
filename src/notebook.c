@@ -464,7 +464,7 @@ static void close_folder_action(GeanyDocument *cur_doc, gboolean other_folders)
 	if (!cur_doc->real_path)
 		return;
 
-	gchar *dir = g_dirname(cur_doc->real_path);
+	gchar *dir = g_path_get_dirname(cur_doc->real_path);
 
 	for (gint i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); i++)
 	{
