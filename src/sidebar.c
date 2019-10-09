@@ -857,6 +857,7 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 			while (i >= 0 && gtk_tree_model_iter_nth_child(model, &child, &iter, i))
 			{
 				gtk_tree_model_get(model, &child, DOCUMENTS_DOCUMENT, &doc, -1);
+
 				document_action(doc, action);
 				i--;
 			}
