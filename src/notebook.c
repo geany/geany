@@ -424,7 +424,8 @@ static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_
 	g_return_if_fail(doc->is_valid);
 
 	doc_path = utils_get_locale_from_utf8(doc->file_name);
-	utils_start_new_geany_instance(doc_path);
+	const gchar *strv[] = {doc_path, NULL};
+	utils_start_new_geany_instance(strv);
 	g_free(doc_path);
 }
 
