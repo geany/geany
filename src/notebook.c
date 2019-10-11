@@ -494,6 +494,33 @@ static void on_close_other_folders(GtkMenuItem *menuitem, gpointer user_data)
 	close_folder_action(user_data, TRUE);
 }
 
+static void on_open_folder(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *cur_doc = user_data;
+	gchar *dir = g_path_get_dirname(cur_doc->real_path);
+	GPtrArray *files = NULL;
+
+	for (gint i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)); i++)
+	{
+		GeanyDocument *doc = document_get_from_page(i);
+
+		if (!doc->real_path || !g_str_has_prefix(doc->real_path, dir))
+			continue;
+		if (!files)
+			files = g_ptr_array_new();
+		g_ptr_array_add(files, utils_get_locale_from_utf8(doc->file_name));
+	}
+	g_free(dir);
+	if (files)
+	{
+		// terminate strv
+		g_ptr_array_add(files, NULL);
+		utils_start_new_geany_instance((const gchar**)files->pdata);
+		g_ptr_array_foreach(files, (GFunc)g_free, NULL);
+		g_ptr_array_free(files, TRUE);
+	}
+}
+
 static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 {
 	GtkWidget *menu_item, *sub;
@@ -522,6 +549,15 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	sub = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item), sub);
 	gtk_widget_set_sensitive(menu_item, doc && doc->real_path);
+
+	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open in New _Window"));
+	gtk_container_add(GTK_CONTAINER(sub), menu_item);
+	g_signal_connect(menu_item, "activate",
+		G_CALLBACK(on_open_folder), doc);
+	gtk_widget_set_sensitive(menu_item, doc && doc->real_path);
+
+	menu_item = gtk_separator_menu_item_new();
+	gtk_container_add(GTK_CONTAINER(sub), menu_item);
 
 	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE, NULL);
 	gtk_container_add(GTK_CONTAINER(sub), menu_item);
