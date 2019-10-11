@@ -2189,7 +2189,7 @@ gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len)
 	names[num] = NULL;
 
 	/* First: determine the common prefix, that will be stripped.
-	/* We only want to strip full path components, including the trailing slash.
+	 * We only want to strip full path components, including the trailing slash.
 	 * Except if the component is just "/".
 	 */
 	prefix = utils_strv_find_common_prefix(names, num);
