@@ -576,12 +576,15 @@ static gchar *pre_process_file(const gchar *cmd, const gchar *inf)
  @return TRUE on success, FALSE on failure.
 */
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
-	int includes_count, const char *tags_file, TMParserType lang)
+	int includes_count, const char *tags_file, TMParserType lang, gchar *pattern0)
 {
 	gboolean ret = FALSE;
 	TMSourceFile *source_file;
 	GList *includes_files;
-	gchar *temp_file = create_temp_file("tmp_XXXXXX.cpp");
+	GString *filename = g_string_new("tmp_XXXXXX");
+	filename = g_string_append(filename, pattern0+1);
+	gchar *temp_file = create_temp_file(filename->str);
+	g_string_free(filename, TRUE);
 
 	if (!temp_file)
 		return FALSE;

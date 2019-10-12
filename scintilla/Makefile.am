@@ -47,7 +47,8 @@ lexers/LexTCL.cxx \
 lexers/LexTxt2tags.cxx \
 lexers/LexVHDL.cxx \
 lexers/LexVerilog.cxx \
-lexers/LexYAML.cxx
+lexers/LexYAML.cxx \
+lexers/LexGIBIANE.cxx
 
 SRCS= \
 gtk/Converter.h \

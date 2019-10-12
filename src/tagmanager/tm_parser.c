@@ -511,6 +511,10 @@ static TMParserMapEntry map_POWERSHELL[] = {
 	{'v', tm_tag_variable_t},
 };
 
+static TMParserMapEntry map_GIBIANE[] = {
+	{'p', tm_tag_function_t},
+	{'v', tm_tag_variable_t},
+};
 
 typedef struct
 {
@@ -573,6 +577,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(JSON),
 	MAP_ENTRY(ZEPHIR),
 	MAP_ENTRY(POWERSHELL),
+	MAP_ENTRY(GIBIANE),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);

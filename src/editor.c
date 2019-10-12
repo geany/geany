@@ -832,6 +832,15 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 			editor_show_calltip(editor, --pos);
 			break;
 		}
+		case ' ':
+		{
+			if(editor->document->file_type->id == GEANY_FILETYPES_GIBIANE){
+				auto_close_chars(sci, pos, nt->ch);
+				/* show calltips */
+				editor_show_calltip(editor, --pos);
+			}
+			break;
+		}
 		case ')':
 		{	/* hide calltips */
 			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0))
@@ -843,6 +852,21 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 			calltip.pos = 0;
 			calltip.sci = NULL;
 			calltip.set = FALSE;
+			break;
+		}
+		case ';':
+		{ /* hide calltips */
+			if(editor->document->file_type->id == GEANY_FILETYPES_GIBIANE){
+				if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0))
+				{
+					SSM(sci, SCI_CALLTIPCANCEL, 0, 0);
+				}
+				g_free(calltip.text);
+				calltip.text = NULL;
+				calltip.pos = 0;
+				calltip.sci = NULL;
+				calltip.set = FALSE;
+			}
 			break;
 		}
 		case '{':
