@@ -420,11 +420,21 @@ static GtkWidget *create_open_file_dialog(void)
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),
 				filetypes_create_file_filter_all_source());
 	add_proj_file_filter(GTK_FILE_CHOOSER(dialog));
+	// add ungrouped filetypes first
 	foreach_slist(node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
 
-		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
+		if (ft->group != GEANY_FILETYPE_GROUP_NONE ||
+			ft->id == GEANY_FILETYPES_NONE)
+			continue;
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filetypes_create_file_filter(ft));
+	}
+	foreach_slist(node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
+
+		if (ft->group == GEANY_FILETYPE_GROUP_NONE)
 			continue;
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filetypes_create_file_filter(ft));
 	}
