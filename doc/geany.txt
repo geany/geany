@@ -421,9 +421,14 @@ following items:
 * All files (default)
 * All source - a combination of all the patterns for each filetype (see 
   `Filetype extensions`_)
+* Project patterns (see `Project properties`_)
 * Individual filetypes
 
-Clicking *More options* will reveal controls to open files with a 
+Individual filetypes are listed alphabetically, but with ungrouped
+filetypes first, then grouped filetypes. By default all filetypes are
+grouped - see `Filetype group membership`_.
+
+Clicking *More options* will reveal controls to open a file with a
 specific filetype and/or encoding (see `Character sets and Unicode 
 Byte-Order-Mark (BOM)`_).
 
@@ -2888,7 +2893,8 @@ The specified path can be an absolute path or it is considered to be
 relative to the project's file name.
 
 The *File patterns* field allows to specify a list of file patterns for the
-project, which can be used in the `Find in files`_ dialog.
+project, which can be used in the Open dialog file filters and the 
+`Find in files`_ dialog.
 
 The *Indentation* tab allows you to override the default
 `Indentation`_ settings.
@@ -4811,7 +4817,8 @@ should look like::
 
 Filetype group membership
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-Filetype groups are used in the `Document->Set Filetype` menu.
+Filetype groups are used in the `Document->Set Filetype` menu and the 
+open dialog.
 
 Group membership is also stored in ``filetype_extensions.conf``. This
 file is used to store information Geany needs at startup, whereas the
@@ -4833,9 +4840,10 @@ The key names cannot be configured.
     Group membership is only read at startup.
 
 .. tip::
-    You can make commonly used filetypes appear in the top-level of the
-    filetype menu by adding them to the `None` group, e.g.
-    `None=C;Python`.
+    You can make commonly used filetypes easier to select by adding 
+    them to the `None` group, e.g. `None=C;Python`. Also check that
+    they are not also listed in other groups (in the user file).
+    This will list them separately from grouped filetypes.
 
 Preferences file format
 -----------------------
