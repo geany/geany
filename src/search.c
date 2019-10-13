@@ -894,7 +894,7 @@ static void create_fif_dialog(void)
 	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	gtk_size_group_add_widget(size_group, label);
 
-	label3 = gtk_label_new_with_mnemonic(_("Fi_les:"));
+	label3 = gtk_label_new_with_mnemonic(_("File _patterns:"));
 	gtk_misc_set_alignment(GTK_MISC(label3), 0, 0.5);
 
 	combo_files_mode = create_fif_file_mode_combo();
