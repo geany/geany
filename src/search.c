@@ -906,7 +906,8 @@ static void create_fif_dialog(void)
 	entry = gtk_bin_get_child(GTK_BIN(fcombo));
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
 	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
-	gtk_widget_set_tooltip_text(entry, _("File patterns, e.g. *.c *.h"));
+	gtk_widget_set_tooltip_text(entry,
+		_("Space separated list of file patterns (e.g. *.c *.h)"));
 	ui_hookup_widget(fif_dlg.dialog, entry, "entry_files");
 	fif_dlg.files_combo = fcombo;
 
