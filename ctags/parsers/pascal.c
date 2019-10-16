@@ -289,12 +289,18 @@ static void findPascalTags (void)
 			for (cp = dbp  ;  *cp != '\0' && !endtoken (*cp)  ;  cp++)
 				continue;
 			vStringNCopyS (name, (const char*) dbp,  cp - dbp);
-			if (arglist != NULL)
-				eFree(arglist);
-			if (kind == K_FUNCTION && vartype != NULL)
-				eFree(vartype);
-			parseArglist((const char*) cp, &arglist, (kind == K_FUNCTION) ? &vartype : NULL);
-			createPascalTag (&tag, name, kind, arglist, (kind == K_FUNCTION) ? vartype : NULL);
+			if (kind == K_FUNCTION || kind == K_PROCEDURE)
+			{
+				if (arglist != NULL)
+					eFree(arglist);
+				if (vartype != NULL)
+					eFree(vartype);
+				arglist = vartype = NULL;
+				parseArglist((const char*) cp, &arglist, (kind == K_FUNCTION) ? &vartype : NULL);
+				createPascalTag (&tag, name, kind, arglist, vartype);
+			}
+			else
+				createPascalTag (&tag, name, kind, NULL, NULL);
 			dbp = cp;  /* set dbp to e-o-token */
 			get_tagname = false;
 			found_tag = true;
