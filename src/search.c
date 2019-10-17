@@ -1560,10 +1560,15 @@ static GString *get_grep_options(void)
 	if (settings.fif_recursive)
 		g_string_append_c(gstr, 'r');
 
+	gboolean pcre = !!strstr(tool_prefs.grep_cmd, "pcre");
 	if (!settings.fif_regexp)
-		g_string_append_c(gstr, 'F');
-	else
-		g_string_append_c(gstr, 'E');
+	{
+		g_string_append_c(gstr, 'F'); // plain text
+	}
+	else if (!pcre)
+	{
+		g_string_append_c(gstr, 'E'); /* extended regexp */
+	}
 
 	if (settings.fif_use_extra_options)
 	{
@@ -1578,10 +1583,15 @@ static GString *get_grep_options(void)
 	g_strstrip(settings.fif_files);
 	if (settings.fif_files_mode != FILES_MODE_ALL && *settings.fif_files)
 	{
-		GString *tmp;
+		GString *tmp = g_string_new(settings.fif_files);
 
+		// pcregrep expects a regex pattern for --include
+		if (pcre)
+		{
+			utils_string_replace_all(tmp, "*", ".*");
+			utils_string_replace_all(tmp, "?", ".?");
+		}
 		/* put --include= before each pattern */
-		tmp = g_string_new(settings.fif_files);
 		do {} while (utils_string_replace_all(tmp, "  ", " "));
 		g_string_prepend_c(tmp, ' ');
 		utils_string_replace_all(tmp, " ", " --include=");
