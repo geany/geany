@@ -152,7 +152,7 @@ static void search_read_io_stderr(GString *string, GIOCondition condition, gpoin
 
 static void search_finished(GPid child_pid, gint status, gpointer user_data);
 
-static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir);
+static gchar **get_grep_argv(const gchar **argv_prefix, const gchar *dir);
 
 static GRegex *compile_regex(const gchar *str, GeanyFindFlags sflags);
 
@@ -1581,7 +1581,9 @@ static GString *get_grep_options(void)
 		}
 	}
 	g_strstrip(settings.fif_files);
-	if (settings.fif_files_mode != FILES_MODE_ALL && *settings.fif_files)
+	// pass --include for recursive matching, otherwise see get_grep_argv
+	if (settings.fif_recursive && settings.fif_files_mode != FILES_MODE_ALL &&
+		*settings.fif_files)
 	{
 		GString *tmp = g_string_new(settings.fif_files);
 
@@ -1694,7 +1696,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *utf8_dir, const
 	else
 	{
 		argv_prefix[1] = NULL;
-		argv = search_get_argv((const gchar**)argv_prefix, dir);
+		argv = get_grep_argv((const gchar**)argv_prefix, dir);
 		g_strfreev(argv_prefix);
 
 		if (argv == NULL)	/* no files */
@@ -1749,20 +1751,21 @@ static gboolean pattern_list_match(GSList *patterns, const gchar *str)
 }
 
 
+// only used when recursive option not set
 /* Creates an argument vector of strings, copying argv_prefix[] values for
  * the first arguments, then followed by filenames found in dir.
+ * Filenames are filtered by file patterns when set.
  * Returns NULL if no files were found, otherwise returned vector should be fully freed. */
-static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
+static gchar **get_grep_argv(const gchar **argv_prefix, const gchar *dir)
 {
 	guint prefix_len, list_len, i, j;
 	gchar **argv;
-	GSList *list, *item, *patterns = NULL;
 	GError *error = NULL;
 
 	g_return_val_if_fail(dir != NULL, NULL);
 
 	prefix_len = g_strv_length((gchar**)argv_prefix);
-	list = utils_get_file_list(dir, &list_len, &error);
+	GSList *list = utils_get_file_list(dir, &list_len, &error);
 	if (error)
 	{
 		ui_set_statusbar(TRUE, _("Could not open directory (%s)"), error->message);
@@ -1770,35 +1773,34 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 		return NULL;
 	}
 	if (list == NULL)
-		return NULL;
+		return NULL; // no files
 
 	argv = g_new(gchar*, prefix_len + list_len + 1);
 
 	for (i = 0, j = 0; i < prefix_len; i++)
 	{
-		if (g_str_has_prefix(argv_prefix[i], "--include="))
-		{
-			const gchar *pat = &(argv_prefix[i][10]); /* the pattern part of the argument */
-
-			patterns = g_slist_prepend(patterns, g_pattern_spec_new(pat));
-		}
-		else
-			argv[j++] = g_strdup(argv_prefix[i]);
+		argv[j++] = g_strdup(argv_prefix[i]);
 	}
 
-	if (patterns)
+	GSList *item;
+	if (settings.fif_files_mode != FILES_MODE_ALL && *settings.fif_files)
 	{
-		GSList *pat;
+		GSList *patterns = NULL;
+		gchar **strv = g_strsplit(settings.fif_files, " ", 0);
+		
+		for (gchar **v = strv; v[0]; v++)
+			patterns = g_slist_prepend(patterns, g_pattern_spec_new(v[0]));
+		g_strfreev(strv);
 
 		foreach_slist(item, list)
 		{
 			if (pattern_list_match(patterns, item->data))
-				argv[j++] = item->data;
+				argv[j++] = item->data; // append filename
 			else
 				g_free(item->data);
 		}
-		foreach_slist(pat, patterns)
-			g_pattern_spec_free(pat->data);
+		foreach_slist(item, patterns)
+			g_pattern_spec_free(item->data);
 		g_slist_free(patterns);
 	}
 	else
@@ -1806,7 +1808,6 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 		foreach_slist(item, list)
 			argv[j++] = item->data;
 	}
-
 	argv[j] = NULL;
 	g_slist_free(list);
 	return argv;
