@@ -592,7 +592,7 @@ msgstr "小图标(_S)"
 
 #: ../data/geany.glade.h:127
 msgid "_Very small icons"
-msgstr "小小图标(_V)"
+msgstr "超小图标(_V)"
 
 #: ../data/geany.glade.h:128
 msgid "_Large icons"
@@ -655,14 +655,14 @@ msgstr "代码折叠"
 
 #: ../data/geany.glade.h:139
 msgid "Fold/unfold all children of a fold point"
-msgstr "展开折叠点的所有子折叠点"
+msgstr "展开或折叠某个折叠点的所有子折叠点"
 
 #: ../data/geany.glade.h:140
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
 msgstr ""
-"展开折叠点的所有子折叠点。按下 Shift 键同时点击折叠点符号可以使用相反的选项。"
+"展开或折叠某折叠点的所有子折叠点。按下 Shift 键同时点击折叠点符号可以使用相反的选项。"
 
 #: ../data/geany.glade.h:141
 msgid "Use indicators to show compile errors"
@@ -672,7 +672,7 @@ msgstr "使用指示器显示编译错误"
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
-msgstr "是否使用提示 (弯曲的下划线) 将编译器找到错误或警告行高亮"
+msgstr "是否使用提示 (波浪线) 将编译器找到的错误或警告行突出显示"
 
 #: ../data/geany.glade.h:143
 msgid "Newline strips trailing spaces"
@@ -816,7 +816,7 @@ msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
 msgstr ""
-"在如 C 、C++ 和 Java 之类语言的源文件中，注释中插入新行时自动进行多行注释"
+"在如 C 、C++ 和 Java 之类语言的源文件的注释中插入新行时，自动进行多行注释"
 
 #: ../data/geany.glade.h:175
 msgid "Autocomplete symbols"
@@ -830,7 +830,7 @@ msgstr "在打开的文件中用已知的符号自动补全 (函数名、全局�
 
 #: ../data/geany.glade.h:177
 msgid "Autocomplete all words in document"
-msgstr "自动完成文档中的所有单词"
+msgstr "自动补全文档中的所有单词"
 
 #: ../data/geany.glade.h:178
 msgid "Drop rest of word on completion"
@@ -842,25 +842,25 @@ msgstr "最大符号名称建议："
 
 #: ../data/geany.glade.h:180
 msgid "Completion list height:"
-msgstr "自动完成列表高度："
+msgstr "自动补全列表高度："
 
 #: ../data/geany.glade.h:181
 msgid "Characters to type for autocompletion:"
-msgstr "键入多少字符启动自动完成："
+msgstr "键入多少字符启动自动补全："
 
 #: ../data/geany.glade.h:182
 msgid ""
 "The amount of characters which are necessary to show the symbol "
 "autocompletion list"
-msgstr "在键入多少字符时显示符号列表"
+msgstr "在键入多少字符时显示自动补全列表"
 
 #: ../data/geany.glade.h:183
 msgid "Display height in rows for the autocompletion list"
-msgstr "自动完成列表显示的行数"
+msgstr "自动补全列表显示的行数"
 
 #: ../data/geany.glade.h:184
 msgid "Maximum number of entries to display in the autocompletion list"
-msgstr "自动完成列表显示的最大条目数"
+msgstr "自动补全列表显示的最大条目数"
 
 #: ../data/geany.glade.h:185
 msgid "Symbol list update frequency:"
@@ -872,7 +872,7 @@ msgid ""
 "list. Note that a too short delay may have performance impact, especially "
 "with large files. A delay of 0 disables real-time updates."
 msgstr ""
-"符号列表自动更新的最小间隔 (以毫秒计)。注意太小的间隔会引发性能问题，尤其对于"
+"符号列表自动更新的最小间隔 (以毫秒计)。注意：太小的间隔可能会引发性能问题，尤其对于"
 "大文件。间隔为 0 将禁用实时更新。"
 
 #: ../data/geany.glade.h:187
@@ -1030,7 +1030,7 @@ msgstr "显示一根细的竖线"
 
 #: ../data/geany.glade.h:223
 msgid "Background"
-msgstr "背景型"
+msgstr "背景"
 
 #: ../data/geany.glade.h:224
 msgid ""
@@ -1188,7 +1188,7 @@ msgstr "磁盘检查间隔："
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
-msgstr "设置磁盘检查的间隔时间。零表示不检查。"
+msgstr "设置磁盘检查的间隔时间（以秒计时）。零表示不检查。"
 
 #: ../data/geany.glade.h:260 ../src/prefs.c:1610 ../src/symbols.c:465
 #: ../plugins/filebrowser.c:1167
@@ -1282,7 +1282,7 @@ msgstr "开头字母："
 
 #: ../data/geany.glade.h:282
 msgid "The name of the developer"
-msgstr "开发者的名字"
+msgstr "开发者姓名"
 
 #: ../data/geany.glade.h:283
 msgid "Year:"
@@ -1712,11 +1712,11 @@ msgstr "替换...(_R)"
 
 #: ../data/geany.glade.h:383
 msgid "Next Me_ssage"
-msgstr "下一个信息(_M)"
+msgstr "下一条信息(_M)"
 
 #: ../data/geany.glade.h:384
 msgid "Pr_evious Message"
-msgstr "前一个信息(_E)"
+msgstr "前一条信息(_E)"
 
 #: ../data/geany.glade.h:385 ../src/keybindings.c:575
 msgid "Go to Ne_xt Marker"
@@ -2213,7 +2213,7 @@ msgstr "一部分贡献者 (详细清单参见文件 %s)"
 
 #: ../src/about.c:426
 msgid "Credits"
-msgstr "荣誉"
+msgstr "鸣谢"
 
 #: ../src/about.c:443
 msgid "License"
@@ -3239,7 +3239,7 @@ msgstr "逐行地向下滚动视图"
 
 #: ../src/keybindings.c:404
 msgid "Complete snippet"
-msgstr "完成片断"
+msgstr "补全片断"
 
 #: ../src/keybindings.c:406
 msgid "Move cursor in snippet"
@@ -3255,7 +3255,7 @@ msgstr "上下文动作"
 
 #: ../src/keybindings.c:412
 msgid "Complete word"
-msgstr "自动完成"
+msgstr "自动补全"
 
 #: ../src/keybindings.c:414
 msgid "Show calltip"
@@ -3263,7 +3263,7 @@ msgstr "显示函数原型"
 
 #: ../src/keybindings.c:416
 msgid "Word part completion"
-msgstr "单词片段完成"
+msgstr "单词片段补全"
 
 #: ../src/keybindings.c:419
 msgid "Move line(s) up"
@@ -3543,7 +3543,7 @@ msgstr "切换到右侧文档"
 
 #: ../src/keybindings.c:647
 msgid "Switch to last used document"
-msgstr "切换到上次使用的文楼"
+msgstr "切换到上次使用的文档"
 
 #: ../src/keybindings.c:650
 msgid "Move document left"
@@ -3647,7 +3647,7 @@ msgstr "下列快捷键可定义："
 
 #: ../src/keyfile.c:1047
 msgid "Type here what you want, use it as a notice/scratch board"
-msgstr "随便写写，当便签或草稿好了。从前有座山，山里有个庙……"
+msgstr "随便写写，当便签或草稿好了。"
 
 #: ../src/keyfile.c:1274
 msgid "Failed to load one or more session files."
@@ -3754,7 +3754,7 @@ msgstr "[文件...]"
 
 #: ../src/libmain.c:537
 msgid "A fast and lightweight IDE."
-msgstr "轻快的 IDE。"
+msgstr "一个快速轻量级的 IDE。"
 
 #: ../src/libmain.c:538
 msgid "Report bugs to https://github.com/geany/geany/issues."
@@ -3918,7 +3918,7 @@ msgstr "插件"
 
 #: ../src/plugins.c:1976
 msgid "Choose which plugins should be loaded at startup:"
-msgstr "选择哪些插件应该在启动时装载："
+msgstr "选择在启动时装载的插件："
 
 #: ../src/plugins.c:2069
 #, c-format
@@ -4496,7 +4496,7 @@ msgstr "第3节"
 
 #: ../src/symbols.c:476
 msgid "Appendix"
-msgstr "索引"
+msgstr "附录"
 
 #: ../src/symbols.c:477 ../src/symbols.c:524 ../src/symbols.c:549
 #: ../src/symbols.c:565 ../src/symbols.c:580 ../src/symbols.c:591
