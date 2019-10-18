@@ -1169,7 +1169,7 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 	if (!g_file_set_contents(fname, str, -1, error))
 		success = FALSE;
 	g_free(str);
-#ifdef __APPLE__
+
 	if (success && g_chmod(fname, 0777) != 0)
 	{
 		if (error)
@@ -1181,7 +1181,6 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 		}
 		success = FALSE;
 	}
-#endif
 
 	if (!success)
 	{
