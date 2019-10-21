@@ -545,8 +545,10 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_R:
 		{
 			tag_list_add_groups(tag_store,
+                &(tv_iters.tag_other), _("Libraries"), ICON_NAMESPACE,
+                &(tv_iters.tag_class), _("Classes"), ICON_CLASS,
 				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_other), _("Other"), ICON_NONE,
+				
 				NULL);
 			break;
 		}

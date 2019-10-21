@@ -7,6 +7,7 @@
 *   This module contains functions for generating tags for R language files.
 *   R is a programming language for statistical computing.
 *   R is GPL Software, get it from http://www.r-project.org/
+*  ** additions: Detlef Groth <dgroth@uni-potsdam.de>
 */
 
 /*
@@ -28,6 +29,7 @@
   ch++
 
 typedef enum {
+	K_CLASS,
 	K_FUNCTION,
 	K_LIBRARY,
 	K_SOURCE,
@@ -35,6 +37,7 @@ typedef enum {
 } rKind;
 
 static kindDefinition RKinds [KIND_COUNT] = {
+	{true, 'c', "class", "classes" },
 	{true, 'f', "function", "functions"},
 	{true, 'l', "library", "libraries"},
 	{true, 's', "source", "sources"},
@@ -106,43 +109,55 @@ static void createRTags (void)
 						cp++;
 					}
 					break;
+				case '=':
 				case '<':
 					cp++;
 					if (*cp == '-') {
 						/* assignment: ident <- someval */
 						cp++;
-						SKIPSPACE(cp);
-
-						if (*cp == '\0') {
-							/* not in this line, read next */
-							/* sometimes functions are declared this way:
-								ident <-
-								function(...)
-								{
-									...
-								}
-								I don't know if there is a reason to write the function keyword
-								in a new line
-							*/
-							if ((line = readLineFromInputFile()) != NULL) {
-								cp = (const unsigned char*)line;
-								SKIPSPACE(cp);
+					}
+					SKIPSPACE(cp);
+					if (*cp == '\0') {
+						/* not in this line, read next */
+						/* sometimes functions are declared this way:
+							ident <-
+							function(...)
+							{
+								...
 							}
-						}
-
-						if (strncasecmp((const char*)cp, "function", (size_t)8) == 0) {
-							/* it's a function: ident <- function(args) */
-							cp += 8;
-							/* if the string really exists, make a tag of it */
-							if (vStringLength(name) > 0)
-								makeRTag(name, K_FUNCTION);
-
-							/* prepare for the next iteration */
-							vStringClear(name);
-							break;
+							I don't know if there is a reason to write the function keyword
+							in a new line
+						*/
+						if ((line = readLineFromInputFile()) != NULL) {
+							cp = (const unsigned char*)line;
+							SKIPSPACE(cp);
 						}
 					}
-					/* fall through */
+					if (strncasecmp((const char*)cp, "function", (size_t)8) == 0) {
+						/* it's a function: ident <- function(args) */
+						cp += 8;
+						/* if the string really exists, make a tag of it */
+						if (vStringLength(name) > 0)
+							makeRTag(name, K_FUNCTION);
+						/* prepare for the next iteration */
+						vStringClear(name);
+						break;
+					} else if (strncasecmp((const char*)cp, "R6Class", (size_t)7) == 0 || 
+						 strncasecmp((const char*)cp, "new.env", (size_t)7) == 0 ||
+						 strncasecmp((const char*)cp, "RxClass", (size_t)7) == 0) {
+						/* it's a Class or Environment: obj <- R6Class(args) 
+						 * RxClass is just a generic placeholder so the user can 
+						 * use this for the outline example: RxClass = proto */
+						cp += 7;
+						/* if the string really exists, make a tag of it */
+						if (vStringLength(name) > 0)
+							makeRTag(name, K_CLASS);
+							/* prepare for the next iteration */
+						vStringClear(name);
+						break;
+					}
+				
+				/* fall through */
 				case ' ':
 				case '\x009':
 					/* skip whitespace */
@@ -171,6 +186,6 @@ extern parserDefinition *RParser (void)
 	def->kindTable  = RKinds;
 	def->kindCount  = ARRAY_SIZE (RKinds);
 	def->extensions = extensions;
-	def->parser     = createRTags;
+	def->parser	 = createRTags;
 	return def;
 }
