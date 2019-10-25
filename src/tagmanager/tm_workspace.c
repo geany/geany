@@ -549,7 +549,7 @@ static gchar *pre_process_file(const gchar *cmd, const gchar *inf)
 
 	g_file_get_contents(tmp_errfile, &errors, NULL, NULL);
 	if (errors && *errors)
-		g_printerr("%s", errors);
+		g_printerr("%s\n", errors);
 	g_free(errors);
 	g_unlink(tmp_errfile);
 	g_free(tmp_errfile);

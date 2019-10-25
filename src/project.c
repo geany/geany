@@ -86,6 +86,7 @@ static gboolean write_config(void);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
+static void run_new_dialog(PropertyDialogElements *e);
 static void apply_editor_prefs(void);
 static void init_stash_prefs(void);
 static void destroy_project(gboolean open_default);
@@ -109,20 +110,8 @@ static gboolean have_session_docs(void)
 }
 
 
-/* TODO: this should be ported to Glade like the project preferences dialog,
- * then we can get rid of the PropertyDialogElements struct altogether as
- * widgets pointers can be accessed through ui_lookup_widget(). */
-void project_new(void)
+static gboolean handle_current_session(void)
 {
-	GtkWidget *vbox;
-	GtkWidget *table;
-	GtkWidget *image;
-	GtkWidget *button;
-	GtkWidget *bbox;
-	GtkWidget *label;
-	gchar *tooltip;
-	PropertyDialogElements e = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, FALSE };
-
 	if (!app->project && project_prefs.project_session)
 	{
 		/* save session in case the dialog is cancelled */
@@ -139,15 +128,29 @@ void project_new(void)
 			else
 			{
 				if (!document_close_all())
-					return;
+					return FALSE;
 			}
 		}
 	}
+	if (app->project)
+		return project_close(FALSE);
+	return TRUE;
+}
 
-	if (! project_ask_close())
-		return;
 
-	g_return_if_fail(app->project == NULL);
+/* TODO: this should be ported to Glade like the project preferences dialog,
+ * then we can get rid of the PropertyDialogElements struct altogether as
+ * widgets pointers can be accessed through ui_lookup_widget(). */
+void project_new(void)
+{
+	GtkWidget *vbox;
+	GtkWidget *table;
+	GtkWidget *image;
+	GtkWidget *button;
+	GtkWidget *bbox;
+	GtkWidget *label;
+	gchar *tooltip;
+	PropertyDialogElements e = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, FALSE };
 
 	e.dialog = gtk_dialog_new_with_buttons(_("New Project"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -224,25 +227,21 @@ void project_new(void)
 	g_signal_connect(e.base_path, "changed", G_CALLBACK(on_entries_changed), &e);
 
 	gtk_widget_show_all(e.dialog);
+	run_new_dialog(&e);
+	gtk_widget_destroy(e.dialog);
+	document_new_file_if_non_open();
+	ui_focus_current_document();
+}
 
-	while (1)
+
+static void run_new_dialog(PropertyDialogElements *e)
+{
+	if (gtk_dialog_run(GTK_DIALOG(e->dialog)) != GTK_RESPONSE_OK ||
+		!handle_current_session())
+		return;
+	do
 	{
-		if (gtk_dialog_run(GTK_DIALOG(e.dialog)) != GTK_RESPONSE_OK)
-		{
-			// any open docs were meant to be moved into the project
-			// rewrite default session because it was cleared
-			if (have_session_docs())
-				configuration_save_default_session();
-			else
-			{
-				// reload any documents that were closed
-				configuration_reload_default_session();
-				configuration_open_files();
-			}
-			break;
-		}
-		// dialog confirmed
-		if (update_config(&e, TRUE))
+		if (update_config(e, TRUE))
 		{
 			// app->project is now set
 			if (!write_config())
@@ -254,13 +253,21 @@ void project_new(void)
 			{
 				ui_set_statusbar(TRUE, _("Project \"%s\" created."), app->project->name);
 				ui_add_recent_project_file(app->project->file_name);
-				break;
+				return;
 			}
 		}
 	}
-	gtk_widget_destroy(e.dialog);
-	document_new_file_if_non_open();
-	ui_focus_current_document();
+	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK);
+	// any open docs were meant to be moved into the project
+	// rewrite default session because it was cleared
+	if (have_session_docs())
+		configuration_save_default_session();
+	else
+	{
+		// reload any documents that were closed
+		configuration_reload_default_session();
+		configuration_open_files();
+	}
 }
 
 
@@ -286,8 +293,9 @@ static void run_open_dialog(GtkDialog *dialog)
 	{
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
+		if (app->project && !project_close(FALSE)) {}
 		/* try to load the config */
-		if (! project_load_file_with_session(filename))
+		else if (! project_load_file_with_session(filename))
 		{
 			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
@@ -307,16 +315,15 @@ void project_open(void)
 {
 	const gchar *dir = local_prefs.project_file_path;
 
-	if (! project_ask_close()) return;
-
 #ifdef G_OS_WIN32
 	if (interface_prefs.use_native_windows_dialogs)
 	{
 		gchar *file = win32_show_project_open_dialog(main_widgets.window, _("Open Project"), dir, FALSE, TRUE);
 		if (file != NULL)
 		{
+			if (app->project && !project_close(FALSE)) {}
 			/* try to load the config */
-			if (! project_load_file_with_session(file))
+			else if (! project_load_file_with_session(file))
 			{
 				SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
 			}

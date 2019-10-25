@@ -106,6 +106,7 @@ static GPtrArray *session_files = NULL;
 static gint session_notebook_page;
 static gint hpan_position;
 static gint vpan_position;
+static guint document_list_update_idle_func_id = 0;
 static const gchar atomic_file_saving_key[] = "use_atomic_file_saving";
 
 static GPtrArray *keyfile_groups = NULL;
@@ -258,6 +259,8 @@ static void init_pref_groups(void)
 		"show_keep_edit_history_on_reload_msg", TRUE);
 	stash_group_add_boolean(group, &file_prefs.reload_clean_doc_on_file_change,
 		"reload_clean_doc_on_file_change", FALSE);
+	stash_group_add_boolean(group, &file_prefs.save_config_on_file_change,
+		"save_config_on_file_change", TRUE);
 	stash_group_add_string(group, &file_prefs.extract_filetype_regex,
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
 	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
@@ -274,7 +277,7 @@ static void init_pref_groups(void)
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
 	/* various build-menu prefs */
-	// Warning: don't move PACKAGE group name items here 
+	// Warning: don't move PACKAGE group name items here
 	group = stash_group_new("build-menu");
 	configuration_add_various_pref_group(group, "build");
 
@@ -1327,11 +1330,46 @@ void configuration_apply_settings(void)
 }
 
 
+static gboolean save_configuration_cb(gpointer data)
+{
+	configuration_save();
+	if (app->project != NULL)
+	{
+		project_write_config();
+	}
+	document_list_update_idle_func_id = 0;
+	return G_SOURCE_REMOVE;
+}
+
+
+static void document_list_changed_cb(GObject *obj, GeanyDocument *doc, gpointer data)
+{
+	g_return_if_fail(doc != NULL && doc->is_valid);
+
+	/* save configuration, especially session file list, but only if we are not just starting
+	 * and not about to quit */
+	if (file_prefs.save_config_on_file_change &&
+		main_status.main_window_realized &&
+		!main_status.opening_session_files &&
+		!main_status.quitting)
+	{
+		if (document_list_update_idle_func_id == 0)
+		{
+			document_list_update_idle_func_id = g_idle_add(save_configuration_cb, NULL);
+		}
+	}
+}
+
+
 void configuration_init(void)
 {
 	keyfile_groups = g_ptr_array_new();
 	pref_groups = g_ptr_array_new();
 	init_pref_groups();
+
+	g_signal_connect(geany_object, "document-open", G_CALLBACK(document_list_changed_cb), NULL);
+	g_signal_connect(geany_object, "document-save", G_CALLBACK(document_list_changed_cb), NULL);
+	g_signal_connect(geany_object, "document-close", G_CALLBACK(document_list_changed_cb), NULL);
 }
 
 
@@ -1339,6 +1377,8 @@ void configuration_finalize(void)
 {
 	guint i;
 	StashGroup *group;
+
+	g_signal_handlers_disconnect_by_func(geany_object, G_CALLBACK(document_list_changed_cb), NULL);
 
 	foreach_ptr_array(group, i, keyfile_groups)
 		stash_group_free(group);

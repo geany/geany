@@ -8,17 +8,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.35\n"
+"Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2019-04-22 10:13+0800\n"
+"PO-Revision-Date: 2019-09-26 20:42+0800\n"
 "Last-Translator: Dongyuan Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
@@ -2170,7 +2170,7 @@ msgstr "(%s 或之后生成)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "使用 GTK+ v%u.%u.%u 和 GLib v%u.%u.%u 运行时库"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -4534,7 +4534,7 @@ msgstr "程序"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "部"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4554,7 +4554,7 @@ msgstr "数据"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "拷贝"
 
 #: ../src/symbols.c:504
 msgid "Keys"

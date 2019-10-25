@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.36
+.. |(version)| replace:: 1.37
 .. -*- reStructuredText -*-
 
 =======
@@ -14,7 +14,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2019-04-28
+:Date: 2019-09-28
 :Version: |(version)|
 
 Copyright © 2005 The Geany contributors
@@ -1143,6 +1143,18 @@ in the `keybinding preferences`_, then select *Tools->Reload Configuration*
 or restart Geany. Note that it works slightly differently from other GTK
 applications, in that you'll need to continue to hold down the Ctrl and Shift
 keys while typing the code point hex digits (and the Enter or Return to finish the code point).
+
+
+Inserting color values
+^^^^^^^^^^^^^^^^^^^^^^
+
+You can insert a color value by selecting *Tools->Color Chooser* from the menu.
+A dialog appears to select the wanted color. If the cursor is placed inside a
+*#RRGGBB* format color value then the dialog will show that color after opening.
+On clicking on *Apply* or *Select* the code for the chosen color will be inserted
+in the format *#RRGGBB*. If text is selected, then it will be replaced with the
+color code on the first click on *Apply* or *Select*. If no text is selected or
+on subsequent clicks the color code is inserted at the current cursor position.
 
 
 Search, replace and go to
@@ -2636,6 +2648,16 @@ reload_clean_doc_on_file_change   Whether to automatically reload documents    f
                                   on disk.
                                   If unsaved changes exist then the user is
                                   prompted to reload manually.
+save_config_on_file_change        Automatically save Geany's configuration     true        immediately
+                                  to disk once the document list changes
+                                  (i.e. new documents are opened, saved or
+                                  closed). This helps to prevent accidentally
+                                  losing the session file list or other
+                                  changed settings when Geany is not shut
+                                  down cleanly. Disable this option if your
+                                  configuration directory is on a slow drive,
+                                  network share or similar and you experience
+                                  problems.
 extract_filetype_regex            Regex to extract filetype name from file     See link    immediately
                                   via capture group one.
                                   See `ft_regex`_ for default.
@@ -2647,9 +2669,9 @@ replace_and_find_by_default       Set ``Replace & Find`` button as default so  t
                                   focus.
 **``build`` group**
 number_ft_menu_items              The maximum number of menu items in the      2           on restart
-                                  filetype section of the Build menu.
+                                  filetype build section of the Build menu.
 number_non_ft_menu_items          The maximum number of menu items in the      3           on restart
-                                  independent section of the Build menu.
+                                  independent build section.
 number_exec_menu_items            The maximum number of menu items in the      2           on restart
                                   execute section of the Build menu.
 ================================  ===========================================  ==========  ===========
@@ -2855,8 +2877,8 @@ warnings or errors are marked in the source, see `Indicators`_ below.
 
 .. tip::
     If Geany's default error message parsing does not parse errors for
-    the tool you're using, you can set a custom regex in the Build Commands
-    Dialog, see `Build Menu Configuration`_.
+    the tool you're using, you can set a custom regex in the
+    `Set Build Commands dialog`_, see `Build Menu Configuration`_.
 
 Indicators
 ^^^^^^^^^^
@@ -2967,7 +2989,7 @@ Execute
 
 Execute will run the corresponding executable file, shell script or
 interpreted script in a terminal window. The command set in the
-"Set Build Commands" dialog is run in a script to ensure the terminal
+`Set Build Commands dialog`_ is run in a script to ensure the terminal
 stays open after execution completes.  Note: see `Terminal emulators`_
 below for the command format.  Alternatively the built-in VTE can be used
 if it is available - see `Virtual terminal emulator widget (VTE)`_.
@@ -3001,8 +3023,7 @@ execute the terminal program and to pass it the name of the Geany run
 script that it should execute in a Bourne compatible shell (eg /bin/sh).
 The marker "%c" is substituted with the name of the Geany run script,
 which is created in the temporary directory and which changes the working
-directory to the directory set in the Build commands dialog, see
-`Build menu commands dialog`_ for details.
+directory to the directory set in the `Set Build Commands dialog`_.
 
 As an example the default (Linux) command is::
 
@@ -3023,12 +3044,9 @@ Build menu configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 The build menu has considerable flexibility and configurability, allowing
-both menu labels the commands they execute and the directory they execute
-in to be configured.
-
-For example, if you change one of the default make commands to run say 'waf'
-you can also change the label to match.
-
+menu labels, the commands they execute and the directory they execute
+in to be configured. For example, if you change one of the default make 
+commands to run say 'waf' you can also change the label to match.
 These settings are saved automatically when Geany is shut down.
 
 The build menu is divided into four groups of items each with different
@@ -3041,8 +3059,9 @@ behaviors:
   filetype of the current document; they also capture output in the
   compiler tab and parse it for errors.
 * Execute commands - are configurable and intended for executing your
-  program or other long running programs.  The output is not parsed for errors
-  and is directed to the terminal command selected in preferences.
+  program or other long running programs.  The output is not parsed for 
+  errors and is directed to the terminal command selected in `Tools 
+  preferences`_.
 * Fixed commands - these perform built-in actions:
 
   * Go to the next error.
@@ -3050,8 +3069,8 @@ behaviors:
   * Show the build menu commands dialog.
 
 The maximum numbers of items in each of the configurable groups can be
-configured in the `Various preferences`_. Even though the maximum number of
-items may have been increased, only those menu items that have values
+configured in `Various preferences`_. Even though the maximum number of
+items may have been increased, only those menu items that have commands
 configured are shown in the menu.
 
 The groups of menu items obtain their configuration from four potential
@@ -3064,20 +3083,20 @@ be used. The sources in decreasing priority are:
 * The defaults
 
 The detailed relationships between sources and the configurable menu item groups
-is shown in the following table.
+is shown in the following table:
 
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
 | Group        | Project File        | Preferences              | System Filetype   |  Defaults                     |
 +==============+=====================+==========================+===================+===============================+
 | Filetype     | Loads From: project | Loads From:              | Loads From:       | None                          |
-|              | file                | filetypes.xxx file in    | filetypes.xxx in  |                               |
+| Build        | file                | filetypes.xxx file in    | filetypes.xxx in  |                               |
 |              |                     | ~/.config/geany/filedefs | Geany install     |                               |
 |              | Saves To: project   |                          |                   |                               |
 |              | file                | Saves to: as above,      | Saves to: as user |                               |
 |              |                     | creating if needed.      | preferences left. |                               |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
-| Filetype     | Loads From: project | Loads From:              | Loads From:       | 1:                            |
-| Independent  | file                | geany.conf file in       | filetypes.xxx in  |   Label: _Make                |
+| Independent  | Loads From: project | Loads From:              | Loads From:       | 1:                            |
+| Build        | file                | geany.conf file in       | filetypes.xxx in  |   Label: _Make                |
 |              |                     | ~/.config/geany          | Geany install     |   Command: make               |
 |              | Saves To: project   |                          |                   |                               |
 |              | file                | Saves to: as above,      | Saves to: as user | 2:                            |
@@ -3099,37 +3118,39 @@ is shown in the following table.
 |              |                     | ~/.config/geany/filedefs |                   |                               |
 +--------------+---------------------+--------------------------+-------------------+-------------------------------+
 
-The following notes on the table reference cells by coordinate as (group,source):
+The following notes on the table may reference cells by coordinate as *(group, source)*:
 
-* General - for filetypes.xxx substitute the appropriate extension for
+* Filetype filenames - for filetypes.xxx substitute the appropriate extension for
   the filetype of the current document for xxx - see `filenames`_.
 
 * System Filetypes - Labels loaded from these sources are locale sensitive
   and can contain translations.
 
-* (Filetype, Project File) and (Filetype, Preferences) - preferences use a full
+* *(Filetype build, Project and Preferences)* - preferences use a full
   filetype file so that users can configure all other filetype preferences
   as well.  Projects can only configure menu items per filetype.  Saving
   in the project file means that there is only one file per project not
   a whole directory.
 
-* (Filetype-Independent, System Filetype) - although conceptually strange, defining
+* *(Filetype-Independent build, System Filetype)* - although conceptually strange, defining
   filetype-independent commands in a filetype file, this provides the ability to
   define filetype dependent default menu items.
 
-* (Execute, Project File) and (Execute, Preferences) - the project independent
+* *(Execute, Project and Preferences)* - the project independent
   execute and preferences independent execute commands can only be set by hand
   editing the appropriate file, see `Preferences file format`_ and `Project file
   format`_.
 
-Build menu commands dialog
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Most of the configuration of the build menu is done through the Build Menu
-Commands Dialog.  You edit the configuration sourced from preferences in the
-dialog opened from the Build->Build Menu Commands item and you edit the
-configuration from the project in the build tab of the project preferences
-dialog.  Both use the same form shown below.
+Set Build Commands dialog
+^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+Most of the configuration of the build menu is done through the `Set 
+Build Commands dialog`_. When no project is open, you can edit the 
+configuration sourced from user preferences using the *Build->Set Build 
+Commands* menu item. You can edit the configuration sourced from a 
+project in the *Build* tab of the `Project Properties`_ dialog. The 
+former menu item also shows the project dialog when a project is open. 
+Both use the same form shown below.
 
 .. image:: ./images/build_menu_commands_dialog.png
 
@@ -3139,15 +3160,14 @@ The dialog is divided into three sections:
 * Independent build commands (available regardless of filetype).
 * Filetype execute commands.
 
-The filetype and independent sections also each contain a field for the regular
+The filetype and independent build sections also each contain a field for the regular
 expression used for parsing command output for error and warning messages.
 
 The columns in the first three sections allow setting of the label, command,
-and working directory to run the command in.
+and working directory to run the command in. An item with an empty 
+label will not be shown in the menu. An empty working directory will 
+default to the directory of the current document.
 
-An item with an empty label will not be shown in the menu.
-
-An empty working directory will default to the directory of the current document.
 If there is no current document then the command will not run.
 
 The dialog will always show the command selected by priority, not just the
@@ -3161,24 +3181,24 @@ with the project source but can with the preferences source dialog.
 
 The clear buttons remove the definition from the configuration source you are editing.
 When you do this the command from the next lower priority source will be shown.
-To hide lower priority menu items without having anything show in the menu
-configure with a nothing in the label but at least one character in the command.
+To hide lower priority menu items without having anything show in the menu,
+configure with nothing in the label but at least one character in the command.
 
 Substitutions in commands and working directories
 `````````````````````````````````````````````````
 
-The first occurrence of each of the following character sequences in each of the
-command and working directory fields is substituted by the items specified below
-before the command is run.
+Before the command is run, the first occurrence of each of the following 
+two character sequences in each of the command and working directory 
+fields is substituted by the items specified below:
 
-* %d - substituted by the absolute path to the directory of the current file.
-* %e - substituted by the name of the current file without the extension or path.
-* %f - substituted by the name of the current file without the path.
-* %p - if a project is open, substituted by the base path from the project.
-* %l - substituted by the line number at the current cursor position.
+* %d - the absolute path to the directory of the current file.
+* %e - the name of the current file without the extension or path.
+* %f - the name of the current file without the path.
+* %p - if a project is open, the base path from the project.
+* %l - the line number at the current cursor position.
 
 .. note::
-   If the basepath set in the project preferences is not an absolute path , then it is
+   If the base path set in `Project Properties`_ is not an absolute path, then it is
    taken as relative to the directory of the project file.  This allows a project file
    stored in the source tree to specify all commands and working directories relative
    to the tree itself, so that the whole tree including the project file, can be moved
@@ -3188,18 +3208,21 @@ before the command is run.
 Build menu keyboard shortcuts
 `````````````````````````````
 
-Keyboard shortcuts can be defined for the first two filetype menu items, the first three
-independent menu items, the first execute menu item and the fixed menu items.
+Keyboard shortcuts can be defined for:
+
+* the first two filetype build menu items
+* the first three independent build menu items
+* the first execute menu item 
+* the fixed menu items (Next/Previous Error, Set Commands)
+
 In the keybindings configuration dialog (see `Keybinding preferences`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
 
 It is currently not possible to bind keyboard shortcuts to more than these menu items.
-
 You can also use underlines in the labels to set mnemonic characters.
 
 Old settings
 ````````````
-
 The configurable Build Menu capability was introduced in Geany 0.19 and
 required a new section to be added to the configuration files (See
 `Preferences file format`_).  Geany will still load older format project,
@@ -3207,8 +3230,7 @@ preferences and filetype file settings and will attempt to map them into the new
 configuration format.  There is not a simple clean mapping between the formats.
 The mapping used produces the most sensible results for the majority of cases.
 However, if they do not map the way you want, you may have to manually
-configure some settings using the Build Commands
-Dialog or the Build tab of the project preferences dialog.
+configure some settings using the `Set Build Commands dialog`_.
 
 Any setting configured in either of these dialogs will override settings mapped from
 older format configuration files.
@@ -4319,15 +4341,16 @@ Example::
 As of Geany 0.19 this section is for legacy support.
 Values that are set in the [build-menu] section will override those in this section.
 
+If any build menu item settings have been configured in the
+`Set Build Commands dialog`_ (or the *Build* tab of the 
+`Project Properties`_ dialog), then these settings are stored in the 
+[build-menu] section and will override the settings in this section for 
+that item.
+
 error_regex
-    See [build-menu] section for details.
+    See the [build-menu] section for details.
 
 **Build commands**
-
-If any build menu item settings have been configured in the Build Menu Commands
-dialog or the Build tab of the project preferences dialog then these
-settings are stored in the [build-menu] section and override the settings in
-this section for that item.
 
 compiler
     This item specifies the command to compile source code files. But
@@ -4714,8 +4737,8 @@ The key names cannot be configured.
     Group membership is only read at startup.
 
 .. tip::
-    You can make commonly used filetypes appear in the top-level of the 
-    filetype menu by adding them to the `None` group, e.g. 
+    You can make commonly used filetypes appear in the top-level of the
+    filetype menu by adding them to the `None` group, e.g.
     `None=C;Python`.
 
 Preferences file format
@@ -4749,8 +4772,8 @@ where:
 
 * GG - is the menu item group,
 
-  - FT for filetype
-  - NF for independent (non-filetype)
+  - FT for filetype build
+  - NF for independent (non-filetype) build
   - EX for execute
 
 * NN - is a two decimal digit number of the item within the group,

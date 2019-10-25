@@ -1,8 +1,49 @@
-Geany 1.36 (unreleased)
+Geany 1.37 (unreleased)
+
+
+Geany 1.36 (September 28, 2019)
+
+    General
+    * Give precedence to user-defined filetype extension mappings over default
+      ones (PR#2166).
+    * Give precedence to the longest matching filetype pattern (Issue#1499,
+      Issue#1921, PR#2167).
+    * Place the socket file in `$XDG_RUNTIME_DIR` when available
+      (Thomas Martitz, PR#2222).
+
+    Bug fixes
+    * Improve path ellipsising in Go To Tag filetype popup
+      (Thomas Martitz, PR#2262).
+
+    Interface
+    * Show group prefix for the Various preferences (PR#2176).
+    * Show the GTK/GLib versions in about dialog (PR#2163).
+
+    Editor
+    * Update Scintilla to version 3.10.4 (PR#2138).
+    * Add support for fractional font sizes (Pedro Henrique Antunes de Oliveira,
+      Issue#703, PR#2250).
+
+    Filetypes
+    * Add Apple Swift filetype (Ankit Pati, PR#1323).
+    * Add Nim filetype (Simon Krauter, Issue#1772, PR#2085).
+    * Update NSIS keywords (PR#2181).
+    * Update error matching for the CUDA filetype (Rajesh Pandian M,
+      Issue#2213, PR#2218).
+    * Add Kotlin custom filetype (Issue#1581, PR#2186).
+    * Add Groovy custom filetype (PR#2188).
+    * Add TypeScript custom filetype (Issue#1449, PR#2187).
+    * Small update of Django keywords (PR#2315).
+    * Don't suggest to override all settings through *Tools->Configuration
+      Files* (Issue#1552, PR#2168).
+
+    Windows
+    * Migrate the installer to NSIS 3 (Issue#1302, PR#2181).
+    * Fix build on recent MSYS2 (Issue#2261, PR#2263).
 
     Internationalization
     * New translations: ku
-    * Updated translations: da, de, es, fr, it, ja, pt, sv
+    * Updated translations: da, de, es, fr, it, ja, lv, pt, sk, sv, zh_CN
 
 
 Geany 1.35 (April 28, 2019)

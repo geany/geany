@@ -307,8 +307,8 @@ msgid ""
 "Removes all messages from the status bar. The messages are still displayed "
 "in the status messages window."
 msgstr ""
-"Entfernt alle Nachrichten aus der Statuszeile. Die Nachrichten sind "
-"weiterhin über den »Status«-Reiter im Infobereich abrufbar."
+"Entfernt alle Nachrichten aus der Statuszeile. Die Nachrichten verbleiben "
+"im Statusmeldungsfenster."
 
 #: ../data/geany.glade.h:59
 msgid "Auto-focus widgets (focus follows mouse)"
@@ -390,19 +390,18 @@ msgstr ""
 
 #: ../data/geany.glade.h:74
 msgid "Store project file inside the project base directory"
-msgstr "Projektdatei innerhalb des Projektbasisverzeichnis erstellen"
+msgstr "Projektdatei im Projektbasisverzeichnises erstellen"
 
-#: ../data/geany.glade.h:75
+#	: ../data/geany.glade.h:75
 msgid ""
 "When enabled, a project file is stored by default inside the project base "
 "directory when creating new projects instead of one directory above the base "
 "directory. You can still change the path of the project file in the New "
 "Project dialog."
 msgstr ""
-"Wenn diese Option eingeschaltet ist, wird beim Erzeugen eines neuen Projekts "
-"die Projektdatei standardmäßig innerhalb des Basisverzeichnis des Projekts "
-"angelegt, ansonsten wird die Datei ein Verzeichnis über dem Basisverzeichnis "
-"angelegt. Der Pfad kann im »Neues Projekt«-Dialog geändert werden."
+"Wenn diese Option eingeschaltet ist, wird eine neue Projektdatei beim Erzeugen normalerweise im  "
+"Projekt-Basisverzeichnis angelegt, sonst ein Verzeichnis über dem Basisverzeichnis. "
+"Den Pfad kann im »Neues Projekt«-Dialog ändern."
 
 #: ../data/geany.glade.h:76
 msgid "<b>Projects</b>"
