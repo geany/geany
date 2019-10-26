@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-23 02:11+0000\n"
-"PO-Revision-Date: 2019-09-24 18:41+0300\n"
+"PO-Revision-Date: 2019-10-25 08:35+0300\n"
 "Last-Translator: Ingmārs Dīriņš <melhiors14@gmail.com>\n"
 "Language-Team: \n"
 "Language: lv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -346,7 +346,7 @@ msgstr "Paslēpt dialogu \"Atrast\""
 #: ../data/geany.glade.h:67
 msgid "Hide the Find dialog after clicking Find Next/Previous"
 msgstr ""
-"Paslēpt dialogu \"Atrast\" pēc \"Atrast nākošo/iepriekšējo\" klikšķināšanas"
+"Paslēpt dialogu \"Atrast\" pēc \"Atrast nākamo/iepriekšējo\" klikšķināšanas"
 
 #: ../data/geany.glade.h:68
 msgid "Use the current word under the cursor for Find dialogs"
@@ -529,7 +529,7 @@ msgstr "Datņu cilnes tiks novietotas piezīmju grāmatas labajā pusē"
 
 #: ../data/geany.glade.h:107
 msgid "Next to current"
-msgstr "Nākošais uz pašreizējo"
+msgstr "Nākamais uz pašreizējo"
 
 #: ../data/geany.glade.h:108
 msgid ""
@@ -641,7 +641,7 @@ msgid ""
 "line wrapping has a high performance cost for large documents so should be "
 "disabled on slow machines."
 msgstr ""
-"Aplauzt rindu pie loga apmales un turpināt to nākošajā rindā. Piezīme: rindu "
+"Aplauzt rindu pie loga apmales un turpināt to nākamajā rindā. Piezīme: rindu "
 "aplaušanai ir augstas veiktspējas izmaksas priekš lieliem dokumentiem, tāpēc "
 "tai vajadzētu tikt izslēgtai uz lēnām mašīnām."
 
@@ -1782,7 +1782,7 @@ msgstr "_Atrast..."
 
 #: ../data/geany.glade.h:379
 msgid "Find _Next"
-msgstr "Atrast _nākošo"
+msgstr "Atrast _nākamo"
 
 #: ../data/geany.glade.h:380
 msgid "Find _Previous"
@@ -1798,7 +1798,7 @@ msgstr "_Aizstāt..."
 
 #: ../data/geany.glade.h:383
 msgid "Next Me_ssage"
-msgstr "Nākošais ziņojum_s"
+msgstr "Nākamais ziņojum_s"
 
 #: ../data/geany.glade.h:384
 msgid "Pr_evious Message"
@@ -1806,7 +1806,7 @@ msgstr "I_epriekšējais ziņojums"
 
 #: ../data/geany.glade.h:385 ../src/keybindings.c:575
 msgid "Go to Ne_xt Marker"
-msgstr "Iet uz _nākošo marķieri"
+msgstr "Iet uz _nākamo marķieri"
 
 #: ../data/geany.glade.h:386 ../src/keybindings.c:578
 msgid "Go to Pre_vious Marker"
@@ -1818,7 +1818,7 @@ msgstr "_Iet uz rindu..."
 
 #: ../data/geany.glade.h:388 ../src/keybindings.c:538
 msgid "Find Next _Selection"
-msgstr "Atra_st nākošo atlasi"
+msgstr "Atra_st nākamo atlasi"
 
 #: ../data/geany.glade.h:389 ../src/keybindings.c:540
 msgid "Find Pre_vious Selection"
@@ -2383,7 +2383,7 @@ msgstr "Ievadiet pielāgoto tekstu, kuru pievienot būvēšanas komandai."
 
 #: ../src/build.c:1347
 msgid "_Next Error"
-msgstr "_Nākošā kļūda"
+msgstr "_Nākamā kļūda"
 
 #: ../src/build.c:1349
 msgid "_Previous Error"
@@ -3418,7 +3418,7 @@ msgstr "Atlasīt uz iepriekšējo vārda daļu"
 
 #: ../src/keybindings.c:454
 msgid "Select to next word part"
-msgstr "Atlasīt uz nākošo vārda daļu"
+msgstr "Atlasīt uz nākamo vārda daļu"
 
 #: ../src/keybindings.c:462
 msgid "Toggle line commentation"
@@ -3506,7 +3506,7 @@ msgstr "Atrast"
 
 #: ../src/keybindings.c:533
 msgid "Find Next"
-msgstr "Atrast nākošo"
+msgstr "Atrast nākamo"
 
 #: ../src/keybindings.c:535
 msgid "Find Previous"
@@ -3522,7 +3522,7 @@ msgstr "Atrast datnēs"
 
 #: ../src/keybindings.c:547
 msgid "Next Message"
-msgstr "Nākošais ziņojums"
+msgstr "Nākamais ziņojums"
 
 #: ../src/keybindings.c:549
 msgid "Previous Message"
@@ -3582,7 +3582,7 @@ msgstr "Iet uz iepriekšējo vārda daļu"
 
 #: ../src/keybindings.c:596
 msgid "Go to Next Word Part"
-msgstr "Iet uz nākošo vārda daļu"
+msgstr "Iet uz nākamo vārda daļu"
 
 #: ../src/keybindings.c:601
 msgid "Toggle All Additional Widgets"
@@ -3738,7 +3738,7 @@ msgstr "Izveidot objektu"
 
 #: ../src/keybindings.c:702
 msgid "Next error"
-msgstr "Nākošā kļūda"
+msgstr "Nākamā kļūda"
 
 #: ../src/keybindings.c:704
 msgid "Previous error"
@@ -4415,7 +4415,7 @@ msgstr "Ie_priekšējais"
 
 #: ../src/search.c:477
 msgid "_Next"
-msgstr "_Nākošais"
+msgstr "_Nākamais"
 
 #: ../src/search.c:481 ../src/search.c:639 ../src/search.c:878
 msgid "_Search for:"
