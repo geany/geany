@@ -772,10 +772,11 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
 	GError *error = NULL;
-	gchar *argv[] = { "/bin/sh", "-c", NULL, NULL };
+	gchar *argv[] = { tool_prefs.shell_cmd, "-l", "-c", NULL, NULL };
 	gchar *working_dir;
 	gchar *utf8_working_dir;
 	gchar *cmd_string;
+	gchar *shell = NULL;
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
@@ -799,8 +800,16 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 
 #ifdef G_OS_UNIX
 	cmd_string = utils_get_locale_from_utf8(cmd);
-	argv[2] = cmd_string;
 	cmd = NULL;  /* under Unix, use argv to start cmd via sh for compatibility */
+	shell = g_path_get_basename(tool_prefs.shell_cmd);
+	if (g_strcmp0(shell, "csh") == 0 || g_strcmp0(shell, "tcsh") == 0)
+	{
+		/* csh and tcsh don't support -l together with -c so don't use it */
+		argv[1] = "-c";
+		argv[2] = cmd_string;
+	}
+	else
+		argv[3] = cmd_string;
 #else
 	/* Expand environment variables like %blah%. */
 	cmd_string = win32_expand_environment_variables(cmd);
@@ -825,6 +834,7 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 
 	g_free(working_dir);
 	g_free(cmd_string);
+	g_free(shell);
 }
 
 

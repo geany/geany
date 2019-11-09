@@ -49,6 +49,7 @@ typedef struct GeanyToolPrefs
 	gchar			*term_cmd;				/**< terminal emulator command */
 	gchar			*grep_cmd;				/**< grep command */
 	gchar			*context_action_cmd;	/**< context action command */
+	gchar			*shell_cmd;				/**< shell used for running commands */
 }
 GeanyToolPrefs;
 
