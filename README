@@ -75,17 +75,13 @@ and open the online version instead when requested.
     building instructions for these platforms, please check the wiki
     at https://wiki.geany.org/howtos/.
 
-Installing from a Git clone
+Installing from a Git clone/release tarball
 +++++++++++++++++++++++++++
 
 Install Autotools (*automake*, *autoconf* and *libtool*), *intltool*,
 and the GLib development files **before** running any of the following
 commands, as well as *rst2html* from Docutils (see above for details).
-Then, run ``./autogen.sh`` and then follow the instructions for
-`installing from a release tarball`_.
-
-Installing from a release tarball
-+++++++++++++++++++++++++++++++++
+Then, run ``./autogen.sh``.
 
 Run the the following three commands::
 
