@@ -186,6 +186,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( COFFEESCRIPT, NONE,       "CoffeeScript",     NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( GO,         GO,           "Go",               NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( ZEPHIR,     ZEPHIR,       "Zephir",           NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( SMALLTALK,  NONE,         "Smalltalk",        NULL,                      SOURCE_FILE, SCRIPT   );
 }
 
 

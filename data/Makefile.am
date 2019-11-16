@@ -67,6 +67,7 @@ filetypes = \
 	filedefs/filetypes.rust \
 	filedefs/filetypes.Scala.conf \
 	filedefs/filetypes.sh \
+	filedefs/filetypes.smalltalk \
 	filedefs/filetypes.sql \
 	filedefs/filetypes.Swift.conf \
 	filedefs/filetypes.TypeScript.conf \

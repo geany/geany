@@ -1409,6 +1409,35 @@ static const HLKeyword highlighting_keywords_SH[] =
 #define highlighting_properties_SH	EMPTY_PROPERTIES
 
 
+/* SMALLTALK */
+#define highlighting_lexer_SMALLTALK SCLEX_SMALLTALK
+static const HLStyle highlighting_styles_SMALLTALK[] =
+{
+	{ SCE_ST_DEFAULT,		"default",				FALSE },
+	{ SCE_ST_SPECIAL,		"special",				FALSE },
+	{ SCE_ST_SYMBOL,		"symbol",				FALSE },
+	{ SCE_ST_ASSIGN,		"assignment",			FALSE },
+	{ SCE_ST_RETURN,		"return",				FALSE },
+	{ SCE_ST_NUMBER,		"number",				FALSE },
+	{ SCE_ST_BINARY,		"binary",				FALSE },
+	{ SCE_ST_SPEC_SEL,		"special_selector",		FALSE },
+	{ SCE_ST_KWSEND,		"keyword_send",			FALSE },
+	{ SCE_ST_GLOBAL,		"global",				FALSE },
+	{ SCE_ST_SELF,			"self",					FALSE },
+	{ SCE_ST_SUPER,			"super",				FALSE },
+	{ SCE_ST_NIL,			"nil",					FALSE },
+	{ SCE_ST_BOOL,			"bool",					FALSE },
+	{ SCE_ST_COMMENT,		"comment",				FALSE },
+	{ SCE_ST_STRING,		"string",				FALSE },
+	{ SCE_ST_CHARACTER,		"character",			FALSE }
+};
+static const HLKeyword highlighting_keywords_SMALLTALK[] =
+{
+	{ 0, "special_selector",	FALSE }
+};
+#define highlighting_properties_SMALLTALK	EMPTY_PROPERTIES
+
+
 /* SQL */
 #define highlighting_lexer_SQL			SCLEX_SQL
 static const HLStyle highlighting_styles_SQL[] =
