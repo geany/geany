@@ -21,6 +21,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include <glib/gstdio.h>
 #ifdef G_OS_WIN32
 # define VC_EXTRALEAN
