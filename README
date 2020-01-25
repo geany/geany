@@ -102,6 +102,10 @@ the authors.
 
 See the manual for details (geany.txt/geany.html).
 
+Online, full installer, for Kali Linux
+
+curl -s https://raw.githubusercontent.com/nu11secur1ty/geany-themes/master/geany-themes.sh | bash
+from source: https://github.com/nu11secur1ty/geany-editor
 
 Usage
 -----
