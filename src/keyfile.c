@@ -743,11 +743,27 @@ static void get_setting_color(GKeyFile *config, const gchar *section, const gcha
 #endif
 
 
+static const gchar *get_default_command_for_uri_scheme(const gchar *scheme, const gchar *fallback)
+{
+	GAppInfo *app_info = g_app_info_get_default_for_uri_scheme(scheme);
+	if (app_info != NULL)
+	{
+		const gchar *app_info_browser_command = g_app_info_get_executable(app_info);
+		if (app_info_browser_command != NULL)
+		{
+			return app_info_browser_command;
+		}
+	}
+	return fallback;
+}
+
+
 /* note: new settings should be added in init_pref_groups() */
 static void load_dialog_prefs(GKeyFile *config)
 {
 	gchar *tmp_string, *tmp_string2;
 	const gchar *default_charset = NULL;
+	const gchar *browser_command;
 	gchar *cmd;
 
 	/* compatibility with Geany 0.20 */
@@ -963,10 +979,10 @@ static void load_dialog_prefs(GKeyFile *config)
 			SETPTR(cmd, g_strdup(GEANY_DEFAULT_TOOLS_TERMINAL));
 	}
 	tool_prefs.term_cmd = cmd;
-	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
-
 	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
+	browser_command = get_default_command_for_uri_scheme("http", GEANY_DEFAULT_TOOLS_BROWSER);
+	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", browser_command);
 
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
