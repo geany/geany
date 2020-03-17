@@ -117,6 +117,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	use_tab_to_indent;	/* makes tab key indent instead of insert a tab char */
 	gboolean	smart_home_key;
 	gboolean	newline_strip;
+	gboolean	comment_blank_lines;
 	gboolean	auto_complete_symbols;
 	gboolean	auto_close_xml_tags;
 	gboolean	complete_snippets;

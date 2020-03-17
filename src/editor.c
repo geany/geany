@@ -3184,7 +3184,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 			}
 
 			/* we are still here, so the above lines were not already comments, so comment it */
-			count_commented += editor_do_comment(editor, i, FALSE, TRUE, TRUE);
+			count_commented += editor_do_comment(editor, i, editor_prefs.comment_blank_lines, TRUE, TRUE);
 		}
 		/* use multi line comment */
 		else

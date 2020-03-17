@@ -2098,6 +2098,17 @@ Newline strips trailing spaces
     setting will clear a blank line, it will not set the next line
     indentation back to zero.
 
+Comment blank line(s)
+    When commenting line(s) -- Edit=>Format=>Comment Line(s) or
+    Toggle Line Commentation -- this will also add the comment tag to
+    blank line(s). This is useful for languages like Ruby, Python, etc.
+    For example, in the below code, the middle line will also be
+    prefixed with "#", if this option is set.
+
+     # puts <<EOD
+     # 
+     # EOD
+
 Line breaking column
     The editor column number to insert a newline at when Line Breaking
     is enabled for the current document.
