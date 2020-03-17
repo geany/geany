@@ -1026,6 +1026,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(HTML);
 		init_styleset_case(JAVA);
 		init_styleset_case(JS);
+		init_styleset_case(JSON);
 		init_styleset_case(LATEX);
 		init_styleset_case(LUA);
 		init_styleset_case(MAKE);
@@ -1114,6 +1115,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(HTML);
 		styleset_case(JAVA);
 		styleset_case(JS);
+		styleset_case(JSON);
 		styleset_case(LATEX);
 		styleset_case(LUA);
 		styleset_case(MAKE);

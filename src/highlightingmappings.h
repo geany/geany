@@ -883,6 +883,31 @@ static const HLKeyword highlighting_keywords_JS[] =
 };
 #define highlighting_properties_JS	highlighting_properties_C
 
+/* JSON */
+#define highlighting_lexer_JSON		SCLEX_JSON
+static const HLStyle highlighting_styles_JSON[] =
+{
+	{ SCE_JSON_DEFAULT,		"default",		FALSE },
+	{ SCE_JSON_NUMBER,		"number",		FALSE },
+	{ SCE_JSON_STRING,		"string",		FALSE },
+	{ SCE_JSON_STRINGEOL,		"stringeol",		FALSE },
+	{ SCE_JSON_PROPERTYNAME,	"string",		FALSE },
+	{ SCE_JSON_ESCAPESEQUENCE,	"escapesequence",	FALSE },
+	{ SCE_JSON_LINECOMMENT,		"commentline",		FALSE },
+	{ SCE_JSON_BLOCKCOMMENT,	"comment",		FALSE },
+	{ SCE_JSON_OPERATOR,		"operator",		FALSE },
+	{ SCE_JSON_URI,			"string",		FALSE },
+	{ SCE_JSON_COMPACTIRI,		"string",		FALSE },
+	{ SCE_JSON_KEYWORD,		"keyword",		FALSE },
+	{ SCE_JSON_LDKEYWORD,		"keyword",		FALSE },
+	{ SCE_JSON_ERROR,		"error",		FALSE }
+};
+static const HLKeyword highlighting_keywords_JSON[] =
+{
+	{ 0, "json",	FALSE },
+	{ 1, "json-ld",	FALSE }
+};
+#define highlighting_properties_JSON	EMPTY_PROPERTIES
 
 /* LaTeX */
 #define highlighting_lexer_LATEX		SCLEX_LATEX

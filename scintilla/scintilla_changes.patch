@@ -118,7 +118,7 @@ index ed47aa8..e58f1ab 100644
 -	LINK_LEXER(lmIHex);
 -	LINK_LEXER(lmIndent);
 -	LINK_LEXER(lmInno);
--	LINK_LEXER(lmJSON);
+ 	LINK_LEXER(lmJSON);
 -	LINK_LEXER(lmKix);
 -	LINK_LEXER(lmKVIrc);
  	LINK_LEXER(lmLatex);
