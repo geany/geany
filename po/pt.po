@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2019-09-22 11:47+0100\n"
-"Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
+"PO-Revision-Date: 2020-04-07 17:14+0100\n"
+"Last-Translator: Pedro Albuquerque <pmra@protonmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: Plural-Forms: nplurals=2; plural=n>1;\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Poedit 2.3\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -1881,7 +1881,7 @@ msgstr "Mostrar espaço _branco"
 
 #: ../data/geany.glade.h:398
 msgid "Show Line _Endings"
-msgstr "Mostrar finais d_e inha"
+msgstr "Mostrar finais d_e linha"
 
 #: ../data/geany.glade.h:399
 msgid "Show Indentation _Guides"
