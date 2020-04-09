@@ -106,7 +106,7 @@ Requirements
 You will need the GTK (>= 2.24) libraries and their dependencies
 (Pango, GLib and ATK). Your distro should provide packages for these,
 usually installed by default. For Windows, you can download an installer
-from the website which bundles these libraries.
+from the website which bundles these libraries.marker_mark
 
 
 Binary packages
@@ -4622,6 +4622,14 @@ marker_search
     Only the second argument is interpreted.
 
     *Example:* ``marker_search=0x000000;0xb8f4b8;false;false``
+
+marker_search_translucency
+    Translucency for the search marker's outline (first argument) and
+    background (second argument). Values between 0 and 255 are accepted.
+
+    Only the first and second arguments are interpreted.
+
+    *Example:* ``marker_search_translucency=127;64``
 
 marker_mark
     The style for a marked line (e.g when using the "Toggle Marker" keybinding
