@@ -106,7 +106,7 @@ Requirements
 You will need the GTK (>= 2.24) libraries and their dependencies
 (Pango, GLib and ATK). Your distro should provide packages for these,
 usually installed by default. For Windows, you can download an installer
-from the website which bundles these libraries.marker_mark
+from the website which bundles these libraries.
 
 
 Binary packages
