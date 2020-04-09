@@ -665,7 +665,7 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	 * cursor positions. */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SNIPPET, INDIC_DOTBOX);
 	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SNIPPET, 60);
-	
+
 	/* define marker symbols
 	 * 0 -> line marker */
 	SSM(sci, SCI_MARKERDEFINE, 0, SC_MARK_SHORTARROW);
