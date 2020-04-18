@@ -1,18 +1,19 @@
 # Translation Geany to Russian.
-# Copyright (C) 2006-2019 The Geany contributors.
+# Copyright (C) 2006-2020 The Geany contributors.
 # This file is distributed under the same license as the Geany package.
 # John Wehin <john.wehin@gmail.com>, 2008-2009.
 # Denis Koryavov <dkoryavov@yandex.ru>, 2010.
 # Igor Burmistrov <meyday@yandex.ru>, 2012
 # Maxim Musatov <m1kc@yandex.ru>, 2012
 # Pavel Roschin <rpg89(at)post(dot)ru>, 2014-2019
+# Dmitry Unruh <dmitryunruh@googlemail.com>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.35\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2019-04-16 21:50+0400\n"
-"Last-Translator: Pavel Roschin <rpg89(at)post(dot)ru>\n"
+"PO-Revision-Date: 2020-04-18 11:35+1000\n"
+"Last-Translator: Dmitry Unruh <dmitryunruh@googlemail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -435,7 +436,7 @@ msgstr "Имя"
 
 #: ../data/geany.glade.h:84
 msgid "Appearance"
-msgstr "Внешний вид"
+msgstr "Появление"
 
 #: ../data/geany.glade.h:85
 msgid "Show documents list"
