@@ -25,7 +25,7 @@ label=label
 
 [keywords]
 # all items must be in one line
-keywords=and break do else elseif end false for function if in local nil not or repeat return then true until while goto
+keywords=and break do else elseif end false for function goto if in local nil not or repeat return then true until while
 # Basic functions
 function_basic=_ALERT assert call collectgarbage coroutine debug dofile dostring error _ERRORMESSAGE foreach foreachi _G gcinfo getfenv getmetatable getn globals _INPUT io ipairs load loadfile loadlib loadstring math module newtype next os _OUTPUT pairs pcall print _PROMPT rawequal rawget rawset require select setfenv setmetatable sort _STDERR _STDIN _STDOUT string table tinsert tonumber tostring tremove type unpack _VERSION xpcall
 # String, (table) & math functions
