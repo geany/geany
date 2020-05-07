@@ -21,7 +21,7 @@
 #ifndef GEANY_PREFS_H
 #define GEANY_PREFS_H 1
 
-#include <glib.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -62,6 +62,8 @@ extern GeanyToolPrefs tool_prefs;
 void prefs_show_dialog(void);
 
 void prefs_kb_search_name(const gchar *search);
+
+gboolean on_prefs_edit_override(GtkWidget *widget, GdkEventButton *event, gpointer data);
 
 #endif /* GEANY_PRIVATE */
 
