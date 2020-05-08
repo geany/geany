@@ -3063,7 +3063,7 @@ static void tagCheck (statementInfo *const st)
 			else if (isType (prev, TOKEN_NAME))
 			{
 				if (isContextualKeyword (prev2))
-					makeTag (prev, st, true, TAG_EXTERN_VAR);
+					makeTag (prev, st, true, TAG_TYPEDEF);
 				else
 					qualifyVariableTag (st, prev);
 			}
