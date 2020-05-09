@@ -1160,6 +1160,17 @@ gint main_lib(gint argc, gchar **argv)
 	geany_debug(geany_lib_versions,
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
 		glib_major_version, glib_minor_version, glib_micro_version);
+
+#if GLIB_CHECK_VERSION(2, 64, 0)
+	gchar *os_prettyname = g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME);
+	gchar *os_codename = g_get_os_info(G_OS_INFO_KEY_VERSION_CODENAME);
+	geany_debug("OS: %s (%s)",
+		os_prettyname ? os_prettyname : "Unknown",
+		os_codename ? os_codename : "Unknown");
+	g_free(os_prettyname);
+	g_free(os_codename);
+#endif
+
 	geany_debug("System data dir: %s", app->datadir);
 	utf8_configdir = utils_get_utf8_from_locale(app->configdir);
 	geany_debug("User config dir: %s", utf8_configdir);
