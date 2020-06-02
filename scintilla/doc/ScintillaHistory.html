@@ -566,6 +566,28 @@
       </li>
     </ul>
     <h3>
+       <a href="https://www.scintilla.org/scite442.zip">Release 4.4.2</a>
+    </h3>
+    <ul>
+	<li>
+	Released 2 June 2020.
+	</li>
+	<li>
+	On Cocoa using Xcode changed Lexilla.dylib install path to @rpath as would otherwise try /usr/lib which
+	won't work for sandboxed applications.
+	</li>
+	<li>
+	On Cocoa using Xcode made work on old versions of macOS by specifying deployment target as 10.8
+	instead of 10.15.
+	</li>
+	<li>
+	On Win32 fix static linking of Lexilla by specifying calling convention in Lexilla.h.
+	</li>
+	<li>
+	SciTE now uses default shared library extension even when directory contains '.'.
+	</li>
+    </ul>
+    <h3>
        <a href="https://www.scintilla.org/scite440.zip">Release 4.4.0</a>
     </h3>
     <ul>
