@@ -2491,6 +2491,11 @@ void ui_init_builder(void)
 			g_warning("Unable to get name from GtkBuilder object");
 			continue;
 		}
+		else
+		{
+			/* Set a default name for use from CSS by name */
+			gtk_widget_set_name(widget, name);
+		}
 
 		toplevel = ui_get_top_parent(widget);
 		if (toplevel)
