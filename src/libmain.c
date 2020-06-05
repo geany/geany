@@ -297,6 +297,12 @@ static void main_init(void)
 	gtk_widget_set_name(ui_lookup_widget(main_widgets.window, "menubar1"), "GeanyMenubar");
 	gtk_widget_set_name(main_widgets.toolbar, "GeanyToolbar");
 
+	/* Setting additional widget names for easier and more specific CSS theming */
+	gtk_widget_set_name(main_widgets.notebook, "GeanyEditorNotebook");
+	gtk_widget_set_name(main_widgets.sidebar_notebook, "GeanySidebar");
+	gtk_widget_set_name(main_widgets.message_window_notebook, "GeanyMsgNotebook");
+	gtk_widget_set_name(main_widgets.project_menu, "GeanyProjectMenu");
+
 	gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
 		GEANY_WINDOW_DEFAULT_WIDTH, GEANY_WINDOW_DEFAULT_HEIGHT);
 }
