@@ -809,7 +809,7 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 
 
 /* folding margin visibility */
-static void sci_set_folding_margin_visible(ScintillaObject *sci, gboolean set)
+static void set_folding_margin_visible(ScintillaObject *sci, gboolean set)
 {
 	if (set)
 	{
@@ -899,7 +899,7 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 		}
 	}
 
-	sci_set_folding_margin_visible(sci, editor_prefs.folding);
+	set_folding_margin_visible(sci, editor_prefs.folding);
 
 	/* keywords */
 	foreach_range(i, n_keywords)
