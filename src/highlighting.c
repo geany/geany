@@ -96,6 +96,7 @@ enum	/* Geany common styling */
 	GCS_LINE_HEIGHT,
 	GCS_CALLTIPS,
 	GCS_INDICATOR_ERROR,
+	GCS_FOLDING_MARGIN_WIDTH,
 	GCS_MAX
 };
 
@@ -564,6 +565,8 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 		1, 1, &common_style_set.fold_marker, &common_style_set.fold_lines);
 	get_keyfile_ints(config, config_home, "styling", "folding_horiz_line",
 		2, 0, &common_style_set.fold_draw_line, NULL);
+	get_keyfile_ints(config, config_home, "styling", "folding_margin_width",
+		1, 0, &common_style_set.styling[GCS_FOLDING_MARGIN_WIDTH].background, NULL);
 	get_keyfile_ints(config, config_home, "styling", "caret_width",
 		1, 0, &common_style_set.styling[GCS_CARET].background, NULL); /* caret.foreground used earlier */
 	get_keyfile_int(config, config_home, "styling", "line_wrap_visuals",
@@ -805,6 +808,22 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 }
 
 
+/* folding margin visibility */
+static void set_folding_margin_visible(ScintillaObject *sci, gboolean set)
+{
+	if (set)
+	{
+		SSM(sci, SCI_SETMARGINWIDTHN, 2, common_style_set.styling[GCS_FOLDING_MARGIN_WIDTH].background);
+		SSM(sci, SCI_SETMARGINSENSITIVEN, 2, TRUE);
+	}
+	else
+	{
+		SSM(sci, SCI_SETMARGINSENSITIVEN, 2, FALSE);
+		SSM(sci, SCI_SETMARGINWIDTHN, 2, 0);
+	}
+}
+
+
 /* Merge & assign global typedefs and user secondary keywords.
  * keyword_idx is used for both style_sets[].keywords and scintilla keyword style number */
 static void merge_type_keywords(ScintillaObject *sci, guint ft_id, guint keyword_idx)
@@ -879,6 +898,8 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 			set_sci_style(sci, styles[i].style, ft_id, i);
 		}
 	}
+
+	set_folding_margin_visible(sci, editor_prefs.folding);
 
 	/* keywords */
 	foreach_range(i, n_keywords)
