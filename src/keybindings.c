@@ -495,6 +495,12 @@ static void init_default_kb(void)
 		0, 0, "edit_sendtocmd8", _("Send to Custom Command 8"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD9, NULL,
 		0, 0, "edit_sendtocmd9", _("Send to Custom Command 9"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD10, NULL,
+		0, 0, "edit_sendtocmd10", _("Send to Custom Command 10"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD11, NULL,
+		0, 0, "edit_sendtocmd11", _("Send to Custom Command 11"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD12, NULL,
+		0, 0, "edit_sendtocmd12", _("Send to Custom Command 12"), NULL);
 	/* may fit better in editor group */
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
 		0, 0, "edit_sendtovte", _("_Send Selection to Terminal"), "send_selection_to_vte1");
