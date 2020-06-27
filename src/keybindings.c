@@ -2481,6 +2481,18 @@ static gboolean cb_func_format_action(guint key_id)
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 8)
 				tools_execute_custom_command(doc, ui_prefs.custom_commands[8]);
 			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD10:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 9)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[9]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD11:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 10)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[10]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD12:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 11)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[11]);
+			break;
 		case GEANY_KEYS_FORMAT_SENDTOVTE:
 			on_send_selection_to_vte1_activate(NULL, NULL);
 			break;
