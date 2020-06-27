@@ -558,6 +558,9 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 		case 6: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD7; break;
 		case 7: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD8; break;
 		case 8: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD9; break;
+		case 9: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD10; break;
+		case 10: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD11; break;
+		case 11: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD12; break;
 	}
 
 	item = gtk_menu_item_new_with_label(label);
