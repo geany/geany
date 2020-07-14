@@ -1692,19 +1692,20 @@ static void on_search1_activate(GtkMenuItem *menuitem, gpointer user_data)
  * if user_data is set, it is the GeanyDocument to keep */
 void on_close_other_documents1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	guint i;
 	GeanyDocument *cur_doc = user_data;
 
 	if (cur_doc == NULL)
 		cur_doc = document_get_current();
 
-	for (i = 0; i < documents_array->len; i++)
+	for (gint i = 0; i < gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));)
 	{
-		GeanyDocument *doc = documents[i];
+		GeanyDocument *doc = document_get_from_page(i);
 
-		if (doc == cur_doc || ! doc->is_valid)
+		if (doc == cur_doc)
+		{
+			i++;
 			continue;
-
+		}
 		if (! document_close(doc))
 			break;
 	}
