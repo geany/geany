@@ -459,8 +459,7 @@ static void on_copy_filename_to_clipboard_activate(GtkMenuItem *menuitem, GeanyD
 {
         g_return_if_fail(doc->is_valid);
 
-        gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), g_path_get_basename(doc->file_name))
-
+        gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), g_path_get_basename(doc->real_path))
 }
 
 
