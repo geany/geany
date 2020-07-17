@@ -537,7 +537,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-        menu_item = ui_image_menu_item_new(GTK_STOCK_COPY, _("Copy filename to clipboard"));
+        menu_item = ui_image_menu_item_new(GTK_STOCK_PASTE, _("Copy filename to clipboard"));
         gtk_widget_show(menu_item);
         gtk_container_add(GTK_CONTAINER(menu), menu_item);
         g_signal_connect(menu_item, "activate",
@@ -546,7 +546,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
         if (doc == NULL || !doc->real_path)
                 gtk_widget_set_sensitive(menu_item, FALSE);
 
-        menu_item = ui_image_menu_item_new(GTK_STOCK_COPY, _("Copy file path to clipboard"));
+        menu_item = ui_image_menu_item_new(GTK_STOCK_PASTE, _("Copy file path to clipboard"));
         gtk_widget_show(menu_item);
         gtk_container_add(GTK_CONTAINER(menu), menu_item);
         g_signal_connect(menu_item, "activate",
@@ -555,7 +555,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
         if (doc == NULL || !doc->real_path)
                 gtk_widget_set_sensitive(menu_item, FALSE);
 
-        menu_item = ui_image_menu_item_new(GTK_STOCK_COPY, _("Copy file directory to clipboard"));
+        menu_item = ui_image_menu_item_new(GTK_STOCK_PASTE, _("Copy file directory to clipboard"));
         gtk_widget_show(menu_item);
         gtk_container_add(GTK_CONTAINER(menu), menu_item);
         g_signal_connect(menu_item, "activate",
