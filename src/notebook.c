@@ -463,6 +463,14 @@ static void on_copy_filename_to_clipboard_activate(GtkMenuItem *menuitem, GeanyD
 }
 
 
+static void on_copy_file_path_to_clipboard_activate(GtkMenuItem *menuitem, GeanyDocument *doc)
+{
+        g_return_if_fail(doc->is_valid);
+
+        gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), g_path_get_dirname(doc->real_path))
+}
+
+
 static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 {
 	GtkWidget *menu_item;
