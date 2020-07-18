@@ -541,32 +541,32 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-		menu_item = ui_image_menu_item_new(GTK_STOCK_PASTE, _("Copy _Basename to Clipboard"));
-		gtk_widget_show(menu_item);
-		gtk_container_add(GTK_CONTAINER(menu), menu_item);
-		g_signal_connect(menu_item, "activate",
-				G_CALLBACK(on_copy_basename_to_clipboard_activate), doc);
-		/* disable if not on disk */
-		if (doc == NULL || !doc->real_path)
-				gtk_widget_set_sensitive(menu_item, FALSE);
+	menu_item = ui_image_menu_item_new(GTK_STOCK_PASTE, _("Copy _Basename to Clipboard"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+			G_CALLBACK(on_copy_basename_to_clipboard_activate), doc);
+	/* disable if not on disk */
+	if (doc == NULL || !doc->real_path)
+			gtk_widget_set_sensitive(menu_item, FALSE);
 
-		menu_item = ui_image_menu_item_new(GTK_STOCK_PASTE, _("Copy _Full Path to Clipboard"));
-		gtk_widget_show(menu_item);
-		gtk_container_add(GTK_CONTAINER(menu), menu_item);
-		g_signal_connect(menu_item, "activate",
-				G_CALLBACK(on_copy_full_path_to_clipboard_activate), doc);
-		/* disable if not on disk */
-		if (doc == NULL || !doc->real_path)
-				gtk_widget_set_sensitive(menu_item, FALSE);
+	menu_item = ui_image_menu_item_new(GTK_STOCK_PASTE, _("Copy _Full Path to Clipboard"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+			G_CALLBACK(on_copy_full_path_to_clipboard_activate), doc);
+	/* disable if not on disk */
+	if (doc == NULL || !doc->real_path)
+			gtk_widget_set_sensitive(menu_item, FALSE);
 
-		menu_item = ui_image_menu_item_new(GTK_STOCK_PASTE, _("Copy _Directory Path to Clipboard"));
-		gtk_widget_show(menu_item);
-		gtk_container_add(GTK_CONTAINER(menu), menu_item);
-		g_signal_connect(menu_item, "activate",
-				G_CALLBACK(on_copy_dir_path_to_clipboard_activate), doc);
-		/* disable if not on disk */
-		if (doc == NULL || !doc->real_path)
-				gtk_widget_set_sensitive(menu_item, FALSE);
+	menu_item = ui_image_menu_item_new(GTK_STOCK_PASTE, _("Copy _Directory Path to Clipboard"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+			G_CALLBACK(on_copy_dir_path_to_clipboard_activate), doc);
+	/* disable if not on disk */
+	if (doc == NULL || !doc->real_path)
+			gtk_widget_set_sensitive(menu_item, FALSE);
 
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
 }
