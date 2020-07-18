@@ -458,18 +458,20 @@ static void on_close_documents_right_activate(GtkMenuItem *menuitem, GeanyDocume
 static void on_copy_basename_to_clipboard_activate(GtkMenuItem *menuitem, GeanyDocument *doc)
 {
 	g_return_if_fail(doc->is_valid);
-	
+
 	gchar *bname = g_path_get_basename(doc->real_path);
-	gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), bname, -1);
+	gchar *utf8_bname = utils_get_utf8_from_locale(bname);
 	g_free(bname);
+	gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), utf8_bname, -1);
+	g_free(utf8_bname);
 }
 
 
 static void on_copy_full_path_to_clipboard_activate(GtkMenuItem *menuitem, GeanyDocument *doc)
 {
 	g_return_if_fail(doc->is_valid);
-	
-	gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), doc->real_path, -1);
+
+	gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), doc->file_name, -1);
 }
 
 
@@ -478,8 +480,10 @@ static void on_copy_dir_path_to_clipboard_activate(GtkMenuItem *menuitem, GeanyD
 	g_return_if_fail(doc->is_valid);
 
 	gchar *dirpath = g_path_get_dirname(doc->real_path);
-	gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), dirpath, -1);
+	gchar *utf8_dirpath = utils_get_utf8_from_locale(dirpath);
 	g_free(dirpath);
+	gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), utf8_dirpath, -1);
+	g_free(utf8_dirpath);
 }
 
 
