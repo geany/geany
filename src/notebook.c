@@ -477,7 +477,7 @@ static void on_copy_dir_path_to_clipboard_activate(GtkMenuItem *menuitem, GeanyD
 {
 	g_return_if_fail(doc->is_valid);
 
-	gchar *dirpath = g_path_get_basename(doc->real_path);
+	gchar *dirpath = g_path_get_dirname(doc->real_path);
 	gtk_clipboard_set_text(gtk_clipboard_get(GDK_NONE), dirpath, -1);
 	g_free(dirpath);
 }
