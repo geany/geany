@@ -477,24 +477,27 @@ static void init_default_kb(void)
 		0, 0, "edit_decreaseindentbyspace", _("Decrease indent by one space"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_AUTOINDENT, NULL,
 		0, 0, "edit_autoindent", _("S_mart Line Indent"), "smart_line_indent1");
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD1, NULL,
-		GDK_1, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd1", _("Send to Custom Command 1"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD2, NULL,
-		GDK_2, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD3, NULL,
-		GDK_3, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD4, NULL,
-		0, 0, "edit_sendtocmd4", _("Send to Custom Command 4"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD5, NULL,
-		0, 0, "edit_sendtocmd5", _("Send to Custom Command 5"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD6, NULL,
-		0, 0, "edit_sendtocmd6", _("Send to Custom Command 6"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD7, NULL,
-		0, 0, "edit_sendtocmd7", _("Send to Custom Command 7"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD8, NULL,
-		0, 0, "edit_sendtocmd8", _("Send to Custom Command 8"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD9, NULL,
-		0, 0, "edit_sendtocmd9", _("Send to Custom Command 9"), NULL);
+
+#define ADD_KB_CUSTOM_COMMAND(n, key, mod) \
+	do { \
+		gchar *label = g_strdup_printf(_("Send to Custom Command %d"), n); \
+		add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD##n, NULL, key, mod, \
+				"edit_sendtocmd"#n, label, NULL); \
+		/* leak @label, but it's required for the whole process lifetime so it doesn't matter */ \
+	} while(0)
+
+	ADD_KB_CUSTOM_COMMAND(1, GDK_1, GEANY_PRIMARY_MOD_MASK);
+	ADD_KB_CUSTOM_COMMAND(2, GDK_2, GEANY_PRIMARY_MOD_MASK);
+	ADD_KB_CUSTOM_COMMAND(3, GDK_3, GEANY_PRIMARY_MOD_MASK);
+	ADD_KB_CUSTOM_COMMAND(4, 0, 0);
+	ADD_KB_CUSTOM_COMMAND(5, 0, 0);
+	ADD_KB_CUSTOM_COMMAND(6, 0, 0);
+	ADD_KB_CUSTOM_COMMAND(7, 0, 0);
+	ADD_KB_CUSTOM_COMMAND(8, 0, 0);
+	ADD_KB_CUSTOM_COMMAND(9, 0, 0);
+
+#undef ADD_KB_CUSTOM_COMMAND
+
 	/* may fit better in editor group */
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
 		0, 0, "edit_sendtovte", _("_Send Selection to Terminal"), "send_selection_to_vte1");
