@@ -117,7 +117,7 @@ msgstr "_Найти использования"
 
 #: ../data/geany.glade.h:20 ../src/symbols.c:2623
 msgid "Find _Document Usage"
-msgstr "Найти использования _документа"
+msgstr "Найти использования в _документе"
 
 #: ../data/geany.glade.h:21
 msgid "Go to Symbol Defini_tion"
