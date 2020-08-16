@@ -133,7 +133,7 @@ Doxyfile-gi.stamp: Doxyfile-gi Doxyfile.stamp $(doxygen_dependencies)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile-gi && echo "" > $@
 
 geany-gtkdoc.h: Doxyfile-gi.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
-	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) -o $@ \
+	$(AM_V_GEN)$(PYTHON) $(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) -o $@ \
 			--sci-output geany-sciwrappers-gtkdoc.h
 
 geany-sciwrappers-gtkdoc.h: geany-gtkdoc.h
