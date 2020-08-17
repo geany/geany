@@ -1,9 +1,10 @@
 # we use both C and C++, so advertize C++
 language: cpp
 cache: ccache
-dist: trusty
-compiler:
-  - gcc
+os: linux
+dist: xenial
+# gcc 5 is the default on xenial
+compiler: gcc
 env:
   - GTK3=no BINRELOC=no
   - GTK3=yes BINRELOC=no
@@ -11,7 +12,81 @@ env:
   - GTK3=yes BINRELOC=yes
   - GTK3=no MINGW=yes
   - GTK3=yes MINGW=yes
+matrix:
+# gcc
+  include:
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.8
+      env:
+        - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
+        - TARGETS="all check"
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+        - TARGETS="all check"
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - TARGETS="all check"
+    - os: linux
+      dist: xenial
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-8
+      env:
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+        - TARGETS="all check"
+
+# clang
+    - os: linux
+      dist: xenial
+      # xenial has clang 7
+      compiler: clang
+      env:
+        - TARGETS="all check"
+    - os: linux
+      dist: trusty
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-6.0
+          packages:
+            - clang-6.0
+      env:
+        - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
+        - TARGETS="all check"
+
 before_install:
+  - eval "${MATRIX_EVAL}"
   - sudo apt-get update -qq
 install:
   - sudo apt-get install -y intltool libtool
@@ -25,19 +100,21 @@ install:
   - sudo apt-get install -y python-lxml
 before_script:
   - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=implicit-function-declaration"
+  - echo $CFLAGS
+  - $CC --version
+  - $CXX --version
 script:
   - NOCONFIGURE=1 ./autogen.sh
-  - >
-    if [ -n "$MINGW" ]; then
+  - if [ -n "$MINGW" ]; then
       arg=-2; [ "$GTK3" = yes ] && arg=-3;
       unset CC CXX;
       sh ./scripts/cross-build-mingw.sh $arg;
     else
-      CONFIGURE_FLAGS="--enable-gtk3=$GTK3 --enable-binreloc=$BINRELOC";
+      CONFIGURE_FLAGS="--enable-gtk3=$GTK3 --enable-binreloc=$BINRELOC --disable-silent-rules";
       mkdir _build                        &&
       cd _build                           &&
       { ../configure $CONFIGURE_FLAGS || { cat config.log; exit 1; } ; } &&
-      make -j2                            &&
-      make -j2 check                      &&
-      make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS";
+      for target in ${TARGETS:-all check distcheck}; do
+        make -j2 $target DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS" || exit $?;
+      done;
     fi
