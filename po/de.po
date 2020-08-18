@@ -4523,7 +4523,7 @@ msgstr "Deaktivieren Sie diese Option um das Dialogfenster offen zu halten."
 
 #: ../src/search.c:633
 msgid "Replace & Fi_nd"
-msgstr "Ersetzen und _Finden"
+msgstr "Ersetzen _und Suchen"
 
 #: ../src/search.c:642
 msgid "Replace wit_h:"
