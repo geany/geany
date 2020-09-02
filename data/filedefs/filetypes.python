@@ -75,7 +75,7 @@ FT_00_LB=_Compile
 FT_00_CM=python -m py_compile "%f"
 FT_00_WD=
 FT_02_LB=_Lint
-FT_02_CM=pep8 --max-line-length=80 "%f"
+FT_02_CM=pycodestyle --max-line-length=80 "%f"
 FT_02_WD=
 error_regex=(.+):([0-9]+):([0-9]+)
 EX_00_LB=_Execute
