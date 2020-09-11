@@ -44,6 +44,7 @@ filetypes_dist = \
 	filedefs/filetypes.html \
 	filedefs/filetypes.java \
 	filedefs/filetypes.javascript \
+	filedefs/filetypes.julia \
 	filedefs/filetypes.JSON.conf \
 	filedefs/filetypes.latex \
 	filedefs/filetypes.lisp \

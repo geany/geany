@@ -528,6 +528,19 @@ static TMParserMapEntry map_POWERSHELL[] = {
 	{'v', tm_tag_variable_t},
 };
 
+static TMParserMapEntry map_JULIA[] = {
+	{'c', tm_tag_variable_t},
+	{'f', tm_tag_function_t},
+	{'g', tm_tag_member_t},
+	{'m', tm_tag_macro_t},
+	{'n', tm_tag_namespace_t},
+	{'s', tm_tag_struct_t},
+	{'t', tm_tag_typedef_t},
+    /* defined as externvar to get those excluded as forward type in symbols.c:goto_tag()
+     * so we can jump to the real implementation (if known) instead of to the import statement */
+	{'x', tm_tag_externvar_t},
+};
+
 
 typedef struct
 {
@@ -591,6 +604,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(JSON),
 	MAP_ENTRY(ZEPHIR),
 	MAP_ENTRY(POWERSHELL),
+	MAP_ENTRY(JULIA),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
