@@ -95,7 +95,6 @@
 
 
 #ifdef G_OS_WIN32
-#define REMOTE_CMD_PORT		49876
 #define SOCKET_IS_VALID(s)	((s) != INVALID_SOCKET)
 #else
 #define SOCKET_IS_VALID(s)	((s) >= 0)
@@ -248,7 +247,7 @@ static void check_socket_permissions(void)
  * (taken from Sylpheed, thanks)
  * Returns the created socket, -1 if an error occurred or -2 if another socket exists and files
  * were sent to it. */
-gint socket_init(gint argc, gchar **argv)
+gint socket_init(gint argc, gchar **argv, G_GNUC_UNUSED gushort socket_port)
 {
 	gint sock;
 #ifdef G_OS_WIN32
@@ -269,13 +268,13 @@ gint socket_init(gint argc, gchar **argv)
 		 * and which is unused. This port number has to be guessed by the first and new instance
 		 * and the only data is the configuration directory path.
 		 * For now we use one port number, that is we support only one instance at all. */
-		sock = socket_fd_open_inet(REMOTE_CMD_PORT);
+		sock = socket_fd_open_inet(socket_port);
 		if (sock < 0)
 			return -1;
 		return sock;
 	}
 
-	sock = socket_fd_connect_inet(REMOTE_CMD_PORT);
+	sock = socket_fd_connect_inet(socket_port);
 	if (sock < 0)
 		return -1;
 #else

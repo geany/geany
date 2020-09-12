@@ -39,6 +39,9 @@ typedef struct GeanyPrefs
 	gchar			*default_open_path;	/**< Default path to look for files when no other path is appropriate. */
 	gchar			*custom_plugin_path;
 	gboolean		save_wingeom;
+#ifdef G_OS_WIN32
+	gint			socket_remote_cmd_port;
+#endif
 }
 GeanyPrefs;
 
