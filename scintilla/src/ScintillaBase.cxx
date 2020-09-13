@@ -61,6 +61,10 @@
 #include "AutoComplete.h"
 #include "ScintillaBase.h"
 
+#ifdef SCI_LEXER
+#include "ExternalLexer.h"
+#endif
+
 using namespace Scintilla;
 
 ScintillaBase::ScintillaBase() {
@@ -68,6 +72,9 @@ ScintillaBase::ScintillaBase() {
 	listType = 0;
 	maxListWidth = 0;
 	multiAutoCMode = SC_MULTIAUTOC_ONCE;
+#ifdef SCI_LEXER
+	Scintilla_LinkLexers();
+#endif
 }
 
 ScintillaBase::~ScintillaBase() {
@@ -78,17 +85,21 @@ void ScintillaBase::Finalise() {
 	popup.Destroy();
 }
 
-void ScintillaBase::AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS) {
-	const bool isFillUp = ac.Active() && ac.IsFillUpChar(*s);
+void ScintillaBase::AddCharUTF(const char *s, unsigned int len, bool /*treatAsDBCS*/) {
+	InsertCharacter(s, len, CharacterSource::directInput);
+}
+
+void ScintillaBase::InsertCharacter(const char *s, unsigned int len, CharacterSource charSource) {
+	const bool isFillUp = ac.Active() && ac.IsFillUpChar(s[0]);
 	if (!isFillUp) {
-		Editor::AddCharUTF(s, len, treatAsDBCS);
+		Editor::InsertCharacter(s, len, charSource);
 	}
 	if (ac.Active()) {
 		AutoCompleteCharacterAdded(s[0]);
 		// For fill ups add the character after the autocompletion has
 		// triggered so containers see the key so can display a calltip.
 		if (isFillUp) {
-			Editor::AddCharUTF(s, len, treatAsDBCS);
+			Editor::InsertCharacter(s, len, charSource);
 		}
 	}
 }
@@ -568,7 +579,7 @@ public:
 	void PropSet(const char *key, const char *val);
 	const char *PropGet(const char *key) const;
 	int PropGetInt(const char *key, int defaultValue=0) const;
-	int PropGetExpanded(const char *key, char *result) const;
+	size_t PropGetExpanded(const char *key, char *result) const;
 
 	int LineEndTypesSupported() override;
 	int AllocateSubStyles(int styleBase, int numberStyles);
@@ -604,9 +615,9 @@ LexState::~LexState() {
 
 LexState *ScintillaBase::DocumentLexState() {
 	if (!pdoc->GetLexInterface()) {
-		pdoc->SetLexInterface(new LexState(pdoc));
+		pdoc->SetLexInterface(Sci::make_unique<LexState>(pdoc));
 	}
-	return static_cast<LexState *>(pdoc->GetLexInterface());
+	return dynamic_cast<LexState *>(pdoc->GetLexInterface());
 }
 
 void LexState::SetLexerModule(const LexerModule *lex) {
@@ -664,7 +675,15 @@ void LexState::SetWordList(int n, const char *wl) {
 }
 
 const char *LexState::GetName() const {
-	return lexCurrent ? lexCurrent->languageName : "";
+	if (lexCurrent) {
+		return lexCurrent->languageName;
+	}
+	if (instance) {
+		if (instance->Version() >= lvIdentity) {
+			return static_cast<ILexerWithIdentity *>(instance)->GetName();
+		}
+	}
+	return "";
 }
 
 void *LexState::PrivateCall(int operation, void *pointer) {
@@ -717,7 +736,7 @@ int LexState::PropGetInt(const char *key, int defaultValue) const {
 	return props.GetInt(key, defaultValue);
 }
 
-int LexState::PropGetExpanded(const char *key, char *result) const {
+size_t LexState::PropGetExpanded(const char *key, char *result) const {
 	return props.GetExpanded(key, result);
 }
 
@@ -986,7 +1005,7 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		return ac.GetTypesep();
 
 	case SCI_CALLTIPSHOW:
-		CallTipShow(LocationFromPosition(static_cast<Sci::Position>(wParam)),
+		CallTipShow(LocationFromPosition(wParam),
 			ConstCharPtrFromSPtr(lParam));
 		break;
 
@@ -1001,11 +1020,11 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		return ct.posStartCallTip;
 
 	case SCI_CALLTIPSETPOSSTART:
-		ct.posStartCallTip = static_cast<Sci::Position>(wParam);
+		ct.posStartCallTip = wParam;
 		break;
 
 	case SCI_CALLTIPSETHLT:
-		ct.SetHighlight(static_cast<int>(wParam), static_cast<int>(lParam));
+		ct.SetHighlight(wParam, lParam);
 		break;
 
 	case SCI_CALLTIPSETBACK:
@@ -1082,6 +1101,10 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 
 	case SCI_GETLEXERLANGUAGE:
 		return StringResult(lParam, DocumentLexState()->GetName());
+
+	case SCI_LOADLEXERLIBRARY:
+		ExternalLexerLoad(ConstCharPtrFromSPtr(lParam));
+		break;
 
 	case SCI_PRIVATELEXERCALL:
 		return reinterpret_cast<sptr_t>(

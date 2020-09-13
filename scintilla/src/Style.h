@@ -71,19 +71,20 @@ public:
 	FontAlias font;
 
 	Style();
-	Style(const Style &source);
+	Style(const Style &source) noexcept;
+	// Style objects should not be moved but MSVC 2015 requires this.
 	Style(Style &&) = default;
 	~Style();
-	Style &operator=(const Style &source);
+	Style &operator=(const Style &source) noexcept;
 	Style &operator=(Style &&) = delete;
 	void Clear(ColourDesired fore_, ColourDesired back_,
 	           int size_,
 	           const char *fontName_, int characterSet_,
 	           int weight_, bool italic_, bool eolFilled_,
 	           bool underline_, ecaseForced caseForce_,
-	           bool visible_, bool changeable_, bool hotspot_);
-	void ClearTo(const Style &source);
-	void Copy(Font &font_, const FontMeasurements &fm_);
+	           bool visible_, bool changeable_, bool hotspot_) noexcept;
+	void ClearTo(const Style &source) noexcept;
+	void Copy(const Font &font_, const FontMeasurements &fm_) noexcept;
 	bool IsProtected() const noexcept { return !(changeable && visible);}
 };
 

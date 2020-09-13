@@ -19,7 +19,7 @@ typedef void (*DrawLineMarkerFn)(Surface *surface, PRectangle &rcWhole, Font &fo
  */
 class LineMarker {
 public:
-	enum typeOfFold { undefined, head, body, tail, headWithTail };
+	enum class FoldPart { undefined, head, body, tail, headWithTail };
 
 	int markType = SC_MARK_CIRCLE;
 	ColourDesired fore = ColourDesired(0, 0, 0);
@@ -34,7 +34,7 @@ public:
 	 * platforms must implement as empty. */
 	DrawLineMarkerFn customDraw = nullptr;
 
-	LineMarker() noexcept = default;
+	LineMarker() = default;
 	LineMarker(const LineMarker &other);
 	LineMarker(LineMarker &&) noexcept = default;
 	LineMarker &operator=(const LineMarker& other);
@@ -44,7 +44,7 @@ public:
 	void SetXPM(const char *textForm);
 	void SetXPM(const char *const *linesForm);
 	void SetRGBAImage(Point sizeRGBAImage, float scale, const unsigned char *pixelsRGBAImage);
-	void Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharacter, typeOfFold tFold, int marginStyle) const;
+	void Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharacter, FoldPart part, int marginStyle) const;
 };
 
 }

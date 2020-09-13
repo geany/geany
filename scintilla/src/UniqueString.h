@@ -11,6 +11,8 @@
 #ifndef UNIQUESTRING_H
 #define UNIQUESTRING_H
 
+#include "Compat.h"
+
 namespace Scintilla {
 
 constexpr bool IsNullOrEmpty(const char *text) noexcept {
@@ -29,7 +31,7 @@ class UniqueStringSet {
 private:
 	std::vector<UniqueString> strings;
 public:
-	UniqueStringSet() noexcept;
+	UniqueStringSet();
 	// UniqueStringSet objects can not be copied.
 	UniqueStringSet(const UniqueStringSet &) = delete;
 	UniqueStringSet &operator=(const UniqueStringSet &) = delete;

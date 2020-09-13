@@ -26,6 +26,7 @@
 #include "StyleContext.h"
 #include "CharacterSet.h"
 #include "LexerModule.h"
+#include "DefaultLexer.h"
 #include "LexerBase.h"
 
 using namespace Scintilla;
@@ -38,6 +39,13 @@ struct latexFoldSave {
 	}
 	latexFoldSave(const latexFoldSave &save) : structLev(save.structLev) {
 		for (int i = 0; i < 8; ++i) openBegins[i] = save.openBegins[i];
+	}
+	latexFoldSave &operator=(const latexFoldSave &save) {
+		if (this != &save) {
+			structLev = save.structLev;
+			for (int i = 0; i < 8; ++i) openBegins[i] = save.openBegins[i];
+		}
+		return *this;
 	}
 	int openBegins[8];
 	Sci_Position structLev;
@@ -81,6 +89,14 @@ public:
 	}
 	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+
+	// ILexerWithIdentity methods
+	const char * SCI_METHOD GetName() override {
+		return "latex";
+	}
+	int SCI_METHOD  GetIdentifier() override {
+		return SCLEX_LATEX;
+	}
 };
 
 static bool latexIsSpecial(int ch) {
@@ -289,6 +305,8 @@ void SCI_METHOD LexerLaTeX::Lex(Sci_PositionU startPos, Sci_Position length, int
 				latexStateReset(mode, state);
 				if (latexLastWordIs(i, styler, "{verbatim}")) {
 					state = SCE_L_VERBATIM;
+				} else if (latexLastWordIs(i, styler, "{lstlisting}")) {
+					state = SCE_L_VERBATIM;
 				} else if (latexLastWordIs(i, styler, "{comment}")) {
 					state = SCE_L_COMMENT2;
 				} else if (latexLastWordIs(i, styler, "{math}") && mode == 0) {
@@ -435,6 +453,9 @@ void SCI_METHOD LexerLaTeX::Lex(Sci_PositionU startPos, Sci_Position length, int
 					match++;
 					if (latexIsTagValid(match, lengthDoc, styler)) {
 						if (latexLastWordIs(match, styler, "{verbatim}")) {
+							styler.ColourTo(i - 1, state);
+							state = SCE_L_COMMAND;
+						} else if (latexLastWordIs(match, styler, "{lstlisting}")) {
 							styler.ColourTo(i - 1, state);
 							state = SCE_L_COMMAND;
 						}

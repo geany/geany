@@ -44,7 +44,7 @@ protected:
 	int maxListWidth;		/// Maximum width of list, in average character widths
 	int multiAutoCMode; /// Mode for autocompleting when multiple selections are present
 
-#ifdef SCI_LEXER
+#if SCI_LEXER
 	LexState *DocumentLexState();
 	void SetLexer(uptr_t wParam);
 	void SetLexerLanguage(const char *languageName);
@@ -61,7 +61,10 @@ protected:
 	void Initialise() override {}
 	void Finalise() override;
 
-	void AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS=false) override;
+	// This method is deprecated, use InsertCharacter instead. The treatAsDBCS parameter is no longer used.
+	virtual void AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS=false);
+
+	void InsertCharacter(const char *s, unsigned int len, CharacterSource charSource) override;
 	void Command(int cmdId);
 	void CancelModes() override;
 	int KeyCommand(unsigned int iMessage) override;

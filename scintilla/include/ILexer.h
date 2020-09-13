@@ -46,7 +46,7 @@ public:
 	virtual int SCI_METHOD GetCharacterAndWidth(Sci_Position position, Sci_Position *pWidth) const = 0;
 };
 
-enum { lvOriginal=0, lvSubStyles=1, lvMetaData=2 };
+enum { lvOriginal=0, lvSubStyles=1, lvMetaData=2, lvIdentity=3 };
 
 class ILexer {
 public:
@@ -83,6 +83,13 @@ public:
 	virtual const char * SCI_METHOD NameOfStyle(int style) = 0;
 	virtual const char * SCI_METHOD TagsOfStyle(int style) = 0;
 	virtual const char * SCI_METHOD DescriptionOfStyle(int style) = 0;
+};
+
+class ILexerWithIdentity : public ILexerWithMetaData {
+public:
+	virtual const char * SCI_METHOD GetName() = 0;
+	virtual int SCI_METHOD  GetIdentifier() = 0;
+	virtual const char * SCI_METHOD PropertyGet(const char *key) = 0;
 };
 
 }

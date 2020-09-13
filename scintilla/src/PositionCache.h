@@ -60,7 +60,7 @@ public:
 	int maxLineLength;
 	int numCharsInLine;
 	int numCharsBeforeEOL;
-	enum validLevel { llInvalid, llCheckTextAndStyle, llPositions, llLines } validity;
+	enum class ValidLevel { invalid, checkTextAndStyle, positions, lines } validity;
 	int xHighlightGuide;
 	bool highlightColumn;
 	bool containsCaret;
@@ -87,20 +87,21 @@ public:
 	virtual ~LineLayout();
 	void Resize(int maxLineLength_);
 	void Free() noexcept;
-	void Invalidate(validLevel validity_);
-	int LineStart(int line) const;
+	void Invalidate(ValidLevel validity_) noexcept;
+	int LineStart(int line) const noexcept;
+	int LineLength(int line) const noexcept;
 	enum class Scope { visibleOnly, includeEnd };
-	int LineLastVisible(int line, Scope scope) const;
-	Range SubLineRange(int subLine, Scope scope) const;
-	bool InLine(int offset, int line) const;
+	int LineLastVisible(int line, Scope scope) const noexcept;
+	Range SubLineRange(int subLine, Scope scope) const noexcept;
+	bool InLine(int offset, int line) const noexcept;
 	void SetLineStart(int line, int start);
 	void SetBracesHighlight(Range rangeLine, const Sci::Position braces[],
 		char bracesMatchStyle, int xHighlight, bool ignoreStyle);
 	void RestoreBracesHighlight(Range rangeLine, const Sci::Position braces[], bool ignoreStyle);
-	int FindBefore(XYPOSITION x, Range range) const;
-	int FindPositionFromX(XYPOSITION x, Range range, bool charPosition) const;
-	Point PointFromPosition(int posInLine, int lineHeight, PointEnd pe) const;
-	int EndLineStyle() const;
+	int FindBefore(XYPOSITION x, Range range) const noexcept;
+	int FindPositionFromX(XYPOSITION x, Range range, bool charPosition) const noexcept;
+	Point PointFromPosition(int posInLine, int lineHeight, PointEnd pe) const noexcept;
+	int EndLineStyle() const noexcept;
 };
 
 /**
@@ -128,7 +129,7 @@ public:
 		llcPage=SC_CACHE_PAGE,
 		llcDocument=SC_CACHE_DOCUMENT
 	};
-	void Invalidate(LineLayout::validLevel validity_);
+	void Invalidate(LineLayout::ValidLevel validity_) noexcept;
 	void SetLevel(int level_) noexcept;
 	int GetLevel() const noexcept { return level; }
 	LineLayout *Retrieve(Sci::Line lineNumber, Sci::Line lineCaret, int maxChars, int styleClock_,
@@ -152,7 +153,7 @@ public:
 	~PositionCacheEntry();
 	void Set(unsigned int styleNumber_, const char *s_, unsigned int len_, const XYPOSITION *positions_, unsigned int clock_);
 	void Clear() noexcept;
-	bool Retrieve(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_) const;
+	bool Retrieve(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_) const noexcept;
 	static unsigned int Hash(unsigned int styleNumber_, const char *s, unsigned int len_) noexcept;
 	bool NewerThan(const PositionCacheEntry &other) const noexcept;
 	void ResetClock() noexcept;
@@ -171,7 +172,7 @@ class SpecialRepresentations {
 	MapRepresentation mapReprs;
 	short startByteHasReprs[0x100];
 public:
-	SpecialRepresentations() noexcept;
+	SpecialRepresentations();
 	void SetRepresentation(const char *charBytes, const char *value);
 	void ClearRepresentation(const char *charBytes);
 	const Representation *RepresentationFromCharacter(const char *charBytes, size_t len) const;

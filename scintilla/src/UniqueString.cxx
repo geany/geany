@@ -21,14 +21,14 @@ UniqueString UniqueStringCopy(const char *text) {
 		return UniqueString();
 	}
 	const size_t len = strlen(text);
-	std::unique_ptr<char[]> upcNew(new char[len + 1]);
-	memcpy(&upcNew[0], text, len + 1);
+	std::unique_ptr<char[]> upcNew = Sci::make_unique<char[]>(len + 1);
+	memcpy(upcNew.get(), text, len + 1);
 	return UniqueString(upcNew.release());
 }
 
 // A set of strings that always returns the same pointer for each string.
 
-UniqueStringSet::UniqueStringSet() noexcept = default;
+UniqueStringSet::UniqueStringSet() = default;
 
 UniqueStringSet::~UniqueStringSet() {
 	strings.clear();
