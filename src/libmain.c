@@ -417,7 +417,7 @@ static gint get_windows_socket_port(void)
 	geany_debug("Using TCP port number %d for IPC", port_number);
 	g_free(configfile);
 	g_key_file_free(config);
-	g_return_val_if_fail(port_number >= 1 && port_number <= (gint)G_MAXUINT16,
+	g_return_val_if_fail(port_number >= 1024 && port_number <= (gint)G_MAXUINT16,
 		SOCKET_WINDOWS_REMOTE_CMD_PORT);
 	return port_number;
 }

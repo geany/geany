@@ -2678,7 +2678,8 @@ number_exec_menu_items            The maximum number of menu items in the      2
 socket_remote_cmd_port            TCP port number to be used for inter         2           on restart
                                   process communication (i.e. with other
                                   Geany instances, e.g. "Open with Geany").
-                                  Only available on Windows.
+                                  Only available on Windows, valid port
+                                  range: 1024 to 65535.
 ================================  ===========================================  ==========  ===========
 
 Statusbar Templates
