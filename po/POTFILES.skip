@@ -2,8 +2,6 @@
 
 # geany.desktop.in will be translated
 geany.desktop.in
-# generated src/interface.c will be translated
-geany.glade
 # no need to translate these files
 plugins/demoplugin.c
 plugins/demoproxy.c
