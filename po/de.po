@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-30 21:57+0100\n"
+"POT-Creation-Date: 2020-08-15 20:02+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -2182,7 +2182,7 @@ msgstr "_Beschreibung:"
 msgid "_Base path:"
 msgstr "_Basisverzeichnis:"
 
-#: ../data/geany.glade.h:468
+#: ../data/geany.glade.h:468 ../src/search.c:897
 msgid "File _patterns:"
 msgstr "_Dateinamenmuster:"
 
@@ -2984,8 +2984,8 @@ msgstr "Datei »%s« wurde gespeichert."
 msgid "Wrap search and find again?"
 msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
-#: ../src/document.c:2464 ../src/search.c:1367 ../src/search.c:1420
-#: ../src/search.c:2222 ../src/search.c:2223
+#: ../src/document.c:2464 ../src/search.c:1368 ../src/search.c:1421
+#: ../src/search.c:2223 ../src/search.c:2224
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Keine Treffer für »%s« gefunden."
@@ -3245,29 +3245,29 @@ msgstr "Schlechter RegEx für Dateityp %s: %s"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
+#: ../src/highlighting.c:1250 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnte die Datei »%s« nicht finden."
 
-#: ../src/highlighting.c:1299
+#: ../src/highlighting.c:1320
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/highlighting.c:1340
+#: ../src/highlighting.c:1361
 msgid "The current filetype overrides the default style."
 msgstr ""
 "Der aktuelle Dateityp überschreibt die Standardeinstellungen für die "
 "Darstellung."
 
-#: ../src/highlighting.c:1341
+#: ../src/highlighting.c:1362
 msgid "This may cause color schemes to display incorrectly."
 msgstr ""
 "Dies kann dazu führen, dass eventuell Farbprofile nicht korrekt angezeigt "
 "werden."
 
-#: ../src/highlighting.c:1366
+#: ../src/highlighting.c:1387
 msgid "Color Schemes"
 msgstr "Farbschemata"
 
@@ -4423,7 +4423,7 @@ msgstr "Auswahl des Projektdateinamens"
 msgid "Project \"%s\" opened."
 msgstr "Projekt »%s« geöffnet."
 
-#: ../src/search.c:309 ../src/search.c:961
+#: ../src/search.c:309 ../src/search.c:962
 msgid "_Use regular expressions"
 msgstr "Reguläre Ausdrücke _benutzen"
 
@@ -4467,11 +4467,11 @@ msgstr ""
 msgid "Search _backwards"
 msgstr "_Rückwärts suchen"
 
-#: ../src/search.c:348 ../src/search.c:970
+#: ../src/search.c:348 ../src/search.c:971
 msgid "C_ase sensitive"
 msgstr "_Groß-/Kleinschreibung beachten"
 
-#: ../src/search.c:352 ../src/search.c:975
+#: ../src/search.c:352 ../src/search.c:976
 msgid "Match only a _whole word"
 msgstr "N_ur ganze Wörter finden"
 
@@ -4565,77 +4565,75 @@ msgstr ""
 "sind\n"
 "Benutzerdefiniert: Manuelles angeben der Dateimuster"
 
-#: ../src/search.c:897
-msgid "Fi_les:"
-msgstr "Fi_lter:"
+#: ../src/search.c:910
+msgid "Space separated list of file patterns (e.g. *.c *.h)"
+msgstr ""
+"Mit Leerzeichen getrennte Liste mit Mustern für »in Dateien finden« (z.B. *."
+"c *.h)"
 
-#: ../src/search.c:909
-msgid "File patterns, e.g. *.c *.h"
-msgstr "Dateinamensmuster, z.B. *.c *.h"
-
-#: ../src/search.c:921
+#: ../src/search.c:922
 msgid "_Directory:"
 msgstr "_Verzeichnis:"
 
-#: ../src/search.c:940
+#: ../src/search.c:941
 msgid "E_ncoding:"
 msgstr "_Kodierung"
 
-#: ../src/search.c:964
+#: ../src/search.c:965
 msgid "See grep's manual page for more information"
 msgstr ""
 "Für mehr Informationen konsultieren Sie bitte die Dokumentation von »grep«"
 
-#: ../src/search.c:966
+#: ../src/search.c:967
 msgid "_Recurse in subfolders"
 msgstr "_In Unterverzeichnissen"
 
-#: ../src/search.c:979
+#: ../src/search.c:980
 msgid "_Invert search results"
 msgstr "Su_chmuster umkehren"
 
-#: ../src/search.c:983
+#: ../src/search.c:984
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "Invertiert die Trefferliste"
 
-#: ../src/search.c:1000
+#: ../src/search.c:1001
 msgid "E_xtra options:"
 msgstr "_Zus. Optionen:"
 
-#: ../src/search.c:1008
+#: ../src/search.c:1009
 msgid "Other options to pass to Grep"
 msgstr "Andere Argumente, die an grep übergeben werden sollen"
 
-#: ../src/search.c:1370 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2229 ../src/search.c:2232
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "%d Treffer für »%s« gefunden."
 msgstr[1] "%d Treffer für »%s« gefunden."
 
-#: ../src/search.c:1426
+#: ../src/search.c:1427
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "%u Treffer in %u Dokumenten ersetzt"
 
-#: ../src/search.c:1615
+#: ../src/search.c:1616
 msgid "Invalid directory for find in files."
 msgstr "Ungültiges Verzeichnis."
 
-#: ../src/search.c:1632
+#: ../src/search.c:1633
 msgid "No text to find."
 msgstr "Kein Text zum Suchen angegeben."
 
-#: ../src/search.c:1708
+#: ../src/search.c:1709
 msgid "Searching..."
 msgstr "Suchen…"
 
-#: ../src/search.c:1710
+#: ../src/search.c:1711
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (im Verzeichnis: %s)"
 
-#: ../src/search.c:1718
+#: ../src/search.c:1719
 #, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
@@ -4643,27 +4641,27 @@ msgstr ""
 "Konnte das grep Kommando »%s« nicht finden. Fehlermeldung: %s (Pfad zum Grep "
 "Kommando in den Einstellungen überprüfen)."
 
-#: ../src/search.c:1758
+#: ../src/search.c:1759
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Konnte Verzeichnis nicht öffnen (%s)."
 
-#: ../src/search.c:1848
+#: ../src/search.c:1849
 msgid "Search failed."
 msgstr "Suche fehlgeschlagen."
 
-#: ../src/search.c:1872
+#: ../src/search.c:1873
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Suche mit %d Treffer abgeschlossen."
 msgstr[1] "Suche mit %d Treffern abgeschlossen."
 
-#: ../src/search.c:1880
+#: ../src/search.c:1881
 msgid "No matches found."
 msgstr "Keine Treffer gefunden."
 
-#: ../src/search.c:1910
+#: ../src/search.c:1911
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Fehler in Ausdruck: %s"
@@ -6130,6 +6128,12 @@ msgstr "Seite an Seite"
 #: ../plugins/splitwindow.c:467
 msgid "Top and Bottom"
 msgstr "Oben und Unten"
+
+#~ msgid "Fi_les:"
+#~ msgstr "Fi_lter:"
+
+#~ msgid "File patterns, e.g. *.c *.h"
+#~ msgstr "Dateinamensmuster, z.B. *.c *.h"
 
 #~ msgid ""
 #~ "Copyright (c) 2005-2019\n"
