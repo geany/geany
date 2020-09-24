@@ -270,6 +270,7 @@ test_sources = \
 	regexp.js						\
 	return-hint.zep					\
 	return-types.go					\
+	ruby-block-assign.rb			\
 	ruby-block-call.rb				\
 	ruby-doc.rb						\
 	ruby-namespaced-class.rb		\
