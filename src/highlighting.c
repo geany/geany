@@ -1180,6 +1180,22 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 }
 
 
+/** Retrieves a @a named_style.
+ * If a style with the name @a named_style does not exist, NULL will be returned.
+ * @param named_style Key/name of the style as specified in the colorscheme file
+ * @return A pointer to the style struct.
+ */
+GEANY_API_SYMBOL
+const GeanyLexerStyle *highlighting_get_named_style(const gchar *named_style)
+{
+	GeanyLexerStyle *cs;
+
+	g_return_val_if_fail(named_style, NULL);
+	cs = g_hash_table_lookup(named_style_hash, named_style);
+	return cs;
+}
+
+
 /** Retrieves a style @a style_id for the filetype @a ft_id.
  * If the style was not already initialised
  * (e.g. by by opening a file of this type), it will be initialised. The returned pointer is

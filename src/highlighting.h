@@ -45,6 +45,8 @@ typedef struct GeanyLexerStyle
 GeanyLexerStyle;
 
 
+const GeanyLexerStyle *highlighting_get_named_style(const gchar *named_style);
+
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id);
 
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
