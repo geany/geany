@@ -49,6 +49,13 @@ GeanyProject;
 
 void project_write_config(void);
 
+gboolean project_close(gboolean open_default);
+
+gboolean project_load_file(const gchar *locale_file_name);
+
+void project_set_save_open_files_list(gboolean save);
+
+gboolean project_get_save_open_files_list(void);
 
 #ifdef GEANY_PRIVATE
 
@@ -71,16 +78,11 @@ void project_new(void);
 
 void project_open(void);
 
-gboolean project_close(gboolean open_default);
-
 void project_properties(void);
 
 void project_build_properties(void);
 
 gboolean project_ask_close(void);
-
-
-gboolean project_load_file(const gchar *locale_file_name);
 
 gboolean project_load_file_with_session(const gchar *locale_file_name);
 
