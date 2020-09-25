@@ -812,6 +812,20 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 }
 
 
+static void on_color_selection_change_palette_with_screen(GdkScreen *screen, const GdkColor *colors, gint n_colors)
+{
+	GtkSettings *settings;
+
+	/* Get the updated palette */
+	g_free(ui_prefs.color_picker_palette);
+	ui_prefs.color_picker_palette = gtk_color_selection_palette_to_string(colors, n_colors);
+
+	/* Update the gtk-color-palette setting so all GtkColorSelection widgets will be modified */
+	settings = gtk_settings_get_for_screen(screen);
+	g_object_set(G_OBJECT(settings), "gtk-color-palette", ui_prefs.color_picker_palette, NULL);
+}
+
+
 /* This shows the color selection dialog to choose a color. */
 void tools_color_chooser(const gchar *color)
 {
@@ -836,6 +850,7 @@ void tools_color_chooser(const gchar *color)
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(main_widgets.window));
 		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
 		gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colorsel), TRUE);
+		gtk_color_selection_set_change_palette_with_screen_hook(on_color_selection_change_palette_with_screen);
 
 		g_signal_connect(ui_widgets.open_colorsel, "response",
 						G_CALLBACK(on_color_dialog_response), NULL);

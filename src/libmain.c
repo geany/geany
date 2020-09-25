@@ -1368,6 +1368,7 @@ static gboolean do_main_quit(void)
 	g_free(prefs.default_open_path);
 	g_free(prefs.custom_plugin_path);
 	g_free(ui_prefs.custom_date_format);
+	g_free(ui_prefs.color_picker_palette);
 	g_free(interface_prefs.editor_font);
 	g_free(interface_prefs.tagbar_font);
 	g_free(interface_prefs.msgwin_font);
