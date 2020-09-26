@@ -26,6 +26,11 @@
 
 G_BEGIN_DECLS
 
+/* Used on Windows for TCP socket based IPC.
+ * The port number is just random but should be below 49152 as Hyper-V tends to bind
+ * dynamic port ranges from 49152 to 65535. */
+#define SOCKET_WINDOWS_REMOTE_CMD_PORT 45937
+
 struct SocketInfo
 {
 	gboolean	 ignore_socket;
@@ -37,7 +42,7 @@ struct SocketInfo
 
 extern struct SocketInfo socket_info;
 
-gint socket_init(gint argc, gchar **argv);
+gint socket_init(gint argc, gchar **argv, gushort socket_port);
 
 gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpointer data);
 

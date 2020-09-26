@@ -46,6 +46,7 @@
 #include "printing.h"
 #include "project.h"
 #include "sciwrappers.h"
+#include "socket.h"
 #include "stash.h"
 #include "support.h"
 #include "symbols.h"
@@ -273,6 +274,14 @@ static void init_pref_groups(void)
 		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
 	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
 		"replace_and_find_by_default", TRUE);
+
+	group = stash_group_new(PACKAGE);
+	configuration_add_various_pref_group(group, "socket");
+
+#ifdef G_OS_WIN32
+	stash_group_add_integer(group, (gint*)&prefs.socket_remote_cmd_port,
+		"socket_remote_cmd_port", SOCKET_WINDOWS_REMOTE_CMD_PORT);
+#endif
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 

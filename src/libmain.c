@@ -395,6 +395,34 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 
 
 #ifdef G_OS_WIN32
+static gint get_windows_socket_port(void)
+{
+	/* Read config file early to get TCP port number as we need it for IPC before all
+	 * other settings are read in load_settings() */
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	GKeyFile *config = g_key_file_new();
+	gint port_number;
+
+	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
+	{
+		geany_debug(
+			"No user config file found, use default TCP port (%s).",
+			SOCKET_WINDOWS_REMOTE_CMD_PORT);
+		g_free(configfile);
+		return SOCKET_WINDOWS_REMOTE_CMD_PORT;
+	}
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+	port_number = utils_get_setting_integer(config, PACKAGE, "socket_remote_cmd_port",
+		SOCKET_WINDOWS_REMOTE_CMD_PORT);
+	geany_debug("Using TCP port number %d for IPC", port_number);
+	g_free(configfile);
+	g_key_file_free(config);
+	g_return_val_if_fail(port_number >= 1024 && port_number <= (gint)G_MAXUINT16,
+		SOCKET_WINDOWS_REMOTE_CMD_PORT);
+	return port_number;
+}
+
+
 static void change_working_directory_on_windows(void)
 {
 	gchar *install_dir = win32_get_installation_dir();
@@ -1089,9 +1117,13 @@ gint main_lib(gint argc, gchar **argv)
 	/* check and create (unix domain) socket for remote operation */
 	if (! socket_info.ignore_socket)
 	{
+		gushort socket_port = 0;
+#ifdef G_OS_WIN32
+		socket_port = (gushort) get_windows_socket_port();
+#endif
 		socket_info.lock_socket = -1;
 		socket_info.lock_socket_tag = 0;
-		socket_info.lock_socket = socket_init(argc, argv);
+		socket_info.lock_socket = socket_init(argc, argv, socket_port);
 		/* Quit if filenames were sent to first instance or the list of open
 		 * documents has been printed */
 		if ((socket_info.lock_socket == -2 /* socket exists */ && argc > 1) ||
