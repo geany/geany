@@ -14,14 +14,14 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2017-12-19 03:11+0100\n"
+"PO-Revision-Date: 2020-09-24 11:51+0200\n"
 "Last-Translator: Piotr Orzechowski <tech@orzechowski.hub.pl>\n"
 "Language-Team: polski <geany-i18n@uvena.de>\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -208,24 +208,20 @@ msgid "<b>Startup</b>"
 msgstr "<b>Uruchamianie</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "Zapisywanie pozycji i wymiarów okna"
+msgstr "Zapisz rozmiar okna"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr "Zapisuje pozycję i rozmiar okna i wczytuje je przy starcie programu"
+msgstr "Zapisuje rozmiar okna i wczytuje przy starcie programu"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "Zapisywanie pozycji i wymiarów okna"
+msgstr "Zapisz pozycję okna"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr "Zapisuje pozycję i rozmiar okna i wczytuje je przy starcie programu"
+msgstr "Zapisuje pozycję okna i wczytuje przy starcie programu"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -244,13 +240,11 @@ msgid "Startup path:"
 msgstr "Katalog domyślny:"
 
 #: ../data/geany.glade.h:46
-#, fuzzy
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
 "Ścieżka do domyślnego katalogu dla otwieranych i zapisywanych plików. Musi "
-"być ścieżką absolutną. Pozostaw pole puste, aby korzystać z bieżącego "
-"katalogu."
+"być ścieżką absolutną. "
 
 #: ../data/geany.glade.h:47
 msgid "Project files:"
@@ -424,7 +418,7 @@ msgstr "<b>Projekty</b>"
 
 #: ../data/geany.glade.h:77 ../src/dialogs.c:231
 msgid "Miscellaneous"
-msgstr "<b>Różne</b>"
+msgstr "Różne"
 
 #. TODO Find a better way to map the current notebook page to the
 #. * corresponding chapter in the documentation, comparing translatable
@@ -456,9 +450,8 @@ msgid "Name"
 msgstr "Nazwa"
 
 #: ../data/geany.glade.h:84
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Wygląd</b>"
+msgstr "Wygląd"
 
 #: ../data/geany.glade.h:85
 msgid "Show documents list"
@@ -474,7 +467,7 @@ msgstr "Pokaż panel _boczny"
 
 #: ../data/geany.glade.h:88
 msgid "Position:"
-msgstr "Położenie"
+msgstr "Położenie:"
 
 #: ../data/geany.glade.h:89
 msgid "<b>Sidebar</b>"
@@ -572,9 +565,8 @@ msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr "Wykonaj: Widok -> Pokaż/ukryj dodatkowe widżety"
 
 #: ../data/geany.glade.h:111
-#, fuzzy
 msgid "Switch to last used document after closing a tab"
-msgstr "Uaktywnij ostatnio używany dokument"
+msgstr "Uaktywnij ostatnio używany dokument po zamknięciu karty"
 
 #: ../data/geany.glade.h:112
 msgid "<b>Editor tabs</b>"
@@ -582,7 +574,7 @@ msgstr "<b>Karty edytora</b>"
 
 #: ../data/geany.glade.h:113
 msgid "Sidebar:"
-msgstr "Panel boczny"
+msgstr "Panel boczny:"
 
 #: ../data/geany.glade.h:114
 msgid "<b>Tab positions</b>"
@@ -850,7 +842,7 @@ msgstr "<b>Wcięcia</b>"
 
 #: ../data/geany.glade.h:168
 msgid "Indentation"
-msgstr "<b>Wcięcia</b>"
+msgstr "Wcięcia"
 
 #: ../data/geany.glade.h:169
 msgid "Snippet completion"
@@ -993,7 +985,7 @@ msgstr "<b>Automatyczne zamykanie cudzysłowów i nawiasów</b>"
 
 #: ../data/geany.glade.h:199
 msgid "Completions"
-msgstr "<b>Auto-uzupełnianie</b>"
+msgstr "Auto-uzupełnianie"
 
 #: ../data/geany.glade.h:200
 msgid "Invert syntax highlighting colors"
@@ -1068,7 +1060,7 @@ msgstr "Kolumna:"
 
 #: ../data/geany.glade.h:217
 msgid "Color:"
-msgstr "Kolor"
+msgstr "Kolor:"
 
 #: ../data/geany.glade.h:218
 msgid "Sets the color of the long line marker"
@@ -1285,7 +1277,7 @@ msgstr "Pliki"
 
 #: ../data/geany.glade.h:261
 msgid "Terminal:"
-msgstr "Terminal"
+msgstr "Terminal:"
 
 #: ../data/geany.glade.h:262
 msgid "Browser:"
@@ -1436,7 +1428,7 @@ msgstr "Skróty klawiaturowe"
 
 #: ../data/geany.glade.h:294
 msgid "Command:"
-msgstr "Polecenie"
+msgstr "Polecenie:"
 
 #: ../data/geany.glade.h:296
 #, no-c-format
@@ -1527,7 +1519,7 @@ msgstr "Kolor tekstu:"
 
 #: ../data/geany.glade.h:315
 msgid "Background color:"
-msgstr "Kolor tła"
+msgstr "Kolor tła:"
 
 #: ../data/geany.glade.h:316
 msgid "Scrollback lines:"
@@ -1675,7 +1667,7 @@ msgstr "Nowy (z _szablonu)"
 
 #: ../data/geany.glade.h:346
 msgid "_Open..."
-msgstr "_Otwórz"
+msgstr "_Otwórz..."
 
 #: ../data/geany.glade.h:347
 msgid "Recent _Files"
@@ -1683,7 +1675,7 @@ msgstr "Ost_atnio otwierane"
 
 #: ../data/geany.glade.h:348
 msgid "Save _As..."
-msgstr "Zapisz jako"
+msgstr "Zapisz jako..."
 
 #: ../data/geany.glade.h:349
 msgid "Sa_ve All"
@@ -1704,7 +1696,7 @@ msgstr "_Ustawienia strony"
 
 #: ../data/geany.glade.h:353
 msgid "_Print..."
-msgstr "Wydrukuj"
+msgstr "Drukuj..."
 
 #: ../data/geany.glade.h:354 ../src/notebook.c:495
 msgid "Close Ot_her Documents"
@@ -1804,7 +1796,7 @@ msgstr "Us_tawienia wtyczek"
 
 #: ../data/geany.glade.h:378
 msgid "_Find..."
-msgstr "Szukaj"
+msgstr "Szukaj..."
 
 #: ../data/geany.glade.h:379
 msgid "Find _Next"
@@ -1816,11 +1808,11 @@ msgstr "Znajdź _poprzedni"
 
 #: ../data/geany.glade.h:381 ../src/symbols.c:2628
 msgid "Find in F_iles..."
-msgstr "Znajdź w _plikach"
+msgstr "Znajdź w _plikach..."
 
 #: ../data/geany.glade.h:382
 msgid "_Replace..."
-msgstr "Z_astąp"
+msgstr "Z_astąp..."
 
 #: ../data/geany.glade.h:383
 msgid "Next Me_ssage"
@@ -1840,7 +1832,7 @@ msgstr "Idź do _poprzedniej zakładki"
 
 #: ../data/geany.glade.h:387
 msgid "_Go to Line..."
-msgstr "Idź _do wiersza"
+msgstr "Idź _do wiersza..."
 
 #: ../data/geany.glade.h:388 ../src/keybindings.c:538
 msgid "Find Next _Selection"
@@ -1865,7 +1857,7 @@ msgstr "_Widok"
 
 #: ../data/geany.glade.h:393
 msgid "Change _Font..."
-msgstr "Zmień _czcionkę"
+msgstr "Zmień _czcionkę..."
 
 #: ../data/geany.glade.h:394
 msgid "Change _Color Scheme..."
@@ -2048,7 +2040,7 @@ msgstr "P_rojekt"
 
 #: ../data/geany.glade.h:438
 msgid "_New..."
-msgstr "_Nowy"
+msgstr "_Nowy..."
 
 #: ../data/geany.glade.h:439
 msgid "_Recent Projects"
@@ -2092,9 +2084,8 @@ msgid "_Word Count"
 msgstr "Zliczanie _słów"
 
 #: ../data/geany.glade.h:449
-#, fuzzy
 msgid "Load Ta_gs File..."
-msgstr "Wczytaj z_naczniki"
+msgstr "Wczytaj z_naczniki:"
 
 #: ../data/geany.glade.h:450
 msgid "_Help"
@@ -2123,9 +2114,8 @@ msgid "Report a _Bug..."
 msgstr "Zgłoś _błąd..."
 
 #: ../data/geany.glade.h:456
-#, fuzzy
 msgid "_Donate..."
-msgstr "_Nie zapisuj"
+msgstr "_Przekaż dotację.."
 
 #: ../data/geany.glade.h:457 ../src/sidebar.c:125
 msgid "Symbols"
@@ -2222,7 +2212,7 @@ msgstr "Położenie:"
 
 #: ../data/geany.glade.h:477
 msgid "Read-only:"
-msgstr "Tylko do odczytu"
+msgstr "Tylko do odczytu:"
 
 #: ../data/geany.glade.h:478
 msgid "Encoding:"
@@ -2472,7 +2462,7 @@ msgstr "Polecenie"
 
 #: ../src/build.c:1836
 msgid "Working directory"
-msgstr "Ka_talog bieżący:"
+msgstr "Ka_talog bieżący"
 
 #: ../src/build.c:1837
 msgid "Reset"
@@ -2556,6 +2546,7 @@ msgid "%d file saved."
 msgid_plural "%d files saved."
 msgstr[0] "Plik %d został zapisany."
 msgstr[1] "Plik %d został zapisany."
+msgstr[2] ""
 
 #: ../src/callbacks.c:899 ../src/keybindings.c:566
 msgid "Go to Line"
@@ -2572,7 +2563,7 @@ msgstr "Ustaw typ dla bieżącego pliku zanim użyjesz tej funkcji"
 
 #: ../src/callbacks.c:1317 ../src/callbacks.c:1325
 msgid "No more message items."
-msgstr "Nie ma więcej komunikatów"
+msgstr "Nie ma więcej komunikatów."
 
 #: ../src/callbacks.c:1428
 #, fuzzy, c-format
@@ -2598,15 +2589,14 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Nie udało się wywołać polecenia zewnętrznego '%s' (%s)."
 
 #: ../src/callbacks.c:1504
-#, fuzzy
 msgid "No context action set."
-msgstr "Działanie kontekstowe:"
+msgstr "Nie ustawiono działania kontekstowego."
 
 #: ../src/dialogs.c:160 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
 #, c-format
 msgid "\"%s\" was not found."
-msgstr "\"%s\" nie został znaleziony"
+msgstr "\"%s\" nie został znaleziony."
 
 #. auto-detect
 #: ../src/dialogs.c:222 ../src/encodings.c:530
@@ -2995,6 +2985,7 @@ msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: zastąpiono %d wystąpienia ciągu %s na ciąg \"%s\"."
 msgstr[1] "%s: zastąpiono %d wystąpienia ciągu %s na ciąg \"%s\"."
+msgstr[2] ""
 
 #: ../src/document.c:3619
 msgid "Do you want to reload it?"
@@ -3188,9 +3179,8 @@ msgid "%s document"
 msgstr "Dokument %s"
 
 #: ../src/filetypes.c:154
-#, fuzzy
 msgid "Shell"
-msgstr "Powłoka:"
+msgstr "Powłoka"
 
 #: ../src/filetypes.c:155
 msgid "Makefile"
@@ -3250,7 +3240,7 @@ msgstr "bez nazwy"
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
-msgstr "Nie można odnaleźć pliku %s"
+msgstr "Nie można odnaleźć pliku %s."
 
 #: ../src/highlighting.c:1299
 #, fuzzy
@@ -3268,9 +3258,8 @@ msgid "This may cause color schemes to display incorrectly."
 msgstr "To może spowodować niepoprawne wyświetlanie schematów kolorów."
 
 #: ../src/highlighting.c:1366
-#, fuzzy
 msgid "Color Schemes"
-msgstr "Schematy _kolorów"
+msgstr "Schematy kolorów"
 
 #. visual group order
 #: ../src/keybindings.c:310 ../src/symbols.c:492
@@ -3395,9 +3384,8 @@ msgid "Delete to line end"
 msgstr "Usuń do końca wiersza"
 
 #: ../src/keybindings.c:393
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Usuń do końca wiersza"
+msgstr "Usuń do początku wiersza"
 
 #: ../src/keybindings.c:396
 msgid "_Transpose Current Line"
@@ -3520,39 +3508,32 @@ msgid "Send to Custom Command 3"
 msgstr "Wyślij do zewnętrznego polecenia 3"
 
 #: ../src/keybindings.c:487
-#, fuzzy
 msgid "Send to Custom Command 4"
-msgstr "Wyślij do zewnętrznego polecenia 1"
+msgstr "Wyślij do zewnętrznego polecenia 4"
 
 #: ../src/keybindings.c:489
-#, fuzzy
 msgid "Send to Custom Command 5"
-msgstr "Wyślij do zewnętrznego polecenia 1"
+msgstr "Wyślij do zewnętrznego polecenia 5"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Send to Custom Command 6"
-msgstr "Wyślij do zewnętrznego polecenia 1"
+msgstr "Wyślij do zewnętrznego polecenia 6"
 
 #: ../src/keybindings.c:493
-#, fuzzy
 msgid "Send to Custom Command 7"
-msgstr "Wyślij do zewnętrznego polecenia 1"
+msgstr "Wyślij do zewnętrznego polecenia 7"
 
 #: ../src/keybindings.c:495
-#, fuzzy
 msgid "Send to Custom Command 8"
-msgstr "Wyślij do zewnętrznego polecenia 1"
+msgstr "Wyślij do zewnętrznego polecenia 8"
 
 #: ../src/keybindings.c:497
-#, fuzzy
 msgid "Send to Custom Command 9"
-msgstr "Wyślij do zewnętrznego polecenia 1"
+msgstr "Wyślij do zewnętrznego polecenia 9"
 
 #: ../src/keybindings.c:505
-#, fuzzy
 msgid "Join lines"
-msgstr "Komentuj linie"
+msgstr "Połącz linie"
 
 #: ../src/keybindings.c:510
 msgid "Insert date"
@@ -4026,7 +4007,7 @@ msgstr ""
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
-msgstr " Czy na pewno chcesz zakończyć program? "
+msgstr " Czy na pewno chcesz zakończyć program?"
 
 #: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
@@ -4339,7 +4320,7 @@ msgstr "Wybierz katalog bazowy dla projektu"
 
 #: ../src/project.c:250 ../src/project.c:622 ../src/project.c:1155
 msgid "Project file could not be written"
-msgstr "Plik projektu nie został zapisany."
+msgstr "Plik projektu nie został zapisany"
 
 #: ../src/project.c:255
 #, c-format
@@ -4618,6 +4599,7 @@ msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "Znaleziono %d wyników wyszukiwania ciągu \"%s\"."
 msgstr[1] "Znaleziono %d wyników wyszukiwania ciągu \"%s\"."
+msgstr[2] ""
 
 #: ../src/search.c:1426
 #, c-format
@@ -4664,6 +4646,7 @@ msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Wyszukiwanie zakończone z %d wynikami"
 msgstr[1] "Wyszukiwanie zakończone z %d wynikami"
+msgstr[2] ""
 
 #: ../src/search.c:1880
 msgid "No matches found."
@@ -5001,9 +4984,8 @@ msgid "Enums"
 msgstr "Enumeracje"
 
 #: ../src/symbols.c:764
-#, fuzzy
 msgid "Programs"
-msgstr "Program"
+msgstr "Programy"
 
 #: ../src/symbols.c:766
 #, fuzzy
@@ -5102,9 +5084,9 @@ msgstr "Nie można wczytać pliku ze znacznikami: %s"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1970
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>Wyświetlanie</b>"
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1973
@@ -5263,9 +5245,8 @@ msgid "Choose more build actions"
 msgstr "Więcej parametrów budowania"
 
 #: ../src/toolbar.c:383
-#, fuzzy
 msgid "Search Field"
-msgstr "Wyszukiwanie nieudane"
+msgstr "Pole wyszukiwania"
 
 #: ../src/toolbar.c:393
 msgid "Goto Field"
@@ -5376,9 +5357,8 @@ msgid "Characters:"
 msgstr "Znaki:"
 
 #: ../src/sidebar.c:177
-#, fuzzy
 msgid "No symbols found"
-msgstr "Nie znaleziono"
+msgstr "Nie znaleziono symboli"
 
 #: ../src/sidebar.c:601
 msgid "Show S_ymbol List"
@@ -5393,9 +5373,8 @@ msgid "H_ide Sidebar"
 msgstr "_Ukryj panel boczny"
 
 #: ../src/sidebar.c:730 ../plugins/filebrowser.c:678
-#, fuzzy
 msgid "_Find in Files..."
-msgstr "Szukaj w _plikach"
+msgstr "Szukaj w _plikach..."
 
 #: ../src/sidebar.c:740
 msgid "Show _Paths"
@@ -5533,9 +5512,8 @@ msgid "Select File"
 msgstr "Wybierz plik"
 
 #: ../src/ui_utils.c:2185
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "Wczytaj _ponownie konfigurację"
+msgstr "Konfiguracja typów plików"
 
 #: ../src/ui_utils.c:2222
 msgid "Save All"
@@ -5810,9 +5788,8 @@ msgid "HTML (name)"
 msgstr "HTML (nazwa)"
 
 #: ../plugins/htmlchars.c:736
-#, fuzzy
 msgid "_Insert Special HTML Characters..."
-msgstr "Znaki specjalne _HTML"
+msgstr "Wstaw znaki specjalne _HTML..."
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:751
@@ -6031,6 +6008,7 @@ msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
 msgstr[0] "Autozapis: plik %d zapisany."
 msgstr[1] "Autozapis: pliki %d zapisane."
+msgstr[2] ""
 
 #. initialize the dialog
 #: ../plugins/saveactions.c:441
@@ -6132,14 +6110,12 @@ msgid "_Top and Bottom"
 msgstr "_Góra i dół"
 
 #: ../plugins/splitwindow.c:465
-#, fuzzy
 msgid "Side by Side"
-msgstr "_Sąsiadująco"
+msgstr "Sąsiadująco"
 
 #: ../plugins/splitwindow.c:467
-#, fuzzy
 msgid "Top and Bottom"
-msgstr "_Góra i dół"
+msgstr "Góra i dół"
 
 #~ msgid ""
 #~ "Copyright (c) 2005-2019\n"
