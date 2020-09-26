@@ -36,7 +36,7 @@ size_t UTF8Length(const wchar_t *uptr, size_t tlen) noexcept {
 	return len;
 }
 
-void UTF8FromUTF16(const wchar_t *uptr, size_t tlen, char *putf, size_t len) {
+void UTF8FromUTF16(const wchar_t *uptr, size_t tlen, char *putf, size_t len) noexcept {
 	size_t k = 0;
 	for (size_t i = 0; i < tlen && uptr[i];) {
 		const unsigned int uch = uptr[i];

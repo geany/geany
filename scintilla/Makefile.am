@@ -60,6 +60,7 @@ gtk/scintilla-marshal.c \
 gtk/scintilla-marshal.h \
 lexlib/Accessor.cxx \
 lexlib/Accessor.h \
+lexlib/CatalogueModules.h \
 lexlib/CharacterCategory.cxx \
 lexlib/CharacterCategory.h \
 lexlib/CharacterSet.cxx \

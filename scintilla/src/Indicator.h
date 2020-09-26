@@ -17,7 +17,7 @@ struct StyleAndColour {
 	}
 	StyleAndColour(int style_, ColourDesired fore_ = ColourDesired(0, 0, 0)) noexcept : style(style_), fore(fore_) {
 	}
-	bool operator==(const StyleAndColour &other) const {
+	bool operator==(const StyleAndColour &other) const noexcept {
 		return (style == other.style) && (fore == other.fore);
 	}
 };
@@ -26,7 +26,7 @@ struct StyleAndColour {
  */
 class Indicator {
 public:
-	enum DrawState { drawNormal, drawHover };
+	enum class State { normal, hover };
 	StyleAndColour sacNormal;
 	StyleAndColour sacHover;
 	bool under;
@@ -38,17 +38,17 @@ public:
 	Indicator(int style_, ColourDesired fore_=ColourDesired(0,0,0), bool under_=false, int fillAlpha_=30, int outlineAlpha_=50) noexcept :
 		sacNormal(style_, fore_), sacHover(style_, fore_), under(under_), fillAlpha(fillAlpha_), outlineAlpha(outlineAlpha_), attributes(0) {
 	}
-	void Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine, const PRectangle &rcCharacter, DrawState drawState, int value) const;
-	bool IsDynamic() const {
+	void Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine, const PRectangle &rcCharacter, State drawState, int value) const;
+	bool IsDynamic() const noexcept {
 		return !(sacNormal == sacHover);
 	}
-	bool OverridesTextFore() const {
+	bool OverridesTextFore() const noexcept {
 		return sacNormal.style == INDIC_TEXTFORE || sacHover.style == INDIC_TEXTFORE;
 	}
-	int Flags() const {
+	int Flags() const noexcept {
 		return attributes;
 	}
-	void SetFlags(int attributes_);
+	void SetFlags(int attributes_) noexcept;
 };
 
 }

@@ -7,6 +7,7 @@ noinst_HEADERS = \
 
 scintilla_includedir = $(includedir)/geany/scintilla/
 scintilla_include_HEADERS = \
+	Compat.h \
 	SciLexer.h \
 	Scintilla.h \
 	Scintilla.iface \

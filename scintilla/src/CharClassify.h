@@ -17,9 +17,9 @@ public:
 	enum cc { ccSpace, ccNewLine, ccWord, ccPunctuation };
 	void SetDefaultCharClasses(bool includeWordClass);
 	void SetCharClasses(const unsigned char *chars, cc newCharClass);
-	int GetCharsOfClass(cc characterClass, unsigned char *buffer) const;
-	cc GetClass(unsigned char ch) const { return static_cast<cc>(charClass[ch]);}
-	bool IsWord(unsigned char ch) const { return static_cast<cc>(charClass[ch]) == ccWord;}
+	int GetCharsOfClass(cc characterClass, unsigned char *buffer) const noexcept;
+	cc GetClass(unsigned char ch) const noexcept { return static_cast<cc>(charClass[ch]);}
+	bool IsWord(unsigned char ch) const noexcept { return static_cast<cc>(charClass[ch]) == ccWord;}
 
 private:
 	enum { maxChar=256 };
