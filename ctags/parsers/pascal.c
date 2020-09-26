@@ -25,11 +25,12 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-	K_FUNCTION, K_PROCEDURE
+	K_FUNCTION, K_TYPE, K_PROCEDURE
 } pascalKind;
 
 static kindDefinition PascalKinds [] = {
 	{ true, 'f', "function",  "functions"},
+	{ true, 't', "type",      "types"},
 	{ true, 'p', "procedure", "procedures"}
 };
 
@@ -146,7 +147,7 @@ static void parseArglist(const char *buf, char **arglist, char **vartype)
 
 
 /* Algorithm adapted from from GNU etags.
- * Locates tags for procedures & functions.  Doesn't do any type- or
+ * Locates tags for procedures & functions.  Doesn't do full type- or
  * var-definitions.  It does look for the keyword "extern" or "forward"
  * immediately following the procedure statement; if found, the tag is
  * skipped.
@@ -259,7 +260,7 @@ static void findPascalTags (void)
 			}
 			else if (tolower ((int) *dbp) == 't')
 			{
-				if (tail ("type"))      /*  check for forward reference */
+				if (tail ("type"))      /*  check for type declaration */
 				{
 					found_tag = false;
 					verify_tag = false;
@@ -273,7 +274,7 @@ static void findPascalTags (void)
 				continue;
 			}
 		}
-		if (get_tagname)  /* grab name of proc or fn */
+		if (get_tagname)  /* grab identifier */
 		{
 			const unsigned char *cp;
 
@@ -283,15 +284,23 @@ static void findPascalTags (void)
 			/* grab block name */
 			while (isspace ((int) *dbp))
 				++dbp;
+			if (!starttoken(*dbp))
+				continue;
 			for (cp = dbp  ;  *cp != '\0' && !endtoken (*cp)  ;  cp++)
 				continue;
 			vStringNCopyS (name, (const char*) dbp,  cp - dbp);
-			if (arglist != NULL)
-				eFree(arglist);
-			if (kind == K_FUNCTION && vartype != NULL)
-				eFree(vartype);
-			parseArglist((const char*) cp, &arglist, (kind == K_FUNCTION) ? &vartype : NULL);
-			createPascalTag (&tag, name, kind, arglist, (kind == K_FUNCTION) ? vartype : NULL);
+			if (kind == K_FUNCTION || kind == K_PROCEDURE)
+			{
+				if (arglist != NULL)
+					eFree(arglist);
+				if (vartype != NULL)
+					eFree(vartype);
+				arglist = vartype = NULL;
+				parseArglist((const char*) cp, &arglist, (kind == K_FUNCTION) ? &vartype : NULL);
+				createPascalTag (&tag, name, kind, arglist, vartype);
+			}
+			else
+				createPascalTag (&tag, name, kind, NULL, NULL);
 			dbp = cp;  /* set dbp to e-o-token */
 			get_tagname = false;
 			found_tag = true;
@@ -333,7 +342,7 @@ static void findPascalTags (void)
 					if (tail ("ype"))
 					{
 						get_tagname = true;
-						kind = K_FUNCTION;
+						kind = K_TYPE;
 					}
 					break;
 			}

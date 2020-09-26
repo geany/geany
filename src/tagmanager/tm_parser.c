@@ -81,6 +81,7 @@ static TMParserMapEntry map_MAKEFILE[] = {
 
 static TMParserMapEntry map_PASCAL[] = {
 	{'f', tm_tag_function_t},
+	{'t', tm_tag_typedef_t},
 	{'p', tm_tag_function_t},
 };
 
