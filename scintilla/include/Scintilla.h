@@ -593,8 +593,6 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_SETVSCROLLBAR 2280
 #define SCI_GETVSCROLLBAR 2281
 #define SCI_APPENDTEXT 2282
-#define SCI_GETTWOPHASEDRAW 2283
-#define SCI_SETTWOPHASEDRAW 2284
 #define SC_PHASES_ONE 0
 #define SC_PHASES_TWO 1
 #define SC_PHASES_MULTIPLE 2
@@ -1057,6 +1055,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_NAMEOFSTYLE 4030
 #define SCI_TAGSOFSTYLE 4031
 #define SCI_DESCRIPTIONOFSTYLE 4032
+#define SCI_SETILEXER 4033
 #define SC_MOD_NONE 0x0
 #define SC_MOD_INSERTTEXT 0x1
 #define SC_MOD_DELETETEXT 0x2
@@ -1156,6 +1155,11 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCN_MARGINRIGHTCLICK 2031
 #define SCN_AUTOCSELECTIONCHANGE 2032
 #ifndef SCI_DISABLE_PROVISIONAL
+#define SC_BIDIRECTIONAL_DISABLED 0
+#define SC_BIDIRECTIONAL_L2R 1
+#define SC_BIDIRECTIONAL_R2L 2
+#define SCI_GETBIDIRECTIONAL 2708
+#define SCI_SETBIDIRECTIONAL 2709
 #define SC_LINECHARACTERINDEX_NONE 0
 #define SC_LINECHARACTERINDEX_UTF32 1
 #define SC_LINECHARACTERINDEX_UTF16 2
@@ -1270,6 +1274,9 @@ struct SCNotification {
 #define SCI_SETKEYSUNICODE 2521
 #define SCI_GETKEYSUNICODE 2522
 
+#define SCI_GETTWOPHASEDRAW 2283
+#define SCI_SETTWOPHASEDRAW 2284
+
 #define CharacterRange Sci_CharacterRange
 #define TextRange Sci_TextRange
 #define TextToFind Sci_TextToFind
@@ -1286,7 +1293,5 @@ struct SCNotification {
 #define INDICS_MASK 0xE0
 
 #endif
-
-#include "Compat.h"
 
 #endif

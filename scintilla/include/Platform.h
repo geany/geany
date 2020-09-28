@@ -257,7 +257,7 @@ public:
 		return GetAlpha() / componentMaximum;
 	}
 
-	ColourAlpha MixedWith(ColourAlpha other) const noexcept {
+	constexpr ColourAlpha MixedWith(ColourAlpha other) const noexcept {
 		const unsigned int red = (GetRed() + other.GetRed()) / 2;
 		const unsigned int green = (GetGreen() + other.GetGreen()) / 2;
 		const unsigned int blue = (GetBlue() + other.GetBlue()) / 2;
@@ -334,6 +334,33 @@ public:
 	friend class SurfaceImpl;
 };
 
+class IScreenLine {
+public:
+	virtual std::string_view Text() const = 0;
+	virtual size_t Length() const = 0;
+	virtual size_t RepresentationCount() const = 0;
+	virtual XYPOSITION Width() const = 0;
+	virtual XYPOSITION Height() const = 0;
+	virtual XYPOSITION TabWidth() const = 0;
+	virtual XYPOSITION TabWidthMinimumPixels() const = 0;
+	virtual const Font *FontOfPosition(size_t position) const = 0;
+	virtual XYPOSITION RepresentationWidth(size_t position) const = 0;
+	virtual XYPOSITION TabPositionAfter(XYPOSITION xPosition) const = 0;
+};
+
+struct Interval {
+	XYPOSITION left;
+	XYPOSITION right;
+};
+
+class IScreenLineLayout {
+public:
+	virtual ~IScreenLineLayout() = default;
+	virtual size_t PositionFromX(XYPOSITION xDistance, bool charPosition) = 0;
+	virtual XYPOSITION XFromPosition(size_t caretPosition) = 0;
+	virtual std::vector<Interval> FindRangeIntervals(size_t start, size_t end) = 0;
+};
+
 /**
  * A surface abstracts a place to draw.
  */
@@ -371,11 +398,13 @@ public:
 	virtual void Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back)=0;
 	virtual void Copy(PRectangle rc, Point from, Surface &surfaceSource)=0;
 
-	virtual void DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back) = 0;
-	virtual void DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore, ColourDesired back) = 0;
-	virtual void DrawTextTransparent(PRectangle rc, Font &font_, XYPOSITION ybase, const char *s, int len, ColourDesired fore) = 0;
-	virtual void MeasureWidths(Font &font_, const char *s, int len, XYPOSITION *positions) = 0;
-	virtual XYPOSITION WidthText(Font &font_, const char *s, int len) = 0;
+	virtual std::unique_ptr<IScreenLineLayout> Layout(const IScreenLine *screenLine) = 0;
+
+	virtual void DrawTextNoClip(PRectangle rc, Font &font_, XYPOSITION ybase, std::string_view text, ColourDesired fore, ColourDesired back) = 0;
+	virtual void DrawTextClipped(PRectangle rc, Font &font_, XYPOSITION ybase, std::string_view text, ColourDesired fore, ColourDesired back) = 0;
+	virtual void DrawTextTransparent(PRectangle rc, Font &font_, XYPOSITION ybase, std::string_view text, ColourDesired fore) = 0;
+	virtual void MeasureWidths(Font &font_, std::string_view text, XYPOSITION *positions) = 0;
+	virtual XYPOSITION WidthText(Font &font_, std::string_view text) = 0;
 	virtual XYPOSITION Ascent(Font &font_)=0;
 	virtual XYPOSITION Descent(Font &font_)=0;
 	virtual XYPOSITION InternalLeading(Font &font_)=0;
@@ -387,6 +416,7 @@ public:
 
 	virtual void SetUnicodeMode(bool unicodeMode_)=0;
 	virtual void SetDBCSMode(int codePage)=0;
+	virtual void SetBidiR2L(bool bidiR2L_)=0;
 };
 
 /**

@@ -11,6 +11,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <memory>
 
@@ -44,7 +45,7 @@ typedef LexerFactoryFunction(EXT_LEXER_DECL *GetLexerFactoryFunction)(unsigned i
 /// This avoids undefined and conditionally defined behaviour.
 template<typename T>
 T FunctionPointer(void *function) noexcept {
-	static_assert(sizeof(T) == sizeof(function), "size mismatch");
+	static_assert(sizeof(T) == sizeof(function));
 	T fp;
 	memcpy(&fp, &function, sizeof(T));
 	return fp;
@@ -151,7 +152,7 @@ LexerLibrary::LexerLibrary(const char *moduleName_) {
 
 				// The external lexer needs to know how to call into its DLL to
 				// do its lexing and folding, we tell it here.
-        lex->SetExternal(fnFactory, i);
+				lex->SetExternal(fnFactory, i);
 			}
 		}
 	}
@@ -191,7 +192,7 @@ void LexerManager::Load(const char *path) {
 		if (ll->moduleName == path)
 			return;
 	}
-	libraries.push_back(Sci::make_unique<LexerLibrary>(path));
+	libraries.push_back(std::make_unique<LexerLibrary>(path));
 }
 
 void LexerManager::Clear() noexcept {
