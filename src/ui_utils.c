@@ -2505,7 +2505,6 @@ void ui_init_builder(void)
 }
 
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 static void load_css_theme(const gchar *fn, guint priority)
 {
 	GtkCssProvider *provider = gtk_css_provider_new();
@@ -2576,15 +2575,11 @@ static void add_css_config_file_item(void)
 	ui_add_config_file_menu_item(theme_fn, NULL, NULL);
 	g_free(theme_fn);
 }
-#endif // GTK3
 
 
 void ui_init(void)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
 	init_css_styles();
-#endif
-
 	init_recent_files();
 
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
@@ -2632,9 +2627,7 @@ void ui_init(void)
 	init_document_widgets();
 
 	create_config_files_menu();
-#if GTK_CHECK_VERSION(3, 0, 0)
 	add_css_config_file_item();
-#endif
 }
 
 

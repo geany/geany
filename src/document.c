@@ -3285,7 +3285,6 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 		return NULL;
 	if (! document_status_styles[status].loaded)
 	{
-#if GTK_CHECK_VERSION(3, 0, 0)
 		GdkRGBA color;
 		GtkWidgetPath *path = gtk_widget_path_new();
 		GtkStyleContext *ctx = gtk_style_context_new();
@@ -3303,16 +3302,6 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 		document_status_styles[status].loaded = TRUE;
 		gtk_widget_path_unref(path);
 		g_object_unref(ctx);
-#else
-		GtkSettings *settings = gtk_widget_get_settings(GTK_WIDGET(doc->editor->sci));
-		gchar *path = g_strconcat("GeanyMainWindow.GtkHBox.GtkNotebook.",
-				document_status_styles[status].name, NULL);
-		GtkStyle *style = gtk_rc_get_style_by_paths(settings, path, NULL, GTK_TYPE_LABEL);
-
-		document_status_styles[status].color = style->fg[GTK_STATE_NORMAL];
-		document_status_styles[status].loaded = TRUE;
-		g_free(path);
-#endif
 	}
 	return &document_status_styles[status].color;
 }
