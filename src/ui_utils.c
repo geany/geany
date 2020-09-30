@@ -195,6 +195,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 	const gchar sp[] = "      ";
 	GString *stats_str;
 	ScintillaObject *sci = doc->editor->sci;
+	gint zoom;
 
 	if (!EMPTY(ui_prefs.statusbar_template))
 		fmt = ui_prefs.statusbar_template;
@@ -303,6 +304,21 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				g_string_append_c(stats_str, ' ');
 				g_string_append_printf(stats_str, "%d",
 					sci_get_style_at(doc->editor->sci, pos));
+				break;
+			case 'z':
+				zoom = sci_get_zoom(doc->editor->sci);
+				if (zoom != 0)
+				{
+					gdouble size, percent;
+
+					size = sci_get_font_size(doc->editor->sci, STYLE_DEFAULT);
+					if (size > 0.0)
+					{
+						percent = (size + zoom) * 100 / size;
+						g_string_append_printf(stats_str, _("Zoom: %.0f%%"), percent);
+						g_string_append(stats_str, sp);
+					}
+				}
 				break;
 			default:
 				g_string_append_len(stats_str, expos, 1);
