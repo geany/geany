@@ -290,7 +290,7 @@ static void main_init(void)
 	osx_ui_init();
 #endif
 
-	/* set widget names for matching with .gtkrc-2.0 */
+	/* set widget names for matching with GTK CSS */
 	gtk_widget_set_name(main_widgets.window, "GeanyMainWindow");
 	gtk_widget_set_name(ui_widgets.toolbar_menu, "GeanyToolbarMenu");
 	gtk_widget_set_name(main_widgets.editor_menu, "GeanyEditMenu");
