@@ -2,7 +2,7 @@
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 # Fajar Wahyu <fajarwahyuabdillah@gmail.com>, 2012.
-# Samsul Ma'arif <mail@samsul.web.id>, 2014, 2015, 2017.
+# Samsul Ma'arif <mail@samsul.web.id>, 2014, 2015, 2017, 2020.
 # Bervianto Leo Pratama <bervianto.leo@gmail.com>, 2016.
 #
 msgid ""
@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-22 11:56+0200\n"
-"PO-Revision-Date: 2017-05-25 08:18+0700\n"
-"Last-Translator: Samsul Ma'arif <mail@samsul.web.id>\n"
+"PO-Revision-Date: 2020-10-01 10:59+0700\n"
+"Last-Translator: Samsul Maarif <samsul@krilin>\n"
 "Language-Team: Indonesian\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -117,7 +117,7 @@ msgstr "Cari Pemakaian _Dokumen"
 
 #: ../data/geany.glade.h:21
 msgid "Go to Symbol Defini_tion"
-msgstr "Lompat ke Definisi Simbol"
+msgstr "Lompa_t ke Definisi Simbol"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -197,26 +197,21 @@ msgid "<b>Startup</b>"
 msgstr "<b>Aktivasi</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "Ingat posisi dan geometri window"
+msgstr "Simpan ukuran jendela"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
 msgstr ""
-"Ingat posisi dan geometri window lalu terapkan itu ketika memulai Geany"
+"Simpan ukuran jendela lalu terapkan itu ketika memulai Geany"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "Ingat posisi dan geometri window"
+msgstr "Simpan posisi jendela"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr ""
-"Ingat posisi dan geometri window lalu terapkan itu ketika memulai Geany"
+msgstr "Simpan posisi jendela lalu terapkan itu ketika memulai Geany"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -261,7 +256,7 @@ msgid ""
 msgstr ""
 "Secara default, Geany akan memuat berkas pada lokasi instalasi global dan "
 "direktori konfigurasi. Lokasi yang dimasukkan di sini akan menjadi path "
-"plugin tambahan yang akan dicari Geany. Kosongkan saja bila tidak dipakai."
+"plugin tambahan yang akan dicari Geany. Kosongkan saja bila tidak digunakan."
 
 #: ../data/geany.glade.h:51
 msgid "<b>Paths</b>"
@@ -323,7 +318,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:61
 msgid "Use Windows native dialogs"
-msgstr "Pakai Dialog asli Windos"
+msgstr "Gunakan Dialog asli Windows"
 
 #: ../data/geany.glade.h:62
 msgid ""
@@ -358,7 +353,7 @@ msgstr ""
 #: ../data/geany.glade.h:68
 msgid "Use the current word under the cursor for Find dialogs"
 msgstr ""
-"Pakai segera kata yang ada di bawah kursor mouse untuk ditelusuri oleh kotak "
+"Gunakan segera kata yang ada di bawah kursor mouse untuk ditelusuri oleh kotak "
 "Pencarian"
 
 #: ../data/geany.glade.h:69
@@ -366,14 +361,14 @@ msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection"
 msgstr ""
-"Pakai segera kata yang ada di bawah kursor mouse ketika membuka kotak "
+"Gunakan segera kata yang ada di bawah kursor mouse ketika membuka kotak "
 "Pencarian, Pencarian di Berkas, atau Kotak Ganti-Kata, dan tanpa perlu di "
 "seleksi"
 
 #: ../data/geany.glade.h:70
 msgid "Use the current file's directory for Find in Files"
 msgstr ""
-"Pakai segera direktori berkas yang sedang dibuka untuk kotak Pencarian pada "
+"Gunakan segera direktori berkas yang sedang dibuka untuk kotak Pencarian pada "
 "Berkas"
 
 #: ../data/geany.glade.h:71
@@ -382,7 +377,7 @@ msgstr "<b>Pencarian</b>"
 
 #: ../data/geany.glade.h:72
 msgid "Use project-based session files"
-msgstr "Pakai sesi berkas berdasarkan proyek"
+msgstr "Gunakan sesi berkas berdasarkan proyek"
 
 #: ../data/geany.glade.h:73
 msgid ""
@@ -433,7 +428,7 @@ msgstr "Apakah menampilkan panel simbol atau tidak"
 
 #: ../data/geany.glade.h:81
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "Mode pengurutan simbol bawaan"
 
 #: ../data/geany.glade.h:82
 msgid "Default sorting mode:"
@@ -705,7 +700,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:141
 msgid "Use indicators to show compile errors"
-msgstr "Pakai indikator untuk menampilkan kesalahan kompilasi"
+msgstr "Gunakan indikator untuk menampilkan kesalahan kompilasi"
 
 #: ../data/geany.glade.h:142
 msgid ""
@@ -759,18 +754,16 @@ msgstr ""
 "dibuka, gunakan <i>Proyek->Terapkan Indentasi Standar</i>."
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "Lebar:"
+msgstr "Leba_r:"
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "Banyaknya karakter yang mengindikasikan lebarnya indent tunggal"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Mode indent-otomatis:"
+msgstr "_Mode indent-otomatis:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -792,8 +785,8 @@ msgstr "T_ab dan spasi"
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
-"Pakai spasi bila total indent lebih sedikit daripada lebar tab, jika tidak "
-"pakai dua-duanya"
+"Gunakan spasi bila total indent lebih sedikit daripada lebar tab, jika tidak "
+"gunakan dua-duanya"
 
 #: ../data/geany.glade.h:158
 msgid "_Spaces"
@@ -801,7 +794,7 @@ msgstr "_Spasi"
 
 #: ../data/geany.glade.h:159
 msgid "Use spaces when inserting indentation"
-msgstr "Pakai spasi ketika menyelipkan indentasi"
+msgstr "Gunakan spasi ketika menyelipkan indentasi"
 
 #: ../data/geany.glade.h:160
 msgid "_Tabs"
@@ -809,7 +802,7 @@ msgstr "_Tab"
 
 #: ../data/geany.glade.h:161
 msgid "Use one tab per indent"
-msgstr "Pakai satu tab per indent"
+msgstr "Gunakan satu tab per indent"
 
 #: ../data/geany.glade.h:162
 msgid "Detect width from file"
@@ -828,9 +821,8 @@ msgid "Type:"
 msgstr "Tipe:"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Tombol tab indentasi"
+msgstr "Tombol _tab indentasi"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -857,7 +849,7 @@ msgid ""
 msgstr ""
 "Dengan mengetikkan beberapa karakter perintah bahasa pemrograman yang "
 "dikenali, Geany otomatis akan memberikan sugesti perintah yang hendak Anda "
-"ketik yang bisa langsung Anda pakai, jadi Anda tidak perlu repot-repot "
+"ketik yang bisa langsung Anda gunakan, jadi Anda tidak perlu repot-repot "
 "mengetik perintah secara lengkap"
 
 #: ../data/geany.glade.h:171
@@ -1020,7 +1012,7 @@ msgstr "Tampilkan penanda indentasi"
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
 "Menampilkan titik-titik kecil untuk mewakili bentuk indentasi sehingga Anda "
-"bisa mengetahui dengan tepat banyaknya indentasi yang dipakai"
+"bisa mengetahui dengan tepat banyaknya indentasi yang digunakan"
 
 #: ../data/geany.glade.h:204
 msgid "Show white space"
@@ -1058,7 +1050,7 @@ msgid ""
 "mark lines"
 msgstr ""
 "Opsi ini memberikan margin sedikit di kanannya nomor baris, yang bisa "
-"dipakai untuk membantu menandai baris"
+"digunakan untuk membantu menandai baris"
 
 #: ../data/geany.glade.h:212
 msgid "Stop scrolling at last line"
@@ -1072,7 +1064,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:214
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Baris tamp_ak sekitar kursor:"
 
 #: ../data/geany.glade.h:215
 msgid "<b>Display</b>"
@@ -1411,7 +1403,7 @@ msgid ""
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Menentukan format tampilan untuk {datetime} wildcard. Anda dapat memakai "
-"specifier konversi apapun yang dipakai pula oleh fungsi strftime ANSI C."
+"specifier konversi apapun yang digunakan pula oleh fungsi strftime ANSI C."
 
 #: ../data/geany.glade.h:287
 msgid ""
@@ -1419,7 +1411,7 @@ msgid ""
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Menentukan format tampilan untuk {year} wildcard. Anda dapat memakai "
-"specifier konversi apapun yang dipakai pula oleh fungsi strftime ANSI C."
+"specifier konversi apapun yang digunakan pula oleh fungsi strftime ANSI C."
 
 #: ../data/geany.glade.h:288
 msgid ""
@@ -1427,7 +1419,7 @@ msgid ""
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Menentukan format tampilan untuk {date} wildcard. Anda dapat memakai "
-"specifier konversi apapun yang dipakai pula oleh fungsi strftime ANSI C."
+"specifier konversi apapun yang digunakan pula oleh fungsi strftime ANSI C."
 
 #: ../data/geany.glade.h:289
 msgid "<b>Template data</b>"
@@ -1461,7 +1453,7 @@ msgstr "Lokasi perintah untuk mencetak berkas (gunakan %f untuk nama berkas)"
 
 #: ../data/geany.glade.h:297
 msgid "Use an external command for printing"
-msgstr "Pakai command eksternal untuk mencetak"
+msgstr "Gunakan command eksternal untuk mencetak"
 
 #: ../data/geany.glade.h:298 ../src/printing.c:237
 msgid "Print line numbers"
@@ -1516,7 +1508,7 @@ msgid ""
 "with the ANSI C strftime function."
 msgstr ""
 "Menentukan format tanggal dan waktu yang akan ditambahkan di setiap header "
-"halaman. Anda dapat menggunakan specifier konversi apapun yang dipakai pula "
+"halaman. Anda dapat menggunakan specifier konversi apapun yang digunakan pula "
 "oleh fungsi strftime ANSI C."
 
 #: ../data/geany.glade.h:308
@@ -1659,7 +1651,7 @@ msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
 msgstr ""
-"Tidak memakai run-script sederhana yang biasanya dipakai untuk menampilkan "
+"Tidak memakai run-script sederhana yang biasanya digunakan untuk menampilkan "
 "status keluar dari program yang dieksekusi"
 
 #: ../data/geany.glade.h:338
@@ -1688,7 +1680,7 @@ msgstr "_Berkas"
 
 #: ../data/geany.glade.h:345
 msgid "New (with _Template)"
-msgstr "Buat (pakai _Template)"
+msgstr "Buat (dengan _Templat)"
 
 #: ../data/geany.glade.h:346
 msgid "_Open..."
@@ -1805,7 +1797,7 @@ msgstr "Indent A_jaib"
 
 #: ../data/geany.glade.h:374
 msgid "_Send Selection to"
-msgstr "Kirim Seleksi ke"
+msgstr "Kirim _Seleksi ke"
 
 #: ../data/geany.glade.h:375
 msgid "I_nsert Comments"
@@ -1873,7 +1865,7 @@ msgstr "Tandai _Semua"
 
 #: ../data/geany.glade.h:391
 msgid "Go to Symbol Decl_aration"
-msgstr "Lompat ke Deklarasi Simbol"
+msgstr "Lompat ke Deklar_asi Simbol"
 
 #: ../data/geany.glade.h:392
 msgid "_View"
@@ -2169,24 +2161,20 @@ msgid "Filename:"
 msgstr "Nama berkas:"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "Nama:"
+msgstr "_Nama:"
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "Deskripsi:"
+msgstr "_Deskripsi:"
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "Base path:"
+msgstr "_Base path:"
 
 #: ../data/geany.glade.h:468
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Pola berkas:"
+msgstr "_Pola berkas:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2220,7 +2208,7 @@ msgstr "Custom"
 
 #: ../data/geany.glade.h:474
 msgid "Use global settings"
-msgstr "Pakai pengaturan global"
+msgstr "Gunakan pengaturan global"
 
 #: ../data/geany.glade.h:475
 msgid "Size:"
@@ -2287,6 +2275,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Hak Cipta (c) 2005\n"
+"Kontributor Geany"
 
 #: ../src/about.c:172
 msgid "About Geany"
@@ -2304,7 +2294,7 @@ msgstr "(dibangun pada atau setelah %s)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "Menggunakan pustaka runtime GTK+ v%u.%u.%u dan GLib v%u.%u.%u"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -2605,9 +2595,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Tidak dapat mengeksekusi konteks perintah aksi \"%s\": %s. %s"
 
 #: ../src/callbacks.c:1504
-#, fuzzy
 msgid "No context action set."
-msgstr "Operasi konteks:"
+msgstr "Set aksi tanpa konteks."
 
 #: ../src/dialogs.c:160 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
@@ -2849,13 +2838,13 @@ msgstr "Berkas %s dibuka ulang."
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
-msgstr "Berkas %s terbuka(%d%s)."
+msgstr "Berkas %s terbuka (%d%s)."
 
 #: ../src/document.c:1497
 msgid ", read-only"
-msgstr ", read-only"
+msgstr ", hanya-baca"
 
 #: ../src/document.c:1621
 msgid "Discard history"
@@ -3825,26 +3814,24 @@ msgid "Failed to load one or more session files."
 msgstr "Gagal mengangkat satu atau lebih berkas sesi."
 
 #: ../src/libmain.c:121
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Atur nomor kolom inisial untuk berkas yang terbuka pertama kali (berguna "
-"jika dipakai bersamaan dengan --line)"
+"Atur nomor kolom inisial ke KOLOM untuk berkas yang terbuka pertama kali (berguna "
+"jika digunakan bersamaan dengan --line)"
 
 #: ../src/libmain.c:121
 msgid "COLUMN"
-msgstr ""
+msgstr "KOLOM"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Pakai direktori konfigurasi alternatif"
+msgstr "Gunakan direktori konfigurasi alternatif DIR"
 
 #: ../src/libmain.c:122
 msgid "DIR"
-msgstr ""
+msgstr "DIR"
 
 #: ../src/libmain.c:123
 msgid "Print internal filetype names"
@@ -3864,29 +3851,27 @@ msgstr ""
 "Jangan membuka berkas pada instance berjalan, paksa membuka instance baru"
 
 #: ../src/libmain.c:128
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
 msgstr ""
-"Gunakan nama berkas soket ini untuk berkomunikasi dengan instance Geany "
+"Gunakan nama berkas soket BERKAS untuk berkomunikasi dengan instance Geany "
 "berjalan"
 
 #: ../src/libmain.c:128 ../src/libmain.c:142
 msgid "FILE"
-msgstr ""
+msgstr "BERKAS"
 
 #: ../src/libmain.c:129
 msgid "Return a list of open documents in a running Geany instance"
 msgstr "Menampilkan daftar dokumen yang dibuka pada instance Geany berjalan"
 
 #: ../src/libmain.c:131
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Atur nomor baris inisial untuk berkas yang pertama kali dibuka"
+msgstr "Atur nomor baris inisial ke BARIS untuk berkas yang pertama kali dibuka"
 
 #: ../src/libmain.c:131
 msgid "LINE"
-msgstr ""
+msgstr "BARIS"
 
 #: ../src/libmain.c:132
 msgid "Don't show message window at startup"
@@ -3918,7 +3903,7 @@ msgstr "Jangan mengangkat dukungan terminal"
 
 #: ../src/libmain.c:142
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Gunakan BERKAS sebagai pustaka VTE yang tertaut-dinamis"
 
 #: ../src/libmain.c:144
 msgid "Be verbose"
@@ -3933,13 +3918,12 @@ msgid "[FILES...]"
 msgstr "[BERKAS...]"
 
 #: ../src/libmain.c:537
-#, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Sebuah IDE yang cepat dan ringan"
+msgstr "Sebuah IDE yang cepat dan ringan."
 
 #: ../src/libmain.c:538
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Laporkan kutu ke https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:571
@@ -3996,9 +3980,8 @@ msgid "Configuration directory could not be created (%s)."
 msgstr "Direktori konfigurasi tidak dapat dibuat (%s)."
 
 #: ../src/libmain.c:1184
-#, fuzzy
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
-msgstr "Search failed (see Help->Debug Messages for details)."
+msgstr "Socket IPC tidak dapat tibuat (lihat Bantuan->Pesan Debug untuk detailnya)."
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
@@ -4050,9 +4033,8 @@ msgid "Open in New _Window"
 msgstr "Buka di _Jendela Baru"
 
 #: ../src/notebook.c:501
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "Pindahkan dokumen ke kanan"
+msgstr "Tutup Dokumen di sebelah _Kanan"
 
 #: ../src/plugins.c:232
 #, c-format
@@ -4115,6 +4097,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"Plugin proxy  '%s' ekstensi '%s' dimulai dengan titik. Silakan perbaiki "
+"plugin proxy-mu."
 
 #: ../src/pluginutils.c:426
 msgid "Configure Plugins"
@@ -4127,7 +4111,7 @@ msgstr "Angkut Kunci"
 #: ../src/prefs.c:186
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
-msgstr "Tekan tombol kombinasi yang ingin dipakai untuk \"%s\"."
+msgstr "Tekan tombol kombinasi yang ingin digunakan untuk \"%s\"."
 
 #: ../src/prefs.c:226 ../src/symbols.c:2586 ../src/sidebar.c:751
 msgid "_Expand All"
@@ -4160,7 +4144,7 @@ msgstr "Timpa keybinding ini?"
 #: ../src/prefs.c:1488
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
-msgstr "Kombinasi '%s' telah terpakai untuk \"%s\"."
+msgstr "Kombinasi '%s' telah digunakan untuk \"%s\"."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
@@ -4406,15 +4390,14 @@ msgstr "Proyek \"%s\" terbuka."
 
 #: ../src/search.c:309 ../src/search.c:961
 msgid "_Use regular expressions"
-msgstr "_Pakai ekspresi regular"
+msgstr "G_unakan ekspresi regular"
 
 #: ../src/search.c:312
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Pakai regex yang berbasiskan POSIX. Untuk informasi lebih lengkap tentang "
+"Gunakan regex yang berbasiskan perl. Untuk informasi lebih lengkap tentang "
 "penggunaan regex, silakan membaca dokumentasi terkait."
 
 #: ../src/search.c:317
@@ -4746,7 +4729,7 @@ msgstr "Program"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Divisi"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4766,7 +4749,7 @@ msgstr "Data"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Salinan"
 
 #: ../src/symbols.c:504
 msgid "Keys"
@@ -5091,6 +5074,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"Tidak dapat mengeksekusi templat perintah \"%s\". Petunjuk: kesalahan lokasi pada perintah "
+"adalah penyebab umum pada galat. Galat: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:57
@@ -5450,7 +5435,7 @@ msgstr "yyyy/mm/dd hh:mm:ss"
 
 #: ../src/ui_utils.c:726 ../src/ui_utils.c:814
 msgid "_Use Custom Date Format"
-msgstr "_Pakai Format Tanggal Custom"
+msgstr "_Gunakan Format Tanggal Custom"
 
 #: ../src/ui_utils.c:730
 msgid "Custom Date Format"
@@ -5570,7 +5555,7 @@ msgstr "Executable"
 #: ../src/win32.c:798
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Gagal membuka URI \"%s\": %s"
 
 #: ../plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -5744,7 +5729,7 @@ msgid ""
 "the button to insert it at the current cursor position."
 msgstr ""
 "Pilih sebuah katakter spesial dari daftar di bawah dan double klik lah atau "
-"pakai tombol untuk menyisipkannya pada posisi kursor saat ini."
+"Gunakan tombol untuk menyisipkannya pada posisi kursor saat ini."
 
 #: ../plugins/htmlchars.c:511
 msgid "Character"
@@ -5806,7 +5791,7 @@ msgstr ""
 
 #: ../plugins/export.c:198
 msgid "_Use current zoom level"
-msgstr "_Pakai level pembesaran yang sekarang"
+msgstr "_Gunakan level pembesaran yang sekarang"
 
 #: ../plugins/export.c:200
 msgid ""
@@ -5935,7 +5920,7 @@ msgstr "Ikuti lokasi path dari berkas yang sekarang"
 
 #: ../plugins/filebrowser.c:1316
 msgid "Use the project's base directory"
-msgstr "Pakai direktori dasar proyek"
+msgstr "Gunakan direktori dasar proyek"
 
 #: ../plugins/filebrowser.c:1320
 msgid ""
@@ -6022,7 +6007,7 @@ msgstr "Simpan Cepat"
 
 #: ../plugins/saveactions.c:688
 msgid "_Filetype to use for newly opened files:"
-msgstr "_Tipe-berkas yang dipakai untuk berkas yang baru dibuka:"
+msgstr "_Tipe-berkas yang digunakan untuk berkas yang baru dibuka:"
 
 #: ../plugins/saveactions.c:719
 msgid "Backup Copy"
