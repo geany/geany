@@ -67,6 +67,7 @@ typedef struct
 	gchar			*wordchars;	/* NULL used for style sets with no styles */
 	gchar			**property_keys;
 	gchar			**property_values;
+	GSList			*autocomplete_keywords;
 } StyleSet;
 
 /* each filetype has a styleset but GEANY_FILETYPES_NONE uses common_style_set for styling */
@@ -156,6 +157,8 @@ static void free_styleset(guint file_type_id)
 	style_ptr->property_keys = NULL;
 	g_strfreev(style_ptr->property_values);
 	style_ptr->property_values = NULL;
+	g_slist_free_full(style_ptr->autocomplete_keywords, g_free);
+	style_ptr->autocomplete_keywords = NULL;
 }
 
 
@@ -848,26 +851,54 @@ static void styleset_init_from_mapping(guint ft_id, GKeyFile *config, GKeyFile *
 		const HLStyle *styles, gsize n_styles,
 		const HLKeyword *keywords, gsize n_keywords)
 {
+	StyleSet *style_set = &style_sets[ft_id];
 	gsize i;
 
 	/* styles */
 	new_styleset(ft_id, n_styles);
 	foreach_range(i, n_styles)
 	{
-		GeanyLexerStyle *style = &style_sets[ft_id].styling[i];
+		GeanyLexerStyle *style = &style_set->styling[i];
 
 		get_keyfile_style(config, config_home, styles[i].name, style);
 	}
 
 	/* keywords */
 	if (n_keywords < 1)
-		style_sets[ft_id].keywords = NULL;
+		style_set->keywords = NULL;
 	else
 	{
-		style_sets[ft_id].keywords = g_new(gchar*, n_keywords + 1);
+		GString *str = g_string_sized_new(1000);
+		gchar **keyword_array;
+		gchar **keyword;
+
+		style_set->keywords = g_new(gchar*, n_keywords + 1);
 		foreach_range(i, n_keywords)
+		{
 			get_keyfile_keywords(config, config_home, keywords[i].key, ft_id, i);
-		style_sets[ft_id].keywords[i] = NULL;
+
+			/* Collect all the (whitespace-separated) lists of keywords that
+			 * should be used for autocompletion */
+			if (keywords[i].autocomplete)
+			{
+				g_string_append(str, style_set->keywords[i]);
+				g_string_append_c(str, ' ');
+			}
+		}
+		style_set->keywords[i] = NULL;
+
+		keyword_array = g_strsplit_set(str->str, " \t", -1);
+		for (keyword = keyword_array; !EMPTY(keyword); keyword++)
+		{
+			if (**keyword != '\0')
+				style_set->autocomplete_keywords = g_slist_prepend(style_set->autocomplete_keywords,
+														g_strdup(*keyword));
+		}
+		style_set->autocomplete_keywords = g_slist_sort(style_set->autocomplete_keywords,
+												(GCompareFunc)g_strcmp0);
+
+		g_strfreev(keyword_array);
+		g_string_free(str, TRUE);
 	}
 }
 
@@ -1901,4 +1932,10 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 	}
 	return !(highlighting_is_comment_style(lexer, style) ||
 		highlighting_is_string_style(lexer, style));
+}
+
+
+const GSList *highlighting_get_keywords(GeanyFiletypeID filetype_id)
+{
+	return style_sets[filetype_id].autocomplete_keywords;
 }

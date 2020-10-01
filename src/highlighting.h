@@ -62,6 +62,8 @@ void highlighting_free_styles(void);
 
 void highlighting_show_color_scheme_dialog(void);
 
+const GSList *highlighting_get_keywords(GeanyFiletypeID filetype_id);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

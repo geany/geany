@@ -630,7 +630,9 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 			g_string_append(words, tag->name);
 
 			/* for now, tag types don't all follow C, so just look at arglist */
-			if (!EMPTY(tag->arglist))
+			if (tag->type == tm_tag_undef_t)
+				g_string_append(words, "?3");
+			else if (!EMPTY(tag->arglist))
 				g_string_append(words, "?2");
 			else
 				g_string_append(words, "?1");
@@ -2072,14 +2074,32 @@ autocomplete_tags(GeanyEditor *editor, GeanyFiletype *ft, const gchar *root, gsi
 {
 	GPtrArray *tags;
 	gboolean found;
+	const GSList *keywords, *keyword;
+	GPtrArray *keyword_tags;
 
 	g_return_val_if_fail(editor, FALSE);
 
-	tags = tm_workspace_find_prefix(root, ft->lang, editor_prefs.autocompletion_max_entries);
+	/* Get keywords and create a dummy TMTag array from them. These tags are
+	 * then also searched when searching workspace */
+	keywords = highlighting_get_keywords(ft->id);
+	keyword_tags = g_ptr_array_new_full(100, (GDestroyNotify)tm_tag_unref);
+	foreach_slist(keyword, keywords)
+	{
+		TMTag *tag = tm_tag_new();
+
+		tag->name = g_strdup(keyword->data);
+		tag->lang = ft->lang;
+		tag->type = tm_tag_undef_t;
+		g_ptr_array_add(keyword_tags, tag);
+	}
+
+	tags = tm_workspace_find_prefix(root, keyword_tags, ft->lang, editor_prefs.autocompletion_max_entries);
 	found = tags->len > 0;
 	if (found)
 		show_tags_list(editor, tags, rootlen);
+
 	g_ptr_array_free(tags, TRUE);
+	g_ptr_array_free(keyword_tags, TRUE);
 
 	return found;
 }
@@ -4927,6 +4947,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	/* tag autocompletion images */
 	register_named_icon(sci, 1, "classviewer-var");
 	register_named_icon(sci, 2, "classviewer-method");
+	register_named_icon(sci, 3, "classviewer-member");
 
 	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
 	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
