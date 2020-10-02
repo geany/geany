@@ -5,12 +5,12 @@ dist: trusty
 compiler:
   - gcc
 env:
-  - GTK3=no BINRELOC=no
-  - GTK3=yes BINRELOC=no
-  - GTK3=no BINRELOC=yes
-  - GTK3=yes BINRELOC=yes
-  - GTK3=no MINGW=yes
-  - GTK3=yes MINGW=yes
+  - GTK2=no BINRELOC=no
+  - GTK2=yes BINRELOC=no
+  - GTK2=no BINRELOC=yes
+  - GTK2=yes BINRELOC=yes
+  - GTK2=no MINGW=yes
+  - GTK2=yes MINGW=yes
 before_install:
   - sudo apt-get update -qq
 install:
@@ -29,11 +29,11 @@ script:
   - NOCONFIGURE=1 ./autogen.sh
   - >
     if [ -n "$MINGW" ]; then
-      arg=-2; [ "$GTK3" = yes ] && arg=-3;
+      arg=-3; [ "$GTK2" = yes ] && arg=-2;
       unset CC CXX;
       sh ./scripts/cross-build-mingw.sh $arg;
     else
-      CONFIGURE_FLAGS="--enable-gtk3=$GTK3 --enable-binreloc=$BINRELOC";
+      CONFIGURE_FLAGS="--enable-gtk2=$GTK2 --enable-binreloc=$BINRELOC";
       mkdir _build                        &&
       cd _build                           &&
       { ../configure $CONFIGURE_FLAGS || { cat config.log; exit 1; } ; } &&
