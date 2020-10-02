@@ -72,26 +72,23 @@ GEANY_CHECK_REVISION([dnl force debug mode for a VCS working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
 
 # GTK version check
-AC_ARG_ENABLE([gtk3],
-		[AS_HELP_STRING([--enable-gtk3],
-						[compile against GTK3 [default=auto]])],
-		[enable_gtk3=$enableval],
-		[enable_gtk3=auto])
+AC_ARG_ENABLE([gtk2],
+		[AS_HELP_STRING([--enable-gtk2],
+						[compile against deprecated GTK2 [default=no]])],
+		[enable_gtk2=$enableval],
+		[enable_gtk2=no])
 
 gtk2_package=gtk+-2.0
 gtk2_min_version=2.24
 gtk3_package=gtk+-3.0
 gtk3_min_version=3.0
 
-PKG_CHECK_EXISTS([$gtk2_package >= $gtk2_min_version], [have_gtk2=yes], [have_gtk2=no])
-PKG_CHECK_EXISTS([$gtk3_package >= $gtk3_min_version], [have_gtk3=yes], [have_gtk3=no])
-AS_IF([test "x$enable_gtk3" = xyes || (test "x$enable_gtk3" != xno &&
-									   test "x$have_gtk3" = xyes &&
-									   test "x$have_gtk2" = xno)],
-	  [gtk_package=$gtk3_package
-	   gtk_min_version=$gtk3_min_version],
-	  [gtk_package=$gtk2_package
-	   gtk_min_version=$gtk2_min_version])
+AS_IF([test "x$enable_gtk2" = "xyes"],
+	[gtk_package=$gtk2_package
+	 gtk_min_version=$gtk2_min_version],
+	[gtk_package=$gtk3_package
+	 gtk_min_version=$gtk3_min_version])
+
 AM_CONDITIONAL([GTK3], [test "x$gtk_package" = "x$gtk3_package"])
 
 # GTK/GLib/GIO checks
