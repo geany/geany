@@ -171,7 +171,7 @@ index ed47aa8..e58f1ab 100644
  	LINK_LEXER(lmRust);
 -	LINK_LEXER(lmSAS);
 -	LINK_LEXER(lmScriptol);
--	LINK_LEXER(lmSmalltalk);
+ 	LINK_LEXER(lmSmalltalk);
 -	LINK_LEXER(lmSML);
 -	LINK_LEXER(lmSorc);
 -	LINK_LEXER(lmSpecman);
