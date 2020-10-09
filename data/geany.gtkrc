@@ -21,6 +21,7 @@ style "geany-search-entry-no-match-style" {
 	base[NORMAL] = "#ffff66666666"
 	text[NORMAL] = "#ffffffffffff"
 	base[SELECTED] = "#777711111111"
+	text[SELECTED] = "#ffffffffffff"
 	# try and remove the entry background image on pixmap engine so that our
 	# background color is visible, and we don't end up with white text on white
 	# background (workaround for Adwaita 3.20).
