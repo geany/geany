@@ -58,7 +58,6 @@ static void geany_wrap_label_get_preferred_width_for_height (GtkWidget *widget,
 static void geany_wrap_label_get_preferred_height_for_width (GtkWidget *widget,
 		gint width, gint *minimal_height, gint *natural_height);
 static GtkSizeRequestMode geany_wrap_label_get_request_mode(GtkWidget *widget);
-
 static void geany_wrap_label_size_allocate	(GtkWidget *widget, GtkAllocation *alloc);
 static void geany_wrap_label_set_wrap_width	(GtkWidget *widget, gint width);
 static void geany_wrap_label_label_notify	(GObject *object, GParamSpec *pspec, gpointer data);

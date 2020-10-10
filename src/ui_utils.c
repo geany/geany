@@ -2525,7 +2525,6 @@ static void load_css_theme(const gchar *fn, guint priority)
 }
 
 
-// see setup_gtk2_styles() in libmain.c for GTK+ 2-specific theme initialization
 static void init_css_styles(void)
 {
 	gchar *theme_fn;

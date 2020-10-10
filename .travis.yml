@@ -26,9 +26,10 @@ script:
   - NOCONFIGURE=1 ./autogen.sh
   - >
     if [ -n "$MINGW" ]; then
+      unset CC CXX;
       sh ./scripts/cross-build-mingw.sh;
     else
-      CONFIGURE_FLAGS="--enable-gtk2=$GTK2 --enable-binreloc=$BINRELOC";
+      CONFIGURE_FLAGS="--enable-binreloc=$BINRELOC";
       mkdir _build                        &&
       cd _build                           &&
       { ../configure $CONFIGURE_FLAGS || { cat config.log; exit 1; } ; } &&

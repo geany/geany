@@ -20,7 +20,8 @@
 
 /* Compatibility macros to support older GTK+ versions
  * 
- * TODO: This file can be removed once the code is updated to use GTK3 keysyms.
+ * Although this file might not be useful anymore, it might be used by plugins
+ * so it cannot be removed without care.
  */
 
 #ifndef GTK_COMPAT_H

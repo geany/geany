@@ -83,9 +83,9 @@
 #include <stdlib.h> /* only for atoi() */
 
 
+/* GTK3 removed ComboBoxEntry, but we need a value to differentiate combo box with and
+ * without entries, and it must not collide with other GTypes */
 #define TYPE_COMBO_BOX_ENTRY get_combo_box_entry_type()
-
-
 static GType get_combo_box_entry_type(void)
 {
 	static volatile gsize type = 0;
