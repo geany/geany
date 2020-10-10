@@ -174,7 +174,7 @@ static gboolean on_msgwin_key_press_event(GtkWidget *widget, GdkEventKey *event,
 {
 	gboolean enter_or_return = ui_is_keyval_enter_or_return(event->keyval);
 
-	if (enter_or_return || event->keyval == GDK_space)
+	if (enter_or_return || event->keyval == GDK_KEY_space)
 	{
 		switch (GPOINTER_TO_INT(data))
 		{

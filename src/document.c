@@ -54,8 +54,6 @@
 #include "vte.h"
 #include "win32.h"
 
-#include "gtkcompat.h"
-
 #ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
 #endif
@@ -78,6 +76,7 @@
 /*#define USE_GIO_FILEMON 1*/
 #include <gio/gio.h>
 
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 
@@ -3557,15 +3556,15 @@ static gboolean on_sci_key(GtkWidget *widget, GdkEventKey *event, gpointer data)
 
 	switch (event->keyval)
 	{
-		case GDK_Tab:
-		case GDK_ISO_Left_Tab:
+		case GDK_KEY_Tab:
+		case GDK_KEY_ISO_Left_Tab:
 		{
 			GtkWidget *action_area = gtk_info_bar_get_action_area(bar);
-			GtkDirectionType dir = event->keyval == GDK_Tab ? GTK_DIR_TAB_FORWARD : GTK_DIR_TAB_BACKWARD;
+			GtkDirectionType dir = event->keyval == GDK_KEY_Tab ? GTK_DIR_TAB_FORWARD : GTK_DIR_TAB_BACKWARD;
 			gtk_widget_child_focus(action_area, dir);
 			return TRUE;
 		}
-		case GDK_Escape:
+		case GDK_KEY_Escape:
 		{
 			gtk_info_bar_response(bar, GTK_RESPONSE_CANCEL);
 			return TRUE;

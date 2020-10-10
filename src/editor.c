@@ -57,11 +57,10 @@
 
 #include "SciLexer.h"
 
-#include "gtkcompat.h"
-
 #include <ctype.h>
 #include <string.h>
 
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 
@@ -2659,7 +2658,7 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 		return FALSE;
 	/* return if we are editing an existing line (chars on right of cursor) */
 	if (keybindings_lookup_item(GEANY_KEY_GROUP_EDITOR,
-			GEANY_KEYS_EDITOR_COMPLETESNIPPET)->key == GDK_space &&
+			GEANY_KEYS_EDITOR_COMPLETESNIPPET)->key == GDK_KEY_space &&
 		! editor_prefs.complete_snippets_whilst_editing && ! at_eol(sci, pos))
 		return FALSE;
 
