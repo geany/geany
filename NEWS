@@ -1,5 +1,50 @@
 Geany 1.37 (unreleased)
 
+    General
+    * Build with GTK3 by default.
+    * Add an option (enabled by default) to save main and project configuration
+      whenever documents are opened/closed to reduce accidental loss of current
+      session in the event of a crash.
+    * List Geany in the category TextEditor (Dominic Hopf, Issue#2460).
+
+    Bug Fixes
+    * Fix main window name as seen by accessibility tools (Issue#2421).
+    * Add missing include (Pino Toscano, PR#2402).
+
+    Interface
+    * Allow to cancel Open Project and New Project dialogs without closing the
+      current project.
+    * Don't ask whether to close current project when opening a recent project.
+    * Disable some items when they are not available.
+    * Provide a CSS name for most widgets (PR#2469).
+    * Add a setting to control the fold margin width (Andy Alt, PR#2140).
+    * Show OS info in debug messages.
+    * Persist colour picker palette (Issue#2595).
+    * Fix color of selected text in search entries with no match (foresto,
+      Issue#2332, PR#2333)
+
+    Editor
+    * Update Scintilla to version 3.21.1 (PR#2506).
+
+    Filetypes
+    * Add BibTeX filetype (Mirco Schoenfeld, PR#2212).
+    * Update JavaScript keywords (dmitryunruh, PR#2486).
+    * Update Lua block comment end (Filip Szymański, PR#2566).
+    * Update FreeBasic keywords (Issue#2583).
+    * Add Smalltalk filetype (Snowflake the Pony, PR#2399).
+    * Add a configuration option to select the default Python command.
+
+    Documentation
+    * Improve Build-related settings documentation.
+    * Added documentation for the Color Chooser (LarsGit223).
+
+    Windows
+    * Bundle the GLib GSpawn helper binaries with the installer for plugin that
+      use the related GLib API.
+    * Make IPC port number configurable, and move the default outside the
+      dynamic range used by Hyper-V (Issue#2101, PR#2585).
+    * Use the `py` launcher for Python filetype (Issue#2211).
+
     Internationalization
     * New translations: ie
     * Updated translations: de, id, lv, pl, pt, ru, sv
