@@ -332,6 +332,8 @@ const gchar *utils_resource_dir(GeanyResourceDirType type);
 
 void utils_start_new_geany_instance(const gchar *doc_path);
 
+gchar *utils_get_os_info_string(void);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS
