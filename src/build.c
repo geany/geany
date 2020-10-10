@@ -1733,11 +1733,7 @@ typedef struct RowWidgets
 	gboolean used_dst;
 } RowWidgets;
 
-#if GTK_CHECK_VERSION(3,0,0)
 typedef GdkRGBA InsensitiveColor;
-#else
-typedef GdkColor InsensitiveColor;
-#endif
 static InsensitiveColor insensitive_color;
 
 static void set_row_color(RowWidgets *r, InsensitiveColor *color)
@@ -1749,11 +1745,7 @@ static void set_row_color(RowWidgets *r, InsensitiveColor *color)
 		if (i == GEANY_BC_LABEL)
 			continue;
 
-#if GTK_CHECK_VERSION(3,0,0)
 		gtk_widget_override_color(r->entries[i], GTK_STATE_FLAG_NORMAL, color);
-#else
-		gtk_widget_modify_text(r->entries[i], GTK_STATE_NORMAL, color);
-#endif
 	}
 }
 
@@ -1866,23 +1858,19 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	enum GeanyBuildCmdEntries i;
 	guint column = 0;
 	gchar *text;
+	GtkStyleContext *ctx;
 
 	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
 
 	text = g_strdup_printf("%d.", cmd + 1);
 	label = gtk_label_new(text);
 	g_free(text);
-#if GTK_CHECK_VERSION(3,0,0)
-{
-	GtkStyleContext *ctx = gtk_widget_get_style_context(label);
 
+	ctx = gtk_widget_get_style_context(label);
 	gtk_style_context_save(ctx);
 	gtk_style_context_get_color(ctx, GTK_STATE_FLAG_INSENSITIVE, &insensitive_color);
 	gtk_style_context_restore(ctx);
-}
-#else
-	insensitive_color = gtk_widget_get_style(label)->text[GTK_STATE_INSENSITIVE];
-#endif
+
 	gtk_table_attach(table, label, column, column + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	roww = g_new0(RowWidgets, 1);

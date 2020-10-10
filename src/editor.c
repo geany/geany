@@ -4796,8 +4796,7 @@ static gboolean on_editor_focus_in(GtkWidget *widget, GdkEventFocus *event, gpoi
 }
 
 
-static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
-		gpointer user_data)
+static gboolean on_editor_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
 	GeanyEditor *editor = user_data;
 
@@ -4806,14 +4805,6 @@ static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
 	editor_check_colourise(editor);
 	return FALSE;
 }
-
-
-#if GTK_CHECK_VERSION(3, 0, 0)
-static gboolean on_editor_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
-{
-	return on_editor_expose_event(widget, NULL, user_data);
-}
-#endif
 
 
 static void setup_sci_keys(ScintillaObject *sci)
@@ -4961,11 +4952,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 		g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), editor);
 		g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 		g_signal_connect(sci, "focus-in-event", G_CALLBACK(on_editor_focus_in), editor);
-#if GTK_CHECK_VERSION(3, 0, 0)
 		g_signal_connect(sci, "draw", G_CALLBACK(on_editor_draw), editor);
-#else
-		g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), editor);
-#endif
 	}
 	return sci;
 }

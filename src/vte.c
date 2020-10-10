@@ -132,12 +132,10 @@ struct VteFunctions
 	void (*vte_terminal_select_all) (VteTerminal *terminal);
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
 	GtkAdjustment* (*vte_terminal_get_adjustment) (VteTerminal *terminal);
-#if GTK_CHECK_VERSION(3, 0, 0)
 	/* hack for the VTE 2.91 API using GdkRGBA: we wrap the API to keep using GdkColor on our side */
 	void (*vte_terminal_set_color_foreground_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
 	void (*vte_terminal_set_color_bold_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
 	void (*vte_terminal_set_color_background_rgba) (VteTerminal *terminal, const GdkRGBA *background);
-#endif
 };
 
 
@@ -183,16 +181,13 @@ static const GtkTargetEntry dnd_targets[] =
 /* replacement for vte_terminal_get_adjustment() when it's not available */
 static GtkAdjustment *default_vte_terminal_get_adjustment(VteTerminal *vte)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
 	if (GTK_IS_SCROLLABLE(vte))
 		return gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(vte));
-#endif
 	/* this is only valid in < 0.38, 0.38 broke ABI */
 	return vte->adjustment;
 }
 
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 /* Wrap VTE 2.91 API using GdkRGBA with GdkColor so we use a single API on our side */
 
 static void rgba_from_color(GdkRGBA *rgba, const GdkColor *color)
@@ -203,7 +198,7 @@ static void rgba_from_color(GdkRGBA *rgba, const GdkColor *color)
 	rgba->alpha = 1.0;
 }
 
-#	define WRAP_RGBA_SETTER(name) \
+#define WRAP_RGBA_SETTER(name) \
 	static void wrap_##name(VteTerminal *terminal, const GdkColor *color) \
 	{ \
 		GdkRGBA rgba; \
@@ -215,8 +210,7 @@ WRAP_RGBA_SETTER(vte_terminal_set_color_background)
 WRAP_RGBA_SETTER(vte_terminal_set_color_bold)
 WRAP_RGBA_SETTER(vte_terminal_set_color_foreground)
 
-#	undef WRAP_RGBA_SETTER
-#endif
+#undef WRAP_RGBA_SETTER
 
 
 static gchar **vte_get_child_environment(void)
@@ -274,19 +268,12 @@ void vte_init(void)
 	{
 		gint i;
 		const gchar *sonames[] = {
-#if GTK_CHECK_VERSION(3, 0, 0)
-# ifdef __APPLE__
+#ifdef __APPLE__
 			"libvte-2.91.0.dylib", "libvte-2.91.dylib",
 			"libvte2_90.9.dylib", "libvte2_90.dylib",
-# endif
+#endif
 			"libvte-2.91.so", "libvte-2.91.so.0",
 			"libvte2_90.so", "libvte2_90.so.9",
-#else /* GTK 2 */
-# ifdef __APPLE__
-			"libvte.9.dylib", "libvte.dylib",
-# endif
-			"libvte.so", "libvte.so.9", "libvte.so.8", "libvte.so.4",
-#endif
 			NULL
 		};
 
@@ -558,7 +545,6 @@ static void vte_set_cursor_blink_mode(void)
 }
 
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 static gboolean vte_is_2_91(void)
 {
 	guint major = vf->vte_get_major_version ? vf->vte_get_major_version() : 0;
@@ -569,7 +555,6 @@ static gboolean vte_is_2_91(void)
 	        /* 0.38 doesn't have runtime version checks, so check a symbol that didn't exist before */
 	        vf->vte_terminal_spawn_sync != NULL);
 }
-#endif
 
 
 static gboolean vte_register_symbols(GModule *mod)
@@ -616,7 +601,6 @@ static gboolean vte_register_symbols(GModule *mod)
 	BIND_REQUIRED_SYMBOL(vte_terminal_get_has_selection);
 	BIND_REQUIRED_SYMBOL(vte_terminal_copy_clipboard);
 	BIND_REQUIRED_SYMBOL(vte_terminal_paste_clipboard);
-#if GTK_CHECK_VERSION(3, 0, 0)
 	if (vte_is_2_91())
 	{
 		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_foreground);
@@ -624,7 +608,6 @@ static gboolean vte_register_symbols(GModule *mod)
 		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_background);
 	}
 	else
-#endif
 	{
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_foreground);
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_bold);

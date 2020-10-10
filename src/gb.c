@@ -78,22 +78,14 @@ static GType geany_pong_get_type(void) G_GNUC_CONST;
 G_DEFINE_TYPE(GeanyPong, geany_pong, GTK_TYPE_DIALOG)
 
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 static void geany_pong_set_cairo_source_color(cairo_t *cr, GdkRGBA *c, gdouble a)
 {
 	cairo_set_source_rgba(cr, c->red, c->green, c->blue, MIN(c->alpha, a));
 }
-#else
-static void geany_pong_set_cairo_source_color(cairo_t *cr, GdkColor *c, gdouble a)
-{
-	cairo_set_source_rgba(cr, c->red/65535.0, c->green/65535.0, c->blue/65535.0, a);
-}
-#endif
 
 
 static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *self)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
 	/* we use the window style context because the area one has a transparent
 	 * background and we want something to paint for the overlay */
 	GtkStyleContext *ctx = gtk_widget_get_style_context(GTK_WIDGET(self));
@@ -102,11 +94,6 @@ static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *se
 
 	gtk_style_context_get_color(ctx, state, &fg);
 	gtk_style_context_get_background_color(ctx, state, &bg);
-#else
-	GtkStyle *style = gtk_widget_get_style(area);
-	GdkColor fg = style->fg[GTK_STATE_NORMAL];
-	GdkColor bg = style->bg[GTK_STATE_NORMAL];
-#endif
 
 	self->area_width = gtk_widget_get_allocated_width(area);
 	self->area_height = gtk_widget_get_allocated_height(area);
@@ -131,6 +118,7 @@ static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *se
 	/* if not running, add an info */
 	if (! self->source_id || self->handle_width < 1)
 	{
+		PangoFontDescription *font = NULL;
 		PangoLayout *layout;
 		gint pw, ph;
 		gdouble scale;
@@ -141,17 +129,12 @@ static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *se
 
 		geany_pong_set_cairo_source_color(cr, &fg, 1.0);
 		layout = pango_cairo_create_layout(cr);
-#if GTK_CHECK_VERSION(3, 0, 0)
-		PangoFontDescription *font = NULL;
 		gtk_style_context_get(ctx, state, GTK_STYLE_PROPERTY_FONT, &font, NULL);
 		if (font)
 		{
 			pango_layout_set_font_description(layout, font);
 			pango_font_description_free(font);
 		}
-#else
-		pango_layout_set_font_description(layout, style->font_desc);
-#endif
 		if (! self->handle_width)
 			pango_layout_set_markup(layout, "<b>You won!</b>\n<small>OK, go back to work now.</small>", -1);
 		else
@@ -169,20 +152,6 @@ static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *se
 
 	return TRUE;
 }
-
-
-#if ! GTK_CHECK_VERSION(3, 0, 0)
-static gboolean geany_pong_area_expose(GtkWidget *area, GdkEventExpose *event, GeanyPong *self)
-{
-	cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(area));
-	gboolean ret;
-
-	ret = geany_pong_area_draw(area, cr, self);
-	cairo_destroy(cr);
-
-	return ret;
-}
-#endif
 
 
 static void geany_pong_reset_ball(GeanyPong *self)
@@ -365,11 +334,7 @@ static void geany_pong_init(GeanyPong *self)
 
 	self->area = gtk_drawing_area_new();
 	gtk_widget_add_events(self->area, GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
-#if GTK_CHECK_VERSION(3, 0, 0)
 	g_signal_connect(self->area, "draw", G_CALLBACK(geany_pong_area_draw), self);
-#else
-	g_signal_connect(self->area, "expose-event", G_CALLBACK(geany_pong_area_expose), self);
-#endif
 	g_signal_connect(self->area, "button-press-event", G_CALLBACK(geany_pong_area_button_press), self);
 	g_signal_connect(self->area, "motion-notify-event", G_CALLBACK(geany_pong_area_motion_notify), self);
 	gtk_widget_set_size_request(self->area, AREA_SIZE, AREA_SIZE);

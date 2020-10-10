@@ -60,13 +60,9 @@ G_BEGIN_DECLS
  */
 #define GEANY_API_VERSION 239
 
-/* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
- * with GTK3-linked Geany leads to crash */
-#if GTK_CHECK_VERSION(3, 0, 0)
-#	define GEANY_ABI_SHIFT 8
-#else
-#	define GEANY_ABI_SHIFT 0
-#endif
+/* hack to have a different ABI when built with different GTK major versions
+ * because loading plugins linked to a different one leads to crashes */
+#define GEANY_ABI_SHIFT 8
 /** The Application Binary Interface (ABI) version, incremented whenever
  * existing fields in the plugin data types have to be changed or reordered.
  * Changing this forces all plugins to be recompiled before Geany can load them. */

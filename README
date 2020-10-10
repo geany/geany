@@ -49,10 +49,10 @@ Installation from sources
 
 Requirements
 ++++++++++++
-For compiling Geany yourself, you will need the GTK2 (>= 2.24) or
-GTK3 libraries and header files. You will also need its dependency libraries
-and header files, such as Pango, Glib and ATK. All these files are
-available at https://www.gtk.org.
+For compiling Geany yourself, you will need the GTK3 (>= 3.0) libraries and
+header files. You will also need its dependency libraries and header files,
+such as Pango, Glib and ATK. All these files are available at
+https://www.gtk.org.
 
 Furthermore you need, of course, a C compiler and the Make tool; a C++
 compiler is also needed for the required Scintilla library included. The

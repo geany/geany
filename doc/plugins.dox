@@ -159,7 +159,7 @@ following.
 First you need to have Geany installed. Then install the development files for GTK
 and its dependencies. The easiest way to do this is to use your distribution's package
 management system, e.g. on Debian and Ubuntu systems you can use
-@code apt-get install libgtk2.0-dev intltool @endcode
+@code apt-get install libgtk-3-dev intltool @endcode
 This will install all necessary files to be able to compile plugins for Geany. On other
 distributions, the package names and commands to use may differ.
 
