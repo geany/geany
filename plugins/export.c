@@ -178,7 +178,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
 	/* file chooser extra widget */
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), vbox);
 	{
 		GtkWidget *check_line_numbers;

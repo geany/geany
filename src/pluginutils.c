@@ -395,7 +395,7 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 
 			gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 6, 6, 6);
 			gtk_container_add(GTK_CONTAINER(align), page);
-			page = gtk_vbox_new(FALSE, 0);
+			page = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 			gtk_box_pack_start(GTK_BOX(page), align, TRUE, TRUE, 0);
 		}
 	}

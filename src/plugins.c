@@ -54,8 +54,7 @@
 #include "utils.h"
 #include "win32.h"
 
-#include "gtkcompat.h"
-
+#include <gtk/gtk.h>
 #include <string.h>
 
 
@@ -1997,7 +1996,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	pm_widgets.popup_help_menu_item = menu_item;
 
 	/* put it together */
-	vbox2 = gtk_vbox_new(FALSE, 6);
+	vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), filter_entry, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);

@@ -22,7 +22,7 @@
 #ifndef GEANY_DOCUMENT_PRIVATE_H
 #define GEANY_DOCUMENT_PRIVATE_H 1
 
-#include "gtkcompat.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

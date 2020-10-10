@@ -494,7 +494,7 @@ static void show_dialog_create_class(gint type)
 		cc_dlg->base_header_entry = cc_table_attach_option_entry(table, _("Base source:"), row++);
 	else
 	{
-		hdr_hbox = gtk_hbox_new(FALSE, 6);
+		hdr_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 
 		label = cc_table_attach_option_label(table, _("Base header:"), row);
 

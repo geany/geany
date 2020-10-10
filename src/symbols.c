@@ -56,11 +56,10 @@
 
 #include "SciLexer.h"
 
-#include "gtkcompat.h"
-
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <gtk/gtk.h>
 
 
 typedef struct

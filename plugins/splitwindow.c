@@ -339,13 +339,13 @@ static void split_view(gboolean horizontal)
 	g_object_ref(notebook);
 	gtk_container_remove(GTK_CONTAINER(parent), notebook);
 
-	pane = horizontal ? gtk_hpaned_new() : gtk_vpaned_new();
+	pane = gtk_paned_new(horizontal ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL);
 	gtk_container_add(GTK_CONTAINER(parent), pane);
 
 	gtk_container_add(GTK_CONTAINER(pane), notebook);
 	g_object_unref(notebook);
 
-	box = gtk_vbox_new(FALSE, 0);
+	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	toolbar = create_toolbar();
 	gtk_box_pack_start(GTK_BOX(box), toolbar, FALSE, FALSE, 0);
 	edit_window.vbox = box;

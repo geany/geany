@@ -40,8 +40,7 @@
 #include "ui_utils.h"
 #include "win32.h"
 
-#include "gtkcompat.h"
-
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
 
@@ -305,7 +304,7 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 	GtkWidget *encoding_ebox, *encoding_label, *encoding_combo;
 
 	expander = gtk_expander_new_with_mnemonic(_("_More Options"));
-	vbox = gtk_vbox_new(FALSE, 6);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 	gtk_container_add(GTK_CONTAINER(expander), vbox);
 
 	table = gtk_table_new(2, 4, FALSE);

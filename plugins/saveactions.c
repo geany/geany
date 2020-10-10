@@ -589,7 +589,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	GtkWidget *vbox, *label, *notebook_vbox, *checkbox_enable;
 	GtkWidget *notebook, *inner_vbox;
 
-	vbox = gtk_vbox_new(FALSE, 6);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 
 	notebook = gtk_notebook_new();
 	gtk_widget_set_can_focus(notebook, FALSE);
@@ -602,8 +602,8 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	{
 		GtkWidget *spin, *hbox, *checkbox, *checkbox_enable_as_lf, *radio1, *radio2;
 
-		notebook_vbox = gtk_vbox_new(FALSE, 2);
-		inner_vbox = gtk_vbox_new(FALSE, 5);
+		notebook_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+		inner_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_vbox), 5);
 		gtk_box_pack_start(GTK_BOX(notebook_vbox), inner_vbox, TRUE, TRUE, 5);
 		gtk_notebook_insert_page(GTK_NOTEBOOK(notebook),
@@ -633,7 +633,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		label = gtk_label_new(_("seconds"));
 
-		hbox = gtk_hbox_new(FALSE, 5);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 		gtk_box_pack_start(GTK_BOX(hbox), spin, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
@@ -670,8 +670,8 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		guint i;
 		const GSList *node;
 
-		notebook_vbox = gtk_vbox_new(FALSE, 2);
-		inner_vbox = gtk_vbox_new(FALSE, 5);
+		notebook_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+		inner_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_vbox), 5);
 		gtk_box_pack_start(GTK_BOX(notebook_vbox), inner_vbox, TRUE, TRUE, 5);
 		gtk_notebook_insert_page(GTK_NOTEBOOK(notebook),
@@ -711,8 +711,8 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	{
 		GtkWidget *hbox, *entry_dir, *entry_time, *button, *image, *spin_dir_levels;
 
-		notebook_vbox = gtk_vbox_new(FALSE, 2);
-		inner_vbox = gtk_vbox_new(FALSE, 5);
+		notebook_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+		inner_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_vbox), 5);
 		gtk_box_pack_start(GTK_BOX(notebook_vbox), inner_vbox, TRUE, TRUE, 5);
 		gtk_notebook_insert_page(GTK_NOTEBOOK(notebook),
@@ -742,7 +742,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
 		gtk_container_add(GTK_CONTAINER(button), image);
 
-		hbox = gtk_hbox_new(FALSE, 6);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 		gtk_box_pack_start(GTK_BOX(hbox), entry_dir, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 
@@ -759,7 +759,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 			gtk_entry_set_text(GTK_ENTRY(entry_time), backupcopy_time_fmt);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), entry_time, FALSE, FALSE, 0);
 
-		hbox = gtk_hbox_new(FALSE, 6);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 
 		label = gtk_label_new_with_mnemonic(
 			_("Directory _levels to include in the backup destination:"));

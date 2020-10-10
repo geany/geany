@@ -231,7 +231,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 
 	gtk_print_operation_set_custom_tab_label(operation, _("Document Setup"));
 
-	page = gtk_vbox_new(FALSE, 0);
+	page = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(page), 5);
 
 	w->check_print_linenumbers = gtk_check_button_new_with_mnemonic(_("Print line numbers"));
@@ -259,7 +259,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	gtk_container_add(GTK_CONTAINER(frame33), alignment36);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(alignment36), 0, 0, 12, 0);
 
-	vbox30 = gtk_vbox_new(FALSE, 1);
+	vbox30 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
 	gtk_container_add(GTK_CONTAINER(alignment36), vbox30);
 
 	w->check_print_basename = gtk_check_button_new_with_mnemonic(_("Use the basename of the printed file"));
@@ -267,7 +267,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	gtk_widget_set_tooltip_text(w->check_print_basename, _("Print only the basename(without the path) of the printed file"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_basename), printing_prefs.page_header_basename);
 
-	hbox10 = gtk_hbox_new(FALSE, 5);
+	hbox10 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_pack_start(GTK_BOX(vbox30), hbox10, TRUE, TRUE, 0);
 
 	label203 = gtk_label_new(_("Date format:"));

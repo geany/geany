@@ -67,7 +67,7 @@
 #include "utils.h"
 #include "win32.h"
 
-#include "gtkcompat.h"
+#include <gtk/gtk.h>
 
 
 #ifndef G_OS_WIN32

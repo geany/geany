@@ -42,10 +42,9 @@
 #include "ui_utils.h"
 #include "utils.h"
 
-#include "gtkcompat.h"
-
 #include <time.h>
 #include <string.h>
+#include <gtk/gtk.h>
 
 
 GeanyTemplatePrefs template_prefs;
