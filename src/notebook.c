@@ -37,8 +37,7 @@
 #include "ui_utils.h"
 #include "utils.h"
 
-#include "gtkcompat.h"
-
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 
@@ -148,18 +147,18 @@ static gboolean is_modifier_key(guint keyval)
 {
 	switch (keyval)
 	{
-		case GDK_Shift_L:
-		case GDK_Shift_R:
-		case GDK_Control_L:
-		case GDK_Control_R:
-		case GDK_Meta_L:
-		case GDK_Meta_R:
-		case GDK_Alt_L:
-		case GDK_Alt_R:
-		case GDK_Super_L:
-		case GDK_Super_R:
-		case GDK_Hyper_L:
-		case GDK_Hyper_R:
+		case GDK_KEY_Shift_L:
+		case GDK_KEY_Shift_R:
+		case GDK_KEY_Control_L:
+		case GDK_KEY_Control_R:
+		case GDK_KEY_Meta_L:
+		case GDK_KEY_Meta_R:
+		case GDK_KEY_Alt_L:
+		case GDK_KEY_Alt_R:
+		case GDK_KEY_Super_L:
+		case GDK_KEY_Super_R:
+		case GDK_KEY_Hyper_L:
+		case GDK_KEY_Hyper_R:
 			return TRUE;
 		default:
 			return FALSE;

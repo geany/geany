@@ -758,20 +758,20 @@ static gboolean on_key_press(GtkWidget *widget, GdkEventKey *event, gpointer dat
 		return TRUE;
 	}
 
-	if (event->keyval == GDK_space)
+	if (event->keyval == GDK_KEY_space)
 	{
 		on_open_clicked(NULL, GINT_TO_POINTER(TRUE));
 		return TRUE;
 	}
 
-	if (( (event->keyval == GDK_Up || event->keyval == GDK_KP_Up) && (event->state & GDK_MOD1_MASK)) || /* FIXME: Alt-Up doesn't seem to work! */
-		(event->keyval == GDK_BackSpace) )
+	if (( (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_KP_Up) && (event->state & GDK_MOD1_MASK)) || /* FIXME: Alt-Up doesn't seem to work! */
+		(event->keyval == GDK_KEY_BackSpace) )
 	{
 		on_go_up();
 		return TRUE;
 	}
 
-	if ((event->keyval == GDK_F10 && event->state & GDK_SHIFT_MASK) || event->keyval == GDK_Menu)
+	if ((event->keyval == GDK_KEY_F10 && event->state & GDK_SHIFT_MASK) || event->keyval == GDK_KEY_Menu)
 	{
 		GdkEventButton button_event;
 

@@ -44,12 +44,11 @@
 #include "ui_utils.h"
 #include "utils.h"
 
-#include "gtkcompat.h"
-
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
 
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 enum
@@ -601,7 +600,7 @@ static void send_replace_dialog_response(GtkButton *button, gpointer user_data)
 static gboolean
 on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-	if (event->keyval == GDK_Tab)
+	if (event->keyval == GDK_KEY_Tab)
 	{
 		gtk_widget_grab_focus(GTK_WIDGET(user_data));
 		return TRUE;

@@ -73,7 +73,7 @@ typedef gboolean (*GeanyKeyBindingFunc)(GeanyKeyBinding *key, guint key_id, gpoi
  * Use keybindings_set_item() to set. */
 struct GeanyKeyBinding
 {
-	guint key;				/**< Key value in lower-case, such as @c GDK_a or 0 */
+	guint key;				/**< Key value in lower-case, such as @c GDK_KEY_a or 0 */
 	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK or 0 */
 	gchar *name;			/**< Key name for the configuration file, such as @c "menu_new" */
 	/** Label used in the preferences dialog keybindings tab.

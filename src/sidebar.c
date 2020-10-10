@@ -879,7 +879,7 @@ static gboolean openfiles_go_to_selection(GtkTreeSelection *selection, guint key
 
 		/* switch to the doc and grab the focus */
 		document_show_tab(doc);
-		if (keyval != GDK_space)
+		if (keyval != GDK_KEY_space)
 			change_focus_to_editor(doc, tv.tree_openfiles);
 	}
 	return FALSE;
@@ -910,7 +910,7 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 			{
 				navqueue_goto_line(doc, doc, line);
 				state = keybindings_get_modifiers(state);
-				if (keyval != GDK_space && ! (state & GEANY_PRIMARY_MOD_MASK))
+				if (keyval != GDK_KEY_space && ! (state & GEANY_PRIMARY_MOD_MASK))
 					change_focus_to_editor(doc, NULL);
 				else
 					handled = FALSE;
@@ -926,7 +926,7 @@ static gboolean sidebar_key_press_cb(GtkWidget *widget, GdkEventKey *event,
 											 gpointer user_data)
 {
 	may_steal_focus = FALSE;
-	if (ui_is_keyval_enter_or_return(event->keyval) || event->keyval == GDK_space)
+	if (ui_is_keyval_enter_or_return(event->keyval) || event->keyval == GDK_KEY_space)
 	{
 		GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS(widget);
 		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(widget));

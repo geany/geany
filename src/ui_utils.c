@@ -51,11 +51,10 @@
 #include "win32.h"
 #include "osx.h"
 
-#include "gtkcompat.h"
-
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 
@@ -1634,7 +1633,7 @@ void ui_entry_add_activate_backward_signal(GtkEntry *entry)
 			G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION, 0, NULL, NULL,
 			g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 		binding_set = gtk_binding_set_by_class(GTK_ENTRY_GET_CLASS(entry));
-		gtk_binding_entry_add_signal(binding_set, GDK_Return, GDK_SHIFT_MASK, "activate-backward", 0);
+		gtk_binding_entry_add_signal(binding_set, GDK_KEY_Return, GDK_SHIFT_MASK, "activate-backward", 0);
 	}
 }
 
@@ -3002,7 +3001,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 
 /** Checks whether the passed @a keyval is the Enter or Return key.
  * There are three different Enter/Return key values
- * (@c GDK_Return, @c GDK_ISO_Enter, @c GDK_KP_Enter).
+ * (@c GDK_KEY_Return, @c GDK_KEY_ISO_Enter, @c GDK_KEY_KP_Enter).
  * This is just a convenience function.
  * @param keyval A keyval.
  * @return @c TRUE if @a keyval is the one of the Enter/Return key values, otherwise @c FALSE.
@@ -3010,7 +3009,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 GEANY_API_SYMBOL
 gboolean ui_is_keyval_enter_or_return(guint keyval)
 {
-	return (keyval == GDK_Return || keyval == GDK_ISO_Enter|| keyval == GDK_KP_Enter);
+	return (keyval == GDK_KEY_Return || keyval == GDK_KEY_ISO_Enter|| keyval == GDK_KEY_KP_Enter);
 }
 
 
