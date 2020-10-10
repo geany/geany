@@ -199,7 +199,7 @@ static GtkWidget *create_switch_dialog(void)
 	gtk_window_set_decorated(GTK_WINDOW(dialog), FALSE);
 	gtk_window_set_default_size(GTK_WINDOW(dialog), 200, -1);
 
-	vbox = gtk_vbox_new(FALSE, 6);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 12);
 	gtk_container_add(GTK_CONTAINER(dialog), vbox);
 
@@ -679,7 +679,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	g_return_val_if_fail(this != NULL, -1);
 
 	/* page is packed into a vbox so we can stack infobars above it */
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	page = GTK_WIDGET(this->editor->sci);
 	gtk_box_pack_start(GTK_BOX(vbox), page, TRUE, TRUE, 0);
 
@@ -694,7 +694,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	g_signal_connect_after(ebox, "button-release-event",
 		G_CALLBACK(focus_sci), NULL);
 
-	hbox = gtk_hbox_new(FALSE, 2);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), this->priv->tab_label, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(ebox), hbox);
 

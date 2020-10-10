@@ -3471,7 +3471,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 	g_signal_connect(info_widget, "response", G_CALLBACK(response_cb), doc);
 
-	hbox = gtk_hbox_new(FALSE, 12);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 12);
 	gtk_box_pack_start(GTK_BOX(content_area), hbox, TRUE, TRUE, 0);
 
 	switch (msgtype)
@@ -3498,7 +3498,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 	if (extra_text)
 	{
-		GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
+		GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 		GtkWidget *extra_label = geany_wrap_label_new(extra_text);
 
 		gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);

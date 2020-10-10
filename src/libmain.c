@@ -63,8 +63,6 @@
 #include "win32.h"
 #include "osx.h"
 
-#include "gtkcompat.h"
-
 #include <signal.h>
 #include <time.h>
 #include <sys/types.h>
@@ -73,6 +71,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
 #ifdef G_OS_UNIX

@@ -182,7 +182,7 @@ static GtkWidget *demo_configure(GeanyPlugin *plugin, GtkDialog *dialog, gpointe
 	GtkWidget *label, *entry, *vbox;
 
 	/* example configuration dialog */
-	vbox = gtk_vbox_new(FALSE, 6);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 
 	/* add a label and a text entry to the dialog */
 	label = gtk_label_new(_("Welcome text to show:"));

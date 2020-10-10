@@ -24,7 +24,7 @@
 
 #include "utils.h"
 
-#include "gtkcompat.h"
+#include <gtk/gtk.h>
 
 
 #define AREA_SIZE 300
@@ -318,11 +318,11 @@ static void geany_pong_init(GeanyPong *self)
 	gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
 	gtk_window_set_resizable(GTK_WINDOW(self), FALSE);
 
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(self))), vbox, TRUE, TRUE, 0);
 
-	hbox = gtk_hbox_new(FALSE, 6);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
 	label = gtk_label_new("Score:");
