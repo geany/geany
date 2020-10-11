@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-22 11:56+0200\n"
+"POT-Creation-Date: 2020-10-11 21:34+0200\n"
 "PO-Revision-Date: 2015-06-23 19:16+0300\n"
 "Last-Translator: Yury Siamashka <yurand2@gmail.com>\n"
 "Language-Team: Belarusian <geany-i18n@uvena.de>\n"
@@ -109,11 +109,11 @@ msgstr "Шукаць"
 msgid "Open Selected F_ile"
 msgstr "Адкрыць вылучаны файл"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2618
+#: ../data/geany.glade.h:19 ../src/symbols.c:2632
 msgid "Find _Usage"
 msgstr "Знайсці ўжыванне"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2623
+#: ../data/geany.glade.h:20 ../src/symbols.c:2637
 msgid "Find _Document Usage"
 msgstr "Знайсці ўжыванне дакумента"
 
@@ -135,7 +135,7 @@ msgstr "Кантэкставае дзеянне"
 #. *   [5] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
 #. * --------------------------------------------------------------------------------------------------------------------------
 #. *       [0]         [1]           [2]                 [3]                        [4]          [5]
-#: ../data/geany.glade.h:23 ../src/filetypes.c:127 ../src/filetypes.c:1526
+#: ../data/geany.glade.h:23 ../src/filetypes.c:127 ../src/filetypes.c:1528
 msgid "None"
 msgstr "Нічога"
 
@@ -1061,7 +1061,7 @@ msgstr "Колер:"
 msgid "Sets the color of the long line marker"
 msgstr "Усталяваць колер маркёра доўгага радка"
 
-#: ../data/geany.glade.h:219 ../src/toolbar.c:73 ../src/tools.c:831
+#: ../data/geany.glade.h:219 ../src/toolbar.c:73 ../src/tools.c:845
 msgid "Color Chooser"
 msgstr "Выбар колеру"
 
@@ -1795,7 +1795,7 @@ msgstr "Шукаць наступны"
 msgid "Find _Previous"
 msgstr "Шукаць папярэдні"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2628
+#: ../data/geany.glade.h:381 ../src/symbols.c:2642
 msgid "Find in F_iles..."
 msgstr "Шукаць у файлах"
 
@@ -2045,7 +2045,7 @@ msgid "_Apply Default Indentation"
 msgstr "Прымяніць прадвызначаныя водступы"
 
 #. build the code
-#: ../data/geany.glade.h:443 ../src/build.c:2451 ../src/build.c:2722
+#: ../data/geany.glade.h:443 ../src/build.c:2459 ../src/build.c:2730
 msgid "_Build"
 msgstr "Зборка"
 
@@ -2130,7 +2130,7 @@ msgstr "Для нататкаў"
 msgid "Project Properties"
 msgstr "Уласцівасці праекта"
 
-#: ../data/geany.glade.h:464 ../src/project.c:179
+#: ../data/geany.glade.h:464 ../src/project.c:182
 msgid "Filename:"
 msgstr "Імя файла:"
 
@@ -2149,7 +2149,7 @@ msgstr "Апісанне:"
 msgid "_Base path:"
 msgstr "Базавы шлях:"
 
-#: ../data/geany.glade.h:468
+#: ../data/geany.glade.h:468 ../src/search.c:897
 #, fuzzy
 msgid "File _patterns:"
 msgstr "Шаблоны файлаў:"
@@ -2160,7 +2160,7 @@ msgid ""
 "g. *.c *.h)"
 msgstr "Спіс шаблонаў пошуку, пазделеных прабеламі (напрыклад, *.c *.h)"
 
-#: ../data/geany.glade.h:470 ../src/project.c:208
+#: ../data/geany.glade.h:470 ../src/project.c:211
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -2372,112 +2372,112 @@ msgid ""
 msgstr ""
 "Не магу выканаць утыліту grep '%s'; праверце шлях, вызначаны ва Ўласцівасцях."
 
-#: ../src/build.c:1093
+#: ../src/build.c:1099
 msgid "Compilation failed."
 msgstr "Кампіляцыя скончылася непаспяхова."
 
-#: ../src/build.c:1107
+#: ../src/build.c:1113
 msgid "Compilation finished successfully."
 msgstr "Кампіляцыя скончылася паспяхова."
 
-#: ../src/build.c:1267
+#: ../src/build.c:1273
 msgid "Custom Text"
 msgstr "Свой тэкст"
 
-#: ../src/build.c:1268
+#: ../src/build.c:1274
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr "Увядзіце тут свой тэкст,  увесь уведзены тэкст далучыцца да каманды."
 
-#: ../src/build.c:1347
+#: ../src/build.c:1353
 msgid "_Next Error"
 msgstr "Наступная памылка"
 
-#: ../src/build.c:1349
+#: ../src/build.c:1355
 msgid "_Previous Error"
 msgstr "Папярэдняя памылка"
 
 #. arguments
-#: ../src/build.c:1359 ../src/build.c:2762
+#: ../src/build.c:1365 ../src/build.c:2770
 msgid "_Set Build Commands"
 msgstr "Усталяваць каманды зборкі"
 
-#: ../src/build.c:1634 ../src/toolbar.c:375
+#: ../src/build.c:1642 ../src/toolbar.c:375
 msgid "Build the current file"
 msgstr "Сабраць цяперашні файл"
 
-#: ../src/build.c:1645
+#: ../src/build.c:1653
 msgid "Build the current file with Make and the default target"
 msgstr ""
 "Сабраць цяперашні файл, выкарыстоўваючы утыліту Make і мэту зборкі по змоўку"
 
-#: ../src/build.c:1647
+#: ../src/build.c:1655
 msgid "Build the current file with Make and the specified target"
 msgstr "Сабраць цяперашні файл, выкарыстоўваючы ўтыліту Make і ўказаную мэту"
 
-#: ../src/build.c:1649
+#: ../src/build.c:1657
 msgid "Compile the current file with Make"
 msgstr "Скампіляваць цяперашні файл, выкарыстоўваючы ўтыліту Make"
 
-#: ../src/build.c:1668
+#: ../src/build.c:1676
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Працэс немагчыма спыніць (%s)."
 
-#: ../src/build.c:1682 ../src/build.c:1694
+#: ../src/build.c:1690 ../src/build.c:1702
 msgid "No more build errors."
 msgstr "Памылак зборкі больш няма."
 
-#: ../src/build.c:1807 ../src/build.c:1809
+#: ../src/build.c:1815 ../src/build.c:1817
 msgid "Set menu item label"
 msgstr "Усталяваць пазнаку элемента меню"
 
-#: ../src/build.c:1834 ../src/symbols.c:522 ../src/tools.c:396
+#: ../src/build.c:1842 ../src/symbols.c:522 ../src/tools.c:396
 msgid "Label"
 msgstr "Пазнака"
 
 #. command column, holding status and command display
-#: ../src/build.c:1835 ../src/symbols.c:517 ../src/tools.c:381
+#: ../src/build.c:1843 ../src/symbols.c:517 ../src/tools.c:381
 msgid "Command"
 msgstr "Каманда"
 
-#: ../src/build.c:1836
+#: ../src/build.c:1844
 msgid "Working directory"
 msgstr "Працоўная дырэкторыя"
 
-#: ../src/build.c:1837
+#: ../src/build.c:1845
 msgid "Reset"
 msgstr "Пераўсталяваць"
 
-#: ../src/build.c:1894
+#: ../src/build.c:1902
 msgid "Click to set menu item label"
 msgstr "Пстрыкніце для ўсталявання пазнакі элемента меню"
 
-#: ../src/build.c:1978 ../src/build.c:1980
+#: ../src/build.c:1986 ../src/build.c:1988
 #, c-format
 msgid "%s commands"
 msgstr "%s Каманды"
 
-#: ../src/build.c:1980
+#: ../src/build.c:1988
 msgid "No filetype"
 msgstr "Немагчыма вызначыць тып файла"
 
-#: ../src/build.c:1989 ../src/build.c:2024
+#: ../src/build.c:1997 ../src/build.c:2032
 msgid "Error regular expression:"
 msgstr "Рэгулярны выраз, які з'яўляецца прыкметай памылкі:"
 
-#: ../src/build.c:2017
+#: ../src/build.c:2025
 msgid "Independent commands"
 msgstr "Незалежныя каманды"
 
-#: ../src/build.c:2049
+#: ../src/build.c:2057
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "Заўвага: элемент 2 адчыняе дыялог і дадае адказ да каманды."
 
-#: ../src/build.c:2058
+#: ../src/build.c:2066
 msgid "Execute commands"
 msgstr "Выканаць каманды"
 
-#: ../src/build.c:2070
+#: ../src/build.c:2078
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
@@ -2485,34 +2485,34 @@ msgstr ""
 "Шаблоны для падстаноўкі з каманду і працоўную дырэкторыю: %d, %e, %f, %p, "
 "дэталёвую інфармацыю глядзі ў даведцы."
 
-#: ../src/build.c:2228
+#: ../src/build.c:2236
 msgid "Set Build Commands"
 msgstr "Усталяваць каманды зборкі"
 
-#: ../src/build.c:2444
+#: ../src/build.c:2452
 msgid "_Compile"
 msgstr "Скампіляваць"
 
-#: ../src/build.c:2458 ../src/build.c:2488 ../src/build.c:2690
+#: ../src/build.c:2466 ../src/build.c:2496 ../src/build.c:2698
 msgid "_Execute"
 msgstr "Выканаць"
 
 #. build the code with make custom
-#: ../src/build.c:2503 ../src/build.c:2688 ../src/build.c:2742
+#: ../src/build.c:2511 ../src/build.c:2696 ../src/build.c:2750
 msgid "Make Custom _Target..."
 msgstr "Сабраць указанную мэту"
 
 #. build the code with make object
-#: ../src/build.c:2505 ../src/build.c:2689 ../src/build.c:2750
+#: ../src/build.c:2513 ../src/build.c:2697 ../src/build.c:2758
 msgid "Make _Object"
 msgstr "Сабраць аб'ектны файл"
 
-#: ../src/build.c:2507 ../src/build.c:2687
+#: ../src/build.c:2515 ../src/build.c:2695
 msgid "_Make"
 msgstr "Сабраць "
 
 #. build the code with make all
-#: ../src/build.c:2734
+#: ../src/build.c:2742
 msgid "_Make All"
 msgstr "Сабраць усе"
 
@@ -2715,7 +2715,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2432 ../src/symbols.c:2448 ../src/ui_utils.c:288
+#: ../src/symbols.c:2446 ../src/symbols.c:2462 ../src/ui_utils.c:288
 msgid "unknown"
 msgstr "невядомы"
 
@@ -2938,8 +2938,8 @@ msgstr "Файл %s захаваны."
 msgid "Wrap search and find again?"
 msgstr "Шукаць зноў спачатку?"
 
-#: ../src/document.c:2464 ../src/search.c:1367 ../src/search.c:1420
-#: ../src/search.c:2222 ../src/search.c:2223
+#: ../src/document.c:2464 ../src/search.c:1368 ../src/search.c:1421
+#: ../src/search.c:2223 ../src/search.c:2224
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Супадзенні не знойдзены для \"%s\"."
@@ -3155,41 +3155,41 @@ msgstr "Makefile"
 msgid "Cascading Stylesheet"
 msgstr "Файл каскаднай табліцы стыляў (CSS)"
 
-#: ../src/filetypes.c:168
+#: ../src/filetypes.c:169
 msgid "Config"
 msgstr "Файл наладак"
 
-#: ../src/filetypes.c:169
+#: ../src/filetypes.c:170
 msgid "Gettext translation"
 msgstr "Gettext файл перакладу"
 
-#: ../src/filetypes.c:430
+#: ../src/filetypes.c:432
 msgid "_Programming Languages"
 msgstr "Мовы праграміравання"
 
-#: ../src/filetypes.c:431
+#: ../src/filetypes.c:433
 msgid "_Scripting Languages"
 msgstr "Мовы скрыптоў"
 
-#: ../src/filetypes.c:432
+#: ../src/filetypes.c:434
 msgid "_Markup Languages"
 msgstr "Мовы разметкі"
 
-#: ../src/filetypes.c:433
+#: ../src/filetypes.c:435
 msgid "M_iscellaneous"
 msgstr "Іншае"
 
-#: ../src/filetypes.c:1185 ../src/win32.c:155
+#: ../src/filetypes.c:1187 ../src/win32.c:155
 msgid "All Source"
 msgstr "Усе зыходныя"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1210 ../src/project.c:349 ../src/win32.c:145
+#: ../src/filetypes.c:1212 ../src/project.c:356 ../src/win32.c:145
 #: ../src/win32.c:190 ../src/win32.c:211 ../src/win32.c:216
 msgid "All files"
 msgstr "Усе файлы"
 
-#: ../src/filetypes.c:1259
+#: ../src/filetypes.c:1261
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "Дрэнны рэгулярны выраз для файлаў тыпу %s: %s"
@@ -3198,25 +3198,25 @@ msgstr "Дрэнны рэгулярны выраз для файлаў тыпу 
 msgid "untitled"
 msgstr "без назвы"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
+#: ../src/highlighting.c:1252 ../src/libmain.c:895 ../src/socket.c:169
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Немагчыма знайсці файл: '%s'."
 
-#: ../src/highlighting.c:1299
+#: ../src/highlighting.c:1322
 msgid "Default"
 msgstr "Прадвызначаны"
 
-#: ../src/highlighting.c:1340
+#: ../src/highlighting.c:1363
 msgid "The current filetype overrides the default style."
 msgstr "Цяперашні тып файла перавызначае прадвызначаны стыль."
 
-#: ../src/highlighting.c:1341
+#: ../src/highlighting.c:1364
 msgid "This may cause color schemes to display incorrectly."
 msgstr "Гэта можа выклікаць няправільнае адлюстраванне каляровых схем."
 
-#: ../src/highlighting.c:1366
+#: ../src/highlighting.c:1389
 msgid "Color Schemes"
 msgstr "Каляровыя схемы"
 
@@ -3257,12 +3257,12 @@ msgstr "Перайсці да"
 msgid "View"
 msgstr "Від"
 
-#: ../src/keybindings.c:320 ../src/symbols.c:643
+#: ../src/keybindings.c:320 ../src/symbols.c:657
 msgid "Document"
 msgstr "Дакумент"
 
-#: ../src/keybindings.c:322 ../src/keybindings.c:693 ../src/project.c:512
-#: ../src/ui_utils.c:2224
+#: ../src/keybindings.c:322 ../src/keybindings.c:693 ../src/project.c:519
+#: ../src/ui_utils.c:2225
 msgid "Build"
 msgstr "Зборка"
 
@@ -3302,7 +3302,7 @@ msgstr "Захаваць як"
 msgid "Save all"
 msgstr "Захаваць усё"
 
-#: ../src/keybindings.c:349 ../src/symbols.c:728
+#: ../src/keybindings.c:349 ../src/symbols.c:742
 msgid "Properties"
 msgstr "Уласцівасці"
 
@@ -3779,13 +3779,13 @@ msgstr "Спалучэнні клавіш"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Можна наладзіць наступныя спалучэнні клавіш:"
 
-#: ../src/keyfile.c:1047
+#: ../src/keyfile.c:1069
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Тут вы можаце пісаць усё, што заўгодна. Карыстайцеся гэтым полем для "
 "нататкаў і хуткіх запісаў."
 
-#: ../src/keyfile.c:1274
+#: ../src/keyfile.c:1296
 msgid "Failed to load one or more session files."
 msgstr "Немагчыма загрузіць адзін або больш файлаў з прошлай сесіі."
 
@@ -3892,35 +3892,35 @@ msgstr "Выводзіць падрабязнасці"
 msgid "Show version and exit"
 msgstr "Паказаць версію і выйсці"
 
-#: ../src/libmain.c:535
+#: ../src/libmain.c:563
 msgid "[FILES...]"
 msgstr "[ФАЙЛЫ...]"
 
-#: ../src/libmain.c:537
+#: ../src/libmain.c:565
 #, fuzzy
 msgid "A fast and lightweight IDE."
 msgstr "Хуткае і легкаважнае асяроддзе распрацоўкі"
 
-#: ../src/libmain.c:538
+#: ../src/libmain.c:566
 msgid "Report bugs to https://github.com/geany/geany/issues."
 msgstr ""
 
 #. note for translators: library versions are printed after this
-#: ../src/libmain.c:571
+#: ../src/libmain.c:599
 #, c-format
 msgid "built on %s with "
 msgstr "сабрана %s ці пазней"
 
-#: ../src/libmain.c:664
+#: ../src/libmain.c:692
 msgid "Move it now?"
 msgstr "Перамясціць гэта?"
 
-#: ../src/libmain.c:666
+#: ../src/libmain.c:694
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "Geany неабходна перамясціць ваш стары каталог з наладкамі перад запускам."
 
-#: ../src/libmain.c:675
+#: ../src/libmain.c:703
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3929,7 +3929,7 @@ msgstr "Ваш каталог з наладкамі паспяхова пера�
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/libmain.c:685
+#: ../src/libmain.c:713
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3938,7 +3938,7 @@ msgstr ""
 "Ваш каталог з наладкамі \"%s\" не можа быць перамешчаны ў \"%s\" (%s). Калі "
 "ласка, перамесціце каталог з наладкамі ўручную."
 
-#: ../src/libmain.c:767
+#: ../src/libmain.c:795
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3949,25 +3949,25 @@ msgstr ""
 "Магчымы праблемы пры карыстанні Geany без дырэкторыі наладак.\n"
 "Запусціць Geany у любым выпадку?"
 
-#: ../src/libmain.c:1174
+#: ../src/libmain.c:1217
 #, c-format
 msgid "This is Geany %s."
 msgstr "Гэта Geany %s."
 
-#: ../src/libmain.c:1177
+#: ../src/libmain.c:1220
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Немагчыма стварыць дырэкторыю  наладак (%s)."
 
-#: ../src/libmain.c:1184
+#: ../src/libmain.c:1228
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
 
-#: ../src/libmain.c:1413
+#: ../src/libmain.c:1459
 msgid "Do you really want to quit?"
 msgstr "Вы ўпэўнены, што жадаеце выйсці?"
 
-#: ../src/libmain.c:1451
+#: ../src/libmain.c:1497
 msgid "Configuration files reloaded."
 msgstr "Файлы наладак загружаны зноў."
 
@@ -3983,26 +3983,26 @@ msgstr "Ачысціць"
 msgid "Status messages"
 msgstr "Паведамленні стану"
 
-#: ../src/msgwindow.c:672
+#: ../src/msgwindow.c:668
 msgid "C_opy"
 msgstr "Капіраваць"
 
-#: ../src/msgwindow.c:681
+#: ../src/msgwindow.c:677
 msgid "Copy _All"
 msgstr "Капіраваць усе"
 
-#: ../src/msgwindow.c:711
+#: ../src/msgwindow.c:707
 msgid "_Hide Message Window"
 msgstr "Схаваць акно паведамленняў"
 
-#: ../src/msgwindow.c:772
+#: ../src/msgwindow.c:768
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
 "Немагчыма знайсці файл  '%s' - спрабую выкарыстоўваць шлях цяперашняга "
 "дакумента."
 
-#: ../src/msgwindow.c:1208
+#: ../src/msgwindow.c:1204
 msgid "The document has been closed."
 msgstr "Дакумент быў закрыт."
 
@@ -4092,11 +4092,11 @@ msgstr "Захапіць клавішу"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Укажыце спалучэнне клавіш для \"%s\"."
 
-#: ../src/prefs.c:226 ../src/symbols.c:2586 ../src/sidebar.c:751
+#: ../src/prefs.c:226 ../src/symbols.c:2600 ../src/sidebar.c:751
 msgid "_Expand All"
 msgstr "Разгарнуць усё"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2591 ../src/sidebar.c:757
+#: ../src/prefs.c:231 ../src/symbols.c:2605 ../src/sidebar.c:757
 msgid "_Collapse All"
 msgstr "Згарнуць усё"
 
@@ -4230,32 +4230,32 @@ msgstr "Файл %s надрукаваны."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:99
+#: ../src/project.c:100
 msgid "projects"
 msgstr "праекты"
 
-#: ../src/project.c:134
+#: ../src/project.c:123
 msgid "Move the current documents into the new project's session?"
 msgstr "Перамясціць цяперашнія дакументы ў сесію новага проекту?"
 
-#: ../src/project.c:152
+#: ../src/project.c:155
 msgid "New Project"
 msgstr "Новы праект"
 
-#: ../src/project.c:157
+#: ../src/project.c:160
 msgid "C_reate"
 msgstr "Стварыць"
 
-#: ../src/project.c:168 ../plugins/classbuilder.c:465
+#: ../src/project.c:171 ../plugins/classbuilder.c:465
 #: ../plugins/classbuilder.c:475
 msgid "Name:"
 msgstr "Імя:"
 
-#: ../src/project.c:175
+#: ../src/project.c:178
 msgid "Project name"
 msgstr "Імя праекта"
 
-#: ../src/project.c:187
+#: ../src/project.c:190
 #, c-format
 msgid ""
 "Path of the file representing the project and storing its settings. It "
@@ -4264,107 +4264,107 @@ msgstr ""
 "Шлях да файла, які прадстаўляе праект і захоўвае яго налады. У яго павінна "
 "быць пашырэнне \"%s\"."
 
-#: ../src/project.c:201
+#: ../src/project.c:204
 msgid "Base path:"
 msgstr "Базавы шлях:"
 
-#: ../src/project.c:211 ../src/project.c:485
+#: ../src/project.c:214 ../src/project.c:492
 msgid "Choose Project Base Path"
 msgstr "Выберыце шлях да каталога праекта"
 
-#: ../src/project.c:250 ../src/project.c:622 ../src/project.c:1155
+#: ../src/project.c:249 ../src/project.c:629 ../src/project.c:1162
 msgid "Project file could not be written"
 msgstr "Не атрымалася выканаць запіс у файл праекта (%s)."
 
-#: ../src/project.c:255
+#: ../src/project.c:254
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Праект \"%s\" створаны."
 
-#: ../src/project.c:294 ../src/project.c:321 ../src/project.c:1022
+#: ../src/project.c:302 ../src/project.c:328 ../src/project.c:1029
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Немагчыма загрузіць файл праекта \"%s\"."
 
-#: ../src/project.c:315 ../src/project.c:333
+#: ../src/project.c:321 ../src/project.c:340
 msgid "Open Project"
 msgstr "Адкрыць праект"
 
-#: ../src/project.c:353
+#: ../src/project.c:360
 msgid "Project files"
 msgstr "Файлы праекта"
 
-#: ../src/project.c:415
+#: ../src/project.c:422
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Праект \"%s\" закрыты."
 
-#: ../src/project.c:625
+#: ../src/project.c:632
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Праект \"%s\" захаваны."
 
-#: ../src/project.c:658
+#: ../src/project.c:665
 msgid "Do you want to close it before proceeding?"
 msgstr "Закрыць яго перад тым, як працягнуць?"
 
-#: ../src/project.c:659
+#: ../src/project.c:666
 #, c-format
 msgid "The '%s' project is open."
 msgstr "Праект '%s' ужо адкрыты."
 
-#: ../src/project.c:708
+#: ../src/project.c:715
 msgid "The specified project name is too short."
 msgstr "Зададзенае імя праекта надта кароткае. "
 
-#: ../src/project.c:714
+#: ../src/project.c:721
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Зададзенае імя праекта занадта доўгае (максімум %d літар)."
 
-#: ../src/project.c:726
+#: ../src/project.c:733
 msgid "You have specified an invalid project filename."
 msgstr "Вы выбралі недапушчальнае імя файла праекта."
 
-#: ../src/project.c:749
+#: ../src/project.c:756
 msgid "Create the project's base path directory?"
 msgstr "Стварыць базавую дырэкторыю праекта?"
 
-#: ../src/project.c:750
+#: ../src/project.c:757
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Шлях \"%s\" не існуе."
 
-#: ../src/project.c:759
+#: ../src/project.c:766
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Немагчыма стварыць базавую дырэкторыю праекта (%s)."
 
-#: ../src/project.c:772
+#: ../src/project.c:779
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Не атрымалася выканаць запіс у файл праекта (%s)."
 
-#: ../src/project.c:778 ../src/search.c:628
+#: ../src/project.c:785 ../src/search.c:628
 msgid "_Replace"
 msgstr "_Замяніць"
 
-#: ../src/project.c:780 ../plugins/export.c:330
+#: ../src/project.c:787 ../plugins/export.c:330
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Файл '%s' ужо існуе. Замяніць яго?"
 
 #. initialise the dialog
-#: ../src/project.c:926 ../src/project.c:937
+#: ../src/project.c:933 ../src/project.c:944
 msgid "Choose Project Filename"
 msgstr "Выберыце імя файла праекта"
 
-#: ../src/project.c:1012
+#: ../src/project.c:1019
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Праект \"%s\" адкрыты."
 
-#: ../src/search.c:309 ../src/search.c:961
+#: ../src/search.c:309 ../src/search.c:962
 msgid "_Use regular expressions"
 msgstr "Выкарыстоўваць рэгулярныя выразы"
 
@@ -4409,11 +4409,11 @@ msgstr ""
 msgid "Search _backwards"
 msgstr "Шукаць у зваротным кірунку"
 
-#: ../src/search.c:348 ../src/search.c:970
+#: ../src/search.c:348 ../src/search.c:971
 msgid "C_ase sensitive"
 msgstr "З улікам рэгістру"
 
-#: ../src/search.c:352 ../src/search.c:975
+#: ../src/search.c:352 ../src/search.c:976
 msgid "Match only a _whole word"
 msgstr "Супадзенне толькі ўсяго слова"
 
@@ -4506,48 +4506,45 @@ msgstr ""
 "Праект: выкарыстоўваць шаблоны назваў файлаў, зададзеныя ў наладах праекта\n"
 "Пазначыць: пазначыць шаблоны імёнаў файлаў уручную"
 
-#: ../src/search.c:897
-msgid "Fi_les:"
-msgstr "Файлы:"
+#: ../src/search.c:910
+#, fuzzy
+msgid "Space separated list of file patterns (e.g. *.c *.h)"
+msgstr "Спіс шаблонаў пошуку, пазделеных прабеламі (напрыклад, *.c *.h)"
 
-#: ../src/search.c:909
-msgid "File patterns, e.g. *.c *.h"
-msgstr "Шаблоны файлаў:  *.c *.h "
-
-#: ../src/search.c:921
+#: ../src/search.c:922
 msgid "_Directory:"
 msgstr "Каталог:"
 
-#: ../src/search.c:940
+#: ../src/search.c:941
 msgid "E_ncoding:"
 msgstr "Кадыроўка:"
 
-#: ../src/search.c:964
+#: ../src/search.c:965
 msgid "See grep's manual page for more information"
 msgstr "Дэталёвую інфармацыю глядзі ў дадведцы grep "
 
-#: ../src/search.c:966
+#: ../src/search.c:967
 msgid "_Recurse in subfolders"
 msgstr "Рэкурсіўна ў падкаталогах"
 
-#: ../src/search.c:979
+#: ../src/search.c:980
 msgid "_Invert search results"
 msgstr "Інвертаваць вынікі пошуку"
 
-#: ../src/search.c:983
+#: ../src/search.c:984
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr ""
 "Інвертаваць сэнс адпаведнасці, для выбару несупадаючых з шаблонам радкоў"
 
-#: ../src/search.c:1000
+#: ../src/search.c:1001
 msgid "E_xtra options:"
 msgstr "Дадатковыя наладкі:"
 
-#: ../src/search.c:1008
+#: ../src/search.c:1009
 msgid "Other options to pass to Grep"
 msgstr "Іншыя наладкі для перадачы утыліце Grep"
 
-#: ../src/search.c:1370 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2229 ../src/search.c:2232
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4555,45 +4552,45 @@ msgstr[0] "Знойдзена %d супадзенне для \"%s\"."
 msgstr[1] "Знойдзена %d супадзення для \"%s\"."
 msgstr[2] "Знойдзена %d супадзенняў для \"%s\"."
 
-#: ../src/search.c:1426
+#: ../src/search.c:1427
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Праведзена %u замен(ы) у %u дакументах."
 
-#: ../src/search.c:1615
+#: ../src/search.c:1616
 msgid "Invalid directory for find in files."
 msgstr "Для пошуку ў файлах пазначаны недапушчальны каталог."
 
-#: ../src/search.c:1632
+#: ../src/search.c:1633
 msgid "No text to find."
 msgstr "Няма тэксту для пошуку"
 
-#: ../src/search.c:1708
+#: ../src/search.c:1709
 msgid "Searching..."
 msgstr "Пошук..."
 
-#: ../src/search.c:1710
+#: ../src/search.c:1711
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s  (у каталоге: %s)"
 
-#: ../src/search.c:1718
+#: ../src/search.c:1719
 #, fuzzy, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
 "Не магу выканаць утыліту grep '%s'; праверце шлях, вызначаны ва Ўласцівасцях."
 
-#: ../src/search.c:1758
+#: ../src/search.c:1759
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Немагчыма адкрыць каталог (%s)"
 
-#: ../src/search.c:1848
+#: ../src/search.c:1849
 msgid "Search failed."
 msgstr "Не атрымалася выканаць пошук."
 
-#: ../src/search.c:1872
+#: ../src/search.c:1873
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
@@ -4601,17 +4598,17 @@ msgstr[0] "Пошук завершаны, знойдзена %d супадзен
 msgstr[1] "Пошук завершаны, знойдзена %d супадзення."
 msgstr[2] "Пошук завершаны, знойдзена %d супадзенняў."
 
-#: ../src/search.c:1880
+#: ../src/search.c:1881
 msgid "No matches found."
 msgstr "Супадзенняў не знойдзена."
 
-#: ../src/search.c:1910
+#: ../src/search.c:1911
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Няправільны рэгулярны выраз: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:236
+#: ../src/socket.c:235
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -4653,11 +4650,11 @@ msgstr ""
 msgid "Value"
 msgstr "Значэнне"
 
-#: ../src/symbols.c:471 ../src/symbols.c:523 ../src/symbols.c:633
+#: ../src/symbols.c:471 ../src/symbols.c:523 ../src/symbols.c:647
 msgid "Chapter"
 msgstr "Глава"
 
-#: ../src/symbols.c:472 ../src/symbols.c:519 ../src/symbols.c:634
+#: ../src/symbols.c:472 ../src/symbols.c:519 ../src/symbols.c:648
 msgid "Section"
 msgstr "Раздзел"
 
@@ -4677,21 +4674,22 @@ msgstr "Раздзел 3"
 msgid "Appendix"
 msgstr "Дадатак"
 
-#: ../src/symbols.c:477 ../src/symbols.c:524 ../src/symbols.c:549
-#: ../src/symbols.c:565 ../src/symbols.c:580 ../src/symbols.c:591
-#: ../src/symbols.c:692 ../src/symbols.c:703 ../src/symbols.c:716
-#: ../src/symbols.c:731 ../src/symbols.c:743 ../src/symbols.c:755
-#: ../src/symbols.c:772 ../src/symbols.c:801 ../src/symbols.c:833
+#: ../src/symbols.c:477 ../src/symbols.c:524 ../src/symbols.c:538
+#: ../src/symbols.c:563 ../src/symbols.c:579 ../src/symbols.c:594
+#: ../src/symbols.c:605 ../src/symbols.c:706 ../src/symbols.c:717
+#: ../src/symbols.c:730 ../src/symbols.c:745 ../src/symbols.c:757
+#: ../src/symbols.c:769 ../src/symbols.c:786 ../src/symbols.c:815
+#: ../src/symbols.c:847
 msgid "Other"
 msgstr "Іншае"
 
-#: ../src/symbols.c:483 ../src/symbols.c:763 ../src/symbols.c:811
+#: ../src/symbols.c:483 ../src/symbols.c:777 ../src/symbols.c:825
 msgid "Module"
 msgstr "Модуль"
 
-#: ../src/symbols.c:484 ../src/symbols.c:576 ../src/symbols.c:688
-#: ../src/symbols.c:741 ../src/symbols.c:753 ../src/symbols.c:768
-#: ../src/symbols.c:782
+#: ../src/symbols.c:484 ../src/symbols.c:590 ../src/symbols.c:702
+#: ../src/symbols.c:755 ../src/symbols.c:767 ../src/symbols.c:782
+#: ../src/symbols.c:796
 msgid "Types"
 msgstr "Тыпы"
 
@@ -4699,11 +4697,11 @@ msgstr "Тыпы"
 msgid "Type constructors"
 msgstr "Канструктары тыпаў"
 
-#: ../src/symbols.c:486 ../src/symbols.c:510 ../src/symbols.c:531
-#: ../src/symbols.c:548 ../src/symbols.c:560 ../src/symbols.c:573
-#: ../src/symbols.c:588 ../src/symbols.c:602 ../src/symbols.c:612
-#: ../src/symbols.c:676 ../src/symbols.c:727 ../src/symbols.c:750
-#: ../src/symbols.c:795 ../src/symbols.c:819
+#: ../src/symbols.c:486 ../src/symbols.c:510 ../src/symbols.c:545
+#: ../src/symbols.c:562 ../src/symbols.c:574 ../src/symbols.c:587
+#: ../src/symbols.c:602 ../src/symbols.c:616 ../src/symbols.c:626
+#: ../src/symbols.c:690 ../src/symbols.c:741 ../src/symbols.c:764
+#: ../src/symbols.c:809 ../src/symbols.c:833
 msgid "Functions"
 msgstr "Функцыі"
 
@@ -4739,10 +4737,10 @@ msgstr ""
 msgid "Keys"
 msgstr "Клавішы"
 
-#: ../src/symbols.c:511 ../src/symbols.c:562 ../src/symbols.c:578
-#: ../src/symbols.c:604 ../src/symbols.c:677 ../src/symbols.c:702
-#: ../src/symbols.c:729 ../src/symbols.c:742 ../src/symbols.c:751
-#: ../src/symbols.c:767 ../src/symbols.c:802 ../src/symbols.c:831
+#: ../src/symbols.c:511 ../src/symbols.c:576 ../src/symbols.c:592
+#: ../src/symbols.c:618 ../src/symbols.c:691 ../src/symbols.c:716
+#: ../src/symbols.c:743 ../src/symbols.c:756 ../src/symbols.c:765
+#: ../src/symbols.c:781 ../src/symbols.c:816 ../src/symbols.c:845
 msgid "Variables"
 msgstr "Пераменныя"
 
@@ -4750,233 +4748,263 @@ msgstr "Пераменныя"
 msgid "Environment"
 msgstr "Асяродзе"
 
-#: ../src/symbols.c:520 ../src/symbols.c:635
+#: ../src/symbols.c:520 ../src/symbols.c:649
 msgid "Subsection"
 msgstr "Падраздзел"
 
-#: ../src/symbols.c:521 ../src/symbols.c:636
+#: ../src/symbols.c:521 ../src/symbols.c:650
 msgid "Subsubsection"
 msgstr "Субпадраздзел"
 
-#: ../src/symbols.c:532 ../src/symbols.c:557
+#: ../src/symbols.c:531
+msgid "Articles"
+msgstr ""
+
+#: ../src/symbols.c:532
+#, fuzzy
+msgid "Book Chapters"
+msgstr "Глава"
+
+#: ../src/symbols.c:533
+msgid "Books & Conference Proceedings"
+msgstr ""
+
+#: ../src/symbols.c:534
+msgid "Conference Papers"
+msgstr ""
+
+#: ../src/symbols.c:535
+msgid "Theses"
+msgstr ""
+
+#: ../src/symbols.c:536
+#, fuzzy
+msgid "Strings"
+msgstr "Наладкі"
+
+#: ../src/symbols.c:537
+msgid "Unpublished"
+msgstr ""
+
+#: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
 msgstr "Структуры"
 
-#: ../src/symbols.c:539
+#: ../src/symbols.c:553
 msgid "Parts"
 msgstr "Часткі"
 
-#: ../src/symbols.c:540
+#: ../src/symbols.c:554
 msgid "Assembly"
 msgstr "Зборка"
 
-#: ../src/symbols.c:541
+#: ../src/symbols.c:555
 msgid "Steps"
 msgstr "Крокі"
 
-#: ../src/symbols.c:556 ../src/symbols.c:654 ../src/symbols.c:700
+#: ../src/symbols.c:570 ../src/symbols.c:668 ../src/symbols.c:714
 msgid "Modules"
 msgstr "Модулі"
 
-#: ../src/symbols.c:558 ../src/symbols.c:605
+#: ../src/symbols.c:572 ../src/symbols.c:619
 msgid "Traits"
 msgstr "Характарыстыкі"
 
-#: ../src/symbols.c:559
+#: ../src/symbols.c:573
 msgid "Implementations"
 msgstr "Рэалізацыі"
 
-#: ../src/symbols.c:561 ../src/symbols.c:822
+#: ../src/symbols.c:575 ../src/symbols.c:836
 msgid "Typedefs / Enums"
 msgstr "Тыпы / Пералічэнні"
 
-#: ../src/symbols.c:563 ../src/symbols.c:780 ../src/symbols.c:789
-#: ../src/symbols.c:828
+#: ../src/symbols.c:577 ../src/symbols.c:794 ../src/symbols.c:803
+#: ../src/symbols.c:842
 msgid "Macros"
 msgstr "Макрасы"
 
-#: ../src/symbols.c:564 ../src/symbols.c:657 ../src/symbols.c:666
-#: ../src/symbols.c:675 ../src/symbols.c:713 ../src/symbols.c:740
+#: ../src/symbols.c:578 ../src/symbols.c:671 ../src/symbols.c:680
+#: ../src/symbols.c:689 ../src/symbols.c:727 ../src/symbols.c:754
 msgid "Methods"
 msgstr "Метады"
 
-#: ../src/symbols.c:572 ../src/symbols.c:587 ../src/symbols.c:685
-#: ../src/symbols.c:710 ../src/symbols.c:724
+#: ../src/symbols.c:586 ../src/symbols.c:601 ../src/symbols.c:699
+#: ../src/symbols.c:724 ../src/symbols.c:738
 msgid "Package"
 msgstr "Пакет"
 
-#: ../src/symbols.c:574 ../src/symbols.c:600 ../src/symbols.c:711
-#: ../src/symbols.c:725 ../src/symbols.c:738 ../src/symbols.c:765
-#: ../src/symbols.c:818
+#: ../src/symbols.c:588 ../src/symbols.c:614 ../src/symbols.c:725
+#: ../src/symbols.c:739 ../src/symbols.c:752 ../src/symbols.c:779
+#: ../src/symbols.c:832
 msgid "Interfaces"
 msgstr "Інтэрфэйсы"
 
-#: ../src/symbols.c:575 ../src/symbols.c:821
+#: ../src/symbols.c:589 ../src/symbols.c:835
 msgid "Structs"
 msgstr "Структуры"
 
-#: ../src/symbols.c:577 ../src/symbols.c:590 ../src/symbols.c:603
-#: ../src/symbols.c:730 ../src/symbols.c:752
+#: ../src/symbols.c:591 ../src/symbols.c:604 ../src/symbols.c:617
+#: ../src/symbols.c:744 ../src/symbols.c:766
 msgid "Constants"
 msgstr "Канстанты"
 
-#: ../src/symbols.c:579 ../src/symbols.c:714 ../src/symbols.c:820
+#: ../src/symbols.c:593 ../src/symbols.c:728 ../src/symbols.c:834
 msgid "Members"
 msgstr "Члены"
 
-#: ../src/symbols.c:589 ../src/symbols.c:754 ../src/symbols.c:779
+#: ../src/symbols.c:603 ../src/symbols.c:768 ../src/symbols.c:793
 msgid "Labels"
 msgstr "Меткі"
 
-#: ../src/symbols.c:599 ../src/symbols.c:664 ../src/symbols.c:814
+#: ../src/symbols.c:613 ../src/symbols.c:678 ../src/symbols.c:828
 msgid "Namespaces"
 msgstr "Прасторы імёнаў"
 
-#: ../src/symbols.c:601 ../src/symbols.c:623 ../src/symbols.c:655
-#: ../src/symbols.c:665 ../src/symbols.c:674 ../src/symbols.c:712
-#: ../src/symbols.c:726 ../src/symbols.c:739 ../src/symbols.c:817
+#: ../src/symbols.c:615 ../src/symbols.c:637 ../src/symbols.c:669
+#: ../src/symbols.c:679 ../src/symbols.c:688 ../src/symbols.c:726
+#: ../src/symbols.c:740 ../src/symbols.c:753 ../src/symbols.c:831
 msgid "Classes"
 msgstr "Класы"
 
-#: ../src/symbols.c:613
+#: ../src/symbols.c:627
 msgid "Anchors"
 msgstr "Якары"
 
-#: ../src/symbols.c:614
+#: ../src/symbols.c:628
 msgid "H1 Headings"
 msgstr "Загаловак (H1)"
 
-#: ../src/symbols.c:615
+#: ../src/symbols.c:629
 msgid "H2 Headings"
 msgstr "Загаловак (H2)"
 
-#: ../src/symbols.c:616
+#: ../src/symbols.c:630
 msgid "H3 Headings"
 msgstr "Загаловак (H3)"
 
-#: ../src/symbols.c:624
+#: ../src/symbols.c:638
 msgid "ID Selectors"
 msgstr "Ідэнтыфікатары"
 
-#: ../src/symbols.c:625
+#: ../src/symbols.c:639
 msgid "Type Selectors"
 msgstr "Тыпы"
 
-#: ../src/symbols.c:644
+#: ../src/symbols.c:658
 msgid "Section Level 1"
 msgstr "Раздзел узровень 1"
 
-#: ../src/symbols.c:645
+#: ../src/symbols.c:659
 msgid "Section Level 2"
 msgstr "Раздзел узровень 2"
 
-#: ../src/symbols.c:646
+#: ../src/symbols.c:660
 msgid "Section Level 3"
 msgstr "Раздзел узровень 3"
 
-#: ../src/symbols.c:647
+#: ../src/symbols.c:661
 msgid "Section Level 4"
 msgstr "Раздзел узровень 4"
 
-#: ../src/symbols.c:656
+#: ../src/symbols.c:670
 msgid "Singletons"
 msgstr "Сінглтоны"
 
-#: ../src/symbols.c:667 ../src/symbols.c:796
+#: ../src/symbols.c:681 ../src/symbols.c:810
 msgid "Procedures"
 msgstr "Працэдуры"
 
-#: ../src/symbols.c:678 ../src/symbols.c:723
+#: ../src/symbols.c:692 ../src/symbols.c:737
 msgid "Imports"
 msgstr "Імпарт"
 
-#: ../src/symbols.c:686
+#: ../src/symbols.c:700
 msgid "Entities"
 msgstr "Сутнасці"
 
-#: ../src/symbols.c:687
+#: ../src/symbols.c:701
 msgid "Architectures"
 msgstr "Архітэктуры"
 
-#: ../src/symbols.c:689
+#: ../src/symbols.c:703
 msgid "Functions / Procedures"
 msgstr "Функцыі / Працэдуры"
 
-#: ../src/symbols.c:690
+#: ../src/symbols.c:704
 msgid "Variables / Signals"
 msgstr "Пераменныя / Сігналы"
 
-#: ../src/symbols.c:691
+#: ../src/symbols.c:705
 msgid "Processes / Blocks / Components"
 msgstr "Працэсы / Блокі / Кампаненты"
 
-#: ../src/symbols.c:699
+#: ../src/symbols.c:713
 msgid "Events"
 msgstr "Падзеі"
 
-#: ../src/symbols.c:701
+#: ../src/symbols.c:715
 msgid "Functions / Tasks"
 msgstr "Функцыі / Задачы"
 
-#: ../src/symbols.c:715 ../src/symbols.c:771
+#: ../src/symbols.c:729 ../src/symbols.c:785
 msgid "Enums"
 msgstr "Пералічэнні"
 
-#: ../src/symbols.c:764
+#: ../src/symbols.c:778
 msgid "Programs"
 msgstr "Праграмы"
 
-#: ../src/symbols.c:766
+#: ../src/symbols.c:780
 msgid "Functions / Subroutines"
 msgstr "Функцыі / Працэдуры"
 
-#: ../src/symbols.c:769
+#: ../src/symbols.c:783
 msgid "Components"
 msgstr "Кампаненты"
 
-#: ../src/symbols.c:770
+#: ../src/symbols.c:784
 msgid "Blocks"
 msgstr "Блокі"
 
-#: ../src/symbols.c:781
+#: ../src/symbols.c:795
 msgid "Defines"
 msgstr "Вызначэнні"
 
-#: ../src/symbols.c:788
+#: ../src/symbols.c:802
 msgid "Targets"
 msgstr "Мэты"
 
-#: ../src/symbols.c:797
+#: ../src/symbols.c:811
 msgid "Indexes"
 msgstr "Індэксы"
 
-#: ../src/symbols.c:798
+#: ../src/symbols.c:812
 msgid "Tables"
 msgstr "Табліцы"
 
-#: ../src/symbols.c:799
+#: ../src/symbols.c:813
 msgid "Triggers"
 msgstr "Трыгеры"
 
-#: ../src/symbols.c:800
+#: ../src/symbols.c:814
 msgid "Views"
 msgstr "Від"
 
-#: ../src/symbols.c:832
+#: ../src/symbols.c:846
 msgid "Extern Variables"
 msgstr "Знешнія зменныя"
 
-#: ../src/symbols.c:1649
+#: ../src/symbols.c:1663
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Невядомае пашырэнне імя файла для \"%s\".\n"
 
-#: ../src/symbols.c:1675
+#: ../src/symbols.c:1689
 #, fuzzy, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr "Не атрымалася стварыць файл тэгаў, магчыма, тэгаў знойдзена не было.\n"
 
-#: ../src/symbols.c:1682
+#: ../src/symbols.c:1696
 #, fuzzy, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -4985,7 +5013,7 @@ msgstr ""
 "Выкарыстанне: %s -g <файл тэгаў> <спіс файлаў>\n"
 "\n"
 
-#: ../src/symbols.c:1683
+#: ../src/symbols.c:1697
 #, c-format
 msgid ""
 "Example:\n"
@@ -4996,54 +5024,54 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1697
+#: ../src/symbols.c:1711
 #, fuzzy
 msgid "Load Tags File"
 msgstr "Загрузіць тэгі"
 
-#: ../src/symbols.c:1704
+#: ../src/symbols.c:1718
 #, fuzzy
 msgid "Geany tags file (*.*.tags)"
 msgstr "Файлы тэгаў Geany (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1724
+#: ../src/symbols.c:1738
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Загружаны файл з тэгамі %s  '%s'."
 
-#: ../src/symbols.c:1727
+#: ../src/symbols.c:1741
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Немагчыма загрузіць файл тэгаў '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1970
+#: ../src/symbols.c:1984
 #, fuzzy, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>Паказваць</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1973
+#: ../src/symbols.c:1987
 #, c-format
 msgid "%s: %lu"
 msgstr ""
 
-#: ../src/symbols.c:2183
+#: ../src/symbols.c:2197
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Папярэдняя аб'ява\"%s\" не знойдзена."
 
-#: ../src/symbols.c:2185
+#: ../src/symbols.c:2199
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Вызначэнне \"%s\" не знойдзена."
 
-#: ../src/symbols.c:2601
+#: ../src/symbols.c:2615
 msgid "Sort by _Name"
 msgstr "Сартаваць па імені"
 
-#: ../src/symbols.c:2608
+#: ../src/symbols.c:2622
 msgid "Sort by _Appearance"
 msgstr "Сартаваць па з'яўленні"
 
@@ -5437,27 +5465,27 @@ msgstr ""
 msgid "_Set Custom Date Format"
 msgstr "Усталяваць свой фармат даты"
 
-#: ../src/ui_utils.c:2015
+#: ../src/ui_utils.c:2016
 msgid "Select Folder"
 msgstr "Выбраць каталог"
 
-#: ../src/ui_utils.c:2015
+#: ../src/ui_utils.c:2016
 msgid "Select File"
 msgstr "Выбраць файл"
 
-#: ../src/ui_utils.c:2185
+#: ../src/ui_utils.c:2186
 msgid "_Filetype Configuration"
 msgstr "Налады тыпу файлаў "
 
-#: ../src/ui_utils.c:2222
+#: ../src/ui_utils.c:2223
 msgid "Save All"
 msgstr "Захаваць усё"
 
-#: ../src/ui_utils.c:2223
+#: ../src/ui_utils.c:2224
 msgid "Close All"
 msgstr "Закрыць усё"
 
-#: ../src/ui_utils.c:2455
+#: ../src/ui_utils.c:2456
 msgid "Geany cannot start!"
 msgstr "Geany не можа запусціцца!"
 
@@ -6040,6 +6068,12 @@ msgstr "Па вертыкалі"
 #: ../plugins/splitwindow.c:467
 msgid "Top and Bottom"
 msgstr "Па гарызанталі"
+
+#~ msgid "Fi_les:"
+#~ msgstr "Файлы:"
+
+#~ msgid "File patterns, e.g. *.c *.h"
+#~ msgstr "Шаблоны файлаў:  *.c *.h "
 
 #~ msgid ""
 #~ "Copyright (c) 2005-2019\n"

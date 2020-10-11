@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-15 20:02+0200\n"
+"POT-Creation-Date: 2020-10-11 21:34+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -137,7 +137,7 @@ msgstr "_Kontextaktion"
 #. *   [5] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
 #. * --------------------------------------------------------------------------------------------------------------------------
 #. *       [0]         [1]           [2]                 [3]                        [4]          [5]
-#: ../data/geany.glade.h:23 ../src/filetypes.c:127 ../src/filetypes.c:1527
+#: ../data/geany.glade.h:23 ../src/filetypes.c:127 ../src/filetypes.c:1528
 msgid "None"
 msgstr "Keiner"
 
@@ -1089,7 +1089,7 @@ msgstr "Farbe:"
 msgid "Sets the color of the long line marker"
 msgstr "Stellt die Farbe der »Umbruchhilfe für lange Zeilen« ein"
 
-#: ../data/geany.glade.h:219 ../src/toolbar.c:73 ../src/tools.c:831
+#: ../data/geany.glade.h:219 ../src/toolbar.c:73 ../src/tools.c:845
 msgid "Color Chooser"
 msgstr "Farbwähler"
 
@@ -3210,33 +3210,33 @@ msgstr "Konfigurationsdatei"
 msgid "Gettext translation"
 msgstr "Gettext-Übersetzungsdatei"
 
-#: ../src/filetypes.c:431
+#: ../src/filetypes.c:432
 msgid "_Programming Languages"
 msgstr "_Kompilersprachen"
 
-#: ../src/filetypes.c:432
+#: ../src/filetypes.c:433
 msgid "_Scripting Languages"
 msgstr "_Interpretersprachen"
 
-#: ../src/filetypes.c:433
+#: ../src/filetypes.c:434
 msgid "_Markup Languages"
 msgstr "_Markup-Sprachen"
 
-#: ../src/filetypes.c:434
+#: ../src/filetypes.c:435
 msgid "M_iscellaneous"
 msgstr "_Sonstiges"
 
-#: ../src/filetypes.c:1186 ../src/win32.c:155
+#: ../src/filetypes.c:1187 ../src/win32.c:155
 msgid "All Source"
 msgstr "Alle Quellen"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1211 ../src/project.c:356 ../src/win32.c:145
+#: ../src/filetypes.c:1212 ../src/project.c:356 ../src/win32.c:145
 #: ../src/win32.c:190 ../src/win32.c:211 ../src/win32.c:216
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: ../src/filetypes.c:1260
+#: ../src/filetypes.c:1261
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "Schlechter RegEx für Dateityp %s: %s"
@@ -3245,29 +3245,29 @@ msgstr "Schlechter RegEx für Dateityp %s: %s"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ../src/highlighting.c:1250 ../src/libmain.c:867 ../src/socket.c:170
+#: ../src/highlighting.c:1252 ../src/libmain.c:895 ../src/socket.c:169
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnte die Datei »%s« nicht finden."
 
-#: ../src/highlighting.c:1320
+#: ../src/highlighting.c:1322
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/highlighting.c:1361
+#: ../src/highlighting.c:1363
 msgid "The current filetype overrides the default style."
 msgstr ""
 "Der aktuelle Dateityp überschreibt die Standardeinstellungen für die "
 "Darstellung."
 
-#: ../src/highlighting.c:1362
+#: ../src/highlighting.c:1364
 msgid "This may cause color schemes to display incorrectly."
 msgstr ""
 "Dies kann dazu führen, dass eventuell Farbprofile nicht korrekt angezeigt "
 "werden."
 
-#: ../src/highlighting.c:1387
+#: ../src/highlighting.c:1389
 msgid "Color Schemes"
 msgstr "Farbschemata"
 
@@ -3821,12 +3821,12 @@ msgstr "Tastenkürzel"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Die folgenden Tastenkürzel sind frei definierbar:"
 
-#: ../src/keyfile.c:1050
+#: ../src/keyfile.c:1069
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Schreiben Sie hier rein, was sie möchten. Sie können es als Notizbuch nutzen."
 
-#: ../src/keyfile.c:1277
+#: ../src/keyfile.c:1296
 msgid "Failed to load one or more session files."
 msgstr ""
 "Eine oder mehrere Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
@@ -3938,36 +3938,36 @@ msgstr "ausführliche Ausgabe"
 msgid "Show version and exit"
 msgstr "Versionsinformation anzeigen und Programm beenden"
 
-#: ../src/libmain.c:535
+#: ../src/libmain.c:563
 msgid "[FILES...]"
 msgstr "[Dateien…]"
 
-#: ../src/libmain.c:537
+#: ../src/libmain.c:565
 msgid "A fast and lightweight IDE."
 msgstr "Eine kleine und schnelle Entwicklungsumgebung"
 
-#: ../src/libmain.c:538
+#: ../src/libmain.c:566
 msgid "Report bugs to https://github.com/geany/geany/issues."
 msgstr ""
 "Fehlerberichte bitte auf https://github.com/geany/geany/issues einreichen."
 
 #. note for translators: library versions are printed after this
-#: ../src/libmain.c:571
+#: ../src/libmain.c:599
 #, c-format
 msgid "built on %s with "
 msgstr "kompiliert am %s mit "
 
-#: ../src/libmain.c:664
+#: ../src/libmain.c:692
 msgid "Move it now?"
 msgstr "Soll es jetzt verschoben werden?"
 
-#: ../src/libmain.c:666
+#: ../src/libmain.c:694
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "Geany muss Ihr aktuelles Konfigurationsverzeichnis an einen neuen Ort "
 "verschieben, bevor es gestartet wird."
 
-#: ../src/libmain.c:675
+#: ../src/libmain.c:703
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3978,7 +3978,7 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/libmain.c:685
+#: ../src/libmain.c:713
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3987,7 +3987,7 @@ msgstr ""
 "Ihr altes Konfigurationsverzeichnis »%s« konnte nicht nach »%s« verschoben "
 "werden. Fehlermeldung: %s. Bitte führen Sie die Aktion manuell aus."
 
-#: ../src/libmain.c:767
+#: ../src/libmain.c:795
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3998,27 +3998,27 @@ msgstr ""
 "Es könnte zu Problemen bei der Verwendung von Geany kommen.\n"
 "Geany trotzdem starten?"
 
-#: ../src/libmain.c:1174
+#: ../src/libmain.c:1217
 #, c-format
 msgid "This is Geany %s."
 msgstr "Willkommen bei Geany %s."
 
-#: ../src/libmain.c:1177
+#: ../src/libmain.c:1220
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigurationsverzeichnis konnte nicht erstellt werden (%s)."
 
-#: ../src/libmain.c:1185
+#: ../src/libmain.c:1228
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
 "Der IPC-Socket konnt konnte nicht erstellt werden. Mehr Details gibt es "
 "unter Hilfe->Debug-Meldungen"
 
-#: ../src/libmain.c:1415
+#: ../src/libmain.c:1459
 msgid "Do you really want to quit?"
 msgstr "Soll Geany wirklich beendet werden?"
 
-#: ../src/libmain.c:1453
+#: ../src/libmain.c:1497
 msgid "Configuration files reloaded."
 msgstr "Einstellungen erneut geladen."
 
@@ -4667,7 +4667,7 @@ msgid "Bad regex: %s"
 msgstr "Fehler in Ausdruck: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:236
+#: ../src/socket.c:235
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
