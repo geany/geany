@@ -1,13 +1,13 @@
 # Danish translation for Geany
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the geany package.
-# scootergrisen, 2018-2019.
+# scootergrisen, 2018-2020.
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 1.36\n"
+"Project-Id-Version: geany 1.37\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2019-09-22 16:03+0200\n"
+"POT-Creation-Date: 2020-10-11 02:11+0000\n"
+"PO-Revision-Date: 2020-10-12 03:31+0200\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
 "Language: da\n"
@@ -4470,11 +4470,8 @@ msgstr ""
 "Brugerdefineret: angiv filmønstre manuelt"
 
 #: ../src/search.c:910
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
-msgstr ""
-"Mellemrumsseparerede liste over filmønstre som bruges til find i filer-"
-"dialogen (f.eks. *.c *.h)"
+msgstr "Mellemrumsseparerede liste over filmønstre (f.eks. *.c *.h)"
 
 #: ../src/search.c:922
 msgid "_Directory:"
@@ -4720,33 +4717,31 @@ msgstr "Underundersektion"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "Artikler"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Kapitel"
+msgstr "Bogkapitler"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "Bøger og konferencesager"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "Konferencepapirer"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "Teser"
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "Indstillinger"
+msgstr "Strenge"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "Upubliceret"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
@@ -6036,9 +6031,3 @@ msgstr "Side om side"
 #: ../plugins/splitwindow.c:467
 msgid "Top and Bottom"
 msgstr "Øverst og nederst"
-
-#~ msgid "Fi_les:"
-#~ msgstr "_Filer:"
-
-#~ msgid "File patterns, e.g. *.c *.h"
-#~ msgstr "Filmønstre, f.eks. *.c *.h"
