@@ -2,14 +2,14 @@
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the Geany package.
 # Tomáš Havlas <tomas.havlas@raven-systems.eu>, 2014.
-# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2019.
+# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.36\n"
+"Project-Id-Version: Geany 1.37\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2019-09-24 16:27+0200\n"
+"PO-Revision-Date: 2020-10-12 14:20+0200\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -4478,11 +4478,9 @@ msgstr ""
 "vlastný: špecifikovať vlastný vzor názvov súborov"
 
 #: ../src/search.c:910
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
 msgstr ""
-"Medzerami oddelený zoznam vzorov pre názvy súborov, použitý v dialógovom "
-"okne vyhľadať v súboroch (napr. „*.c *.h“)"
+"Medzerami oddelený zoznam vzorov pre názvy súborov (napr. „*.c *.h“)"
 
 #: ../src/search.c:922
 msgid "_Directory:"
@@ -4727,33 +4725,31 @@ msgstr "Podpodsekcia"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "Články v časopisoch"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Kapitola"
+msgstr "Kapitoly v knihe"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "Knihy a zborníky konferencií"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "Články na konferencii"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "Vedecko-kvalifikačné práce"
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "Nastavenia"
+msgstr "Reťazce"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "Nepublikované"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
@@ -6039,9 +6035,3 @@ msgstr "Vedľa seba"
 #: ../plugins/splitwindow.c:467
 msgid "Top and Bottom"
 msgstr "Nad sebou"
-
-#~ msgid "Fi_les:"
-#~ msgstr "_Súbory:"
-
-#~ msgid "File patterns, e.g. *.c *.h"
-#~ msgstr "Vzor názvov súborov, napr. *. *.h"
