@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2019-01-09 14:45+0200\n"
-"Last-Translator: Vangelis Skarmoutsos <skarmoutsosv@gmail.com>\n"
+"POT-Creation-Date: 2020-10-12 02:11+0000\n"
+"PO-Revision-Date: 2020-10-12 14:10+0300\n"
+"Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Greek\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -760,18 +760,16 @@ msgstr ""
 "έγγραφα, επιλέξτε <i>Έργο->Εφαρμογή προκαθορισμένης εσοχής</i>."
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "Πλάτος:"
+msgstr "Πλάτο_ς:"
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "Το πλάτος σε χαρακτήρες τους οποίους θα έχει μια μοναδική εσοχή"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Μέθοδος αυτόματης εσοχής:"
+msgstr "Λειτουργία αυτό_ματης εσοχής:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -829,9 +827,8 @@ msgid "Type:"
 msgstr "Τύπος:"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Εσοχή του πλήκτρου Tab"
+msgstr "Εσοχές πλή_κτρου Tab"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -2176,24 +2173,20 @@ msgid "Filename:"
 msgstr "Όνομα αρχείου:"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "Όνομα:"
+msgstr "Ό_νομα:"
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "Περιγραφή:"
+msgstr "Π_εριγραφή:"
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "Βασική διαδρομή:"
+msgstr "_Βασική διαδρομή:"
 
 #: ../data/geany.glade.h:468 ../src/search.c:897
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Πρότυπα αρχείων:"
+msgstr "_Πρότυπα αρχείων:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2294,6 +2287,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"Οι συνεισφέροντες στο Geany"
 
 #: ../src/about.c:172
 msgid "About Geany"
@@ -2311,7 +2306,7 @@ msgstr "(δημιουργήθηκε την ή μετά %s)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "Χρήση βιβλιοθηκών χρόνου εκτέλεσης GTK+ v%u.%u.%u και GLib v%u.%u.%u"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -2859,9 +2854,9 @@ msgstr "Το αρχείο %s επαναφορτώθηκε."
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
-msgstr "Το αρχείο %s ανοίχθηκε(%d%s)."
+msgstr "Το αρχείο %s ανοίχθηκε (%d%s)."
 
 #: ../src/document.c:1497
 msgid ", read-only"
@@ -4014,6 +4009,8 @@ msgstr "Δεν ήταν δυνατόν να δημιουργηθεί ο φάκε
 #: ../src/libmain.c:1228
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
+"Δεν ήταν δυνατή η δημιουργία IPC socket, ανατρέξτε στη Βοήθεια-> Μηνύματα "
+"Aποσφαλμάτωσης για λεπτομέρειες."
 
 #: ../src/libmain.c:1459
 msgid "Do you really want to quit?"
@@ -4564,11 +4561,8 @@ msgstr ""
 "Προσαρμοσμένα: καθορισμός πρότυπων αρχείων χειροκίνητα"
 
 #: ../src/search.c:910
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
-msgstr ""
-"Λίστα πρότυπων αρχείων διαχωρισμένη με κενά για χρήση στο διάλογο αναζήτηση "
-"σε αρχεία (π.χ. *.c *.h)"
+msgstr "Λίστα πρότυπων αρχείων διαχωρισμένη με κενά (π.χ. *.c *.h)"
 
 #: ../src/search.c:922
 msgid "_Directory:"
@@ -4769,7 +4763,7 @@ msgstr "Πρόγραμμα"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Τμήματα"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4789,7 +4783,7 @@ msgstr "Δεδομένα"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Αντίγραφα"
 
 #: ../src/symbols.c:504
 msgid "Keys"
@@ -4816,33 +4810,31 @@ msgstr "Υπο-υποενότητα"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "Άρθρα"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Κεφάλαιο"
+msgstr "Κεφάλαια Βιβλίου"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "Βιβλία & Πρακτικά Συνεδρίων"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "Paper Συνεδρίων"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "Διατριβές"
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "Ρυθμίσεις"
+msgstr "Strings"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "Μη δημοσιευμένα"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
