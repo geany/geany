@@ -2,14 +2,14 @@
 # Copyright (C) 2006-2019 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 # Tarot Osuji <tarot@sdf.lonestar.org>, 2008.
-# Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2019
+# Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2020
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.36\n"
+"Project-Id-Version: Geany 1.37\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2014-11-09 13:26+0900\n"
+"PO-Revision-Date: 2020-10-13 13:26+0900\n"
 "Last-Translator: Chikahiro Masami <cmasa.z321@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
@@ -4445,11 +4445,8 @@ msgstr ""
 "カスタム: ファイルパターンを指定"
 
 #: ../src/search.c:910
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
-msgstr ""
-"ファイルダイアログでファイルを検索するのに使用する、ファイルパターンを空白で"
-"区切ったリスト(例 *.c *.h)"
+msgstr "ファイルパターンの空白で区切ったリスト(例 *.c *.h)"
 
 #: ../src/search.c:922
 msgid "_Directory:"
@@ -4563,8 +4560,7 @@ msgstr "文字列は空です(または空白のみの文字列)"
 
 #: ../src/spawn.c:153 ../src/spawn.c:167
 msgid "A quoted Windows program name must be entirely inside the quotes"
-msgstr ""
-"Windowsプログラム名に引用符をつけるときは、名前全体を引用符の中に含めます"
+msgstr "Windowsプログラム名に引用符をつけるときは、名前全体を引用符の中に含めます"
 
 #: ../src/spawn.c:260
 msgid "Program not found"
@@ -4690,33 +4686,31 @@ msgstr "サブサブセクション"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "題名"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
 msgstr "章"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "書籍と会議議事録"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "会議の資料"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "これら"
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "設定"
+msgstr "文字列"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "出版されない"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
@@ -5866,8 +5860,7 @@ msgstr "アクションを保存"
 
 #: ../plugins/saveactions.c:42
 msgid "This plugin provides different actions related to saving of files."
-msgstr ""
-"このプラグインはファイル保存時に、複数のアクションを選択できるようにします。"
+msgstr "このプラグインはファイル保存時に、複数のアクションを提供します。"
 
 #: ../plugins/saveactions.c:174
 #, c-format
