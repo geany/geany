@@ -4,21 +4,21 @@
 # This file is distributed under the same license as the geany package.
 #
 # Dormouse Young <dormouse.young@gmail.com>, 2006-2009.
-# Dongyuan Liu <liu.dongyuan@gmail.com>, 2009-2019.
+# Dongyuan Liu <liu.dongyuan@gmail.com>, 2009-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2019-09-26 20:42+0800\n"
+"PO-Revision-Date: 2020-10-13 23:07+0800\n"
 "Last-Translator: Dongyuan Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
@@ -1522,7 +1522,9 @@ msgstr "在虚拟终端中执行程序"
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
-msgstr "在虚拟终端而不是一个终端中执行程序。注意：虚拟终端中的程序不能停止。"
+msgstr ""
+"在虚拟终端中执行程序，而不是打开新的终端窗口。注意：虚拟终端中的执行的程序不"
+"能停止"
 
 #: ../data/geany.glade.h:336
 msgid "Don't use run script"
@@ -2268,7 +2270,7 @@ msgstr "因为终端中可能含有一些输入，没有执行文件（按 Ctrl+
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
-msgstr "无法执行生成命令“%s”：%s。请检查首选项中的终端设置。"
+msgstr "无法执行生成命令“%s”：%s。请检查首选项中的终端设置"
 
 #: ../src/build.c:1099
 msgid "Compilation failed."
@@ -3648,7 +3650,7 @@ msgstr "下列快捷键可定义："
 
 #: ../src/keyfile.c:1069
 msgid "Type here what you want, use it as a notice/scratch board"
-msgstr "随便写写，当便签或草稿好了。"
+msgstr "随便写写，当便签或草稿好了"
 
 #: ../src/keyfile.c:1296
 msgid "Failed to load one or more session files."
@@ -4339,9 +4341,8 @@ msgstr ""
 "自定义：自定义文件通配符"
 
 #: ../src/search.c:910
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
-msgstr "空格分隔的文件通配符，用于在文件中查找 (例如 *.c *.h)"
+msgstr "用空格分隔的文件通配符 (例如 *.c *.h)"
 
 #: ../src/search.c:922
 msgid "_Directory:"
@@ -4580,33 +4581,31 @@ msgstr "小小节"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "文章"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
-msgstr "章"
+msgstr "书籍章节"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "书籍和会议论文集"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "会议论文"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "论文"
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "设置"
+msgstr "字符串"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "未发表的"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
