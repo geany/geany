@@ -1,24 +1,24 @@
 # translation of es.po to
-# Spanish translation file for Geany 1.35
-# Copyright (C) 2006-2019 The Geany contributors.
+# Spanish translation file for Geany 1.37
+# Copyright (C) 2006-2020 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 # Damián Viano <des@damianv.com.ar>, 2006 - 2007.
 # Antonio Jiménez González <ajimenez@linuxmail.org>, 2009 - 2010.
-# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2019.
+# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2020.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.36\n"
+"Project-Id-Version: Geany 1.37\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2019-09-22 15:30+0200\n"
-"Last-Translator: Lucas Vieites Fariña <lucas@codexion.com>\n"
+"POT-Creation-Date: 2020-10-14 02:11+0000\n"
+"PO-Revision-Date: 2020-10-14 16:04+0200\n"
+"Last-Translator: Lucas Vieites <lucasvieites@gmail.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Geany / PoHelper 1.35\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -4545,11 +4545,8 @@ msgstr ""
 "Personalizado: indicar los patrones de archivo de forma manual"
 
 #: ../src/search.c:910
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
-msgstr ""
-"Lista de patrones de archivos, separados por comas, usado para el diálogo "
-"«Buscar en archivos» (p.ej: *.c *.h)"
+msgstr "Lista de patrones de archivos, separados por comas (p.ej: *.c *.h)"
 
 #: ../src/search.c:922
 msgid "_Directory:"
@@ -4797,33 +4794,31 @@ msgstr "Sub-sub-sección"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "Artículos"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Capítulo"
+msgstr "Capítulos de libro"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "Actas de congresos y libro"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "Ponencias"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "Tésis"
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "Opciones"
+msgstr "Cadenas de texto"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "Sin publicar"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
