@@ -3,23 +3,23 @@
 # This file is distributed under the same license as the geany package.
 #
 # André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
-# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015 - 2019.
+# Pedro Albuquerque <pmra@protonmail.com>, 2015 -2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2020-04-07 17:14+0100\n"
+"POT-Creation-Date: 2020-10-13 02:11+0000\n"
+"PO-Revision-Date: 2020-10-13 11:17+0100\n"
 "Last-Translator: Pedro Albuquerque <pmra@protonmail.com>\n"
-"Language-Team: Português <palbuquerque73@gmail.com>\n"
+"Language-Team: Português <translation-team-pt@lists.sourceforge.net>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=n>1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Gtranslator 3.30.1\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -4516,11 +4516,8 @@ msgstr ""
 "Personalizado: especificar os padrões de ficheiros manualmente."
 
 #: ../src/search.c:910
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
-msgstr ""
-"Lista separada por espaços de padrões de ficheiros usados no diálogo "
-"\"Localizar em ficheiros\" (ex, *.c *.h)"
+msgstr "Lista separada por espaços de padrões de ficheiros (ex, *.c *.h)"
 
 #: ../src/search.c:922
 msgid "_Directory:"
@@ -4765,33 +4762,31 @@ msgstr "Sub-sub-secção"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "Artigos"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Capítulo"
+msgstr "Capítulos do livro"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "Livros & Procedimentos de conferências"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "Teses de conferências"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "Teses"
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "Preferências"
+msgstr "Cadeias"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "Não publicados"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
