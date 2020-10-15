@@ -9,10 +9,10 @@
 # Dmitry Unruh <dmitryunruh@googlemail.com>, 2020
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.35\n"
+"Project-Id-Version: Geany 1.37\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2020-04-18 11:35+1000\n"
+"PO-Revision-Date: 2020-10-16 02:00+1000\n"
 "Last-Translator: Dmitry Unruh <dmitryunruh@googlemail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
@@ -2268,7 +2268,7 @@ msgstr "(собрано %s или позднее)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "Использует GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime библиотеки"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -4501,11 +4501,8 @@ msgstr ""
 "Указать: указать шаблоны имён файлов вручную"
 
 #: ../src/search.c:910
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
-msgstr ""
-"Список шаблонов поиска, разделённых пробелами (например, *.c *.h), "
-"используемых для поиска в диалоге файлов"
+msgstr "Список шаблонов файлов, разделённых пробелами (например, *.c *.h)"
 
 #: ../src/search.c:922
 msgid "_Directory:"
@@ -4707,7 +4704,7 @@ msgstr "Программа"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Подразделения"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4727,7 +4724,7 @@ msgstr "Данные"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Копии"
 
 #: ../src/symbols.c:504
 msgid "Keys"
@@ -4754,33 +4751,31 @@ msgstr "Субподраздел"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "Статьи"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Глава"
+msgstr "Главы книги"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "Сборники книг и конференций"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "Страницы конференций"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "Диссертации"
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "Настройки"
+msgstr "Строки"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "Неопубликованное"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
