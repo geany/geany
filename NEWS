@@ -19,7 +19,7 @@ Geany 1.37 (unreleased)
     * Provide a CSS name for most widgets (PR#2469).
     * Add a setting to control the fold margin width (Andy Alt, PR#2140).
     * Show OS info in debug messages.
-    * Persist colour picker palette (Issue#2595).
+    * Persist color picker palette (Issue#2595).
     * Fix color of selected text in search entries with no match (foresto,
       Issue#2332, PR#2333)
 
@@ -44,10 +44,12 @@ Geany 1.37 (unreleased)
     * Make IPC port number configurable, and move the default outside the
       dynamic range used by Hyper-V (Issue#2101, PR#2585).
     * Use the `py` launcher for Python filetype (Issue#2211).
+    * Support programming ligatures (like Fira Code font) (Issue#2535).
 
     Internationalization
     * New translations: ie
-    * Updated translations: da, de, el, es, fr, id, it, ja, lv, pl, pt, ru, sk, sv, zh_CN
+    * Updated translations: da, de, el, es, fr, id, it, ja, lv, pl, pt, ru,
+                            sk, sv, zh_CN
 
 Geany 1.36 (September 28, 2019)
 
