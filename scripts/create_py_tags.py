@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 #
 # Author:  Enrico Tröger
 # License: GPL v2 or later
@@ -29,13 +28,12 @@ import inspect
 import os
 import re
 import sys
-import types
 
 PYTHON_LIB_DIRECTORY = os.path.dirname(os.__file__)
-PYTHON_LIB_IGNORE_PACKAGES = (u'test', u'dist-packages', u'site-packages', 'Tools')
+PYTHON_LIB_IGNORE_PACKAGES = ('test', 'dist-packages', 'site-packages', 'Tools')
 # some modules execute funky code when they are imported which we really don't want here
 # (though if you feel funny, try: 'import antigravity')
-PYTHON_LIB_IGNORE_MODULES = (u'antigravity.py', u'idlelib/idle.py', u'multiprocessing/util.py')
+PYTHON_LIB_IGNORE_MODULES = ('antigravity.py', 'idlelib/idle.py', 'multiprocessing/util.py')
 PYTHON_KEYWORDS = ('and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif',
                    'else', 'except', 'exec', 'finally', 'for', 'from', 'global', 'if', 'import',
                    'in', 'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise', 'return', 'try',
@@ -53,6 +51,19 @@ TYPE_FUNCTION = '%d' % 128
 
 tag_filename = 'data/tags/std.py.tags'
 tag_regexp = '^[ \t]*(def|class)[ \t]+([a-zA-Z0-9_]+)[ \t]*(\(.*\))[:]'
+
+def joinseq(seq):
+    if len(seq) == 1:
+        return '(' + seq[0] + ',)'
+    else:
+        return '(' + ', '.join(seq) + ')'
+
+def strseq(object, convert, join=joinseq):
+    """Recursively walk a sequence, stringifying each element."""
+    if type(object) in (list, tuple):
+        return join(map(lambda o, c=convert, j=join: strseq(o, c, j), object))
+    else:
+        return convert(object)
 
 
 ########################################################################
@@ -74,7 +85,7 @@ class Parser:
         """
         try:
             #~ TODO print inspect.getmro(c)
-            if type(_object) == types.ClassType:
+            if isinstance(_object, type):
                 return _object.__bases__[0].__name__
             else:
                 return _object.__mro__[1].__name__
@@ -87,7 +98,7 @@ class Parser:
                       formatvarargs=lambda name: '*' + name,
                       formatvarkw=lambda name: '**' + name,
                       formatvalue=lambda value: '=' + repr(value),
-                      join=inspect.joinseq):
+                      join=joinseq):
         """Format an argument spec from the 4 values returned by getargspec.
 
         The first four arguments are (args, varargs, varkw, defaults).  The
@@ -98,7 +109,7 @@ class Parser:
         if defaults:
             firstdefault = len(args) - len(defaults)
         for i in range(len(args)):
-            spec = inspect.strseq(args[i], formatarg, join)
+            spec = strseq(args[i], formatarg, join)
             if defaults and i >= firstdefault:
                 d = defaults[i - firstdefault]
                 # this is the difference from the original formatargspec() function
@@ -125,7 +136,7 @@ class Parser:
         args = ''
         scope = ''
         try:
-            args = apply(self._formatargspec, inspect.getargspec(obj))
+            args = self._formatargspec(inspect.getfullargspec(obj))
         except (TypeError, KeyError):
             pass
         if parent:
@@ -133,7 +144,7 @@ class Parser:
                 args = '(%s)' % parent
             else:
                 scope = '%s%s' % (TA_SCOPE, parent)
-        if isinstance(obj, basestring):
+        if isinstance(obj, str):
             tagname = obj
         else:
             tagname = obj.__name__
@@ -155,9 +166,9 @@ class Parser:
         """
         try:
             module = imp.load_source('tags_file_module', filename)
-        except IOError, e:
+        except IOError as e:
             # file not found
-            print '%s: %s' % (filename, e)
+            print('%s: %s' % (filename, e))
             return
         except Exception:
             module = None
@@ -169,7 +180,7 @@ class Parser:
                     name = obj.__name__
                 except AttributeError:
                     name = obj_name
-                if not name or not isinstance(name, basestring) or is_private_identifier(name):
+                if not name or not isinstance(name, str) or is_private_identifier(name):
                     # skip non-public tags
                     continue
                 if inspect.isfunction(obj):
@@ -228,18 +239,17 @@ class Parser:
 
         @param filename (str)
         """
-        result = self.tags.values()
+        result = list(self.tags.values())
         # sort the tags
         result.sort()
         # write them
-        target_file = open(filename, 'wb')
-        target_file.write(
-            '# format=tagmanager - Automatically generated file - do not edit (created on %s)\n' % \
-            datetime.datetime.now().ctime())
-        for symbol in result:
-            if not symbol == '\n': # skip empty lines
-                target_file.write(symbol)
-        target_file.close()
+        with open(filename, 'wb') as target_file:
+            target_file.write(
+                ('# format=tagmanager - Automatically generated file - do not edit (created on %s)\n' % \
+                datetime.datetime.now().ctime()).encode('latin-1'))
+            for symbol in result:
+                if not symbol == '\n': # skip empty lines
+                    target_file.write(symbol.encode('latin-1'))
 
 
 #----------------------------------------------------------------------
@@ -293,7 +303,10 @@ def main():
     parser.add_builtins()
 
     for filename in args:
-        parser.process_file(filename)
+        try:
+            parser.process_file(filename)
+        except (SystemExit, ImportError, TypeError):
+            continue
 
     parser.write_to_file(tag_filename)
 
