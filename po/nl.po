@@ -2,7 +2,7 @@
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the Geanty package.
 #
-# Peter Scholtens <peter.scholtens@xs4all.nl>, 2009 - 2012, 2014 - 2017.
+# Peter Scholtens <peter.scholtens@freedom.nl>, 2009 - 2012, 2014 - 2017, 2020.
 # Ayke van Laëthem <aykevanlaethem@gmail.com>, 2009, 2010.
 # Kurt De Bree <kdebree@telenet.be>, 2006.
 # Benno Schulenberg <benno@vertaalt.nl>, 2016.
@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2017-11-06 20:43+0100\n"
-"Last-Translator: Peter Scholtens <peter.scholtens@xs4all.nl>\n"
+"PO-Revision-Date: 2020-10-22 20:40+0200\n"
+"Last-Translator: Peter Scholtens <peter.scholtens@freedom.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.3\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -220,7 +220,7 @@ msgstr "Afsluiten bevestigen"
 
 #: ../data/geany.glade.h:43
 msgid "Shows a confirmation dialog on exit"
-msgstr "Toont een bevestigingsvenster bij afsluiten."
+msgstr "Toont een bevestigingsvenster bij afsluiten"
 
 #: ../data/geany.glade.h:44
 msgid "<b>Shutdown</b>"
@@ -243,7 +243,7 @@ msgstr "Projectbestanden:"
 
 #: ../data/geany.glade.h:48
 msgid "Path to start in when opening project files"
-msgstr "Beginpad voor het openen van projectbestanden."
+msgstr "Beginpad voor het openen van projectbestanden"
 
 #: ../data/geany.glade.h:49
 msgid "Extra plugin path:"
@@ -277,7 +277,7 @@ msgid ""
 "finished"
 msgstr ""
 "Of er een pieptoon moet worden gegeven wanneer er een fout optreedt of "
-"wanneer het compilatieproces klaar is."
+"wanneer het compilatieproces klaar is"
 
 #: ../data/geany.glade.h:55
 msgid "Switch to status message list at new message"
@@ -288,8 +288,8 @@ msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives"
 msgstr ""
-"Schakelt naar het statusvenster (onderaan in het berichtenvenster) als er "
-"een nieuw bericht is."
+"Schakelt over naar het statusvenster (onderaan in het berichtenvenster) als "
+"er een nieuw bericht is"
 
 #: ../data/geany.glade.h:57
 msgid "Suppress status messages in the status bar"
@@ -327,7 +327,7 @@ msgid ""
 "default dialogs"
 msgstr ""
 "Bepaalt of de dialogen die eigen zijn aan Windows of de standaard GTK-"
-"dialogen gebruikt worden."
+"dialogen gebruikt worden"
 
 #: ../data/geany.glade.h:63
 msgid "<b>Miscellaneous</b>"
@@ -341,7 +341,7 @@ msgstr "Telkens opnieuw blijven doorzoeken"
 msgid "Always wrap search around the document"
 msgstr ""
 "Blijft een document telkens opnieuw doorzoeken, rondlopend vanaf begin of "
-"eind."
+"eind"
 
 #: ../data/geany.glade.h:66
 msgid "Hide the Find dialog"
@@ -349,7 +349,7 @@ msgstr "Zoekvenster verbergen"
 
 #: ../data/geany.glade.h:67
 msgid "Hide the Find dialog after clicking Find Next/Previous"
-msgstr "Verbergt het zoekvenster na klikken op Volgende/Vorige zoeken."
+msgstr "Verbergt het zoekvenster na klikken op Volgende/Vorige zoeken"
 
 #: ../data/geany.glade.h:68
 msgid "Use the current word under the cursor for Find dialogs"
@@ -361,7 +361,7 @@ msgid ""
 "Replace dialog and there is no selection"
 msgstr ""
 "Gebruikt het huidige woord onder de cursor in de Zoek-, Zoek-in-bestanden- "
-"of Vervangen-dialoog als er geen selectie is."
+"of Vervangen-dialoog als er geen selectie is"
 
 #: ../data/geany.glade.h:70
 msgid "Use the current file's directory for Find in Files"
@@ -381,7 +381,7 @@ msgid ""
 "project"
 msgstr ""
 "Of de sessiebestanden van het project opgeslagen moeten worden en weer "
-"geopend moeten worden als het project heropend wordt."
+"geopend moeten worden als het project heropend wordt"
 
 #: ../data/geany.glade.h:74
 msgid "Store project file inside the project base directory"
@@ -543,7 +543,7 @@ msgid ""
 "of the notebook"
 msgstr ""
 "Of de bestandstabbladen naast het huidige tabblad geplaatst worden, in "
-"plaats van aan de uiteinden van het tabbladvenster."
+"plaats van aan de uiteinden van het tabbladvenster"
 
 #: ../data/geany.glade.h:109
 msgid "Double-clicking hides all additional widgets"
@@ -709,7 +709,7 @@ msgid ""
 msgstr ""
 "Of er markeringen (gegolfde onderstreping) gebruikt moeten worden om de "
 "regels te markeren waarin de compiler een waarschuwing of een fout heeft "
-"gevonden."
+"gevonden"
 
 #: ../data/geany.glade.h:143
 msgid "Newline strips trailing spaces"
@@ -719,7 +719,7 @@ msgstr "Enter verwijdert witruimte aan regeleinde"
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr ""
 "Staat Enter toe om witruimte (tabs en spaties) aan het einde van de vorige "
-"regel te verwijderen."
+"regel te verwijderen"
 
 #: ../data/geany.glade.h:145
 msgid "Line breaking column:"
@@ -817,23 +817,22 @@ msgid ""
 "opened"
 msgstr ""
 "Of het inspringingstype uit de inhoud van het bestand gedetecteerd moet "
-"worden wanneer het geopend wordt."
+"worden wanneer het geopend wordt"
 
 #: ../data/geany.glade.h:164
 msgid "Type:"
 msgstr "Type:"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Tabtoets springt in"
+msgstr "Tab-toets springt in"
 
 #: ../data/geany.glade.h:166
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
-"Drukken op Tab/Shift+Tab springt in/uit in plaats van een tabteken in te "
-"voegen."
+"Drukken op Tab/Shift+Tab springt in/uit in plaats van een tab-teken in te "
+"voegen"
 
 #: ../data/geany.glade.h:167
 msgid "<b>Indentation</b>"
@@ -912,7 +911,7 @@ msgid ""
 "The amount of characters which are necessary to show the symbol "
 "autocompletion list"
 msgstr ""
-"Het aantal getypte tekens dat nodig is om de autovoltooiingslijst te tonen."
+"Het aantal getypte tekens dat nodig is om de autovoltooiingslijst te tonen"
 
 #: ../data/geany.glade.h:183
 msgid "Display height in rows for the autocompletion list"
@@ -996,8 +995,8 @@ msgstr "Kleuren van syntaxisaccentuering omdraaien"
 #: ../data/geany.glade.h:201
 msgid "Invert all colors, by default using white text on a black background"
 msgstr ""
-"Draait alle kleuren om, standaard met een witte tekst op een zwarte "
-"achtergrond."
+"Inverteert alle kleuren, standaard met een witte tekst op een zwarte "
+"achtergrond"
 
 #: ../data/geany.glade.h:202
 msgid "Show indentation guides"
@@ -1007,7 +1006,7 @@ msgstr "Inspringingsmarkeringen weergeven"
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
 "Toont kleine stippellijnen om het gebruik van de juiste inspringing te "
-"vergemakkelijken."
+"vergemakkelijken"
 
 #: ../data/geany.glade.h:204
 msgid "Show white space"
@@ -1054,7 +1053,7 @@ msgstr "Met scrollen stoppen bij de laatste regel"
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr ""
 "Of het scrollen moet stoppen zodra de laatste regel van een document in "
-"beeld is."
+"beeld is"
 
 #: ../data/geany.glade.h:214
 msgid "Lines visible _around the cursor:"
@@ -1131,7 +1130,7 @@ msgstr "Uitgeschakeld"
 
 #: ../data/geany.glade.h:228
 msgid "Do not show virtual spaces"
-msgstr "Laat virtuele spaties niet zien."
+msgstr "Laat virtuele spaties niet zien"
 
 #: ../data/geany.glade.h:229
 msgid "Only for rectangular selections"
@@ -1143,7 +1142,7 @@ msgid ""
 "selection"
 msgstr ""
 "Laat virtuele spaties voorbij regeleinden alleen zien wanneer een "
-"rechthoekige selectie gemaakt wordt."
+"rechthoekige selectie gemaakt wordt"
 
 #: ../data/geany.glade.h:231
 msgid "Always"
@@ -1151,7 +1150,7 @@ msgstr "Altijd"
 
 #: ../data/geany.glade.h:232
 msgid "Always show virtual spaces beyond the end of lines"
-msgstr "Laat virtuele spaties aan regeleinden altijd zien."
+msgstr "Laat virtuele spaties aan regeleinden altijd zien"
 
 #: ../data/geany.glade.h:233
 msgid "<b>Virtual spaces</b>"
@@ -1172,8 +1171,8 @@ msgstr "Nieuwe bestanden van de opdrachtregel openen"
 #: ../data/geany.glade.h:237
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
-"Opent een nieuw bestand voor elke op de opdrachtregel meegegeven "
-"bestandsnaam die niet bestaat."
+"Maakt een nieuw bestand aan voor elke op de opdrachtregel meegegeven niet-"
+"bestaande bestandsnaam"
 
 #: ../data/geany.glade.h:238
 msgid "Default end of line characters:"
@@ -1212,7 +1211,7 @@ msgstr "Standaard codering (van bestaande niet-Unicode bestanden):"
 #: ../data/geany.glade.h:245
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr ""
-"Stelt de standaard codering in voor het openen van niet-Unicode bestanden."
+"Stelt de standaard codering in voor het openen van niet-Unicode bestanden"
 
 #: ../data/geany.glade.h:246
 msgid "<b>Encodings</b>"
@@ -1238,7 +1237,7 @@ msgid ""
 msgstr ""
 "Zorgt ervoor dat nieuweregeltekens altijd omgezet worden voor het "
 "wegschrijven, om verschillende soorten regeleindes in hetzelfde bestand te "
-"vermijden."
+"vermijden"
 
 #: ../data/geany.glade.h:251
 msgid "Strip trailing spaces and tabs"
@@ -1268,7 +1267,7 @@ msgstr "Lengte van 'laatst geopende bestanden'-lijst:"
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr ""
 "Specificeert het aantal bestanden dat opgeslagen wordt in de 'laatst "
-"geopende bestanden'-lijst."
+"geopende bestanden'-lijst"
 
 #: ../data/geany.glade.h:258
 msgid "Disk check timeout:"
@@ -1490,7 +1489,7 @@ msgstr "De basisnaam van het af te drukken bestand gebruiken"
 
 #: ../data/geany.glade.h:305
 msgid "Print only the basename (without the path) of the printed file"
-msgstr "Drukt alleen de naam van het bestand af (zonder het pad)."
+msgstr "Drukt alleen de naam van het bestand af (zonder het pad)"
 
 #: ../data/geany.glade.h:306 ../src/printing.c:273
 msgid "Date format:"
@@ -1524,7 +1523,7 @@ msgstr "Lettertype:"
 
 #: ../data/geany.glade.h:312
 msgid "Sets the font for the terminal widget"
-msgstr "Stelt het lettertype in voor de terminal."
+msgstr "Stelt het lettertype in voor de terminal"
 
 #: ../data/geany.glade.h:313
 msgid "Choose Terminal Font"
@@ -1634,9 +1633,9 @@ msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
 msgstr ""
-"Voer programma's uit in de virtuele terminal in plaats van een nieuw "
-"terminalvenster te openen. Let wel, programma's uitgevoerd in de virtuele "
-"terminal kunnen niet gestopt worden."
+"Voer programma's uit in de virtuele terminal emulator (VTE) in plaats van "
+"een nieuw terminalvenster te openen. Let wel, programma's uitgevoerd in de "
+"VTE kunnen niet gestopt worden"
 
 #: ../data/geany.glade.h:336
 msgid "Don't use run script"
@@ -1647,8 +1646,8 @@ msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
 msgstr ""
-"Gebruik niet het simpele runscript dat meestal wordt gebruikt om de "
-"afsluitwaarde van een programma weer te geven."
+"Gebruik niet het simpele run-script dat meestal wordt gebruikt om de "
+"afsluitwaarde van een programma weer te geven"
 
 #: ../data/geany.glade.h:338
 msgid "<b>Terminal</b>"
@@ -2173,9 +2172,8 @@ msgid "_Base path:"
 msgstr "Basispad:"
 
 #: ../data/geany.glade.h:468 ../src/search.c:897
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Bestandspatronen:"
+msgstr "Bestandnaamspatronen:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2293,7 +2291,7 @@ msgstr "(gebouwd op of na %s)"
 #: ../src/about.c:252
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "Gebruikt de GTK+ v%u.%u.%u en GLib v%u.%u.%u runtime bibliotheken"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:285
@@ -2360,7 +2358,7 @@ msgstr "vervangen van %%p is mislukt; er is geen geopend project"
 
 #: ../src/build.c:785
 msgid "Process failed, no working directory"
-msgstr "Proces is mislukt.  Geen werkmap beschikbaar."
+msgstr "Proces is mislukt. Geen werkmap beschikbaar"
 
 #: ../src/build.c:797
 #, c-format
@@ -2398,7 +2396,7 @@ msgid ""
 "Preferences"
 msgstr ""
 "Kan bouwcommando '%s' niet uitvoeren: %s; controleer de terminalinstelling "
-"in Voorkeuren."
+"in Voorkeuren"
 
 #: ../src/build.c:1099
 msgid "Compilation failed."
@@ -2590,12 +2588,11 @@ msgstr "Controleer padinstellingen bij Voorkeuren."
 #: ../src/callbacks.c:1495
 #, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "Kan situatie specifieke commando '%s' niet uitvoeren (%s. %s)."
+msgstr "Kan situatie specifieke commando '%s' niet uitvoeren: %s. %s"
 
 #: ../src/callbacks.c:1504
-#, fuzzy
 msgid "No context action set."
-msgstr "Contextactie:"
+msgstr "Geen contextactie ingesteld."
 
 #: ../src/dialogs.c:160 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
@@ -2993,7 +2990,7 @@ msgstr "Wenst u het opnieuw te laden?"
 
 #: ../src/editor.c:4461
 msgid "Enter Tab Width"
-msgstr "Tabgrootte:"
+msgstr "Tabgrootte"
 
 #: ../src/editor.c:4462
 msgid "Enter the amount of spaces which should be replaced by a tab character."
@@ -3809,7 +3806,7 @@ msgstr "De volgende sneltoetsen zijn gedefinieerd:"
 
 #: ../src/keyfile.c:1069
 msgid "Type here what you want, use it as a notice/scratch board"
-msgstr "Type hier wat u maar wilt; gebruik het als notitie-/krabbelbord."
+msgstr "Type hier wat u maar wilt; gebruik het als notitie-/krabbelbord"
 
 #: ../src/keyfile.c:1296
 msgid "Failed to load one or more session files."
@@ -3827,11 +3824,9 @@ msgstr ""
 msgid "COLUMN"
 msgstr "KOLOM"
 
-# FIXME: Shouldn't it say '--config=FILENAME"?
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Een alternatieve configuratiemap gebruiken"
+msgstr "Alternatieve configuratiemap DIR gebruiken"
 
 #: ../src/libmain.c:122
 msgid "DIR"
@@ -3928,7 +3923,7 @@ msgstr "Een snel en lichtgewicht IDE."
 
 #: ../src/libmain.c:566
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr "Rapporteer fouten op https://github.com/geany/geany/issues"
+msgstr "Rapporteer fouten op https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:599
@@ -4038,9 +4033,8 @@ msgid "Open in New _Window"
 msgstr "Openen in nieuw venster"
 
 #: ../src/notebook.c:501
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "Verplaats document naar rechts"
+msgstr "Sluit documenten aan de rechterzijde"
 
 #: ../src/plugins.c:232
 #, c-format
@@ -4078,7 +4072,7 @@ msgstr ""
 
 #: ../src/plugins.c:1679
 msgid "No plugins available."
-msgstr "Geen plugins beschikbaar"
+msgstr "Geen plugins beschikbaar."
 
 #: ../src/plugins.c:1811
 msgid "Active"
@@ -4301,7 +4295,7 @@ msgstr "Kies basispad van project"
 
 #: ../src/project.c:249 ../src/project.c:629 ../src/project.c:1162
 msgid "Project file could not be written"
-msgstr "Projectbestand kon niet worden weggeschreven."
+msgstr "Projectbestand kon niet worden weggeschreven"
 
 #: ../src/project.c:254
 #, c-format
@@ -4414,7 +4408,7 @@ msgid ""
 "corresponding control characters"
 msgstr ""
 "Vervangt \\\\, \\t, \\n, \\r en \\uXXXX (Unicode tekens) door de "
-"bijbehorende stuurtekens."
+"bijbehorende stuurtekens"
 
 #: ../src/search.c:324
 msgid "Use multi-line matchin_g"
@@ -4535,12 +4529,12 @@ msgstr ""
 "projectsinstellingen\n"
 "Aangepast: de bestandspatronen handmatig opgeven"
 
+# "file" should be "file name"?
 #: ../src/search.c:910
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
 msgstr ""
-"Lijst van bestandsnaampatronen voor zoekfunctie in bestandsdialoog (bijv. *."
-"c *.h) gescheiden door spaties"
+"Door spaties gescheiden lijst van bestandsnaampatronen voor zoekfunctie in "
+"bestandsdialoog (bijv. *.c *.h)"
 
 #: ../src/search.c:922
 msgid "_Directory:"
@@ -4650,7 +4644,7 @@ msgstr ""
 
 #: ../src/spawn.c:96 ../src/spawn.c:146 ../src/spawn.c:190
 msgid "Text ended before matching quote was found"
-msgstr "Tekst hield op voordat overeenkomstige quote gevonden was."
+msgstr "Tekst hield op voordat overeenkomstige quote gevonden was"
 
 #. TL note: from glib
 #: ../src/spawn.c:132
@@ -4663,11 +4657,11 @@ msgstr "Plaats geciteerd Windows programma geheel binnen de aanhalingstekens"
 
 #: ../src/spawn.c:260
 msgid "Program not found"
-msgstr "Programma is niet gevonden."
+msgstr "Programma niet gevonden"
 
 #: ../src/spawn.c:766
 msgid "Failed to change to the working directory"
-msgstr "Kan niet naar werkmap wijzigen."
+msgstr "Kan niet overschakelen naar de werkmap"
 
 #: ../src/spawn.c:771
 msgid "Unknown error executing child process"
@@ -4750,15 +4744,15 @@ msgstr "Alinea"
 
 #: ../src/symbols.c:496
 msgid "Group"
-msgstr "Groep:"
+msgstr "Groep"
 
 #: ../src/symbols.c:497
 msgid "Data"
-msgstr "Data:"
+msgstr "Data"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Kopieën"
 
 #: ../src/symbols.c:504
 msgid "Keys"
@@ -4785,33 +4779,31 @@ msgstr "Subsubsectie"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "Artikelen"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Hoofdstuk"
+msgstr "Hoofdstukken uit boeken"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "Boeken en conferentienaslagwerken"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "Conferentienaslagwerken"
 
 #: ../src/symbols.c:535
 msgid "Theses"
 msgstr ""
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "Instellingen"
+msgstr "Tekenreeksen"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "Ongepubliceerd"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
@@ -5328,11 +5320,11 @@ msgstr "Woorden tellen"
 
 #: ../src/tools.c:704
 msgid "selection"
-msgstr "Selectie"
+msgstr "selectie"
 
 #: ../src/tools.c:709
 msgid "whole document"
-msgstr "Volledig document"
+msgstr "volledig document"
 
 #: ../src/tools.c:718
 msgid "Range:"
@@ -5828,8 +5820,7 @@ msgstr "_Regelnummers toevoegen"
 
 #: ../plugins/export.c:188
 msgid "Insert line numbers before each line in the exported document"
-msgstr ""
-"Voegt regelnummers toe vooraan elke regel in het geëxporteerde bestand."
+msgstr "Voegt regelnummers toe vooraan elke regel in het geëxporteerde bestand"
 
 #: ../plugins/export.c:198
 msgid "_Use current zoom level"
@@ -6047,7 +6038,7 @@ msgstr "_Alle geopende bestanden opslaan"
 msgid "Instant Save"
 msgstr "Instant opslaan"
 
-# Of nieuw aangemaakte bestanden?
+# Should this not be Newly Created files?
 #: ../plugins/saveactions.c:688
 msgid "_Filetype to use for newly opened files:"
 msgstr "_Bestandstype voor nieuw geopende bestanden:"
@@ -6079,7 +6070,7 @@ msgstr "Splitst de editor in twee delen."
 
 #: ../plugins/splitwindow.c:299
 msgid "Show the current document"
-msgstr "Toon huidige document."
+msgstr "Toon huidige document"
 
 #: ../plugins/splitwindow.c:321 ../plugins/splitwindow.c:454
 #: ../plugins/splitwindow.c:469
