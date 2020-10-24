@@ -32,6 +32,7 @@ zlib
 expat
 libffi
 libiconv
+brotli
 bzip2
 libffi
 libpng
