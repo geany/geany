@@ -396,7 +396,6 @@ static void create_vte(void)
 
 void vte_close(void)
 {
-	g_free(vf);
 	/* free the vte widget before unloading vte module
 	 * this prevents a segfault on X close window if the message window is hidden */
 	g_signal_handlers_disconnect_by_func(vc->vte, G_CALLBACK(vte_start), NULL);
@@ -407,6 +406,7 @@ void vte_close(void)
 	g_free(vc->font);
 	g_free(vc->send_cmd_prefix);
 	g_free(vc);
+	g_free(vf);
 	g_free(gtk_menu_key_accel);
 	/* Don't unload the module explicitly because it causes a segfault on FreeBSD. The segfault
 	 * happens when the app really exits, not directly on g_module_close(). This still needs to
