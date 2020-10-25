@@ -10,6 +10,8 @@ Geany 1.37 (unreleased)
     Bug Fixes
     * Fix main window name as seen by accessibility tools (Issue#2421).
     * Add missing include (Pino Toscano, PR#2402).
+    * Fix a possible crash when quitting (Hodong & Guido Falsi, Issue#2457,
+      PR#2634).
 
     Interface
     * Allow to cancel Open Project and New Project dialogs without closing the
