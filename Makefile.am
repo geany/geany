@@ -21,7 +21,6 @@ EXTRA_DIST = \
 	HACKING \
 	README.I18N \
 	README.Packagers \
-	po/intl_stats.sh \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in \
