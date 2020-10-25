@@ -1065,6 +1065,15 @@ void editor_sci_notify_cb(G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED gint sc
 }
 
 
+/* recalculate margins width */
+static void update_margins(ScintillaObject *sci)
+{
+	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
+	sci_set_folding_margin_visible(sci, editor_prefs.folding);
+}
+
+
 static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
@@ -1185,8 +1194,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
 		case SCN_ZOOM:
-			/* recalculate line margin width */
-			sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+			update_margins(sci);
 			break;
 	}
 	/* we always return FALSE here to let plugins handle the event too */
@@ -4608,6 +4616,7 @@ void editor_set_font(GeanyEditor *editor, const gchar *font)
 
 	g_free(font_name);
 
+	update_margins(editor->sci);
 	/* zoom to 100% to prevent confusion */
 	sci_zoom_off(editor->sci);
 }
@@ -5188,6 +5197,8 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
 	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+
+	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
