@@ -2406,3 +2406,71 @@ gchar *utils_get_real_path(const gchar *file_name)
 {
 	return tm_get_real_path(file_name);
 }
+
+
+/*
+ * Get a string describing the OS.
+ *
+ * If the OS can be determined, a string which describes the OS will
+ * be returned. If no OS can be determined then `NULL` will be returned.
+ *
+ * @note The format of the returned string is unspecified and is only
+ * meant to provide diagnostic information to the user.
+ *
+ * @return A newly-allocated string containing a description of the
+ * OS if it can be determined or `NULL` if it cannot.
+ *
+ * @since 1.37
+ */
+gchar *utils_get_os_info_string(void)
+{
+	gchar *os_info = NULL;
+
+#if GLIB_CHECK_VERSION(2, 64, 0)
+# if ! defined(__APPLE__)
+	/* on non-macOS operating systems */
+	{
+		GString *os_str;
+		gchar *pretty_name;
+		gchar *code_name;
+
+		pretty_name = g_get_os_info(G_OS_INFO_KEY_PRETTY_NAME);
+		if (pretty_name == NULL)
+			return NULL;
+
+		os_str = g_string_new(pretty_name);
+		g_free(pretty_name);
+
+		code_name = g_get_os_info(G_OS_INFO_KEY_VERSION_CODENAME);
+		if (code_name != NULL)
+		{
+			g_string_append_printf(os_str, " (%s)", code_name);
+			g_free(code_name);
+		}
+
+		os_info = g_string_free(os_str, FALSE);
+	}
+# else
+	/* on macOS, only `G_OS_INFO_KEY_NAME` is supported and returns the
+	 * fixed string `macOS` */
+	os_info = g_get_os_info(G_OS_INFO_KEY_NAME);
+# endif
+#else
+	/* if g_get_os_info() is not available, do it the old-fashioned way */
+# if defined(_WIN64)
+	os_info = g_strdup("Microsoft Windows (64-bit)");
+# elif defined(_WIN32)
+	os_info = g_strdup("Microsoft Windows");
+# elif defined(__APPLE__)
+	os_info = g_strdup("Apple macOS");
+# elif defined(__linux__)
+	os_info = g_strdup("Linux");
+# elif defined(__FreeBSD__)
+	os_info = g_strdup("FreeBSD");
+# elif defined(__ANDROID__)
+	os_info = g_strdup("Android");
+# endif
+#endif
+
+	return os_info;
+}
