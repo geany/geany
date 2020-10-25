@@ -19,7 +19,7 @@ Geany 1.37 (October 25, 2020)
     * Don't ask whether to close current project when opening a recent project.
     * Disable some items when they are not available.
     * Provide a CSS name for most widgets (PR#2469).
-    * Add a setting to control the fold margin width (Andy Alt, PR#2140).
+    * Adapt margins width to font size and zoom (Issue#1733, PR#1738).
     * Show OS info in debug messages.
     * Persist color picker palette (Issue#2595).
     * Fix color of selected text in search entries with no match (foresto,
