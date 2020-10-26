@@ -26,17 +26,14 @@ AC_USE_SYSTEM_EXTENSIONS
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
 LT_INIT([disable-static])
 AC_PROG_CC
+AC_PROG_CXX
 AC_PROG_CC_C99
 AM_PROG_CC_C_O
-
-AC_PROG_CXX
-GEANY_PROG_CXX
-AX_CXX_COMPILE_STDCXX_11
-
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
-# autoscan start
+# C++ required for scintilla
+AX_CXX_COMPILE_STDCXX_17
 
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h glob.h stdlib.h sys/time.h errno.h limits.h])
