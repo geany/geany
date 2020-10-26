@@ -165,7 +165,7 @@ public:
 		delete this;
 	}
 	int SCI_METHOD Version() const override {
-		return lvIdentity;
+		return lvRelease5;
 	}
 	const char * SCI_METHOD PropertyNames() override {
 		return osAsm.PropertyNames();
@@ -191,11 +191,11 @@ public:
 		return 0;
 	}
 
-	static ILexer *LexerFactoryAsm() {
+	static ILexer5 *LexerFactoryAsm() {
 		return new LexerAsm("asm", SCLEX_ASM, ';');
 	}
 
-	static ILexer *LexerFactoryAs() {
+	static ILexer5 *LexerFactoryAs() {
 		return new LexerAsm("as", SCLEX_AS, '#');
 	}
 };

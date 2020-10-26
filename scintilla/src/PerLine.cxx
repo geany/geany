@@ -10,6 +10,7 @@
 #include <cstring>
 
 #include <stdexcept>
+#include <string_view>
 #include <vector>
 #include <forward_list>
 #include <algorithm>
@@ -145,7 +146,7 @@ int LineMarkers::NumberFromLine(Sci::Line line, int which) const noexcept {
 void LineMarkers::MergeMarkers(Sci::Line line) {
 	if (markers[line + 1]) {
 		if (!markers[line])
-			markers[line] = Sci::make_unique<MarkerHandleSet>();
+			markers[line] = std::make_unique<MarkerHandleSet>();
 		markers[line]->CombineWith(markers[line + 1].get());
 		markers[line + 1].reset();
 	}
@@ -181,7 +182,7 @@ int LineMarkers::AddMark(Sci::Line line, int markerNum, Sci::Line lines) {
 	}
 	if (!markers[line]) {
 		// Need new structure to hold marker handle
-		markers[line] = Sci::make_unique<MarkerHandleSet>();
+		markers[line] = std::make_unique<MarkerHandleSet>();
 	}
 	markers[line]->InsertHandle(handleCurrent, markerNum);
 
@@ -338,21 +339,13 @@ namespace {
 
 constexpr int IndividualStyles = 0x100;
 
-size_t NumberLines(const char *text) noexcept {
-	int lines = 1;
-	if (text) {
-		while (*text) {
-			if (*text == '\n')
-				lines++;
-			text++;
-		}
-	}
-	return lines;
+size_t NumberLines(std::string_view sv) {
+	return std::count(sv.begin(), sv.end(), '\n') + 1;
 }
 
 std::unique_ptr<char[]>AllocateAnnotation(size_t length, int style) {
 	const size_t len = sizeof(AnnotationHeader) + length + ((style == IndividualStyles) ? length : 0);
-	return Sci::make_unique<char[]>(len);
+	return std::make_unique<char[]>(len);
 }
 
 }
@@ -522,7 +515,7 @@ bool LineTabstops::ClearTabstops(Sci::Line line) noexcept {
 bool LineTabstops::AddTabstop(Sci::Line line, int x) {
 	tabstops.EnsureLength(line + 1);
 	if (!tabstops[line]) {
-		tabstops[line] = Sci::make_unique<TabstopList>();
+		tabstops[line] = std::make_unique<TabstopList>();
 	}
 
 	TabstopList *tl = tabstops[line].get();

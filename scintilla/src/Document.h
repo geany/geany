@@ -171,7 +171,7 @@ constexpr int LevelNumber(int level) noexcept {
 class LexInterface {
 protected:
 	Document *pdoc;
-	ILexer *instance;
+	ILexer5 *instance;
 	bool performingStyle;	///< Prevent reentrance
 public:
 	explicit LexInterface(Document *pdoc_) noexcept : pdoc(pdoc_), instance(nullptr), performingStyle(false) {
@@ -211,7 +211,7 @@ public:
 
 /**
  */
-class Document : PerLine, public IDocumentWithLineEnd, public ILoader {
+class Document : PerLine, public IDocument, public ILoader {
 
 public:
 	/** Used to pair watcher pointer with user data. */
@@ -309,7 +309,7 @@ public:
 	int GetLineEndTypesActive() const noexcept { return cb.GetLineEndTypes(); }
 
 	int SCI_METHOD Version() const override {
-		return dvLineEnd;
+		return dvRelease4;
 	}
 
 	void SCI_METHOD SetErrorStatus(int status) override;
@@ -334,7 +334,7 @@ public:
 	bool IsDBCSLeadByteNoExcept(char ch) const noexcept;
 	bool IsDBCSLeadByteInvalid(char ch) const noexcept;
 	bool IsDBCSTrailByteInvalid(char ch) const noexcept;
-	int DBCSDrawBytes(const char *text, int len) const noexcept;
+	int DBCSDrawBytes(std::string_view text) const noexcept;
 	int SafeSegment(const char *text, int length, int lengthSegment) const noexcept;
 	EncodingFamily CodePageFamily() const noexcept;
 
@@ -452,7 +452,7 @@ public:
 	int GetCharsOfClass(CharClassify::cc characterClass, unsigned char *buffer) const;
 	void SetCharacterCategoryOptimization(int countCharacters);
 	int CharacterCategoryOptimization() const noexcept;
-	void SCI_METHOD StartStyling(Sci_Position position, char mask) override;
+	void SCI_METHOD StartStyling(Sci_Position position) override;
 	bool SCI_METHOD SetStyleFor(Sci_Position length, char style) override;
 	bool SCI_METHOD SetStyles(Sci_Position length, const char *styles) override;
 	Sci::Position GetEndStyled() const noexcept { return endStyled; }

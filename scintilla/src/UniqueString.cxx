@@ -5,7 +5,7 @@
 // Copyright 2017 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <cstring>
+#include <string_view>
 #include <vector>
 #include <algorithm>
 #include <memory>
@@ -20,15 +20,15 @@ UniqueString UniqueStringCopy(const char *text) {
 	if (!text) {
 		return UniqueString();
 	}
-	const size_t len = strlen(text);
-	std::unique_ptr<char[]> upcNew = Sci::make_unique<char[]>(len + 1);
-	memcpy(upcNew.get(), text, len + 1);
+	const std::string_view sv(text);
+	std::unique_ptr<char[]> upcNew = std::make_unique<char[]>(sv.length() + 1);
+	sv.copy(upcNew.get(), sv.length());
 	return UniqueString(upcNew.release());
 }
 
 // A set of strings that always returns the same pointer for each string.
 
-UniqueStringSet::UniqueStringSet() = default;
+UniqueStringSet::UniqueStringSet() noexcept = default;
 
 UniqueStringSet::~UniqueStringSet() {
 	strings.clear();
@@ -42,8 +42,9 @@ const char *UniqueStringSet::Save(const char *text) {
 	if (!text)
 		return nullptr;
 
+	const std::string_view sv(text);
 	for (const UniqueString &us : strings) {
-		if (text == us.get()) {
+		if (sv == us.get()) {
 			return us.get();
 		}
 	}

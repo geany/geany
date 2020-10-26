@@ -245,7 +245,7 @@ public:
 		delete this;
 	}
 	int SCI_METHOD Version() const override {
-		return lvIdentity;
+		return lvRelease5;
 	}
 	const char * SCI_METHOD PropertyNames() override {
 		return osBasic.PropertyNames();
@@ -270,13 +270,13 @@ public:
 	void * SCI_METHOD PrivateCall(int, void *) override {
 		return 0;
 	}
-	static ILexer *LexerFactoryBlitzBasic() {
+	static ILexer5 *LexerFactoryBlitzBasic() {
 		return new LexerBasic("blitzbasic", SCLEX_BLITZBASIC, ';', CheckBlitzFoldPoint, blitzbasicWordListDesc);
 	}
-	static ILexer *LexerFactoryPureBasic() {
+	static ILexer5 *LexerFactoryPureBasic() {
 		return new LexerBasic("purebasic", SCLEX_PUREBASIC, ';', CheckPureFoldPoint, purebasicWordListDesc);
 	}
-	static ILexer *LexerFactoryFreeBasic() {
+	static ILexer5 *LexerFactoryFreeBasic() {
 		return new LexerBasic("freebasic", SCLEX_FREEBASIC, '\'', CheckFreeFoldPoint, freebasicWordListDesc );
 	}
 };

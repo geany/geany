@@ -350,7 +350,7 @@ public:
 		delete this;
 	}
 	int SCI_METHOD Version() const override {
-		return lvIdentity;
+		return lvRelease5;
 	}
 	const char *SCI_METHOD PropertyNames() override {
 		return osPython.PropertyNames();
@@ -409,7 +409,7 @@ public:
 		return styleSubable;
 	}
 
-	static ILexer *LexerFactoryPython() {
+	static ILexer5 *LexerFactoryPython() {
 		return new LexerPython();
 	}
 

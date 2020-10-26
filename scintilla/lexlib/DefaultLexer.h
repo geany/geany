@@ -13,7 +13,7 @@
 namespace Scintilla {
 
 // A simple lexer with no state
-class DefaultLexer : public ILexerWithIdentity {
+class DefaultLexer : public ILexer5 {
 	const char *languageName;
 	int language;
 	const LexicalClass *lexClasses;
@@ -47,7 +47,7 @@ public:
 	const char * SCI_METHOD NameOfStyle(int style) override;
 	const char * SCI_METHOD TagsOfStyle(int style) override;
 	const char * SCI_METHOD DescriptionOfStyle(int style) override;
-	// ILexerWithIdentity methods
+	// ILexer5 methods
 	const char * SCI_METHOD GetName() override;
 	int SCI_METHOD GetIdentifier() override;
 };

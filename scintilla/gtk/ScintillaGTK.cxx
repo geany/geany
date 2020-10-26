@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <new>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -103,7 +104,7 @@ static GdkWindow *PWindow(const Window &w) noexcept {
 	return gtk_widget_get_window(widget);
 }
 
-extern std::string UTF8FromLatin1(const char *s, int len);
+extern std::string UTF8FromLatin1(std::string_view text);
 
 enum {
 	COMMAND_SIGNAL,
@@ -120,12 +121,6 @@ enum {
 	TARGET_UTF8_STRING,
 	TARGET_URI
 };
-
-GdkAtom ScintillaGTK::atomUTF8 = nullptr;
-GdkAtom ScintillaGTK::atomUTF8Mime = nullptr;
-GdkAtom ScintillaGTK::atomString = nullptr;
-GdkAtom ScintillaGTK::atomUriList = nullptr;
-GdkAtom ScintillaGTK::atomDROPFILES_DND = nullptr;
 
 static const GtkTargetEntry clipboardCopyTargets[] = {
 	{ (gchar *) "UTF8_STRING", 0, TARGET_UTF8_STRING },
@@ -1420,7 +1415,7 @@ void ScintillaGTK::GetGtkSelectionText(GtkSelectionData *selectionData, Selectio
 	if (selectionTypeData == GDK_TARGET_STRING) {
 		if (IsUnicodeMode()) {
 			// Unknown encoding so assume in Latin1
-			dest = UTF8FromLatin1(dest.c_str(), dest.length());
+			dest = UTF8FromLatin1(dest);
 			selText.Copy(dest, SC_CP_UTF8, 0, isRectangular, false);
 		} else {
 			// Assume buffer is in same encoding as selection
@@ -1541,7 +1536,7 @@ void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, Se
 		const char *charSet = ::CharacterSetID(text->characterSet);
 		if (*charSet) {
 			std::string tmputf = ConvertText(text->Data(), text->Length(), "UTF-8", charSet, false);
-			converted = Sci::make_unique<SelectionText>();
+			converted = std::make_unique<SelectionText>();
 			converted->Copy(tmputf, SC_CP_UTF8, 0, text->rectangular, false);
 			text = converted.get();
 		}
@@ -2364,7 +2359,7 @@ void ScintillaGTK::CommitThis(char *commitStr) {
 			if (!IsUnicodeMode())
 				docChar = ConvertText(u8Char, u8CharLen, charSetSource, "UTF-8", true);
 
-			InsertCharacter(docChar.c_str(), docChar.size(), CharacterSource::directInput);
+			InsertCharacter(docChar, CharacterSource::directInput);
 		}
 		g_free(uniStr);
 		ShowCaretAtCurrentPosition();
@@ -2405,8 +2400,7 @@ void ScintillaGTK::PreeditChangedInlineThis() {
 			return;
 		}
 
-		if (preeditStr.uniStrLen == 0 || preeditStr.uniStrLen > maxLenInputIME) {
-			//fprintf(stderr, "Do not allow over 200 chars: %i\n", preeditStr.uniStrLen);
+		if (preeditStr.uniStrLen == 0) {
 			ShowCaretAtCurrentPosition();
 			return;
 		}
@@ -2427,7 +2421,7 @@ void ScintillaGTK::PreeditChangedInlineThis() {
 			if (!IsUnicodeMode())
 				docChar = ConvertText(u8Char, u8CharLen, charSetSource, "UTF-8", true);
 
-			InsertCharacter(docChar.c_str(), docChar.size(), CharacterSource::tentativeInput);
+			InsertCharacter(docChar, CharacterSource::tentativeInput);
 
 			DrawImeIndicator(indicator[i], docChar.size());
 		}
@@ -3008,13 +3002,11 @@ sptr_t ScintillaGTK::DirectFunction(
 }
 
 /* legacy name for scintilla_object_send_message */
-GEANY_API_SYMBOL
 sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	ScintillaGTK *psci = static_cast<ScintillaGTK *>(sci->pscin);
 	return psci->WndProc(iMessage, wParam, lParam);
 }
 
-GEANY_API_SYMBOL
 gintptr scintilla_object_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	return scintilla_send_message(sci, iMessage, wParam, lParam);
 }
@@ -3026,7 +3018,6 @@ extern void Platform_Initialise();
 extern void Platform_Finalise();
 
 /* legacy name for scintilla_object_get_type */
-GEANY_API_SYMBOL
 GType scintilla_get_type() {
 	static GType scintilla_type = 0;
 	try {
@@ -3056,7 +3047,6 @@ GType scintilla_get_type() {
 	return scintilla_type;
 }
 
-GEANY_API_SYMBOL
 GType scintilla_object_get_type() {
 	return scintilla_get_type();
 }
@@ -3162,7 +3152,6 @@ static void scintilla_init(ScintillaObject *sci) {
 }
 
 /* legacy name for scintilla_object_new */
-GEANY_API_SYMBOL
 GtkWidget *scintilla_new() {
 	GtkWidget *widget = GTK_WIDGET(g_object_new(scintilla_get_type(), nullptr));
 	gtk_widget_set_direction(widget, GTK_TEXT_DIR_LTR);
@@ -3170,7 +3159,6 @@ GtkWidget *scintilla_new() {
 	return widget;
 }
 
-GEANY_API_SYMBOL
 GtkWidget *scintilla_object_new() {
 	return scintilla_new();
 }
@@ -3193,7 +3181,6 @@ void scintilla_release_resources(void) {
 static void *copy_(void *src) { return src; }
 static void free_(void *) { }
 
-GEANY_API_SYMBOL
 GType scnotification_get_type(void) {
 	static gsize type_id = 0;
 	if (g_once_init_enter(&type_id)) {

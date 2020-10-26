@@ -435,7 +435,7 @@ public:
 		delete this;
 	}
 	int SCI_METHOD Version() const override {
-		return lvIdentity;
+		return lvRelease5;
 	}
 	const char *SCI_METHOD PropertyNames() override {
 		return osPerl.PropertyNames();
@@ -461,7 +461,7 @@ public:
 		return 0;
 	}
 
-	static ILexer *LexerFactoryPerl() {
+	static ILexer5 *LexerFactoryPerl() {
 		return new LexerPerl();
 	}
 	int InputSymbolScan(StyleContext &sc);
