@@ -29,8 +29,10 @@ Windows builds (enrico?).
 Create a signed tag for the release in Git with 'git tag -s <version>'.
 
 Website: update Latest Version (https://www.geany.org/admin/latest_version/latestversion/)
-and add a News item.  Release notes and front page version will update
-automatically when the cache gets cleaned.
+and add a News item.  Release notes and front page version will be updated
+immediately automatically.
+If anything seems still outdated, it might be cached. Try to clear the cache using the
+big button on https://www.geany.org/admin/clearcache/.
 
 Announce on geany, devel, i18n mailing lists (check you're subscribed).
 Put a news item on SourceForge (https://sourceforge.net/p/geany/news/)
