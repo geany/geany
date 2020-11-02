@@ -1195,6 +1195,23 @@ colored box. These markers can be removed by selecting the
 Remove Markers command from the Document menu.
 
 
+Change font in search dialog text fields
+````````````````````````````````````````
+
+All search related dialogs use a Monospace font for the text input fields to
+increase the readability of input text. This is useful when you are
+typing input such as regular expressions with spaces, periods and commas which
+might be hard to read with a proportional font.
+
+If you want to change the font, you can do this easily by using the following
+custom CSS snippet, see `Customizing Geany's appearance using GTK+ CSS`_::
+
+    #GeanyDialogSearch GtkEntry /* GTK < 3.20 */,
+    #GeanyDialogSearch entry /* GTK >= 3.20 */ {
+        font: 8pt monospace;
+    }
+
+
 Find selection
 ^^^^^^^^^^^^^^
 The *Find Next/Previous Selection* commands perform a search for the
