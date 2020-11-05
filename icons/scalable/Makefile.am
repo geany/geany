@@ -5,7 +5,9 @@ icons_actionsdir = $(iconsdir)/actions
 dist_icons_apps_DATA =		\
 	geany.svg
 
-dist_icons_actions_DATA =	\
-	geany-build.svg			\
-	geany-close-all.svg		\
-	geany-save-all.svg
+dist_icons_actions_DATA =		\
+	geany-build.svg				\
+	geany-close-all.svg			\
+	geany-save-all.svg			\
+	geany-go-next-marker.svg	\
+	geany-go-prev-marker.svg

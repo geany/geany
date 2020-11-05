@@ -96,6 +96,8 @@ GeanyMainWidgets;
 #define GEANY_STOCK_SAVE_ALL "geany-save-all"
 #define GEANY_STOCK_CLOSE_ALL "geany-close-all"
 #define GEANY_STOCK_BUILD "geany-build"
+#define GEANY_STOCK_GO_NEXT_MARKER "geany-go-next-marker"
+#define GEANY_STOCK_GO_PREV_MARKER "geany-go-prev-marker"
 
 
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);

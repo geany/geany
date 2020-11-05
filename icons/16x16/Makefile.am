@@ -16,4 +16,6 @@ dist_icons_apps_DATA =							\
 dist_icons_actions_DATA =						\
 	geany-build.png								\
 	geany-close-all.png							\
-	geany-save-all.png
+	geany-save-all.png							\
+	geany-go-next-marker.png					\
+	geany-go-prev-marker.png
