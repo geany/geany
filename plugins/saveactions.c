@@ -685,7 +685,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		g_signal_connect(checkbox_enable, "toggled",
 			G_CALLBACK(checkbox_toggled_cb), GINT_TO_POINTER(NOTEBOOK_PAGE_INSTANTSAVE));
 
-		label = gtk_label_new_with_mnemonic(_("_Filetype to use for newly opened files:"));
+		label = gtk_label_new_with_mnemonic(_("Default _filetype to use for new files:"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
 
