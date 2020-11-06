@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2020-10-11 22:59+0200\n"
+"PO-Revision-Date: 2020-11-06 15:05+0100\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Geany / PoHelper 1.36\n"
+"X-Generator: Geany / PoHelper 1.38\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -6101,9 +6101,9 @@ msgid "Instant Save"
 msgstr "Sauvegarde immédiate"
 
 #: ../plugins/saveactions.c:688
-msgid "_Filetype to use for newly opened files:"
+msgid "Default _filetype to use for new files:"
 msgstr ""
-"_Type de fichiers à utiliser lors de la création de nouveaux fichiers :"
+"_Type de fichier à utiliser lors de la création de nouveaux fichiers :"
 
 #: ../plugins/saveactions.c:719
 msgid "Backup Copy"
