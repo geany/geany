@@ -21,11 +21,8 @@ EXE_WRAPPER_32="mingw-w64-i686-wine"
 EXE_WRAPPER_64="mingw-w64-x86_64-wine"
 
 package_urls=""
-gtk3_dependency_pkgs="
-libepoxy
-hicolor-icon-theme
-adwaita-icon-theme
-"
+gtk3_dependency_pkgs=""
+gtk4_dependency_pkgs=""
 
 packages="
 gcc-libs
@@ -46,6 +43,7 @@ gettext
 glib2
 graphite2
 jasper
+libepoxy
 libjpeg-turbo
 libtiff
 libwinpthread-git
@@ -60,6 +58,8 @@ pango
 cairo
 pixman
 gdk-pixbuf2
+hicolor-icon-theme
+adwaita-icon-theme
 "
 
 handle_command_line_options() {
@@ -74,6 +74,9 @@ handle_command_line_options() {
 		"-3")
 			gtkv="3"
 			;;
+		"-4")
+			gtkv="4"
+			;;
 		"-n")
 			run_pi=""
 			;;
@@ -81,13 +84,14 @@ handle_command_line_options() {
 			cross="yes"
 			;;
 		"-h"|"--help")
-			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-3] [CACHEDIR]"
+			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-3 | -4] [CACHEDIR]"
 			echo "      -c Use pacman cache. Otherwise pacman will download"
 			echo "         archive files"
 			echo "      -h Show this help screen"
 			echo "      -n Do not run post install scripts of the packages"
 			echo "      -z Create a zip afterwards"
 			echo "      -3 Prefer gtk3"
+			echo "      -4 Prefer gtk4"
 			echo "      -x Set when the script is executed in a cross-compilation context (e.g. to use wine)"
 			echo "CACHEDIR Directory where to look for cached packages (default: /var/cache/pacman/pkg)"
 			exit 1
