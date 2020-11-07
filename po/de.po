@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-24 21:33+0200\n"
+"POT-Creation-Date: 2020-11-07 13:57+0100\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -3001,17 +3001,17 @@ msgstr[1] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 msgid "Do you want to reload it?"
 msgstr "Möchten Sie die Datei neu laden?"
 
-#: ../src/editor.c:4461
+#: ../src/editor.c:4469
 msgid "Enter Tab Width"
 msgstr "Tabulatorbreite:"
 
-#: ../src/editor.c:4462
+#: ../src/editor.c:4470
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Geben Sie die Anzahl der Leerzeichen an, welche durch den Tabulator ersetzt "
 "werden sollen."
 
-#: ../src/editor.c:4668
+#: ../src/editor.c:4677
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Achtung: Keine gewöhnliche harte Tabulatorbreite:: %d != 8!"
@@ -3245,29 +3245,29 @@ msgstr "Schlechter RegEx für Dateityp %s: %s"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ../src/highlighting.c:1252 ../src/libmain.c:895 ../src/socket.c:169
+#: ../src/highlighting.c:1231 ../src/libmain.c:895 ../src/socket.c:169
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnte die Datei »%s« nicht finden."
 
-#: ../src/highlighting.c:1322
+#: ../src/highlighting.c:1301
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/highlighting.c:1363
+#: ../src/highlighting.c:1342
 msgid "The current filetype overrides the default style."
 msgstr ""
 "Der aktuelle Dateityp überschreibt die Standardeinstellungen für die "
 "Darstellung."
 
-#: ../src/highlighting.c:1364
+#: ../src/highlighting.c:1343
 msgid "This may cause color schemes to display incorrectly."
 msgstr ""
 "Dies kann dazu führen, dass eventuell Farbprofile nicht korrekt angezeigt "
 "werden."
 
-#: ../src/highlighting.c:1389
+#: ../src/highlighting.c:1368
 msgid "Color Schemes"
 msgstr "Farbschemata"
 
@@ -3998,27 +3998,27 @@ msgstr ""
 "Es könnte zu Problemen bei der Verwendung von Geany kommen.\n"
 "Geany trotzdem starten?"
 
-#: ../src/libmain.c:1217
+#: ../src/libmain.c:1215
 #, c-format
 msgid "This is Geany %s."
 msgstr "Willkommen bei Geany %s."
 
-#: ../src/libmain.c:1220
+#: ../src/libmain.c:1218
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigurationsverzeichnis konnte nicht erstellt werden (%s)."
 
-#: ../src/libmain.c:1228
+#: ../src/libmain.c:1226
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
 "Der IPC-Socket konnt konnte nicht erstellt werden. Mehr Details gibt es "
 "unter Hilfe->Debug-Meldungen"
 
-#: ../src/libmain.c:1459
+#: ../src/libmain.c:1457
 msgid "Do you really want to quit?"
 msgstr "Soll Geany wirklich beendet werden?"
 
-#: ../src/libmain.c:1497
+#: ../src/libmain.c:1495
 msgid "Configuration files reloaded."
 msgstr "Einstellungen erneut geladen."
 
@@ -5585,24 +5585,24 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:585
+#: ../src/vte.c:586
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "Ungültige VTE-Bibliothek \"%s\": Es fehlt das Symbol \"%s\""
 
-#: ../src/vte.c:766
+#: ../src/vte.c:767
 msgid "_Set Path From Document"
 msgstr "Pfad des Dokumentes _übernehmen"
 
-#: ../src/vte.c:771
+#: ../src/vte.c:772
 msgid "_Restart Terminal"
 msgstr "Terminal _neustarten"
 
-#: ../src/vte.c:804
+#: ../src/vte.c:805
 msgid "_Input Methods"
 msgstr "Eingabe_methoden"
 
-#: ../src/vte.c:896
+#: ../src/vte.c:897
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
@@ -6073,8 +6073,8 @@ msgid "Instant Save"
 msgstr "Instant Save"
 
 #: ../plugins/saveactions.c:688
-msgid "_Filetype to use for newly opened files:"
-msgstr "_Dateityp der neu geöffneten Datei:"
+msgid "Default _filetype to use for new files:"
+msgstr "_Dateityp der für neue Dateien angenommen wird:"
 
 #: ../plugins/saveactions.c:719
 msgid "Backup Copy"
