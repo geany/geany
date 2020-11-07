@@ -1,5 +1,8 @@
 Geany 1.37.1 (unreleased)
 
+    Windows
+    * Fix crash on first startup (Issue#2639, PR#2645).
+
 
 Geany 1.37 (October 25, 2020)
 
