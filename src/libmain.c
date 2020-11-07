@@ -406,7 +406,7 @@ static gint get_windows_socket_port(void)
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
 	{
 		geany_debug(
-			"No user config file found, use default TCP port (%s).",
+			"No user config file found, use default TCP port (%d).",
 			SOCKET_WINDOWS_REMOTE_CMD_PORT);
 		g_free(configfile);
 		return SOCKET_WINDOWS_REMOTE_CMD_PORT;
