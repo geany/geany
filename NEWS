@@ -1,4 +1,4 @@
-Geany 1.37.1 (unreleased)
+Geany 1.37.1 (November 08, 2020)
 
     Windows
     * Fix crash on first startup (Issue#2639, PR#2645).
