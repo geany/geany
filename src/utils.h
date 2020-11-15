@@ -287,7 +287,7 @@ gint utils_color_to_bgr(const GdkColor *color);
 
 gint utils_parse_color_to_bgr(const gchar *spec);
 
-gchar *utils_get_current_time_string(void);
+gchar *utils_get_current_time_string(gboolean include_microseconds);
 
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, gboolean nblock,
 									GIOFunc func, gpointer data);
