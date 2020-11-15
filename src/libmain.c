@@ -403,14 +403,6 @@ static gint get_windows_socket_port(void)
 	GKeyFile *config = g_key_file_new();
 	gint port_number;
 
-	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
-	{
-		geany_debug(
-			"No user config file found, use default TCP port (%d).",
-			SOCKET_WINDOWS_REMOTE_CMD_PORT);
-		g_free(configfile);
-		return SOCKET_WINDOWS_REMOTE_CMD_PORT;
-	}
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 	port_number = utils_get_setting_integer(config, PACKAGE, "socket_remote_cmd_port",
 		SOCKET_WINDOWS_REMOTE_CMD_PORT);
