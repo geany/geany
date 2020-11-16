@@ -330,6 +330,9 @@ gchar *main_get_argv_filename(const gchar *filename)
 		else
 			cur_dir = g_strdup(original_cwd);
 
+#ifdef G_OS_WIN32
+		SETPTR(cur_dir, g_locale_from_utf8(cur_dir, -1, NULL, NULL, NULL));
+#endif
 		result = g_strjoin(
 			G_DIR_SEPARATOR_S, cur_dir, filename, NULL);
 		g_free(cur_dir);
@@ -886,6 +889,10 @@ static void open_cl_files(gint argc, gchar **argv)
 			continue;
 		}
 
+#ifdef G_OS_WIN32
+		/* It seems argv elements are encoded in CP1252 on a German Windows */
+		SETPTR(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
+#endif
 		if (filename && ! main_handle_filename(filename))
 		{
 			const gchar *msg = _("Could not find file '%s'.");
