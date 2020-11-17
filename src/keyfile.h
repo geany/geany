@@ -44,7 +44,7 @@ void configuration_save(void);
 
 gboolean configuration_load(void);
 
-void configuration_open_files(void);
+void configuration_open_files(gchar *);
 
 void configuration_reload_default_session(void);
 

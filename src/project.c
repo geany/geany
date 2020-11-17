@@ -266,7 +266,8 @@ static void run_new_dialog(PropertyDialogElements *e)
 	{
 		// reload any documents that were closed
 		configuration_reload_default_session();
-		configuration_open_files();
+		gchar root_folder[]="/";
+		configuration_open_files(root_folder); // TODO : Find better trick
 	}
 }
 
@@ -277,9 +278,15 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 	{
 		if (project_prefs.project_session)
 		{
-			configuration_open_files();
+			geany_debug("Ouverture d'un projet");
+			gchar * root_path_locale = g_path_get_dirname(locale_file_name);
+			gchar * root_path_utf8 = utils_get_utf8_from_locale(locale_file_name);
+			configuration_open_files(root_path_utf8);
 			document_new_file_if_non_open();
 			ui_focus_current_document();
+
+			g_free(root_path_locale);
+			g_free(root_path_utf8);
 		}
 		return TRUE;
 	}
@@ -467,7 +474,8 @@ static void destroy_project(gboolean open_default)
 		if (open_default && cl_options.load_session)
 		{
 			configuration_reload_default_session();
-			configuration_open_files();
+			gchar root_folder[]="/";
+			configuration_open_files(root_folder); // TODO : find a better trick
 			document_new_file_if_non_open();
 			ui_focus_current_document();
 		}

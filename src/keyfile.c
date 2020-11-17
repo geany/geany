@@ -1187,7 +1187,7 @@ gboolean configuration_load(void)
 }
 
 
-static gboolean open_session_file(gchar **tmp, guint len)
+static gboolean open_session_file(gchar **tmp, guint len, gchar *root_folder)
 {
 	guint pos;
 	const gchar *ft_name;
@@ -1199,7 +1199,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/** TODO when we have a global pref for line breaking, use its value */
 	gboolean line_breaking = FALSE;
 	gboolean ret = FALSE;
-
+	
 	pos = atoi(tmp[0]);
 	ft_name = tmp[1];
 	ro = atoi(tmp[2]);
@@ -1217,6 +1217,19 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/* try to get the locale equivalent for the filename */
 	unescaped_filename = g_uri_unescape_string(tmp[7], NULL);
 	locale_filename = utils_get_locale_from_utf8(unescaped_filename);
+
+	/* is the locale_filename absolute or relative ? */
+	geany_debug(locale_filename);
+	if(g_path_is_absolute(locale_filename))
+	{
+		geany_debug("Absolute path");
+	}
+	else
+	{
+		geany_debug("Relative path %s, root folder %s", locale_filename, root_folder);
+		locale_filename = g_canonicalize_filename(locale_filename, root_folder);
+		geany_debug("Relative path -> %s", locale_filename);
+	}
 
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
@@ -1254,7 +1267,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 /* Open session files
  * Note: notebook page switch handler and adding to recent files list is always disabled
  * for all files opened within this function */
-void configuration_open_files(void)
+void configuration_open_files(gchar *root_folder)
 {
 	gint i;
 	gboolean failure = FALSE;
@@ -1270,7 +1283,7 @@ void configuration_open_files(void)
 
 		if (tmp != NULL && (len = g_strv_length(tmp)) >= 8)
 		{
-			if (! open_session_file(tmp, len))
+			if (! open_session_file(tmp, len, root_folder))
 				failure = TRUE;
 		}
 		g_strfreev(tmp);
