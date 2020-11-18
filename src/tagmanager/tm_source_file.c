@@ -32,7 +32,7 @@
 #include "tm_source_file.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
-#include "ctags-api.h"
+#include "tm_ctags.h"
 
 typedef struct
 {
@@ -136,7 +136,7 @@ gchar *tm_get_real_path(const gchar *file_name)
 	return NULL;
 }
 
-static char get_tag_impl(const char *impl)
+gchar tm_source_file_get_tag_impl(const gchar *impl)
 {
 	if ((0 == strcmp("virtual", impl))
 	 || (0 == strcmp("pure virtual", impl)))
@@ -148,7 +148,7 @@ static char get_tag_impl(const char *impl)
 	return TAG_IMPL_UNKNOWN;
 }
 
-static char get_tag_access(const char *access)
+gchar tm_source_file_get_tag_access(const gchar *access)
 {
 	if (0 == strcmp("public", access))
 		return TAG_ACCESS_PUBLIC;
@@ -165,59 +165,6 @@ static char get_tag_access(const char *access)
 	g_warning("Unknown access type %s", access);
 #endif
 	return TAG_ACCESS_UNKNOWN;
-}
-
-/*
- Initializes a TMTag structure with information from a ctagsTag struct
- used by the ctags parsers. Note that the TMTag structure must be malloc()ed
- before calling this function.
- @param tag The TMTag structure to initialize
- @param file Pointer to a TMSourceFile struct (it is assigned to the file member)
- @param tag_entry Tag information gathered by the ctags parser
- @return TRUE on success, FALSE on failure
-*/
-static gboolean init_tag(TMTag *tag, TMSourceFile *file, const ctagsTag *tag_entry)
-{
-	TMTagType type;
-
-	if (!tag_entry)
-		return FALSE;
-
-	type = tm_parser_get_tag_type(tag_entry->kindLetter, tag_entry->lang);
-	if (file->lang != tag_entry->lang)  /* this is a tag from a subparser */
-	{
-		/* check for possible re-definition of subparser type */
-		type = tm_parser_get_subparser_type(file->lang, tag_entry->lang, type);
-	}
-
-	if (!tag_entry->name || type == tm_tag_undef_t)
-		return FALSE;
-
-	tag->name = g_strdup(tag_entry->name);
-	tag->type = type;
-	tag->local = tag_entry->isFileScope;
-	tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
-	tag->line = tag_entry->lineNumber;
-	if (NULL != tag_entry->signature)
-		tag->arglist = g_strdup(tag_entry->signature);
-	if ((NULL != tag_entry->scopeName) &&
-		(0 != tag_entry->scopeName[0]))
-		tag->scope = g_strdup(tag_entry->scopeName);
-	if (tag_entry->inheritance != NULL)
-		tag->inheritance = g_strdup(tag_entry->inheritance);
-	if (tag_entry->varType != NULL)
-		tag->var_type = g_strdup(tag_entry->varType);
-	if (tag_entry->access != NULL)
-		tag->access = get_tag_access(tag_entry->access);
-	if (tag_entry->implementation != NULL)
-		tag->impl = get_tag_impl(tag_entry->implementation);
-	if ((tm_tag_macro_t == tag->type) && (NULL != tag->arglist))
-		tag->type = tm_tag_macro_with_arg_t;
-	tag->file = file;
-	/* redefine lang also for subparsers because the rest of Geany assumes that
-	 * tags from a single file are from a single language */
-	tag->lang = file->lang;
-	return TRUE;
 }
 
 /*
@@ -429,7 +376,7 @@ static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *f
 				const gchar *kind = value ? value : key;
 
 				if (kind[0] && kind[1])
-					tag->type = tm_parser_get_tag_type(ctagsGetKindFromName(kind, lang), lang);
+					tag->type = tm_parser_get_tag_type(tm_ctags_get_kind_from_name(kind, lang), lang);
 				else
 					tag->type = tm_parser_get_tag_type(*kind, lang);
 			}
@@ -439,11 +386,11 @@ static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *f
 				tag->inheritance = g_strdup(value);
 			}
 			else if (0 == strcmp(key, "implementation")) /* implementation limit */
-				tag->impl = get_tag_impl(value);
+				tag->impl = tm_source_file_get_tag_impl(value);
 			else if (0 == strcmp(key, "line")) /* line */
 				tag->line = atol(value);
 			else if (0 == strcmp(key, "access")) /* access */
-				tag->access = get_tag_access(value);
+				tag->access = tm_source_file_get_tag_access(value);
 			else if (0 == strcmp(key, "class") ||
 					 0 == strcmp(key, "enum") ||
 					 0 == strcmp(key, "function") ||
@@ -614,64 +561,6 @@ gboolean tm_source_file_write_tags_file(const gchar *tags_file, GPtrArray *tags_
 	return ret;
 }
 
-/* add argument list of __init__() Python methods to the class tag */
-static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source_file)
-{
-	guint i;
-	const char *parent_tag_name;
-
-	if (tag->type != tm_tag_method_t || tag->scope == NULL ||
-		g_strcmp0(tag->name, "__init__") != 0)
-		return;
-
-	parent_tag_name = strrchr(tag->scope, '.');
-	if (parent_tag_name)
-		parent_tag_name++;
-	else
-		parent_tag_name = tag->scope;
-
-	/* going in reverse order because the tag was added recently */
-	for (i = current_source_file->tags_array->len; i > 0; i--)
-	{
-		TMTag *prev_tag = (TMTag *) current_source_file->tags_array->pdata[i - 1];
-		if (g_strcmp0(prev_tag->name, parent_tag_name) == 0)
-		{
-			g_free(prev_tag->arglist);
-			prev_tag->arglist = g_strdup(tag->arglist);
-			break;
-		}
-	}
-}
-
-/* new parsing pass ctags callback function */
-static bool ctags_pass_start(void *user_data)
-{
-	TMSourceFile *current_source_file = user_data;
-
-	tm_tags_array_free(current_source_file->tags_array, FALSE);
-	return TRUE;
-}
-
-/* new tag ctags callback function */
-static bool ctags_new_tag(const ctagsTag *const tag,
-	void *user_data)
-{
-	TMSourceFile *current_source_file = user_data;
-	TMTag *tm_tag = tm_tag_new();
-
-	if (!init_tag(tm_tag, current_source_file, tag))
-	{
-		tm_tag_unref(tm_tag);
-		return TRUE;
-	}
-
-	if (tm_tag->lang == TM_PARSER_PYTHON)
-		update_python_arglist(tm_tag, current_source_file);
-
-	g_ptr_array_add(current_source_file->tags_array, tm_tag);
-
-	return TRUE;
-}
 
 /* Initializes a TMSourceFile structure from a file name. */
 static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name,
@@ -710,7 +599,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	if (name == NULL)
 		source_file->lang = TM_PARSER_NONE;
 	else
-		source_file->lang = ctagsGetNamedLang(name);
+		source_file->lang = tm_ctags_get_named_lang(name);
 
 	return TRUE;
 }
@@ -827,8 +716,8 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 
 	tm_tags_array_free(source_file->tags_array, FALSE);
 
-	ctagsParse(use_buffer ? text_buf : NULL, buf_size, file_name,
-		source_file->lang, ctags_new_tag, ctags_pass_start, source_file);
+	tm_ctags_parse(use_buffer ? text_buf : NULL, buf_size, file_name,
+		source_file->lang, source_file);
 
 	return !retry;
 }
@@ -839,7 +728,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 */
 const gchar *tm_source_file_get_lang_name(TMParserType lang)
 {
-	return ctagsGetLangName(lang);
+	return tm_ctags_get_lang_name(lang);
 }
 
 /* Gets the language index for \a name.
@@ -848,5 +737,5 @@ const gchar *tm_source_file_get_lang_name(TMParserType lang)
 */
 TMParserType tm_source_file_get_named_lang(const gchar *name)
 {
-	return ctagsGetNamedLang(name);
+	return tm_ctags_get_named_lang(name);
 }
