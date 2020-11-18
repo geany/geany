@@ -72,7 +72,7 @@ static vString* nestingLevelsToScope (const NestingLevels* nls)
 	vString* result = vStringNew ();
 	for (i = 0; i < nls->n; ++i)
 	{
-	    NestingLevel *nl = nestingLevelsGetNth (nls, i);
+	    NestingLevel *nl = nestingLevelsGetNthFromRoot (nls, i);
 	    tagEntryInfo *e = getEntryOfNestingLevel (nl);
 	    if (e && strlen (e->name) > 0 && (!e->placeholder))
 	    {

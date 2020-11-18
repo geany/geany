@@ -436,7 +436,7 @@ static bool constructParentString(NestingLevels *nls, int indent,
 	vStringClear (result);
 	for (i = 0; i < nls->n; i++)
 	{
-		NestingLevel *nl = nestingLevelsGetNth (nls, i);
+		NestingLevel *nl = nestingLevelsGetNthFromRoot (nls, i);
 		tagEntryInfo *e;
 
 		if (indent <= PY_NL_INDENTATION(nl))
@@ -474,7 +474,7 @@ static void checkIndent(NestingLevels *nls, int indent)
 
 	for (i = 0; i < nls->n; i++)
 	{
-		n = nestingLevelsGetNth (nls, i);
+		n = nestingLevelsGetNthFromRoot (nls, i);
 		if (n && indent <= PY_NL_INDENTATION(n))
 		{
 			/* truncate levels */
@@ -491,7 +491,7 @@ static void addNestingLevel(NestingLevels *nls, int indentation, struct corkInfo
 
 	for (i = 0; i < nls->n; i++)
 	{
-		nl = nestingLevelsGetNth(nls, i);
+		nl = nestingLevelsGetNthFromRoot(nls, i);
 		if (indentation <= PY_NL_INDENTATION(nl)) break;
 	}
 	if (i == nls->n)
