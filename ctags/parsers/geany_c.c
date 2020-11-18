@@ -19,7 +19,7 @@
 #include "debug.h"
 #include "mio.h"
 #include "entry.h"
-#include "lcpp.h"
+#include "geany_lcpp.h"
 #include "keyword.h"
 #include "options.h"
 #include "parse.h"

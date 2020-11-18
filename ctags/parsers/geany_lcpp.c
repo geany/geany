@@ -17,7 +17,7 @@
 
 #include "debug.h"
 #include "entry.h"
-#include "lcpp.h"
+#include "geany_lcpp.h"
 #include "kind.h"
 #include "options_p.h"
 #include "read.h"

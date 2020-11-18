@@ -27,7 +27,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
-#include "lcpp.h"
+#include "geany_lcpp.h"
 #include "routines.h"
 #include "xtag.h"
 
