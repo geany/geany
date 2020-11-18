@@ -857,6 +857,6 @@ extern parserDefinition *PythonParser (void)
 	def->kindCount = ARRAY_SIZE (PythonKinds);
 	def->extensions = extensions;
 	def->parser = findPythonTags;
-	def->useCork = true;
+	def->useCork = CORK_QUEUE;
 	return def;
 }

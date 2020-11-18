@@ -373,7 +373,7 @@ extern parserDefinition* RstParser (void)
 	def->fieldTable = RstFields;
 	def->fieldCount = ARRAY_SIZE (RstFields);
 
-	def->useCork = true;
+	def->useCork = CORK_QUEUE;
 
 	return def;
 }

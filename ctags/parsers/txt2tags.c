@@ -188,7 +188,7 @@ extern parserDefinition* Txt2tagsParser (void)
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findTxt2tagsTags;
-	def->useCork = true;
+	def->useCork = CORK_QUEUE;
 	return def;
 }
 
