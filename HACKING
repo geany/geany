@@ -654,22 +654,12 @@ http://sf.net/projects/ctags - see the tracker.
 
 (You can also try the Anjuta project's anjuta-tags codebase.)
 
-.. note::
-    From Geany 1.22 GLib's GRegex engine is used instead of POSIX
-    regex, unlike CTags. It should be close enough to POSIX to work
-    OK.
-    We no longer support regex parsers with the "b" regex flag
-    option set and Geany will print debug warnings if it's used.
-    CTags supports it but doesn't currently (2011) include any
-    parsers that use it. It should be easy to convert to extended
-    regex syntax anyway.
-
 Method
 ``````
 * Add foo.c to SRCS in Makefile.am.
-* Add Foo to parsers.h
+* Add Foo to src/tagmanager/tm_parsers.h
 * Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
-  exactly the order in parsers.h.
+  exactly the order in src/tagmanager/tm_parsers.h.
 
 In src/tagmanager/tm_parser.c:
 Add a map_FOO TMParserMapEntry mapping each kind's letter from foo.c's
