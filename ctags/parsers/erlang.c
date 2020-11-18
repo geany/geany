@@ -18,6 +18,7 @@
 #include "entry.h"
 #include "options.h"
 #include "read.h"
+#include "parse.h"
 #include "routines.h"
 #include "vstring.h"
 

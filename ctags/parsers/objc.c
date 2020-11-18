@@ -17,6 +17,7 @@
 
 #include "keyword.h"
 #include "entry.h"
+#include "parse.h"
 #include "options.h"
 #include "read.h"
 #include "routines.h"
@@ -1109,7 +1110,7 @@ static void objcInitialize (const langType language)
 extern parserDefinition *ObjcParser (void)
 {
 	static const char *const extensions[] = { "m", "h", NULL };
-	parserDefinition *def = parserNewFull ("ObjectiveC", KIND_FILE_ALT);
+	parserDefinition *def = parserNew ("ObjectiveC");
 	def->kindTable = ObjcKinds;
 	def->kindCount = ARRAY_SIZE (ObjcKinds);
 	def->extensions = extensions;

@@ -17,7 +17,6 @@
 #include <stdio.h>
 #endif
 #include <string.h>
-#include "main.h"
 #include "entry.h"
 #include "keyword.h"
 #include "parse.h"

@@ -10,7 +10,6 @@
 *   INCLUDE FILES
 */
 #include "general.h"	/* must always come first */
-#include "main.h"
 
 #include <string.h>
 
@@ -446,7 +445,7 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
 	tag.sourceFileName = getInputFileName();
 
 	tag.extensionFields.signature = arg_list;
-	tag.extensionFields.varType = type;
+	tag.extensionFields.typeRef[1] = type;
 	if (parent_kind != K_NONE)
 	{
 		tag.extensionFields.scopeKindIndex = parent_kind;
@@ -973,7 +972,7 @@ static void findRustTags (void)
 extern parserDefinition *RustParser (void)
 {
 	static const char *const extensions[] = { "rs", NULL };
-	parserDefinition *def = parserNewFull ("Rust", KIND_FILE_ALT);
+	parserDefinition *def = parserNew ("Rust");
 	def->kindTable = rustKinds;
 	def->kindCount = ARRAY_SIZE (rustKinds);
 	def->extensions = extensions;

@@ -1224,7 +1224,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 		if (((TOKEN_NAME == st->firstToken->type) || isDataTypeKeyword(st->firstToken))
 			&& (0 != strcmp(vStringValue(st->firstToken->name), tag->name)))
 		{
-			tag->extensionFields.varType = getVarType(st, nameToken);
+			tag->extensionFields.typeRef[1] = getVarType(st, nameToken);
 		}
 	}
 }
@@ -1726,7 +1726,7 @@ static void analyzeIdentifier (tokenInfo *const token)
 	bool parensToo = false;
 
 	if (isInputLanguage (Lang_java)  ||
-		! isIgnoreToken (name, &parensToo, &replacement))
+		! cppIsIgnoreToken (name, &parensToo, &replacement))
 	{
 		if (replacement != NULL)
 			token->keyword = analyzeKeyword (replacement);
