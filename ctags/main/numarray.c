@@ -36,7 +36,7 @@
 		return result;													\
 	}																	\
 																		\
-	extern void prefix##ArrayAdd (prefix##Array *const current, type num) \
+	extern unsigned int prefix##ArrayAdd (prefix##Array *const current, type num) \
 	{																	\
 		Assert (current != NULL);										\
 		if (current->count == current->max)								\
@@ -44,7 +44,8 @@
 			current->max *= 2;											\
 			current->array = xRealloc (current->array, current->max, type);	\
 		}																\
-		current->array [current->count++] = num;						\
+		current->array [current->count] = num;							\
+		return current->count++;										\
 	}																	\
 																		\
 	extern void prefix##ArrayRemoveLast (prefix##Array *const current)	\
@@ -167,9 +168,9 @@
 	}
 
 /* We expect the linker we use is enough clever to delete dead code. */
-impNumArray(char, Char, char);
-impNumArray(uchar, Uchar, unsigned char);
-impNumArray(int, Int, int);
-impNumArray(uint, Uint, unsigned int);
-impNumArray(long, Long, long);
-impNumArray(ulong, Ulong, unsigned long);
+impNumArray(char, Char, char)
+impNumArray(uchar, Uchar, unsigned char)
+impNumArray(int, Int, int)
+impNumArray(uint, Uint, unsigned int)
+impNumArray(long, Long, long)
+impNumArray(ulong, Ulong, unsigned long)

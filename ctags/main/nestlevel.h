@@ -35,18 +35,22 @@ struct NestingLevels
 	int n;					/* number of levels in use */
 	int allocated;
 	size_t userDataSize;
+	void (* deleteUserData) (NestingLevel *);
 };
 
 /*
 *   FUNCTION PROTOTYPES
 */
 extern NestingLevels *nestingLevelsNew(size_t userDataSize);
+extern NestingLevels *nestingLevelsNewFull(size_t userDataSize,
+										   void (* deleteUserData)(NestingLevel *));
 extern void nestingLevelsFree(NestingLevels *nls);
 extern NestingLevel *nestingLevelsPush(NestingLevels *nls, int corkIndex);
 extern NestingLevel * nestingLevelsTruncate(NestingLevels *nls, int depth, int corkIndex);
 extern void nestingLevelsPop(NestingLevels *nls);
-extern NestingLevel *nestingLevelsGetCurrent(const NestingLevels *nls);
-extern NestingLevel *nestingLevelsGetNth(const NestingLevels *nls, int n);
+#define nestingLevelsGetCurrent(NLS) nestingLevelsGetNthParent((NLS), 0)
+extern NestingLevel *nestingLevelsGetNthFromRoot(const NestingLevels *nls, int n);
+extern NestingLevel *nestingLevelsGetNthParent(const NestingLevels *nls, int n);
 
 extern void *nestingLevelGetUserData (const NestingLevel *nl);
 

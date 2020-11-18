@@ -12,34 +12,34 @@
 #ifndef CTAGS_MAIN_DEPENDENCY_H
 #define CTAGS_MAIN_DEPENDENCY_H
 
-#include "general.h"
+/*
+*   INCLUDE FILES
+*/
+#include "general.h"  /* must always come first */
 
 #include "types.h"
 
 
+/*
+*   DATA DECLARATIONS
+*/
 typedef enum eDepType {
 	DEPTYPE_KIND_OWNER,
 	DEPTYPE_SUBPARSER,
 	COUNT_DEPTYPES,
 } depType;
 
-typedef struct sParserDependency {
+struct sParserDependency {
 	depType type;
 	const char *upperParser;
 	void *data;
-} parserDependency;
-
-extern void linkDependencyAtInitializeParsing (depType dtype,
-					       parserDefinition *const masterParser,
-					       parserDefinition *const slaveParser);
-
-typedef struct sSubparser subparser;
-struct sSubparser {
-	langType id;
-	subparser *next;
 };
 
-extern void initializeSubparsers (const parserDefinition *parser);
-extern void finalizeSubparsers (parserDefinition *parser);
+struct sSlaveParser {
+	depType type;
+	langType id;
+	void *data;
+	slaveParser *next;
+};
 
 #endif	/* CTAGS_MAIN_DEPENDENCY_H */

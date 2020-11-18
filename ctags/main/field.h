@@ -12,10 +12,18 @@
 #ifndef CTAGS_MAIN_FIELD_H
 #define CTAGS_MAIN_FIELD_H
 
+/*
+*   INCLUDE FILES
+*/
+
 #include "general.h"
 #include "types.h"
 
 #include "vstring.h"
+
+/*
+*   DATA DECLARATIONS
+*/
 
 typedef enum eFieldType { /* extension field content control */
 	FIELD_UNKNOWN = -1,
@@ -42,70 +50,56 @@ typedef enum eFieldType { /* extension field content control */
 	FIELD_KIND_KEY,
 
 	/* EXTENSION FIELDS NEWLY INTRODUCED IN UCTAGS */
-	FIELD_ROLE,
+	FIELD_ROLES,
 	FIELD_REF_MARK,
 	FIELD_SCOPE_KEY,
-	FIELD_EXTRA,
+	FIELD_EXTRAS,
 	FIELD_XPATH,
 	FIELD_SCOPE_KIND_LONG,
-	FIELD_END,
-	FIELD_BUILTIN_LAST = FIELD_END,
+	FIELD_END_LINE,
+	FIELD_BUILTIN_LAST = FIELD_END_LINE,
 } fieldType ;
 
-typedef const char* (* renderEscaped) (const tagEntryInfo *const tag,
-				       const char *value,
-				       vString * buffer);
-typedef bool (* isValueAvailable) (const struct sTagEntryInfo *const tag);
+#define fieldDataTypeFalgs "sib" /* used in --list-fields */
+typedef enum eFieldDataType {
+	FIELDTYPE_STRING  = 1 << 0,
+	FIELDTYPE_INTEGER = 1 << 1,
+	FIELDTYPE_BOOL    = 1 << 2,
+
+	/* used in --list-fields */
+	FIELDTYPE_END_MARKER = 1 << 3,
+} fieldDataType;
+
+typedef const char* (*fieldRenderer)(const tagEntryInfo *const,
+									 const char *,
+									 vString *);
 
 #define FIELD_LETTER_NO_USE '\0'
-typedef struct sFieldDefinition {
-	/* lettern, and ftype are initialized in the main part,
+struct sFieldDefinition {
+	/* letter, and ftype are initialized in the main part,
 	   not in a parser. */
 #define NUL_FIELD_LETTER '\0'
 	unsigned char letter;
 	const char* name;
 	const char* description;
 	bool enabled;
-	renderEscaped renderEscaped;
-	isValueAvailable isValueAvailable;
+
+	fieldRenderer render;
+	fieldRenderer renderNoEscaping;
+	bool (* doesContainAnyChar) (const tagEntryInfo *const, const char*, const char *);
+
+	bool (* isValueAvailable) (const tagEntryInfo *const);
+
+	fieldDataType dataType; /* used in json output */
 
 	unsigned int ftype;	/* Given from the main part */
-} fieldDefinition;
+};
 
-
-extern fieldType getFieldTypeForOption (char letter);
 
 /*
-   `getFieldTypeForName' is for looking for a field not owned by any parser,
+*   FUNCTION PROTOTYPES
+*/
 
-   `getFieldTypeForNameAndLanguage' can be used for getting all fields having
-   the same name; specify `LANG_AUTO' as `language' parameter to get the first
-   field having the name. With the returned fieldType, `nextSiblingField' gets
-   the next field having the same name. `nextSiblingField' returns `FIELD_UNKNOWN'
-   at the end of iteration.
-
-   Specifying `LANG_IGNORE' has the same effects as `LANG_AUTO'. However,
-   internally, each parser is not initialized. `LANG_IGNORE' is a bit faster. */
-extern fieldType getFieldTypeForName (const char *name);
-extern fieldType getFieldTypeForNameAndLanguage (const char *fieldName, langType language);
 extern bool isFieldEnabled (fieldType type);
-extern bool enableField (fieldType type, bool state, bool warnIfFixedField);
-extern bool isCommonField (fieldType type);
-extern int     getFieldOwner (fieldType type);
-extern const char* getFieldName (fieldType type);
-extern void printFields (int language);
-
-extern bool isFieldRenderable (fieldType type);
-
-extern bool doesFieldHaveValue (fieldType type, const tagEntryInfo *tag);
-extern const char* renderFieldEscaped (fieldType type, const tagEntryInfo *tag, int index);
-
-extern void initFieldDescs (void);
-extern int countFields (void);
-
-/* language should be typed to langType.
-   Use int here to avoid circular dependency */
-extern int defineField (fieldDefinition *spec, langType language);
-extern fieldType nextSiblingField (fieldType type);
 
 #endif	/* CTAGS_MAIN_FIELD_H */

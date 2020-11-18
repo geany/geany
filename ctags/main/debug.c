@@ -16,16 +16,22 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include "debug.h"
+#include "entry_p.h"
 #include "options.h"
+#include "parse_p.h"
 #include "read.h"
+#include "read_p.h"
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
 #ifdef DEBUG
+#include "htable.h"
+
 
 extern void lineBreak (void) {}  /* provides a line-specified break point */
 
@@ -74,11 +80,16 @@ extern void debugEntry (const tagEntryInfo *const tag)
 
 	if (debug (DEBUG_PARSE))
 	{
-		printf ("<#%s%s:%s", scope, tag->kind->name, tag->name);
+		langType lang = (tag->extensionFields.scopeLangType == LANG_AUTO)
+			? tag->langType
+			: tag->extensionFields.scopeLangType;
+		kindDefinition *scopeKindDef = getLanguageKind(lang,
+													   tag->extensionFields.scopeKindIndex);
+		printf ("<#%s%s:%s", scope, getTagKindName(tag), tag->name);
 
-		if (tag->extensionFields.scopeKind != NULL  &&
+		if (tag->extensionFields.scopeKindIndex != KIND_GHOST_INDEX  &&
 				tag->extensionFields.scopeName != NULL)
-			printf (" [%s:%s]", tag->extensionFields.scopeKind->name,
+			printf (" [%s:%s]", scopeKindDef->name,
 					tag->extensionFields.scopeName);
 
 		if (isFieldEnabled (FIELD_INHERITANCE) &&
@@ -123,6 +134,90 @@ extern void debugAssert (const char *assertion, const char *file, unsigned int l
 	}
 	fflush(stderr);
 	abort();
+}
+
+static int debugScopeDepth;
+#define DEBUG_INDENT_UNIT 4
+
+static char debugPrefix[DEBUG_INDENT_UNIT + 1];
+
+extern void debugInit (void)
+{
+	memset(debugPrefix, ' ', DEBUG_INDENT_UNIT);
+	debugPrefix[DEBUG_INDENT_UNIT] = '\0';
+}
+
+extern void debugIndent(void)
+{
+	for(int i=0;i< debugScopeDepth;i++)
+		fputs(debugPrefix, stderr);
+}
+
+extern void debugInc(void)
+{
+	debugScopeDepth++;
+}
+
+extern void debugDec(void)
+{
+	debugScopeDepth--;
+	if(debugScopeDepth < 0)
+		debugScopeDepth = 0;
+}
+
+
+
+struct circularRefChecker {
+	hashTable *visitTable;
+	int counter;
+};
+
+extern void circularRefCheckerDestroy (struct circularRefChecker * checker)
+{
+	hashTableDelete (checker->visitTable);
+	checker->visitTable = NULL;
+	eFree (checker);
+}
+
+extern struct circularRefChecker * circularRefCheckerNew (void)
+{
+	Assert (sizeof(void *) >= sizeof(int));
+
+	struct circularRefChecker *c = xMalloc (1, struct circularRefChecker);
+
+	c->visitTable = hashTableNew (17, hashPtrhash, hashPtreq, NULL, NULL);
+	c->counter = 0;
+
+	return c;
+}
+
+extern int circularRefCheckerCheck (struct circularRefChecker *c, void *ptr)
+{
+	union conv {
+		int i;
+		void *ptr;
+	} v;
+
+	v.ptr = hashTableGetItem(c->visitTable, ptr);
+	if (v.ptr)
+		return v.i;
+	else
+	{
+		v.i = ++c->counter;
+		hashTablePutItem (c->visitTable, ptr, v.ptr);
+		return 0;
+	}
+}
+
+extern int circularRefCheckerGetCurrent (struct circularRefChecker *c)
+{
+	return c->counter;
+}
+
+extern void circularRefCheckClear (struct circularRefChecker *c)
+{
+	hashTableClear (c->visitTable);
+	c->counter = 0;
 }
 
 #endif

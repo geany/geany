@@ -13,10 +13,12 @@
 */
 #include "general.h"  /* must always come first */
 
-#include "main.h"
 #include "debug.h"
+#include "entry.h"
 #include "routines.h"
 #include "nestlevel.h"
+
+#include <string.h>
 
 /* TODO: Alignment */
 #define NL_SIZE(nls) (sizeof(NestingLevel) + (nls)->userDataSize)
@@ -26,11 +28,18 @@
 *   FUNCTION DEFINITIONS
 */
 
-extern NestingLevels *nestingLevelsNew(size_t userDataSize)
+extern NestingLevels *nestingLevelsNewFull(size_t userDataSize,
+										   void (* deleteUserData)(NestingLevel *))
 {
 	NestingLevels *nls = xCalloc (1, NestingLevels);
 	nls->userDataSize = userDataSize;
+	nls->deleteUserData = deleteUserData;
 	return nls;
+}
+
+extern NestingLevels *nestingLevelsNew(size_t userDataSize)
+{
+	return nestingLevelsNewFull (userDataSize, NULL);
 }
 
 extern void nestingLevelsFree(NestingLevels *nls)
@@ -38,9 +47,11 @@ extern void nestingLevelsFree(NestingLevels *nls)
 	int i;
 	NestingLevel *nl;
 
-	for (i = 0; i < nls->allocated; i++)
+	for (i = 0; i < nls->n; i++)
 	{
 		nl = NL_NTH(nls, i);
+		if (nls->deleteUserData)
+			nls->deleteUserData (nl);
 		nl->corkIndex = CORK_NIL;
 	}
 	if (nls->levels) eFree(nls->levels);
@@ -61,6 +72,9 @@ extern NestingLevel * nestingLevelsPush(NestingLevels *nls, int corkIndex)
 	nls->n++;
 
 	nl->corkIndex = corkIndex;
+	if (nls->userDataSize > 0)
+		memset (nl->userData, 0, nls->userDataSize);
+
 	return nl;
 }
 
@@ -80,27 +94,25 @@ extern void nestingLevelsPop(NestingLevels *nls)
 	NestingLevel *nl = nestingLevelsGetCurrent(nls);
 
 	Assert (nl != NULL);
+	if (nls->deleteUserData)
+		nls->deleteUserData (nl);
 	nl->corkIndex = CORK_NIL;
 	nls->n--;
 }
 
-extern NestingLevel *nestingLevelsGetCurrent(const NestingLevels *nls)
-{
-	Assert (nls != NULL);
-
-	if (nls->n < 1)
-		return NULL;
-
-	return NL_NTH(nls, (nls->n - 1));
-}
-
-extern NestingLevel *nestingLevelsGetNth(const NestingLevels *nls, int n)
+extern NestingLevel *nestingLevelsGetNthFromRoot (const NestingLevels *nls, int n)
 {
 	Assert (nls != NULL);
 	if (nls->n > n && n >= 0)
 		return  NL_NTH(nls, n);
 	else
 		return NULL;
+}
+
+extern NestingLevel *nestingLevelsGetNthParent (const NestingLevels *nls, int n)
+{
+	Assert (nls != NULL);
+	return nestingLevelsGetNthFromRoot (nls, nls->n - 1 - n);
 }
 
 extern void *nestingLevelGetUserData (const NestingLevel *nl)

@@ -17,7 +17,7 @@
 #if defined (HAVE_CONFIG_H)
 # define PROGRAM_VERSION PACKAGE_VERSION
 #else
-# define PROGRAM_VERSION "0.0.0"
+# define PROGRAM_VERSION "5.9.0"
 #endif
 #define PROGRAM_NAME      "Universal Ctags"
 #define PROGRAM_URL       "https://ctags.io/"
@@ -30,5 +30,11 @@
 extern const char* ctags_repoinfo;
 #define CTAGS_FIELD_PREFIX "UCTAGS"
 
-
+/*
+ * Reserved words
+ */
+#define RSV_LANGMAP_DEFAULT "default"
+#define RSV_LANG_ALL "all"
+#define RSV_LANG_AUTO "auto"
+#define RSV_NONE "NONE"
 #endif	/* CTAGS_MAIN_CTAGS_H */

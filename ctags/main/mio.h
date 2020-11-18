@@ -126,7 +126,7 @@ MIO *mio_new_memory (unsigned char *data,
 MIO *mio_new_mio    (MIO *base, long start, long size);
 MIO *mio_ref        (MIO *mio);
 
-int mio_free (MIO *mio);
+int mio_unref (MIO *mio);
 FILE *mio_file_get_fp (MIO *mio);
 unsigned char *mio_memory_get_data (MIO *mio, size_t *size);
 size_t mio_read (MIO *mio,
@@ -158,5 +158,7 @@ int mio_flush (MIO *mio);
 
 void  mio_attach_user_data (MIO *mio, void *user_data, MIODestroyNotify user_data_free_func);
 void *mio_get_user_data (MIO *mio);
+
+int mio_try_resize (MIO *mio, size_t new_size);
 
 #endif /* MIO_H */

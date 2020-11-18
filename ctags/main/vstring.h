@@ -14,9 +14,7 @@
 */
 #include "general.h"  /* must always come first */
 
-#if defined(HAVE_STDLIB_H)
-# include <stdlib.h>  /* to define size_t */
-#endif
+#include <stdlib.h>  /* to define size_t */
 
 #include <stdio.h>
 
@@ -28,12 +26,11 @@
 */
 
 #define vStringValue(vs)      ((vs)->buffer)
-#define vStringItem(vs,i)     ((vs)->buffer[i])
+#define vStringChar(vs,i)     ((vs)->buffer[i])
 #define vStringLast(vs)       ((vs)->buffer[(vs)->length - 1])
 #define vStringLength(vs)     ((vs)->length)
 #define vStringIsEmpty(vs)    ((vs)->length == 0)
 #define vStringSize(vs)       ((vs)->size)
-#define vStringChar(vs,i)     ((vs)->buffer[i])
 #define vStringLower(vs)      toLowerString((vs)->buffer)
 #define vStringUpper(vs)      toUpperString((vs)->buffer)
 #define vStringClear(string) \
@@ -66,7 +63,15 @@ extern void vStringStripTrailing (vString *const string);
 extern void vStringCat (vString *const string, const vString *const s);
 extern void vStringCatS (vString *const string, const char *const s);
 extern void vStringNCat (vString *const string, const vString *const s, const size_t length);
+
+/* vStringNCatS calls strlen(S) thought it takes LENGTH because
+ * the handle the case that strlen(S) is smaller than LENGTH.
+ *
+ * In the case a caller knows strlen(S) equals to or is greater than LENGTH,
+ * calling strlen is just overhead. vStringNCatSUnsafe doesn't call strlen. */
 extern void vStringNCatS (vString *const string, const char *const s, const size_t length);
+extern void vStringNCatSUnsafe (vString *const string, const char *const s, const size_t length);
+
 extern vString *vStringNewCopy (const vString *const string);
 extern vString *vStringNewInit (const char *const s);
 extern vString *vStringNewNInit (const char *const s, const size_t length);
@@ -84,6 +89,7 @@ extern vString *vStringNewOrClearWithAutoRelease (vString *const string);
 
 extern vString *vStringNewOwn (char *s);
 extern char    *vStringDeleteUnwrap (vString *const string);
+extern char    *vStringStrdup (const vString *const string);
 
 extern void vStringCatSWithEscaping (vString* b, const char *s);
 extern void vStringCatSWithEscapingAsPattern (vString *output, const char* input);
@@ -100,6 +106,13 @@ CTAGS_INLINE void vStringPut (vString *const string, const int c)
 	string->buffer [string->length] = c;
 	if (c != '\0')
 		string->buffer [++string->length] = '\0';
+}
+
+CTAGS_INLINE void vStringPutWithLimit (vString *const string, const int c,
+									   unsigned int maxlen)
+{
+	if (vStringLength (string) < maxlen || maxlen == 0)
+		vStringPut (string, c);
 }
 
 #endif  /* CTAGS_MAIN_VSTRING_H */

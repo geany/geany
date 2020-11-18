@@ -13,105 +13,113 @@
 
 #include "general.h"  /* must always come first */
 
+#include "colprint_p.h"
 #include "ctags.h"
 #include "debug.h"
-#include "options.h"
-#include "parse.h"
-#include "ptag.h"
-#include "output.h"
+#include "entry_p.h"
+#include "options_p.h"
+#include "parse_p.h"
+#include "ptag_p.h"
+#include "routines_p.h"
+#include "writer_p.h"
 #include <string.h>
 
 
-static bool writePseudoTagForXcmdData (ptagDesc *desc,
-					  struct ptagXcmdData *pdata)
-{
-	return writePseudoTag (desc,
-			       pdata->fileName,  pdata->pattern, pdata->language);
-}
-
-static bool ptagMakeFormat (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
+static bool ptagMakeFormat (ptagDesc *desc, langType language CTAGS_ATTR_UNUSED,
+							const void *data CTAGS_ATTR_UNUSED)
 {
 	char format [11];
 	const char *formatComment = "unknown format";
+	const optionValues *opt = data;
 
-	sprintf (format, "%u", Option.tagFileFormat);
-	if (Option.tagFileFormat == 1)
+	sprintf (format, "%u", opt->tagFileFormat);
+	if (opt->tagFileFormat == 1)
 		formatComment = "original ctags format";
-	else if (Option.tagFileFormat == 2)
+	else if (opt->tagFileFormat == 2)
 		formatComment =
 			"extended format; --format=1 will not append ;\" to lines";
 	return writePseudoTag (desc, format, formatComment, NULL);
 }
 
-static bool ptagMakeHowSorted (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
+static bool ptagMakeHowSorted (ptagDesc *desc, langType language CTAGS_ATTR_UNUSED,
+							   const void *data CTAGS_ATTR_UNUSED)
 {
+	const optionValues *opt = data;
 	return writePseudoTag (desc,
-			       Option.sorted == SO_FOLDSORTED ? "2" :
-			       (Option.sorted == SO_SORTED ? "1" : "0"),
+			       opt->sorted == SO_FOLDSORTED ? "2" :
+			       (opt->sorted == SO_SORTED ? "1" : "0"),
 			       "0=unsorted, 1=sorted, 2=foldcase",
 			       NULL);
 }
 
-static bool ptagMakeAuthor (ptagDesc *desc, void *data)
+static bool ptagMakeAuthor (ptagDesc *desc, langType language CTAGS_ATTR_UNUSED,
+							const void *data CTAGS_ATTR_UNUSED)
 {
-	struct ptagXcmdData *pdata = data;
-
-	if (pdata)
-		return writePseudoTagForXcmdData (desc, data);
-	else
-		return writePseudoTag (desc,
-				       AUTHOR_NAME,  "", NULL);
+	return writePseudoTag (desc,
+						   AUTHOR_NAME,  "", NULL);
 }
 
-static bool ptagMakeProgName (ptagDesc *desc, void *data)
+static bool ptagMakeProgName (ptagDesc *desc, langType language CTAGS_ATTR_UNUSED,
+							  const void *data CTAGS_ATTR_UNUSED)
 {
-	struct ptagXcmdData *pdata = data;
-
-	if (pdata)
-		return writePseudoTagForXcmdData (desc, data);
-	else
-		return writePseudoTag (desc,
-				PROGRAM_NAME,  "Derived from Exuberant Ctags", NULL);
+	return writePseudoTag (desc,
+						   PROGRAM_NAME,  "Derived from Exuberant Ctags", NULL);
 }
 
-static bool ptagMakeProgURL (ptagDesc *desc, void *data)
+static bool ptagMakeProgURL (ptagDesc *desc, langType language CTAGS_ATTR_UNUSED,
+							 const void *data CTAGS_ATTR_UNUSED)
 {
-	struct ptagXcmdData *pdata = data;
-
-	if (pdata)
-		return writePseudoTagForXcmdData (desc, data);
-	else
-		return writePseudoTag (desc,
-				       PROGRAM_URL, "official site", NULL);
+	return writePseudoTag (desc,
+						   PROGRAM_URL, "official site", NULL);
 }
 
-static bool ptagMakeProgVersion (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
+static bool ptagMakeProgVersion (ptagDesc *desc, langType language CTAGS_ATTR_UNUSED,
+								 const void *data CTAGS_ATTR_UNUSED)
 {
 	const char* repoinfo = ctags_repoinfo? ctags_repoinfo: "";
 	return writePseudoTag (desc, PROGRAM_VERSION, repoinfo, NULL);
 }
 
 #ifdef HAVE_ICONV
-static bool ptagMakeFileEncoding (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
+static bool ptagMakeFileEncoding (ptagDesc *desc, langType language CTAGS_ATTR_UNUSED,
+								  const void *data)
 {
-	if (! Option.outputEncoding)
+	const optionValues *opt = data;
+	if (! opt->outputEncoding)
 		return false;
 
-	return writePseudoTag (desc, Option.outputEncoding, "", NULL);
+	return writePseudoTag (desc, opt->outputEncoding, "", NULL);
 }
 #endif
 
-static bool ptagMakeKindSeparators (ptagDesc *desc, void *data)
+static bool ptagMakeKindSeparators (ptagDesc *desc, langType language,
+									const void *data CTAGS_ATTR_UNUSED)
 {
-	langType *language = data;
-
-	return makeKindSeparatorsPseudoTags (*language, desc);
+	return makeKindSeparatorsPseudoTags (language, desc);
 }
 
-static bool ptagMakeKindDescriptions (ptagDesc *desc, void *data)
+static bool ptagMakeKindDescriptions (ptagDesc *desc, langType language,
+									  const void *data CTAGS_ATTR_UNUSED)
 {
-	langType *language = data;
-	return makeKindDescriptionsPseudoTags (*language, desc);
+	return makeKindDescriptionsPseudoTags (language, desc);
+}
+
+static bool ptagMakeFieldDescriptions (ptagDesc *desc, langType language,
+									   const void *data CTAGS_ATTR_UNUSED)
+{
+	return makeFieldDescriptionsPseudoTags (language, desc);
+}
+
+static bool ptagMakeExtraDescriptions (ptagDesc *desc, langType language,
+									   const void *data CTAGS_ATTR_UNUSED)
+{
+	return makeExtraDescriptionsPseudoTags (language, desc);
+}
+
+static bool ptagMakeProcCwd (ptagDesc *desc, langType language,
+									   const void *data CTAGS_ATTR_UNUSED)
+{
+	return writePseudoTag (desc, CurrentDirectory, "", NULL);
 }
 
 static ptagDesc ptagDescs [] = {
@@ -121,48 +129,76 @@ static ptagDesc ptagDescs [] = {
 	  false, "JSON_OUTPUT_VERSION",
 	  "the version of json output stream format",
 	  ptagMakeJsonOutputVersion,
-	  true },
+	  PTAGF_COMMON },
 	{ true, "TAG_FILE_FORMAT",
 	  "the version of tags file format",
 	  ptagMakeFormat,
-	  true },
+	  PTAGF_COMMON },
 	{ true, "TAG_FILE_SORTED",
 	  "how tags are sorted",
 	  ptagMakeHowSorted,
-	  true },
+	  PTAGF_COMMON },
 	{ true, "TAG_PROGRAM_AUTHOR",
 	  "the author of this ctags implementation",
 	  ptagMakeAuthor,
-	  true },
+	  PTAGF_COMMON },
 	{ true, "TAG_PROGRAM_NAME",
 	  "the name of this ctags implementation",
 	  ptagMakeProgName,
-	  true },
+	  PTAGF_COMMON },
 	{ true, "TAG_PROGRAM_URL",
 	  "the official site URL of this ctags implementation",
 	  ptagMakeProgURL,
-	  true },
+	  PTAGF_COMMON },
 	{ true, "TAG_PROGRAM_VERSION",
 	  "the version of this ctags implementation",
 	  ptagMakeProgVersion,
-	  true },
+	  PTAGF_COMMON },
 #ifdef HAVE_ICONV
 	{ true, "TAG_FILE_ENCODING",
 	  "the encoding used in output tags file",
 	  ptagMakeFileEncoding,
-	  true },
+	  PTAGF_COMMON },
 #endif
 	{ false, "TAG_KIND_SEPARATOR",
 	  "the separators used in kinds",
 	  ptagMakeKindSeparators,
-	  false },
+	  PTAGF_PARSER },
 	{ false, "TAG_KIND_DESCRIPTION",
-	  "the letters, names and descriptions of kinds in a parser",
+	  "the letters, names and descriptions of enabled kinds in the language",
 	  ptagMakeKindDescriptions,
-	  false },
+	  PTAGF_PARSER },
+	{ false, "TAG_FIELD_DESCRIPTION",
+	  "the names and descriptions of enabled fields",
+	  ptagMakeFieldDescriptions,
+	  PTAGF_COMMON|PTAGF_PARSER },
+	{ false, "TAG_EXTRA_DESCRIPTION",
+	  "the names and descriptions of enabled extras",
+	  ptagMakeExtraDescriptions,
+	  PTAGF_COMMON|PTAGF_PARSER },
+	{ true, "TAG_OUTPUT_MODE",
+	  "the output mode: u-ctags or e-ctags",
+	  ptagMakeCtagsOutputMode,
+	  PTAGF_COMMON },
+	{ true, "TAG_OUTPUT_FILESEP",
+	  "the separator used in file name (slash or backslash)",
+	  ptagMakeCtagsOutputFilesep,
+	  PTAGF_COMMON },
+	{ true, "TAG_PATTERN_LENGTH_LIMIT",
+	  "the limit of pattern length",
+	  ptagMakePatternLengthLimit,
+	  PTAGF_COMMON },
+	{ true, "TAG_PROC_CWD",
+	  "the current working directory of the tags generator",
+	  ptagMakeProcCwd,
+	  PTAGF_COMMON },
+	{ true, "TAG_OUTPUT_EXCMD",
+	  "the excmd: number, pattern, mixed, or combine",
+	  ptagMakeCtagsOutputExcmd,
+	  PTAGF_COMMON },
 };
 
-extern bool makePtagIfEnabled (ptagType type, void *data)
+extern bool makePtagIfEnabled (ptagType type, langType language, const void *data)
 {
 	ptagDesc *desc;
 
@@ -170,7 +206,7 @@ extern bool makePtagIfEnabled (ptagType type, void *data)
 
 	desc = ptagDescs + type;
 	if (desc->enabled)
-		return desc->makeTag (desc, data);
+		return desc->makeTag (desc, language, data);
 	else
 		return false;
 }
@@ -222,13 +258,39 @@ extern ptagType getPtagTypeForName (const char *name)
 extern bool isPtagCommonInParsers  (ptagType type)
 {
 	ptagDesc* pdesc = getPtagDesc (type);
-	return pdesc->commonInParsers;
+	return pdesc->flags & PTAGF_COMMON;
 }
 
-extern void printPtag (ptagType type)
+extern bool isPtagParserSpecific (ptagType type)
 {
-	printf("%s\t%s\t%s\n",
-	       ptagDescs[type].name,
-	       ptagDescs[type].description? ptagDescs[type].description: "NONE",
-	       ptagDescs[type].enabled? "on": "off");
+	ptagDesc* pdesc = getPtagDesc (type);
+	return pdesc->flags & PTAGF_PARSER;
+}
+
+static int ptagCompare (struct colprintLine *a, struct colprintLine *b)
+{
+	const char *a_name = colprintLineGetColumn (a, 0);
+	const char *b_name = colprintLineGetColumn (b, 0);
+	return strcmp(a_name, b_name);
+}
+
+extern void printPtags (bool withListHeader, bool machinable, FILE *fp)
+{
+	struct colprintTable *table = colprintTableNew ("L:NAME",
+													"L:ENABLED",
+													"L:DESCRIPTION",
+													NULL);
+	for (unsigned int i = 0; i < PTAG_COUNT; i++)
+	{
+		struct colprintLine *line = colprintTableGetNewLine (table);
+		colprintLineAppendColumnCString (line, ptagDescs[i].name);
+		colprintLineAppendColumnCString (line, ptagDescs[i].enabled
+										 ? "on"
+										 : "off");
+		colprintLineAppendColumnCString (line, ptagDescs[i].description);
+	}
+
+	colprintTableSort (table, ptagCompare);
+	colprintTablePrint (table, 0, withListHeader, machinable, fp);
+	colprintTableDelete (table);
 }

@@ -16,9 +16,10 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "args.h"
+#include "args_p.h"
 #include "debug.h"
 #include "routines.h"
+#include "vstring.h"
 
 /*
 *   FUNCTION DEFINITIONS
@@ -281,7 +282,8 @@ extern void argForth (Arguments* const current)
 extern void argDelete (Arguments* const current)
 {
 	Assert (current != NULL);
-	if (current->type ==  ARG_STRING  &&  current->item != NULL)
+	if ((current->type ==  ARG_STRING
+		 || current->type ==  ARG_FILE) &&  current->item != NULL)
 		eFree (current->item);
 	memset (current, 0, sizeof (Arguments));
 	eFree (current);

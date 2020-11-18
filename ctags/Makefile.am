@@ -1,6 +1,7 @@
 AM_CPPFLAGS = \
 	-I$(srcdir)/main \
 	-I$(srcdir)/parsers \
+	-DEXTERNAL_PARSER_LIST_FILE=\"$(top_srcdir)/src/tagmanager/tm_parsers.h\" \
 	-DG_LOG_DOMAIN=\"CTags\"
 AM_CFLAGS = \
 	$(GTK_CFLAGS) \
@@ -30,6 +31,8 @@ parsers = \
 	parsers/html.c \
 	parsers/jscript.c \
 	parsers/json.c \
+	parsers/lcpp.c \
+	parsers/lcpp.h \
 	parsers/lua.c \
 	parsers/make.c \
 	parsers/markdown.c \
@@ -53,44 +56,56 @@ parsers = \
 	parsers/verilog.c \
 	parsers/vhdl.c
 
+# skip cmd.c and mini-geany.c which define main()
 libctags_la_SOURCES = \
 	main/args.c \
-	main/args.h \
+	main/args_p.h \
+	main/colprint.c \
+	main/colprint_p.h \
 	main/ctags.h \
-	main/ctags-api.c \
-	main/ctags-api.h \
-	main/debug.h \
 	main/debug.c \
-	main/dependency.h \
+	main/debug.h \
 	main/dependency.c \
+	main/dependency.h \
+	main/dependency_p.h \
 	main/e_msoft.h \
 	main/entry.c \
 	main/entry.h \
+	main/entry_p.h \
+	main/entry_private.c \
 	main/error.c \
-	main/error.h \
+	main/error_p.h \
 	main/field.c \
 	main/field.h \
+	main/field_p.h \
 	main/flags.c \
-	main/flags.h \
+	main/flags_p.h \
 	main/fmt.c \
-	main/fmt.h \
+	main/fmt_p.h \
 	main/gcc-attr.h \
 	main/general.h \
+	main/gvars.h \
 	main/htable.c \
 	main/htable.h \
 	main/inline.h \
+	main/interactive_p.h \
 	main/keyword.c \
 	main/keyword.h \
+	main/keyword_p.h \
 	main/kind.c \
 	main/kind.h \
-	main/lcpp.c \
-	main/lcpp.h \
+	main/kind_p.h \
 	main/lregex.c \
-	main/lxcmd.c \
+	main/lregex.h \
+	main/lregex_p.h \
 	main/lxpath.c \
+	main/lxpath.h \
+	main/lxpath_p.h \
 	main/main.c \
-	main/main.h \
+	main/main_p.h \
+	main/mbcs.c \
 	main/mbcs.h \
+	main/mbcs_p.h \
 	main/mio.c \
 	main/mio.h \
 	main/nestlevel.c \
@@ -101,37 +116,63 @@ libctags_la_SOURCES = \
 	main/objpool.h \
 	main/options.c \
 	main/options.h \
-	main/output-ctags.c \
-	main/output.h \
+	main/options_p.h \
+	main/param.c \
+	main/param.h \
+	main/param_p.h \
 	main/parse.c \
 	main/parse.h \
-	main/parsers.h \
-	main/pcoproc.c \
-	main/pcoproc.h \
+	main/parse_p.h \
+	main/parsers_p.h \
+	main/portable-dirent_p.h \
+	main/portable-scandir.c \
 	main/promise.c \
 	main/promise.h \
+	main/promise_p.h \
 	main/ptag.c \
-	main/ptag.h \
+	main/ptag_p.h \
 	main/ptrarray.c \
 	main/ptrarray.h \
+	main/rbtree.c \
+	main/rbtree.h \
 	main/read.c \
 	main/read.h \
+	main/read_p.h \
 	main/repoinfo.c \
 	main/repoinfo.h \
 	main/routines.c \
 	main/routines.h \
+	main/routines_p.h \
+	main/seccomp.c \
 	main/selectors.c \
 	main/selectors.h \
 	main/sort.c \
-	main/sort.h \
+	main/sort_p.h \
+	main/stats.c \
+	main/stats_p.h \
 	main/strlist.c \
 	main/strlist.h \
+	main/subparser.h \
+	main/subparser_p.h \
+	main/tokeninfo.c \
+	main/tokeninfo.h \
+	main/trace.c \
 	main/trace.h \
 	main/trashbox.c \
 	main/trashbox.h \
+	main/trashbox_p.h \
 	main/types.h \
+	main/unwindi.c \
+	main/unwindi.h \
 	main/vstring.c \
 	main/vstring.h \
-	main/xtag.h \
+	main/writer-ctags.c \
+	main/writer-etags.c \
+	main/writer-json.c \
+	main/writer-xref.c \
+	main/writer.c \
+	main/writer_p.h \
 	main/xtag.c \
+	main/xtag.h \
+	main/xtag_p.h \
 	$(parsers)

@@ -28,21 +28,9 @@
 #include <crt_externs.h>
 #endif
 
+#include <stdlib.h>
 #include <string.h>
-
-/*  To provide timings features if available.
- */
-#ifdef HAVE_CLOCK
-# ifdef HAVE_TIME_H
-#  include <time.h>
-# endif
-#else
-# ifdef HAVE_TIMES
-#  ifdef HAVE_SYS_TIMES_H
-#   include <sys/times.h>
-#  endif
-# endif
-#endif
+#include <time.h>
 
 /*  To provide directory searching for recursion feature.
  */
@@ -56,74 +44,50 @@
 #ifdef HAVE_DIRECT_H
 # include <direct.h>  /* to _getcwd() */
 #endif
-#ifdef HAVE_DIR_H
-# include <dir.h>  /* to declare findfirst() and findnext */
-#endif
 #ifdef HAVE_IO_H
 # include <io.h>  /* to declare _findfirst() */
 #endif
 
 
+#include "ctags.h"
 #include "debug.h"
-#include "entry.h"
-#include "error.h"
-#include "field.h"
-#include "keyword.h"
-#include "main.h"
-#include "options.h"
-#include "output.h"
-#include "read.h"
-#include "routines.h"
+#include "entry_p.h"
+#include "error_p.h"
+#include "field_p.h"
+#include "keyword_p.h"
+#include "main_p.h"
+#include "options_p.h"
+#include "parse_p.h"
+#include "read_p.h"
+#include "routines_p.h"
+#include "stats_p.h"
+#include "trace.h"
+#include "trashbox_p.h"
+#include "writer_p.h"
+#include "xtag_p.h"
 
-/*
-*   MACROS
-*/
-#define plural(value)  (((unsigned long)(value) == 1L) ? "" : "s")
+#ifdef HAVE_JANSSON
+#include "interactive_p.h"
+#include <jansson.h>
+#include <errno.h>
+#endif
 
 /*
 *   DATA DEFINITIONS
 */
-static struct { long files, lines, bytes; } Totals = { 0, 0, 0 };
-#ifndef CTAGS_LIB
 static mainLoopFunc mainLoop;
 static void *mainData;
-#endif
 
 /*
 *   FUNCTION PROTOTYPES
 */
-#ifndef CTAGS_LIB
 static bool createTagsForEntry (const char *const entryName);
-#endif
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-extern void addTotals (
-		const unsigned int files, const long unsigned int lines,
-		const long unsigned int bytes)
-{
-	Totals.files += files;
-	Totals.lines += lines;
-	Totals.bytes += bytes;
-}
-
-extern bool isDestinationStdout (void)
-{
-	bool toStdout = false;
-
-	if (outpuFormatUsedStdoutByDefault() ||  Option.filter  ||
-		(Option.tagFileName != NULL  &&  (strcmp (Option.tagFileName, "-") == 0
-						  || strcmp (Option.tagFileName, "/dev/stdout") == 0
-		)))
-		toStdout = true;
-	return toStdout;
-}
-
-#ifndef CTAGS_LIB
-
-#if defined (HAVE_OPENDIR)
+#if defined (HAVE_OPENDIR) && (defined (HAVE_DIRENT_H) || defined (_MSC_VER))
 static bool recurseUsingOpendir (const char *const dirName)
 {
 	bool resize = false;
@@ -143,10 +107,10 @@ static bool recurseUsingOpendir (const char *const dirName)
 				if (strcmp (dirName, ".") == 0)
 					filePath = entry->d_name;
 				else
-				  {
+				{
 					filePath = combinePathAndFile (dirName, entry->d_name);
 					free_p = true;
-				  }
+				}
 				resize |= createTagsForEntry (filePath);
 				if (free_p)
 					eFree (filePath);
@@ -157,7 +121,7 @@ static bool recurseUsingOpendir (const char *const dirName)
 	return resize;
 }
 
-#elif defined (HAVE_FINDFIRST) || defined (HAVE__FINDFIRST)
+#elif defined (HAVE__FINDFIRST)
 
 static bool createTagsForWildcardEntry (
 		const char *const pattern, const size_t dirLength,
@@ -180,16 +144,7 @@ static bool createTagsForWildcardUsingFindfirst (const char *const pattern)
 {
 	bool resize = false;
 	const size_t dirLength = baseFilename (pattern) - pattern;
-#if defined (HAVE_FINDFIRST)
-	struct ffblk fileInfo;
-	int result = findfirst (pattern, &fileInfo, FA_DIREC);
-	while (result == 0)
-	{
-		const char *const entry = (const char *) fileInfo.ff_name;
-		resize |= createTagsForWildcardEntry (pattern, dirLength, entry);
-		result = findnext (&fileInfo);
-	}
-#elif defined (HAVE__FINDFIRST)
+#if defined (HAVE__FINDFIRST)
 	struct _finddata_t fileInfo;
 	findfirst_t hFile = _findfirst (pattern, &fileInfo);
 	if (hFile != -1L)
@@ -225,9 +180,9 @@ static bool recurseIntoDirectory (const char *const dirName)
 	else
 	{
 		verbose ("RECURSING into directory \"%s\"\n", dirName);
-#if defined (HAVE_OPENDIR)
+#if defined (HAVE_OPENDIR) && (defined (HAVE_DIRENT_H) || defined (_MSC_VER))
 		resize = recurseUsingOpendir (dirName);
-#elif defined (HAVE_FINDFIRST) || defined (HAVE__FINDFIRST)
+#elif defined (HAVE__FINDFIRST)
 		{
 			vString *const pattern = vStringNew ();
 			vStringCopyS (pattern, dirName);
@@ -250,8 +205,8 @@ static bool createTagsForEntry (const char *const entryName)
 	fileStatus *status = eStat (entryName);
 
 	Assert (entryName != NULL);
-	if (isExcludedFile (entryName))
-		verbose ("excluding \"%s\"\n", entryName);
+	if (isExcludedFile (entryName, true))
+		verbose ("excluding \"%s\" (the early stage)\n", entryName);
 	else if (status->isSymbolicLink  &&  ! Option.followLinks)
 		verbose ("ignoring \"%s\" (symbolic link)\n", entryName);
 	else if (! status->exists)
@@ -260,6 +215,8 @@ static bool createTagsForEntry (const char *const entryName)
 		resize = recurseIntoDirectory (entryName);
 	else if (! status->isNormalFile)
 		verbose ("ignoring \"%s\" (special file)\n", entryName);
+	else if (isExcludedFile (entryName, false))
+		verbose ("excluding \"%s\"\n", entryName);
 	else
 		resize = parseFile (entryName);
 
@@ -275,9 +232,9 @@ static bool createTagsForWildcardArg (const char *const arg)
 	vString *const pattern = vStringNewInit (arg);
 	char *patternS = vStringValue (pattern);
 
-#if defined (HAVE_FINDFIRST) || defined (HAVE__FINDFIRST)
+#if defined (HAVE__FINDFIRST)
 	/*  We must transform the "." and ".." forms into something that can
-	 *  be expanded by the findfirst/_findfirst functions.
+	 *  be expanded by the _findfirst function.
 	 */
 	if (Option.recurse  &&
 		(strcmp (patternS, ".") == 0  ||  strcmp (patternS, "..") == 0))
@@ -359,69 +316,6 @@ static bool createTagsFromListFile (const char *const fileName)
 	return resize;
 }
 
-#if defined (HAVE_CLOCK)
-# define CLOCK_AVAILABLE
-# ifndef CLOCKS_PER_SEC
-#  define CLOCKS_PER_SEC		1000000
-# endif
-#elif defined (HAVE_TIMES)
-# define CLOCK_AVAILABLE
-# define CLOCKS_PER_SEC	60
-static clock_t clock (void)
-{
-	struct tms buf;
-
-	times (&buf);
-	return (buf.tms_utime + buf.tms_stime);
-}
-#else
-# define clock()  (clock_t)0
-#endif
-
-static void printTotals (const clock_t *const timeStamps)
-{
-	const unsigned long totalTags = numTagsTotal();
-	const unsigned long addedTags = numTagsAdded();
-
-	fprintf (stderr, "%ld file%s, %ld line%s (%ld kB) scanned",
-			Totals.files, plural (Totals.files),
-			Totals.lines, plural (Totals.lines),
-			Totals.bytes/1024L);
-#ifdef CLOCK_AVAILABLE
-	{
-		const double interval = ((double) (timeStamps [1] - timeStamps [0])) /
-								CLOCKS_PER_SEC;
-
-		fprintf (stderr, " in %.01f seconds", interval);
-		if (interval != (double) 0.0)
-			fprintf (stderr, " (%lu kB/s)",
-					(unsigned long) (Totals.bytes / interval) / 1024L);
-	}
-#endif
-	fputc ('\n', stderr);
-
-	fprintf (stderr, "%lu tag%s added to tag file",
-			addedTags, plural(addedTags));
-	if (Option.append)
-		fprintf (stderr, " (now %lu tags)", totalTags);
-	fputc ('\n', stderr);
-
-	if (totalTags > 0  &&  Option.sorted != SO_UNSORTED)
-	{
-		fprintf (stderr, "%lu tag%s sorted", totalTags, plural (totalTags));
-#ifdef CLOCK_AVAILABLE
-		fprintf (stderr, " in %.02f seconds",
-				((double) (timeStamps [2] - timeStamps [1])) / CLOCKS_PER_SEC);
-#endif
-		fputc ('\n', stderr);
-	}
-
-#ifdef DEBUG
-	fprintf (stderr, "longest tag line = %lu\n",
-		 (unsigned long) maxTagsLine ());
-#endif
-}
-
 static bool etagsInclude (void)
 {
 	return (bool)(Option.etags && Option.etagsInclude != NULL);
@@ -486,9 +380,112 @@ static void batchMakeTags (cookedArgs *args, void *user CTAGS_ATTR_UNUSED)
 	timeStamp (2);
 
 	if (Option.printTotals)
-		printTotals (timeStamps);
+	{
+		printTotals (timeStamps, Option.append, Option.sorted);
+		if (Option.printTotals > 1)
+			for (unsigned int i = 0; i < countParsers(); i++)
+				printParserStatisticsIfUsed (i);
+	}
+
 #undef timeStamp
 }
+
+#ifdef HAVE_JANSSON
+void interactiveLoop (cookedArgs *args CTAGS_ATTR_UNUSED, void *user)
+{
+	struct interactiveModeArgs *iargs = user;
+
+	if (iargs->sandbox) {
+		/* As of jansson 2.6, the object hashing is seeded off
+		   of /dev/urandom, so trigger the hash seeding
+		   before installing the syscall filter.
+		*/
+		json_t * tmp = json_object ();
+		json_decref (tmp);
+
+		if (installSyscallFilter ()) {
+			error (FATAL, "install_syscall_filter failed");
+			/* The explicit exit call is needed because
+			   "error (FATAL,..." just prints a message in
+			   interactive mode. */
+			exit (1);
+		}
+	}
+
+	char buffer[1024];
+	json_t *request;
+
+	fputs ("{\"_type\": \"program\", \"name\": \"" PROGRAM_NAME "\", \"version\": \"" PROGRAM_VERSION "\"}\n", stdout);
+	fflush (stdout);
+
+	while (fgets (buffer, sizeof(buffer), stdin))
+	{
+		if (buffer[0] == '\n')
+			continue;
+
+		request = json_loads (buffer, JSON_DISABLE_EOF_CHECK, NULL);
+		if (! request)
+		{
+			error (FATAL, "invalid json");
+			goto next;
+		}
+
+		json_t *command = json_object_get (request, "command");
+		if (! command)
+		{
+			error (FATAL, "command name not found");
+			goto next;
+		}
+
+		if (!strcmp ("generate-tags", json_string_value (command)))
+		{
+			json_int_t size = -1;
+			const char *filename;
+
+			if (json_unpack (request, "{ss}", "filename", &filename) == -1)
+			{
+				error (FATAL, "invalid generate-tags request");
+				goto next;
+			}
+
+			json_unpack (request, "{sI}", "size", &size);
+
+			openTagFile ();
+			if (size == -1)
+			{					/* read from disk */
+				if (iargs->sandbox) {
+					error (FATAL,
+						   "invalid request in sandbox submode: reading file contents from a file is limited");
+					closeTagFile (false);
+					goto next;
+				}
+
+				createTagsForEntry (filename);
+			}
+			else
+			{					/* read nbytes from stream */
+				unsigned char *data = eMalloc (size);
+				size = fread (data, 1, size, stdin);
+				MIO *mio = mio_new_memory (data, size, eRealloc, eFreeNoNullCheck);
+				parseFileWithMio (filename, mio, NULL);
+				mio_unref (mio);
+			}
+
+			closeTagFile (false);
+			fputs ("{\"_type\": \"completed\", \"command\": \"generate-tags\"}\n", stdout);
+			fflush(stdout);
+		}
+		else
+		{
+			error (FATAL, "unknown command name");
+			goto next;
+		}
+
+	next:
+		json_decref (request);
+	}
+}
+#endif
 
 static bool isSafeVar (const char* var)
 {
@@ -508,17 +505,21 @@ static bool isSafeVar (const char* var)
 
 static void sanitizeEnviron (void)
 {
-	char **e = NULL;
+	char **e;
 	int i;
 
 #if HAVE_DECL___ENVIRON
 	e = __environ;
 #elif HAVE_DECL__NSGETENVIRON
-{
-	char ***ep = _NSGetEnviron();
-	if (ep)
-		e = *ep;
-}
+	{
+		char ***ep = _NSGetEnviron();
+		if (ep)
+			e = *ep;
+		else
+			e = NULL;
+	}
+#else
+	e = NULL;
 #endif
 
 	if (!e)
@@ -547,24 +548,34 @@ static void sanitizeEnviron (void)
  *		Start up code
  */
 
-extern int main (int argc CTAGS_ATTR_UNUSED, char **argv)
+extern int ctags_cli_main (int argc CTAGS_ATTR_UNUSED, char **argv)
 {
 	cookedArgs *args;
 
+#if defined(WIN32) && defined(HAVE_MKSTEMP)
+	/* MinGW-w64's mkstemp() uses rand() for generating temporary files. */
+	srand ((unsigned int) clock ());
+#endif
+
+	initDefaultTrashBox ();
+
+	DEBUG_INIT();
+
 	setErrorPrinter (stderrDefaultErrorPrinter, NULL);
 	setMainLoop (batchMakeTags, NULL);
-	setTagWriter (&ctagsWriter);
+	setTagWriter (WRITER_U_CTAGS, NULL);
 
 	setCurrentDirectory ();
 	setExecutableName (*argv++);
 	sanitizeEnviron ();
 	checkRegex ();
-	initFieldDescs ();
+	initFieldObjects ();
+	initXtagObjects ();
 
 	args = cArgNewFromArgv (argv);
 	previewFirstOption (args);
-	testEtagsInvocation ();
 	initializeParsing ();
+	testEtagsInvocation ();
 	initOptions ();
 	readOptionConfiguration ();
 	verbose ("Reading initial options from command line\n");
@@ -583,10 +594,11 @@ extern int main (int argc CTAGS_ATTR_UNUSED, char **argv)
 	freeOptionResources ();
 	freeParserResources ();
 	freeRegexResources ();
-	freeXcmdResources ();
 #ifdef HAVE_ICONV
 	freeEncodingResources ();
 #endif
+
+	finiDefaultTrashBox();
 
 	if (Option.printLanguage)
 		return (Option.printLanguage == true)? 0: 1;
@@ -594,4 +606,3 @@ extern int main (int argc CTAGS_ATTR_UNUSED, char **argv)
 	exit (0);
 	return 0;
 }
-#endif

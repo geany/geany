@@ -14,34 +14,30 @@
 #define MSDOS_STYLE_PATH 1
 #define HAVE_FCNTL_H 1
 #define HAVE_IO_H 1
-#define HAVE_LIMITS_H 1
-#define HAVE_STDLIB_H 1
 #define HAVE_SYS_STAT_H 1
 #define HAVE_SYS_TYPES_H 1
-#define HAVE_TIME_H 1
-#define HAVE_CLOCK 1
 #define HAVE_CHSIZE 1
-#define HAVE_FGETPOS 1
+#define HAVE_DIRECT_H 1
 #define HAVE_STRICMP 1
 #define HAVE_STRNICMP 1
 #define HAVE_STRSTR 1
 #define HAVE_STRERROR 1
+#define HAVE__FINDFIRST 1
 #define HAVE_FINDNEXT 1
-#define HAVE_TEMPNAM 1
+#define findfirst_t intptr_t
+#define HAVE_MKSTEMP 1
 #define HAVE_FNMATCH 1
 #define HAVE_FNMATCH_H 1
 #define HAVE_PUTENV 1
-#define tempnam(dir,pfx) _tempnam(dir,pfx)
 #define TMPDIR "\\"
+
+int mkstemp (char *template_name);
 
 #ifdef _MSC_VER
 
-# define HAVE__FINDFIRST 1
-# define HAVE_DIRECT_H 1
 # if _MSC_VER < 1900
 #  define snprintf _snprintf
 # endif
-# define findfirst_t intptr_t
 
 #if (_MSC_VER >= 1800) // Visual Studio 2013 or newer
 #define HAVE_STDBOOL_H 1
@@ -58,13 +54,14 @@ typedef enum { false, true } bool;
 
 # include <_mingw.h>
 # define HAVE_STDBOOL_H 1
-# define HAVE_DIR_H 1
 # define HAVE_DIRENT_H 1
-# define HAVE__FINDFIRST 1
-# define findfirst_t long
 # define ffblk _finddata_t
 # define FA_DIREC _A_SUBDIR
 # define ff_name name
+
+# if defined(__USE_MINGW_ANSI_STDIO) && defined(__MINGW64_VERSION_MAJOR)
+#  define HAVE_ASPRINTF 1
+# endif
 
 #endif
 

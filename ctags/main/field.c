@@ -19,27 +19,38 @@
 #include "ctags.h"
 #include "debug.h"
 #include "entry.h"
+#include "entry_p.h"
 #include "field.h"
+#include "field_p.h"
 #include "kind.h"
-#include "options.h"
+#include "options_p.h"
+#include "parse_p.h"
 #include "read.h"
 #include "routines.h"
+#include "trashbox.h"
+#include "writer_p.h"
+#include "xtag_p.h"
 
+#define FIELD_NULL_LETTER_CHAR '-'
+#define FIELD_NULL_LETTER_STRING "-"
 
-struct sFieldDesc {
-	fieldDefinition *spec;
-	unsigned int fixed:   1;   /* fields which cannot be disabled. */
+typedef struct sFieldObject {
+	fieldDefinition *def;
 	vString     *buffer;
 	const char* nameWithPrefix;
 	langType language;
 	fieldType sibling;
-};
+} fieldObject;
 
 static const char *renderFieldName (const tagEntryInfo *const tag, const char *value, vString* b);
+static const char *renderFieldNameNoEscape (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b);
 static const char *renderFieldInput (const tagEntryInfo *const tag, const char *value, vString* b);
+static const char *renderFieldInputNoEscape (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldCompactInputLine (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldSignature (const tagEntryInfo *const tag, const char *value, vString* b);
+static const char *renderFieldSignatureNoEscape (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldScope (const tagEntryInfo *const tag, const char *value, vString* b);
+static const char *renderFieldScopeNoEscape (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldTyperef (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldInherits (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldKindName (const tagEntryInfo *const tag, const char *value, vString* b);
@@ -50,12 +61,17 @@ static const char *renderFieldKindLetter (const tagEntryInfo *const tag, const c
 static const char *renderFieldImplementation (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldFile (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldPattern (const tagEntryInfo *const tag, const char *value, vString* b);
-static const char *renderFieldRole (const tagEntryInfo *const tag, const char *value, vString* b);
+static const char *renderFieldRoles (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldRefMarker (const tagEntryInfo *const tag, const char *value, vString* b);
-static const char *renderFieldExtra (const tagEntryInfo *const tag, const char *value, vString* b);
+static const char *renderFieldExtras (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldXpath (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldScopeKindName(const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldEnd (const tagEntryInfo *const tag, const char *value, vString* b);
+
+static bool doesContainAnyCharInName (const tagEntryInfo *const tag, const char *value, const char *chars);
+static bool doesContainAnyCharInInput (const tagEntryInfo *const tag, const char*value, const char *chars);
+static bool doesContainAnyCharInFieldScope (const tagEntryInfo *const tag, const char *value, const char *chars);
+static bool doesContainAnyCharInSignature (const tagEntryInfo *const tag, const char *value, const char *chars);
 
 static bool     isLanguageFieldAvailable  (const tagEntryInfo *const tag);
 static bool     isTyperefFieldAvailable   (const tagEntryInfo *const tag);
@@ -64,195 +80,238 @@ static bool     isInheritsFieldAvailable  (const tagEntryInfo *const tag);
 static bool     isAccessFieldAvailable    (const tagEntryInfo *const tag);
 static bool     isImplementationFieldAvailable (const tagEntryInfo *const tag);
 static bool     isSignatureFieldAvailable (const tagEntryInfo *const tag);
-static bool     isRoleFieldAvailable      (const tagEntryInfo *const tag);
-static bool     isExtraFieldAvailable     (const tagEntryInfo *const tag);
+static bool     isExtrasFieldAvailable    (const tagEntryInfo *const tag);
 static bool     isXpathFieldAvailable     (const tagEntryInfo *const tag);
 static bool     isEndFieldAvailable       (const tagEntryInfo *const tag);
 
 
-#define DEFINE_FIELD_SPEC(L, N, V, H, F)		\
-	DEFINE_FIELD_SPEC_FULL (L, N, V, H, F, NULL)
-#define DEFINE_FIELD_SPEC_FULL(L, N, V, H, F, A)\
+#define DEFINE_FIELD(L, N, V, H, DT, RE)				\
+	DEFINE_FIELD_FULL (L, N, V, H, NULL, DT, RE, NULL, NULL)
+#define DEFINE_FIELD_FULL(L, N, V, H, A, DT, RE, RN, DCAC)	\
 	{					\
 		.letter        = L,		\
 		.name          = N,		\
 		.description   = H,		\
 		.enabled       = V,		\
-		.renderEscaped = F,		\
+		.render        = RE,		\
+		.renderNoEscaping= RN,		\
+		.doesContainAnyChar = DCAC, \
 		.isValueAvailable = A,		\
+		.dataType = DT, \
 	}
 
-#define WITH_DEFUALT_VALUE(str) ((str)?(str):"-")
+#define WITH_DEFUALT_VALUE(str) ((str)?(str):FIELD_NULL_LETTER_STRING)
 
 static fieldDefinition fieldDefinitionsFixed [] = {
         /* FIXED FIELDS */
-	DEFINE_FIELD_SPEC ('N', "name",     true,
-			  "tag name (fixed field)",
-			  renderFieldName),
-	DEFINE_FIELD_SPEC ('F', "input",    true,
-			   "input file (fixed field)",
-			   renderFieldInput),
-	DEFINE_FIELD_SPEC ('P', "pattern",  true,
-			   "pattern (fixed field)",
+	DEFINE_FIELD_FULL ('N', "name",     true,
+			  "tag name",
+			  NULL,
+			  FIELDTYPE_STRING,
+			  renderFieldName, renderFieldNameNoEscape,
+			  doesContainAnyCharInName),
+	DEFINE_FIELD_FULL ('F', "input",    true,
+			   "input file",
+			   NULL,
+			   FIELDTYPE_STRING,
+			   renderFieldInput, renderFieldInputNoEscape,
+			   doesContainAnyCharInInput),
+	DEFINE_FIELD ('P', "pattern",  true,
+			   "pattern",
+			   FIELDTYPE_STRING|FIELDTYPE_BOOL,
 			   renderFieldPattern),
 };
 
 static fieldDefinition fieldDefinitionsExuberant [] = {
-	DEFINE_FIELD_SPEC ('C', "compact",        false,
-			   "compact input line (fixed field, only used in -x option)",
+	DEFINE_FIELD ('C', "compact",        false,
+			   "compact input line (used only in xref output)",
+			   FIELDTYPE_STRING,
 			   renderFieldCompactInputLine),
 
 	/* EXTENSION FIELDS */
-	DEFINE_FIELD_SPEC_FULL ('a', "access",         false,
+	DEFINE_FIELD_FULL ('a', "access",         false,
 		      "Access (or export) of class members",
-		      renderFieldAccess, isAccessFieldAvailable),
-	DEFINE_FIELD_SPEC_FULL ('f', "file",           true,
+			  isAccessFieldAvailable,
+			  FIELDTYPE_STRING,
+		      renderFieldAccess, NULL, NULL),
+	DEFINE_FIELD_FULL ('f', "file",           true,
 		      "File-restricted scoping",
-		      renderFieldFile, isFileFieldAvailable),
-	DEFINE_FIELD_SPEC_FULL ('i', "inherits",       false,
+			  isFileFieldAvailable,
+			  FIELDTYPE_BOOL,
+		      renderFieldFile, NULL, NULL),
+	DEFINE_FIELD_FULL ('i', "inherits",       false,
 		      "Inheritance information",
-		      renderFieldInherits, isInheritsFieldAvailable),
-	DEFINE_FIELD_SPEC ('K', NULL,             false,
-		      "Kind of tag as full name",
+			  isInheritsFieldAvailable,
+			  FIELDTYPE_STRING|FIELDTYPE_BOOL,
+		      renderFieldInherits, NULL, NULL),
+	DEFINE_FIELD ('K', NULL,             false,
+		      "Kind of tag in long-name form",
+		      FIELDTYPE_STRING,
 		      renderFieldKindName),
-	DEFINE_FIELD_SPEC ('k', NULL,             true,
-			   "Kind of tag as a single letter",
+	DEFINE_FIELD ('k', NULL,             true,
+			   "Kind of tag in one-letter form",
+			   FIELDTYPE_STRING,
 			   renderFieldKindLetter),
-	DEFINE_FIELD_SPEC_FULL ('l', "language",       false,
+	DEFINE_FIELD_FULL ('l', "language",       false,
 			   "Language of input file containing tag",
-			   renderFieldLanguage, isLanguageFieldAvailable),
-	DEFINE_FIELD_SPEC_FULL ('m', "implementation", false,
+			   isLanguageFieldAvailable,
+			   FIELDTYPE_STRING,
+			   renderFieldLanguage, NULL, NULL),
+	DEFINE_FIELD_FULL ('m', "implementation", false,
 			   "Implementation information",
-			   renderFieldImplementation, isImplementationFieldAvailable),
-	DEFINE_FIELD_SPEC ('n', "line",           false,
+			   isImplementationFieldAvailable,
+			   FIELDTYPE_STRING,
+			   renderFieldImplementation, NULL, NULL),
+	DEFINE_FIELD ('n', "line",           false,
 			   "Line number of tag definition",
+			   FIELDTYPE_INTEGER,
 			   renderFieldLineNumber),
-	DEFINE_FIELD_SPEC_FULL ('S', "signature",	     false,
+	DEFINE_FIELD_FULL ('S', "signature",     false,
 			   "Signature of routine (e.g. prototype or parameter list)",
-			   renderFieldSignature, isSignatureFieldAvailable),
-	DEFINE_FIELD_SPEC ('s', NULL,             true,
-			   "Scope of tag definition (`p' can be used for printing its kind)",
-			   renderFieldScope),
-	DEFINE_FIELD_SPEC_FULL ('t', "typeref",        true,
+			   isSignatureFieldAvailable,
+			   FIELDTYPE_STRING,
+			   renderFieldSignature, renderFieldSignatureNoEscape,
+			   doesContainAnyCharInSignature),
+	DEFINE_FIELD_FULL ('s', NULL,             true,
+			   "[tags output] scope (kind:name) of tag definition, [xref and json output] name of scope",
+			   NULL,
+			   FIELDTYPE_STRING,
+			   renderFieldScope, renderFieldScopeNoEscape,
+			   doesContainAnyCharInFieldScope),
+	DEFINE_FIELD_FULL ('t', "typeref",        true,
 			   "Type and name of a variable or typedef",
-			   renderFieldTyperef, isTyperefFieldAvailable),
-	DEFINE_FIELD_SPEC ('z', "kind",           false,
-			   "Include the \"kind:\" key in kind field (use k or K) in tags output, kind full name in xref output",
+			   isTyperefFieldAvailable,
+			   FIELDTYPE_STRING,
+			   renderFieldTyperef, NULL, NULL),
+	DEFINE_FIELD ('z', "kind",           false,
+			   "[tags output] prepend \"kind:\" to k/ (or K/) field output, [xref and json output] kind in long-name form",
+			   FIELDTYPE_STRING,
 			   /* Following renderer is for handling --_xformat=%{kind};
 			      and is not for tags output. */
 			   renderFieldKindName),
 };
 
 static fieldDefinition fieldDefinitionsUniversal [] = {
-	DEFINE_FIELD_SPEC_FULL ('r', "role",    false,
-			   "Role",
-			   renderFieldRole, isRoleFieldAvailable),
-	DEFINE_FIELD_SPEC ('R',  NULL,     false,
+	DEFINE_FIELD ('r', "roles",    false,
+			   "Roles",
+			   FIELDTYPE_STRING,
+			   renderFieldRoles),
+	DEFINE_FIELD ('R',  NULL,     false,
 			   "Marker (R or D) representing whether tag is definition or reference",
+			   FIELDTYPE_STRING,
 			   renderFieldRefMarker),
-	DEFINE_FIELD_SPEC ('Z', "scope",   false,
-			  "Include the \"scope:\" key in scope field (use s) in tags output, scope name in xref output",
+	DEFINE_FIELD_FULL ('Z', "scope",   false,
+			  "[tags output] prepend \"scope:\" key to s/scope field output, [xref and json output] the same as s/ field",
+			   NULL,
+			   FIELDTYPE_STRING,
 			   /* Following renderer is for handling --_xformat=%{scope};
 			      and is not for tags output. */
-			   renderFieldScope),
-	DEFINE_FIELD_SPEC_FULL ('E', "extra",   false,
+			   renderFieldScope, renderFieldScopeNoEscape,
+			   doesContainAnyCharInFieldScope),
+	DEFINE_FIELD_FULL ('E', "extras",   false,
 			   "Extra tag type information",
-			   renderFieldExtra, isExtraFieldAvailable),
-	DEFINE_FIELD_SPEC_FULL ('x', "xpath",   false,
+			   isExtrasFieldAvailable,
+			   FIELDTYPE_STRING,
+			   renderFieldExtras, NULL, NULL),
+	DEFINE_FIELD_FULL ('x', "xpath",   false,
 			   "xpath for the tag",
-			   renderFieldXpath, isXpathFieldAvailable),
-	DEFINE_FIELD_SPEC ('p', "scopeKind", false,
-			   "Kind of scope as full name",
+			   isXpathFieldAvailable,
+			   FIELDTYPE_STRING,
+			   renderFieldXpath, NULL, NULL),
+	DEFINE_FIELD ('p', "scopeKind", false,
+			   "[tags output] no effect, [xref and json output] kind of scope in long-name form",
+			   FIELDTYPE_STRING,
 			   renderFieldScopeKindName),
-	DEFINE_FIELD_SPEC_FULL ('e', "end", false,
+	DEFINE_FIELD_FULL ('e', "end", false,
 			   "end lines of various items",
-			   renderFieldEnd, isEndFieldAvailable),
+			   isEndFieldAvailable,
+			   FIELDTYPE_INTEGER,
+			   renderFieldEnd, NULL, NULL),
 };
 
 
-static unsigned int       fieldDescUsed = 0;
-static unsigned int       fieldDescAllocated = 0;
-static fieldDesc* fieldDescs = NULL;
+static unsigned int       fieldObjectUsed = 0;
+static unsigned int       fieldObjectAllocated = 0;
+static fieldObject* fieldObjects = NULL;
 
-extern void initFieldDescs (void)
+extern void initFieldObjects (void)
 {
-	int i;
-	fieldDesc *fdesc;
+	unsigned int i;
+	fieldObject *fobj;
 
-	Assert (fieldDescs == NULL);
+	Assert (fieldObjects == NULL);
 
-	fieldDescAllocated
+	fieldObjectAllocated
 	  = ARRAY_SIZE (fieldDefinitionsFixed)
 	  + ARRAY_SIZE (fieldDefinitionsExuberant)
 	  + ARRAY_SIZE (fieldDefinitionsUniversal);
-	fieldDescs = xMalloc (fieldDescAllocated, fieldDesc);
+	fieldObjects = xMalloc (fieldObjectAllocated, fieldObject);
+	DEFAULT_TRASH_BOX(&fieldObjects, eFreeIndirect);
 
-	fieldDescUsed = 0;
+	fieldObjectUsed = 0;
 
 	for (i = 0; i < ARRAY_SIZE (fieldDefinitionsFixed); i++)
 	{
-		fdesc = fieldDescs + i + fieldDescUsed;
-		fdesc->spec   = fieldDefinitionsFixed + i;
-		fdesc->fixed  = 1;
-		fdesc->buffer = NULL;
-		fdesc->nameWithPrefix = fdesc->spec->name;
-		fdesc->language = LANG_IGNORE;
-		fdesc->sibling  = FIELD_UNKNOWN;
+		fobj = fieldObjects + i + fieldObjectUsed;
+		fobj->def = fieldDefinitionsFixed + i;
+		fobj->buffer = NULL;
+		fobj->nameWithPrefix = fobj->def->name;
+		fobj->language = LANG_IGNORE;
+		fobj->sibling  = FIELD_UNKNOWN;
 	}
-	fieldDescUsed += ARRAY_SIZE (fieldDefinitionsFixed);
+	fieldObjectUsed += ARRAY_SIZE (fieldDefinitionsFixed);
 
 	for (i = 0; i < ARRAY_SIZE (fieldDefinitionsExuberant); i++)
 	{
-		fdesc = fieldDescs + i + fieldDescUsed;
-		fdesc->spec = fieldDefinitionsExuberant +i;
-		fdesc->fixed = 0;
-		fdesc->buffer = NULL;
-		fdesc->nameWithPrefix = fdesc->spec->name;
-		fdesc->language = LANG_IGNORE;
-		fdesc->sibling  = FIELD_UNKNOWN;
+		fobj = fieldObjects + i + fieldObjectUsed;
+		fobj->def = fieldDefinitionsExuberant +i;
+		fobj->buffer = NULL;
+		fobj->nameWithPrefix = fobj->def->name;
+		fobj->language = LANG_IGNORE;
+		fobj->sibling  = FIELD_UNKNOWN;
 	}
-	fieldDescUsed += ARRAY_SIZE (fieldDefinitionsExuberant);
+	fieldObjectUsed += ARRAY_SIZE (fieldDefinitionsExuberant);
 
 	for (i = 0; i < ARRAY_SIZE (fieldDefinitionsUniversal); i++)
 	{
 		char *nameWithPrefix;
 
-		fdesc = fieldDescs + i + fieldDescUsed;
-		fdesc->spec = fieldDefinitionsUniversal + i;
-		fdesc->fixed = 0;
-		fdesc->buffer = NULL;
+		fobj = fieldObjects + i + fieldObjectUsed;
+		fobj->def = fieldDefinitionsUniversal + i;
+		fobj->buffer = NULL;
 
-		if (fdesc->spec->name)
+		if (fobj->def->name)
 		{
-			nameWithPrefix = eMalloc (sizeof CTAGS_FIELD_PREFIX + strlen (fdesc->spec->name) + 1);
+			nameWithPrefix = eMalloc (sizeof CTAGS_FIELD_PREFIX + strlen (fobj->def->name) + 1);
 			nameWithPrefix [0] = '\0';
 			strcat (nameWithPrefix, CTAGS_FIELD_PREFIX);
-			strcat (nameWithPrefix, fdesc->spec->name);
-			fdesc->nameWithPrefix = nameWithPrefix;
+			strcat (nameWithPrefix, fobj->def->name);
+			fobj->nameWithPrefix = nameWithPrefix;
+			DEFAULT_TRASH_BOX(nameWithPrefix, eFree);
 		}
 		else
-			fdesc->nameWithPrefix = NULL;
-		fdesc->language = LANG_IGNORE;
-		fdesc->sibling  = FIELD_UNKNOWN;
+			fobj->nameWithPrefix = NULL;
+		fobj->language = LANG_IGNORE;
+		fobj->sibling  = FIELD_UNKNOWN;
 	}
-	fieldDescUsed += ARRAY_SIZE (fieldDefinitionsUniversal);
+	fieldObjectUsed += ARRAY_SIZE (fieldDefinitionsUniversal);
 
-	Assert ( fieldDescAllocated == fieldDescUsed );
+	Assert ( fieldObjectAllocated == fieldObjectUsed );
 }
 
-static fieldDesc* getFieldDesc(fieldType type)
+static fieldObject* getFieldObject(fieldType type)
 {
-	Assert ((0 <= type) && (type < fieldDescUsed));
-	return fieldDescs + type;
+	Assert ((0 <= type) && ((unsigned int)type < fieldObjectUsed));
+	return fieldObjects + type;
 }
 
 extern fieldType getFieldTypeForOption (char letter)
 {
 	unsigned int i;
 
-	for (i = 0; i < fieldDescUsed; i++)
+	for (i = 0; i < fieldObjectUsed; i++)
 	{
-		if (fieldDescs [i].spec->letter == letter)
+		if (fieldObjects [i].def->letter == letter)
 			return i;
 	}
 	return FIELD_UNKNOWN;
@@ -279,102 +338,52 @@ extern fieldType getFieldTypeForNameAndLanguage (const char *fieldName, langType
 	else if (language != LANG_IGNORE && (initialized == false))
 		initializeParser (language);
 
-	for (i = 0; i < fieldDescUsed; i++)
+	for (i = 0; i < fieldObjectUsed; i++)
 	{
-		if (fieldDescs [i].spec->name
-		    && strcmp (fieldDescs [i].spec->name, fieldName) == 0
+		if (fieldObjects [i].def->name
+		    && strcmp (fieldObjects [i].def->name, fieldName) == 0
 		    && ((language == LANG_AUTO)
-			|| (fieldDescs [i].language == language)))
+			|| (fieldObjects [i].language == language)))
 			return i;
 	}
 
 	return FIELD_UNKNOWN;
 }
 
+extern const char* getFieldDescription (fieldType type)
+{
+	fieldObject* fobj;
+
+	fobj = getFieldObject (type);
+	return fobj->def->description;
+}
+
 extern const char* getFieldName(fieldType type)
 {
-	fieldDesc* fdesc;
+	fieldObject* fobj;
 
-	fdesc = getFieldDesc (type);
+	fobj = getFieldObject (type);
 	if (Option.putFieldPrefix)
-		return fdesc->nameWithPrefix;
+		return fobj->nameWithPrefix;
 	else
-		return fdesc->spec->name;
+		return fobj->def->name;
+}
+
+extern unsigned char getFieldLetter (fieldType type)
+{
+	fieldObject* fobj = getFieldObject (type);
+
+	return fobj->def->letter == '\0'
+		? FIELD_NULL_LETTER_CHAR
+		: fobj->def->letter;
 }
 
 extern bool doesFieldHaveValue (fieldType type, const tagEntryInfo *tag)
 {
-	if (getFieldDesc(type)->spec->isValueAvailable)
-		return getFieldDesc(type)->spec->isValueAvailable(tag);
+	if (getFieldObject(type)->def->isValueAvailable)
+		return getFieldObject(type)->def->isValueAvailable(tag);
 	else
 		return true;
-}
-
-#define PR_FIELD_WIDTH_LETTER     7
-#define PR_FIELD_WIDTH_NAME      15
-#define PR_FIELD_WIDTH_LANGUAGE  16
-#define PR_FIELD_WIDTH_DESC      30
-#define PR_FIELD_WIDTH_XFMT      6
-#define PR_FIELD_WIDTH_ENABLED   7
-
-#define PR_FIELD_STR(X) PR_FIELD_WIDTH_##X
-#define PR_FIELD_FMT(X,T) "%-" STRINGIFY(PR_FIELD_STR(X)) STRINGIFY(T)
-
-#define MAKE_FIELD_FMT(LETTER_SPEC)		\
-	PR_FIELD_FMT (LETTER,LETTER_SPEC)	\
-	" "					\
-	PR_FIELD_FMT (NAME,s)			\
-	" "					\
-	PR_FIELD_FMT (ENABLED,s)		\
-	" "					\
-	PR_FIELD_FMT (LANGUAGE,s)		\
-	" "					\
-	PR_FIELD_FMT (XFMT,s)		\
-	" "					\
-	PR_FIELD_FMT (DESC,s)			\
-	"\n"
-
-static void printField (fieldType i)
-{
-	unsigned char letter = fieldDescs[i].spec->letter;
-	const char *name;
-	const char *language;
-
-	if (letter == FIELD_LETTER_NO_USE)
-		letter = '-';
-
-	if (! fieldDescs[i].spec->name)
-		name = "NONE";
-	else
-		name = getFieldName (i);
-
-	if (fieldDescs[i].language == LANG_IGNORE)
-		language = "NONE";
-	else
-		language = getLanguageName (fieldDescs[i].language);
-
-	printf((Option.machinable? "%c\t%s\t%s\t%s\t%s\t%s\n": MAKE_FIELD_FMT(c)),
-	       letter,
-	       name,
-	       isFieldEnabled (i)? "on": "off",
-	       language,
-	       getFieldDesc (i)->spec->renderEscaped? "TRUE": "FALSE",
-	       fieldDescs[i].spec->description? fieldDescs[i].spec->description: "NONE");
-}
-
-extern void printFields (int language)
-{
-	unsigned int i;
-
-	if (Option.withListHeader)
-		printf ((Option.machinable? "%s\t%s\t%s\t%s\t%s\t%s\n": MAKE_FIELD_FMT(s)),
-			"#LETTER", "NAME", "ENABLED", "LANGUAGE", "XFMT", "DESCRIPTION");
-
-	for (i = 0; i < fieldDescUsed; i++)
-	{
-		if (language == LANG_AUTO || getFieldOwner (i) == language)
-			printField (i);
-	}
 }
 
 static const char *renderAsIs (vString* b CTAGS_ATTR_UNUSED, const char *s)
@@ -390,41 +399,61 @@ static const char *renderEscapedString (const char *s,
 	return vStringValue (b);
 }
 
-static const char *renderEscapedName (const char* s,
+static const char *renderEscapedName (const bool isTagName,
+				      const char* s,
 				      const tagEntryInfo *const tag,
 				      vString* b)
 {
-	const char* base = s;
+	int unexpected_byte = 0;
 
-	for (; *s; s++)
+	if (isTagName && (!tag->isPseudoTag) &&  (*s == ' ' || *s == '!'))
 	{
-		int c = *s;
-		if ((c > 0x00 && c <= 0x1F) || c == 0x7F)
+		/* Don't allow a leading space or exclamation mark as it conflicts with
+		 * pseudo-tags when sorting.  Anything with a lower byte value is
+		 * escaped by renderEscapedString() already. */
+		unexpected_byte = *s;
+		switch (*s)
 		{
-			char letter = getLanguageKind(tag->langType, tag->kindIndex)->letter;
-			verbose ("Unexpected character (0 < *c && *c < 0x20) included in a tagEntryInfo: %s\n", base);
-			verbose ("File: %s, Line: %lu, Lang: %s, Kind: %c\n",
-				 tag->inputFileName, tag->lineNumber, getLanguageName(tag->langType), letter);
-			verbose ("Escape the character\n");
-			break;
+			case ' ': vStringCatS (b, "\\x20"); s++; break;
+			case '!': vStringCatS (b, "\\x21"); s++; break;
+			default: AssertNotReached();
 		}
-		else if (c == '\\')
-			break;
-		else
-			continue;
+	}
+	else
+	{
+		/* Find the first byte needing escaping for the warning message */
+		const char *p = s;
+
+		while (*p > 0x1F && *p != 0x7F)
+			p++;
+		unexpected_byte = *p;
 	}
 
-	if (*s == '\0')
-		return base;
-
-	vStringNCatS (b, base, s - base);
+	if (unexpected_byte)
+	{
+		const kindDefinition *kdef = getTagKind (tag);
+		verbose ("Unexpected character %#04x included in a tagEntryInfo: %s\n", unexpected_byte, s);
+		verbose ("File: %s, Line: %lu, Lang: %s, Kind: %c\n",
+			 tag->inputFileName, tag->lineNumber, getLanguageName(tag->langType), kdef->letter);
+		verbose ("Escape the character\n");
+	}
 
 	return renderEscapedString (s, tag, b);
 }
 
 static const char *renderFieldName (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
 {
-	return renderEscapedName (tag->name, tag, b);
+	return renderEscapedName (true, tag->name, tag, b);
+}
+
+static const char *renderFieldNameNoEscape (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
+{
+	return renderAsIs (b, tag->name);
+}
+
+static bool doesContainAnyCharInName (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, const char *chars)
+{
+	return strpbrk (tag->name, chars)? true: false;
 }
 
 static const char *renderFieldInput (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
@@ -436,10 +465,42 @@ static const char *renderFieldInput (const tagEntryInfo *const tag, const char *
 	return renderEscapedString (f, tag, b);
 }
 
+static const char *renderFieldInputNoEscape (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
+{
+	const char *f = tag->inputFileName;
+
+	if (Option.lineDirectives && tag->sourceFileName)
+		f = tag->sourceFileName;
+
+	return renderAsIs (b, f);
+}
+
+static bool doesContainAnyCharInInput (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, const char *chars)
+{
+	const char *f = tag->inputFileName;
+
+	if (Option.lineDirectives && tag->sourceFileName)
+		f = tag->sourceFileName;
+
+	return strpbrk (f, chars)? true: false;
+}
+
 static const char *renderFieldSignature (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
 {
 	return renderEscapedString (WITH_DEFUALT_VALUE (tag->extensionFields.signature),
 				    tag, b);
+}
+
+static const char *renderFieldSignatureNoEscape (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
+{
+	return renderAsIs (b, WITH_DEFUALT_VALUE (tag->extensionFields.signature));
+}
+
+static bool doesContainAnyCharInSignature (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, const char *chars)
+{
+	return (tag->extensionFields.signature && strpbrk(tag->extensionFields.signature, chars))
+		? true
+		: false;
 }
 
 static const char *renderFieldScope (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
@@ -447,8 +508,25 @@ static const char *renderFieldScope (const tagEntryInfo *const tag, const char *
 	const char* scope;
 
 	getTagScopeInformation ((tagEntryInfo *const)tag, NULL, &scope);
-	return scope? renderEscapedName (scope, tag, b): NULL;
+	return scope? renderEscapedName (false, scope, tag, b): NULL;
 }
+
+static const char *renderFieldScopeNoEscape (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
+{
+	const char* scope;
+
+	getTagScopeInformation ((tagEntryInfo *const)tag, NULL, &scope);
+	return scope? renderAsIs (b, scope): NULL;
+}
+
+static bool doesContainAnyCharInFieldScope (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, const char *chars)
+{
+	const char* scope;
+
+	getTagScopeInformation ((tagEntryInfo *const)tag, NULL, &scope);
+	return (scope && strpbrk (scope, chars));
+}
+
 
 static const char *renderFieldInherits (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
 {
@@ -458,31 +536,90 @@ static const char *renderFieldInherits (const tagEntryInfo *const tag, const cha
 
 static const char *renderFieldTyperef (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
 {
-	return renderEscapedName (WITH_DEFUALT_VALUE (tag->extensionFields.typeRef [1]), tag, b);
+	/* Return "-" instead of "-:-". */
+	if (tag->extensionFields.typeRef [0] == NULL
+		&& tag->extensionFields.typeRef [1] == NULL)
+		return renderAsIs (b, FIELD_NULL_LETTER_STRING);
+
+	vStringCatS (b, WITH_DEFUALT_VALUE (tag->extensionFields.typeRef [0]));
+	vStringPut  (b, ':');
+	return renderEscapedName (false, WITH_DEFUALT_VALUE (tag->extensionFields.typeRef [1]), tag, b);
 }
 
 
-extern const char* renderFieldEscaped (fieldType type,
-				       const tagEntryInfo *tag,
-				       int index)
+static const char* renderFieldCommon (fieldType type,
+									  const tagEntryInfo *tag,
+									  int index,
+									  bool noEscaping)
 {
-	fieldDesc *fdesc = fieldDescs + type;
+	fieldObject *fobj = fieldObjects + type;
 	const char *value;
+	fieldRenderer rfn;
 
 	Assert (tag);
-	Assert (fdesc->spec->renderEscaped);
-
-	fdesc->buffer = vStringNewOrClear (fdesc->buffer);
+	Assert (index < 0 || ((unsigned int)index) < tag->usedParserFields);
 
 	if (index >= 0)
 	{
-		Assert ( tag->usedParserFields > index );
-		value = tag->parserFields[ index ].value;
+		const tagField *f = getParserFieldForIndex (tag, index);
+
+		value = f->value;
 	}
 	else
 		value = NULL;
 
-	return fdesc->spec->renderEscaped (tag, value, fdesc->buffer);
+	if (noEscaping)
+		rfn = fobj->def->renderNoEscaping;
+	else
+		rfn = fobj->def->render;
+	Assert (rfn);
+
+	fobj->buffer = vStringNewOrClearWithAutoRelease (fobj->buffer);
+	return rfn (tag, value, fobj->buffer);
+}
+
+extern const char* renderField (fieldType type, const tagEntryInfo *tag, int index)
+{
+	return renderFieldCommon (type, tag, index, false);
+}
+
+extern const char* renderFieldNoEscaping (fieldType type, const tagEntryInfo *tag, int index)
+{
+	return renderFieldCommon (type, tag, index, true);
+}
+
+static bool defaultDoesContainAnyChar (const tagEntryInfo *const tag CTAGS_ATTR_UNUSED, const char* value, const char* chars)
+{
+	return strpbrk (value, chars)? true: false;
+}
+
+extern bool  doesFieldHaveTabOrNewlineChar (fieldType type, const tagEntryInfo *tag, int index)
+{
+	fieldObject *fobj = fieldObjects + type;
+	const char *value;
+	bool (* doesContainAnyChar) (const tagEntryInfo *const, const char*, const char*) = fobj->def->doesContainAnyChar;
+
+	Assert (tag);
+	Assert (index == NO_PARSER_FIELD || ((unsigned int)index) < tag->usedParserFields);
+
+	if (doesContainAnyChar == NULL)
+	{
+		if (index == NO_PARSER_FIELD)
+			return false;
+		else
+			doesContainAnyChar = defaultDoesContainAnyChar;
+	}
+
+	if (index >= 0)
+	{
+		const tagField *f = getParserFieldForIndex (tag, index);
+
+		value = f->value;
+	}
+	else
+		value = NULL;
+
+	return (* doesContainAnyChar) (tag, value, "\t\n");
 }
 
 /*  Writes "line", stripping leading and duplicate white space.
@@ -519,8 +656,8 @@ static const char* renderCompactInputLine (vString *b,  const char *const line)
 
 static const char *renderFieldKindName (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
 {
-	kindDefinition *kdef = getLanguageKind(tag->langType, tag->kindIndex);
-	return renderAsIs (b, kdef->name);
+	const char* name = getTagKindName (tag);
+	return renderAsIs (b, name);
 }
 
 static const char *renderFieldCompactInputLine (const tagEntryInfo *const tag,
@@ -530,9 +667,15 @@ static const char *renderFieldCompactInputLine (const tagEntryInfo *const tag,
 	const char *line;
 	static vString *tmp;
 
-	tmp = vStringNewOrClear (tmp);
+	if (tag->isPseudoTag)
+	{
+		Assert (tag->pattern);
+		return tag->pattern;
+	}
 
-	line = readLineFromBypassAnyway (tmp, tag, NULL);
+	tmp = vStringNewOrClearWithAutoRelease (tmp);
+
+	line = readLineFromBypassForTag (tmp, tag, NULL);
 	if (line)
 		renderCompactInputLine (b, line);
 	else
@@ -561,19 +704,33 @@ static const char *renderFieldLineNumber (const tagEntryInfo *const tag,
 	return vStringValue (b);
 }
 
-static const char *renderFieldRole (const tagEntryInfo *const tag,
+static const char *renderFieldRoles (const tagEntryInfo *const tag,
 				    const char *value CTAGS_ATTR_UNUSED,
 				    vString* b)
 {
-	int rindex = tag->extensionFields.roleIndex;
-
-	if (rindex == ROLE_INDEX_DEFINITION)
-		vStringClear (b);
-	else
+	roleBitsType rbits = tag->extensionFields.roleBits;
+	const roleDefinition * role;
+	if (rbits)
 	{
-		return "TODO";
-	}
+		int roleCount = countLanguageRoles (tag->langType, tag->kindIndex);
+		int nRoleWritten = 0;
 
+		for (int roleIndex = 0; roleIndex < roleCount; roleIndex++)
+		{
+			if (((rbits >> roleIndex) & (roleBitsType)1)
+				&& isLanguageRoleEnabled (tag->langType, tag->kindIndex, roleIndex))
+			{
+				if (nRoleWritten > 0)
+					vStringPut(b, ',');
+
+				role = getTagRole(tag, roleIndex);
+				renderRole (role, b);
+				nRoleWritten++;
+			}
+		}
+	}
+	else
+		vStringCatS (b, ROLE_DEFINITION_NAME);
 	return vStringValue (b);
 }
 
@@ -592,7 +749,7 @@ static const char *renderFieldLanguage (const tagEntryInfo *const tag,
 }
 
 static const char *renderFieldAccess (const tagEntryInfo *const tag,
-				      const char *value,
+				      const char *value CTAGS_ATTR_UNUSED,
 				      vString* b)
 {
 	return renderAsIs (b, WITH_DEFUALT_VALUE (tag->extensionFields.access));
@@ -602,7 +759,11 @@ static const char *renderFieldKindLetter (const tagEntryInfo *const tag,
 					  const char *value CTAGS_ATTR_UNUSED,
 					  vString* b)
 {
-	return "TODO";
+	static char c[2] = { [1] = '\0' };
+
+	c [0] = getTagKindLetter(tag);
+
+	return renderAsIs (b, c);
 }
 
 static const char *renderFieldImplementation (const tagEntryInfo *const tag,
@@ -616,16 +777,25 @@ static const char *renderFieldFile (const tagEntryInfo *const tag,
 				    const char *value CTAGS_ATTR_UNUSED,
 				    vString* b)
 {
-	return renderAsIs (b, tag->isFileScope? "file": "-");
+	return renderAsIs (b, tag->isFileScope? "file": FIELD_NULL_LETTER_STRING);
 }
 
 static const char *renderFieldPattern (const tagEntryInfo *const tag,
 				       const char *value CTAGS_ATTR_UNUSED,
 				       vString* b)
 {
-	char* tmp = makePatternString (tag);
-	vStringCatS (b, tmp);
-	eFree (tmp);
+	if (tag->isFileEntry)
+		return NULL;
+	else if (tag->pattern)
+		vStringCatS (b, tag->pattern);
+	else
+	{
+		char* tmp;
+
+		tmp = makePatternString (tag);
+		vStringCatS (b, tmp);
+		eFree (tmp);
+	}
 	return vStringValue (b);
 }
 
@@ -635,19 +805,20 @@ static const char *renderFieldRefMarker (const tagEntryInfo *const tag,
 {
 	static char c[2] = { [1] = '\0' };
 
-	c [0] = tag->extensionFields.roleIndex == ROLE_INDEX_DEFINITION? 'D': 'R';
+	c [0] = (tag->extensionFields.roleBits)? 'R': 'D';
 
 	return renderAsIs (b, c);
 }
 
-static const char *renderFieldExtra (const tagEntryInfo *const tag,
+static const char *renderFieldExtras (const tagEntryInfo *const tag,
 				     const char *value CTAGS_ATTR_UNUSED,
 				     vString* b)
 {
 	int i;
 	bool hasExtra = false;
+	int c = countXtags();
 
-	for (i = 0; i < XTAG_COUNT; i++)
+	for (i = 0; i < c; i++)
 	{
 		const char *name = getXtagName (i);
 
@@ -671,7 +842,7 @@ static const char *renderFieldExtra (const tagEntryInfo *const tag,
 }
 
 static const char *renderFieldXpath (const tagEntryInfo *const tag,
-				     const char *value,
+				     const char *value CTAGS_ATTR_UNUSED,
 				     vString* b)
 {
 #ifdef HAVE_LIBXML
@@ -683,7 +854,7 @@ static const char *renderFieldXpath (const tagEntryInfo *const tag,
 }
 
 static const char *renderFieldScopeKindName(const tagEntryInfo *const tag,
-					    const char *value,
+					    const char *value CTAGS_ATTR_UNUSED,
 					    vString* b)
 {
 	const char* kind;
@@ -693,14 +864,14 @@ static const char *renderFieldScopeKindName(const tagEntryInfo *const tag,
 }
 
 static const char *renderFieldEnd (const tagEntryInfo *const tag,
-				   const char *value,
+				   const char *value CTAGS_ATTR_UNUSED,
 				   vString* b)
 {
-	static char buf[16];
+	static char buf[21];
 
 	if (tag->extensionFields.endLine != 0)
 	{
-		sprintf (buf, "%ld", tag->extensionFields.endLine);
+		sprintf (buf, "%lu", tag->extensionFields.endLine);
 		return renderAsIs (b, buf);
 	}
 	else
@@ -743,17 +914,14 @@ static bool     isSignatureFieldAvailable (const tagEntryInfo *const tag)
 	return (tag->extensionFields.signature != NULL)? true: false;
 }
 
-static bool     isRoleFieldAvailable      (const tagEntryInfo *const tag)
+static bool     isExtrasFieldAvailable     (const tagEntryInfo *const tag)
 {
-	return (tag->extensionFields.roleIndex != ROLE_INDEX_DEFINITION)? true: false;
-}
-
-static bool     isExtraFieldAvailable     (const tagEntryInfo *const tag)
-{
-	int i;
+	unsigned int i;
 	for (i = 0; i < sizeof (tag->extra); i++)
 	{
 		if (tag->extra [i])
+			return true;
+		else if (tag->extraDynamic)
 			return true;
 	}
 
@@ -776,48 +944,43 @@ static bool     isEndFieldAvailable       (const tagEntryInfo *const tag)
 
 extern bool isFieldEnabled (fieldType type)
 {
-	return getFieldDesc(type)->spec->enabled;
-}
-
-static bool isFieldFixed (fieldType type)
-{
-	return getFieldDesc(type)->fixed? true: false;
+	return getFieldObject(type)->def->enabled;
 }
 
 extern bool enableField (fieldType type, bool state, bool warnIfFixedField)
 {
-	fieldDefinition *spec = getFieldDesc(type)->spec;
-	bool old = spec->enabled? true: false;
-	if (isFieldFixed (type))
+	fieldDefinition *def = getFieldObject(type)->def;
+	bool old = def->enabled;
+	if (writerDoesTreatFieldAsFixed (type))
 	{
 		if ((!state) && warnIfFixedField)
 		{
-			if (spec->name && spec->letter != NUL_FIELD_LETTER)
+			if (def->name && def->letter != NUL_FIELD_LETTER)
 				error(WARNING, "Cannot disable fixed field: '%c'{%s}",
-				      spec->letter, spec->name);
-			else if (spec->name)
+				      def->letter, def->name);
+			else if (def->name)
 				error(WARNING, "Cannot disable fixed field: {%s}",
-				      spec->name);
-			else if (spec->letter != NUL_FIELD_LETTER)
+				      def->name);
+			else if (def->letter != NUL_FIELD_LETTER)
 				error(WARNING, "Cannot disable fixed field: '%c'",
-				      getFieldDesc(type)->spec->letter);
+				      getFieldObject(type)->def->letter);
 			else
 				AssertNotReached();
 		}
 	}
 	else
 	{
-		getFieldDesc(type)->spec->enabled = state;
+		getFieldObject(type)->def->enabled = state;
 
 		if (isCommonField (type))
 			verbose ("enable field \"%s\": %s\n",
-				 getFieldDesc(type)->spec->name,
-				 (state? "TRUE": "FALSE"));
+				 getFieldObject(type)->def->name,
+				 (state? "yes": "no"));
 		else
 			verbose ("enable field \"%s\"<%s>: %s\n",
-				 getFieldDesc(type)->spec->name,
+				 getFieldObject(type)->def->name,
 				 getLanguageName (getFieldOwner(type)),
-				 (state? "TRUE": "FALSE"));
+				 (state? "yes": "no"));
 	}
 	return old;
 }
@@ -829,90 +992,246 @@ extern bool isCommonField (fieldType type)
 
 extern int     getFieldOwner (fieldType type)
 {
-	return getFieldDesc(type)->language;
+	return getFieldObject(type)->language;
 }
 
-extern bool isFieldRenderable (fieldType type)
+extern unsigned int getFieldDataType (fieldType type)
 {
-	return getFieldDesc(type)->spec->renderEscaped? true: false;
+	return getFieldObject(type)->def->dataType;
+}
+
+extern bool doesFieldHaveRenderer (fieldType type, bool noEscaping)
+{
+	if (noEscaping)
+		return getFieldObject(type)->def->renderNoEscaping? true: false;
+	else
+		return getFieldObject(type)->def->render? true: false;
 }
 
 extern int countFields (void)
 {
-	return fieldDescUsed;
+	return fieldObjectUsed;
 }
 
 extern fieldType nextSiblingField (fieldType type)
 {
-	fieldDesc *fdesc;
+	fieldObject *fobj;
 
-	fdesc = fieldDescs + type;
-	return fdesc->sibling;
+	fobj = fieldObjects + type;
+	return fobj->sibling;
 }
 
 static void updateSiblingField (fieldType type, const char* name)
 {
 	int i;
-	fieldDesc *fdesc;
+	fieldObject *fobj;
 
 	for (i = type; i > 0; i--)
 	{
-		fdesc = fieldDescs + i - 1;
-		if (fdesc->spec->name && (strcmp (fdesc->spec->name, name) == 0))
+		fobj = fieldObjects + i - 1;
+		if (fobj->def->name && (strcmp (fobj->def->name, name) == 0))
 		{
-			Assert (fdesc->sibling == FIELD_UNKNOWN);
-			fdesc->sibling = type;
+			Assert (fobj->sibling == FIELD_UNKNOWN);
+			fobj->sibling = type;
 			break;
 		}
 	}
 }
 
-static const char* defaultRenderer (const tagEntryInfo *const tag,
+static const char* defaultRenderer (const tagEntryInfo *const tag CTAGS_ATTR_UNUSED,
 				    const char *value,
-				    vString * buffer)
+				    vString * buffer CTAGS_ATTR_UNUSED)
 {
-	return value;
+	return renderEscapedString (value, tag, buffer);
 }
 
-extern int defineField (fieldDefinition *spec, langType language)
+extern int defineField (fieldDefinition *def, langType language)
 {
-	fieldDesc *fdesc;
+	fieldObject *fobj;
 	char *nameWithPrefix;
 	size_t i;
 
-	Assert (spec);
-	Assert (spec->name);
-	for (i = 0; i < strlen (spec->name); i++)
+	Assert (def);
+	Assert (def->name);
+	for (i = 0; i < strlen (def->name); i++)
 	{
-		Assert ( isalnum (spec->name [i]) );
+		Assert ( isalpha (def->name [i]) );
 	}
-	spec->letter = NUL_FIELD_LETTER;
+	def->letter = NUL_FIELD_LETTER;
 
-	if (fieldDescUsed == fieldDescAllocated)
+	if (fieldObjectUsed == fieldObjectAllocated)
 	{
-		fieldDescAllocated *= 2;
-		fieldDescs = xRealloc (fieldDescs, fieldDescAllocated, fieldDesc);
+		fieldObjectAllocated *= 2;
+		fieldObjects = xRealloc (fieldObjects, fieldObjectAllocated, fieldObject);
 	}
-	fdesc = fieldDescs + (fieldDescUsed);
-	spec->ftype = fieldDescUsed++;
+	fobj = fieldObjects + (fieldObjectUsed);
+	def->ftype = fieldObjectUsed++;
 
-	if (spec->renderEscaped == NULL)
-		spec->renderEscaped = defaultRenderer;
+	if (def->render == NULL)
+	{
+		def->render = defaultRenderer;
+		def->renderNoEscaping = NULL;
+		def->doesContainAnyChar = NULL;
+	}
 
-	fdesc->spec = spec;
+	if (! def->dataType)
+		def->dataType = FIELDTYPE_STRING;
 
-	fdesc->fixed =  0;
-	fdesc->buffer = NULL;
+	fobj->def = def;
 
-	nameWithPrefix = eMalloc (sizeof CTAGS_FIELD_PREFIX + strlen (spec->name) + 1);
+	fobj->buffer = NULL;
+
+	nameWithPrefix = eMalloc (sizeof CTAGS_FIELD_PREFIX + strlen (def->name) + 1);
 	nameWithPrefix [0] = '\0';
 	strcat (nameWithPrefix, CTAGS_FIELD_PREFIX);
-	strcat (nameWithPrefix, spec->name);
-	fdesc->nameWithPrefix = nameWithPrefix;
+	strcat (nameWithPrefix, def->name);
+	fobj->nameWithPrefix = nameWithPrefix;
+	DEFAULT_TRASH_BOX(nameWithPrefix, eFree);
 
-	fdesc->language = language;
-	fdesc->sibling  = FIELD_UNKNOWN;
+	fobj->language = language;
+	fobj->sibling  = FIELD_UNKNOWN;
 
-	updateSiblingField (spec->ftype, spec->name);
-	return spec->ftype;
+	updateSiblingField (def->ftype, def->name);
+	return def->ftype;
+}
+
+#define FIELD_COL_LETTER      0
+#define FIELD_COL_NAME        1
+#define FIELD_COL_ENABLED     2
+#define FIELD_COL_LANGUAGE    3
+#define FIELD_COL_JSTYPE      4
+#define FIELD_COL_FIXED       5
+#define FIELD_COL_DESCRIPTION 6
+extern struct colprintTable * fieldColprintTableNew (void)
+{
+	return colprintTableNew ("L:LETTER", "L:NAME", "L:ENABLED",
+							 "L:LANGUAGE", "L:JSTYPE", "L:FIXED", "L:DESCRIPTION", NULL);
+}
+
+static void  fieldColprintAddLine (struct colprintTable *table, int i)
+{
+	fieldObject *fobj = getFieldObject(i);
+	fieldDefinition *fdef = fobj->def;
+
+	struct colprintLine *line = colprintTableGetNewLine(table);
+
+	colprintLineAppendColumnChar (line,
+								  (fdef->letter == NUL_FIELD_LETTER)
+								  ? FIELD_NULL_LETTER_CHAR
+								  : fdef->letter);
+
+	const char *name = getFieldName (i);
+	colprintLineAppendColumnCString (line, name? name: RSV_NONE);
+	colprintLineAppendColumnBool (line, fdef->enabled);
+	colprintLineAppendColumnCString (line,
+									 fobj->language == LANG_IGNORE
+									 ? RSV_NONE
+									 : getLanguageName (fobj->language));
+
+	char  typefields [] = "---";
+	{
+		unsigned int bmask, offset;
+		unsigned int type = getFieldDataType(i);
+		for (bmask = 1, offset = 0;
+			 bmask < FIELDTYPE_END_MARKER;
+			 bmask <<= 1, offset++)
+			if (type & bmask)
+				typefields[offset] = fieldDataTypeFalgs[offset];
+	}
+	colprintLineAppendColumnCString (line, typefields);
+	colprintLineAppendColumnBool (line, writerDoesTreatFieldAsFixed (i));
+	colprintLineAppendColumnCString (line, fdef->description);
+}
+
+extern void fieldColprintAddCommonLines (struct colprintTable *table)
+{
+	for (int i = 0; i <= FIELD_BUILTIN_LAST; i++)
+		fieldColprintAddLine(table, i);
+}
+
+extern void fieldColprintAddLanguageLines (struct colprintTable *table, langType language)
+{
+	for (unsigned int i = FIELD_BUILTIN_LAST + 1; i < fieldObjectUsed; i++)
+	{
+		fieldObject *fobj = getFieldObject(i);
+		if (fobj->language == language)
+			fieldColprintAddLine (table, i);
+	}
+}
+
+static int fieldColprintCompareLines (struct colprintLine *a , struct colprintLine *b)
+{
+	const char *a_fixed  = colprintLineGetColumn (a, FIELD_COL_FIXED);
+	const char *b_fixed  = colprintLineGetColumn (b, FIELD_COL_FIXED);
+	const char *a_parser = colprintLineGetColumn (a, FIELD_COL_LANGUAGE);
+	const char *b_parser = colprintLineGetColumn (b, FIELD_COL_LANGUAGE);
+
+	if ((strcmp (a_fixed, "yes") == 0)
+		&& (strcmp (b_fixed, "yes") == 0))
+	{
+		/* name, input, pattern, compact */
+		const char *a_name  = colprintLineGetColumn (a, FIELD_COL_NAME);
+		const char *b_name  = colprintLineGetColumn (b, FIELD_COL_NAME);
+		const char *ref_name;
+		unsigned int a_index = ~0U;
+		unsigned int b_index = ~0U;
+
+		for (unsigned int i = 0; i < ARRAY_SIZE(fieldDefinitionsFixed); i++)
+		{
+			ref_name = fieldDefinitionsFixed [i].name;
+			if (strcmp (a_name, ref_name) == 0)
+				a_index = i;
+			if (strcmp (b_name, ref_name) == 0)
+				b_index = i;
+			if ((a_index != ~0U) || (b_index != ~0U))
+				break;
+		}
+
+		if (a_index < b_index)
+			return -1;
+		else if (a_index == b_index)
+			return 0;			/* ??? */
+		else
+			return 1;
+	}
+	else if ((strcmp (a_fixed, "yes") == 0)
+			  && (strcmp (b_fixed, "yes") != 0))
+		return -1;
+	else if ((strcmp (a_fixed, "yes") != 0)
+			 && (strcmp (b_fixed, "yes") == 0))
+		return 1;
+
+	if (strcmp (a_parser, RSV_NONE) == 0
+		&& strcmp (b_parser, RSV_NONE) != 0)
+		return -1;
+	else if (strcmp (a_parser, RSV_NONE) != 0
+			 && strcmp (b_parser, RSV_NONE) == 0)
+		return 1;
+	else if (strcmp (a_parser, RSV_NONE) != 0
+			 && strcmp (b_parser, RSV_NONE) != 0)
+	{
+		int r;
+		r = strcmp (a_parser, b_parser);
+		if (r != 0)
+			return r;
+
+		const char *a_name = colprintLineGetColumn (a, FIELD_COL_NAME);
+		const char *b_name = colprintLineGetColumn (b, FIELD_COL_NAME);
+
+		return strcmp(a_name, b_name);
+	}
+	else
+	{
+		const char *a_letter = colprintLineGetColumn (a, FIELD_COL_LETTER);
+		const char *b_letter = colprintLineGetColumn (b, FIELD_COL_LETTER);
+
+		return strcmp(a_letter, b_letter);
+	}
+}
+
+extern void fieldColprintTablePrint (struct colprintTable *table,
+									 bool withListHeader, bool machinable, FILE *fp)
+{
+	colprintTableSort (table, fieldColprintCompareLines);
+	colprintTablePrint (table, 0, withListHeader, machinable, fp);
 }
