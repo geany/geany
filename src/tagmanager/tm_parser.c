@@ -159,7 +159,7 @@ static TMParserMapEntry map_SQL[] = {
 	{'c', tm_tag_undef_t},
 	{'d', tm_tag_prototype_t},
 	{'f', tm_tag_function_t},
-	{'F', tm_tag_field_t},
+	{'E', tm_tag_field_t},
 	{'l', tm_tag_undef_t},
 	{'L', tm_tag_undef_t},
 	{'P', tm_tag_package_t},
@@ -209,7 +209,7 @@ static TMParserMapEntry map_RUBY[] = {
 	{'c', tm_tag_class_t},
 	{'f', tm_tag_method_t},
 	{'m', tm_tag_namespace_t},
-	{'F', tm_tag_member_t},
+	{'S', tm_tag_member_t},
 };
 
 static TMParserMapEntry map_TCL[] = {
@@ -458,7 +458,7 @@ static TMParserMapEntry map_OBJC[] = {
 	{'m', tm_tag_method_t},
 	{'c', tm_tag_class_t},
 	{'v', tm_tag_variable_t},
-	{'F', tm_tag_field_t},
+	{'E', tm_tag_field_t},
 	{'f', tm_tag_function_t},
 	{'p', tm_tag_undef_t},
 	{'t', tm_tag_typedef_t},
@@ -496,7 +496,7 @@ static TMParserMapEntry map_RUST[] = {
 	{'M', tm_tag_macro_t},
 	{'m', tm_tag_field_t},
 	{'e', tm_tag_enumerator_t},
-	{'F', tm_tag_method_t},
+	{'P', tm_tag_method_t},
 };
 
 static TMParserMapEntry map_GO[] = {

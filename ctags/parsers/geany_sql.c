@@ -204,7 +204,7 @@ static kindDefinition SqlKinds [] = {
 	{ true,  'c', "cursor",		  "cursors"				   },
 	{ false, 'd', "prototype",	  "prototypes"			   },
 	{ true,  'f', "function",	  "functions"			   },
-	{ true,  'F', "field",		  "record fields"		   },
+	{ true,  'E', "field",		  "record fields"		   },
 	{ false, 'l', "local",		  "local variables"		   },
 	{ true,  'L', "label",		  "block label"			   },
 	{ true,  'P', "package",	  "packages"			   },

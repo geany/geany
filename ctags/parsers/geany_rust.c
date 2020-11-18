@@ -58,7 +58,7 @@ static kindDefinition rustKinds[] = {
 	{true, 'M', "macro", "Macro Definition"},
 	{true, 'm', "field", "A struct field"},
 	{true, 'e', "enumerator", "An enum variant"},
-	{true, 'F', "method", "A method"},
+	{true, 'P', "method", "A method"},
 };
 
 typedef enum {

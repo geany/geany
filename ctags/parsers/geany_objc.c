@@ -46,7 +46,7 @@ static kindDefinition ObjcKinds[] = {
 	{true, 'm', "method", "Object's method"},
 	{true, 'c', "class", "Class' method"},
 	{true, 'v', "var", "Global variable"},
-	{true, 'F', "field", "Object field"},
+	{true, 'E', "field", "Object field"},
 	{true, 'f', "function", "A function"},
 	{true, 'p', "property", "A property"},
 	{true, 't', "typedef", "A type alias"},

@@ -39,7 +39,7 @@ static kindDefinition RubyKinds [] = {
 	{ true, 'c', "class",  "classes" },
 	{ true, 'f', "method", "methods" },
 	{ true, 'm', "module", "modules" },
-	{ true, 'F', "singletonMethod", "singleton methods" },
+	{ true, 'S', "singletonMethod", "singleton methods" },
 #if 0
 	/* Following two kinds are reserved. */
 	{ true, 'd', "describe", "describes and contexts for Rspec" },
