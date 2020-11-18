@@ -248,7 +248,7 @@ static void initCOBOLRefTagEntry (tagEntryInfo *e, const char *name,
 
 static void initCOBOLTagEntry (tagEntryInfo *e, const char *name, const cobolKind kind)
 {
-	initCOBOLRefTagEntry (e, name, kind, ROLE_INDEX_DEFINITION);
+	initCOBOLRefTagEntry (e, name, kind, ROLE_DEFINITION_INDEX);
 }
 
 static int makeCOBOLRefTag (const char *name, const cobolKind kind, const int role)
@@ -267,7 +267,7 @@ static int makeCOBOLRefTag (const char *name, const cobolKind kind, const int ro
 
 static int makeCOBOLTag (const char *name, const cobolKind kind)
 {
-	return makeCOBOLRefTag (name, kind, ROLE_INDEX_DEFINITION);
+	return makeCOBOLRefTag (name, kind, ROLE_DEFINITION_INDEX);
 }
 
 #define CBL_NL(nl) (*((unsigned int *) (nestingLevelGetUserData (nl))))
@@ -498,7 +498,7 @@ static parserDefinition* commonCobolParserDefinition (const char *name,
 	def->kindCount = ARRAY_SIZE(CobolKinds);
 	def->keywordTable = cobolKeywordTable;
 	def->keywordCount = ARRAY_SIZE(cobolKeywordTable);
-	def->useCork = true;
+	def->useCork = CORK_QUEUE;
 	return def;
 }
 

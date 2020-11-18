@@ -320,7 +320,7 @@ static void makeConstTag (tokenInfo *const token, const flexKind kind)
 	{
 		const char *const name = vStringValue (token->string);
 		tagEntryInfo e;
-		int role = ROLE_INDEX_DEFINITION;
+		int role = ROLE_DEFINITION_INDEX;
 
 		/* Geany diff: reftags are not enabled but should be
 		if (kind == FLEXTAG_IMPORT)
