@@ -266,8 +266,7 @@ static void run_new_dialog(PropertyDialogElements *e)
 	{
 		// reload any documents that were closed
 		configuration_reload_default_session();
-		gchar root_folder[]="/";
-		configuration_open_files(root_folder); // TODO : Find better trick
+		configuration_open_files(NULL);
 	}
 }
 
@@ -474,8 +473,7 @@ static void destroy_project(gboolean open_default)
 		if (open_default && cl_options.load_session)
 		{
 			configuration_reload_default_session();
-			gchar root_folder[]="/";
-			configuration_open_files(root_folder); // TODO : find a better trick
+			configuration_open_files(NULL); // TODO : find a better trick
 			document_new_file_if_non_open();
 			ui_focus_current_document();
 		}

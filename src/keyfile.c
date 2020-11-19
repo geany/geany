@@ -1220,7 +1220,7 @@ static gboolean open_session_file(gchar **tmp, guint len, gchar *root_folder)
 
 	/* is the locale_filename absolute or relative ? */
 	geany_debug(locale_filename);
-	if(g_path_is_absolute(locale_filename))
+	if(g_path_is_absolute(locale_filename) && root_folder)
 	{
 		geany_debug("Absolute path");
 	}
