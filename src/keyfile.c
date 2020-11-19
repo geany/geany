@@ -1250,7 +1250,11 @@ static gboolean open_session_file(gchar **tmp, guint len, gchar *root_folder)
 	else
 	{
 		geany_debug("Relative path %s, root folder %s", locale_filename, root_folder);
-		locale_filename = g_canonicalize_filename(locale_filename, root_folder);
+		gchar *absolute_path;
+		absolute_path = g_strconcat(root_folder, &(locale_filename[1]), NULL);
+		geany_debug("absolute_path : %s",absolute_path);
+		g_free(locale_filename);
+		locale_filename = absolute_path;
 	}
 
 	if (len > 8)

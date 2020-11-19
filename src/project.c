@@ -473,7 +473,7 @@ static void destroy_project(gboolean open_default)
 		if (open_default && cl_options.load_session)
 		{
 			configuration_reload_default_session();
-			configuration_open_files(NULL); // TODO : find a better trick
+			configuration_open_files(NULL);
 			document_new_file_if_non_open();
 			ui_focus_current_document();
 		}
