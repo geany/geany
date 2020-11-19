@@ -278,9 +278,8 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 	{
 		if (project_prefs.project_session)
 		{
-			geany_debug("Ouverture d'un projet");
 			gchar * root_path_locale = g_path_get_dirname(locale_file_name);
-			gchar * root_path_utf8 = utils_get_utf8_from_locale(locale_file_name);
+			gchar * root_path_utf8 = utils_get_utf8_from_locale(root_path_locale);
 			configuration_open_files(root_path_utf8);
 			document_new_file_if_non_open();
 			ui_focus_current_document();

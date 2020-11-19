@@ -384,7 +384,6 @@ static gchar *get_session_file_string(GeanyDocument *doc, gchar * project_root_f
 	}
 
 
-
 	locale_filename = utils_get_locale_from_utf8(doc_filename);
 	escaped_filename = g_uri_escape_string(locale_filename, NULL, TRUE);
 
@@ -1244,7 +1243,6 @@ static gboolean open_session_file(gchar **tmp, guint len, gchar *root_folder)
 	locale_filename = utils_get_locale_from_utf8(unescaped_filename);
 
 	/* is the locale_filename absolute or relative ? */
-	geany_debug(locale_filename);
 	if(g_path_is_absolute(locale_filename) && root_folder)
 	{
 		geany_debug("Absolute path");
@@ -1253,7 +1251,6 @@ static gboolean open_session_file(gchar **tmp, guint len, gchar *root_folder)
 	{
 		geany_debug("Relative path %s, root folder %s", locale_filename, root_folder);
 		locale_filename = g_canonicalize_filename(locale_filename, root_folder);
-		geany_debug("Relative path -> %s", locale_filename);
 	}
 
 	if (len > 8)
