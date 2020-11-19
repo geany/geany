@@ -1119,6 +1119,7 @@ static gboolean write_config(void)
 	GeanyProject *p;
 	GKeyFile *config;
 	gchar *filename;
+	gchar *project_dir=NULL; /* Should be set only if project use relative filename */
 	gchar *data;
 	gboolean ret = FALSE;
 	GSList *node;
@@ -1144,6 +1145,9 @@ static gboolean write_config(void)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
 	g_key_file_set_boolean(config, "project", "relative_files", p->use_relative_filename);
+	if(p->use_relative_filename){
+		project_dir=g_path_get_dirname(p->file_name);
+	}
 
 	// editor settings
 	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->priv->long_line_behaviour);
@@ -1151,7 +1155,8 @@ static gboolean write_config(void)
 
 	/* store the session files into the project too */
 	if (project_prefs.project_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, project_dir);
+
 	build_save_menu(config, (gpointer)p, GEANY_BCS_PROJ);
 	g_signal_emit_by_name(geany_object, "project-save", config);
 	/* write the file */

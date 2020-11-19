@@ -351,17 +351,41 @@ static void save_recent_files(GKeyFile *config, GQueue *queue, gchar const *key)
 }
 
 
-static gchar *get_session_file_string(GeanyDocument *doc)
+static gchar *get_session_file_string(GeanyDocument *doc, gchar * project_root_folder)
 {
 	gchar *fname;
+	gchar *relative_filename;
+	gchar *doc_filename;
 	gchar *locale_filename;
 	gchar *escaped_filename;
 	GeanyFiletype *ft = doc->file_type;
+	GFile *file_doc;
+	GFile *file_root_folder;
 
 	if (ft == NULL) /* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
-	locale_filename = utils_get_locale_from_utf8(doc->file_name);
+	/* project_root_folder contain a path only if the project use relative path */
+	if(project_root_folder){
+		file_root_folder = g_file_new_for_path(project_root_folder);
+		file_doc = g_file_new_for_path(doc->file_name);
+		relative_filename = g_file_get_relative_path(file_root_folder, file_doc);
+		if(relative_filename){
+			/* Append './' so we know it is a relative filename */
+			doc_filename = g_strconcat("./",relative_filename, NULL); 
+		}else{
+			doc_filename = g_strconcat(doc->file_name, NULL);
+		} 
+		g_object_unref(file_root_folder);
+		g_object_unref(file_doc);
+		g_free(relative_filename);
+	}else{
+		doc_filename = g_strconcat(doc->file_name, NULL);
+	}
+
+
+
+	locale_filename = utils_get_locale_from_utf8(doc_filename);
 	escaped_filename = g_uri_escape_string(locale_filename, NULL, TRUE);
 
 	fname = g_strdup_printf("%d;%s;%d;E%s;%d;%d;%d;%s;%d;%d",
@@ -375,6 +399,7 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		escaped_filename,
 		doc->editor->line_breaking,
 		doc->editor->indent_width);
+	g_free(doc_filename);
 	g_free(escaped_filename);
 	g_free(locale_filename);
 	return fname;
@@ -395,7 +420,7 @@ static void remove_session_files(GKeyFile *config)
 }
 
 
-void configuration_save_session_files(GKeyFile *config)
+void configuration_save_session_files(GKeyFile *config, gchar * project_root_folder)
 {
 	gint npage;
 	gchar entry[16];
@@ -418,7 +443,7 @@ void configuration_save_session_files(GKeyFile *config)
 			gchar *fname;
 
 			g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", j);
-			fname = get_session_file_string(doc);
+			fname = get_session_file_string(doc, project_root_folder);
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;
@@ -647,7 +672,7 @@ void configuration_save(void)
 	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 
 	if (cl_options.load_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, NULL);
 #ifdef HAVE_VTE
 	else if (vte_info.have_vte)
 	{
@@ -1110,7 +1135,7 @@ void configuration_save_default_session(void)
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	if (cl_options.load_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, NULL);
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
