@@ -835,6 +835,8 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		gtk_text_buffer_get_end_iter(buffer, &end);
 		SETPTR(p->description, gtk_text_buffer_get_text(buffer, &start, &end, FALSE));
 
+		p->use_relative_filename = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(e->use_relative_filename));
+
 		foreach_slist(node, stash_groups)
 			stash_group_update(node->data, e->dialog);
 
