@@ -372,10 +372,10 @@ static gchar *get_session_file_string(GeanyDocument *doc, gchar * project_root_f
 		relative_filename = g_file_get_relative_path(file_root_folder, file_doc);
 		if(relative_filename){
 			/* Append './' so we know it is a relative filename */
-			doc_filename = g_strconcat("./",relative_filename, NULL); 
+			doc_filename = g_strconcat("./",relative_filename, NULL);
 		}else{
 			doc_filename = g_strconcat(doc->file_name, NULL);
-		} 
+		}
 		g_object_unref(file_root_folder);
 		g_object_unref(file_doc);
 		g_free(relative_filename);
