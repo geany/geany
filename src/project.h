@@ -41,6 +41,7 @@ typedef struct GeanyProject
 	 * by a plugin. */
 	gint type;
 	GStrv file_patterns;	/**< Array of filename extension patterns. */
+	gboolean use_relative_filename;
 
 	struct GeanyProjectPrivate	*priv;	/* must be last, append fields before this item */
 }

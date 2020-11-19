@@ -73,6 +73,7 @@ typedef struct _PropertyDialogElements
 	GtkWidget *file_name;
 	GtkWidget *base_path;
 	GtkWidget *patterns;
+	GtkWidget *use_relative_filename;
 	BuildTableData build_properties;
 	gint build_page_num;
 	gboolean entries_modified;
@@ -541,6 +542,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	e->description = ui_lookup_widget(e->dialog, "textview_project_dialog_description");
 	e->base_path = ui_lookup_widget(e->dialog, "entry_project_dialog_base_path");
 	e->patterns = ui_lookup_widget(e->dialog, "entry_project_dialog_file_patterns");
+	e->use_relative_filename = ui_lookup_widget(e->dialog, "checkbutton_project_dialog_file_relative");
 
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 
@@ -616,6 +618,10 @@ static void show_project_properties(gboolean show_build)
 	entry_text = p->file_patterns ? g_strjoinv(" ", p->file_patterns) : g_strdup("");
 	gtk_entry_set_text(GTK_ENTRY(e.patterns), entry_text);
 	g_free(entry_text);
+
+	gtk_toggle_button_set_active(
+		GTK_TOGGLE_BUTTON(ui_lookup_widget(e.dialog, "checkbutton_project_dialog_file_relative")),
+		p->use_relative_filename );
 
 	g_signal_emit_by_name(geany_object, "project-dialog-open", e.notebook);
 	gtk_widget_show_all(e.dialog);
@@ -1069,6 +1075,7 @@ static gboolean load_config(const gchar *filename)
 	p->file_name = utils_get_utf8_from_locale(filename);
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
+	p->use_relative_filename = utils_get_setting_boolean(config, "project", "relative_files", FALSE);
 
 	p->priv->long_line_behaviour = utils_get_setting_integer(config, "long line marker",
 		"long_line_behaviour", 1 /* follow global */);
@@ -1134,6 +1141,7 @@ static gboolean write_config(void)
 	if (p->file_patterns)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
+	g_key_file_set_boolean(config, "project", "relative_files", p->use_relative_filename);
 
 	// editor settings
 	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->priv->long_line_behaviour);
