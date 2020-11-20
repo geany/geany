@@ -619,7 +619,7 @@ static void show_project_properties(gboolean show_build)
 	g_free(entry_text);
 
 	gtk_toggle_button_set_active(
-		GTK_TOGGLE_BUTTON(ui_lookup_widget(e.dialog, "checkbutton_project_dialog_file_relative")),
+		GTK_TOGGLE_BUTTON(e.use_relative_filename),
 		p->use_relative_filename );
 
 	g_signal_emit_by_name(geany_object, "project-dialog-open", e.notebook);

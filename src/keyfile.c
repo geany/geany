@@ -371,16 +371,15 @@ static gchar *get_session_file_string(GeanyDocument *doc, gchar * project_root_f
 		file_doc = g_file_new_for_path(doc->file_name);
 		relative_filename = g_file_get_relative_path(file_root_folder, file_doc);
 		if(relative_filename){
-			/* Append './' so we know it is a relative filename */
-			doc_filename = g_strconcat("./",relative_filename, NULL);
+			doc_filename = g_strdup(relative_filename);
 		}else{
-			doc_filename = g_strconcat(doc->file_name, NULL);
+			doc_filename = g_strdup(doc->file_name);
 		}
 		g_object_unref(file_root_folder);
 		g_object_unref(file_doc);
 		g_free(relative_filename);
 	}else{
-		doc_filename = g_strconcat(doc->file_name, NULL);
+		doc_filename = g_strdup(doc->file_name);
 	}
 
 
@@ -1243,18 +1242,22 @@ static gboolean open_session_file(gchar **tmp, guint len, gchar *root_folder)
 	locale_filename = utils_get_locale_from_utf8(unescaped_filename);
 
 	/* is the locale_filename absolute or relative ? */
-	if(g_path_is_absolute(locale_filename) && root_folder)
-	{
-		geany_debug("Absolute path");
-	}
-	else
+	if(!g_path_is_absolute(locale_filename) && root_folder)
 	{
 		geany_debug("Relative path %s, root folder %s", locale_filename, root_folder);
 		gchar *absolute_path;
-		absolute_path = g_strconcat(root_folder, &(locale_filename[1]), NULL);
+		absolute_path = g_strconcat(root_folder, "/", locale_filename, NULL);
 		geany_debug("absolute_path : %s",absolute_path);
 		g_free(locale_filename);
 		locale_filename = absolute_path;
+	}
+	else if(!g_path_is_absolute(locale_filename))
+	{
+		geany_debug("Relative path %s, can't get root folder");
+	}
+	else
+	{
+		geany_debug("Absolute path");
 	}
 
 	if (len > 8)
