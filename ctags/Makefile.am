@@ -176,3 +176,25 @@ libctags_la_SOURCES = \
 	main/xtag.h \
 	main/xtag_p.h \
 	$(parsers)
+
+# build bundled GNU regex if needed
+if USE_BUNDLED_REGEX
+noinst_LTLIBRARIES += libgnu_regex.la
+libgnu_regex_la_SOURCES = \
+	gnu_regex/regex.c \
+	gnu_regex/regex.h
+# regex.c includes other sources we have to distribute
+EXTRA_libgnu_regex_la_SOURCES = \
+	gnu_regex/regcomp.c \
+	gnu_regex/regex.c \
+	gnu_regex/regex.h \
+	gnu_regex/regex_internal.c \
+	gnu_regex/regex_internal.h \
+	gnu_regex/regexec.c
+libgnu_regex_la_CPPFLAGS = -D__USE_GNU
+EXTRA_DIST = \
+	gnu_regex/README.txt
+
+libctags_la_LIBADD = libgnu_regex.la
+AM_CPPFLAGS += -I$(srcdir)/gnu_regex
+endif

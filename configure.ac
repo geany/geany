@@ -44,6 +44,14 @@ AC_CHECK_HEADERS([fcntl.h glob.h stdlib.h sys/time.h errno.h limits.h])
 # Checks for dependencies needed by ctags
 AC_CHECK_HEADERS([fnmatch.h direct.h io.h sys/dir.h])
 AC_DEFINE([HAVE_STDBOOL_H], [1], [whether or not to use <stdbool.h>.])
+AC_CHECK_FUNC([regcomp],
+		[have_regcomp=yes],
+		[have_regcomp=no
+		 dnl various stuff for ctags/gnu_regex/
+		 AC_CHECK_HEADERS([langinfo.h locale.h libintl.h wctype.h wchar.h])
+		 AC_CHECK_FUNCS([memcpy isblank wcrtomb mbrtowc wcscoll])
+		 AC_FUNC_ALLOCA])
+AM_CONDITIONAL([USE_BUNDLED_REGEX], [test "xno" = "x$have_regcomp"])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T
