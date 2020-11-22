@@ -52,6 +52,8 @@ AC_CHECK_FUNC([regcomp],
 		 AC_CHECK_FUNCS([memcpy isblank wcrtomb mbrtowc wcscoll])
 		 AC_FUNC_ALLOCA])
 AM_CONDITIONAL([USE_BUNDLED_REGEX], [test "xno" = "x$have_regcomp"])
+AC_CHECK_FUNC([fnmatch], [have_fnmatch=yes], [have_fnmatch=no])
+AM_CONDITIONAL([USE_BUNDLED_FNMATCH], [test "xno" = "x$have_fnmatch"])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T
