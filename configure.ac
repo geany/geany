@@ -61,9 +61,11 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
 # Checks for library functions.
-AC_CHECK_FUNCS([fgetpos fnmatch mkstemp strerror strstr realpath])
+AC_CHECK_FUNCS([realpath])
 
 # Function checks for u-ctags
+AC_CHECK_FUNCS([strerror strstr asprintf])
+AC_CHECK_FUNCS([mkstemp tempnam], [break])
 AC_CHECK_FUNCS([strcasecmp stricmp], [break])
 AC_CHECK_FUNCS([strncasecmp strnicmp], [break])
 AC_CHECK_FUNCS([truncate ftruncate chsize], [break])
