@@ -27,23 +27,10 @@
 #endif
 
 #include "geanyentryaction.h"
-
+#include "geanyentryactionprivate.h"
 #include "ui_utils.h"
 
 #include <ctype.h>
-
-
-typedef struct _GeanyEntryActionPrivate		GeanyEntryActionPrivate;
-
-#define GEANY_ENTRY_ACTION_GET_PRIVATE(obj)	(GEANY_ENTRY_ACTION(obj)->priv)
-
-
-struct _GeanyEntryActionPrivate
-{
-	GtkWidget	*entry;
-	gboolean	 numeric;
-	gboolean	 connected;
-};
 
 enum
 {
@@ -98,14 +85,41 @@ static void delegate_entry_activate_backward_cb(GtkEntry *entry, GeanyEntryActio
 }
 
 
-static void delegate_entry_changed_cb(GtkEditable *editable, GeanyEntryAction *action)
+static void delegate_entry_changed_cb(GtkEditable      *editable,
+                                      GeanyEntryAction *action)
 {
 	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
-	const gchar *text = gtk_entry_get_text(GTK_ENTRY(priv->entry));
+	gchar *new_search_keyword;
 
-	g_signal_emit(action, signals[ENTRY_CHANGED], 0, text);
+	if (!priv->preedit_phase)
+		new_search_keyword = g_strdup(gtk_entry_get_text(GTK_ENTRY(priv->entry)));
+	else
+		new_search_keyword = g_strconcat(gtk_entry_get_text(GTK_ENTRY(priv->entry)),
+										 priv->preedit, NULL);
+	if (g_strcmp0 (priv->search_keyword, new_search_keyword))
+	{
+		g_free(priv->search_keyword);
+		priv->search_keyword = new_search_keyword;
+		g_signal_emit(action, signals[ENTRY_CHANGED], 0, priv->search_keyword);
+		return;
+	}
+
+	g_free (new_search_keyword);
 }
 
+static void
+delegate_entry_preedit_changed_cb(GtkWidget        *widget,
+                                  char             *preedit,
+                                  GeanyEntryAction *action)
+{
+	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
+
+	g_free(priv->preedit);
+	priv->preedit = g_strdup(preedit);
+	priv->preedit_phase = TRUE;
+	delegate_entry_changed_cb(GTK_EDITABLE (priv->entry), action);
+	priv->preedit_phase = FALSE;
+}
 
 static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widget)
 {
@@ -117,6 +131,7 @@ static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widge
 		if (priv->numeric)
 			g_signal_connect(priv->entry, "insert-text",
 				G_CALLBACK(ui_editable_insert_text_callback), NULL);
+		g_signal_connect(priv->entry, "preedit-changed", G_CALLBACK(delegate_entry_preedit_changed_cb), action);
 		g_signal_connect(priv->entry, "changed", G_CALLBACK(delegate_entry_changed_cb), action);
 		g_signal_connect(priv->entry, "activate", G_CALLBACK(delegate_entry_activate_cb), action);
 		g_signal_connect(priv->entry, "activate-backward",
@@ -177,6 +192,8 @@ static void geany_entry_action_init(GeanyEntryAction *action)
 	priv->entry = NULL;
 	priv->numeric = FALSE;
 	priv->connected = FALSE;
+	priv->preedit = g_strdup("");
+	priv->search_keyword = g_strdup("");
 }
 
 
