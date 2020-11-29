@@ -331,6 +331,8 @@ gchar *main_get_argv_filename(const gchar *filename)
 			cur_dir = g_strdup(original_cwd);
 
 #ifdef G_OS_WIN32
+		/* Convert the CWD from UTF-8 to system locale as we join it with the filename below.
+		 * The filename is passed via argv in system locale. */
 		SETPTR(cur_dir, g_locale_from_utf8(cur_dir, -1, NULL, NULL, NULL));
 #endif
 		result = g_strjoin(
@@ -890,7 +892,9 @@ static void open_cl_files(gint argc, gchar **argv)
 		}
 
 #ifdef G_OS_WIN32
-		/* It seems argv elements are encoded in CP1252 on a German Windows */
+		/* filename is in system locale (either it is an absolute path passed from the command line
+		 * or a relative path was made absolute with the current working directory),
+		 * so convert it back to UTF-8. */
 		SETPTR(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
 #endif
 		if (filename && ! main_handle_filename(filename))
