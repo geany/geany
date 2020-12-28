@@ -575,14 +575,16 @@ void search_show_find_dialog(void)
 	}
 	else
 	{
-		/* only set selection if the dialog is not already visible */
-		if (! gtk_widget_get_visible(find_dlg.dialog) && sel)
+		if (sel != NULL)
+		{
+			/* update the search text from current selection */
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
+			/* reset the entry widget's background colour */
+			ui_set_search_entry_background(find_dlg.entry, TRUE);
+		}
 		gtk_widget_grab_focus(find_dlg.entry);
 		set_dialog_position(find_dlg.dialog, find_dlg.position);
 		gtk_widget_show(find_dlg.dialog);
-		if (sel != NULL) /* when we have a selection, reset the entry widget's background colour */
-			ui_set_search_entry_background(find_dlg.entry, TRUE);
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(find_dlg.dialog));
 	}
@@ -751,11 +753,13 @@ void search_show_replace_dialog(void)
 	}
 	else
 	{
-		/* only set selection if the dialog is not already visible */
-		if (! gtk_widget_get_visible(replace_dlg.dialog) && sel)
+		if (sel != NULL)
+		{
+			/* update the search text from current selection */
 			gtk_entry_set_text(GTK_ENTRY(replace_dlg.find_entry), sel);
-		if (sel != NULL) /* when we have a selection, reset the entry widget's background colour */
+			/* reset the entry widget's background colour */
 			ui_set_search_entry_background(replace_dlg.find_entry, TRUE);
+		}
 		gtk_widget_grab_focus(replace_dlg.find_entry);
 		set_dialog_position(replace_dlg.dialog, replace_dlg.position);
 		gtk_widget_show(replace_dlg.dialog);
@@ -1059,10 +1063,8 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 
 	if (!text)
 	{
-		/* only set selection if the dialog is not already visible, or has just been created */
-		if (doc && ! sel && ! gtk_widget_get_visible(fif_dlg.dialog))
+		if (doc && ! sel)
 			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
-
 		text = sel;
 	}
 	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.search_combo));
