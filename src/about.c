@@ -87,7 +87,7 @@ static const gchar *translators[][2] = {
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
 	{ "sr", "Nikola Radovanovic &lt;cobisimo@gmail.com&gt;"},
 	{ "tr", "Gürkan Gür &lt;seqizz@gmail.com&gt;"},
-	{ "uk", "Boris Dibrov &lt;dibrov.bor@gmail.com&gt;" },
+	{ "uk", "Artur Shepilko &lt;nomadbyte@gmail.com&gt;" },
 	{ "vi_VN", "Clytie Siddall &lt;clytie@riverland.net.au&gt;" },
 	{ "zh_CN", "Dormouse Young &lt;mouselinux@163.com&gt;,\nXhacker Liu &lt;liu.dongyuan@gmail.com&gt;" },
 	{ "zh_TW", "KoViCH &lt;kovich.ian@gmail.com&gt;\nWei-Lun Chao &lt;chaoweilun@gmail.com&gt;" }
@@ -98,7 +98,8 @@ static const gchar *prev_translators[][2] = {
 	{ "es", "Damián Viano &lt;debian@damianv.com.ar&gt;\nNacho Cabanes &lt;ncabanes@gmail.com&gt;" },
 	{ "pl", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;\nJarosław Foksa &lt;jfoksa@gmail.com&gt;" },
 	{ "nl", "Kurt De Bree &lt;kdebree@telenet.be&gt;" },
-	{ "sk", "Tomáš Vadina &lt;kyberdev@gmail.com&gt;" }
+	{ "sk", "Tomáš Vadina &lt;kyberdev@gmail.com&gt;" },
+	{ "uk", "Boris Dibrov &lt;dibrov.bor@gmail.com&gt;" }
 };
 static const guint prev_translators_len = G_N_ELEMENTS(prev_translators);
 
