@@ -686,6 +686,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
 	item = gtk_check_menu_item_new_with_mnemonic(_("Show _Hidden Files"));
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), show_hidden_files);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hidden_files_clicked), NULL);
@@ -741,8 +742,6 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 		if (popup_menu == NULL)
 			popup_menu = create_popup_menu();
 
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(popup_items.show_hidden_files),
-			show_hidden_files);
 		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
 		/* don't return TRUE here, unless the selection won't be changed */
 	}
@@ -1249,6 +1248,8 @@ static void on_toggle_hidden(void)
 {
 	gboolean enabled = !gtk_toggle_button_get_active(
 		GTK_TOGGLE_BUTTON(pref_widgets.show_hidden_checkbox));
+
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(popup_items.show_hidden_files), !enabled);
 
 	gtk_widget_set_sensitive(pref_widgets.hide_objects_checkbox, enabled);
 	enabled &= gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.hide_objects_checkbox));
