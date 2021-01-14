@@ -429,6 +429,20 @@ static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_
 }
 
 
+static void on_move_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *doc = user_data;
+	gchar *doc_path;
+
+	g_return_if_fail(doc->is_valid);
+
+	doc_path = utils_get_locale_from_utf8(doc->file_name);
+	utils_start_new_geany_instance(doc_path);
+	g_free(doc_path);
+	document_close(doc);
+}
+
+
 static gboolean has_tabs_on_right(GeanyDocument *doc)
 {
 	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
@@ -478,6 +492,16 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate",
 		G_CALLBACK(on_open_in_new_window_activate), doc);
+	/* disable if not on disk */
+	if (doc == NULL || !doc->real_path)
+		gtk_widget_set_sensitive(menu_item, FALSE);
+
+	/* Same as Open in New Window but closes the doc in old window */
+	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Move to New _Window"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+		G_CALLBACK(on_move_activate), doc);
 	/* disable if not on disk */
 	if (doc == NULL || !doc->real_path)
 		gtk_widget_set_sensitive(menu_item, FALSE);
