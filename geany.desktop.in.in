@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
 Version=1.0
-_Name=Geany
+_Name=@PACKAGE_NAME@
 _GenericName=Integrated Development Environment
-_Comment=A fast and lightweight IDE using GTK+
-Exec=geany %F
+_Comment=@PKG_DESC@
+Exec=@BINDIR@/geany %F
 Icon=geany
 Terminal=false
 Categories=GTK;Development;IDE;TextEditor;

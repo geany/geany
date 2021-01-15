@@ -9,6 +9,9 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.11 -Wall parallel-tests subdir-objects])
 AC_CONFIG_HEADERS([config.h])
 
+PKG_DESC="A fast and lightweight IDE using GTK+"
+AC_SUBST([PKG_DESC])
+
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 GEANY_PREFIX
@@ -186,6 +189,7 @@ AC_CONFIG_FILES([
 		data/filedefs/filetypes.python
 		doc/Makefile
 		doc/geany.1
+		geany.desktop.in
 		geany.pc
 		geany.nsi
 		doc/Doxyfile
