@@ -9,8 +9,9 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.11 -Wall parallel-tests subdir-objects])
 AC_CONFIG_HEADERS([config.h])
 
-PKG_DESC="A fast and lightweight IDE using GTK+"
+PKG_DESC="A fast and lightweight IDE"
 AC_SUBST([PKG_DESC])
+AC_DEFINE_UNQUOTED([PKG_DESC], [_("$PKG_DESC")], [use PKG_DESC as defined in configure.ac])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
