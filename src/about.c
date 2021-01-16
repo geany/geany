@@ -213,7 +213,7 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_justify(GTK_LABEL(label_info), GTK_JUSTIFY_CENTER);
 	gtk_label_set_selectable(GTK_LABEL(label_info), TRUE);
 	gtk_label_set_use_markup(GTK_LABEL(label_info), TRUE);
-	g_snprintf(buffer, sizeof(buffer), INFO, PKG_DESC);
+	g_snprintf(buffer, sizeof(buffer), INFO, _("A fast and lightweight IDE"));
 	gtk_label_set_markup(GTK_LABEL(label_info), buffer);
 	gtk_misc_set_padding(GTK_MISC(label_info), 2, 11);
 	gtk_widget_show(label_info);

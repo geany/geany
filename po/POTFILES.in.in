@@ -1,7 +1,6 @@
 # List of source files containing translatable strings.
 
 @top_builddir@/geany.desktop.in
-@top_builddir@/config.h
 data/geany.glade
 src/about.c
 src/build.c
