@@ -37,7 +37,7 @@ uninstall-local:
 
 # manually install some files under another name
 install-data-local:
-	sed -i '/Exec=/c\Exec=@bindir@/geany' @top_builddir@/geany.desktop
+	sed -i '/Exec=/c\Exec=@bindir@/geany %F' @top_builddir@/geany.desktop
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
 	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(pkgdatadir)/GPL-2
 if MINGW
