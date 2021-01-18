@@ -80,5 +80,5 @@ pkgconfigdir = $(libdir)/pkgconfig
 
 desktopdir = $(datadir)/applications
 desktop_in_files = geany.desktop
-desktop_DATA = $(desktop_in_files:.@top_builddir@/desktop.in=.desktop)
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@

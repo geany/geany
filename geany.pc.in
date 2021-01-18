@@ -6,8 +6,8 @@ datarootdir=@datarootdir@
 datadir=@datadir@
 localedir=@localedir@
 
-Name: @PACKAGE_NAME@
-Description: @PKG_DESC@
+Name: Geany
+Description: A fast and lightweight IDE using GTK+
 Requires: @DEPENDENCIES@
 Version: @VERSION@
 Libs: -L${libdir} -lgeany
