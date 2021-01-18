@@ -185,7 +185,6 @@ AC_CONFIG_FILES([
 		src/tagmanager/Makefile
 		plugins/Makefile
 		po/Makefile.in
-		po/POTFILES.in
 		data/Makefile
 		data/filedefs/filetypes.python
 		doc/Makefile
