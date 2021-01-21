@@ -10,7 +10,8 @@ EXTRA_DIST = \
 	filetypesprivate.h \
 	keybindingsprivate.h \
 	pluginprivate.h \
-	projectprivate.h
+	projectprivate.h \
+	geany.gresource.xml
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir) \
@@ -93,6 +94,7 @@ libgeany_la_SOURCES = \
 	prefs.c prefs.h \
 	printing.c printing.h \
 	project.c project.h \
+	resources.c resources.h \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \
 	socket.c socket.h \
@@ -184,6 +186,29 @@ signallist.i: $(glade_file) Makefile
 	) > $@ || { $(RM) $@ && exit 1; }
 
 CLEANFILES += signallist.i
+
+# embed files using gresource
+resource_dependencies = geany.gresource.xml $(top_srcdir)/data/geany.glade
+resources.c: $(resource_dependencies)
+	$(AM_V_GEN)$(GLIB_COMPILE_RESOURCES) \
+		--target=$@ \
+		--sourcedir=$(srcdir) \
+		--generate-source \
+		--c-name="geany" \
+		--manual-register \
+		--internal \
+			$(srcdir)/geany.gresource.xml
+resources.h: $(resource_dependencies)
+	$(AM_V_GEN)$(GLIB_COMPILE_RESOURCES) \
+		--target=$@ \
+		--sourcedir=$(srcdir) \
+		--generate-header \
+		--c-name="geany" \
+		--manual-register \
+		--internal \
+			$(srcdir)/geany.gresource.xml
+CLEANFILES += resources.c resources.h
+BUILT_SOURCES = resources.c resources.h
 
 # install the run script
 if MINGW

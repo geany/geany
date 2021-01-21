@@ -98,6 +98,26 @@ G_BEGIN_DECLS
 #endif
 
 
+#if !GTK_CHECK_VERSION(3, 4, 0)
+static inline guint gtkcompat_builder_add_from_resource(GtkBuilder *builder,
+	const gchar *resource_path, GError **error)
+{
+	GBytes *bytes = g_resources_lookup_data(resource_path,
+		G_RESOURCE_LOOKUP_FLAGS_NONE, error);
+	if (bytes == NULL)
+		return 0;
+	gsize data_len = 0;
+	gconstpointer data = g_bytes_get_data(bytes, &data_len);
+	g_assert(data_len > 0);
+	g_assert(data != NULL);
+	guint id = gtk_builder_add_from_string(builder, data, data_len, error);
+	g_bytes_unref(bytes);
+	return id;
+}
+#define gtk_builder_add_from_resource gtkcompat_builder_add_from_resource
+#endif
+
+
 G_END_DECLS
 
 #endif /* GTK_COMPAT_H */
