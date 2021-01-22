@@ -401,6 +401,20 @@ void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
 }
 
 
+void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	sidebar_update_tag_list(doc, TRUE);
+}
+
+
+void on_entry_tagfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data)
+{
+	if (event->button.button == 1)
+		gtk_entry_set_text(entry, "");
+}
+
+
 /* hides toolbar from toolbar popup menu */
 static void on_hide_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
@@ -462,7 +476,7 @@ static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
 		ui_update_popup_reundo_items(doc);
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
-		sidebar_update_tag_list(doc, FALSE);
+		sidebar_update_tag_list(doc, TRUE);
 		document_highlight_tags(doc);
 
 		document_check_disk_status(doc, TRUE);

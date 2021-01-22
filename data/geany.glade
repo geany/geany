@@ -8245,17 +8245,48 @@
                     <signal name="switch-page" handler="on_tv_notebook_switch_page" swapped="no"/>
                     <signal name="switch-page" handler="on_tv_notebook_switch_page_after" after="yes" swapped="no"/>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow2">
+                      <object class="GtkVBox" id="vbox46">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">automatic</property>
-                        <property name="vscrollbar_policy">automatic</property>
+                        <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkTreeView" id="treeview2">
+                          <object class="GtkEntry" id="entry_tagfilter">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="enable_search">False</property>
+                            <property name="tooltip_text" translatable="yes">Filter the Symbol List</property>
+                            <property name="invisible_char">•</property>
+                            <property name="secondary_icon_stock">gtk-clear</property>
+                            <property name="primary_icon_activatable">False</property>
+                            <property name="secondary_icon_activatable">True</property>
+                            <property name="primary_icon_sensitive">True</property>
+                            <property name="secondary_icon_sensitive">True</property>
+                            <signal name="changed" handler="on_entry_tagfilter_changed" swapped="no"/>
+                            <signal name="icon-press" handler="on_entry_tagfilter_icon_press" swapped="no"/>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkScrolledWindow" id="scrolledwindow2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="vscrollbar_policy">automatic</property>
+                            <child>
+                              <object class="GtkTreeView" id="treeview2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="enable_search">False</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </object>
                     </child>

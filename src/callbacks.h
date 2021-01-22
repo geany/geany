@@ -72,6 +72,10 @@ void on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpoin
 
 void on_toolbar_search_entry_activate(GtkAction *action, const gchar *text, gpointer user_data);
 
+void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data);
+
+void on_entry_tagfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data);
+
 void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_find_usage1_activate(GtkMenuItem *menuitem, gpointer user_data);
