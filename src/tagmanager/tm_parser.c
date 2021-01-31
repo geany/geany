@@ -435,6 +435,7 @@ static TMParserMapEntry map_VERILOG[] = {
 };
 
 static TMParserMapEntry map_R[] = {
+    {'c', tm_tag_class_t},
 	{'f', tm_tag_function_t},
 	{'l', tm_tag_other_t},
 	{'s', tm_tag_other_t},
