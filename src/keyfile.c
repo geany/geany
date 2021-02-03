@@ -1246,7 +1246,7 @@ static gboolean open_session_file(gchar **tmp, guint len, gchar *root_folder)
 	{
 		geany_debug("Relative path %s, root folder %s", locale_filename, root_folder);
 		gchar *absolute_path;
-		absolute_path = g_strconcat(root_folder, "/", locale_filename, NULL);
+		absolute_path = g_build_path(G_DIR_SEPARATOR_S, root_folder, locale_filename, NULL);
 		geany_debug("absolute_path : %s",absolute_path);
 		g_free(locale_filename);
 		locale_filename = absolute_path;
