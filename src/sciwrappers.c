@@ -148,27 +148,33 @@ void sci_set_mark_long_lines(ScintillaObject *sci, gint type, gint column, const
  * expensive operation */
 static gint sci_text_height_cached(ScintillaObject *sci)
 {
-	static guint cache_hash = 0;
+	struct height_spec {
+		gchar *font;
+		gint size;
+		gint zoom;
+		gint extra;
+	};
+	static struct height_spec cache = {0};
 	static gint cache_value = 0;
-	guint hash;
-	gchar *font;
-	gint size;
+	struct height_spec current;
 
-	/* hash font, size and zoom factor using djb's algorithm which should be
-	 * good enough for this use case. */
-	font = sci_get_string(sci, SCI_STYLEGETFONT, 0);
-	hash = g_str_hash(font);
-	g_free(font);
-	size = SSM(sci, SCI_STYLEGETSIZEFRACTIONAL, 0, 0);
-	hash = hash * 33 + (gint) (size & 0x00FF);
-	hash = hash * 33 + (gint) ((size & 0xFF00) >> 8);
-	hash = hash * 33 + (gint) SSM(sci, SCI_GETZOOM, 0, 0);
-	hash = hash * 33 + (gint) SSM(sci, SCI_GETEXTRAASCENT, 0, 0);
-	hash = hash * 33 + (gint) SSM(sci, SCI_GETEXTRADESCENT, 0, 0);
+	current.font = sci_get_string(sci, SCI_STYLEGETFONT, 0);
+	current.size = SSM(sci, SCI_STYLEGETSIZEFRACTIONAL, 0, 0);
+	current.zoom = SSM(sci, SCI_GETZOOM, 0, 0);
+	current.extra = SSM(sci, SCI_GETEXTRAASCENT, 0, 0) + SSM(sci, SCI_GETEXTRADESCENT, 0, 0);
 
-	if (hash != cache_hash)
+	if (g_strcmp0(current.font, cache.font) == 0 &&
+		current.size == cache.size &&
+		current.zoom == cache.zoom &&
+		current.extra == cache.extra)
 	{
-		cache_hash = hash;
+		g_free(current.font);
+	}
+	else
+	{
+		g_free(cache.font);
+		cache = current;
+
 		cache_value = SSM(sci, SCI_TEXTHEIGHT, 0, 0);
 	}
 
