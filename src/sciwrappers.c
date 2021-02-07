@@ -144,10 +144,47 @@ void sci_set_mark_long_lines(ScintillaObject *sci, gint type, gint column, const
 }
 
 
+/* Calls SCI_TEXTHEIGHT but tries very hard to cache the result as it's a very
+ * expensive operation */
+static gint sci_text_height_cached(ScintillaObject *sci)
+{
+	struct height_spec {
+		gchar *font;
+		gint size;
+		gint zoom;
+		gint extra;
+	};
+	static struct height_spec cache = {0};
+	static gint cache_value = 0;
+	struct height_spec current;
+
+	current.font = sci_get_string(sci, SCI_STYLEGETFONT, 0);
+	current.size = SSM(sci, SCI_STYLEGETSIZEFRACTIONAL, 0, 0);
+	current.zoom = SSM(sci, SCI_GETZOOM, 0, 0);
+	current.extra = SSM(sci, SCI_GETEXTRAASCENT, 0, 0) + SSM(sci, SCI_GETEXTRADESCENT, 0, 0);
+
+	if (g_strcmp0(current.font, cache.font) == 0 &&
+		current.size == cache.size &&
+		current.zoom == cache.zoom &&
+		current.extra == cache.extra)
+	{
+		g_free(current.font);
+	}
+	else
+	{
+		g_free(cache.font);
+		cache = current;
+
+		cache_value = SSM(sci, SCI_TEXTHEIGHT, 0, 0);
+	}
+
+	return cache_value;
+}
+
 /* compute margin width based on ratio of line height */
 static gint margin_width_from_line_height(ScintillaObject *sci, gdouble ratio, gint threshold)
 {
-	const gint line_height = SSM(sci, SCI_TEXTHEIGHT, 0, 0);
+	const gint line_height = sci_text_height_cached(sci);
 	gint width;
 
 	width = line_height * ratio;
