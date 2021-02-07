@@ -15,9 +15,7 @@
 #if defined (HAVE_IO_H)
 # include <io.h>
 #endif
-#if defined (HAVE_STDLIB_H)
-# include <stdlib.h>  /* to declare malloc () */
-#endif
+#include <stdlib.h>  /* to declare malloc () */
 #if defined (HAVE_UNISTD_H)
 # include <unistd.h>
 #endif
@@ -25,11 +23,11 @@
 #include <stdio.h>
 
 #include "debug.h"
-#include "entry.h"
-#include "options.h"
+#include "entry_p.h"
+#include "options_p.h"
 #include "read.h"
 #include "routines.h"
-#include "sort.h"
+#include "sort_p.h"
 
 /*
 *   FUNCTION DEFINITIONS
@@ -55,17 +53,46 @@ extern void catFile (MIO *mio)
 # define PE_CONST const
 #endif
 
+/*
+   Output file name should not be evaluated in system(3) function.
+   The name must be used as is. Quotations are required to block the
+   evaluation.
+
+   Normal single-quotes are used to quote a cstring:
+   a => 'a'
+   " => '"'
+
+   If a single-quote is included in the cstring, use double quotes for quoting it.
+   ' => ''"'"''
+*/
+static void appendCstringWithQuotes (vString *dest, const char* cstr)
+{
+#ifdef WIN32
+	vStringCatS (dest, cstr);
+#else
+	vStringPut (dest, '\'');
+	for (const char *o = cstr; *o; o++)
+	{
+		if (*o == '\'')
+			vStringCatS (dest, "'\"'\"'");
+		else
+			vStringPut (dest, *o);
+	}
+	vStringPut (dest, '\'');
+#endif
+}
+
 extern void externalSortTags (const bool toStdout, MIO *tagFile)
 {
 	const char *const sortNormalCommand = "sort -u";
 	const char *const sortFoldedCommand = "sort -u -f";
 	const char *sortCommand =
 		Option.sorted == SO_FOLDSORTED ? sortFoldedCommand : sortNormalCommand;
+# ifndef HAVE_SETENV
 	PE_CONST char *const sortOrder1 = "LC_COLLATE=C";
 	PE_CONST char *const sortOrder2 = "LC_ALL=C";
-	const size_t length = 4 + strlen (sortOrder1) + strlen (sortOrder2) +
-			strlen (sortCommand) + (2 * strlen (tagFileName ()));
-	char *const cmd = (char *) malloc (length + 1);
+# endif
+	vString *cmd = vStringNew ();
 	int ret = -1;
 
 	if (cmd != NULL)
@@ -80,19 +107,29 @@ extern void externalSortTags (const bool toStdout, MIO *tagFile)
 		putenv (sortOrder1);
 		putenv (sortOrder2);
 # endif
-		if (toStdout)
-			sprintf (cmd, "%s", sortCommand);
-		else
-			sprintf (cmd, "%s -o %s %s", sortCommand,
-					tagFileName (), tagFileName ());
+		vStringCatS (cmd, sortCommand);
+		if (! toStdout)
+		{
+			vStringCatS (cmd, " -o ");
+			appendCstringWithQuotes (cmd, tagFileName ());
+			vStringPut (cmd, ' ');
+			appendCstringWithQuotes (cmd, tagFileName ());
+		}
 #else
-		if (toStdout)
-			sprintf (cmd, "%s %s %s", sortOrder1, sortOrder2, sortCommand);
-		else
-			sprintf (cmd, "%s %s %s -o %s %s", sortOrder1, sortOrder2,
-					sortCommand, tagFileName (), tagFileName ());
+		vStringCatS (cmd, sortOrder1);
+		vStringPut (cmd, ' ');
+		vStringCatS (cmd, sortOrder2);
+		vStringPut (cmd, ' ');
+		vStringCatS (cmd, sortCommand);
+		if (! toStdout)
+		{
+			vStringCats (cmd, " -o ");
+			appendCstringWithQuotes (cmd, tagFileName ());
+			vStringPut (cmd, ' ');
+			appendCstringWithQuotes (cmd, tagFileName ());
+		}
 #endif
-		verbose ("system (\"%s\")\n", cmd);
+		verbose ("system (\"%s\")\n", vStringValue (cmd));
 		if (toStdout)
 		{
 			const int fdstdin = 0;
@@ -105,15 +142,14 @@ extern void externalSortTags (const bool toStdout, MIO *tagFile)
 				error (FATAL | PERROR, "cannot redirect stdin");
 			if (lseek (fdstdin, 0, SEEK_SET) != 0)
 				error (FATAL | PERROR, "cannot rewind tag file");
-			ret = system (cmd);
+			ret = system (vStringValue (cmd));
 			if (dup2 (fdsave, fdstdin) < 0)
 				error (FATAL | PERROR, "cannot restore stdin fd");
 			close (fdsave);
 		}
 		else
-			ret = system (cmd);
-		free (cmd);
-
+			ret = system (vStringValue (cmd));
+		vStringDelete (cmd);
 	}
 	if (ret != 0)
 		error (FATAL | PERROR, "cannot sort tag file");
@@ -131,7 +167,7 @@ extern void failedSort (MIO *const mio, const char* msg)
 {
 	const char* const cannotSort = "cannot sort tag file";
 	if (mio != NULL)
-		mio_free (mio);
+		mio_unref (mio);
 	if (msg == NULL)
 		error (FATAL | PERROR, "%s", cannotSort);
 	else
@@ -155,7 +191,7 @@ static int compareTags (const void *const one, const void *const two)
 }
 
 static void writeSortedTags (
-		char **const table, const size_t numTags, const bool toStdout)
+		char **const table, const size_t numTags, const bool toStdout, bool newlineReplaced)
 {
 	MIO *mio;
 	size_t i;
@@ -176,12 +212,16 @@ static void writeSortedTags (
 		 *  pattern) if this is not an xref file.
 		 */
 		if (i == 0  ||  Option.xref  ||  strcmp (table [i], table [i-1]) != 0)
+		{
 			if (mio_puts (mio, table [i]) == EOF)
 				failedSort (mio, NULL);
+			else if (newlineReplaced)
+				mio_putc (mio, '\n');
+		}
 	}
 	if (toStdout)
 		mio_flush (mio);
-	mio_free (mio);
+	mio_unref (mio);
 }
 
 extern void internalSortTags (const bool toStdout, MIO* mio, size_t numTags)
@@ -190,11 +230,12 @@ extern void internalSortTags (const bool toStdout, MIO* mio, size_t numTags)
 	const char *line;
 	size_t i;
 	int (*cmpFunc)(const void *, const void *);
+	bool newlineReplaced = false;
 
 	/*  Allocate a table of line pointers to be sorted.
 	 */
 	const size_t tableSize = numTags * sizeof (char *);
-	char **const table = (char **) malloc (tableSize);  /* line pointers */
+	char **table = (char **) malloc (tableSize);  /* line pointers */
 	DebugStatement ( size_t mallocSize = tableSize; )  /* cumulative total */
 
 
@@ -222,6 +263,11 @@ extern void internalSortTags (const bool toStdout, MIO* mio, size_t numTags)
 				failedSort (mio, "out of memory");
 			DebugStatement ( mallocSize += stringSize; )
 			strcpy (table [i], line);
+			if (table[i][stringSize - 2] == '\n')
+			{
+				table[i][stringSize - 2] = '\0';
+				newlineReplaced = true;
+			}
 			++i;
 		}
 	}
@@ -232,7 +278,7 @@ extern void internalSortTags (const bool toStdout, MIO* mio, size_t numTags)
 	 */
 	qsort (table, numTags, sizeof (*table), cmpFunc);
 
-	writeSortedTags (table, numTags, toStdout);
+	writeSortedTags (table, numTags, toStdout, newlineReplaced);
 
 	PrintStatus (("sort memory: %ld bytes\n", (long) mallocSize));
 	for (i = 0 ; i < numTags ; ++i)

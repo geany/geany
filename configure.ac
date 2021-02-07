@@ -43,8 +43,17 @@ AC_CHECK_HEADERS([fcntl.h glob.h stdlib.h sys/time.h errno.h limits.h])
 
 # Checks for dependencies needed by ctags
 AC_CHECK_HEADERS([fnmatch.h direct.h io.h sys/dir.h])
-AC_DEFINE([USE_STDBOOL_H], [1], [whether or not to use <stdbool.h>.])
-AC_DEFINE([CTAGS_LIB], [1], [compile ctags as a library.])
+AC_DEFINE([HAVE_STDBOOL_H], [1], [whether or not to use <stdbool.h>.])
+AC_CHECK_FUNC([regcomp],
+		[have_regcomp=yes],
+		[have_regcomp=no
+		 dnl various stuff for ctags/gnu_regex/
+		 AC_CHECK_HEADERS([langinfo.h locale.h libintl.h wctype.h wchar.h])
+		 AC_CHECK_FUNCS([memcpy isblank wcrtomb mbrtowc wcscoll])
+		 AC_FUNC_ALLOCA])
+AM_CONDITIONAL([USE_BUNDLED_REGEX], [test "xno" = "x$have_regcomp"])
+AC_CHECK_FUNC([fnmatch], [have_fnmatch=yes], [have_fnmatch=no])
+AM_CONDITIONAL([USE_BUNDLED_FNMATCH], [test "xno" = "x$have_fnmatch"])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T
@@ -52,9 +61,11 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
 # Checks for library functions.
-AC_CHECK_FUNCS([fgetpos fnmatch mkstemp strerror strstr realpath])
+AC_CHECK_FUNCS([realpath])
 
 # Function checks for u-ctags
+AC_CHECK_FUNCS([strerror strstr asprintf])
+AC_CHECK_FUNCS([mkstemp tempnam], [break])
 AC_CHECK_FUNCS([strcasecmp stricmp], [break])
 AC_CHECK_FUNCS([strncasecmp strnicmp], [break])
 AC_CHECK_FUNCS([truncate ftruncate chsize], [break])

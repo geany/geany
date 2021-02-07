@@ -15,13 +15,15 @@
 #include "general.h"
 #include "mio.h"
 #include "parse.h"
+#include "numarray.h"
 
 int  makePromise   (const char *parser,
-		    unsigned long startLine, int startCharOffset,
-		    unsigned long endLine, int endCharOffset,
+		    unsigned long startLine, long startCharOffset,
+		    unsigned long endLine, long endCharOffset,
 		    unsigned long sourceLineOffset);
-bool forcePromises (void);
-void breakPromisesAfter (int promise);
-int getLastPromise (void);
+
+/* Fill the line with white spaces.
+   The callee takes the ownership of lines. */
+void promiseAttachLineFiller (int promise, ulongArray *lines);
 
 #endif	/* CTAGS_MAIN_PROMISE_H */

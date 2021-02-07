@@ -16,7 +16,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "flags.h"
+#include "ctags.h"
+#include "flags_p.h"
 #include "vstring.h"
 #include "routines.h"
 
@@ -27,8 +28,6 @@ void flagsEval (const char* flags_original, flagDefinition* defs, unsigned int n
 
 	if (!flags_original)
 		return;
-	if (!defs)
-		return;
 
 	flags = eStrdup (flags_original);
 	for (i = 0 ; flags [i] != '\0' ; ++i)
@@ -38,34 +37,34 @@ void flagsEval (const char* flags_original, flagDefinition* defs, unsigned int n
 			const char* aflag = flags + i + 1;
 			char* needle_close_paren = strchr(aflag, LONG_FLAGS_CLOSE);
 			const char* param;
-			char* needle_eqaul;
+			char* needle_equal;
 
 			if (needle_close_paren == NULL)
 			{
-				error (WARNING, "long flags specifier opened with `%c' is not closed `%c'",
-				       LONG_FLAGS_OPEN, LONG_FLAGS_CLOSE);
+				error (WARNING, "long flags specifier opened with `%c' is not closed `%c': \"%s\"",
+				       LONG_FLAGS_OPEN, LONG_FLAGS_CLOSE, flags_original);
 				break;
 			}
 
 			*needle_close_paren = '\0';
-			needle_eqaul = strchr(aflag, '=');
-			if ((needle_eqaul == NULL || (needle_eqaul >= needle_close_paren)))
+			needle_equal = strchr(aflag, '=');
+			if ((needle_equal == NULL || (needle_equal >= needle_close_paren)))
 			{
-				needle_eqaul = NULL;
+				needle_equal = NULL;
 				param = NULL;
 			}
 			else
 			{
-				param = needle_eqaul + 1;
-				*needle_eqaul = '\0';
+				param = needle_equal + 1;
+				*needle_equal = '\0';
 			}
 
 			for ( j = 0 ; j < ndefs ; ++j )
 				if (defs[j].longStr && (strcmp(aflag, defs[j].longStr) == 0))
 					defs[j].longProc(aflag, param, data);
 
-			if (needle_eqaul)
-				*needle_eqaul = '=';
+			if (needle_equal)
+				*needle_equal = '=';
 			*needle_close_paren = LONG_FLAGS_CLOSE;
 
 			i = needle_close_paren - flags;
@@ -77,31 +76,75 @@ void flagsEval (const char* flags_original, flagDefinition* defs, unsigned int n
 	eFree (flags);
 }
 
-void  flagPrintHelp (flagDefinition* def, unsigned int ndefs)
+extern struct colprintTable * flagsColprintTableNew (void)
 {
+	return colprintTableNew ("L:LETTER", "L:NAME", "L:DESCRIPTION", NULL);
+}
 
-	unsigned int i;
-	const char *longStr;
-	const char *description;
-	const char *paramName;
-	char shortChar[3];
-	for ( i = 0; i < ndefs; ++i )
+extern void flagsColprintAddDefinitions (struct colprintTable *table, flagDefinition* def,
+										 unsigned int ndefs)
+{
+	vString *longName = vStringNew ();
+
+	for (unsigned int i = 0; i < ndefs; i++)
 	{
-		longStr = def[i].longStr? def[i].longStr: "";
-		description = def[i].description? def[i].description: "";
+		struct colprintLine * line;
+		char shortChar;
+		const char *paramName;
+		const char *description;
+
+
+		line = colprintTableGetNewLine(table);
+
+		shortChar = def[i].shortChar;
+		if (shortChar == '\0')
+			shortChar = '-';
+		colprintLineAppendColumnChar (line, shortChar);
+
+		vStringCopyS (longName, def[i].longStr? def[i].longStr: RSV_NONE);
 		paramName = def[i].paramName;
-
-		if (def[i].shortChar == '\0')
-			strcpy (shortChar, "\\0");
-		else
-		{
-			shortChar[0] = def[i].shortChar;
-			shortChar[1] = '\0';
-		}
-
 		if (paramName)
-			printf ("%s\t%s=%s\t%s\n", shortChar, longStr, paramName, description);
-		else
-			printf ("%s\t%s\t%s\n", shortChar, longStr, description);
+		{
+			vStringPut (longName, '=');
+			vStringCatS (longName, paramName);
+		}
+		colprintLineAppendColumnVString (line, longName);
+		vStringClear(longName);
+
+		description = def[i].description? def[i].description: "";
+		colprintLineAppendColumnCString (line, description);
 	}
+
+	vStringDelete(longName);
+}
+
+static int flagsColprintCompareLines(struct colprintLine *a , struct colprintLine *b)
+{
+	const char *a_letter = colprintLineGetColumn (a, 0);
+	const char *b_letter = colprintLineGetColumn (b, 0);
+
+	if (a_letter[0] != '-' && b_letter[0] == '-')
+		return -1;
+	else if (a_letter[0] == '-' && b_letter[0] != '-')
+		return 1;
+	else if (a_letter[0] != '-' && b_letter[0] != '-')
+		return strcmp(a_letter, b_letter);
+
+
+	const char *a_name = colprintLineGetColumn (a, 1);
+	const char *b_name = colprintLineGetColumn (b, 1);
+
+	if (a_name[0] != '_' && b_name[0] == '_')
+		return -1;
+	else if (a_name[0] == '_' && b_name[0] != '_')
+		return 1;
+
+	return strcmp(a_name, b_name);
+}
+
+extern void flagsColprintTablePrint (struct colprintTable *table,
+									 bool withListHeader, bool machinable, FILE *fp)
+{
+	colprintTableSort (table, flagsColprintCompareLines);
+	colprintTablePrint (table, 0, withListHeader, machinable, fp);
 }

@@ -14,27 +14,26 @@
 */
 #include "general.h"  /* must always come first */
 
+#include "gvars.h"
+#include "types.h"
 #ifdef DEBUG
 # include <assert.h>
 #endif
-#include "entry.h"
 
 /*
 *   Macros
 */
 
 #ifdef DEBUG
-# define debug(level)      ((Option.debugLevel & (long)(level)) != 0)
+# define debug(level)      ((ctags_debugLevel & (long)(level)) != 0)
 # define DebugStatement(x) x
 # define PrintStatus(x)    if (debug(DEBUG_STATUS)) printf x;
 # ifdef NDEBUG
 #  define Assert(c) do {} while(0)
 #  define AssertNotReached() do {} while(0)
 # else
-   /* based on glibc's assert.h __ASSERT_FUNCTION */
-#  if defined (__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 4))
-#   define ASSERT_FUNCTION __PRETTY_FUNCTION__
-#  elif defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
+   /* We expect cc supports c99 standard. */
+#  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
 #   define ASSERT_FUNCTION __func__
 #  else
 #   define ASSERT_FUNCTION ((const char*)0)
@@ -52,6 +51,10 @@
 # endif
 #endif
 
+#ifdef DEBUG
+/* This makes valgrind report an error earlier. */
+#define DISABLE_OBJPOOL
+#endif
 /*
 *   Data declarations
 */
@@ -79,4 +82,21 @@ extern void debugCppIgnore (const bool ignore);
 extern void debugEntry (const tagEntryInfo *const tag);
 extern void debugAssert (const char *assertion, const char *file, unsigned int line, const char *function) attr__noreturn;
 
+#ifdef DEBUG
+#define DEBUG_INIT() debugInit()
+extern void debugInit (void);
+extern void debugIndent(void);
+extern void debugInc(void);
+extern void debugDec(void);
+
+struct circularRefChecker;
+extern struct circularRefChecker * circularRefCheckerNew (void);
+extern void circularRefCheckerDestroy (struct circularRefChecker * checker);
+extern int circularRefCheckerCheck (struct circularRefChecker *c, void *ptr);
+extern int circularRefCheckerGetCurrent (struct circularRefChecker *c);
+extern void circularRefCheckClear (struct circularRefChecker *c);
+
+#else
+#define DEBUG_INIT() do { } while(0)
+#endif	/* DEBUG */
 #endif  /* CTAGS_MAIN_DEBUG_H */

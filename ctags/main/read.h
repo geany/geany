@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include "parse.h"
+#include "types.h"
 #include "vstring.h"
 #include "mio.h"
 
@@ -55,68 +55,30 @@ enum eCharacters {
 
 /* InputFile: reading from fp in inputFile with updating fields in input fields */
 extern unsigned long getInputLineNumber (void);
+extern unsigned long getInputLineNumberForFileOffset(long offset);
 extern int getInputLineOffset (void);
 extern const char *getInputFileName (void);
 extern MIOPos getInputFilePosition (void);
-extern MIOPos getInputFilePositionForLine (int line);
+extern MIOPos getInputFilePositionForLine (unsigned int line);
 extern langType getInputLanguage (void);
-extern const char *getInputLanguageName (void);
-extern const char *getInputFileTagPath (void);
 extern bool isInputLanguage (langType lang);
 extern bool isInputHeaderFile (void);
 extern bool isInputLanguageKindEnabled (int kindIndex);
-extern bool doesInputLanguageAllowNullTag (void);
-extern kindDefinition *getInputLanguageFileKind (void);
-extern bool doesInputLanguageRequestAutomaticFQTag (void);
+extern bool isInputLanguageRoleEnabled (int kindIndex, int roleIndex);
 
-extern void freeInputFileResources (void);
 extern const unsigned char *getInputFileData (size_t *size);
 
-/* Stream opend by getMio can be passed to openInputFile as the 3rd
-   argument. If the 3rd argument is NULL, openInputFile calls getMio
-   internally. The 3rd argument is introduced for reusing mio object
-   created in parser guessing stage. */
-extern bool openInputFile (const char *const fileName, const langType language, MIO *mio);
-#ifdef CTAGS_LIB
-extern bool bufferOpen (const char *const fileName, const langType language,
-						unsigned char *buffer, size_t buffer_size);
-#endif
-extern MIO *getMio (const char *const fileName, const char *const openMode,
-				    bool memStreamRequired);
-extern void resetInputFile (const langType language);
-
-extern void closeInputFile (void);
-extern void *getInputFileUserData(void);
 extern int getcFromInputFile (void);
 extern int getNthPrevCFromInputFile (unsigned int nth, int def);
 extern int skipToCharacterInInputFile (int c);
+extern int skipToCharacterInInputFile2 (int c0, int c1);
 extern void ungetcToInputFile (int c);
 extern const unsigned char *readLineFromInputFile (void);
 
-enum nestedInputBoundaryFlag {
-	BOUNDARY_START = 1UL << 0,
-	BOUNDARY_END   = 1UL << 1,
-};
-extern unsigned int getNestedInputBoundaryInfo (unsigned long lineNumber);
-
-extern const char *getSourceFileTagPath (void);
-extern langType getSourceLanguage (void);
 extern unsigned long getSourceLineNumber (void);
 
-/* Raw: reading from given a parameter, fp */
-extern char *readLineRaw           (vString *const vLine, MIO *const mio);
-extern char* readLineRawWithNoSeek (vString *const vline, FILE *const pp);
-
-/* Bypass: reading from fp in inputFile WITHOUT updating fields in input fields */
-extern char *readLineFromBypass (vString *const vLine, MIOPos location, long *const pSeekValue);
-extern char *readLineFromBypassSlow (vString *const vLine, unsigned long lineNumber,
-				     const char *pattern, long *const pSeekValue);
-
-extern void   pushNarrowedInputStream (const langType language,
-				       unsigned long startLine, int startCharOffset,
-				       unsigned long endLine, int endCharOffset,
-				       unsigned long sourceLineOffset);
-extern void   popNarrowedInputStream  (void);
+/* Raw: reading from given a parameter, mio */
+extern char *readLineRaw (vString *const vLine, MIO *const mio);
 
 extern void     pushLanguage(const langType language);
 extern langType popLanguage (void);

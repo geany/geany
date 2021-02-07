@@ -13,9 +13,7 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
-/* GEANY DIFF
 #include <fnmatch.h>
- * GEANY DIFF END */
 
 #include "debug.h"
 #include "read.h"
@@ -75,7 +73,7 @@ extern stringList* stringListNewFromFile (const char* const fileName)
 			else
 				vStringDelete (str);
 		}
-		mio_free (mio);
+		mio_unref (mio);
 	}
 	return result;
 }
@@ -109,13 +107,13 @@ extern void stringListDelete (stringList *const current)
 static bool compareString (
 		const char *const string, vString *const itm)
 {
-	return (bool) (strcmp (string, vStringValue (itm)) == 0);
+	return (strcmp (string, vStringValue (itm)) == 0);
 }
 
 static bool compareStringInsensitive (
 		const char *const string, vString *const itm)
 {
-	return (bool) (strcasecmp (string, vStringValue (itm)) == 0);
+	return (strcasecmp (string, vStringValue (itm)) == 0);
 }
 
 static int stringListIndex (
@@ -137,7 +135,7 @@ static int stringListIndex (
 extern bool stringListHas (
 		const stringList *const current, const char *const string)
 {
-	bool result = false;
+	bool result;
 	Assert (current != NULL);
 	result = stringListIndex (current, string, compareString) != -1;
 	return result;
@@ -162,7 +160,7 @@ static vString* stringListFinds (
 extern bool stringListHasInsensitive (
 		const stringList *const current, const char *const string)
 {
-	bool result = false;
+	bool result;
 	Assert (current != NULL);
 	Assert (string != NULL);
 	result = stringListIndex (current, string, compareStringInsensitive) != -1;
@@ -217,11 +215,20 @@ extern vString* stringListExtensionFinds (
 static bool fileNameMatched (
 		const vString* const vpattern, const char* const fileName)
 {
-/* GEANY DIFF */
-/*	const char* const pattern = vStringValue (vpattern);
-	return (bool) (fnmatch (pattern, fileName, 0) == 0); */
-	return false;
-/* GEANY DIFF END */
+	const char* const pattern = vStringValue (vpattern);
+
+#ifdef CASE_INSENSITIVE_FILENAMES
+	{
+		char* const p = newUpperString (pattern);
+		char* const f = newUpperString (fileName);
+		bool r = (fnmatch (p, f, 0) == 0);
+		eFree (f);
+		eFree (p);
+		return r;
+	}
+#else
+	return (fnmatch (pattern, fileName, 0) == 0);
+#endif
 }
 
 extern bool stringListFileMatched (
@@ -236,11 +243,24 @@ extern vString* stringListFileFinds (
 	vString* vstr = NULL;
 	bool matched = false;
 	unsigned int i;
+	const char * normalized = fileName;
+
+#if defined (WIN32)
+	vString *tmp = vStringNewInit (fileName);
+	vStringTranslate (tmp, PATH_SEPARATOR, OUTPUT_PATH_SEPARATOR);
+	normalized = vStringValue (tmp);
+#endif
+
 	for (i = 0  ;  ! matched  &&  i < stringListCount (current)  ;  ++i)
 	{
 		vstr = stringListItem (current, i);
-		matched = fileNameMatched (vstr, fileName);
+		matched = fileNameMatched (vstr, normalized);
 	}
+
+#if defined (WIN32)
+	vStringDelete (tmp);
+#endif
+
 	return matched? vstr: NULL;
 }
 

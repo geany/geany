@@ -54,7 +54,7 @@ typedef gint TMParserType;
 
 #ifdef GEANY_PRIVATE
 
-/* keep in sync with ctags/parsers.h */
+/* keep in sync with tm_parsers.h and parser_map in tm_parser.c */
 enum
 {
 	TM_PARSER_NONE = -2, /* keep in sync with ctags LANG_IGNORE */

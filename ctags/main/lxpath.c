@@ -12,8 +12,9 @@
 #include "debug.h"
 #include "entry.h"
 #include "options.h"
-#include "parse.h"
+#include "parse_p.h"
 #include "read.h"
+#include "read_p.h"
 #include "routines.h"
 #include "xtag.h"
 
@@ -22,36 +23,43 @@
 #include <libxml/tree.h>
 
 static void simpleXpathMakeTag (xmlNode *node,
+				const char *xpath,
 				const tagXpathMakeTagSpec *spec,
-				const kindDefinition* const kinds,
 				void *userData)
 {
 	tagEntryInfo tag;
 	xmlChar* str;
 	char *path;
+	int kind;
 
 	str = xmlNodeGetContent(node);
 	if (str == NULL)
 		return;
 
-	if (spec->role == ROLE_INDEX_DEFINITION)
-		initTagEntry (&tag, (char *)str, spec->kind);
+	if (spec->kind == KIND_GHOST_INDEX && spec->decideKind)
+		kind = spec->decideKind (node, xpath, spec, userData);
+	else
+		kind = spec->kind;
+	Assert (kind != KIND_GHOST_INDEX);
+
+	if (spec->role == ROLE_DEFINITION_INDEX)
+		initTagEntry (&tag, (char *)str, kind);
 	else if (isXtagEnabled(XTAG_REFERENCE_TAGS))
 		initRefTagEntry (&tag, (char *)str,
-				 spec->kind,
+				 kind,
 				 spec->role);
 	else
 		goto out;
 
 
-	tag.lineNumber = xmlGetLineNo (node);
+	tag.lineNumber = XML_GET_LINE (node);
 	tag.filePosition = getInputFilePositionForLine (tag.lineNumber);
 
 	path = (char *)xmlGetNodePath (node);
 	tag.extensionFields.xpath = path;
 
 	if (spec->make)
-		spec->make (node, spec, &tag, userData);
+		spec->make (node, xpath, spec, &tag, userData);
 	else
 		makeTagEntry (&tag);
 
@@ -72,9 +80,18 @@ extern void addTagXpath (const langType language CTAGS_ATTR_UNUSED, tagXpathTabl
 		error (WARNING, "Failed to compile the Xpath expression: %s", xpathTable->xpath);
 }
 
+extern void removeTagXpath (const langType language CTAGS_ATTR_UNUSED, tagXpathTable *xpathTable)
+{
+	if (xpathTable->xpathCompiled)
+	{
+		xmlXPathFreeCompExpr (xpathTable->xpathCompiled);
+		xpathTable->xpathCompiled = NULL;
+	}
+}
+
 static void findXMLTagsCore (xmlXPathContext *ctx, xmlNode *root,
 			     const tagXpathTableTable *xpathTableTable,
-			     const kindDefinition* const kinds,void *userData)
+			     void *userData)
 {
 	unsigned int i;
 	int j;
@@ -95,10 +112,10 @@ static void findXMLTagsCore (xmlXPathContext *ctx, xmlNode *root,
 #if 0
 		/* Older version of libxml2 doesn't have xmlXPathSetContextNode. */
 		if (xmlXPathSetContextNode (root, ctx) != 0)
-		  {
-		    error (WARNING, "Failed to set node to XpathContext");
-		    return;
-		  }
+		{
+			error (WARNING, "Failed to set node to XpathContext");
+			return;
+		}
 #else
 		ctx->node = root;
 #endif
@@ -111,13 +128,13 @@ static void findXMLTagsCore (xmlXPathContext *ctx, xmlNode *root,
 
 		if (set)
 		{
-			for (j = 0; j < set->nodeNr; ++j)
+			for (j = 0; j < xmlXPathNodeSetGetLength (set); ++j)
 			{
-				node = set->nodeTab[j];
+				node = xmlXPathNodeSetItem(set, j);
 				if (elt->specType == LXPATH_TABLE_DO_MAKE)
-					simpleXpathMakeTag (node, &(elt->spec.makeTagSpec), kinds, userData);
+					simpleXpathMakeTag (node, elt->xpath, &(elt->spec.makeTagSpec), userData);
 				else
-					elt->spec.recurSpec.enter (node, &(elt->spec.recurSpec), ctx, userData);
+					elt->spec.recurSpec.enter (node, elt->xpath, &(elt->spec.recurSpec), ctx, userData);
 			}
 		}
 		xmlXPathFreeObject (object);
@@ -132,7 +149,7 @@ static xmlDocPtr makeXMLDoc (void)
 {
 	const unsigned char* data;
 	size_t size;
-	xmlDocPtr doc = NULL;
+	xmlDocPtr doc;
 
 	doc = getInputFileUserData ();
 	if (doc)
@@ -144,6 +161,7 @@ static xmlDocPtr makeXMLDoc (void)
 	data = getInputFileData (&size);
 	if (data)
 	{
+		xmlSetGenericErrorFunc (NULL, suppressWarning);
 		xmlLineNumbersDefault (1);
 		doc = xmlParseMemory((const char*)data, size);
 	}
@@ -151,20 +169,23 @@ static xmlDocPtr makeXMLDoc (void)
 	return doc;
 }
 
-extern void findXMLTags (xmlXPathContext *ctx, xmlNode *root,
-			 const tagXpathTableTable *xpathTableTable,
-			 const kindDefinition* const kinds,void *userData)
+extern void findXMLTagsFull (xmlXPathContext *ctx, xmlNode *root,
+			 int tableTableIndex,
+			 void (* runAfter) (xmlXPathContext *, xmlNode *, void *),
+			 void *userData)
 {
 	bool usedAsEntryPoint = false;
 	xmlDocPtr doc = NULL;
+
+	const langType lang = getInputLanguage();
+	const tagXpathTableTable *xpathTableTable
+		= getXpathTableTable (lang, tableTableIndex);
 
 	if (ctx == NULL)
 	{
 		usedAsEntryPoint = true;
 
 		findRegexTags ();
-
-		xmlSetGenericErrorFunc (NULL, suppressWarning);
 
 		doc = makeXMLDoc ();
 
@@ -186,7 +207,9 @@ extern void findXMLTags (xmlXPathContext *ctx, xmlNode *root,
 		}
 	}
 
-	findXMLTagsCore (ctx, root, xpathTableTable, kinds, userData);
+	findXMLTagsCore (ctx, root, xpathTableTable, userData);
+	if (runAfter)
+		(* runAfter) (ctx, root, userData);
 
 out:
 	if (usedAsEntryPoint)
@@ -205,10 +228,22 @@ extern void addTagXpath (const langType language, tagXpathTable *xpathTable)
 	xpathTable->xpathCompiled = NULL;
 }
 
-extern void findXMLTags (xmlXPathContext *ctx, xmlNode *root,
-			 const tagXpathTableTable *xpathTableTable,
-			 const kindDefinition* const kinds, void *userData)
+extern void removeTagXpath (const langType language CTAGS_ATTR_UNUSED, tagXpathTable *xpathTable CTAGS_ATTR_UNUSED)
+{
+}
+
+extern void findXMLTagsFull (xmlXPathContext *ctx, xmlNode *root,
+			 int tableTableIndex,
+			 void (* runAfter) (xmlXPathContext *, xmlNode *, void *),
+			 void *userData)
 {
 }
 
 #endif
+
+extern void findXMLTags (xmlXPathContext *ctx, xmlNode *root,
+			 int tableTableIndex,
+			 void *userData)
+{
+	findXMLTagsFull (ctx, root, tableTableIndex, NULL, userData);
+}

@@ -17,8 +17,6 @@
  and a set of individual source files.
 */
 
-#include "general.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -32,7 +30,7 @@
 #include <glib/gstdio.h>
 
 #include "tm_workspace.h"
-#include "ctags-api.h"
+#include "tm_ctags.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
 
@@ -79,7 +77,7 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->typename_array = g_ptr_array_new();
 	theWorkspace->global_typename_array = g_ptr_array_new();
 
-	ctagsInit();
+	tm_ctags_init();
 	tm_parser_verify_type_mappings();
 
 	return TRUE;
@@ -664,7 +662,7 @@ static void fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
  @param scope The scope name of the tag to find, or NULL.
  @param type The tag types to return (TMTagType). Can be a bitmask.
  @param attrs The attributes to sort and dedup on (0 terminated integer array).
- @param lang Specifies the language(see the table in parsers.h) of the tags to be found,
+ @param lang Specifies the language(see the table in tm_parsers.h) of the tags to be found,
              -1 for all
  @return Array of matching tags.
 */
@@ -712,7 +710,7 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 /* Returns tags with the specified prefix sorted by name. If there are several
  tags with the same name, only one of them appears in the resulting array.
  @param prefix The prefix of the tag to find.
- @param lang Specifies the language(see the table in parsers.h) of the tags to be found,
+ @param lang Specifies the language(see the table in tm_parsers.h) of the tags to be found,
              -1 for all.
  @param max_num The maximum number of tags to return.
  @return Array of matching tags sorted by their name.

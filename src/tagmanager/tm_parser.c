@@ -19,7 +19,7 @@
  */
 
 #include "tm_parser.h"
-#include "ctags-api.h"
+#include "tm_ctags.h"
 
 #include <string.h>
 
@@ -159,7 +159,7 @@ static TMParserMapEntry map_SQL[] = {
 	{'c', tm_tag_undef_t},
 	{'d', tm_tag_prototype_t},
 	{'f', tm_tag_function_t},
-	{'F', tm_tag_field_t},
+	{'E', tm_tag_field_t},
 	{'l', tm_tag_undef_t},
 	{'L', tm_tag_undef_t},
 	{'P', tm_tag_package_t},
@@ -209,7 +209,7 @@ static TMParserMapEntry map_RUBY[] = {
 	{'c', tm_tag_class_t},
 	{'f', tm_tag_method_t},
 	{'m', tm_tag_namespace_t},
-	{'F', tm_tag_member_t},
+	{'S', tm_tag_member_t},
 };
 
 static TMParserMapEntry map_TCL[] = {
@@ -458,7 +458,7 @@ static TMParserMapEntry map_OBJC[] = {
 	{'m', tm_tag_method_t},
 	{'c', tm_tag_class_t},
 	{'v', tm_tag_variable_t},
-	{'F', tm_tag_field_t},
+	{'E', tm_tag_field_t},
 	{'f', tm_tag_function_t},
 	{'p', tm_tag_undef_t},
 	{'t', tm_tag_typedef_t},
@@ -496,7 +496,7 @@ static TMParserMapEntry map_RUST[] = {
 	{'M', tm_tag_macro_t},
 	{'m', tm_tag_field_t},
 	{'e', tm_tag_enumerator_t},
-	{'F', tm_tag_method_t},
+	{'P', tm_tag_method_t},
 };
 
 static TMParserMapEntry map_GO[] = {
@@ -691,28 +691,23 @@ void tm_parser_verify_type_mappings(void)
 {
 	TMParserType lang;
 
-	if (TM_PARSER_COUNT > ctagsGetLangCount())
+	if (TM_PARSER_COUNT > tm_ctags_get_lang_count())
 		g_error("More parsers defined in Geany than in ctags");
 
 	for (lang = 0; lang < TM_PARSER_COUNT; lang++)
 	{
-		const gchar *kinds = ctagsGetLangKinds(lang);
+		const gchar *kinds = tm_ctags_get_lang_kinds(lang);
 		TMParserMap *map = &parser_map[lang];
 		gchar presence_map[256];
 		guint i;
 
 		if (! map->entries || map->size < 1)
 			g_error("No tag types in TM for %s, is the language listed in parser_map?",
-					ctagsGetLangName(lang));
-
-		/* TODO: check also regex parser mappings. At the moment there's no way
-		 * to access regex parser definitions in ctags */
-		if (ctagsIsUsingRegexParser(lang))
-			continue;
+					tm_ctags_get_lang_name(lang));
 
 		if (map->size != strlen(kinds))
 			g_error("Different number of tag types in TM (%d) and ctags (%d) for %s",
-				map->size, (int)strlen(kinds), ctagsGetLangName(lang));
+				map->size, (int)strlen(kinds), tm_ctags_get_lang_name(lang));
 
 		memset(presence_map, 0, sizeof(presence_map));
 		for (i = 0; i < map->size; i++)
@@ -734,10 +729,10 @@ void tm_parser_verify_type_mappings(void)
 			}
 			if (!ctags_found)
 				g_error("Tag type '%c' found in TM but not in ctags for %s",
-					map->entries[i].kind, ctagsGetLangName(lang));
+					map->entries[i].kind, tm_ctags_get_lang_name(lang));
 			if (!tm_found)
 				g_error("Tag type '%c' found in ctags but not in TM for %s",
-					kinds[i], ctagsGetLangName(lang));
+					kinds[i], tm_ctags_get_lang_name(lang));
 
 			presence_map[(unsigned char) map->entries[i].kind]++;
 		}
@@ -746,7 +741,7 @@ void tm_parser_verify_type_mappings(void)
 		{
 			if (presence_map[i] > 1)
 				g_error("Duplicate tag type '%c' found for %s",
-					(gchar)i, ctagsGetLangName(lang));
+					(gchar)i, tm_ctags_get_lang_name(lang));
 		}
 	}
 }

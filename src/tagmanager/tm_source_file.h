@@ -62,6 +62,10 @@ GPtrArray *tm_source_file_read_tags_file(const gchar *tags_file, TMParserType mo
 
 gboolean tm_source_file_write_tags_file(const gchar *tags_file, GPtrArray *tags_array);
 
+gchar tm_source_file_get_tag_impl(const gchar *impl);
+
+gchar tm_source_file_get_tag_access(const gchar *access);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

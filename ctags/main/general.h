@@ -14,13 +14,13 @@
 */
 #if defined (HAVE_CONFIG_H)
 # include <config.h>
-#if (defined (HAVE_FORK) && defined (HAVE_WAITPID) && defined (HAVE_EXECV) && defined (HAVE_PIPE))
-#define HAVE_COPROC
-#endif
 #elif defined (WIN32)
 # include "e_msoft.h"
 #endif
 
+/*  To provide timings features.
+ */
+#include <time.h>
 
 /*
 *   MACROS
@@ -50,24 +50,18 @@
 *   DATA DECLARATIONS
 */
 
-#ifdef USE_STDBOOL_H
+#ifdef HAVE_STDBOOL_H
 # include <stdbool.h>
 #endif
 
 /*
-*   FUNCTION PROTOTYPES
+*   HACK for #1610.
 */
 
-#if defined (NEED_PROTO_REMOVE) && defined (HAVE_REMOVE)
-extern int remove (const char *);
-#endif
-
-#if defined (NEED_PROTO_UNLINK) && ! defined (HAVE_REMOVE)
-extern void *unlink (const char *);
-#endif
-
-#ifdef NEED_PROTO_GETENV
-extern char *getenv (const char *);
+#ifdef ICONV_USE_LIB_PREFIX
+#define iconv libiconv
+#define iconv_open libiconv_open
+#define iconv_close libiconv_close
 #endif
 
 #endif  /* CTAGS_MAIN_GENERAL_H */

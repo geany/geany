@@ -13,7 +13,7 @@
 #include <glib-object.h>
 
 #include "tm_tag.h"
-#include "ctags-api.h"
+#include "tm_ctags.h"
 
 
 #define TAG_NEW(T)	((T) = g_slice_new0(TMTag))
