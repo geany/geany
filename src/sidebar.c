@@ -46,6 +46,10 @@
 
 #include <gdk/gdkkeysyms.h>
 
+/// BVV: It is needed to add the document, activated by the click on the sidebar, to the forward and back navigations
+#include "editor.h"
+#include "sciwrappers.h"
+///
 
 SidebarTreeviews tv = {NULL, NULL, NULL};
 /* while typeahead searching, editor should not get focus */
@@ -126,6 +130,11 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
+
+  /// BVV: Added the serach for tags in the Symbols tab of the sidebar
+  gtk_tree_view_set_search_column(GTK_TREE_VIEW(tree), SYMBOLS_COLUMN_NAME);
+  gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), TRUE);
+  ///
 
 	ui_widget_modify_font_from_string(tree, interface_prefs.tagbar_font);
 
@@ -310,6 +319,9 @@ static void prepare_openfiles(void)
 
 	gtk_tree_view_set_search_column(GTK_TREE_VIEW(tv.tree_openfiles),
 		DOCUMENTS_SHORTNAME);
+
+  // BVV: Added the serach for files in the Documents tab of the sidebar
+  gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tv.tree_openfiles), TRUE);
 
 	/* sort opened filenames in the store_openfiles treeview */
 	sortable = GTK_TREE_SORTABLE(GTK_TREE_MODEL(store_openfiles));
@@ -887,10 +899,24 @@ static gboolean openfiles_go_to_selection(GtkTreeSelection *selection, guint key
 		if (! doc)
 			return FALSE;	/* parent */
 
+    /// BVV: Store the current document before it will be changed
+    GeanyDocument* old_doc = document_get_current();
+    if (!old_doc) old_doc = doc;
+    ///
+
 		/* switch to the doc and grab the focus */
 		document_show_tab(doc);
-		if (keyval != GDK_space)
-			change_focus_to_editor(doc, tv.tree_openfiles);
+    /// BVV: Add the document, activated by the click on the sidebar,
+    /// to the forward and back navigations
+    GeanyEditor* editor = doc->editor;
+    ScintillaObject* sci = editor->sci;
+    gint current_line_number =
+      sci_get_line_from_position(sci, sci_get_current_position(sci));
+    navqueue_goto_line(old_doc, doc, current_line_number);
+    ///
+    // BVV: Enable the fast search and the scrolling by keyboard in the Documents tab
+		/*if (keyval != GDK_space)
+			change_focus_to_editor(doc, tv.tree_openfiles);*/
 	}
 	return FALSE;
 }
@@ -920,9 +946,10 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 			{
 				navqueue_goto_line(doc, doc, line);
 				state = keybindings_get_modifiers(state);
-				if (keyval != GDK_space && ! (state & GEANY_PRIMARY_MOD_MASK))
+        // BVV: Enable the fast search and the scrolling by keyboard in the Symbols tab
+				/*if (keyval != GDK_space && ! (state & GEANY_PRIMARY_MOD_MASK))
 					change_focus_to_editor(doc, NULL);
-				else
+				else*/
 					handled = FALSE;
 			}
 		}
