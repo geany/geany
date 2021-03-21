@@ -120,7 +120,7 @@ constexpr bool IsADigit(int ch) noexcept {
 	return (ch >= '0') && (ch <= '9');
 }
 
-inline bool IsADigit(int ch, int base) noexcept {
+constexpr bool IsADigit(int ch, int base) noexcept {
 	if (base <= 10) {
 		return (ch >= '0') && (ch < '0' + base);
 	} else {
@@ -169,7 +169,7 @@ constexpr bool iswordstart(int ch) noexcept {
 	return IsAlphaNumeric(ch) || ch == '_';
 }
 
-inline bool isoperator(int ch) noexcept {
+constexpr bool isoperator(int ch) noexcept {
 	if (IsAlphaNumeric(ch))
 		return false;
 	if (ch == '%' || ch == '^' || ch == '&' || ch == '*' ||
@@ -185,7 +185,7 @@ inline bool isoperator(int ch) noexcept {
 // Simple case functions for ASCII supersets.
 
 template <typename T>
-inline T MakeUpperCase(T ch) noexcept {
+constexpr T MakeUpperCase(T ch) noexcept {
 	if (ch < 'a' || ch > 'z')
 		return ch;
 	else
@@ -193,7 +193,7 @@ inline T MakeUpperCase(T ch) noexcept {
 }
 
 template <typename T>
-inline T MakeLowerCase(T ch) noexcept {
+constexpr T MakeLowerCase(T ch) noexcept {
 	if (ch < 'A' || ch > 'Z')
 		return ch;
 	else

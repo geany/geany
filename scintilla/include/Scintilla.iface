@@ -1595,13 +1595,6 @@ get bool GetVScrollBar=2281(,)
 # Append a string to the end of the document without changing the selection.
 fun void AppendText=2282(position length, string text)
 
-# Is drawing done in two phases with backgrounds drawn before foregrounds?
-get bool GetTwoPhaseDraw=2283(,)
-
-# In twoPhaseDraw mode, drawing is performed in two phases, first the background
-# and then the foreground. This avoids chopping off characters that overlap the next run.
-set void SetTwoPhaseDraw=2284(bool twoPhase,)
-
 enu PhasesDraw=SC_PHASES_
 val SC_PHASES_ONE=0
 val SC_PHASES_TWO=1
@@ -3001,6 +2994,9 @@ fun int TagsOfStyle=4031(int style, stringresult tags)
 # Result is NUL-terminated.
 fun int DescriptionOfStyle=4032(int style, stringresult description)
 
+# Set the lexer from an ILexer*.
+set void SetILexer=4033(, pointer ilexer)
+
 # Notifications
 # Type of modification and the action which caused the modification.
 # These are defined as a bit mask to make it easy to specify which notifications are wanted.
@@ -3255,7 +3251,6 @@ val SCLEX_X12=128
 val SCLEX_DATAFLEX=129
 val SCLEX_HOLLYWOOD=130
 val SCLEX_RAKU=131
-val SCLEX_LPEG=999
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -5357,6 +5352,17 @@ evt void AutoCSelectionChange=2032(int listType, string text, int position)
 
 cat Provisional
 
+enu Bidirectional=SC_BIDIRECTIONAL_
+val SC_BIDIRECTIONAL_DISABLED=0
+val SC_BIDIRECTIONAL_L2R=1
+val SC_BIDIRECTIONAL_R2L=2
+
+# Retrieve bidirectional text display state.
+get Bidirectional GetBidirectional=2708(,)
+
+# Set bidirectional text display state.
+set void SetBidirectional=2709(Bidirectional bidirectional,)
+
 enu LineCharacterIndexType=SC_LINECHARACTERINDEX_
 val SC_LINECHARACTERINDEX_NONE=0
 val SC_LINECHARACTERINDEX_UTF32=1
@@ -5397,6 +5403,13 @@ set void SetKeysUnicode=2521(bool keysUnicode,)
 
 # Are keys always interpreted as Unicode?
 get bool GetKeysUnicode=2522(,)
+
+# Is drawing done in two phases with backgrounds drawn before foregrounds?
+get bool GetTwoPhaseDraw=2283(,)
+
+# In twoPhaseDraw mode, drawing is performed in two phases, first the background
+# and then the foreground. This avoids chopping off characters that overlap the next run.
+set void SetTwoPhaseDraw=2284(bool twoPhase,)
 
 val INDIC0_MASK=0x20
 val INDIC1_MASK=0x40

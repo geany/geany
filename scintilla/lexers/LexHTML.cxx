@@ -18,7 +18,6 @@
 #include "ILexer.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
-#include "StringCopy.h"
 #include "WordList.h"
 #include "LexAccessor.h"
 #include "Accessor.h"
@@ -866,7 +865,7 @@ public:
 			isXml_ ? "xml" : (isPHPScript_ ? "phpscript" : "hypertext"),
 			isXml_ ? SCLEX_XML : (isPHPScript_ ? SCLEX_PHPSCRIPT : SCLEX_HTML),
 			isXml_ ? lexicalClassesHTML : lexicalClassesXML,
-			isXml_ ? Sci::size(lexicalClassesHTML) : Sci::size(lexicalClassesXML)),
+			isXml_ ? std::size(lexicalClassesHTML) : std::size(lexicalClassesXML)),
 		isXml(isXml_),
 		isPHPScript(isPHPScript_),
 		osHTML(isPHPScript_),
@@ -897,13 +896,13 @@ public:
 	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 	// No Fold as all folding performs in Lex.
 
-	static ILexer *LexerFactoryHTML() {
+	static ILexer5 *LexerFactoryHTML() {
 		return new LexerHTML(false, false);
 	}
-	static ILexer *LexerFactoryXML() {
+	static ILexer5 *LexerFactoryXML() {
 		return new LexerHTML(true, false);
 	}
-	static ILexer *LexerFactoryPHPScript() {
+	static ILexer5 *LexerFactoryPHPScript() {
 		return new LexerHTML(false, true);
 	}
 };

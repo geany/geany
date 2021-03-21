@@ -14,6 +14,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <map>
 #include <forward_list>
@@ -64,7 +65,7 @@ namespace {
 	return whether this modification represents an operation that
 	may reasonably be deferred (not done now OR [possibly] at all)
 */
-bool CanDeferToLastStep(const DocModification &mh) noexcept {
+constexpr bool CanDeferToLastStep(const DocModification &mh) noexcept {
 	if (mh.modificationType & (SC_MOD_BEFOREINSERT | SC_MOD_BEFOREDELETE))
 		return true;	// CAN skip
 	if (!(mh.modificationType & (SC_PERFORMED_UNDO | SC_PERFORMED_REDO)))
@@ -99,10 +100,10 @@ Timer::Timer() noexcept :
 Idler::Idler() noexcept :
 		state(false), idlerID(0) {}
 
-static bool IsAllSpacesOrTabs(const char *s, unsigned int len) noexcept {
-	for (unsigned int i = 0; i < len; i++) {
+static constexpr bool IsAllSpacesOrTabs(std::string_view sv) noexcept {
+	for (const char ch : sv) {
 		// This is safe because IsSpaceOrTab() will return false for null terminators
-		if (!IsSpaceOrTab(s[i]))
+		if (!IsSpaceOrTab(ch))
 			return false;
 	}
 	return true;
@@ -213,7 +214,7 @@ void Editor::SetRepresentations() {
 		"DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB",
 		"CAN", "EM", "SUB", "ESC", "FS", "GS", "RS", "US"
 	};
-	for (size_t j=0; j < Sci::size(reps); j++) {
+	for (size_t j=0; j < std::size(reps); j++) {
 		const char c[2] = { static_cast<char>(j), 0 };
 		reprs.SetRepresentation(c, reps[j]);
 	}
@@ -228,7 +229,7 @@ void Editor::SetRepresentations() {
 			"DCS", "PU1", "PU2", "STS", "CCH", "MW", "SPA", "EPA",
 			"SOS", "SGCI", "SCI", "CSI", "ST", "OSC", "PM", "APC"
 		};
-		for (size_t j=0; j < Sci::size(repsC1); j++) {
+		for (size_t j=0; j < std::size(repsC1); j++) {
 			const char c1[3] = { '\xc2',  static_cast<char>(0x80+j), 0 };
 			reprs.SetRepresentation(c1, repsC1[j]);
 		}
@@ -379,9 +380,10 @@ SelectionPosition Editor::ClampPositionIntoDocument(SelectionPosition sp) const 
 }
 
 Point Editor::LocationFromPosition(SelectionPosition pos, PointEnd pe) {
+	const PRectangle rcClient = GetTextRectangle();
 	RefreshStyleData();
 	AutoSurface surface(this);
-	return view.LocationFromPosition(surface, *this, pos, topLine, vs, pe);
+	return view.LocationFromPosition(surface, *this, pos, topLine, vs, pe, rcClient);
 }
 
 Point Editor::LocationFromPosition(Sci::Position pos, PointEnd pe) {
@@ -397,11 +399,12 @@ SelectionPosition Editor::SPositionFromLocation(Point pt, bool canReturnInvalid,
 	RefreshStyleData();
 	AutoSurface surface(this);
 
+	PRectangle rcClient = GetTextRectangle();
+	// May be in scroll view coordinates so translate back to main view
+	const Point ptOrigin = GetVisibleOriginInMain();
+	rcClient.Move(-ptOrigin.x, -ptOrigin.y);
+
 	if (canReturnInvalid) {
-		PRectangle rcClient = GetTextRectangle();
-		// May be in scroll view coordinates so translate back to main view
-		const Point ptOrigin = GetVisibleOriginInMain();
-		rcClient.Move(-ptOrigin.x, -ptOrigin.y);
 		if (!rcClient.Contains(pt))
 			return SelectionPosition(INVALID_POSITION);
 		if (pt.x < vs.textStart)
@@ -410,7 +413,8 @@ SelectionPosition Editor::SPositionFromLocation(Point pt, bool canReturnInvalid,
 			return SelectionPosition(INVALID_POSITION);
 	}
 	const PointDocument ptdoc = DocumentPointFromView(pt);
-	return view.SPositionFromLocation(surface, *this, ptdoc, canReturnInvalid, charPosition, virtualSpace, vs);
+	return view.SPositionFromLocation(surface, *this, ptdoc, canReturnInvalid,
+		charPosition, virtualSpace, vs, rcClient);
 }
 
 Sci::Position Editor::PositionFromLocation(Point pt, bool canReturnInvalid, bool charPosition) {
@@ -918,11 +922,11 @@ SelectionPosition Editor::MovePositionSoVisible(SelectionPosition pos, int moveD
 		Sci::Line lineDisplay = pcs->DisplayFromDoc(lineDoc);
 		if (moveDir > 0) {
 			// lineDisplay is already line before fold as lines in fold use display line of line after fold
-			lineDisplay = Sci::clamp(lineDisplay, static_cast<Sci::Line>(0), pcs->LinesDisplayed());
+			lineDisplay = std::clamp<Sci::Line>(lineDisplay, 0, pcs->LinesDisplayed());
 			return SelectionPosition(
 				pdoc->LineStart(pcs->DocFromDisplay(lineDisplay)));
 		} else {
-			lineDisplay = Sci::clamp(lineDisplay - 1, static_cast<Sci::Line>(0), pcs->LinesDisplayed());
+			lineDisplay = std::clamp<Sci::Line>(lineDisplay - 1, 0, pcs->LinesDisplayed());
 			return SelectionPosition(
 				pdoc->LineEnd(pcs->DocFromDisplay(lineDisplay)));
 		}
@@ -947,7 +951,7 @@ void Editor::SetLastXChosen() {
 }
 
 void Editor::ScrollTo(Sci::Line line, bool moveThumb) {
-	const Sci::Line topLineNew = Sci::clamp(line, static_cast<Sci::Line>(0), MaxScrollPos());
+	const Sci::Line topLineNew = std::clamp<Sci::Line>(line, 0, MaxScrollPos());
 	if (topLineNew != topLine) {
 		// Try to optimise small scrolls
 #ifndef UNDER_CE
@@ -1181,7 +1185,7 @@ Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const SelectionRange &ran
 				} else {
 					// yMarginT must equal to caretYSlop, with a minimum of 1 and
 					// a maximum of slightly less than half the height of the text area.
-					yMarginT = Sci::clamp(static_cast<Sci::Line>(policies.y.slop), static_cast<Sci::Line>(1), halfScreen);
+					yMarginT = std::clamp<Sci::Line>(policies.y.slop, 1, halfScreen);
 					if (bEven) {
 						yMarginB = yMarginT;
 					} else {
@@ -1191,7 +1195,7 @@ Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const SelectionRange &ran
 				yMoveT = yMarginT;
 				if (bEven) {
 					if (bJump) {
-						yMoveT = Sci::clamp(static_cast<Sci::Line>(policies.y.slop * 3), static_cast<Sci::Line>(1), halfScreen);
+						yMoveT = std::clamp<Sci::Line>(policies.y.slop * 3, 1, halfScreen);
 					}
 					yMoveB = yMoveT;
 				} else {
@@ -1206,7 +1210,7 @@ Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const SelectionRange &ran
 				}
 			} else {	// Not strict
 				yMoveT = bJump ? policies.y.slop * 3 : policies.y.slop;
-				yMoveT = Sci::clamp(yMoveT, static_cast<Sci::Line>(1), halfScreen);
+				yMoveT = std::clamp<Sci::Line>(yMoveT, 1, halfScreen);
 				if (bEven) {
 					yMoveB = yMoveT;
 				} else {
@@ -1256,7 +1260,7 @@ Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const SelectionRange &ran
 				newXY.topLine = std::min(newXY.topLine, lineCaret);
 			}
 		}
-		newXY.topLine = Sci::clamp(newXY.topLine, static_cast<Sci::Line>(0), MaxScrollPos());
+		newXY.topLine = std::clamp<Sci::Line>(newXY.topLine, 0, MaxScrollPos());
 	}
 
 	// Horizontal positioning
@@ -1278,7 +1282,7 @@ Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const SelectionRange &ran
 				} else {
 					// xMargin must equal to caretXSlop, with a minimum of 2 and
 					// a maximum of slightly less than half the width of the text area.
-					xMarginR = Sci::clamp(policies.x.slop, 2, halfScreen);
+					xMarginR = std::clamp(policies.x.slop, 2, halfScreen);
 					if (bEven) {
 						xMarginL = xMarginR;
 					} else {
@@ -1287,7 +1291,7 @@ Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const SelectionRange &ran
 				}
 				if (bJump && bEven) {
 					// Jump is used only in even mode
-					xMoveL = xMoveR = Sci::clamp(policies.x.slop * 3, 1, halfScreen);
+					xMoveL = xMoveR = std::clamp(policies.x.slop * 3, 1, halfScreen);
 				} else {
 					xMoveL = xMoveR = 0;	// Not used, avoid a warning
 				}
@@ -1310,7 +1314,7 @@ Editor::XYScrollPosition Editor::XYScrollToMakeVisible(const SelectionRange &ran
 				}
 			} else {	// Not strict
 				xMoveR = bJump ? policies.x.slop * 3 : policies.x.slop;
-				xMoveR = Sci::clamp(xMoveR, 1, halfScreen);
+				xMoveR = std::clamp(xMoveR, 1, halfScreen);
 				if (bEven) {
 					xMoveL = xMoveR;
 				} else {
@@ -1523,7 +1527,7 @@ bool Editor::WrapLines(WrapScope ws) {
 		const Sci::Line lineDocTop = pcs->DocFromDisplay(topLine);
 		const Sci::Line subLineTop = topLine - pcs->DisplayFromDoc(lineDocTop);
 		if (ws == WrapScope::wsVisible) {
-			lineToWrap = Sci::clamp(lineDocTop-5, wrapPending.start, pdoc->LinesTotal());
+			lineToWrap = std::clamp(lineDocTop-5, wrapPending.start, pdoc->LinesTotal());
 			// Priority wrap to just after visible area.
 			// Since wrapping could reduce display lines, treat each
 			// as taking only one display line.
@@ -1542,9 +1546,9 @@ bool Editor::WrapLines(WrapScope ws) {
 		} else if (ws == WrapScope::wsIdle) {
 			// Try to keep time taken by wrapping reasonable so interaction remains smooth.
 			constexpr double secondsAllowed = 0.01;
-			const Sci::Line linesInAllowedTime = Sci::clamp(
+			const Sci::Line linesInAllowedTime = std::clamp<Sci::Line>(
 				static_cast<Sci::Line>(secondsAllowed / durationWrapOneLine.Duration()),
-				LinesOnScreen() + 50, static_cast<Sci::Line>(0x10000));
+				LinesOnScreen() + 50, 0x10000);
 			lineToWrapEnd = lineToWrap + linesInAllowedTime;
 		}
 		const Sci::Line lineEndNeedWrap = std::min(wrapPending.end, pdoc->LinesTotal());
@@ -1588,7 +1592,7 @@ bool Editor::WrapLines(WrapScope ws) {
 
 	if (wrapOccurred) {
 		SetScrollBars();
-		SetTopLine(Sci::clamp(goodTopLine, static_cast<Sci::Line>(0), MaxScrollPos()));
+		SetTopLine(std::clamp<Sci::Line>(goodTopLine, 0, MaxScrollPos()));
 		SetVerticalScrollPos();
 	}
 
@@ -1824,7 +1828,7 @@ long Editor::TextWidth(uptr_t style, const char *text) {
 	RefreshStyleData();
 	AutoSurface surface(this);
 	if (surface) {
-		return Sci::lround(surface->WidthText(vs.styles[style].font, text, static_cast<int>(strlen(text))));
+		return std::lround(surface->WidthText(vs.styles[style].font, text));
 	} else {
 		return 1;
 	}
@@ -1846,7 +1850,7 @@ void Editor::SetScrollBars() {
 	// TODO: ensure always showing as many lines as possible
 	// May not be, if, for example, window made larger
 	if (topLine > MaxScrollPos()) {
-		SetTopLine(Sci::clamp(topLine, static_cast<Sci::Line>(0), MaxScrollPos()));
+		SetTopLine(std::clamp<Sci::Line>(topLine, 0, MaxScrollPos()));
 		SetVerticalScrollPos();
 		Redraw();
 	}
@@ -1895,7 +1899,7 @@ void Editor::AddChar(char ch) {
 	char s[2];
 	s[0] = ch;
 	s[1] = '\0';
-	InsertCharacter(s, 1, CharacterSource::directInput);
+	InsertCharacter(std::string_view(s, 1), CharacterSource::directInput);
 }
 
 void Editor::FilterSelections() {
@@ -1906,8 +1910,8 @@ void Editor::FilterSelections() {
 }
 
 // InsertCharacter inserts a character encoded in document code page.
-void Editor::InsertCharacter(const char *s, unsigned int len, CharacterSource charSource) {
-	if (len == 0) {
+void Editor::InsertCharacter(std::string_view sv, CharacterSource charSource) {
+	if (sv.empty()) {
 		return;
 	}
 	FilterSelections();
@@ -1947,7 +1951,7 @@ void Editor::InsertCharacter(const char *s, unsigned int len, CharacterSource ch
 					}
 				}
 				positionInsert = RealizeVirtualSpace(positionInsert, currentSel->caret.VirtualSpace());
-				const Sci::Position lengthInserted = pdoc->InsertString(positionInsert, s, len);
+				const Sci::Position lengthInserted = pdoc->InsertString(positionInsert, sv.data(), sv.length());
 				if (lengthInserted > 0) {
 					currentSel->caret.SetPosition(positionInsert + lengthInserted);
 					currentSel->anchor.SetPosition(positionInsert + lengthInserted);
@@ -1976,32 +1980,32 @@ void Editor::InsertCharacter(const char *s, unsigned int len, CharacterSource ch
 	// Avoid blinking during rapid typing:
 	ShowCaretAtCurrentPosition();
 	if ((caretSticky == SC_CARETSTICKY_OFF) ||
-		((caretSticky == SC_CARETSTICKY_WHITESPACE) && !IsAllSpacesOrTabs(s, len))) {
+		((caretSticky == SC_CARETSTICKY_WHITESPACE) && !IsAllSpacesOrTabs(sv))) {
 		SetLastXChosen();
 	}
 
-	int ch = static_cast<unsigned char>(s[0]);
+	int ch = static_cast<unsigned char>(sv[0]);
 	if (pdoc->dbcsCodePage != SC_CP_UTF8) {
-		if (len > 1) {
+		if (sv.length() > 1) {
 			// DBCS code page or DBCS font character set.
-			ch = (ch << 8) | static_cast<unsigned char>(s[1]);
+			ch = (ch << 8) | static_cast<unsigned char>(sv[1]);
 		}
 	} else {
-		if ((ch < 0xC0) || (1 == len)) {
+		if ((ch < 0xC0) || (1 == sv.length())) {
 			// Handles UTF-8 characters between 0x01 and 0x7F and single byte
 			// characters when not in UTF-8 mode.
 			// Also treats \0 and naked trail bytes 0x80 to 0xBF as valid
 			// characters representing themselves.
 		} else {
 			unsigned int utf32[1] = { 0 };
-			UTF32FromUTF8(s, len, utf32, Sci::size(utf32));
+			UTF32FromUTF8(sv, utf32, std::size(utf32));
 			ch = utf32[0];
 		}
 	}
 	NotifyChar(ch, charSource);
 
 	if (recordingMacro && charSource != CharacterSource::tentativeInput) {
-		std::string copy(s, len); // ensure NUL-terminated
+		std::string copy(sv); // ensure NUL-terminated
 		NotifyMacroRecord(SCI_REPLACESEL, 0, reinterpret_cast<sptr_t>(copy.data()));
 	}
 }
@@ -2138,7 +2142,7 @@ void Editor::ClearAll() {
 
 void Editor::ClearDocumentStyle() {
 	pdoc->decorations->DeleteLexerDecorations();
-	pdoc->StartStyling(0, '\377');
+	pdoc->StartStyling(0);
 	pdoc->SetStyleFor(pdoc->Length(), 0);
 	pcs->ShowAll();
 	SetAnnotationHeights(0, pdoc->LinesTotal());
@@ -2539,7 +2543,7 @@ void Editor::CheckModificationForWrap(DocModification mh) {
 namespace {
 
 // Move a position so it is still after the same character as before the insertion.
-Sci::Position MovePositionForInsertion(Sci::Position position, Sci::Position startInsertion, Sci::Position length) noexcept {
+constexpr Sci::Position MovePositionForInsertion(Sci::Position position, Sci::Position startInsertion, Sci::Position length) noexcept {
 	if (position > startInsertion) {
 		return position + length;
 	}
@@ -2548,7 +2552,7 @@ Sci::Position MovePositionForInsertion(Sci::Position position, Sci::Position sta
 
 // Move a position so it is still after the same character as before the deletion if that
 // character is still present else after the previous surviving character.
-Sci::Position MovePositionForDeletion(Sci::Position position, Sci::Position startDeletion, Sci::Position length) noexcept {
+constexpr Sci::Position MovePositionForDeletion(Sci::Position position, Sci::Position startDeletion, Sci::Position length) noexcept {
 	if (position > startDeletion) {
 		const Sci::Position endDeletion = startDeletion + length;
 		if (position > endDeletion) {
@@ -2668,7 +2672,7 @@ void Editor::NotifyModified(Document *, DocModification mh, void *) {
 		if (mh.linesAdded != 0) {
 			// Avoid scrolling of display if change before current display
 			if (mh.position < posTopLine && !CanDeferToLastStep(mh)) {
-				const Sci::Line newTop = Sci::clamp(topLine + mh.linesAdded, static_cast<Sci::Line>(0), MaxScrollPos());
+				const Sci::Line newTop = std::clamp<Sci::Line>(topLine + mh.linesAdded, 0, MaxScrollPos());
 				if (newTop != topLine) {
 					SetTopLine(newTop);
 					SetVerticalScrollPos();
@@ -2910,8 +2914,8 @@ void Editor::PageMove(int direction, Selection::selTypes selt, bool stuttered) {
 	} else {
 		const Point pt = LocationFromPosition(sel.MainCaret());
 
-		topLineNew = Sci::clamp(
-		            topLine + direction * LinesToScroll(), static_cast<Sci::Line>(0), MaxScrollPos());
+		topLineNew = std::clamp<Sci::Line>(
+		            topLine + direction * LinesToScroll(), 0, MaxScrollPos());
 		newPos = SPositionFromLocation(
 			Point::FromInts(lastXChosen - xOffset, static_cast<int>(pt.y) +
 				direction * (vs.lineHeight * static_cast<int>(LinesToScroll()))),
@@ -3260,7 +3264,7 @@ constexpr short LowShortFromWParam(uptr_t x) {
 	return static_cast<short>(x & 0xffff);
 }
 
-unsigned int WithExtends(unsigned int iMessage) noexcept {
+constexpr unsigned int WithExtends(unsigned int iMessage) noexcept {
 	switch (iMessage) {
 	case SCI_CHARLEFT: return SCI_CHARLEFTEXTEND;
 	case SCI_CHARRIGHT: return SCI_CHARRIGHTEXTEND;
@@ -3287,7 +3291,7 @@ unsigned int WithExtends(unsigned int iMessage) noexcept {
 	}
 }
 
-int NaturalDirection(unsigned int iMessage) noexcept {
+constexpr int NaturalDirection(unsigned int iMessage) noexcept {
 	switch (iMessage) {
 	case SCI_CHARLEFT:
 	case SCI_CHARLEFTEXTEND:
@@ -3318,7 +3322,7 @@ int NaturalDirection(unsigned int iMessage) noexcept {
 	}
 }
 
-bool IsRectExtend(unsigned int iMessage, bool isRectMoveExtends) noexcept {
+constexpr bool IsRectExtend(unsigned int iMessage, bool isRectMoveExtends) noexcept {
 	switch (iMessage) {
 	case SCI_CHARLEFTRECTEXTEND:
 	case SCI_CHARRIGHTRECTEXTEND:
@@ -4200,7 +4204,7 @@ std::string Editor::RangeText(Sci::Position start, Sci::Position end) const {
 	if (start < end) {
 		const Sci::Position len = end - start;
 		std::string ret(len, '\0');
-		pdoc->GetCharRange(const_cast<char *>(ret.data()), start, len);
+		pdoc->GetCharRange(ret.data(), start, len);
 		return ret;
 	}
 	return std::string();
@@ -5106,7 +5110,8 @@ Sci::Position Editor::PositionAfterMaxStyling(Sci::Position posMax, bool scrolli
 	// When scrolling, allow less time to ensure responsive
 	const double secondsAllowed = scrolling ? 0.005 : 0.02;
 
-	const Sci::Line linesToStyle = Sci::clamp(static_cast<int>(secondsAllowed / pdoc->durationStyleOneLine.Duration()),
+	const Sci::Line linesToStyle = std::clamp(
+		static_cast<int>(secondsAllowed / pdoc->durationStyleOneLine.Duration()),
 		10, 0x10000);
 	const Sci::Line stylingMaxLine = std::min(
 		pdoc->SciLineFromPosition(pdoc->GetEndStyled()) + linesToStyle,
@@ -5461,18 +5466,18 @@ void Editor::EnsureLineVisible(Sci::Line lineDoc, bool enforcePolicy) {
 		const Sci::Line lineDisplay = pcs->DisplayFromDoc(lineDoc);
 		if (visiblePolicy.policy & VISIBLE_SLOP) {
 			if ((topLine > lineDisplay) || ((visiblePolicy.policy & VISIBLE_STRICT) && (topLine + visiblePolicy.slop > lineDisplay))) {
-				SetTopLine(Sci::clamp(lineDisplay - visiblePolicy.slop, static_cast<Sci::Line>(0), MaxScrollPos()));
+				SetTopLine(std::clamp<Sci::Line>(lineDisplay - visiblePolicy.slop, 0, MaxScrollPos()));
 				SetVerticalScrollPos();
 				Redraw();
 			} else if ((lineDisplay > topLine + LinesOnScreen() - 1) ||
 			        ((visiblePolicy.policy & VISIBLE_STRICT) && (lineDisplay > topLine + LinesOnScreen() - 1 - visiblePolicy.slop))) {
-				SetTopLine(Sci::clamp(lineDisplay - LinesOnScreen() + 1 + visiblePolicy.slop, static_cast<Sci::Line>(0), MaxScrollPos()));
+				SetTopLine(std::clamp<Sci::Line>(lineDisplay - LinesOnScreen() + 1 + visiblePolicy.slop, 0, MaxScrollPos()));
 				SetVerticalScrollPos();
 				Redraw();
 			}
 		} else {
 			if ((topLine > lineDisplay) || (lineDisplay > topLine + LinesOnScreen() - 1) || (visiblePolicy.policy & VISIBLE_STRICT)) {
-				SetTopLine(Sci::clamp(lineDisplay - LinesOnScreen() / 2 + 1, static_cast<Sci::Line>(0), MaxScrollPos()));
+				SetTopLine(std::clamp<Sci::Line>(lineDisplay - LinesOnScreen() / 2 + 1, 0, MaxScrollPos()));
 				SetVerticalScrollPos();
 				Redraw();
 			}
@@ -5660,7 +5665,7 @@ void Editor::AddStyledText(const char *buffer, Sci::Position appendLength) {
 	for (i = 0; i < textLength; i++) {
 		text[i] = buffer[i*2+1];
 	}
-	pdoc->StartStyling(CurrentPosition(), static_cast<unsigned char>(0xff));
+	pdoc->StartStyling(CurrentPosition());
 	pdoc->SetStyles(textLength, text.c_str());
 	SetEmptySelection(sel.MainCaret() + lengthInserted);
 }
@@ -6093,14 +6098,14 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		return pdoc->MovePositionOutsideChar(static_cast<Sci::Position>(wParam) + 1, 1, true);
 
 	case SCI_POSITIONRELATIVE:
-		return Sci::clamp(pdoc->GetRelativePosition(
+		return std::clamp<Sci::Position>(pdoc->GetRelativePosition(
 			static_cast<Sci::Position>(wParam), lParam),
-			static_cast<Sci::Position>(0), pdoc->Length());
+			0, pdoc->Length());
 
 	case SCI_POSITIONRELATIVECODEUNITS:
-		return Sci::clamp(pdoc->GetRelativePositionUTF16(
+		return std::clamp<Sci::Position>(pdoc->GetRelativePositionUTF16(
 			static_cast<Sci::Position>(wParam), lParam),
-			static_cast<Sci::Position>(0), pdoc->Length());
+			0, pdoc->Length());
 
 	case SCI_LINESCROLL:
 		ScrollTo(topLine + static_cast<Sci::Line>(lParam));
@@ -6525,7 +6530,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		return pdoc->GetLineEndTypesActive();
 
 	case SCI_STARTSTYLING:
-		pdoc->StartStyling(static_cast<Sci::Position>(wParam), static_cast<char>(lParam));
+		pdoc->StartStyling(static_cast<Sci::Position>(wParam));
 		break;
 
 	case SCI_SETSTYLING:
@@ -6548,6 +6553,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	case SCI_GETBUFFEREDDRAW:
 		return view.bufferedDraw;
 
+#ifdef INCLUDE_DEPRECATED_FEATURES
 	case SCI_GETTWOPHASEDRAW:
 		return view.phasesDraw == EditView::phasesTwo;
 
@@ -6555,6 +6561,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		if (view.SetTwoPhaseDraw(wParam != 0))
 			InvalidateStyleRedraw();
 		break;
+#endif
 
 	case SCI_GETPHASESDRAW:
 		return view.phasesDraw;
@@ -6772,7 +6779,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	case SCI_TEXTWIDTH:
 		PLATFORM_ASSERT(wParam < vs.styles.size());
 		PLATFORM_ASSERT(lParam);
-		return TextWidth(static_cast<int>(wParam), CharPtrFromSPtr(lParam));
+		return TextWidth(wParam, CharPtrFromSPtr(lParam));
 
 	case SCI_TEXTHEIGHT:
 		RefreshStyleData();
@@ -6875,6 +6882,13 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case SCI_GETIMEINTERACTION:
 		return imeInteraction;
+
+	case SCI_SETBIDIRECTIONAL:
+		// SCI_SETBIDIRECTIONAL is implemented on platform subclasses if they support bidirectional text.
+		break;
+
+	case SCI_GETBIDIRECTIONAL:
+		return static_cast<sptr_t>(bidirectional);
 
 	case SCI_GETLINECHARACTERINDEX:
 		return pdoc->LineCharacterIndex();
@@ -7384,7 +7398,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		return vs.caretStyle;
 
 	case SCI_SETCARETWIDTH:
-		vs.caretWidth = Sci::clamp(static_cast<int>(wParam), 0, 20);
+		vs.caretWidth = std::clamp(static_cast<int>(wParam), 0, 20);
 		InvalidateStyleRedraw();
 		break;
 

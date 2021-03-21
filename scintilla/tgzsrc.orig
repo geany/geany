@@ -1,0 +1,3 @@
+cd ..
+rm -f scintilla.tgz
+tar --exclude-from=scintilla/.hgignore --create scintilla/* | gzip -c >scintilla.tgz

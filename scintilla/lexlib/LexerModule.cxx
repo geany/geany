@@ -90,7 +90,7 @@ size_t LexerModule::NamedStyles() const noexcept {
 	return nClasses;
 }
 
-ILexer *LexerModule::Create() const {
+ILexer5 *LexerModule::Create() const {
 	if (fnFactory)
 		return fnFactory();
 	else

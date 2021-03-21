@@ -36,11 +36,11 @@ class ScintillaGTK : public ScintillaBase {
 
 	GtkWidgetClass *parentClass;
 
-	static GdkAtom atomUTF8;
-	static GdkAtom atomUTF8Mime;
-	static GdkAtom atomString;
-	static GdkAtom atomUriList;
-	static GdkAtom atomDROPFILES_DND;
+	static inline GdkAtom atomUTF8 {};
+	static inline GdkAtom atomUTF8Mime {};
+	static inline GdkAtom atomString {};
+	static inline GdkAtom atomUriList {};
+	static inline GdkAtom atomDROPFILES_DND {};
 	GdkAtom atomSought;
 
 #if PLAT_GTK_WIN32

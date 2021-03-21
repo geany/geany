@@ -44,7 +44,7 @@ void SCI_METHOD LexerBase::Release() {
 }
 
 int SCI_METHOD LexerBase::Version() const {
-	return lvIdentity;
+	return lvRelease5;
 }
 
 const char * SCI_METHOD LexerBase::PropertyNames() {
@@ -144,7 +144,7 @@ const char * SCI_METHOD LexerBase::DescriptionOfStyle(int style) {
 	return (style < NamedStyles()) ? lexClasses[style].description : "";
 }
 
-// ILexerWithIdentity methods
+// ILexer5 methods
 
 const char *SCI_METHOD LexerBase::GetName() {
 	return "";

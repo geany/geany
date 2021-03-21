@@ -138,7 +138,6 @@ src/RESearch.cxx \
 src/RESearch.h \
 src/RunStyles.cxx \
 src/RunStyles.h \
-src/SVector.h \
 src/ScintillaBase.cxx \
 src/ScintillaBase.h \
 src/Selection.cxx \
@@ -149,7 +148,6 @@ src/Style.cxx \
 src/Style.h \
 src/UniConversion.cxx \
 src/UniConversion.h \
-src/UnicodeFromUTF8.h \
 src/UniqueString.cxx \
 src/UniqueString.h \
 src/ViewStyle.cxx \

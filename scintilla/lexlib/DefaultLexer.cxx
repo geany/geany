@@ -40,7 +40,7 @@ void SCI_METHOD DefaultLexer::Release() {
 }
 
 int SCI_METHOD DefaultLexer::Version() const {
-	return lvIdentity;
+	return lvRelease5;
 }
 
 const char * SCI_METHOD DefaultLexer::PropertyNames() {
@@ -128,7 +128,7 @@ const char * SCI_METHOD DefaultLexer::DescriptionOfStyle(int style) {
 	return (style < NamedStyles()) ? lexClasses[style].description : "";
 }
 
-// ILexerWithIdentity methods
+// ILexer5 methods
 const char * SCI_METHOD DefaultLexer::GetName() {
 	return languageName;
 }

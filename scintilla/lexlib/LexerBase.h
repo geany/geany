@@ -11,7 +11,7 @@
 namespace Scintilla {
 
 // A simple lexer with no state
-class LexerBase : public ILexerWithIdentity {
+class LexerBase : public ILexer5 {
 protected:
 	const LexicalClass *lexClasses;
 	size_t nClasses;
@@ -46,7 +46,7 @@ public:
 	const char * SCI_METHOD NameOfStyle(int style) override;
 	const char * SCI_METHOD TagsOfStyle(int style) override;
 	const char * SCI_METHOD DescriptionOfStyle(int style) override;
-	// ILexerWithIdentity methods
+	// ILexer5 methods
 	const char * SCI_METHOD GetName() override;
 	int SCI_METHOD GetIdentifier() override;
 	const char *SCI_METHOD PropertyGet(const char *key) override;

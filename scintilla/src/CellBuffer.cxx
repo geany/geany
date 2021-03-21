@@ -14,6 +14,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <algorithm>
 #include <memory>
@@ -195,8 +196,8 @@ public:
 	}
 	void InsertLines(Sci::Line line, const Sci::Position *positions, size_t lines, bool lineStart) override {
 		const POS lineAsPos = static_cast<POS>(line);
-		if (sizeof(Sci::Position) == sizeof(POS)) {
-			starts.InsertPartitions(lineAsPos, reinterpret_cast<const POS *>(positions), lines);
+		if constexpr (sizeof(Sci::Position) == sizeof(POS)) {
+			starts.InsertPartitions(lineAsPos, positions, lines);
 		} else {
 			starts.InsertPartitionsWithCast(lineAsPos, positions, lines);
 		}
@@ -315,7 +316,7 @@ void Action::Create(actionType at_, Sci::Position position_, const char *data_, 
 	position = position_;
 	at = at_;
 	if (lenData_) {
-		data = Sci::make_unique<char[]>(lenData_);
+		data = std::make_unique<char[]>(lenData_);
 		memcpy(&data[0], data_, lenData_);
 	}
 	lenData = lenData_;
@@ -501,7 +502,7 @@ void UndoHistory::TentativeCommit() {
 }
 
 bool UndoHistory::TentativeActive() const noexcept {
-	return tentativePoint >= 0;
+	return tentativePoint >= 0; 
 }
 
 int UndoHistory::TentativeSteps() noexcept {
@@ -571,9 +572,9 @@ CellBuffer::CellBuffer(bool hasStyles_, bool largeDocument_) :
 	utf8LineEnds = 0;
 	collectingUndo = true;
 	if (largeDocument)
-		plv = Sci::make_unique<LineVector<Sci::Position>>();
+		plv = std::make_unique<LineVector<Sci::Position>>();
 	else
-		plv = Sci::make_unique<LineVector<int>>();
+		plv = std::make_unique<LineVector<int>>();
 }
 
 CellBuffer::~CellBuffer() {
@@ -863,7 +864,7 @@ bool CellBuffer::UTF8IsCharacterBoundary(Sci::Position position) const {
 			if (!UTF8IsTrailByte(back.front())) {
 				if (i > 0) {
 					// Have reached a non-trail
-					const int cla = UTF8Classify(reinterpret_cast<const unsigned char*>(back.data()), back.size());
+					const int cla = UTF8Classify(back);
 					if ((cla & UTF8MaskInvalid) || (cla != i)) {
 						return false;
 					}
@@ -918,14 +919,14 @@ void CellBuffer::ResetLineEnds() {
 
 namespace {
 
-CountWidths CountCharacterWidthsUTF8(const char *s, size_t len) noexcept {
+CountWidths CountCharacterWidthsUTF8(std::string_view sv) noexcept {
 	CountWidths cw;
-	size_t remaining = len;
+	size_t remaining = sv.length();
 	while (remaining > 0) {
-		const int utf8Status = UTF8Classify(reinterpret_cast<const unsigned char*>(s), len);
+		const int utf8Status = UTF8Classify(sv);
 		const int lenChar = utf8Status & UTF8MaskWidth;
 		cw.CountChar(lenChar);
-		s += lenChar;
+		sv.remove_prefix(lenChar);
 		remaining -= lenChar;
 	}
 	return cw;
@@ -946,8 +947,8 @@ void CellBuffer::RecalculateIndexLineStarts(Sci::Line lineFirst, Sci::Line lineL
 		posLineEnd = LineStart(line+1);
 		const Sci::Position width = posLineEnd - posLineStart;
 		text.resize(width);
-		GetCharRange(const_cast<char *>(text.data()), posLineStart, width);
-		const CountWidths cw = CountCharacterWidthsUTF8(text.data(), text.size());
+		GetCharRange(text.data(), posLineStart, width);
+		const CountWidths cw = CountCharacterWidthsUTF8(text);
 		plv->SetLineCharactersWidth(line, cw);
 	}
 }
@@ -976,7 +977,7 @@ void CellBuffer::BasicInsertString(Sci::Position position, const char *s, Sci::P
 		// Actually, don't need to check that whole insertion is valid just that there
 		// are no potential fragments at ends.
 		simpleInsertion = UTF8IsCharacterBoundary(position) &&
-			UTF8IsValid(s, insertLength);
+			UTF8IsValid(std::string_view(s, insertLength));
 	}
 
 	substance.InsertFromArray(position, s, 0, insertLength);
@@ -1040,6 +1041,7 @@ void CellBuffer::BasicInsertString(Sci::Position position, const char *s, Sci::P
 				if (*ptr == '\n') {
 					++ptr;
 				}
+				[[fallthrough]];
 			case 1: // '\n'
 				positions[nPositions++] = position + ptr - s;
 				if (nPositions == PositionBlockSize) {
@@ -1114,7 +1116,7 @@ void CellBuffer::BasicInsertString(Sci::Position position, const char *s, Sci::P
 	}
 	if (maintainingIndex) {
 		if (simpleInsertion && (lineInsert == lineStart)) {
-			const CountWidths cw = CountCharacterWidthsUTF8(s, insertLength);
+			const CountWidths cw = CountCharacterWidthsUTF8(std::string_view(s, insertLength));
 			plv->InsertCharacters(linePosition, cw);
 		} else {
 			RecalculateIndexLineStarts(linePosition, lineInsert - 1);
@@ -1154,10 +1156,10 @@ void CellBuffer::BasicDeleteChars(Sci::Position position, Sci::Position deleteLe
 				UTF8IsCharacterBoundary(position) && UTF8IsCharacterBoundary(posEnd);
 			if (simpleDeletion) {
 				std::string text(deleteLength, '\0');
-				GetCharRange(const_cast<char *>(text.data()), position, deleteLength);
-				if (UTF8IsValid(text.data(), text.size())) {
+				GetCharRange(text.data(), position, deleteLength);
+				if (UTF8IsValid(text)) {
 					// Everything is good
-					const CountWidths cw = CountCharacterWidthsUTF8(text.data(), text.size());
+					const CountWidths cw = CountCharacterWidthsUTF8(text);
 					plv->InsertCharacters(linePosition, -cw);
 				} else {
 					lineRecalculateStart = linePosition;

@@ -401,7 +401,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	Sci::Position RealizeVirtualSpace(Sci::Position position, Sci::Position virtualSpace);
 	SelectionPosition RealizeVirtualSpace(const SelectionPosition &position);
 	void AddChar(char ch);
-	virtual void InsertCharacter(const char *s, unsigned int len, CharacterSource charSource);
+	virtual void InsertCharacter(std::string_view sv, CharacterSource charSource);
 	void ClearBeforeTentativeStart();
 	void InsertPaste(const char *text, Sci::Position len);
 	enum PasteShape { pasteStream=0, pasteRectangular = 1, pasteLine = 2 };
@@ -530,7 +530,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	Sci::Position PositionAfterMaxStyling(Sci::Position posMax, bool scrolling) const;
 	void StartIdleStyling(bool truncatedLastStyling);
 	void StyleAreaBounded(PRectangle rcArea, bool scrolling);
-	bool SynchronousStylingToVisible() const noexcept {
+	constexpr bool SynchronousStylingToVisible() const noexcept {
 		return (idleStyling == SC_IDLESTYLING_NONE) || (idleStyling == SC_IDLESTYLING_AFTERVISIBLE);
 	}
 	void IdleStyling();
@@ -647,6 +647,7 @@ public:
 			surf->Init(ed->wMain.GetID());
 			surf->SetUnicodeMode(SC_CP_UTF8 == ed->CodePage());
 			surf->SetDBCSMode(ed->CodePage());
+			surf->SetBidiR2L(ed->BidirectionalR2L());
 		}
 	}
 	AutoSurface(SurfaceID sid, Editor *ed, int technology = -1) {
@@ -655,6 +656,7 @@ public:
 			surf->Init(sid, ed->wMain.GetID());
 			surf->SetUnicodeMode(SC_CP_UTF8 == ed->CodePage());
 			surf->SetDBCSMode(ed->CodePage());
+			surf->SetBidiR2L(ed->BidirectionalR2L());
 		}
 	}
 	// Deleted so AutoSurface objects can not be copied.

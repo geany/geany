@@ -8,18 +8,17 @@
 // Copyright 2013 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <cassert>
 #include <cstring>
 
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <algorithm>
 
-#include "StringCopy.h"
 #include "CaseConvert.h"
 #include "UniConversion.h"
-
-#include "Compat.h"
 
 using namespace Scintilla;
 
@@ -584,8 +583,9 @@ class CaseConverter : public ICaseConverter {
 		CharacterConversion() noexcept : character(0) {
 			// Empty case: NUL -> "".
 		}
-		CharacterConversion(int character_=0, const char *conversion_="") noexcept : character(character_) {
-			StringCopy(conversion.conversion, conversion_);
+		CharacterConversion(int character_, std::string_view conversion_) noexcept : character(character_) {
+			assert(conversion_.length() <= maxConversionLength);
+			conversion_.copy(conversion.conversion, conversion_.length());
 		}
 		bool operator<(const CharacterConversion &other) const noexcept {
 			return character < other.character;
@@ -697,7 +697,7 @@ void AddSymmetric(enum CaseConversion conversion, int lower,int upper) {
 
 void SetupConversions(enum CaseConversion conversion) {
 	// First initialize for the symmetric ranges
-	for (size_t i=0; i<Sci::size(symmetricCaseConversionRanges);) {
+	for (size_t i=0; i<std::size(symmetricCaseConversionRanges);) {
 		const int lower = symmetricCaseConversionRanges[i++];
 		const int upper = symmetricCaseConversionRanges[i++];
 		const int length = symmetricCaseConversionRanges[i++];
@@ -707,7 +707,7 @@ void SetupConversions(enum CaseConversion conversion) {
 		}
 	}
 	// Add the symmetric singletons
-	for (size_t i=0; i<Sci::size(symmetricCaseConversions);) {
+	for (size_t i=0; i<std::size(symmetricCaseConversions);) {
 		const int lower = symmetricCaseConversions[i++];
 		const int upper = symmetricCaseConversions[i++];
 		AddSymmetric(conversion, lower, upper);

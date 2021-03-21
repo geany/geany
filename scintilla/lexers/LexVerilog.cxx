@@ -222,7 +222,7 @@ public:
 		}
 	virtual ~LexerVerilog() {}
 	int SCI_METHOD Version() const override {
-		return lvIdentity;
+		return lvRelease5;
 	}
 	void SCI_METHOD Release() override {
 		delete this;
@@ -283,7 +283,7 @@ public:
 	const char * SCI_METHOD GetSubStyleBases() override {
 		return styleSubable;
 	}
-	static ILexer* LexerFactoryVerilog() {
+	static ILexer5* LexerFactoryVerilog() {
 		return new LexerVerilog();
 	}
 	static int MaskActive(int style) {

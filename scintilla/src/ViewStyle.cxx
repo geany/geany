@@ -10,6 +10,7 @@
 #include <cstring>
 
 #include <stdexcept>
+#include <string_view>
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -52,7 +53,7 @@ void FontRealised::Realise(Surface &surface, int zoomLevel, int technology, cons
 	descent = static_cast<unsigned int>(surface.Descent(font));
 	capitalHeight = surface.Ascent(font) - surface.InternalLeading(font);
 	aveCharWidth = surface.AverageCharWidth(font);
-	spaceWidth = surface.WidthText(font, " ", 1);
+	spaceWidth = surface.WidthText(font, " ");
 }
 
 ViewStyle::ViewStyle() : markers(MARKER_MAX + 1), indicators(INDICATOR_MAX + 1) {
@@ -343,7 +344,7 @@ void ViewStyle::Refresh(Surface &surface, int tabInChars) {
 	controlCharWidth = 0.0;
 	if (controlCharSymbol >= 32) {
 		const char cc[2] = { static_cast<char>(controlCharSymbol), '\0' };
-		controlCharWidth = surface.WidthText(styles[STYLE_CONTROLCHAR].font, cc, 1);
+		controlCharWidth = surface.WidthText(styles[STYLE_CONTROLCHAR].font, cc);
 	}
 
 	CalculateMarginWidthAndMask();
@@ -436,7 +437,7 @@ void ViewStyle::CalcLargestMarkerHeight() noexcept {
 }
 
 int ViewStyle::GetFrameWidth() const noexcept {
-	return Sci::clamp(caretLineFrame, 1, lineHeight / 3);
+	return std::clamp(caretLineFrame, 1, lineHeight / 3);
 }
 
 bool ViewStyle::IsLineFrameOpaque(bool caretActive, bool lineContainsCaret) const noexcept {
@@ -601,7 +602,7 @@ void ViewStyle::CreateAndAddFont(const FontSpecification &fs) {
 	if (fs.fontName) {
 		FontMap::iterator it = fonts.find(fs);
 		if (it == fonts.end()) {
-			fonts[fs] = Sci::make_unique<FontRealised>();
+			fonts[fs] = std::make_unique<FontRealised>();
 		}
 	}
 }

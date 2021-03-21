@@ -308,7 +308,7 @@ public :
 	virtual ~LexerSQL() {}
 
 	int SCI_METHOD Version () const override {
-		return lvIdentity;
+		return lvRelease5;
 	}
 
 	void SCI_METHOD Release() override {
@@ -350,7 +350,7 @@ public :
 		return 0;
 	}
 
-	static ILexer *LexerFactorySQL() {
+	static ILexer5 *LexerFactorySQL() {
 		return new LexerSQL();
 	}
 private:

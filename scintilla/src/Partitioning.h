@@ -8,8 +8,6 @@
 #ifndef PARTITIONING_H
 #define PARTITIONING_H
 
-#include "Compat.h"
-
 namespace Scintilla {
 
 /// A split vector of integers with a method for adding a value to all elements
@@ -87,7 +85,7 @@ private:
 	}
 
 	void Allocate(ptrdiff_t growSize) {
-		body = Sci::make_unique<SplitVectorWithRangeAdd<T>>(growSize);
+		body = std::make_unique<SplitVectorWithRangeAdd<T>>(growSize);
 		stepPartition = 0;
 		stepLength = 0;
 		body->Insert(0, 0);	// This value stays 0 for ever
