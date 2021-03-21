@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2016-06-28 09:28+0200\n"
+"POT-Creation-Date: 2021-03-17 02:11+0000\n"
+"PO-Revision-Date: 2021-03-17 19:18+0300\n"
 "Last-Translator: Gürkan Gür <seqizz@gmail.com>\n"
 "Language-Team: Gürkan Gür <seqizz@gmail.com>\n"
 "Language: tr_TR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -184,7 +184,7 @@ msgid ""
 "disable it if you do not need it"
 msgstr ""
 "Sanal terminal desteği (VTE) açılışta yüklenmiş olmalı. İhtiyacınız yoksa "
-"etkisizleştirin."
+"etkisizleştirin"
 
 #: ../data/geany.glade.h:36
 msgid "Enable plugin support"
@@ -195,26 +195,22 @@ msgid "<b>Startup</b>"
 msgstr "<b>Başlangıç</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "Pencere yeri ve boyutunu kaydet"
+msgstr "Pencere boyutunu kaydet"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
 msgstr ""
-"Şu anki pencere pozisyonu ve boyutunu kaydeder, açılışta bu şekilde açar."
+"Şu anki pencere pozisyonu ve boyutunu kaydeder, açılışta bu şekilde açar"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "Pencere yeri ve boyutunu kaydet"
+msgstr "Pencere boyutunu kaydet"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
 msgstr ""
-"Şu anki pencere pozisyonu ve boyutunu kaydeder, açılışta bu şekilde açar."
+"Şu anki pencere pozisyonu ve boyutunu kaydeder, açılışta bu şekilde açar"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -419,7 +415,7 @@ msgstr "Sembol listesini aç ya da kapat"
 
 #: ../data/geany.glade.h:81
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "Varsayılan sembol sıralama modu"
 
 #: ../data/geany.glade.h:82
 msgid "Default sorting mode:"
@@ -670,7 +666,7 @@ msgid ""
 "drop any selections within or outside of the editor window"
 msgstr ""
 "Sürükle ve bırak özelliğini kapatır. Bu sayede düzenleyici içinde veya "
-"dışarıyla sürükle bırak yöntemi ile taşıma yapılamaz."
+"dışarıyla sürükle bırak yöntemi ile taşıma yapılamaz"
 
 #: ../data/geany.glade.h:138
 msgid "Code folding"
@@ -740,18 +736,16 @@ msgstr ""
 ">Öntanımlı Girintilemeyi Uygula</i> kullanın."
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "Genişlik"
+msgstr "_Genişlik:"
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "Tek girdi için karakterin genişliği"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Oto-Girinti modu:"
+msgstr "Oto-Girinti _modu:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -806,9 +800,8 @@ msgid "Type:"
 msgstr "Tür:"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Tab tuşu aralığı"
+msgstr "Tab _tuşu aralığı"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -1035,7 +1028,7 @@ msgstr "Son satıra gelindiğinde kaydırmayı durdurur"
 
 #: ../data/geany.glade.h:214
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "İmlecin etrafında görünen çizgiler:"
 
 #: ../data/geany.glade.h:215
 msgid "<b>Display</b>"
@@ -1210,14 +1203,13 @@ msgid ""
 msgstr ""
 "Yeni satır karakterlerinin tamamının dosyayı kaydetmeden elden geçirilmesi "
 "gerektiğini belirler. Bu sayede aynı dosyada farklı satır sonları "
-"kullanımına bağlı karmaşayı engelleyebilirsiniz."
+"kullanımına bağlı karmaşayı engelleyebilirsiniz"
 
 #: ../data/geany.glade.h:251
 msgid "Strip trailing spaces and tabs"
 msgstr "Sondaki boşluğu temizle"
 
 #: ../data/geany.glade.h:252
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr ""
 "Dosyaların sonundaki boşluk, sekme ve diğer satır sonu karakterlerini "
@@ -1318,7 +1310,7 @@ msgstr "Geliştiricinin e-posta adresi"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"
-msgstr "geliştirici isminin baş harfleri"
+msgstr "Geliştirici isminin baş harfleri"
 
 #: ../data/geany.glade.h:275
 msgid "Initial version:"
@@ -1334,7 +1326,7 @@ msgstr "Şirket adı"
 
 #: ../data/geany.glade.h:278
 msgid "Developer:"
-msgstr "Geliştirici"
+msgstr "Geliştirici:"
 
 #: ../data/geany.glade.h:279
 msgid "Company:"
@@ -1459,7 +1451,7 @@ msgstr "Dosyanın sadece adını kullan"
 
 #: ../data/geany.glade.h:305
 msgid "Print only the basename (without the path) of the printed file"
-msgstr "Yazdırırken dosyanın sadece adını (yolu olmadan) kullan."
+msgstr "Yazdırırken dosyanın sadece adını (yolu olmadan) kullan"
 
 #: ../data/geany.glade.h:306 ../src/printing.c:273
 msgid "Date format:"
@@ -1727,7 +1719,7 @@ msgstr "_Seçimi Terminale Gönder"
 
 #: ../data/geany.glade.h:366 ../src/keybindings.c:502
 msgid "_Reflow Lines/Block"
-msgstr ""
+msgstr "_Akış Sayısı/Önle"
 
 #: ../data/geany.glade.h:367 ../src/keybindings.c:460
 msgid "T_oggle Case of Selection"
@@ -2123,24 +2115,20 @@ msgid "Filename:"
 msgstr "Dosya adı:"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "Adı:"
+msgstr "_Adı:"
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "Tanım:"
+msgstr "_Tanım:"
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "Temel yol:"
+msgstr "_Temel yol:"
 
-#: ../data/geany.glade.h:468 ../src/search.c:897
-#, fuzzy
+#: ../data/geany.glade.h:468 ../src/search.c:901
 msgid "File _patterns:"
-msgstr "Dosya örnekleri:"
+msgstr "Dosya _örnekleri:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2240,73 +2228,76 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"Geany katkıda bulunanlar"
 
-#: ../src/about.c:172
+#: ../src/about.c:173
 msgid "About Geany"
 msgstr "Geany Hakkında"
 
-#: ../src/about.c:216
+#: ../src/about.c:217
 msgid "A fast and lightweight IDE"
 msgstr "Hızlı ve Hafif Bir IDE"
 
-#: ../src/about.c:238
+#: ../src/about.c:239
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(%s veya daha sonrasında derlendi)"
 
-#: ../src/about.c:252
+#: ../src/about.c:253
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
 msgstr ""
+"GTK+ v%u.%u.%u ve GLib v%u.%u.%u kullanılan çalışma zamanı kütüphaneleri"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:285
+#: ../src/about.c:286
 msgid "Info"
 msgstr "Bilgi"
 
-#: ../src/about.c:301
+#: ../src/about.c:302
 msgid "Developers"
 msgstr "Geliştiriciler"
 
-#: ../src/about.c:308
+#: ../src/about.c:309
 msgid "maintainer"
 msgstr "bakıcı"
 
-#: ../src/about.c:316 ../src/about.c:324 ../src/about.c:332
+#: ../src/about.c:317 ../src/about.c:325 ../src/about.c:333
 msgid "developer"
 msgstr "geliştirici"
 
-#: ../src/about.c:340
+#: ../src/about.c:341
 msgid "translation maintainer"
 msgstr "çeviri bakıcısı"
 
-#: ../src/about.c:349
+#: ../src/about.c:350
 msgid "Translators"
 msgstr "Çevirmenler"
 
-#: ../src/about.c:369
+#: ../src/about.c:370
 msgid "Previous Translators"
 msgstr "Önceki Çevirmenler"
 
-#: ../src/about.c:390
+#: ../src/about.c:391
 msgid "Contributors"
 msgstr "Katkıda Bulunanlar"
 
-#: ../src/about.c:400
+#: ../src/about.c:401
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr "Onlarca geliştiriciden bazıları (daha detaylı liste için bkz: %s):"
 
-#: ../src/about.c:426
+#: ../src/about.c:427
 msgid "Credits"
 msgstr "Yapımcılar"
 
-#: ../src/about.c:443
+#: ../src/about.c:444
 msgid "License"
 msgstr "Lisans"
 
-#: ../src/about.c:452
+#: ../src/about.c:453
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2550,9 +2541,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Komut çalıştırılamadı \"%s\": %s. %s"
 
 #: ../src/callbacks.c:1504
-#, fuzzy
 msgid "No context action set."
-msgstr "Bağlam eylemi:"
+msgstr "Bağlam eylemi."
 
 #: ../src/dialogs.c:160 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
@@ -2790,9 +2780,9 @@ msgstr "%s dosyası yeniden yüklendi."
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
-msgstr "%s dosyası açıldı(%d%s)."
+msgstr "%s dosyası açıldı (%d%s)."
 
 #: ../src/document.c:1497
 msgid ", read-only"
@@ -2800,7 +2790,7 @@ msgstr ", salt okunur"
 
 #: ../src/document.c:1621
 msgid "Discard history"
-msgstr ""
+msgstr "Geçimişi sil"
 
 #: ../src/document.c:1622
 msgid ""
@@ -2809,6 +2799,10 @@ msgid ""
 "will not be displayed again but your choice can be changed in the various "
 "preferences."
 msgstr ""
+"Arabelleğin önceki durumu geçmişte saklanır ve geri alma işlemi geri yükler. "
+"Yeniden yükleme sırasında geçmişi atarak bunu devre dışı bırakabilirsiniz. "
+"Bu ileti tekrar görüntülenmeyecek, ancak seçiminiz çeşitli ayarlarda "
+"değiştirilebilirsiniz."
 
 #: ../src/document.c:1626
 msgid "The file has been reloaded."
@@ -2890,7 +2884,7 @@ msgstr "\"%s\" dosyası diskte bulunamadı!"
 #: ../src/document.c:2126
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr "Salt okunur döküman '%s'! kaydedilemez"
+msgstr "Salt okunur döküman '%s' kaydedilemez! "
 
 #: ../src/document.c:2194
 #, c-format
@@ -2910,7 +2904,7 @@ msgstr ""
 
 #: ../src/document.c:2201
 msgid "Error saving file."
-msgstr "Dosya kaydetmede hata"
+msgstr "Dosya kaydetmede hata."
 
 #: ../src/document.c:2225
 #, c-format
@@ -2921,8 +2915,8 @@ msgstr "%s dosyası kaydedildi."
 msgid "Wrap search and find again?"
 msgstr "Aramayı geç ve tekrar bul?"
 
-#: ../src/document.c:2464 ../src/search.c:1368 ../src/search.c:1421
-#: ../src/search.c:2223 ../src/search.c:2224
+#: ../src/document.c:2464 ../src/search.c:1370 ../src/search.c:1423
+#: ../src/search.c:2225 ../src/search.c:2226
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "\"%s\" araması için hiçbir eşleşme bulunamadı."
@@ -2938,16 +2932,16 @@ msgstr[1] "%s: %d tane \"%s\" değeri \"%s\" ile değiştirildi."
 msgid "Do you want to reload it?"
 msgstr "Yeniden yüklemek ister misiniz?"
 
-#: ../src/editor.c:4461
+#: ../src/editor.c:4469
 msgid "Enter Tab Width"
 msgstr "Tab genişliğini girin"
 
-#: ../src/editor.c:4462
+#: ../src/editor.c:4470
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Bir sekme (tab) karakterinin yerine geçecek olan boşluk sayısını giriniz."
 
-#: ../src/editor.c:4668
+#: ../src/editor.c:4686
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Uyarı: standart dışı sekme genişliği: %d != 8!"
@@ -3181,25 +3175,25 @@ msgstr "%s dosya türü için geçersiz düzenli ifade: %s"
 msgid "untitled"
 msgstr "isimsiz"
 
-#: ../src/highlighting.c:1252 ../src/libmain.c:895 ../src/socket.c:169
+#: ../src/highlighting.c:1231 ../src/libmain.c:887 ../src/socket.c:169
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "'%s' dosyası bulunamadı."
 
-#: ../src/highlighting.c:1322
+#: ../src/highlighting.c:1301
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: ../src/highlighting.c:1363
+#: ../src/highlighting.c:1342
 msgid "The current filetype overrides the default style."
 msgstr "Geçerli dosya öntanımlı stili görmezden geliyor."
 
-#: ../src/highlighting.c:1364
+#: ../src/highlighting.c:1343
 msgid "This may cause color schemes to display incorrectly."
 msgstr "Bu işlem renk şemalarının hatalı görüntülenmesine sebep olabilir."
 
-#: ../src/highlighting.c:1389
+#: ../src/highlighting.c:1368
 msgid "Color Schemes"
 msgstr "Renk Şemaları"
 
@@ -3326,7 +3320,6 @@ msgid "Delete to line end"
 msgstr "Satırın sonuna kadar sil"
 
 #: ../src/keybindings.c:393
-#, fuzzy
 msgid "Delete to beginning of line"
 msgstr "Satırın sonuna kadar sil"
 
@@ -3502,11 +3495,11 @@ msgstr "Sonrakini Bul"
 msgid "Find Previous"
 msgstr "Öncekini Bul"
 
-#: ../src/keybindings.c:542 ../src/search.c:618
+#: ../src/keybindings.c:542 ../src/search.c:620
 msgid "Replace"
 msgstr "Değiştir"
 
-#: ../src/keybindings.c:544 ../src/search.c:868
+#: ../src/keybindings.c:544 ../src/search.c:872
 msgid "Find in Files"
 msgstr "Dosyalarda Bul"
 
@@ -3716,7 +3709,7 @@ msgstr "Derle"
 
 #: ../src/keybindings.c:695
 msgid "Make all"
-msgstr "hepsini derle"
+msgstr "Hepsini derle"
 
 #: ../src/keybindings.c:698
 msgid "Make custom target"
@@ -3757,8 +3750,7 @@ msgstr "Şu kısayollar düzenlenebilir:"
 #: ../src/keyfile.c:1069
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
-"Buraya istediğinizi yazabilirsiniz. Karalama defteri olarak "
-"kullanabilirsiniz."
+"Buraya istediğinizi yazabilirsiniz. Karalama defteri olarak kullanabilirsiniz"
 
 #: ../src/keyfile.c:1296
 msgid "Failed to load one or more session files."
@@ -3769,19 +3761,20 @@ msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
+"İlk açılan dosya için ilk kolon numarasını kolona ayarlayın (--line ile "
+"birlikte kullanışlıdır)"
 
 #: ../src/libmain.c:121
 msgid "COLUMN"
-msgstr ""
+msgstr "KOLON"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
 msgstr "Alternatif bir ayar dizini kullan"
 
 #: ../src/libmain.c:122
 msgid "DIR"
-msgstr ""
+msgstr "DİZİN"
 
 #: ../src/libmain.c:123
 msgid "Print internal filetype names"
@@ -3800,7 +3793,6 @@ msgid "Don't open files in a running instance, force opening a new instance"
 msgstr "Dosyaları çalışılan ortamda açma, yeni bir ortamda açmaya zorla"
 
 #: ../src/libmain.c:128
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
 msgstr ""
@@ -3809,7 +3801,7 @@ msgstr ""
 
 #: ../src/libmain.c:128 ../src/libmain.c:142
 msgid "FILE"
-msgstr ""
+msgstr "DOSYA"
 
 #: ../src/libmain.c:129
 msgid "Return a list of open documents in a running Geany instance"
@@ -3817,11 +3809,11 @@ msgstr "Çalışan Geany süreçlerinde açık olan belgelerin bir listesini ver
 
 #: ../src/libmain.c:131
 msgid "Set initial line number to LINE for the first opened file"
-msgstr ""
+msgstr "İlk açılan dosya için ilk satır numarasını satıra ayarlayın"
 
 #: ../src/libmain.c:131
 msgid "LINE"
-msgstr ""
+msgstr "SIRA"
 
 #: ../src/libmain.c:132
 msgid "Don't show message window at startup"
@@ -3845,7 +3837,7 @@ msgstr "Tüm DOSYALARI okuma modunda aç (yardım sayfalarına bkz)"
 
 #: ../src/libmain.c:139
 msgid "Don't load the previous session's files"
-msgstr "önceki oturumun dosyalarını yükleme"
+msgstr "Önceki oturumun dosyalarını yükleme"
 
 #: ../src/libmain.c:141
 msgid "Don't load terminal support"
@@ -3853,7 +3845,7 @@ msgstr "Terminal desteğini yükleme"
 
 #: ../src/libmain.c:142
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Dosyayı dinamik olarak bağlı VTE kitaplığı olarak kullan"
 
 #: ../src/libmain.c:144
 msgid "Be verbose"
@@ -3863,34 +3855,33 @@ msgstr "Daha çok bilgi ver"
 msgid "Show version and exit"
 msgstr "Sürümü görüntüle ve çık"
 
-#: ../src/libmain.c:563
+#: ../src/libmain.c:555
 msgid "[FILES...]"
 msgstr "[DOSYALAR...]"
 
-#: ../src/libmain.c:565
-#, fuzzy
+#: ../src/libmain.c:557
 msgid "A fast and lightweight IDE."
-msgstr "Hızlı ve Hafif Bir IDE"
+msgstr "Hızlı ve Hafif Bir IDE."
 
-#: ../src/libmain.c:566
+#: ../src/libmain.c:558
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Hataları rapor et https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
-#: ../src/libmain.c:599
+#: ../src/libmain.c:591
 #, c-format
 msgid "built on %s with "
-msgstr "%s zamanında şu araç ile derlendi"
+msgstr "%s zamanında şu araç ile derlendi "
 
-#: ../src/libmain.c:692
+#: ../src/libmain.c:684
 msgid "Move it now?"
 msgstr "Şimdi taşınsın mı?"
 
-#: ../src/libmain.c:694
+#: ../src/libmain.c:686
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr "Geany başlamadan önce eski ayar dizininizi taşıması gerek."
 
-#: ../src/libmain.c:703
+#: ../src/libmain.c:695
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3899,7 +3890,7 @@ msgstr "Ayar dizininiz \"%s\" konumundan \"%s\" konumuna başarıyla taşındı.
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/libmain.c:713
+#: ../src/libmain.c:705
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3908,7 +3899,7 @@ msgstr ""
 "Eski ayar dizininiz \"%s\" , \"%s\" konumuna taşınamadı (%s). Lütfen dizini "
 "yeni konuma elle taşıyın."
 
-#: ../src/libmain.c:795
+#: ../src/libmain.c:787
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3919,26 +3910,25 @@ msgstr ""
 "Geany'i ayar dizini olmadan kullanmak bazı sorunlara yol açabilir.\n"
 "Yine de Geany'i açmak ister misiniz?"
 
-#: ../src/libmain.c:1217
+#: ../src/libmain.c:1207
 #, c-format
 msgid "This is Geany %s."
 msgstr "Bu, Geany %s."
 
-#: ../src/libmain.c:1220
+#: ../src/libmain.c:1210
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Ayar dizini oluşturulamadı (%s)."
 
-#: ../src/libmain.c:1228
-#, fuzzy
+#: ../src/libmain.c:1218
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr "Arama başarısız (detaylar için Yardım->Hata Mesajları)."
 
-#: ../src/libmain.c:1459
+#: ../src/libmain.c:1449
 msgid "Do you really want to quit?"
 msgstr "Gerçekten çıkmak istiyor musunuz?"
 
-#: ../src/libmain.c:1497
+#: ../src/libmain.c:1487
 msgid "Configuration files reloaded."
 msgstr "Ayar dosyaları tekrar yüklendi."
 
@@ -3984,7 +3974,6 @@ msgid "Open in New _Window"
 msgstr "Yeni Pen_cerede Aç"
 
 #: ../src/notebook.c:501
-#, fuzzy
 msgid "Close Documents to the _Right"
 msgstr "Dükümanı sağa taşı"
 
@@ -4048,6 +4037,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"Vekil eklentisi '%s' bir nokta ile '%s' başlar. Lütfen vekil eklentinizi "
+"düzeltin."
 
 #: ../src/pluginutils.c:426
 msgid "Configure Plugins"
@@ -4243,7 +4234,7 @@ msgstr "Projenin Temel Klasörünü Seç"
 
 #: ../src/project.c:249 ../src/project.c:629 ../src/project.c:1162
 msgid "Project file could not be written"
-msgstr "Proje dosyası yazılamadı."
+msgstr "Proje dosyası yazılamadı"
 
 #: ../src/project.c:254
 #, c-format
@@ -4293,7 +4284,7 @@ msgstr "Belirtilen proje ismi çok uzun (en fazla %d karakter)."
 
 #: ../src/project.c:733
 msgid "You have specified an invalid project filename."
-msgstr "Geçersiz bir dosya adı girdiniz"
+msgstr "Geçersiz bir dosya adı girdiniz."
 
 #: ../src/project.c:756
 msgid "Create the project's base path directory?"
@@ -4314,7 +4305,7 @@ msgstr "Proje temel dizini oluşturulamadı (%s)."
 msgid "Project file could not be written (%s)."
 msgstr "Proje dosyası yazılamadı (%s)."
 
-#: ../src/project.c:785 ../src/search.c:628
+#: ../src/project.c:785 ../src/search.c:630
 msgid "_Replace"
 msgstr "Değişti_r"
 
@@ -4333,12 +4324,11 @@ msgstr "Proje Dosya Adını Seç"
 msgid "Project \"%s\" opened."
 msgstr "\"%s\" projesi açıldı."
 
-#: ../src/search.c:309 ../src/search.c:962
+#: ../src/search.c:309 ../src/search.c:966
 msgid "_Use regular expressions"
 msgstr "Düzenli ifadeleri k_ullan"
 
 #: ../src/search.c:312
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
@@ -4348,7 +4338,7 @@ msgstr ""
 
 #: ../src/search.c:317
 msgid "Use _escape sequences"
-msgstr ""
+msgstr "_çıkış dizilerini kullan"
 
 #: ../src/search.c:321
 msgid ""
@@ -4369,16 +4359,20 @@ msgid ""
 "characters are part of the input and can be captured as normal characters by "
 "the pattern."
 msgstr ""
+"Eşleşmelerin birden çok satıra yayılmasına izin vererek, satır yerine tüm "
+"arabellekte bir defa da düzenli ifade eşleştirmesi yapın. Bu mod da, yeni "
+"satır karakterleri girişin bir parçasıdır ve desen tarafından normal "
+"karakterler olarak yakalanabilir."
 
 #: ../src/search.c:342
 msgid "Search _backwards"
 msgstr "Geriye do_ğru ara"
 
-#: ../src/search.c:348 ../src/search.c:971
+#: ../src/search.c:348 ../src/search.c:975
 msgid "C_ase sensitive"
 msgstr "Büyük/Küçük harf duy_arlı"
 
-#: ../src/search.c:352 ../src/search.c:976
+#: ../src/search.c:352 ../src/search.c:980
 msgid "Match only a _whole word"
 msgstr "Bütün kelimeyi e_şle"
 
@@ -4394,7 +4388,7 @@ msgstr "_Önceki"
 msgid "_Next"
 msgstr "So_nraki"
 
-#: ../src/search.c:481 ../src/search.c:639 ../src/search.c:878
+#: ../src/search.c:481 ../src/search.c:641 ../src/search.c:882
 msgid "_Search for:"
 msgstr "_Ara:"
 
@@ -4411,57 +4405,57 @@ msgstr "İ_şaretle"
 msgid "Mark all matches in the current document"
 msgstr "Dökümandaki bütün eşleşmeleri işaretle"
 
-#: ../src/search.c:523 ../src/search.c:698
+#: ../src/search.c:523 ../src/search.c:700
 msgid "In Sessi_on"
 msgstr "_Oturumda"
 
-#: ../src/search.c:528 ../src/search.c:703
+#: ../src/search.c:528 ../src/search.c:705
 msgid "_In Document"
 msgstr "D_ökümanda"
 
 #. close window checkbox
-#: ../src/search.c:534 ../src/search.c:716
+#: ../src/search.c:534 ../src/search.c:718
 msgid "Close _dialog"
 msgstr "_Diyaloğu kapat"
 
-#: ../src/search.c:538 ../src/search.c:720
+#: ../src/search.c:538 ../src/search.c:722
 msgid "Disable this option to keep the dialog open"
 msgstr "Pencereyi açık tutmak için bu seçeneği pasifleştirin"
 
-#: ../src/search.c:633
+#: ../src/search.c:635
 msgid "Replace & Fi_nd"
 msgstr "Değişti_r & Bul"
 
-#: ../src/search.c:642
+#: ../src/search.c:644
 msgid "Replace wit_h:"
 msgstr "Şununla değiş_tir:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:691
+#: ../src/search.c:693
 msgid "Re_place All"
 msgstr "Tüm_ünü değiştir"
 
-#: ../src/search.c:708
+#: ../src/search.c:710
 msgid "In Se_lection"
 msgstr "Seç_im içinde"
 
-#: ../src/search.c:710
+#: ../src/search.c:712
 msgid "Replace all matches found in the currently selected text"
 msgstr "Seçilen yazı içinde bütün eşleşmeleri değiştir"
 
-#: ../src/search.c:827
+#: ../src/search.c:831
 msgid "all"
 msgstr "tümü"
 
-#: ../src/search.c:829
+#: ../src/search.c:833
 msgid "project"
 msgstr "proje"
 
-#: ../src/search.c:831
+#: ../src/search.c:835
 msgid "custom"
 msgstr "özel"
 
-#: ../src/search.c:835
+#: ../src/search.c:839
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
@@ -4471,103 +4465,102 @@ msgstr ""
 "Proje: proje ayarlarında belirtilmiş dosya bilgilerini kullan\n"
 "Özel: bilgileri kendiniz girin"
 
-#: ../src/search.c:910
-#, fuzzy
+#: ../src/search.c:914
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
 msgstr ""
 "Dosyalarda bul diyalog penceresinde kullanılacak boşlukla ayrılmış tanımlar "
 "(örn. *.c *.h)"
 
-#: ../src/search.c:922
+#: ../src/search.c:926
 msgid "_Directory:"
 msgstr "_Dizin:"
 
-#: ../src/search.c:941
+#: ../src/search.c:945
 msgid "E_ncoding:"
 msgstr "K_odlama:"
 
-#: ../src/search.c:965
+#: ../src/search.c:969
 msgid "See grep's manual page for more information"
 msgstr "Daha fazla bilgi için grep'in yardım sayfalarına bakınız"
 
-#: ../src/search.c:967
+#: ../src/search.c:971
 msgid "_Recurse in subfolders"
 msgstr "Alt klasö_rlerde de uygula"
 
-#: ../src/search.c:980
+#: ../src/search.c:984
 msgid "_Invert search results"
 msgstr "Arama sonuçlarını ters çev_ir"
 
-#: ../src/search.c:984
+#: ../src/search.c:988
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "Eşlenen değil, eşlenmeyen satırları seç"
 
-#: ../src/search.c:1001
+#: ../src/search.c:1005
 msgid "E_xtra options:"
 msgstr "Ekstra s_eçenekler:"
 
-#: ../src/search.c:1009
+#: ../src/search.c:1013
 msgid "Other options to pass to Grep"
 msgstr "Grep için diğer seçenekler"
 
-#: ../src/search.c:1371 ../src/search.c:2229 ../src/search.c:2232
+#: ../src/search.c:1373 ../src/search.c:2231 ../src/search.c:2234
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "%d eşleşme bulundu, \"%s\""
-msgstr[1] "%d eşleşme bulundu, \"%s\""
+msgstr[0] "%d eşleşme bulundu, \"%s\"."
+msgstr[1] "%d eşleşme bulundu, \"%s\"."
 
-#: ../src/search.c:1427
+#: ../src/search.c:1429
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "%u sayıdaki eşleşme %u belgede değiştirildi."
 
-#: ../src/search.c:1616
+#: ../src/search.c:1618
 msgid "Invalid directory for find in files."
 msgstr "Dosyalarda bulmak için geçersiz dizin."
 
-#: ../src/search.c:1633
+#: ../src/search.c:1635
 msgid "No text to find."
 msgstr "Bulunacak yazı yok."
 
-#: ../src/search.c:1709
+#: ../src/search.c:1711
 msgid "Searching..."
 msgstr "Arıyor..."
 
-#: ../src/search.c:1711
+#: ../src/search.c:1713
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (dizin: %s)"
 
-#: ../src/search.c:1719
+#: ../src/search.c:1721
 #, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
-"grep aracı \"%s\" çalıştırılamadı: %s. Seçenekler'de PATH ayarını kontrol "
+"Grep aracı \"%s\" çalıştırılamadı: %s. Seçenekler'de PATH ayarını kontrol "
 "edin."
 
-#: ../src/search.c:1759
+#: ../src/search.c:1761
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Dizin açılamadı (%s)"
 
-#: ../src/search.c:1849
+#: ../src/search.c:1851
 msgid "Search failed."
 msgstr "Arama hatalı."
 
-#: ../src/search.c:1873
+#: ../src/search.c:1875
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Arama %d eşleşme ile tamamlandı."
 msgstr[1] "Arama %d eşleşme ile tamamlandı."
 
-#: ../src/search.c:1881
+#: ../src/search.c:1883
 msgid "No matches found."
 msgstr "Eşleşme bulunamadı."
 
-#: ../src/search.c:1911
+#: ../src/search.c:1913
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Kötü düzensiz ifade: %s"
@@ -4674,7 +4667,7 @@ msgstr "Program"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Bölünmeler"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4694,7 +4687,7 @@ msgstr "Veri"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Kopyalar"
 
 #: ../src/symbols.c:504
 msgid "Keys"
@@ -4721,33 +4714,31 @@ msgstr "Alt-Altbölüm"
 
 #: ../src/symbols.c:531
 msgid "Articles"
-msgstr ""
+msgstr "Makaleler"
 
 #: ../src/symbols.c:532
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Bölüm"
+msgstr "Kitap Bölümleri"
 
 #: ../src/symbols.c:533
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "Kitaplar Ve Konferans Bildirileri"
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "Konferans Bildirisi"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "Tez"
 
 #: ../src/symbols.c:536
-#, fuzzy
 msgid "Strings"
-msgstr "Ayarlar"
+msgstr "Seçenekler"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "Basılmamış"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
@@ -4771,7 +4762,7 @@ msgstr "Modüller"
 
 #: ../src/symbols.c:572 ../src/symbols.c:619
 msgid "Traits"
-msgstr ""
+msgstr "Özellikler"
 
 #: ../src/symbols.c:573
 msgid "Implementations"
@@ -4779,7 +4770,7 @@ msgstr "Uygulamalar"
 
 #: ../src/symbols.c:575 ../src/symbols.c:836
 msgid "Typedefs / Enums"
-msgstr ""
+msgstr "Typedefs / Enums"
 
 #: ../src/symbols.c:577 ../src/symbols.c:794 ../src/symbols.c:803
 #: ../src/symbols.c:842
@@ -4911,7 +4902,7 @@ msgstr "Fonksiyonlar / Görevler"
 
 #: ../src/symbols.c:729 ../src/symbols.c:785
 msgid "Enums"
-msgstr ""
+msgstr "Sınıfları  sırala"
 
 #: ../src/symbols.c:778
 msgid "Programs"
@@ -5022,7 +5013,7 @@ msgstr "%s: %lu"
 #: ../src/symbols.c:2197
 #, c-format
 msgid "Forward declaration \"%s\" not found."
-msgstr ""
+msgstr "Bildirim \"%s\" bulunamadı."
 
 #: ../src/symbols.c:2199
 #, c-format
@@ -5048,6 +5039,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"Şablon komutu yürütülemiyor \"%s\". İpucu: komutta ki yanlış yollar "
+"hataların yaygın bir nedenidir. Hatasız: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:57
@@ -5351,7 +5344,7 @@ msgstr "MOD"
 
 #: ../src/ui_utils.c:407
 msgid " (new instance)"
-msgstr "(yeni örnek)"
+msgstr " (yeni örnek)"
 
 #: ../src/ui_utils.c:437
 #, c-format
@@ -5486,24 +5479,24 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:585
+#: ../src/vte.c:586
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr "Geçersiz VTE kütüphanesi \"%s\": geçersiz sembol \"%s\""
+msgstr "geçersiz VTE kütüphanesi \"%s\": geçersiz sembol \"%s\""
 
-#: ../src/vte.c:766
+#: ../src/vte.c:767
 msgid "_Set Path From Document"
 msgstr "D_ökümandan Yol Ayarla"
 
-#: ../src/vte.c:771
+#: ../src/vte.c:772
 msgid "_Restart Terminal"
 msgstr "Te_rminali Yeniden Başlat"
 
-#: ../src/vte.c:804
+#: ../src/vte.c:805
 msgid "_Input Methods"
 msgstr "G_iriş Yöntemleri"
 
-#: ../src/vte.c:896
+#: ../src/vte.c:897
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
@@ -5971,7 +5964,7 @@ msgid "Instant Save"
 msgstr "Anlık Kayıt"
 
 #: ../plugins/saveactions.c:688
-msgid "_Filetype to use for newly opened files:"
+msgid "Default _filetype to use for new files:"
 msgstr "Yeni açılan dosyalar için dosya t_ürü:"
 
 #: ../plugins/saveactions.c:719
