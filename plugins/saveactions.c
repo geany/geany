@@ -284,7 +284,7 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 			 * configured default file type */
 			ft = filetypes_lookup_by_name(instantsave_default_ft);
 
-		if (ft != NULL)
+		if (ft != NULL && !EMPTY(ft->extension))
 			/* add the filetype's default extension to the new filename */
 			SETPTR(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
 
