@@ -63,8 +63,7 @@
 
 /**
  *  Tries to open the given URI in a browser.
- *  On Windows, the system's default browser is opened.
- *  On non-Windows systems, the browser command set in the preferences dialog is used. In case
+ *  The browser command set in the preferences dialog is used. In case
  *  that fails or it is unset, the user is asked to correct or fill it.
  *
  *  @param uri The URI to open in the web browser.
@@ -74,10 +73,6 @@
 GEANY_API_SYMBOL
 void utils_open_browser(const gchar *uri)
 {
-#ifdef G_OS_WIN32
-	g_return_if_fail(uri != NULL);
-	win32_open_browser(uri);
-#else
 	gchar *argv[2] = { (gchar *) uri, NULL };
 
 	g_return_if_fail(uri != NULL);
@@ -94,7 +89,6 @@ void utils_open_browser(const gchar *uri)
 
 		SETPTR(tool_prefs.browser_cmd, new_cmd);
 	}
-#endif
 }
 
 
