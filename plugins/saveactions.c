@@ -267,20 +267,30 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 		gint fd;
 		GeanyFiletype *ft = doc->file_type;
 
-		directory = !EMPTY(instantsave_target_dir) ? instantsave_target_dir : g_get_tmp_dir();
-		new_filename = g_build_filename(directory, "gis_XXXXXX", NULL);
-		fd = g_mkstemp(new_filename);
-		if (fd != -1)
-			close(fd); /* close the returned file descriptor as we only need the filename */
-
 		if (ft == NULL || ft->id == GEANY_FILETYPES_NONE)
 			/* ft is NULL when a new file without template was opened, so use the
 			 * configured default file type */
 			ft = filetypes_lookup_by_name(instantsave_default_ft);
 
+		/* construct filename */
+		directory = !EMPTY(instantsave_target_dir) ? instantsave_target_dir : g_get_tmp_dir();
+		new_filename = g_build_filename(directory, "gis_XXXXXX", NULL);
 		if (ft != NULL && !EMPTY(ft->extension))
-			/* add the filetype's default extension to the new filename */
 			SETPTR(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
+
+		/* create new file */
+		fd = g_mkstemp(new_filename);
+		if (fd == -1)
+		{
+			gchar *message = g_strdup_printf(
+				_("Instant Save filename could not be generated (%s)."), g_strerror(errno));
+			ui_set_statusbar(TRUE, "%s", message);
+			g_warning("%s", message);
+			g_free(message);
+			return;
+		}
+
+		close(fd); /* close the returned file descriptor as we only need the filename */
 
 		doc->file_name = new_filename;
 
