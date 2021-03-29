@@ -98,13 +98,7 @@ static gboolean store_target_directory(const gchar *utf8_dir, gchar **target)
 {
 	gchar *tmp;
 
-	if (target == NULL)
-	{
-		SETPTR(*target, NULL);
-		return TRUE;
-	}
-
-	if (G_UNLIKELY(EMPTY(utf8_dir)))
+	if (G_UNLIKELY(EMPTY(utf8_dir)) || target == NULL)
 		return FALSE;
 
 	tmp = utils_get_locale_from_utf8(utf8_dir);
@@ -522,9 +516,14 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 
 		if (instantsave_default_ft != NULL)
 			g_key_file_set_string(config, "instantsave", "default_ft", instantsave_default_ft);
-		if (enable_instantsave && !EMPTY(instantsave_text_dir))
+		if (enable_instantsave)
 		{
-			if (store_target_directory(instantsave_text_dir, &instantsave_target_dir))
+			if (EMPTY(instantsave_text_dir))
+			{
+				g_key_file_set_string(config, "instantsave", "target_dir", "");
+				SETPTR(instantsave_target_dir, NULL);
+			}
+			else if (store_target_directory(instantsave_text_dir, &instantsave_target_dir))
 			{
 				g_key_file_set_string(config, "instantsave", "target_dir", instantsave_target_dir);
 			}
