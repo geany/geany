@@ -66,6 +66,9 @@
 #include <unistd.h>
 #endif
 
+/* define the configuration filenames */
+#define PREFERENCES_FILE				"geany.conf"
+#define SESSION_FILE					"session.conf"
 
 /* some default settings which are used at the very first start of Geany to fill
  * the configuration file */
@@ -628,11 +631,17 @@ static void save_ui_prefs(GKeyFile *config)
 	}
 }
 
+typedef enum ConfigPayload
+{
+	PREFERENCES,
+	SESSION
+}
+ConfigPayload;
 
-void configuration_save(void)
+void write_config_file(gchar const *filename, ConfigPayload payload)
 {
 	GKeyFile *config = g_key_file_new();
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, filename, NULL);
 	gchar *data;
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
@@ -640,22 +649,27 @@ void configuration_save(void)
 	/* this signal can be used e.g. to prepare any settings before Stash code reads them below */
 	g_signal_emit_by_name(geany_object, "save-settings", config);
 
-	save_dialog_prefs(config);
-	save_ui_prefs(config);
-	project_save_prefs(config);	/* save project filename, etc. */
-	save_recent_files(config, ui_prefs.recent_queue, "recent_files");
-	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
-
-	if (cl_options.load_session)
-		configuration_save_session_files(config);
-#ifdef HAVE_VTE
-	else if (vte_info.have_vte)
+	switch (payload)
 	{
-		vte_get_working_directory();	/* refresh vte_info.dir */
-		g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
-	}
+		case PREFERENCES:
+			save_dialog_prefs(config);
+			save_ui_prefs(config);
+			project_save_prefs(config);	/* save project filename, etc. */
+			break;
+		case SESSION:
+			save_recent_files(config, ui_prefs.recent_queue, "recent_files");
+			save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+			if (cl_options.load_session)
+				configuration_save_session_files(config);
+#ifdef HAVE_VTE
+			else if (vte_info.have_vte)
+			{
+				vte_get_working_directory();	/* refresh vte_info.dir */
+				g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
+			}
 #endif
-
+			break;
+	}
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
 	utils_write_file(configfile, data);
@@ -665,6 +679,14 @@ void configuration_save(void)
 	g_free(configfile);
 }
 
+void configuration_save(void)
+{
+	/* save all configuration files
+	 * it is probably not very efficient to write all 3 files every time
+	 * could be more selective about which file is saved when */
+	write_config_file(PREFERENCES_FILE, PREFERENCES);
+	write_config_file("session.conf", SESSION);
+}
 
 static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
 {
@@ -1103,7 +1125,7 @@ static void load_ui_prefs(GKeyFile *config)
  */
 void configuration_save_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, PREFERENCES_FILE, NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
@@ -1124,7 +1146,7 @@ void configuration_save_default_session(void)
 
 void configuration_clear_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, PREFERENCES_FILE, NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
@@ -1148,7 +1170,7 @@ void configuration_clear_default_session(void)
  */
 void configuration_reload_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, SESSION_FILE, NULL);
 	GKeyFile *config = g_key_file_new();
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
@@ -1159,31 +1181,44 @@ void configuration_reload_default_session(void)
 	g_key_file_free(config);
 }
 
-
-gboolean configuration_load(void)
+gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, filename, NULL);
 	GKeyFile *config = g_key_file_new();
 
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
 	{	/* config file does not (yet) exist, so try to load a global config file which may be */
 		/* created by distributors */
 		geany_debug("No user config file found, trying to use global configuration.");
-		SETPTR(configfile, g_build_filename(app->datadir, "geany.conf", NULL));
+		SETPTR(configfile, g_build_filename(app->datadir, filename, NULL));
 	}
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 	g_free(configfile);
 
-	load_dialog_prefs(config);
-	load_ui_prefs(config);
-	project_load_prefs(config);
-	configuration_load_session_files(config, TRUE);
-
+	switch (payload)
+	{
+		case PREFERENCES:
+			load_dialog_prefs(config);
+			load_ui_prefs(config);
+			project_load_prefs(config);
+			break;
+		case SESSION:
+			configuration_load_session_files(config, TRUE);
+			break;
+	}
 	/* this signal can be used e.g. to delay building UI elements until settings have been read */
 	g_signal_emit_by_name(geany_object, "load-settings", config);
 
 	g_key_file_free(config);
 	return TRUE;
+}
+
+
+gboolean configuration_load(void)
+{
+	gboolean prefs_loaded = read_config_file(PREFERENCES_FILE, PREFERENCES);
+	gboolean sess_loaded = read_config_file(SESSION_FILE, SESSION);
+	return prefs_loaded && sess_loaded;
 }
 
 
