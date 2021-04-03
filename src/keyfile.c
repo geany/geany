@@ -685,7 +685,7 @@ void configuration_save(void)
 	 * it is probably not very efficient to write both files every time
 	 * could be more selective about which file is saved when */
 	write_config_file(PREFERENCES_FILE, PREFERENCES);
-	write_config_file("session.conf", SESSION);
+	write_config_file(SESSION_FILE, SESSION);
 }
 
 static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
@@ -1146,7 +1146,7 @@ void configuration_save_default_session(void)
 
 void configuration_clear_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, PREFERENCES_FILE, NULL);
+	gchar *configfile = g_build_filename(app->configdir, SESSION_FILE, NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
