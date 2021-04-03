@@ -682,7 +682,7 @@ void write_config_file(gchar const *filename, ConfigPayload payload)
 void configuration_save(void)
 {
 	/* save all configuration files
-	 * it is probably not very efficient to write all 3 files every time
+	 * it is probably not very efficient to write both files every time
 	 * could be more selective about which file is saved when */
 	write_config_file(PREFERENCES_FILE, PREFERENCES);
 	write_config_file("session.conf", SESSION);
