@@ -1217,7 +1217,15 @@ gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 gboolean configuration_load(void)
 {
 	gboolean prefs_loaded = read_config_file(PREFERENCES_FILE, PREFERENCES);
-	gboolean sess_loaded = read_config_file(SESSION_FILE, SESSION);
+	/* backwards-compatibility: try to read session from preferences if session file doesn't exist */
+	gchar *session_filename = SESSION_FILE;
+	gchar *session_file = g_build_filename(app->configdir, session_filename, NULL);
+	if (! g_file_test(session_file, G_FILE_TEST_IS_REGULAR))
+	{
+		geany_debug("No user session file found, trying to use configuration file.");
+		session_filename = PREFERENCES_FILE;
+	}
+	gboolean sess_loaded = read_config_file(session_filename, SESSION);
 	return prefs_loaded && sess_loaded;
 }
 
