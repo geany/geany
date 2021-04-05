@@ -1225,6 +1225,7 @@ gboolean configuration_load(void)
 		geany_debug("No user session file found, trying to use configuration file.");
 		session_filename = PREFERENCES_FILE;
 	}
+	g_free(session_file);
 	gboolean sess_loaded = read_config_file(session_filename, SESSION);
 	return prefs_loaded && sess_loaded;
 }
