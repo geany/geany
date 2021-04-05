@@ -646,12 +646,11 @@ void write_config_file(gchar const *filename, ConfigPayload payload)
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
-	/* this signal can be used e.g. to prepare any settings before Stash code reads them below */
-	g_signal_emit_by_name(geany_object, "save-settings", config);
-
 	switch (payload)
 	{
 		case PREFERENCES:
+			/* this signal can be used e.g. to prepare any settings before Stash code reads them below */
+			g_signal_emit_by_name(geany_object, "save-settings", config);
 			save_dialog_prefs(config);
 			save_ui_prefs(config);
 			project_save_prefs(config);	/* save project filename, etc. */
@@ -1201,13 +1200,13 @@ gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 			load_dialog_prefs(config);
 			load_ui_prefs(config);
 			project_load_prefs(config);
+			/* this signal can be used e.g. to delay building UI elements until settings have been read */
+			g_signal_emit_by_name(geany_object, "load-settings", config);
 			break;
 		case SESSION:
 			configuration_load_session_files(config, TRUE);
 			break;
 	}
-	/* this signal can be used e.g. to delay building UI elements until settings have been read */
-	g_signal_emit_by_name(geany_object, "load-settings", config);
 
 	g_key_file_free(config);
 	return TRUE;
