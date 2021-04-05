@@ -217,6 +217,7 @@ test_sources = \
 	keyword_struct.cs				\
 	keyword_virtual.cs				\
 	keyword_volatile.cs				\
+	kotlin.kt					\
 	labels.sql						\
 	lanus.for						\
 	line_directives.c				\

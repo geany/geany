@@ -816,6 +816,18 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_KOTLIN:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Packages"), ICON_NAMESPACE,
+				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_function), _("Methods"), ICON_METHOD,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_type), _("Typealiases"), ICON_STRUCT,
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_D:
 		default:
 		{

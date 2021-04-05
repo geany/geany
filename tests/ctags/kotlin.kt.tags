@@ -1,0 +1,12 @@
+# format=tagmanager
+AbstractWorkerÌ32Îcom.example.helloworldÖ0
+GlobalÌ1Îcom.example.helloworldÖ0
+StringWorkerÌ4096Îcom.example.helloworldÖ0
+WorkerÌ1Îcom.example.helloworldÖ0
+com.example.helloworldÌ256Ö0
+greetingÌ16384Îcom.example.helloworld.GlobalÖ0
+mainÌ16Îcom.example.helloworldÖ0
+nameÌ16384Îcom.example.helloworld.WorkerÖ0
+processÌ16Îcom.example.helloworld.AbstractWorkerÖ0
+processÌ16Îcom.example.helloworld.WorkerÖ0
+resultÌ16384Îcom.example.helloworld.mainÖ0

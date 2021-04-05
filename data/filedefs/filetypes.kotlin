@@ -13,7 +13,7 @@ typedefs=
 
 [settings]
 lexer_filetype=C
-tag_parser=C
+tag_parser=Kotlin
 extension=kt
 mime_type=text/x-kotlin
 comment_single=//

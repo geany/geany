@@ -528,6 +528,17 @@ static TMParserMapEntry map_POWERSHELL[] = {
 	{'v', tm_tag_variable_t},
 };
 
+static TMParserMapEntry map_KOTLIN[] = {
+	{'p', tm_tag_namespace_t},
+	{'c', tm_tag_class_t},
+	{'o', tm_tag_class_t},
+	{'i', tm_tag_interface_t},
+	{'T', tm_tag_typedef_t},
+	{'m', tm_tag_function_t},
+	{'C', tm_tag_variable_t},
+	{'v', tm_tag_variable_t},
+};
+
 
 typedef struct
 {
@@ -591,6 +602,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(JSON),
 	MAP_ENTRY(ZEPHIR),
 	MAP_ENTRY(POWERSHELL),
+	MAP_ENTRY(KOTLIN),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -793,6 +805,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_JAVA:
 		case TM_PARSER_JAVASCRIPT:
 		case TM_PARSER_JSON:
+		case TM_PARSER_KOTLIN:
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_PYTHON:

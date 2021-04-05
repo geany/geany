@@ -14,10 +14,16 @@ dstdir = os.path.abspath(sys.argv[2])
 os.chdir(dstdir + '/parsers')
 parser_dst_files = glob.glob('*.c') + glob.glob('*.h')
 parser_dst_files = list(filter(lambda x: not x.startswith('geany_'), parser_dst_files))
-os.chdir(srcdir + '/parsers')
+os.chdir(srcdir)
 print('Copying parsers... ({} files)'.format(len(parser_dst_files)))
 for f in parser_dst_files:
-    shutil.copy(f, dstdir + '/parsers')
+    if os.path.exists('parsers/' + f):
+        shutil.copy('parsers/' + f, dstdir + '/parsers')
+    elif os.path.exists('peg/' + f):
+        shutil.copy('peg/' + f, dstdir + '/parsers')
+    else:
+        print("Error: Could not find file " + f + "!")
+        sys.exit(1)
 
 os.chdir(srcdir)
 main_src_files = glob.glob('main/*.c') + glob.glob('main/*.h')
@@ -39,4 +45,4 @@ if main_diff:
     print('Files added to main: ' + str(main_diff))
 
 os.chdir(dstdir)
-os.system('patch -p1 <ctags_changes.patch')
+os.system('patch -p2 <ctags_changes.patch')
