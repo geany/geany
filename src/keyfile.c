@@ -67,7 +67,7 @@
 #endif
 
 /* define the configuration filenames */
-#define PREFERENCES_FILE				"geany.conf"
+#define PREFS_FILE						"geany.conf"
 #define SESSION_FILE					"session.conf"
 
 /* some default settings which are used at the very first start of Geany to fill
@@ -633,7 +633,7 @@ static void save_ui_prefs(GKeyFile *config)
 
 typedef enum ConfigPayload
 {
-	PREFERENCES,
+	PREFS,
 	SESSION
 }
 ConfigPayload;
@@ -648,7 +648,7 @@ void write_config_file(gchar const *filename, ConfigPayload payload)
 
 	switch (payload)
 	{
-		case PREFERENCES:
+		case PREFS:
 			/* this signal can be used e.g. to prepare any settings before Stash code reads them below */
 			g_signal_emit_by_name(geany_object, "save-settings", config);
 			save_dialog_prefs(config);
@@ -683,7 +683,7 @@ void configuration_save(void)
 	/* save all configuration files
 	 * it is probably not very efficient to write both files every time
 	 * could be more selective about which file is saved when */
-	write_config_file(PREFERENCES_FILE, PREFERENCES);
+	write_config_file(PREFS_FILE, PREFS);
 	write_config_file(SESSION_FILE, SESSION);
 }
 
@@ -1124,7 +1124,7 @@ static void load_ui_prefs(GKeyFile *config)
  */
 void configuration_save_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, PREFERENCES_FILE, NULL);
+	gchar *configfile = g_build_filename(app->configdir, PREFS_FILE, NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
@@ -1196,7 +1196,7 @@ gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 
 	switch (payload)
 	{
-		case PREFERENCES:
+		case PREFS:
 			load_dialog_prefs(config);
 			load_ui_prefs(config);
 			project_load_prefs(config);
@@ -1215,14 +1215,14 @@ gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 
 gboolean configuration_load(void)
 {
-	gboolean prefs_loaded = read_config_file(PREFERENCES_FILE, PREFERENCES);
+	gboolean prefs_loaded = read_config_file(PREFS_FILE, PREFS);
 	/* backwards-compatibility: try to read session from preferences if session file doesn't exist */
 	gchar *session_filename = SESSION_FILE;
 	gchar *session_file = g_build_filename(app->configdir, session_filename, NULL);
 	if (! g_file_test(session_file, G_FILE_TEST_IS_REGULAR))
 	{
 		geany_debug("No user session file found, trying to use configuration file.");
-		session_filename = PREFERENCES_FILE;
+		session_filename = PREFS_FILE;
 	}
 	g_free(session_file);
 	gboolean sess_loaded = read_config_file(session_filename, SESSION);
