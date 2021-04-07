@@ -1297,25 +1297,40 @@ static guint key_kp_translate(guint key_in)
 }
 
 
-/* Check if event keypress matches keybinding combo */
-gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb)
+void keybindings_get_normalised_event(GdkEventKey *ev, guint *state, guint *keyval)
 {
-	guint state, keyval;
+	GdkModifierType consumed;
+	GdkDisplay *display = gdk_window_get_display(ev->window);
+	GdkKeymap *keymap = gdk_keymap_get_for_display(display);
 
-	if (ev->keyval == 0)
-		return FALSE;
+	gdk_keymap_translate_keyboard_state(keymap, ev->hardware_keycode,
+		ev->state, ev->group, keyval, NULL, NULL, &consumed);
 
-	keyval = ev->keyval;
-	state = keybindings_get_modifiers(ev->state);
-	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
-	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
-		if (keyval >= GDK_A && keyval <= GDK_Z)
-			keyval += GDK_a - GDK_A;
+	/* Keys such as caps lock are always reported as consumed even when they
+	 * are not pressed - AND with the original state to get the actually
+	 * consumed events */
+	consumed &= ev->state;
 
-	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
-		keyval = key_kp_translate(keyval);
+	/* Don't consume modifiers when no other key is set */
+	if (*keyval == GDK_VoidSymbol)
+		consumed = 0;
 
-	return (keyval == kb->key && state == kb->mods);
+	*state = keybindings_get_modifiers(ev->state) & ~consumed;
+
+	/* We want to see Ctrl+Shift+r instead of Ctrl+R. When shift is consumed
+	 * and keyval is uppercase, unconsume the shift. Also handle the case when
+	 * both caps lock and shift are pressed which makes keyval lowercase. */
+	if ((consumed & GDK_SHIFT_MASK && gdk_keyval_to_lower(*keyval) != *keyval) ||
+		(consumed & GDK_SHIFT_MASK && consumed & GDK_LOCK_MASK &&
+		 gdk_keyval_to_upper(*keyval) != *keyval))
+	{
+		*state |= GDK_SHIFT_MASK;
+	}
+	if (consumed & (GDK_SHIFT_MASK|GDK_LOCK_MASK))
+		*keyval = gdk_keyval_to_lower(*keyval);
+
+	if (*keyval >= GDK_KP_Space && *keyval < GDK_KP_Equal)
+		*keyval = key_kp_translate(*keyval);
 }
 
 
@@ -1346,7 +1361,7 @@ static gboolean run_kb(GeanyKeyBinding *kb, GeanyKeyGroup *group)
 /* central keypress event handler, almost all keypress events go to this function */
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
-	guint state, keyval;
+	guint state, keyval, legacy_state;
 	gsize g, i;
 	GeanyDocument *doc;
 	GeanyKeyGroup *group;
@@ -1364,15 +1379,10 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	if (doc)
 		document_check_disk_status(doc, FALSE);
 
-	keyval = ev->keyval;
-	state = keybindings_get_modifiers(ev->state);
-	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
-	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
-		if (keyval >= GDK_A && keyval <= GDK_Z)
-			keyval += GDK_a - GDK_A;
-
-	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
-		keyval = key_kp_translate(keyval);
+	keybindings_get_normalised_event(ev, &state, &keyval);
+	/* User keybindings of old Geany versions may contain extra modifiers
+	 * such as shift - make sure these still work. */
+	legacy_state = keybindings_get_modifiers(ev->state);
 
 	/*geany_debug("%d (%d) %d (%d)", keyval, ev->keyval, state, ev->state);*/
 
@@ -1388,7 +1398,7 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	{
 		foreach_ptr_array(kb, i, group->key_items)
 		{
-			if (keyval == kb->key && state == kb->mods)
+			if (keyval == kb->key && (state == kb->mods || legacy_state == kb->mods))
 			{
 				if (run_kb(kb, group))
 					return TRUE;

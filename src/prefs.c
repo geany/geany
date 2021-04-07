@@ -1414,16 +1414,16 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext,
 static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, GtkLabel *label)
 {
 	gchar *str;
-	guint state;
+	guint state, keyval;
 
 	g_return_val_if_fail(GTK_IS_LABEL(label), FALSE);
-
-	state = keybindings_get_modifiers(event->state);
 
 	if (event->keyval == GDK_Escape)
 		return FALSE;	/* close the dialog, don't allow escape when detecting keybindings. */
 
-	str = gtk_accelerator_name(event->keyval, state);
+	keybindings_get_normalised_event(event, &state, &keyval);
+
+	str = gtk_accelerator_name(keyval, state);
 
 	gtk_label_set_text(label, str);
 	g_free(str);
@@ -1632,8 +1632,14 @@ static gboolean prefs_dialog_key_press_response_cb(GtkWidget *dialog, GdkEventKe
 												   gpointer data)
 {
 	GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_HELP, GEANY_KEYS_HELP_HELP);
+	guint state, keyval;
 
-	if (keybindings_check_event(event, kb))
+	if (event->keyval == 0)
+		return FALSE;
+
+	keybindings_get_normalised_event(event, &state, &keyval);
+
+	if (keyval == kb->key && state == kb->mods)
 	{
 		open_preferences_help();
 		return TRUE;
