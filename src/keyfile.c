@@ -653,11 +653,11 @@ void write_config_file(gchar const *filename, ConfigPayload payload)
 			g_signal_emit_by_name(geany_object, "save-settings", config);
 			save_dialog_prefs(config);
 			save_ui_prefs(config);
-			project_save_prefs(config);	/* save project filename, etc. */
 			break;
 		case SESSION:
 			save_recent_files(config, ui_prefs.recent_queue, "recent_files");
 			save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+			project_save_prefs(config);	/* save project filename, etc. */
 			if (cl_options.load_session)
 				configuration_save_session_files(config);
 #ifdef HAVE_VTE
@@ -1199,11 +1199,11 @@ gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 		case PREFS:
 			load_dialog_prefs(config);
 			load_ui_prefs(config);
-			project_load_prefs(config);
 			/* this signal can be used e.g. to delay building UI elements until settings have been read */
 			g_signal_emit_by_name(geany_object, "load-settings", config);
 			break;
 		case SESSION:
+			project_load_prefs(config);
 			configuration_load_session_files(config, TRUE);
 			break;
 	}
