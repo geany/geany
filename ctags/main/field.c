@@ -67,6 +67,7 @@ static const char *renderFieldExtras (const tagEntryInfo *const tag, const char 
 static const char *renderFieldXpath (const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldScopeKindName(const tagEntryInfo *const tag, const char *value, vString* b);
 static const char *renderFieldEnd (const tagEntryInfo *const tag, const char *value, vString* b);
+static const char *renderFieldEpoch (const tagEntryInfo *const tag, const char *value, vString* b);
 
 static bool doesContainAnyCharInName (const tagEntryInfo *const tag, const char *value, const char *chars);
 static bool doesContainAnyCharInInput (const tagEntryInfo *const tag, const char*value, const char *chars);
@@ -83,6 +84,7 @@ static bool     isSignatureFieldAvailable (const tagEntryInfo *const tag);
 static bool     isExtrasFieldAvailable    (const tagEntryInfo *const tag);
 static bool     isXpathFieldAvailable     (const tagEntryInfo *const tag);
 static bool     isEndFieldAvailable       (const tagEntryInfo *const tag);
+static bool     isEpochAvailable           (const tagEntryInfo *const tag);
 
 
 #define DEFINE_FIELD(L, N, V, H, DT, RE)				\
@@ -227,6 +229,11 @@ static fieldDefinition fieldDefinitionsUniversal [] = {
 			   isEndFieldAvailable,
 			   FIELDTYPE_INTEGER,
 			   renderFieldEnd, NULL, NULL),
+	DEFINE_FIELD_FULL ('T', "epoch", true,
+					   "the last modified time of the input file (only for F/file kind tag)",
+					   isEpochAvailable,
+					   FIELDTYPE_INTEGER,
+					   renderFieldEpoch, NULL, NULL),
 };
 
 
@@ -878,6 +885,18 @@ static const char *renderFieldEnd (const tagEntryInfo *const tag,
 		return NULL;
 }
 
+static const char *renderFieldEpoch (const tagEntryInfo *const tag,
+									  const char *value, vString* b)
+{
+#define buf_len 21
+	static char buf[buf_len];
+
+	if (snprintf (buf, buf_len, "%lld", (long long)tag->extensionFields.epoch) > 0)
+		return renderAsIs (b, buf);
+	else
+		return NULL;
+}
+
 static bool     isLanguageFieldAvailable (const tagEntryInfo *const tag)
 {
 	return (tag->langType == LANG_IGNORE)? false: true;
@@ -942,46 +961,33 @@ static bool     isEndFieldAvailable       (const tagEntryInfo *const tag)
 	return (tag->extensionFields.endLine != 0)? true: false;
 }
 
+static bool isEpochAvailable (const tagEntryInfo *const tag)
+{
+	return (tag->kindIndex == KIND_FILE_INDEX)
+		? true
+		: false;
+}
+
 extern bool isFieldEnabled (fieldType type)
 {
 	return getFieldObject(type)->def->enabled;
 }
 
-extern bool enableField (fieldType type, bool state, bool warnIfFixedField)
+extern bool enableField (fieldType type, bool state)
 {
 	fieldDefinition *def = getFieldObject(type)->def;
 	bool old = def->enabled;
-	if (writerDoesTreatFieldAsFixed (type))
-	{
-		if ((!state) && warnIfFixedField)
-		{
-			if (def->name && def->letter != NUL_FIELD_LETTER)
-				error(WARNING, "Cannot disable fixed field: '%c'{%s}",
-				      def->letter, def->name);
-			else if (def->name)
-				error(WARNING, "Cannot disable fixed field: {%s}",
-				      def->name);
-			else if (def->letter != NUL_FIELD_LETTER)
-				error(WARNING, "Cannot disable fixed field: '%c'",
-				      getFieldObject(type)->def->letter);
-			else
-				AssertNotReached();
-		}
-	}
-	else
-	{
-		getFieldObject(type)->def->enabled = state;
+	getFieldObject(type)->def->enabled = state;
 
-		if (isCommonField (type))
-			verbose ("enable field \"%s\": %s\n",
+	if (isCommonField (type))
+		verbose ("enable field \"%s\": %s\n",
 				 getFieldObject(type)->def->name,
 				 (state? "yes": "no"));
-		else
-			verbose ("enable field \"%s\"<%s>: %s\n",
+	else
+		verbose ("enable field \"%s\"<%s>: %s\n",
 				 getFieldObject(type)->def->name,
 				 getLanguageName (getFieldOwner(type)),
 				 (state? "yes": "no"));
-	}
 	return old;
 }
 

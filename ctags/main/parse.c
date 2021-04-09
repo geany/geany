@@ -4777,12 +4777,18 @@ extern void anonGenerate (vString *buffer, const char *prefix, int kind)
 	parser -> anonymousIdentiferId ++;
 
 	char szNum[32];
+#if 0
 	char buf [9];
 
 	vStringCopyS(buffer, prefix);
 
 	anonHashString (getInputFileName(), buf);
 	sprintf(szNum,"%s%02x%02x",buf,parser -> anonymousIdentiferId, kind);
+#else
+	/* we want to see numbers for anon functions in the tree view instead of the hash */
+	vStringCopyS(buffer, prefix);
+	sprintf(szNum,"%u", parser -> anonymousIdentiferId);
+#endif
 	vStringCatS(buffer,szNum);
 }
 
