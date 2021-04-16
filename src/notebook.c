@@ -36,6 +36,9 @@
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "search.h"
+#include "sciwrappers.h"
+#include "msgwindow.h"
 
 #include "gtkcompat.h"
 
@@ -660,6 +663,330 @@ static void notebook_tab_close_button_style_set(GtkWidget *btn, GtkRcStyle *prev
 	gtk_widget_set_size_request(btn, w + 2, h + 2);
 }
 
+static void find_occurrence(GObject *object, gboolean previous)
+{
+    GtkWidget *checkbox_case = g_object_get_data(object, "checkbox_case");
+    GtkWidget *checkbox_multiline = g_object_get_data(object, "checkbox_multiline");
+    GtkWidget *checkbox_words = g_object_get_data(object, "checkbox_words");
+    GtkWidget *checkbox_words_prefix = g_object_get_data(object, "checkbox_words_prefix");
+    GtkWidget *checkbox_escape_sequences = g_object_get_data(object, "checkbox_escape_sequences");
+    GtkWidget *checkbox_regexp = g_object_get_data(object, "checkbox_regexp");
+    GtkWidget *label_total_matches = g_object_get_data(object, "label_total_matches");
+    GtkWidget *entry_what_to_search = g_object_get_data(object, "entry_what_to_search");
+    GeanyDocument *doc = g_object_get_data(object, "doc");
+
+    GeanyFindFlags search_flags;
+    search_flags = int_search_flags(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_case)),
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_words)),
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_regexp)),
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_multiline)),
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_words_prefix)));
+
+    gchar * search_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_what_to_search)))));
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_escape_sequences))
+        && !utils_str_replace_escape(search_text, FALSE))
+    {
+       /* search text has invalid sequence */
+       goto clean_up;
+    }
+    gint result = document_find_text(doc, search_text, search_text, search_flags,
+		previous, NULL, TRUE, NULL);
+    if (result)
+    {
+       ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(entry_what_to_search), search_text, 0);
+    }
+    clean_up:
+    g_free(search_text);
+}
+
+static void on_button_previous_clicked(GtkWidget *button_previous, GObject *object)
+{
+    find_occurrence(object, TRUE);
+}
+
+static void on_button_next_clicked(GtkWidget *button_next, GObject *object)
+{
+    find_occurrence(object, FALSE);
+}
+
+static void update_total_matches_in_document_info(GObject *object)
+{
+    GtkWidget *checkbox_case = g_object_get_data(object, "checkbox_case");
+    GtkWidget *checkbox_multiline = g_object_get_data(object, "checkbox_multiline");
+    GtkWidget *checkbox_words = g_object_get_data(object, "checkbox_words");
+    GtkWidget *checkbox_all_occurrences = g_object_get_data(object, "checkbox_all_occurrences");
+    GtkWidget *checkbox_words_prefix = g_object_get_data(object, "checkbox_words_prefix");
+    GtkWidget *checkbox_escape_sequences = g_object_get_data(object, "checkbox_escape_sequences");
+    GtkWidget *checkbox_regexp = g_object_get_data(object, "checkbox_regexp");
+    GtkWidget *label_total_matches = g_object_get_data(object, "label_total_matches");
+    GtkWidget *entry_what_to_search = g_object_get_data(object, "entry_what_to_search");
+
+    GeanyFindFlags search_flags;
+    search_flags = int_search_flags(
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_case)),
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_words)),
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_regexp)),
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_multiline)),
+        gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_words_prefix)));
+
+    gchar * search_text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_what_to_search)))));
+    if (!(search_flags & GEANY_FIND_REGEXP)
+        && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_escape_sequences))
+        && !utils_str_replace_escape(search_text, FALSE))
+    {
+        /* search text has invalid sequence */
+        g_free(search_text);
+        search_text = g_strdup("");
+    }
+    GeanyDocument *doc = g_object_get_data(object, "doc");
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_all_occurrences)))
+    {
+        /* clear messages */
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
+        gtk_list_store_clear(msgwindow.store_msg);
+    }
+    /* mark all occurances */
+    gint count = search_mark_all(doc, search_text, search_flags);
+    /* update total matches info */
+    if (!count)
+    {
+        gtk_label_set_markup_with_mnemonic(GTK_LABEL(label_total_matches), "");
+        g_free(search_text);
+        return ;
+    }
+    GString* matches = g_string_new("");
+    g_string_append_printf(matches, ngettext("<b>%d match</b>", "<b>%d matches</b>", count),
+	    count);
+    gtk_label_set_markup_with_mnemonic(GTK_LABEL(label_total_matches), matches->str);
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_all_occurrences)))
+    {
+        /* show occurrences in messages */
+        find_document_usage(doc, search_text, search_flags);
+    }
+}
+
+static void on_entry_what_to_search_changed(GtkWidget *entry_what_to_search, GObject *object)
+{
+    update_total_matches_in_document_info(object);
+}
+
+static void on_entry_what_to_search_activated(GtkWidget *entry_what_to_search, GObject *object)
+{
+    find_occurrence(object, FALSE);
+}
+
+static void on_button_close_clicked(GtkWidget *button_close, GObject *object)
+{
+    GtkWidget *sbox = g_object_get_data(object, "sbox");
+    GtkWidget *sbox_for_more = g_object_get_data(object, "sbox_for_more");
+    GtkWidget *expander_more = g_object_get_data(object, "expander_more");
+    GeanyDocument *doc = g_object_get_data(object, "doc");
+    if (gtk_widget_get_visible(sbox_for_more))
+    {
+        /* hide more sbox */
+        gtk_widget_activate(expander_more);
+    }
+    /* hide sbox */
+    gtk_widget_set_visible(sbox, FALSE);
+    editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
+}
+
+static void on_expander_more_activated(GtkExpander *expander_more, gpointer data)
+{
+    GtkWidget *sbox_for_more = data;
+    gtk_widget_set_visible(sbox_for_more, !gtk_widget_get_visible(sbox_for_more));
+}
+
+static void on_checkbox_regexp_toggled(GtkToggleButton *checkbox_regexp, GObject *object)
+{
+    GtkWidget *checkbox_multiline = g_object_get_data(object, "checkbox_multiline");
+    GtkWidget *checkbox_words = g_object_get_data(object, "checkbox_words");
+    GtkWidget *checkbox_words_prefix = g_object_get_data(object, "checkbox_words_prefix");
+    GtkWidget *checkbox_escape_sequences = g_object_get_data(object, "checkbox_escape_sequences");
+    GtkWidget *button_previous = g_object_get_data(object, "button_previous");
+    gtk_widget_set_sensitive(checkbox_multiline, gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_regexp)));
+    gtk_widget_set_sensitive(checkbox_words, !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_regexp)));
+    gtk_widget_set_sensitive(checkbox_words_prefix,
+        !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_regexp)));
+    gtk_widget_set_sensitive(checkbox_escape_sequences,
+        !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_regexp)));
+    gtk_widget_set_sensitive(button_previous, !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_regexp)));
+    update_total_matches_in_document_info(object);
+}
+
+static void on_checkbox_words_toggled(GtkToggleButton *checkbox_words, GObject *object)
+{
+    GtkWidget *checkbox_words_prefix = g_object_get_data(object, "checkbox_words_prefix");
+    gtk_widget_set_sensitive(checkbox_words_prefix,
+        !gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox_words)));
+    update_total_matches_in_document_info(object);
+}
+
+static void on_checkbox_case_toggled(GtkToggleButton *checkbox_case, GObject *object)
+{
+    update_total_matches_in_document_info(object);
+}
+
+static void on_checkbox_sequences_toggled(GtkToggleButton *checkbox_sequences, GObject *object)
+{
+    update_total_matches_in_document_info(object);
+}
+
+static void on_checkbox_all_occurrences_toggled(GtkToggleButton *checkbox_all_occurrences, GObject *object)
+{
+    update_total_matches_in_document_info(object);
+}
+
+static void add_data_to_object(GObject *object, GtkWidget *checkbox_case, GtkWidget *checkbox_multiline,
+	GtkWidget *checkbox_words, GtkWidget *checkbox_all_occurrences, GtkWidget *checkbox_words_prefix,
+	GtkWidget *checkbox_escape_sequences, GtkWidget *checkbox_regexp, GtkWidget *label_total_matches,
+	GtkWidget *entry_what_to_search, GeanyDocument *doc, GtkWidget *button_previous)
+{
+    g_object_set_data(object, "checkbox_case", checkbox_case);
+    g_object_set_data(object, "checkbox_multiline", checkbox_multiline);
+    g_object_set_data(object, "checkbox_words", checkbox_words);
+    g_object_set_data(object, "checkbox_all_occurrences", checkbox_all_occurrences);
+    g_object_set_data(object, "checkbox_words_prefix", checkbox_words_prefix);
+    g_object_set_data(object, "checkbox_escape_sequences", checkbox_escape_sequences);
+    g_object_set_data(object, "checkbox_regexp", checkbox_regexp);
+    g_object_set_data(object, "label_total_matches", label_total_matches);
+    g_object_set_data(object, "entry_what_to_search", entry_what_to_search);
+    g_object_set_data(object, "doc", doc);
+    g_object_set_data(object, "button_previous", button_previous);
+}
+
+static void create_search_bar(GeanyDocument *this, GtkWidget *vbox, gboolean top)
+{
+    GtkWidget *sbox, *sbox_for_more;
+    GtkWidget *entry_what_to_search, *label_total_matches, *label_gap;
+    GtkWidget *button_next, *button_previous, *button_close;
+    GtkWidget *image_go_down, *image_up_down, *image_close, *expander_more;
+    GtkWidget *checkbox_regexp, *checkbox_case, *checkbox_words, *checkbox_words_prefix,
+        *checkbox_multiline, *checkbox_escape_sequences, *checkbox_all_occurrences;
+
+    sbox = gtk_hbox_new(FALSE, 6);
+    sbox_for_more = gtk_hbox_new(FALSE, 6);
+    entry_what_to_search = gtk_combo_box_text_new_with_entry();;
+    ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_what_to_search))));
+    gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_what_to_search))), 50);
+    gtk_box_pack_start(GTK_BOX(sbox), entry_what_to_search, TRUE, TRUE, 0);
+
+    button_previous = gtk_button_new();
+    button_next = gtk_button_new();
+    button_close = gtk_button_new();
+    image_go_down = gtk_image_new_from_stock(GTK_STOCK_GO_DOWN, GTK_ICON_SIZE_BUTTON);
+    image_up_down = gtk_image_new_from_stock(GTK_STOCK_GO_UP, GTK_ICON_SIZE_BUTTON);
+    image_close = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_BUTTON);
+    gtk_button_set_image(GTK_BUTTON(button_next), image_go_down);
+    gtk_button_set_image(GTK_BUTTON(button_previous), image_up_down);
+    gtk_button_set_image(GTK_BUTTON(button_close), image_close);
+    gtk_widget_show(image_go_down);
+    gtk_widget_show(image_up_down);
+    gtk_widget_show(image_close);
+
+    gtk_box_pack_start(GTK_BOX(sbox), button_previous, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox), button_next, FALSE, FALSE, 0);
+
+    checkbox_case = gtk_check_button_new_with_mnemonic(_("Match case"));
+    checkbox_words = gtk_check_button_new_with_mnemonic(_("Whole words"));
+    checkbox_all_occurrences = gtk_check_button_new_with_mnemonic(_("All occurrences"));
+    checkbox_words_prefix = gtk_check_button_new_with_mnemonic(_("Words prefix"));
+    checkbox_escape_sequences = gtk_check_button_new_with_mnemonic(_("Escape sequences"));
+    checkbox_regexp = gtk_check_button_new_with_mnemonic(_("Regex"));
+    checkbox_multiline = gtk_check_button_new_with_mnemonic(_("Multi-line"));
+    label_total_matches = gtk_label_new_with_mnemonic("");
+    label_gap = gtk_label_new_with_mnemonic("");
+
+    expander_more = gtk_expander_new_with_mnemonic(_("_More"));
+    g_signal_connect_after(expander_more, "activate",
+        G_CALLBACK(on_expander_more_activated), sbox_for_more);
+
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_multiline), FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(checkbox_multiline), FALSE);
+    gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_multiline), FALSE);
+
+    add_data_to_object(G_OBJECT(button_next), checkbox_case, checkbox_multiline,
+        checkbox_words, checkbox_all_occurrences, checkbox_words_prefix, checkbox_escape_sequences,
+        checkbox_regexp, label_total_matches, entry_what_to_search, this, button_previous);
+    add_data_to_object(G_OBJECT(button_previous), checkbox_case, checkbox_multiline,
+        checkbox_words, checkbox_all_occurrences, checkbox_words_prefix, checkbox_escape_sequences,
+        checkbox_regexp, label_total_matches, entry_what_to_search, this, button_previous);
+	add_data_to_object(G_OBJECT(checkbox_regexp), checkbox_case, checkbox_multiline,
+        checkbox_words, checkbox_all_occurrences, checkbox_words_prefix, checkbox_escape_sequences,
+        checkbox_regexp, label_total_matches, entry_what_to_search, this, button_previous);
+	add_data_to_object(G_OBJECT(checkbox_words), checkbox_case, checkbox_multiline,
+        checkbox_words, checkbox_all_occurrences, checkbox_words_prefix, checkbox_escape_sequences,
+        checkbox_regexp, label_total_matches, entry_what_to_search, this, button_previous);
+	add_data_to_object(G_OBJECT(checkbox_case), checkbox_case, checkbox_multiline,
+        checkbox_words, checkbox_all_occurrences, checkbox_words_prefix, checkbox_escape_sequences,
+        checkbox_regexp, label_total_matches, entry_what_to_search, this, button_previous);
+	add_data_to_object(G_OBJECT(checkbox_escape_sequences), checkbox_case, checkbox_multiline,
+        checkbox_words, checkbox_all_occurrences, checkbox_words_prefix, checkbox_escape_sequences,
+        checkbox_regexp, label_total_matches, entry_what_to_search, this, button_previous);
+    add_data_to_object(G_OBJECT(entry_what_to_search), checkbox_case, checkbox_multiline,
+        checkbox_words, checkbox_all_occurrences, checkbox_words_prefix, checkbox_escape_sequences,
+        checkbox_regexp, label_total_matches, entry_what_to_search, this, button_previous);
+    add_data_to_object(G_OBJECT(checkbox_all_occurrences), checkbox_case, checkbox_multiline,
+        checkbox_words, checkbox_all_occurrences, checkbox_words_prefix, checkbox_escape_sequences,
+        checkbox_regexp, label_total_matches, entry_what_to_search, this, button_previous);
+
+    g_object_set_data(G_OBJECT(button_close), "sbox", sbox);
+    g_object_set_data(G_OBJECT(button_close), "sbox_for_more", sbox_for_more);
+    g_object_set_data(G_OBJECT(button_close), "expander_more", expander_more);
+    g_object_set_data(G_OBJECT(button_close), "doc", this);
+
+    g_signal_connect(checkbox_regexp, "toggled",
+        G_CALLBACK(on_checkbox_regexp_toggled), checkbox_regexp);
+    g_signal_connect(checkbox_words, "toggled",
+        G_CALLBACK(on_checkbox_words_toggled), checkbox_words);
+    g_signal_connect(checkbox_case, "toggled",
+        G_CALLBACK(on_checkbox_case_toggled), checkbox_case);
+    g_signal_connect(checkbox_escape_sequences, "toggled",
+        G_CALLBACK(on_checkbox_sequences_toggled), checkbox_escape_sequences);
+    g_signal_connect(checkbox_all_occurrences, "toggled",
+        G_CALLBACK(on_checkbox_all_occurrences_toggled), checkbox_all_occurrences);
+    g_signal_connect(G_OBJECT(entry_what_to_search), "changed",
+        G_CALLBACK(on_entry_what_to_search_changed), entry_what_to_search);
+    g_signal_connect_after(gtk_bin_get_child(GTK_BIN(entry_what_to_search)), "activate",
+        G_CALLBACK(on_entry_what_to_search_activated), entry_what_to_search);
+    g_signal_connect(G_OBJECT(button_next), "clicked",
+        G_CALLBACK(on_button_next_clicked), button_next);
+    g_signal_connect(G_OBJECT(button_previous), "clicked",
+        G_CALLBACK(on_button_previous_clicked), button_previous);
+
+    gtk_box_pack_start(GTK_BOX(sbox), checkbox_case, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox), checkbox_words, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox), checkbox_regexp, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox), expander_more, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox), label_total_matches, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox), button_close, FALSE, FALSE, 0);
+
+    gtk_box_pack_start(GTK_BOX(sbox_for_more), label_gap, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox_for_more), checkbox_all_occurrences, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox_for_more), checkbox_words_prefix, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox_for_more), checkbox_escape_sequences, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sbox_for_more), checkbox_multiline, FALSE, FALSE, 0);
+
+    g_signal_connect(G_OBJECT(button_close), "clicked",
+        G_CALLBACK(on_button_close_clicked), button_close);
+
+    if (top)
+    {
+        gtk_box_pack_start(GTK_BOX(vbox), sbox, FALSE, FALSE, 0);
+        gtk_box_pack_start(GTK_BOX(vbox), sbox_for_more, FALSE, FALSE, 0);
+    }
+    else
+    {
+        gtk_box_pack_end(GTK_BOX(vbox), sbox, FALSE, FALSE, 0);
+        gtk_box_pack_end(GTK_BOX(vbox), sbox_for_more, FALSE, FALSE, 0);
+    }
+
+    gtk_widget_show_all(sbox);
+    gtk_widget_show_all(sbox_for_more);
+    gtk_widget_hide(sbox);
+    gtk_widget_hide(sbox_for_more);
+}
+
 
 /* Returns page number of notebook page, or -1 on error
  *
@@ -680,8 +1007,11 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	/* page is packed into a vbox so we can stack infobars above it */
 	vbox = gtk_vbox_new(FALSE, 0);
+
+	create_search_bar(this, vbox, TRUE);
 	page = GTK_WIDGET(this->editor->sci);
 	gtk_box_pack_start(GTK_BOX(vbox), page, TRUE, TRUE, 0);
+	create_search_bar(this, vbox, FALSE);
 
 	this->priv->tab_label = gtk_label_new(NULL);
 

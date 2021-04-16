@@ -831,7 +831,14 @@ void on_toolbutton_compile_clicked(GtkAction *action, gpointer user_data)
 
 void on_find1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	search_show_find_dialog();
+	if (interface_prefs.search_bar_position != SEARCH_BAR_POSITION_NONE)
+	{
+		search_show_find_bar();
+	}
+	else
+	{
+		search_show_find_dialog();
+	}
 }
 
 

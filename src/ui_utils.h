@@ -69,6 +69,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		compiler_tab_autoscroll;
 	gint			msgwin_orientation;			/**< orientation of the message window */
 	gint 			symbols_sort_mode;			/**< symbol list sorting mode */
+	gint 			search_bar_position;                    /**< search bar position */
 }
 GeanyInterfacePrefs;
 
@@ -362,6 +363,15 @@ GtkWidget *ui_create_encodings_combo_box(gboolean has_detect, gint default_enc);
 gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo);
 
 gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc);
+
+/* Get search bar sbox - container for entry, buttons, checkboxes. */
+GtkWidget* get_search_bar_sbox(GeanyDocument *doc);
+
+/* Emits entry what_to_search in search bar changed if visible. */
+void ui_emit_search_bar_entry_changed(GeanyDocument *doc);
+
+/* Emits button_close in search bar clicked if visible. */
+void ui_emit_search_bar_close_button_clicked(GeanyDocument *doc);
 
 #endif /* GEANY_PRIVATE */
 

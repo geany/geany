@@ -56,6 +56,7 @@
 #include "utils.h"
 #include "vte.h"
 #include "osx.h"
+#include "notebook.h"
 
 #include "gtkcompat.h"
 
@@ -875,6 +876,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
 		gboolean old_sidebar_pos = interface_prefs.sidebar_pos;
 		GeanyDocument *doc = document_get_current();
+		gint previous_search_bar_position = interface_prefs.search_bar_position;
 
 		/* Synchronize Stash settings */
 		prefs_action(PREF_UPDATE);
@@ -1308,6 +1310,27 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		/* store all settings */
 		configuration_save();
+		GtkWidget *find_dialog = get_find_dialog();
+		if (interface_prefs.search_bar_position != SEARCH_BAR_POSITION_NONE
+			&& GTK_IS_WIDGET(find_dialog) && gtk_widget_get_visible(find_dialog))
+		{
+			gtk_widget_hide(find_dialog);
+		}
+
+		if ((interface_prefs.search_bar_position != SEARCH_BAR_POSITION_NONE
+			&& previous_search_bar_position != SEARCH_BAR_POSITION_NONE
+			&& previous_search_bar_position != interface_prefs.search_bar_position)
+			|| (interface_prefs.search_bar_position == SEARCH_BAR_POSITION_NONE
+			&& previous_search_bar_position != SEARCH_BAR_POSITION_NONE))
+		{
+			gint current_search_bar_position = interface_prefs.search_bar_position;
+			interface_prefs.search_bar_position = previous_search_bar_position;
+			for (i = 0; i < documents_array->len; i++)
+			{
+				ui_emit_search_bar_close_button_clicked(documents_array->pdata[i]);
+			}
+			interface_prefs.search_bar_position = current_search_bar_position;
+		}
 	}
 
 	if (response == GTK_RESPONSE_HELP)

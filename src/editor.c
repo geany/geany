@@ -517,6 +517,13 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 
 	ui_update_statusbar(editor->document, pos);
 
+	if (interface_prefs.search_bar_position != SEARCH_BAR_POSITION_NONE
+		&& (nt->updated & SC_UPDATE_CONTENT))
+	{
+		/* update search bar results */
+		ui_emit_search_bar_entry_changed(editor->document);
+	}
+
 #if 0
 	/** experimental code for inverting selections */
 	{

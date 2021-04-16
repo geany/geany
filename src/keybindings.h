@@ -138,6 +138,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_DOCUMENT_UNFOLDALL,				/**< Keybinding. */
 	GEANY_KEYS_GOTO_MATCHINGBRACE,				/**< Keybinding. */
 	GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE,		/**< Keybinding. */
+	GEANY_KEYS_SEARCH_BAR_CLOSE,				/**< Keybinding. */
 	GEANY_KEYS_CLIPBOARD_PASTE,					/**< Keybinding. */
 	GEANY_KEYS_BUILD_MAKE,						/**< Keybinding. */
 	GEANY_KEYS_INSERT_ALTWHITESPACE,			/**< Keybinding. */

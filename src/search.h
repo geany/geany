@@ -27,6 +27,7 @@
 #ifndef GEANY_SEARCH_H
 #define GEANY_SEARCH_H 1
 
+#include "sciwrappers.h"
 #include <glib.h>
 
 
@@ -64,6 +65,14 @@ typedef struct GeanySearchPrefs
 }
 GeanySearchPrefs;
 
+typedef enum
+{
+	SEARCH_BAR_POSITION_TOP = 0,
+	SEARCH_BAR_POSITION_BOTTOM = 1,
+	SEARCH_BAR_POSITION_NONE = 2
+}
+GeanySearchBarPrefs;
+
 typedef struct GeanyMatchInfo
 {
 	GeanyFindFlags flags;
@@ -80,7 +89,8 @@ typedef struct GeanyMatchInfo
 GeanyMatchInfo;
 
 void search_show_find_in_files_dialog(const gchar *dir);
-
+GeanyFindFlags int_search_flags(gint match_case, gint whole_word, gint regexp, gint multiline, gint word_start);
+GSList *find_range(ScintillaObject *sci, GeanyFindFlags flags, struct Sci_TextToFind *ttf);
 
 #ifdef GEANY_PRIVATE
 
@@ -114,6 +124,8 @@ void search_finalize(void);
 
 void search_show_find_dialog(void);
 
+void search_show_find_bar(void);
+
 void search_show_replace_dialog(void);
 
 void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir);
@@ -138,6 +150,10 @@ gint search_replace_match(struct _ScintillaObject *sci, const GeanyMatchInfo *ma
 
 guint search_replace_range(struct _ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		GeanyFindFlags flags, const gchar *replace_text);
+
+gint find_document_usage(struct GeanyDocument *doc, const gchar *search_text, GeanyFindFlags flags);
+
+GtkWidget* get_find_dialog();
 
 #endif /* GEANY_PRIVATE */
 
