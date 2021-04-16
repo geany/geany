@@ -497,9 +497,9 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 	if (doc->file_name != NULL)
 	{
 		if (rename_file)
-		{
-			document_rename_file(doc, utf8_filename);
-		}
+			if (! document_rename_file(doc, utf8_filename))
+				return FALSE;
+
 		if (doc->tm_file)
 		{
 			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
