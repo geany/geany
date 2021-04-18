@@ -198,7 +198,7 @@ fix-ubuntu-libdir:
 	if test "$(DESTDIR)$(libdir)" = /usr/local/lib && \
 	   LANG=C ldd "$(DESTDIR)$(bindir)/geany" | grep -q 'libgeany.*not found' \
 	; then \
-		ldconfig "$(DESTDIR)$(libdir)"; \
+		PATH="\$PATH:/sbin" ldconfig "$(DESTDIR)$(libdir)"; \
 	fi
 
 install-exec-hook: fix-ubuntu-libdir
