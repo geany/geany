@@ -813,6 +813,13 @@ static gboolean signal_cb(gpointer user_data)
 #endif
 
 
+static gboolean enable_new_cb(gpointer data)
+{
+	gint *i = data;
+	*i = FALSE;
+	return G_SOURCE_REMOVE;
+}
+
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
 gboolean main_handle_filename(const gchar *locale_filename)
@@ -846,12 +853,25 @@ gboolean main_handle_filename(const gchar *locale_filename)
 	else if (file_prefs.cmdline_new_files)
 	{	/* create new file with the given filename */
 		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+		static gboolean disable_new = FALSE;
 
 		doc = document_find_by_filename(utf8_filename);
 		if (doc)
 			document_show_tab(doc);
-		else
-			doc = document_new_file(utf8_filename, NULL, NULL);
+		else if (!disable_new)
+		{
+			gchar *msg = g_strdup_printf("%s?", _("Create a new file"));
+			if (dialogs_show_question_full(NULL,
+				GTK_STOCK_NEW, GTK_STOCK_CANCEL, msg,
+				_("Could not find file '%s'."), utf8_filename))
+				doc = document_new_file(utf8_filename, NULL, NULL);
+			else
+			{
+				disable_new = TRUE;
+				g_idle_add(enable_new_cb, &disable_new);
+			}
+			g_free(msg);
+		}
 		if (doc != NULL)
 			ui_add_recent_document(doc);
 		g_free(utf8_filename);
