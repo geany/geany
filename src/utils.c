@@ -1012,16 +1012,17 @@ gint utils_parse_color_to_bgr(const gchar *spec)
 }
 
 
-/* Returns: newly allocated string with the current time formatted HH:MM:SS. */
-gchar *utils_get_current_time_string(void)
+/* Returns: newly allocated string with the current time formatted HH:MM:SS.
+ * If "include_microseconds" is TRUE, microseconds are appended.
+ *
+ * The returned string should be freed with g_free(). */
+gchar *utils_get_current_time_string(gboolean include_microseconds)
 {
-	const time_t tp = time(NULL);
-	const struct tm *tmval = localtime(&tp);
-	gchar *result = g_malloc0(9);
-
-	strftime(result, 9, "%H:%M:%S", tmval);
-	result[8] = '\0';
-	return result;
+	GDateTime *now = g_date_time_new_now_local();
+	const gchar *format = include_microseconds ? "%H:%M:%S.%f" : "%H:%M:%S";
+	gchar *time_string = g_date_time_format(now, format);
+	g_date_time_unref(now);
+	return time_string;
 }
 
 
