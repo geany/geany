@@ -68,8 +68,16 @@ typedef struct
 #define EMPTY_KEYWORDS		((HLKeyword *) NULL)
 #define EMPTY_PROPERTIES	((HLProperty *) NULL)
 
-/* like G_N_ELEMENTS() but supports @array being NULL (for empty entries) */
-#define HL_N_ENTRIES(array) ((array != NULL) ? G_N_ELEMENTS(array) : 0)
+/* like G_N_ELEMENTS() but supports @array being NULL (for empty entries).
+ * The straightforward `((array != NULL) ? G_N_ELEMENTS(array) : 0)` is not
+ * used here because of GCC8's -Wsizeof-pointer-div which doesn't realize the
+ * result of G_N_ELEMENTS() is never actually used when `array` is NULL.
+ * This implementation gives the same result as the LHS of the division
+ * becomes 0 when `array` is NULL, but is not a case that GCC can misinterpret
+ * and warn about.
+ * An alternative solution would be using zero-sized arrays instead of NULLs,
+ * but zero-sized arrays are forbidden by ISO C */
+#define HL_N_ENTRIES(array) ((sizeof(array) * ((array) != NULL)) / sizeof((array)[0]))
 
 
 /* Abaqus */
