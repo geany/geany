@@ -70,6 +70,12 @@ typedef struct
 	gboolean lower   /* input: search only for lines with lower number than @line */;
 } TreeSearchData;
 
+typedef struct
+{
+	gint tag_line;         /* input: the line to look for */
+	GtkTreeIter iter;      /* return: the iterator of the symmbol found */
+	gboolean found;        /* return: wheither or not a symbol have been found */
+} TagQueryIterData;
 
 static GPtrArray *top_level_iter_names = NULL;
 
@@ -2502,6 +2508,89 @@ gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
 		tag_types |= tm_tag_namespace_t;
 
 	return get_current_tag_name_cached(doc, tagname, tag_types);
+}
+
+
+/* Gets selected symbol in TreeView.
+ * Helpful to check whether or not the selection must be updated. */
+TMTag* symbols_get_current_selection_tag()
+{
+	GeanyDocument *doc = document_get_current();
+	if (!doc)
+		return NULL;
+
+	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
+	GtkTreeModel *model = GTK_TREE_MODEL(doc->priv->tag_store);
+	GtkTreeIter iter;
+
+	if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+		return NULL;
+
+	TMTag *selection_tag;
+	gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &selection_tag, -1);
+	return selection_tag;
+}
+
+
+/* Function pointer of type GtkTreeModelForeachFunc.
+ * This function is called for each items of a tree model and will stop as soon as a match is found. */
+gboolean search_tag_func(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data_query)
+{
+	TagQueryIterData *ptr_user_data_query = (TagQueryIterData*) user_data_query;
+
+	TMTag *current_tag;
+	gtk_tree_model_get(model, iter, SYMBOLS_COLUMN_TAG, &current_tag, -1);
+
+	if (current_tag)
+	{
+		/* Look for a matching line in tree view */
+		if (ptr_user_data_query->tag_line == current_tag->line)
+		{
+			ptr_user_data_query->iter = *iter;
+			ptr_user_data_query->found = TRUE;
+			return TRUE;
+		}
+	}
+
+	ptr_user_data_query->found = FALSE;
+	return FALSE;
+}
+
+
+/* Search for a given tag line in tree model than sets the tree selection it.
+ * If not found, selection is cleared. */
+gboolean symbols_select_tag_at_line(gint line)
+{
+	GeanyDocument *doc = document_get_current();
+	if (!doc)
+		return FALSE;
+
+	TagQueryIterData query;
+	query.tag_line = line;
+
+	gtk_tree_model_foreach(GTK_TREE_MODEL(doc->priv->tag_store), search_tag_func, (gpointer) &query);
+	if (query.found)
+	{
+		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
+		gtk_tree_selection_select_iter(selection, &query.iter);
+		return TRUE;
+	}
+	else
+		symbols_clear_selection();
+
+	return FALSE;
+}
+
+
+/* Clear any selected items in tree selection */
+void symbols_clear_selection()
+{
+	GeanyDocument *doc = document_get_current();
+	if (!doc)
+		return;
+
+	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
+	gtk_tree_selection_unselect_all(selection);
 }
 
 
