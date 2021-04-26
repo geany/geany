@@ -21,6 +21,7 @@ pacman -S rsync
 # and if its missisng do:
 #ln -s windres.exe i686-w64-mingw32-windres.exe
 
+NOCONFIGURE=1 ./autogen.sh
 ./configure --prefix=/c/geany --host=i686-w64-mingw32 --disable-html-docs --enable-gtk2
 make -j2
 make install
