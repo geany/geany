@@ -142,6 +142,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( PERL,       PERL,         "Perl",             NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( PHP,        PHP,          "PHP",              NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( JS,         JAVASCRIPT,   "Javascript",       NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( JSON,       JSON,         "JSON",             NULL,                      FILE,        MISC     );
 	FT_INIT( PYTHON,     PYTHON,       "Python",           NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( RUBY,       RUBY,         "Ruby",             NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( TCL,        TCL,          "Tcl",              NULL,                      SOURCE_FILE, SCRIPT   );

@@ -1,0 +1,32 @@
+[styling]
+default=default
+number=number_1
+string=string_1
+stringeol=string_eol
+propertyname=string_1
+escapesequence=string_1
+commentline=comment_line
+comment=comment
+operator=operator
+uri=string_1
+compactiri=string_2
+keyword=keyword_1
+ldkeyword=keyword_2
+error=error
+
+[lexer_properties]
+
+[keywords]
+json=true false null
+json-ld=
+
+[settings]
+lexer_filetype=JSON
+tag_parser=JSON
+extension=json
+mime_type=application/json
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1
