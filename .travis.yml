@@ -1,7 +1,7 @@
 # we use both C and C++, so advertize C++
 language: cpp
 cache: ccache
-dist: trusty
+dist: bionic
 compiler:
   - gcc
 env:
