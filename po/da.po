@@ -1,13 +1,13 @@
 # Danish translation for Geany
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the geany package.
-# scootergrisen, 2018-2020.
+# scootergrisen, 2018-2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: geany 1.37\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-11 02:11+0000\n"
-"PO-Revision-Date: 2020-10-12 03:31+0200\n"
+"POT-Creation-Date: 2021-04-18 02:11+0000\n"
+"PO-Revision-Date: 2021-04-18 00:00+0200\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
 "Language: da\n"
@@ -2124,7 +2124,7 @@ msgstr "_Beskrivelse:"
 msgid "_Base path:"
 msgstr "_Grundsti:"
 
-#: ../data/geany.glade.h:468 ../src/search.c:897
+#: ../data/geany.glade.h:468 ../src/search.c:901
 msgid "File _patterns:"
 msgstr "_Filmønstre:"
 
@@ -2230,73 +2230,73 @@ msgstr ""
 "Ophavsret (c) 2005\n"
 "Geany-bidragsyderne"
 
-#: ../src/about.c:172
+#: ../src/about.c:173
 msgid "About Geany"
 msgstr "Om Geany"
 
-#: ../src/about.c:216
+#: ../src/about.c:217
 msgid "A fast and lightweight IDE"
 msgstr "En hurtig og letvægts-IDE"
 
-#: ../src/about.c:238
+#: ../src/about.c:239
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(bygget %s eller efter)"
 
-#: ../src/about.c:252
+#: ../src/about.c:253
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
 msgstr "Med afviklingsbibliotekerne GTK+ v%u.%u.%u og GLib v%u.%u.%u"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:285
+#: ../src/about.c:286
 msgid "Info"
 msgstr "Information"
 
-#: ../src/about.c:301
+#: ../src/about.c:302
 msgid "Developers"
 msgstr "Udviklere"
 
-#: ../src/about.c:308
+#: ../src/about.c:309
 msgid "maintainer"
 msgstr "vedligeholder"
 
-#: ../src/about.c:316 ../src/about.c:324 ../src/about.c:332
+#: ../src/about.c:317 ../src/about.c:325 ../src/about.c:333
 msgid "developer"
 msgstr "udvikler"
 
-#: ../src/about.c:340
+#: ../src/about.c:341
 msgid "translation maintainer"
 msgstr "oversættelsesvedligeholder"
 
-#: ../src/about.c:349
+#: ../src/about.c:350
 msgid "Translators"
 msgstr "Oversættere"
 
-#: ../src/about.c:369
+#: ../src/about.c:370
 msgid "Previous Translators"
 msgstr "Tidligere oversættere"
 
-#: ../src/about.c:390
+#: ../src/about.c:391
 msgid "Contributors"
 msgstr "Bidragydere"
 
-#: ../src/about.c:400
+#: ../src/about.c:401
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 "Nogle af mange bidragydere (se filen %s, for en mere detaljeret liste):"
 
-#: ../src/about.c:426
+#: ../src/about.c:427
 msgid "Credits"
 msgstr "Anerkendelser"
 
-#: ../src/about.c:443
+#: ../src/about.c:444
 msgid "License"
 msgstr "Licens"
 
-#: ../src/about.c:452
+#: ../src/about.c:453
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2917,8 +2917,8 @@ msgstr "Gemte filen %s."
 msgid "Wrap search and find again?"
 msgstr "Start søgningen forfra når slutningen og find igen?"
 
-#: ../src/document.c:2464 ../src/search.c:1368 ../src/search.c:1421
-#: ../src/search.c:2223 ../src/search.c:2224
+#: ../src/document.c:2464 ../src/search.c:1370 ../src/search.c:1423
+#: ../src/search.c:2225 ../src/search.c:2226
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Ingen match fundet for \"%s\"."
@@ -2934,15 +2934,15 @@ msgstr[1] "%s: erstattede %d forekomster af \"%s\" med \"%s\"."
 msgid "Do you want to reload it?"
 msgstr "Vil du genindlæse den?"
 
-#: ../src/editor.c:4461
+#: ../src/editor.c:4469
 msgid "Enter Tab Width"
 msgstr "Indtast tabulatorbredde"
 
-#: ../src/editor.c:4462
+#: ../src/editor.c:4470
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Indtast mængden af mellemrum som skal erstattes af et tabulatortegn."
 
-#: ../src/editor.c:4668
+#: ../src/editor.c:4686
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Advarsel: ikke-standard hård tabulatorbredde: %d != 8!"
@@ -3176,25 +3176,25 @@ msgstr "Dårligt regulært udtryk for filtypen %s: %s"
 msgid "untitled"
 msgstr "unavngivet"
 
-#: ../src/highlighting.c:1252 ../src/libmain.c:895 ../src/socket.c:169
+#: ../src/highlighting.c:1231 ../src/libmain.c:887 ../src/socket.c:169
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Kunne ikke finde filen '%s'."
 
-#: ../src/highlighting.c:1322
+#: ../src/highlighting.c:1301
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/highlighting.c:1363
+#: ../src/highlighting.c:1342
 msgid "The current filetype overrides the default style."
 msgstr "Den nuværende filtype tilsidesætter standardstilen."
 
-#: ../src/highlighting.c:1364
+#: ../src/highlighting.c:1343
 msgid "This may cause color schemes to display incorrectly."
 msgstr "Det kan forårsage at farveskemaer vises forkert."
 
-#: ../src/highlighting.c:1389
+#: ../src/highlighting.c:1368
 msgid "Color Schemes"
 msgstr "Farveskemaer"
 
@@ -3496,11 +3496,11 @@ msgstr "Find næste"
 msgid "Find Previous"
 msgstr "Find forrige"
 
-#: ../src/keybindings.c:542 ../src/search.c:618
+#: ../src/keybindings.c:542 ../src/search.c:620
 msgid "Replace"
 msgstr "Erstat"
 
-#: ../src/keybindings.c:544 ../src/search.c:868
+#: ../src/keybindings.c:544 ../src/search.c:872
 msgid "Find in Files"
 msgstr "Find i filer"
 
@@ -3854,34 +3854,34 @@ msgstr "Vær uddybende"
 msgid "Show version and exit"
 msgstr "Vis version og afslut"
 
-#: ../src/libmain.c:563
+#: ../src/libmain.c:555
 msgid "[FILES...]"
 msgstr "[FILER...]"
 
-#: ../src/libmain.c:565
+#: ../src/libmain.c:557
 msgid "A fast and lightweight IDE."
 msgstr "En hurtig og letvægts-IDE."
 
-#: ../src/libmain.c:566
+#: ../src/libmain.c:558
 msgid "Report bugs to https://github.com/geany/geany/issues."
 msgstr "Rapportér fejl til https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
-#: ../src/libmain.c:599
+#: ../src/libmain.c:591
 #, c-format
 msgid "built on %s with "
 msgstr "bygget %s med "
 
-#: ../src/libmain.c:692
+#: ../src/libmain.c:684
 msgid "Move it now?"
 msgstr "Flyt den nu?"
 
-#: ../src/libmain.c:694
+#: ../src/libmain.c:686
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "Geany har brug for at flytte din gamle konfigurationsmappe inden start."
 
-#: ../src/libmain.c:703
+#: ../src/libmain.c:695
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3890,7 +3890,7 @@ msgstr "Din konfigurationsmappe er blevet flyttet fra \"%s\" til \"%s\"."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/libmain.c:713
+#: ../src/libmain.c:705
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3899,7 +3899,7 @@ msgstr ""
 "Din gamle konfigurationsmappe \"%s\" kunne ikke flyttes til \"%s\" (%s). "
 "Flyt venligst mappen til den nye placering manuelt."
 
-#: ../src/libmain.c:795
+#: ../src/libmain.c:787
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3910,27 +3910,27 @@ msgstr ""
 "Der kan være problemer med at bruge Geany uden en konfigurationsmappe.\n"
 "Start Geany alligevel?"
 
-#: ../src/libmain.c:1217
+#: ../src/libmain.c:1207
 #, c-format
 msgid "This is Geany %s."
 msgstr "Dette er Geany %s."
 
-#: ../src/libmain.c:1220
+#: ../src/libmain.c:1210
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigurationsmappen kunne ikke oprettes (%s)."
 
-#: ../src/libmain.c:1228
+#: ../src/libmain.c:1218
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
 "IPC-soklen kunne ikke oprettes, se Hjælp->Fejlretningsmeddelelser for "
 "detaljer."
 
-#: ../src/libmain.c:1459
+#: ../src/libmain.c:1449
 msgid "Do you really want to quit?"
 msgstr "Vil du virkelig afslutte?"
 
-#: ../src/libmain.c:1497
+#: ../src/libmain.c:1487
 msgid "Configuration files reloaded."
 msgstr "Konfigurationsfilerne blev genindlæst."
 
@@ -4309,7 +4309,7 @@ msgstr "Kunne ikke oprette projektets grundmappe (%s)."
 msgid "Project file could not be written (%s)."
 msgstr "Kunne ikke skrive projektfilen (%s)."
 
-#: ../src/project.c:785 ../src/search.c:628
+#: ../src/project.c:785 ../src/search.c:630
 msgid "_Replace"
 msgstr "_Erstat"
 
@@ -4328,7 +4328,7 @@ msgstr "Vælg projektets filnavn"
 msgid "Project \"%s\" opened."
 msgstr "Åbnede projektet \"%s\"."
 
-#: ../src/search.c:309 ../src/search.c:962
+#: ../src/search.c:309 ../src/search.c:966
 msgid "_Use regular expressions"
 msgstr "_Brug regulære udtryk"
 
@@ -4372,11 +4372,11 @@ msgstr ""
 msgid "Search _backwards"
 msgstr "Søg _baglæns"
 
-#: ../src/search.c:348 ../src/search.c:971
+#: ../src/search.c:348 ../src/search.c:975
 msgid "C_ase sensitive"
-msgstr "Der skelnes ikke mellem store og små _bogstaver"
+msgstr "Der skelnes mellem store og små _bogstaver"
 
-#: ../src/search.c:352 ../src/search.c:976
+#: ../src/search.c:352 ../src/search.c:980
 msgid "Match only a _whole word"
 msgstr "Match kun et _helt ord"
 
@@ -4392,7 +4392,7 @@ msgstr "_Forrige"
 msgid "_Next"
 msgstr "_Næste"
 
-#: ../src/search.c:481 ../src/search.c:639 ../src/search.c:878
+#: ../src/search.c:481 ../src/search.c:641 ../src/search.c:882
 msgid "_Search for:"
 msgstr "_Søg efter:"
 
@@ -4409,57 +4409,57 @@ msgstr "_Mærk"
 msgid "Mark all matches in the current document"
 msgstr "Mærk alle match i det nuværende dokument"
 
-#: ../src/search.c:523 ../src/search.c:698
+#: ../src/search.c:523 ../src/search.c:700
 msgid "In Sessi_on"
 msgstr "I _session"
 
-#: ../src/search.c:528 ../src/search.c:703
+#: ../src/search.c:528 ../src/search.c:705
 msgid "_In Document"
 msgstr "I _dokument"
 
 #. close window checkbox
-#: ../src/search.c:534 ../src/search.c:716
+#: ../src/search.c:534 ../src/search.c:718
 msgid "Close _dialog"
 msgstr "Luk _dialog"
 
-#: ../src/search.c:538 ../src/search.c:720
+#: ../src/search.c:538 ../src/search.c:722
 msgid "Disable this option to keep the dialog open"
 msgstr "Deaktivér valgmuligheden for at holde dialogen åben"
 
-#: ../src/search.c:633
+#: ../src/search.c:635
 msgid "Replace & Fi_nd"
 msgstr "_Erstat og find"
 
-#: ../src/search.c:642
+#: ../src/search.c:644
 msgid "Replace wit_h:"
 msgstr "Erstat _med:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:691
+#: ../src/search.c:693
 msgid "Re_place All"
 msgstr "Erstat _alle"
 
-#: ../src/search.c:708
+#: ../src/search.c:710
 msgid "In Se_lection"
 msgstr "I _markering"
 
-#: ../src/search.c:710
+#: ../src/search.c:712
 msgid "Replace all matches found in the currently selected text"
 msgstr "Erstat alle match fundet i den nuværende markeret tekst"
 
-#: ../src/search.c:827
+#: ../src/search.c:831
 msgid "all"
 msgstr "alle"
 
-#: ../src/search.c:829
+#: ../src/search.c:833
 msgid "project"
 msgstr "projekt"
 
-#: ../src/search.c:831
+#: ../src/search.c:835
 msgid "custom"
 msgstr "brugerdefineret"
 
-#: ../src/search.c:835
+#: ../src/search.c:839
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
@@ -4469,72 +4469,72 @@ msgstr ""
 "Projekt: brug filmønstre defineret i projektets indstillinger\n"
 "Brugerdefineret: angiv filmønstre manuelt"
 
-#: ../src/search.c:910
+#: ../src/search.c:914
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
 msgstr "Mellemrumsseparerede liste over filmønstre (f.eks. *.c *.h)"
 
-#: ../src/search.c:922
+#: ../src/search.c:926
 msgid "_Directory:"
 msgstr "_Mappe:"
 
-#: ../src/search.c:941
+#: ../src/search.c:945
 msgid "E_ncoding:"
 msgstr "_Kodning:"
 
-#: ../src/search.c:965
+#: ../src/search.c:969
 msgid "See grep's manual page for more information"
 msgstr "Se greps manualside for mere information"
 
-#: ../src/search.c:967
+#: ../src/search.c:971
 msgid "_Recurse in subfolders"
 msgstr "_Rekursiv i undermapper"
 
-#: ../src/search.c:980
+#: ../src/search.c:984
 msgid "_Invert search results"
 msgstr "_Omvend søgeresultater"
 
-#: ../src/search.c:984
+#: ../src/search.c:988
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "Omvend måden hvorpå der matches, for at vælge linjer som ikke matcher"
 
-#: ../src/search.c:1001
+#: ../src/search.c:1005
 msgid "E_xtra options:"
 msgstr "_Ekstra valgmuligheder:"
 
-#: ../src/search.c:1009
+#: ../src/search.c:1013
 msgid "Other options to pass to Grep"
 msgstr "Andre valgmuligheder som skal videregives til Grep"
 
-#: ../src/search.c:1371 ../src/search.c:2229 ../src/search.c:2232
+#: ../src/search.c:1373 ../src/search.c:2231 ../src/search.c:2234
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "Fandt %d match for \"%s\"."
 msgstr[1] "Fandt %d match for \"%s\"."
 
-#: ../src/search.c:1427
+#: ../src/search.c:1429
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Erstattede %u match i %u dokumenter."
 
-#: ../src/search.c:1616
+#: ../src/search.c:1618
 msgid "Invalid directory for find in files."
 msgstr "Ugyldig mappe til find i filer."
 
-#: ../src/search.c:1633
+#: ../src/search.c:1635
 msgid "No text to find."
 msgstr "Ingen tekst at finde."
 
-#: ../src/search.c:1709
+#: ../src/search.c:1711
 msgid "Searching..."
 msgstr "Søger..."
 
-#: ../src/search.c:1711
+#: ../src/search.c:1713
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (i mappe: %s)"
 
-#: ../src/search.c:1719
+#: ../src/search.c:1721
 #, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
@@ -4542,27 +4542,27 @@ msgstr ""
 "Kan ikke eksekvere grep-værktøjet \"%s\": %s. Tjek stiindstillingen i "
 "Præferencer."
 
-#: ../src/search.c:1759
+#: ../src/search.c:1761
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Kunne ikke åbne mappe (%s)"
 
-#: ../src/search.c:1849
+#: ../src/search.c:1851
 msgid "Search failed."
 msgstr "Søgning mislykkedes."
 
-#: ../src/search.c:1873
+#: ../src/search.c:1875
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Søgning færdig med %d match."
 msgstr[1] "Søgning færdig med %d match."
 
-#: ../src/search.c:1881
+#: ../src/search.c:1883
 msgid "No matches found."
 msgstr "Fandt ingen match."
 
-#: ../src/search.c:1911
+#: ../src/search.c:1913
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Dårligt regulært udtryk: %s"
@@ -5486,24 +5486,24 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:585
+#: ../src/vte.c:586
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "ugyldigt VTE-bibliotek \"%s\": manglende symbol \"%s\""
 
-#: ../src/vte.c:766
+#: ../src/vte.c:767
 msgid "_Set Path From Document"
 msgstr "_Indstil sti fra dokument"
 
-#: ../src/vte.c:771
+#: ../src/vte.c:772
 msgid "_Restart Terminal"
 msgstr "_Genstart terminal"
 
-#: ../src/vte.c:804
+#: ../src/vte.c:805
 msgid "_Input Methods"
 msgstr "_Inputmetoder"
 
-#: ../src/vte.c:896
+#: ../src/vte.c:897
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
@@ -5973,8 +5973,8 @@ msgid "Instant Save"
 msgstr "Gem øjeblikkeligt"
 
 #: ../plugins/saveactions.c:688
-msgid "_Filetype to use for newly opened files:"
-msgstr "_Filtype som skal bruges til nyligt åbnede filer:"
+msgid "Default _filetype to use for new files:"
+msgstr "Standard_filtype som skal bruges til nye filer:"
 
 #: ../plugins/saveactions.c:719
 msgid "Backup Copy"
