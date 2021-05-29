@@ -339,6 +339,8 @@ test_results = $(test_sources:=.tags)
 
 TEST_EXTENSIONS = .tags
 TAGS_LOG_COMPILER = $(srcdir)/runner.sh
+AM_TAGS_LOG_FLAGS = $(top_builddir)/src/geany$(EXEEXT)
+AM_TESTS_ENVIRONMENT = top_srcdir=$(top_srcdir) top_builddir=$(top_builddir)
 
 TESTS = $(test_results)
 EXTRA_DIST = $(test_sources) $(test_results)
@@ -349,6 +351,6 @@ check_processing_order_sources = \
 EXTRA_DIST += $(check_processing_order_sources)
 .PHONY: check-processing-order
 check-processing-order: $(check_processing_order_sources)
-	srcdir="$(srcdir)" top_builddir="$(top_builddir)" \
-	$(srcdir)/runner.sh --result $(check_processing_order_sources:%=$(srcdir)/%)
+	$(AM_TESTS_ENVIRONMENT) \
+	$(srcdir)/runner.sh $(top_builddir)/src/geany$(EXEEXT) --result $(check_processing_order_sources:%=$(srcdir)/%)
 check-local: check-processing-order

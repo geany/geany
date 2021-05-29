@@ -303,10 +303,10 @@ static void main_init(void)
 
 const gchar *main_get_version_string(void)
 {
-	static gchar full[] = VERSION " (git >= " REVISION ")";
+	static gchar full[] = PACKAGE_VERSION " (git >= " REVISION ")";
 
 	if (utils_str_equal(REVISION, "-1"))
-		return VERSION;
+		return PACKAGE_VERSION;
 	else
 		return full;
 }

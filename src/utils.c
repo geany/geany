@@ -1912,7 +1912,7 @@ gchar *utils_get_help_url(const gchar *suffix)
 	if (! g_file_test(uri + skip, G_FILE_TEST_IS_REGULAR))
 	{	/* fall back to online documentation if it is not found on the hard disk */
 		g_free(uri);
-		uri = g_strconcat(GEANY_HOMEPAGE, "manual/", VERSION, "/index.html", NULL);
+		uri = g_strconcat(GEANY_HOMEPAGE, "manual/", PACKAGE_VERSION, "/index.html", NULL);
 	}
 
 	if (suffix != NULL)

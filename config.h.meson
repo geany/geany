@@ -1,0 +1,340 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Define to 1 if using 'alloca.c'. */
+#mesondefine C_ALLOCA
+
+/* Use AutoPackage? */
+#mesondefine ENABLE_BINRELOC
+
+/* always defined to indicate that i18n is enabled */
+#mesondefine ENABLE_NLS
+
+/* Gettext package. */
+#mesondefine GETTEXT_PACKAGE
+
+/* Define to 1 if you have 'alloca', as a function or macro. */
+#mesondefine HAVE_ALLOCA
+
+/* Define to 1 if <alloca.h> works. */
+#mesondefine HAVE_ALLOCA_H
+
+/* Define to 1 if you have the `asprintf' function. */
+#mesondefine HAVE_ASPRINTF
+
+/* Define to 1 if you have the `bind_textdomain_codeset' function. */
+#mesondefine HAVE_BIND_TEXTDOMAIN_CODESET
+
+/* Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the
+   CoreFoundation framework. */
+#mesondefine HAVE_CFLOCALECOPYCURRENT
+
+/* Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in
+   the CoreFoundation framework. */
+#mesondefine HAVE_CFPREFERENCESCOPYAPPVALUE
+
+/* Define to 1 if you have the `chsize' function. */
+#mesondefine HAVE_CHSIZE
+
+/* define if the compiler supports basic C++11 syntax */
+#mesondefine HAVE_CXX11
+
+/* Define to 1 if you have the `dcgettext' function. */
+#mesondefine HAVE_DCGETTEXT
+
+/* Define to 1 if you have the declaration of `_NSGetEnviron', and to 0 if you
+   don't. */
+#mesondefine HAVE_DECL__NSGETENVIRON
+
+/* Define to 1 if you have the declaration of `__environ', and to 0 if you
+   don't. */
+#mesondefine HAVE_DECL___ENVIRON
+
+/* Define to 1 if you have the <direct.h> header file. */
+#mesondefine HAVE_DIRECT_H
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#mesondefine HAVE_DLFCN_H
+
+/* Define to 1 if you have the <errno.h> header file. */
+#mesondefine HAVE_ERRNO_H
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#mesondefine HAVE_FCNTL_H
+
+/* Define to 1 if you have the <fnmatch.h> header file. */
+#mesondefine HAVE_FNMATCH_H
+
+/* Define to 1 if you have the `ftruncate' function. */
+#mesondefine HAVE_FTRUNCATE
+
+/* Define if the GNU gettext() function is already present or preinstalled. */
+#mesondefine HAVE_GETTEXT
+
+/* Define to 1 if you have the <glob.h> header file. */
+#mesondefine HAVE_GLOB_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#mesondefine HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <io.h> header file. */
+#mesondefine HAVE_IO_H
+
+/* Define to 1 if you have the `isblank' function. */
+#mesondefine HAVE_ISBLANK
+
+/* Define to 1 if you have the <langinfo.h> header file. */
+#mesondefine HAVE_LANGINFO_H
+
+/* Define if your <locale.h> file defines LC_MESSAGES. */
+#mesondefine HAVE_LC_MESSAGES
+
+/* Define to 1 if you have the <libintl.h> header file. */
+#mesondefine HAVE_LIBINTL_H
+
+/* Define to 1 if you have the <limits.h> header file. */
+#mesondefine HAVE_LIMITS_H
+
+/* Define to 1 if you have the <locale.h> header file. */
+#mesondefine HAVE_LOCALE_H
+
+/* Define to 1 if you have the `mbrtowc' function. */
+#mesondefine HAVE_MBRTOWC
+
+/* Define to 1 if you have the `memcpy' function. */
+#mesondefine HAVE_MEMCPY
+
+/* Define to 1 if you have the <minix/config.h> header file. */
+#mesondefine HAVE_MINIX_CONFIG_H
+
+/* Define to 1 if you have the `mkstemp' function. */
+#mesondefine HAVE_MKSTEMP
+
+/* Define if plugins are enabled. */
+#mesondefine HAVE_PLUGINS
+
+/* Define to 1 if you have the `realpath' function. */
+#mesondefine HAVE_REALPATH
+
+/* Should always be 1, required for CTags. */
+#mesondefine HAVE_REGCOMP
+
+/* Define if you want to detect a running instance */
+#mesondefine HAVE_SOCKET
+
+/* whether or not to use <stdbool.h>. */
+#mesondefine HAVE_STDBOOL_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#mesondefine HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#mesondefine HAVE_STDIO_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#mesondefine HAVE_STDLIB_H
+
+/* Define to 1 if you have the `strcasecmp' function. */
+#mesondefine HAVE_STRCASECMP
+
+/* Define to 1 if you have the `strerror' function. */
+#mesondefine HAVE_STRERROR
+
+/* Define to 1 if you have the `stricmp' function. */
+#mesondefine HAVE_STRICMP
+
+/* Define to 1 if you have the <strings.h> header file. */
+#mesondefine HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#mesondefine HAVE_STRING_H
+
+/* Define to 1 if you have the `strncasecmp' function. */
+#mesondefine HAVE_STRNCASECMP
+
+/* Define to 1 if you have the `strnicmp' function. */
+#mesondefine HAVE_STRNICMP
+
+/* Define to 1 if you have the `strstr' function. */
+#mesondefine HAVE_STRSTR
+
+/* Define to 1 if you have the <sys/dir.h> header file. */
+#mesondefine HAVE_SYS_DIR_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#mesondefine HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/time.h> header file. */
+#mesondefine HAVE_SYS_TIME_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#mesondefine HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the `tempnam' function. */
+#mesondefine HAVE_TEMPNAM
+
+/* Define to 1 if you have the `truncate' function. */
+#mesondefine HAVE_TRUNCATE
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#mesondefine HAVE_UNISTD_H
+
+/* Define if you want VTE support */
+#mesondefine HAVE_VTE
+
+/* Define to 1 if you have the <wchar.h> header file. */
+#mesondefine HAVE_WCHAR_H
+
+/* Define to 1 if you have the `wcrtomb' function. */
+#mesondefine HAVE_WCRTOMB
+
+/* Define to 1 if you have the `wcscoll' function. */
+#mesondefine HAVE_WCSCOLL
+
+/* Define to 1 if you have the <wctype.h> header file. */
+#mesondefine HAVE_WCTYPE_H
+
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
+#mesondefine LT_OBJDIR
+
+/* Name of package */
+#mesondefine PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#mesondefine PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#mesondefine PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#mesondefine PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#mesondefine PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#mesondefine PACKAGE_URL
+
+/* Define to the version of this package. */
+#mesondefine PACKAGE_VERSION
+
+/* git revision hash */
+#mesondefine REVISION
+
+/* If using the C implementation of alloca, define if you know the
+   direction of stack growth for your system; otherwise it will be
+   automatically deduced at runtime.
+	STACK_DIRECTION > 0 => grows toward higher addresses
+	STACK_DIRECTION < 0 => grows toward lower addresses
+	STACK_DIRECTION = 0 => direction of growth unknown */
+#mesondefine STACK_DIRECTION
+
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
+#mesondefine STDC_HEADERS
+
+/* Define to 1 if your <sys/time.h> declares `struct tm'. */
+#mesondefine TM_IN_SYS_TIME
+
+/* Enable extensions on AIX 3, Interix.  */
+#ifndef _ALL_SOURCE
+# undef _ALL_SOURCE
+#endif
+/* Enable general extensions on macOS.  */
+#ifndef _DARWIN_C_SOURCE
+# undef _DARWIN_C_SOURCE
+#endif
+/* Enable general extensions on Solaris.  */
+#ifndef __EXTENSIONS__
+# undef __EXTENSIONS__
+#endif
+/* Enable GNU extensions on systems that have them.  */
+#ifndef _GNU_SOURCE
+# undef _GNU_SOURCE
+#endif
+/* Enable X/Open compliant socket functions that do not require linking
+   with -lxnet on HP-UX 11.11.  */
+#ifndef _HPUX_ALT_XOPEN_SOCKET_API
+# undef _HPUX_ALT_XOPEN_SOCKET_API
+#endif
+/* Identify the host operating system as Minix.
+   This macro does not affect the system headers' behavior.
+   A future release of Autoconf may stop defining this macro.  */
+#ifndef _MINIX
+# undef _MINIX
+#endif
+/* Enable general extensions on NetBSD.
+   Enable NetBSD compatibility extensions on Minix.  */
+#ifndef _NETBSD_SOURCE
+# undef _NETBSD_SOURCE
+#endif
+/* Enable OpenBSD compatibility extensions on NetBSD.
+   Oddly enough, this does nothing on OpenBSD.  */
+#ifndef _OPENBSD_SOURCE
+# undef _OPENBSD_SOURCE
+#endif
+/* Define to 1 if needed for POSIX-compatible behavior.  */
+#ifndef _POSIX_SOURCE
+# undef _POSIX_SOURCE
+#endif
+/* Define to 2 if needed for POSIX-compatible behavior.  */
+#ifndef _POSIX_1_SOURCE
+# undef _POSIX_1_SOURCE
+#endif
+/* Enable POSIX-compatible threading on Solaris.  */
+#ifndef _POSIX_PTHREAD_SEMANTICS
+# undef _POSIX_PTHREAD_SEMANTICS
+#endif
+/* Enable extensions specified by ISO/IEC TS 18661-5:2014.  */
+#ifndef __STDC_WANT_IEC_60559_ATTRIBS_EXT__
+# undef __STDC_WANT_IEC_60559_ATTRIBS_EXT__
+#endif
+/* Enable extensions specified by ISO/IEC TS 18661-1:2014.  */
+#ifndef __STDC_WANT_IEC_60559_BFP_EXT__
+# undef __STDC_WANT_IEC_60559_BFP_EXT__
+#endif
+/* Enable extensions specified by ISO/IEC TS 18661-2:2015.  */
+#ifndef __STDC_WANT_IEC_60559_DFP_EXT__
+# undef __STDC_WANT_IEC_60559_DFP_EXT__
+#endif
+/* Enable extensions specified by ISO/IEC TS 18661-4:2015.  */
+#ifndef __STDC_WANT_IEC_60559_FUNCS_EXT__
+# undef __STDC_WANT_IEC_60559_FUNCS_EXT__
+#endif
+/* Enable extensions specified by ISO/IEC TS 18661-3:2015.  */
+#ifndef __STDC_WANT_IEC_60559_TYPES_EXT__
+# undef __STDC_WANT_IEC_60559_TYPES_EXT__
+#endif
+/* Enable extensions specified by ISO/IEC TR 24731-2:2010.  */
+#ifndef __STDC_WANT_LIB_EXT2__
+# undef __STDC_WANT_LIB_EXT2__
+#endif
+/* Enable extensions specified by ISO/IEC 24747:2009.  */
+#ifndef __STDC_WANT_MATH_SPEC_FUNCS__
+# undef __STDC_WANT_MATH_SPEC_FUNCS__
+#endif
+/* Enable extensions on HP NonStop.  */
+#ifndef _TANDEM_SOURCE
+# undef _TANDEM_SOURCE
+#endif
+/* Enable X/Open extensions.  Define to 500 only if necessary
+   to make mbstate_t available.  */
+#ifndef _XOPEN_SOURCE
+# undef _XOPEN_SOURCE
+#endif
+
+
+/* Version number of package */
+#mesondefine VERSION
+
+/* Path to a loadable libvte */
+#mesondefine VTE_MODULE_PATH
+
+/* we are cross compiling for WIN32 */
+#mesondefine WIN32
+
+/* Define to `long int' if <sys/types.h> does not define. */
+#mesondefine off_t
+
+/* Define to `unsigned int' if <sys/types.h> does not define. */
+#mesondefine size_t

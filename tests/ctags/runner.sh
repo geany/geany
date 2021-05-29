@@ -1,10 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 # error out on undefined variable expansion, useful for debugging
 set -u
 
-# FIXME: get this from automake so we have $(EXEEXT)
-GEANY="${top_builddir:-../..}/src/geany"
+GEANY="$1"
 TMPDIR=$(mktemp -d) || exit 99
 CONFDIR="$TMPDIR/config/"
 
@@ -14,9 +13,10 @@ trap 'rm -rf "$TMPDIR"' EXIT
 # related configuration files
 mkdir -p "$CONFDIR" || exit 99
 mkdir -p "$CONFDIR/filedefs/" || exit 99
-cp "${srcdir:-.}"/../../data/filetype_extensions.conf "$CONFDIR" || exit 99
-cp "${srcdir:-.}"/../../data/filedefs/filetypes.* "$CONFDIR/filedefs/" || exit 99
+cp "${top_srcdir:-../..}"/data/filetype_extensions.conf "$CONFDIR" || exit 99
+cp "${top_srcdir:-../..}"/data/filedefs/filetypes.* "$CONFDIR/filedefs/" || exit 99
 
+shift
 if [ "$1" = "--result" ]; then
   # --result $result $source...
   [ $# -gt 2 ] || exit 99

@@ -178,7 +178,6 @@ AC_CONFIG_FILES([
 		doc/geany.1
 		geany.pc
 		geany.nsi
-		doc/Doxyfile
 		tests/Makefile
 		tests/ctags/Makefile
 ])

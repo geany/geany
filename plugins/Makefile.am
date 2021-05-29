@@ -43,7 +43,7 @@ saveactions_la_SOURCES   = saveactions.c
 filebrowser_la_SOURCES   = filebrowser.c
 splitwindow_la_SOURCES   = splitwindow.c
 
-demoplugin_la_CFLAGS    = -DG_LOG_DOMAIN=\""Demoplugin"\" -DLOCALEDIR=\""$(LOCALEDIR)"\"
+demoplugin_la_CFLAGS    = -DG_LOG_DOMAIN=\""Demoplugin"\"
 demoproxy_la_CFLAGS     = -DG_LOG_DOMAIN=\""Demoproxy"\"
 classbuilder_la_CFLAGS  = -DG_LOG_DOMAIN=\""Classbuilder"\"
 htmlchars_la_CFLAGS     = -DG_LOG_DOMAIN=\""HTMLChars"\"
@@ -64,10 +64,9 @@ splitwindow_la_LIBADD   = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
 endif # PLUGINS
 
 if MINGW
-# FIXME: why is this define different than the non-MINGW one?
-AM_CPPFLAGS = -DGEANY_DATADIR=\"data\"
+AM_CPPFLAGS = -DGEANY_DATADIR=\"data\" -DGEANY_LOCALEDIR=\"\"
 else
-AM_CPPFLAGS = -DDATADIR=\"$(datadir)\"
+AM_CPPFLAGS = -DGEANY_DATADIR=\"$(datadir)\" -DGEANY_LOCALEDIR=\""$(localedir)"\"
 endif
 
 AM_CPPFLAGS += \

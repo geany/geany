@@ -82,8 +82,22 @@ clean-pdf-local:
 
 endif
 
+AT=@
+
 # API Documentation
 if WITH_DOXYGEN
+
+# $(AT) instead of @ so that configure doesn't mess up the rules already
+Doxyfile: Doxyfile.in
+	$(AM_V_GEN)$(SED) \
+		-e 's,$(AT)top_srcdir$(AT),$(top_srcdir),' \
+		-e 's,$(AT)top_builddir$(AT),$(top_builddir),' \
+		-e 's,$(AT)VERSION$(AT),$(VERSION),' \
+		-e 's,$(AT)GIRONLY$(AT),@internal,' \
+		-e 's,$(AT)HTML$(AT),YES,' \
+		-e 's,$(AT)XML$(AT),NO,' \
+		-e 's,$(AT)SORT$(AT),YES,' \
+		$< > $@ || ( $(RM) -f $@ ; exit 1 )
 
 doxygen_sources = \
 	$(srcdir)/plugins.dox \
@@ -114,18 +128,16 @@ clean-api-docs-local:
 
 if ENABLE_GTKDOC_HEADER
 
-# set WARN_IF_UNDOCUMENTED because apparently doxygens warns for undocumented stuff
-# in headers (even though it's correctly documented in the corresponding .c file) only
-# for xml output
-Doxyfile-gi: Doxyfile
+Doxyfile-gi: Doxyfile.in
 	$(AM_V_GEN)$(SED) \
-		-e 's,gironly=@internal,gironly=,' \
-		-e 's,^\(GENERATE_HTML.*\)YES,\1NO,' \
-		-e 's,^\(GENERATE_XML.*\)NO,\1YES,' \
-		-e 's,^\(WARN_IF_UNDOCUMENTED.*\)YES,\1NO,' \
-		-e 's,^\(SORT_MEMBER_DOCS.*\)YES,\1NO,' \
-		-e 's,^\(SORT_BRIEF_DOCS.*\)YES,\1NO,' \
-		$< > $@ || { $(RM) $@ && exit 1; }
+		-e 's,$(AT)top_srcdir$(AT),$(top_srcdir),' \
+		-e 's,$(AT)top_builddir$(AT),$(top_builddir),' \
+		-e 's,$(AT)VERSION$(AT),$(VERSION),' \
+		-e 's,$(AT)GIRONLY$(AT),,' \
+		-e 's,$(AT)HTML$(AT),NO,' \
+		-e 's,$(AT)XML$(AT),YES,' \
+		-e 's,$(AT)SORT$(AT),NO,' \
+		$< > $@ || ( $(RM) -f $@ ; exit 1 )
 
 # we depend on Doxyfile.stamp not have this run in parallel with it to avoid
 # concurrent Doxygen runs, which might overwrite each other's files

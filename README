@@ -78,6 +78,38 @@ and open the online version instead when requested.
 Installing from a Git clone
 +++++++++++++++++++++++++++
 
+Using the meson build system
+++++++++++++++++++++++++++++
+
+N.B. Meson support is still incomplete and a work-in-progress.
+
+Meson requires to chose a separate build directory. Either create
+one, or let meson do it:
+
+`meson build` or `mkdir build; cd build; meson ..`
+
+Either command will configure the build system. The system is probed
+in many ways and system-dependant build files are created. This includes
+location of dependencies and compiler and linker flags required for them.
+
+To build Geany, follow with a `meson compile -C build`
+
+To install Geany, follow the build with a `sudo meson install -C build`.
+
+By default, meson will install Geany to `/usr/local`. A different
+prefix can be selected at the initial command or via reconfiguration:
+
+`meson --prefix /opt build` or `meson configure --prefix /opt build`
+
+Geany has some selectable features that may reduce the required
+build and runtime dependencies. See meson_optionts.txt for a full list.
+
+To turn a feature off, use `-D<feature>=false` when configuring the build,
+for example: `meson configure -Dvte=false build`
+
+Using Autotools
++++++++++++++++
+
 Install Autotools (*automake*, *autoconf* and *libtool*), *intltool*,
 and the GLib development files **before** running any of the following
 commands, as well as *rst2html* from Docutils (see above for details).

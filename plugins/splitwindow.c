@@ -31,7 +31,7 @@
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows."),
-	VERSION, _("The Geany developer team"))
+	PACKAGE_VERSION, _("The Geany developer team"))
 
 
 GeanyData		*geany_data;

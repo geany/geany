@@ -1,0 +1,3 @@
+option('vte', type : 'boolean', description : 'enable if you want virtual terminal support')
+option('plugins', type : 'boolean', description : 'enable if you want plugin support')
+option('gtkdoc', type : 'boolean', description : 'enable to gtk-doc compatible headers for the API')
