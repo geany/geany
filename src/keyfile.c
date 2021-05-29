@@ -578,6 +578,12 @@ static void save_dialog_prefs(GKeyFile *config)
 #endif
 }
 
+typedef enum ConfigPayload
+{
+	PREFS,
+	SESSION
+}
+ConfigPayload;
 
 static void save_ui_prefs(GKeyFile *config)
 {
@@ -605,6 +611,18 @@ static void save_ui_prefs(GKeyFile *config)
 		g_key_file_set_integer(config, PACKAGE, "scribble_pos", scribble_pos);
 	}
 
+	g_key_file_set_string(config, PACKAGE, "custom_date_format", ui_prefs.custom_date_format);
+	if (ui_prefs.custom_commands != NULL)
+	{
+		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
+				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
+		g_key_file_set_string_list(config, PACKAGE, "custom_commands_labels",
+				(const gchar**) ui_prefs.custom_commands_labels, g_strv_length(ui_prefs.custom_commands_labels));
+	}
+}
+
+static void save_ui_session(GKeyFile *config)
+{
 	if (prefs.save_winpos || prefs.save_wingeom)
 	{
 		GdkWindowState wstate;
@@ -620,23 +638,7 @@ static void save_ui_prefs(GKeyFile *config)
 		ui_prefs.geometry[4] = (wstate & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", ui_prefs.geometry, 5);
 	}
-
-	g_key_file_set_string(config, PACKAGE, "custom_date_format", ui_prefs.custom_date_format);
-	if (ui_prefs.custom_commands != NULL)
-	{
-		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
-				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
-		g_key_file_set_string_list(config, PACKAGE, "custom_commands_labels",
-				(const gchar**) ui_prefs.custom_commands_labels, g_strv_length(ui_prefs.custom_commands_labels));
-	}
 }
-
-typedef enum ConfigPayload
-{
-	PREFS,
-	SESSION
-}
-ConfigPayload;
 
 void write_config_file(gchar const *filename, ConfigPayload payload)
 {
@@ -658,6 +660,7 @@ void write_config_file(gchar const *filename, ConfigPayload payload)
 			save_recent_files(config, ui_prefs.recent_queue, "recent_files");
 			save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 			project_save_prefs(config);	/* save project filename, etc. */
+			save_ui_session(config);
 			if (cl_options.load_session)
 				configuration_save_session_files(config);
 #ifdef HAVE_VTE
@@ -1040,9 +1043,6 @@ static void load_dialog_prefs(GKeyFile *config)
 
 static void load_ui_prefs(GKeyFile *config)
 {
-	gint *geo;
-	gsize geo_len;
-
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
@@ -1089,6 +1089,12 @@ static void load_ui_prefs(GKeyFile *config)
 	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
 				_("Type here what you want, use it as a notice/scratch board"));
 	scribble_pos = utils_get_setting_integer(config, PACKAGE, "scribble_pos", -1);
+}
+
+static void load_ui_session(GKeyFile *config)
+{
+	gint *geo;
+	gsize geo_len;
 
 	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", &geo_len, NULL);
 	if (! geo || geo_len < 5)
@@ -1204,6 +1210,7 @@ gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 			break;
 		case SESSION:
 			project_load_prefs(config);
+			load_ui_session(config);
 			configuration_load_session_files(config, TRUE);
 			break;
 	}
