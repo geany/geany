@@ -121,17 +121,10 @@ nobase_dist_pkgdata_DATA = \
 	filetype_extensions.conf \
 	snippets.conf \
 	ui_toolbar.xml \
-	geany.glade
-
-nobase_pkgdata_DATA = \
-	$(filetypes_nodist)
-
-if GTK3
-nobase_dist_pkgdata_DATA += \
+	geany.glade \
 	geany-3.0.css \
 	geany-3.20.css \
 	geany.css
-else
-nobase_dist_pkgdata_DATA += geany.gtkrc
-endif
 
+nobase_pkgdata_DATA = \
+	$(filetypes_nodist)

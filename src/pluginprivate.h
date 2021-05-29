@@ -26,8 +26,6 @@
 #include "ui_utils.h"	/* GeanyAutoSeparator */
 #include "keybindings.h"	/* GeanyKeyGroup */
 
-#include "gtkcompat.h"
-
 
 G_BEGIN_DECLS
 

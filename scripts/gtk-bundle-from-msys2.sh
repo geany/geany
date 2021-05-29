@@ -18,7 +18,6 @@ UNX_UTILS_URL="https://download.geany.org/contrib/UnxUpdates.zip"
 MSYS2_ABI_PATH="/c/msys32"
 
 package_urls=""
-gtk2_dependency_pkgs=""
 gtk3_dependency_pkgs="
 libepoxy
 hicolor-icon-theme
@@ -62,9 +61,6 @@ handle_command_line_options() {
 		"-z"|"--zip")
 			make_zip="yes"
 			;;
-		"-2")
-			gtkv="2"
-			;;
 		"-3")
 			gtkv="3"
 			;;
@@ -72,13 +68,12 @@ handle_command_line_options() {
 			run_pi=""
 			;;
 		"-h"|"--help")
-			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-2 | -3] [CACHEDIR]"
+			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-3] [CACHEDIR]"
 			echo "      -c Use pacman cache. Otherwise pacman will download"
 			echo "         archive files"
 			echo "      -h Show this help screen"
 			echo "      -n Do not run post install scripts of the packages"
 			echo "      -z Create a zip afterwards"
-			echo "      -2 Prefer gtk2"
 			echo "      -3 Prefer gtk3"
 			echo "CACHEDIR Directory where to look for cached packages (default: /var/cache/pacman/pkg)"
 			exit 1
@@ -200,7 +195,6 @@ cleanup_unnecessary_files() {
 	rm -rf share/glib-2.0/gdb
 	rm -rf share/glib-2.0/gettext
 	rm -rf share/graphite2
-	rm -rf share/gtk-2.0
 	rm -rf share/gtk-3.0
 	rm -rf share/gtk-doc
 	rm -rf share/info

@@ -56,11 +56,10 @@
 
 #include "SciLexer.h"
 
-#include "gtkcompat.h"
-
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <gtk/gtk.h>
 
 
 typedef struct
@@ -1905,11 +1904,7 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 
 	monitor_num = gdk_screen_get_monitor_at_point(screen, *x, *y);
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 	gtk_widget_get_preferred_size(GTK_WIDGET(menu), NULL, &req);
-#else
-	gtk_widget_size_request(GTK_WIDGET(menu), &req);
-#endif
 
 #if GTK_CHECK_VERSION(3, 4, 0)
 	gdk_screen_get_monitor_workarea(screen, monitor_num, &monitor);

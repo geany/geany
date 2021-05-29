@@ -82,38 +82,17 @@ AC_CHECK_DECLS([_NSGetEnviron],,,[[#include <crt_externs.h>]])
 GEANY_CHECK_REVISION([dnl force debug mode for a VCS working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
 
-# GTK version check
-AC_ARG_ENABLE([gtk2],
-		[AS_HELP_STRING([--enable-gtk2],
-						[compile against deprecated GTK2 [default=no]])],
-		[enable_gtk2=$enableval],
-		[enable_gtk2=no])
-
-gtk2_package=gtk+-2.0
-gtk2_min_version=2.24
-gtk3_package=gtk+-3.0
-gtk3_min_version=3.0
-
-AS_IF([test "x$enable_gtk2" = "xyes"],
-	[gtk_package=$gtk2_package
-	 gtk_min_version=$gtk2_min_version],
-	[gtk_package=$gtk3_package
-	 gtk_min_version=$gtk3_min_version])
-
-AM_CONDITIONAL([GTK3], [test "x$gtk_package" = "x$gtk3_package"])
-
 # GTK/GLib/GIO checks
-gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.32"
+gtk_modules="gtk+-3.0 >= 3.0 glib-2.0 >= 2.32"
 gtk_modules_private="gio-2.0 >= 2.32 gmodule-no-export-2.0"
 PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
 AC_SUBST([DEPENDENCIES], [$gtk_modules])
 AS_VAR_APPEND([GTK_CFLAGS], [" -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_32"])
-dnl Disable all GTK deprecations on 3.x so long as we want to keep 2.x support and only require 3.0.
-dnl No need on 2.x as we target the latest version.
-AM_COND_IF([GTK3], [AS_VAR_APPEND([GTK_CFLAGS], [" -DGDK_DISABLE_DEPRECATION_WARNINGS"])])
+dnl Disable all GTK deprecations
+AS_VAR_APPEND([GTK_CFLAGS], [" -DGDK_DISABLE_DEPRECATION_WARNINGS"])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
-GTK_VERSION=`$PKG_CONFIG --modversion $gtk_package`
+GTK_VERSION=`$PKG_CONFIG --modversion gtk+-3.0`
 AC_SUBST([GTK_VERSION])
 GEANY_STATUS_ADD([Using GTK version], [${GTK_VERSION}])
 # GTHREAD checks

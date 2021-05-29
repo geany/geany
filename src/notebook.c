@@ -37,8 +37,7 @@
 #include "ui_utils.h"
 #include "utils.h"
 
-#include "gtkcompat.h"
-
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 
@@ -148,18 +147,18 @@ static gboolean is_modifier_key(guint keyval)
 {
 	switch (keyval)
 	{
-		case GDK_Shift_L:
-		case GDK_Shift_R:
-		case GDK_Control_L:
-		case GDK_Control_R:
-		case GDK_Meta_L:
-		case GDK_Meta_R:
-		case GDK_Alt_L:
-		case GDK_Alt_R:
-		case GDK_Super_L:
-		case GDK_Super_R:
-		case GDK_Hyper_L:
-		case GDK_Hyper_R:
+		case GDK_KEY_Shift_L:
+		case GDK_KEY_Shift_R:
+		case GDK_KEY_Control_L:
+		case GDK_KEY_Control_R:
+		case GDK_KEY_Meta_L:
+		case GDK_KEY_Meta_R:
+		case GDK_KEY_Alt_L:
+		case GDK_KEY_Alt_R:
+		case GDK_KEY_Super_L:
+		case GDK_KEY_Super_R:
+		case GDK_KEY_Hyper_L:
+		case GDK_KEY_Hyper_R:
 			return TRUE;
 		default:
 			return FALSE;
@@ -199,7 +198,7 @@ static GtkWidget *create_switch_dialog(void)
 	gtk_window_set_decorated(GTK_WINDOW(dialog), FALSE);
 	gtk_window_set_default_size(GTK_WINDOW(dialog), 200, -1);
 
-	vbox = gtk_vbox_new(FALSE, 6);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 12);
 	gtk_container_add(GTK_CONTAINER(dialog), vbox);
 
@@ -679,7 +678,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	g_return_val_if_fail(this != NULL, -1);
 
 	/* page is packed into a vbox so we can stack infobars above it */
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	page = GTK_WIDGET(this->editor->sci);
 	gtk_box_pack_start(GTK_BOX(vbox), page, TRUE, TRUE, 0);
 
@@ -694,7 +693,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	g_signal_connect_after(ebox, "button-release-event",
 		G_CALLBACK(focus_sci), NULL);
 
-	hbox = gtk_hbox_new(FALSE, 2);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), this->priv->tab_label, FALSE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(ebox), hbox);
 

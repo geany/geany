@@ -41,14 +41,13 @@
 #include "utils.h"
 #include "keybindings.h"
 
-#include "gtkcompat.h"
-
 /* include stdlib.h AND unistd.h, because on GNU/Linux pid_t seems to be
  * in stdlib.h, on FreeBSD in unistd.h, sys/types.h is needed for C89 */
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <signal.h>
 #include <string.h>
@@ -132,12 +131,11 @@ struct VteFunctions
 	void (*vte_terminal_select_all) (VteTerminal *terminal);
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
 	GtkAdjustment* (*vte_terminal_get_adjustment) (VteTerminal *terminal);
-#if GTK_CHECK_VERSION(3, 0, 0)
+
 	/* hack for the VTE 2.91 API using GdkRGBA: we wrap the API to keep using GdkColor on our side */
 	void (*vte_terminal_set_color_foreground_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
 	void (*vte_terminal_set_color_bold_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
 	void (*vte_terminal_set_color_background_rgba) (VteTerminal *terminal, const GdkRGBA *background);
-#endif
 };
 
 
@@ -183,16 +181,13 @@ static const GtkTargetEntry dnd_targets[] =
 /* replacement for vte_terminal_get_adjustment() when it's not available */
 static GtkAdjustment *default_vte_terminal_get_adjustment(VteTerminal *vte)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
 	if (GTK_IS_SCROLLABLE(vte))
 		return gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(vte));
-#endif
 	/* this is only valid in < 0.38, 0.38 broke ABI */
 	return vte->adjustment;
 }
 
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 /* Wrap VTE 2.91 API using GdkRGBA with GdkColor so we use a single API on our side */
 
 static void rgba_from_color(GdkRGBA *rgba, const GdkColor *color)
@@ -203,7 +198,7 @@ static void rgba_from_color(GdkRGBA *rgba, const GdkColor *color)
 	rgba->alpha = 1.0;
 }
 
-#	define WRAP_RGBA_SETTER(name) \
+#define WRAP_RGBA_SETTER(name) \
 	static void wrap_##name(VteTerminal *terminal, const GdkColor *color) \
 	{ \
 		GdkRGBA rgba; \
@@ -215,8 +210,7 @@ WRAP_RGBA_SETTER(vte_terminal_set_color_background)
 WRAP_RGBA_SETTER(vte_terminal_set_color_bold)
 WRAP_RGBA_SETTER(vte_terminal_set_color_foreground)
 
-#	undef WRAP_RGBA_SETTER
-#endif
+#undef WRAP_RGBA_SETTER
 
 
 static gchar **vte_get_child_environment(void)
@@ -274,19 +268,12 @@ void vte_init(void)
 	{
 		gint i;
 		const gchar *sonames[] = {
-#if GTK_CHECK_VERSION(3, 0, 0)
-# ifdef __APPLE__
+#ifdef __APPLE__
 			"libvte-2.91.0.dylib", "libvte-2.91.dylib",
 			"libvte2_90.9.dylib", "libvte2_90.dylib",
-# endif
+#endif
 			"libvte-2.91.so", "libvte-2.91.so.0",
 			"libvte2_90.so", "libvte2_90.so.9",
-#else /* GTK 2 */
-# ifdef __APPLE__
-			"libvte.9.dylib", "libvte.dylib",
-# endif
-			"libvte.so", "libvte.so.9", "libvte.so.8", "libvte.so.4",
-#endif
 			NULL
 		};
 
@@ -350,14 +337,14 @@ static void create_vte(void)
 	GtkWidget *vte, *scrollbar, *hbox;
 
 	vc->vte = vte = vf->vte_terminal_new();
-	scrollbar = gtk_vscrollbar_new(vf->vte_terminal_get_adjustment(VTE_TERMINAL(vte)));
+	scrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, vf->vte_terminal_get_adjustment(VTE_TERMINAL(vte)));
 	gtk_widget_set_can_focus(scrollbar, FALSE);
 
 	/* create menu now so copy/paste shortcuts work */
 	vc->menu = vte_create_popup_menu();
 	g_object_ref_sink(vc->menu);
 
-	hbox = gtk_hbox_new(FALSE, 0);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), vte, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, FALSE, 0);
 
@@ -447,7 +434,7 @@ static void set_clean(gboolean value)
 static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (ui_is_keyval_enter_or_return(event->keyval) ||
-		((event->keyval == GDK_c) && (event->state & GDK_CONTROL_MASK)))
+		((event->keyval == GDK_KEY_c) && (event->state & GDK_CONTROL_MASK)))
 	{
 		/* assume any text on the prompt has been executed when pressing Enter/Return */
 		set_clean(TRUE);
@@ -464,10 +451,10 @@ static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer 
 	if (event->type != GDK_KEY_RELEASE)
 		return FALSE;
 
-	if ((event->keyval == GDK_c ||
-		event->keyval == GDK_d ||
-		event->keyval == GDK_C ||
-		event->keyval == GDK_D) &&
+	if ((event->keyval == GDK_KEY_c ||
+		event->keyval == GDK_KEY_d ||
+		event->keyval == GDK_KEY_C ||
+		event->keyval == GDK_KEY_D) &&
 		event->state & GDK_CONTROL_MASK &&
 		! (event->state & GDK_SHIFT_MASK) && ! (event->state & GDK_MOD1_MASK))
 	{
@@ -559,7 +546,6 @@ static void vte_set_cursor_blink_mode(void)
 }
 
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 static gboolean vte_is_2_91(void)
 {
 	guint major = vf->vte_get_major_version ? vf->vte_get_major_version() : 0;
@@ -570,7 +556,6 @@ static gboolean vte_is_2_91(void)
 	        /* 0.38 doesn't have runtime version checks, so check a symbol that didn't exist before */
 	        vf->vte_terminal_spawn_sync != NULL);
 }
-#endif
 
 
 static gboolean vte_register_symbols(GModule *mod)
@@ -617,7 +602,7 @@ static gboolean vte_register_symbols(GModule *mod)
 	BIND_REQUIRED_SYMBOL(vte_terminal_get_has_selection);
 	BIND_REQUIRED_SYMBOL(vte_terminal_copy_clipboard);
 	BIND_REQUIRED_SYMBOL(vte_terminal_paste_clipboard);
-#if GTK_CHECK_VERSION(3, 0, 0)
+
 	if (vte_is_2_91())
 	{
 		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_foreground);
@@ -625,7 +610,6 @@ static gboolean vte_register_symbols(GModule *mod)
 		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_background);
 	}
 	else
-#endif
 	{
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_foreground);
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_bold);
@@ -739,14 +723,14 @@ static GtkWidget *vte_create_popup_menu(void)
 
 	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY, NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group,
-		GDK_c, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
+		GDK_KEY_c, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_COPY));
 
 	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE, NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group,
-		GDK_v, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
+		GDK_KEY_v, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PASTE));

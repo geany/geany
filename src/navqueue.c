@@ -34,7 +34,7 @@
 #include "toolbar.h"
 #include "utils.h"
 
-#include "gtkcompat.h"
+#include <gtk/gtk.h>
 
 
 /* for the navigation history queue */

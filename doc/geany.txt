@@ -452,50 +452,8 @@ by specifying the command line option ``--with-vte-module-path`` to
 ./configure.
 
 
-Defining own widget styles using .gtkrc-2.0
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can define your widget style for many of Geany's GUI parts. To
-do this, just edit your ``.gtkrc-2.0`` (usually found in your home
-directory on UNIX-like systems and in the etc subdirectory of your
-Geany installation on Windows).
-
-To have a defined style used by Geany you must assign it to
-at least one of Geany's widgets. For example use the following line::
-
-    widget "Geany*" style "geanyStyle"
-
-This would assign your style "geany_style" to all Geany
-widgets. You can also assign styles only to specific widgets. At the
-moment you can use the following widgets:
-
-* GeanyMainWindow
-* GeanyEditMenu
-* GeanyToolbarMenu
-* GeanyDialog
-* GeanyDialogPrefs
-* GeanyDialogProject
-* GeanyDialogSearch
-* GeanyMenubar
-* GeanyToolbar
-
-An example of a simple ``.gtkrc-2.0``::
-
-    style "geanyStyle"
-    {
-        font_name="Sans 12"
-    }
-    widget "GeanyMainWindow" style "geanyStyle"
-
-    style "geanyStyle"
-    {
-        font_name="Sans 10"
-    }
-    widget "GeanyPrefsDialog" style "geanyStyle"
-
-
-Customizing Geany's appearance using GTK+ 3 CSS
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Customizing Geany's appearance using GTK+ CSS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To override GTK+ CSS styles, you can use traditional mechanisms or you
 can create a file named ``geany.css`` in the user configuration directory
@@ -1240,25 +1198,18 @@ Remove Markers command from the Document menu.
 Change font in search dialog text fields
 ````````````````````````````````````````
 
-All search related dialogs use a Monospace for the text input fields to
+All search related dialogs use a Monospace font for the text input fields to
 increase the readability of input text. This is useful when you are
 typing input such as regular expressions with spaces, periods and commas which
-might it hard to read with a proportional font.
+might be hard to read with a proportional font.
 
-If you want to change the font, you can do this easily
-by inserting the following style into your ``.gtkrc-2.0``
-(usually found in your home directory on UNIX-like systems and in the
-etc subdirectory of your Geany installation on Windows)::
+If you want to change the font, you can do this easily by using the following
+custom CSS snippet, see `Customizing Geany's appearance using GTK+ CSS`_::
 
-    style "search_style"
-    {
-        font_name="Monospace 8"
+    #GeanyDialogSearch GtkEntry /* GTK < 3.20 */,
+    #GeanyDialogSearch entry /* GTK >= 3.20 */ {
+        font: 8pt monospace;
     }
-    widget "GeanyDialogSearch.*.GtkEntry" style:highest "search_style"
-
-Please note the addition of ":highest" in the last line which sets the priority
-of this style to the highest available. Otherwise, the style is ignored
-for the search dialogs.
 
 
 Find selection
@@ -3269,13 +3220,19 @@ On Unix-like systems the provided print dialog offers a print preview. The
 preview file is opened with a PDF viewer and by default GTK uses ``evince``
 for print preview. If you have not installed evince or just want to use
 another PDF viewer, you can change the program to use in the file
-``.gtkrc-2.0`` (usually found in your home directory). Simply add a line
-like::
+``settings.ini`` (usually found in ``~/.config/gtk-3.0``, see the
+`GTK documentation`_). For example, use::
 
-    gtk-print-preview-command = "epdfview %f"
+    [Settings]
+    gtk-print-preview-command = epdfview %f
 
-at the end of the file. Of course, you can also use xpdf, kpdf or whatever
-as the print preview command.
+Of course, you can also use xpdf, kpdf or whatever as the print preview
+command.  That command should ideally delete the temporary file referenced by
+``%f``.  See the `GTK documentation for the setting`_ for more details.
+
+.. _GTK documentation: https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings.description
+.. _GTK documentation for the setting: https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings--gtk-print-preview-command
+
 
 Geany also provides an alternative basic printing support using a custom
 print command. However, the printed document contains no syntax highlighting.
