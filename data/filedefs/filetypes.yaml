@@ -3,7 +3,7 @@
 # Edit these in the colorscheme .conf file instead
 default=default
 comment=comment
-identifier=identifier
+identifier=type
 keyword=keyword_1
 number=number_1
 reference=function
