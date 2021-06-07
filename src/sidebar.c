@@ -51,18 +51,6 @@ SidebarTreeviews tv = {NULL, NULL, NULL};
 /* while typeahead searching, editor should not get focus */
 static gboolean may_steal_focus = FALSE;
 
-static struct
-{
-	GtkWidget *close;
-	GtkWidget *save;
-	GtkWidget *reload;
-	GtkWidget *show_paths;
-	GtkWidget *find_in_files;
-	GtkWidget *expand_all;
-	GtkWidget *collapse_all;
-}
-doc_items = {NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-
 enum
 {
 	TREEVIEW_SYMBOL = 0,
@@ -86,9 +74,31 @@ enum
 	DOCUMENTS_FILENAME		/* full filename */
 };
 
+/* how to display sidebar documents */
+static enum {
+	SHOW_PATHS_NONE = 0,
+	SHOW_PATHS_LIST,
+	SHOW_PATHS_TREE,
+
+	MAX_SHOW_PATHS
+} documents_show_paths;
+
+static struct
+{
+	GtkWidget *close;
+	GtkWidget *save;
+	GtkWidget *reload;
+	GtkWidget *show_paths[MAX_SHOW_PATHS];
+	GtkWidget *find_in_files;
+	GtkWidget *expand_all;
+	GtkWidget *collapse_all;
+}
+doc_items;
+
 static GtkTreeStore	*store_openfiles;
 static GtkWidget *openfiles_popup_menu;
-static gboolean documents_show_paths;
+
+
 static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
 /* callback prototypes */
@@ -254,19 +264,32 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 static gint documents_sort_func(GtkTreeModel *model, GtkTreeIter *iter_a,
 								GtkTreeIter *iter_b, gpointer data)
 {
-	gchar *key_a, *key_b;
 	gchar *name_a, *name_b;
+	GeanyDocument *doc_a, *doc_b;
 	gint cmp;
 
-	gtk_tree_model_get(model, iter_a, DOCUMENTS_SHORTNAME, &name_a, -1);
-	key_a = g_utf8_collate_key_for_filename(name_a, -1);
-	g_free(name_a);
-	gtk_tree_model_get(model, iter_b, DOCUMENTS_SHORTNAME, &name_b, -1);
-	key_b = g_utf8_collate_key_for_filename(name_b, -1);
+	gtk_tree_model_get(model, iter_a,
+	                   DOCUMENTS_SHORTNAME, &name_a,
+	                   DOCUMENTS_DOCUMENT, &doc_a, -1);
+	gtk_tree_model_get(model, iter_b,
+	                   DOCUMENTS_SHORTNAME, &name_b,
+	                   DOCUMENTS_DOCUMENT, &doc_b, -1);
+	/* sort dirs after files */
+	if (!doc_a && doc_b)
+		cmp = 1;
+	else if (doc_a && !doc_b)
+		cmp = -1;
+	else
+	{
+		gchar *key_a = g_utf8_collate_key_for_filename(name_a, -1);
+		gchar *key_b = g_utf8_collate_key_for_filename(name_b, -1);
+		cmp = strcmp(key_a, key_b);
+		g_free(key_b);
+		g_free(key_a);
+	}
+
 	g_free(name_b);
-	cmp = strcmp(key_a, key_b);
-	g_free(key_b);
-	g_free(key_a);
+	g_free(name_a);
 
 	return cmp;
 }
@@ -333,28 +356,6 @@ static void prepare_openfiles(void)
 }
 
 
-/* iter should be toplevel */
-static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
-{
-	GeanyDocument *doc;
-	gchar *name;
-	gboolean result;
-
-	if (utils_str_equal(dir, "."))
-		dir = GEANY_STRING_UNTITLED;
-
-	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_DOCUMENT, &doc, -1);
-	g_return_val_if_fail(!doc, FALSE);
-
-	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_SHORTNAME, &name, -1);
-
-	result = utils_filenamecmp(name, dir) == 0;
-	g_free(name);
-
-	return result;
-}
-
-
 static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
 {
 	gchar *head = g_strndup(str, strlen(prefix));
@@ -365,12 +366,10 @@ static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
 }
 
 
-static gchar *get_doc_folder(const gchar *path)
+static gchar *get_project_folder(const gchar *path)
 {
-	gchar *tmp_dirname = g_strdup(path);
 	gchar *project_base_path;
 	gchar *dirname = NULL;
-	const gchar *home_dir = g_get_home_dir();
 	const gchar *rest;
 
 	/* replace the project base path with the project name */
@@ -385,9 +384,9 @@ static gchar *get_doc_folder(const gchar *path)
 			project_base_path[--len] = '\0';
 
 		/* check whether the dir name matches or uses the project base path */
-		if (utils_filename_has_prefix(tmp_dirname, project_base_path))
+		if (utils_filename_has_prefix(path, project_base_path))
 		{
-			rest = tmp_dirname + len;
+			rest = path + len;
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
 			{
 				dirname = g_strdup_printf("%s%s", app->project->name, rest);
@@ -395,10 +394,22 @@ static gchar *get_doc_folder(const gchar *path)
 		}
 		g_free(project_base_path);
 	}
+
+	return dirname;
+}
+
+
+static gchar *get_doc_folder(const gchar *path)
+{
+	gchar *tmp_dirname = g_strdup(path);
+	gchar *dirname = get_project_folder(path);
+	const gchar *rest;
+
 	if (dirname == NULL)
 	{
-		dirname = tmp_dirname;
+		const gchar *home_dir = g_get_home_dir();
 
+		dirname = tmp_dirname;
 		/* If matches home dir, replace with tilde */
 		if (!EMPTY(home_dir) && utils_filename_has_prefix(dirname, home_dir))
 		{
@@ -417,45 +428,338 @@ static gchar *get_doc_folder(const gchar *path)
 }
 
 
-static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
+static void unfold_iter(GtkTreeIter *iter)
 {
-	gchar *path;
-	gchar *dirname = NULL;
-	static GtkTreeIter parent;
-	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
-	static GIcon *dir_icon = NULL;
+	GtkTreePath *path;
 
-	if (!documents_show_paths)
-		return NULL;
+	path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), iter);
+	gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
+	gtk_tree_path_free(path);
+}
 
-	path = g_path_get_dirname(DOC_FILENAME(doc));
-	dirname = get_doc_folder(path);
 
-	if (gtk_tree_model_get_iter_first(model, &parent))
+static gchar *parent_dir_name(GtkTreeIter *parent, const gchar *path)
+{
+	gsize parent_len = 0;
+	gchar *dirname;
+	gchar *pathname = NULL;
+
+	if (parent)
 	{
-		do
+		gchar *parent_dir;
+		GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
+
+		gtk_tree_model_get(model, parent, DOCUMENTS_FILENAME, &parent_dir, -1);
+		if (parent_dir)
 		{
-			if (find_tree_iter_dir(&parent, dirname))
-			{
-				g_free(dirname);
-				g_free(path);
-				return &parent;
-			}
+			pathname = get_doc_folder(parent_dir);
+			parent_len = strlen(pathname) + 1;
+			g_free(parent_dir);
 		}
-		while (gtk_tree_model_iter_next(model, &parent));
 	}
-	/* no match, add dir parent */
+
+	dirname = get_doc_folder(path);
+	if (parent_len)
+	{
+		gsize len;
+		dirname = get_doc_folder(path);
+		len = strlen(dirname);
+		/* Maybe parent is /home but dirname is ~ (after substitution from /home/user) */
+		if (pathname[0] == dirname[0])
+			memmove(dirname, dirname + parent_len, len - parent_len + 1);
+	}
+
+	g_free(pathname);
+
+	return dirname;
+}
+
+
+static void tree_copy_node(GtkTreeIter *new_node, GtkTreeIter *node, GtkTreeIter *parent_new)
+{
+	GIcon *icon;
+	gchar *filename;
+	gchar *shortname;
+	GdkColor *color;
+	GeanyDocument *doc;
+	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
+
+	gtk_tree_store_append(store_openfiles, new_node, parent_new);
+	gtk_tree_model_get(model,                node,
+	                   DOCUMENTS_ICON,      &icon,
+	                   DOCUMENTS_SHORTNAME, &shortname,
+	                   DOCUMENTS_DOCUMENT,  &doc,
+	                   DOCUMENTS_COLOR,     &color,
+	                   DOCUMENTS_FILENAME,  &filename,
+	                   -1);
+
+	if (doc)
+		doc->priv->iter = *new_node;
+	else if (parent_new)
+		SETPTR(shortname, parent_dir_name(parent_new, filename));
+
+	gtk_tree_store_set(store_openfiles,     new_node,
+	                   DOCUMENTS_ICON,      icon,
+	                   DOCUMENTS_SHORTNAME, shortname,
+	                   DOCUMENTS_DOCUMENT,  doc,
+	                   DOCUMENTS_COLOR,     color,
+	                   DOCUMENTS_FILENAME,  filename,
+	                   -1);
+	g_free(filename);
+	g_free(shortname);
+	if (color)
+		gdk_color_free(color);
+}
+
+
+/* Helper that implements the recursive part of tree_reparent() */
+static void tree_reparent_recurse(GtkTreeIter *node, GtkTreeIter *parent_new, GtkTreeIter *new_node)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
+	GtkTreeIter child;
+
+	/* Start by copying the node itself. It becomes parent_new for the children to be copied. */
+	tree_copy_node(new_node, node, parent_new);
+	if (gtk_tree_model_iter_nth_child(model, &child, node, 0))
+	{
+		do {
+			GtkTreeIter new_child;
+			tree_reparent_recurse(&child, new_node, &new_child);
+		}
+		while (gtk_tree_model_iter_next(model, &child));
+	}
+}
+
+
+/*
+ * Copy node and all of its children to a new parent, and then remove the old node.
+ *
+ * It is done by reparenting the node itself to the new parent, creating a copy of it,
+ * and then recursively reparenting all children to the copy of the node.
+ *
+ * Finally, the new location will be written back to node so it's readily available,
+ * e.g. to unfold it.
+ * */
+static void tree_reparent(GtkTreeIter *node, GtkTreeIter *parent_new)
+{
+	GtkTreeIter new_node;
+	tree_reparent_recurse(node, parent_new, &new_node);
+	gtk_tree_store_remove(store_openfiles, node);
+	*node = new_node;
+}
+
+
+static void tree_add_new_dir(GtkTreeIter *child, GtkTreeIter *parent, const gchar *file)
+{
+	static GIcon *dir_icon = NULL;
+	gchar *dirname = parent_dir_name(parent, file);
+
 	if (!dir_icon)
 		dir_icon = ui_get_mime_icon("inode/directory");
 
-	gtk_tree_store_append(store_openfiles, &parent, NULL);
-	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, dir_icon,
-		DOCUMENTS_FILENAME, path,
-		DOCUMENTS_SHORTNAME, doc->file_name ? dirname : GEANY_STRING_UNTITLED, -1);
+	gtk_tree_store_append(store_openfiles, child, parent);
+	gtk_tree_store_set(store_openfiles,     child,
+	                   DOCUMENTS_ICON,      dir_icon,
+	                   DOCUMENTS_FILENAME,  file,
+	                   DOCUMENTS_SHORTNAME, dirname,
+	                   -1);
 
 	g_free(dirname);
+}
+
+
+/*
+ * Returns the position of dir delimiter where paths don't match
+ * */
+static guint pathcmp(const gchar *s1, const gchar *s2)
+{
+	guint i = 0;
+	gchar *a;
+	gchar *b;
+
+	g_return_val_if_fail(s1 != NULL, 0);
+	g_return_val_if_fail(s2 != NULL, 0);
+
+#ifdef G_OS_WIN32
+	a = utf8_strdown(s1);
+	if (NULL == a)
+		return 0;
+	b = utf8_strdown(s2);
+	if (NULL == b)
+	{
+		g_free(a);
+		return 0;
+	}
+#else
+	a = (gchar*)s1;
+	b = (gchar*)s2;
+#endif
+
+	while (a[i] && b[i] && a[i] == b[i])
+		i++;
+	if (a[i] == '\0' && b[i] == '\0')
+		return i; /* strings are equal: a/b/c == a/b/c */
+	if ((a[i] == '\0' && b[i] == G_DIR_SEPARATOR) ||
+	    (b[i] == '\0' && a[i] == G_DIR_SEPARATOR))
+		return i; /* subdir case: a/b/c == a/b */
+	while (i > 0 && (a[i] != G_DIR_SEPARATOR || b[i] != G_DIR_SEPARATOR))
+		i--; /* last slash: a/b/boo == a/b/bar */
+
+#ifdef G_OS_WIN32
+	g_free(a);
+	g_free(b);
+#endif
+
+	return i;
+}
+
+
+typedef struct TreeForeachData {
+	gchar *needle;
+	gsize best_len;
+	gsize needle_len;
+	GtkTreeIter best_iter;
+	enum {
+		TREE_CASE_NONE,
+		TREE_CASE_EQUALS,
+		TREE_CASE_CHILD_OF,
+		TREE_CASE_PARENT_OF,
+		TREE_CASE_HAVE_SAME_PARENT
+	} best_case;
+} TreeForeachData;
+
+
+static gboolean tree_foreach_callback(GtkTreeModel *model, GtkTreePath *path,
+					GtkTreeIter *iter, gpointer data_in)
+{
+	gchar *name;
+	gchar *dirname;
+	guint diff;
+	gsize name_len;
+	GeanyDocument *doc;
+	TreeForeachData *data = (TreeForeachData*)data_in;
+
+	gtk_tree_model_get(model, iter,
+			DOCUMENTS_FILENAME, &name,
+			DOCUMENTS_DOCUMENT, &doc, -1);
+
+	if (doc) /* skip documents */
+		goto finally;
+
+	dirname = get_doc_folder(name);
+	if (dirname)
+		SETPTR(name, dirname);
+
+	diff = pathcmp(name, data->needle);
+	name_len = strlen(name);
+
+	if (diff == 0)
+		goto finally;
+
+	if (data->best_len < diff)
+	{
+		gint best_case;
+		gboolean tree = documents_show_paths == SHOW_PATHS_TREE;
+
+		/* there are four cases */
+		/* first case: exact match. File is from already opened dir */
+		if (name_len == diff && data->needle_len == name_len)
+			best_case = TREE_CASE_EQUALS;
+		/* second case: split current dir. File is from deeper level */
+		else if (name_len == diff && tree)
+			best_case = TREE_CASE_CHILD_OF;
+		/* third case: split parent dir. File is from one of existing level */
+		else if (data->needle_len == diff && tree)
+			best_case = TREE_CASE_PARENT_OF;
+		/* fourth case: both dirs have same parent */
+		else if (tree)
+			best_case = TREE_CASE_HAVE_SAME_PARENT;
+		else
+			goto finally;
+		data->best_len = diff;
+		data->best_case = best_case;
+		data->best_iter = *iter;
+	}
+finally:
+	g_free(name);
+	return FALSE;
+}
+
+/* Returns TRUE if parent points to a newly added row,
+ * caller might want to expand the relevant rows in the tree view */
+static gboolean get_doc_parent(GeanyDocument *doc, GtkTreeIter *parent)
+{
+	gchar *path;
+	GtkTreeIter iter;
+	gint name_diff = 0;
+	gboolean has_parent;
+	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
+	TreeForeachData data = {NULL, 0, 0, {0}, TREE_CASE_NONE};
+	gboolean new_row;
+
+	path = g_path_get_dirname(DOC_FILENAME(doc));
+
+	/* find best opened dir */
+	data.needle = get_doc_folder(path);
+	data.needle_len = strlen(data.needle);
+	name_diff = strlen(path) - data.needle_len;
+	gtk_tree_model_foreach(model, tree_foreach_callback, (gpointer)&data);
+
+	switch (data.best_case)
+	{
+		case TREE_CASE_EQUALS:
+		{
+			*parent = data.best_iter;
+			/* dir already open */
+			new_row = FALSE;
+			break;
+		}
+		case TREE_CASE_CHILD_OF:
+		{
+			/* This dir is longer than existing so just add child */
+			tree_add_new_dir(parent, &data.best_iter, path);
+			new_row = TRUE;
+			break;
+		}
+		case TREE_CASE_PARENT_OF:
+		{
+			/* More complicated logic. This dir should be a parent
+			 * of existing, so reparent existing dir.  */
+			has_parent = gtk_tree_model_iter_parent(model, &iter, &data.best_iter);
+			tree_add_new_dir(parent, has_parent ? &iter : NULL, path);
+			tree_reparent(&data.best_iter, parent);
+			new_row = TRUE;
+			break;
+		}
+		case TREE_CASE_HAVE_SAME_PARENT:
+		{
+			/* Even more complicated logic. Both dirs have same
+			 * parent, so create new parent and reparent them */
+			GtkTreeIter new_parent;
+			gchar *newpath = g_strndup(path, data.best_len + name_diff);
+
+			has_parent = gtk_tree_model_iter_parent(model, &iter, &data.best_iter);
+			tree_add_new_dir(&new_parent, has_parent ? &iter : NULL, newpath);
+			tree_reparent(&data.best_iter, &new_parent);
+			tree_add_new_dir(parent, &new_parent, path);
+			unfold_iter(&new_parent);
+
+			g_free(newpath);
+			new_row = TRUE;
+			break;
+		}
+		default:
+		{
+			tree_add_new_dir(parent, NULL, path);
+			new_row = TRUE;
+			break;
+		}
+	}
+
+	g_free(data.needle);
 	g_free(path);
-	return &parent;
+
+	return new_row;
 }
 
 
@@ -464,23 +768,26 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 void sidebar_openfiles_add(GeanyDocument *doc)
 {
 	GtkTreeIter *iter = &doc->priv->iter;
-	GtkTreeIter *parent = get_doc_parent(doc);
 	gchar *basename;
 	const GdkColor *color = document_get_status_color(doc);
 	static GIcon *file_icon = NULL;
+	gboolean new_row;
 
-	gtk_tree_store_append(store_openfiles, iter, parent);
-
-	/* check if new parent */
-	if (parent && gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store_openfiles), parent) == 1)
+	if (documents_show_paths != SHOW_PATHS_NONE)
 	{
-		GtkTreePath *path;
-
-		/* expand parent */
-		path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), parent);
-		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
-		gtk_tree_path_free(path);
+		/* check if new parent */
+		GtkTreeIter parent;
+		new_row = get_doc_parent(doc, &parent);
+		gtk_tree_store_append(store_openfiles, iter, &parent);
+		if (new_row)
+			unfold_iter(&parent);
 	}
+	else
+	{
+		gtk_tree_store_append(store_openfiles, iter, NULL);
+	}
+
+
 	if (!file_icon)
 		file_icon = ui_get_mime_icon("text/plain");
 
@@ -495,16 +802,51 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 
 static void openfiles_remove(GeanyDocument *doc)
 {
-	GtkTreeIter *iter = &doc->priv->iter;
+	GtkTreeIter iter = doc->priv->iter;
 	GtkTreeIter parent;
+	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
 
-	if (gtk_tree_model_iter_parent(GTK_TREE_MODEL(store_openfiles), &parent, iter) &&
-		gtk_tree_model_iter_n_children(GTK_TREE_MODEL(store_openfiles), &parent) == 1)
-		gtk_tree_store_remove(store_openfiles, &parent);
-	else
-		gtk_tree_store_remove(store_openfiles, iter);
+	if (documents_show_paths == SHOW_PATHS_NONE)
+	{
+		gtk_tree_store_remove(store_openfiles, &iter);
+		return;
+	}
+
+	/* walk on top and close all orphaned parents */
+	while (gtk_tree_model_iter_parent(model, &parent, &iter)
+	    && gtk_tree_model_iter_n_children(model, &parent) == 1)
+	{
+		iter = parent;
+	}
+	gtk_tree_store_remove(store_openfiles, &iter);
+
+	/* If, after removing, there is a single silbling left and it represents
+	 * a directory, it can be merged with the parent directory row,
+	 * essentially to reverse the effect of TREE_CASE_PARENT_OF and TREE_CASE_HAVE_SAME_PARENT
+	 * in get_doc_parent(). */
+	if (gtk_tree_store_iter_is_valid(store_openfiles, &parent)
+	 && gtk_tree_model_iter_n_children(model, &parent) == 1)
+	{
+		GtkTreeIter child, pparent;
+		GeanyDocument *other_doc;
+
+		gtk_tree_model_iter_nth_child(model, &child, &parent, 0);
+		gtk_tree_model_get(model, &child, DOCUMENTS_DOCUMENT, &other_doc, -1);
+		if (!other_doc && gtk_tree_model_iter_parent(model, &pparent, &parent))
+		{
+			GtkTreePath *path, *new_path;
+			gboolean is_expanded;
+
+			path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), &child);
+			is_expanded = gtk_tree_view_row_expanded(GTK_TREE_VIEW(tv.tree_openfiles), path);
+			tree_reparent(&child, &pparent);
+			if (is_expanded)
+				unfold_iter(&child);
+			gtk_tree_store_remove(store_openfiles, &parent);
+			gtk_tree_path_free(path);
+		}
+	}
 }
-
 
 void sidebar_openfiles_update(GeanyDocument *doc)
 {
@@ -623,7 +965,7 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 
 static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
-	documents_show_paths = gtk_check_menu_item_get_active(item);
+	documents_show_paths = GPOINTER_TO_INT(user_data);
 	sidebar_openfiles_update_all();
 }
 
@@ -680,6 +1022,28 @@ static void on_openfiles_expand_collapse(GtkMenuItem *menuitem, gpointer user_da
 }
 
 
+static void create_show_paths_popup_menu(void)
+{
+	GSList *group = NULL;
+	const gchar *items[MAX_SHOW_PATHS] = {
+		[SHOW_PATHS_NONE] = _("D_ocuments Only"),
+		[SHOW_PATHS_LIST] = _("Show _Paths"),
+		[SHOW_PATHS_TREE] = _("Show _Tree")
+	};
+
+	for (guint i = 0; i < G_N_ELEMENTS(items); i++)
+	{
+		GtkWidget *w = gtk_radio_menu_item_new_with_mnemonic(group, items[i]);
+		group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(w));
+		gtk_widget_show(w);
+		gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), w);
+		g_signal_connect(w, "activate",
+			G_CALLBACK(on_openfiles_show_paths_activate), GINT_TO_POINTER(i));
+		doc_items.show_paths[i] = w;
+	}
+}
+
+
 static void create_openfiles_popup_menu(void)
 {
 	GtkWidget *item;
@@ -727,12 +1091,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
-	doc_items.show_paths = gtk_check_menu_item_new_with_mnemonic(_("Show _Paths"));
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), documents_show_paths);
-	gtk_widget_show(doc_items.show_paths);
-	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.show_paths);
-	g_signal_connect(doc_items.show_paths, "activate",
-			G_CALLBACK(on_openfiles_show_paths_activate), NULL);
+	create_show_paths_popup_menu();
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
@@ -759,11 +1118,7 @@ static void unfold_parent(GtkTreeIter *iter)
 	GtkTreeIter parent;
 
 	if (gtk_tree_model_iter_parent(GTK_TREE_MODEL(store_openfiles), &parent, iter))
-	{
-		GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), &parent);
-		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
-		gtk_tree_path_free(path);
-	}
+		unfold_iter(&parent);
 }
 
 
@@ -823,36 +1178,38 @@ static void document_action(GeanyDocument *doc, gint action)
 }
 
 
+static void on_openfiles_document_action_apply(GtkTreeModel *model, GtkTreeIter iter, gint action)
+{
+	GeanyDocument *doc;
+	gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
+	if (doc)
+	{
+		document_action(doc, action);
+	}
+	else
+	{
+		/* parent item selected */
+		GtkTreeIter child;
+		gint i = gtk_tree_model_iter_n_children(model, &iter) - 1;
+
+		while (i >= 0 && gtk_tree_model_iter_nth_child(model, &child, &iter, i))
+		{
+			on_openfiles_document_action_apply(model, child, action);
+			i--;
+		}
+	}
+}
+
+
 static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkTreeIter iter;
 	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
 	GtkTreeModel *model;
-	GeanyDocument *doc;
 	gint action = GPOINTER_TO_INT(user_data);
 
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
-	{
-		gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
-		if (doc)
-		{
-			document_action(doc, action);
-		}
-		else
-		{
-			/* parent item selected */
-			GtkTreeIter child;
-			gint i = gtk_tree_model_iter_n_children(model, &iter) - 1;
-
-			while (i >= 0 && gtk_tree_model_iter_nth_child(model, &child, &iter, i))
-			{
-				gtk_tree_model_get(model, &child, DOCUMENTS_DOCUMENT, &doc, -1);
-
-				document_action(doc, action);
-				i--;
-			}
-		}
-	}
+		on_openfiles_document_action_apply(model, iter, action);
 }
 
 
@@ -1050,7 +1407,7 @@ static void documents_menu_update(GtkTreeSelection *selection)
 	gtk_widget_set_sensitive(doc_items.find_in_files, sel);
 	g_free(shortname);
 
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), documents_show_paths);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths[documents_show_paths]), TRUE);
 	gtk_widget_set_sensitive(doc_items.expand_all, documents_show_paths);
 	gtk_widget_set_sensitive(doc_items.collapse_all, documents_show_paths);
 }
@@ -1089,7 +1446,7 @@ void sidebar_init(void)
 	StashGroup *group;
 
 	group = stash_group_new(PACKAGE);
-	stash_group_add_boolean(group, &documents_show_paths, "documents_show_paths", TRUE);
+	stash_group_add_integer(group, (gint*)&documents_show_paths, "documents_show_paths", SHOW_PATHS_LIST);
 	stash_group_add_widget_property(group, &ui_prefs.sidebar_page, "sidebar_page", GINT_TO_POINTER(0),
 		main_widgets.sidebar_notebook, "page", 0);
 	configuration_add_pref_group(group, FALSE);
