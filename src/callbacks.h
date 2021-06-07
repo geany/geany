@@ -22,6 +22,7 @@
 #define GEANY_CALLBACKS_H 1
 
 #include "gtkcompat.h"
+#include "geanyentryaction.h"
 
 G_BEGIN_DECLS
 
@@ -48,7 +49,7 @@ void on_close_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_replace_tabs_activate(GtkMenuItem *menuitem, gpointer user_data);
 
-void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data);
+void on_toolbutton_search_clicked(GtkAction *action, GeanyEntryAction *entry_action);
 
 gboolean toolbar_popup_menu(GtkWidget *widget, GdkEventButton *event, gpointer user_data);
 

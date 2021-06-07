@@ -53,7 +53,7 @@ static GSList *plugin_items = NULL;
 /* Available toolbar actions
  * Fields: name, stock_id, label, accelerator, tooltip, callback */
 static const GtkActionEntry ui_entries[] = {
-	/* custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build" */
+	/* custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "Search", "GotoEntry", "Build" */
 	{ "Save", GTK_STOCK_SAVE, NULL, NULL, N_("Save the current file"), G_CALLBACK(on_save1_activate) },
 	{ "SaveAs", GTK_STOCK_SAVE_AS, NULL, NULL, N_("Save as"), G_CALLBACK(on_save_as1_activate) },
 	{ "SaveAll", GEANY_STOCK_SAVE_ALL, NULL, NULL, N_("Save all open files"), G_CALLBACK(on_save_all1_activate) },
@@ -75,7 +75,6 @@ static const GtkActionEntry ui_entries[] = {
 	{ "ZoomOut", GTK_STOCK_ZOOM_OUT, NULL, NULL, N_("Zoom out the text"), G_CALLBACK(on_zoom_out1_activate) },
 	{ "UnIndent", GTK_STOCK_UNINDENT, NULL, NULL, N_("Decrease indentation"), G_CALLBACK(on_menu_decrease_indent1_activate) },
 	{ "Indent", GTK_STOCK_INDENT, NULL, NULL, N_("Increase indentation"), G_CALLBACK(on_menu_increase_indent1_activate) },
-	{ "Search", GTK_STOCK_FIND, NULL, NULL, N_("Find the entered text in the current file"), G_CALLBACK(on_toolbutton_search_clicked) },
 	{ "Goto", GTK_STOCK_JUMP_TO, NULL, NULL, N_("Jump to the entered line number"), G_CALLBACK(on_toolbutton_goto_clicked) },
 	{ "Preferences", GTK_STOCK_PREFERENCES, NULL, NULL, N_("Show the preferences dialog"), G_CALLBACK(on_preferences1_activate) },
 	{ "Quit", GTK_STOCK_QUIT, NULL, NULL, N_("Quit Geany"), G_CALLBACK(on_quit1_activate) },
@@ -344,6 +343,7 @@ GtkWidget *toolbar_init(void)
 	GtkAction *action_open;
 	GtkAction *action_build;
 	GtkAction *action_searchentry;
+	GtkAction *action_search;
 	GtkAction *action_gotoentry;
 	GtkSettings *gtk_settings;
 
@@ -388,6 +388,11 @@ GtkWidget *toolbar_init(void)
 	g_signal_connect(action_searchentry, "entry-changed",
 		G_CALLBACK(on_toolbar_search_entry_changed), NULL);
 	gtk_action_group_add_action(group, action_searchentry);
+
+	action_search = gtk_action_new("Search", "Search", _("Find the entered text in the current file"), GTK_STOCK_FIND);
+	g_signal_connect(action_search, "activate",
+		G_CALLBACK(on_toolbutton_search_clicked), action_searchentry);
+	gtk_action_group_add_action(group, action_search);
 
 	action_gotoentry = geany_entry_action_new(
 		"GotoEntry", _("Goto Field"), _("Jump to the entered line number"), TRUE);
