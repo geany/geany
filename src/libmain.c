@@ -976,7 +976,18 @@ static void load_startup_files(gint argc, gchar **argv)
 	if (load_session)
 	{
 		/* load session files into tabs, as they are found in the session_files variable */
-		configuration_open_files();
+		gchar* root_path=NULL;
+		if(app->project)
+		{
+			root_path = g_path_get_dirname(app->project->file_name);
+			configuration_open_files(root_path);
+			g_free( root_path);
+		}
+		else
+		{
+			configuration_open_files(NULL);
+		}
+		
 
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		{

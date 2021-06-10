@@ -351,17 +351,39 @@ static void save_recent_files(GKeyFile *config, GQueue *queue, gchar const *key)
 }
 
 
-static gchar *get_session_file_string(GeanyDocument *doc)
+static gchar *get_session_file_string(GeanyDocument *doc, gchar * project_root_folder)
 {
 	gchar *fname;
+	gchar *relative_filename;
+	gchar *doc_filename;
 	gchar *locale_filename;
 	gchar *escaped_filename;
 	GeanyFiletype *ft = doc->file_type;
+	GFile *file_doc;
+	GFile *file_root_folder;
 
 	if (ft == NULL) /* can happen when saving a new file when quitting */
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
-	locale_filename = utils_get_locale_from_utf8(doc->file_name);
+	/* project_root_folder contain a path only if the project use relative path */
+	if(project_root_folder){
+		file_root_folder = g_file_new_for_path(project_root_folder);
+		file_doc = g_file_new_for_path(doc->file_name);
+		relative_filename = g_file_get_relative_path(file_root_folder, file_doc);
+		if(relative_filename){
+			doc_filename = g_strdup(relative_filename);
+		}else{
+			doc_filename = g_strdup(doc->file_name);
+		}
+		g_object_unref(file_root_folder);
+		g_object_unref(file_doc);
+		g_free(relative_filename);
+	}else{
+		doc_filename = g_strdup(doc->file_name);
+	}
+
+
+	locale_filename = utils_get_locale_from_utf8(doc_filename);
 	escaped_filename = g_uri_escape_string(locale_filename, NULL, TRUE);
 
 	fname = g_strdup_printf("%d;%s;%d;E%s;%d;%d;%d;%s;%d;%d",
@@ -375,6 +397,7 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		escaped_filename,
 		doc->editor->line_breaking,
 		doc->editor->indent_width);
+	g_free(doc_filename);
 	g_free(escaped_filename);
 	g_free(locale_filename);
 	return fname;
@@ -395,7 +418,7 @@ static void remove_session_files(GKeyFile *config)
 }
 
 
-void configuration_save_session_files(GKeyFile *config)
+void configuration_save_session_files(GKeyFile *config, gchar * project_root_folder)
 {
 	gint npage;
 	gchar entry[16];
@@ -418,7 +441,7 @@ void configuration_save_session_files(GKeyFile *config)
 			gchar *fname;
 
 			g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", j);
-			fname = get_session_file_string(doc);
+			fname = get_session_file_string(doc, project_root_folder);
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;
@@ -647,7 +670,7 @@ void configuration_save(void)
 	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 
 	if (cl_options.load_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, NULL);
 #ifdef HAVE_VTE
 	else if (vte_info.have_vte)
 	{
@@ -1110,7 +1133,7 @@ void configuration_save_default_session(void)
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	if (cl_options.load_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, NULL);
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
@@ -1187,7 +1210,7 @@ gboolean configuration_load(void)
 }
 
 
-static gboolean open_session_file(gchar **tmp, guint len)
+static gboolean open_session_file(gchar **tmp, guint len, gchar *root_folder)
 {
 	guint pos;
 	const gchar *ft_name;
@@ -1199,7 +1222,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/** TODO when we have a global pref for line breaking, use its value */
 	gboolean line_breaking = FALSE;
 	gboolean ret = FALSE;
-
+	
 	pos = atoi(tmp[0]);
 	ft_name = tmp[1];
 	ro = atoi(tmp[2]);
@@ -1217,6 +1240,25 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/* try to get the locale equivalent for the filename */
 	unescaped_filename = g_uri_unescape_string(tmp[7], NULL);
 	locale_filename = utils_get_locale_from_utf8(unescaped_filename);
+
+	/* is the locale_filename absolute or relative ? */
+	if(!g_path_is_absolute(locale_filename) && root_folder)
+	{
+		geany_debug("Relative path %s, root folder %s", locale_filename, root_folder);
+		gchar *absolute_path;
+		absolute_path = g_build_path(G_DIR_SEPARATOR_S, root_folder, locale_filename, NULL);
+		geany_debug("absolute_path : %s",absolute_path);
+		g_free(locale_filename);
+		locale_filename = absolute_path;
+	}
+	else if(!g_path_is_absolute(locale_filename))
+	{
+		geany_debug("Relative path %s, can't get root folder");
+	}
+	else
+	{
+		geany_debug("Absolute path");
+	}
 
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
@@ -1254,7 +1296,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 /* Open session files
  * Note: notebook page switch handler and adding to recent files list is always disabled
  * for all files opened within this function */
-void configuration_open_files(void)
+void configuration_open_files(gchar *root_folder)
 {
 	gint i;
 	gboolean failure = FALSE;
@@ -1270,7 +1312,7 @@ void configuration_open_files(void)
 
 		if (tmp != NULL && (len = g_strv_length(tmp)) >= 8)
 		{
-			if (! open_session_file(tmp, len))
+			if (! open_session_file(tmp, len, root_folder))
 				failure = TRUE;
 		}
 		g_strfreev(tmp);
