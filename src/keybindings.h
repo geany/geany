@@ -275,6 +275,9 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_EDITOR_DELETELINETOBEGINNING,	/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_STRIPTRAILINGSPACES,	/**< Keybinding.
 												 * @since 1.34 (API 238) */
+	GEANY_KEYS_FORMAT_SENDTOCMD10,				/**< Keybinding. */
+	GEANY_KEYS_FORMAT_SENDTOCMD11,				/**< Keybinding. */
+	GEANY_KEYS_FORMAT_SENDTOCMD12,				/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
