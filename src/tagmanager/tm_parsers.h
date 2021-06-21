@@ -82,6 +82,7 @@
 	SystemVerilogParser, \
 	SCSSParser, \
 	TerraformParser, \
-	SinexParser
+	SinexParser, \
+	KotlinParser
 
 #endif
