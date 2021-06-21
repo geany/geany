@@ -12,10 +12,12 @@ doccomment=author deprecated exception param return see serial serialData serial
 typedefs=
 
 [lexer_properties=C]
+lexer.cpp.triplequoted.strings=1
+fold.preprocessor=0
 
 [settings]
 lexer_filetype=C
-tag_parser=C
+tag_parser=Kotlin
 extension=kt
 mime_type=text/x-kotlin
 comment_single=//
