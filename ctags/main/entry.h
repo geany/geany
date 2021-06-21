@@ -16,6 +16,7 @@
 #include "types.h"
 
 #include <stdint.h>
+#include <time.h>
 
 #include "field.h"
 #include "xtag.h"
@@ -52,6 +53,7 @@ struct sTagEntryInfo {
 										  current tag by itself, set this. */
 	unsigned int isPseudoTag:1;	/* Used only in xref output.
 								   If a tag is a pseudo, set this. */
+	unsigned int inCorkQueue:1;
 
 	unsigned long lineNumber;     /* line number of tag */
 	const char* pattern;	      /* pattern for locating input line
@@ -67,7 +69,6 @@ struct sTagEntryInfo {
 
 	struct {
 		const char* access;
-		const char* fileScope;
 		const char* implementation;
 		const char* inheritance;
 
@@ -96,6 +97,7 @@ struct sTagEntryInfo {
 		const char* xpath;
 #endif
 		unsigned long endLine;
+		time_t epoch;
 	} extensionFields;  /* list of extension fields*/
 
 	/* `usedParserFields' tracks how many parser own fields are
@@ -162,8 +164,9 @@ void          registerEntry (int corkIndex);
  * under the scope.
  *
  * If FUNC returns false, this function returns false.
- * If FUNC never returns false, this func returns true.
- * If FUNC is not called because no node for NAME in the symbol table.
+ * If FUNC never returns false, this function returns true.
+ * If FUNC is not called because no node for NAME in the symbol table,
+ * this function returns true.
  */
 bool          foreachEntriesInScope (int corkIndex,
 									 const char *name, /* or NULL */

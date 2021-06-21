@@ -165,7 +165,7 @@ extern bool ptagMakeCtagsOutputExcmd (ptagDesc *desc,
 		excmd = "pattern";
 		break;
 	case EX_COMBINE:
-		excmd = "combine";
+		excmd = "combineV2";
 		break;
 	default:
 		AssertNotReached ();
@@ -173,14 +173,14 @@ extern bool ptagMakeCtagsOutputExcmd (ptagDesc *desc,
 		break;
 	}
 	return writePseudoTag (desc, excmd,
-						   "number, pattern, mixed, or combine",
+						   "number, pattern, mixed, or combineV2",
 						   NULL);
 }
 
-extern void writerCheckOptions (void)
+extern void writerCheckOptions (bool fieldsWereReset)
 {
 	if (writer->checkOptions)
-		writer->checkOptions (writer);
+		writer->checkOptions (writer, fieldsWereReset);
 }
 
 extern bool writerPrintPtagByDefault (void)

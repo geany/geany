@@ -148,7 +148,7 @@ extern void useRegexMethod (const langType language);
 extern void printRegexFlags (bool withListHeader, bool machinable, FILE *fp);
 extern void printMultilineRegexFlags (bool withListHeader, bool machinable, FILE *fp);
 extern void printMultitableRegexFlags (bool withListHeader, bool machinable, FILE *fp);
-extern bool hasLanguageScopeActionInRegex (const langType language);
+extern bool doesLanguageExpectCorkInRegex (const langType language);
 
 /* Multiline Regex Interface */
 extern bool hasLanguageMultilineRegexPatterns (const langType language);
@@ -169,6 +169,8 @@ extern bool makeKindDescriptionsPseudoTags (const langType language,
 extern bool makeFieldDescriptionsPseudoTags (const langType language,
 					       const ptagDesc *pdesc);
 extern bool makeExtraDescriptionsPseudoTags (const langType language,
+					       const ptagDesc *pdesc);
+extern bool makeRoleDescriptionsPseudoTags (const langType language,
 					       const ptagDesc *pdesc);
 
 extern void printLanguageMultitableStatistics (langType language);

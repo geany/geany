@@ -1369,6 +1369,7 @@ struct GetLanguageRequest {
 	enum { GLR_OPEN, GLR_DISCARD, GLR_REUSE, } type;
 	const char *const fileName;
 	MIO *mio;
+	time_t mtime;
 };
 
 static langType
@@ -1466,7 +1467,13 @@ getFileLanguageForRequestInternal (struct GetLanguageRequest *req)
 
   cleanup:
 	if (req->type == GLR_OPEN && glc.input)
+	{
 		req->mio = mio_ref (glc.input);
+		if (!fstatus)
+			fstatus = eStat (fileName);
+		if (fstatus)
+			req->mtime = fstatus->mtime;
+	}
     GLC_FCLOSE(&glc);
     if (fstatus)
 	    eStatFree (fstatus);
@@ -1516,6 +1523,7 @@ extern langType getLanguageForFilenameAndContents (const char *const fileName)
 	struct GetLanguageRequest req = {
 		.type = GLR_DISCARD,
 		.fileName = fileName,
+		.mtime = (time_t)0,
 	};
 
 	return getFileLanguageForRequest (&req);
@@ -3746,7 +3754,7 @@ static unsigned int parserCorkFlags (parserDefinition *parser)
 
 	r |= parser->useCork;
 
-	if (hasLanguageScopeActionInRegex (parser->id)
+	if (doesLanguageExpectCorkInRegex (parser->id)
 	    || parser->requestAutomaticFQTag)
 		r |= CORK_QUEUE;
 
@@ -3834,7 +3842,8 @@ static bool createTagsWithFallback1 (const langType language,
 	if (useCork)
 		corkTagFile(corkFlags);
 
-	addParserPseudoTags (language);
+	if (isXtagEnabled (XTAG_PSEUDO_TAGS))
+		addParserPseudoTags (language);
 	initializeParserStats (parser);
 	tagFilePosition (&tagfpos);
 
@@ -3917,14 +3926,14 @@ extern bool runParserInNarrowedInputStream (const langType language,
 
 static bool createTagsWithFallback (
 	const char *const fileName, const langType language,
-	MIO *mio, bool *failureInOpenning)
+	MIO *mio, time_t mtime, bool *failureInOpenning)
 {
 	langType exclusive_subparser = LANG_IGNORE;
 	bool tagFileResized = false;
 
 	Assert (0 <= language  &&  language < (int) LanguageCount);
 
-	if (!openInputFile (fileName, language, mio))
+	if (!openInputFile (fileName, language, mio, mtime))
 	{
 		*failureInOpenning = true;
 		return false;
@@ -4081,7 +4090,7 @@ extern bool parseFile (const char *const fileName)
 	return bRet;
 }
 
-static bool parseMio (const char *const fileName, langType language, MIO* mio, bool useSourceFileTagPath,
+static bool parseMio (const char *const fileName, langType language, MIO* mio, time_t mtime, bool useSourceFileTagPath,
 					  void *clientData)
 {
 	bool tagFileResized = false;
@@ -4093,7 +4102,7 @@ static bool parseMio (const char *const fileName, langType language, MIO* mio, b
 
 	initParserTrashBox ();
 
-	tagFileResized = createTagsWithFallback (fileName, language, mio, &failureInOpenning);
+	tagFileResized = createTagsWithFallback (fileName, language, mio, mtime, &failureInOpenning);
 
 	finiParserTrashBox ();
 
@@ -4115,6 +4124,7 @@ extern bool parseFileWithMio (const char *const fileName, MIO *mio,
 		.fileName = fileName,
 		.mio = mio,
 	};
+	memset (&req.mtime, 0, sizeof (req.mtime));
 
 	language = getFileLanguageForRequest (&req);
 	Assert (language != LANG_AUTO);
@@ -4139,7 +4149,7 @@ extern bool parseFileWithMio (const char *const fileName, MIO *mio,
 		/* TODO: checkUTF8BOM can be used to update the encodings. */
 		openConverter (getLanguageEncoding (language), Option.outputEncoding);
 #endif
-		tagFileResized = parseMio (fileName, language, req.mio, true, clientData);
+		tagFileResized = parseMio (fileName, language, req.mio, req.mtime, true, clientData);
 		if (Option.filter && ! Option.interactive)
 			closeTagFile (tagFileResized);
 		addTotals (1, 0L, 0L);
@@ -4164,7 +4174,7 @@ extern bool parseRawBuffer(const char *fileName, unsigned char *buffer,
 	if (buffer)
 		mio = mio_new_memory (buffer, bufferSize, NULL, NULL);
 
-	r = parseMio (fileName, language, mio, false, clientData);
+	r = parseMio (fileName, language, mio, (time_t)0, false, clientData);
 
 	if (buffer)
 		mio_unref (mio);
@@ -4258,12 +4268,12 @@ extern void addLanguageCallbackRegex (const langType language, const char *const
 	addCallbackRegex ((LanguageTable +language)->lregexControlBlock, regex, flags, callback, disabled, userData);
 }
 
-extern bool hasLanguageScopeActionInRegex (const langType language)
+extern bool doesLanguageExpectCorkInRegex (const langType language)
 {
 	bool hasScopeAction;
 
 	pushLanguage (language);
-	hasScopeAction = lregexQueryParserAndSubparsers (language, hasScopeActionInRegex);
+	hasScopeAction = lregexQueryParserAndSubparsers (language, doesExpectCorkInRegex);
 	popLanguage ();
 
 	return hasScopeAction;
@@ -4541,6 +4551,30 @@ static bool makeKindDescriptionPseudoTag (kindDefinition *kind,
 	return false;
 }
 
+static bool makeRoleDescriptionPseudoTag (kindDefinition *kind,
+										  roleDefinition *role,
+										  void *user_data)
+{
+	struct makeKindDescriptionPseudoTagData *data = user_data;
+
+	vString *parser_and_kind_name = vStringNewInit (data->langName);
+	vStringCatS (parser_and_kind_name, PSEUDO_TAG_SEPARATOR);
+	vStringCatS (parser_and_kind_name, kind->name);
+
+	vString *description = vStringNew ();
+	const char *d = role->description? role->description: role->name;
+	vStringCatSWithEscapingAsPattern (description, d);
+
+	data->written |=  writePseudoTag (data->pdesc, role->name,
+									  vStringValue (description),
+									  vStringValue (parser_and_kind_name));
+
+	vStringDelete (description);
+	vStringDelete (parser_and_kind_name);
+
+	return false;
+}
+
 extern bool makeKindDescriptionsPseudoTags (const langType language,
 					    const ptagDesc *pdesc)
 {
@@ -4648,6 +4682,47 @@ extern bool makeExtraDescriptionsPseudoTags (const langType language,
 		}
 	}
 	return written;
+}
+
+extern bool makeRoleDescriptionsPseudoTags (const langType language,
+											const ptagDesc *pdesc)
+{
+	parserObject *parser;
+	struct kindControlBlock *kcb;
+	parserDefinition* lang;
+	kindDefinition *kind;
+	struct makeKindDescriptionPseudoTagData data;
+
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+	parser = LanguageTable + language;
+	kcb = parser->kindControlBlock;
+	lang = parser->def;
+
+	unsigned int kindCount = countKinds(kcb);
+
+	data.langName = lang->name;
+	data.pdesc = pdesc;
+	data.written = false;
+
+	for (unsigned int i = 0; i < kindCount; ++i)
+	{
+		if (!isLanguageKindEnabled (language, i))
+			continue;
+
+		kind = getKind (kcb, i);
+
+		unsigned int roleCount = countRoles (kcb, i);
+		for (unsigned int j = 0; j < roleCount; ++j)
+		{
+			if (isRoleEnabled (kcb, i, j))
+			{
+				roleDefinition *role = getRole (kcb, i, j);
+				makeRoleDescriptionPseudoTag (kind, role, &data);
+			}
+		}
+	}
+
+	return data.written;
 }
 
 /*
@@ -4998,6 +5073,12 @@ extern bool processPretendOption (const char *const option, const char *const pa
 	return true;
 }
 
+extern unsigned int getLanguageCorkUsage (langType lang)
+{
+	parserObject* const parser = LanguageTable + lang;
+	return parserCorkFlags (parser->def);
+}
+
 /*
  * The universal fallback parser.
  * If any parser doesn't handle the input, this parser is
@@ -5074,6 +5155,7 @@ typedef enum {
 	K_ROLES,
 	K_ROLES_DISABLED,
 	K_FIELD_TESTING,
+	K_TRIGGER_NOTICE,
 	KIND_COUNT
 } CTST_Kind;
 
@@ -5153,6 +5235,7 @@ static kindDefinition CTST_Kinds[KIND_COUNT] = {
 	{false, 'R', "rolesDisabled", "emit a tag with multi roles(disabled by default)",
 	 .referenceOnly = true, ATTACH_ROLES (CTST_RolesDisabledKindRoles)},
 	{true,  'f', "fieldMaker", "tag for testing field:" },
+	{true,  'n', "triggerNotice", "trigger notice output"},
 };
 
 typedef enum {
@@ -5334,6 +5417,9 @@ static void createCTSTTags (void)
 
 						break;
 					}
+					case K_TRIGGER_NOTICE:
+						notice ("notice output for testing: %s", CTST_Kinds [i].name);
+						break;
 				}
 			}
 	}

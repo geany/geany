@@ -43,14 +43,13 @@ extern fieldType getFieldTypeForOption (char letter);
    internally, each parser is not initialized. `LANG_IGNORE' is a bit faster. */
 extern fieldType getFieldTypeForName (const char *name);
 extern fieldType getFieldTypeForNameAndLanguage (const char *fieldName, langType language);
-extern bool enableField (fieldType type, bool state, bool warnIfFixedField);
+extern bool enableField (fieldType type, bool state);
 extern bool isCommonField (fieldType type);
 extern int     getFieldOwner (fieldType type);
 extern const char* getFieldDescription (fieldType type);
 extern const char* getFieldName (fieldType type);
 extern unsigned char getFieldLetter (fieldType type);
 extern unsigned int getFieldDataType (fieldType type);
-extern void printFields (int language);
 
 /* Whether the field specified with TYPE has a
    method for rendering in the current format. */

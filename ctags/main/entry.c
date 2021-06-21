@@ -203,6 +203,9 @@ extern void makeFileTag (const char *const fileName)
 		tag.extensionFields.endLine = getInputLineNumber ();
 	}
 
+	if (isFieldEnabled (FIELD_EPOCH))
+		tag.extensionFields.epoch = getInputFileMtime ();
+
 	makeTagEntry (&tag);
 }
 
@@ -1066,8 +1069,6 @@ static tagEntryInfoX *copyTagEntry (const tagEntryInfo *const tag,
 	slot->name = eStrdup (slot->name);
 	if (slot->extensionFields.access)
 		slot->extensionFields.access = eStrdup (slot->extensionFields.access);
-	if (slot->extensionFields.fileScope)
-		slot->extensionFields.fileScope = eStrdup (slot->extensionFields.fileScope);
 	if (slot->extensionFields.implementation)
 		slot->extensionFields.implementation = eStrdup (slot->extensionFields.implementation);
 	if (slot->extensionFields.inheritance)
@@ -1144,8 +1145,6 @@ static void deleteTagEnry (void *data)
 
 	if (slot->extensionFields.access)
 		eFree ((char *)slot->extensionFields.access);
-	if (slot->extensionFields.fileScope)
-		eFree ((char *)slot->extensionFields.fileScope);
 	if (slot->extensionFields.implementation)
 		eFree ((char *)slot->extensionFields.implementation);
 	if (slot->extensionFields.inheritance)
@@ -1450,6 +1449,7 @@ static int queueTagEntry(const tagEntryInfo *const tag)
 
 	corkIndex = (int)ptrArrayAdd (TagFile.corkQueue, entry);
 	entry->corkIndex = corkIndex;
+	entry->slot.inCorkQueue = 1;
 
 	return corkIndex;
 }
@@ -1885,8 +1885,9 @@ static void    markTagExtraBitFull     (tagEntryInfo *const tag, xtagType extra,
 
 		int n = countXtags () - XTAG_COUNT;
 		tag->extraDynamic = xCalloc ((n / 8) + 1, uint8_t);
-		PARSER_TRASH_BOX(tag->extraDynamic, eFree);
-		markTagExtraBit (tag, extra);
+		if (!tag->inCorkQueue)
+			PARSER_TRASH_BOX(tag->extraDynamic, eFree);
+		markTagExtraBitFull (tag, extra, mark);
 		return;
 	}
 
@@ -1914,7 +1915,6 @@ extern bool isTagExtraBitMarked (const tagEntryInfo *const tag, xtagType extra)
 		index = (extra / 8);
 		offset = (extra % 8);
 		slot = tag->extra;
-
 	}
 	else if (!tag->extraDynamic)
 		return false;
@@ -1924,7 +1924,6 @@ extern bool isTagExtraBitMarked (const tagEntryInfo *const tag, xtagType extra)
 		index = ((extra - XTAG_COUNT) / 8);
 		offset = ((extra - XTAG_COUNT) % 8);
 		slot = tag->extraDynamic;
-
 	}
 	return !! ((slot [ index ]) & (1 << offset));
 }
