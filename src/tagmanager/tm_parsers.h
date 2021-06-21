@@ -76,6 +76,7 @@
 	AutoItParser, \
 	Perl6Parser, \
 	OcamlParser, \
-	LdScriptParser
+	LdScriptParser, \
+	KotlinParser
 
 #endif
