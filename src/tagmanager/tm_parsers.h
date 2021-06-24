@@ -65,6 +65,7 @@
 	JsonParser, \
 	ZephirParser, \
 	PowerShellParser, \
-	BibtexParser
+	BibtexParser, \
+	AutoItParser
 
 #endif

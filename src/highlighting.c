@@ -1001,6 +1001,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(ABAQUS);
 		init_styleset_case(ADA);
 		init_styleset_case(ASM);
+		init_styleset_case(AU3);
 		init_styleset_case(BASIC);
 		init_styleset_case(BATCH);
 		init_styleset_case(C);
@@ -1090,6 +1091,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(ABAQUS);
 		styleset_case(ADA);
 		styleset_case(ASM);
+		styleset_case(AU3);
 		styleset_case(BASIC);
 		styleset_case(BATCH);
 		styleset_case(C);
@@ -1624,6 +1626,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_YAML:
 			/* there is no string type in those lexers, listing here just for completeness */
 			return FALSE;
+
+		case SCLEX_AU3:
+			return (style == SCE_AU3_STRING);
 	}
 	return FALSE;
 }
@@ -1843,6 +1848,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_MARKDOWN:
 			/* there is no comment type in those lexers, listing here just for completeness */
 			return FALSE;
+
+		case SCLEX_AU3:
+			return (style == SCE_AU3_COMMENT ||
+				style == SCE_AU3_COMMENTBLOCK);
 	}
 	return FALSE;
 }

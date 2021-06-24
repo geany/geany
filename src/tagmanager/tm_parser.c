@@ -528,6 +528,14 @@ static TMParserMapEntry map_POWERSHELL[] = {
 	{'v', tm_tag_variable_t},
 };
 
+static TMParserMapEntry map_AUTOIT[] = {
+	{'f', tm_tag_function_t},
+	{'r', tm_tag_other_t},
+	{'g', tm_tag_member_t},
+	{'l', tm_tag_member_t},
+	{'S', tm_tag_member_t},
+};
+
 
 typedef struct
 {
@@ -591,6 +599,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(JSON),
 	MAP_ENTRY(ZEPHIR),
 	MAP_ENTRY(POWERSHELL),
+	MAP_ENTRY(AUTOIT),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);

@@ -14,6 +14,7 @@ parsers = \
 	parsers/geany_abc.c \
 	parsers/geany_asciidoc.c \
 	parsers/geany_asm.c \
+	parsers/geany_autoit.c \
 	parsers/geany_basic.c \
 	parsers/geany_bibtex.c \
 	parsers/geany_c.c \
