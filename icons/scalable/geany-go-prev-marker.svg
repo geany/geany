@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48px"
+   height="48px"
+   viewBox="0 0 48 48"
+   version="1.1"
+   id="SVGRoot"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="geany-go-prev-marker.svg"
+   inkscape:export-filename="/home/sudoer/PERSONAL/Загрузки/VIRTUAL/BM/16/geany-go-prev-marker.png"
+   inkscape:export-xdpi="32"
+   inkscape:export-ydpi="32">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.3333333"
+     inkscape:cx="26.25"
+     inkscape:cy="24"
+     inkscape:document-units="px"
+     inkscape:current-layer="SVGRoot"
+     showgrid="false"
+     inkscape:window-width="1440"
+     inkscape:window-height="843"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:grid-bbox="true" />
+  <defs
+     id="defs10">
+    <symbol
+       id="arrow-right-alt"
+       viewBox="0 0 20 20">
+      <title
+         id="title81505">arrow-right-alt</title>
+      <path
+         d="M2 11V9h12l-4-4 1-2 7 7-7 7-1-2 4-4H2z"
+         id="path81507" />
+    </symbol>
+    <symbol
+       id="plus"
+       viewBox="0 0 20 20">
+      <title
+         id="title82240">plus</title>
+      <path
+         d="M17 7v3h-5v5H9v-5H4V7h5V2h3v5h5z"
+         id="path82242" />
+    </symbol>
+    <symbol
+       id="redo"
+       viewBox="0 0 20 20">
+      <title
+         id="title82270">redo</title>
+      <path
+         d="M2.77 10.1c.51-1.2 1.24-2.28 2.15-3.18.9-.91 1.98-1.64 3.18-2.15s2.52-.79 3.9-.79V1l6 4.5-6 4.5V7c-.97 0-1.89.2-2.73.55A7.02 7.02 0 0 0 5 14c0 .97.2 1.89.55 2.73L2.77 17.9c-.51-1.2-.79-2.52-.79-3.9s.28-2.7.79-3.9z"
+         id="path82272" />
+    </symbol>
+    <symbol
+       id="arrow-right-alt2"
+       viewBox="0 0 20 20">
+      <title
+         id="title81510">arrow-right-alt2</title>
+      <path
+         d="M6 15l5-5-5-5 1-2 7 7-7 7z"
+         id="path81512" />
+    </symbol>
+  </defs>
+  <metadata
+     id="metadata13">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <use
+     id="use90807"
+     style="fill:#000000;stroke:none"
+     xlink:href="#plus"
+     x="0"
+     y="0"
+     width="100%"
+     height="100%"
+     transform="matrix(-0.76923077,0,0,0.76923077,51.384615,8.3076923)" />
+  <use
+     id="use90870"
+     style="fill:#000000;stroke:none"
+     xlink:href="#arrow-right-alt2"
+     x="0"
+     y="0"
+     width="100%"
+     height="100%"
+     transform="matrix(-0.625,0,0,0.71428571,25,6.857143)" />
+</svg>
