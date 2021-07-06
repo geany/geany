@@ -883,6 +883,42 @@ static const HLKeyword highlighting_keywords_JS[] =
 };
 #define highlighting_properties_JS	highlighting_properties_C
 
+/* Julia */
+#define highlighting_lexer_JULIA		SCLEX_JULIA
+static const HLStyle highlighting_styles_JULIA[] =
+{
+	{ SCE_JULIA_DEFAULT,			"default",				FALSE },
+	{ SCE_JULIA_COMMENT,			"comment",				FALSE },
+	{ SCE_JULIA_NUMBER,				"number",				FALSE },
+	{ SCE_JULIA_KEYWORD1,			"keyword1",				FALSE },
+	{ SCE_JULIA_KEYWORD2,			"keyword2",				FALSE },
+	{ SCE_JULIA_KEYWORD3,			"keyword3",				FALSE },
+	{ SCE_JULIA_CHAR,				"char",					FALSE },
+	{ SCE_JULIA_OPERATOR,			"operator",				FALSE },
+	{ SCE_JULIA_BRACKET,			"bracket",				FALSE },
+	{ SCE_JULIA_IDENTIFIER,			"identifier",			FALSE },
+	{ SCE_JULIA_STRING,				"string",				FALSE },
+	{ SCE_JULIA_SYMBOL,				"symbol",				FALSE },
+	{ SCE_JULIA_MACRO,				"macro",				FALSE },
+	{ SCE_JULIA_STRINGINTERP,		"stringinterp",			FALSE },
+	{ SCE_JULIA_DOCSTRING,			"docstring",			FALSE },
+	{ SCE_JULIA_STRINGLITERAL,		"stringliteral",		FALSE },
+	{ SCE_JULIA_COMMAND,			"command",				FALSE },
+	{ SCE_JULIA_COMMANDLITERAL,		"commandliteral",		FALSE },
+	{ SCE_JULIA_TYPEANNOT,			"typeannotation",		FALSE },
+	{ SCE_JULIA_LEXERROR,			"lexerror",				FALSE },
+	{ SCE_JULIA_KEYWORD4,			"keyword4",				FALSE },
+	{ SCE_JULIA_TYPEOPERATOR,		"typeoperator",			FALSE },
+};
+static const HLKeyword highlighting_keywords_JULIA[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "secondary",	FALSE },
+	{ 2, "tertiary",	FALSE },
+	{ 3, "functions",	FALSE }
+};
+#define highlighting_properties_JULIA	EMPTY_PROPERTIES
+
 
 /* LaTeX */
 #define highlighting_lexer_LATEX		SCLEX_LATEX

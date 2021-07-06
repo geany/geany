@@ -1,0 +1,81 @@
+# filetypes.julia
+#
+# For complete documentation of this file, please see Geany's main documentation
+#
+# Keywords from pygment lexer (http://pygments.org/)
+# and from vim parser (https://github.com/JuliaEditorSupport/julia-vim/)
+#
+
+[styling]
+default=default
+comment=comment
+number=number_3
+keyword1=keyword_1
+keyword2=keyword_2
+keyword3=number_3
+keyword4=identifier_1
+char=string_1
+operator=operator
+bracket=operator
+identifier=identifier_1
+string=string_2
+symbol=string_1
+macro=macro
+stringinterp=default
+docstring=string_2
+stringliteral=string_2,bold
+command=default,italic
+commandliteral=default,italic,bold
+typeoperator=annotation
+typeannotation=keyword_2
+lexerror=error
+
+[keywords]
+# all items must be in one line
+# primary should contain at least the reserved keyword (for, if, begin, end, ...)
+primary=baremodule begin break catch const continue do else elseif end export finally for function global if import let local macro module quote return struct try using while abstract mutable primitive type where in isa as
+secondary=Main Base Core Any AbstractArray AbstractRange LinRange OrdinalRange AbstractUnitRange UnitRange StepRange StepRangeLen BitArray CartesianIndices DenseArray Array LinearIndices PermutedDimsArray SubArray AbstractChannel Channel AbstractChar Char AbstractDict Dict IdDict WeakKeyDict AbstractDisplay TextDisplay AbstractSet BitSet Set AbstractString String SubString SubstitutionString Cstring Cwstring Enum Exception ArgumentError AssertionError BoundsError CapturedException CompositeException DimensionMismatch DivideError DomainError EOFError ErrorException InexactError InterruptException InvalidStateException KeyError MethodError MissingException OutOfMemoryError OverflowError ProcessFailedException ReadOnlyMemoryError SegmentationFault StackOverflowError StringIndexError SystemError TaskFailedException TypeError UndefKeywordError UndefRefError UndefVarError ExponentialBackOff Expr GlobalRef HTML IO IOStream IndexStyle IndexCartesian IndexLinear LineNumberNode MIME Method MethodSummary Missing Module NamedTuple Nothing Number Complex Real AbstractFloat BigFloat Float16 Float32 Float64 AbstractIrrational Irrational Integer Bool Signed BigInt Int Int128 Int16 Int32 Int64 Int8 Unsigned UInt UInt128 UInt16 UInt32 UInt64 UInt8 Rational Pair QuoteNode RawFD Ref Ptr Regex RegexMatch RoundingMode Some Symbol Task Text Timer Tuple Type DataType Union UnionAll TypeVar UndefInitializer Val Vararg VecElement VersionNumber WeakRef AbstractVector DenseVector StridedVector AbstractMatrix DenseMatrix StridedMatrix AbstractVecOrMat DenseVecOrMat StridedVecOrMat
+tertiary=true false missing Inf NaN pi stdin stdout stderr devnull nothing undef ARGS ENV ENDIAN_BOM LOAD_PATH VERSION PROGRAM_FILE DEPOT_PATH
+functions=
+
+[lexer_properties]
+# Fold multiline triple-doublequote strings, usually used to document a function or type above the definition.
+fold.julia.docstring=1
+
+# Set this property to 0 to disable syntax based folding.
+fold.julia.syntax.based=1
+
+# This option enables highlighting of the type identifier after `::`.
+lexer.julia.highlight.typeannotation=0
+
+# This option enables highlighting of syntax error int character or number definition.
+lexer.julia.highlight.lexerror=0
+
+[settings]
+lexer_filetype=Julia
+tag_parser=Julia
+
+# default extension used when saving files
+extension=jl
+
+# MIME type
+mime_type=text/x-julia
+
+# single comments, like # in this file
+comment_single=#
+# multiline comments
+comment_open=#=
+comment_close==#
+
+[indentation]
+width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+type=0
+
+
+[build-menu]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=
+run_cmd=julia "%f"

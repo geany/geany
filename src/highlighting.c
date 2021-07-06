@@ -1026,6 +1026,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(HTML);
 		init_styleset_case(JAVA);
 		init_styleset_case(JS);
+		init_styleset_case(JULIA);
 		init_styleset_case(LATEX);
 		init_styleset_case(LUA);
 		init_styleset_case(MAKE);
@@ -1115,6 +1116,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(HTML);
 		styleset_case(JAVA);
 		styleset_case(JS);
+		styleset_case(JULIA);
 		styleset_case(LATEX);
 		styleset_case(LUA);
 		styleset_case(MAKE);
@@ -1514,6 +1516,13 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 			return (style == SCE_MATLAB_STRING ||
 				style == SCE_MATLAB_DOUBLEQUOTESTRING);
 
+		case SCLEX_JULIA:
+			return (style == SCE_JULIA_CHAR  ||
+				style == SCE_JULIA_STRING    ||
+				style == SCE_JULIA_DOCSTRING ||
+				style == SCE_JULIA_COMMAND   ||
+				style == SCE_JULIA_STRINGINTERP);
+
 		case SCLEX_XML:
 		case SCLEX_HTML:
 		case SCLEX_PHPSCRIPT:
@@ -1717,6 +1726,9 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 
 		case SCLEX_OCTAVE:
 			return (style == SCE_MATLAB_COMMENT);
+
+		case SCLEX_JULIA:
+			return (style == SCE_JULIA_COMMENT);
 
 		case SCLEX_LUA:
 			return (style == SCE_LUA_COMMENT ||

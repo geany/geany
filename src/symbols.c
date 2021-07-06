@@ -619,6 +619,20 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_JULIA:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_variable), _("Constants"), ICON_VAR,
+				&(tv_iters.tag_namespace), _("Modules"), ICON_NAMESPACE,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_member), _("Fields"), ICON_MEMBER,
+				&(tv_iters.tag_macro), _("Macros"), ICON_MACRO,
+				&(tv_iters.tag_struct), _("Structures"), ICON_STRUCT,
+				&(tv_iters.tag_type), _("Types"), ICON_CLASS,
+				&(tv_iters.tag_externvar), _("Unknowns"), ICON_OTHER,
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_HTML:
 		{
 			tag_list_add_groups(tag_store,

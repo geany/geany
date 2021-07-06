@@ -31,6 +31,7 @@ parsers = \
 	parsers/geany_html.c \
 	parsers/geany_jscript.c \
 	parsers/geany_json.c \
+	parsers/geany_julia.c \
 	parsers/geany_lcpp.c \
 	parsers/geany_lcpp.h \
 	parsers/geany_lua.c \

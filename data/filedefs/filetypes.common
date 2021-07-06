@@ -132,11 +132,13 @@ comment_doc_keyword_error=comment_doc,italic
 number=0x007f00
 number_1=number
 number_2=number_1
+number_3=0x808000
 
 type=0x0000d0;;true;false
 class=type
 function=0x000080
 parameter=function
+annotation=0x8080ff;;true;false
 
 keyword=0x00007f;;true;false
 keyword_1=keyword
@@ -163,6 +165,7 @@ preprocessor=0x007f7f
 regex=number_1
 operator=0x301010
 decorator=string_1,bold
+macro=preprocessor,bold
 other=0x404080
 
 tag=type
