@@ -383,7 +383,7 @@ void ui_set_window_title(GeanyDocument *doc)
 			g_string_append(str, DOC_FILENAME(doc));
 		else
 		{
-			gchar *short_name = document_get_basename_for_display(doc, 30);
+			gchar *short_name = document_get_basename_for_display(doc, 80);
 			gchar *dirname = g_path_get_dirname(DOC_FILENAME(doc));
 
 			g_string_append(str, short_name);
