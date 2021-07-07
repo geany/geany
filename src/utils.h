@@ -168,6 +168,8 @@ GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
 
 GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error);
 
+gboolean utils_is_closing_brace(gchar c, gboolean include_angles);
+
 gint utils_write_file(const gchar *filename, const gchar *text);
 
 gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
