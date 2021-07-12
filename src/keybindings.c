@@ -345,7 +345,7 @@ static void init_default_kb(void)
 		GDK_KEY_s, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "menu_saveall", _("Save all"),
 		"menu_save_all1");
 	add_kb(group, GEANY_KEYS_FILE_PROPERTIES, NULL,
-		0, 0, "file_properties", _("Properties"), "properties1");
+		GDK_KEY_v, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "file_properties", _("Properties"), "properties1");
 	add_kb(group, GEANY_KEYS_FILE_PRINT, NULL,
 		GDK_KEY_p, GEANY_PRIMARY_MOD_MASK, "menu_print", _("Print"), "print1");
 	add_kb(group, GEANY_KEYS_FILE_CLOSE, NULL,
