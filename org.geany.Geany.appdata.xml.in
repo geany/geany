@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component>
+  <id type="desktop">org.geany.Geany</id>
+  <launchable type="desktop-id">geany.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <_name>Geany</_name>
+  <developer_name>Geany</developer_name>
+  <project_license>GPL-2.0+</project_license>
+  <_summary>A fast and lightweight IDE</_summary>
+  <url type="homepage">https://geany.org/</url>
+  <url type="bugtracker">https://github.com/geany/geany/issues</url>
+  <description>
+    <_p>Geany was developed to provide a small and fast IDE, which has only a
+few dependencies on other packages. Another goal was to be as independent
+as possible from a specific Desktop Environment like KDE or GNOME.</_p>
+    <_p>Geany includes the following features:</_p>
+    <ul>
+      <_li>Syntax highlighting</_li>
+      <_li>Code completion</_li>
+      <_li>Auto completion of often used constructs like if, for and while</_li>
+      <_li>Auto completion of XML and HTML tags</_li>
+      <_li>Call tips</_li>
+      <_li>Code folding</_li>
+      <_li>Many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal</_li>
+      <_li>Symbol lists</_li>
+      <_li>Embedded terminal emulation</_li>
+      <_li>Extensibility through plugins</_li>
+    </ul>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image height="808" width="942">https://www.geany.org/uploads/Gallery/geany_main.png</image>
+    </screenshot>
+    <screenshot>
+      <image height="808" width="942">https://www.geany.org/uploads/Gallery/geany_build.png</image>
+    </screenshot>
+    <screenshot>
+      <image height="808" width="942">https://www.geany.org/uploads/Gallery/geany_vte.png</image>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release date="2018-02-25" version="1.33"/>
+  </releases>
+  <update_contact>https://github.com/geany/geany</update_contact>
+  <translation type="gettext">geany</translation>
+  <content_rating type="oars-1.1"/>
+</component>
