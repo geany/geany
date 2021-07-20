@@ -80,6 +80,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmFreeBasic);
 	LINK_LEXER(lmHaskell);
 	LINK_LEXER(lmHTML);
+	LINK_LEXER(lmJulia);
 	LINK_LEXER(lmLatex);
 	LINK_LEXER(lmLISP);
 	LINK_LEXER(lmLua);
