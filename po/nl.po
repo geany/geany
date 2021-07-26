@@ -6,13 +6,14 @@
 # Ayke van Laëthem <aykevanlaethem@gmail.com>, 2009, 2010.
 # Kurt De Bree <kdebree@telenet.be>, 2006.
 # Benno Schulenberg <benno@vertaalt.nl>, 2016.
+# Robin van der Vliet <info@robinvandervliet.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2020-10-22 20:40+0200\n"
-"Last-Translator: Peter Scholtens <peter.scholtens@freedom.nl>\n"
+"PO-Revision-Date: 2021-07-26 18:27+0200\n"
+"Last-Translator: Robin van der Vliet <info@robinvandervliet.com>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +28,7 @@ msgstr "Geany"
 
 #: ../geany.desktop.in.h:2
 msgid "Integrated Development Environment"
-msgstr "Geïntegreerde Ontwikkelomgeving"
+msgstr "Geïntegreerde ontwikkelomgeving"
 
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK+"
@@ -619,7 +620,7 @@ msgstr "_Kleine pictogrammen"
 
 #: ../data/geany.glade.h:127
 msgid "_Very small icons"
-msgstr "_Miniscule pictogrammen"
+msgstr "_Minuscule pictogrammen"
 
 #: ../data/geany.glade.h:128
 msgid "_Large icons"
@@ -766,7 +767,7 @@ msgstr "De breedte in tekens van een inspringing"
 #: ../data/geany.glade.h:153
 #, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Automatische inspringingsmode:"
+msgstr "Automatische inspringingsmodus:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -860,7 +861,7 @@ msgstr "Automatische XML/HTML-tag voltooiing"
 
 #: ../data/geany.glade.h:172
 msgid "Insert matching closing tag for XML/HTML"
-msgstr "Voeg automatisch XML/HTML sluithaakje toe"
+msgstr "Voeg automatisch XML/HTML-sluithaakje toe"
 
 #: ../data/geany.glade.h:173
 msgid "Automatic continuation of multi-line comments"
@@ -2157,9 +2158,8 @@ msgid "Filename:"
 msgstr "Bestandsnaam:"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "Naam:"
+msgstr "_Naam:"
 
 #: ../data/geany.glade.h:466
 #, fuzzy
@@ -2274,6 +2274,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"De Geany-bijdragers"
 
 #: ../src/about.c:172
 msgid "About Geany"
@@ -2422,7 +2424,7 @@ msgstr "Volge_nde fout"
 
 #: ../src/build.c:1355
 msgid "_Previous Error"
-msgstr "Zoek Vor_ige fout"
+msgstr "Zoek vor_ige fout"
 
 #. arguments
 #: ../src/build.c:1365 ../src/build.c:2770
@@ -2549,8 +2551,8 @@ msgstr "_Make all"
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] "%d Bestand opgeslagen."
-msgstr[1] "%d Bestanden opgeslagen."
+msgstr[0] "%d bestand opgeslagen."
+msgstr[1] "%d bestanden opgeslagen."
 
 #: ../src/callbacks.c:899 ../src/keybindings.c:566
 msgid "Go to Line"
@@ -2811,7 +2813,7 @@ msgstr "Tabbladen"
 
 #: ../src/document.c:1247
 msgid "Tabs and Spaces"
-msgstr "Tabs en Spaties"
+msgstr "Tabs en spaties"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
@@ -3903,7 +3905,7 @@ msgstr "Terminalondersteuning niet laden"
 
 #: ../src/libmain.c:142
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr "Gebruik bestand als dynamisch gelinkte VTE blibiotheek"
+msgstr "Gebruik bestand als dynamisch gelinkte VTE-bibliotheek"
 
 #: ../src/libmain.c:144
 msgid "Be verbose"
@@ -3982,6 +3984,8 @@ msgstr "Configuratiemap kon niet worden aangemaakt (%s)."
 #: ../src/libmain.c:1228
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
+"IPC-socket kon niet worden aangemaakt, zie Help->Debug-berichten voor "
+"details."
 
 #: ../src/libmain.c:1459
 msgid "Do you really want to quit?"
@@ -4653,7 +4657,7 @@ msgstr "Tekst was leeg (of bevatte alleen lege regels)"
 
 #: ../src/spawn.c:153 ../src/spawn.c:167
 msgid "A quoted Windows program name must be entirely inside the quotes"
-msgstr "Plaats geciteerd Windows programma geheel binnen de aanhalingstekens"
+msgstr "Plaats geciteerd Windows-programma geheel binnen de aanhalingstekens"
 
 #: ../src/spawn.c:260
 msgid "Program not found"
@@ -4732,7 +4736,7 @@ msgstr "Programma"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Divisies"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4795,7 +4799,7 @@ msgstr "Conferentienaslagwerken"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "Theses"
 
 #: ../src/symbols.c:536
 msgid "Strings"
@@ -4891,15 +4895,15 @@ msgstr "Ankers"
 
 #: ../src/symbols.c:628
 msgid "H1 Headings"
-msgstr "H1 kopregels"
+msgstr "H1-kopregels"
 
 #: ../src/symbols.c:629
 msgid "H2 Headings"
-msgstr "H2 kopregels"
+msgstr "H2-kopregels"
 
 #: ../src/symbols.c:630
 msgid "H3 Headings"
-msgstr "H3 kopregels"
+msgstr "H3-kopregels"
 
 #: ../src/symbols.c:638
 msgid "ID Selectors"
@@ -4911,19 +4915,19 @@ msgstr "Type selectors"
 
 #: ../src/symbols.c:658
 msgid "Section Level 1"
-msgstr "Sectie nivo 1"
+msgstr "Sectieniveau 1"
 
 #: ../src/symbols.c:659
 msgid "Section Level 2"
-msgstr "Sectie nivo 2"
+msgstr "Sectieniveau 2"
 
 #: ../src/symbols.c:660
 msgid "Section Level 3"
-msgstr "Sectie nivo 3"
+msgstr "Sectieniveau 3"
 
 #: ../src/symbols.c:661
 msgid "Section Level 4"
-msgstr "Sectie nivo 4"
+msgstr "Sectieniveau 4"
 
 #: ../src/symbols.c:670
 msgid "Singletons"
@@ -5226,7 +5230,7 @@ msgstr "Open een recent bestand"
 
 #: ../src/toolbar.c:376
 msgid "Choose more build actions"
-msgstr "Kies meer bouw acties"
+msgstr "Kies meer bouwacties"
 
 #: ../src/toolbar.c:383
 msgid "Search Field"
@@ -5234,7 +5238,7 @@ msgstr "Zoekveld"
 
 #: ../src/toolbar.c:393
 msgid "Goto Field"
-msgstr "Regel Veld"
+msgstr "Regelveld"
 
 #: ../src/toolbar.c:586
 msgid "Separator"
@@ -5254,7 +5258,7 @@ msgstr ""
 
 #: ../src/toolbar.c:975
 msgid "Available Items"
-msgstr "Beschikbare Items"
+msgstr "Beschikbare items"
 
 #: ../src/toolbar.c:996
 msgid "Displayed Items"
@@ -5426,7 +5430,7 @@ msgstr "Lettertype gewijzigd (%s)."
 
 #: ../src/ui_utils.c:688
 msgid "C Standard Library"
-msgstr "C standaard bibliotheek"
+msgstr "C-standaardbibliotheek"
 
 #: ../src/ui_utils.c:689
 msgid "ISO C99"
@@ -5434,11 +5438,11 @@ msgstr "ISO C99"
 
 #: ../src/ui_utils.c:690
 msgid "C++ (C Standard Library)"
-msgstr "C++ (C standaard bibliotheek)"
+msgstr "C++ (C-standaardbibliotheek)"
 
 #: ../src/ui_utils.c:691
 msgid "C++ Standard Library"
-msgstr "C++ standaard bibliotheek"
+msgstr "C++-standaardbibliotheek"
 
 #: ../src/ui_utils.c:692
 msgid "C++ STL"
@@ -5605,15 +5609,15 @@ msgstr "Klasse creëren"
 
 #: ../plugins/classbuilder.c:441
 msgid "Create C++ Class"
-msgstr "Creëer C++ klasse"
+msgstr "Creëer C++-klasse"
 
 #: ../plugins/classbuilder.c:444
 msgid "Create GTK+ Class"
-msgstr "Creëer GTK+ klasse"
+msgstr "Creëer GTK+-klasse"
 
 #: ../plugins/classbuilder.c:447
 msgid "Create PHP Class"
-msgstr "Creëer PHP klasse"
+msgstr "Creëer PHP-klasse"
 
 #: ../plugins/classbuilder.c:464
 msgid "Namespace"
@@ -5962,7 +5966,7 @@ msgstr "De map wijzigen naar de basismap van het huidig geopende project"
 
 #: ../plugins/saveactions.c:42
 msgid "Save Actions"
-msgstr "Opslag Acties"
+msgstr "Opslagacties"
 
 #: ../plugins/saveactions.c:42
 msgid "This plugin provides different actions related to saving of files."
@@ -5971,18 +5975,18 @@ msgstr "Deze plugin bevat verschillende acties mbt. het opslaan van bestanden."
 #: ../plugins/saveactions.c:174
 #, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
-msgstr "Backupkopie: map kon niet worden aangemaakt (%s)."
+msgstr "Back-upkopie: map kon niet worden aangemaakt (%s)."
 
 #. it's unlikely that this happens
 #: ../plugins/saveactions.c:208
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
-msgstr "Backupkopie: bestand kon niet worden gelezen (%s)."
+msgstr "Back-upkopie: bestand kon niet worden gelezen (%s)."
 
 #: ../plugins/saveactions.c:233
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
-msgstr "Backupkopie: bestand kon niet worden opgeslagen (%s)."
+msgstr "Back-upkopie: bestand kon niet worden opgeslagen (%s)."
 
 #: ../plugins/saveactions.c:370
 #, c-format
@@ -5998,7 +6002,7 @@ msgstr "Kies map"
 
 #: ../plugins/saveactions.c:529
 msgid "Backup directory does not exist or is not writable."
-msgstr "Backup-map bestaat niet of er kan niet in geschreven worden."
+msgstr "Back-upmap bestaat niet of er kan niet in geschreven worden."
 
 #: ../plugins/saveactions.c:610
 msgid "Auto Save"
@@ -6015,7 +6019,7 @@ msgstr "Aanz_etten"
 
 #: ../plugins/saveactions.c:626
 msgid "Auto save _interval:"
-msgstr "_Interval voor automatische backup:"
+msgstr "_Interval voor automatische back-up:"
 
 #: ../plugins/saveactions.c:634
 msgid "seconds"
@@ -6045,24 +6049,24 @@ msgstr "_Bestandstype voor nieuw geopende bestanden:"
 
 #: ../plugins/saveactions.c:719
 msgid "Backup Copy"
-msgstr "Backupkopie"
+msgstr "Back-upkopie"
 
 #: ../plugins/saveactions.c:729
 msgid "_Directory to save backup files in:"
-msgstr "_Map om backupbestanden in op te slaan:"
+msgstr "_Map om back-upbestanden in op te slaan:"
 
 #: ../plugins/saveactions.c:752
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
-"Datum/_Tijd format for backup bestanden (zie \"man strftime\" voor details):"
+"Datum/_Tijdformaat voor back-upbestanden (zie \"man strftime\" voor details):"
 
 #: ../plugins/saveactions.c:765
 msgid "Directory _levels to include in the backup destination:"
-msgstr "Aanta_l mapniveau's dat bij een backup wordt meegenomen:"
+msgstr "Aanta_l mapniveau's dat bij een back-up wordt meegenomen:"
 
 #: ../plugins/splitwindow.c:33
 msgid "Split Window"
-msgstr "Splits Venster"
+msgstr "Splits venster"
 
 #: ../plugins/splitwindow.c:33
 msgid "Splits the editor view into two windows."
@@ -6079,7 +6083,7 @@ msgstr "_Maak splitsing ongedaan"
 
 #: ../plugins/splitwindow.c:436
 msgid "_Split Window"
-msgstr "_Splits Venster"
+msgstr "_Splits venster"
 
 #: ../plugins/splitwindow.c:444
 msgid "_Side by Side"
@@ -6087,7 +6091,7 @@ msgstr "_Zij aan zij"
 
 #: ../plugins/splitwindow.c:449
 msgid "_Top and Bottom"
-msgstr "_Boven en Onder"
+msgstr "_Boven en onder"
 
 #: ../plugins/splitwindow.c:465
 msgid "Side by Side"
@@ -6095,7 +6099,7 @@ msgstr "Zij aan zij"
 
 #: ../plugins/splitwindow.c:467
 msgid "Top and Bottom"
-msgstr "Boven en Onder"
+msgstr "Boven en onder"
 
 #~ msgid "Fi_les:"
 #~ msgstr "Bestanden:"
