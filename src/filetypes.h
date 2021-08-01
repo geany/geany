@@ -139,6 +139,13 @@ GeanyFiletypeGroupID;
 #define FILETYPE_ID(filetype_ptr) \
 	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_NONE)
 
+typedef enum
+{
+	TRINARY_NOT_SET,
+	TRINARY_YES,
+	TRINARY_NO
+} Trinary;
+
 /** Represents a filetype. */
 typedef struct GeanyFiletype
 {
@@ -167,6 +174,7 @@ typedef struct GeanyFiletype
 	/* filetype indent settings, -1 if not set */
 	gint			  indent_type;
 	gint			  indent_width;
+	Trinary		  error_regex_add_default;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
 }
@@ -228,6 +236,8 @@ gboolean filetype_has_tags(GeanyFiletype *ft);
 
 gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		gchar **filename, gint *line);
+
+gboolean filetypes_default_parse_compiler_error_line(GeanyFiletype *ft);
 
 gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
 		const gchar **co, const gchar **cc);

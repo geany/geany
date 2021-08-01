@@ -474,7 +474,7 @@ static guint match_basename(const GeanyFiletype *ft, const gchar *base_filename)
 	for (guint j = 0; ft->pattern[j] != NULL; j++)
 	{
 		gchar *pat = ft->pattern[j];
-		
+
 		if (g_pattern_match_simple(pat, base_filename))
 		{
 			return strlen(pat);
@@ -534,7 +534,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	for (guint i = 0; i < filetypes_array->len; i++)
 	{
 		guint mlen = match_basename(filetypes[i], base_filename);
-		
+
 		if (mlen > plen)
 		{	// longest pattern match wins
 			plen = mlen;
@@ -1363,6 +1363,26 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 
 	g_match_info_free(minfo);
 	return *filename != NULL;
+}
+
+
+gboolean filetypes_default_parse_compiler_error_line(GeanyFiletype *ft)
+{
+	GeanyDocument *doc;
+	Trinary *tmp;
+
+	if (ft == NULL)
+	{
+		doc = document_get_current();
+		if (doc != NULL)
+			ft = doc->file_type;
+	}
+
+	tmp = build_get_regex_add_default(build_info.grp, ft, NULL);
+	if (tmp == NULL)
+		return TRUE;
+
+	return *tmp == TRINARY_YES;
 }
 
 

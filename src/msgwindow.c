@@ -1111,7 +1111,8 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 	ft = filetypes[build_info.file_type_id];
 
 	/* try parsing with a custom regex */
-	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line))
+	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line)
+      && filetypes_default_parse_compiler_error_line(ft))
 	{
 		/* fallback to default old-style parsing */
 		parse_compiler_error_line(trimmed_string, filename, line);
