@@ -154,7 +154,6 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_FILE_CLOSE,						/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_REPLACETABS,			/**< Keybinding. */
 	GEANY_KEYS_FILE_RELOAD,						/**< Keybinding. */
-	GEANY_KEYS_FILE_RELOAD_ALL,						/**< Keybinding. */
 	GEANY_KEYS_SEARCH_FINDNEXTSEL,				/**< Keybinding. */
 	GEANY_KEYS_FOCUS_MESSAGES,					/**< Keybinding. */
 	GEANY_KEYS_BUILD_RUN,						/**< Keybinding. */
@@ -276,6 +275,8 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_EDITOR_DELETELINETOBEGINNING,	/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_STRIPTRAILINGSPACES,	/**< Keybinding.
 												 * @since 1.34 (API 238) */
+	GEANY_KEYS_FILE_RELOAD_ALL,					/**< Keybinding.
+												 * @since 1.38 (API 239) */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 

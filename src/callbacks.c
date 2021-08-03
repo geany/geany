@@ -338,7 +338,16 @@ void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 /* reload all files */
 void on_toolbutton_reload_all_clicked(GtkAction *action, gpointer user_data)
 {
-	force_reload_all();
+	guint i;
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+	
+	foreach_document(i)
+	{
+		if (! (documents[i]->file_name == NULL))
+			document_reload_force(documents[i], documents[i]->encoding);
+	}
+	
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
 }
 
 
