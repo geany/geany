@@ -335,6 +335,12 @@ void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 	document_reload_prompt(doc, NULL);
 }
 
+/* reload all files */
+void on_toolbutton_reload_all_clicked(GtkAction *action, gpointer user_data)
+{
+	force_reload_all();
+}
+
 
 static void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {

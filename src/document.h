@@ -244,6 +244,8 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc);
 
 void document_reload_config(GeanyDocument *doc);
 
+void force_reload_all(void);
+
 GeanyDocument *document_find_by_sci(ScintillaObject *sci);
 
 void document_show_tab(GeanyDocument *doc);

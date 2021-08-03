@@ -3392,6 +3392,16 @@ static void force_close_all(void)
 	main_status.closing_all = FALSE;
 }
 
+void force_reload_all(void)
+{
+	guint i;
+
+	foreach_document(i)
+	{
+		if (! (documents[i]->file_name == NULL))
+			document_reload_force(documents[i], documents[i]->encoding);
+	}
+}
 
 gboolean document_close_all(void)
 {
