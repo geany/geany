@@ -451,6 +451,9 @@ static void init_default_kb(void)
 		0, 0, "edit_selectwordpartleft", _("Select to previous word part"), NULL);
 	add_kb(group, GEANY_KEYS_SELECT_WORDPARTRIGHT, NULL,
 		0, 0, "edit_selectwordpartright", _("Select to next word part"), NULL);
+	add_kb(group, GEANY_KEYS_SELECT_BRACKETS, NULL,
+		GDK_b, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK,
+		"edit_selectbraces", _("Select to Enclosing _Brackets"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FORMAT);
 
@@ -2488,37 +2491,67 @@ static gboolean cb_func_format_action(guint key_id)
 }
 
 
+static void select_brackets(ScintillaObject *sci)
+{
+	struct Sci_TextToFind ttf;
+	gint cur, start, end;
+	
+	cur = sci_get_current_position(sci);
+	ttf.chrg.cpMin = cur;
+	ttf.chrg.cpMax = sci_get_length(sci);
+	ttf.lpstrText = editor_prefs.brace_match_ltgt ? "[])}>]" : "[])}]";
+	while (1)
+	{
+		end = sci_find_text(sci, SCFIND_REGEXP, &ttf);
+		if (end < 0) return;
+		start = sci_find_matching_brace(sci, end);
+		if (start >= 0 && start < cur) break;
+		ttf.chrg.cpMin = end + 1;
+	}
+	sci_set_selection(sci, end, start + 1);
+}
+
+
 /* common function for select keybindings, valid for scintilla and/or gtk_editable objects. */
 static gboolean cb_func_select_action(guint key_id)
 {
 	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
-
-	switch (key_id)
+	
+	// some bindings work on widgets that aren't doc->editor->sci
+	if (key_id == GEANY_KEYS_SELECT_ALL)
+		on_menu_select_all1_activate(NULL, NULL);
+	if (doc)
 	{
-		case GEANY_KEYS_SELECT_ALL:
-			on_menu_select_all1_activate(NULL, NULL);
-			break;
-		case GEANY_KEYS_SELECT_WORD:
-			if (doc != NULL)
+		switch (key_id)
+		{
+			case GEANY_KEYS_SELECT_WORD:
 				editor_select_word(doc->editor);
-			break;
-		case GEANY_KEYS_SELECT_LINE:
-			if (doc != NULL)
+				break;
+			case GEANY_KEYS_SELECT_LINE:
 				editor_select_lines(doc->editor, FALSE);
-			break;
-		case GEANY_KEYS_SELECT_PARAGRAPH:
-			if (doc != NULL)
+				break;
+			case GEANY_KEYS_SELECT_PARAGRAPH:
 				editor_select_paragraph(doc->editor);
-			break;
-		case GEANY_KEYS_SELECT_WORDPARTLEFT:
-			if (IS_SCINTILLA(focusw))
-				sci_send_command(SCINTILLA(focusw), SCI_WORDPARTLEFTEXTEND);
-			break;
-		case GEANY_KEYS_SELECT_WORDPARTRIGHT:
-			if (IS_SCINTILLA(focusw))
-				sci_send_command(SCINTILLA(focusw), SCI_WORDPARTRIGHTEXTEND);
-			break;
+				break;
+		}
+	}
+	if (IS_SCINTILLA(focusw))
+	{
+		ScintillaObject *sci = SCINTILLA(focusw);
+		
+		switch (key_id)
+		{
+			case GEANY_KEYS_SELECT_WORDPARTLEFT:
+				sci_send_command(sci, SCI_WORDPARTLEFTEXTEND);
+				break;
+			case GEANY_KEYS_SELECT_WORDPARTRIGHT:
+				sci_send_command(sci, SCI_WORDPARTRIGHTEXTEND);
+				break;
+			case GEANY_KEYS_SELECT_BRACKETS:
+				select_brackets(sci);
+				break;
+		}
 	}
 	return TRUE;
 }
