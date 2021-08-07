@@ -1479,7 +1479,7 @@ static gboolean cb_func_file_action(guint key_id)
 			on_toolbutton_reload_clicked(NULL, NULL);
 			break;
 		case GEANY_KEYS_FILE_RELOAD_ALL:
-			on_toolbutton_reload_all_clicked(NULL, NULL);
+			on_reload_all(NULL, NULL);
 			break;
 		case GEANY_KEYS_FILE_PRINT:
 			on_print1_activate(NULL, NULL);

@@ -3349,6 +3349,8 @@ Close                           Ctrl-W  (C)               Closes the current fil
 
 Reload file                     Ctrl-R  (C)               Reloads the current file.
 
+Reload all                                                Reloads all open files.
+
 Print                           Ctrl-P  (C)               Prints the current file.
 
 Quit                            Ctrl-Q  (C)               Quits Geany.

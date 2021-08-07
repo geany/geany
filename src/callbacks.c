@@ -336,7 +336,7 @@ void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 }
 
 /* reload all files */
-void on_toolbutton_reload_all_clicked(GtkAction *action, gpointer user_data)
+void on_reload_all(GtkAction *action, gpointer user_data)
 {
 	guint i;
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
