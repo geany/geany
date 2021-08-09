@@ -344,7 +344,7 @@ void on_reload_all(GtkAction *action, gpointer user_data)
 	foreach_document(i)
 	{
 		if (! (documents[i]->file_name == NULL))
-			document_reload_force(documents[i], documents[i]->encoding);
+			document_reload_prompt(documents[i], documents[i]->encoding);
 	}
 	
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
