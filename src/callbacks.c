@@ -341,10 +341,24 @@ void on_reload_all(GtkAction *action, gpointer user_data)
 	guint i;
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	
+	if (!file_prefs.keep_edit_history_on_reload)
+	{
+		foreach_document(i)
+		{
+			if (!(documents[i]->changed || (document_can_undo(documents[i]) ||
+			document_can_redo(documents[i]))) && dialogs_show_question_full(NULL,
+			_("_Reload"), GTK_STOCK_CANCEL, _("Any unsaved changes will be lost."),
+			_("Are you sure you want to reload all files?")))
+				break;
+			else
+				return;
+		}
+	}
+	
 	foreach_document(i)
 	{
 		if (! (documents[i]->file_name == NULL))
-			document_reload_prompt(documents[i], documents[i]->encoding);
+			document_reload_force(documents[i], documents[i]->encoding);
 	}
 	
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
