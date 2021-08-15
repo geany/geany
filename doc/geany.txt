@@ -3349,7 +3349,7 @@ Close                           Ctrl-W  (C)               Closes the current fil
 
 Reload file                     Ctrl-R  (C)               Reloads the current file.
 
-Reload all                                                Reloads all open files.
+Reload all                                                Reloads all open files. If the reload will not be 'undo'-able and changes that will be lost are detected (unsaved or saved) the reload will be confirmed, otherwise the reload will proceed without confirmation.
 
 Print                           Ctrl-P  (C)               Prints the current file.
 

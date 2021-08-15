@@ -350,7 +350,7 @@ void on_reload_all(GtkAction *action, gpointer user_data)
 			if (doc->changed || document_can_undo(doc) || document_can_redo(doc))
 			{
 				if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
-					_("Any unsaved changes will be lost."),
+					_("Changes detected, reloading all will lose any changes and history."),
 					_("Are you sure you want to reload all files?")))
 				{
 					break; // break the loop and continue with reloading below
