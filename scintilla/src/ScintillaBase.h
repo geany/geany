@@ -8,12 +8,9 @@
 #ifndef SCINTILLABASE_H
 #define SCINTILLABASE_H
 
-namespace Scintilla {
+namespace Scintilla::Internal {
 
-#ifdef SCI_LEXER
 class LexState;
-#endif
-
 /**
  */
 class ScintillaBase : public Editor, IListBoxDelegate {
@@ -32,24 +29,18 @@ protected:
 		idcmdSelectAll=16
 	};
 
-	enum { maxLenInputIME = 200 };
-
-	int displayPopupMenu;
+	Scintilla::PopUp displayPopupMenu;
 	Menu popup;
-	AutoComplete ac;
+	Scintilla::Internal::AutoComplete ac;
 
 	CallTip ct;
 
 	int listType;			///< 0 is an autocomplete list
 	int maxListWidth;		/// Maximum width of list, in average character widths
-	int multiAutoCMode; /// Mode for autocompleting when multiple selections are present
+	Scintilla::MultiAutoComplete multiAutoCMode; /// Mode for autocompleting when multiple selections are present
 
-#if SCI_LEXER
 	LexState *DocumentLexState();
-	void SetLexer(uptr_t wParam);
-	void SetLexerLanguage(const char *languageName);
 	void Colourise(int start, int end);
-#endif
 
 	ScintillaBase();
 	// Deleted so ScintillaBase objects can not be copied.
@@ -61,13 +52,10 @@ protected:
 	void Initialise() override {}
 	void Finalise() override;
 
-	// This method is deprecated, use InsertCharacter instead. The treatAsDBCS parameter is no longer used.
-	virtual void AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS=false);
-
-	void InsertCharacter(const char *s, unsigned int len, CharacterSource charSource) override;
+	void InsertCharacter(std::string_view sv, Scintilla::CharacterSource charSource) override;
 	void Command(int cmdId);
 	void CancelModes() override;
-	int KeyCommand(unsigned int iMessage) override;
+	int KeyCommand(Scintilla::Message iMessage) override;
 
 	void AutoCompleteInsert(Sci::Position startPos, Sci::Position removeLen, const char *text, Sci::Position textLen);
 	void AutoCompleteStart(Sci::Position lenEntered, const char *list);
@@ -77,7 +65,7 @@ protected:
 	int AutoCompleteGetCurrentText(char *buffer) const;
 	void AutoCompleteCharacterAdded(char ch);
 	void AutoCompleteCharacterDeleted();
-	void AutoCompleteCompleted(char ch, unsigned int completionMethod);
+	void AutoCompleteCompleted(char ch, Scintilla::CompletionMethods completionMethod);
 	void AutoCompleteMoveToCurrentWord();
 	void AutoCompleteSelection();
 	void ListNotify(ListBoxEvent *plbe) override;
@@ -90,8 +78,8 @@ protected:
 	bool ShouldDisplayPopup(Point ptInWindowCoordinates) const;
 	void ContextMenu(Point pt);
 
-	void ButtonDownWithModifiers(Point pt, unsigned int curTime, int modifiers) override;
-	void RightButtonDownWithModifiers(Point pt, unsigned int curTime, int modifiers) override;
+	void ButtonDownWithModifiers(Point pt, unsigned int curTime, Scintilla::KeyMod modifiers) override;
+	void RightButtonDownWithModifiers(Point pt, unsigned int curTime, Scintilla::KeyMod modifiers) override;
 
 	void NotifyStyleToNeeded(Sci::Position endStyleNeeded) override;
 	void NotifyLexerChanged(Document *doc, void *userData) override;
@@ -100,7 +88,7 @@ public:
 	~ScintillaBase() override;
 
 	// Public so scintilla_send_message can use it
-	sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) override;
+	Scintilla::sptr_t WndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam) override;
 };
 
 }

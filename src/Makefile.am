@@ -15,6 +15,7 @@ EXTRA_DIST = \
 AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/scintilla/include \
+	-I$(top_srcdir)/scintilla/lexilla/include \
 	-I$(srcdir)/tagmanager \
 	-DGTK \
 	-DGEANY_PRIVATE \
@@ -119,6 +120,7 @@ libgeany_la_CFLAGS  = $(AM_CPPFLAGS) @LIBGEANY_CFLAGS@
 libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 libgeany_la_LIBADD = \
+	$(top_builddir)/scintilla/liblexilla.la \
 	$(top_builddir)/scintilla/libscintilla.la \
 	$(builddir)/tagmanager/libtagmanager.la \
 	@GTK_LIBS@ \

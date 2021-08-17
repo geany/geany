@@ -35,6 +35,7 @@
 #endif
 
 #include "sciwrappers.h"
+#include <Lexilla.h> /* ILexer5 */
 
 #include "utils.h"
 
@@ -674,7 +675,10 @@ void sci_set_lexer(ScintillaObject *sci, guint lexer_id)
 {
 	gint old = sci_get_lexer(sci);
 
-	SSM(sci, SCI_SETLEXER, lexer_id, 0);
+	/* TODO, LexerNameFromID() is already deprecated */
+	ILexer5 *lexer = CreateLexer(LexerNameFromID(lexer_id));
+
+	SSM(sci, SCI_SETILEXER, 0, (uintptr_t) lexer);
 
 	if (old != (gint)lexer_id)
 		SSM(sci, SCI_CLEARDOCUMENTSTYLE, 0, 0);
@@ -1443,4 +1447,3 @@ gint sci_word_end_position(ScintillaObject *sci, gint position, gboolean onlyWor
 {
 	return SSM(sci, SCI_WORDENDPOSITION, position, onlyWordCharacters);
 }
-
