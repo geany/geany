@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-11 21:34+0200\n"
-"PO-Revision-Date: 2015-05-17 18:43-0200\n"
-"Last-Translator: Felipe Braga <fbobraga@gmail.com>\n"
+"PO-Revision-Date: 2021-08-27 16:57-0300\n"
+"Last-Translator: Matheus Constancio <ma.constancio@protonmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "Ambiente de Desenvolvimento Integrado"
 
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK+"
-msgstr "Uma IDE rápido e leve usando GTK+"
+msgstr "Um IDE rápido e leve usando GTK+"
 
 #: ../geany.desktop.in.h:4
 #, fuzzy
@@ -3635,11 +3635,11 @@ msgstr "Ir para a Próxima Parte da Palavra"
 
 #: ../src/keybindings.c:601
 msgid "Toggle All Additional Widgets"
-msgstr "Exibir/esconder todos os painéis adicionais"
+msgstr "Alternar todos os painéis adicionais"
 
 #: ../src/keybindings.c:604
 msgid "Fullscreen"
-msgstr "Tela cheia"
+msgstr "Tela Cheia"
 
 #: ../src/keybindings.c:606
 msgid "Toggle Messages Window"
@@ -3828,7 +3828,7 @@ msgid ""
 "conjunction with --line)"
 msgstr ""
 "Definir o número da coluna inicial para o primeiro arquivo aberto (útil "
-"junto com --line)"
+"em junção com --line)"
 
 #: ../src/libmain.c:121
 msgid "COLUMN"
@@ -3936,7 +3936,7 @@ msgstr "[ARQUIVOS...]"
 #: ../src/libmain.c:565
 #, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Uma IDE rápido e leve"
+msgstr "Um IDE rápido e leve"
 
 #: ../src/libmain.c:566
 msgid "Report bugs to https://github.com/geany/geany/issues."
