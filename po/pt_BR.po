@@ -2109,7 +2109,7 @@ msgstr "_Mensagens de Depuração"
 
 #: ../data/geany.glade.h:453
 msgid "_Website"
-msgstr "Sítio na _Web"
+msgstr "Local da rede internet"
 
 #: ../data/geany.glade.h:454
 msgid "Wi_ki"
@@ -2281,7 +2281,7 @@ msgstr "Sobre o Geany"
 
 #: ../src/about.c:216
 msgid "A fast and lightweight IDE"
-msgstr "Uma IDE rápido e leve"
+msgstr "Uma IDE rápida e leve"
 
 #: ../src/about.c:238
 #, c-format
@@ -2846,7 +2846,7 @@ msgstr ", somente-leitura"
 
 #: ../src/document.c:1621
 msgid "Discard history"
-msgstr ""
+msgstr "Histórico de descarte"
 
 #: ../src/document.c:1622
 msgid ""
@@ -3936,11 +3936,11 @@ msgstr "[ARQUIVOS...]"
 #: ../src/libmain.c:565
 #, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Uma IDE rápido e leve"
+msgstr "Uma IDE rápida e leve"
 
 #: ../src/libmain.c:566
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Reportar bugs para https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:599
@@ -4755,7 +4755,7 @@ msgstr "Programa"
 
 #: ../src/symbols.c:493
 msgid "Divisions"
-msgstr ""
+msgstr "Divisões"
 
 #: ../src/symbols.c:494 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
@@ -4775,7 +4775,7 @@ msgstr "Dados"
 
 #: ../src/symbols.c:498
 msgid "Copies"
-msgstr ""
+msgstr "Cópias"
 
 #: ../src/symbols.c:504
 msgid "Keys"
@@ -4815,11 +4815,11 @@ msgstr ""
 
 #: ../src/symbols.c:534
 msgid "Conference Papers"
-msgstr ""
+msgstr "Artigos da Conferência"
 
 #: ../src/symbols.c:535
 msgid "Theses"
-msgstr ""
+msgstr "Teses"
 
 #: ../src/symbols.c:536
 #, fuzzy
@@ -4828,7 +4828,7 @@ msgstr "Definições"
 
 #: ../src/symbols.c:537
 msgid "Unpublished"
-msgstr ""
+msgstr "Não publicado"
 
 #: ../src/symbols.c:546 ../src/symbols.c:571
 msgid "Structures"
@@ -4960,7 +4960,7 @@ msgstr "Procedimentos"
 
 #: ../src/symbols.c:692 ../src/symbols.c:737
 msgid "Imports"
-msgstr "Imports"
+msgstr "Importações"
 
 #: ../src/symbols.c:700
 msgid "Entities"
@@ -7156,7 +7156,7 @@ msgstr "Topo e Base"
 #~ msgstr "Atalhos de teclado"
 
 #~ msgid " - A fast and lightweight IDE"
-#~ msgstr "- Uma IDE rápido e leve"
+#~ msgstr "- Uma IDE rápida e leve"
 
 #~ msgid "Function"
 #~ msgstr "Função"
