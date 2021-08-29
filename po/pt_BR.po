@@ -30,7 +30,7 @@ msgstr "Ambiente de Desenvolvimento Integrado"
 
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK+"
-msgstr "Uma IDE rápido e leve usando GTK+"
+msgstr "Uma IDE rápida e leve usando GTK+"
 
 #: ../geany.desktop.in.h:4
 #, fuzzy
@@ -427,7 +427,7 @@ msgstr "Exibe ou esconde a lista de símbolos"
 
 #: ../data/geany.glade.h:81
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "Modo de classificação de símbolo padrão"
 
 #: ../data/geany.glade.h:82
 #, fuzzy
@@ -1055,7 +1055,7 @@ msgstr "Parar ou não de rolar uma página após a última linha de um documento
 
 #: ../data/geany.glade.h:214
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Linhas visíveis _em torno do cursor:"
 
 #: ../data/geany.glade.h:215
 msgid "<b>Display</b>"
