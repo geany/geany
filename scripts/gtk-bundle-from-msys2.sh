@@ -204,6 +204,7 @@ delayed_post_install() {
 		${EXE_WRAPPER_64} bin/gdk-pixbuf-query-loaders.exe --update-cache
 		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/hicolor
 		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/Adwaita
+		${EXE_WRAPPER_64} bin/glib-compile-schemas share/glib-2.0/schemas/
 	fi
 }
 
@@ -236,7 +237,6 @@ cleanup_unnecessary_files() {
 	rm -rf share/glib-2.0/codegen
 	rm -rf share/glib-2.0/gdb
 	rm -rf share/glib-2.0/gettext
-	rm -rf share/glib-2.0/schemas
 	rm -rf share/graphite2
 	rm -rf share/gtk-3.0
 	rm -rf share/gtk-doc
