@@ -140,8 +140,9 @@ _getpkg() {
 		# use @(gz|xz|zst) to filter out signature files (e.g. mingw-w64-x86_64-...-any.pkg.tar.zst.sig)
 		ls $cachedir/mingw-w64-${ABI}-${1}-${package_version}-*.tar.@(gz|xz|zst) | sort -V | tail -n 1
 	else
-		# -dd to ignore dependencies as we listed them already above in $packages
-		pacman -Sddp mingw-w64-${ABI}-${1}
+		# -dd to ignore dependencies as we listed them already above in $packages and
+		# make pacman ignore its possibly existing cache (otherwise we would get an URL to the cache)
+		pacman -Sddp --cachedir /nonexistent mingw-w64-${ABI}-${1}
 	fi
 }
 
@@ -169,7 +170,7 @@ extract_packages() {
 		else
 			echo "Download $pkg using curl"
 			filename=$(basename "$pkg")
-			curl -s -o "$filename" -l "$pkg"
+			curl --silent --location --output "$filename" "$pkg"
 			tar xf "$filename"
 			rm "$filename"
 		fi
