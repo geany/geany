@@ -2109,7 +2109,7 @@ msgstr "_Mensagens de Depuração"
 
 #: ../data/geany.glade.h:453
 msgid "_Website"
-msgstr "Local da rede internet"
+msgstr "Página na web"
 
 #: ../data/geany.glade.h:454
 msgid "Wi_ki"
