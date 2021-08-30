@@ -104,6 +104,8 @@ handle_command_line_options() {
 }
 
 set -e  # stop on errors
+# enable extended globbing as we need it in _getpkg
+shopt -s extglob
 
 initialize() {
 	if [ -z "$cachedir" ]; then
@@ -135,7 +137,8 @@ _getpkg() {
 	if [ "$use_cache" = "yes" ]; then
 		package_info=$(pacman -Qi mingw-w64-$ABI-$1)
 		package_version=$(echo "$package_info" | grep "^Version " | cut -d':' -f 2 | tr -d '[[:space:]]')
-		ls $cachedir/mingw-w64-${ABI}-${1}-${package_version}-* | sort -V | tail -n 1
+		# use @(gz|xz|zst) to filter out signature files (e.g. mingw-w64-x86_64-...-any.pkg.tar.zst.sig)
+		ls $cachedir/mingw-w64-${ABI}-${1}-${package_version}-*.tar.@(gz|xz|zst) | sort -V | tail -n 1
 	else
 		# -dd to ignore dependencies as we listed them already above in $packages
 		pacman -Sddp mingw-w64-${ABI}-${1}
