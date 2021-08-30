@@ -30,7 +30,7 @@ msgstr "Ambiente de Desenvolvimento Integrado"
 
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK+"
-msgstr "Uma IDE rápida e leve usando GTK+"
+msgstr "Um IDE rápida e leve usando GTK+"
 
 #: ../geany.desktop.in.h:4
 #, fuzzy
@@ -2281,7 +2281,7 @@ msgstr "Sobre o Geany"
 
 #: ../src/about.c:216
 msgid "A fast and lightweight IDE"
-msgstr "Uma IDE rápida e leve"
+msgstr "Um IDE rápida e leve"
 
 #: ../src/about.c:238
 #, c-format
@@ -2413,7 +2413,7 @@ msgstr "Texto Personalizado"
 #: ../src/build.c:1274
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
-"Insira o texto personalizado aqui, todo o texto digitado será anexado ao "
+"Insira o texto personalizadoUma aqui, todo o texto digitado será anexado ao "
 "comando."
 
 #: ../src/build.c:1353
