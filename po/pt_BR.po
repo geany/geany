@@ -2413,8 +2413,7 @@ msgstr "Texto Personalizado"
 #: ../src/build.c:1274
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
-"Insira o texto personalizadoUma aqui, todo o texto digitado será anexado ao "
-"comando."
+"Insira o texto personalizado aqui, todo o texto digitado será anexado ao comando."
 
 #: ../src/build.c:1353
 msgid "_Next Error"
