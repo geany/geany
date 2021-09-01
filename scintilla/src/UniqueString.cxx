@@ -43,7 +43,7 @@ const char *UniqueStringSet::Save(const char *text) {
 		return nullptr;
 
 	for (const UniqueString &us : strings) {
-		if (text == us.get()) {
+		if (strcmp(us.get(), text) == 0) {
 			return us.get();
 		}
 	}
