@@ -65,11 +65,8 @@ typedef struct
 } HLProperty;
 
 
-#define EMPTY_KEYWORDS		((HLKeyword *) NULL)
-#define EMPTY_PROPERTIES	((HLProperty *) NULL)
-
 /* like G_N_ELEMENTS() but supports @array being NULL (for empty entries) */
-#define HL_N_ENTRIES(array) ((array != NULL) ? G_N_ELEMENTS(array) : 0)
+#define HL_N_ENTRIES(array) (sizeof(array) ? G_N_ELEMENTS(array) : 0)
 
 
 /* Abaqus */
@@ -94,7 +91,7 @@ static const HLKeyword highlighting_keywords_ABAQUS[] =
 	{ 4, "arguments", FALSE },
 	{ 5, "functions", FALSE }
 };
-#define highlighting_properties_ABAQUS		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_ABAQUS[] = {};
 
 
 /* Ada */
@@ -118,7 +115,7 @@ static const HLKeyword highlighting_keywords_ADA[] =
 {
 	{ 0, "primary",	FALSE }
 };
-#define highlighting_properties_ADA		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_ADA[] = {};
 
 
 /* ActionScript */
@@ -162,7 +159,7 @@ static const HLKeyword highlighting_keywords_ASM[] =
 	{ 3, "directives",		FALSE }
 	/*{ 5, "instructions",	FALSE }*/
 };
-#define highlighting_properties_ASM		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_ASM[] = {};
 
 
 /* BASIC */
@@ -200,7 +197,7 @@ static const HLKeyword highlighting_keywords_BASIC[] =
 	{ 2, "user1",			FALSE },
 	{ 3, "user2",			FALSE }
 };
-#define highlighting_properties_BASIC	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_BASIC[] = {};
 
 
 /* BATCH */
@@ -221,7 +218,7 @@ static const HLKeyword highlighting_keywords_BATCH[] =
 	{ 0, "keywords",			FALSE },
 	{ 1, "keywords_optional",	FALSE }
 };
-#define highlighting_properties_BATCH	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_BATCH[] = {};
 
 
 /* C */
@@ -300,7 +297,7 @@ static const HLKeyword highlighting_keywords_CAML[] =
 	{ 0, "keywords",			FALSE },
 	{ 1, "keywords_optional",	FALSE }
 };
-#define highlighting_properties_CAML	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_CAML[] = {};
 
 
 /* CMake */
@@ -329,7 +326,7 @@ static const HLKeyword highlighting_keywords_CMAKE[] =
 	{ 1, "parameters",	FALSE },
 	{ 2, "userdefined",	FALSE }
 };
-#define highlighting_properties_CMAKE	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_CMAKE[] = {};
 
 /* CoffeeScript */
 #define highlighting_lexer_COFFEESCRIPT		SCLEX_COFFEESCRIPT
@@ -358,7 +355,7 @@ static const HLKeyword highlighting_keywords_COFFEESCRIPT[] =
 	{ 1, "secondary",	FALSE },
 	{ 3, "globalclass",	FALSE }
 };
-#define highlighting_properties_COFFEESCRIPT	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_COFFEESCRIPT[] = {};
 
 
 /* CSS */
@@ -401,7 +398,7 @@ static const HLKeyword highlighting_keywords_CSS[] =
 	{ 6, "browser_pseudo_classes",	FALSE },
 	{ 7, "browser_pseudo_elements",	FALSE }
 };
-#define highlighting_properties_CSS		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_CSS[] = {};
 
 
 /* Cobol */
@@ -427,8 +424,8 @@ static const HLStyle highlighting_styles_CONF[] =
 	{ SCE_PROPS_ASSIGNMENT,	"assignment",	FALSE },
 	{ SCE_PROPS_DEFVAL,		"defval",		FALSE }
 };
-#define highlighting_keywords_CONF		EMPTY_KEYWORDS
-#define highlighting_properties_CONF	EMPTY_PROPERTIES
+static const HLKeyword highlighting_keywords_CONF[] = {};
+static const HLProperty highlighting_properties_CONF[] = {};
 
 
 /* D */
@@ -469,7 +466,7 @@ static const HLKeyword highlighting_keywords_D[] =
 	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 	{ 4, "types",		FALSE },
 };
-#define highlighting_properties_D		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_D[] = {};
 
 
 /* Diff */
@@ -489,8 +486,8 @@ static const HLStyle highlighting_styles_DIFF[] =
 	{ SCE_DIFF_REMOVED_PATCH_ADD,		"removed_patch_add",	FALSE },
 	{ SCE_DIFF_REMOVED_PATCH_DELETE,	"removed_patch_delete",	FALSE }
 };
-#define highlighting_keywords_DIFF		EMPTY_KEYWORDS
-#define highlighting_properties_DIFF	EMPTY_PROPERTIES
+static const HLKeyword highlighting_keywords_DIFF[] = {};
+static const HLProperty highlighting_properties_DIFF[] = {};
 
 
 #define highlighting_lexer_DOCBOOK			SCLEX_XML
@@ -531,7 +528,7 @@ static const HLKeyword highlighting_keywords_DOCBOOK[] =
 	{ 0, "elements",	FALSE },
 	{ 5, "dtd",			FALSE }
 };
-#define highlighting_properties_DOCBOOK		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_DOCBOOK[] = {};
 
 
 /* Erlang */
@@ -574,7 +571,7 @@ static const HLKeyword highlighting_keywords_ERLANG[] =
 	{ 4, "doc",			FALSE },
 	{ 5, "doc_macro",	FALSE }
 };
-#define highlighting_properties_ERLANG	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_ERLANG[] = {};
 
 
 /* F77 */
@@ -603,7 +600,7 @@ static const HLKeyword highlighting_keywords_F77[] =
 	{ 1, "intrinsic_functions",	FALSE },
 	{ 2, "user_functions",		FALSE }
 };
-#define highlighting_properties_F77		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_F77[] = {};
 
 
 /* Ferite */
@@ -644,7 +641,7 @@ static const HLKeyword highlighting_keywords_FORTH[] =
 	{ 4, "preword2",	FALSE },
 	{ 5, "string",		FALSE }
 };
-#define highlighting_properties_FORTH	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_FORTH[] = {};
 
 
 /* Fortran */
@@ -696,7 +693,7 @@ static const HLKeyword highlighting_keywords_HASKELL[] =
 	{ 1, "ffi",				   FALSE },
 	{ 2, "reserved_operators", FALSE }
 };
-#define highlighting_properties_HASKELL		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_HASKELL[] = {};
 
 
 /* HAXE */
@@ -917,7 +914,7 @@ static const HLKeyword highlighting_keywords_JULIA[] =
 	{ 2, "tertiary",	FALSE },
 	{ 3, "functions",	FALSE }
 };
-#define highlighting_properties_JULIA	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_JULIA[] = {};
 
 
 /* LaTeX */
@@ -942,7 +939,7 @@ static const HLKeyword highlighting_keywords_LATEX[] =
 {
 	{ 0, "primary",	FALSE }
 };
-#define highlighting_properties_LATEX	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_LATEX[] = {};
 
 
 /* Lisp */
@@ -967,7 +964,7 @@ static const HLKeyword highlighting_keywords_LISP[] =
 	{ 0, "keywords",			FALSE },
 	{ 1, "special_keywords",	FALSE }
 };
-#define highlighting_properties_LISP	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_LISP[] = {};
 
 
 /* Lua */
@@ -1007,7 +1004,7 @@ static const HLKeyword highlighting_keywords_LUA[] =
 	{ 6, "user3",			FALSE },
 	{ 7, "user4",			FALSE }
 };
-#define highlighting_properties_LUA		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_LUA[] = {};
 
 
 /* Makefile */
@@ -1022,8 +1019,8 @@ static const HLStyle highlighting_styles_MAKE[] =
 	{ SCE_MAKE_TARGET,			"target",		FALSE },
 	{ SCE_MAKE_IDEOL,			"ideol",		FALSE }
 };
-#define highlighting_keywords_MAKE		EMPTY_KEYWORDS
-#define highlighting_properties_MAKE	EMPTY_PROPERTIES
+static const HLKeyword highlighting_keywords_MAKE[] = {};
+static const HLProperty highlighting_properties_MAKE[] = {};
 
 
 /* Markdown */
@@ -1053,8 +1050,8 @@ static const HLStyle highlighting_styles_MARKDOWN[] =
 	{ SCE_MARKDOWN_CODE2,		"code",			FALSE },
 	{ SCE_MARKDOWN_CODEBK,		"codebk",		FALSE }
 };
-#define highlighting_keywords_MARKDOWN		EMPTY_KEYWORDS
-#define highlighting_properties_MARKDOWN	EMPTY_PROPERTIES
+static const HLKeyword highlighting_keywords_MARKDOWN[] = {};
+static const HLProperty highlighting_properties_MARKDOWN[] = {};
 
 
 /* Matlab */
@@ -1075,7 +1072,7 @@ static const HLKeyword highlighting_keywords_MATLAB[] =
 {
 	{ 0, "primary",	FALSE }
 };
-#define highlighting_properties_MATLAB	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_MATLAB[] = {};
 
 
 /* NSIS */
@@ -1109,7 +1106,7 @@ static const HLKeyword highlighting_keywords_NSIS[] =
 	{ 2, "lables",		FALSE },
 	{ 3, "userdefined",	FALSE }
 };
-#define highlighting_properties_NSIS	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_NSIS[] = {};
 
 
 /* Objective-C */
@@ -1150,7 +1147,7 @@ static const HLKeyword highlighting_keywords_PASCAL[] =
 {
 	{ 0, "primary",	FALSE }
 };
-#define highlighting_properties_PASCAL	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_PASCAL[] = {};
 
 
 /* Perl */
@@ -1207,7 +1204,7 @@ static const HLKeyword highlighting_keywords_PERL[] =
 {
 	{ 0, "primary",	FALSE }
 };
-#define highlighting_properties_PERL	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_PERL[] = {};
 
 
 /* PHP */
@@ -1238,8 +1235,8 @@ static const HLStyle highlighting_styles_PO[] =
 	{ SCE_PO_MSGCTXT_TEXT_EOL,		"msgctxt_text_eol",		FALSE },
 	{ SCE_PO_ERROR,					"error",				FALSE }
 };
-#define highlighting_keywords_PO	EMPTY_KEYWORDS
-#define highlighting_properties_PO	EMPTY_PROPERTIES
+static const HLKeyword highlighting_keywords_PO[] = {};
+static const HLProperty highlighting_properties_PO[] = {};
 
 
 /* PowerShell */
@@ -1273,7 +1270,7 @@ static const HLKeyword highlighting_keywords_POWERSHELL[] =
 	{ 4, "user1",		FALSE },
 	{ 5, "docComment",	FALSE },
 };
-#define highlighting_properties_POWERSHELL	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_POWERSHELL[] = {};
 
 
 /* Python */
@@ -1306,7 +1303,7 @@ static const HLKeyword highlighting_keywords_PYTHON[] =
 	{ 0, "primary",		FALSE },
 	{ 1, "identifiers",	FALSE }
 };
-#define highlighting_properties_PYTHON	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_PYTHON[] = {};
 
 
 /* R */
@@ -1332,7 +1329,7 @@ static const HLKeyword highlighting_keywords_R[] =
 	{ 1, "package",			FALSE },
 	{ 2, "package_other",	FALSE }
 };
-#define highlighting_properties_R	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_R[] = {};
 
 
 /* Ruby */
@@ -1378,7 +1375,7 @@ static const HLKeyword highlighting_keywords_RUBY[] =
 {
 	{ 0, "primary",	FALSE }
 };
-#define highlighting_properties_RUBY	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_RUBY[] = {};
 
 /* Rust */
 #define highlighting_lexer_RUST		SCLEX_RUST
@@ -1417,7 +1414,7 @@ static const HLKeyword highlighting_keywords_RUST[] =
 	{ 2, "tertiary",	FALSE },
 	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 };
-#define highlighting_properties_RUST		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_RUST[] = {};
 
 /* SH */
 #define highlighting_lexer_SH		SCLEX_BASH
@@ -1442,7 +1439,7 @@ static const HLKeyword highlighting_keywords_SH[] =
 {
 	{ 0, "primary",	FALSE }
 };
-#define highlighting_properties_SH	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_SH[] = {};
 
 
 /* SMALLTALK */
@@ -1471,7 +1468,7 @@ static const HLKeyword highlighting_keywords_SMALLTALK[] =
 {
 	{ 0, "special_selector",	FALSE }
 };
-#define highlighting_properties_SMALLTALK	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_SMALLTALK[] = {};
 
 
 /* SQL */
@@ -1507,7 +1504,7 @@ static const HLKeyword highlighting_keywords_SQL[] =
 {
 	{ 0, "keywords",	FALSE }
 };
-#define highlighting_properties_SQL		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_SQL[] = {};
 
 
 /* TCL */
@@ -1546,7 +1543,7 @@ static const HLKeyword highlighting_keywords_TCL[] =
 	{ 3, "tkcommands",	FALSE },
 	{ 4, "expand",		FALSE }
 };
-#define highlighting_properties_TCL		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_TCL[] = {};
 
 
 /* Txt2Tags */
@@ -1580,8 +1577,8 @@ static const HLStyle highlighting_styles_TXT2TAGS[] =
 	{ SCE_TXT2TAGS_PREPROC,		"preproc",		FALSE },
 	{ SCE_TXT2TAGS_POSTPROC,	"postproc",		FALSE }
 };
-#define highlighting_keywords_TXT2TAGS		EMPTY_KEYWORDS
-#define highlighting_properties_TXT2TAGS	EMPTY_PROPERTIES
+static const HLKeyword highlighting_keywords_TXT2TAGS[] = {};
+static const HLProperty highlighting_properties_TXT2TAGS[] = {};
 
 
 /* VHDL */
@@ -1615,7 +1612,7 @@ static const HLKeyword highlighting_keywords_VHDL[] =
 	{ 5, "std_types",		FALSE },
 	{ 6, "userwords",		FALSE },
 };
-#define highlighting_properties_VHDL	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_VHDL[] = {};
 
 
 /* Verilog */
@@ -1649,7 +1646,7 @@ static const HLKeyword highlighting_keywords_VERILOG[] =
 	{ 2, "word3",		FALSE },
 	{ 4, "docComment",	FALSE }
 };
-#define highlighting_properties_VERILOG		EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_VERILOG[] = {};
 
 
 /* XML */
@@ -1681,7 +1678,7 @@ static const HLKeyword highlighting_keywords_YAML[] =
 {
 	{ 0, "keywords",	FALSE }
 };
-#define highlighting_properties_YAML	EMPTY_PROPERTIES
+static const HLProperty highlighting_properties_YAML[] = {};
 
 
 /* Zephir */
