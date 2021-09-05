@@ -1209,11 +1209,6 @@ gint main_lib(gint argc, gchar **argv)
 	build_menu_update(doc);
 	sidebar_update_tag_list(doc, FALSE);
 
-#ifdef G_OS_WIN32
-	/* Manually realise the main window to be able to set the position but don't show it.
-	 * We don't set the position after showing the window to avoid flickering. */
-	gtk_widget_realize(main_widgets.window);
-#endif
 	setup_window_position();
 
 	/* finally show the window */
