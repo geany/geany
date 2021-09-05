@@ -45,20 +45,7 @@ typedef enum {
  * return a structure allocated using parserNew(). This structure must,
  * at minimum, set the `parser' field.
  */
-#ifdef EXTERNAL_PARSER_LIST
 extern parserDefinitionFunc EXTERNAL_PARSER_LIST;
-#else /* ! EXTERNAL_PARSER_LIST */
-extern parserDefinitionFunc PARSER_LIST;
-#ifdef HAVE_LIBXML
-extern parserDefinitionFunc XML_PARSER_LIST;
-#endif
-#ifdef HAVE_LIBYAML
-extern parserDefinitionFunc YAML_PARSER_LIST;
-#endif
-#ifdef HAVE_PACKCC
-extern parserDefinitionFunc PEG_PARSER_LIST;
-#endif
-#endif /* EXTERNAL_PARSER_LIST */
 
 extern bool doesLanguageAllowNullTag (const langType language);
 extern bool doesLanguageRequestAutomaticFQTag (const langType language);

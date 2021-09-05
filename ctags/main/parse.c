@@ -122,31 +122,8 @@ static void uninstallTagXpathTable (const langType language);
 /*
 *   DATA DEFINITIONS
 */
-static parserDefinition *FallbackParser (void);
-static parserDefinition *CTagsParser (void);
-static parserDefinition *CTagsSelfTestParser (void);
 static parserDefinitionFunc* BuiltInParsers[] = {
-#ifdef EXTERNAL_PARSER_LIST
 	EXTERNAL_PARSER_LIST
-#else  /* ! EXTERNAL_PARSER_LIST */
-	CTagsParser,				/* This must be first entry. */
-	FallbackParser,				/* LANG_FALLBACK */
-	CTagsSelfTestParser,
-
-	PARSER_LIST,
-	XML_PARSER_LIST
-#ifdef HAVE_LIBXML
-	,
-#endif
-	YAML_PARSER_LIST
-#ifdef HAVE_LIBYAML
-	,
-#endif
-       PEG_PARSER_LIST
-#ifdef HAVE_PACKCC
-       ,
-#endif
-#endif	/* EXTERNAL_PARSER_LIST */
 };
 static parserObject* LanguageTable = NULL;
 static unsigned int LanguageCount = 0;
@@ -4999,65 +4976,12 @@ extern bool processPretendOption (const char *const option, const char *const pa
 }
 
 /*
- * The universal fallback parser.
- * If any parser doesn't handle the input, this parser is
- * used for the input when --languages=+Unknown is given.
- * writer-etags enables this parser implicitly.
- */
-static parserDefinition *FallbackParser (void)
-{
-	parserDefinition *const def = parserNew ("Unknown");
-	def->extensions = NULL;
-	def->kindTable = NULL;
-	def->kindCount = 0;
-
-	/* A user can extend this parser with --regex-Unknown=...
-	 * or --langdef=MyParser{base=Unknown}.
-	 *
-	 * TODO: if following conditions are met, dontFindTags()
-	 * defined below can be used.
-	 * - any regex pattern is not defined,
-	 * - any sub parser is not defined, and
-	 * - end: field is not enabled.
-	 */
-	def->parser = findRegexTags;
-	def->enabled = 0;
-	def->method = METHOD_REGEX;
-	return def;
-}
-
-/*
- * A dummy parser for printing pseudo tags in xref output
- */
-static void dontFindTags (void)
-{
-}
-
-static kindDefinition CtagsKinds[] = {
-	{true, 'p', "ptag", "pseudo tags"},
-};
-
-static parserDefinition *CTagsParser (void)
-{
-	parserDefinition *const def = parserNew ("UniversalCtags");
-	def->extensions = NULL;
-	def->kindTable = CtagsKinds;
-	def->kindCount = ARRAY_SIZE(CtagsKinds);
-	def->parser = dontFindTags;
-	def->invisible = true;
-	return def;
-}
-
-/*
  * A parser for CTagsSelfTest (CTST)
  */
 #define SELF_TEST_PARSER "CTagsSelfTest"
 #if defined(DEBUG) && defined(HAVE_SECCOMP)
 extern void getppid(void);
 #endif
-
-static bool CTST_GatherStats;
-static int CTST_num_handled_char;
 
 typedef enum {
 	K_BROKEN,
@@ -5081,29 +5005,15 @@ typedef enum {
 	R_BROKEN_REF,
 } CTST_BrokenRole;
 
-static roleDefinition CTST_BrokenRoles [] = {
-	{true, "broken", "broken" },
-};
-
 typedef enum {
 	R_DISABLED_KIND_DISABLED_ROLE,
 	R_DISABLED_KIND_ENABLED_ROLE,
 } CTST_DisabledKindRole;
 
-static roleDefinition CTST_DisabledKindRoles [] = {
-	{ false, "disabled", "disabled role attached to disabled kind" },
-	{ true,  "enabled",  "enabled role attached to disabled kind"  },
-};
-
 typedef enum {
 	R_ENABLED_KIND_DISABLED_ROLE,
 	R_ENABLED_KIND_ENABLED_ROLE,
 } CTST_EnabledKindRole;
-
-static roleDefinition CTST_EnabledKindRoles [] = {
-	{ false, "disabled", "disabled role attached to enabled kind" },
-	{ true,  "enabled",  "enabled role attached to enabled kind"  },
-};
 
 typedef enum {
 	R_ROLES_KIND_A_ROLE,
@@ -5112,261 +5022,13 @@ typedef enum {
 	R_ROLES_KIND_D_ROLE,
 } CTST_RolesKindRole;
 
-static roleDefinition CTST_RolesKindRoles [] = {
-	{ true,  "a", "A role" },
-	{ true,  "b", "B role" },
-	{ false, "c", "C role" },
-	{ true,  "d", "D role"  },
-};
-
 typedef enum {
 	R_ROLES_DISABLED_KIND_A_ROLE,
 	R_ROLES_DISABLED_KIND_B_ROLE,
 } CTST_RolesDisableKindRole;
-
-
-static roleDefinition CTST_RolesDisabledKindRoles [] = {
-	{ true,  "A", "A role" },
-	{ true,  "B", "B role" },
-};
-
-static kindDefinition CTST_Kinds[KIND_COUNT] = {
-	/* `a' is reserved for kinddef testing */
-	{true, 'b', "broken tag", "name with unwanted characters",
-	 .referenceOnly = false, ATTACH_ROLES (CTST_BrokenRoles) },
-	{true, KIND_NULL_LETTER, "no letter", "kind with no letter"
-	 /* use '@' when testing. */
-	},
-	{true, 'L', NULL, "kind with no long name" },
-	{true, 'N', "nothingSpecial", "emit a normal tag" },
-	{true, 'B', NULL, "beginning of an area for a guest" },
-	{true, 'E', NULL, "end of an area for a guest" },
-#if defined(DEBUG) && defined(HAVE_SECCOMP)
-	{true, 'P', "callGetPPid", "trigger calling getppid(2) that seccomp sandbox disallows"},
-#endif
-	{false,'d', "disabled", "a kind disabled by default",
-	 .referenceOnly = false, ATTACH_ROLES (CTST_DisabledKindRoles)},
-	{true, 'e', "enabled", "a kind enabled by default",
-	 .referenceOnly = false, ATTACH_ROLES (CTST_EnabledKindRoles)},
-	{true, 'r', "roles", "emit a tag with multi roles",
-	 .referenceOnly = true, ATTACH_ROLES (CTST_RolesKindRoles)},
-	{false, 'R', "rolesDisabled", "emit a tag with multi roles(disabled by default)",
-	 .referenceOnly = true, ATTACH_ROLES (CTST_RolesDisabledKindRoles)},
-	{true,  'f', "fieldMaker", "tag for testing field:" },
-};
 
 typedef enum {
 	F_BOOLEAN_FIELD,
 	F_BOOLEAN_AND_STRING_FIELD,
 	COUNT_FIELD
 } CTSTField;
-
-static fieldDefinition CTSTFields[COUNT_FIELD] = {
-	{ .name = "bField",
-	  .description = "field for testing boolean type",
-	  .dataType = FIELDTYPE_BOOL,
-	  .enabled = true,
-	},
-	{ .name = "sbField",
-	  .description = "field for testing string|boolean type",
-	  .dataType = FIELDTYPE_STRING|FIELDTYPE_BOOL,
-	  .enabled = true,
-	},
-};
-
-static void createCTSTTags (void)
-{
-	int i;
-	const unsigned char *line;
-	tagEntryInfo e;
-
-	unsigned long lb = 0;
-	unsigned long le = 0;
-
-	int found_enabled_disabled[2] = {0, 0};
-
-	TRACE_ENTER_TEXT("Parsing starts");
-
-	while ((line = readLineFromInputFile ()) != NULL)
-	{
-		int c = line[0];
-
-		for (i = 0; i < KIND_COUNT; i++)
-			if ((c == CTST_Kinds[i].letter && i != K_NO_LETTER)
-				|| (c == '@' && i == K_NO_LETTER))
-			{
-				if (CTST_GatherStats)
-					CTST_num_handled_char++;
-
-				switch (i)
-				{
-					case K_BROKEN:
-						initTagEntry (&e, "one\nof\rbroken\tname", i);
-						e.extensionFields.scopeKindIndex = K_BROKEN;
-						e.extensionFields.scopeName = "\\Broken\tContext";
-						makeTagEntry (&e);
-						initTagEntry (&e, "only\nnewline", i);
-						makeTagEntry (&e);
-						initTagEntry (&e, "only\ttab", i);
-						makeTagEntry (&e);
-						initTagEntry (&e, "newline-in-scope", i);
-						e.extensionFields.scopeKindIndex = K_BROKEN;
-						e.extensionFields.scopeName = "parent\nscope";
-						makeTagEntry (&e);
-						initTagEntry (&e, "tab-in-scope", i);
-						e.extensionFields.scopeKindIndex = K_BROKEN;
-						e.extensionFields.scopeName = "parent\tscope";
-						makeTagEntry (&e);
-						break;
-					case K_NO_LETTER:
-						initTagEntry (&e, "abnormal kindDefinition testing (no letter)", i);
-						makeTagEntry (&e);
-						break;
-					case K_NO_LONG_NAME:
-						initTagEntry (&e, "abnormal kindDefinition testing (no long name)", i);
-						makeTagEntry (&e);
-						break;
-					case K_NOTHING_SPECIAL:
-						if (!lb)
-						{
-							initTagEntry (&e, "NOTHING_SPECIAL", i);
-							makeTagEntry (&e);
-						}
-						break;
-					case K_GUEST_BEGINNING:
-						lb = getInputLineNumber ();
-						break;
-					case K_GUEST_END:
-						le = getInputLineNumber ();
-						makePromise (SELF_TEST_PARSER, lb + 1, 0, le, 0, lb + 1);
-						break;
-#if defined(DEBUG) && defined(HAVE_SECCOMP)
-				    case K_CALL_GETPPID:
-						getppid();
-						break;
-#endif
-				    case K_DISABLED:
-				    case K_ENABLED:
-						{
-							int role;
-							char *name;
-							if (found_enabled_disabled[i == K_DISABLED]++ == 0)
-							{
-								role = ROLE_DEFINITION_INDEX;
-								name = (i == K_DISABLED)
-									? "disable-kind-no-role"
-									: "enabled-kind-no-role";
-							}
-							else if (found_enabled_disabled[i == K_DISABLED]++ == 1)
-							{
-								role = (i == K_DISABLED)
-									? R_DISABLED_KIND_DISABLED_ROLE
-									: R_ENABLED_KIND_DISABLED_ROLE;
-								name = (i == K_DISABLED)
-									? "disable-kind-disabled-role"
-									: "enabled-kind-disabled-role";
-							}
-							else
-							{
-								role = (i == K_DISABLED)
-									? R_DISABLED_KIND_ENABLED_ROLE
-									: R_ENABLED_KIND_ENABLED_ROLE;
-								name = (i == K_DISABLED)
-									? "disable-kind-enabled-role"
-									: "enabled-kind-enabled-role";
-							}
-							initRefTagEntry (&e, name, i, role);
-							makeTagEntry (&e);
-							break;
-						}
-					case K_ROLES:
-					{
-						char *name = "multiRolesTarget";
-						int qindex;
-						tagEntryInfo *qe;
-
-						initTagEntry (&e, name, i);
-						assignRole(&e, R_ROLES_KIND_A_ROLE);
-						assignRole(&e, R_ROLES_KIND_C_ROLE);
-						assignRole(&e, R_ROLES_KIND_D_ROLE);
-						qindex = makeTagEntry (&e);
-						qe = getEntryInCorkQueue (qindex);
-						if (qe)
-							assignRole(qe, R_ROLES_KIND_B_ROLE);
-						break;
-					}
-					case K_ROLES_DISABLED:
-					{
-						char *name = "multiRolesDisabledTarget";
-
-						initRefTagEntry (&e, name, i, R_ROLES_DISABLED_KIND_A_ROLE);
-						makeTagEntry (&e);
-						initRefTagEntry (&e, name, i, R_ROLES_DISABLED_KIND_B_ROLE);
-						makeTagEntry (&e);
-						break;
-					}
-					case K_FIELD_TESTING:
-					{
-						char c = 'a';
-						char name []= {'\0', 't', 'a', 'g', '\0' };
-
-						name [0] = c++;
-						initTagEntry (&e, name, i);
-						attachParserField (&e, false,
-										   CTSTFields[F_BOOLEAN_FIELD].ftype, "");
-						makeTagEntry (&e);
-
-						name [0] = c++;
-						initTagEntry (&e, name, i);
-						makeTagEntry (&e);
-
-						name [0] = c++;
-						initTagEntry (&e, name, i);
-						attachParserField (&e, false,
-										   CTSTFields[F_BOOLEAN_AND_STRING_FIELD].ftype, "val");
-						makeTagEntry (&e);
-
-						name [0] = c++;
-						initTagEntry (&e, name, i);
-						attachParserField (&e, false,
-										   CTSTFields[F_BOOLEAN_AND_STRING_FIELD].ftype, "");
-						makeTagEntry (&e);
-
-						break;
-					}
-				}
-			}
-	}
-
-	TRACE_LEAVE();
-}
-
-static void initStatsCTST (langType lang CTAGS_ATTR_UNUSED)
-{
-	CTST_GatherStats = true;
-}
-
-static void printStatsCTST (langType lang CTAGS_ATTR_UNUSED)
-{
-	fprintf (stderr, "The number of handled chars: %d\n",
-			 CTST_num_handled_char);
-}
-
-static parserDefinition *CTagsSelfTestParser (void)
-{
-	static const char *const extensions[] = { NULL };
-	parserDefinition *const def = parserNew (SELF_TEST_PARSER);
-	def->extensions = extensions;
-	def->kindTable = CTST_Kinds;
-	def->kindCount = KIND_COUNT;
-	def->parser = createCTSTTags;
-	def->invisible = true;
-	def->useMemoryStreamInput = true;
-	def->useCork = CORK_QUEUE;
-	def->initStats = initStatsCTST;
-	def->printStats = printStatsCTST;
-	def->fieldTable = CTSTFields;
-	def->fieldCount = ARRAY_SIZE (CTSTFields);
-
-	return def;
-}
