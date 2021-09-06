@@ -256,6 +256,7 @@ SectionEnd
 
 ; Development files
 Section "Development files" SEC09
+	SectionIn 1
 	SetOverwrite ifnewer
 	SetOutPath "$INSTDIR\include"
 	File /r "${GEANY_RELEASE_DIR}\include\*"
