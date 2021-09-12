@@ -335,6 +335,43 @@ void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 	document_reload_prompt(doc, NULL);
 }
 
+/* reload all files */
+void on_reload_all(GtkAction *action, gpointer user_data)
+{
+	guint i;
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+
+	if (!file_prefs.keep_edit_history_on_reload)
+	{
+		GeanyDocument *doc;
+		foreach_document(i)
+		{
+			doc = documents[i];
+			if (doc->changed || document_can_undo(doc) || document_can_redo(doc))
+			{
+				if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
+					_("Changes detected, reloading all will lose any changes and history."),
+					_("Are you sure you want to reload all files?")))
+				{
+					break; // break the loop and continue with reloading below
+				}
+				else
+				{
+					return; // cancel reloading
+				}
+			}
+		}
+	}
+
+	foreach_document(i)
+	{
+		if (! (documents[i]->file_name == NULL))
+			document_reload_force(documents[i], documents[i]->encoding);
+	}
+
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
+}
+
 
 static void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
