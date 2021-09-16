@@ -30,6 +30,7 @@ Makefile.in
 /config.status
 /config.sub
 /configure
+/data/filedefs/filetypes.python
 /debian
 /depcomp
 /geany.1
