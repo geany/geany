@@ -6925,30 +6925,24 @@
                                     <signal name="activate" handler="on_smart_line_indent1_activate" swapped="no"/>
                                   </object>
                                 </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkMenuItem" id="send_selection_to2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">_Send Selection</property>
+                            <property name="use_underline">True</property>
+                            <child type="submenu">
+                              <object class="GtkMenu" id="send_selection_to2_menu">
+                                <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkSeparatorMenuItem" id="separator37">
-                                    <property name="visible">True</property>
+                                  <object class="GtkMenuItem" id="invisible13">
                                     <property name="can_focus">False</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkMenuItem" id="send_selection_to2">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Send Selection to</property>
+                                    <property name="label" translatable="yes">invisible</property>
                                     <property name="use_underline">True</property>
-                                    <child type="submenu">
-                                      <object class="GtkMenu" id="send_selection_to2_menu">
-                                        <property name="can_focus">False</property>
-                                        <child>
-                                          <object class="GtkMenuItem" id="invisible13">
-                                            <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">invisible</property>
-                                            <property name="use_underline">True</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
                                   </object>
                                 </child>
                               </object>
