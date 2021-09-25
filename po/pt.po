@@ -1,25 +1,25 @@
 # Portuguese translation for geany
-# Copyright (C) 2006-2019 The Geany contributors.
+# Copyright (C) 2006-2021 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 #
 # André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
-# Pedro Albuquerque <pmra@protonmail.com>, 2015 -2020.
+# Pedro Albuquerque <pmra@protonmail.com>, 2015 - 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.36\n"
+"Project-Id-Version: Geany 1.38\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 19:03+0200\n"
-"PO-Revision-Date: 2020-10-13 11:17+0100\n"
+"POT-Creation-Date: 2021-09-24 02:11+0000\n"
+"PO-Revision-Date: 2021-09-24 07:03+0100\n"
 "Last-Translator: Pedro Albuquerque <pmra@protonmail.com>\n"
 "Language-Team: Português <translation-team-pt@lists.sourceforge.net>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
-"X-Generator: Gtranslator 3.30.1\n"
+"X-Generator: Poedit 2.3\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -358,7 +358,7 @@ msgid ""
 "Replace dialog and there is no selection"
 msgstr ""
 "Usar a palavra sob o cursor quando abrir um dos diálogos Procurar, Procurar "
-"em ficheiros ou Substituir, se não houver uma selecção feita."
+"em ficheiros ou Substituir, se não houver uma selecção feita"
 
 #: ../data/geany.glade.h:70
 msgid "Use the current file's directory for Find in Files"
@@ -1134,7 +1134,7 @@ msgid ""
 "selection"
 msgstr ""
 "Mostrar os espaços virtuais para além do final das linhas, só quando "
-"desenhar uma selecção rectangular."
+"desenhar uma selecção rectangular"
 
 #: ../data/geany.glade.h:231
 msgid "Always"
@@ -1229,7 +1229,7 @@ msgid ""
 msgstr ""
 "Garante que os caracteres de fim de linha são sempre convertidos antes de "
 "gravar o ficheiro, evitando caracteres de fim de linha diferentes num mesmo "
-"ficheiro."
+"ficheiro"
 
 #: ../data/geany.glade.h:251
 msgid "Strip trailing spaces and tabs"
@@ -1566,7 +1566,7 @@ msgstr "Rolar ao premir uma tecla"
 
 #: ../data/geany.glade.h:323
 msgid "Whether to scroll to the bottom if a key was pressed"
-msgstr "Se se rola o texto até ao fim caso uma tecla seja premida."
+msgstr "Se se rola o texto até ao fim caso uma tecla seja premida"
 
 #: ../data/geany.glade.h:324
 msgid "Scroll on output"
@@ -1628,7 +1628,7 @@ msgid ""
 "note, programs executed in VTE cannot be stopped"
 msgstr ""
 "Executar programas no VTE em vez de abrir uma janela com o terminal. Note "
-"que programas executados no VTE não podem ser parados."
+"que programas executados no VTE não podem ser parados"
 
 #: ../data/geany.glade.h:336
 msgid "Don't use run script"
@@ -1640,7 +1640,7 @@ msgid ""
 "status of the executed program"
 msgstr ""
 "Não usa o script de execução simples normalmente usado para mostrar o estado "
-"final de um programa executado."
+"final de um programa executado"
 
 #: ../data/geany.glade.h:338
 msgid "<b>Terminal</b>"
@@ -2467,7 +2467,7 @@ msgstr "Repor"
 
 #: ../src/build.c:1889
 msgid "Click to set menu item label"
-msgstr "Clicar para definir rótulo de item de menu "
+msgstr "Clicar para definir rótulo de item de menu"
 
 #: ../src/build.c:1973 ../src/build.c:1975
 #, c-format
@@ -2537,17 +2537,17 @@ msgstr "Make de _todos"
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] " %d ficheiro gravado."
+msgstr[0] "%d ficheiro gravado."
 msgstr[1] "%d ficheiros gravados."
 
 #: ../src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
+"Alterações detectadas, recarregar descarta todas as mudanças e o histórico."
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Tem a certeza que quer recarregar \"%s\"?"
+msgstr "Tem a certeza de que quer recarregar todos os ficheiros?"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -3349,13 +3349,12 @@ msgid "Reload file"
 msgstr "Recarregar ficheiro"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Recarregar ficheiro"
+msgstr "Recarregar todos os ficheiros"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
-msgstr "Reabrir último separador fechado "
+msgstr "Reabrir último separador fechado"
 
 #: ../src/keybindings.c:363
 msgid "Quit"
@@ -3845,14 +3844,14 @@ msgstr "Não pré-processar ficheiros de C/C++ ao gerar ficheiro de etiquetas"
 msgid "Don't open files in a running instance, force opening a new instance"
 msgstr ""
 "Não abrir ficheiros na instância actual do programa, forçar a abertura de "
-"uma nova instância."
+"uma nova instância"
 
 #: ../src/libmain.c:127
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
 msgstr ""
 "Usar o nome FICHEIRO deste ficheiro para comunicação com uma instância "
-"activa do Geany."
+"activa do Geany"
 
 #: ../src/libmain.c:127 ../src/libmain.c:141
 msgid "FILE"
@@ -3927,7 +3926,7 @@ msgstr "Reportar erros a https://github.com/geany/geany/issues."
 #: ../src/libmain.c:590
 #, c-format
 msgid "built on %s with "
-msgstr "(gerado em %s com)"
+msgstr "gerado em %s com "
 
 #: ../src/libmain.c:683
 msgid "Move it now?"
@@ -4527,7 +4526,7 @@ msgid ""
 msgstr ""
 "Todos: procura todos os ficheiros na pasta.\n"
 "Projecto: usa padrões de ficheiros definidos nas definições do projecto.\n"
-"Personalizado: especificar os padrões de ficheiros manualmente."
+"Personalizado: especificar os padrões de ficheiros manualmente"
 
 #: ../src/search.c:914
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
@@ -4884,14 +4883,12 @@ msgid "Classes"
 msgstr "Classes"
 
 #: ../src/symbols.c:628
-#, fuzzy
 msgid "Fields"
-msgstr "Ir para campo"
+msgstr "Campos"
 
 #: ../src/symbols.c:632
-#, fuzzy
 msgid "Unknowns"
-msgstr "desconhecido"
+msgstr "Desconhecidos"
 
 #: ../src/symbols.c:640
 msgid "Anchors"
@@ -5285,7 +5282,7 @@ msgid ""
 "changed. Error message: %s"
 msgstr ""
 "O comando personalizado executado devolveu um erro. A sua selecção não foi "
-"modificada. Mensagem de erro: %s."
+"modificada. Mensagem de erro: %s"
 
 #: ../src/tools.c:231
 msgid "The executed custom command exited with an unsuccessful exit code."
@@ -5420,7 +5417,7 @@ msgstr "MOD"
 
 #: ../src/ui_utils.c:406
 msgid " (new instance)"
-msgstr "(nova instância)"
+msgstr " (nova instância)"
 
 #: ../src/ui_utils.c:436
 #, c-format
@@ -5559,7 +5556,7 @@ msgstr "LF"
 #: ../src/vte.c:571
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr "Biblioteca VTE inválida \"%s\": símbolo \"%s\" em falta"
+msgstr "biblioteca VTE inválida \"%s\": símbolo \"%s\" em falta"
 
 #: ../src/vte.c:751
 msgid "_Set Path From Document"
@@ -5875,7 +5872,7 @@ msgstr "Demasiados itens seleccionados!"
 #: ../plugins/filebrowser.c:493
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
-msgstr "Impossível executar o comando externo personalizado \"%s\" (%s). "
+msgstr "Impossível executar o comando externo personalizado \"%s\" (%s)."
 
 #: ../plugins/filebrowser.c:657
 msgid "Open in _Geany"
@@ -5942,7 +5939,7 @@ msgstr ""
 "%d.\n"
 "%f será substituído pelo nome do ficheiro incluindo o caminho completo.\n"
 "%d será substituído pelo caminho do ficheiro seleccionado, sem o nome do "
-"ficheiro."
+"ficheiro"
 
 #: ../plugins/filebrowser.c:1283
 msgid "Show hidden files"
@@ -5991,9 +5988,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Cópia de segurança: o ficheiro não pôde ser gravado (%s)."
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "O ficheiro de projecto não pôde ser escrito (%s)."
+msgstr "O ficheiro Gravação instantânea não pôde ser gerado (%s)."
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -6008,9 +6005,8 @@ msgid "Select Directory"
 msgstr "Seleccione uma pasta"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "A pasta para a cópia de segurança não existe ou não pode ser escrita."
+msgstr "A pasta Gravação instantânea não existe ou não pode ser escrita."
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -6055,14 +6051,15 @@ msgid "Instant Save"
 msgstr "Gravar instantâneo"
 
 #: ../plugins/saveactions.c:721
-#, fuzzy
 msgid "Default _filetype to use for new files:"
-msgstr "Tipo de _ficheiro a usar para ficheiros recém-abertos:"
+msgstr "Tipo de _ficheiro predefinido a usar para novos ficheiros:"
 
 #: ../plugins/saveactions.c:742
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
+"Pasta on_de gravar os ficheiros (deixar em branco para usar a predefinição: "
+"%s):"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -6071,6 +6068,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>Se definir a pasta Gravação instantânea como uma pasta não "
+"automaticamente limpa,\n"
+"terá de limpar manualmente os ficheiros gravados instantaneamente. A "
+"extensão Gravação instantânea não elimina os ficheiros criados.</i>"
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"
