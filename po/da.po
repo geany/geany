@@ -4,9 +4,9 @@
 # scootergrisen, 2018-2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 1.37\n"
+"Project-Id-Version: geany 1.38\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 19:03+0200\n"
+"POT-Creation-Date: 2021-09-21 02:11+0000\n"
 "PO-Revision-Date: 2021-04-18 00:00+0200\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
@@ -2505,12 +2505,11 @@ msgstr[1] "%d filer gemt."
 
 #: ../src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
-msgstr ""
+msgstr "Ændringer registreret, genindlæsning af alle vil miste ændringer og historik."
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Er du sikker på, at du vil genindlæse '%s'?"
+msgstr "Er du sikker på, at du vil genindlæse alle filer?"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -3310,9 +3309,8 @@ msgid "Reload file"
 msgstr "Genindlæs fil"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Genindlæs fil"
+msgstr "Genindlæs alle filer"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -4839,14 +4837,12 @@ msgid "Classes"
 msgstr "Klasser"
 
 #: ../src/symbols.c:628
-#, fuzzy
 msgid "Fields"
-msgstr "Gå til-felt"
+msgstr "Felter"
 
 #: ../src/symbols.c:632
-#, fuzzy
 msgid "Unknowns"
-msgstr "ukendt"
+msgstr "Ukendte"
 
 #: ../src/symbols.c:640
 msgid "Anchors"
@@ -5944,9 +5940,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Sikkerhedskopiering: Filen kunne ikke gemmes (%s)."
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Kunne ikke skrive projektfilen (%s)."
+msgstr "Gem straks-filnavn kunne ikke genereres (%s)."
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -5961,10 +5957,9 @@ msgid "Select Directory"
 msgstr "Vælg mappe"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
 msgstr ""
-"Sikkerhedskopieringsmappen findes ikke eller der kan ikke skrives til den."
+"Gem straks-mappen findes ikke eller der kan ikke skrives til den."
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -6006,7 +6001,7 @@ msgstr "_Gem alle åbne filer"
 
 #: ../plugins/saveactions.c:711
 msgid "Instant Save"
-msgstr "Gem øjeblikkeligt"
+msgstr "Gem straks"
 
 #: ../plugins/saveactions.c:721
 msgid "Default _filetype to use for new files:"
@@ -6015,7 +6010,7 @@ msgstr "Standard_filtype som skal bruges til nye filer:"
 #: ../plugins/saveactions.c:742
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
-msgstr ""
+msgstr "_Mappe som filer skal gemmes i (lad den være tom for at bruge standarden: %s):"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -6024,6 +6019,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>Hvis du indstiller Gem straks-mappen til en mappe som ikke ryddes "
+"automatisk, \n"
+"så skal du rydde op i filer som er blevet gemt straks manualt. Gem straks-pluginet "
+"sletter ikke de oprettede filer.</i>"
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"
