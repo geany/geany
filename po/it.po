@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-21 19:03+0200\n"
-"PO-Revision-Date: 2020-10-12 21:36+0100\n"
+"PO-Revision-Date: 2021-09-21 19:17+0100\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team: geany-i18n@uvena.de\n"
 "Language: it\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: iso-8859-15\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -2583,11 +2583,11 @@ msgstr[1] "%d file salvati."
 #: ../src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
+"Modifiche rilevate, ricaricando tutto verranno perse modifiche e storico."
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Si è sicuri di voler ripristinare '%s'?"
+msgstr "Si è sicuri di voler ricaricare tutti i file?"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -2912,7 +2912,7 @@ msgstr "Lo storico di annullamento andrà perso."
 #: ../src/document.c:1657
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
-msgstr "Si è sicuri di voler ripristinare '%s'?"
+msgstr "Si è sicuri di voler ricaricare '%s'?"
 
 #: ../src/document.c:1763
 msgid "Error renaming file."
@@ -3399,9 +3399,8 @@ msgid "Reload file"
 msgstr "Ricarica file"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Ricarica file"
+msgstr "Ricarica tutti i file"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -4957,14 +4956,12 @@ msgid "Classes"
 msgstr "Classi"
 
 #: ../src/symbols.c:628
-#, fuzzy
 msgid "Fields"
-msgstr "Vai a campo"
+msgstr "Campi"
 
 #: ../src/symbols.c:632
-#, fuzzy
 msgid "Unknowns"
-msgstr "sconosciuto"
+msgstr "Incognite"
 
 #: ../src/symbols.c:640
 msgid "Anchors"
@@ -5202,7 +5199,7 @@ msgstr "Salva tutti i file aperti"
 
 #: ../src/toolbar.c:60
 msgid "Reload the current file from disk"
-msgstr "Ripristina il file corrente dal disco rigido"
+msgstr "Ricarica il file corrente dal disco rigido"
 
 #: ../src/toolbar.c:61
 msgid "Close the current file"
@@ -6081,9 +6078,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Copia di backup: Impossibile salvare il file (%s)."
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Impossibile salvare il file del progetto (%s)."
+msgstr "Nome file per salvataggio istantaneo non generato (%s)."
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -6098,9 +6095,8 @@ msgid "Select Directory"
 msgstr "Seleziona directory"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "La directory di backup non esiste o non è scrivibile."
+msgstr "La directory di salvataggio istantaneo non esiste o non è scrivibile."
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -6145,14 +6141,15 @@ msgid "Instant Save"
 msgstr "Salvataggio istantaneo"
 
 #: ../plugins/saveactions.c:721
-#, fuzzy
 msgid "Default _filetype to use for new files:"
-msgstr "_Tipo file da usare per i nuovi file aperti:"
+msgstr "_Tipo file da usare per i nuovi file:"
 
 #: ../plugins/saveactions.c:742
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
+"_Cartella dove salvare i file (lasciare vuoto per utilizzare la predefinita: "
+"%s):"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -6161,6 +6158,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>Se si imposta la cartella di salvataggio istantaneo ad una non "
+"automaticamente svuotata,\n"
+"sarà necessario rimuovere i file di salvataggio istantaneo manualmente. Il "
+"plugin di salvataggio istantaneo non rimuoverà i file creati.</i>"
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"
