@@ -88,7 +88,7 @@
 #define TYPE_COMBO_BOX_ENTRY get_combo_box_entry_type()
 static GType get_combo_box_entry_type(void)
 {
-	static volatile gsize type = 0;
+	static gsize type = 0;
 	if (g_once_init_enter(&type))
 	{
 		GType g_type = g_type_register_static_simple(GTK_TYPE_COMBO_BOX, "dummy-combo-box-entry",
