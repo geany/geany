@@ -1,13 +1,13 @@
 # Turkish translations for geany package.
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the geany package.
-# Gürkan Gür <seqizz@gmail.com> 2008 - 2014
+# Gürkan Gür <seqizz@gmail.com> 2008 - 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-21 19:03+0200\n"
-"PO-Revision-Date: 2021-03-17 19:18+0300\n"
+"PO-Revision-Date: 2021-10-01 21:03+0200\n"
 "Last-Translator: Gürkan Gür <seqizz@gmail.com>\n"
 "Language-Team: Gürkan Gür <seqizz@gmail.com>\n"
 "Language: tr_TR\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -23,7 +23,7 @@ msgstr "Geany"
 
 #: ../geany.desktop.in.h:2
 msgid "Integrated Development Environment"
-msgstr "Tümleşik Geliştirme Ortamı"
+msgstr "Entegre Geliştirme Ortamı"
 
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK+"
@@ -2505,11 +2505,12 @@ msgstr[1] "%d dosya kaydedildi."
 #: ../src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
+"Yeniden yükleme durumunda dosyalarda yapılan değişiklikler ve geçmiş bilgisi "
+"kaybolacak."
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Yeniden yüklemek istediğinize emin misiniz '%s'?"
+msgstr "Tüm dosyaları yeniden yüklemek istediğinize emin misiniz?"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -2893,7 +2894,7 @@ msgstr "\"%s\" dosyası diskte bulunamadı!"
 #: ../src/document.c:2125
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr "Salt okunur döküman '%s' kaydedilemez! "
+msgstr "Salt okunur döküman '%s' kaydedilemez!"
 
 #: ../src/document.c:2193
 #, c-format
@@ -3309,9 +3310,8 @@ msgid "Reload file"
 msgstr "Yeniden yükle"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Yeniden yükle"
+msgstr "Tüm dosyaları yeniden yükle"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -4836,14 +4836,12 @@ msgid "Classes"
 msgstr "Sınıflar"
 
 #: ../src/symbols.c:628
-#, fuzzy
 msgid "Fields"
-msgstr "Alana Git"
+msgstr "Alanlar"
 
 #: ../src/symbols.c:632
-#, fuzzy
 msgid "Unknowns"
-msgstr "bilinmeyen"
+msgstr "Bilinmeyenler"
 
 #: ../src/symbols.c:640
 msgid "Anchors"
@@ -5936,9 +5934,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Yedek Kopya: Dosya kaydedilemedi (%s)."
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Proje dosyası yazılamadı (%s)."
+msgstr "Hızlı Kayıt dosyası üretilemedi (%s)."
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -5953,9 +5951,8 @@ msgid "Select Directory"
 msgstr "Dizin Seç"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "Yedek için seçilen dizin yok ya da yazılabilir durumda değil."
+msgstr "Hızlı Kayıt dizini bulunamadı veya yazılabilir değil."
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -5996,7 +5993,7 @@ msgstr "Bütün a_çık dosyaları kaydet"
 
 #: ../plugins/saveactions.c:711
 msgid "Instant Save"
-msgstr "Anlık Kayıt"
+msgstr "Hızlı Kayıt"
 
 #: ../plugins/saveactions.c:721
 msgid "Default _filetype to use for new files:"
@@ -6006,6 +6003,8 @@ msgstr "Yeni açılan dosyalar için dosya t_ürü:"
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
+"_Dosyaların kaydedileceği dizin (öntanımlı dizini kullanmak için boş "
+"bırakın: %s):"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -6014,6 +6013,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>Hızlı Kayıt dizini olarak otomatik olarak temizlenmeyen bir dizin "
+"seçerseniz,\n"
+"bu dizini elle temizlemeniz gerekir. Hızlı Kayıt eklentisi oluşturulan "
+"dosyaları silmemektedir.</i>"
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"
