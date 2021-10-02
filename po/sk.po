@@ -2,14 +2,14 @@
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the Geany package.
 # Tomáš Havlas <tomas.havlas@raven-systems.eu>, 2014.
-# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2020.
+# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.37\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-21 19:03+0200\n"
-"PO-Revision-Date: 2020-10-12 14:20+0200\n"
+"PO-Revision-Date: 2021-09-26 16:57+0200\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -387,7 +387,7 @@ msgid ""
 "Project dialog."
 msgstr ""
 "Ak je povolené, pri vytváraní nových projektov je súbor projektu štandardne "
-"uložený v koreňovom adresári projektu, namiesto umiestnenia toho priečinku o "
+"uložený v koreňovom adresári projektu, namiesto umiestnenia toho adresára o "
 "úroveň vyššie. Cestu k súboru je stále možné zmeniť pri vytváraní projektu."
 
 #: ../data/geany.glade.h:76
@@ -607,7 +607,7 @@ msgstr "S_ystémové nastavenie"
 
 #: ../data/geany.glade.h:126
 msgid "_Small icons"
-msgstr "_Maĺé ikony"
+msgstr "_Malé ikony"
 
 #: ../data/geany.glade.h:127
 msgid "_Very small icons"
@@ -2444,7 +2444,7 @@ msgstr "Kliknite pre nastavenie označenia položky v ponuke"
 #: ../src/build.c:1973 ../src/build.c:1975
 #, c-format
 msgid "%s commands"
-msgstr "Príkazy pre: %s"
+msgstr "Príkazy pre %s"
 
 #: ../src/build.c:1975
 msgid "No filetype"
@@ -2472,7 +2472,7 @@ msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
-"%d, %e, %f, %p, %l sú nahradené v poliach pre príkaz a priečinok, viď manuál "
+"%d, %e, %f, %p, %l sú nahradené v poliach pre príkaz a adresár, viď manuál "
 "pre viac detailov."
 
 #: ../src/build.c:2223
@@ -2517,11 +2517,12 @@ msgstr[2] "%d súborov uložených."
 #: ../src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
+"Boli zistené zmeny. Znova načítanie všetkých súborov spôsobí stratu zmien a "
+"histórie."
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Ste si istý, že chcete znova načítať „%s“?"
+msgstr "Ste si istý, že chcete znova načítať všetky súbory?"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -2707,7 +2708,7 @@ msgid ""
 "new file)."
 msgstr ""
 "Nastala chyba, alebo nebolo možné získať informácie o súbore (napr. z nového "
-"súboru)"
+"súboru)."
 
 #: ../src/dialogs.c:1203 ../src/dialogs.c:1204 ../src/dialogs.c:1205
 #: ../src/dialogs.c:1211 ../src/dialogs.c:1212 ../src/dialogs.c:1213
@@ -2755,7 +2756,7 @@ msgid ""
 "supported."
 msgstr ""
 "Súbor „%s“ pravdepodobne nie je textový súbor, alebo jeho kódovanie nie je "
-"podporované"
+"podporované."
 
 #: ../src/document.c:1028
 #, c-format
@@ -2768,7 +2769,7 @@ msgstr ""
 "Súbor „%s“ nebolo možné správne otvoriť a bol orezaný. Toto môže nastať "
 "pokiaľ súbor obsahuje znak NULL. Uloženie takéhoto súboru môže spôsobiť "
 "stratu dát.\n"
-"Súbor bol otvorený len na čítanie"
+"Súbor bol otvorený len na čítanie."
 
 #: ../src/document.c:1240
 msgid "Spaces"
@@ -3319,12 +3320,11 @@ msgstr "Zavrieť všetky"
 
 #: ../src/keybindings.c:357
 msgid "Reload file"
-msgstr "Znova načítať"
+msgstr "Znova načítať súbor"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Znova načítať"
+msgstr "Znova načítať všetky súbory"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -3796,7 +3796,7 @@ msgstr "STĹPEC"
 
 #: ../src/libmain.c:121
 msgid "Use alternate configuration directory DIR"
-msgstr "Použiť alternatívny priečinok ADRESÁR pre konfiguráciu"
+msgstr "Použiť alternatívny adresár ADRESÁR pre konfiguráciu"
 
 #: ../src/libmain.c:121
 msgid "DIR"
@@ -4421,7 +4421,7 @@ msgstr "_Hľadaný výraz:"
 #. Now add the multiple match options
 #: ../src/search.c:509
 msgid "_Find All"
-msgstr "Nájsť všetky_"
+msgstr "Ná_jsť všetky"
 
 #: ../src/search.c:516
 msgid "_Mark"
@@ -4497,11 +4497,11 @@ msgstr "Medzerami oddelený zoznam vzorov pre názvy súborov (napr. „*.c *.h�
 
 #: ../src/search.c:926
 msgid "_Directory:"
-msgstr "_Adresár"
+msgstr "_Adresár:"
 
 #: ../src/search.c:945
 msgid "E_ncoding:"
-msgstr "_Kódovanie"
+msgstr "_Kódovanie:"
 
 #: ../src/search.c:969
 msgid "See grep's manual page for more information"
@@ -4846,14 +4846,12 @@ msgid "Classes"
 msgstr "Triedy"
 
 #: ../src/symbols.c:628
-#, fuzzy
 msgid "Fields"
-msgstr "Pole prejsť na"
+msgstr "Polia"
 
 #: ../src/symbols.c:632
-#, fuzzy
 msgid "Unknowns"
-msgstr "neznáme"
+msgstr "Neznáme"
 
 #: ../src/symbols.c:640
 msgid "Anchors"
@@ -5597,7 +5595,7 @@ msgstr "Zdrojový súbor:"
 
 #: ../plugins/classbuilder.c:484
 msgid "Inheritance"
-msgstr "Dedičnosť:"
+msgstr "Dedičnosť"
 
 #: ../plugins/classbuilder.c:486
 msgid "Base class:"
@@ -5645,7 +5643,7 @@ msgstr "Je singleton"
 
 #: ../plugins/classbuilder.c:575
 msgid "Constructor type:"
-msgstr "Typ konštruktoru"
+msgstr "Typ konštruktoru:"
 
 #: ../plugins/classbuilder.c:1087
 msgid "Create Cla_ss"
@@ -5711,7 +5709,7 @@ msgstr "Rôzne znaky"
 #: ../plugins/htmlchars.c:365 ../plugins/filebrowser.c:1202
 #: ../plugins/saveactions.c:569
 msgid "Plugin configuration directory could not be created."
-msgstr "Nie je možné vytvoriť priečinok pre konfiguráciu zásuvného modulu."
+msgstr "Nie je možné vytvoriť adresár pre konfiguráciu zásuvného modulu."
 
 #: ../plugins/htmlchars.c:486
 msgid "Special Characters"
@@ -5949,9 +5947,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Záložná kópia: Nie je možné uložiť súbor (%s)."
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Nie je možné zapísať súbor projektu (%s)."
+msgstr "Nie je možné vytvoriť názov súboru pre okamžité uloženie (%s)."
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -5964,16 +5962,15 @@ msgstr[2] "Automatické uloženie: %d súborov uložených."
 #. initialize the dialog
 #: ../plugins/saveactions.c:454
 msgid "Select Directory"
-msgstr "Vybrať priečinok"
+msgstr "Vybrať adresár"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "Záložný priečinok neexistuje, alebo do neho nie je možné zapisovať"
+msgstr "Adresár pre okamžité uloženie neexistuje, alebo do neho nie je možné zapisovať."
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
-msgstr "Záložný priečinok neexistuje, alebo do neho nie je možné zapisovať"
+msgstr "Záložný adresár neexistuje, alebo do neho nie je možné zapisovať."
 
 #: ../plugins/saveactions.c:642
 msgid "Auto Save"
@@ -6013,14 +6010,13 @@ msgid "Instant Save"
 msgstr "Okamžité uloženie"
 
 #: ../plugins/saveactions.c:721
-#, fuzzy
 msgid "Default _filetype to use for new files:"
-msgstr "Súborový _typ pre novo vytvorené súbory"
+msgstr "Predvolený _typ súboru pre nové súbory:"
 
 #: ../plugins/saveactions.c:742
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
-msgstr ""
+msgstr "_Adresár pre ukladanie súborov (nechajte prázdne pre použitie predvoleného: %s):"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -6029,6 +6025,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>Ak použijete ako adresár pre okamžité ukladanie adresár, ktorý nie je "
+"automaticky čistený,\n"
+"musíte okamžite uložené súbory čistiť manuálne. Zásuvný modul pre okamžité "
+"uloženie nemaže vytvárané súbory.</i>"
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"
@@ -6036,7 +6036,7 @@ msgstr "Záložná kópia"
 
 #: ../plugins/saveactions.c:794
 msgid "_Directory to save backup files in:"
-msgstr "_Adresár pre ukladanie záložných kópií"
+msgstr "_Adresár pre ukladanie záložných kópií:"
 
 #: ../plugins/saveactions.c:817
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
