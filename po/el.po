@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 19:03+0200\n"
-"PO-Revision-Date: 2020-10-12 14:10+0300\n"
+"POT-Creation-Date: 2021-10-01 02:11+0000\n"
+"PO-Revision-Date: 2021-10-01 11:29+0300\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Greek\n"
 "Language: el\n"
@@ -144,7 +144,7 @@ msgstr "Βασικό"
 
 #: ../data/geany.glade.h:25
 msgid "Current chars"
-msgstr "Τρέχον χαρακτήρες"
+msgstr "Τρέχοντες χαρακτήρες"
 
 #: ../data/geany.glade.h:26
 msgid "Match braces"
@@ -1741,7 +1741,7 @@ msgstr "Εν_τολές"
 
 #: ../data/geany.glade.h:357 ../src/keybindings.c:437
 msgid "Cu_t Current Line(s)"
-msgstr "Απο_κοπή τρέχουσας γραμμής(ών)"
+msgstr "Απο_κοπή Τρέχουσας Γραμμής(ών)"
 
 #: ../data/geany.glade.h:358 ../src/keybindings.c:434
 msgid "_Copy Current Line(s)"
@@ -2424,7 +2424,7 @@ msgstr "Η μεταγλώττιση ολοκληρώθηκε με επιτυχί
 
 #: ../src/build.c:1272
 msgid "Custom Text"
-msgstr "Προσαρμοσμένο κείμενο"
+msgstr "Προσαρμοσμένο Κείμενο"
 
 #: ../src/build.c:1273
 msgid "Enter custom text here, all entered text is appended to the command."
@@ -2574,11 +2574,12 @@ msgstr[1] "%d αρχεία αποθηκεύτηκαν."
 #: ../src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
+"Εντοπίστηκαν αλλαγές, η επαναφόρτωση όλων θα έχει ως αποτέλεσμα να χαθούν "
+"τυχόν αλλαγές και ιστορικό."
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Είστε σίγουροι ότι θέλετε να επαναφορτώσετε '%s';"
+msgstr "Είστε σίγουροι ότι θέλετε να επαναφορτώσετε όλα τα αρχεία;"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -3385,9 +3386,8 @@ msgid "Reload file"
 msgstr "Επαναφόρτωση αρχείου"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Επαναφόρτωση αρχείου"
+msgstr "Επαναφόρτωση όλων των αρχείων"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -4932,14 +4932,12 @@ msgid "Classes"
 msgstr "Κλάσεις"
 
 #: ../src/symbols.c:628
-#, fuzzy
 msgid "Fields"
-msgstr "Πήγαινε στο πεδίο"
+msgstr "Πεδία"
 
 #: ../src/symbols.c:632
-#, fuzzy
 msgid "Unknowns"
-msgstr "άγνωστο"
+msgstr "Άγνωστα"
 
 #: ../src/symbols.c:640
 msgid "Anchors"
@@ -5526,7 +5524,7 @@ msgstr "_Χρησιμοποιείστε προσαρμοσμένη διάταξ�
 
 #: ../src/ui_utils.c:729
 msgid "Custom Date Format"
-msgstr "Προσαρμοσμένη διάταξη ημερομηνίας"
+msgstr "Προσαρμοσμένη Μορφή Ημερομηνίας"
 
 #: ../src/ui_utils.c:730
 msgid ""
@@ -6046,9 +6044,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Αντίγραφο ασφαλείας: Δεν ήταν δυνατή η αποθήκευση του αρχείου (%s)."
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Το αρχείο του έργου δεν ήταν δυνατόν να γραφεί (%s)."
+msgstr "Αδυναμία δημιουργίας αρχείου Άμεσης Αποθήκευσης (%s)."
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -6063,9 +6061,8 @@ msgid "Select Directory"
 msgstr "Επιλογή φακέλου"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "Ο φάκελος για αντίγραφα ασφαλείας δεν υπάρχει ή δεν είναι εγγράψιμος."
+msgstr "Ο φάκελος Άμεσης Αποθήκευσης δεν υπάρχει ή δεν είναι εγγράψιμος."
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -6106,17 +6103,17 @@ msgstr "Απο_θήκευση όλων των ανοιγμένων αρχείω�
 
 #: ../plugins/saveactions.c:711
 msgid "Instant Save"
-msgstr "Στιγμιαία αποθήκευση"
+msgstr "Άμεση Αποθήκευση"
 
 #: ../plugins/saveactions.c:721
-#, fuzzy
 msgid "Default _filetype to use for new files:"
-msgstr "_Τύπος αρχείου για πρόσφατα δημιουργημένα αρχεία:"
+msgstr "_Τύπος αρχείου για νέα αρχεία:"
 
 #: ../plugins/saveactions.c:742
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
+"Φάκελο_ς για αποθήκευση αρχείων (αφήστε κενό για χρήση της προεπιλογής: %s):"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -6125,6 +6122,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i> Εάν ορίσετε τον φάκελο Άμεσης Αποθήκευσης σε έναν φάκελοπου δεν "
+"καθαρίζεται αυτόματα,\n"
+"θα χρειαστεί να καθαρίσετε τα σχετικά αρχεία με μη αυτόματο τρόπο. Το "
+"πρόσθετο Instant Save δεν θα διαγράψει τα δημιουργημένα αρχεία. </i>"
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"
