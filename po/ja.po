@@ -2488,12 +2488,11 @@ msgstr[0] "%d 個のファイルを保存しました"
 
 #: ../src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
-msgstr ""
+msgstr "変更を検出しました。全て再読み込みすると変更と履歴が失われます。"
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "'%s' を再読み込みしてもよろしいですか?"
+msgstr "全てのファイルを再読み込みしてもよろしいですか?"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -3290,9 +3289,8 @@ msgid "Reload file"
 msgstr "再読み込み"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "再読み込み"
+msgstr "全ファイルを再読み込み"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -4809,12 +4807,10 @@ msgid "Classes"
 msgstr "クラス"
 
 #: ../src/symbols.c:628
-#, fuzzy
 msgid "Fields"
-msgstr "項目に移動"
+msgstr "項目"
 
 #: ../src/symbols.c:632
-#, fuzzy
 msgid "Unknowns"
 msgstr "不明"
 
@@ -5905,9 +5901,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "バックアップ: ファイルが保存できません(%s)"
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "プロジェクトファイルが書き込めません（%s）"
+msgstr "簡易保存ファイル名が生成できません（%s）"
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -5921,9 +5917,8 @@ msgid "Select Directory"
 msgstr "ディレクトリを選択"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "バックアップ ディレクトリが存在しないか書き込めません"
+msgstr "簡易保存ディレクトリが存在しないか書き込めません"
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -5967,14 +5962,13 @@ msgid "Instant Save"
 msgstr "簡易保存"
 
 #: ../plugins/saveactions.c:721
-#, fuzzy
 msgid "Default _filetype to use for new files:"
-msgstr "新しく作成するファイルのファイルの種類(_F):"
+msgstr "新規ファイルの既定のファイル種類(_F):"
 
 #: ../plugins/saveactions.c:742
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
-msgstr ""
+msgstr "保存先ディレクトリ(_D)(空欄にすると規定値を使用: %s)"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -5983,6 +5977,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>簡易保存ディレクトリに設定したディレクトリは"
+"自動的に作成されません、\n"
+"簡易保存されたファイルは手作業でクリーンアップする必要があります。"
+"館員保存プラグインは作成されたファイルを削除しません。</i>"
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"
