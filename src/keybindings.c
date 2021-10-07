@@ -622,21 +622,29 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FOCUS_SEARCHBAR, NULL,
 		GDK_KEY_F7, 0, "switch_search_bar", _("Switch to Search Bar"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_MESSAGE_WINDOW, NULL,
-		0, 0, "switch_message_window", _("Switch to Message Window"), NULL);
+		0, 0, "switch_msgwin_status", _("Switch to Message Window"), NULL);
+	add_kb(group, GEANY_KEYS_FOCUS_STATUS, NULL,
+		0, 0, "switch_msgwin_status", _("Switch to Message Window - Status"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_COMPILER, NULL,
-		0, 0, "switch_compiler", _("Switch to Compiler"), NULL);
+		0, 0, "switch_msgwin_status_compiler", _("Switch to Message Window - Compiler"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_MESSAGES, NULL,
-		0, 0, "switch_messages", _("Switch to Messages"), NULL);
+		0, 0, "switch_msgwin_status_messages", _("Switch to Message Window - Messages"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_SCRIBBLE, NULL,
-		GDK_KEY_F6, 0, "switch_scribble", _("Switch to Scribble"), NULL);
+		GDK_KEY_F6, 0, "switch_msgwin_status_scribble", _("Switch to Message Window - Scribble"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_VTE, NULL,
 		GDK_KEY_F4, 0, "switch_vte", _("Switch to VTE"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_SIDEBAR, NULL,
 		0, 0, "switch_sidebar", _("Switch to Sidebar"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST, NULL,
-		0, 0, "switch_sidebar_symbol_list", _("Switch to Sidebar Symbol List"), NULL);
+		0, 0, "switch_sidebar_symbol_list", _("Switch to Sidebar - Symbols"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST, NULL,
-		0, 0, "switch_sidebar_doc_list", _("Switch to Sidebar Document List"), NULL);
+		0, 0, "switch_sidebar_doc_list", _("Switch to Sidebar - Documents"), NULL);
+	add_kb(group, GEANY_KEYS_FOCUS_TOGGLE_EDITOR_VTE, NULL,
+		0, 0, "switch_editor_vte", _("Switch between Editor and VTE"), NULL);
+	add_kb(group, GEANY_KEYS_FOCUS_TOGGLE_EDITOR_SIDEBAR, NULL,
+		0, 0, "switch_editor_sidebar", _("Switch between Editor and Sidebar"), NULL);
+	add_kb(group, GEANY_KEYS_FOCUS_TOGGLE_EDITOR_MSGWIN, NULL,
+		0, 0, "switch_editor_msgwin", _("Switch between Editor and Message Window"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_NOTEBOOK);
 
@@ -1696,7 +1704,6 @@ static gchar *get_current_word_or_sel(GeanyDocument *doc, gboolean sci_word)
 	return read_current_word(doc, sci_word) ? g_strdup(editor_info.current_word) : NULL;
 }
 
-
 static void focus_sidebar(void)
 {
 	if (ui_prefs.sidebar_visible)
@@ -1734,7 +1741,6 @@ static GtkWidget *find_focus_widget(GtkWidget *widget)
 	return focus;
 }
 
-
 static void focus_msgwindow(void)
 {
 	if (ui_prefs.msgwindow_visible)
@@ -1750,6 +1756,71 @@ static void focus_msgwindow(void)
 	}
 }
 
+static void focus_toggle_editor_vte(void)
+{
+	static gint previous_page_num = -1;
+
+	if (!ui_prefs.msgwindow_visible)
+	{
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+		return;
+	}
+
+	gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook));
+	GtkWidget *widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
+
+	widget = find_focus_widget(widget);
+	if (gtk_widget_has_focus(widget))
+	{
+      if (previous_page_num >= 0) {
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), previous_page_num);
+		}
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+	}
+	else
+	{
+		previous_page_num = page_num;
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_VTE);
+	}
+}
+
+static void focus_toggle_editor_sidebar(void)
+{
+	if (!ui_prefs.sidebar_visible)
+	{
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+		return;
+	}
+
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL)
+	{
+		GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
+		if (gtk_widget_has_focus(sci))
+			keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_SIDEBAR);
+		else
+			keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+	}
+}
+
+static void focus_toggle_editor_msgwin(void)
+{
+	if (!ui_prefs.msgwindow_visible)
+	{
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+		return;
+	}
+
+	GeanyDocument *doc = document_get_current();
+	if (doc != NULL)
+	{
+		GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
+		if (gtk_widget_has_focus(sci))
+			keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_MESSAGE_WINDOW);
+		else
+			keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+	}
+}
 
 static gboolean cb_func_switch_action(guint key_id)
 {
@@ -1799,6 +1870,19 @@ static gboolean cb_func_switch_action(guint key_id)
 			break;
 		case GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST:
 			sidebar_focus_symbols_tab();
+			break;
+
+		case GEANY_KEYS_FOCUS_STATUS:
+			msgwin_switch_tab(MSG_STATUS, TRUE);
+			break;
+		case GEANY_KEYS_FOCUS_TOGGLE_EDITOR_VTE:
+			focus_toggle_editor_vte();
+			break;
+		case GEANY_KEYS_FOCUS_TOGGLE_EDITOR_SIDEBAR:
+			focus_toggle_editor_sidebar();
+			break;
+		case GEANY_KEYS_FOCUS_TOGGLE_EDITOR_MSGWIN:
+			focus_toggle_editor_msgwin();
 			break;
 	}
 	return TRUE;

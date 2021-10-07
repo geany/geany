@@ -277,6 +277,10 @@ enum GeanyKeyBindingID
 												 * @since 1.34 (API 238) */
 	GEANY_KEYS_FILE_RELOAD_ALL,					/**< Keybinding.
 												 * @since 1.38 (API 240) */
+	GEANY_KEYS_FOCUS_STATUS,						/**< Keybinding. */
+	GEANY_KEYS_FOCUS_TOGGLE_EDITOR_VTE,			/**< Keybinding. */
+	GEANY_KEYS_FOCUS_TOGGLE_EDITOR_SIDEBAR,	/**< Keybinding. */
+	GEANY_KEYS_FOCUS_TOGGLE_EDITOR_MSGWIN,		/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
