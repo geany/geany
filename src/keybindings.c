@@ -1772,7 +1772,8 @@ static void focus_toggle_editor_vte(void)
 	widget = find_focus_widget(widget);
 	if (gtk_widget_has_focus(widget))
 	{
-      if (previous_page_num >= 0) {
+		if (previous_page_num >= 0 && page_num == MSG_VTE)
+		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), previous_page_num);
 		}
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
