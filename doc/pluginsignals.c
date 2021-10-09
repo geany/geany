@@ -227,7 +227,7 @@ signal void (*build_start)(GObject *obj, gpointer user_data);
  * @param obj a GeanyObject instance, should be ignored.
  * @param word the current word (in UTF-8 encoding) below the cursor position
  *        where the popup menu will be opened.
- * @param click_pos the cursor position where the popup will be opened.
+ * @param pos the cursor position where the popup will be opened.
  * @param doc the current document.
  * @param user_data user data.
  */
