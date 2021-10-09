@@ -2,16 +2,16 @@
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 # Enrico Tröger <enrico.troeger@uvena.de> 2006 - 2009
-# Frank Lanitz <frank@frank.uvena.de> 2006 - 2020
+# Frank Lanitz <frank@frank.uvena.de> 2006 - 2021
 # Dominic Hopf <dh@dmaphy.de> 2008 - 2009
 #
 # Basic guidelines for this translation: http://wiki.xfce.org/de/translations
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.36\n"
+"Project-Id-Version: Geany 1.38\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 19:03+0200\n"
+"POT-Creation-Date: 2021-10-09 12:58+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -2569,11 +2569,12 @@ msgstr[1] "%d Dateien gespeichert."
 #: ../src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
+"Änderungen entdeckt. Wirklich alles neu laden? Diese Änderungen inklusive "
+"deren Geschichte werden dann verworfen."
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Möchten Sie »%s« wirklich neu laden?"
+msgstr "Möchten Sie alles wirklich neu laden?"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -3383,9 +3384,8 @@ msgid "Reload file"
 msgstr "Neu laden"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Neu laden"
+msgstr "Alle Dateien neu laden"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -4028,11 +4028,11 @@ msgstr ""
 "Der IPC-Socket konnt konnte nicht erstellt werden. Mehr Details gibt es "
 "unter Hilfe->Debug-Meldungen"
 
-#: ../src/libmain.c:1400
+#: ../src/libmain.c:1395
 msgid "Do you really want to quit?"
 msgstr "Soll Geany wirklich beendet werden?"
 
-#: ../src/libmain.c:1438
+#: ../src/libmain.c:1433
 msgid "Configuration files reloaded."
 msgstr "Einstellungen erneut geladen."
 
@@ -4939,14 +4939,12 @@ msgid "Classes"
 msgstr "Klassen"
 
 #: ../src/symbols.c:628
-#, fuzzy
 msgid "Fields"
-msgstr "Zu Feld gehen"
+msgstr "Felder"
 
 #: ../src/symbols.c:632
-#, fuzzy
 msgid "Unknowns"
-msgstr "unbekannt"
+msgstr "Unbekannte"
 
 #: ../src/symbols.c:640
 msgid "Anchors"
@@ -6045,9 +6043,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Backup Copy: Datei konnte nicht gespeichert werden (%s)."
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Projektdatei konnte nicht geschrieben werden (%s)."
+msgstr "Instant Save-Dateiname konnte nicht generiert werden (%s)."
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -6062,9 +6060,8 @@ msgid "Select Directory"
 msgstr "Verzeichnis wählen"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "Sicherungsverzeichnis existiert nicht oder ist nicht beschreibbar."
+msgstr "Instant Save-Verzeichnis existiert nicht oder ist nicht beschreibbar."
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -6115,6 +6112,8 @@ msgstr "_Dateityp der für neue Dateien angenommen wird:"
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
+"_Verzeichnis zum Speichern der Dateien (leer für die Standardeinstellung: "
+"%s):"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -6123,6 +6122,9 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"Wenn sie das Instant Save-Verzeichnis auf eines ohne automatische "
+"Bereinigung setzen, müssen sie dieses Verzeichnis regelmäßig selbst leeren. "
+"Instant Save löscht dort keine Daten."
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"
