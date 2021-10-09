@@ -2,10 +2,10 @@ Geany 1.38 (October 09, 2021)
 
     General
     * Increase speed when opening documents, especially on startup
-      (Justin Blanchard, Issue#2883, Issue#2649, Issue#2791,
-      Issue#2883, PR#2883, PR#2747).
+      (Justin Blanchard, Issue#2883, Issue#2649, Issue#2791, PR#2884, PR#2747).
     * Synchronize Geany's Ctags implementation with Universal Ctags, this
       leads to updated symbol parsers (Jiří Techet, PR#2666).
+    * Remove GTK+2 Support (PR#2602).
     * Geany needs a C++17 compiler to build (PR#2862).
 
     Bug fixes
