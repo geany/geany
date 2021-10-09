@@ -13,19 +13,20 @@
 #include <climits>
 
 #include <stdexcept>
+#include <string_view>
 #include <vector>
+#include <optional>
 #include <algorithm>
 #include <memory>
 
-#include "Platform.h"
+#include "Debugging.h"
 
-#include "Scintilla.h"
 #include "Position.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
 
-using namespace Scintilla;
+using namespace Scintilla::Internal;
 
 // Find the first run at a position
 template <typename DISTANCE, typename STYLE>
@@ -78,8 +79,8 @@ void RunStyles<DISTANCE, STYLE>::RemoveRunIfSameAsPrevious(DISTANCE run) {
 
 template <typename DISTANCE, typename STYLE>
 RunStyles<DISTANCE, STYLE>::RunStyles() {
-	starts = Sci::make_unique<Partitioning<DISTANCE>>(8);
-	styles = Sci::make_unique<SplitVector<STYLE>>();
+	starts = std::make_unique<Partitioning<DISTANCE>>(8);
+	styles = std::make_unique<SplitVector<STYLE>>();
 	styles->InsertValue(0, 2, 0);
 }
 
@@ -215,8 +216,8 @@ void RunStyles<DISTANCE, STYLE>::InsertSpace(DISTANCE position, DISTANCE insertL
 
 template <typename DISTANCE, typename STYLE>
 void RunStyles<DISTANCE, STYLE>::DeleteAll() {
-	starts = Sci::make_unique<Partitioning<DISTANCE>>(8);
-	styles = Sci::make_unique<SplitVector<STYLE>>();
+	starts = std::make_unique<Partitioning<DISTANCE>>(8);
+	styles = std::make_unique<SplitVector<STYLE>>();
 	styles->InsertValue(0, 2, 0);
 }
 
@@ -306,9 +307,9 @@ void RunStyles<DISTANCE, STYLE>::Check() const {
 	}
 }
 
-template class Scintilla::RunStyles<int, int>;
-template class Scintilla::RunStyles<int, char>;
+template class Scintilla::Internal::RunStyles<int, int>;
+template class Scintilla::Internal::RunStyles<int, char>;
 #if (PTRDIFF_MAX != INT_MAX) || PLAT_HAIKU
-template class Scintilla::RunStyles<ptrdiff_t, int>;
-template class Scintilla::RunStyles<ptrdiff_t, char>;
+template class Scintilla::Internal::RunStyles<ptrdiff_t, int>;
+template class Scintilla::Internal::RunStyles<ptrdiff_t, char>;
 #endif

@@ -74,6 +74,7 @@ AM_CPPFLAGS += \
 	-DGTK \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/tagmanager \
+	-I$(top_srcdir)/scintilla/lexilla/include \
 	-I$(top_srcdir)/scintilla/include \
 	$(GTK_CFLAGS) \
 	$(PLUGIN_CFLAGS)

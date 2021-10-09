@@ -8,7 +8,7 @@
 #ifndef SPARSEVECTOR_H
 #define SPARSEVECTOR_H
 
-namespace Scintilla {
+namespace Scintilla::Internal {
 
 // SparseVector is similar to RunStyles but is more efficient for cases where values occur
 // for one position instead of over a range of positions.
@@ -27,8 +27,8 @@ private:
 	}
 public:
 	SparseVector() : empty() {
-		starts = Sci::make_unique<Partitioning<Sci::Position>>(8);
-		values = Sci::make_unique<SplitVector<T>>();
+		starts = std::make_unique<Partitioning<Sci::Position>>(8);
+		values = std::make_unique<SplitVector<T>>();
 		values->InsertEmpty(0, 2);
 	}
 	// Deleted so SparseVector objects can not be copied.
