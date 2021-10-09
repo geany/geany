@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.36\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-21 19:03+0200\n"
-"PO-Revision-Date: 2020-11-06 15:05+0100\n"
+"PO-Revision-Date: 2021-10-09 16:53+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -2584,9 +2584,8 @@ msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Êtes-vous sur de vouloir recharger « %s » ?"
+msgstr "Êtes-vous sûr de vouloir recharger tous les fichiers ?"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -2909,7 +2908,7 @@ msgstr "L'historique d'annulation sera perdu."
 #: ../src/document.c:1657
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
-msgstr "Êtes-vous sur de vouloir recharger « %s » ?"
+msgstr "Êtes-vous sûr de vouloir recharger « %s » ?"
 
 #: ../src/document.c:1763
 msgid "Error renaming file."
@@ -3390,9 +3389,8 @@ msgid "Reload file"
 msgstr "Recharger le fichier"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Recharger le fichier"
+msgstr "Recharger tous les fichiers"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -4958,12 +4956,12 @@ msgstr "Classes"
 #: ../src/symbols.c:628
 #, fuzzy
 msgid "Fields"
-msgstr "Se rendre à une ligne"
+msgstr "Champs"
 
 #: ../src/symbols.c:632
 #, fuzzy
 msgid "Unknowns"
-msgstr "inconnu"
+msgstr "Inconnus"
 
 #: ../src/symbols.c:640
 msgid "Anchors"
@@ -6070,9 +6068,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Copie de sauvegarde : le fichier n'a pu être enregistré (%s)."
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Le fichier de projet n'a pas pu être écrit (%s)."
+msgstr "Le nom du fichier de sauvegarde immédiate n'a pas pu être généré (%s)."
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -6087,10 +6085,10 @@ msgid "Select Directory"
 msgstr "Sélectionner le dossier"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
 msgstr ""
-"Le dossier de sauvegarde n'existe pas ou n'a pas de permission d'écriture."
+"Le dossier de sauvegarde immédiate n'existe pas ou n'est pas accessible en "
+"écriture."
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -6141,11 +6139,11 @@ msgid "Default _filetype to use for new files:"
 msgstr "_Type de fichier à utiliser lors de la création de nouveaux fichiers :"
 
 #: ../plugins/saveactions.c:742
-#, fuzzy, c-format
+#, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
-"dossier depuis lequel lancer Make All. Laissez vide pour la commande par "
-"défaut."
+"_Dossier où enregistrer les fichiers (laisser vide pour utiliser le dossier "
+"par défaut « %s »):"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -6154,6 +6152,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>Si vous définissez le dossier de sauvegarde immédiate à un dossier qui "
+"n'est pas vidé automatiquement, vous devrez nettoyer\n"
+"manuellement les fichiers enregistrés. Le plugin Sauvegarde immédiate ne "
+"supprimera pas les fichiers créés.</i>"
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"

@@ -28,7 +28,7 @@ Geany 1.38 (October 09, 2021)
     * Switch Windows builds to GTK3 and x86_64 (PR#2590).
 
     Internationalization
-    * Updated translations: da, de, el, es, et, it, ja, nl pt, pt BR,
+    * Updated translations: da, de, el, es, et, fr, it, ja, nl pt, pt BR,
       sk, tr, uk, zh_CN
 
 
