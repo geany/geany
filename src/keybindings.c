@@ -624,21 +624,21 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FOCUS_MESSAGE_WINDOW, NULL,
 		0, 0, "switch_msgwin_status", _("Switch to Message Window"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_STATUS, NULL,
-		0, 0, "switch_msgwin_status", _("Switch to Message Window - Status"), NULL);
+		0, 0, "switch_msgwin_status", _("Switch to Message Window: Status"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_COMPILER, NULL,
-		0, 0, "switch_msgwin_status_compiler", _("Switch to Message Window - Compiler"), NULL);
+		0, 0, "switch_msgwin_status_compiler", _("Switch to Message Window: Compiler"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_MESSAGES, NULL,
-		0, 0, "switch_msgwin_status_messages", _("Switch to Message Window - Messages"), NULL);
+		0, 0, "switch_msgwin_status_messages", _("Switch to Message Window: Messages"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_SCRIBBLE, NULL,
-		GDK_KEY_F6, 0, "switch_msgwin_status_scribble", _("Switch to Message Window - Scribble"), NULL);
+		GDK_KEY_F6, 0, "switch_msgwin_status_scribble", _("Switch to Message Window: Scribble"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_VTE, NULL,
 		GDK_KEY_F4, 0, "switch_vte", _("Switch to VTE"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_SIDEBAR, NULL,
 		0, 0, "switch_sidebar", _("Switch to Sidebar"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_SIDEBAR_SYMBOL_LIST, NULL,
-		0, 0, "switch_sidebar_symbol_list", _("Switch to Sidebar - Symbols"), NULL);
+		0, 0, "switch_sidebar_symbol_list", _("Switch to Sidebar: Symbols"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_SIDEBAR_DOCUMENT_LIST, NULL,
-		0, 0, "switch_sidebar_doc_list", _("Switch to Sidebar - Documents"), NULL);
+		0, 0, "switch_sidebar_doc_list", _("Switch to Sidebar: Documents"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_TOGGLE_EDITOR_VTE, NULL,
 		0, 0, "switch_editor_vte", _("Switch between Editor and VTE"), NULL);
 	add_kb(group, GEANY_KEYS_FOCUS_TOGGLE_EDITOR_SIDEBAR, NULL,
