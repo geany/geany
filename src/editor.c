@@ -490,7 +490,7 @@ static void on_margin_click(GeanyEditor *editor, SCNotification *nt)
 		sci_toggle_marker_at_line(editor->sci, line, 1);	/* toggle the marker */
 	}
 	/* left click on the folding margin to toggle folding state of current line */
-	else if (nt->margin == 2 && editor_prefs.folding)
+	else if (nt->margin == 2 && editor_prefs.folding && editor_prefs.show_fold_margin)
 	{
 		gint line = sci_get_line_from_position(editor->sci, nt->position);
 		editor_toggle_fold(editor, line, nt->modifiers);
@@ -1063,7 +1063,7 @@ static void update_margins(ScintillaObject *sci)
 {
 	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
-	sci_set_folding_margin_visible(sci, editor_prefs.folding);
+	sci_set_folding_margin_visible(sci, editor_prefs.folding && editor_prefs.show_fold_margin);
 }
 
 
@@ -5189,7 +5189,7 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
 	sci_set_eol_representation_characters(sci, sci_get_eol_mode(sci));
 
-	sci_set_folding_margin_visible(sci, editor_prefs.folding);
+	sci_set_folding_margin_visible(sci, editor_prefs.folding && editor_prefs.show_fold_margin);
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);

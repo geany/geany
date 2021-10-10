@@ -713,9 +713,9 @@
   </object>
   <object class="GtkImage" id="image7">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-new</property>
-    <property name="icon-size">1</property>
+    <property name="icon_size">1</property>
   </object>
   <object class="GtkListStore" id="indent_mode_list">
     <columns>
@@ -3951,17 +3951,6 @@
                                     <property name="can-focus">False</property>
                                     <property name="label-xalign">0</property>
                                     <property name="shadow-type">none</property>
-                                    <child type="label">
-                                      <object class="GtkCheckButton" id="check_line_end">
-                                        <property name="label" translatable="yes">Show line endings</property>
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">True</property>
-                                        <property name="receives-default">False</property>
-                                        <property name="tooltip-text" translatable="yes">Shows the line ending character</property>
-                                        <property name="use-underline">True</property>
-                                        <property name="draw-indicator">True</property>
-                                      </object>
-                                    </child>
                                     <child>
                                       <object class="GtkAlignment">
                                         <property name="visible">True</property>
@@ -3978,6 +3967,17 @@
                                             <property name="draw-indicator">True</property>
                                           </object>
                                         </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkCheckButton" id="check_line_end">
+                                        <property name="label" translatable="yes">Show line endings</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="tooltip-text" translatable="yes">Shows the line ending character</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="draw-indicator">True</property>
                                       </object>
                                     </child>
                                   </object>
@@ -4020,6 +4020,22 @@
                                   </packing>
                                 </child>
                                 <child>
+                                  <object class="GtkCheckButton" id="check_fold_margin">
+                                    <property name="label" translatable="yes">Show fold margin</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="tooltip-text" translatable="yes">Shows or hides the fold margin right of the line numbers, which is used to fold code</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">7</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <object class="GtkCheckButton" id="check_scroll_stop_at_last_line">
                                     <property name="label" translatable="yes">Stop scrolling at last line</property>
                                     <property name="visible">True</property>
@@ -4032,7 +4048,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">7</property>
+                                    <property name="position">8</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4073,7 +4089,7 @@
                                   <packing>
                                     <property name="expand">True</property>
                                     <property name="fill">True</property>
-                                    <property name="position">8</property>
+                                    <property name="position">9</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7501,6 +7517,16 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkCheckMenuItem" id="menu_fold_margin1">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">Show _Fold Margin</property>
+                            <property name="use-underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_fold_margin1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkCheckMenuItem" id="menu_show_white_space1">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -8057,10 +8083,10 @@
                           <object class="GtkImageMenuItem" id="project_new_from_folder1">
                             <property name="label" translatable="yes">New from _Folder...</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="use_underline">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="use-underline">True</property>
                             <property name="image">image7</property>
-                            <property name="use_stock">False</property>
+                            <property name="use-stock">False</property>
                             <signal name="activate" handler="on_project_new_from_folder1_activate" swapped="no"/>
                           </object>
                         </child>

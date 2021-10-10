@@ -589,6 +589,9 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_markers_margin);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_fold_margin);
+
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.scroll_stop_at_last_line);
 
@@ -860,6 +863,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		gboolean autoclose_brackets[5];
 		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
 		gboolean old_sidebar_pos = interface_prefs.sidebar_pos;
+		gboolean check_folding_last;
 		GeanyDocument *doc = document_get_current();
 
 		/* Synchronize Stash settings */
@@ -1041,9 +1045,16 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
+		check_folding_last = editor_prefs.folding;
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding");
 		editor_prefs.folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		ui_update_fold_items();
+
+		if(!check_folding_last && editor_prefs.folding)
+		{
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
+				ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin")), TRUE);
+		}
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children");
 		editor_prefs.unfold_all_children = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1066,6 +1077,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
 		editor_prefs.show_markers_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin");
+		editor_prefs.show_fold_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
 		editor_prefs.scroll_stop_at_last_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1527,6 +1541,7 @@ static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
 	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin"), sens);
 }
 
 

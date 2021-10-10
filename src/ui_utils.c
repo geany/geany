@@ -563,6 +563,7 @@ void ui_update_fold_items(void)
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_fold_all1"), editor_prefs.folding);
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_unfold_all1"), editor_prefs.folding);
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "separator22"), editor_prefs.folding);
+	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_fold_margin1"), editor_prefs.folding);
 }
 
 
@@ -1432,6 +1433,9 @@ void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 			case GEANY_EDITOR_SHOW_MARKERS_MARGIN:
 				sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
 				break;
+			case GEANY_EDITOR_SHOW_FOLD_MARGIN:
+				sci_set_folding_margin_visible(doc->editor->sci, editor_prefs.show_fold_margin);
+				break;
 			case GEANY_EDITOR_SHOW_LINE_NUMBERS:
 				sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
 				break;
@@ -1453,6 +1457,7 @@ void ui_update_view_editor_menu_items(void)
 {
 	ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_markers_margin1")), editor_prefs.show_markers_margin);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_fold_margin1")), editor_prefs.show_fold_margin);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_linenumber_margin1")), editor_prefs.show_linenumber_margin);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_white_space1")), editor_prefs.show_white_space);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_line_endings1")), editor_prefs.show_line_endings);
