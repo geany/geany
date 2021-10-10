@@ -863,7 +863,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		gboolean autoclose_brackets[5];
 		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
 		gboolean old_sidebar_pos = interface_prefs.sidebar_pos;
-		gboolean check_folding_last;
 		GeanyDocument *doc = document_get_current();
 
 		/* Synchronize Stash settings */
@@ -1045,16 +1044,19 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
-		check_folding_last = editor_prefs.folding;
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding");
+
+		if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)) != editor_prefs.folding)
+		{
+			if(!editor_prefs.folding) {
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
+					ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin")), TRUE);
+			} else
+				editor_unfold_all(doc->editor);
+		}
+
 		editor_prefs.folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		ui_update_fold_items();
-
-		if(!check_folding_last && editor_prefs.folding)
-		{
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
-				ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin")), TRUE);
-		}
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children");
 		editor_prefs.unfold_all_children = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
