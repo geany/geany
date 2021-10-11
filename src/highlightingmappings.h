@@ -388,7 +388,7 @@ static const HLStyle highlighting_styles_CSS[] =
 	{ SCE_CSS_EXTENDED_IDENTIFIER,		"extended_identifier",		FALSE },
 	{ SCE_CSS_EXTENDED_PSEUDOCLASS,		"extended_pseudoclass",		FALSE },
 	{ SCE_CSS_EXTENDED_PSEUDOELEMENT,	"extended_pseudoelement",	FALSE },
-	{ SCE_CSS_MEDIA,					"media",					FALSE }
+	{ SCE_CSS_GROUP_RULE,				"group_rule",				FALSE }
 };
 static const HLKeyword highlighting_keywords_CSS[] =
 {

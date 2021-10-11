@@ -62,6 +62,9 @@ class ScintillaGTK : public ScintillaBase {
 	GtkIMContext *im_context;
 	GUnicodeScript lastNonCommonScript;
 
+	GtkSettings *settings;
+	gulong settingsHandlerId;
+
 	// Wheel mouse support
 	unsigned int linesPerScroll;
 	gint64 lastWheelMouseTime;

@@ -1073,7 +1073,7 @@ XYPOSITION SurfaceImpl::Ascent(const Font *font_) {
 	if (PFont(font_)->pfd) {
 		PangoFontMetrics *metrics = pango_context_get_metrics(pcontext,
 					    PFont(font_)->pfd, pango_context_get_language(pcontext));
-		ascent = std::round(floatFromPangoUnits(
+		ascent = std::ceil(floatFromPangoUnits(
 					    pango_font_metrics_get_ascent(metrics)));
 		pango_font_metrics_unref(metrics);
 	}
@@ -1087,7 +1087,7 @@ XYPOSITION SurfaceImpl::Descent(const Font *font_) {
 	if (PFont(font_)->pfd) {
 		PangoFontMetrics *metrics = pango_context_get_metrics(pcontext,
 					    PFont(font_)->pfd, pango_context_get_language(pcontext));
-		const XYPOSITION descent = std::round(floatFromPangoUnits(
+		const XYPOSITION descent = std::ceil(floatFromPangoUnits(
 				pango_font_metrics_get_descent(metrics)));
 		pango_font_metrics_unref(metrics);
 		return descent;

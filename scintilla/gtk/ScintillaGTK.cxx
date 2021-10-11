@@ -5,6 +5,7 @@
 
 #include <cstddef>
 #include <cstdlib>
+#include <cstdint>
 #include <cassert>
 #include <cstring>
 #include <cstdio>
@@ -179,6 +180,18 @@ GdkAtom SelectionOfGSD(GtkSelectionData *sd) noexcept {
 	return gtk_selection_data_get_selection(sd);
 }
 
+bool SettingGet(GtkSettings *settings, const gchar *name, gpointer value) noexcept {
+	if (!settings) {
+		return false;
+	}
+	if (!g_object_class_find_property(G_OBJECT_GET_CLASS(
+		G_OBJECT(settings)), name)) {
+		return false;
+	}
+	g_object_get(G_OBJECT(settings), name, value, nullptr);
+	return true;
+}
+
 }
 
 FontOptions::FontOptions(GtkWidget *widget) noexcept {
@@ -218,6 +231,8 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 	preeditInitialized(false),
 	im_context(nullptr),
 	lastNonCommonScript(G_UNICODE_SCRIPT_INVALID_CODE),
+	settings(nullptr),
+	settingsHandlerId(0),
 	lastWheelMouseTime(0),
 	lastWheelMouseDirection(0),
 	wheelMouseIntensity(0),
@@ -264,6 +279,12 @@ ScintillaGTK::~ScintillaGTK() {
 	}
 	ClearPrimarySelection();
 	wPreedit.Destroy();
+	if (settingsHandlerId) {
+		g_signal_handler_disconnect(settings, settingsHandlerId);
+	}
+	if (settings) {
+		g_object_unref(settings);
+	}
 }
 
 void ScintillaGTK::RealizeThis(GtkWidget *widget) {
@@ -341,6 +362,15 @@ void ScintillaGTK::RealizeThis(GtkWidget *widget) {
 	cursor = gdk_cursor_new_for_display(pdisplay, GDK_LEFT_PTR);
 	gdk_window_set_cursor(PWindow(scrollbarh), cursor);
 	UnRefCursor(cursor);
+
+	using NotifyLambda = void (*)(GObject *, GParamSpec *, ScintillaGTK *);
+	if (settings) {
+		settingsHandlerId = g_signal_connect(settings, "notify::gtk-xft-dpi",
+			G_CALLBACK(static_cast<NotifyLambda>([](GObject *, GParamSpec *, ScintillaGTK *sciThis) {
+				sciThis->InvalidateStyleRedraw();
+			})),
+			this);
+	}
 }
 
 void ScintillaGTK::Realize(GtkWidget *widget) {
@@ -669,20 +699,16 @@ void ScintillaGTK::Init() {
 	gtk_container_add(GTK_CONTAINER(PWidget(wPreedit)), predrw);
 	gtk_widget_show(predrw);
 
+	settings = gtk_settings_get_default();
+
 	// Set caret period based on GTK settings
 	gboolean blinkOn = false;
-	if (g_object_class_find_property(G_OBJECT_GET_CLASS(
-			G_OBJECT(gtk_settings_get_default())), "gtk-cursor-blink")) {
-		g_object_get(G_OBJECT(
-				     gtk_settings_get_default()), "gtk-cursor-blink", &blinkOn, nullptr);
-	}
-	if (blinkOn &&
-			g_object_class_find_property(G_OBJECT_GET_CLASS(
-						G_OBJECT(gtk_settings_get_default())), "gtk-cursor-blink-time")) {
-		gint value;
-		g_object_get(G_OBJECT(
-				     gtk_settings_get_default()), "gtk-cursor-blink-time", &value, nullptr);
-		caret.period = static_cast<int>(value / 1.75);
+	SettingGet(settings, "gtk-cursor-blink", &blinkOn);
+	if (blinkOn) {
+		gint value = 500;
+		if (SettingGet(settings, "gtk-cursor-blink-time", &value)) {
+			caret.period = static_cast<int>(value / 1.75);
+		}
 	} else {
 		caret.period = 0;
 	}

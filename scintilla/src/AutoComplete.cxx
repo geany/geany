@@ -211,7 +211,7 @@ void AutoComplete::Show(bool show) {
 		lb->Select(0);
 }
 
-void AutoComplete::Cancel() {
+void AutoComplete::Cancel() noexcept {
 	if (lb->Created()) {
 		lb->Clear();
 		lb->Destroy();
@@ -272,7 +272,7 @@ void AutoComplete::Select(const char *word) {
 			}
 		} else if (cond < 0) {
 			end = pivot - 1;
-		} else if (cond > 0) {
+		} else { // cond > 0
 			start = pivot + 1;
 		}
 	}
