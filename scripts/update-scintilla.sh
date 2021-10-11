@@ -73,7 +73,7 @@ copy_to scintilla/lexilla/lexlib  "$LEX_SRC"/lexlib/*.h
 copy_to scintilla/lexilla/        "$LEX_SRC"/License.txt
 copy_to scintilla/lexilla/        "$LEX_SRC"/version.txt
 # now copy the lexers we use
-git ls-files scintilla/lexilla/lexers/*.cxx | while read f; do
+git -C scintilla/lexilla/lexers/ ls-files *.cxx | while read f; do
   copy_to "scintilla/lexilla/lexers" "$LEX_SRC/lexers/$f"
 done
 
