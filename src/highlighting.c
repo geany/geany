@@ -1168,7 +1168,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
  * (e.g. by by opening a file of this type), it will be initialised. The returned pointer is
  * owned by Geany and must not be freed.
  * @param ft_id Filetype ID, e.g. @c GEANY_FILETYPES_DIFF.
- * @param style_id A Scintilla lexer style, e.g. @c SCE_DIFF_ADDED. See scintilla/include/SciLexer.h.
+ * @param style_id A Scintilla lexer style, e.g. @c SCE_DIFF_ADDED. See scintilla/lexilla/include/SciLexer.h.
  * @return A pointer to the style struct.
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
 GEANY_API_SYMBOL

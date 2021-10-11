@@ -8,7 +8,8 @@ scintilla_include_HEADERS =            \
 include/Scintilla.h                    \
 include/Scintilla.iface                \
 include/ScintillaWidget.h              \
-include/Sci_Position.h
+include/Sci_Position.h                 \
+lexilla/include/SciLexer.h
 
 LEXER_SRCS =                           \
 lexilla/lexers/LexAbaqus.cxx           \

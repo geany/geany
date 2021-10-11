@@ -107,9 +107,9 @@ fi
 if ! git diff --quiet scintilla/lexilla/include/SciLexer.h; then
 	cat << EOF
 
-Check the diff of scintilla/include/SciLexer.h to see whether and which
+Check the diff of scintilla/lexilla/include/SciLexer.h to see whether and which
 mapping to add or update in src/highlightingmappings.h
-(use git diff scintilla/include/SciLexer.h).
+(use git diff scintilla/lexilla/include/SciLexer.h).
 Don't forget to also update the comment and string styles in
 src/highlighting.c.
 EOF
