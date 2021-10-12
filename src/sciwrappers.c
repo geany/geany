@@ -147,45 +147,94 @@ void sci_set_mark_long_lines(ScintillaObject *sci, gint type, gint column, const
 
 /* Calls SCI_TEXTHEIGHT but tries very hard to cache the result as it's a very
  * expensive operation */
-static gint sci_text_height_cached(ScintillaObject *sci)
+struct height_spec {
+	gchar *font;
+	gint size;
+	gint line;
+	gint zoom;
+	gint extra;
+	gint value; /* Cached value. */
+	size_t last_used_tick; /* "time" of last use. */
+};
+
+#define TEXT_HEIGHT_CACHE_ITEMS_MAX	128
+
+static gint sci_text_height_cache_compare_fn(gconstpointer a, gconstpointer b)
 {
-	struct height_spec {
-		gchar *font;
-		gint size;
-		gint zoom;
-		gint extra;
-	};
-	static struct height_spec cache = {0};
-	static gint cache_value = 0;
-	struct height_spec current;
+	gint ret;
+	const struct height_spec *as = (const struct height_spec*)a;
+	const struct height_spec *bs = (const struct height_spec*)b;
+
+	ret = g_strcmp0(as->font, bs->font);
+	if (0 != ret)
+		return (ret);
+	ret = as->size - bs->size;
+	if (0 != ret)
+		return (ret);
+	ret = as->line - bs->line;
+	if (0 != ret)
+		return (ret);
+	ret = as->zoom - bs->zoom;
+	if (0 != ret)
+		return (ret);
+	return (as->extra - bs->extra);
+}
+
+gint sci_text_height_cached(ScintillaObject *sci, const gint line)
+{
+	static GArray *cache = NULL;
+	static size_t cache_tick = 0;
+	struct height_spec current, *cache_item;
+
+	if (NULL == cache) {
+		cache = g_array_new(FALSE, FALSE, sizeof(struct height_spec));
+	}
+
+	cache_tick ++; /* Tick cache "time". */
 
 	current.font = sci_get_string(sci, SCI_STYLEGETFONT, 0);
 	current.size = SSM(sci, SCI_STYLEGETSIZEFRACTIONAL, 0, 0);
+	current.line = line;
 	current.zoom = SSM(sci, SCI_GETZOOM, 0, 0);
 	current.extra = SSM(sci, SCI_GETEXTRAASCENT, 0, 0) + SSM(sci, SCI_GETEXTRADESCENT, 0, 0);
+	current.last_used_tick = cache_tick;
 
-	if (g_strcmp0(current.font, cache.font) == 0 &&
-		current.size == cache.size &&
-		current.zoom == cache.zoom &&
-		current.extra == cache.extra)
-	{
+	cache_item = bsearch(&current, cache->data, cache->len,
+	    sizeof(struct height_spec), sci_text_height_cache_compare_fn);
+	if (NULL != cache_item)
+	{ /* Cache hit. */
 		g_free(current.font);
-	}
-	else
-	{
-		g_free(cache.font);
-		cache = current;
-
-		cache_value = SSM(sci, SCI_TEXTHEIGHT, 0, 0);
+		cache_item->last_used_tick = cache_tick;
+		return cache_item->value;
 	}
 
-	return cache_value;
+	/* Cache miss, call SCI_TEXTHEIGHT and add to cache. */
+	current.value = SSM(sci, SCI_TEXTHEIGHT, line, 0);
+	g_array_append_val(cache, current);
+	/* Check cache items count before sort.*/
+	if (TEXT_HEIGHT_CACHE_ITEMS_MAX < (cache->len / sizeof(struct height_spec))) {
+		/* Remove oldest used item. */
+		size_t idx_to_remove = 0, min_tick = cache_tick;
+		for (size_t i = 0; i < TEXT_HEIGHT_CACHE_ITEMS_MAX; i ++) {
+			cache_item = &g_array_index(cache, struct height_spec, i);
+			if (min_tick < cache_item->last_used_tick)
+				continue;
+			idx_to_remove = i;
+			min_tick = cache_item->last_used_tick;
+		}
+		g_free(g_array_index(cache, struct height_spec, idx_to_remove).font);
+		g_array_remove_index(cache, idx_to_remove);
+	}
+	/* Sort cache entries to allow bsearch() work. */
+	g_array_sort(cache, sci_text_height_cache_compare_fn);
+
+	return current.value;
 }
 
 /* compute margin width based on ratio of line height */
 static gint margin_width_from_line_height(ScintillaObject *sci, gdouble ratio, gint threshold)
 {
-	const gint line_height = sci_text_height_cached(sci);
+	const gint line_height = sci_text_height_cached(sci, 0);
 	gint width;
 
 	width = line_height * ratio;

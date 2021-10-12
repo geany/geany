@@ -174,6 +174,7 @@ void				sci_scroll_columns			(ScintillaObject *sci, gint columns);
 gint				sci_search_next				(ScintillaObject *sci, gint flags, const gchar *text);
 gint				sci_search_prev				(ScintillaObject *sci, gint flags, const gchar *text);
 void				sci_marker_delete_all		(ScintillaObject *sci, gint marker);
+gint				sci_text_height_cached		(ScintillaObject *sci, const gint line);
 void				sci_set_symbol_margin		(ScintillaObject *sci, gboolean set);
 void				sci_set_codepage			(ScintillaObject *sci, gint cp);
 void				sci_clear_cmdkey			(ScintillaObject *sci, gint key);

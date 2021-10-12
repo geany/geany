@@ -1960,7 +1960,7 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 		gint pos_x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
 		gint pos_y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos);
 
-		line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
+		line_height = sci_text_height_cached(sci, line);
 
 		gdk_window_get_origin(window, x, y);
 		*x += pos_x;
