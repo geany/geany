@@ -1,0 +1,166 @@
+#
+# Copyright:	2021, The Geany contributors
+# License:		GNU GPL v2 or later
+
+name: CI Build
+
+on: push
+#on:
+#  push:
+#    branches:
+#      - master
+#  pull_request:
+#    branches:
+#      - master
+
+# cancel already running builds of the same branch or pull request
+concurrency:
+  group: ci-${{ github.head_ref }} || concat(${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CFLAGS: -g -O2 -Werror=pointer-arith -Werror=implicit-function-declaration
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_COMPRESS: true
+  CCACHE_MAXSIZE: 1G
+  PYTHON: python3
+  DEBUG: 0
+
+jobs:
+  linux:
+    name: Linux Build (BINRELOC=${{ matrix.binreloc }})
+    runs-on: ubuntu-18.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - binreloc: no
+          - binreloc: yes
+
+    env:
+      CONFIGURE_FLAGS: --enable-binreloc=${{ matrix.binreloc }}
+      CC: ccache gcc
+      CXX: ccache g++
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # create and use a timestamp for the cache key: GH Actions will never update a cache
+      # only use an existing cache item or create a new one. To use an existing cache *and*
+      # push back the the updated cache after build, we use a always new cache key (to force
+      # the creation of the cache item at the end) in combination with "restore-keys" as fallback
+      - name: Prepare ccache timestamp
+        id: ccache_cache_timestamp
+        run: echo "::set-output name=timestamp::$(date +%Y-%m-%d-%H-%M)"
+
+      - name: Configure ccache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ${{ runner.os }}-${{ github.job }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+          restore-keys: ${{ runner.os }}-${{ github.job }}-ccache-
+
+      - name: Show environment
+        run: env | sort
+        if: ${{ env.DEBUG == '1' }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install --assume-yes --no-install-recommends \
+            ccache \
+            intltool \
+            libtool \
+            libgtk-3-dev \
+            doxygen \
+            python3-docutils \
+            python3-lxml \
+            rst2pdf
+
+      - name: Configure
+        run: |
+          NOCONFIGURE=1 ./autogen.sh
+          mkdir _build
+          cd _build
+          { ../configure $CONFIGURE_FLAGS || { cat config.log; exit 1; } ; }
+
+      - name: Build
+        run: |
+          cd _build
+          make
+
+      - name: Run Tests
+        run: |
+          cd _build
+          make -j2 check
+
+      - name: Run distcheck
+        run: |
+          cd _build
+          make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS";
+
+      - name: ccache statistics
+        run: ccache --show-stats
+        if: ${{ env.DEBUG == '1' }}
+
+
+  mingw:
+    name: Mingw Build
+    # i686-w64-mingw32-pkg-config fails with weird error message on 20.04
+    runs-on: ubuntu-18.04
+    env:
+      CC: ccache i686-w64-mingw32-gcc
+      CXX: ccache i686-w64-mingw32-g++
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # create and use a timestamp for the cache key: GH Actions will never update a cache
+      # only use an existing cache item or create a new one. To use an existing cache *and*
+      # push back the the updated cache after build, we use a always new cache key (to force
+      # the creation of the cache item at the end) in combination with "restore-keys" as fallback
+      - name: Prepare ccache timestamp
+        id: ccache_cache_timestamp
+        run: echo "::set-output name=timestamp::$(date +%Y-%m-%d-%H-%M)"
+
+      - name: Configure ccache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ${{ runner.os }}-${{ github.job }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+          restore-keys: ${{ runner.os }}-${{ github.job }}-ccache-
+
+      - name: Show environment
+        run: env | sort
+        if: ${{ env.DEBUG == '1' }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install --assume-yes --no-install-recommends \
+            ccache \
+            intltool \
+            libtool \
+            mingw-w64-tools \
+            g++-mingw-w64-i686 \
+            gcc-mingw-w64-i686 \
+            binutils-mingw-w64-i686 \
+            doxygen \
+            python3-docutils \
+            python3-lxml \
+            rst2pdf
+          # fix broken pkg-config-crosswrapper, see https://bugs.launchpad.net/ubuntu/+source/mingw-w64/+bug/1327242
+          sudo sed -e 's/PKG_CONFIG_PATH=/&$PKG_CONFIG_PATH:/' -i /usr/bin/i686-w64-mingw32-pkg-config
+
+      - name: Run autogen.sh
+        run: |
+          NOCONFIGURE=1 ./autogen.sh
+
+      - name: Build
+        run: |
+          sh ./scripts/cross-build-mingw.sh;
+
+      - name: ccache statistics
+        run: ccache --show-stats
+        if: ${{ env.DEBUG == '1' }}
