@@ -182,6 +182,7 @@ void				sci_clear_cmdkey			(ScintillaObject *sci, gint key);
 void				sci_assign_cmdkey			(ScintillaObject *sci, gint key, gint command);
 void				sci_selection_duplicate		(ScintillaObject *sci);
 void				sci_line_duplicate			(ScintillaObject *sci);
+void				sci_new_line				(ScintillaObject *sci);
 
 void				sci_set_keywords			(ScintillaObject *sci, guint k, const gchar *text);
 void				sci_set_lexer				(ScintillaObject *sci, guint lexer_id);
