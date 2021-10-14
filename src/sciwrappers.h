@@ -98,6 +98,8 @@ gint				sci_get_current_line		(ScintillaObject *sci);
 void				sci_indicator_set			(ScintillaObject *sci, gint indic);
 void				sci_indicator_clear			(ScintillaObject *sci, gint pos, gint len);
 
+void				sci_delete_range			(ScintillaObject *sci, gint pos, gint len);
+
 void				sci_set_line_indentation	(ScintillaObject *sci, gint line, gint indent);
 gint				sci_get_line_indentation	(ScintillaObject *sci, gint line);
 gint				sci_find_matching_brace		(ScintillaObject *sci, gint pos);

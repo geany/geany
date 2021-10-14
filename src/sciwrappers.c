@@ -285,6 +285,10 @@ void sci_add_text(ScintillaObject *sci, const gchar *text)
 	}
 }
 
+void sci_delete_range(ScintillaObject *sci, const gint pos, const gint length)
+{
+	SSM(sci, SCI_DELETERANGE, pos, length);
+}
 
 /** Sets all text.
  * @param sci Scintilla widget.

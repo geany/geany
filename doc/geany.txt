@@ -2193,6 +2193,10 @@ Geany can automatically insert a closing bracket and quote characters when
 you open them. For instance, you type a ``(`` and Geany will automatically
 insert ``)``. With the following options, you can define for which
 characters this should work.
+For a more flowing writing (not move the typing hand to arrow keys) Geany
+checks if the character written is the closing quote or bracket that was
+previously inserted. In that case only one quote or bracket of the one written
+and the one previously inserted remains.
 
 Parenthesis ( )
     Auto-close parenthesis when typing an opening one
@@ -2208,6 +2212,7 @@ Single quotes ' '
 
 Double quotes " "
     Auto-close double quotes when typing an opening one
+
 
 
 Editor Display preferences
