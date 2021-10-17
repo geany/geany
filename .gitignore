@@ -68,7 +68,7 @@ Makefile.in
 /po/.intltool-merge-cache
 /po/LINGUAS
 /po/Makefile.in.in
-/po/Makevars
+/po/Makevars.template
 /po/*.mo
 /po/*.pot
 /po/POTFILES
