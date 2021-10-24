@@ -2784,6 +2784,15 @@ relative to the project's file name.
 The *File patterns* field allows to specify a list of file patterns for the
 project, which can be used in the `Find in files`_ dialog.
 
+The *Relatives files* option allows to store the relative path instead
+of the absolute path of the opened files when the session is saved.
+
+.. Warning:: 
+    If this is convenient to share a project, think twice before
+    adding a ``.geany`` file to a version control system (like svn or git).
+    You or other people risk to commit this file and broadcast to the world
+    the paths of all your opened files.
+
 The *Indentation* tab allows you to override the default
 `Indentation`_ settings.
 

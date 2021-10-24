@@ -73,6 +73,7 @@ typedef struct _PropertyDialogElements
 	GtkWidget *file_name;
 	GtkWidget *base_path;
 	GtkWidget *patterns;
+	GtkWidget *use_relative_filename;
 	BuildTableData build_properties;
 	gint build_page_num;
 	gboolean entries_modified;
@@ -266,7 +267,7 @@ static void run_new_dialog(PropertyDialogElements *e)
 	{
 		// reload any documents that were closed
 		configuration_reload_default_session();
-		configuration_open_files();
+		configuration_open_files(NULL);
 	}
 }
 
@@ -277,9 +278,14 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 	{
 		if (project_prefs.project_session)
 		{
-			configuration_open_files();
+			gchar * root_path_locale = g_path_get_dirname(locale_file_name);
+			gchar * root_path_utf8 = utils_get_utf8_from_locale(root_path_locale);
+			configuration_open_files(root_path_utf8);
 			document_new_file_if_non_open();
 			ui_focus_current_document();
+
+			g_free(root_path_locale);
+			g_free(root_path_utf8);
 		}
 		return TRUE;
 	}
@@ -467,7 +473,7 @@ static void destroy_project(gboolean open_default)
 		if (open_default && cl_options.load_session)
 		{
 			configuration_reload_default_session();
-			configuration_open_files();
+			configuration_open_files(NULL);
 			document_new_file_if_non_open();
 			ui_focus_current_document();
 		}
@@ -535,6 +541,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	e->description = ui_lookup_widget(e->dialog, "textview_project_dialog_description");
 	e->base_path = ui_lookup_widget(e->dialog, "entry_project_dialog_base_path");
 	e->patterns = ui_lookup_widget(e->dialog, "entry_project_dialog_file_patterns");
+	e->use_relative_filename = ui_lookup_widget(e->dialog, "checkbutton_project_dialog_file_relative");
 
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
 
@@ -610,6 +617,10 @@ static void show_project_properties(gboolean show_build)
 	entry_text = p->file_patterns ? g_strjoinv(" ", p->file_patterns) : g_strdup("");
 	gtk_entry_set_text(GTK_ENTRY(e.patterns), entry_text);
 	g_free(entry_text);
+
+	gtk_toggle_button_set_active(
+		GTK_TOGGLE_BUTTON(e.use_relative_filename),
+		p->use_relative_filename );
 
 	g_signal_emit_by_name(geany_object, "project-dialog-open", e.notebook);
 	gtk_widget_show_all(e.dialog);
@@ -822,6 +833,8 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
 		SETPTR(p->description, gtk_text_buffer_get_text(buffer, &start, &end, FALSE));
+
+		p->use_relative_filename = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(e->use_relative_filename));
 
 		foreach_slist(node, stash_groups)
 			stash_group_update(node->data, e->dialog);
@@ -1063,6 +1076,7 @@ static gboolean load_config(const gchar *filename)
 	p->file_name = utils_get_utf8_from_locale(filename);
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
+	p->use_relative_filename = utils_get_setting_boolean(config, "project", "relative_files", FALSE);
 
 	p->priv->long_line_behaviour = utils_get_setting_integer(config, "long line marker",
 		"long_line_behaviour", 1 /* follow global */);
@@ -1104,6 +1118,7 @@ static gboolean write_config(void)
 	GeanyProject *p;
 	GKeyFile *config;
 	gchar *filename;
+	gchar *project_dir=NULL; /* Should be set only if project use relative filename */
 	gchar *data;
 	gboolean ret = FALSE;
 	GSList *node;
@@ -1128,6 +1143,10 @@ static gboolean write_config(void)
 	if (p->file_patterns)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
+	g_key_file_set_boolean(config, "project", "relative_files", p->use_relative_filename);
+	if(p->use_relative_filename){
+		project_dir=g_path_get_dirname(p->file_name);
+	}
 
 	// editor settings
 	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->priv->long_line_behaviour);
@@ -1135,7 +1154,8 @@ static gboolean write_config(void)
 
 	/* store the session files into the project too */
 	if (project_prefs.project_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, project_dir);
+
 	build_save_menu(config, (gpointer)p, GEANY_BCS_PROJ);
 	g_signal_emit_by_name(geany_object, "project-save", config);
 	/* write the file */
