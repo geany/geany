@@ -5481,10 +5481,15 @@ GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   Se
 
 .. _ft_regex:
 
-The GEANY_DEFAULT_FILETYPE_REGEX default value is  ``-\*-\s*([^\s]+)\s*-\*-`` which finds Emacs filetypes.  For example, C and C++ header files can be differentiated by the first-line comments::
+The GEANY_DEFAULT_FILETYPE_REGEX default value is  ``-\*-\s*([^\s]+)\s*-\*-`` which finds filetypes contained in Emacs-style tags.  For example, C and C++ header files can be differentiated by comments on the first line::
 
-    /* -*-C-*- */
+    /* -*- C -*- */
     // -*- C++ -*-
+
+Filetypes that Geany recognizes are contained in ``filetype_extensions.conf``, which is described at `filetype extensions`_.  In case different options are desired for another editor, the Geany filetype can be listed first, or the regular expression modified as needed::
+
+    -*- Lisp -*- mode: Lisp; fill-column: 75; comment-column: 50; -*-
+
 
 The GEANY_DEFAULT_TOOLS_TERMINAL default value on Windows is::
 
