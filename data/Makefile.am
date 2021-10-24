@@ -33,6 +33,7 @@ filetypes_dist = \
 	filedefs/filetypes.ferite \
 	filedefs/filetypes.forth \
 	filedefs/filetypes.fortran \
+	filedefs/filetypes.fountain \
 	filedefs/filetypes.freebasic \
 	filedefs/filetypes.Genie.conf \
 	filedefs/filetypes.glsl \

@@ -830,6 +830,16 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_MARKDOWN:
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_variable), _("Sections"), ICON_OTHER,
+				NULL);
+			break;
+		case GEANY_FILETYPES_FOUNTAIN:
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_variable), _("Scenes"), ICON_OTHER,
+				NULL);
+			break;
 		case GEANY_FILETYPES_D:
 		default:
 		{

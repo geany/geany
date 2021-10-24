@@ -541,6 +541,10 @@ static TMParserMapEntry map_JULIA[] = {
 	{'x', tm_tag_externvar_t},
 };
 
+/* not in universal-ctags */
+static TMParserMapEntry map_FOUNTAIN[] = {
+	{'v', tm_tag_variable_t},
+};
 
 typedef struct
 {
@@ -605,6 +609,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(ZEPHIR),
 	MAP_ENTRY(POWERSHELL),
 	MAP_ENTRY(JULIA),
+	MAP_ENTRY(FOUNTAIN),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);

@@ -188,6 +188,8 @@ static void init_builtin_filetypes(void)
 	FT_INIT( ZEPHIR,     ZEPHIR,       "Zephir",           NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( SMALLTALK,  NONE,         "Smalltalk",        NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( JULIA,      JULIA,        "Julia",            NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( FOUNTAIN,   FOUNTAIN,     "Fountain",         NULL,                      SOURCE_FILE, MARKUP   );
+
 }
 
 

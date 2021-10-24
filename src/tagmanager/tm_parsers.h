@@ -66,6 +66,7 @@
 	ZephirParser, \
 	PowerShellParser, \
     JuliaParser, \
-	BibtexParser
+	BibtexParser, \
+	FountainParser
 
 #endif

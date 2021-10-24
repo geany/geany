@@ -78,6 +78,7 @@
 	FalconParser, \
 	FlexParser, \
 	FortranParser, \
+	FountainParser, \
 	FyppParser,	   \
 	GdbinitParser, \
 	GoParser, \

@@ -25,6 +25,7 @@ parsers = \
 	parsers/geany_erlang.c \
 	parsers/geany_flex.c \
 	parsers/geany_fortran.c \
+	parsers/geany_fountain.c \
 	parsers/geany_go.c \
 	parsers/geany_haskell.c \
 	parsers/geany_haxe.c \
