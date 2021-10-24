@@ -24,7 +24,7 @@ codebk=attribute_unknown
 extension=fountain
 
 # MIME type
-mime_type=text/x-markdown
+mime_type=text/x-fountain
 
 # sort tags by appearance
 symbol_list_sort_mode=1
