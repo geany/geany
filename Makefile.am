@@ -29,12 +29,6 @@ DISTCLEANFILES = \
 uninstall-local:
 	rm -rf $(DESTDIR)$(pkgdatadir);
 
-# Remove po/.intltool-merge-cache.lock on "distcheck" which is left over by various incorrectly
-# patched versions of intltool, e.g. https://bugs.archlinux.org/task/67098 or
-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=991623
-distclean-local:
-	rm -f $(top_builddir)/po/.intltool-merge-cache.lock
-
 # manually install some files under another name
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
