@@ -1195,7 +1195,10 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
 		case SCN_ZOOM:
-			update_margins(sci);
+			if (editor_prefs.zoom_disable_scrollwheel)
+				sci_zoom_off(editor->sci);
+			else
+				update_margins(sci);
 			break;
 	}
 	/* we always return FALSE here to let plugins handle the event too */
