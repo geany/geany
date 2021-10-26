@@ -365,13 +365,25 @@ gboolean sci_is_modified(ScintillaObject *sci)
 
 void sci_zoom_in(ScintillaObject *sci)
 {
-	SSM(sci, SCI_ZOOMIN, 0, 0);
+	// SCI_ZOOMIN is limited to 20, SCI_SETZOOM is unlimited
+	int curr_zoom = SSM(sci, SCI_GETZOOM, 0, 0);
+	++curr_zoom;
+	SSM(sci, SCI_SETZOOM, curr_zoom, curr_zoom);
 }
 
 
 void sci_zoom_out(ScintillaObject *sci)
 {
-	SSM(sci, SCI_ZOOMOUT, 0, 0);
+	int curr_size = SSM(sci, SCI_STYLEGETSIZEFRACTIONAL, STYLE_DEFAULT, STYLE_DEFAULT);
+	int curr_zoom = SSM(sci, SCI_GETZOOM, 0, 0);
+
+	// SCI_ZOOMOUT is limited to -10, SCI_SETZOOM is unlimited.
+	// Minimum font size is 2pt.  Number of zoom levels depends on base font size.
+	if (curr_size + curr_zoom*SC_FONT_SIZE_MULTIPLIER > 2*SC_FONT_SIZE_MULTIPLIER)
+	{
+		--curr_zoom;
+		SSM(sci, SCI_SETZOOM, curr_zoom, curr_zoom);
+	}
 }
 
 
