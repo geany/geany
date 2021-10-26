@@ -1198,7 +1198,16 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			if (editor_prefs.zoom_disable_scrollwheel)
 				sci_zoom_off(editor->sci);
 			else
+			{
+				int curr_size = SSM(sci, SCI_STYLEGETSIZEFRACTIONAL, STYLE_DEFAULT, STYLE_DEFAULT);
+				int curr_zoom = SSM(sci, SCI_GETZOOM, 0, 0);
+				++curr_zoom;
+				if (curr_size + curr_zoom*SC_FONT_SIZE_MULTIPLIER <= 2*SC_FONT_SIZE_MULTIPLIER)
+				{
+					SSM(sci, SCI_SETZOOM, curr_zoom, curr_zoom);
+				}
 				update_margins(sci);
+			}
 			break;
 	}
 	/* we always return FALSE here to let plugins handle the event too */
