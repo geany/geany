@@ -69,6 +69,8 @@ typedef struct GeanyInterfacePrefs
 	gboolean		compiler_tab_autoscroll;
 	gint			msgwin_orientation;			/**< orientation of the message window */
 	gint 			symbols_sort_mode;			/**< symbol list sorting mode */
+	/** whether to show a warning when closing a project to open a new one */
+	gboolean		warn_on_project_close;
 }
 GeanyInterfacePrefs;
 

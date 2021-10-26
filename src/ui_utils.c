@@ -2352,6 +2352,8 @@ void ui_init_prefs(void)
 		"msgwin_messages_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.msgwin_scribble_visible,
 		"msgwin_scribble_visible", TRUE);
+	stash_group_add_boolean(group, &interface_prefs.warn_on_project_close,
+		"warn_on_project_close", TRUE);
 }
 
 
