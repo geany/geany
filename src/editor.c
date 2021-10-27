@@ -222,13 +222,15 @@ static void add_kb(GKeyFile *keyfile, const gchar *group, gchar **keys)
 		gchar *accel_string = g_key_file_get_value(keyfile, group, keys[i], NULL);
 
 		gtk_accelerator_parse(accel_string, &key, &mods);
-		g_free(accel_string);
 
 		if (key == 0 && mods == 0)
 		{
 			g_warning("Can not parse accelerator \"%s\" from user snippets.conf", accel_string);
+			g_free(accel_string);
 			continue;
 		}
+		g_free(accel_string);
+
 		gtk_accel_group_connect(snippet_accel_group, key, mods, 0,
 			g_cclosure_new_swap((GCallback)on_snippet_keybinding_activate,
 				g_strdup(keys[i]), (GClosureNotify)g_free));
