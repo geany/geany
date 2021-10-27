@@ -1284,7 +1284,10 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 		doc = document_get_current();
 		if (doc != NULL)
 			ft = doc->file_type;
+		if (ft == NULL)
+			return FALSE;
 	}
+
 	tmp = build_get_regex(build_info.grp, ft, NULL);
 	if (tmp == NULL)
 		return FALSE;
