@@ -437,6 +437,14 @@ static void init_default_kb(void)
 		GDK_KEY_x, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cu_t Current Line(s)"),
 		"cut_current_lines1");
 
+	/* Second set of keybindings for cut/copy/paste */
+	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT_II, NULL,
+		NULL, NULL, "menu_cut", _("Cut"), "menu_cut1");
+	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY_II, NULL,
+		NULL, NULL, "menu_copy", _("Copy"), "menu_copy1");
+	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE_II, NULL,
+		NULL, NULL, "menu_paste", _("Paste"), "menu_paste1");
+
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SELECT);
 
 	add_kb(group, GEANY_KEYS_SELECT_ALL, NULL,
@@ -608,12 +616,22 @@ static void init_default_kb(void)
 		"menu_show_messages_window1");
 	add_kb(group, GEANY_KEYS_VIEW_SIDEBAR, NULL,
 		0, 0, "toggle_sidebar", _("Toggle Sidebar"), "menu_show_sidebar1");
+
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN, NULL,
-		GDK_KEY_equal, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
+		GDK_KEY_plus, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
 		GDK_KEY_minus, GEANY_PRIMARY_MOD_MASK, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
 		GDK_KEY_0, GEANY_PRIMARY_MOD_MASK, "normal_size", _("Zoom Reset"), "normal_size1");
+
+	/* Note: There are two zoom-in keybindings because some operating systems
+	 *       and keyboard layouts cannot access one or the other keybinding.
+	 *       Chromium and Firefox also recognize both keybindings.
+	 *       A second zoom-out keybinding is provided for symmetry. */
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN_II, NULL,
+		GDK_KEY_equal, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT_II, NULL,
+		NULL, NULL, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FOCUS);
 
@@ -1623,9 +1641,11 @@ static gboolean cb_func_view_action(guint key_id)
 			on_menu_show_sidebar1_toggled(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMIN:
+		case GEANY_KEYS_VIEW_ZOOMIN_II:
 			on_zoom_in1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMOUT:
+		case GEANY_KEYS_VIEW_ZOOMOUT_II:
 			on_zoom_out1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMRESET:
@@ -1942,12 +1962,15 @@ static gboolean cb_func_clipboard_action(guint key_id)
 	switch (key_id)
 	{
 		case GEANY_KEYS_CLIPBOARD_CUT:
+		case GEANY_KEYS_CLIPBOARD_CUT_II:
 			on_cut1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPY:
+		case GEANY_KEYS_CLIPBOARD_COPY_II:
 			on_copy1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_PASTE:
+		case GEANY_KEYS_CLIPBOARD_PASTE_II:
 			on_paste1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPYLINE:

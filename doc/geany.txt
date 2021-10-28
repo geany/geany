@@ -3324,6 +3324,9 @@ The following tables list all customizable keyboard shortcuts, those
 which are common to many applications are marked with (C) after the
 shortcut.
 
+Some actions are listed twice in the Preferences dialog to allow a
+secondary keybinding to be set.
+
 File keybindings
 ````````````````
 =============================== ========================= ==================================================
@@ -3675,6 +3678,7 @@ Toggle all additional widgets                             Hide and show all addi
                                                           and the status bar.
 
 Zoom In                         Ctrl-+  (C)               Zooms in the text.
+                                Ctrl-=  (C)
 
 Zoom Out                        Ctrl--  (C)               Zooms out the text.
 
