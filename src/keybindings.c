@@ -439,11 +439,11 @@ static void init_default_kb(void)
 
 	/* Second set of keybindings for cut/copy/paste */
 	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT_II, NULL,
-		NULL, NULL, "menu_cut", _("Cut"), "menu_cut1");
+		0, 0, "menu_cut", _("Cut"), "menu_cut1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY_II, NULL,
-		NULL, NULL, "menu_copy", _("Copy"), "menu_copy1");
+		0, 0, "menu_copy", _("Copy"), "menu_copy1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE_II, NULL,
-		NULL, NULL, "menu_paste", _("Paste"), "menu_paste1");
+		0, 0, "menu_paste", _("Paste"), "menu_paste1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SELECT);
 
@@ -631,7 +631,7 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN_II, NULL,
 		GDK_KEY_equal, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT_II, NULL,
-		NULL, NULL, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
+		0, 0, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FOCUS);
 
