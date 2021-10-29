@@ -426,24 +426,25 @@ static void init_default_kb(void)
 
 	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT, NULL,
 		GDK_KEY_x, GEANY_PRIMARY_MOD_MASK, "menu_cut", _("Cut"), "menu_cut1");
+	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT_II, NULL,
+		0, 0, "menu_cut_ii", _("Cut"), NULL);
+
 	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY, NULL,
 		GDK_KEY_c, GEANY_PRIMARY_MOD_MASK, "menu_copy", _("Copy"), "menu_copy1");
+	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY_II, NULL,
+		0, 0, "menu_copy_ii", _("Copy"), NULL);
+
 	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE, NULL,
 		GDK_KEY_v, GEANY_PRIMARY_MOD_MASK, "menu_paste", _("Paste"), "menu_paste1");
+	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE_II, NULL,
+		0, 0, "menu_paste_ii", _("Paste"), NULL);
+
 	add_kb(group, GEANY_KEYS_CLIPBOARD_COPYLINE, NULL,
 		GDK_KEY_c, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "edit_copyline", _("_Copy Current Line(s)"),
 		"copy_current_lines1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_CUTLINE, NULL,
 		GDK_KEY_x, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cu_t Current Line(s)"),
 		"cut_current_lines1");
-
-	/* Second set of keybindings for cut/copy/paste */
-	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT_II, NULL,
-		0, 0, "menu_cut", _("Cut"), "menu_cut1");
-	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY_II, NULL,
-		0, 0, "menu_copy", _("Copy"), "menu_copy1");
-	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE_II, NULL,
-		0, 0, "menu_paste", _("Paste"), "menu_paste1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SELECT);
 
@@ -617,21 +618,22 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_VIEW_SIDEBAR, NULL,
 		0, 0, "toggle_sidebar", _("Toggle Sidebar"), "menu_show_sidebar1");
 
-	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN, NULL,
-		GDK_KEY_plus, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
-	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
-		GDK_KEY_minus, GEANY_PRIMARY_MOD_MASK, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
-	add_kb(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
-		GDK_KEY_0, GEANY_PRIMARY_MOD_MASK, "normal_size", _("Zoom Reset"), "normal_size1");
-
 	/* Note: There are two zoom-in keybindings because some operating systems
 	 *       and keyboard layouts cannot access one or the other keybinding.
 	 *       Chromium and Firefox also recognize both keybindings.
 	 *       A second zoom-out keybinding is provided for symmetry. */
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN, NULL,
+		GDK_KEY_plus, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN_II, NULL,
-		GDK_KEY_equal, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
+		GDK_KEY_equal, GEANY_PRIMARY_MOD_MASK, "menu_zoomin_ii", _("Zoom In"), NULL);
+
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
+		GDK_KEY_minus, GEANY_PRIMARY_MOD_MASK, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT_II, NULL,
-		0, 0, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
+		0, 0, "menu_zoomout_ii", _("Zoom Out"), NULL);
+
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
+		GDK_KEY_0, GEANY_PRIMARY_MOD_MASK, "normal_size", _("Zoom Reset"), "normal_size1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FOCUS);
 
