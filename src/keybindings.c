@@ -615,12 +615,12 @@ static void init_default_kb(void)
 	 *       A second zoom-out keybinding is provided for symmetry. */
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN, NULL,
 		GDK_KEY_plus, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
-	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN_II, NULL,
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN_2, NULL,
 		GDK_KEY_equal, GEANY_PRIMARY_MOD_MASK, "menu_zoomin_ii", _("Zoom In"), NULL);
 
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
 		GDK_KEY_minus, GEANY_PRIMARY_MOD_MASK, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
-	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT_II, NULL,
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT_2, NULL,
 		0, 0, "menu_zoomout_ii", _("Zoom Out"), NULL);
 
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
@@ -1634,11 +1634,11 @@ static gboolean cb_func_view_action(guint key_id)
 			on_menu_show_sidebar1_toggled(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMIN:
-		case GEANY_KEYS_VIEW_ZOOMIN_II:
+		case GEANY_KEYS_VIEW_ZOOMIN_2:
 			on_zoom_in1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMOUT:
-		case GEANY_KEYS_VIEW_ZOOMOUT_II:
+		case GEANY_KEYS_VIEW_ZOOMOUT_2:
 			on_zoom_out1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMRESET:
@@ -1955,15 +1955,12 @@ static gboolean cb_func_clipboard_action(guint key_id)
 	switch (key_id)
 	{
 		case GEANY_KEYS_CLIPBOARD_CUT:
-		case GEANY_KEYS_CLIPBOARD_CUT_II:
 			on_cut1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPY:
-		case GEANY_KEYS_CLIPBOARD_COPY_II:
 			on_copy1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_PASTE:
-		case GEANY_KEYS_CLIPBOARD_PASTE_II:
 			on_paste1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPYLINE:
