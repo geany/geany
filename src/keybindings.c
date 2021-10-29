@@ -426,19 +426,10 @@ static void init_default_kb(void)
 
 	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT, NULL,
 		GDK_KEY_x, GEANY_PRIMARY_MOD_MASK, "menu_cut", _("Cut"), "menu_cut1");
-	add_kb(group, GEANY_KEYS_CLIPBOARD_CUT_II, NULL,
-		0, 0, "menu_cut_ii", _("Cut"), NULL);
-
 	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY, NULL,
 		GDK_KEY_c, GEANY_PRIMARY_MOD_MASK, "menu_copy", _("Copy"), "menu_copy1");
-	add_kb(group, GEANY_KEYS_CLIPBOARD_COPY_II, NULL,
-		0, 0, "menu_copy_ii", _("Copy"), NULL);
-
 	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE, NULL,
 		GDK_KEY_v, GEANY_PRIMARY_MOD_MASK, "menu_paste", _("Paste"), "menu_paste1");
-	add_kb(group, GEANY_KEYS_CLIPBOARD_PASTE_II, NULL,
-		0, 0, "menu_paste_ii", _("Paste"), NULL);
-
 	add_kb(group, GEANY_KEYS_CLIPBOARD_COPYLINE, NULL,
 		GDK_KEY_c, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "edit_copyline", _("_Copy Current Line(s)"),
 		"copy_current_lines1");
