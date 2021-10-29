@@ -278,7 +278,6 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_FILE_RELOAD_ALL,					/**< Keybinding.
 												 * @since 1.38 (API 240) */
 	GEANY_KEYS_VIEW_ZOOMIN_2,					/**< Keybinding. */
-	GEANY_KEYS_VIEW_ZOOMOUT_2,					/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 

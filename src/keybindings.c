@@ -611,8 +611,7 @@ static void init_default_kb(void)
 
 	/* Note: There are two zoom-in keybindings because some operating systems
 	 *       and keyboard layouts cannot access one or the other keybinding.
-	 *       Chromium and Firefox also recognize both keybindings.
-	 *       A second zoom-out keybinding is provided for symmetry. */
+	 *       Chromium and Firefox also recognize both keybindings. */
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN, NULL,
 		GDK_KEY_plus, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN_2, NULL,
@@ -620,9 +619,6 @@ static void init_default_kb(void)
 
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
 		GDK_KEY_minus, GEANY_PRIMARY_MOD_MASK, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
-	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT_2, NULL,
-		0, 0, "menu_zoomout_ii", _("Zoom Out"), NULL);
-
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
 		GDK_KEY_0, GEANY_PRIMARY_MOD_MASK, "normal_size", _("Zoom Reset"), "normal_size1");
 
@@ -1638,7 +1634,6 @@ static gboolean cb_func_view_action(guint key_id)
 			on_zoom_in1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMOUT:
-		case GEANY_KEYS_VIEW_ZOOMOUT_2:
 			on_zoom_out1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMRESET:
