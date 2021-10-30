@@ -1009,7 +1009,8 @@ static void process_build_output_line(gchar *msg, gint color)
 	{
 		SETPTR(current_dir_entered, tmp);
 	}
-	msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line);
+	GeanyLineType linetype;
+	msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line, &linetype);
 
 	if (line != -1 && filename != NULL)
 	{
@@ -1021,10 +1022,14 @@ static void process_build_output_line(gchar *msg, gint color)
 		{
 			if (line > 0) /* some compilers, like pdflatex report errors on line 0 */
 				line--;   /* so only adjust the line number if it is greater than 0 */
-			editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
+			GeanyIndicator indic = GEANY_INDICATOR_ERROR;
+			if(linetype == LINE_WARNING)
+				indic = GEANY_INDICATOR_WARNING;
+			if(linetype == LINE_ERROR || linetype == LINE_WARNING)
+				editor_indicator_set_on_line(doc->editor, indic, line);
 		}
 		build_info.message_count++;
-		color = COLOR_RED;	/* error message parsed on the line */
+		color = linetype == LINE_WARNING ? COLOR_YELLOW : COLOR_RED;	/* error message parsed on the line */
 
 		if (build_info.message_count == 1)
 		{

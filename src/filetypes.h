@@ -37,6 +37,14 @@ G_BEGIN_DECLS
 /* Forward-declared to avoid including document.h since it includes this header */
 struct GeanyDocument;
 
+typedef enum
+{
+	LINE_ERROR = 0,
+	LINE_WARNING,
+	LINE_NOTE,
+	LINE_TEXT
+} GeanyLineType;
+
 /** IDs of known filetypes
  *
  * @ref filetypes will contain an item for each. Use GeanyData::filetypes_array to
@@ -227,7 +235,7 @@ GtkFileFilter *filetypes_create_file_filter_all_source(void);
 gboolean filetype_has_tags(GeanyFiletype *ft);
 
 gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
-		gchar **filename, gint *line);
+		gchar **filename, gint *line, GeanyLineType *linetype);
 
 gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
 		const gchar **co, const gchar **cc);

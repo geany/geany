@@ -95,6 +95,7 @@ calltips=call_tips
 
 # error indicator color
 indicator_error=0xff0000
+indicator_warning=0xffcc00
 
 [settings]
 # which characters should be skipped when moving (or included when deleting) to word boundaries

@@ -36,7 +36,8 @@ enum MsgColors
 	COLOR_RED,		/**< Color red */
 	COLOR_DARK_RED,	/**< Color dark red */
 	COLOR_BLACK,	/**< Color black */
-	COLOR_BLUE		/**< Color blue */
+	COLOR_BLUE,		/**< Color blue */
+	COLOR_YELLOW
 };
 
 /** Indices of the notebooks in the messages window. */
@@ -49,7 +50,6 @@ typedef enum
 	MSG_SCRATCH,	/**< Index of the scratch tab */
 	MSG_VTE			/**< Index of the VTE tab */
 } MessageWindowTabNum;
-
 
 void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
 void msgwin_status_add_string(const gchar *msg);
@@ -103,7 +103,7 @@ void msgwin_menu_add_common_items(GtkMenu *menu);
 gboolean msgwin_goto_compiler_file_line(gboolean focus_editor);
 
 void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
-									  gchar **filename, gint *line);
+									  gchar **filename, gint *line, GeanyLineType*linetype);
 
 gboolean msgwin_goto_messages_file_line(gboolean focus_editor);
 

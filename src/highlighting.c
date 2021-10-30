@@ -96,6 +96,7 @@ enum	/* Geany common styling */
 	GCS_LINE_HEIGHT,
 	GCS_CALLTIPS,
 	GCS_INDICATOR_ERROR,
+	GCS_INDICATOR_WARNING,
 	GCS_MAX
 };
 
@@ -559,6 +560,7 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_style(config, config_home, "marker_mark", &common_style_set.styling[GCS_MARKER_MARK]);
 	get_keyfile_style(config, config_home, "calltips", &common_style_set.styling[GCS_CALLTIPS]);
 	get_keyfile_style(config, config_home, "indicator_error", &common_style_set.styling[GCS_INDICATOR_ERROR]);
+	get_keyfile_style(config, config_home, "indicator_warning", &common_style_set.styling[GCS_INDICATOR_WARNING]);
 
 	get_keyfile_ints(config, config_home, "styling", "folding_style",
 		1, 1, &common_style_set.fold_marker, &common_style_set.fold_lines);
@@ -650,6 +652,11 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLEPIXMAP);
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR,
 		invert(common_style_set.styling[GCS_INDICATOR_ERROR].foreground));
+
+	/* Warning indicator */
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_WARNING, INDIC_SQUIGGLEPIXMAP);
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_WARNING,
+		invert(common_style_set.styling[GCS_INDICATOR_WARNING].foreground));
 
 	/* Search indicator, used for 'Mark' matches */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
