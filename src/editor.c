@@ -4702,11 +4702,20 @@ void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width)
 /* Convenience function for editor_goto_pos() to pass in a line number. */
 gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
 {
-	gint pos;
-
 	g_return_val_if_fail(editor, FALSE);
-	if (line_no < 0 || line_no >= sci_get_line_count(editor->sci))
-		return FALSE;
+	gboolean set_marker = TRUE;
+	gulong line_count = sci_get_line_count(editor->sci);
+
+	if (line_no >= line_count)
+	{
+		line_no =  line_count - 1;
+		set_marker = FALSE;
+	}
+	if (line_no < 0)
+	{
+		line_no = 0;
+		set_marker = FALSE;
+	}
 
 	if (offset != 0)
 	{
@@ -4715,8 +4724,19 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
 		line_no = current_line + line_no;
 	}
 
-	pos = sci_get_position_from_line(editor->sci, line_no);
-	return editor_goto_pos(editor, pos, TRUE);
+	if (line_no >= line_count)
+	{
+		line_no =  line_count - 1;
+		set_marker = FALSE;
+	}
+	if (line_no < 0)
+	{
+		line_no = 0;
+		set_marker = FALSE;
+	}
+
+	gint pos = sci_get_position_from_line(editor->sci, line_no);
+	return editor_goto_pos(editor, pos, set_marker);
 }
 
 
