@@ -4705,7 +4705,6 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
 	g_return_val_if_fail(editor, FALSE);
 	g_return_val_if_fail(line_no >= 0, FALSE);
 
-	gboolean set_marker = TRUE;
 	gulong line_count = sci_get_line_count(editor->sci);
 
 	if (offset != 0)
@@ -4715,7 +4714,7 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
 		line_no = current_line + line_no;
 	}
 
-	set_marker = line_no >= 0 && line_no < line_count;
+	gboolean set_marker = line_no >= 0 && line_no < line_count;
 	line_no = (line_no < 0)           ? 0
 			: (line_no >= line_count) ? line_count - 1
 			: line_no;
