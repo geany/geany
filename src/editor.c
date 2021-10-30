@@ -4703,19 +4703,10 @@ void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width)
 gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
 {
 	g_return_val_if_fail(editor, FALSE);
+	g_return_val_if_fail(line_no >= 0, FALSE);
+
 	gboolean set_marker = TRUE;
 	gulong line_count = sci_get_line_count(editor->sci);
-
-	if (line_no >= line_count)
-	{
-		line_no =  line_count - 1;
-		set_marker = FALSE;
-	}
-	if (line_no < 0)
-	{
-		line_no = 0;
-		set_marker = FALSE;
-	}
 
 	if (offset != 0)
 	{
@@ -4724,16 +4715,10 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
 		line_no = current_line + line_no;
 	}
 
-	if (line_no >= line_count)
-	{
-		line_no =  line_count - 1;
-		set_marker = FALSE;
-	}
-	if (line_no < 0)
-	{
-		line_no = 0;
-		set_marker = FALSE;
-	}
+	set_marker = line_no >= 0 && line_no < line_count;
+	line_no = (line_no < 0)           ? 0
+			: (line_no >= line_count) ? line_count - 1
+			: line_no;
 
 	gint pos = sci_get_position_from_line(editor->sci, line_no);
 	return editor_goto_pos(editor, pos, set_marker);
