@@ -4716,7 +4716,7 @@ void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width)
 gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gboolean offset)
 {
 	g_return_val_if_fail(editor, FALSE);
-	gulong line_count = sci_get_line_count(editor->sci);
+	gint line_count = sci_get_line_count(editor->sci);
 
 	if (offset)
 		line_no += sci_get_current_line(editor->sci) + 1;
