@@ -921,17 +921,10 @@ void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data)
 		_("Enter the line you want to go to:"), value);
 	if (result != NULL)
 	{
-		GeanyDocument *doc = document_get_current();
-		g_return_if_fail(doc != NULL);
+		on_toolbutton_goto_entry_activate(NULL, result, NULL);
 
-		gint line_no = atoi(result);
-		gboolean offset = (*result == '+' || *result == '-');
-
-		if (! editor_goto_line(doc->editor, line_no, offset))
-			utils_beep();
 		/* remember value for future calls */
 		g_snprintf(value, sizeof(value), "%s", result);
-
 		g_free(result);
 	}
 }
