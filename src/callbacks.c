@@ -911,21 +911,6 @@ void on_find_in_files1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static void get_line_and_offset_from_text(const gchar *text, gint *line_no, gint *offset)
-{
-	if (*text == '+' || *text == '-')
-	{
-		*line_no = atoi(text + 1);
-		*offset = (*text == '+') ? 1 : -1;
-	}
-	else
-	{
-		*line_no = atoi(text) - 1;
-		*offset = 0;
-	}
-}
-
-
 void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	static gchar value[16] = "";
@@ -937,12 +922,11 @@ void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data)
 	if (result != NULL)
 	{
 		GeanyDocument *doc = document_get_current();
-		gint offset;
-		gint line_no;
-
 		g_return_if_fail(doc != NULL);
 
-		get_line_and_offset_from_text(result, &line_no, &offset);
+		gint line_no = atoi(result);
+		gboolean offset = (*result == '+' || *result == '-');
+
 		if (! editor_goto_line(doc->editor, line_no, offset))
 			utils_beep();
 		/* remember value for future calls */
@@ -956,12 +940,11 @@ void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	gint offset;
-	gint line_no;
-
 	g_return_if_fail(doc != NULL);
 
-	get_line_and_offset_from_text(text, &line_no, &offset);
+	gint line_no = atoi(text);
+	gboolean offset = (*text == '+' || *text == '-');
+
 	if (! editor_goto_line(doc->editor, line_no, offset))
 		utils_beep();
 	else
