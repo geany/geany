@@ -4699,20 +4699,8 @@ void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width)
 }
 
 
-/* Convenience function for editor_goto_pos() to pass in a line number.
- *
- * If @a offset is FALSE, goes to line @a line_no.  Otherwise, goes to
- * the current line + @a line_no.  Sets the line marker.
- *
- * If the destination line is not in the document, goes to the nearest 
- * line and does not set the marker.
- *
- * @param editor Editor.
- * @param line_no The line to go to or an offset from the current line.
- *                The first line of the document is 1.
- * @param offset Whether @a line_no is an offset from the current line.
- * @return @c TRUE if action has been performed, otherwise @c FALSE.
- */
+/* Convenience function for editor_goto_pos() to pass a line number.
+ * line_no is 1 based */
 gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gboolean offset)
 {
 	g_return_val_if_fail(editor, FALSE);
@@ -4723,8 +4711,8 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gboolean offset)
 
 	/* ensure line_no is in bounds and determine whether to set line marker */
 	gboolean set_marker = line_no > 0 && line_no < line_count;
-	line_no = (line_no <= 0)           ? 0
-			: (line_no >= line_count) ? line_count - 1
+	line_no = line_no <= 0          ? 0
+			: line_no >= line_count ? line_count - 1
 			: line_no - 1;
 
 	gint pos = sci_get_position_from_line(editor->sci, line_no);
