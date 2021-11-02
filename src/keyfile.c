@@ -1380,11 +1380,8 @@ void configuration_apply_settings(void)
 	g_free(scribble_text);
 
 	/* set the position of the hpaned and vpaned */
-	if (prefs.save_winpos)
-	{
-		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
-		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
-	}
+	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
+	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
 
 	/* set fullscreen after initial draw so that returning to normal view is the right size.
 	 * fullscreen mode is disabled by default, so act only if it is true */

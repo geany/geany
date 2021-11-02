@@ -147,29 +147,24 @@ static GOptionEntry entries[] =
 };
 
 
+/* interprets the saved window geometry */
 static void setup_window_position(void)
 {
-	/* interprets the saved window geometry */
-	if (prefs.save_wingeom)
+	if (ui_prefs.geometry[2] != -1 && ui_prefs.geometry[3] != -1)
 	{
-		if (ui_prefs.geometry[2] != -1 && ui_prefs.geometry[3] != -1)
-		{
-			gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
-				ui_prefs.geometry[2], ui_prefs.geometry[3]);
-		}
+		gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
+			ui_prefs.geometry[2], ui_prefs.geometry[3]);
 	}
 
-	if (prefs.save_winpos)
+	if (ui_prefs.geometry[0] != -1 && ui_prefs.geometry[1] != -1)
 	{
-		if (ui_prefs.geometry[0] != -1 && ui_prefs.geometry[1] != -1)
-		{
-			gtk_window_move(GTK_WINDOW(main_widgets.window),
-				ui_prefs.geometry[0], ui_prefs.geometry[1]);
-		}
-		if (ui_prefs.geometry[4] == 1)
-		{
-			gtk_window_maximize(GTK_WINDOW(main_widgets.window));
-		}
+		gtk_window_move(GTK_WINDOW(main_widgets.window),
+			ui_prefs.geometry[0], ui_prefs.geometry[1]);
+	}
+
+	if (ui_prefs.geometry[4] == 1)
+	{
+		gtk_window_maximize(GTK_WINDOW(main_widgets.window));
 	}
 }
 
