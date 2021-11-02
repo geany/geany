@@ -108,8 +108,6 @@ static gchar *scribble_text = NULL;
 static gint scribble_pos = -1;
 static GPtrArray *session_files = NULL;
 static gint session_notebook_page;
-static gint hpan_position;
-static gint vpan_position;
 static guint document_list_update_idle_func_id = 0;
 static const gchar atomic_file_saving_key[] = "use_atomic_file_saving";
 
@@ -626,16 +624,71 @@ static void save_ui_session(GKeyFile *config)
 	if (prefs.save_winpos || prefs.save_wingeom)
 	{
 		GdkWindowState wstate;
+		int xpos, ypos, width, height;
+		int treeview_position, msgwindow_position;
+		gboolean treeview_visible, msgwindow_visible;
 
-		g_key_file_set_integer(config, PACKAGE, "treeview_position",
-				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"))));
-		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
-				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1"))));
+		gtk_window_get_position(GTK_WINDOW(main_widgets.window), &xpos, &ypos);
+		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &width, &height);
 
-		gtk_window_get_position(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
-		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[2], &ui_prefs.geometry[3]);
+		treeview_visible = gtk_widget_is_visible(ui_lookup_widget(main_widgets.window, "hpaned1"));
+		treeview_position = gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")));
+
+		msgwindow_visible = gtk_widget_is_visible(ui_lookup_widget(main_widgets.window, "vpaned1"));
+		msgwindow_position = gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")));
+
+		/* Save new window size and position only when not maximized */
 		wstate = gdk_window_get_state(gtk_widget_get_window(main_widgets.window));
-		ui_prefs.geometry[4] = (wstate & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
+		if (wstate & GDK_WINDOW_STATE_MAXIMIZED)
+		{
+			if (prefs.save_wingeom)
+				ui_prefs.geometry[4] = 1;
+
+			/* Adjust treeview and msgwindow position for non-maximized state */
+			if (ui_prefs.geometry[2] > 0 && ui_prefs.geometry[3] > 0
+				&& ui_prefs.geometry[2] < width && ui_prefs.geometry[3] < height)
+			{
+				if (msgwindow_visible && interface_prefs.msgwin_orientation == GTK_ORIENTATION_VERTICAL)
+				{
+					msgwindow_position += ui_prefs.geometry[3] - height;
+
+					if (treeview_visible && interface_prefs.sidebar_pos != GTK_POS_LEFT)
+						treeview_position += ui_prefs.geometry[2] - width - msgwindow_position;
+				}
+				else if (msgwindow_visible)
+				{
+					msgwindow_position += ui_prefs.geometry[2] - width;
+					if (treeview_visible && interface_prefs.sidebar_pos != GTK_POS_LEFT)
+						treeview_position += ui_prefs.geometry[2] - width;
+				}
+			}
+		}
+		else
+		{
+			if (prefs.save_winpos)
+			{
+				ui_prefs.geometry[0] = xpos;
+				ui_prefs.geometry[1] = ypos;
+			}
+			if (prefs.save_wingeom)
+			{
+				ui_prefs.geometry[2] = width;
+				ui_prefs.geometry[3] = height;
+				ui_prefs.geometry[4] = 0;
+			}
+		}
+
+		if (prefs.save_wingeom)
+		{
+			if (treeview_visible)
+				ui_prefs.treeview_position = treeview_position;
+
+			if (msgwindow_visible)
+				ui_prefs.msgwindow_position = msgwindow_position;
+		}
+
+		g_key_file_set_integer(config, PACKAGE, "treeview_position", ui_prefs.treeview_position);
+		g_key_file_set_integer(config, PACKAGE, "msgwindow_position", ui_prefs.msgwindow_position);
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", ui_prefs.geometry, 5);
 	}
 }
@@ -1116,8 +1169,8 @@ static void load_ui_session(GKeyFile *config)
 		ui_prefs.geometry[3] = MAX(-1, geo[3]);
 		ui_prefs.geometry[4] = geo[4] != 0;
 	}
-	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
-	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
+	ui_prefs.treeview_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
+	ui_prefs.msgwindow_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
 				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) :
 				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
 
@@ -1378,10 +1431,6 @@ void configuration_apply_settings(void)
 		gtk_text_buffer_place_cursor(buffer, &iter);
 	}
 	g_free(scribble_text);
-
-	/* set the position of the hpaned and vpaned */
-	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
-	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
 
 	/* set fullscreen after initial draw so that returning to normal view is the right size.
 	 * fullscreen mode is disabled by default, so act only if it is true */
