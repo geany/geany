@@ -74,7 +74,9 @@
  * the configuration file */
 #define GEANY_MAX_SYMBOLLIST_HEIGHT		10
 #define GEANY_MIN_SYMBOLLIST_CHARS		4
-#define GEANY_MSGWIN_HEIGHT				208
+#define GEANY_MSGWIN_HEIGHT				165
+#define GEANY_SIDEBAR_WIDTH_SM			165
+#define GEANY_SIDEBAR_WIDTH_LG			245
 #define GEANY_DISK_CHECK_TIMEOUT		30
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
 #ifdef G_OS_WIN32
@@ -588,7 +590,6 @@ static void save_ui_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
-	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
 	g_key_file_set_string(config, PACKAGE, "color_picker_palette", ui_prefs.color_picker_palette);
 
 	/* get the text from the scribble textview */
@@ -624,71 +625,112 @@ static void save_ui_session(GKeyFile *config)
 	if (prefs.save_winpos || prefs.save_wingeom)
 	{
 		GdkWindowState wstate;
-		int xpos, ypos, width, height;
-		int treeview_position, msgwindow_position;
-		gboolean treeview_visible, msgwindow_visible;
+		gint xpos, ypos, width, height;
+		gint treeview_position, msgwindow_position;
 
 		gtk_window_get_position(GTK_WINDOW(main_widgets.window), &xpos, &ypos);
 		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &width, &height);
 
-		treeview_visible = gtk_widget_is_visible(ui_lookup_widget(main_widgets.window, "hpaned1"));
 		treeview_position = gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")));
-
-		msgwindow_visible = gtk_widget_is_visible(ui_lookup_widget(main_widgets.window, "vpaned1"));
 		msgwindow_position = gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")));
 
-		/* Save new window size and position only when not maximized */
+		/* Don't save position/geometry when maximized, fullscreen, or minimized */
 		wstate = gdk_window_get_state(gtk_widget_get_window(main_widgets.window));
-		if (wstate & GDK_WINDOW_STATE_MAXIMIZED)
+		if (wstate & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN))
 		{
 			if (prefs.save_wingeom)
-				ui_prefs.geometry[4] = 1;
+				ui_prefs.geometry[4] = (wstate & GDK_WINDOW_STATE_MAXIMIZED) ? TRUE : FALSE;
 
-			/* Adjust treeview and msgwindow position for non-maximized state */
-			if (ui_prefs.geometry[2] > 0 && ui_prefs.geometry[3] > 0
+			/* Adjust treeview and msgwindow position for non-maximized/fullscreen state */
+			if (0 < ui_prefs.geometry[2] && 0 < ui_prefs.geometry[3]
 				&& ui_prefs.geometry[2] < width && ui_prefs.geometry[3] < height)
 			{
-				if (msgwindow_visible && interface_prefs.msgwin_orientation == GTK_ORIENTATION_VERTICAL)
+				if (interface_prefs.msgwin_orientation == GTK_ORIENTATION_VERTICAL)
 				{
+					/* msgwin is on the bottom */
 					msgwindow_position += ui_prefs.geometry[3] - height;
 
-					if (treeview_visible && interface_prefs.sidebar_pos != GTK_POS_LEFT)
-						treeview_position += ui_prefs.geometry[2] - width - msgwindow_position;
-				}
-				else if (msgwindow_visible)
-				{
-					msgwindow_position += ui_prefs.geometry[2] - width;
-					if (treeview_visible && interface_prefs.sidebar_pos != GTK_POS_LEFT)
+					if (interface_prefs.sidebar_pos == GTK_POS_RIGHT)
 						treeview_position += ui_prefs.geometry[2] - width;
 				}
+				else
+				{
+					msgwindow_position += ui_prefs.geometry[2] - width;
+
+					/* when sidebar and msgwin are both on the right, msgwin is on the outer edge */
+					if (interface_prefs.sidebar_pos == GTK_POS_RIGHT)
+						treeview_position += ui_prefs.geometry[2] - width - msgwindow_position;
+
+				}
 			}
+			else
+			{
+				/* current state may be invalid; use previous saved state */
+				treeview_position = ui_prefs.treeview_position;
+				msgwindow_position = ui_prefs.msgwindow_position;
+			}
+		}
+		else if (wstate & (GDK_WINDOW_STATE_ICONIFIED | GDK_WINDOW_STATE_WITHDRAWN))
+		{
+			if (prefs.save_wingeom)
+				ui_prefs.geometry[4] = 0;
+
+			/* current state may be invalid; use previous saved state */
+			treeview_position = ui_prefs.treeview_position;
+			msgwindow_position = ui_prefs.msgwindow_position;
 		}
 		else
 		{
 			if (prefs.save_winpos)
 			{
+				/* position can be negative in some cases */
 				ui_prefs.geometry[0] = xpos;
 				ui_prefs.geometry[1] = ypos;
 			}
 			if (prefs.save_wingeom)
 			{
-				ui_prefs.geometry[2] = width;
-				ui_prefs.geometry[3] = height;
+				/* don't save invalid geometry */
+				if (width > 0 && height > 0)
+				{
+					ui_prefs.geometry[2] = width;
+					ui_prefs.geometry[3] = height;
+				}
+
 				ui_prefs.geometry[4] = 0;
 			}
 		}
 
 		if (prefs.save_wingeom)
 		{
-			if (treeview_visible)
+			/* Some checks to avoid saving invalid positions */
+			if (ui_prefs.sidebar_visible && 0 <= treeview_position
+				&& treeview_position < ui_prefs.geometry[2])
+			{
 				ui_prefs.treeview_position = treeview_position;
+			}
 
-			if (msgwindow_visible)
-				ui_prefs.msgwindow_position = msgwindow_position;
+			/* Some checks to avoid saving invalid positions */
+			if (ui_prefs.msgwindow_visible && msgwindow_position >= 0)
+			{
+				if (interface_prefs.msgwin_orientation == GTK_ORIENTATION_VERTICAL
+					&& msgwindow_position <= ui_prefs.geometry[3])
+				{
+					ui_prefs.msgwindow_position = msgwindow_position;
+				}
+				else if (interface_prefs.msgwin_orientation != GTK_ORIENTATION_VERTICAL
+					&& msgwindow_position <= ui_prefs.geometry[2])
+				{
+					ui_prefs.msgwindow_position = msgwindow_position;
+				}
+			}
+
+			/* Finally ready to save... */
+			g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
+			g_key_file_set_integer(config, PACKAGE, "treeview_position", ui_prefs.treeview_position);
+			g_key_file_set_integer(config, PACKAGE, "msgwindow_position", ui_prefs.msgwindow_position);
 		}
 
-		g_key_file_set_integer(config, PACKAGE, "treeview_position", ui_prefs.treeview_position);
-		g_key_file_set_integer(config, PACKAGE, "msgwindow_position", ui_prefs.msgwindow_position);
+		/* if (prefs.save_winpos && prefs.save_wingeom) */
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", ui_prefs.geometry, 5);
 	}
 }
@@ -1149,32 +1191,136 @@ static void load_ui_session(GKeyFile *config)
 	gint *geo;
 	gsize geo_len;
 
-	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", &geo_len, NULL);
-	if (! geo || geo_len < 5)
+	/* restore window position and geometry */
 	{
-		ui_prefs.geometry[0] = -1;
-		ui_prefs.geometry[1] = -1;
-		ui_prefs.geometry[2] = -1;
-		ui_prefs.geometry[3] = -1;
-		ui_prefs.geometry[4] = 0;
-	}
-	else
-	{
-		/* don't use insane values but when main windows was maximized last time, pos might be
-		 * negative (due to differences in root window and window decorations) */
-		/* quitting when minimized can make pos -32000, -32000 on Windows! */
-		ui_prefs.geometry[0] = MAX(-1, geo[0]);
-		ui_prefs.geometry[1] = MAX(-1, geo[1]);
-		ui_prefs.geometry[2] = MAX(-1, geo[2]);
-		ui_prefs.geometry[3] = MAX(-1, geo[3]);
-		ui_prefs.geometry[4] = geo[4] != 0;
-	}
-	ui_prefs.treeview_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
-	ui_prefs.msgwindow_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
-				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) :
-				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
+		gint *geo;
+		gsize geo_len;
 
-	g_free(geo);
+		geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", &geo_len, NULL);
+		if (! geo || geo_len < 5)
+		{
+			ui_prefs.geometry[0] = -1;
+			ui_prefs.geometry[1] = -1;
+			ui_prefs.geometry[2] = -1;
+			ui_prefs.geometry[3] = -1;
+			ui_prefs.geometry[4] = 0;
+		}
+		else
+		{
+			/* don't use insane values but when main windows was maximized last time, pos might be
+			 * negative (due to differences in root window and window decorations) */
+			/* quitting when minimized can make pos -32000, -32000 on Windows! */
+			ui_prefs.geometry[0] = MAX(-1, geo[0]);
+			ui_prefs.geometry[1] = MAX(-1, geo[1]);
+			ui_prefs.geometry[2] = MAX(-1, geo[2]);
+			ui_prefs.geometry[3] = MAX(-1, geo[3]);
+			ui_prefs.geometry[4] = geo[4] != 0;
+		}
+
+		ui_prefs.treeview_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", -1);
+		ui_prefs.msgwindow_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", -1);
+
+		g_free(geo);
+
+		// calculate and apply default positions only if cannot restore from config
+		if (ui_prefs.treeview_position < 0 || ui_prefs.msgwindow_position < 0)
+		{
+			gint statusbar_height, treeview_default_width, msgwin_default_width;
+			gint treeview_default_position, msgwindow_default_position;
+			gsize width, height;
+
+			/* need window width and height to calculate positions */
+			if (ui_prefs.geometry[2] > 0 && ui_prefs.geometry[3] > 0)
+			{
+				width = ui_prefs.geometry[2];
+				height = ui_prefs.geometry[3];
+			}
+			else
+			{
+				width = GEANY_WINDOW_DEFAULT_WIDTH;
+				height = GEANY_WINDOW_DEFAULT_HEIGHT;
+			}
+
+			/* account for tab positions, need more space for left/right */
+			if (interface_prefs.tab_pos_sidebar == GTK_POS_TOP
+				|| interface_prefs.tab_pos_sidebar == GTK_POS_BOTTOM)
+			{
+				treeview_default_width = GEANY_SIDEBAR_WIDTH_SM;
+			}
+			else
+			{
+				treeview_default_width = GEANY_SIDEBAR_WIDTH_LG;
+			}
+
+			if (interface_prefs.tab_pos_msgwin == GTK_POS_LEFT
+				|| interface_prefs.tab_pos_sidebar == GTK_POS_RIGHT)
+			{
+				msgwin_default_width = GEANY_SIDEBAR_WIDTH_LG;
+			}
+			else
+			{
+				msgwin_default_width = GEANY_SIDEBAR_WIDTH_SM;
+			}
+
+			/* msgwin is on bottom */
+			if (interface_prefs.msgwin_orientation == GTK_ORIENTATION_VERTICAL)
+			{
+				if (interface_prefs.statusbar_visible)
+					gtk_widget_get_preferred_height(ui_lookup_widget(main_widgets.window, "hbox1"), NULL, &statusbar_height);
+				else
+					statusbar_height = 0;
+
+				if (height > GEANY_MSGWIN_HEIGHT + statusbar_height)
+					msgwindow_default_position = height - GEANY_MSGWIN_HEIGHT - statusbar_height;
+				else
+					msgwindow_default_position = height * 2. / 3.;
+
+				if (interface_prefs.sidebar_pos == GTK_POS_RIGHT)
+				{
+					if (width > treeview_default_width)
+						treeview_default_position = width - treeview_default_width;
+					else
+						treeview_default_position = width * 3. / 4.;
+				}
+				else
+				{
+					treeview_default_position = treeview_default_width;
+				}
+			}
+			/* msgwin is on right */
+			else
+			{
+				/* use restored msgwin position if it's usable */
+				if (ui_prefs.msgwindow_position >= 0)
+					msgwindow_default_position = ui_prefs.msgwindow_position;
+				else if (width > msgwin_default_width)
+					msgwindow_default_position = width - msgwin_default_width;
+				else
+					msgwindow_default_position = width * 4. / 5.;
+
+				if (interface_prefs.sidebar_pos == GTK_POS_RIGHT)
+				{
+					if (width > treeview_default_width + msgwin_default_width)
+						treeview_default_position = width - treeview_default_width - msgwin_default_width;
+					else if (width > msgwin_default_width)
+						treeview_default_position = (width - msgwin_default_width) / 2;
+					else
+						treeview_default_position = width * 3. / 5.;
+				}
+				else
+				{
+					treeview_default_position = treeview_default_width;
+				}
+			}
+
+			/* finally, apply calculated defaults */
+			if (ui_prefs.treeview_position < 0)
+				ui_prefs.treeview_position = treeview_default_position;
+
+			if (ui_prefs.msgwindow_position < 0)
+				ui_prefs.msgwindow_position = msgwindow_default_position;
+		}
+	}
 }
 
 

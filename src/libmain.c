@@ -167,9 +167,6 @@ static void setup_window_position(void)
 	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), ui_prefs.treeview_position);
 	gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), ui_prefs.msgwindow_position);
 
-	g_print("ui_prefs.msgwindow_position = %d\n", ui_prefs.msgwindow_position);
-	g_print("ui_prefs.treeview_position = %d\n", ui_prefs.treeview_position);
-
 	if (ui_prefs.geometry[4] == 1)
 	{
 		gtk_window_maximize(GTK_WINDOW(main_widgets.window));
