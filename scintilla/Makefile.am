@@ -8,6 +8,7 @@ AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DNO_CXX11_REGEX
 LEXER_SRCS= \
 lexers/LexAbaqus.cxx \
 lexers/LexAda.cxx \
+lexers/LexAsciidoc.cxx \
 lexers/LexAsm.cxx \
 lexers/LexBash.cxx \
 lexers/LexBasic.cxx \

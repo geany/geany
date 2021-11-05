@@ -133,6 +133,39 @@ static const HLKeyword highlighting_keywords_AS[] =
 #define highlighting_properties_AS	highlighting_properties_C
 
 
+/* Asccidoc */
+#define highlighting_lexer_ASCIIDOC			SCLEX_ASCIIDOC
+static const HLStyle highlighting_styles_ASCIIDOC[] =
+{
+	{ SCE_ASCIIDOC_DEFAULT,		"default",		FALSE },
+	{ SCE_ASCIIDOC_STRONG1,		"strong",		FALSE },
+	{ SCE_ASCIIDOC_STRONG2,		"strong",		FALSE },
+	{ SCE_ASCIIDOC_EM1,			"emphasis",		FALSE },
+	{ SCE_ASCIIDOC_EM2,			"emphasis",		FALSE },
+	{ SCE_ASCIIDOC_HEADER1,		"header1",		FALSE },
+	{ SCE_ASCIIDOC_HEADER2,		"header2",		FALSE },
+	{ SCE_ASCIIDOC_HEADER3,		"header3",		FALSE },
+	{ SCE_ASCIIDOC_HEADER4,		"header4",		FALSE },
+	{ SCE_ASCIIDOC_HEADER5,		"header5",		FALSE },
+	{ SCE_ASCIIDOC_HEADER6,		"header6",		FALSE },
+	{ SCE_ASCIIDOC_ULIST_ITEM,	"ulist_item",	FALSE },
+	{ SCE_ASCIIDOC_OLIST_ITEM,	"olist_item",	FALSE },
+	{ SCE_ASCIIDOC_BLOCKQUOTE,	"blockquote",	FALSE },
+	{ SCE_ASCIIDOC_LINK,		"link",			FALSE },
+	{ SCE_ASCIIDOC_CODEBK,		"code",			FALSE },
+	{ SCE_ASCIIDOC_PASSBK,		"passthrough",  FALSE },
+	{ SCE_ASCIIDOC_COMMENT,		"comment",		FALSE },
+	{ SCE_ASCIIDOC_COMMENTBK,	"comment",		FALSE },
+	{ SCE_ASCIIDOC_LITERAL,		"literal",		FALSE },
+	{ SCE_ASCIIDOC_LITERALBK,	"literal",		FALSE },
+	{ SCE_ASCIIDOC_ATTRIB,		"attrib",		FALSE },
+	{ SCE_ASCIIDOC_ATTRIBVAL,	"attribval",	FALSE },
+	{ SCE_ASCIIDOC_MACRO,		"macro",		FALSE }
+};
+#define highlighting_keywords_ASCIIDOC		EMPTY_KEYWORDS
+#define highlighting_properties_ASCIIDOC	EMPTY_PROPERTIES
+
+
 /* ASM */
 #define highlighting_lexer_ASM			SCLEX_ASM
 static const HLStyle highlighting_styles_ASM[] =

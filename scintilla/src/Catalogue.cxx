@@ -62,6 +62,7 @@ int Scintilla_LinkLexers() {
 //**\(\tLINK_LEXER(\*);\n\)
 	LINK_LEXER(lmAbaqus);
 	LINK_LEXER(lmAda);
+	LINK_LEXER(lmAsciidoc);
 	LINK_LEXER(lmAsm);
 	LINK_LEXER(lmBash);
 	LINK_LEXER(lmBatch);
