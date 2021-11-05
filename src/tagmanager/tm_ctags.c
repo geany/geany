@@ -207,6 +207,7 @@ void tm_ctags_init(void)
 
 	initializeParsing();
 	initOptions();
+	initRegexOptscript();
 
 	/* make sure all parsers are initialized */
 	initializeParser(LANG_AUTO);
