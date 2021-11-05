@@ -7,6 +7,7 @@ import sys
 
 if len(sys.argv) != 3:
     print('Usage: update-ctags.py <universal ctags directory> <geany ctags directory>')
+    sys.exit(1)
 
 srcdir = os.path.abspath(sys.argv[1])
 dstdir = os.path.abspath(sys.argv[2])
@@ -18,6 +19,10 @@ os.chdir(srcdir + '/parsers')
 print('Copying parsers... ({} files)'.format(len(parser_dst_files)))
 for f in parser_dst_files:
     shutil.copy(f, dstdir + '/parsers')
+
+print('Copying dsl files...')
+for f in ['dsl/es.c', 'dsl/es.h', 'dsl/optscript.c', 'dsl/optscript.h']:
+	shutil.copy(srcdir + '/' + f, dstdir + '/' + f)
 
 os.chdir(srcdir)
 main_src_files = glob.glob('main/*.c') + glob.glob('main/*.h')
