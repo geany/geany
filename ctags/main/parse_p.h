@@ -63,7 +63,7 @@ extern parserDefinitionFunc PEG_PARSER_LIST;
 extern bool doesLanguageAllowNullTag (const langType language);
 extern bool doesLanguageRequestAutomaticFQTag (const langType language);
 
-extern langType getNamedLanguageFull (const char *const name, size_t len, bool noPretending);
+extern langType getNamedLanguageFull (const char *const name, size_t len, bool noPretending, bool include_aliases);
 
 extern kindDefinition* getLanguageKind(const langType language, int kindIndex);
 extern kindDefinition* getLanguageKindForName (const langType language, const char *kindName);
@@ -145,10 +145,10 @@ extern void matchLanguageRegex (const langType language, const vString* const li
 extern void freeRegexResources (void);
 extern bool checkRegex (void);
 extern void useRegexMethod (const langType language);
-extern void printRegexFlags (bool withListHeader, bool machinable, FILE *fp);
-extern void printMultilineRegexFlags (bool withListHeader, bool machinable, FILE *fp);
-extern void printMultitableRegexFlags (bool withListHeader, bool machinable, FILE *fp);
-extern bool hasLanguageScopeActionInRegex (const langType language);
+extern void printRegexFlags (bool withListHeader, bool machinable, const char *flags, FILE *fp);
+extern void printMultilineRegexFlags (bool withListHeader, bool machinable, const char *flags, FILE *fp);
+extern void printMultitableRegexFlags (bool withListHeader, bool machinable, const char *flags, FILE *fp);
+extern bool doesLanguageExpectCorkInRegex (const langType language);
 
 /* Multiline Regex Interface */
 extern bool hasLanguageMultilineRegexPatterns (const langType language);
@@ -169,6 +169,8 @@ extern bool makeKindDescriptionsPseudoTags (const langType language,
 extern bool makeFieldDescriptionsPseudoTags (const langType language,
 					       const ptagDesc *pdesc);
 extern bool makeExtraDescriptionsPseudoTags (const langType language,
+					       const ptagDesc *pdesc);
+extern bool makeRoleDescriptionsPseudoTags (const langType language,
 					       const ptagDesc *pdesc);
 
 extern void printLanguageMultitableStatistics (langType language);

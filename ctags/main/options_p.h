@@ -70,20 +70,6 @@ typedef enum eTagRelative {
 	TREL_NEVER,
 } tagRelative;
 
-typedef enum eOptionLoadingStage {
-	OptionLoadingStageNone,
-	OptionLoadingStageCustom,
-	OptionLoadingStageDosCnf,
-	OptionLoadingStageEtc,
-	OptionLoadingStageLocalEtc,
-	OptionLoadingStageXdg,
-	OptionLoadingStageHomeRecursive,
-	OptionLoadingStageCurrentRecursive,
-	OptionLoadingStagePreload,
-	OptionLoadingStageEnvVar,
-	OptionLoadingStageCmdline,
-} OptionLoadingStage;
-
 /*  This stores the command line options.
  */
 typedef struct sOptionValues {
@@ -118,6 +104,7 @@ typedef struct sOptionValues {
 	unsigned int patternLengthLimit; /* --pattern-length-limit=N */
 	bool putFieldPrefix;		 /* --put-field-prefix */
 	unsigned int maxRecursionDepth; /* --maxdepth=<max-recursion-depth> */
+	bool fieldsReset;				/* --fields=[^+-] */
 	enum interactiveMode { INTERACTIVE_NONE = 0,
 						   INTERACTIVE_DEFAULT,
 						   INTERACTIVE_SANDBOX, } interactive; /* --interactive */
@@ -187,6 +174,8 @@ extern bool processLanguageEncodingOption (const char *const option, const char 
 #endif
 extern bool processRoledefOption (const char *const option, const char *const parameter);
 extern bool processScopesepOption (const char *const option, const char *const parameter);
+extern bool processPreludeOption (const char *const option, const char *const parameter);
+extern bool processSequelOption (const char *const option, const char *const parameter);
 extern bool processPretendOption (const char *const option, const char *const parameter);
 extern bool processRolesOption (const char *const option, const char *const parameter);
 

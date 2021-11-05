@@ -1,6 +1,7 @@
 AM_CPPFLAGS = \
 	-I$(srcdir)/main \
 	-I$(srcdir)/parsers \
+	-I$(srcdir)/dsl \
 	-DEXTERNAL_PARSER_LIST_FILE=\"$(top_srcdir)/src/tagmanager/tm_parsers.h\" \
 	-DG_LOG_DOMAIN=\"CTags\"
 AM_CFLAGS = \
@@ -58,11 +59,17 @@ parsers = \
 	parsers/geany_vhdl.c
 
 # skip cmd.c and mini-geany.c which define main()
+# also skip lregex-pcre2.c which we don't use
 libctags_la_SOURCES = \
+	dsl/optscript.c \
+	dsl/optscript.h \
+	dsl/es.c \
+	dsl/es.h \
 	main/args.c \
 	main/args_p.h \
 	main/colprint.c \
 	main/colprint_p.h \
+	main/CommonPrelude.c \
 	main/ctags.h \
 	main/debug.c \
 	main/debug.h \
@@ -99,6 +106,7 @@ libctags_la_SOURCES = \
 	main/lregex.c \
 	main/lregex.h \
 	main/lregex_p.h \
+	main/lregex-default.c \
 	main/lxpath.c \
 	main/lxpath.h \
 	main/lxpath_p.h \
@@ -144,6 +152,8 @@ libctags_la_SOURCES = \
 	main/routines.c \
 	main/routines.h \
 	main/routines_p.h \
+	main/script.c \
+	main/script_p.h \
 	main/seccomp.c \
 	main/selectors.c \
 	main/selectors.h \
