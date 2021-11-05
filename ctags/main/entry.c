@@ -203,6 +203,9 @@ extern void makeFileTag (const char *const fileName)
 		tag.extensionFields.endLine = getInputLineNumber ();
 	}
 
+	if (isFieldEnabled (FIELD_EPOCH))
+		tag.extensionFields.epoch = getInputFileMtime ();
+
 	makeTagEntry (&tag);
 }
 
@@ -1066,8 +1069,6 @@ static tagEntryInfoX *copyTagEntry (const tagEntryInfo *const tag,
 	slot->name = eStrdup (slot->name);
 	if (slot->extensionFields.access)
 		slot->extensionFields.access = eStrdup (slot->extensionFields.access);
-	if (slot->extensionFields.fileScope)
-		slot->extensionFields.fileScope = eStrdup (slot->extensionFields.fileScope);
 	if (slot->extensionFields.implementation)
 		slot->extensionFields.implementation = eStrdup (slot->extensionFields.implementation);
 	if (slot->extensionFields.inheritance)
@@ -1144,8 +1145,6 @@ static void deleteTagEnry (void *data)
 
 	if (slot->extensionFields.access)
 		eFree ((char *)slot->extensionFields.access);
-	if (slot->extensionFields.fileScope)
-		eFree ((char *)slot->extensionFields.fileScope);
 	if (slot->extensionFields.implementation)
 		eFree ((char *)slot->extensionFields.implementation);
 	if (slot->extensionFields.inheritance)
@@ -1450,6 +1449,7 @@ static int queueTagEntry(const tagEntryInfo *const tag)
 
 	corkIndex = (int)ptrArrayAdd (TagFile.corkQueue, entry);
 	entry->corkIndex = corkIndex;
+	entry->slot.inCorkQueue = 1;
 
 	return corkIndex;
 }
@@ -1652,12 +1652,17 @@ extern size_t        countEntryInCorkQueue (void)
 	return ptrArrayCount (TagFile.corkQueue);
 }
 
+extern void markTagPlaceholder (tagEntryInfo *e, bool placeholder)
+{
+	e->placeholder = placeholder;
+}
+
 extern int makePlaceholder (const char *const name)
 {
 	tagEntryInfo e;
 
 	initTagEntry (&e, name, KIND_GHOST_INDEX);
-	e.placeholder = 1;
+	markTagPlaceholder(&e, true);
 
 	/*
 	 * makePlaceholder may be called even before reading any bytes
@@ -1766,6 +1771,13 @@ extern int makeQualifiedTagEntry (const tagEntryInfo *const e)
 	return r;
 }
 
+extern void setTagPositionFromTag (tagEntryInfo *const dst,
+								   const tagEntryInfo *const src)
+{
+		dst->lineNumber = src->lineNumber;
+		dst->filePosition = src->filePosition;
+}
+
 static void initTagEntryFull (tagEntryInfo *const e, const char *const name,
 			      unsigned long lineNumber,
 			      langType langType_,
@@ -1801,6 +1813,8 @@ static void initTagEntryFull (tagEntryInfo *const e, const char *const name,
 	e->extensionFields.roleBits = roleBits;
 	if (roleBits)
 		markTagExtraBit (e, XTAG_REFERENCE_TAGS);
+
+	e->extensionFields.nth = NO_NTH_FIELD;
 
 	if (doesParserRunAsGuest ())
 		markTagExtraBit (e, XTAG_GUEST);
@@ -1885,8 +1899,9 @@ static void    markTagExtraBitFull     (tagEntryInfo *const tag, xtagType extra,
 
 		int n = countXtags () - XTAG_COUNT;
 		tag->extraDynamic = xCalloc ((n / 8) + 1, uint8_t);
-		PARSER_TRASH_BOX(tag->extraDynamic, eFree);
-		markTagExtraBit (tag, extra);
+		if (!tag->inCorkQueue)
+			PARSER_TRASH_BOX(tag->extraDynamic, eFree);
+		markTagExtraBitFull (tag, extra, mark);
 		return;
 	}
 
@@ -1914,7 +1929,6 @@ extern bool isTagExtraBitMarked (const tagEntryInfo *const tag, xtagType extra)
 		index = (extra / 8);
 		offset = (extra % 8);
 		slot = tag->extra;
-
 	}
 	else if (!tag->extraDynamic)
 		return false;
@@ -1924,14 +1938,13 @@ extern bool isTagExtraBitMarked (const tagEntryInfo *const tag, xtagType extra)
 		index = ((extra - XTAG_COUNT) / 8);
 		offset = ((extra - XTAG_COUNT) % 8);
 		slot = tag->extraDynamic;
-
 	}
 	return !! ((slot [ index ]) & (1 << offset));
 }
 
 extern bool isTagExtra (const tagEntryInfo *const tag)
 {
-	for (unsigned int i = 0; i < XTAG_COUNT; i++)
+	for (unsigned int i = 0; i < countXtags(); i++)
 		if (isTagExtraBitMarked (tag, i))
 			return true;
 	return false;
@@ -2010,15 +2023,28 @@ extern void tagFilePosition (MIOPos *p)
 			   "failed to get file position of the tag file\n");
 }
 
-extern void setTagFilePosition (MIOPos *p)
+extern void setTagFilePosition (MIOPos *p, bool truncation)
 {
 	/* mini-geany doesn't set TagFile.mio. */
 	if 	(TagFile.mio == NULL)
 		return;
 
+
+	long t0 = 0;
+	if (truncation)
+		t0 = mio_tell (TagFile.mio);
+
 	if (mio_setpos (TagFile.mio, p) == -1)
 		error (FATAL|PERROR,
 			   "failed to set file position of the tag file\n");
+
+	if (truncation)
+	{
+		long t1 = mio_tell (TagFile.mio);
+		if (!mio_try_resize (TagFile.mio, (size_t)t1))
+			error (FATAL|PERROR,
+				   "failed to truncate the tag file %ld -> %ld\n", t0, t1);
+	}
 }
 
 extern const char* getTagFileDirectory (void)

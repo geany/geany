@@ -16,12 +16,15 @@
 #include "types.h"
 
 #include <stdint.h>
+#include <time.h>
 
 #include "field.h"
 #include "xtag.h"
 #include "mio.h"
 #include "ptrarray.h"
 #include "nestlevel.h"
+
+#include "script_p.h"
 
 /*
 *   MACROS
@@ -45,13 +48,14 @@ struct sTagEntryInfo {
 	unsigned int isFileScope    :1;  /* is tag visible only within input file? */
 	unsigned int isFileEntry    :1;  /* is this just an entry for a file name? */
 	unsigned int truncateLineAfterTag :1;  /* truncate tag line at end of tag name? */
-	unsigned int placeholder    :1;	 /* This is just a part of scope context.
+	unsigned int placeholder    :1;	 /* is used only for keeping corkIndex based scope chain.
 					    Put this entry to cork queue but
 					    don't print it to tags file. */
 	unsigned int skipAutoFQEmission:1; /* If a parser makes a fq tag for the
 										  current tag by itself, set this. */
 	unsigned int isPseudoTag:1;	/* Used only in xref output.
 								   If a tag is a pseudo, set this. */
+	unsigned int inCorkQueue:1;
 
 	unsigned long lineNumber;     /* line number of tag */
 	const char* pattern;	      /* pattern for locating input line
@@ -67,7 +71,6 @@ struct sTagEntryInfo {
 
 	struct {
 		const char* access;
-		const char* fileScope;
 		const char* implementation;
 		const char* inheritance;
 
@@ -96,6 +99,9 @@ struct sTagEntryInfo {
 		const char* xpath;
 #endif
 		unsigned long endLine;
+		time_t epoch;
+#define NO_NTH_FIELD -1
+		short nth;
 	} extensionFields;  /* list of extension fields*/
 
 	/* `usedParserFields' tracks how many parser own fields are
@@ -141,6 +147,7 @@ extern bool isRoleAssigned(const tagEntryInfo *const e, int roleIndex);
 
 extern int makeQualifiedTagEntry (const tagEntryInfo *const e);
 
+extern void setTagPositionFromTag (tagEntryInfo *const dst, const tagEntryInfo *const src);
 
 #define CORK_NIL 0
 tagEntryInfo *getEntryInCorkQueue   (int n);
@@ -162,8 +169,9 @@ void          registerEntry (int corkIndex);
  * under the scope.
  *
  * If FUNC returns false, this function returns false.
- * If FUNC never returns false, this func returns true.
- * If FUNC is not called because no node for NAME in the symbol table.
+ * If FUNC never returns false, this function returns true.
+ * If FUNC is not called because no node for NAME in the symbol table,
+ * this function returns true.
  */
 bool          foreachEntriesInScope (int corkIndex,
 									 const char *name, /* or NULL */
@@ -256,6 +264,7 @@ extern void attachParserFieldToCorkEntry (int index, fieldType ftype, const char
 extern const char* getParserFieldValueForType (tagEntryInfo *const tag, fieldType ftype);
 
 extern int makePlaceholder (const char *const name);
+extern void markTagPlaceholder (tagEntryInfo *e, bool placeholder);
 
 /* Marking all tag entries entries under the scope specified
  * with index recursively.

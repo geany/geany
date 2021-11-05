@@ -70,6 +70,13 @@ typedef enum {
 	CORK_SYMTAB = (1 << 1),
 } corkUsage;
 
+/* optlib2c requires the declaration here. */
+enum scriptHook {
+	SCRIPT_HOOK_PRELUDE,
+	SCRIPT_HOOK_SEQUEL,
+	SCRIPT_HOOK_MAX,
+};
+
 struct sParserDefinition {
 	/* defined by parser */
 	char* name;                    /* name of language */
@@ -84,7 +91,7 @@ struct sParserDefinition {
 	rescanParser parser2;          /* rescanning parser (unusual case) */
 	selectLanguage* selectLanguage; /* may be used to resolve conflicts */
 	unsigned int method;           /* See METHOD_ definitions above */
-	unsigned int useCork;		   /* bit or of corkUsage */
+	unsigned int useCork;		   /* bit fields of corkUsage */
 	bool useMemoryStreamInput;
 	bool allowNullTag;
 	bool requestAutomaticFQTag;
@@ -139,6 +146,7 @@ extern const char *getLanguageName (const langType language);
 extern const char *getLanguageKindName (const langType language, const int kindIndex);
 
 extern langType getNamedLanguage (const char *const name, size_t len);
+extern langType getNamedLanguageOrAlias (const char *const name, size_t len);
 extern langType getLanguageForFilenameAndContents (const char *const fileName);
 extern langType getLanguageForCommand (const char *const command, langType startFrom);
 extern langType getLanguageForFilename (const char *const filename, langType startFrom);
@@ -149,6 +157,7 @@ extern bool isLanguageRoleEnabled (const langType language, int kindIndex, int r
 extern kindDefinition* getLanguageKindForLetter (const langType language, char kindLetter);
 
 extern void initializeParser (langType language);
+extern unsigned int getLanguageCorkUsage (langType language);
 
 #ifdef HAVE_ICONV
 extern const char *getLanguageEncoding (const langType language);
@@ -168,6 +177,8 @@ extern void addLanguageTagMultiTableRegex(const langType language,
 										  const char* const regex,
 										  const char* const name, const char* const kinds, const char* const flags,
 										  bool *disabled);
+
+extern void addLanguageOptscriptToHook (langType language, enum scriptHook hook, const char *const src);
 
 extern void anonGenerate (vString *buffer, const char *prefix, int kind);
 extern vString *anonGenerateNew (const char *prefix, int kind);
