@@ -1195,20 +1195,36 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
 		case SCN_ZOOM:
+		{
+			/* Zooming via scrollwheel is controlled by Scintilla.
+			 * To give the appearance being disabled,  the zoom level
+			 * is reset to the previous known state. */
+			static gint prev_zoom = 0;
+			int curr_zoom = SSM(sci, SCI_GETZOOM, 0, 0);
+
 			if (editor_prefs.zoom_disable_scrollwheel)
-				sci_zoom_off(editor->sci);
+			{
+				/* reset to previous zoom state */
+				SSM(sci, SCI_SETZOOM, prev_zoom, prev_zoom);
+				update_margins(sci);
+			}
 			else
 			{
+				/* stop zooming out when size reaches 2pt */
 				int curr_size = SSM(sci, SCI_STYLEGETSIZEFRACTIONAL, STYLE_DEFAULT, STYLE_DEFAULT);
-				int curr_zoom = SSM(sci, SCI_GETZOOM, 0, 0);
-				++curr_zoom;
-				if (curr_size + curr_zoom*SC_FONT_SIZE_MULTIPLIER <= 2*SC_FONT_SIZE_MULTIPLIER)
+				if (curr_size + curr_zoom * SC_FONT_SIZE_MULTIPLIER <= 2 * SC_FONT_SIZE_MULTIPLIER)
 				{
-					SSM(sci, SCI_SETZOOM, curr_zoom, curr_zoom);
+					SSM(sci, SCI_SETZOOM, prev_zoom, prev_zoom);
+				}
+				else
+				{
+					/* update zoom state */
+					prev_zoom = curr_zoom;
 				}
 				update_margins(sci);
 			}
 			break;
+		}
 	}
 	/* we always return FALSE here to let plugins handle the event too */
 	return FALSE;
