@@ -51,7 +51,7 @@ static void createPascalTag (tagEntryInfo* const tag,
 	else
 	{
 		/* TODO: Passing NULL as name makes an assertion behind initTagEntry failure */
-		/* initTagEntry (tag, NULL, NULL); */
+		initTagEntry (tag, NULL, KIND_GHOST_INDEX);
 	}
 }
 

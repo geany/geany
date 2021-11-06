@@ -181,6 +181,7 @@ test_sources = \
 	intro_orig.tex					\
 	intro.tex						\
 	invalid_name.f90				\
+	issue2358.pas					\
 	java_enum.java					\
 	js-broken-strings.js			\
 	js-class-related-unterminated.js	\
