@@ -294,28 +294,31 @@ static void run_open_dialog(GtkDialog *dialog)
 	{
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+		gboolean already_open = FALSE;
 
-		/* Don't re-open projects that are already open. */
-		gboolean skip_open = FALSE;
-		if (!project_prefs.project_reload_already_open && app->project) {
+		if (app->project) {
+			/* Check if project file is already open. */
 			char *realpath = utils_get_real_path(filename);
 			char *project_filename = utils_get_locale_from_utf8(app->project->file_name);
 			char *project_realpath = utils_get_real_path(project_filename);
-			skip_open = utils_str_equal(project_realpath, realpath);
+			already_open = utils_str_equal(project_realpath, realpath);
 
 			g_free(project_filename);
 			g_free(project_realpath);
 			g_free(realpath);
 		}
-		if (skip_open) {
-			msgwin_status_add(_("Project file is already loaded. (%s)"), utf8_filename);
+		if (already_open && !project_prefs.project_reload_already_open) {
+			SHOW_ERR1(_("Project file is already loaded. (%s)"), utf8_filename);
 			g_free(utf8_filename);
 			g_free(filename);
 			continue;
 		}
-		/* Don't open new project if old project cannot be closed */
-		else if (app->project && !project_close(FALSE)) {}
-		/* try to load the config */
+		else if (app->project && !project_close(FALSE)) {
+			SHOW_ERR1(_("Error closing current project. (%s)"), app->project->file_name);
+			g_free(utf8_filename);
+			g_free(filename);
+			continue;
+		}
 		else if (! project_load_file_with_session(filename))
 		{
 			SHOW_ERR1(_("Project file could not be loaded. (%s)"), utf8_filename);
@@ -324,6 +327,7 @@ static void run_open_dialog(GtkDialog *dialog)
 			g_free(filename);
 			continue;
 		}
+		g_free(utf8_filename);
 		g_free(filename);
 		break;
 	}
@@ -342,24 +346,23 @@ void project_open(void)
 
 		if (file != NULL)
 		{
-			/* Don't re-open projects that are already open. */
-			gboolean skip_open = FALSE;
-			if (!project_prefs.project_reload_already_open && app->project) {
+			gboolean already_open = FALSE;
+			if (app->project) {
 				char *realpath = utils_get_real_path(file);
 				char *project_filename = utils_get_locale_from_utf8(app->project->file_name);
 				char *project_realpath = utils_get_real_path(project_filename);
-				skip_open = utils_str_equal(project_realpath, realpath);
+				already_open = utils_str_equal(project_realpath, realpath);
 
 				g_free(project_filename);
 				g_free(project_realpath);
 				g_free(realpath);
 			}
-			if (skip_open) {
-				msgwin_status_add(_("Project file is already loaded. (%s)"), file);
+			if (already_open && !project_prefs.project_reload_already_open) {
+				SHOW_ERR1(_("Project file is already loaded. (%s)"), file);
 			}
-			/* Don't open new project if old project cannot be closed */
-			if (app->project && !project_close(FALSE)) {}
-			/* try to load the config */
+			if (app->project && !project_close(FALSE)) {
+				SHOW_ERR1(_("Error closing current project. (%s)"), app->project->file_name);
+			}
 			else if (! project_load_file_with_session(file))
 			{
 				SHOW_ERR1(_("Project file could not be loaded. (%s)"), file);
