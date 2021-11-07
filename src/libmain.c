@@ -1216,6 +1216,10 @@ gint main_lib(gint argc, gchar **argv)
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 
+	/* restore menubar state or hide on startup */
+	if (!ui_prefs.menubar_visible || interface_prefs.on_startup_hide_menubar)
+		keybindings_send_command(GEANY_KEY_GROUP_VIEW, GEANY_KEYS_TOGGLE_MENUBAR);
+
 	configuration_apply_settings();
 
 #ifdef HAVE_SOCKET

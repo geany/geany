@@ -603,6 +603,8 @@ static void init_default_kb(void)
 		"menu_toggle_all_additional_widgets1");
 	add_kb(group, GEANY_KEYS_VIEW_FULLSCREEN, cb_func_menu_fullscreen,
 		GDK_KEY_F11, 0, "menu_fullscreen", _("Fullscreen"), "menu_fullscreen1");
+	add_kb(group, GEANY_KEYS_TOGGLE_MENUBAR, NULL,
+		0, 0, "toggle_menubar", _("Toggle Menubar"), NULL);
 	add_kb(group, GEANY_KEYS_VIEW_MESSAGEWINDOW, cb_func_menu_messagewindow,
 		0, 0, "menu_messagewindow", _("Toggle Messages Window"),
 		"menu_show_messages_window1");
@@ -1630,6 +1632,27 @@ static gboolean cb_func_view_action(guint key_id)
 			break;
 		case GEANY_KEYS_VIEW_ZOOMRESET:
 			on_normal_size1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_TOGGLE_MENUBAR:
+		{
+			GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
+			if (gtk_widget_is_visible(geany_menubar))
+			{
+				GeanyKeyGroup *group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
+				GeanyKeyBinding *kb = keybindings_get_item(group, GEANY_KEYS_TOGGLE_MENUBAR);
+				if (kb->key != 0)
+				{
+					gtk_widget_hide(geany_menubar);
+					gchar *val = gtk_accelerator_name(kb->key, kb->mods);
+					msgwin_status_add("Menubar has been hidden.  To reshow it, use: %s", val);
+					g_free(val);
+				}
+				else
+					msgwin_status_add("Menubar will not be hidden until after a keybinding to reshow it has been set.");
+			}
+			else
+				gtk_widget_show(geany_menubar);
+		}
 			break;
 		default:
 			break;

@@ -71,6 +71,7 @@ typedef struct GeanyInterfacePrefs
 	gint 			symbols_sort_mode;			/**< symbol list sorting mode */
 	/** whether to show a warning when closing a project to open a new one */
 	gboolean		warn_on_project_close;
+	gboolean		on_startup_hide_menubar;	/**< hide menubar on startup */
 }
 GeanyInterfacePrefs;
 
@@ -164,6 +165,7 @@ typedef struct UIPrefs
 	gboolean	sidebar_visible;
 	gint		sidebar_page;
 	gboolean	msgwindow_visible;
+	gboolean	menubar_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 	gchar		*statusbar_template;
 	gboolean	new_document_after_close;

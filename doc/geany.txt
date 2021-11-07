@@ -2544,6 +2544,7 @@ msgwin_scribble_visible           Whether to show the Scribble tab in the      t
                                   Messages Window
 warn_on_project_close             Whether to show a warning when opening       true        immediately
                                   a project while one is already open.
+on_startup_hide_menubar           Whether to hide the menu bar on startup      false       on restart
 **``terminal`` group**
 send_selection_unsafe             By default, Geany strips any trailing        false       immediately
                                   newline characters from the current
@@ -3667,8 +3668,10 @@ Action                          Default shortcut          Description
 =============================== ========================= ==================================================
 Fullscreen                      F11  (C)                  Switches to fullscreen mode.
 
-Toggle Messages Window                                    Toggles the message window (status and compiler
-                                                          messages) on and off.
+Toggle Menubar                                            Shows or hides the menubar.
+
+Toggle Messages Window                                    Shows or hides the message window
+                                                          (status and compiler messages).
 
 Toggle Sidebar                                            Shows or hides the sidebar.
 
