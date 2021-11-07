@@ -2544,6 +2544,10 @@ msgwin_scribble_visible           Whether to show the Scribble tab in the      t
                                   Messages Window
 warn_on_project_close             Whether to show a warning when opening       true        immediately
                                   a project while one is already open.
+warn_on_project_unwritable        Whether to show a popup warning when         true        immediately
+                                  opening a read-only project file.
+                                  When disabled, the warning will be sent
+                                  to the status window instead.
 **``terminal`` group**
 send_selection_unsafe             By default, Geany strips any trailing        false       immediately
                                   newline characters from the current

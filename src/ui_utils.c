@@ -2354,6 +2354,8 @@ void ui_init_prefs(void)
 		"msgwin_scribble_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.warn_on_project_close,
 		"warn_on_project_close", TRUE);
+	stash_group_add_boolean(group, &interface_prefs.warn_on_project_unwritable,
+		"warn_on_project_unwritable", TRUE);
 }
 
 
