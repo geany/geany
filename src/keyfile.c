@@ -671,6 +671,13 @@ static void save_ui_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "symbols_group_by_type", ui_prefs.symbols_group_by_type);
 	g_key_file_set_string(config, PACKAGE, "color_picker_palette", ui_prefs.color_picker_palette);
 
+	/* Update and save current menubar state */
+	{
+		GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
+		ui_prefs.menubar_visible = gtk_widget_is_visible(geany_menubar);
+		g_key_file_set_boolean(config, PACKAGE, "menubar_visible", ui_prefs.menubar_visible);
+	}
+
 	/* get the text from the scribble textview */
 	{
 		GtkTextBuffer *buffer;
@@ -1098,6 +1105,7 @@ static void load_dialog_prefs(GKeyFile *config)
 
 static void load_ui_prefs(GKeyFile *config)
 {
+	ui_prefs.menubar_visible = utils_get_setting_boolean(config, PACKAGE, "menubar_visible", TRUE);
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);

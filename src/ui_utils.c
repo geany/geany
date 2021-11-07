@@ -2389,6 +2389,8 @@ void ui_init_prefs(void)
 		"warn_on_project_close", TRUE);
 	stash_group_add_spin_button_integer(group, &interface_prefs.tab_label_len,
 		"tab_label_length", 1000, "spin_tab_label_len");
+	stash_group_add_boolean(group, &interface_prefs.on_startup_hide_menubar,
+		"on_startup_hide_menubar", FALSE);
 }
 
 

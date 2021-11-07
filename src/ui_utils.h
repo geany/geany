@@ -74,6 +74,7 @@ typedef struct GeanyInterfacePrefs
 	gint			openfiles_path_mode;
 	/** number of characters of a filename to be visible on the tab label */
 	gint			tab_label_len;
+	gboolean		on_startup_hide_menubar;	/**< hide menubar on startup */
 }
 GeanyInterfacePrefs;
 
@@ -167,6 +168,7 @@ typedef struct UIPrefs
 	gboolean	sidebar_visible;
 	gint		sidebar_page;
 	gboolean	msgwindow_visible;
+	gboolean	menubar_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 	gchar		*statusbar_template;
 	gboolean	new_document_after_close;
