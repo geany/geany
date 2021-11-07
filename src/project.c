@@ -37,6 +37,7 @@
 #include "geanyobject.h"
 #include "keyfile.h"
 #include "main.h"
+#include "msgwindow.h"
 #include "projectprivate.h"
 #include "sidebar.h"
 #include "stash.h"
@@ -292,14 +293,32 @@ static void run_open_dialog(GtkDialog *dialog)
 	while (gtk_dialog_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
-		if (app->project && !project_close(FALSE)) {}
+		/* Don't re-open projects that are already open. */
+		gboolean skip_open = FALSE;
+		if (!project_prefs.project_reload_already_open && app->project) {
+			char *realpath = utils_get_real_path(filename);
+			char *project_filename = utils_get_locale_from_utf8(app->project->file_name);
+			char *project_realpath = utils_get_real_path(project_filename);
+			skip_open = utils_str_equal(project_realpath, realpath);
+
+			g_free(project_filename);
+			g_free(project_realpath);
+			g_free(realpath);
+		}
+		if (skip_open) {
+			msgwin_status_add(_("Project file is already loaded. (%s)"), utf8_filename);
+			g_free(utf8_filename);
+			g_free(filename);
+			continue;
+		}
+		/* Don't open new project if old project cannot be closed */
+		else if (app->project && !project_close(FALSE)) {}
 		/* try to load the config */
 		else if (! project_load_file_with_session(filename))
 		{
-			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
-
-			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), utf8_filename);
+			SHOW_ERR1(_("Project file could not be loaded. (%s)"), utf8_filename);
 			gtk_widget_grab_focus(GTK_WIDGET(dialog));
 			g_free(utf8_filename);
 			g_free(filename);
@@ -319,13 +338,31 @@ void project_open(void)
 	if (interface_prefs.use_native_windows_dialogs)
 	{
 		gchar *file = win32_show_project_open_dialog(main_widgets.window, _("Open Project"), dir, FALSE, TRUE);
+		gchar *utf8_filename = utils_get_utf8_from_locale(file);
+
 		if (file != NULL)
 		{
+			/* Don't re-open projects that are already open. */
+			gboolean skip_open = FALSE;
+			if (!project_prefs.project_reload_already_open && app->project) {
+				char *realpath = utils_get_real_path(file);
+				char *project_filename = utils_get_locale_from_utf8(app->project->file_name);
+				char *project_realpath = utils_get_real_path(project_filename);
+				skip_open = utils_str_equal(project_realpath, realpath);
+
+				g_free(project_filename);
+				g_free(project_realpath);
+				g_free(realpath);
+			}
+			if (skip_open) {
+				msgwin_status_add(_("Project file is already loaded. (%s)"), file);
+			}
+			/* Don't open new project if old project cannot be closed */
 			if (app->project && !project_close(FALSE)) {}
 			/* try to load the config */
 			else if (! project_load_file_with_session(file))
 			{
-				SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
+				SHOW_ERR1(_("Project file could not be loaded. (%s)"), file);
 			}
 			g_free(file);
 		}

@@ -63,6 +63,7 @@
 #include "document.h"
 #include "encodings.h"
 #include "main.h"
+#include "msgwindow.h"
 #include "support.h"
 #include "utils.h"
 #include "win32.h"
@@ -631,8 +632,27 @@ static void handle_input_filename(const gchar *buf)
 	{
 		if (g_str_has_suffix(locale_filename, ".geany"))
 		{
-			if (project_ask_close())
-				main_load_project_from_command_line(locale_filename, TRUE);
+			/* Don't re-open projects that are already open.
+			 * The filename has to be checked here to prevent
+			 * warnings for files that won't even be opened. */
+			gboolean skip_open = FALSE;
+			if (!project_prefs.project_reload_already_open && app->project) {
+				char *realpath = utils_get_real_path(locale_filename);
+				char *project_filename = utils_get_locale_from_utf8(app->project->file_name);
+				char *project_realpath = utils_get_real_path(project_filename);
+				skip_open = utils_str_equal(project_realpath, realpath);
+
+				g_free(project_filename);
+				g_free(project_realpath);
+				g_free(realpath);
+			}
+			if (!skip_open)
+			{
+				if (project_ask_close())
+					main_load_project_from_command_line(locale_filename, TRUE);
+			} else {
+				msgwin_status_add(_("Project file is already loaded. (%s)"), utf8_filename);
+			}
 		}
 		else
 			main_handle_filename(locale_filename);

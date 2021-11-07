@@ -2614,6 +2614,9 @@ save_config_on_file_change        Automatically save Geany's configuration     t
 extract_filetype_regex            Regex to extract filetype name from file     See link    immediately
                                   via capture group one.
                                   See `ft_regex`_ for default.
+**``projects`` group**
+reload_already_open               When a project that is already loaded        false        immediately
+                                  is opened again, whether to reload it.
 **``search`` group**
 find_selection_type               See `Find selection`_.                       0           immediately
 replace_and_find_by_default       Set ``Replace & Find`` button as default so  true        immediately

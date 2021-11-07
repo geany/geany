@@ -271,6 +271,12 @@ static void init_pref_groups(void)
 		"allow_always_save", FALSE);
 
 	group = stash_group_new(PACKAGE);
+	configuration_add_various_pref_group(group, "projects");
+
+	stash_group_add_boolean(group, &project_prefs.project_reload_already_open,
+		"reload_already_open", FALSE);
+
+	group = stash_group_new(PACKAGE);
 	configuration_add_various_pref_group(group, "search");
 
 	stash_group_add_integer(group, (gint*)&search_prefs.find_selection_type,
@@ -449,6 +455,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", project_prefs.project_file_in_basedir);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_reload_already_open", project_prefs.project_reload_already_open);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_wingeom);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
@@ -807,6 +814,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
+	project_prefs.project_reload_already_open = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_reload_already_open", FALSE);
 	project_prefs.project_file_in_basedir = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", FALSE);
 	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
 	prefs.save_wingeom = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_winpos);
