@@ -1297,6 +1297,11 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
 
+	if (g_access(filename, W_OK) != 0)
+	{
+		readonly = TRUE;
+	}
+
 	if (reload)
 	{
 		utf8_filename = g_strdup(doc->file_name);
