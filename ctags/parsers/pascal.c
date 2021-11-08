@@ -37,22 +37,14 @@ static kindDefinition PascalKinds [] = {
 *   FUNCTION DEFINITIONS
 */
 
-static void createPascalTag (tagEntryInfo* const tag,
-							 const vString* const name, const int kind,
-							 const char *arglist, const char *vartype)
+static void createPascalTag (
+		tagEntryInfo* const tag, const vString* const name, const int kind)
 {
 	if (PascalKinds [kind].enabled  &&  name != NULL  &&  vStringLength (name) > 0)
-	{
 		initTagEntry (tag, vStringValue (name), kind);
-
-		tag->extensionFields.signature = arglist;
-		tag->extensionFields.typeRef[1] = vartype;
-	}
 	else
-	{
 		/* TODO: Passing NULL as name makes an assertion behind initTagEntry failure */
-		/* initTagEntry (tag, NULL, NULL); */
-	}
+		initTagEntry (tag, NULL, KIND_GHOST_INDEX);
 }
 
 static void makePascalTag (const tagEntryInfo* const tag)
@@ -82,69 +74,6 @@ static bool tail (const char *cp)
 	return result;
 }
 
-static void parseArglist(const char *buf, char **arglist, char **vartype)
-{
-	char *c, *start, *end;
-	int level;
-
-	if (NULL == buf || NULL == arglist)
-		return;
-
-	c = strdup(buf);
-	/* parse argument list which can be missing like in "function ginit:integer;" */
-	if (NULL != (start = strchr(c, '(')))
-	{
-		for (level = 1, end = start + 1; level > 0; ++end)
-		{
-			if ('\0' == *end)
-				break;
-			else if ('(' == *end)
-				++ level;
-			else if (')' == *end)
-				-- level;
-		}
-	}
-	else /* if no argument list was found, continue looking for a return value */
-	{
-		start = "()";
-		end = c;
-	}
-
-	/* parse return type if requested by passing a non-NULL vartype argument */
-	if (NULL != vartype)
-	{
-		char *var, *var_start;
-
-		*vartype = NULL;
-
-		if (NULL != (var = strchr(end, ':')))
-		{
-			var++; /* skip ':' */
-			while (isspace((int) *var))
-				++var;
-
-			if (starttoken(*var))
-			{
-				var_start = var;
-				var++;
-				while (intoken(*var))
-					var++;
-				if (endtoken(*var))
-				{
-					*var = '\0';
-					*vartype = strdup(var_start);
-				}
-			}
-		}
-	}
-
-	*end = '\0';
-	*arglist = strdup(start);
-
-	eFree(c);
-}
-
-
 /* Algorithm adapted from from GNU etags.
  * Locates tags for procedures & functions.  Doesn't do any type- or
  * var-definitions.  It does look for the keyword "extern" or "forward"
@@ -155,12 +84,10 @@ static void findPascalTags (void)
 {
 	vString *name = vStringNew ();
 	tagEntryInfo tag;
-	char *arglist = NULL;
-	char *vartype = NULL;
 	pascalKind kind = K_FUNCTION;
 		/* each of these flags is true iff: */
 	bool incomment = false;  /* point is inside a comment */
-	int comment_char = '\0'; /* type of current comment */
+	int comment_char = '\0';    /* type of current comment */
 	bool inquote = false;    /* point is inside '..' string */
 	bool get_tagname = false;/* point is after PROCEDURE/FUNCTION
 		keyword, so next item = potential tag */
@@ -257,14 +184,6 @@ static void findPascalTags (void)
 					verify_tag = false;
 				}
 			}
-			else if (tolower ((int) *dbp) == 't')
-			{
-				if (tail ("type"))      /*  check for forward reference */
-				{
-					found_tag = false;
-					verify_tag = false;
-				}
-			}
 			if (found_tag && verify_tag)  /* not external proc, so make tag */
 			{
 				found_tag = false;
@@ -286,12 +205,7 @@ static void findPascalTags (void)
 			for (cp = dbp  ;  *cp != '\0' && !endtoken (*cp)  ;  cp++)
 				continue;
 			vStringNCopyS (name, (const char*) dbp,  cp - dbp);
-			if (arglist != NULL)
-				eFree(arglist);
-			if (kind == K_FUNCTION && vartype != NULL)
-				eFree(vartype);
-			parseArglist((const char*) cp, &arglist, (kind == K_FUNCTION) ? &vartype : NULL);
-			createPascalTag (&tag, name, kind, arglist, (kind == K_FUNCTION) ? vartype : NULL);
+			createPascalTag (&tag, name, kind);
 			dbp = cp;  /* set dbp to e-o-token */
 			get_tagname = false;
 			found_tag = true;
@@ -329,20 +243,9 @@ static void findPascalTags (void)
 						kind = K_FUNCTION;
 					}
 					break;
-				case 't':
-					if (tail ("ype"))
-					{
-						get_tagname = true;
-						kind = K_FUNCTION;
-					}
-					break;
 			}
 		}  /* while not eof */
 	}
-	if (arglist != NULL)
-		eFree(arglist);
-	if (vartype != NULL)
-		eFree(vartype);
 	vStringDelete (name);
 }
 
@@ -351,7 +254,7 @@ extern parserDefinition* PascalParser (void)
 	static const char *const extensions [] = { "p", "pas", NULL };
 	parserDefinition* def = parserNew ("Pascal");
 	def->extensions = extensions;
-	def->kindTable  = PascalKinds;
+	def->kindTable      = PascalKinds;
 	def->kindCount  = ARRAY_SIZE (PascalKinds);
 	def->parser     = findPascalTags;
 	return def;
