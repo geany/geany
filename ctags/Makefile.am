@@ -10,28 +10,28 @@ AM_CFLAGS = \
 noinst_LTLIBRARIES = libctags.la
 
 parsers = \
-	parsers/geany_abaqus.c \
-	parsers/geany_abc.c \
-	parsers/geany_asciidoc.c \
+	parsers/abaqus.c \
+	parsers/abc.c \
+	parsers/asciidoc.c \
 	parsers/geany_asm.c \
 	parsers/geany_basic.c \
-	parsers/geany_bibtex.c \
+	parsers/bibtex.c \
 	parsers/geany_c.c \
-	parsers/geany_cobol.c \
+	parsers/cobol.c \
 	parsers/geany_iniconf.c \
-	parsers/geany_css.c \
+	parsers/css.c \
 	parsers/geany_diff.c \
 	parsers/geany_docbook.c \
-	parsers/geany_erlang.c \
-	parsers/geany_flex.c \
+	parsers/erlang.c \
+	parsers/flex.c \
 	parsers/geany_fortran.c \
 	parsers/geany_go.c \
-	parsers/geany_haskell.c \
-	parsers/geany_haxe.c \
+	parsers/haskell.c \
+	parsers/haxe.c \
 	parsers/geany_html.c \
 	parsers/geany_jscript.c \
-	parsers/geany_json.c \
-	parsers/geany_julia.c \
+	parsers/json.c \
+	parsers/julia.c \
 	parsers/geany_lcpp.c \
 	parsers/geany_lcpp.h \
 	parsers/geany_lua.c \
@@ -43,17 +43,17 @@ parsers = \
 	parsers/geany_pascal.c \
 	parsers/geany_perl.c \
 	parsers/geany_php.c \
-	parsers/geany_powershell.c \
+	parsers/powershell.c \
 	parsers/geany_python.c \
 	parsers/geany_r.c \
-	parsers/geany_rst.c \
+	parsers/rst.c \
 	parsers/geany_ruby.c \
 	parsers/geany_rust.c \
 	parsers/geany_sh.c \
 	parsers/geany_sql.c \
 	parsers/geany_tcl.c \
 	parsers/geany_tex.c \
-	parsers/geany_txt2tags.c \
+	parsers/txt2tags.c \
 	parsers/geany_verilog.c \
 	parsers/geany_vhdl.c
 
