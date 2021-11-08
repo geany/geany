@@ -4,9 +4,10 @@
 *   Based on work by Jon Strait
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your opinion) any later version.
 *
-*   This module contains functions for generating tags for Abc files.
+*   This module contains functions for generating tags for Abc files
+*   (https://en.wikipedia.org/wiki/ABC_notation).
 */
 
 /*
@@ -27,52 +28,17 @@
 *   DATA DEFINITIONS
 */
 
+typedef enum {
+   K_SECTION,
+} AbcKind;
+
 static kindDefinition AbcKinds[] = {
-	{ true, 'm', "member", "sections" },
-	{ true, 's', "struct",  "header1"}
+	{ true, 's', "section", "sections" },
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
-
-/* checks if str is all the same character */
-/*static bool issame(const char *str)
-{
-	char first = *str;
-
-	while (*(++str))
-	{
-		if (*str && *str != first)
-			return false;
-	}
-	return true;
-}*/
-
-
-static void makeAbcTag (const vString* const name, bool name_before)
-{
-	tagEntryInfo e;
-	initTagEntry (&e, vStringValue(name), 0);
-
-	if (name_before)
-		e.lineNumber--;	/* we want the line before the underline chars */
-
-	makeTagEntry(&e);
-}
-
-/*static void makeAbcTag2 (const vString* const name, bool name_before)
-{
-	tagEntryInfo e;
-	initTagEntry (&e, vStringValue(name));
-
-	if (name_before)
-		e.lineNumber--;
-	e.kindName = "struct";
-	e.kind = 's';
-
-	makeTagEntry(&e);
-}*/
 
 static void findAbcTags (void)
 {
@@ -81,23 +47,10 @@ static void findAbcTags (void)
 
 	while ((line = readLineFromInputFile()) != NULL)
 	{
-		/*int name_len = vStringLength(name);*/
-
-		/* underlines must be the same length or more */
-		/*if (name_len > 0 &&	(line[0] == '=' || line[0] == '-') && issame((const char*) line))
-		{
-			makeAbcTag(name, true);
-		}*/
-/*		if (line[1] == '%') {
-			vStringClear(name);
-			vStringCatS(name, (const char *) line);
-			makeAbcTag(name, false);
-		}*/
 		if (line[0] == 'T') {
-			/*vStringClear(name);*/
 			vStringCatS(name, " / ");
 			vStringCatS(name, (const char *) line);
-			makeAbcTag(name, false);
+			makeSimpleTag(name, K_SECTION);
 		}
 		else {
 			vStringClear (name);

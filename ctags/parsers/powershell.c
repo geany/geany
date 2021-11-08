@@ -5,9 +5,10 @@
 *   regarding variable and function definitions.
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
-*   This module contains code for generating tags for Windows PowerShell scripts.
+*   This module contains code for generating tags for Windows PowerShell scripts
+*   (https://en.wikipedia.org/wiki/PowerShell).
 */
 
 /*
@@ -74,7 +75,7 @@ typedef struct {
 	vString *		scope;
 	unsigned long	lineNumber;
 	MIOPos			filePosition;
-	int 			parentKind; /* -1 if none */
+	int 			parentKind; /* KIND_GHOST_INDEX if none */
 } tokenInfo;
 
 
@@ -151,7 +152,7 @@ static tokenInfo *newToken (void)
 	token->scope		= vStringNew ();
 	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
-	token->parentKind	= -1;
+	token->parentKind	= KIND_GHOST_INDEX;
 
 	return token;
 }
@@ -386,9 +387,9 @@ static const char *parsePowerShellScope (tokenInfo *const token)
 		/* extract the scope */
 		vStringNCopyS (powershellScope, tokenName, powershellScopeLen);
 		/* cut the resulting scope string from the identifier */
-		memmove (token->string->buffer,
+		memmove (vStringValue (token->string),
 				 /* +1 to skip the leading colon */
-				 token->string->buffer + powershellScopeLen + 1,
+				 vStringValue (token->string) + powershellScopeLen + 1,
 				 /* +1 for the skipped leading colon and - 1 to include the trailing \0 byte */
 				 token->string->length + 1 - powershellScopeLen - 1);
 		token->string->length -= powershellScopeLen + 1;
@@ -559,7 +560,7 @@ static void enterScope (tokenInfo *const parentToken,
 		switch (token->type)
 		{
 			case TOKEN_OPEN_CURLY:
-				enterScope (token, NULL, -1);
+				enterScope (token, NULL, KIND_GHOST_INDEX);
 				break;
 
 			case TOKEN_KEYWORD:
@@ -588,7 +589,7 @@ static void findPowerShellTags (void)
 
 	do
 	{
-		enterScope (token, NULL, -1);
+		enterScope (token, NULL, KIND_GHOST_INDEX);
 	}
 	while (token->type != TOKEN_EOF); /* keep going even with unmatched braces */
 

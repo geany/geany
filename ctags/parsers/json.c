@@ -20,10 +20,14 @@
 #include "debug.h"
 #include "entry.h"
 #include "keyword.h"
+#include "options.h"
 #include "parse.h"
 #include "read.h"
 #include "routines.h"
 #include "vstring.h"
+
+#define isIdentChar(c) \
+	(isalnum (c) || (c) == '+' || (c) == '-' || (c) == '.')
 
 typedef enum {
 	TOKEN_EOF,
@@ -76,6 +80,12 @@ static kindDefinition JsonKinds [] = {
 	{ true,  's', "string",		"strings"	},
 	{ true,  'b', "boolean",	"booleans"	},
 	{ true,  'z', "null",		"nulls"		}
+};
+
+static const keywordTable JsonKeywordTable [] = {
+	{"true",  KEYWORD_true },
+	{"false", KEYWORD_false},
+	{"null", KEYWORD_null },
 };
 
 static tokenInfo *newToken (void)
@@ -132,15 +142,27 @@ static void makeJsonTag (tokenInfo *const token, const jsonKind kind)
 	makeTagEntry (&e);
 }
 
-static bool isIdentChar (int c)
-{
-	return (isalnum (c) || c == '+' || c == '-' || c == '.');
-}
+#define DEPTH_LIMIT 512
+static int depth_counter;
 
 static void readTokenFull (tokenInfo *const token,
 						   bool includeStringRepr)
 {
 	int c;
+
+	if (depth_counter > DEPTH_LIMIT)
+	{
+		token->type = TOKEN_EOF;
+
+		/* Not to repeat warnings. */
+		if (depth_counter == (DEPTH_LIMIT + 1))
+		{
+			notice ("Terminate parsing: too deep brackets recursion in %s at %ld",
+					getInputFileName(), getInputLineNumber());
+			depth_counter++;
+		}
+		return;
+	}
 
 	token->type = TOKEN_UNDEFINED;
 	vStringClear (token->string);
@@ -155,10 +177,18 @@ static void readTokenFull (tokenInfo *const token,
 	switch (c)
 	{
 		case EOF: token->type = TOKEN_EOF;			break;
-		case '[': token->type = TOKEN_OPEN_SQUARE;	break;
-		case ']': token->type = TOKEN_CLOSE_SQUARE;	break;
-		case '{': token->type = TOKEN_OPEN_CURLY;	break;
-		case '}': token->type = TOKEN_CLOSE_CURLY;	break;
+		case '[':
+			depth_counter++;
+			token->type = TOKEN_OPEN_SQUARE;		break;
+		case ']':
+			depth_counter--;
+			token->type = TOKEN_CLOSE_SQUARE;		break;
+		case '{':
+			depth_counter++;
+			token->type = TOKEN_OPEN_CURLY;			break;
+		case '}':
+			depth_counter--;
+			token->type = TOKEN_CLOSE_CURLY;		break;
 		case ':': token->type = TOKEN_COLON;		break;
 		case ',': token->type = TOKEN_COMMA;		break;
 
@@ -352,6 +382,8 @@ static void findJsonTags (void)
 {
 	tokenInfo *const token = newToken ();
 
+	depth_counter = 0;
+
 	/* We allow multiple top-level elements, although it's not actually valid
 	 * JSON.  An interesting side effect of this is that we allow a leading
 	 * Unicode BOM mark -- even though ok, many JSON parsers will choke on it */
@@ -368,9 +400,6 @@ static void findJsonTags (void)
 static void initialize (const langType language)
 {
 	Lang_json = language;
-	addKeyword ("true", language, KEYWORD_true);
-	addKeyword ("false", language, KEYWORD_false);
-	addKeyword ("null", language, KEYWORD_null);
 }
 
 /* Create parser definition structure */
@@ -383,6 +412,9 @@ extern parserDefinition* JsonParser (void)
 	def->kindCount	= ARRAY_SIZE (JsonKinds);
 	def->parser		= findJsonTags;
 	def->initialize = initialize;
+	def->keywordTable = JsonKeywordTable;
+	def->keywordCount = ARRAY_SIZE (JsonKeywordTable);
+	def->allowNullTag = true;
 
 	return def;
 }
