@@ -3234,7 +3234,7 @@ static void initializeValaParser (const langType language)
 	addKeyword ("requires", language, KEYWORD_ATTRIBUTE);	/* ignore */
 }
 
-extern parserDefinition* CParser (void)
+extern parserDefinition* CParserOld (void)
 {
 	static const char *const extensions [] = { "c", "pc", "sc", NULL };
 	parserDefinition* def = parserNew ("C");
@@ -3246,7 +3246,7 @@ extern parserDefinition* CParser (void)
 	return def;
 }
 
-extern parserDefinition* CppParser (void)
+extern parserDefinition* CppParserOld (void)
 {
 	static const char *const extensions [] = {
 		"c++", "cc", "cp", "cpp", "cxx", "h", "h++", "hh", "hp", "hpp", "hxx",

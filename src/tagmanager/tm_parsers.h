@@ -14,8 +14,8 @@
 
 /* Keep in sync with tm_parser.h */
 #define EXTERNAL_PARSER_LIST \
-	CParser, \
-	CppParser, \
+	CParserOld, \
+	CppParserOld, \
 	JavaParser, \
 	MakefileParser, \
 	PascalParser, \
