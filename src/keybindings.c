@@ -608,8 +608,15 @@ static void init_default_kb(void)
 		"menu_show_messages_window1");
 	add_kb(group, GEANY_KEYS_VIEW_SIDEBAR, NULL,
 		0, 0, "toggle_sidebar", _("Toggle Sidebar"), "menu_show_sidebar1");
+
+	/* Note: There are two zoom-in keybindings because some operating systems
+	 *       and keyboard layouts cannot access one or the other keybinding.
+	 *       Chromium and Firefox also recognize both keybindings. */
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN, NULL,
 		GDK_KEY_plus, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
+	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN_2, NULL,
+		GDK_KEY_equal, GEANY_PRIMARY_MOD_MASK, "menu_zoomin_ii", _("Zoom In"), NULL);
+
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
 		GDK_KEY_minus, GEANY_PRIMARY_MOD_MASK, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
@@ -1623,6 +1630,7 @@ static gboolean cb_func_view_action(guint key_id)
 			on_menu_show_sidebar1_toggled(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMIN:
+		case GEANY_KEYS_VIEW_ZOOMIN_2:
 			on_zoom_in1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMOUT:
