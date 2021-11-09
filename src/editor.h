@@ -319,7 +319,7 @@ void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width);
 
 void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap);
 
-gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset);
+gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gboolean offset);
 
 void editor_set_indentation_guides(GeanyEditor *editor);
 
