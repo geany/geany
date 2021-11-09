@@ -11,6 +11,38 @@ AM_CFLAGS = \
 noinst_LTLIBRARIES = libctags.la
 
 parsers = \
+	parsers/cxx/cxx.c \
+	parsers/cxx/cxx_debug.c \
+	parsers/cxx/cxx_debug.h \
+	parsers/cxx/cxx_debug_type.c \
+	parsers/cxx/cxx_keyword.c \
+	parsers/cxx/cxx_keyword.h \
+	parsers/cxx/cxx_parser_block.c \
+	parsers/cxx/cxx_parser.c \
+	parsers/cxx/cxx_parser_function.c \
+	parsers/cxx/cxx_parser.h \
+	parsers/cxx/cxx_parser_internal.h \
+	parsers/cxx/cxx_parser_lambda.c \
+	parsers/cxx/cxx_parser_namespace.c \
+	parsers/cxx/cxx_parser_template.c \
+	parsers/cxx/cxx_parser_tokenizer.c \
+	parsers/cxx/cxx_parser_typedef.c \
+	parsers/cxx/cxx_parser_using.c \
+	parsers/cxx/cxx_parser_variable.c \
+	parsers/cxx/cxx_qtmoc.c \
+	parsers/cxx/cxx_scope.c \
+	parsers/cxx/cxx_scope.h \
+	parsers/cxx/cxx_subparser.c \
+	parsers/cxx/cxx_subparser.h \
+	parsers/cxx/cxx_subparser_internal.h \
+	parsers/cxx/cxx_tag.c \
+	parsers/cxx/cxx_tag.h \
+	parsers/cxx/cxx_token.c \
+	parsers/cxx/cxx_token_chain.c \
+	parsers/cxx/cxx_token_chain.h \
+	parsers/cxx/cxx_token.h \
+	parsers/cpreprocessor.c \
+	parsers/cpreprocessor.h \
 	parsers/geany_abaqus.c \
 	parsers/geany_abc.c \
 	parsers/geany_asciidoc.c \
