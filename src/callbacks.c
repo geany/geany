@@ -445,30 +445,22 @@ static void on_hide_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-/* re-disable scrollwheel zoom after using keybindings */
-static gboolean on_zoom_disable_scrollwheel_timeout(G_GNUC_UNUSED gpointer user_data)
-{
-	editor_prefs.zoom_disable_scrollwheel = TRUE;
-	return FALSE;
-}
-
-
 /* zoom in from menu bar and popup menu */
 void on_zoom_in1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	gboolean zoom_disable_restore;
 
 	g_return_if_fail(doc != NULL);
 
-	if (editor_prefs.zoom_disable_scrollwheel)
-	{
-		/* Need to temporarily enable zoom to allow keybindings to work */
-		editor_prefs.zoom_disable_scrollwheel = FALSE;
-		sci_zoom_in(doc->editor->sci);
-		g_timeout_add (250, on_zoom_disable_scrollwheel_timeout, NULL);
-	}
-	else
-		sci_zoom_in(doc->editor->sci);
+	/* Need to temporarily enable zoom to allow keybindings to work */
+	zoom_disable_restore = editor_prefs.zoom_disable_scrollwheel;
+	editor_prefs.zoom_disable_scrollwheel = FALSE;
+
+	sci_zoom_in(doc->editor->sci);
+
+	/* Restore previous setting */
+	editor_prefs.zoom_disable_scrollwheel = zoom_disable_restore;
 }
 
 
@@ -476,36 +468,36 @@ void on_zoom_in1_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_zoom_out1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	gboolean zoom_disable_restore;
 
 	g_return_if_fail(doc != NULL);
 
-	if (editor_prefs.zoom_disable_scrollwheel)
-	{
-		/* Need to temporarily enable zoom to allow keybindings to work */
-		editor_prefs.zoom_disable_scrollwheel = FALSE;
-		sci_zoom_out(doc->editor->sci);
-		g_timeout_add (250, on_zoom_disable_scrollwheel_timeout, NULL);
-	}
-	else
-		sci_zoom_out(doc->editor->sci);
+	/* Need to temporarily enable zoom to allow keybindings to work */
+	zoom_disable_restore = editor_prefs.zoom_disable_scrollwheel;
+	editor_prefs.zoom_disable_scrollwheel = FALSE;
+
+	sci_zoom_out(doc->editor->sci);
+
+	/* Restore previous setting */
+	editor_prefs.zoom_disable_scrollwheel = zoom_disable_restore;
 }
 
 
 void on_normal_size1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	gboolean zoom_disable_restore;
 
 	g_return_if_fail(doc != NULL);
 
-	if (editor_prefs.zoom_disable_scrollwheel)
-	{
-		/* Need to temporarily enable zoom to allow keybindings to work */
-		editor_prefs.zoom_disable_scrollwheel = FALSE;
-		sci_zoom_off(doc->editor->sci);
-		g_timeout_add (250, on_zoom_disable_scrollwheel_timeout, NULL);
-	}
-	else
-		sci_zoom_off(doc->editor->sci);
+	/* Need to temporarily enable zoom to allow keybindings to work */
+	zoom_disable_restore = editor_prefs.zoom_disable_scrollwheel;
+	editor_prefs.zoom_disable_scrollwheel = FALSE;
+
+	sci_zoom_off(doc->editor->sci);
+
+	/* Restore previous setting */
+	editor_prefs.zoom_disable_scrollwheel = zoom_disable_restore;
 }
 
 
