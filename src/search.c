@@ -197,9 +197,12 @@ static void init_prefs(void)
 		"pref_search_always_wrap", FALSE, "check_hide_find_dialog");
 	stash_group_add_toggle_button(group, &search_prefs.use_current_file_dir,
 		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
+
+	/* dialog layout & positions */
+	group = stash_group_new("search");
+	configuration_add_session_group(group);
 	stash_group_add_boolean(group, &find_dlg.all_expanded, "find_all_expanded", FALSE);
 	stash_group_add_boolean(group, &replace_dlg.all_expanded, "replace_all_expanded", FALSE);
-	/* dialog positions */
 	stash_group_add_integer(group, &find_dlg.position[0], "position_find_x", -1);
 	stash_group_add_integer(group, &find_dlg.position[1], "position_find_y", -1);
 	stash_group_add_integer(group, &replace_dlg.position[0], "position_replace_x", -1);
