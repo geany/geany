@@ -39,6 +39,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "win32.h"
+#include "prefs.h"
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -508,6 +509,16 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 		}
 	}
 	success = document_save_file_as(doc, utf8_filename);
+
+	if (success && file_prefs.remember_last_save_path)
+	{
+		/* save the last used path for the next time we save the same path is used */
+		if (prefs.last_save_path != NULL)
+		{
+			g_free(prefs.last_save_path);
+		}
+		prefs.last_save_path = g_path_get_dirname(utf8_filename);
+	}
 
 	build_menu_update(doc);
 	return success;

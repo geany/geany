@@ -1324,6 +1324,7 @@ static gboolean do_main_quit(void)
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
 	g_strfreev(ui_prefs.custom_commands_labels);
+	g_free(prefs.last_save_path);
 
 	queue_free(ui_prefs.recent_queue);
 	queue_free(ui_prefs.recent_projects_queue);

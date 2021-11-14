@@ -1618,6 +1618,11 @@ const gchar *utils_get_default_dir_utf8(void)
 	{
 		return app->project->base_path;
 	}
+	
+	if (file_prefs.remember_last_save_path && !EMPTY(prefs.last_save_path))
+	{
+		return prefs.last_save_path;
+	}
 
 	if (!EMPTY(prefs.default_open_path))
 	{

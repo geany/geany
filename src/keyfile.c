@@ -267,6 +267,8 @@ static void init_pref_groups(void)
 	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
 		"allow_always_save", FALSE);
 
+	stash_group_add_string(group, &prefs.last_save_path, "last_save_path", NULL);
+
 	group = stash_group_new(PACKAGE);
 	configuration_add_various_pref_group(group, "search");
 
@@ -508,6 +510,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", file_prefs.final_new_line);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_ensure_convert_line_endings", file_prefs.ensure_convert_new_lines);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", file_prefs.replace_tabs);
+	g_key_file_set_boolean(config, PACKAGE, "pref_editor_remember_last_save_path", file_prefs.remember_last_save_path);
 	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", file_prefs.strip_trailing_spaces);
 
 	/* toolbar */
@@ -869,6 +872,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	}
 	file_prefs.default_eol_character = utils_get_setting_integer(config, PACKAGE, "default_eol_character", GEANY_DEFAULT_EOL_CHARACTER);
 	file_prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
+	file_prefs.remember_last_save_path = utils_get_setting_boolean(config, PACKAGE, "pref_editor_remember_last_save_path", FALSE);
 	file_prefs.ensure_convert_new_lines = utils_get_setting_boolean(config, PACKAGE, "pref_editor_ensure_convert_line_endings", FALSE);
 	file_prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
 	file_prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
