@@ -114,7 +114,7 @@ public:
 	FontHandle(FontHandle &&) = delete;
 	FontHandle &operator=(const FontHandle &) = delete;
 	FontHandle &operator=(FontHandle &&) = delete;
-	~FontHandle() {
+	~FontHandle() override {
 		if (pfd)
 			pango_font_description_free(pfd);
 		pfd = nullptr;

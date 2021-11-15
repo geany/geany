@@ -80,7 +80,7 @@ WordList::~WordList() {
 }
 
 WordList::operator bool() const noexcept {
-	return len ? true : false;
+	return len != 0;
 }
 
 bool WordList::operator!=(const WordList &other) const noexcept {
@@ -144,7 +144,7 @@ bool WordList::Set(const char *s) {
  * so '^GTK_' matches 'GTK_X', 'GTK_MAJOR_VERSION', and 'GTK_'.
  */
 bool WordList::InList(const char *s) const noexcept {
-	if (0 == words)
+	if (!words)
 		return false;
 	const unsigned char firstChar = s[0];
 	int j = starts[firstChar];
@@ -186,7 +186,7 @@ bool WordList::InList(const char *s) const noexcept {
  * The marker is ~ in this case.
  */
 bool WordList::InListAbbreviated(const char *s, const char marker) const noexcept {
-	if (0 == words)
+	if (!words)
 		return false;
 	const unsigned char firstChar = s[0];
 	int j = starts[firstChar];
@@ -240,7 +240,7 @@ bool WordList::InListAbbreviated(const char *s, const char marker) const noexcep
 * No multiple markers check is done and wont work.
 */
 bool WordList::InListAbridged(const char *s, const char marker) const noexcept {
-	if (0 == words)
+	if (!words)
 		return false;
 	const unsigned char firstChar = s[0];
 	int j = starts[firstChar];
