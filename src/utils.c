@@ -795,11 +795,11 @@ gchar *utils_get_initials(const gchar *name)
  *  @param config A GKeyFile object.
  *  @param section The group name to look in for the key.
  *  @param key The key to find.
- *  @param default_value The default value which will be returned when @a section or @a key
- *         don't exist.
+ *  @param default_value The default value which will be returned when @a section
+ *         or @a key don't exist.
  *
- *  @return The value associated with @a key as an integer, or the given default value if the value
- *          could not be retrieved.
+ *  @return The value associated with @a key as an integer, or the given default
+ *          value if the value could not be retrieved.
  **/
 GEANY_API_SYMBOL
 gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key,
@@ -826,11 +826,11 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
  *  @param config A GKeyFile object.
  *  @param section The group name to look in for the key.
  *  @param key The key to find.
- *  @param default_value The default value which will be returned when @c section or @c key
- *         don't exist.
+ *  @param default_value The default value which will be returned when @c section
+ *         or @c key don't exist.
  *
- *  @return The value associated with @a key as a boolean, or the given default value if the value
- *          could not be retrieved.
+ *  @return The value associated with @a key as a boolean, or the given default
+ *          value if the value could not be retrieved.
  **/
 GEANY_API_SYMBOL
 gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key,
@@ -852,16 +852,47 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 
 
 /**
+ *  Wraps g_key_file_get_double() to add a default value argument.
+ *
+ *  @param config A GKeyFile object.
+ *  @param section The group name to look in for the key.
+ *  @param key The key to find.
+ *  @param default_value The default value which will be returned when @a section
+ *         or @a key don't exist.
+ *
+ *  @return The value associated with @a key as an integer, or the given default
+ *          value if the value could not be retrieved.
+ **/
+GEANY_API_SYMBOL
+gdouble utils_get_setting_double(GKeyFile *config, const gchar *section, const gchar *key,
+							   const gdouble default_value)
+{
+	gdouble tmp;
+	GError *error = NULL;
+
+	g_return_val_if_fail(config, default_value);
+
+	tmp = g_key_file_get_double(config, section, key, &error);
+	if (error)
+	{
+		g_error_free(error);
+		return default_value;
+	}
+	return tmp;
+}
+
+
+/**
  *  Wraps g_key_file_get_string() to add a default value argument.
  *
  *  @param config A GKeyFile object.
  *  @param section The group name to look in for the key.
  *  @param key The key to find.
- *  @param default_value The default value which will be returned when @a section or @a key
- *         don't exist.
+ *  @param default_value The default value which will be returned when @a section
+ *         or @a key don't exist.
  *
- *  @return A newly allocated string, either the value for @a key or a copy of the given
- *          default value if it could not be retrieved.
+ *  @return A newly allocated string, either the value for @a key or a copy of
+ *          the given default value if it could not be retrieved.
  **/
 GEANY_API_SYMBOL
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key,

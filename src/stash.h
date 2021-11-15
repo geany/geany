@@ -39,6 +39,9 @@ StashGroup *stash_group_new(const gchar *name);
 void stash_group_add_boolean(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value);
 
+void stash_group_add_double(StashGroup *group, gdouble *setting,
+		const gchar *key_name, gdouble default_value);
+
 void stash_group_add_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value);
 

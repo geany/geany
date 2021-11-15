@@ -177,6 +177,25 @@ static void handle_boolean_setting(StashGroup *group, StashPref *se,
 }
 
 
+static void handle_double_setting(StashGroup *group, StashPref *se,
+		GKeyFile *config, SettingAction action)
+{
+	gdouble *setting = se->setting;
+	gdouble *default_double = (gdouble *) &se->default_value;
+
+	switch (action)
+	{
+		case SETTING_READ:
+			*setting = utils_get_setting_double(config, group->name, se->key_name,
+				*default_double);
+			break;
+		case SETTING_WRITE:
+			g_key_file_set_double(config, group->name, se->key_name, *setting);
+			break;
+	}
+}
+
+
 static void handle_integer_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
@@ -262,6 +281,8 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 				handle_boolean_setting(group, entry, keyfile, action); break;
 			case G_TYPE_INT:
 				handle_integer_setting(group, entry, keyfile, action); break;
+			case G_TYPE_DOUBLE:
+				handle_double_setting(group, entry, keyfile, action); break;
 			case G_TYPE_STRING:
 				handle_string_setting(group, entry, keyfile, action); break;
 			default:
@@ -482,6 +503,20 @@ void stash_group_add_boolean(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value)
 {
 	add_pref(group, G_TYPE_BOOLEAN, setting, key_name, (union Value) {.bool_val = default_value});
+}
+
+
+/** Adds double setting.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading. */
+GEANY_API_SYMBOL
+void stash_group_add_double(StashGroup *group, gdouble *setting,
+		const gchar *key_name, gdouble default_value)
+{
+	gulong *default_long = (gulong*) &default_value;
+	add_pref(group, G_TYPE_DOUBLE, setting, key_name, (gpointer) *default_long);
 }
 
 
