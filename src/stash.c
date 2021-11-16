@@ -515,7 +515,7 @@ GEANY_API_SYMBOL
 void stash_group_add_double(StashGroup *group, gdouble *setting,
 		const gchar *key_name, gdouble default_value)
 {
-	gulong *default_long = (gulong*) &default_value;
+	guint64 *default_long = (guint64*) &default_value;
 	add_pref(group, G_TYPE_DOUBLE, setting, key_name, (gpointer) *default_long);
 }
 
