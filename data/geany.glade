@@ -4603,11 +4603,11 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="check_remember_last_save_dir">
-                                <property name="label" translatable="yes">Opens save file dialog in the same directory</property>
+                                <property name="label" translatable="yes">Default to last save directory</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="tooltip_text" translatable="yes">Opens save file dialog in the same directory that was used before</property>
+                                <property name="tooltip_text" translatable="yes">Default to last save directory</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                               </object>
