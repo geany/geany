@@ -46,8 +46,8 @@
  * property. Macros could be added for common widget properties such as @c GtkExpander:"expanded".
  *
  * @section settings-example Settings Example
- * Here we have some settings for how to make a cup - whether it should be made of china
- * and who's going to make it. (Yes, it's a stupid example).
+ * Here we have some settings for a cup - whether it is made of porcelain, who made it,
+ * how many we have, and how much they cost. (Yes, it's a stupid example).
  * @include stash-example.c
  * @note You might want to handle the warning/error conditions differently from above.
  *
@@ -103,6 +103,7 @@ union Value
 {
 	gboolean bool_val;
 	gint int_val;
+	gdouble double_val;
 	gchar *str_val;
 	gchar **strv_val;
 	gpointer *ptr_val;
@@ -181,13 +182,12 @@ static void handle_double_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
 	gdouble *setting = se->setting;
-	gdouble *default_double = (gdouble *) &se->default_value;
 
 	switch (action)
 	{
 		case SETTING_READ:
 			*setting = utils_get_setting_double(config, group->name, se->key_name,
-				*default_double);
+				se->default_value.double_val);
 			break;
 		case SETTING_WRITE:
 			g_key_file_set_double(config, group->name, se->key_name, *setting);
@@ -515,8 +515,7 @@ GEANY_API_SYMBOL
 void stash_group_add_double(StashGroup *group, gdouble *setting,
 		const gchar *key_name, gdouble default_value)
 {
-	guint64 *default_long = (guint64*) &default_value;
-	add_pref(group, G_TYPE_DOUBLE, setting, key_name, (gpointer) *default_long);
+	add_pref(group, G_TYPE_DOUBLE, setting, key_name, (union Value) {.double_val = default_value});
 }
 
 
