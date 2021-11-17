@@ -98,34 +98,6 @@ static GType get_combo_box_entry_type(void)
 	return type;
 }
 
-/* storage for StashPref default values */
-union Value
-{
-	gboolean bool_val;
-	gint int_val;
-	gdouble double_val;
-	gchar *str_val;
-	gchar **strv_val;
-	gpointer *ptr_val;
-	GtkWidget *widget_val;
-};
-
-struct StashPref
-{
-	GType setting_type;			/* e.g. G_TYPE_INT */
-	gpointer setting;			/* Address of a variable */
-	const gchar *key_name;
-	union Value default_value;	/* Default value, as per setting_type above, e.g. .int_val */
-	GType widget_type;			/* e.g. GTK_TYPE_TOGGLE_BUTTON */
-	StashWidgetID widget_id;	/* (GtkWidget*) or (gchar*) */
-	union
-	{
-		struct EnumWidget *radio_buttons;
-		const gchar *property_name;
-	} extra;	/* extra fields depending on widget_type */
-};
-
-typedef struct StashPref StashPref;
 
 struct StashGroup
 {
@@ -294,6 +266,30 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 						G_STRFUNC);
 		}
 	}
+}
+
+
+/** Get the StashPref within @a group with @a key_name.
+ * @param group .
+ * @param key_name Name of the preference to get.
+ * @return StashPref associated with @a key_name.  Otherwise, NULL. */
+GEANY_API_SYMBOL
+StashPref *stash_group_get_pref_by_name(StashGroup *group, const gchar *key_name)
+{
+	if (!key_name || !group || !group->entries)
+		return NULL;
+
+	StashPref *entry;
+	guint i;
+
+	foreach_ptr_array(entry, i, group->entries)
+	{
+		if (entry && g_strcmp0(key_name, entry->key_name) == 0)
+		{
+			return entry;
+		}
+	}
+	return NULL;
 }
 
 
