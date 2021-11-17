@@ -32,9 +32,45 @@ typedef struct StashGroup StashGroup;
  * stash_group_display() and stash_group_update(). */
 typedef gconstpointer StashWidgetID;
 
+/* storage for StashPref default values */
+union Value
+{
+	gboolean bool_val;
+	gint int_val;
+	gdouble double_val;
+	gchar *str_val;
+	gchar **strv_val;
+	gpointer *ptr_val;
+	GtkWidget *widget_val;
+};
+
+/**
+ *  Structure to hold a preference key and its properties.
+ */
+struct StashPref
+{
+	GType setting_type;			/**< Setting type. e.g., G_TYPE_INT */
+	gpointer setting;			/**< Address of a variable */
+	const gchar *key_name;		/**< Key name. */
+	union Value default_value;		/**< Default value, as per setting_type above, e.g., .int_val */
+	GType widget_type;			/**< Widget type, e.g., GTK_TYPE_TOGGLE_BUTTON */
+	StashWidgetID widget_id;	/**< Widget ID. (GtkWidget*) or (gchar*) */
+	/** extra fields depending on widget_type */
+	union
+	{
+		struct EnumWidget *radio_buttons;	/**< Radio buttons. */
+		const gchar *property_name;			/**< Property name. */
+	} extra;
+};
+
+typedef struct StashPref StashPref;
+
+
 GType stash_group_get_type(void);
 
 StashGroup *stash_group_new(const gchar *name);
+
+StashPref *stash_group_get_pref_by_name(StashGroup *group, const gchar *key_name);
 
 void stash_group_add_boolean(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value);
