@@ -46,8 +46,8 @@
  * property. Macros could be added for common widget properties such as @c GtkExpander:"expanded".
  *
  * @section settings-example Settings Example
- * Here we have some settings for how to make a cup - whether it should be made of china
- * and who's going to make it. (Yes, it's a stupid example).
+ * Here we have some settings for a cup - whether it is made of porcelain, who made it,
+ * how many we have, and how much they cost. (Yes, it's a stupid example).
  * @include stash-example.c
  * @note You might want to handle the warning/error conditions differently from above.
  *
@@ -103,6 +103,7 @@ union Value
 {
 	gboolean bool_val;
 	gint int_val;
+	gdouble double_val;
 	gchar *str_val;
 	gchar **strv_val;
 	gpointer *ptr_val;
@@ -172,6 +173,24 @@ static void handle_boolean_setting(StashGroup *group, StashPref *se,
 			break;
 		case SETTING_WRITE:
 			g_key_file_set_boolean(config, group->name, se->key_name, *setting);
+			break;
+	}
+}
+
+
+static void handle_double_setting(StashGroup *group, StashPref *se,
+		GKeyFile *config, SettingAction action)
+{
+	gdouble *setting = se->setting;
+
+	switch (action)
+	{
+		case SETTING_READ:
+			*setting = utils_get_setting_double(config, group->name, se->key_name,
+				se->default_value.double_val);
+			break;
+		case SETTING_WRITE:
+			g_key_file_set_double(config, group->name, se->key_name, *setting);
 			break;
 	}
 }
@@ -262,6 +281,8 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 				handle_boolean_setting(group, entry, keyfile, action); break;
 			case G_TYPE_INT:
 				handle_integer_setting(group, entry, keyfile, action); break;
+			case G_TYPE_DOUBLE:
+				handle_double_setting(group, entry, keyfile, action); break;
 			case G_TYPE_STRING:
 				handle_string_setting(group, entry, keyfile, action); break;
 			default:
@@ -482,6 +503,19 @@ void stash_group_add_boolean(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value)
 {
 	add_pref(group, G_TYPE_BOOLEAN, setting, key_name, (union Value) {.bool_val = default_value});
+}
+
+
+/** Adds double setting.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading. */
+GEANY_API_SYMBOL
+void stash_group_add_double(StashGroup *group, gdouble *setting,
+		const gchar *key_name, gdouble default_value)
+{
+	add_pref(group, G_TYPE_DOUBLE, setting, key_name, (union Value) {.double_val = default_value});
 }
 
 

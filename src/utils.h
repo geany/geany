@@ -182,6 +182,8 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 
 gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key, const gint default_value);
 
+gdouble utils_get_setting_double(GKeyFile *config, const gchar *section, const gchar *key, const gdouble default_value);
+
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value);
 
 gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
