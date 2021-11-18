@@ -526,7 +526,11 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 	if (event->button == 3)
 	{
 		gtk_widget_grab_focus(vte_config.vte);
+#if GTK_CHECK_VERSION(3,22,0)
+		gtk_menu_popup_at_pointer(GTK_MENU(vte_config.menu), NULL);
+#else
 		gtk_menu_popup(GTK_MENU(vte_config.menu), NULL, NULL, NULL, NULL, event->button, event->time);
+#endif
 		return TRUE;
 	}
 	else if (event->button == 2)

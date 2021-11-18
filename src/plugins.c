@@ -1642,8 +1642,12 @@ static gboolean pm_treeview_button_press_cb(GtkWidget *widget, GdkEventButton *e
 {
 	if (event->button == 3)
 	{
+#if GTK_CHECK_VERSION(3,22,0)
+		gtk_menu_popup_at_pointer(GTK_MENU(pm_widgets.popup_menu), NULL);
+#else
 		gtk_menu_popup(GTK_MENU(pm_widgets.popup_menu), NULL, NULL, NULL, NULL,
 				event->button, event->time);
+#endif
 	}
 	return FALSE;
 }
