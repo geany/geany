@@ -52,6 +52,7 @@ struct StashPref
 	GType setting_type;			/**< Setting type. e.g., G_TYPE_INT */
 	gpointer setting;			/**< Address of a variable */
 	const gchar *key_name;		/**< Key name. */
+	gchar *comment;				/**< Comment associated with the key */
 	union Value default_value;		/**< Default value, as per setting_type above, e.g., .int_val */
 	GType widget_type;			/**< Widget type, e.g., GTK_TYPE_TOGGLE_BUTTON */
 	StashWidgetID widget_id;	/**< Widget ID. (GtkWidget*) or (gchar*) */
@@ -71,6 +72,9 @@ GType stash_group_get_type(void);
 StashGroup *stash_group_new(const gchar *name);
 
 StashPref *stash_group_get_pref_by_name(StashGroup *group, const gchar *key_name);
+
+void stash_group_add_comment(StashGroup *group,
+		const gchar *key_name, const gchar *comment);
 
 void stash_group_add_boolean(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value);

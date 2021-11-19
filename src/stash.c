@@ -265,6 +265,11 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 					g_warning("Unhandled type for %s::%s in %s()!", group->name, entry->key_name,
 						G_STRFUNC);
 		}
+
+		if (action == SETTING_WRITE && entry->comment != NULL)
+		{
+			g_key_file_set_comment(keyfile, group->name, entry->key_name, entry->comment, NULL);
+		}
 	}
 }
 
@@ -476,7 +481,7 @@ add_pref(StashGroup *group, GType type, gpointer setting,
 {
 	StashPref *entry = g_slice_new(StashPref);
 
-	*entry = (StashPref) {type, setting, key_name, default_value, G_TYPE_NONE, NULL, {NULL}};
+	*entry = (StashPref) {type, setting, key_name, NULL, default_value, G_TYPE_NONE, NULL, {NULL}};
 
 	/* init any pointer settings to NULL so they can be freed later */
 	if (type == G_TYPE_STRING || type == G_TYPE_STRV) {
@@ -486,6 +491,31 @@ add_pref(StashGroup *group, GType type, gpointer setting,
 
 	g_ptr_array_add(group->entries, entry);
 	return entry;
+}
+
+
+/** Adds a comment to an existing setting.
+ * @param group .
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param comment Comment to associate with the key. */
+GEANY_API_SYMBOL
+void stash_group_add_comment(StashGroup *group,
+		const gchar *key_name, const gchar *comment)
+{
+	if (!group || !key_name || !comment)
+		return;
+
+	StashPref *pref = stash_group_get_pref_by_name(group, key_name);
+	if (!pref)
+		return;
+
+	if (pref->comment != NULL)
+	{
+		g_free(pref->comment);
+		pref->comment = NULL;
+	}
+
+	pref->comment = g_strdup(comment);
 }
 
 
