@@ -34,6 +34,7 @@ filetypes_dist = \
 	filedefs/filetypes.forth \
 	filedefs/filetypes.fortran \
 	filedefs/filetypes.freebasic \
+	filedefs/filetypes.gdscript \
 	filedefs/filetypes.Genie.conf \
 	filedefs/filetypes.glsl \
 	filedefs/filetypes.go \

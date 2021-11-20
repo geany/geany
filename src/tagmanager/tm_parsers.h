@@ -67,6 +67,7 @@
 	PowerShellParser, \
 	JuliaParser, \
 	BibtexParser, \
-	CPreProParser
+	CPreProParser, \
+	GDScriptParser
 
 #endif

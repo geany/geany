@@ -597,6 +597,17 @@ static TMParserMapEntry map_CPREPROCESSOR[] = {
 	{'h', tm_tag_undef_t},
 	{'D', tm_tag_undef_t},
 };
+static TMParserMapEntry map_GDSCRIPT[] = {
+	{'c', tm_tag_class_t},
+	{'m', tm_tag_method_t},
+	{'v', tm_tag_variable_t},
+	{'C', tm_tag_variable_t},
+	{'g', tm_tag_enum_t},
+	{'e', tm_tag_variable_t},
+	{'z', tm_tag_other_t},
+	{'l', tm_tag_other_t},
+	{'s', tm_tag_variable_t},
+};
 
 typedef struct
 {
@@ -662,6 +673,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(POWERSHELL),
 	MAP_ENTRY(JULIA),
 	MAP_ENTRY(CPREPROCESSOR),
+	MAP_ENTRY(GDSCRIPT),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -895,6 +907,8 @@ gboolean tm_parser_enable_role(TMParserType lang, gchar kind)
 {
 	switch (lang)
 	{
+		case TM_PARSER_GDSCRIPT:
+			return kind == 'c' ? FALSE : TRUE;
 		case TM_PARSER_GO:
 			/* 'p' is used both for package definition tags and imported package
 			 * tags and we can't tell which is which just by kind. By disabling
@@ -967,6 +981,7 @@ gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gc
 	{
 		switch (lang)
 		{
+			case TM_PARSER_GDSCRIPT:
 			case TM_PARSER_GO:
 			case TM_PARSER_PASCAL:
 			case TM_PARSER_PYTHON:
@@ -978,6 +993,7 @@ gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gc
 					case TM_PARSER_PASCAL:
 						sep = ": ";
 						break;
+					case TM_PARSER_GDSCRIPT:
 					case TM_PARSER_PYTHON:
 						sep = " -> ";
 						break;
@@ -1042,6 +1058,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_COBOL:
 		case TM_PARSER_D:
 		case TM_PARSER_FERITE:
+		case TM_PARSER_GDSCRIPT:
 		case TM_PARSER_GLSL:
 		case TM_PARSER_GO:
 		case TM_PARSER_JAVA:

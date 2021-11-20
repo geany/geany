@@ -29,6 +29,7 @@ lexilla/lexers/LexDiff.cxx             \
 lexilla/lexers/LexErlang.cxx           \
 lexilla/lexers/LexForth.cxx            \
 lexilla/lexers/LexFortran.cxx          \
+lexilla/lexers/LexGDScript.cxx         \
 lexilla/lexers/LexHTML.cxx             \
 lexilla/lexers/LexHaskell.cxx          \
 lexilla/lexers/LexJulia.cxx            \

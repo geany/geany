@@ -655,6 +655,35 @@ static const HLKeyword highlighting_keywords_FORTH[] =
 #define highlighting_properties_FORTRAN		highlighting_properties_F77
 
 
+/* GDScript */
+#define highlighting_lexer_GDSCRIPT		SCLEX_GDSCRIPT
+static const HLStyle highlighting_styles_GDSCRIPT[] =
+{
+	{ SCE_GD_DEFAULT,		"default",			FALSE },
+	{ SCE_GD_COMMENTLINE,	"commentline",		FALSE },
+	{ SCE_GD_NUMBER,		"number",			FALSE },
+	{ SCE_GD_STRING,		"string",			FALSE },
+	{ SCE_GD_CHARACTER,		"character",		FALSE },
+	{ SCE_GD_WORD,			"word",				FALSE },
+	{ SCE_GD_TRIPLE,		"triple",			FALSE },
+	{ SCE_GD_TRIPLEDOUBLE,	"tripledouble",		FALSE },
+	{ SCE_GD_CLASSNAME,		"classname",		FALSE },
+	{ SCE_GD_FUNCNAME,		"funcname",			FALSE },
+	{ SCE_GD_OPERATOR,		"operator",			FALSE },
+	{ SCE_GD_IDENTIFIER,	"identifier",		FALSE },
+	{ SCE_GD_COMMENTBLOCK,	"commentblock",		FALSE },
+	{ SCE_GD_STRINGEOL,		"stringeol",		FALSE },
+	{ SCE_GD_WORD2,			"word2",			FALSE },
+	{ SCE_GD_ANNOTATION,	"annotation",		FALSE }
+};
+static const HLKeyword highlighting_keywords_GDSCRIPT[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "identifiers",	FALSE }
+};
+#define highlighting_properties_GDSCRIPT	EMPTY_PROPERTIES
+
+
 /* Go */
 #define highlighting_lexer_GO		SCLEX_CPP
 #define highlighting_styles_GO		highlighting_styles_C

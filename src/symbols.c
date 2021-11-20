@@ -515,6 +515,18 @@ static void add_top_level_items(GeanyDocument *doc)
 				&tv_iters.tag_macro, _("Keys"), ICON_VAR,
 				NULL);
 			break;
+		case GEANY_FILETYPES_GDSCRIPT:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_member), _("Methods"), ICON_MACRO,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_externvar), _("Imports"), ICON_NAMESPACE,
+				&(tv_iters.tag_type), _("Enums"), ICON_STRUCT,
+				NULL);
+			break;
+		}
 		case GEANY_FILETYPES_NSIS:
 			tag_list_add_groups(tag_store,
 				&tv_iters.tag_namespace, _("Sections"), ICON_OTHER,
