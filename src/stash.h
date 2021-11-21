@@ -56,6 +56,7 @@ struct StashPref
 	union Value default_value;		/**< Default value, as per setting_type above, e.g., .int_val */
 	union Value setting_backup;		/**< Backup of previous setting when override is in effect */
 	gboolean runtime_override;		/**< Whether a runtime override is in effect */
+	gboolean session;				/**< Whether this StashPref holds session data */
 	GType widget_type;			/**< Widget type, e.g., GTK_TYPE_TOGGLE_BUTTON */
 	StashWidgetID widget_id;	/**< Widget ID. (GtkWidget*) or (gchar*) */
 	/** extra fields depending on widget_type */
@@ -117,7 +118,15 @@ void stash_group_pref_unset_override(StashPref *pref);
 
 void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile);
 
+void stash_group_load_config_from_key_file(StashGroup *group, GKeyFile *keyfile);
+
+void stash_group_load_session_from_key_file(StashGroup *group, GKeyFile *keyfile);
+
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile);
+
+void stash_group_save_config_to_key_file(StashGroup *group, GKeyFile *keyfile);
+
+void stash_group_save_session_to_key_file(StashGroup *group, GKeyFile *keyfile);
 
 void stash_group_free(StashGroup *group);
 
@@ -125,7 +134,17 @@ void stash_group_release(StashGroup *group);
 
 gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename);
 
+gboolean stash_group_load_config_from_file(StashGroup *group, const gchar *filename);
+
+gboolean stash_group_load_session_from_file(StashGroup *group, const gchar *filename);
+
 gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags);
+
+gint stash_group_save_config_to_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags);
+
+gint stash_group_save_session_to_file(StashGroup *group, const gchar *filename,
 		GKeyFileFlags flags);
 
 /* *** GTK-related functions *** */

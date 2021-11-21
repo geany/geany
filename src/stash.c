@@ -121,7 +121,11 @@ EnumWidget;
 typedef enum SettingAction
 {
 	SETTING_READ,
-	SETTING_WRITE
+	SETTING_WRITE,
+	CONFIG_READ,
+	CONFIG_WRITE,
+	SESSION_READ,
+	SESSION_WRITE,
 }
 SettingAction;
 
@@ -136,6 +140,8 @@ PrefAction;
 static void handle_boolean_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
+	gboolean read = FALSE;
+	gboolean write = FALSE;
 	gboolean *setting = se->setting;
 
 	if (se->runtime_override)
@@ -146,12 +152,37 @@ static void handle_boolean_setting(StashGroup *group, StashPref *se,
 	switch (action)
 	{
 		case SETTING_READ:
-			*setting = utils_get_setting_boolean(config, group->name, se->key_name,
-				se->default_value.bool_val);
+			read = TRUE;
+			break;
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
 			break;
 		case SETTING_WRITE:
-			g_key_file_set_boolean(config, group->name, se->key_name, *setting);
+			write = TRUE;
 			break;
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
+			break;
+	}
+
+	if (read)
+	{
+		*setting = utils_get_setting_boolean(config, group->name, se->key_name,
+			se->default_value.bool_val);
+	}
+	if (write)
+	{
+		g_key_file_set_boolean(config, group->name, se->key_name, *setting);
 	}
 }
 
@@ -159,6 +190,8 @@ static void handle_boolean_setting(StashGroup *group, StashPref *se,
 static void handle_double_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
+	gboolean read = FALSE;
+	gboolean write = FALSE;
 	gdouble *setting = se->setting;
 
 	if (se->runtime_override)
@@ -169,12 +202,37 @@ static void handle_double_setting(StashGroup *group, StashPref *se,
 	switch (action)
 	{
 		case SETTING_READ:
-			*setting = utils_get_setting_double(config, group->name, se->key_name,
-				se->default_value.double_val);
+			read = TRUE;
+			break;
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
 			break;
 		case SETTING_WRITE:
-			g_key_file_set_double(config, group->name, se->key_name, *setting);
+			write = TRUE;
 			break;
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
+			break;
+	}
+
+	if (read)
+	{
+		*setting = utils_get_setting_double(config, group->name, se->key_name,
+			se->default_value.double_val);
+	}
+	if (write)
+	{
+		g_key_file_set_double(config, group->name, se->key_name, *setting);
 	}
 }
 
@@ -182,6 +240,8 @@ static void handle_double_setting(StashGroup *group, StashPref *se,
 static void handle_integer_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
+	gboolean read = FALSE;
+	gboolean write = FALSE;
 	gint *setting = se->setting;
 
 	if (se->runtime_override)
@@ -192,12 +252,37 @@ static void handle_integer_setting(StashGroup *group, StashPref *se,
 	switch (action)
 	{
 		case SETTING_READ:
-			*setting = utils_get_setting_integer(config, group->name, se->key_name,
-				se->default_value.int_val);
+			read = TRUE;
+			break;
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
 			break;
 		case SETTING_WRITE:
-			g_key_file_set_integer(config, group->name, se->key_name, *setting);
+			write = TRUE;
 			break;
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
+			break;
+	}
+
+	if (read)
+	{
+		*setting = utils_get_setting_integer(config, group->name, se->key_name,
+			se->default_value.int_val);
+	}
+	if (write)
+	{
+		g_key_file_set_integer(config, group->name, se->key_name, *setting);
 	}
 }
 
@@ -205,19 +290,46 @@ static void handle_integer_setting(StashGroup *group, StashPref *se,
 static void handle_string_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
+	gboolean read = FALSE;
+	gboolean write = FALSE;
 	gchararray *setting = se->setting;
 
 	switch (action)
 	{
 		case SETTING_READ:
-			g_free(*setting);
-			*setting = utils_get_setting_string(config, group->name, se->key_name,
-				se->default_value.str_val);
+			read = TRUE;
+			break;
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
 			break;
 		case SETTING_WRITE:
-			g_key_file_set_string(config, group->name, se->key_name,
-				*setting ? *setting : "");
+			write = TRUE;
 			break;
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
+			break;
+	}
+
+	if (read)
+	{
+		g_free(*setting);
+		*setting = utils_get_setting_string(config, group->name, se->key_name,
+			se->default_value.str_val);
+	}
+	if (write)
+	{
+		g_key_file_set_string(config, group->name, se->key_name,
+			*setting ? *setting : "");
 	}
 }
 
@@ -225,28 +337,52 @@ static void handle_string_setting(StashGroup *group, StashPref *se,
 static void handle_strv_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
+	gboolean read = FALSE;
+	gboolean write = FALSE;
 	gchararray **setting = se->setting;
 
 	switch (action)
 	{
 		case SETTING_READ:
-			g_strfreev(*setting);
-			*setting = g_key_file_get_string_list(config, group->name, se->key_name,
-				NULL, NULL);
-			if (*setting == NULL)
-				*setting = g_strdupv(se->default_value.strv_val);
+			read = TRUE;
 			break;
-
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
+			break;
 		case SETTING_WRITE:
-		{
-			/* don't try to save a NULL string vector */
-			const gchar *dummy[] = { "", NULL };
-			const gchar **strv = *setting ? (const gchar **)*setting : dummy;
-
-			g_key_file_set_string_list(config, group->name, se->key_name,
-				strv, g_strv_length((gchar **)strv));
+			write = TRUE;
 			break;
-		}
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
+			break;
+	}
+
+	if (read)
+	{
+		g_strfreev(*setting);
+		*setting = g_key_file_get_string_list(config, group->name, se->key_name,
+			NULL, NULL);
+		if (*setting == NULL)
+			*setting = g_strdupv(se->default_value.strv_val);
+	}
+	if (write)
+	{
+		/* don't try to save a NULL string vector */
+		const gchar *dummy[] = { "", NULL };
+		const gchar **strv = *setting ? (const gchar **)*setting : dummy;
+
+		g_key_file_set_string_list(config, group->name, se->key_name,
+			strv, g_strv_length((gchar **)strv));
 	}
 }
 
@@ -325,6 +461,18 @@ void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile)
 	keyfile_action(SETTING_READ, group, keyfile);
 }
 
+GEANY_API_SYMBOL
+void stash_group_load_config_from_key_file(StashGroup *group, GKeyFile *keyfile)
+{
+	keyfile_action(CONFIG_READ, group, keyfile);
+}
+
+GEANY_API_SYMBOL
+void stash_group_load_session_from_key_file(StashGroup *group, GKeyFile *keyfile)
+{
+	keyfile_action(SESSION_READ, group, keyfile);
+}
+
 
 /** Writes group settings into key values in @a keyfile.
  * @a keyfile is usually written to a configuration file afterwards.
@@ -334,6 +482,18 @@ GEANY_API_SYMBOL
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_WRITE, group, keyfile);
+}
+
+GEANY_API_SYMBOL
+void stash_group_save_config_to_key_file(StashGroup *group, GKeyFile *keyfile)
+{
+	keyfile_action(CONFIG_WRITE, group, keyfile);
+}
+
+GEANY_API_SYMBOL
+void stash_group_save_session_to_key_file(StashGroup *group, GKeyFile *keyfile)
+{
+	keyfile_action(SESSION_WRITE, group, keyfile);
 }
 
 
@@ -355,6 +515,36 @@ gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename)
 	ret = g_key_file_load_from_file(keyfile, filename, 0, NULL);
 	/* even on failure we load settings to apply defaults */
 	stash_group_load_from_key_file(group, keyfile);
+
+	g_key_file_free(keyfile);
+	return ret;
+}
+
+GEANY_API_SYMBOL
+gboolean stash_group_load_config_from_file(StashGroup *group, const gchar *filename)
+{
+	GKeyFile *keyfile;
+	gboolean ret;
+
+	keyfile = g_key_file_new();
+	ret = g_key_file_load_from_file(keyfile, filename, 0, NULL);
+	/* even on failure we load settings to apply defaults */
+	stash_group_load_config_from_key_file(group, keyfile);
+
+	g_key_file_free(keyfile);
+	return ret;
+}
+
+GEANY_API_SYMBOL
+gboolean stash_group_load_session_from_file(StashGroup *group, const gchar *filename)
+{
+	GKeyFile *keyfile;
+	gboolean ret;
+
+	keyfile = g_key_file_new();
+	ret = g_key_file_load_from_file(keyfile, filename, 0, NULL);
+	/* even on failure we load settings to apply defaults */
+	stash_group_load_session_from_key_file(group, keyfile);
 
 	g_key_file_free(keyfile);
 	return ret;
@@ -384,6 +574,48 @@ gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 		g_key_file_load_from_file(keyfile, filename, flags, NULL);
 
 	stash_group_save_to_key_file(group, keyfile);
+	data = g_key_file_to_data(keyfile, NULL, NULL);
+	ret = utils_write_file(filename, data);
+	g_free(data);
+	g_key_file_free(keyfile);
+	return ret;
+}
+
+GEANY_API_SYMBOL
+gint stash_group_save_config_to_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags)
+{
+	GKeyFile *keyfile;
+	gchar *data;
+	gint ret;
+
+	keyfile = g_key_file_new();
+	/* if we need to keep comments or translations, try to load first */
+	if (flags)
+		g_key_file_load_from_file(keyfile, filename, flags, NULL);
+
+	stash_group_save_config_to_key_file(group, keyfile);
+	data = g_key_file_to_data(keyfile, NULL, NULL);
+	ret = utils_write_file(filename, data);
+	g_free(data);
+	g_key_file_free(keyfile);
+	return ret;
+}
+
+GEANY_API_SYMBOL
+gint stash_group_save_session_to_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags)
+{
+	GKeyFile *keyfile;
+	gchar *data;
+	gint ret;
+
+	keyfile = g_key_file_new();
+	/* if we need to keep comments or translations, try to load first */
+	if (flags)
+		g_key_file_load_from_file(keyfile, filename, flags, NULL);
+
+	stash_group_save_session_to_key_file(group, keyfile);
 	data = g_key_file_to_data(keyfile, NULL, NULL);
 	ret = utils_write_file(filename, data);
 	g_free(data);
@@ -627,7 +859,7 @@ add_pref(StashGroup *group, GType type, gpointer setting,
 {
 	StashPref *entry = g_slice_new(StashPref);
 
-	*entry = (StashPref) {type, setting, key_name, NULL, default_value, default_value, FALSE, G_TYPE_NONE, NULL, {NULL}};
+	*entry = (StashPref) {type, setting, key_name, NULL, default_value, default_value, FALSE, FALSE, G_TYPE_NONE, NULL, {NULL}};
 
 	/* init any pointer settings to NULL so they can be freed later */
 	if (type == G_TYPE_STRING || type == G_TYPE_STRV)
