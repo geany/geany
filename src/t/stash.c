@@ -88,8 +88,7 @@ static GPtrArray *stash_groups = NULL;
 
 
 GEANY_API_SYMBOL
-GPtrArray *get_stash_groups()
-{
+GPtrArray *get_stash_groups() {
 	return stash_groups;
 }
 
@@ -121,7 +120,11 @@ EnumWidget;
 typedef enum SettingAction
 {
 	SETTING_READ,
-	SETTING_WRITE
+	SETTING_WRITE,
+	CONFIG_READ,
+	CONFIG_WRITE,
+	SESSION_READ,
+	SESSION_WRITE,
 }
 SettingAction;
 
@@ -136,45 +139,57 @@ PrefAction;
 static void handle_boolean_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
-	gboolean *setting = se->setting;
-
-	if (se->runtime_override)
+	if (!se->setting_backup)
 	{
-		setting = &se->setting_backup.bool_val;
+		se->setting_backup = se->setting;
 	}
+
+
+	if (!se->over_ride && se->setting_backup != se->setting)
+	{
+		g_free(se->setting_backup);
+		se->setting_backup = se->setting;
+	}
+
+	gboolean *setting = se->setting_backup;
+
+	gboolean read = FALSE;
+	gboolean write = FALSE;
 
 	switch (action)
 	{
 		case SETTING_READ:
-			*setting = utils_get_setting_boolean(config, group->name, se->key_name,
-				se->default_value.bool_val);
+			read = TRUE;
+			break;
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
 			break;
 		case SETTING_WRITE:
-			g_key_file_set_boolean(config, group->name, se->key_name, *setting);
+			write = TRUE;
+			break;
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
 			break;
 	}
-}
 
-
-static void handle_double_setting(StashGroup *group, StashPref *se,
-		GKeyFile *config, SettingAction action)
-{
-	gdouble *setting = se->setting;
-
-	if (se->runtime_override)
+	if (read)
 	{
-		setting = &se->setting_backup.double_val;
+		*setting = utils_get_setting_boolean(config, group->name, se->key_name,
+			GPOINTER_TO_INT(se->default_value));
 	}
-
-	switch (action)
+	if (write)
 	{
-		case SETTING_READ:
-			*setting = utils_get_setting_double(config, group->name, se->key_name,
-				se->default_value.double_val);
-			break;
-		case SETTING_WRITE:
-			g_key_file_set_double(config, group->name, se->key_name, *setting);
-			break;
+		g_key_file_set_boolean(config, group->name, se->key_name, *setting);
 	}
 }
 
@@ -182,22 +197,115 @@ static void handle_double_setting(StashGroup *group, StashPref *se,
 static void handle_integer_setting(StashGroup *group, StashPref *se,
 		GKeyFile *config, SettingAction action)
 {
-	gint *setting = se->setting;
-
-	if (se->runtime_override)
+	if (!se->setting_backup)
 	{
-		setting = &se->setting_backup.int_val;
+		se->setting_backup = se->setting;
 	}
+
+
+	if (!se->over_ride && se->setting_backup != se->setting)
+	{
+		g_free(se->setting_backup);
+		se->setting_backup = se->setting;
+	}
+
+	gint *setting = se->setting_backup;
+
+	gboolean read = FALSE;
+	gboolean write = FALSE;
 
 	switch (action)
 	{
 		case SETTING_READ:
-			*setting = utils_get_setting_integer(config, group->name, se->key_name,
-				se->default_value.int_val);
+			read = TRUE;
+			break;
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
 			break;
 		case SETTING_WRITE:
-			g_key_file_set_integer(config, group->name, se->key_name, *setting);
+			write = TRUE;
 			break;
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
+			break;
+	}
+
+	if (read)
+	{
+		*setting = utils_get_setting_integer(config, group->name, se->key_name,
+			GPOINTER_TO_INT(se->default_value));
+	}
+	if (write)
+	{
+		g_key_file_set_integer(config, group->name, se->key_name, *setting);
+	}
+}
+
+
+static void handle_double_setting(StashGroup *group, StashPref *se,
+		GKeyFile *config, SettingAction action)
+{
+	if (!se->setting_backup)
+	{
+		se->setting_backup = se->setting;
+	}
+
+
+	if (!se->over_ride && se->setting_backup != se->setting)
+	{
+		g_free(se->setting_backup);
+		se->setting_backup = se->setting;
+	}
+
+	gdouble *setting = se->setting_backup;
+	gdouble *default_double = (gdouble *) &se->default_value;
+
+	gboolean read = FALSE;
+	gboolean write = FALSE;
+
+	switch (action)
+	{
+		case SETTING_READ:
+			read = TRUE;
+			break;
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
+			break;
+		case SETTING_WRITE:
+			write = TRUE;
+			break;
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
+			break;
+	}
+	if (read)
+	{
+		*setting = utils_get_setting_double(config, group->name, se->key_name,
+			*default_double);
+	}
+	if (write)
+	{
+		g_key_file_set_double(config, group->name, se->key_name, *setting);
 	}
 }
 
@@ -207,17 +315,45 @@ static void handle_string_setting(StashGroup *group, StashPref *se,
 {
 	gchararray *setting = se->setting;
 
+	gboolean read = FALSE;
+	gboolean write = FALSE;
+
 	switch (action)
 	{
 		case SETTING_READ:
-			g_free(*setting);
-			*setting = utils_get_setting_string(config, group->name, se->key_name,
-				se->default_value.str_val);
+			read = TRUE;
+			break;
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
 			break;
 		case SETTING_WRITE:
-			g_key_file_set_string(config, group->name, se->key_name,
-				*setting ? *setting : "");
+			write = TRUE;
 			break;
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
+			break;
+	}
+
+	if (read)
+	{
+		g_free(*setting);
+		*setting = utils_get_setting_string(config, group->name, se->key_name,
+			se->default_value);
+	}
+	if (write)
+	{
+		g_key_file_set_string(config, group->name, se->key_name,
+			*setting ? *setting : "");
 	}
 }
 
@@ -227,26 +363,52 @@ static void handle_strv_setting(StashGroup *group, StashPref *se,
 {
 	gchararray **setting = se->setting;
 
+	gboolean read = FALSE;
+	gboolean write = FALSE;
+
 	switch (action)
 	{
 		case SETTING_READ:
-			g_strfreev(*setting);
-			*setting = g_key_file_get_string_list(config, group->name, se->key_name,
-				NULL, NULL);
-			if (*setting == NULL)
-				*setting = g_strdupv(se->default_value.strv_val);
+			read = TRUE;
 			break;
-
+		case CONFIG_READ:
+			if (!se->session)
+				read = TRUE;
+			break;
+		case SESSION_READ:
+			if (se->session)
+				read = TRUE;
+			break;
 		case SETTING_WRITE:
-		{
-			/* don't try to save a NULL string vector */
-			const gchar *dummy[] = { "", NULL };
-			const gchar **strv = *setting ? (const gchar **)*setting : dummy;
-
-			g_key_file_set_string_list(config, group->name, se->key_name,
-				strv, g_strv_length((gchar **)strv));
+			write = TRUE;
 			break;
-		}
+		case CONFIG_WRITE:
+			if (!se->session)
+				write = TRUE;
+			break;
+		case SESSION_WRITE:
+			if (se->session)
+				write = TRUE;
+			break;
+	}
+
+	if (read)
+	{
+		g_strfreev(*setting);
+		*setting = g_key_file_get_string_list(config, group->name, se->key_name,
+			NULL, NULL);
+		if (*setting == NULL)
+			*setting = g_strdupv(se->default_value);
+	}
+
+	if (write)
+	{
+		/* don't try to save a NULL string vector */
+		const gchar *dummy[] = { "", NULL };
+		const gchar **strv = *setting ? (const gchar **)*setting : dummy;
+
+		g_key_file_set_string_list(config, group->name, se->key_name,
+			strv, g_strv_length((gchar **)strv));
 	}
 }
 
@@ -266,13 +428,17 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 		switch (entry->setting_type)
 		{
 			case G_TYPE_BOOLEAN:
-				handle_boolean_setting(group, entry, keyfile, action); break;
+				handle_boolean_setting(group, entry, keyfile, action);
+				break;
 			case G_TYPE_INT:
-				handle_integer_setting(group, entry, keyfile, action); break;
+				handle_integer_setting(group, entry, keyfile, action);
+				break;
 			case G_TYPE_DOUBLE:
-				handle_double_setting(group, entry, keyfile, action); break;
+				handle_double_setting(group, entry, keyfile, action);
+				break;
 			case G_TYPE_STRING:
-				handle_string_setting(group, entry, keyfile, action); break;
+				handle_string_setting(group, entry, keyfile, action);
+				break;
 			default:
 				/* Note: G_TYPE_STRV is not a constant, can't use case label */
 				if (entry->setting_type == G_TYPE_STRV)
@@ -280,17 +446,19 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 				else
 					g_warning("Unhandled type for %s::%s in %s()!", group->name, entry->key_name,
 						G_STRFUNC);
+				break;
 		}
 
 		if (action == SETTING_WRITE && entry->comment != NULL)
 		{
-			g_key_file_set_comment(keyfile, group->name, entry->key_name, entry->comment, NULL);
+			g_key_file_set_comment(keyfile, group->name, entry->key_name,
+				entry->comment, NULL);
 		}
 	}
 }
 
 
-/** Get the StashPref within @a group with @a key_name.
+/** Get the StashPref with in @a group with @a key_name.
  * @param group .
  * @param key_name Name of the preference to get.
  * @return StashPref associated with @a key_name.  Otherwise, NULL. */
@@ -325,6 +493,18 @@ void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile)
 	keyfile_action(SETTING_READ, group, keyfile);
 }
 
+GEANY_API_SYMBOL
+void stash_group_load_config_from_key_file(StashGroup *group, GKeyFile *keyfile)
+{
+	keyfile_action(CONFIG_READ, group, keyfile);
+}
+
+GEANY_API_SYMBOL
+void stash_group_load_session_from_key_file(StashGroup *group, GKeyFile *keyfile)
+{
+	keyfile_action(SESSION_READ, group, keyfile);
+}
+
 
 /** Writes group settings into key values in @a keyfile.
  * @a keyfile is usually written to a configuration file afterwards.
@@ -334,6 +514,18 @@ GEANY_API_SYMBOL
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_WRITE, group, keyfile);
+}
+
+GEANY_API_SYMBOL
+void stash_group_save_config_to_key_file(StashGroup *group, GKeyFile *keyfile)
+{
+	keyfile_action(CONFIG_WRITE, group, keyfile);
+}
+
+GEANY_API_SYMBOL
+void stash_group_save_session_to_key_file(StashGroup *group, GKeyFile *keyfile)
+{
+	keyfile_action(SESSION_WRITE, group, keyfile);
 }
 
 
@@ -355,6 +547,36 @@ gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename)
 	ret = g_key_file_load_from_file(keyfile, filename, 0, NULL);
 	/* even on failure we load settings to apply defaults */
 	stash_group_load_from_key_file(group, keyfile);
+
+	g_key_file_free(keyfile);
+	return ret;
+}
+
+GEANY_API_SYMBOL
+gboolean stash_group_load_config_from_file(StashGroup *group, const gchar *filename)
+{
+	GKeyFile *keyfile;
+	gboolean ret;
+
+	keyfile = g_key_file_new();
+	ret = g_key_file_load_from_file(keyfile, filename, 0, NULL);
+	/* even on failure we load settings to apply defaults */
+	stash_group_load_config_from_key_file(group, keyfile);
+
+	g_key_file_free(keyfile);
+	return ret;
+}
+
+GEANY_API_SYMBOL
+gboolean stash_group_load_session_from_file(StashGroup *group, const gchar *filename)
+{
+	GKeyFile *keyfile;
+	gboolean ret;
+
+	keyfile = g_key_file_new();
+	ret = g_key_file_load_from_file(keyfile, filename, 0, NULL);
+	/* even on failure we load settings to apply defaults */
+	stash_group_load_session_from_key_file(group, keyfile);
 
 	g_key_file_free(keyfile);
 	return ret;
@@ -391,6 +613,48 @@ gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 	return ret;
 }
 
+GEANY_API_SYMBOL
+gint stash_group_save_config_to_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags)
+{
+	GKeyFile *keyfile;
+	gchar *data;
+	gint ret;
+
+	keyfile = g_key_file_new();
+	/* if we need to keep comments or translations, try to load first */
+	if (flags)
+		g_key_file_load_from_file(keyfile, filename, flags, NULL);
+
+	stash_group_save_config_to_key_file(group, keyfile);
+	data = g_key_file_to_data(keyfile, NULL, NULL);
+	ret = utils_write_file(filename, data);
+	g_free(data);
+	g_key_file_free(keyfile);
+	return ret;
+}
+
+GEANY_API_SYMBOL
+gint stash_group_save_session_to_file(StashGroup *group, const gchar *filename,
+		GKeyFileFlags flags)
+{
+	GKeyFile *keyfile;
+	gchar *data;
+	gint ret;
+
+	keyfile = g_key_file_new();
+	/* if we need to keep comments or translations, try to load first */
+	if (flags)
+		g_key_file_load_from_file(keyfile, filename, flags, NULL);
+
+	stash_group_save_session_to_key_file(group, keyfile);
+	data = g_key_file_to_data(keyfile, NULL, NULL);
+	ret = utils_write_file(filename, data);
+	g_free(data);
+	g_key_file_free(keyfile);
+	return ret;
+}
+
 
 static void free_stash_pref(StashPref *pref)
 {
@@ -410,7 +674,7 @@ StashGroup *stash_group_new(const gchar *name)
 	if (!name)
 		return NULL;
 
-	// initialize stash group list
+	// initialize stash group
 	if (!stash_groups)
 		stash_groups = g_ptr_array_new();
 
@@ -431,8 +695,7 @@ StashGroup *stash_group_new(const gchar *name)
  * @param prefix.  May be NULL.
  * @return group if found.  If @a prefix is NULL, returns the first group without prefix.  NULL if no group found. */
 GEANY_API_SYMBOL
-StashGroup *stash_group_get_group(const gchar *group_name, const gchar *prefix)
-{
+StashGroup *stash_group_get_group(const gchar *group_name, const gchar *prefix) {
 	if (!group_name || !stash_groups)
 		return NULL;
 
@@ -501,6 +764,7 @@ void stash_group_free(StashGroup *group)
 {
 	if (group && g_atomic_int_dec_and_test(&group->refcount))
 	{
+		printf("%s->refcount = %d\n", group->name, group->refcount);
 		g_ptr_array_free(group->entries, TRUE);
 		g_ptr_array_remove(stash_groups, group);
 		g_slice_free(StashGroup, group);
@@ -550,43 +814,45 @@ void stash_group_set_use_defaults(StashGroup *group, gboolean use_defaults)
 /** Override StashPref setting.
  * @param group pointer to StashGroup, may be NULL
  * @param pref pointer to StashPref
- * @param new_setting new value. */
+ * @param new_setting Address of override setting variable. */
 GEANY_API_SYMBOL
-void stash_group_pref_set_override(StashPref *pref, union Value new_setting)
+void stash_group_pref_set_override(StashPref *pref, gpointer new_setting)
 {
+	/* TODO: How to override string/stringv without breaking existing code? */
+
 	if (!pref)
 		return;
 
-	switch (pref->setting_type)
-	{
+	switch (pref->setting_type) {
 		case G_TYPE_BOOLEAN:
-			if (!pref->runtime_override)
+			pref->over_ride = TRUE;
+			if (pref->setting_backup == pref->setting)
 			{
-				pref->runtime_override = TRUE;
-				pref->setting_backup.bool_val = *(gboolean *)pref->setting;
+				pref->setting_backup = g_malloc(sizeof(gboolean));
+				*(gboolean*) pref->setting_backup = *(gboolean*) pref->setting;
 			}
-			*(gboolean *) pref->setting = new_setting.bool_val;
+			*(gboolean*) pref->setting = (gboolean) new_setting;
 			break;
 		case G_TYPE_INT:
-			if (!pref->runtime_override)
+			pref->over_ride = TRUE;
+			if (pref->setting_backup == pref->setting)
 			{
-				pref->runtime_override = TRUE;
-				pref->setting_backup.int_val = *(gint *)pref->setting;
+				pref->setting_backup = g_malloc(sizeof(gint));
+				*(gint*) pref->setting_backup = *(gint*) pref->setting;
 			}
-			*(gint *) pref->setting = new_setting.int_val;
+			*(gint*) pref->setting = (gint) new_setting;
 			break;
 		case G_TYPE_DOUBLE:
-			if (!pref->runtime_override)
+			pref->over_ride = TRUE;
+			if (pref->setting_backup == pref->setting)
 			{
-				pref->runtime_override = TRUE;
-				pref->setting_backup.double_val = *(gdouble *)pref->setting;
+				pref->setting_backup = g_malloc(sizeof(gdouble));
+				*(gdouble*) pref->setting_backup = *(gdouble*) pref->setting;
 			}
-			*(gdouble *) pref->setting = new_setting.double_val;
+			*(gulong*) pref->setting = (gulong) new_setting;
 			break;
 		default:
-			pref->runtime_override = FALSE;
 			g_warning("Unhandled type for %s in %s()!", pref->key_name, G_STRFUNC);
-			break;
 	}
 }
 
@@ -595,46 +861,36 @@ void stash_group_pref_set_override(StashPref *pref, union Value new_setting)
  * @param pref pointer to StashPref
  * @return pointer to original setting variable */
 GEANY_API_SYMBOL
-void stash_group_pref_unset_override(StashPref *pref)
+gpointer stash_group_pref_unset_override(StashPref *pref)
 {
-	if (!pref || !pref->runtime_override)
-		return;
+	if (!pref)
+		return NULL;
 
-	/* restore old setting */
-	switch (pref->setting_type)
-	{
-		case G_TYPE_BOOLEAN:
-			*(gboolean*) pref->setting = pref->setting_backup.bool_val;
-			break;
-		case G_TYPE_INT:
-			*(gint*) pref->setting = pref->setting_backup.int_val;
-			break;
-		case G_TYPE_DOUBLE:
-			*(gdouble*) pref->setting = pref->setting_backup.double_val;
-			break;
-		default:
-			g_warning("Unhandled type for %s in %s()!", pref->key_name, G_STRFUNC);
-			break;
-	}
+	if (!pref->over_ride)
+		return pref->setting;
 
-	pref->runtime_override = FALSE;
+	/* restore setting by value */
+	*(gulong*) pref->setting = *(gulong*)pref->setting_backup;
+
+	pref->over_ride = FALSE;
+	return pref->setting;
 }
 
 
 static StashPref *
 add_pref(StashGroup *group, GType type, gpointer setting,
-		const gchar *key_name, union Value default_value)
+		const gchar *key_name, gpointer default_value)
 {
+	StashPref init = {type, key_name, NULL, setting, FALSE, setting, FALSE, default_value, G_TYPE_NONE, NULL, {NULL}};
 	StashPref *entry = g_slice_new(StashPref);
 
-	*entry = (StashPref) {type, setting, key_name, NULL, default_value, default_value, FALSE, G_TYPE_NONE, NULL, {NULL}};
+	*entry = init;
 
 	/* init any pointer settings to NULL so they can be freed later */
-	if (type == G_TYPE_STRING || type == G_TYPE_STRV)
-	{
+	if (type == G_TYPE_STRING ||
+		type == G_TYPE_STRV)
 		if (group->use_defaults)
 			*(gpointer**)setting = NULL;
-	}
 
 	g_ptr_array_add(group->entries, entry);
 	return entry;
@@ -666,19 +922,6 @@ void stash_group_add_comment(StashGroup *group,
 }
 
 
-/** Adds boolean setting.
- * @param group .
- * @param setting Address of setting variable.
- * @param key_name Name for key in a @c GKeyFile.
- * @param default_value Value to use if the key doesn't exist when loading. */
-GEANY_API_SYMBOL
-void stash_group_add_boolean(StashGroup *group, gboolean *setting,
-		const gchar *key_name, gboolean default_value)
-{
-	add_pref(group, G_TYPE_BOOLEAN, setting, key_name, (union Value) {.bool_val = default_value});
-}
-
-
 /** Adds double setting.
  * @param group .
  * @param setting Address of setting variable.
@@ -688,7 +931,20 @@ GEANY_API_SYMBOL
 void stash_group_add_double(StashGroup *group, gdouble *setting,
 		const gchar *key_name, gdouble default_value)
 {
-	add_pref(group, G_TYPE_DOUBLE, setting, key_name, (union Value) {.double_val = default_value});
+	gulong *default_long = (gulong*) &default_value;
+	add_pref(group, G_TYPE_DOUBLE, setting, key_name, (gpointer) *default_long);
+}
+
+/** Adds boolean setting.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading. */
+GEANY_API_SYMBOL
+void stash_group_add_boolean(StashGroup *group, gboolean *setting,
+		const gchar *key_name, gboolean default_value)
+{
+	add_pref(group, G_TYPE_BOOLEAN, setting, key_name, GINT_TO_POINTER(default_value));
 }
 
 
@@ -701,7 +957,7 @@ GEANY_API_SYMBOL
 void stash_group_add_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value)
 {
-	add_pref(group, G_TYPE_INT, setting, key_name, (union Value) {.int_val = default_value});
+	add_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value));
 }
 
 
@@ -715,7 +971,7 @@ GEANY_API_SYMBOL
 void stash_group_add_string(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value)
 {
-	add_pref(group, G_TYPE_STRING, setting, key_name, (union Value) {.str_val = (gchar *) default_value});
+	add_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value);
 }
 
 
@@ -729,7 +985,7 @@ GEANY_API_SYMBOL
 void stash_group_add_string_vector(StashGroup *group, gchar ***setting,
 		const gchar *key_name, const gchar **default_value)
 {
-	add_pref(group, G_TYPE_STRV, setting, key_name, (union Value) {.strv_val = (gchar **) default_value});
+	add_pref(group, G_TYPE_STRV, setting, key_name, (gpointer)default_value);
 }
 
 
@@ -1015,7 +1271,7 @@ void stash_group_update(StashGroup *group, GtkWidget *owner)
 
 static StashPref *
 add_widget_pref(StashGroup *group, GType setting_type, gpointer setting,
-		const gchar *key_name, union Value default_value,
+		const gchar *key_name, gpointer default_value,
 		GType widget_type, StashWidgetID widget_id)
 {
 	StashPref *entry =
@@ -1038,7 +1294,7 @@ GEANY_API_SYMBOL
 void stash_group_add_toggle_button(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_BOOLEAN, setting, key_name, (union Value) {.bool_val = default_value},
+	add_widget_pref(group, G_TYPE_BOOLEAN, setting, key_name, GINT_TO_POINTER(default_value),
 		GTK_TYPE_TOGGLE_BUTTON, widget_id);
 }
 
@@ -1063,7 +1319,7 @@ void stash_group_add_radio_buttons(StashGroup *group, gint *setting,
 		StashWidgetID widget_id, gint enum_id, ...)
 {
 	StashPref *entry =
-		add_widget_pref(group, G_TYPE_INT, setting, key_name, (union Value) {.int_val = default_value},
+		add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
 			GTK_TYPE_RADIO_BUTTON, NULL);
 	va_list args;
 	gsize count = 1;
@@ -1112,8 +1368,8 @@ GEANY_API_SYMBOL
 void stash_group_add_spin_button_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_INT, setting, key_name,
-		(union Value) {.int_val = default_value}, GTK_TYPE_SPIN_BUTTON, widget_id);
+	add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
+		GTK_TYPE_SPIN_BUTTON, widget_id);
 }
 
 
@@ -1128,8 +1384,8 @@ GEANY_API_SYMBOL
 void stash_group_add_combo_box(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_INT, setting, key_name,
-		(union Value) {.int_val = default_value}, GTK_TYPE_COMBO_BOX, widget_id);
+	add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
+		GTK_TYPE_COMBO_BOX, widget_id);
 }
 
 
@@ -1145,8 +1401,8 @@ GEANY_API_SYMBOL
 void stash_group_add_combo_box_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_STRING, setting, key_name,
-		(union Value) {.str_val = (gchar *) default_value}, TYPE_COMBO_BOX_ENTRY, widget_id);
+	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
+		TYPE_COMBO_BOX_ENTRY, widget_id);
 }
 
 
@@ -1160,8 +1416,8 @@ GEANY_API_SYMBOL
 void stash_group_add_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_STRING, setting, key_name,
-		(union Value) {.str_val = (gchar *) default_value}, GTK_TYPE_ENTRY, widget_id);
+	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
+		GTK_TYPE_ENTRY, widget_id);
 }
 
 
@@ -1194,14 +1450,11 @@ void stash_group_add_widget_property(StashGroup *group, gpointer setting,
 		const gchar *key_name, gpointer default_value, StashWidgetID widget_id,
 		const gchar *property_name, GType type)
 {
-	StashPref *entry;
-
 	if (!type)
 		type = object_get_property_type(G_OBJECT(widget_id), property_name);
 
-	entry = add_widget_pref(group, type, setting, key_name,
-			(union Value) {.ptr_val = default_value}, G_TYPE_PARAM, widget_id);
-	entry->extra.property_name = property_name;
+	add_widget_pref(group, type, setting, key_name, default_value,
+		G_TYPE_PARAM, widget_id)->extra.property_name = property_name;
 }
 
 
@@ -1499,3 +1752,4 @@ void stash_tree_update(GtkTreeView *tree)
 {
 	stash_tree_action(gtk_tree_view_get_model(tree), PREF_UPDATE);
 }
+
