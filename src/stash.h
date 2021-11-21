@@ -67,9 +67,27 @@ struct StashPref
 typedef struct StashPref StashPref;
 
 
+/** Struct for a group of settings. */
+struct StashGroup
+{
+	guint refcount;				/* ref count for GBoxed implementation */
+	const gchar *name;			/**< group name to use in the keyfile */
+	GPtrArray *entries;			/**< array of (StashPref*) */
+	gboolean various;			/**< mark group for display/edit in stash treeview */
+	const gchar *prefix;		/**< text to display for Various UI instead of name */
+	gboolean use_defaults;		/**< use default values if there's no keyfile entry */
+};
+
+typedef struct StashGroup StashGroup;
+
+
+GPtrArray *get_stash_groups();
+
 GType stash_group_get_type(void);
 
 StashGroup *stash_group_new(const gchar *name);
+
+StashGroup *stash_group_get_group(const gchar *group_name, const gchar *prefix);
 
 StashPref *stash_group_get_pref_by_name(StashGroup *group, const gchar *key_name);
 
@@ -96,6 +114,8 @@ void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile);
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile);
 
 void stash_group_free(StashGroup *group);
+
+void stash_group_release(StashGroup *group);
 
 gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename);
 

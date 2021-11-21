@@ -83,6 +83,17 @@
 #include <stdlib.h> /* only for atoi() */
 
 
+/* array of (StashGroup*) */
+static GPtrArray *stash_groups = NULL;
+
+
+GEANY_API_SYMBOL
+GPtrArray *get_stash_groups()
+{
+	return stash_groups;
+}
+
+
 /* GTK3 removed ComboBoxEntry, but we need a value to differentiate combo box with and
  * without entries, and it must not collide with other GTypes */
 #define TYPE_COMBO_BOX_ENTRY get_combo_box_entry_type()
@@ -98,16 +109,6 @@ static GType get_combo_box_entry_type(void)
 	return type;
 }
 
-
-struct StashGroup
-{
-	guint refcount;				/* ref count for GBoxed implementation */
-	const gchar *name;			/* group name to use in the keyfile */
-	GPtrArray *entries;			/* array of (StashPref*) */
-	gboolean various;		/* mark group for display/edit in stash treeview */
-	const gchar *prefix;	/* text to display for Various UI instead of name */
-	gboolean use_defaults;		/* use default values if there's no keyfile entry */
-};
 
 typedef struct EnumWidget
 {
@@ -387,17 +388,62 @@ static void free_stash_pref(StashPref *pref)
 
 /** Creates a new group.
  * @param name Name used for @c GKeyFile group.
- * @return Group. */
+ * @return Pointer to Group.  Return NULL if group name is empty. */
 GEANY_API_SYMBOL
 StashGroup *stash_group_new(const gchar *name)
 {
-	StashGroup *group = g_slice_new0(StashGroup);
+	if (!name)
+		return NULL;
 
+	// initialize stash group list
+	if (!stash_groups)
+		stash_groups = g_ptr_array_new();
+
+	StashGroup *group = g_slice_new0(StashGroup);
 	group->name = name;
 	group->entries = g_ptr_array_new_with_free_func((GDestroyNotify) free_stash_pref);
 	group->use_defaults = TRUE;
-	group->refcount = 1;
+	group->refcount = 2;
+
+	g_ptr_array_add(stash_groups, group);
+
 	return group;
+}
+
+
+/** Get StashGroup with @a group_name that contains StashPref with @key_name.
+ * @param group_name .
+ * @param prefix.  May be NULL.
+ * @return group if found.  If @a prefix is NULL, returns the first group without prefix.  NULL if no group found. */
+GEANY_API_SYMBOL
+StashGroup *stash_group_get_group(const gchar *group_name, const gchar *prefix)
+{
+	if (!group_name || !stash_groups)
+		return NULL;
+
+	StashGroup *match_group;
+	guint i;
+
+	foreach_ptr_array(match_group, i, stash_groups)
+	{
+		if (match_group && g_strcmp0(group_name, match_group->name) == 0)
+		{
+			gboolean matched = FALSE;
+			if (!prefix && !match_group->prefix)
+				matched = TRUE;
+
+			if (prefix && match_group->prefix && g_strcmp0(prefix, match_group->prefix) == 0)
+				matched = TRUE;
+
+			if (matched)
+			{
+				match_group->refcount++;
+				return match_group;
+			}
+		}
+	}
+
+	return NULL;
 }
 
 
@@ -438,11 +484,22 @@ static StashGroup *stash_group_dup(StashGroup *src)
 GEANY_API_SYMBOL
 void stash_group_free(StashGroup *group)
 {
-	if (g_atomic_int_dec_and_test(&group->refcount))
+	if (group && g_atomic_int_dec_and_test(&group->refcount))
 	{
 		g_ptr_array_free(group->entries, TRUE);
+		g_ptr_array_remove(stash_groups, group);
 		g_slice_free(StashGroup, group);
 	}
+}
+
+
+/** Decrements the group refcount.  Does not decrement to less than 1.  Does not free group.
+ * @param group . */
+GEANY_API_SYMBOL
+void stash_group_release(StashGroup *group)
+{
+	if (group && group->refcount > 1)
+		group->refcount--;
 }
 
 
@@ -484,7 +541,8 @@ add_pref(StashGroup *group, GType type, gpointer setting,
 	*entry = (StashPref) {type, setting, key_name, NULL, default_value, G_TYPE_NONE, NULL, {NULL}};
 
 	/* init any pointer settings to NULL so they can be freed later */
-	if (type == G_TYPE_STRING || type == G_TYPE_STRV) {
+	if (type == G_TYPE_STRING || type == G_TYPE_STRV)
+	{
 		if (group->use_defaults)
 			*(gpointer**)setting = NULL;
 	}
