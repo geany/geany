@@ -66,6 +66,9 @@
 #include <unistd.h>
 #endif
 
+/* define the configuration filenames */
+#define PREFS_FILE						"geany.conf"
+#define SESSION_FILE					"session.conf"
 
 /* some default settings which are used at the very first start of Geany to fill
  * the configuration file */
@@ -575,6 +578,12 @@ static void save_dialog_prefs(GKeyFile *config)
 #endif
 }
 
+typedef enum ConfigPayload
+{
+	PREFS,
+	SESSION
+}
+ConfigPayload;
 
 static void save_ui_prefs(GKeyFile *config)
 {
@@ -602,6 +611,18 @@ static void save_ui_prefs(GKeyFile *config)
 		g_key_file_set_integer(config, PACKAGE, "scribble_pos", scribble_pos);
 	}
 
+	g_key_file_set_string(config, PACKAGE, "custom_date_format", ui_prefs.custom_date_format);
+	if (ui_prefs.custom_commands != NULL)
+	{
+		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
+				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
+		g_key_file_set_string_list(config, PACKAGE, "custom_commands_labels",
+				(const gchar**) ui_prefs.custom_commands_labels, g_strv_length(ui_prefs.custom_commands_labels));
+	}
+}
+
+static void save_ui_session(GKeyFile *config)
+{
 	if (prefs.save_winpos || prefs.save_wingeom)
 	{
 		GdkWindowState wstate;
@@ -617,45 +638,40 @@ static void save_ui_prefs(GKeyFile *config)
 		ui_prefs.geometry[4] = (wstate & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", ui_prefs.geometry, 5);
 	}
-
-	g_key_file_set_string(config, PACKAGE, "custom_date_format", ui_prefs.custom_date_format);
-	if (ui_prefs.custom_commands != NULL)
-	{
-		g_key_file_set_string_list(config, PACKAGE, "custom_commands",
-				(const gchar**) ui_prefs.custom_commands, g_strv_length(ui_prefs.custom_commands));
-		g_key_file_set_string_list(config, PACKAGE, "custom_commands_labels",
-				(const gchar**) ui_prefs.custom_commands_labels, g_strv_length(ui_prefs.custom_commands_labels));
-	}
 }
 
-
-void configuration_save(void)
+void write_config_file(gchar const *filename, ConfigPayload payload)
 {
 	GKeyFile *config = g_key_file_new();
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, filename, NULL);
 	gchar *data;
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
-	/* this signal can be used e.g. to prepare any settings before Stash code reads them below */
-	g_signal_emit_by_name(geany_object, "save-settings", config);
-
-	save_dialog_prefs(config);
-	save_ui_prefs(config);
-	project_save_prefs(config);	/* save project filename, etc. */
-	save_recent_files(config, ui_prefs.recent_queue, "recent_files");
-	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
-
-	if (cl_options.load_session)
-		configuration_save_session_files(config);
-#ifdef HAVE_VTE
-	else if (vte_info.have_vte)
+	switch (payload)
 	{
-		vte_get_working_directory();	/* refresh vte_info.dir */
-		g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
-	}
+		case PREFS:
+			/* this signal can be used e.g. to prepare any settings before Stash code reads them below */
+			g_signal_emit_by_name(geany_object, "save-settings", config);
+			save_dialog_prefs(config);
+			save_ui_prefs(config);
+			break;
+		case SESSION:
+			save_recent_files(config, ui_prefs.recent_queue, "recent_files");
+			save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+			project_save_prefs(config);	/* save project filename, etc. */
+			save_ui_session(config);
+			if (cl_options.load_session)
+				configuration_save_session_files(config);
+#ifdef HAVE_VTE
+			else if (vte_info.have_vte)
+			{
+				vte_get_working_directory();	/* refresh vte_info.dir */
+				g_key_file_set_string(config, "VTE", "last_dir", vte_info.dir);
+			}
 #endif
-
+			break;
+	}
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
 	utils_write_file(configfile, data);
@@ -665,6 +681,14 @@ void configuration_save(void)
 	g_free(configfile);
 }
 
+void configuration_save(void)
+{
+	/* save all configuration files
+	 * it is probably not very efficient to write both files every time
+	 * could be more selective about which file is saved when */
+	write_config_file(PREFS_FILE, PREFS);
+	write_config_file(SESSION_FILE, SESSION);
+}
 
 static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
 {
@@ -1019,9 +1043,6 @@ static void load_dialog_prefs(GKeyFile *config)
 
 static void load_ui_prefs(GKeyFile *config)
 {
-	gint *geo;
-	gsize geo_len;
-
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
@@ -1068,6 +1089,12 @@ static void load_ui_prefs(GKeyFile *config)
 	scribble_text = utils_get_setting_string(config, PACKAGE, "scribble_text",
 				_("Type here what you want, use it as a notice/scratch board"));
 	scribble_pos = utils_get_setting_integer(config, PACKAGE, "scribble_pos", -1);
+}
+
+static void load_ui_session(GKeyFile *config)
+{
+	gint *geo;
+	gsize geo_len;
 
 	geo = g_key_file_get_integer_list(config, PACKAGE, "geometry", &geo_len, NULL);
 	if (! geo || geo_len < 5)
@@ -1103,7 +1130,7 @@ static void load_ui_prefs(GKeyFile *config)
  */
 void configuration_save_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, PREFS_FILE, NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
@@ -1124,7 +1151,7 @@ void configuration_save_default_session(void)
 
 void configuration_clear_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, SESSION_FILE, NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
@@ -1148,7 +1175,7 @@ void configuration_clear_default_session(void)
  */
 void configuration_reload_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, SESSION_FILE, NULL);
 	GKeyFile *config = g_key_file_new();
 
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
@@ -1159,31 +1186,54 @@ void configuration_reload_default_session(void)
 	g_key_file_free(config);
 }
 
-
-gboolean configuration_load(void)
+gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 {
-	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *configfile = g_build_filename(app->configdir, filename, NULL);
 	GKeyFile *config = g_key_file_new();
 
 	if (! g_file_test(configfile, G_FILE_TEST_IS_REGULAR))
 	{	/* config file does not (yet) exist, so try to load a global config file which may be */
 		/* created by distributors */
 		geany_debug("No user config file found, trying to use global configuration.");
-		SETPTR(configfile, g_build_filename(app->datadir, "geany.conf", NULL));
+		SETPTR(configfile, g_build_filename(app->datadir, filename, NULL));
 	}
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 	g_free(configfile);
 
-	load_dialog_prefs(config);
-	load_ui_prefs(config);
-	project_load_prefs(config);
-	configuration_load_session_files(config, TRUE);
-
-	/* this signal can be used e.g. to delay building UI elements until settings have been read */
-	g_signal_emit_by_name(geany_object, "load-settings", config);
+	switch (payload)
+	{
+		case PREFS:
+			load_dialog_prefs(config);
+			load_ui_prefs(config);
+			/* this signal can be used e.g. to delay building UI elements until settings have been read */
+			g_signal_emit_by_name(geany_object, "load-settings", config);
+			break;
+		case SESSION:
+			project_load_prefs(config);
+			load_ui_session(config);
+			configuration_load_session_files(config, TRUE);
+			break;
+	}
 
 	g_key_file_free(config);
 	return TRUE;
+}
+
+
+gboolean configuration_load(void)
+{
+	gboolean prefs_loaded = read_config_file(PREFS_FILE, PREFS);
+	/* backwards-compatibility: try to read session from preferences if session file doesn't exist */
+	gchar *session_filename = SESSION_FILE;
+	gchar *session_file = g_build_filename(app->configdir, session_filename, NULL);
+	if (! g_file_test(session_file, G_FILE_TEST_IS_REGULAR))
+	{
+		geany_debug("No user session file found, trying to use configuration file.");
+		session_filename = PREFS_FILE;
+	}
+	g_free(session_file);
+	gboolean sess_loaded = read_config_file(session_filename, SESSION);
+	return prefs_loaded && sess_loaded;
 }
 
 
