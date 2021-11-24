@@ -84,7 +84,7 @@ static gboolean load_config(const gchar *filename);
 static gboolean write_config(void);
 static void set_project_name_and_file(PropertyDialogElements *e, const gchar *base_path);
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
-static void run_new_dialog(PropertyDialogElements *e);
+static gboolean run_new_dialog(PropertyDialogElements *e);
 static void apply_editor_prefs(void);
 static void init_stash_prefs(void);
 static void destroy_project(gboolean open_default);
@@ -149,6 +149,7 @@ void project_new(void)
 	GtkWidget *label;
 	gchar *tooltip;
 	gchar *base_path;
+	gboolean project_created;
 	PropertyDialogElements e = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0 };
 
 	/* open directory dialog to get base path */
@@ -225,18 +226,20 @@ void project_new(void)
 	g_free(base_path);
 
 	gtk_widget_show_all(e.dialog);
-	run_new_dialog(&e);
+	project_created = run_new_dialog(&e);
 	gtk_widget_destroy(e.dialog);
 	document_new_file_if_non_open();
 	ui_focus_current_document();
+	if (project_created)
+		project_properties();
 }
 
 
-static void run_new_dialog(PropertyDialogElements *e)
+static gboolean run_new_dialog(PropertyDialogElements *e)
 {
 	if (gtk_dialog_run(GTK_DIALOG(e->dialog)) != GTK_RESPONSE_OK ||
 		!handle_current_session())
-		return;
+		return FALSE;
 	do
 	{
 		if (update_config(e, TRUE))
@@ -251,7 +254,7 @@ static void run_new_dialog(PropertyDialogElements *e)
 			{
 				ui_set_statusbar(TRUE, _("Project \"%s\" created."), app->project->name);
 				ui_add_recent_project_file(app->project->file_name);
-				return;
+				return TRUE;
 			}
 		}
 	}
@@ -266,6 +269,7 @@ static void run_new_dialog(PropertyDialogElements *e)
 		configuration_reload_default_session();
 		configuration_open_files();
 	}
+	return FALSE;
 }
 
 
