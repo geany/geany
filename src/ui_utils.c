@@ -1999,6 +1999,21 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 #endif
 
 
+gchar *ui_get_project_directory(const gchar *path)
+{
+	gchar *utf8_path;
+	const gchar *title = _("Select Project Base Path");
+
+#ifdef G_OS_WIN32
+	utf8_path = win32_show_folder_dialog(ui_widgets.prefs_dialog, title, path);
+#else
+	utf8_path = run_file_chooser(title, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, path);
+#endif
+
+	return utf8_path;
+}
+
+
 static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkFileChooserAction action = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(button), "action"));
