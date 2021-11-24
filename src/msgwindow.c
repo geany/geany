@@ -297,10 +297,14 @@ static const GdkColor *get_color(gint msg_color)
 {
 	switch (msg_color)
 	{
-		case COLOR_RED: return &color_error;
-		case COLOR_DARK_RED: return &color_context;
-		case COLOR_BLUE: return &color_message;
-		default: return NULL;
+		case COLOR_ERROR:		/* red */
+			return &color_error;
+		case COLOR_CONTEXT:		/* orange */
+			return &color_context;
+		case COLOR_MESSAGE:		/* blue */
+			return &color_message;
+		default:				/* black */
+			return NULL;
 	}
 }
 
