@@ -4,14 +4,13 @@
 
 name: CI Build
 
-on: push
-#on:
-#  push:
-#    branches:
-#      - master
-#  pull_request:
-#    branches:
-#      - master
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 # cancel already running builds of the same branch or pull request
 concurrency:
