@@ -16,6 +16,7 @@ EXTRA_DIST = \
 	autogen.sh \
 	scripts/gen-api-gtkdoc.py \
 	geany.desktop.in \
+	org.geany.Geany.appdata.xml.in \
 	geany.pc.in \
 	ChangeLog.pre-1-22 \
 	HACKING \
@@ -28,6 +29,7 @@ EXTRA_DIST = \
 
 DISTCLEANFILES = \
 	geany.desktop \
+	org.geany.Geany.appdata.xml \
 	intltool-extract \
 	intltool-merge \
 	intltool-update
@@ -88,3 +90,8 @@ desktopdir = $(datadir)/applications
 desktop_in_files = geany.desktop
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
+
+appdatadir = $(datadir)/metainfo
+appdata_in_files = org.geany.Geany.appdata.xml.in
+appdata_DATA = $(appdata_in_files:.xml.in=.xml)
+@INTLTOOL_XML_RULE@
