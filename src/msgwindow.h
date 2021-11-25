@@ -38,7 +38,7 @@ enum MsgColors
 	COLOR_TEXT,		/**< Color for normal text.  Default is black. */
 	COLOR_MESSAGE,	/**< Color for ``geany-compiler-message``.  Default is blue. */
 
-#ifndef GEANY_DISABLE_DEPRECATED
+#ifndef GEANY_DISABLE_DEPRECATED /* 2021/11/24 */
 	COLOR_RED		GEANY_DEPRECATED = COLOR_ERROR,		/**< @deprecated Use COLOR_ERROR instead. */
 	COLOR_DARK_RED	GEANY_DEPRECATED = COLOR_CONTEXT,	/**< @deprecated Use COLOR_CONTEXT instead. */
 	COLOR_BLACK		GEANY_DEPRECATED = COLOR_TEXT,		/**< @deprecated Use COLOR_TEXT instead. */
