@@ -720,20 +720,6 @@ gchar *sci_get_line(ScintillaObject *sci, gint line_num)
 }
 
 
-/** Gets all text.
- * @deprecated sci_get_text is deprecated and should not be used in newly-written code.
- * Use sci_get_contents() instead.
- *
- * @param sci Scintilla widget.
- * @param len Length of @a text buffer, usually sci_get_length() + 1.
- * @param text Text buffer; must be allocated @a len + 1 bytes for null-termination. */
-GEANY_API_SYMBOL
-void sci_get_text(ScintillaObject *sci, gint len, gchar *text)
-{
-	SSM(sci, SCI_GETTEXT, (uptr_t) len, (sptr_t) text);
-}
-
-
 /** Allocates and fills a buffer with text from the start of the document.
  * @param sci Scintilla widget.
  * @param buffer_len Buffer length to allocate, including the terminating

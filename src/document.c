@@ -2155,13 +2155,13 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		data[0] = (gchar) 0xef;
 		data[1] = (gchar) 0xbb;
 		data[2] = (gchar) 0xbf;
-		sci_get_text(doc->editor->sci, len, data + 3);
+		SSM(doc->editor->sci, SCI_GETTEXT, (uptr_t) len, (sptr_t) data + 3);
 		len += 3;
 	}
 	else
 	{
 		data = (gchar*) g_malloc(len);
-		sci_get_text(doc->editor->sci, len, data);
+		SSM(doc->editor->sci, SCI_GETTEXT, (uptr_t) len, (sptr_t) data);
 	}
 
 	/* save in original encoding, skip when it is already UTF-8 or has the encoding "None" */
