@@ -2436,7 +2436,17 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 GEANY_API_SYMBOL
 gchar *utils_get_real_path(const gchar *file_name)
 {
-	return tm_get_real_path(file_name);
+	if (file_name)
+	{
+		gsize len = get_path_max(file_name) + 1;
+		gchar *path = g_malloc0(len);
+
+		if (realpath(file_name, path))
+			return path;
+		else
+			g_free(path);
+	}
+	return NULL;
 }
 
 
