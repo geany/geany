@@ -1462,35 +1462,6 @@ void ui_update_view_editor_menu_items(void)
 }
 
 
-/** Creates a GNOME HIG-style frame (with no border and indented child alignment).
- * @param label_text The label text.
- * @param alignment An address to store the alignment widget pointer.
- *
- * @return @transfer{floating} The frame widget, setting the alignment container for
- * packing child widgets.
- *
- * @deprecated 1.29: Use GTK API directly
- **/
-GEANY_API_SYMBOL
-GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment)
-{
-	GtkWidget *label, *align;
-	GtkWidget *frame = gtk_frame_new(NULL);
-
-	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_NONE);
-
-	align = gtk_alignment_new(0.5, 0.5, 1, 1);
-	gtk_container_add(GTK_CONTAINER(frame), align);
-	gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 0, 12, 0);
-
-	label = ui_label_new_bold(label_text);
-	gtk_frame_set_label_widget(GTK_FRAME(frame), label);
-
-	*alignment = align;
-	return frame;
-}
-
-
 /** Makes a fixed border for dialogs without increasing the button box border.
  * @param dialog The parent container for the @c GtkVBox.
  *
@@ -2710,22 +2681,6 @@ void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
 	g_signal_connect(item, "show", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
 	g_signal_connect(item, "hide", G_CALLBACK(on_auto_separator_item_show_hide), autosep);
 	g_signal_connect(item, "destroy", G_CALLBACK(on_auto_separator_item_destroy), autosep);
-}
-
-
-/**
- * Sets @a text as the contents of the tooltip for @a widget.
- *
- * @param widget The widget the tooltip should be set for.
- * @param text The text for the tooltip.
- *
- * @since 0.16
- * @deprecated 0.21 use gtk_widget_set_tooltip_text() instead
- */
-GEANY_API_SYMBOL
-void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
-{
-	gtk_widget_set_tooltip_text(widget, text);
 }
 
 
