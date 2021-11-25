@@ -744,20 +744,6 @@ gchar *sci_get_contents(ScintillaObject *sci, gint buffer_len)
 
 
 /** Gets selected text.
- * @deprecated sci_get_selected_text is deprecated and should not be used in newly-written code.
- * Use sci_get_selection_contents() instead.
- *
- * @param sci Scintilla widget.
- * @param text Text buffer; must be allocated sci_get_selected_text_length() + 1 bytes
- * for null-termination. */
-GEANY_API_SYMBOL
-void sci_get_selected_text(ScintillaObject *sci, gchar *text)
-{
-	SSM(sci, SCI_GETSELTEXT, 0, (sptr_t) text);
-}
-
-
-/** Gets selected text.
  * @param sci Scintilla widget.
  *
  * @return The selected text. Should be freed when no longer needed.
