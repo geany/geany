@@ -354,7 +354,7 @@ static void save_recent_files(GKeyFile *config, GQueue *queue, gchar const *key)
 }
 
 
-static gchar *get_session_file_string(GeanyDocument *doc)
+static gchar *get_session_file_string(GeanyDocument *doc, gboolean is_project)
 {
 	gchar *fname;
 	gchar *locale_filename;
@@ -365,6 +365,25 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 		ft = filetypes[GEANY_FILETYPES_NONE];
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
+	/* use relative path for projects with relative base path and files
+	 * inside the base path */
+	if (is_project && app->project && !g_path_is_absolute(app->project->base_path))
+	{
+		gchar *project_dir, *relpath, *base_path;
+		GFile *prjdir, *fname;
+
+		base_path = project_get_base_path();
+		project_dir = utils_get_locale_from_utf8(base_path);
+		prjdir = g_file_new_for_path(project_dir);
+		fname = g_file_new_for_path(locale_filename);
+		relpath = g_file_get_relative_path(prjdir, fname);
+		if (relpath)
+			SETPTR(locale_filename, relpath);
+		g_object_unref(fname);
+		g_object_unref(prjdir);
+		g_free(project_dir);
+		g_free(base_path);
+	}
 	escaped_filename = g_uri_escape_string(locale_filename, NULL, TRUE);
 
 	fname = g_strdup_printf("%d;%s;%d;E%s;%d;%d;%d;%s;%d;%d",
@@ -398,7 +417,7 @@ static void remove_session_files(GKeyFile *config)
 }
 
 
-void configuration_save_session_files(GKeyFile *config)
+void configuration_save_session_files(GKeyFile *config, gboolean is_project)
 {
 	gint npage;
 	gchar entry[16];
@@ -421,7 +440,7 @@ void configuration_save_session_files(GKeyFile *config)
 			gchar *fname;
 
 			g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", j);
-			fname = get_session_file_string(doc);
+			fname = get_session_file_string(doc, is_project);
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;
@@ -662,7 +681,7 @@ void write_config_file(gchar const *filename, ConfigPayload payload)
 			project_save_prefs(config);	/* save project filename, etc. */
 			save_ui_session(config);
 			if (cl_options.load_session)
-				configuration_save_session_files(config);
+				configuration_save_session_files(config, FALSE);
 #ifdef HAVE_VTE
 			else if (vte_info.have_vte)
 			{
@@ -1137,7 +1156,7 @@ void configuration_save_default_session(void)
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 
 	if (cl_options.load_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, FALSE);
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
@@ -1267,6 +1286,16 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	/* try to get the locale equivalent for the filename */
 	unescaped_filename = g_uri_unescape_string(tmp[7], NULL);
 	locale_filename = utils_get_locale_from_utf8(unescaped_filename);
+
+	if (!g_path_is_absolute(locale_filename) && app->project)
+	{
+		gchar *base_path = project_get_base_path();
+		gchar *project_dir = utils_get_locale_from_utf8(base_path);
+
+		SETPTR(locale_filename, g_build_filename(project_dir, locale_filename, NULL));
+		g_free(project_dir);
+		g_free(base_path);
+	}
 
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
