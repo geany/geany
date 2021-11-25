@@ -40,13 +40,13 @@ enum MsgColors
 
 #ifndef GEANY_DISABLE_DEPRECATED
 	/* 2021/12 */
-	/** @deprecated Use COLOR_ERROR instead.   @since 1.39 (API 243) */
+	/** @deprecated since 1.39 (API 243)  Use COLOR_ERROR instead. */
 	COLOR_RED		GEANY_DEPRECATED = COLOR_ERROR,
-	/** @deprecated Use COLOR_CONTEXT instead. @since 1.39 (API 243) */
+	/** @deprecated since 1.39 (API 243)  Use COLOR_CONTEXT instead. */
 	COLOR_DARK_RED	GEANY_DEPRECATED = COLOR_CONTEXT,
-	/** @deprecated Use COLOR_TEXT instead.    @since 1.39 (API 243) */
+	/** @deprecated since 1.39 (API 243)  Use COLOR_TEXT instead. */
 	COLOR_BLACK		GEANY_DEPRECATED = COLOR_TEXT,
-	/** @deprecated Use COLOR_MESSAGE instead. @since 1.39 (API 243) */
+	/** @deprecated since 1.39 (API 243)  Use COLOR_MESSAGE instead. */
 	COLOR_BLUE		GEANY_DEPRECATED = COLOR_MESSAGE,
 #endif  /* GEANY_DISABLE_DEPRECATED */
 };
