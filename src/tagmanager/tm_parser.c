@@ -77,6 +77,7 @@ static TMParserMapEntry map_JAVA[] = {
 static TMParserMapEntry map_MAKEFILE[] = {
 	{'m', tm_tag_macro_t},
 	{'t', tm_tag_function_t},
+	{'I', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_PASCAL[] = {
@@ -91,6 +92,7 @@ static TMParserMapEntry map_PERL[] = {
 	{'p', tm_tag_package_t},
 	{'s', tm_tag_function_t},
 	{'d', tm_tag_prototype_t},
+	{'M', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_PHP[] = {
@@ -102,6 +104,7 @@ static TMParserMapEntry map_PHP[] = {
 	{'n', tm_tag_namespace_t},
 	{'t', tm_tag_struct_t},
 	{'v', tm_tag_variable_t},
+	{'a', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_PYTHON[] = {
@@ -179,6 +182,7 @@ static TMParserMapEntry map_SQL[] = {
 	{'x', tm_tag_undef_t},
 	{'y', tm_tag_undef_t},
 	{'z', tm_tag_undef_t},
+	{'C', tm_tag_undef_t},
 };
 
 /* not in universal-ctags */
@@ -210,6 +214,10 @@ static TMParserMapEntry map_RUBY[] = {
 	{'f', tm_tag_method_t},
 	{'m', tm_tag_namespace_t},
 	{'S', tm_tag_member_t},
+	{'C', tm_tag_undef_t},
+	{'A', tm_tag_undef_t},
+	{'a', tm_tag_undef_t},
+	{'L', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_TCL[] = {
@@ -240,7 +248,10 @@ static TMParserMapEntry map_D[] = {
 };
 
 static TMParserMapEntry map_DIFF[] = {
-	{'f', tm_tag_function_t},
+	{'m', tm_tag_function_t},
+	{'n', tm_tag_function_t},
+	{'d', tm_tag_function_t},
+	{'h', tm_tag_undef_t},
 };
 
 /* different parser than in universal-ctags */
@@ -264,6 +275,7 @@ static TMParserMapEntry map_VHDL[] = {
 
 static TMParserMapEntry map_LUA[] = {
 	{'f', tm_tag_function_t},
+	{'X', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_JAVASCRIPT[] = {
@@ -274,6 +286,9 @@ static TMParserMapEntry map_JAVASCRIPT[] = {
 	{'C', tm_tag_macro_t},
 	{'v', tm_tag_variable_t},
 	{'g', tm_tag_function_t},
+	{'G', tm_tag_undef_t},
+	{'S', tm_tag_undef_t},
+	{'M', tm_tag_undef_t},
 };
 
 /* not in universal-ctags */
@@ -329,9 +344,13 @@ static TMParserMapEntry map_REST[] = {
 
 static TMParserMapEntry map_HTML[] = {
 	{'a', tm_tag_member_t},
+	{'c', tm_tag_undef_t},
 	{'h', tm_tag_namespace_t},
 	{'i', tm_tag_class_t},
 	{'j', tm_tag_variable_t},
+	{'C', tm_tag_undef_t},
+	{'I', tm_tag_undef_t},
+	{'J', tm_tag_undef_t},
 };
 
 static TMSubparserMapEntry subparser_HTML_javascript_map[] = {
@@ -402,9 +421,15 @@ static TMParserMapEntry map_ACTIONSCRIPT[] = {
 
 /* not in universal-ctags */
 static TMParserMapEntry map_NSIS[] = {
-	{'n', tm_tag_namespace_t},
+	{'s', tm_tag_namespace_t},
 	{'f', tm_tag_function_t},
 	{'v', tm_tag_variable_t},
+	{'d', tm_tag_undef_t},
+	{'m', tm_tag_undef_t},
+	{'S', tm_tag_undef_t},
+	{'p', tm_tag_undef_t},
+	{'l', tm_tag_undef_t},
+	{'i', tm_tag_undef_t},
 };
 
 /* not in universal-ctags */
@@ -465,6 +490,7 @@ static TMParserMapEntry map_OBJC[] = {
 	{'s', tm_tag_struct_t},
 	{'e', tm_tag_enum_t},
 	{'M', tm_tag_macro_t},
+	{'C', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_ASCIIDOC[] = {
@@ -508,6 +534,12 @@ static TMParserMapEntry map_GO[] = {
 	{'s', tm_tag_struct_t},
 	{'i', tm_tag_interface_t},
 	{'m', tm_tag_member_t},
+	{'M', tm_tag_undef_t},
+	{'n', tm_tag_undef_t},
+	{'u', tm_tag_undef_t},
+	{'P', tm_tag_undef_t},
+	{'a', tm_tag_undef_t},
+	{'R', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_JSON[] = {
