@@ -9,7 +9,7 @@ Context MenusÌ256Ö0
 Desktop ShortcutsÌ256Ö0
 Development filesÌ256Ö0
 DocumentationÌ256Ö0
-GTK Ì256Ö0
+GTK ${GTK_VERSION} Runtime EnvironmentÌ256Ö0
 Language FilesÌ256Ö0
 OnDirLeaveÌ16Ö0
 PluginsÌ256Ö0
