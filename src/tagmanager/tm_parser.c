@@ -801,16 +801,18 @@ const gchar *tm_parser_context_separator(TMParserType lang)
 		case TM_PARSER_CPP:
 		case TM_PARSER_GLSL:	/* for structs */
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
-		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_RUST:
-		case TM_PARSER_ZEPHIR:
 			return "::";
 
 		/* avoid confusion with other possible separators in group/section name */
 		case TM_PARSER_CONF:
 		case TM_PARSER_REST:
 			return ":::";
+
+		case TM_PARSER_PHP:
+		case TM_PARSER_ZEPHIR:
+			return "\\";
 
 		/* no context separator */
 		case TM_PARSER_ASCIIDOC:
