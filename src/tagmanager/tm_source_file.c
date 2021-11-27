@@ -23,11 +23,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <glib/gstdio.h>
-#ifdef G_OS_WIN32
-# define VC_EXTRALEAN
-# define WIN32_LEAN_AND_MEAN
-# include <windows.h> /* for GetFullPathName */
-#endif
 
 #include "tm_source_file.h"
 #include "tm_tag.h"
