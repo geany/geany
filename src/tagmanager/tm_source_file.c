@@ -34,6 +34,9 @@
 #include "tm_parser.h"
 #include "tm_ctags.h"
 
+#include "../utils.h"
+
+
 typedef struct
 {
 	TMSourceFile public;
@@ -72,45 +75,6 @@ enum
 #define SOURCE_FILE_NEW(S) ((S) = g_slice_new(TMSourceFilePriv))
 #define SOURCE_FILE_FREE(S) g_slice_free(TMSourceFilePriv, (TMSourceFilePriv *) S)
 
-static int get_path_max(const char *path)
-{
-#ifdef PATH_MAX
-	return PATH_MAX;
-#else
-	int path_max = pathconf(path, _PC_PATH_MAX);
-	if (path_max <= 0)
-		path_max = 4096;
-	return path_max;
-#endif
-}
-
-
-#if defined(G_OS_WIN32) && !defined(HAVE_REALPATH)
-/* realpath implementation for Windows found at http://bugzilla.gnome.org/show_bug.cgi?id=342926
- * this one is better than e.g. liberty's lrealpath because this one uses Win32 API and works
- * with special chars within the filename */
-static char *realpath (const char *pathname, char *resolved_path)
-{
-	int size;
-
-	if (resolved_path != NULL)
-	{
-		int path_max = get_path_max(pathname);
-		size = GetFullPathNameA (pathname, path_max, resolved_path, NULL);
-		if (size > path_max)
-			return NULL;
-		else
-			return resolved_path;
-	}
-	else
-	{
-		size = GetFullPathNameA (pathname, 0, NULL, NULL);
-		resolved_path = g_new0 (char, size);
-		GetFullPathNameA (pathname, size, resolved_path, NULL);
-		return resolved_path;
-	}
-}
-#endif
 
 gchar tm_source_file_get_tag_impl(const gchar *impl)
 {
@@ -562,7 +526,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 			g_warning("%s: Not a regular file", file_name);
 			return FALSE;
 		}
-		source_file->file_name = tm_get_real_path(file_name);
+		source_file->file_name = utils_get_real_path(file_name);
 		source_file->short_name = strrchr(source_file->file_name, '/');
 		if (source_file->short_name)
 			++ source_file->short_name;
