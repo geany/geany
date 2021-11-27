@@ -102,10 +102,6 @@ void				sci_set_line_indentation	(ScintillaObject *sci, gint line, gint indent);
 gint				sci_get_line_indentation	(ScintillaObject *sci, gint line);
 gint				sci_find_matching_brace		(ScintillaObject *sci, gint pos);
 
-#ifndef GEANY_DISABLE_DEPRECATED
-void				sci_get_text_range			(ScintillaObject *sci, gint start, gint end, gchar *text) GEANY_DEPRECATED_FOR(sci_get_contents_range);
-#endif	/* GEANY_DISABLE_DEPRECATED */
-
 #ifdef GEANY_PRIVATE
 
 gchar*				sci_get_string				(ScintillaObject *sci, guint msg, gulong wParam);

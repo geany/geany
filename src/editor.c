@@ -642,19 +642,15 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 }
 
 
-/* do not use with long strings */
 static gboolean match_last_chars(ScintillaObject *sci, gint pos, const gchar *str)
 {
-	gsize len = strlen(str);
 	gchar *buf;
-
-	g_return_val_if_fail(len < 100, FALSE);
+	gsize len = strlen(str);
 
 	if ((gint)len > pos)
 		return FALSE;
 
-	buf = g_alloca(len + 1);
-	sci_get_text_range(sci, pos - len, pos, buf);
+	buf = sci_get_contents_range(sci, pos - len, pos);
 	return strcmp(str, buf) == 0;
 }
 
@@ -1765,9 +1761,13 @@ void editor_find_current_word_sciwc(GeanyEditor *editor, gint pos, gchar *word, 
 		*word = 0;
 	else
 	{
+		gchar *tmp_word;
 		if ((guint)(end - start) >= wordlen)
 			end = start + (wordlen - 1);
-		sci_get_text_range(editor->sci, start, end, word);
+
+		tmp_word = sci_get_contents_range(editor->sci, start, end);
+		g_utf8_strncpy(word, tmp_word, wordlen);
+		g_free(tmp_word);
 	}
 }
 
@@ -2726,7 +2726,7 @@ static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 	ScintillaObject *sci = editor->sci;
 	gint lexer = sci_get_lexer(sci);
 	gint min, size, style;
-	gchar *str_found, sel[512];
+	gchar *str_found, *sel;
 	gboolean result = FALSE;
 
 	/* If the user has turned us off, quit now.
@@ -2744,14 +2744,13 @@ static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 		return FALSE;
 
 	/* Grab the last 512 characters or so */
-	min = pos - (sizeof(sel) - 1);
-	if (min < 0) min = 0;
+	min = pos - 511;
+	min = (min < 0) ? 0 : min;
 
 	if (pos - min < 3)
 		return FALSE; /* Smallest tag is 3 characters e.g. <p> */
 
-	sci_get_text_range(sci, min, pos, sel);
-	sel[sizeof(sel) - 1] = '\0';
+	sel = sci_get_contents_range(sci, min, pos);
 
 	if (ch == '>' && sel[pos - min - 2] == '/')
 		/* User typed something like "<br/>" */
@@ -2771,6 +2770,7 @@ static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 		insert_closing_tag(editor, pos, ch, str_found);
 		result = TRUE;
 	}
+	g_free(sel);
 	g_free(str_found);
 	return result;
 }
@@ -2991,11 +2991,10 @@ static gint get_multiline_comment_style(GeanyEditor *editor, gint line_start)
 gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 {
 	gint first_line, last_line;
-	gint x, i, line_start, line_len;
+	gint x, i, line_start, line_end, line_len;
 	gint sel_start, sel_end;
 	gint count = 0;
 	gsize co_len;
-	gchar sel[256];
 	const gchar *co, *cc;
 	gboolean single_line = FALSE;
 	GeanyFiletype *ft;
@@ -3032,17 +3031,14 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 
 	for (i = first_line; i <= last_line; i++)
 	{
-		gint buf_len;
+		gchar *sel;
 
 		line_start = sci_get_position_from_line(editor->sci, i);
-		line_len = sci_get_line_end_position(editor->sci, i) - line_start;
+		line_end = sci_get_line_end_position(editor->sci, i);
+		line_len = line_end - line_start;
 		x = 0;
 
-		buf_len = MIN((gint)sizeof(sel) - 1, line_len);
-		if (buf_len <= 0)
-			continue;
-		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);
-		sel[buf_len] = '\0';
+		sel = sci_get_contents_range(editor->sci, line_start, line_end);
 
 		while (isspace(sel[x])) x++;
 
@@ -3090,6 +3086,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 				break;
 			}
 		}
+		g_free(sel);
 	}
 	sci_end_undo_action(editor->sci);
 
@@ -3117,10 +3114,9 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 void editor_do_comment_toggle(GeanyEditor *editor)
 {
 	gint first_line, last_line;
-	gint x, i, line_start, line_len, first_line_start, last_line_start;
+	gint x, i, line_start, line_end, first_line_start, last_line_start;
 	gint sel_start, sel_end;
 	gint count_commented = 0, count_uncommented = 0;
-	gchar sel[256];
 	const gchar *co, *cc;
 	gboolean single_line = FALSE;
 	gboolean first_line_was_comment = FALSE;
@@ -3156,17 +3152,13 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 	for (i = first_line; i <= last_line; i++)
 	{
-		gint buf_len;
+		gchar *sel;
 
 		line_start = sci_get_position_from_line(editor->sci, i);
-		line_len = sci_get_line_end_position(editor->sci, i) - line_start;
+		line_end = sci_get_line_end_position(editor->sci, i);
 		x = 0;
 
-		buf_len = MIN((gint)sizeof(sel) - 1, line_len);
-		if (buf_len < 0)
-			continue;
-		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);
-		sel[buf_len] = '\0';
+		sel = sci_get_contents_range(editor->sci, line_start, line_end);
 
 		while (isspace(sel[x])) x++;
 
@@ -3216,6 +3208,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 			/* break because we are already on the last line */
 			break;
 		}
+		g_free(sel);
 	}
 
 	sci_end_undo_action(editor->sci);
@@ -3290,7 +3283,6 @@ gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 	gint x, i, line_start, line_len;
 	gint sel_start, sel_end, co_len;
 	gint count = 0;
-	gchar sel[256];
 	const gchar *co, *cc;
 	gboolean single_line = FALSE;
 	GeanyFiletype *ft;
@@ -3327,17 +3319,13 @@ gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 	for (i = first_line; i <= last_line; i++)
 	{
-		gint buf_len;
+		gchar *sel;
 
 		line_start = sci_get_position_from_line(editor->sci, i);
 		line_len = sci_get_line_end_position(editor->sci, i) - line_start;
 		x = 0;
 
-		buf_len = MIN((gint)sizeof(sel) - 1, line_len);
-		if (buf_len < 0)
-			continue;
-		sci_get_text_range(editor->sci, line_start, line_start + buf_len, sel);
-		sel[buf_len] = '\0';
+		sel = sci_get_contents_range(editor->sci, line_start, line_start + line_len);
 
 		while (isspace(sel[x])) x++;
 
@@ -3380,6 +3368,7 @@ gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 				break;
 			}
 		}
+		g_free(sel);
 	}
 	sci_end_undo_action(editor->sci);
 
