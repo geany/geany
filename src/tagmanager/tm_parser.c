@@ -136,9 +136,13 @@ static TMParserMapEntry map_PYTHON[] = {
 	{'f', tm_tag_function_t},
 	{'m', tm_tag_method_t},
 	{'v', tm_tag_variable_t},
+	{'I', tm_tag_undef_t},
+	{'i', tm_tag_externvar_t},
     /* defined as externvar to get those excluded as forward type in symbols.c:goto_tag()
      * so we can jump to the real implementation (if known) instead of to the import statement */
 	{'x', tm_tag_externvar_t},
+	{'z', tm_tag_undef_t},
+	{'l', tm_tag_undef_t},
 };
 
 /* different parser than tex.c from universal-ctags */
