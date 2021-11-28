@@ -671,7 +671,7 @@ gboolean tm_tag_is_anon(const TMTag *tag)
 	char dummy;
 
 	if (tag->lang == TM_PARSER_C || tag->lang == TM_PARSER_CPP)
-		return sscanf(tag->name, "anon_%*[a-z]_%u%c", &i, &dummy) == 1;
+		return sscanf(tag->name, "__anon%u%c", &i, &dummy) == 1;
 	else if (tag->lang == TM_PARSER_FORTRAN || tag->lang == TM_PARSER_F77)
 		return sscanf(tag->name, "Structure#%u%c", &i, &dummy) == 1 ||
 			sscanf(tag->name, "Interface#%u%c", &i, &dummy) == 1 ||

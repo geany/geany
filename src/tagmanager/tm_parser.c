@@ -44,25 +44,49 @@ typedef struct
 
 static GHashTable *subparser_map = NULL;
 
-
-static TMParserMapEntry map_C[] = {
-	{'c', tm_tag_class_t},
-	{'d', tm_tag_macro_t},
-	{'e', tm_tag_enumerator_t},
-	{'f', tm_tag_function_t},
-	{'g', tm_tag_enum_t},
-	{'m', tm_tag_member_t},
-	{'n', tm_tag_namespace_t},
-	{'p', tm_tag_prototype_t},
-	{'s', tm_tag_struct_t},
-	{'t', tm_tag_typedef_t},
-	{'u', tm_tag_union_t},
-	{'v', tm_tag_variable_t},
+#define COMMON_C \
+	{'d', tm_tag_macro_t}, \
+	{'e', tm_tag_enumerator_t}, \
+	{'f', tm_tag_function_t}, \
+	{'g', tm_tag_enum_t}, \
+	{'m', tm_tag_member_t}, \
+	{'p', tm_tag_prototype_t}, \
+	{'s', tm_tag_struct_t}, \
+	{'t', tm_tag_typedef_t}, \
+	{'u', tm_tag_union_t}, \
+	{'v', tm_tag_variable_t}, \
 	{'x', tm_tag_externvar_t},
+
+/* Old C parser, also used by GLSL and Ferite */
+static TMParserMapEntry map_C_old_parser[] = {
+	COMMON_C
+	{'c', tm_tag_class_t},
+	{'n', tm_tag_namespace_t},
 };
 
-/* C++, same as C */
-#define map_CPP map_C
+# define COMMON_C_NEW_PARSER \
+	{'h', tm_tag_undef_t}, \
+	{'l', tm_tag_undef_t}, \
+	{'z', tm_tag_undef_t}, \
+	{'L', tm_tag_undef_t}, \
+	{'D', tm_tag_undef_t},
+
+static TMParserMapEntry map_C[] = {
+	COMMON_C
+	COMMON_C_NEW_PARSER
+};
+
+static TMParserMapEntry map_CPP[] = {
+	COMMON_C
+	COMMON_C_NEW_PARSER
+
+	{'c', tm_tag_class_t},
+	{'n', tm_tag_namespace_t},
+	{'A', tm_tag_undef_t},
+	{'N', tm_tag_undef_t},
+	{'U', tm_tag_undef_t},
+	{'Z', tm_tag_undef_t},
+};
 
 static TMParserMapEntry map_JAVA[] = {
 	{'c', tm_tag_class_t},
@@ -359,7 +383,7 @@ static TMParserMapEntry map_F77[] = {
 
 #define map_FORTRAN map_F77
 
-#define map_FERITE map_C
+#define map_FERITE map_C_old_parser
 
 /* different parser than in universal-ctags */
 static TMParserMapEntry map_MATLAB[] = {
@@ -367,7 +391,7 @@ static TMParserMapEntry map_MATLAB[] = {
 	{'s', tm_tag_struct_t},
 };
 
-#define map_GLSL map_C
+#define map_GLSL map_C_old_parser
 
 /* not in universal-ctags */
 static TMParserMapEntry map_VALA[] = {
@@ -541,6 +565,11 @@ static TMParserMapEntry map_JULIA[] = {
 	{'x', tm_tag_externvar_t},
 };
 
+static TMParserMapEntry map_CPREPROCESSOR[] = {
+	{'d', tm_tag_undef_t},
+	{'h', tm_tag_undef_t},
+	{'D', tm_tag_undef_t},
+};
 
 typedef struct
 {
@@ -605,6 +634,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(ZEPHIR),
 	MAP_ENTRY(POWERSHELL),
 	MAP_ENTRY(JULIA),
+	MAP_ENTRY(CPREPROCESSOR),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);

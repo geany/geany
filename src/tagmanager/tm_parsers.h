@@ -14,8 +14,8 @@
 
 /* Keep in sync with tm_parser.h */
 #define EXTERNAL_PARSER_LIST \
-	CParserOld, \
-	CppParserOld, \
+	CParser, \
+	CppParser, \
 	JavaParser, \
 	MakefileParser, \
 	PascalParser, \
@@ -65,7 +65,8 @@
 	JsonParser, \
 	ZephirParser, \
 	PowerShellParser, \
-    JuliaParser, \
-	BibtexParser
+	JuliaParser, \
+	BibtexParser, \
+	CPreProParser
 
 #endif
