@@ -82,7 +82,8 @@ parsers = \
 	parsers/php.c \
 	parsers/powershell.c \
 	parsers/geany_python.c \
-	parsers/geany_r.c \
+	parsers/r.c \
+	parsers/r.h \
 	parsers/rst.c \
 	parsers/ruby.c \
 	parsers/rust.c \
