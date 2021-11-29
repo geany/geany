@@ -145,7 +145,7 @@ in plugindata.h. This is usually not needed if you're just appending
 fields to structs. The GEANY_API_VERSION value should be incremented
 for any changes to the plugin API, including appending elements.
 
-If you're in doubt when making changes to plugin API code, just ask us.
+If you're in any doubt when making changes to plugin API code, just ask us.
 
 Plugin API/ABI design
 ^^^^^^^^^^^^^^^^^^^^^
