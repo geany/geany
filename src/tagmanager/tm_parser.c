@@ -154,8 +154,8 @@ static TMParserMapEntry map_ASM[] = {
 
 /* not in universal-ctags */
 static TMParserMapEntry map_CONF[] = {
-	{'n', tm_tag_namespace_t},
-	{'m', tm_tag_macro_t},
+	{'s', tm_tag_namespace_t},
+	{'k', tm_tag_macro_t},
 };
 
 static TMParserMapEntry map_SQL[] = {
