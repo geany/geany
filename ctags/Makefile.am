@@ -92,7 +92,7 @@ parsers = \
 	parsers/geany_tcl.c \
 	parsers/geany_tex.c \
 	parsers/txt2tags.c \
-	parsers/geany_verilog.c \
+	parsers/verilog.c \
 	parsers/geany_vhdl.c
 
 # skip cmd.c and mini-geany.c which define main()
