@@ -19,7 +19,8 @@ parsers = \
 	parsers/geany_bibtex.c \
 	parsers/geany_c.c \
 	parsers/geany_cobol.c \
-	parsers/geany_iniconf.c \
+	parsers/iniconf.c \
+	parsers/iniconf.h \
 	parsers/geany_css.c \
 	parsers/diff.c \
 	parsers/geany_docbook.c \
