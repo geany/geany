@@ -482,6 +482,13 @@ static TMParserMapEntry map_R[] = {
 	{'f', tm_tag_function_t},
 	{'l', tm_tag_other_t},
 	{'s', tm_tag_other_t},
+	{'g', tm_tag_undef_t},
+	{'v', tm_tag_undef_t},
+	{'z', tm_tag_undef_t},
+	{'c', tm_tag_undef_t},
+	{'L', tm_tag_undef_t},
+	{'d', tm_tag_undef_t},
+	{'n', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_COBOL[] = {
