@@ -367,19 +367,6 @@ typedef enum
 }
 GeanyProxyProbeResults;
 
-/** @deprecated Use GEANY_PROXY_IGNORE instead.
- * @since 1.26 (API 226)
- */
-#define PROXY_IGNORED GEANY_PROXY_IGNORE
-/** @deprecated Use GEANY_PROXY_MATCH instead.
- * @since 1.26 (API 226)
- */
-#define PROXY_MATCHED GEANY_PROXY_MATCH
-/** @deprecated Use GEANY_PROXY_RELATED instead.
- * @since 1.26 (API 226)
- */
-#define PROXY_NOLOAD 0x100
-
 /** Hooks that need to be implemented by every proxy
  *
  * @see geany_plugin_register_proxy() for a full description of the proxy mechanism.
