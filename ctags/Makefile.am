@@ -87,7 +87,7 @@ parsers = \
 	parsers/rst.c \
 	parsers/ruby.c \
 	parsers/rust.c \
-	parsers/geany_sh.c \
+	parsers/sh.c \
 	parsers/sql.c \
 	parsers/geany_tcl.c \
 	parsers/geany_tex.c \
