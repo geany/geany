@@ -253,7 +253,10 @@ static TMParserMapEntry map_TCL[] = {
 };
 
 static TMParserMapEntry map_SH[] = {
+	{'a', tm_tag_undef_t},
 	{'f', tm_tag_function_t},
+	{'s', tm_tag_undef_t},
+	{'h', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_D[] = {
