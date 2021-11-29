@@ -1114,11 +1114,13 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_PYTHON:
+		case TM_PARSER_R:
 		case TM_PARSER_RUBY:
 		case TM_PARSER_RUST:
 		case TM_PARSER_SQL:
 		case TM_PARSER_TXT2TAGS:
 		case TM_PARSER_VALA:
+		case TM_PARSER_VERILOG:
 		case TM_PARSER_ZEPHIR:
 			return TRUE;
 
