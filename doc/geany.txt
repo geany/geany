@@ -2681,7 +2681,7 @@ Filetype Regex
 The ``extract_filetype_regex`` setting contains the regex that is used
 to extract the filetype name from the file with the first capture group.
 The default value finds filetypes contained in Emacs-style tags.
-See `def_ft_regex`_.
+See `keyfile.c`_.
 
 For example, C and C++ header files can be differentiated by the following
 first-line comments::
@@ -5498,14 +5498,10 @@ GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~
                                 comment.
 GEANY_MAX_AUTOCOMPLETE_WORDS    How many autocompletion suggestions should    30
                                 Geany provide.
-GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   See below.
-                                files.
+
+GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   ``-\*-\s*([^\s]+)\s*-\*-``
+                                files.  See `Filetype Regex`_ for usage.
 ==============================  ============================================  ==================
-
-.. _def_ft_regex:
-
-The GEANY_DEFAULT_FILETYPE_REGEX default value is  ``-\*-\s*([^\s]+)\s*-\*-``
-which finds filetypes contained in Emacs-style tags.  See `Filetype Regex`_ for usage.
 
 The GEANY_DEFAULT_TOOLS_TERMINAL default value on Windows is::
 
