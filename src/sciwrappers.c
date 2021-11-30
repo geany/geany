@@ -720,20 +720,6 @@ gchar *sci_get_line(ScintillaObject *sci, gint line_num)
 }
 
 
-/** Gets all text.
- * @deprecated sci_get_text is deprecated and should not be used in newly-written code.
- * Use sci_get_contents() instead.
- *
- * @param sci Scintilla widget.
- * @param len Length of @a text buffer, usually sci_get_length() + 1.
- * @param text Text buffer; must be allocated @a len + 1 bytes for null-termination. */
-GEANY_API_SYMBOL
-void sci_get_text(ScintillaObject *sci, gint len, gchar *text)
-{
-	SSM(sci, SCI_GETTEXT, (uptr_t) len, (sptr_t) text);
-}
-
-
 /** Allocates and fills a buffer with text from the start of the document.
  * @param sci Scintilla widget.
  * @param buffer_len Buffer length to allocate, including the terminating
@@ -754,20 +740,6 @@ gchar *sci_get_contents(ScintillaObject *sci, gint buffer_len)
 	text = g_malloc(buffer_len);
 	SSM(sci, SCI_GETTEXT, (uptr_t) buffer_len, (sptr_t) text);
 	return text;
-}
-
-
-/** Gets selected text.
- * @deprecated sci_get_selected_text is deprecated and should not be used in newly-written code.
- * Use sci_get_selection_contents() instead.
- *
- * @param sci Scintilla widget.
- * @param text Text buffer; must be allocated sci_get_selected_text_length() + 1 bytes
- * for null-termination. */
-GEANY_API_SYMBOL
-void sci_get_selected_text(ScintillaObject *sci, gchar *text)
-{
-	SSM(sci, SCI_GETSELTEXT, 0, (sptr_t) text);
 }
 
 
@@ -1078,25 +1050,6 @@ void sci_clear_cmdkey(ScintillaObject *sci, gint key)
 
 
 /** Gets text between @a start and @a end.
- * @deprecated sci_get_text_range is deprecated and should not be used in newly-written code.
- * Use sci_get_contents_range() instead.
- *
- * @param sci Scintilla widget.
- * @param start Start.
- * @param end End.
- * @param text Text will be zero terminated and must be allocated (end - start + 1) bytes. */
-GEANY_API_SYMBOL
-void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
-{
-	struct Sci_TextRange tr;
-	tr.chrg.cpMin = start;
-	tr.chrg.cpMax = end;
-	tr.lpstrText = text;
-	SSM(sci, SCI_GETTEXTRANGE, 0, (sptr_t) &tr);
-}
-
-
-/** Gets text between @a start and @a end.
  * @param sci Scintilla widget.
  * @param start Start position.
  * @param end End position.
@@ -1108,11 +1061,18 @@ GEANY_API_SYMBOL
 gchar *sci_get_contents_range(ScintillaObject *sci, gint start, gint end)
 {
 	gchar *text;
+	struct Sci_TextRange tr;
 
 	g_return_val_if_fail(start < end, NULL);
 
 	text = g_malloc((gsize) (end - start) + 1);
-	sci_get_text_range(sci, start, end, text);
+
+	tr.chrg.cpMin = start;
+	tr.chrg.cpMax = end;
+	tr.lpstrText = text;
+
+	SSM(sci, SCI_GETTEXTRANGE, 0, (sptr_t) &tr);
+
 	return text;
 }
 
