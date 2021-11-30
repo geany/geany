@@ -2419,42 +2419,27 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 }
 
 
-
-static int get_path_max(const char *path)
-{
-#ifdef PATH_MAX
-	return PATH_MAX;
-#else
-	int path_max = pathconf(path, _PC_PATH_MAX);
-	if (path_max <= 0)
-		path_max = 4096;
-	return path_max;
-#endif
-}
-
-
 #if defined(G_OS_WIN32) && !defined(HAVE_REALPATH)
 /* realpath implementation for Windows found at http://bugzilla.gnome.org/show_bug.cgi?id=342926
  * this one is better than e.g. liberty's lrealpath because this one uses Win32 API and works
  * with special chars within the filename */
-static char *realpath (const char *pathname, char *resolved_path)
+static char *realpath(const char *pathname, char *resolved_path)
 {
 	int size;
 
 	if (resolved_path != NULL)
 	{
-		int path_max = get_path_max(pathname);
-		size = GetFullPathNameA (pathname, path_max, resolved_path, NULL);
-		if (size > path_max)
+		size = GetFullPathName(pathname, PATH_MAX, resolved_path, NULL);
+		if (size > PATH_MAX)
 			return NULL;
 		else
 			return resolved_path;
 	}
 	else
 	{
-		size = GetFullPathNameA (pathname, 0, NULL, NULL);
-		resolved_path = g_new0 (char, size);
-		GetFullPathNameA (pathname, size, resolved_path, NULL);
+		size = GetFullPathName(pathname, 0, NULL, NULL);
+		resolved_path = g_new0(char, size);
+		GetFullPathName(pathname, size, resolved_path, NULL);
 		return resolved_path;
 	}
 }
@@ -2467,11 +2452,6 @@ static char *realpath (const char *pathname, char *resolved_path)
  * This is similar to the POSIX `realpath` function when passed a
  * @c NULL argument.
  *
- * @warning This function suffers the same problems as the POSIX
- * function `realpath()`, namely that it's impossible to determine
- * a suitable size for the returned buffer, and so it's limited to a
- * maximum of `PATH_MAX`.
- *
  * @param file_name The file name to get the real path of.
  *
  * @return A newly-allocated string containing the real path which
@@ -2483,17 +2463,12 @@ static char *realpath (const char *pathname, char *resolved_path)
 GEANY_API_SYMBOL
 gchar *utils_get_real_path(const gchar *file_name)
 {
-	if (file_name)
-	{
-		gsize len = get_path_max(file_name) + 1;
-		gchar *path = g_malloc0(len);
+	gchar *path = NULL;
 
-		if (realpath(file_name, path))
-			return path;
-		else
-			g_free(path);
-	}
-	return NULL;
+	if (file_name)
+		path = realpath(file_name, NULL);
+
+	return path;
 }
 
 
