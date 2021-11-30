@@ -772,7 +772,6 @@ const gchar *tm_parser_context_separator(TMParserType lang)
 
 		/* avoid confusion with other possible separators in group/section name */
 		case TM_PARSER_CONF:
-		case TM_PARSER_REST:
 			return ":::";
 
 		/* no context separator */
