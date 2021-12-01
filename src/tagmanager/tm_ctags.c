@@ -121,6 +121,15 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	/* redefine lang also for subparsers because the rest of Geany assumes that
 	 * tags from a single file are from a single language */
 	tag->lang = file->lang;
+	if (tag->scope)
+	{
+		gchar *new_scope = tm_parser_update_scope(tag->lang, tag->scope);
+		if (new_scope != tag->scope)
+		{
+			g_free(tag->scope);
+			tag->scope = new_scope;
+		}
+	}
 	return TRUE;
 }
 

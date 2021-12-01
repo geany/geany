@@ -1,5 +1,5 @@
 # format=tagmanager
 MyClassÃ1ŒTest÷0
 TestÃ256÷0
-someMethod1Ã16Õ()ŒTest\MyClass÷0
-someMethod2Ã16Õ()ŒTest\MyClass÷0
+someMethod1Ã16Õ()ŒTest::MyClass÷0
+someMethod2Ã16Õ()ŒTest::MyClass÷0
