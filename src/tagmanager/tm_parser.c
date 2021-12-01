@@ -770,11 +770,12 @@ const gchar *tm_parser_context_separator(TMParserType lang)
 		case TM_PARSER_ZEPHIR:
 			return "::";
 
-		/* avoid confusion with other possible separators in group/section name */
+		/* these parsers don't report nested scopes but default "." for scope separator
+		 * might appear in the text so use something more improbable */
 		case TM_PARSER_CONF:
+		case TM_PARSER_REST:
 			return ":::";
 
-		/* no context separator */
 		case TM_PARSER_TXT2TAGS:
 			return "\"\"";
 
