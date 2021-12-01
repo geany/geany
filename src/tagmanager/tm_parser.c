@@ -772,6 +772,7 @@ const gchar *tm_parser_context_separator(TMParserType lang)
 
 		/* these parsers don't report nested scopes but default "." for scope separator
 		 * might appear in the text so use something more improbable */
+		case TM_PARSER_ASCIIDOC:
 		case TM_PARSER_CONF:
 		case TM_PARSER_REST:
 			return ":::";
