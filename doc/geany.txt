@@ -2434,19 +2434,16 @@ Initial version
     The initial version of files you will be creating.
 
 Year
-    Specify a format for the {year} wildcard. You can use any conversion specifiers
-    which can be used with the ANSI C strftime function.  For details please see
-    http://man.cx/strftime.
+    Specify a format for the {year} wildcard. For a list of available conversion
+    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 Date
-    Specify a format for the {date} wildcard. You can use any conversion specifiers
-    which can be used with the ANSI C strftime function.  For details please see
-    http://man.cx/strftime.
+    Specify a format for the {date} wildcard. For a list of available conversion
+    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 Date & Time
-    Specify a format for the {datetime} wildcard. You can use any conversion specifiers
-    which can be used with the ANSI C strftime function.  For details please see
-    http://man.cx/strftime.
+    Specify a format for the {datetime} wildcard. For a list of available conversion
+    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 
 Keybinding preferences
@@ -2485,9 +2482,8 @@ Use base name of the printed file
     Don't use the entire path for the header, only the filename.
 
 Date format
-    How the date should be printed. You can use the same format
-    specifiers as in the ANSI C function strftime(). For details please
-    see http://man.cx/strftime.
+    How the date should be printed. For a list of available conversion
+    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 
 Various preferences
@@ -3213,8 +3209,8 @@ the date and time of printing. By default, the file name of the document
 with full path information is added to the header. If you prefer to add
 only the basename of the file(without any path information) you can set it
 in the preferences dialog. You can also adjust the format of the date and
-time added to the page header. The available conversion specifiers are the
-same as the ones which can be used with the ANSI C strftime function.
+time added to the page header. For a list of available conversion
+specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 All of these settings can also be changed in the print dialog just before
 actual printing is done.
@@ -4931,9 +4927,8 @@ version        The initial version of a new file.            file templates, fil
 **Date & time wildcards**
 
 The format for these wildcards can be changed in the preferences
-dialog, see `Template preferences`_. You can use any conversion
-specifiers which can be used with the ANSI C strftime function.
-For details please see http://man.cx/strftime.
+dialog, see `Template preferences`_. For a list of available conversion
+specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 ============== ============================================= =======================================
 Wildcard       Description                                   Available in

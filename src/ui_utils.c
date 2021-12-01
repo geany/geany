@@ -728,7 +728,7 @@ static void insert_date(GeanyDocument *doc, gint pos, const gchar *date_style)
 	{
 		gchar *str = dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
 				_("Enter here a custom date and time format. "
-				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
+				"For a list of available conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."),
 				ui_prefs.custom_date_format);
 		if (str)
 			SETPTR(ui_prefs.custom_date_format, str);

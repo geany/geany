@@ -276,7 +276,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	w->entry_print_dateformat = gtk_entry_new();
 	ui_entry_add_clear_icon(GTK_ENTRY(w->entry_print_dateformat));
 	gtk_box_pack_start(GTK_BOX(hbox10), w->entry_print_dateformat, TRUE, TRUE, 0);
-	gtk_widget_set_tooltip_text(w->entry_print_dateformat, _("Specify a format for the date and time stamp which is added to the page header on each page. You can use any conversion specifiers which can be used with the ANSI C strftime function."));
+	gtk_widget_set_tooltip_text(w->entry_print_dateformat, _("Specify a format for the date and time stamp which is added to the page header on each page. For a list of available conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."));
 	gtk_entry_set_text(GTK_ENTRY(w->entry_print_dateformat), printing_prefs.page_header_datefmt);
 
 	on_page_header_toggled(GTK_TOGGLE_BUTTON(w->check_print_pageheader), w);

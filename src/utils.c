@@ -720,12 +720,11 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 
 
 /**
- *  Retrieves a formatted date/time string from strftime().
- *  This function should be preferred to directly calling strftime() since this function
- *  works on UTF-8 encoded strings.
+ *  Retrieves a formatted date/time string from GDateTime.
+ *  This function works on UTF-8 encoded strings.
  *
- *  @param format The format string to pass to strftime(3). See the strftime(3)
- *                documentation for details, in UTF-8 encoding.
+ *  @param format The format string to pass to g_date_time_format, in UTF-8 encoding.
+                  See https://docs.gtk.org/glib/method.DateTime.format.html for details.
  *  @param time_to_use @nullable The date/time to use, in time_t format or @c NULL to use the current time.
  *
  *  @return A newly-allocated string, should be freed when no longer needed.
@@ -735,39 +734,22 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
 GEANY_API_SYMBOL
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 {
-	const struct tm *tm;
-	static gchar date[1024];
-	gchar *locale_format;
-	gsize len;
+	time_t unixtime;
+	gchar *datetime_formatted;
+	GDateTime *datetime;
 
 	g_return_val_if_fail(format != NULL, NULL);
 
-	if (! g_utf8_validate(format, -1, NULL))
-	{
-		locale_format = g_locale_from_utf8(format, -1, NULL, NULL, NULL);
-		if (locale_format == NULL)
-			return NULL;
-	}
-	else
-		locale_format = g_strdup(format);
-
 	if (time_to_use != NULL)
-		tm = localtime(time_to_use);
+		unixtime = *time_to_use;
 	else
-	{
-		time_t tp = time(NULL);
-		tm = localtime(&tp);
-	}
+		unixtime = time(NULL);
 
-	len = strftime(date, 1024, locale_format, tm);
-	g_free(locale_format);
-	if (len == 0)
-		return NULL;
+	datetime = g_date_time_new_from_unix_local(unixtime);
+	datetime_formatted = g_date_time_format(datetime, format);
 
-	if (! g_utf8_validate(date, len, NULL))
-		return g_locale_to_utf8(date, len, NULL, NULL, NULL);
-	else
-		return g_strdup(date);
+	g_date_time_unref(datetime);
+	return datetime_formatted;
 }
 
 
