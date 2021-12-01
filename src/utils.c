@@ -2429,7 +2429,7 @@ static char *realpath(const char *pathname, char *resolved_path)
 
 	if (resolved_path != NULL)
 	{
-		size = GetFullPathName(pathname, PATH_MAX, resolved_path, NULL);
+		size = GetFullPathNameA(pathname, PATH_MAX, resolved_path, NULL);
 		if (size > PATH_MAX)
 			return NULL;
 		else
@@ -2437,9 +2437,9 @@ static char *realpath(const char *pathname, char *resolved_path)
 	}
 	else
 	{
-		size = GetFullPathName(pathname, 0, NULL, NULL);
+		size = GetFullPathNameA(pathname, 0, NULL, NULL);
 		resolved_path = g_new0(char, size);
-		GetFullPathName(pathname, size, resolved_path, NULL);
+		GetFullPathNameA(pathname, size, resolved_path, NULL);
 		return resolved_path;
 	}
 }
