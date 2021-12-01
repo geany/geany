@@ -826,7 +826,6 @@ const gchar *tm_parser_context_separator(TMParserType lang)
 		case TM_PARSER_C:	/* for C++ .h headers or C structs */
 		case TM_PARSER_CPP:
 		case TM_PARSER_GLSL:	/* for structs */
-		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_RUST:
