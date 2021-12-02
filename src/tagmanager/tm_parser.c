@@ -873,6 +873,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_D:
 		case TM_PARSER_FERITE:
 		case TM_PARSER_GLSL:
+		case TM_PARSER_GO:
 		case TM_PARSER_JAVA:
 		case TM_PARSER_JAVASCRIPT:
 		case TM_PARSER_JSON:
@@ -894,7 +895,6 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_ERLANG:
 		case TM_PARSER_F77:
 		case TM_PARSER_FORTRAN:
-		case TM_PARSER_GO:
 		case TM_PARSER_OBJC:
 		case TM_PARSER_REST:
 		/* Other parsers don't use scope at all (or should be somewhere above) */
