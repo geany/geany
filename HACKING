@@ -126,10 +126,18 @@ the existing elements stay in place - this will keep the ABI stable.
 
 Keeping the plugin ABI stable
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Before the 1.0 release series, the ABI can change when necessary, and
-even the API can change. An ABI change just means that all plugins will
-not load and they must be rebuilt. An API change means that some plugins
-might not build correctly.
+In general the ABI changes as little as we can manage. The ABI number
+must match exactly between Geany and plugins, so an ABI change breaks
+all plugins until they are re-compiled. But sometimes it is absolutely
+necessary. Removing a feature or significantly changing the semantics
+of an existing feature require an ABI change since existing plugins may
+no longer work with the modified version of Geany.
+
+The API identifying number is increased whenever anything is added to
+the API so plugins can test if the feature is available. The API number
+required by a plugin needs only to be lower than the API Geany provides,
+so an increase in API number without a change in ABI will not stop
+plugins that need a lower number from working.
 
 If you're reordering or changing existing elements of structs that are
 used as part of the plugin API, you must increment GEANY_ABI_VERSION

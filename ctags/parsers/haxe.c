@@ -2,9 +2,12 @@
  *       Copyright (c) 2007, Ritchie Turner
  *
  *       This source code is released for free distribution under the terms of the
- *       GNU General Public License.
+ *       GNU General Public License version 2 or (at your opinion) any later version.
  *
- *              borrowed from PHP
+ *       This module contains functions for generating tags for Haxe files
+ *       (https://en.wikipedia.org/wiki/Haxe).
+ *
+ *       Borrowed from PHP.
  */
 
 /*
@@ -212,6 +215,3 @@ extern parserDefinition* HaxeParser (void)
 	/*def->initialize = initialize;*/
 	return def;
 }
-
-
-

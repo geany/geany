@@ -291,7 +291,6 @@ static TMParserMapEntry map_JAVASCRIPT[] = {
 	{'M', tm_tag_undef_t},
 };
 
-/* not in universal-ctags */
 static TMParserMapEntry map_HASKELL[] = {
 	{'t', tm_tag_typedef_t},
 	{'c', tm_tag_macro_t},
@@ -324,7 +323,6 @@ static TMParserMapEntry map_FREEBASIC[] = {
 	{'g', tm_tag_externvar_t},
 };
 
-/* not in universal-ctags */
 static TMParserMapEntry map_HAXE[] = {
 	{'m', tm_tag_method_t},
 	{'c', tm_tag_class_t},
@@ -339,7 +337,9 @@ static TMParserMapEntry map_REST[] = {
 	{'s', tm_tag_member_t},
 	{'S', tm_tag_macro_t},
 	{'t', tm_tag_variable_t},
+	{'C', tm_tag_undef_t},
 	{'T', tm_tag_undef_t},
+	{'d', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_HTML[] = {
@@ -419,7 +419,6 @@ static TMParserMapEntry map_ACTIONSCRIPT[] = {
 	{'x', tm_tag_other_t},
 };
 
-/* not in universal-ctags */
 static TMParserMapEntry map_NSIS[] = {
 	{'s', tm_tag_namespace_t},
 	{'f', tm_tag_function_t},
@@ -437,15 +436,12 @@ static TMParserMapEntry map_MARKDOWN[] = {
 	{'v', tm_tag_variable_t},
 };
 
-/* not in universal-ctags */
 static TMParserMapEntry map_TXT2TAGS[] = {
-	{'m', tm_tag_member_t},
+	{'s', tm_tag_member_t},
 };
 
-/* not in universal-ctags */
 static TMParserMapEntry map_ABC[] = {
-	{'m', tm_tag_member_t},
-	{'s', tm_tag_struct_t},
+	{'s', tm_tag_member_t},
 };
 
 static TMParserMapEntry map_VERILOG[] = {
@@ -503,11 +499,10 @@ static TMParserMapEntry map_ASCIIDOC[] = {
 	{'a', tm_tag_undef_t},
 };
 
-/* not in universal-ctags */
 static TMParserMapEntry map_ABAQUS[] = {
-	{'c', tm_tag_class_t},
-	{'m', tm_tag_member_t},
-	{'n', tm_tag_interface_t},
+	{'p', tm_tag_class_t},
+	{'a', tm_tag_member_t},
+	{'s', tm_tag_interface_t},
 };
 
 static TMParserMapEntry map_RUST[] = {
@@ -834,15 +829,15 @@ const gchar *tm_parser_context_separator(TMParserType lang)
 		case TM_PARSER_ZEPHIR:
 			return "::";
 
-		/* avoid confusion with other possible separators in group/section name */
+		case TM_PARSER_TXT2TAGS:
+			return "\"\"";
+
+		/* these parsers don't report nested scopes but default "." for scope separator
+		 * might appear in the text so use something more improbable */
+		case TM_PARSER_ASCIIDOC:
 		case TM_PARSER_CONF:
 		case TM_PARSER_REST:
-			return ":::";
-
-		/* no context separator */
-		case TM_PARSER_ASCIIDOC:
-		case TM_PARSER_TXT2TAGS:
-			return "\x03";
+			return "\x3";
 
 		default:
 			return ".";
