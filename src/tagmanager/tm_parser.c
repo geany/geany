@@ -813,6 +813,8 @@ gchar *tm_parser_update_scope(TMParserType lang, gchar *scope)
 	{
 		case TM_PARSER_PHP:
 		case TM_PARSER_ZEPHIR:
+			/* PHP parser uses two different scope separators but this would
+			 * complicate things in Geany so make sure there's just one type */
 			return replace_string_if_present(scope, "\\", "::");
 	}
 	return scope;
