@@ -125,6 +125,8 @@ TMTagType tm_parser_get_subparser_type(TMParserType lang, TMParserType sublang, 
 
 gchar *tm_parser_update_scope(TMParserType lang, gchar *scope);
 
+gboolean tm_parser_enable_role(TMParserType lang, gchar kind);
+
 const gchar *tm_parser_context_separator(TMParserType lang);
 
 gboolean tm_parser_has_full_context(TMParserType lang);

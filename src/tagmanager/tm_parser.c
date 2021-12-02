@@ -816,6 +816,21 @@ gchar *tm_parser_update_scope(TMParserType lang, gchar *scope)
 }
 
 
+/* whether or not to enable ctags roles for the given language and kind */
+gboolean tm_parser_enable_role(TMParserType lang, gchar kind)
+{
+	switch (lang)
+	{
+		case TM_PARSER_GO:
+			/* 'p' is used both for package definition tags and imported package
+			 * tags and we can't tell which is which just by kind. By disabling
+			 * roles for this kind, we only get package definition tags. */
+			return kind == 'p' ? FALSE : TRUE;
+	}
+	return TRUE;
+}
+
+
 const gchar *tm_parser_context_separator(TMParserType lang)
 {
 	switch (lang)

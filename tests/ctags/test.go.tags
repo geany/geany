@@ -33,7 +33,6 @@ f2Ì16Í()ÎmainÖ0
 f3Ì16Í()Îmain.T1Ö0Ï(a, b int)
 f4Ì16Í(a func () func ())Îmain.T7Ö0Ï(func (), int)
 f5Ì16Í()ÎmainÖ0
-fmtÌ256Ö0
 gÌ16384ÎmainÖ0Ïint
 hÌ16384ÎmainÖ0Ïint
 mainÌ16Í()ÎmainÖ0
