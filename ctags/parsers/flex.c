@@ -189,7 +189,7 @@ static kindDefinition FlexKinds [] = {
 	{ true,  'm', "method",		  "methods"			   },
 	{ true,  'p', "property",	  "properties"		   },
 	{ true,  'v', "variable",	  "global variables"   },
-	{ /*false*/ true, 'l', "localvar",	  "local variables"   },
+	{ false, 'l', "localvar",	  "local variables"   },
 	{ true,  'C', "constant",	  "constants"		   },
 	{ true,  'I', "import",		  "imports",
 	  .referenceOnly = true, ATTACH_ROLES (FlexImportRoles) },
@@ -322,10 +322,8 @@ static void makeConstTag (tokenInfo *const token, const flexKind kind)
 		tagEntryInfo e;
 		int role = ROLE_DEFINITION_INDEX;
 
-		/* Geany diff: reftags are not enabled but should be
 		if (kind == FLEXTAG_IMPORT)
 			role = FLEX_IMPORT_ROLE_IMPORTED;
-		*/
 
 		initRefTagEntry (&e, name, kind, role);
 
@@ -569,15 +567,7 @@ getNextChar:
 					  {
 						  if (d == '*')
 						  {
-							  do
-							  {
-								  skipToCharacterInInputFile ('*');
-								  c = getcFromInputFile ();
-								  if (c == '/')
-									  break;
-								  else
-									  ungetcToInputFile (c);
-							  } while (c != EOF);
+							  skipToCharacterInInputFile2('*', '/');
 							  goto getNextChar;
 						  }
 						  else if (d == '/')	/* is this the start of a comment?  */
@@ -1310,7 +1300,7 @@ static void parseFunction (tokenInfo *const token)
 
 	deleteToken (name);
 }
- 
+
 /* Parses a block surrounded by curly braces.
  * @p parentScope is the scope name for this block, or NULL for unnamed scopes */
 static bool parseBlock (tokenInfo *const token, const vString *const parentScope)

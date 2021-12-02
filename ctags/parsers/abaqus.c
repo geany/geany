@@ -1,9 +1,11 @@
 /*
+ *   Copyright (c) 2013, Baptiste Pierrat
+ *
  *   This source code is released for free distribution under the terms of the
- *   GNU General Public License.
+ *   GNU General Public License version 2 or (at your opinion) any later version.
  *
  *   This module contains functions for generating tags for source files
- *   for inp files (Abaqus).
+ *   for Abaqus inp files (https://en.wikipedia.org/wiki/Abaqus).
  */
 
 /*
@@ -29,9 +31,9 @@ typedef enum {
 } AbaqusKind;
 
 static kindDefinition AbaqusKinds[] = {
-     { true, 'c', "class",      "Parts" },
-     { true, 'm', "member",      "Assembly" },
-     { true, 'n', "namespace",      "Steps" }
+     { true, 'p', "part",     "Parts" },
+     { true, 'a', "assembly", "Assembly" },
+     { true, 's', "step",     "Steps" }
 };
 
 /*

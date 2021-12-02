@@ -1,14 +1,15 @@
 /*
- *   Copyright (c) 2000-2001, Jérôme Plût
- *   Copyright (c) 2006, Enrico Tröger
- *   Copyright (c) 2019, Mirco Schönfeld
+ *	 Copyright (c) 2008, David Fishburn
+ *	 Copyright (c) 2012, Jan Larres
+ *	 Copyright (c) 2019, Mirco Schönfeld
  *
- *   This source code is released for free distribution under the terms of the
- *   GNU General Public License.
+ *	 This source code is released for free distribution under the terms of the
+ *	 GNU General Public License version 2 or (at your option) any later version.
  *
- *   This module contains functions for generating tags for source files
- *   for the BibTex formatting system. 
- *   https://en.wikipedia.org/wiki/BibTeX
+ *	 This module contains functions for generating identifiers of entries of Bibtex language files.
+ *
+ *	 BibTex language "reference":
+ *		 https://en.wikipedia.org/wiki/BibTeX
  */
 
 /*
@@ -32,7 +33,7 @@
 #define isType(token,t)		(bool) ((token)->type == (t))
 #define isKeyword(token,k)	(bool) ((token)->keyword == (k))
 #define isIdentChar(c) \
-	(isalpha (c) || isdigit (c) || (c) == '_' || (c) == '-' || (c) == '+')
+	(isalpha (c) || isdigit (c) || (c) == '_' || (c) == '-' || (c) == '+' || (c) == ':')
 
 /*
  *	 DATA DECLARATIONS
@@ -139,7 +140,7 @@ static const keywordTable BibKeywordTable [] = {
 	{ "techreport",	  KEYWORD_techreport		},
 	{ "unpublished",	KEYWORD_unpublished		}
 };
-  
+
 /*
  *	 FUNCTION DEFINITIONS
  */
@@ -322,7 +323,6 @@ static bool parseTag (tokenInfo *const token, bibKind kind)
 			goto out;
 		}
 	}
-  
 
  out:
 	deleteToken (name);
