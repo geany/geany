@@ -891,6 +891,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_JAVA:
 		case TM_PARSER_JAVASCRIPT:
 		case TM_PARSER_JSON:
+		case TM_PARSER_LUA:
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_PYTHON:
