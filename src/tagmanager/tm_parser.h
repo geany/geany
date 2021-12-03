@@ -127,6 +127,8 @@ gchar *tm_parser_update_scope(TMParserType lang, gchar *scope);
 
 gboolean tm_parser_enable_role(TMParserType lang, gchar kind);
 
+gboolean tm_parser_enable_kind(TMParserType lang, gchar kind);
+
 const gchar *tm_parser_context_separator(TMParserType lang);
 
 gboolean tm_parser_has_full_context(TMParserType lang);

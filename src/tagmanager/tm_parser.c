@@ -831,6 +831,20 @@ gboolean tm_parser_enable_role(TMParserType lang, gchar kind)
 }
 
 
+/* whether or not to enable ctags kinds for the given language */
+gboolean tm_parser_enable_kind(TMParserType lang, gchar kind)
+{
+	switch (lang)
+	{
+		case TM_PARSER_PYTHON:
+			/* 'z' currently causes incorrect parsing of cython arguments.
+			 * This can be removed if our unit tests pass with 'z' enabled. */
+			return kind == 'z' ? FALSE : TRUE;
+	}
+	return TRUE;
+}
+
+
 const gchar *tm_parser_context_separator(TMParserType lang)
 {
 	switch (lang)

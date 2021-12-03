@@ -76,8 +76,11 @@ static void enable_kinds_and_roles()
 		for (kind = 0; kind < kind_num; kind++)
 		{
 			kindDefinition *def = getLanguageKind(lang, kind);
-			enableKind(def, true);
-			enable_roles(lang, kind);
+			gboolean should_enable = tm_parser_enable_kind(lang, def->letter);
+
+			enableKind(def, should_enable);
+			if (should_enable)
+				enable_roles(lang, kind);
 		}
 	}
 }
