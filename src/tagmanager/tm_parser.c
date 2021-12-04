@@ -834,14 +834,21 @@ gboolean tm_parser_enable_role(TMParserType lang, gchar kind)
 /* whether or not to enable ctags kinds for the given language */
 gboolean tm_parser_enable_kind(TMParserType lang, gchar kind)
 {
-	switch (lang)
+	TMParserMap *map;
+	guint i;
+
+	if (lang >= TM_PARSER_COUNT)
+		/* Fatal error but tm_parser_verify_type_mappings() will provide
+		 * better message later */
+		return FALSE;
+
+	map = &parser_map[lang];
+	for (i = 0; i < map->size; i++)
 	{
-		case TM_PARSER_PYTHON:
-			/* 'z' currently causes incorrect parsing of cython arguments.
-			 * This can be removed if our unit tests pass with 'z' enabled. */
-			return kind == 'z' ? FALSE : TRUE;
+		if (map->entries[i].kind == kind)
+			return map->entries[i].type != tm_tag_undef_t;
 	}
-	return TRUE;
+	return FALSE;
 }
 
 
