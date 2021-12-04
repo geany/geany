@@ -195,7 +195,7 @@ void project_new(gboolean from_folder)
 	e.file_name = gtk_entry_new();
 	gtk_entry_set_activates_default(GTK_ENTRY(e.file_name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e.file_name));
-	gtk_entry_set_width_chars(GTK_ENTRY(e.file_name), 30);
+	gtk_entry_set_width_chars(GTK_ENTRY(e.file_name), 40);
 	tooltip = g_strdup_printf(
 		_("Path of the file representing the project and storing its settings. "
 		"It should normally have the \"%s\" extension."), "."GEANY_PROJECT_EXT);
