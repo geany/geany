@@ -365,6 +365,8 @@ gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo);
 
 gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc);
 
+gchar *ui_get_project_directory(const gchar *path);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

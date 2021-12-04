@@ -1387,7 +1387,13 @@ void on_previous_message1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_project_new1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	project_new();
+	project_new(FALSE);
+}
+
+
+void on_project_new_from_folder1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	project_new(TRUE);
 }
 
 
