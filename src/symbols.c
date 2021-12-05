@@ -51,6 +51,7 @@
 #include "support.h"
 #include "tm_parser.h"
 #include "tm_tag.h"
+#include "tm_ctags.h"
 #include "ui_utils.h"
 #include "utils.h"
 
@@ -116,7 +117,7 @@ symbol_menu;
 
 static void load_user_tags(GeanyFiletypeID ft_id);
 
-/* get the tags_ignore list, exported by tagmanager's geany.c */
+/* get the tags_ignore list, exported by geany_lcpp.c */
 extern gchar **c_tags_ignore;
 
 /* ignore certain tokens when parsing C-like syntax.
@@ -128,11 +129,22 @@ static void load_c_ignore_tags(void)
 
 	if (g_file_get_contents(path, &content, NULL, NULL))
 	{
+		gchar **line;
+
 		/* historically we ignore the glib _DECLS for tag generation */
 		SETPTR(content, g_strconcat("G_BEGIN_DECLS G_END_DECLS\n", content, NULL));
 
 		g_strfreev(c_tags_ignore);
+		tm_ctags_clear_ignore_symbols();
+
+		/* for old c.c parser */
 		c_tags_ignore = g_strsplit_set(content, " \n\r", -1);
+		/* for new cxx parser */
+		foreach_strv(line, c_tags_ignore)
+		{
+			tm_ctags_add_ignore_symbol(*line);
+		}
+
 		g_free(content);
 	}
 	g_free(path);
