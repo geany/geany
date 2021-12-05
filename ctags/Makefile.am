@@ -43,7 +43,7 @@ parsers = \
 	parsers/geany_matlab.c \
 	parsers/nsis.c \
 	parsers/objc.c \
-	parsers/geany_pascal.c \
+	parsers/pascal.c \
 	parsers/perl.c \
 	parsers/perl.h \
 	parsers/php.c \
