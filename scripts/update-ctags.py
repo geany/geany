@@ -13,22 +13,25 @@ srcdir = os.path.abspath(sys.argv[1])
 dstdir = os.path.abspath(sys.argv[2])
 
 os.chdir(dstdir + '/parsers')
-parser_dst_files = glob.glob('**/*.c') + glob.glob('**/*.h')
+parser_dst_files = glob.glob('*.c') + glob.glob('*.h')
 parser_dst_files = list(filter(lambda x: not x.startswith('geany_'), parser_dst_files))
 cxx_parser_dst_files = glob.glob('cxx/*.c') + glob.glob('cxx/*.h')
 for f in cxx_parser_dst_files:
     os.remove(f)
 
-os.chdir(srcdir)
+os.chdir(srcdir + '/parsers')
 print('Copying parsers... ({} files)'.format(len(parser_dst_files)))
 for f in parser_dst_files:
-    if os.path.exists('parsers/' + f):
-        shutil.copy('parsers/' + f, dstdir + '/parsers/' + f)
-    elif os.path.exists(f):
-        shutil.copy(f, dstdir + '/parsers/' + f)
-    else:
-        print('Error: Could not find file ' + f + '!')
-        sys.exit(1)
+    shutil.copy(f, dstdir + '/parsers')
+
+os.chdir(dstdir + '/peg')
+peg_dst_files = glob.glob('*.c') + glob.glob('*.h')
+peg_dst_files = list(filter(lambda x: not x.startswith('geany_'), peg_dst_files))
+os.chdir(srcdir + '/peg')
+os.system('make -C {} peg/{}'.format(srcdir, ' peg/'.join(peg_dst_files)))
+print('Copying peg parsers... ({} files)'.format(len(peg_dst_files)))
+for f in peg_dst_files:
+    shutil.copy(f, dstdir + '/peg')
 
 cxx_parser_src_files = glob.glob('cxx/*.c') + glob.glob('cxx/*.h')
 print('Copying cxx parser files... ({} files)'.format(len(cxx_parser_src_files)))
