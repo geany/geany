@@ -122,11 +122,11 @@ parsers = \
 	parsers/typescript.c \
 	parsers/verilog.c \
 	parsers/vhdl.c \
-	parsers/peg/peg_common.h \
-	parsers/peg/kotlin.c \
-	parsers/peg/kotlin.h \
-	parsers/peg/kotlin_post.h \
-	parsers/peg/kotlin_pre.h
+	peg/peg_common.h \
+	peg/kotlin.c \
+	peg/kotlin.h \
+	peg/kotlin_post.h \
+	peg/kotlin_pre.h
 
 # skip cmd.c and mini-geany.c which define main()
 # also skip lregex-pcre2.c which we don't use
