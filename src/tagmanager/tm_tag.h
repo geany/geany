@@ -109,6 +109,7 @@ typedef struct TMTag
 	char access; /**< Access type (public/protected/private/etc.) */
 	char impl; /**< Implementation (e.g. virtual) */
 	TMParserType lang; /* Programming language of the file */
+	gchar kind_letter; /* Kind letter from ctags */
 } TMTag;
 
 /* The GType for a TMTag */

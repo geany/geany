@@ -383,9 +383,10 @@ static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *f
 				const gchar *kind = value ? value : key;
 
 				if (kind[0] && kind[1])
-					tag->type = tm_parser_get_tag_type(tm_ctags_get_kind_from_name(kind, lang), lang);
+					tag->kind_letter = tm_ctags_get_kind_from_name(kind, lang);
 				else
-					tag->type = tm_parser_get_tag_type(*kind, lang);
+					tag->kind_letter = *kind;
+				tag->type = tm_parser_get_tag_type(tag->kind_letter, lang);
 			}
 			else if (0 == strcmp(key, "inherits")) /* comma-separated list of classes this class inherits from */
 			{
