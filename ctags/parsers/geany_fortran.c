@@ -190,6 +190,7 @@ typedef struct sTokenInfo {
 	struct sTokenInfo *secondary;
 	unsigned long lineNumber;
 	MIOPos filePosition;
+	bool anonymous;
 } tokenInfo;
 
 /*
@@ -430,6 +431,7 @@ static tokenInfo *newToken (void)
 	token->secondary    = NULL;
 	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
+	token->anonymous    = false;
 
 	return token;
 }
@@ -447,6 +449,7 @@ static tokenInfo *newAnonTokenFrom (tokenInfo *const token, const char *type)
 {
 	char buffer[64];
 	tokenInfo *result = newTokenFrom (token);
+	result->anonymous = true;
 	sprintf (buffer, "%s#%u", type, contextual_fake_count++);
 	vStringClear (result->string);
 	vStringCatS (result->string, buffer);
@@ -491,6 +494,9 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 
 		if (token->tag == TAG_COMMON_BLOCK)
 			e.lineNumberEntry = canUseLineNumberAsLocator();
+
+		if (token->anonymous)
+			markTagExtraBit (&e, XTAG_ANONYMOUS);
 
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
