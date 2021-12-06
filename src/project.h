@@ -67,9 +67,15 @@ void project_init(void);
 void project_finalize(void);
 
 
-void project_new(void);
+void project_new_with_dialog(void);
+
+gboolean project_new(gchar const *name, gchar const *file_name, gchar const *base_path);
 
 void project_open(void);
+
+void project_open_folder(void);
+
+void project_save_as(void);
 
 gboolean project_close(gboolean open_default);
 

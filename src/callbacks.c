@@ -1340,13 +1340,25 @@ void on_previous_message1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_project_new1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	project_new();
+	project_new_with_dialog();
 }
 
 
 void on_project_open1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	project_open();
+}
+
+
+void on_project_open_folder1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	project_open_folder();
+}
+
+
+void on_project_save_as1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	project_save_as();
 }
 
 

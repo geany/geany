@@ -7977,11 +7977,29 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkImageMenuItem" id="project_open_folder1">
+                            <property name="label" translatable="yes">Open _Folder...</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="use-underline">True</property>
+                            <signal name="activate" handler="on_project_open_folder1_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkMenuItem" id="recent_projects1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">_Recent Projects</property>
                             <property name="use_underline">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImageMenuItem" id="project_save_as1">
+                            <property name="label" translatable="yes">Save _As...</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="use-underline">True</property>
+                            <signal name="activate" handler="on_project_save_as1_activate" swapped="no"/>
                           </object>
                         </child>
                         <child>

@@ -91,6 +91,9 @@ static void apply_editor_prefs(void);
 static void init_stash_prefs(void);
 static void destroy_project(gboolean open_default);
 
+static GeanyProject *create_project(void);
+static void update_ui(void);
+
 
 #define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
 #define SHOW_ERR1(args, more) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args, more)
@@ -137,11 +140,171 @@ static gboolean handle_current_session(void)
 	return TRUE;
 }
 
+/* name, file_name, and base_path must not be NULL */
+/* file_name will not be overwritten if it exists */
+/* base_path will not be created if it does not exist */
+/* return FALSE on failure */
+/* TODO: Add error codes so caller can respond appropriately. */
+gboolean project_new(gchar const *name, gchar const *file_name, gchar const *base_path) {
+	gchar *locale_filename;
+	gsize name_len;
+	gint err_code = 0;
+	GeanyProject *p;
+
+	g_return_val_if_fail(name != NULL, FALSE);
+	g_return_val_if_fail(file_name != NULL, FALSE);
+	g_return_val_if_fail(base_path != NULL, FALSE);
+
+	name_len = strlen(name);
+	g_return_val_if_fail(name_len != 0, FALSE);
+	g_return_val_if_fail(name_len < MAX_NAME_LEN, FALSE);
+
+	locale_filename = utils_get_locale_from_utf8(file_name);
+	if (!EMPTY(base_path))
+	{	/* check whether the given directory actually exists */
+		gchar *locale_path = utils_get_locale_from_utf8(base_path);
+
+		if (! g_path_is_absolute(locale_path))
+		{	/* relative base path, so add base dir of project file name */
+			gchar *dir = g_path_get_dirname(locale_filename);
+			SETPTR(locale_path, g_build_filename(dir, locale_path, NULL));
+			g_free(dir);
+		}
+
+		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+		{	/* base_path is not a directory or does not exist */
+			err_code = 1;
+			g_free(locale_path);
+			g_return_val_if_fail(err_code == 0, FALSE);
+		}
+		g_free(locale_path);
+	}
+	/* finally test whether the given project file can be written */
+	if ((err_code = utils_is_file_writable(locale_filename)) != 0 ||
+		(err_code = g_file_test(locale_filename, G_FILE_TEST_IS_DIR) ? EISDIR : 0) != 0)
+	{
+		g_free(locale_filename);
+		g_return_val_if_fail(err_code == 0, FALSE);
+	}
+	else if (err_code = g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+	{	/* project file already exists */
+		err_code = 1;
+		g_free(locale_filename);
+		g_return_val_if_fail(err_code == 0, FALSE);
+	}
+	g_free(locale_filename);
+
+	if (app->project != NULL)
+	{
+		project_close(FALSE);
+	}
+	create_project();
+	p = app->project;
+
+	SETPTR(p->name, g_strdup(name));
+	SETPTR(p->file_name, g_strdup(file_name));
+	SETPTR(p->base_path, g_strdup(base_path));
+
+	update_ui();
+
+	return TRUE;
+}
+
+
+void project_open_folder(void)
+{
+	GtkWidget *dialog;
+	gchar *base_path = NULL;
+
+	dialog = gtk_file_chooser_dialog_new(_("Choose Project Base Path"),
+		NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+		NULL);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		base_path = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+	}
+
+	if (base_path && *base_path)
+	{
+		open_folder(base_path);
+		g_free(base_path);
+	}
+
+	gtk_widget_destroy(dialog);
+}
+
+
+void project_save_as(void)
+{
+	g_return_if_fail(app->project != NULL);
+
+	gchar *filename = NULL;
+
+#ifdef G_OS_WIN32
+	gchar *path = win32_show_project_open_dialog(e->dialog, _("Choose Project Filename"),
+						app->project->file_name, TRUE, TRUE);
+	if (path != NULL)
+	{
+		filename = path;
+	}
+#else
+	GtkWidget *dialog;
+	gchar *locale_dir, *name;
+
+	/* initialise the dialog */
+	dialog = gtk_file_chooser_dialog_new(_("Choose Project Filename"), NULL,
+					GTK_FILE_CHOOSER_ACTION_SAVE,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_widget_set_name(dialog, "GeanyDialogProject");
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
+	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+
+	locale_dir = g_path_get_dirname(app->project->file_name);
+	name = g_path_get_basename(app->project->file_name);
+
+	if (g_file_test(locale_dir, G_FILE_TEST_EXISTS)
+		&& !g_str_has_prefix(locale_dir, g_get_user_cache_dir()))
+	{
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_dir);
+	}
+	else
+	{
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), local_prefs.project_file_path);
+	}
+
+	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), name);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		gchar *tmp_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		filename = utils_get_utf8_from_locale(tmp_filename);
+		g_free(tmp_filename);
+	}
+	gtk_widget_destroy(dialog);
+#endif
+
+	if (filename && *filename)
+	{
+		g_free(app->project->file_name);
+		app->project->file_name = filename;
+	}
+
+	/* save project session files, etc */
+	if (!write_config())
+		g_warning("Project file \"%s\" could not be written", app->project->file_name);
+}
+
 
 /* TODO: this should be ported to Glade like the project preferences dialog,
  * then we can get rid of the PropertyDialogElements struct altogether as
  * widgets pointers can be accessed through ui_lookup_widget(). */
-void project_new(void)
+void project_new_with_dialog(void)
 {
 	GtkWidget *vbox;
 	GtkWidget *table;
@@ -694,6 +857,7 @@ static GeanyProject *create_project(void)
 	app->project = project;
 	return project;
 }
+
 
 
 /* Verifies data for New & Properties dialogs.

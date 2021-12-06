@@ -827,6 +827,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 	if (filename == NULL)
 		return FALSE;
 
+	/* resume normal file handling */
 	get_line_and_column_from_filename(filename, &line, &column);
 	if (line >= 0)
 		cl_options.goto_line = line;
@@ -862,6 +863,64 @@ gboolean main_handle_filename(const gchar *locale_filename)
 }
 
 
+gboolean open_folder(gchar *folder_name)
+{
+	gchar *prj_name, *prj_basepath;
+	gchar *prj_file_basename, *prj_file_path;
+	gchar *prj_cache_basename, *prj_cache_path, *prj_cache_file;
+	GChecksum* md5calc;
+
+	prj_basepath = utils_get_real_path(folder_name);
+	prj_name = g_path_get_basename(prj_basepath);
+	prj_file_basename = g_strconcat(prj_name, ".geany", NULL);
+	prj_file_path = g_build_filename(prj_basepath, prj_file_basename, NULL);
+
+	/* project file for user cache folder */
+	md5calc = g_checksum_new(G_CHECKSUM_MD5);
+	g_checksum_update(md5calc, (const guchar*)prj_basepath, -1);
+	prj_cache_basename = g_strconcat(prj_name, "_", g_checksum_get_string(md5calc), ".geany", NULL);
+	g_checksum_free(md5calc);
+
+	/* make sure cache folder exists */
+	prj_cache_path = g_build_filename(g_get_user_cache_dir(), "geany", "folders", NULL);
+	utils_mkdir(prj_cache_path, TRUE);
+	prj_cache_file = g_build_filename(prj_cache_path, prj_cache_basename, NULL);
+
+	if (g_file_test(prj_file_path, G_FILE_TEST_IS_REGULAR))
+	{	/* open project inside folder */
+		if (app->project != NULL)
+		{	/* cannot open new project if project already open */
+			project_close(FALSE);
+		}
+		main_load_project_from_command_line(prj_file_path, TRUE);
+	}
+	else if (g_file_test(prj_cache_file, G_FILE_TEST_IS_REGULAR))
+	{	/* open project in cache folder */
+		if (app->project != NULL)
+		{	/* cannot open new project if project already open */
+			project_close(FALSE);
+		}
+		main_load_project_from_command_line(prj_cache_file, TRUE);
+	}
+	else if (project_prefs.project_file_in_basedir)
+	{	/* create project file in folder */
+		project_new(prj_name, prj_file_path, ".");
+	}
+	else
+	{	/* create project file in cache folder */
+		project_new(prj_name, prj_cache_file, prj_basepath);
+	}
+
+	g_free(prj_name);
+	g_free(prj_basepath);
+	g_free(prj_file_basename);
+	g_free(prj_file_path);
+	g_free(prj_cache_basename);
+	g_free(prj_cache_path);
+	g_free(prj_cache_file);
+}
+
+
 /* open files from command line */
 static void open_cl_files(gint argc, gchar **argv)
 {
@@ -871,8 +930,11 @@ static void open_cl_files(gint argc, gchar **argv)
 	{
 		gchar *filename = main_get_argv_filename(argv[i]);
 
+		// open folder as project
+		// remaining files on command line will be added to project
 		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
 		{
+			open_folder(filename);
 			g_free(filename);
 			continue;
 		}

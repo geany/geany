@@ -76,6 +76,8 @@ void main_load_project_from_command_line(const gchar *locale_filename, gboolean 
 
 gint main_lib(gint argc, gchar **argv);
 
+gboolean open_folder(gchar *folder_name);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS
