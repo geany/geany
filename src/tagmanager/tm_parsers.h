@@ -24,7 +24,7 @@
 	PythonParser, \
 	TexParser, \
 	AsmParser, \
-	ConfParser, \
+	IniconfParser, \
 	SqlParser, \
 	DocBookParser, \
 	ErlangParser, \

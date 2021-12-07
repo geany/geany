@@ -49,7 +49,22 @@ static bool nonfatal_error_printer(const errorSelection selection,
 }
 
 
-static void enable_all_lang_kinds()
+static void enable_roles(const TMParserType lang, guint kind)
+{
+	unsigned int c = countLanguageRoles(lang, kind);
+	kindDefinition *def = getLanguageKind(lang, kind);
+	gchar kind_letter = def->letter;
+
+	for (unsigned int i = 0; i < c; i++)
+	{
+		roleDefinition* rdef = getLanguageRole(lang, kind, (int)i);
+		gboolean should_enable = tm_parser_enable_role(lang, kind_letter);
+		enableRole(rdef, should_enable);
+	}
+}
+
+
+static void enable_kinds_and_roles()
 {
 	TMParserType lang;
 
@@ -61,7 +76,11 @@ static void enable_all_lang_kinds()
 		for (kind = 0; kind < kind_num; kind++)
 		{
 			kindDefinition *def = getLanguageKind(lang, kind);
-			enableKind(def, true);
+			gboolean should_enable = tm_parser_enable_kind(lang, def->letter);
+
+			enableKind(def, should_enable);
+			if (should_enable)
+				enable_roles(lang, kind);
 		}
 	}
 }
@@ -121,6 +140,15 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	/* redefine lang also for subparsers because the rest of Geany assumes that
 	 * tags from a single file are from a single language */
 	tag->lang = file->lang;
+	if (tag->scope)
+	{
+		gchar *new_scope = tm_parser_update_scope(tag->lang, tag->scope);
+		if (new_scope != tag->scope)
+		{
+			g_free(tag->scope);
+			tag->scope = new_scope;
+		}
+	}
 	return TRUE;
 }
 
@@ -217,7 +245,7 @@ void tm_ctags_init(void)
 	enableXtag(XTAG_REFERENCE_TAGS, true);
 
 	/* some kinds we are interested in are disabled by default */
-	enable_all_lang_kinds();
+	enable_kinds_and_roles();
 }
 
 

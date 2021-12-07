@@ -15,43 +15,46 @@ parsers = \
 	parsers/abc.c \
 	parsers/asciidoc.c \
 	parsers/geany_asm.c \
-	parsers/geany_basic.c \
+	parsers/basic.c \
 	parsers/bibtex.c \
 	parsers/geany_c.c \
 	parsers/cobol.c \
-	parsers/geany_iniconf.c \
+	parsers/iniconf.c \
+	parsers/iniconf.h \
 	parsers/css.c \
-	parsers/geany_diff.c \
+	parsers/diff.c \
 	parsers/geany_docbook.c \
 	parsers/erlang.c \
 	parsers/flex.c \
 	parsers/geany_fortran.c \
-	parsers/geany_go.c \
+	parsers/go.c \
 	parsers/haskell.c \
 	parsers/haxe.c \
-	parsers/geany_html.c \
-	parsers/geany_jscript.c \
+	parsers/html.c \
+	parsers/jscript.c \
 	parsers/json.c \
 	parsers/julia.c \
 	parsers/geany_lcpp.c \
 	parsers/geany_lcpp.h \
-	parsers/geany_lua.c \
-	parsers/geany_make.c \
+	parsers/lua.c \
+	parsers/make.c \
+	parsers/make.h \
 	parsers/geany_markdown.c \
 	parsers/geany_matlab.c \
-	parsers/geany_nsis.c \
-	parsers/geany_objc.c \
+	parsers/nsis.c \
+	parsers/objc.c \
 	parsers/geany_pascal.c \
-	parsers/geany_perl.c \
-	parsers/geany_php.c \
+	parsers/perl.c \
+	parsers/perl.h \
+	parsers/php.c \
 	parsers/powershell.c \
 	parsers/geany_python.c \
 	parsers/geany_r.c \
 	parsers/rst.c \
-	parsers/geany_ruby.c \
-	parsers/geany_rust.c \
+	parsers/ruby.c \
+	parsers/rust.c \
 	parsers/geany_sh.c \
-	parsers/geany_sql.c \
+	parsers/sql.c \
 	parsers/geany_tcl.c \
 	parsers/geany_tex.c \
 	parsers/txt2tags.c \

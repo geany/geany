@@ -77,6 +77,7 @@ static TMParserMapEntry map_JAVA[] = {
 static TMParserMapEntry map_MAKEFILE[] = {
 	{'m', tm_tag_macro_t},
 	{'t', tm_tag_function_t},
+	{'I', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_PASCAL[] = {
@@ -91,6 +92,7 @@ static TMParserMapEntry map_PERL[] = {
 	{'p', tm_tag_package_t},
 	{'s', tm_tag_function_t},
 	{'d', tm_tag_prototype_t},
+	{'M', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_PHP[] = {
@@ -102,6 +104,7 @@ static TMParserMapEntry map_PHP[] = {
 	{'n', tm_tag_namespace_t},
 	{'t', tm_tag_struct_t},
 	{'v', tm_tag_variable_t},
+	{'a', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_PYTHON[] = {
@@ -151,8 +154,8 @@ static TMParserMapEntry map_ASM[] = {
 
 /* not in universal-ctags */
 static TMParserMapEntry map_CONF[] = {
-	{'n', tm_tag_namespace_t},
-	{'m', tm_tag_macro_t},
+	{'s', tm_tag_namespace_t},
+	{'k', tm_tag_macro_t},
 };
 
 static TMParserMapEntry map_SQL[] = {
@@ -179,6 +182,7 @@ static TMParserMapEntry map_SQL[] = {
 	{'x', tm_tag_undef_t},
 	{'y', tm_tag_undef_t},
 	{'z', tm_tag_undef_t},
+	{'C', tm_tag_undef_t},
 };
 
 /* not in universal-ctags */
@@ -210,6 +214,10 @@ static TMParserMapEntry map_RUBY[] = {
 	{'f', tm_tag_method_t},
 	{'m', tm_tag_namespace_t},
 	{'S', tm_tag_member_t},
+	{'C', tm_tag_undef_t},
+	{'A', tm_tag_undef_t},
+	{'a', tm_tag_undef_t},
+	{'L', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_TCL[] = {
@@ -240,7 +248,10 @@ static TMParserMapEntry map_D[] = {
 };
 
 static TMParserMapEntry map_DIFF[] = {
-	{'f', tm_tag_function_t},
+	{'m', tm_tag_function_t},
+	{'n', tm_tag_function_t},
+	{'d', tm_tag_function_t},
+	{'h', tm_tag_undef_t},
 };
 
 /* different parser than in universal-ctags */
@@ -264,6 +275,7 @@ static TMParserMapEntry map_VHDL[] = {
 
 static TMParserMapEntry map_LUA[] = {
 	{'f', tm_tag_function_t},
+	{'X', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_JAVASCRIPT[] = {
@@ -274,6 +286,9 @@ static TMParserMapEntry map_JAVASCRIPT[] = {
 	{'C', tm_tag_macro_t},
 	{'v', tm_tag_variable_t},
 	{'g', tm_tag_function_t},
+	{'G', tm_tag_undef_t},
+	{'S', tm_tag_undef_t},
+	{'M', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_HASKELL[] = {
@@ -329,9 +344,13 @@ static TMParserMapEntry map_REST[] = {
 
 static TMParserMapEntry map_HTML[] = {
 	{'a', tm_tag_member_t},
+	{'c', tm_tag_undef_t},
 	{'h', tm_tag_namespace_t},
 	{'i', tm_tag_class_t},
 	{'j', tm_tag_variable_t},
+	{'C', tm_tag_undef_t},
+	{'I', tm_tag_undef_t},
+	{'J', tm_tag_undef_t},
 };
 
 static TMSubparserMapEntry subparser_HTML_javascript_map[] = {
@@ -401,9 +420,15 @@ static TMParserMapEntry map_ACTIONSCRIPT[] = {
 };
 
 static TMParserMapEntry map_NSIS[] = {
-	{'n', tm_tag_namespace_t},
+	{'s', tm_tag_namespace_t},
 	{'f', tm_tag_function_t},
 	{'v', tm_tag_variable_t},
+	{'d', tm_tag_undef_t},
+	{'m', tm_tag_undef_t},
+	{'S', tm_tag_undef_t},
+	{'p', tm_tag_undef_t},
+	{'l', tm_tag_undef_t},
+	{'i', tm_tag_undef_t},
 };
 
 /* not in universal-ctags */
@@ -461,6 +486,7 @@ static TMParserMapEntry map_OBJC[] = {
 	{'s', tm_tag_struct_t},
 	{'e', tm_tag_enum_t},
 	{'M', tm_tag_macro_t},
+	{'C', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_ASCIIDOC[] = {
@@ -503,6 +529,12 @@ static TMParserMapEntry map_GO[] = {
 	{'s', tm_tag_struct_t},
 	{'i', tm_tag_interface_t},
 	{'m', tm_tag_member_t},
+	{'M', tm_tag_undef_t},
+	{'n', tm_tag_undef_t},
+	{'u', tm_tag_undef_t},
+	{'P', tm_tag_undef_t},
+	{'a', tm_tag_undef_t},
+	{'R', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_JSON[] = {
@@ -756,6 +788,70 @@ void tm_parser_verify_type_mappings(void)
 }
 
 
+static gchar *replace_string_if_present(gchar *haystack, gchar *needle, gchar *subst)
+{
+	if (strstr(haystack, needle))
+	{
+		gchar **split = g_strsplit(haystack, needle, -1);
+		gchar *ret = g_strjoinv(subst, split);
+		g_strfreev(split);
+		return ret;
+	}
+	return haystack;
+}
+
+
+/* return updated scope or original scope if no change needed */
+gchar *tm_parser_update_scope(TMParserType lang, gchar *scope)
+{
+	switch (lang)
+	{
+		case TM_PARSER_PHP:
+		case TM_PARSER_ZEPHIR:
+			/* PHP parser uses two different scope separators but this would
+			 * complicate things in Geany so make sure there's just one type */
+			return replace_string_if_present(scope, "\\", "::");
+	}
+	return scope;
+}
+
+
+/* whether or not to enable ctags roles for the given language and kind */
+gboolean tm_parser_enable_role(TMParserType lang, gchar kind)
+{
+	switch (lang)
+	{
+		case TM_PARSER_GO:
+			/* 'p' is used both for package definition tags and imported package
+			 * tags and we can't tell which is which just by kind. By disabling
+			 * roles for this kind, we only get package definition tags. */
+			return kind == 'p' ? FALSE : TRUE;
+	}
+	return TRUE;
+}
+
+
+/* whether or not to enable ctags kinds for the given language */
+gboolean tm_parser_enable_kind(TMParserType lang, gchar kind)
+{
+	TMParserMap *map;
+	guint i;
+
+	if (lang >= TM_PARSER_COUNT)
+		/* Fatal error but tm_parser_verify_type_mappings() will provide
+		 * better message later */
+		return FALSE;
+
+	map = &parser_map[lang];
+	for (i = 0; i < map->size; i++)
+	{
+		if (map->entries[i].kind == kind)
+			return map->entries[i].type != tm_tag_undef_t;
+	}
+	return FALSE;
+}
+
+
 const gchar *tm_parser_context_separator(TMParserType lang)
 {
 	switch (lang)
@@ -763,7 +859,6 @@ const gchar *tm_parser_context_separator(TMParserType lang)
 		case TM_PARSER_C:	/* for C++ .h headers or C structs */
 		case TM_PARSER_CPP:
 		case TM_PARSER_GLSL:	/* for structs */
-		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_RUST:
@@ -799,9 +894,11 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_D:
 		case TM_PARSER_FERITE:
 		case TM_PARSER_GLSL:
+		case TM_PARSER_GO:
 		case TM_PARSER_JAVA:
 		case TM_PARSER_JAVASCRIPT:
 		case TM_PARSER_JSON:
+		case TM_PARSER_LUA:
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_PYTHON:
@@ -820,7 +917,6 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_ERLANG:
 		case TM_PARSER_F77:
 		case TM_PARSER_FORTRAN:
-		case TM_PARSER_GO:
 		case TM_PARSER_OBJC:
 		case TM_PARSER_REST:
 		/* Other parsers don't use scope at all (or should be somewhere above) */
