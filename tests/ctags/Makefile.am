@@ -192,6 +192,7 @@ test_sources = \
 	js-string-continuation.js		\
 	js-sub-block-scope.js			\
 	js-unknown-construct-nesting.js	\
+	julia-corner_cases.jl	\
 	jsFunc_tutorial.js				\
 	keyword_abstract.cs				\
 	keyword_catch_try.cs			\

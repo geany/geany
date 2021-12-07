@@ -16,11 +16,13 @@
 #include <string.h>
 
 #include "keyword.h"
+#include "debug.h"
 #include "entry.h"
 #include "parse.h"
-#include "options.h"
 #include "read.h"
 #include "routines.h"
+#include "selectors.h"
+#include "trashbox.h"
 #include "vstring.h"
 
 typedef enum {
@@ -36,7 +38,8 @@ typedef enum {
 	K_TYPEDEF,
 	K_STRUCT,
 	K_ENUM,
-	K_MACRO
+	K_MACRO,
+	K_CATEGORY,
 } objcKind;
 
 static kindDefinition ObjcKinds[] = {
@@ -53,6 +56,7 @@ static kindDefinition ObjcKinds[] = {
 	{true, 's', "struct", "A type structure"},
 	{true, 'e', "enum", "An enumeration"},
 	{true, 'M', "macro", "A preprocessor macro"},
+	{true, 'C', "category", "categories"},
 };
 
 typedef enum {
@@ -63,6 +67,7 @@ typedef enum {
 	ObjcINTERFACE,
 	ObjcPROTOCOL,
 	ObjcENCODE,
+	ObjcEXTERN,
 	ObjcSYNCHRONIZED,
 	ObjcSELECTOR,
 	ObjcPROPERTY,
@@ -93,7 +98,11 @@ typedef enum {
 	Tok_dpoint,	/* ':' */
 	Tok_Sharp,	/* '#' */
 	Tok_Backslash,	/* '\\' */
+	Tok_Asterisk,	/* '*' */
+	Tok_ANGLEL,		/* '<' */
+	Tok_ANGLER,		/* '>' */
 	Tok_EOL,	/* '\r''\n' */
+	Tok_CSTRING,	/* "..." */
 	Tok_any,
 
 	Tok_EOF	/* END of file */
@@ -105,6 +114,7 @@ static const keywordTable objcKeywordTable[] = {
 	{"typedef", ObjcTYPEDEF},
 	{"struct", ObjcSTRUCT},
 	{"enum", ObjcENUM},
+	{"extern", ObjcEXTERN},
 	{"@implementation", ObjcIMPLEMENTATION},
 	{"@interface", ObjcINTERFACE},
 	{"@protocol", ObjcPROTOCOL},
@@ -123,6 +133,24 @@ static const keywordTable objcKeywordTable[] = {
 	{"@dynamic", ObjcDYNAMIC},
 	{"@optional", ObjcOPTIONAL},
 	{"@required", ObjcREQUIRED},
+};
+
+typedef enum {
+	F_CATEGORY,
+	F_PROTOCOLS,
+} objcField;
+
+static fieldDefinition ObjcFields [] = {
+	{
+		.name = "category",
+		.description = "category attached to the class",
+		.enabled = true,
+	},
+	{
+		.name = "protocols",
+		.description = "protocols that the class (or category) confirms to",
+		.enabled = true,
+	},
 };
 
 static langType Lang_ObjectiveC;
@@ -176,11 +204,13 @@ static void eatWhiteSpace (lexingState * st)
 	st->cp = cp;
 }
 
-static void eatString (lexingState * st)
+static void readCString (lexingState * st)
 {
 	bool lastIsBackSlash = false;
 	bool unfinished = true;
 	const unsigned char *c = st->cp + 1;
+
+	vStringClear (st->name);
 
 	while (unfinished)
 	{
@@ -191,7 +221,10 @@ static void eatString (lexingState * st)
 		else if (*c == '"' && !lastIsBackSlash)
 			unfinished = false;
 		else
+		{
 			lastIsBackSlash = *c == '\\';
+			vStringPut (st->name, (int) *c);
+		}
 
 		c++;
 	}
@@ -282,7 +315,7 @@ static objcKeyword lex (lexingState * st)
 		return Tok_EOL;
 	}
 
-	if (isAlpha (*st->cp))
+	if (isAlpha (*st->cp) || (*st->cp == '_'))
 	{
 		readIdentifier (st);
 		retType = lookupKeyword (vStringValue (st->name), Lang_ObjectiveC);
@@ -373,14 +406,23 @@ static objcKeyword lex (lexingState * st)
 			st->cp++;
 			return Tok_dpoint;
 		case '"':
-			eatString (st);
-			return Tok_any;
+			readCString (st);
+			return Tok_CSTRING;
 		case '+':
 			st->cp++;
 			return Tok_PLUS;
 		case '-':
 			st->cp++;
 			return Tok_MINUS;
+		case '*':
+			st->cp++;
+			return Tok_Asterisk;
+		case '<':
+			st->cp++;
+			return Tok_ANGLEL;
+		case '>':
+			st->cp++;
+			return Tok_ANGLER;
 
 		default:
 			st->cp++;
@@ -419,6 +461,8 @@ static void parseImplemMethods (vString * const ident, objcToken what);
 static vString *tempName = NULL;
 static vString *parentName = NULL;
 static objcKind parentType = K_INTERFACE;
+static int parentCorkIndex = CORK_NIL;
+static int categoryCorkIndex = CORK_NIL;
 
 /* used to prepare tag for OCaml, just in case their is a need to
  * add additional information to the tag. */
@@ -426,7 +470,7 @@ static void prepareTag (tagEntryInfo * tag, vString const *name, objcKind kind)
 {
 	initTagEntry (tag, vStringValue (name), kind);
 
-	if (parentName != NULL)
+	if (vStringLength (parentName) > 0)
 	{
 		tag->extensionFields.scopeKindIndex = parentType;
 		tag->extensionFields.scopeName = vStringValue (parentName);
@@ -439,22 +483,39 @@ static void pushEnclosingContext (const vString * parent, objcKind type)
 	parentType = type;
 }
 
+static void pushEnclosingContextFull (const vString * parent, objcKind type, int corkIndex)
+{
+	pushEnclosingContext (parent, type);
+	parentCorkIndex = corkIndex;
+}
+
 static void popEnclosingContext (void)
 {
 	vStringClear (parentName);
+	parentCorkIndex = CORK_NIL;
+}
+
+static void pushCategoryContext (int category_index)
+{
+	categoryCorkIndex = category_index;
+}
+
+static void popCategoryContext (void)
+{
+	categoryCorkIndex = CORK_NIL;
 }
 
 /* Used to centralise tag creation, and be able to add
  * more information to it in the future */
-static void addTag (vString * const ident, int kind)
+static int addTag (vString * const ident, int kind)
 {
 	tagEntryInfo toCreate;
 
 	if (! ObjcKinds[kind].enabled)
-		return;
+		return CORK_NIL;
 
 	prepareTag (&toCreate, ident, kind);
-	makeTagEntry (&toCreate);
+	return makeTagEntry (&toCreate);
 }
 
 static objcToken waitedToken, fallBackToken;
@@ -541,24 +602,77 @@ static objcKind methodKind;
 
 static vString *fullMethodName;
 static vString *prevIdent;
+static vString *signature;
 
-static void parseMethodsName (vString * const ident, objcToken what)
+static void tillTokenWithCapturingSignature (vString * const ident, objcToken what)
 {
+	tillToken (ident, what);
+
+	if (what != waitedToken)
+	{
+		if (what == Tok_Asterisk)
+			vStringPut (signature, '*');
+		else if (vStringLength (ident) > 0)
+		{
+			if (! (vStringLast (signature) == ','
+				   || vStringLast (signature) == '('
+				   || vStringLast (signature) == ' '))
+				vStringPut (signature, ' ');
+
+			vStringCat (signature, ident);
+		}
+	}
+}
+
+static void parseMethodsNameCommon (vString * const ident, objcToken what,
+									parseNext reEnter,
+									parseNext nextAction)
+{
+	int index;
+
 	switch (what)
 	{
 	case Tok_PARL:
 		toDoNext = &tillToken;
-		comeAfter = &parseMethodsName;
+		comeAfter = reEnter;
 		waitedToken = Tok_PARR;
+
+		if (! (vStringLength(prevIdent) == 0
+			   && vStringLength(fullMethodName) == 0))
+			toDoNext = &tillTokenWithCapturingSignature;
 		break;
 
 	case Tok_dpoint:
 		vStringCat (fullMethodName, prevIdent);
-		vStringCatS (fullMethodName, ":");
+		vStringPut (fullMethodName, ':');
 		vStringClear (prevIdent);
+
+		if (vStringLength (signature) > 1)
+			vStringPut (signature, ',');
 		break;
 
 	case ObjcIDENTIFIER:
+		if ((vStringLength (prevIdent) > 0
+			 /* "- initWithObject: o0 withAnotherObject: o1;"
+				Overwriting the last value of prevIdent ("o0");
+				a parameter name ("o0") was stored to prevIdent,
+				and a part of selector("withAnotherObject")
+				overwrites it.
+				If type for the parameter specified explicitly,
+				the last char of signature should not be ',' nor
+				'('. In this case, "id" must be put as the type for
+				the parameter. */
+			 && (vStringLast (signature) == ','
+				 || vStringLast (signature) == '('))
+			|| (/* "- initWithObject: object;"
+				   In this case no overwriting happens.
+				   However, "id" for "object" is part
+				   of signature. */
+				vStringLength (prevIdent) == 0
+				&& vStringLength (fullMethodName) > 0
+				&& vStringLast (signature) == '('))
+			vStringCatS (signature, "id");
+
 		vStringCopy (prevIdent, ident);
 		break;
 
@@ -567,15 +681,34 @@ static void parseMethodsName (vString * const ident, objcToken what)
 		/* method name is not simple */
 		if (vStringLength (fullMethodName) != '\0')
 		{
-			addTag (fullMethodName, methodKind);
+			index = addTag (fullMethodName, methodKind);
 			vStringClear (fullMethodName);
 		}
 		else
-			addTag (prevIdent, methodKind);
+			index = addTag (prevIdent, methodKind);
 
-		toDoNext = &parseMethods;
+		toDoNext = nextAction;
 		parseImplemMethods (ident, what);
 		vStringClear (prevIdent);
+
+		tagEntryInfo *e = getEntryInCorkQueue (index);
+		if (e)
+		{
+			if (vStringLast (signature) == ',')
+				vStringCatS (signature, "id");
+			vStringPut (signature, ')');
+
+			e->extensionFields.signature = vStringStrdup (signature);
+
+			vStringClear (signature);
+			vStringPut (signature, '(');
+
+			tagEntryInfo *e_cat = getEntryInCorkQueue (categoryCorkIndex);
+			if (e_cat)
+				attachParserFieldToCorkEntry (index,
+											  ObjcFields [F_CATEGORY].ftype,
+											  e_cat->name);
+		}
 		break;
 
 	default:
@@ -583,44 +716,34 @@ static void parseMethodsName (vString * const ident, objcToken what)
 	}
 }
 
+static void parseMethodsName (vString * const ident, objcToken what)
+{
+	parseMethodsNameCommon (ident, what, parseMethodsName, parseMethods);
+}
+
 static void parseMethodsImplemName (vString * const ident, objcToken what)
 {
-	switch (what)
+	parseMethodsNameCommon (ident, what, parseMethodsImplemName, parseImplemMethods);
+}
+
+static void parseCategory (vString * const ident, objcToken what)
+{
+	if (what == ObjcIDENTIFIER)
 	{
-	case Tok_PARL:
-		toDoNext = &tillToken;
-		comeAfter = &parseMethodsImplemName;
-		waitedToken = Tok_PARR;
-		break;
-
-	case Tok_dpoint:
-		vStringCat (fullMethodName, prevIdent);
-		vStringCatS (fullMethodName, ":");
-		vStringClear (prevIdent);
-		break;
-
-	case ObjcIDENTIFIER:
-		vStringCopy (prevIdent, ident);
-		break;
-
-	case Tok_CurlL:
-	case Tok_semi:
-		/* method name is not simple */
-		if (vStringLength (fullMethodName) != '\0')
+		tagEntryInfo *e = getEntryInCorkQueue (parentCorkIndex);
+		if (e)
 		{
-			addTag (fullMethodName, methodKind);
-			vStringClear (fullMethodName);
+			attachParserFieldToCorkEntry (parentCorkIndex,
+										  ObjcFields [F_CATEGORY].ftype,
+										  vStringValue (ident));
+			if (e->kindIndex == K_INTERFACE)
+				toDoNext = &parseMethods;
+			else
+				toDoNext = &parseImplemMethods;
 		}
-		else
-			addTag (prevIdent, methodKind);
 
-		toDoNext = &parseImplemMethods;
-		parseImplemMethods (ident, what);
-		vStringClear (prevIdent);
-		break;
-
-	default:
-		break;
+		int index = addTag (ident, K_CATEGORY);
+		pushCategoryContext (index);
 	}
 }
 
@@ -640,6 +763,7 @@ static void parseImplemMethods (vString * const ident, objcToken what)
 
 	case ObjcEND:	/* @end */
 		popEnclosingContext ();
+		popCategoryContext ();
 		toDoNext = &globalScope;
 		break;
 
@@ -647,6 +771,10 @@ static void parseImplemMethods (vString * const ident, objcToken what)
 		toDoNext = &ignoreBalanced;
 		ignoreBalanced (ident, what);
 		comeAfter = &parseImplemMethods;
+		break;
+
+	case Tok_PARL: /* ( */
+		toDoNext = &parseCategory;
 		break;
 
 	default:
@@ -681,6 +809,49 @@ static void parseProperty (vString * const ident, objcToken what)
 	}
 }
 
+static void parseInterfaceSuperclass (vString * const ident, objcToken what)
+{
+	tagEntryInfo *e = getEntryInCorkQueue (parentCorkIndex);
+	if (what == ObjcIDENTIFIER && e)
+		e->extensionFields.inheritance = vStringStrdup (ident);
+
+	toDoNext = &parseMethods;
+}
+
+static void parseInterfaceProtocolList (vString * const ident, objcToken what)
+{
+	static vString *protocol_list;
+
+	if (parentCorkIndex == CORK_NIL)
+	{
+		toDoNext = &parseMethods;
+		return;
+	}
+
+	if (protocol_list == NULL)
+	{
+		protocol_list = vStringNew ();
+		DEFAULT_TRASH_BOX(protocol_list, vStringDelete);
+	}
+
+	if (what == ObjcIDENTIFIER)
+		vStringCat(protocol_list, ident);
+	else if (what == Tok_COMA)
+		vStringPut (protocol_list, ',');
+	else if (what == Tok_ANGLER)
+	{
+		attachParserFieldToCorkEntry (parentCorkIndex,
+									  ObjcFields [F_PROTOCOLS].ftype,
+									  vStringValue (protocol_list));
+		if (categoryCorkIndex != CORK_NIL)
+			attachParserFieldToCorkEntry (categoryCorkIndex,
+										  ObjcFields [F_PROTOCOLS].ftype,
+										  vStringValue (protocol_list));
+		vStringClear (protocol_list);
+		toDoNext = &parseMethods;
+	}
+}
+
 static void parseMethods (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	switch (what)
@@ -701,11 +872,24 @@ static void parseMethods (vString * const ident CTAGS_ATTR_UNUSED, objcToken wha
 
 	case ObjcEND:	/* @end */
 		popEnclosingContext ();
+		popCategoryContext ();
 		toDoNext = &globalScope;
 		break;
 
 	case Tok_CurlL:	/* { */
 		toDoNext = &parseFields;
+		break;
+
+	case Tok_dpoint: /* : */
+		toDoNext = &parseInterfaceSuperclass;
+		break;
+
+	case Tok_PARL: /* ( */
+		toDoNext = &parseCategory;
+		break;
+
+	case Tok_ANGLEL: /* < */
+		toDoNext = &parseInterfaceProtocolList;
 		break;
 
 	default:
@@ -718,8 +902,8 @@ static void parseProtocol (vString * const ident, objcToken what)
 {
 	if (what == ObjcIDENTIFIER)
 	{
-		pushEnclosingContext (ident, K_PROTOCOL);
-		addTag (ident, K_PROTOCOL);
+		int index = addTag (ident, K_PROTOCOL);
+		pushEnclosingContextFull (ident, K_PROTOCOL, index);
 	}
 	toDoNext = &parseMethods;
 }
@@ -728,8 +912,8 @@ static void parseImplementation (vString * const ident, objcToken what)
 {
 	if (what == ObjcIDENTIFIER)
 	{
-		addTag (ident, K_IMPLEMENTATION);
-		pushEnclosingContext (ident, K_IMPLEMENTATION);
+		int index = addTag (ident, K_IMPLEMENTATION);
+		pushEnclosingContextFull (ident, K_IMPLEMENTATION, index);
 	}
 	toDoNext = &parseImplemMethods;
 }
@@ -738,8 +922,8 @@ static void parseInterface (vString * const ident, objcToken what)
 {
 	if (what == ObjcIDENTIFIER)
 	{
-		addTag (ident, K_INTERFACE);
-		pushEnclosingContext (ident, K_INTERFACE);
+		int index = addTag (ident, K_INTERFACE);
+		pushEnclosingContextFull (ident, K_INTERFACE, index);
 	}
 
 	toDoNext = &parseMethods;
@@ -990,6 +1174,24 @@ static void parsePreproc (vString * const ident, objcToken what)
 	}
 }
 
+static void skipCurlL (vString * const ident, objcToken what)
+{
+	if (what == Tok_CurlL)
+		toDoNext = comeAfter;
+}
+
+static void parseCPlusPlusCLinkage (vString * const ident, objcToken what)
+{
+	toDoNext = comeAfter;
+
+	/* Linkage specification like "C" */
+	if (what == Tok_CSTRING)
+		toDoNext = skipCurlL;
+	else
+		/* Force handle this ident in globalScope */
+		globalScope (ident, what);
+}
+
 /* Handle the "strong" top levels, all 'big' declarations
  * happen here */
 static void globalScope (vString * const ident, objcToken what)
@@ -1044,6 +1246,11 @@ static void globalScope (vString * const ident, objcToken what)
 		ignoreBalanced (ident, what);
 		break;
 
+	case ObjcEXTERN:
+		comeAfter = &globalScope;
+		toDoNext = &parseCPlusPlusCLinkage;
+		break;
+
 	case ObjcEND:
 	case ObjcPUBLIC:
 	case ObjcPROTECTED:
@@ -1068,6 +1275,7 @@ static void findObjcTags (void)
 	tempName = vStringNew ();
 	fullMethodName = vStringNew ();
 	prevIdent = vStringNew ();
+	signature = vStringNewInit ("(");
 
 	/* (Re-)initialize state variables, this might be a second file */
 	comeAfter = NULL;
@@ -1096,10 +1304,14 @@ static void findObjcTags (void)
 	vStringDelete (tempName);
 	vStringDelete (fullMethodName);
 	vStringDelete (prevIdent);
+	vStringDelete (signature);
+	signature = NULL;
 	parentName = NULL;
 	tempName = NULL;
 	prevIdent = NULL;
 	fullMethodName = NULL;
+	categoryCorkIndex = CORK_NIL;
+	parentCorkIndex = CORK_NIL;
 }
 
 static void objcInitialize (const langType language)
@@ -1109,14 +1321,25 @@ static void objcInitialize (const langType language)
 
 extern parserDefinition *ObjcParser (void)
 {
-	static const char *const extensions[] = { "m", "h", NULL };
+	static const char *const extensions[] = { "mm", "m", "h",
+						  NULL };
+	static const char *const aliases[] = { "objc", "objective-c",
+					       NULL };
+	static selectLanguage selectors[] = { selectByObjectiveCAndMatLabKeywords,
+					      selectByObjectiveCKeywords,
+					      NULL };
 	parserDefinition *def = parserNew ("ObjectiveC");
 	def->kindTable = ObjcKinds;
 	def->kindCount = ARRAY_SIZE (ObjcKinds);
 	def->extensions = extensions;
+	def->fieldTable = ObjcFields;
+	def->fieldCount = ARRAY_SIZE (ObjcFields);
+	def->aliases = aliases;
 	def->parser = findObjcTags;
 	def->initialize = objcInitialize;
+	def->selectLanguage = selectors;
 	def->keywordTable = objcKeywordTable;
 	def->keywordCount = ARRAY_SIZE (objcKeywordTable);
+	def->useCork = CORK_QUEUE;
 	return def;
 }

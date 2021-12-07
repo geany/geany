@@ -1,14 +1,11 @@
-
 /*
 * Copyright (c) 2003, Peter Strand <peter@zarquon.se>
 *
 * This source code is released for free distribution under the terms of the
-* GNU General Public License.
+* GNU General Public License version 2 or (at your opinion) any later version.
 *
 * This module contains functions for generating tags for Haskell language
-* files.
-*
-*
+* files (https://en.wikipedia.org/wiki/Haskell_(programming_language)).
 *
 * Does not handle operators or infix definitions like:
 * a `f` b = ...
@@ -38,10 +35,10 @@ typedef enum {
 } haskellKind;
 
 static kindDefinition HaskellKinds [] = {
-	{ true, 't', "typedef", "types" },
-	{ true, 'c', "macro", "type constructors" },
+	{ true, 't', "type", "types" },
+	{ true, 'c', "constructor", "type constructors" },
 	{ true, 'f', "function", "functions" },
-	{ true, 'm', "namespace", "modules"}
+	{ true, 'm', "module", "modules"}
 };
 
 
@@ -276,6 +273,7 @@ static void findHaskellTags (int is_literate)
 			}
 		}
 		if (is_literate && in_tex_lit_code && c == '\\') {
+			get_line(token);
 			if (strncmp(token, "end{code}", 9) == 0) {
 				in_tex_lit_code = 0;
 				c = get_next_char();
@@ -346,7 +344,7 @@ extern parserDefinition* HaskellParser (void)
 extern parserDefinition* LiterateHaskellParser (void)
 {
 	static const char *const extensions [] = { "lhs", NULL };
-	parserDefinition* def = parserNew ("Literate Haskell");
+	parserDefinition* def = parserNew ("LiterateHaskell");
 	def->kindTable  = HaskellKinds;
 	def->kindCount  = ARRAY_SIZE(HaskellKinds);
 	def->extensions = extensions;

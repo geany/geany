@@ -1,0 +1,66 @@
+# format=tagmanager
+BaseÃ256÷0
+FooÃ2048÷0
+FooÃ4096÷0
+Mod1Ã256÷0
+Mod2Ã256÷0
+Module1Ã256÷0
+Module10Ã256ŒMyModule÷0
+Module11Ã256ŒMyModule÷0
+Module13Ã256÷0
+Module2Ã256÷0
+Module3Ã256÷0
+Module4Ã256÷0
+Module5Ã256÷0
+Module6Ã256÷0
+Module7Ã256÷0
+Module8Ã256ŒMyModule÷0
+Module9Ã256ŒMyModule÷0
+MyModuleÃ256÷0
+OurRationalÃ2048Õ{T<:Integer}÷0
+OurRational{Int16}Ã16Õ(num::T, den::T) where T<:Integer ÷0
+OurRational{Int64}Ã16Õ(num::T, den::T, test::T) where T<:Integer ŒOurRational÷0
+OurRational{Int8}Ã16Õ(num::T, den::T) where T<:Integer ŒOurRational÷0
+OurRational{T}Ã16Õ(num::T, den::T) where T<:IntegerŒOurRational÷0
+PointÃ2048Õ{T}÷0
+PointyÃ4096÷0
+TestÃ2048÷0
+aÃ64Õ::Float64ŒTest÷0
+bÃ64Õ::Float64ŒTest÷0
+barÃ16Õ(x, y)ŒFoo÷0
+cellÃ16Õ(dims::(Integer...))÷0
+denÃ64Õ::TŒOurRational÷0
+elsizeÃ16Õ(::AbstractArray{T}) where {T} ÷0
+elsizeÃ16Õ(::AbstractArray{T}) where T÷0
+fÃ16Õ(x::FooBar)÷0
+fooÃ16Õ(x::(Int,))÷0
+fooÃ16Õ()÷0
+fooÃ16Õ(x)ŒBaz÷0
+foo_bar!Ã16Õ(x,y)÷0
+func1Ã32768ŒModule11÷0
+func1Ã32768ŒModule13÷0
+func1Ã32768ŒModule2÷0
+func1Ã32768ŒModule4÷0
+func1Ã32768ŒModule7÷0
+func2Ã32768ŒModule11÷0
+func2Ã32768ŒModule2÷0
+func2Ã32768ŒModule6÷0
+func2Ã32768ŒModule7÷0
+func3Ã16Õ(a::Int)ŒMyModule÷0
+func3Ã32768ŒModule11÷0
+func4Ã16Õ(a::Int)ŒMyModule÷0
+func5Ã16Õ(b::Int)ŒMyModule.func4÷0
+gÃ16Õ(x, y)::Int8÷0
+myfunÃ16Õ()÷0
+normÃ16Õ(p::Point{<:Real})÷0
+numÃ64Õ::TŒOurRational÷0
+same_type_numericÃ16Õ(x::T, y::T) where {T <: Number} ÷0
+same_type_numericÃ16Õ(x::T, y::T) where T ÷0
+showÃ32768ŒBase÷0
+testÃ16Õ(x)÷0
+testÃ64Õ::TŒOurRational÷0
+test_docstringÃ16÷0
+xÃ64Õ::BarŒFoo÷0
+xÃ64Õ::TŒPoint÷0
+yÃ64Õ::TŒPoint÷0
+yÃ16384÷0

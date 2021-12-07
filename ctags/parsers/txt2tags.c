@@ -5,9 +5,10 @@
 *   Based on work by Jon Strait
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your opinion) any later version.
 *
-*   This module contains functions for generating tags for Txt2tags files.
+*   This module contains functions for generating tags for Txt2tags files
+*   (https://en.wikipedia.org/wiki/Txt2tags).
 */
 
 /*
@@ -26,8 +27,7 @@
 #include "entry.h"
 
 
-/* as any character may happen in an input, use something highly unlikely */
-#define SCOPE_SEPARATOR "\x3" /* ASCII ETX */
+#define SCOPE_SEPARATOR "\"\""
 
 /*
 *   DATA DEFINITIONS
@@ -42,7 +42,7 @@ static scopeSeparator Txt2TagsSeparators [] = {
 };
 
 static kindDefinition Txt2tagsKinds[] = {
-	{ true, 'm', "member", "sections",
+	{ true, 's', "section", "sections",
 	  ATTACH_SEPARATORS(Txt2TagsSeparators) },
 };
 
