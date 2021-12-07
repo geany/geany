@@ -1629,7 +1629,7 @@ static void on_set_build_commands_activate(GtkWidget *w, gpointer u)
 {
 	/* For now, just show the project dialog */
 	if (app->project)
-		project_build_properties();
+		project_properties_dialog("build");
 	else
 		show_build_commands_dialog();
 }

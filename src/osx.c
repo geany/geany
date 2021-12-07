@@ -44,7 +44,7 @@ static gboolean open_project_idle(gchar *locale_path)
 	utf8_path = utils_get_utf8_from_locale(locale_path);
 	if (app->project == NULL ||
 		(g_strcmp0(utf8_path, app->project->file_name) != 0 && project_ask_close()))
-		project_load_file_with_session(locale_path);
+		project_load_file(locale_path, TRUE);
 	g_free(utf8_path);
 	g_free(locale_path);
 	return FALSE;
@@ -65,7 +65,7 @@ static gboolean app_open_file_cb(GtkosxApplication *osx_app, gchar *path, gpoint
 		g_free(cwd);
 	}
 
-	if (g_str_has_suffix(path, ".geany"))
+	if (g_str_has_suffix(path, "." GEANY_PROJECT_EXT))
 	{
 		g_idle_add((GSourceFunc)open_project_idle, locale_path);
 		opened = TRUE;

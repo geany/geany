@@ -67,28 +67,26 @@ void project_init(void);
 void project_finalize(void);
 
 
-void project_new_with_dialog(void);
+void project_new_dialog(void);
 
-gboolean project_new(gchar const *name, gchar const *file_name, gchar const *base_path);
+gint project_new(gchar const *name, gchar const *file_name, gchar const *base_path);
 
-void project_open(void);
+void project_open_dialog(void);
 
-void project_open_folder(void);
+void project_open_folder_dialog(void);
 
-void project_save_as(void);
+gint project_open_folder(gchar *folder_name, gboolean use_session);
+
+void project_save_as_dialog(void);
 
 gboolean project_close(gboolean open_default);
 
-void project_properties(void);
-
-void project_build_properties(void);
-
 gboolean project_ask_close(void);
 
+void project_properties_dialog(gchar const *page_name);
 
-gboolean project_load_file(const gchar *locale_file_name);
 
-gboolean project_load_file_with_session(const gchar *locale_file_name);
+gboolean project_load_file(const gchar *locale_file_name, gboolean with_session);
 
 gchar *project_get_base_path(void);
 
@@ -102,6 +100,7 @@ void project_load_prefs(GKeyFile *config);
 void project_setup_prefs(void);
 
 void project_apply_prefs(void);
+
 
 #endif /* GEANY_PRIVATE */
 

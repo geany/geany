@@ -140,78 +140,8 @@ static gboolean handle_current_session(void)
 	return TRUE;
 }
 
-/* name, file_name, and base_path must not be NULL */
-/* file_name will not be overwritten if it exists */
-/* base_path will not be created if it does not exist */
-/* return FALSE on failure */
-/* TODO: Add error codes so caller can respond appropriately. */
-gboolean project_new(gchar const *name, gchar const *file_name, gchar const *base_path) {
-	gchar *locale_filename;
-	gsize name_len;
-	gint err_code = 0;
-	GeanyProject *p;
 
-	g_return_val_if_fail(name != NULL, FALSE);
-	g_return_val_if_fail(file_name != NULL, FALSE);
-	g_return_val_if_fail(base_path != NULL, FALSE);
-
-	name_len = strlen(name);
-	g_return_val_if_fail(name_len != 0, FALSE);
-	g_return_val_if_fail(name_len < MAX_NAME_LEN, FALSE);
-
-	locale_filename = utils_get_locale_from_utf8(file_name);
-	if (!EMPTY(base_path))
-	{	/* check whether the given directory actually exists */
-		gchar *locale_path = utils_get_locale_from_utf8(base_path);
-
-		if (! g_path_is_absolute(locale_path))
-		{	/* relative base path, so add base dir of project file name */
-			gchar *dir = g_path_get_dirname(locale_filename);
-			SETPTR(locale_path, g_build_filename(dir, locale_path, NULL));
-			g_free(dir);
-		}
-
-		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
-		{	/* base_path is not a directory or does not exist */
-			err_code = 1;
-			g_free(locale_path);
-			g_return_val_if_fail(err_code == 0, FALSE);
-		}
-		g_free(locale_path);
-	}
-	/* finally test whether the given project file can be written */
-	if ((err_code = utils_is_file_writable(locale_filename)) != 0 ||
-		(err_code = g_file_test(locale_filename, G_FILE_TEST_IS_DIR) ? EISDIR : 0) != 0)
-	{
-		g_free(locale_filename);
-		g_return_val_if_fail(err_code == 0, FALSE);
-	}
-	else if (err_code = g_file_test(locale_filename, G_FILE_TEST_EXISTS))
-	{	/* project file already exists */
-		err_code = 1;
-		g_free(locale_filename);
-		g_return_val_if_fail(err_code == 0, FALSE);
-	}
-	g_free(locale_filename);
-
-	if (app->project != NULL)
-	{
-		project_close(FALSE);
-	}
-	create_project();
-	p = app->project;
-
-	SETPTR(p->name, g_strdup(name));
-	SETPTR(p->file_name, g_strdup(file_name));
-	SETPTR(p->base_path, g_strdup(base_path));
-
-	update_ui();
-
-	return TRUE;
-}
-
-
-void project_open_folder(void)
+void project_open_folder_dialog(void)
 {
 	GtkWidget *dialog;
 	gchar *base_path = NULL;
@@ -229,7 +159,7 @@ void project_open_folder(void)
 
 	if (base_path && *base_path)
 	{
-		open_folder(base_path);
+		project_open_folder(base_path, TRUE);
 		g_free(base_path);
 	}
 
@@ -237,7 +167,169 @@ void project_open_folder(void)
 }
 
 
-void project_save_as(void)
+/* resolve relative paths and check project file existence
+ *    folder to look for file.  Must not be empty.
+ *    base_name of project file.  Must not be empty.
+ *    base_path of project.
+ * Return 0 on success with path in newly allocated string abs_path.  Otherwise, NULL. */
+/* TODO: Make return values meaningful */
+static gint project_file_check_path(gchar const *folder, gchar const *base_name, gchar const *base_path, gchar **abs_path)
+{
+	g_return_val_if_fail(!EMPTY(folder), __LINE__);
+	g_return_val_if_fail(!EMPTY(base_name), __LINE__);
+
+	if (utils_is_absolute_path(folder))
+	{
+		*abs_path = g_build_filename(folder, base_name, NULL);
+		if (g_file_test(*abs_path, G_FILE_TEST_IS_REGULAR))
+		{
+			GFile *gfile = g_file_new_for_path(*abs_path);
+			SETPTR(*abs_path,  g_file_get_path(gfile));
+			g_object_unref(gfile);
+			return 0;
+		}
+		g_free(*abs_path);
+		*abs_path = NULL;
+		return __LINE__;
+	}
+	else if (utils_is_absolute_path(base_path))
+	{	/* folder is relative and base_path is absolute */
+		*abs_path = g_build_filename(base_path, folder, base_name, NULL);
+		if (g_file_test(*abs_path, G_FILE_TEST_IS_REGULAR))
+		{
+			GFile *gfile = g_file_new_for_path(*abs_path);
+			SETPTR(*abs_path,  g_file_get_path(gfile));
+			g_object_unref(gfile);
+			return 0;
+		}
+		g_free(*abs_path);
+		*abs_path = NULL;
+		return __LINE__;
+	}
+
+	return __LINE__;
+}
+
+
+/* open folder as project.
+ *    open associated project if folder has one.  otherwise, create new project.
+ *    for `/path/to/project/`, associated projects are searched in order:
+ *       /path/to/project/project.geany
+ *       /path/to/project.geany
+ *       /path/to/project/project_file_path/project.geany
+ *       ~/.cache/geany/folders/project_[md5].geany
+ *    folder_name must not be NULL or relative.
+ * return 0 on success. */
+/* TODO: Make return values meaningful */
+gint project_open_folder(gchar *folder_name, gboolean use_session)
+{
+	g_return_val_if_fail(!EMPTY(folder_name), __LINE__);
+	g_return_val_if_fail(utils_is_absolute_path(folder_name), __LINE__);
+
+	gchar *prj_name, *prj_basepath;
+	gchar *prj_file_basename, *prj_file_path, *prj_cache_file;
+	gboolean prj_file_found = FALSE;
+
+	prj_basepath = utils_get_real_path(folder_name);
+	g_return_val_if_fail(!EMPTY(prj_basepath), __LINE__);
+
+	prj_name = g_path_get_basename(prj_basepath);
+	g_return_val_if_fail(!EMPTY(prj_name), __LINE__);
+
+	prj_file_basename = g_strconcat(prj_name, "." GEANY_PROJECT_EXT, NULL);
+
+	if (!prj_file_found)
+	{
+		prj_file_found = !project_file_check_path(".", prj_file_basename, prj_basepath, &prj_file_path);
+	}
+	if (!prj_file_found)
+	{
+		prj_file_found = !project_file_check_path("..", prj_file_basename, prj_basepath, &prj_file_path);
+	}
+	if (!prj_file_found && !EMPTY(local_prefs.project_file_path)
+		&& !utils_is_absolute_path(local_prefs.project_file_path))
+	{
+		prj_file_found = !project_file_check_path(local_prefs.project_file_path, prj_file_basename, prj_basepath, &prj_file_path);
+	}
+
+	{	/* build cache path */
+		gchar *prj_cache_basename, *prj_cache_path;
+		GChecksum* md5calc;
+
+		md5calc = g_checksum_new(G_CHECKSUM_MD5);
+		g_checksum_update(md5calc, (const guchar*)prj_basepath, -1);
+		prj_cache_basename = g_strconcat(prj_name, "_", g_checksum_get_string(md5calc), "." GEANY_PROJECT_EXT, NULL);
+		prj_cache_path = g_build_filename(g_get_user_cache_dir(), "geany", "folders", NULL);
+		utils_mkdir(prj_cache_path, TRUE);
+		prj_cache_file = g_build_filename(prj_cache_path, prj_cache_basename, NULL);
+
+		if (!prj_file_found)
+		{	/* check cache folder*/
+			prj_file_found = !project_file_check_path(prj_cache_path, prj_cache_basename, prj_basepath, &prj_file_path);
+		}
+
+		g_free(prj_cache_basename);
+		g_free(prj_cache_path);
+		g_checksum_free(md5calc);
+	}
+
+	/* load project file if found */
+	if (prj_file_found && !EMPTY(prj_file_path))
+	{
+		if (app->project && !project_close(FALSE))
+			g_return_val_if_fail(! "unable to close previous project", __LINE__);
+
+		project_load_file(prj_file_path, use_session);
+		return 0;
+	}
+
+	/* create new project */
+	if (project_prefs.project_file_in_basedir
+		|| utils_str_equal(local_prefs.project_file_path, ".")
+		|| utils_str_equal(local_prefs.project_file_path, "./"))
+	{
+		GFile *gfile = g_file_new_build_filename(prj_basepath, prj_file_basename, NULL);
+		prj_file_path =  g_file_get_path(gfile);
+		project_new(prj_name, prj_file_path, ".");
+		g_object_unref(gfile);
+	}
+	else if (!utils_is_absolute_path(local_prefs.project_file_path)
+			&& !EMPTY(local_prefs.project_file_path))
+	{
+		gchar *abspath = g_build_filename(prj_basepath, local_prefs.project_file_path, NULL);
+		GFile *gfile = g_file_new_build_filename(abspath, prj_file_basename, NULL);
+		prj_file_path =  g_file_get_path(gfile);
+
+		utils_mkdir(abspath, TRUE);
+		project_new(prj_name, prj_file_path, prj_basepath);
+
+		g_free(abspath);
+		g_object_unref(gfile);
+	}
+	else
+	{	/* fallback to user cache */
+		project_new(prj_name, prj_cache_file, prj_basepath);
+	}
+
+	g_free(prj_name);
+	g_free(prj_basepath);
+	g_free(prj_file_basename);
+	g_free(prj_file_path);
+	g_free(prj_cache_file);
+
+	if (!app || !app->project)
+		g_return_val_if_fail(! "project could not be created or opened", __LINE__);
+
+	return 0;
+}
+
+
+/* save current project with new filename.
+ *    open project if folder has one.
+ *    otherwise, create new project.
+ * return 0 on success. */
+/* TODO: Make return values meaningful */
+void project_save_as_dialog(void)
 {
 	g_return_if_fail(app->project != NULL);
 
@@ -277,9 +369,17 @@ void project_save_as(void)
 		{
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_dir);
 		}
-		else
+		else if (utils_is_absolute_path(local_prefs.project_file_path))
 		{
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), local_prefs.project_file_path);
+		}
+		else if (!EMPTY(local_prefs.project_file_path))
+		{
+			GFile *gfile = g_file_new_build_filename(app->project->base_path, local_prefs.project_file_path, NULL);
+			gchar *project_file_path = g_file_get_path(gfile);
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), project_file_path);
+			g_free(project_file_path);
+			g_object_unref(gfile);
 		}
 
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), name);
@@ -294,7 +394,7 @@ void project_save_as(void)
 	}
 #endif
 
-	if (filename && *filename)
+	if (!EMPTY(filename))
 	{
 		g_free(app->project->file_name);
 		app->project->file_name = filename;
@@ -306,10 +406,106 @@ void project_save_as(void)
 }
 
 
+/* create a new project.
+ *    name and file_name must not be NULL.
+ *    file_name will not be overwritten if it exists.
+ *    base_path will not be created if it does not exist.
+ *    file_name or base_path may be relative to the other.  If base_path is empty, it will be assumed to be "."
+ * return 0 on success. */
+/* TODO: Make return values meaningful */
+gint project_new(gchar const *name, gchar const *file_name, gchar const *base_path)
+{
+	gchar *locale_filename;
+	gsize name_len;
+	gint err_code = 0;
+	GeanyProject *p;
+
+	g_return_val_if_fail(name != NULL, __LINE__);
+	g_return_val_if_fail(file_name != NULL, __LINE__);
+
+	if (EMPTY(base_path))
+		base_path = ".";
+
+	name_len = strlen(name);
+	g_return_val_if_fail(name_len != 0, __LINE__);
+	g_return_val_if_fail(name_len < MAX_NAME_LEN, __LINE__);
+
+	locale_filename = utils_get_locale_from_utf8(file_name);
+	{	/* check whether the given directory actually exists */
+		gchar *locale_path = utils_get_locale_from_utf8(base_path);
+
+		if (! utils_is_absolute_path(locale_path))
+		{	/* relative base path, so add base dir of project file name */
+			if (utils_is_absolute_path(locale_filename))
+			{
+				gchar *dir = g_path_get_dirname(locale_filename);
+				SETPTR(locale_path, g_build_filename(dir, locale_path, NULL));
+				g_free(dir);
+			}
+			else
+			{
+				g_free(locale_filename);
+				g_free(locale_path);
+				g_return_val_if_fail(! "both file_name and base path are relative", __LINE__);
+			}
+		}
+
+		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+		{
+			g_free(locale_filename);
+			g_free(locale_path);
+			g_return_val_if_fail(! "base_path is not a directory or does not exist", __LINE__);
+		}
+		g_free(locale_path);
+	}
+
+	if (!utils_is_absolute_path(locale_filename))
+	{
+		SETPTR(locale_filename, g_build_filename(base_path, locale_filename, NULL));
+	}
+
+	/* finally test whether the given project file can be written */
+	if ((err_code = utils_is_file_writable(locale_filename)) != 0 ||
+		(err_code = g_file_test(locale_filename, G_FILE_TEST_IS_DIR) ? EISDIR : 0) != 0)
+	{
+		g_free(locale_filename);
+		g_return_val_if_fail(! "project file cannot be written", __LINE__);
+	}
+	else if (err_code = g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+	{
+		g_free(locale_filename);
+		g_return_val_if_fail(! "project file already exists", __LINE__);
+	}
+	g_free(locale_filename);
+
+	if (app->project && !project_close(FALSE))
+		g_return_val_if_fail(! "current project isn't closed", __LINE__);
+
+	create_project();
+	p = app->project;
+
+	SETPTR(p->name, g_strdup(name));
+	SETPTR(p->file_name, g_strdup(file_name));
+	SETPTR(p->base_path, g_strdup(base_path));
+
+	update_ui();
+
+	if (!write_config())
+	{
+		destroy_project(FALSE);
+		g_return_val_if_fail(! "write_config failed", __LINE__);
+	}
+
+	ui_set_statusbar(TRUE, _("Project \"%s\" created."), app->project->name);
+	ui_add_recent_project_file(app->project->file_name);
+	return 0;
+}
+
+
 /* TODO: this should be ported to Glade like the project preferences dialog,
  * then we can get rid of the PropertyDialogElements struct altogether as
  * widgets pointers can be accessed through ui_lookup_widget(). */
-void project_new_with_dialog(void)
+void project_new_dialog(void)
 {
 	GtkWidget *vbox;
 	GtkWidget *table;
@@ -439,22 +635,6 @@ static void run_new_dialog(PropertyDialogElements *e)
 }
 
 
-gboolean project_load_file_with_session(const gchar *locale_file_name)
-{
-	if (project_load_file(locale_file_name))
-	{
-		if (project_prefs.project_session)
-		{
-			configuration_open_files();
-			document_new_file_if_non_open();
-			ui_focus_current_document();
-		}
-		return TRUE;
-	}
-	return FALSE;
-}
-
-
 static void run_open_dialog(GtkDialog *dialog)
 {
 	while (gtk_dialog_run(dialog) == GTK_RESPONSE_ACCEPT)
@@ -463,7 +643,7 @@ static void run_open_dialog(GtkDialog *dialog)
 
 		if (app->project && !project_close(FALSE)) {}
 		/* try to load the config */
-		else if (! project_load_file_with_session(filename))
+		else if (! project_load_file(filename, TRUE))
 		{
 			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
 
@@ -479,7 +659,7 @@ static void run_open_dialog(GtkDialog *dialog)
 }
 
 
-void project_open(void)
+void project_open_dialog(void)
 {
 	const gchar *dir = local_prefs.project_file_path;
 
@@ -491,7 +671,7 @@ void project_open(void)
 		{
 			if (app->project && !project_close(FALSE)) {}
 			/* try to load the config */
-			else if (! project_load_file_with_session(file))
+			else if (! project_load_file(file, TRUE))
 			{
 				SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
 			}
@@ -732,7 +912,7 @@ static void create_properties_dialog(PropertyDialogElements *e)
 }
 
 
-static void show_project_properties(gboolean show_build)
+void project_properties_dialog(gchar const *page_name)
 {
 	GeanyProject *p = app->project;
 	GtkWidget *widget = NULL;
@@ -783,7 +963,7 @@ static void show_project_properties(gboolean show_build)
 	gtk_widget_show_all(e.dialog);
 
 	/* note: notebook page must be shown before setting current page */
-	if (show_build)
+	if (utils_str_equal(page_name, "build"))
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
 	else
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), 0);
@@ -807,18 +987,6 @@ static void show_project_properties(gboolean show_build)
 	g_signal_emit_by_name(geany_object, "project-dialog-close", e.notebook);
 	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
 	gtk_widget_hide(e.dialog);
-}
-
-
-void project_properties(void)
-{
-	show_project_properties(FALSE);
-}
-
-
-void project_build_properties(void)
-{
-	show_project_properties(TRUE);
 }
 
 
@@ -911,11 +1079,20 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	{	/* check whether the given directory actually exists */
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
 
-		if (! g_path_is_absolute(locale_path))
+		if (! utils_is_absolute_path(locale_path))
 		{	/* relative base path, so add base dir of project file name */
-			gchar *dir = g_path_get_dirname(locale_filename);
-			SETPTR(locale_path, g_build_filename(dir, locale_path, NULL));
-			g_free(dir);
+			if (utils_is_absolute_path(file_name))
+			{
+				gchar *dir = g_path_get_dirname(locale_filename);
+				SETPTR(locale_path, g_build_filename(dir, locale_path, NULL));
+				g_free(dir);
+			}
+			else
+			{	/* project filename and basepath are both relative */
+				SHOW_ERR(_("The project filename and base path cannot both be relative paths."));
+				gtk_widget_grab_focus(e->file_name);
+				return FALSE;
+			}
 		}
 
 		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
@@ -942,6 +1119,12 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		}
 		g_free(locale_path);
 	}
+
+	if (! utils_is_absolute_path(locale_filename))
+	{
+		SETPTR(locale_filename, g_build_filename(base_path, file_name, NULL));
+	}
+
 	/* finally test whether the given project file can be written */
 	if ((err_code = utils_is_file_writable(locale_filename)) != 0 ||
 		(err_code = g_file_test(locale_filename, G_FILE_TEST_IS_DIR) ? EISDIR : 0) != 0)
@@ -1178,7 +1361,7 @@ static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget 
 }
 
 
-gboolean project_load_file(const gchar *locale_file_name)
+gboolean project_load_file(const gchar *locale_file_name, gboolean with_session)
 {
 	g_return_val_if_fail(locale_file_name != NULL, FALSE);
 
@@ -1190,6 +1373,13 @@ gboolean project_load_file(const gchar *locale_file_name)
 
 		ui_add_recent_project_file(utf8_filename);
 		g_free(utf8_filename);
+
+		if (with_session && project_prefs.project_session)
+		{
+			configuration_open_files();
+			document_new_file_if_non_open();
+			ui_focus_current_document();
+		}
 		return TRUE;
 	}
 	else

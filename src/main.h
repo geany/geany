@@ -45,6 +45,7 @@ typedef struct
 	gboolean	ignore_global_tags;
 	gboolean	list_documents;
 	gboolean 	readonly;
+	gchar		*project_path;
 }
 CommandLineOptions;
 
@@ -72,11 +73,7 @@ gboolean main_quit(void);
 
 gboolean main_handle_filename(const gchar *locale_filename);
 
-void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session);
-
 gint main_lib(gint argc, gchar **argv);
-
-gboolean open_folder(gchar *folder_name);
 
 #endif /* GEANY_PRIVATE */
 

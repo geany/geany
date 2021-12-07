@@ -121,6 +121,7 @@ static GOptionEntry entries[] =
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use alternate configuration directory DIR"), N_("DIR") },
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
+	{ "project", 'k', 0, G_OPTION_ARG_FILENAME, &cl_options.project_path, N_("Open a project .geany file, or open a directory as a project"), N_("PATH") },
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags file"), NULL },
 #ifdef HAVE_SOCKET
 	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &cl_options.new_instance, N_("Don't open files in a running instance, force opening a new instance"), NULL },
@@ -675,7 +676,7 @@ static gint create_config_dir(void)
 		 * in ~/.geany still exists and try to move it */
 		if (alternate_config == NULL)
 		{
-			gchar *old_dir = g_build_filename(g_get_home_dir(), ".geany", NULL);
+			gchar *old_dir = g_build_filename(g_get_home_dir(), "." GEANY_PROJECT_EXT, NULL);
 			/* move the old config dir if it exists */
 			if (g_file_test(old_dir, G_FILE_TEST_EXISTS))
 			{
@@ -863,64 +864,6 @@ gboolean main_handle_filename(const gchar *locale_filename)
 }
 
 
-gboolean open_folder(gchar *folder_name)
-{
-	gchar *prj_name, *prj_basepath;
-	gchar *prj_file_basename, *prj_file_path;
-	gchar *prj_cache_basename, *prj_cache_path, *prj_cache_file;
-	GChecksum* md5calc;
-
-	prj_basepath = utils_get_real_path(folder_name);
-	prj_name = g_path_get_basename(prj_basepath);
-	prj_file_basename = g_strconcat(prj_name, ".geany", NULL);
-	prj_file_path = g_build_filename(prj_basepath, prj_file_basename, NULL);
-
-	/* project file for user cache folder */
-	md5calc = g_checksum_new(G_CHECKSUM_MD5);
-	g_checksum_update(md5calc, (const guchar*)prj_basepath, -1);
-	prj_cache_basename = g_strconcat(prj_name, "_", g_checksum_get_string(md5calc), ".geany", NULL);
-	g_checksum_free(md5calc);
-
-	/* make sure cache folder exists */
-	prj_cache_path = g_build_filename(g_get_user_cache_dir(), "geany", "folders", NULL);
-	utils_mkdir(prj_cache_path, TRUE);
-	prj_cache_file = g_build_filename(prj_cache_path, prj_cache_basename, NULL);
-
-	if (g_file_test(prj_file_path, G_FILE_TEST_IS_REGULAR))
-	{	/* open project inside folder */
-		if (app->project != NULL)
-		{	/* cannot open new project if project already open */
-			project_close(FALSE);
-		}
-		main_load_project_from_command_line(prj_file_path, TRUE);
-	}
-	else if (g_file_test(prj_cache_file, G_FILE_TEST_IS_REGULAR))
-	{	/* open project in cache folder */
-		if (app->project != NULL)
-		{	/* cannot open new project if project already open */
-			project_close(FALSE);
-		}
-		main_load_project_from_command_line(prj_cache_file, TRUE);
-	}
-	else if (project_prefs.project_file_in_basedir)
-	{	/* create project file in folder */
-		project_new(prj_name, prj_file_path, ".");
-	}
-	else
-	{	/* create project file in cache folder */
-		project_new(prj_name, prj_cache_file, prj_basepath);
-	}
-
-	g_free(prj_name);
-	g_free(prj_basepath);
-	g_free(prj_file_basename);
-	g_free(prj_file_path);
-	g_free(prj_cache_basename);
-	g_free(prj_cache_path);
-	g_free(prj_cache_file);
-}
-
-
 /* open files from command line */
 static void open_cl_files(gint argc, gchar **argv)
 {
@@ -930,11 +873,8 @@ static void open_cl_files(gint argc, gchar **argv)
 	{
 		gchar *filename = main_get_argv_filename(argv[i]);
 
-		// open folder as project
-		// remaining files on command line will be added to project
 		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
 		{
-			open_folder(filename);
 			g_free(filename);
 			continue;
 		}
@@ -965,7 +905,7 @@ static void load_session_project_file(void)
 	locale_filename = utils_get_locale_from_utf8(project_prefs.session_file);
 
 	if (G_LIKELY(!EMPTY(locale_filename)))
-		project_load_file(locale_filename);
+		project_load_file(locale_filename, FALSE);
 
 	g_free(locale_filename);
 	g_free(project_prefs.session_file);	/* no longer needed */
@@ -991,32 +931,36 @@ static void load_settings(void)
 }
 
 
-void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session)
-{
-	gchar *pfile;
-
-	pfile = utils_get_path_from_uri(locale_filename);
-	if (pfile != NULL)
-	{
-		if (use_session)
-			project_load_file_with_session(pfile);
-		else
-			project_load_file(pfile);
-	}
-	g_free(pfile);
-}
-
-
 static void load_startup_files(gint argc, gchar **argv)
 {
 	gboolean load_session = FALSE;
 
-	if (argc > 1 && g_str_has_suffix(argv[1], ".geany"))
+	if (cl_options.project_path)
+	{
+		gchar *filename = main_get_argv_filename(cl_options.project_path);
+		SETPTR(filename, utils_get_path_from_uri(filename));
+
+		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+		{
+			geany_debug("Opening directory as project");
+			project_open_folder(filename, FALSE);
+			load_session = project_prefs.project_session;
+		}
+		else if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+		{
+			geany_debug("Opening project file");
+			project_load_file(filename, FALSE);
+			load_session = project_prefs.project_session;
+		}
+		g_free(filename);
+	}
+	else if (argc > 1 && g_str_has_suffix(argv[1], "." GEANY_PROJECT_EXT))
 	{
 		gchar *filename = main_get_argv_filename(argv[1]);
+		SETPTR(filename, utils_get_path_from_uri(filename));
 
 		/* project file specified: load it, but decide the session later */
-		main_load_project_from_command_line(filename, FALSE);
+		project_load_file(filename, FALSE);
 		argc--, argv++;
 		/* force session load if using project-based session files */
 		load_session = project_prefs.project_session;
@@ -1132,8 +1076,9 @@ gint main_lib(gint argc, gchar **argv)
 		socket_info.lock_socket = socket_init(argc, argv, socket_port);
 		/* Quit if filenames were sent to first instance or the list of open
 		 * documents has been printed */
-		if ((socket_info.lock_socket == -2 /* socket exists */ && argc > 1) ||
-			cl_options.list_documents)
+		if ((socket_info.lock_socket == -2 /* socket exists */
+				&& (argc > 1 || cl_options.project_path))
+			|| cl_options.list_documents)
 		{
 			socket_finalize();
 			gdk_notify_startup_complete();
