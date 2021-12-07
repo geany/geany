@@ -112,6 +112,8 @@ libctags_la_SOURCES = \
 	dsl/optscript.h \
 	dsl/es.c \
 	dsl/es.h \
+	libreadtags/readtags.c \
+	libreadtags/readtags.h \
 	main/args.c \
 	main/args_p.h \
 	main/colprint.c \
