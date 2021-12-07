@@ -730,7 +730,10 @@ gchar *sci_get_line(ScintillaObject *sci, gint line_num)
 GEANY_API_SYMBOL
 void sci_get_text(ScintillaObject *sci, gint len, gchar *text)
 {
-	SSM(sci, SCI_GETTEXT, (uptr_t) len, (sptr_t) text);
+	if (len > 0) {
+		SSM(sci, SCI_GETTEXT, (uptr_t) len - 1, (sptr_t) text);
+		text[len] = '\0';
+	}
 }
 
 
@@ -749,10 +752,14 @@ gchar *sci_get_contents(ScintillaObject *sci, gint buffer_len)
 	gchar *text;
 
 	if (buffer_len < 0)
-		buffer_len = sci_get_length(sci) + 1;
+		return sci_get_string(sci, SCI_GETTEXT, 0);
 
-	text = g_malloc(buffer_len);
-	SSM(sci, SCI_GETTEXT, (uptr_t) buffer_len, (sptr_t) text);
+	text = NULL;
+	if (buffer_len > 0) {
+		text = g_malloc(buffer_len);
+		sci_get_text(sci, buffer_len - 1, text);
+		text[buffer_len - 1] = '\0';
+	}
 	return text;
 }
 
@@ -760,6 +767,9 @@ gchar *sci_get_contents(ScintillaObject *sci, gint buffer_len)
 /** Gets selected text.
  * @deprecated sci_get_selected_text is deprecated and should not be used in newly-written code.
  * Use sci_get_selection_contents() instead.
+ *
+ * @note You must ensure NUL termination yourself, this function does
+ * not NUL terminate the buffer itself.
  *
  * @param sci Scintilla widget.
  * @param text Text buffer; must be allocated sci_get_selected_text_length() + 1 bytes
