@@ -128,8 +128,41 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 {
 	gint i;
 
-	g_return_if_fail(argc > 1);
 	geany_debug("using running instance of Geany");
+
+	if (cl_options.project_path)
+	{
+		gchar *filename = main_get_argv_filename(cl_options.project_path);
+		SETPTR(filename, utils_get_path_from_uri(filename));
+
+		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+		{
+			socket_fd_write_all(sock, "folder\n", 7);
+			socket_fd_write_all(sock, filename, strlen(filename));
+			socket_fd_write_all(sock, "\n.\n", 3);
+		}
+		else if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+		{
+			socket_fd_write_all(sock, "project\n", 8);
+			socket_fd_write_all(sock, filename, strlen(filename));
+			socket_fd_write_all(sock, "\n.\n", 3);
+		}
+		g_free(filename);
+	}
+	else if (argc > 1 && g_str_has_suffix(argv[1], "." GEANY_PROJECT_EXT))
+	{
+		gchar *filename = main_get_argv_filename(argv[1]);
+		SETPTR(filename, utils_get_path_from_uri(filename));
+
+		socket_fd_write_all(sock, "project\n", 8);
+		socket_fd_write_all(sock, filename, strlen(filename));
+		socket_fd_write_all(sock, "\n.\n", 3);
+		argc--, argv++;
+		g_free(filename);
+	}
+
+	if (argc < 2)
+		return;
 
 	if (cl_options.goto_line >= 0)
 	{
@@ -325,7 +358,7 @@ gint socket_init(gint argc, gchar **argv, G_GNUC_UNUSED gushort socket_port)
 	/* remote command mode, here we have another running instance and want to use it */
 
 	/* now we send the command line args */
-	if (argc > 1)
+	if (argc > 1 || cl_options.project_path)
 	{
 #ifdef G_OS_WIN32
 		/* first we send a request to retrieve the window handle and focus the window */
@@ -629,13 +662,29 @@ static void handle_input_filename(const gchar *buf)
 	locale_filename = utils_get_locale_from_utf8(utf8_filename);
 	if (locale_filename)
 	{
-		if (g_str_has_suffix(locale_filename, ".geany"))
-		{
-			if (project_ask_close())
-				main_load_project_from_command_line(locale_filename, TRUE);
-		}
-		else
+		if (!g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
 			main_handle_filename(locale_filename);
+	}
+	g_free(utf8_filename);
+	g_free(locale_filename);
+}
+
+
+static void handle_input_project(const gchar *buf)
+{
+	gchar *utf8_filename, *locale_filename;
+
+	/* we never know how the input is encoded, so do the best auto detection we can */
+	if (! g_utf8_validate(buf, -1, NULL))
+		utf8_filename = encodings_convert_to_utf8(buf, -1, NULL);
+	else
+		utf8_filename = g_strdup(buf);
+
+	locale_filename = utils_get_locale_from_utf8(utf8_filename);
+	if (locale_filename)
+	{
+		if (project_ask_close())
+			project_load_file(locale_filename, TRUE);
 	}
 	g_free(utf8_filename);
 	g_free(locale_filename);
@@ -700,6 +749,32 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			/* send ETX (end-of-text) so reader knows to stop reading */
 			socket_fd_write_all(sock, "\3", 1);
 			g_free(doc_list);
+		}
+		else if (strncmp(buf, "project", 7) == 0)
+		{
+			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+			{
+				gsize buf_len = strlen(buf);
+
+				/* remove trailing newline */
+				if (buf_len > 0 && buf[buf_len - 1] == '\n')
+					buf[buf_len - 1] = '\0';
+
+				handle_input_project(buf);
+			}
+		}
+		else if (strncmp(buf, "folder", 6) == 0)
+		{
+			while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+			{
+				gsize buf_len = strlen(buf);
+
+				/* remove trailing newline */
+				if (buf_len > 0 && buf[buf_len - 1] == '\n')
+					buf[buf_len - 1] = '\0';
+
+				project_open_folder(buf, TRUE);
+			}
 		}
 		else if (strncmp(buf, "line", 4) == 0)
 		{
