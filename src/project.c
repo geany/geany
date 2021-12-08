@@ -288,24 +288,25 @@ gint project_open_folder(gchar *folder_name, gboolean use_session)
 		|| utils_str_equal(local_prefs.project_file_path, ".")
 		|| utils_str_equal(local_prefs.project_file_path, "./"))
 	{
-		gchar *abs_path = g_build_filename(prj_basepath, prj_file_basename, NULL);
-		GFile *gfile = g_file_new_for_path(abs_path);
-		SETPTR(abs_path,  g_file_get_path(gfile));
-		prj_file_path =  g_file_get_path(gfile);
+		prj_file_path = g_build_filename(prj_basepath, prj_file_basename, NULL);
+		GFile *gfile = g_file_new_for_path(prj_file_path);
+		SETPTR(prj_file_path,  g_file_get_path(gfile));
 		project_new(prj_name, prj_file_path, ".");
 		g_object_unref(gfile);
 	}
 	else if (!utils_is_absolute_path(local_prefs.project_file_path)
 			&& !EMPTY(local_prefs.project_file_path))
 	{
-		gchar *abspath = g_build_filename(prj_basepath, local_prefs.project_file_path, NULL);
-		GFile *gfile = g_file_new_build_filename(abspath, prj_file_basename, NULL);
-		prj_file_path =  g_file_get_path(gfile);
+		GFile *gfile;
 
-		utils_mkdir(abspath, TRUE);
+		prj_file_path = g_build_filename(prj_basepath, local_prefs.project_file_path, NULL);
+		utils_mkdir(prj_file_path, TRUE);
+
+		SETPTR(prj_file_path, g_build_filename(prj_file_path, prj_file_basename, NULL));
+		gfile = g_file_new_for_path(prj_file_path);
+		SETPTR(prj_file_path, g_file_get_path(gfile));
+
 		project_new(prj_name, prj_file_path, prj_basepath);
-
-		g_free(abspath);
 		g_object_unref(gfile);
 	}
 	else
@@ -377,8 +378,13 @@ void project_save_as_dialog(void)
 		}
 		else if (!EMPTY(local_prefs.project_file_path))
 		{
-			GFile *gfile = g_file_new_build_filename(app->project->base_path, local_prefs.project_file_path, NULL);
-			gchar *project_file_path = g_file_get_path(gfile);
+			gchar *project_file_path;
+			GFile *gfile;
+
+			project_file_path = g_build_filename(app->project->base_path, local_prefs.project_file_path, NULL);
+			gfile = g_file_new_for_path(project_file_path);
+			SETPTR(project_file_path, g_file_get_path(gfile));
+
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), project_file_path);
 			g_free(project_file_path);
 			g_object_unref(gfile);
