@@ -274,6 +274,10 @@ Short option  Long option              Function
 *none*        --ft-names               Print a list of Geany's internal filetype names (useful
                                        for snippets configuration).
 
+-k            --project=path           Open a project.  The path may refer to a project file
+                                       (with a ``.geany`` extension) or a folder to use as the
+                                       base path of a project.  See `Project management`_.
+
 -g            --generate-tags          Generate a global tags file (see
                                        `Generating a global tags file`_).
 
@@ -1801,7 +1805,12 @@ Startup path
     It must be an absolute path.
 
 Project files
-    Path to start in when opening project files.
+    Path to start in when saving new projects or opening project files.
+    The path may be relative.
+
+    * When saving new projects, the project base path is used as the
+      reference path.  (See `Open folder as project`_.)
+    * When opening projects, the GTK default fallback is used.
 
 Extra plugin path
     By default Geany looks in the system installation and the user
@@ -1865,6 +1874,7 @@ Use the current file's directory for Find in Files
     When opening the Find in Files dialog, set the directory to search to the directory of the current
     active file. When this option is disabled, the directory of the last use of the Find in Files
     dialog is used. See `Find in Files`_ for details.
+
 
 Projects
 ````````
@@ -2799,6 +2809,78 @@ extension.
 
 When project session support is enabled, Geany will close the currently
 open files and open the session files associated with the project.
+
+
+Open folder as project
+^^^^^^^^^^^^^^^^^^^^^^
+
+The Open folder command opens or creates projects associated with a folder.
+This feature is useful when used in combination with plugins that show
+the contents of the project base path.
+
+The command displays a standard folder chooser.
+Geany first searches for, and attempts to open, an associated project.
+For a folder with the path, ``/path/to/project/``, the first file found,
+from the following list, is opened::
+
+    /path/to/project/project.geany
+    /path/to/project.geany
+    /path/to/project/project_file_path/project.geany
+    ~/.cache/geany/folders/project_[md5].geany
+
+If none of the files exists, a new project is created with the following
+properties, continuing the example:
+
+* Project Name: project
+* Project File: described below
+* Project base path: /path/to/project/
+
+The project file is saved according to settings in `Preferences`_.
+
+* If the option to "Store project file inside the project base directory"
+  is selected, the project file is stored inside the project folder with
+  the same name as the project.  Namely, ``/path/to/project/project.geany``
+  See `General Miscellaneous preferences`_ / `Projects`_.
+
+* If a relative ``project_file_path`` is set, the project is stored at
+  ``/path/to/project/project_file_path/project.geany``.
+  See `General Startup preferences`_ / `Paths`_.
+
+  * Setting the path to ``.`` has the same effect as checking the
+    previously described option.
+
+  * Setting the path to ``..`` causes the project file to be saved to
+    ``/path/to/project.geany``.
+
+  * Missing folders are created.  For instance, suppose the path is set
+    to ``.geany``, the folder ``/path/to/project/.geany`` is created,
+    and the project file saved to ``/path/to/project/.geany/project.geany``.
+
+  * If the path is blank or absolute, the new project file is stored in
+    a subdirectory of the user cache folder.  The filename contains a hash
+    to avoid file name collisions.  On Linux, the path may look like::
+
+    ~/.cache/geany/folders/project_0a3b532362f47aa9e906117ed6ac9537.geany
+
+    Absolute project_file_path is not used when opening folders
+    to avoid name collisions and clutter.
+
+The project may be customized further from Project properties,
+and the Project / `Save As project`_ menu item may be used to save the
+project file with a different name.
+
+Note: Project files created in the cache folder are intended to be transient.
+They may be removed later by Geany or another process.  Users are
+strongly advised to move or resave projects to another location before
+customizing them further.
+
+
+Save As project
+^^^^^^^^^^^^^^^
+
+The Save As command resaves the current project in a different file.
+The previous project file is not removed from the file system.
+Settings from inactive plugins are not saved in the new file.
 
 
 Close project
