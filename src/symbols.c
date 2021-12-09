@@ -1401,34 +1401,38 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				TMTag *found = found_item->data;
 
 				parent_name = get_parent_name(found);
-				/* if parent is unknown, ignore it */
+				/* if parent is unknown, it may not have been added yet - remove
+				 * now and add it again in the second pass when parent should
+				 * already be created */
 				if (parent_name && ! g_hash_table_lookup(parents_table, parent_name))
-					parent_name = NULL;
-
-				if (!tm_tags_equal(tag, found))
+					cont = tree_store_remove_row(store, &iter);
+				else
 				{
-					const gchar *name;
-					gchar *tooltip;
+					if (!tm_tags_equal(tag, found))
+					{
+						const gchar *name;
+						gchar *tooltip;
 
-					/* only update fields that (can) have changed (name that holds line
-					 * number, tooltip, and the tag itself) */
-					name = get_symbol_name(doc, found, parent_name != NULL);
-					tooltip = get_symbol_tooltip(doc, found);
-					gtk_tree_store_set(store, &iter,
-							SYMBOLS_COLUMN_NAME, name,
-							SYMBOLS_COLUMN_TOOLTIP, tooltip,
-							SYMBOLS_COLUMN_TAG, found,
-							-1);
-					g_free(tooltip);
+						/* only update fields that (can) have changed (name that holds line
+						 * number, tooltip, and the tag itself) */
+						name = get_symbol_name(doc, found, parent_name != NULL);
+						tooltip = get_symbol_tooltip(doc, found);
+						gtk_tree_store_set(store, &iter,
+								SYMBOLS_COLUMN_NAME, name,
+								SYMBOLS_COLUMN_TOOLTIP, tooltip,
+								SYMBOLS_COLUMN_TAG, found,
+								-1);
+						g_free(tooltip);
+					}
+
+					update_parents_table(parents_table, found, &iter);
+
+					/* remove the updated tag from the table and list */
+					tags_table_remove(tags_table, found);
+					*tags = g_list_delete_link(*tags, found_item);
+
+					cont = ui_tree_model_iter_any_next(model, &iter, TRUE);
 				}
-
-				update_parents_table(parents_table, found, &iter);
-
-				/* remove the updated tag from the table and list */
-				tags_table_remove(tags_table, found);
-				*tags = g_list_delete_link(*tags, found_item);
-
-				cont = ui_tree_model_iter_any_next(model, &iter, TRUE);
 			}
 
 			tm_tag_unref(tag);
