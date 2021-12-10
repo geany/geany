@@ -4,6 +4,7 @@
 set -u
 
 GEANY="$1"
+PRINTER="${top_srcdir:-../..}"/scripts/print-tags.py
 TMPDIR=$(mktemp -d) || exit 99
 CONFDIR="$TMPDIR/config/"
 
@@ -32,6 +33,8 @@ fi
 shift
 
 tagfile="$TMPDIR/test.${source##*.}.tags"
+outfile="$TMPDIR/test.${source##*.}.out"
 
 "$GEANY" -c "$CONFDIR" -P -g "$tagfile" "$source" "$@" || exit 1
-diff -u "$result" "$tagfile" || exit 2
+cat "$tagfile" | "$PRINTER" > "$outfile" || exit 3
+diff -u "$result" "$outfile" || exit 2
