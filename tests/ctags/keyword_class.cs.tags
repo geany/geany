@@ -1,9 +1,16 @@
-# format=tagmanager
 KidÌ1Ö0
+class:      Kid
 KidÌ128Í()ÎKidÖ0
+method:     Kid :: Kid()
 KidÌ128Í(string name, int age)ÎKidÖ0
+method:     Kid :: Kid(string name, int age)
 MainÌ128Í()ÎMainClassÖ0Ïpublic void
+method:     public void MainClass :: Main()
 MainClassÌ1Ö0
+class:      MainClass
 PrintKidÌ128Í()ÎKidÖ0Ïpublic void
+method:     public void Kid :: PrintKid()
 ageÌ8ÎKidÖ0Ïint
+field:      int Kid :: age
 nameÌ8ÎKidÖ0
+field:      Kid :: name

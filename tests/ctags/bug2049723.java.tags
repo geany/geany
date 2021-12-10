@@ -1,4 +1,6 @@
-# format=tagmanager
 bug2049723Ì1Ö0
+class:      bug2049723
 m1Ì128Í(String arg)Îbug2049723Ö0Ïpublic void
+method:     public void bug2049723 :: m1(String arg)
 m2Ì128Í(@Nonnull String arg)Îbug2049723Ö0Ïpublic void
+method:     public void bug2049723 :: m2(@Nonnull String arg)

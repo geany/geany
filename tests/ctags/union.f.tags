@@ -1,8 +1,14 @@
-# format=tagmanager
 dateÌ64ÎstartÖ0
+member:     start :: date
 dayÌ64ÎstartÖ0
+member:     start :: day
 monthÌ64ÎstartÖ0
+member:     start :: month
 sdateÌ16384ÎwritedateÖ0
+variable:   writedate :: sdate
 startÌ1ÎwritedateÖ0
+class:      writedate :: start
 writedateÌ2048Ö0
+struct:     writedate
 yearÌ64ÎstartÖ0
+member:     start :: year

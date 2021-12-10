@@ -1,11 +1,20 @@
-# format=tagmanager
 #footerÌ16384Ö0
+variable:   #footer
 *Ì2048Ö0
+struct:     *
 .foo aÌ2048Ö0
+struct:     .foo a
 .foo bÌ2048Ö0
+struct:     .foo b
 .headerÌ1Ö0
+class:      .header
 .redÌ1Ö0
+class:      .red
 div.magicÌ1Ö0
+class:      div.magic
 htmlÌ2048Ö0
+struct:     html
 ul > li > aÌ2048Ö0
+struct:     ul > li > a
 ul liÌ2048Ö0
+struct:     ul li

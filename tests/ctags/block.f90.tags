@@ -1,7 +1,12 @@
-# format=tagmanager
 BlocksÌ256Ö0
+namespace:  Blocks
 MainÌ2048Ö0
+struct:     Main
 MyFuncÌ16ÎBlocksÖ0
+function:   Blocks :: MyFunc
 iÌ16384ÎBlocksÖ0
+variable:   Blocks :: i
 moreintÌ16384ÎMainÖ0
+variable:   Main :: moreint
 otherintÌ16384ÎMainÖ0
+variable:   Main :: otherint

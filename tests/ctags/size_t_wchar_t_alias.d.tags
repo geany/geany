@@ -1,3 +1,4 @@
-# format=tagmanager
 size_tÌ4096Ö0
+typedef:    size_t
 wchar_tÌ4096Ö0
+typedef:    wchar_t

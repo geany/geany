@@ -1,3 +1,4 @@
-# format=tagmanager
 BaseClass󉅞
+class:      BaseClass
 IntM�8蜝aseClass�0蟟nt
+field:      int BaseClass :: IntM

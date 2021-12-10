@@ -1,15 +1,28 @@
-# format=tagmanager
 aÌ16384Ö0
+variable:   a
 bÌ16Í()Ö0
+function:   b()
 cÌ16Í()Ö0
+function:   c()
 dÌ16384Ö0
+variable:   d
 eÌ16Í()Ö0
+function:   e()
 fÌ16384Ö0
+variable:   f
 gÌ16Í()Ö0
+function:   g()
 hÌ16384Ö0
+variable:   h
 iÌ16Í()Ö0
+function:   i()
 jÌ16Í()Ö0
+function:   j()
 kÌ16Ö0
+function:   k
 lÌ16Í()Ö0
+function:   l()
 mÌ16384Ö0
+variable:   m
 nÌ16Í()Ö0
+function:   n()

@@ -1,5 +1,8 @@
-# format=tagmanager
 AÌ2Ö0
+enum:       A
 A::BÌ512Ö0
+package:    A::B
 LABELÌ65536Ö0
+macro:      LABEL
 MySubÌ16Ö0
+function:   MySub

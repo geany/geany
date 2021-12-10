@@ -1,9 +1,16 @@
-# format=tagmanager
 AÌ1Ö0
+class:      A
 BÌ1Ö0
+class:      B
 __constructÌ16Í()ÎAÖ0
+function:   A :: __construct()
 __constructÌ16Í($p)ÎBÖ0
+function:   B :: __construct($p)
 stuffÌ16Í($arg1, $arg2)ÎtBarÖ0
+function:   tBar :: stuff($arg1, $arg2)
 stuffÌ16Í()ÎtFooÖ0
+function:   tFoo :: stuff()
 tBarÌ2048Ö0
+struct:     tBar
 tFooÌ2048Ö0
+struct:     tFoo

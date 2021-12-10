@@ -1,17 +1,32 @@
-# format=tagmanager
 AÌ1Ö0
+class:      A
 BÌ1Ö0
+class:      B
 CÌ1Ö0
+class:      C
 DÌ1Ö0
+class:      D
 aÌ16Í()Ö0
+function:   a()
 bÌ16Í()Ö0
+function:   b()
 cÌ16Í()Ö0
+function:   c()
 dÌ16Í()Ö0
+function:   d()
 iAÌ32Ö0
+interface:  iA
 iBÌ32Ö0
+interface:  iB
 iCÌ32Ö0
+interface:  iC
 iDÌ32Ö0
+interface:  iD
 tAÌ2048Ö0
+struct:     tA
 tBÌ2048Ö0
+struct:     tB
 tCÌ2048Ö0
+struct:     tC
 tDÌ2048Ö0
+struct:     tD

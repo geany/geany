@@ -1,4 +1,6 @@
-# format=tagmanager
 aaÌ16384ÎfigureÖ0
+variable:   figure :: aa
 figÌ16384ÎfigureÖ0
+variable:   figure :: fig
 figureÌ2048Ö0
+struct:     figure

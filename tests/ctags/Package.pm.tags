@@ -1,13 +1,24 @@
-# format=tagmanager
 CONSTÌ2Ö0
+enum:       CONST
 ENDÌ65536Ö0
+macro:      END
 END2Ì65536Ö0
+macro:      END2
 TestÌ512Ö0
+package:    Test
 Test::OneÌ512Ö0
+package:    Test::One
 Test::One::TwoÌ512Ö0
+package:    Test::One::Two
 dudeÌ16Ö0
+function:   dude
 initÌ16Ö0
+function:   init
 quoÌ16Ö0
+function:   quo
 quoÌ1024Ö0
+prototype:  quo
 xtzÌ1024Ö0
+prototype:  xtz
 xuzÌ1024Ö0
+prototype:  xuz

@@ -1,7 +1,12 @@
-# format=tagmanager
 chapter1Ì16Ö0
+function:   chapter1
 conclusionÌ1Ö0
+class:      conclusion
 introÌ1Ö0
+class:      intro
 sect1Ì64Ö0
+member:     sect1
 sect2Ì65536Ö0
+macro:      sect2
 sect3Ì16384Ö0
+variable:   sect3

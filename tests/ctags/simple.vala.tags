@@ -1,22 +1,42 @@
-# format=tagmanager
 Demo.HelloWorldÌ1Ö0
+class:      Demo.HelloWorld
 FooÌ1ÎNameSpaceNameÖ0
+class:      NameSpaceName :: Foo
 ITestÌ32Ö0
+interface:  ITest
 MU_BOHRÌ8ÎDemo.HelloWorldÖ0Ïconst double
+field:      const double Demo.HelloWorld :: MU_BOHR
 NameSpaceNameÌ256Ö0
+namespace:  NameSpaceName
 POPUPÌ4ÎDemo.HelloWorld.WindowTypeÖ0
+enumerator: Demo.HelloWorld.WindowType :: POPUP
 TOPLEVELÌ4ÎDemo.HelloWorld.WindowTypeÖ0
+enumerator: Demo.HelloWorld.WindowType :: TOPLEVEL
 VectorÌ2048ÎDemo.HelloWorldÖ0
+struct:     Demo.HelloWorld :: Vector
 WindowTypeÌ2ÎDemo.HelloWorldÖ0
+enum:       Demo.HelloWorld :: WindowType
 _ageÌ8ÎDemo.HelloWorldÖ0Ïint
+field:      int Demo.HelloWorld :: _age
 ageÌ8ÎDemo.HelloWorldÖ0Ïint
+field:      int Demo.HelloWorld :: age
 cÌ8ÎDemo.HelloWorldÖ0Ïunichar
+field:      unichar Demo.HelloWorld :: c
 data_1Ì8ÎITestÖ0Ïabstract int
+field:      abstract int ITest :: data_1
 mainÌ128Í(string[] args)ÎDemo.HelloWorldÖ0Ïpublic int
+method:     public int Demo.HelloWorld :: main(string[] args)
 method_1Ì128Í()ÎITestÖ0Ïpublic abstract void
+method:     public abstract void ITest :: method_1()
 percentileÌ8ÎDemo.HelloWorldÖ0Ïfloat
+field:      float Demo.HelloWorld :: percentile
 sig_1Ì128Í(int a)ÎDemo.HelloWorldÖ0Ïpublic signal void
+method:     public signal void Demo.HelloWorld :: sig_1(int a)
 the_box_has_crashedÌ8ÎDemo.HelloWorldÖ0Ïbool
+field:      bool Demo.HelloWorld :: the_box_has_crashed
 xÌ8ÎDemo.HelloWorld.VectorÖ0Ïdouble
+field:      double Demo.HelloWorld.Vector :: x
 yÌ8ÎDemo.HelloWorld.VectorÖ0Ïdouble
+field:      double Demo.HelloWorld.Vector :: y
 zÌ8ÎDemo.HelloWorld.VectorÖ0Ïdouble
+field:      double Demo.HelloWorld.Vector :: z

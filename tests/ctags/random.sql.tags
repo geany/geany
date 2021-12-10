@@ -1,19 +1,36 @@
-# format=tagmanager
 SeedÌ16384ÎrandomÖ0
+variable:   random :: Seed
 get_randÌ256ÎrandomÖ0
+namespace:  random :: get_rand
 get_randÌ1024ÎrandomÖ0
+prototype:  random :: get_rand
 get_rand_maxÌ256ÎrandomÖ0
+namespace:  random :: get_rand_max
 get_rand_maxÌ1024ÎrandomÖ0
+prototype:  random :: get_rand_max
 incrementÌ16384ÎrandomÖ0
+variable:   random :: increment
 multiplierÌ16384ÎrandomÖ0
+variable:   random :: multiplier
 randÌ16ÎrandomÖ0
+function:   random :: rand
 randÌ1024ÎrandomÖ0
+prototype:  random :: rand
 rand_maxÌ16ÎrandomÖ0
+function:   random :: rand_max
 rand_maxÌ1024ÎrandomÖ0
+prototype:  random :: rand_max
 rand_stringÌ16ÎrandomÖ0
+function:   random :: rand_string
 rand_stringÌ1024ÎrandomÖ0
+prototype:  random :: rand_string
 randomÌ512Ö0
+package:    random
 smallerÌ16ÎrandomÖ0
+function:   random :: smaller
 smallerÌ1024ÎrandomÖ0
+prototype:  random :: smaller
 srandÌ256ÎrandomÖ0
+namespace:  random :: srand
 srandÌ1024ÎrandomÖ0
+prototype:  random :: srand

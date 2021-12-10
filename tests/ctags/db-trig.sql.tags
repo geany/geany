@@ -1,3 +1,4 @@
-# format=tagmanager
 restrict_loginÌ65536ÎdatabaseÖ0
+macro:      database :: restrict_login
 startup_dbÌ65536ÎdatabaseÖ0
+macro:      database :: startup_db

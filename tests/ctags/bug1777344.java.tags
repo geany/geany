@@ -1,10 +1,18 @@
-# format=tagmanager
 VÌ128Í()Îbug1777344Ö0Ï
+method:      bug1777344 :: V()
 bÌ8Îbug1777344Ö0Ïboolean
+field:      boolean bug1777344 :: b
 bug1777344Ì1Ö0
+class:      bug1777344
 cÌ8Îbug1777344Ö0Ïboolean
+field:      boolean bug1777344 :: c
 dÌ8Îbug1777344Ö0Ïboolean
+field:      boolean bug1777344 :: d
 eÌ8Îbug1777344Ö0Ïboolean
+field:      boolean bug1777344 :: e
 map1Ì8Îbug1777344Ö0ÏHashMap
+field:      HashMap bug1777344 :: map1
 map2Ì8Îbug1777344Ö0ÏHashMap
+field:      HashMap bug1777344 :: map2
 map3Ì8Îbug1777344Ö0ÏHashMap
+field:      HashMap bug1777344 :: map3

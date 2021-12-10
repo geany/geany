@@ -1,9 +1,16 @@
-# format=tagmanager
 AlternativeNestedNameSpaceClassÃ1ŒSomeNameSpace.Nested÷0
+class:      SomeNameSpace.Nested :: AlternativeNestedNameSpaceClass
 MainÃ128Õ()ŒSomeNameSpace.MyClass÷0œpublic void
+method:     public void SomeNameSpace.MyClass :: Main()
 MyClassÃ1ŒSomeNameSpace÷0
+class:      SomeNameSpace :: MyClass
 NestedÃ256ŒSomeNameSpace÷0
+namespace:  SomeNameSpace :: Nested
 NestedNameSpaceClassÃ1ŒSomeNameSpace.Nested÷0
+class:      SomeNameSpace.Nested :: NestedNameSpaceClass
 SayHelloÃ128Õ()ŒSomeNameSpace.Nested.NestedNameSpaceClass÷0œpublic void
+method:     public void SomeNameSpace.Nested.NestedNameSpaceClass :: SayHello()
 SomeNameSpaceÃ256÷0
+namespace:  SomeNameSpace
 SomeNameSpace.NestedÃ256÷0
+namespace:  SomeNameSpace.Nested

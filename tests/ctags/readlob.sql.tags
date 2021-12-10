@@ -1,10 +1,18 @@
-# format=tagmanager
 b_fileÌ8Îlob_tableÖ0
+field:      lob_table :: b_file
 b_lobÌ8Îlob_tableÖ0
+field:      lob_table :: b_lob
 c_lobÌ8Îlob_tableÖ0
+field:      lob_table :: c_lob
 charbufÌ16384Ö0
+variable:   charbuf
 clob_locatorÌ16384Ö0
+variable:   clob_locator
 idÌ8Îlob_tableÖ0
+field:      lob_table :: id
 lob_tableÌ1Ö0
+class:      lob_table
 read_amountÌ16384Ö0
+variable:   read_amount
 read_offsetÌ16384Ö0
+variable:   read_offset

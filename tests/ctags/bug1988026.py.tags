@@ -1,5 +1,8 @@
-# format=tagmanager
 im_a_functionÌ16Í()Ö0
+function:   im_a_function()
 mainÌ128Í()ÎtestClassÖ0
+method:     testClass :: main()
 my_varÌ16384ÎtestClassÖ0
+variable:   testClass :: my_var
 testClassÌ1Ö0
+class:      testClass

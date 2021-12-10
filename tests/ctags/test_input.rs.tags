@@ -1,58 +1,114 @@
-# format=tagmanager
 AÌ2048Ö0
+struct:     A
 AnimalÌ2Ö0
+enum:       Animal
 BÌ2048Ö0
+struct:     B
 BarÌ2048Ö0
+struct:     Bar
 BazÌ2048Ö0
+struct:     Baz
 CÌ1Ö0
+class:      C
 CÌ2048Ö0
+struct:     C
 DÌ32Ö0
+interface:  D
 DoZÌ32Ö0
+interface:  DoZ
 FooÌ1Ö0
+class:      Foo
 FooÌ2048Ö0
+struct:     Foo
 Foo2Ì2048Ö0
+struct:     Foo2
 ParametrizedTraitÌ32Ö0
+interface:  ParametrizedTrait
 S1Ì2048Ö0
+struct:     S1
 SomeStructÌ2048Îtest_input2Ö0
+struct:     test_input2 :: SomeStruct
 SuperTraitTestÌ32Ö0
+interface:  SuperTraitTest
 TestableÌ32Ö0
+interface:  Testable
 TraitedStructTestÌ1Ö0
+class:      TraitedStructTest
 TraitedStructTestÌ2048Ö0
+struct:     TraitedStructTest
 aÌ8ÎCÖ0
+field:      C :: a
 a_anteaterÌ4ÎAnimalÖ0
+enumerator: Animal :: a_anteater
 a_bearÌ4ÎAnimalÖ0
+enumerator: Animal :: a_bear
 a_catÌ4ÎAnimalÖ0
+enumerator: Animal :: a_cat
 a_dogÌ4ÎAnimalÖ0
+enumerator: Animal :: a_dog
 barÌ8ÎAÖ0
+field:      A :: bar
 barÌ8ÎBÖ0
+field:      B :: bar
 do_zÌ128Í(&self)ÎDoZÖ0
+method:     DoZ :: do_z(&self)
 do_zÌ128Í(&self)ÎFooÖ0
+method:     Foo :: do_z(&self)
 fooÌ8ÎAÖ0
+field:      A :: foo
 fooÌ8ÎBÖ0
+field:      B :: foo
 foo_field_1Ì8ÎFooÖ0
+field:      Foo :: foo_field_1
 gfuncÌ16Í<X:Testable+DoZ>(x:&X)Ö0
+function:   gfunc<X:Testable+DoZ>(x:&X)
 ignoreÌ65536Ö0
+macro:      ignore
 lifetime_and_charÌ16Í<'lifetime>(_: &'lifetime isize)Ö0
+function:   lifetime_and_char<'lifetime>(_: &'lifetime isize)
 mainÌ16Í()Ö0
+function:   main()
 my_methodÌ128Í(&self,_:isize)ÎFooÖ0
+method:     Foo :: my_method(&self,_:isize)
 nestedÌ16Í()ÎmainÖ0
+function:   main :: nested()
 not_hidden_by_charÌ16Í()Îlifetime_and_charÖ0
+function:   lifetime_and_char :: not_hidden_by_char()
 only_fieldÌ8ÎS1Ö0
+field:      S1 :: only_field
 preserve_string_delimsÌ16Í(_bar: extern r#"C"# fn())Ö0
+function:   preserve_string_delims(_bar: extern r#"C"# fn())
 sizeÌ16384Ö0
+variable:   size
 some2Ì16Í(a:Animal)Ö0
+function:   some2(a:Animal)
 testÌ128Í(&self)ÎFooÖ0
+method:     Foo :: test(&self)
 testÌ128Í(&self)ÎParametrizedTraitÖ0
+method:     ParametrizedTrait :: test(&self)
 testÌ128Í(&self)ÎTestableÖ0
+method:     Testable :: test(&self)
 testÌ128Í(&self)ÎTraitedStructTestÖ0
+method:     TraitedStructTest :: test(&self)
 test1Ì128Í(&self)ÎFooÖ0
+method:     Foo :: test1(&self)
 test1Ì128Í(&self)ÎTestableÖ0
+method:     Testable :: test1(&self)
 test2Ì128Í(&self)ÎFooÖ0
+method:     Foo :: test2(&self)
 test2Ì128Í(&self)ÎTestableÖ0
+method:     Testable :: test2(&self)
 test_input2Ì256Ö0
+namespace:  test_input2
 test_macroÌ65536Ö0
+macro:      test_macro
 where_fooÌ16Í<T>(a: T) where T: SendÖ0
+function:   where_foo<T>(a: T) where T: Send
 xÌ8ÎFoo2Ö0
+field:      Foo2 :: x
 xÌ8ÎTraitedStructTestÖ0
+field:      TraitedStructTest :: x
 yÌ8ÎFoo2Ö0
+field:      Foo2 :: y
 yadaÌ16Í(a:isize, c:Foo, b:test_input2::SomeStruct) -> StringÖ0
+function:   yada(a:isize, c:Foo, b:test_input2::SomeStruct) -> String

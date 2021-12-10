@@ -1,15 +1,28 @@
-# format=tagmanager
 C1Ì1ÎN1Ö0
+class:      N1 :: C1
 C2Ì1ÎN1.C1Ö0
+class:      N1.C1 :: C2
 C2Ì1ÎN1.N2Ö0
+class:      N1.N2 :: C2
 IMyInterfaceÌ32ÎMyNamespace1Ö0
+interface:  MyNamespace1 :: IMyInterface
 MainÌ128Í(string[] args)ÎMyNamespace1.MyClass2Ö0Ïpublic void
+method:     public void MyNamespace1.MyClass2 :: Main(string[] args)
 MyClass1Ì1ÎMyNamespace1Ö0
+class:      MyNamespace1 :: MyClass1
 MyClass2Ì1ÎMyNamespace1Ö0
+class:      MyNamespace1 :: MyClass2
 MyDelegateÌ128Í()ÎMyNamespace1Ö0Ïdelegate int
+method:     delegate int MyNamespace1 :: MyDelegate()
 MyEnumÌ2ÎMyNamespace1Ö0
+enum:       MyNamespace1 :: MyEnum
 MyNamespace1Ì256Ö0
+namespace:  MyNamespace1
 MyNamespace2Ì256ÎMyNamespace1Ö0
+namespace:  MyNamespace1 :: MyNamespace2
 MyStructÌ2048ÎMyNamespace1Ö0
+struct:     MyNamespace1 :: MyStruct
 N1Ì256Ö0
+namespace:  N1
 N2Ì256ÎN1Ö0
+namespace:  N1 :: N2

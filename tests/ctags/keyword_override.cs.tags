@@ -1,10 +1,18 @@
-# format=tagmanager
 AreaÌ128Í()ÎTestClass.CubeÖ0Ïpublic override double
+method:     public override double TestClass.Cube :: Area()
 AreaÌ128Í()ÎTestClass.SquareÖ0Ïpublic virtual double
+method:     public virtual double TestClass.Square :: Area()
 CubeÌ1ÎTestClassÖ0
+class:      TestClass :: Cube
 CubeÌ128Í(double x)ÎTestClass.CubeÖ0
+method:     TestClass.Cube :: Cube(double x)
 MainÌ128Í()ÎTestClassÖ0Ïpublic void
+method:     public void TestClass :: Main()
 SquareÌ1ÎTestClassÖ0
+class:      TestClass :: Square
 SquareÌ128Í(double x)ÎTestClass.SquareÖ0
+method:     TestClass.Square :: Square(double x)
 TestClassÌ1Ö0
+class:      TestClass
 xÌ8ÎTestClass.SquareÖ0Ïdouble
+field:      double TestClass.Square :: x

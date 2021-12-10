@@ -1,3 +1,4 @@
-# format=tagmanager
 lockÌ128Í()ÎLockingÖ0
+method:     Locking :: lock()
 unlockÌ128Í()ÎLockingÖ0
+method:     Locking :: unlock()

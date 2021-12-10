@@ -1,24 +1,46 @@
-# format=tagmanager
 AliasIntÌ4096Ö0
+typedef:    AliasInt
 ClassÌ1Ö0
+class:      Class
 EnumÌ2Ö0
+enum:       Enum
 InterfaceÌ32Ö0
+interface:  Interface
 StructÌ2048Ö0
+struct:     Struct
 TemplateÌ256Ö0
+namespace:  Template
 TemplateAliasÌ4096ÎTemplateÖ0
+typedef:    Template :: TemplateAlias
 UnionÌ8192ÎStructÖ0
+union:      Struct :: Union
 _barÌ64ÎClassÖ0ÏAliasInt
+member:     AliasInt Class :: _bar
 barÌ4ÎEnumÖ0
+enumerator: Enum :: bar
 barÌ16Í()ÎClassÖ0Ïpublic AliasInt
+function:   public AliasInt Class :: bar()
 barÌ1024Í()ÎInterfaceÖ0Ïpublic AliasInt
+prototype:  public AliasInt Interface :: bar()
 conditionalÌ16384Ö0ÏT
+variable:   T conditional
 fooÌ4ÎEnumÖ0
+enumerator: Enum :: foo
 globalVarÌ16384Ö0Ï__gshared int
+variable:   __gshared int globalVar
 iÌ16384Ö0Ïint
+variable:   int i
 mainÌ16Í(string[] args)Ö0Ïvoid
+function:   void main(string[] args)
 objÌ16384Ö0ÏObject
+variable:   Object obj
 qarÌ64ÎStruct.UnionÖ0Ïint
+member:     int Struct.Union :: qar
 quxxÌ64ÎStruct.UnionÖ0Ïbool
+member:     bool Struct.Union :: quxx
 test.simpleÌ256Ö0
+namespace:  test.simple
 tfunÌ16Í(T v)ÎClassÖ0Ïauto
+function:   auto Class :: tfun(T v)
 thisÌ16Í(AliasInt x)ÎClassÖ0
+function:   Class :: this(AliasInt x)

@@ -1,10 +1,18 @@
-# format=tagmanager
 CÌ1Ö0
+class:      C
 Enum1Ì2Ö0
+enum:       Enum1
 MyGenericClass1Ì1Ö0
+class:      MyGenericClass1
 Value1Ì4ÎEnum1Ö0
+enumerator: Enum1 :: Value1
 ValuesÌ4ÎEnum1Ö0
+enumerator: Enum1 :: Values
 int1Ì8ÎCÖ0Ïint
+field:      int C :: int1
 str1Ì8ÎCÖ0
+field:      C :: str1
 str2Ì8ÎCÖ0
+field:      C :: str2
 str3Ì8ÎCÖ0
+field:      C :: str3

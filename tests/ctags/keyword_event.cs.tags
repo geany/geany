@@ -1,22 +1,42 @@
-# format=tagmanager
 ExplicitEventsSampleÌ1Ö0
+class:      ExplicitEventsSample
 FireAwayÌ128Í()ÎIÖ0Ïvoid
+method:     void I :: FireAway()
 FireAwayÌ128Í()ÎMyClassÖ0Ïpublic void
+method:     public void MyClass :: FireAway()
 FireEventsÌ128Í()ÎExplicitEventsSampleÖ0Ïprivate void
+method:     private void ExplicitEventsSample :: FireEvents()
 IÌ32Ö0
+interface:  I
 I1Ì32Ö0
+interface:  I1
 I2Ì32Ö0
+interface:  I2
 MainÌ128Í()ÎMainClassÖ0Ïpublic void
+method:     public void MainClass :: Main()
 MainÌ128Í()ÎMyClassÖ0Ïpublic void
+method:     public void MyClass :: Main()
 MainClassÌ1Ö0
+class:      MainClass
 MyClassÌ1Ö0
+class:      MyClass
 MyDelegateÌ128Í()Ö0Ïpublic delegate void
+method:     public delegate void MyDelegate()
 MyDelegate1Ì128Í(int i)Ö0Ïpublic delegate void
+method:     public delegate void MyDelegate1(int i)
 MyDelegate1Ì128Í()Ö0Ïpublic delegate void
+method:     public delegate void MyDelegate1()
 MyDelegate2Ì128Í(string s)Ö0Ïpublic delegate int
+method:     public delegate int MyDelegate2(string s)
 MyDelegate3Ì128Í(int i, object o)Ö0Ïpublic delegate void
+method:     public delegate void MyDelegate3(int i, object o)
 MyDelegate4Ì128Í()Ö0Ïpublic delegate void
+method:     public delegate void MyDelegate4()
 MyEvent2StorageÌ8ÎExplicitEventsSampleÖ0ÏMyDelegate2
+field:      MyDelegate2 ExplicitEventsSample :: MyEvent2Storage
 PropertyEventsSampleÌ1Ö0
+class:      PropertyEventsSample
 eventTableÌ8ÎPropertyEventsSampleÖ0ÏHashtable
+field:      Hashtable PropertyEventsSample :: eventTable
 fÌ128Í()ÎMainClassÖ0Ïprivate void
+method:     private void MainClass :: f()

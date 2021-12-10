@@ -1,5 +1,8 @@
-# format=tagmanager
 __constructл16м($a, $b)нц≈ж0
+function:   ц≈ :: __construct($a, $b)
 __toStringл16м()нц≈ж0
+function:   ц≈ :: __toString()
 rл16384нц≈ж0
+variable:   ц≈ :: r
 ц≈л1ж0
+class:      ц≈

@@ -1,8 +1,14 @@
-# format=tagmanager
 DataÌ1ÎProgramÖ0
+class:      Program :: Data
 InterfaceÌ2048Ö0
+struct:     Interface
 MyFuncÌ16ÎProgramÖ0
+function:   Program :: MyFunc
 ProgramÌ32ÎProgramÖ0
+interface:  Program :: Program
 ProgramÌ256Ö0
+namespace:  Program
 contentsÌ64ÎDataÖ0
+member:     Data :: contents
 iÌ16384ÎProgramÖ0
+variable:   Program :: i

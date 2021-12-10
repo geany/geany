@@ -1,16 +1,30 @@
-# format=tagmanager
 A-Global-Scope-FunctionÃ16Õ()÷0
+function:   A-Global-Scope-Function()
 ALocalVarÃ16384÷0
+variable:   ALocalVar
 BasePathÃ16384÷0
+variable:   BasePath
 ErrorActionPreferenceÃ16384÷0
+variable:   ErrorActionPreference
 LoadTemplateÃ16Õ($template)÷0
+function:   LoadTemplate($template)
 LogMessageÃ16Õ()÷0
+function:   LogMessage()
 LogMessageOKÃ16Õ()÷0
+function:   LogMessageOK()
 MainÃ16Õ()÷0
+function:   Main()
 MyFilterÃ16÷0
+function:   MyFilter
 MyPrivateFilterÃ16÷0
+function:   MyPrivateFilter
 Read-Configuration-FileÃ16Õ()÷0
+function:   Read-Configuration-File()
 SecondLevelNestedFunctionÃ16Õ()ŒTopLevelFunction÷0
+function:   TopLevelFunction :: SecondLevelNestedFunction()
 SettingsÃ16384÷0
+variable:   Settings
 ThirdLevelNestedFunctionÃ16Õ()ŒTopLevelFunction::SecondLevelNestedFunction÷0
+function:   TopLevelFunction::SecondLevelNestedFunction :: ThirdLevelNestedFunction()
 TopLevelFunctionÃ16Õ()÷0
+function:   TopLevelFunction()

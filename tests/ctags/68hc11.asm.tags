@@ -1,11 +1,20 @@
-# format=tagmanager
 COLDÌ256Ö0
+namespace:  COLD
 INTERRUPTSÌ256Ö0
+namespace:  INTERRUPTS
 PORTDÌ65536Ö0
+macro:      PORTD
 PROMPTÌ256Ö0
+namespace:  PROMPT
 SPÌ65536Ö0
+macro:      SP
 TRAPPÌ256Ö0
+namespace:  TRAPP
 sym1Ì65536Ö0
+macro:      sym1
 sym2Ì65536Ö0
+macro:      sym2
 sym3Ì256Ö0
+namespace:  sym3
 sym4Ì256Ö0
+namespace:  sym4

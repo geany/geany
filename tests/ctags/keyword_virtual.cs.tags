@@ -1,19 +1,36 @@
-# format=tagmanager
 AreaÌ128Í()ÎTestClass.CircleÖ0Ïpublic override double
+method:     public override double TestClass.Circle :: Area()
 AreaÌ128Í()ÎTestClass.CylinderÖ0Ïpublic override double
+method:     public override double TestClass.Cylinder :: Area()
 AreaÌ128Í()ÎTestClass.DimensionsÖ0Ïpublic virtual double
+method:     public virtual double TestClass.Dimensions :: Area()
 AreaÌ128Í()ÎTestClass.SphereÖ0Ïpublic override double
+method:     public override double TestClass.Sphere :: Area()
 CircleÌ1ÎTestClassÖ0
+class:      TestClass :: Circle
 CircleÌ128Í(double r)ÎTestClass.CircleÖ0
+method:     TestClass.Circle :: Circle(double r)
 CylinderÌ1ÎTestClassÖ0
+class:      TestClass :: Cylinder
 CylinderÌ128Í(double r, double h)ÎTestClass.CylinderÖ0
+method:     TestClass.Cylinder :: Cylinder(double r, double h)
 DimensionsÌ1ÎTestClassÖ0
+class:      TestClass :: Dimensions
 DimensionsÌ128Í()ÎTestClass.DimensionsÖ0
+method:     TestClass.Dimensions :: Dimensions()
 DimensionsÌ128Í(double x, double y)ÎTestClass.DimensionsÖ0
+method:     TestClass.Dimensions :: Dimensions(double x, double y)
 MainÌ128Í()ÎTestClassÖ0Ïpublic void
+method:     public void TestClass :: Main()
 SphereÌ1ÎTestClassÖ0
+class:      TestClass :: Sphere
 SphereÌ128Í(double r)ÎTestClass.SphereÖ0
+method:     TestClass.Sphere :: Sphere(double r)
 TestClassÌ1Ö0
+class:      TestClass
 piÌ8ÎTestClass.DimensionsÖ0Ïconst double
+field:      const double TestClass.Dimensions :: pi
 xÌ8ÎTestClass.DimensionsÖ0Ïdouble
+field:      double TestClass.Dimensions :: x
 yÌ8ÎTestClass.DimensionsÖ0Ïdouble
+field:      double TestClass.Dimensions :: y

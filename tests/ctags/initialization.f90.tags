@@ -1,4 +1,6 @@
-# format=tagmanager
 funconÌ256Ö0
+namespace:  funcon
 imatÌ16384ÎfunconÖ0
+variable:   funcon :: imat
 imat6Ì16384ÎfunconÖ0
+variable:   funcon :: imat6

@@ -1,14 +1,26 @@
-# format=tagmanager
 amberÌ16384ÎtrafficÖ0
+variable:   traffic :: amber
 amber_ticsÌ16384ÎtrafficÖ0
+variable:   traffic :: amber_tics
 clockÌ16384ÎtrafficÖ0
+variable:   traffic :: clock
 colorÌ16384Îtraffic.lightÖ0
+variable:   traffic.light :: color
 greenÌ16384ÎtrafficÖ0
+variable:   traffic :: green
 green_ticsÌ16384ÎtrafficÖ0
+variable:   traffic :: green_tics
 lightÌ16ÎtrafficÖ0
+function:   traffic :: light
 offÌ16384ÎtrafficÖ0
+variable:   traffic :: off
 onÌ16384ÎtrafficÖ0
+variable:   traffic :: on
 redÌ16384ÎtrafficÖ0
+variable:   traffic :: red
 red_ticsÌ16384ÎtrafficÖ0
+variable:   traffic :: red_tics
 ticsÌ16384Îtraffic.lightÖ0
+variable:   traffic.light :: tics
 trafficÌ1Ö0
+class:      traffic

@@ -1,9 +1,16 @@
-# format=tagmanager
 GUESTAÌ16384Ö0
+variable:   GUESTA
 GUESTBÌ16384Ö0
+variable:   GUESTB
 GUESTCÌ16384Ö0
+variable:   GUESTC
 GUESTDÌ16384Ö0
+variable:   GUESTD
 HOSTAÌ16384Ö0
+variable:   HOSTA
 HOSTBÌ16384Ö0
+variable:   HOSTB
 HOSTCÌ16384Ö0
+variable:   HOSTC
 HOSTDÌ16384Ö0
+variable:   HOSTD

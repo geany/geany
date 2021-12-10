@@ -1,5 +1,8 @@
-# format=tagmanager
 MyClassÃ1ŒTest÷0
+class:      Test :: MyClass
 TestÃ256÷0
+namespace:  Test
 someMethod1Ã16Õ()ŒTest::MyClass÷0
+function:   Test::MyClass :: someMethod1()
 someMethod2Ã16Õ()ŒTest::MyClass÷0
+function:   Test::MyClass :: someMethod2()

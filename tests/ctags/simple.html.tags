@@ -1,6 +1,10 @@
-# format=tagmanager
 messageÌ16Í()Ö0
+function:   message()
 postfixed_anchorÌ64Ö0
+member:     postfixed_anchor
 prefixed_anchorÌ64Ö0
+member:     prefixed_anchor
 simple_anchorÌ64Ö0
+member:     simple_anchor
 unquoted_anchorÌ64Ö0
+member:     unquoted_anchor

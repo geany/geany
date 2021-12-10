@@ -1,15 +1,28 @@
-# format=tagmanager
 AddÌ128Í(object value)ÎMyCollections.ListWithChangedEventÖ0Ïpublic override int
+method:     public override int MyCollections.ListWithChangedEvent :: Add(object value)
 ChangedEventHandlerÌ128Í(object sender, EventArgs e)ÎMyCollectionsÖ0Ïpublic delegate void
+method:     public delegate void MyCollections :: ChangedEventHandler(object sender, EventArgs e)
 ClearÌ128Í()ÎMyCollections.ListWithChangedEventÖ0Ïpublic override void
+method:     public override void MyCollections.ListWithChangedEvent :: Clear()
 DetachÌ128Í()ÎTestEvents.EventListenerÖ0Ïpublic void
+method:     public void TestEvents.EventListener :: Detach()
 EventListenerÌ1ÎTestEventsÖ0
+class:      TestEvents :: EventListener
 EventListenerÌ128Í(ListWithChangedEvent list)ÎTestEvents.EventListenerÖ0
+method:     TestEvents.EventListener :: EventListener(ListWithChangedEvent list)
 ListÌ8ÎTestEvents.EventListenerÖ0ÏListWithChangedEvent
+field:      ListWithChangedEvent TestEvents.EventListener :: List
 ListChangedÌ128Í(object sender, EventArgs e)ÎTestEvents.EventListenerÖ0Ïprivate void
+method:     private void TestEvents.EventListener :: ListChanged(object sender, EventArgs e)
 ListWithChangedEventÌ1ÎMyCollectionsÖ0
+class:      MyCollections :: ListWithChangedEvent
 MainÌ128Í()ÎTestEvents.TestÖ0Ïpublic void
+method:     public void TestEvents.Test :: Main()
 MyCollectionsÌ256Ö0
+namespace:  MyCollections
 OnChangedÌ128Í(EventArgs e)ÎMyCollections.ListWithChangedEventÖ0Ïprotected virtual void
+method:     protected virtual void MyCollections.ListWithChangedEvent :: OnChanged(EventArgs e)
 TestÌ1ÎTestEventsÖ0
+class:      TestEvents :: Test
 TestEventsÌ256Ö0
+namespace:  TestEvents

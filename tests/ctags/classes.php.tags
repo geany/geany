@@ -1,8 +1,14 @@
-# format=tagmanager
 BarÌ1Ö0
+class:      Bar
 FooÌ1Ö0
+class:      Foo
 __constructÌ16Í()ÎBarÖ0
+function:   Bar :: __construct()
 __constructÌ16Í($a, $b)ÎFooÖ0
+function:   Foo :: __construct($a, $b)
 method1Ì16Í()ÎBarÖ0
+function:   Bar :: method1()
 method1Ì16Í($arg)ÎFooÖ0
+function:   Foo :: method1($arg)
 method2Ì16Í()ÎFooÖ0
+function:   Foo :: method2()

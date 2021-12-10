@@ -1,8 +1,14 @@
-# format=tagmanager
 AccessSalaryÌ128Í()ÎEmployeeÖ0Ïpublic double
+method:     public double Employee :: AccessSalary()
 EmployeeÌ1Ö0
+class:      Employee
 MainÌ128Í()ÎMainClassÖ0Ïpublic void
+method:     public void MainClass :: Main()
 MainClassÌ1Ö0
+class:      MainClass
 nameÌ8ÎEmployeeÖ0
+field:      Employee :: name
 not_visibleÌ8ÎEmployeeÖ0Ïint
+field:      int Employee :: not_visible
 salaryÌ8ÎEmployeeÖ0Ïdouble
+field:      double Employee :: salary

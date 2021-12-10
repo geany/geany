@@ -1,6 +1,10 @@
-# format=tagmanager
 aÌ2048Ö0
+struct:     a
 htmlÌ2048Ö0
+struct:     html
 inputÌ2048Ö0
+struct:     input
 pÌ2048Ö0
+struct:     p
 textareaÌ2048Ö0
+struct:     textarea

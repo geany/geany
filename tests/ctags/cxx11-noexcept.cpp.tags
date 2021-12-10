@@ -1,5 +1,8 @@
-# format=tagmanager
 BaseÌ1Ö0
+class:      Base
 barÌ1024Í() constÎBaseÖ0Ïvoid
+prototype:  void Base :: bar() const
 bazÌ16Í()ÎBaseÖ0Ïint
+function:   int Base :: baz()
 fooÌ1024Í()ÎBaseÖ0Ïvoid
+prototype:  void Base :: foo()

@@ -1,42 +1,82 @@
-# format=tagmanager
 MyClassÌ1Ö0
+class:      MyClass
 MyClass_sub1Ì128Í(x)ÎMyClassÖ0
+method:     MyClass :: MyClass_sub1(x)
 MyClass_sub2Ì128Í(x)ÎMyClassÖ0
+method:     MyClass :: MyClass_sub2(x)
 aÌ16Í(flag)Ö0
+function:   a(flag)
 aaÌ16Í()Ö0
+function:   aa()
 aa_sub1Ì16Í()ÎaaÖ0
+function:   aa :: aa_sub1()
 aa_sub2Ì16Í()ÎaaÖ0
+function:   aa :: aa_sub2()
 bÌ16Í()Ö0
+function:   b()
 bazÌ16Í()ÎfÖ0
+function:   f :: baz()
 cÌ16Í(flag)Ö0
+function:   c(flag)
 dÌ16Í()Ö0
+function:   d()
 eÌ16Í(flag)Ö0
+function:   e(flag)
 fÌ16Í()Ö0
+function:   f()
 gÌ16Í(flag)Ö0
+function:   g(flag)
 hÌ16Í()Ö0
+function:   h()
 iÌ16Í(flag)Ö0
+function:   i(flag)
 jÌ16Í()Ö0
+function:   j()
 kÌ16Í(flag)Ö0
+function:   k(flag)
 lÌ16Í()Ö0
+function:   l()
 mÌ16Í(flag)Ö0
+function:   m(flag)
 nÌ16Í()Ö0
+function:   n()
 oÌ16Í()Ö0
+function:   o()
 pÌ16Í()Ö0
+function:   p()
 qÌ16Í()Ö0
+function:   q()
 rÌ16Í(flag)Ö0
+function:   r(flag)
 sÌ16Í()Ö0
+function:   s()
 tÌ16Í(flag)Ö0
+function:   t(flag)
 uÌ16Í(flag)Ö0
+function:   u(flag)
 vÌ16Í(flag)Ö0
+function:   v(flag)
 wÌ16Í()Ö0
+function:   w()
 w_sub1Ì16Í(x)ÎwÖ0
+function:   w :: w_sub1(x)
 w_sub2Ì16Í()ÎwÖ0
+function:   w :: w_sub2()
 xÌ16Í()Ö0
+function:   x()
 x_sub1Ì16Í()ÎxÖ0
+function:   x :: x_sub1()
 x_sub2Ì16Í()ÎxÖ0
+function:   x :: x_sub2()
 yÌ16Í()Ö0
+function:   y()
 y_sub1Ì16Í()ÎyÖ0
+function:   y :: y_sub1()
 y_sub2Ì16Í()ÎyÖ0
+function:   y :: y_sub2()
 zÌ16Í()Ö0
+function:   z()
 z_sub1Ì16Í()ÎzÖ0
+function:   z :: z_sub1()
 z_sub2Ì16Í()ÎzÖ0
+function:   z :: z_sub2()

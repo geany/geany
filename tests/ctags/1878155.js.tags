@@ -1,5 +1,8 @@
-# format=tagmanager
 REÌ1Ö0
+class:      RE
 barÌ64ÎREÖ0
+member:     RE :: bar
 fooÌ16384Ö0
+variable:   foo
 my_functionÌ16Í()Ö0
+function:   my_function()

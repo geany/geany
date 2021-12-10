@@ -1,4 +1,6 @@
-# format=tagmanager
 Test1Ì16Í()Ö0
+function:   Test1()
 Test2Ì16Í()Ö0
+function:   Test2()
 Test3Ì16Í()Ö0
+function:   Test3()

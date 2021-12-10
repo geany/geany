@@ -1,6 +1,10 @@
-# format=tagmanager
 a[href^="http://"]Ì2048Ö0
+struct:     a[href^="http://"]
 a[href^="https://"]Ì2048Ö0
+struct:     a[href^="https://"]
 a[lang~=en]Ì2048Ö0
+struct:     a[lang~=en]
 bodyÌ2048Ö0
+struct:     body
 pÌ2048Ö0
+struct:     p

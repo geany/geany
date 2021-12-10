@@ -1,5 +1,8 @@
-# format=tagmanager
 AUTO_TESTÌ2048Ö0
+struct:     AUTO_TEST
 DÌ16384ÎAUTO_TESTÖ0
+variable:   AUTO_TEST :: D
 PÌ16384ÎAUTO_TESTÖ0
+variable:   AUTO_TEST :: P
 QÌ16384ÎAUTO_TESTÖ0
+variable:   AUTO_TEST :: Q

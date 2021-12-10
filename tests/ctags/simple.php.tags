@@ -1,12 +1,22 @@
-# format=tagmanager
 4siteÌ16384Ö0
+variable:   4site
 CONSTANTÌ65536Ö0
+macro:      CONSTANT
 CartÌ1Ö0
+class:      Cart
 VarÌ16384Ö0
+variable:   Var
 _4siteÌ16384Ö0
+variable:   _4site
 add_itemÌ16Í($artnr, $num)ÎCartÖ0
+function:   Cart :: add_item($artnr, $num)
 fooÌ16Í($arg_1, $arg_2, ..., $arg_n)Ö0
+function:   foo($arg_1, $arg_2, ..., $arg_n)
 itemsÌ16384ÎCartÖ0
+variable:   Cart :: items
 remove_itemÌ16Í($artnr, $num)ÎCartÖ0
+function:   Cart :: remove_item($artnr, $num)
 täyteÌ16384Ö0
+variable:   t
 varÌ16384Ö0
+variable:   var

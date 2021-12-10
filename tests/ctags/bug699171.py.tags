@@ -1,3 +1,4 @@
-# format=tagmanager
 HEADER_TEMPLATEÌ16384Ö0
+variable:   HEADER_TEMPLATE
 QuitÌ16Í(msg, exitcode=0)Ö0
+function:   Quit(msg, exitcode=0)

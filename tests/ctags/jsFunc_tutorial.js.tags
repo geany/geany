@@ -1,71 +1,140 @@
-# format=tagmanager
 Ball1Ã16Õ()÷0
+function:   Ball1()
 Ball3Ã16Õ()÷0
+function:   Ball3()
 D1Ã16Õ(a, b)÷0
+function:   D1(a, b)
 D2Ã16Õ(a, b)÷0
+function:   D2(a, b)
 D2AÃ16Õ(a, b)÷0
+function:   D2A(a, b)
 D3Ã16÷0
+function:   D3
 D4Ã16÷0
+function:   D4
 D5Ã16Õ(myOperator)÷0
+function:   D5(myOperator)
 DT1Ã16Õ()÷0
+function:   DT1()
 DT2Ã16Õ(message)÷0
+function:   DT2(message)
 DT2AÃ16Õ(message)÷0
+function:   DT2A(message)
 DT3Ã16Õ()÷0
+function:   DT3()
 DT4Ã1Õ(message, specifiedName)÷0
+class:      DT4(message, specifiedName)
 DT5Ã1Õ(color, specifiedName, owner, weight)÷0
+class:      DT5(color, specifiedName, owner, weight)
 DT6Ã1Õ(name, salary, mySupervisor)÷0
+class:      DT6(name, salary, mySupervisor)
 DT7Ã1Õ(name, salary)÷0
+class:      DT7(name, salary)
 DT7AÃ1Õ(name, salary)÷0
+class:      DT7A(name, salary)
 DT8Ã1Õ(name, salary)÷0
+class:      DT8(name, salary)
 DT9Ã1Õ(name, salary)÷0
+class:      DT9(name, salary)
 PT1Ã16Õ()÷0
+function:   PT1()
 PT2Ã1Õ(name, color)÷0
+class:      PT2(name, color)
 PT3Ã1Õ(name, salary)÷0
+class:      PT3(name, salary)
 addÃ16Õ(a,b)ŒmyObject÷0
+function:   myObject :: add(a,b)
 addSalaryÃ128Õ(addition)ŒPT3÷0
+method:     PT3 :: addSalary(addition)
 addSalaryFunctionÃ1Õ(addition)÷0
+class:      addSalaryFunction(addition)
 addSalaryFunctionDT9Ã1Õ(addition)÷0
+class:      addSalaryFunctionDT9(addition)
 ball0Ã16384÷0
+variable:   ball0
 ball1Ã16384÷0
+variable:   ball1
 ball2Ã1÷0
+class:      ball2
 ball3Ã16384÷0
+variable:   ball3
 ball4Ã16384÷0
+variable:   ball4
 ball5Ã16384÷0
+variable:   ball5
 ball6Ã16384÷0
+variable:   ball6
 ball7Ã16384÷0
+variable:   ball7
 ball8Ã16384÷0
+variable:   ball8
 ball9Ã16384÷0
+variable:   ball9
 balloonÃ16384÷0
+variable:   balloon
 bossÃ16384÷0
+variable:   boss
 boss1Ã16384÷0
+variable:   boss1
 boss2Ã16384÷0
+variable:   boss2
 boss3Ã16384÷0
+variable:   boss3
 calculateÃ16Õ(number)ŒgetHalfOf7÷0
+function:   getHalfOf7 :: calculate(number)
 calculateÃ16Õ(number)ŒgetHalfOf8÷0
+function:   getHalfOf8 :: calculate(number)
 calculate8Ã16Õ(number)÷0
+function:   calculate8(number)
 getHalfOf7Ã16Õ(num1, num2, num3)÷0
+function:   getHalfOf7(num1, num2, num3)
 getHalfOf8Ã16Õ(num1, num2, num3)÷0
+function:   getHalfOf8(num1, num2, num3)
 getSalaryÃ128Õ()ŒDT7÷0
+method:     DT7 :: getSalary()
 getSalaryÃ128Õ()ŒDT7A÷0
+method:     DT7A :: getSalary()
 getSalaryÃ128Õ()ŒDT8÷0
+method:     DT8 :: getSalary()
 getSalaryÃ128Õ()ŒPT3÷0
+method:     PT3 :: getSalary()
 getSalaryFunctionDT9Ã16Õ()÷0
+function:   getSalaryFunctionDT9()
 livesInÃ128ŒPT2÷0
+method:     PT2 :: livesIn
 managerÃ16384÷0
+variable:   manager
 myFunction4Ã16Õ(message)÷0
+function:   myFunction4(message)
 myFunction5Ã16Õ()÷0
+function:   myFunction5()
 myFunction6Ã16Õ()÷0
+function:   myFunction6()
 myFunction6AÃ16Õ()÷0
+function:   myFunction6A()
 myFunction6AEÃ16Õ()÷0
+function:   myFunction6AE()
 myFunction6BÃ16Õ()÷0
+function:   myFunction6B()
 myFunction6EÃ16Õ()÷0
+function:   myFunction6E()
 myObjectÃ1÷0
+class:      myObject
 my_global_var1Ã16384÷0
+variable:   my_global_var1
 object1Ã1÷0
+class:      object1
 object2Ã1÷0
+class:      object2
 object3Ã1÷0
+class:      object3
 priceÃ128ŒPT2÷0
+method:     PT2 :: price
 savedFunc6BÃ16Õ()÷0
+function:   savedFunc6B()
 sayName4AÃ16Õ(name)÷0
+function:   sayName4A(name)
 teamLeaderÃ16384÷0
+variable:   teamLeader
 theAddÃ16Õ(a, b)÷0
+function:   theAdd(a, b)

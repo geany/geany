@@ -1,14 +1,26 @@
-# format=tagmanager
 $(obj)/raid6int1.cÌ16Ö0
+function:   $(obj)/raid6int1.c
 AÌ65536Ö0
+macro:      A
 BÌ65536Ö0
+macro:      B
 CÌ65536Ö0
+macro:      C
 DÌ65536Ö0
+macro:      D
 EÌ65536Ö0
+macro:      E
 FÌ65536Ö0
+macro:      F
 GÌ65536Ö0
+macro:      G
 HÌ65536Ö0
+macro:      H
 IÌ65536Ö0
+macro:      I
 a.oÌ16Ö0
+function:   a.o
 b.oÌ16Ö0
+function:   b.o
 defaultÌ16Ö0
+function:   default

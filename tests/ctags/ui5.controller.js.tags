@@ -1,6 +1,10 @@
-# format=tagmanager
 onInitÃ128Õ()Œapp.my_form÷0
+method:     app.my_form :: onInit()
 refreshFormÃ128Õ(AUFNR)Œapp.my_form÷0
+method:     app.my_form :: refreshForm(AUFNR)
 refreshSettlementsÃ128Õ(AUFNR)Œapp.my_form÷0
+method:     app.my_form :: refreshSettlements(AUFNR)
 setRefreshedÃ128Õ(value)Œapp.my_form÷0
+method:     app.my_form :: setRefreshed(value)
 successfulRequestÃ128Õ(data)Œapp.my_form÷0
+method:     app.my_form :: successfulRequest(data)

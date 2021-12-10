@@ -1,5 +1,8 @@
-# format=tagmanager
 $(A)-$(A:.c=.o)Ì16Ö0
+function:   $(A)-$(A:.c=.o)
 ${B}-${B:.c=.o}Ì16Ö0
+function:   ${B}-${B:.c=.o}
 AÌ65536Ö0
+macro:      A
 BÌ65536Ö0
+macro:      B

@@ -1,6 +1,10 @@
-# format=tagmanager
 FAC010Ì16384Ö0
+variable:   FAC010
 FEC010Ì16384Ö0
+variable:   FEC010
 PER010Ì16384Ö0
+variable:   PER010
 REM010Ì16384Ö0
+variable:   REM010
 URE010Ì16384Ö0
+variable:   URE010

@@ -1,8 +1,14 @@
-# format=tagmanager
 ActivityÃ64ŒDetection_Record÷0
+member:     Detection_Record :: Activity
 DR_FilenameÃ16384ŒTR_DetectionRecording÷0
+variable:   TR_DetectionRecording :: DR_Filename
 DR_LunÃ16384ŒTR_DetectionRecording÷0
+variable:   TR_DetectionRecording :: DR_Lun
 Detection_RecordÃ1ŒTR_DetectionRecording÷0
+class:      TR_DetectionRecording :: Detection_Record
 FaceÃ64ŒDetection_Record÷0
+member:     Detection_Record :: Face
 TR_DetectionRecordingÃ256÷0
+namespace:  TR_DetectionRecording
 TypeÃ64ŒDetection_Record÷0
+member:     Detection_Record :: Type

@@ -1,9 +1,16 @@
-# format=tagmanager
 aÌ16384Ö0
+variable:   a
 bÌ16384Ö0
+variable:   b
 barÌ64Îclass.test1Ö0
+member:     class.test1 :: bar
 cÌ16384Ö0
+variable:   c
 classÌ1Í()Ö0
+class:      class()
 fooÌ64Îclass.test1Ö0
+member:     class.test1 :: foo
 test1Ì1ÎclassÖ0
+class:      class :: test1
 test3Ì128Í()ÎclassÖ0
+method:     class :: test3()

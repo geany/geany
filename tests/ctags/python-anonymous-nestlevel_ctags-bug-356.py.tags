@@ -1,4 +1,6 @@
-# format=tagmanager
 TestclassÌ1Ö0
+class:      Testclass
 mainÌ128Í(self)ÎTestclassÖ0
+method:     Testclass :: main(self)
 module_level_attributeÌ16384Ö0
+variable:   module_level_attribute

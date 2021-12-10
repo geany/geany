@@ -1,6 +1,10 @@
-# format=tagmanager
 %.oÌ16Ö0
+function:   %.o
 %.pÌ16Ö0
+function:   %.p
 %.qÌ16Ö0
+function:   %.q
 %aÌ16Ö0
+function:   %a
 b%Ì16Ö0
+function:   b%

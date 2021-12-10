@@ -1,8 +1,14 @@
-# format=tagmanager
 AÃ65536÷0
+macro:      A
 BÃ65536÷0
+macro:      B
 GroupÃ1÷0
+class:      Group
 XÃ64ŒGroup÷0
+member:     Group :: X
 YÃ64ŒGroup÷0
+member:     Group :: Y
 ZÃ64ŒGroup÷0
+member:     Group :: Z
 funcÃ16Õ()÷0
+function:   func()

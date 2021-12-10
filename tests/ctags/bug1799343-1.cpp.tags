@@ -1,7 +1,12 @@
-# format=tagmanager
 CÌ2048Ö0
+struct:     C
 DÌ16Í()ÎDÖ0
+function:   D :: D()
 DÌ2048Ö0
+struct:     D
 mainÌ16Í(void)Ö0Ïint
+function:   int main(void)
 xÌ64ÎCÖ0Ïint
+member:     int C :: x
 ~DÌ16Í()ÎDÖ0
+function:   D :: ~D()

@@ -1,6 +1,10 @@
-# format=tagmanager
 MainÌ128Í()ÎMyClass2Ö0Ïpublic void
+method:     public void MyClass2 :: Main()
 MyClass1Ì1Ö0
+class:      MyClass1
 MyClass2Ì1Ö0
+class:      MyClass2
 xÌ8ÎMyClass1Ö0Ïint
+field:      int MyClass1 :: x
 yÌ8ÎMyClass1Ö0Ïint
+field:      int MyClass1 :: y
