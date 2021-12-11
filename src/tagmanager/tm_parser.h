@@ -128,6 +128,8 @@ gint tm_parser_scope_autocomplete_suffix(TMParserType lang, const gchar *str);
 
 const gchar *tm_parser_get_constructor_method(TMParserType lang);
 
+gboolean tm_parser_is_anon_name(TMParserType lang, gchar *name);
+
 gchar *tm_parser_update_scope(TMParserType lang, gchar *scope);
 
 gboolean tm_parser_enable_role(TMParserType lang, gchar kind);

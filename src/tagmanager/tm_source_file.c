@@ -175,7 +175,7 @@ gchar tm_source_file_get_tag_access(const gchar *access)
  @param fp FILE pointer from where the tag line is read
  @return TRUE on success, FALSE on FAILURE
 */
-static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
+static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, TMParserType lang)
 {
 	guchar buf[BUFSIZ];
 	guchar *start, *end;
@@ -198,7 +198,11 @@ static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 			if (!isprint(*start))
 				return FALSE;
 			else
+			{
 				tag->name = g_strdup((gchar*)start);
+				if (tm_parser_is_anon_name(lang, tag->name))
+					tag->flags |= tm_tag_flag_anon_t;
+			}
 		}
 		else
 		{
@@ -220,7 +224,7 @@ static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 					tag->scope = g_strdup((gchar*)start + 1);
 					break;
 				case TA_FLAGS:
-					tag->flags = atoi((gchar*)start + 1);
+					tag->flags |= atoi((gchar*)start + 1);
 					break;
 				case TA_VARTYPE:
 					tag->var_type = g_strdup((gchar*)start + 1);
@@ -324,6 +328,9 @@ static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *f
 	tag->name = g_strndup(p, (gsize)(tab - p));
 	p = tab + 1;
 
+	if (tm_parser_is_anon_name(lang, tag->name))
+		tag->flags |= tm_tag_flag_anon_t;
+
 	/* tagfile, unused */
 	if (! (tab = strchr(p, '\t')))
 	{
@@ -422,7 +429,7 @@ static TMTag *new_tag_from_tags_file(TMSourceFile *file, FILE *fp, TMParserType 
 	switch (format)
 	{
 		case TM_FILE_FORMAT_TAGMANAGER:
-			result = init_tag_from_file(tag, file, fp);
+			result = init_tag_from_file(tag, file, fp, mode);
 			break;
 		case TM_FILE_FORMAT_PIPE:
 			result = init_tag_from_file_alt(tag, file, fp);
