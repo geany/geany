@@ -89,6 +89,9 @@ Please, make sure contributions you make follow these rules:
 * only one feature should be in each pull request (or patch).
 * pull requests (or patches) should not contain changes unrelated to the feature,
   and commits should be sensible units of change.
+* If making minor corrections to a previous commit, the submitter should use
+  'commit --amend' (if the branch has already been pushed, then push again using
+  'force').
 * Please make sure your modifications follow the style of existing code:
   see `Coding`_ for more information.
 
