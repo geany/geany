@@ -1556,6 +1556,10 @@ static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 			if (editor_prefs.autoclose_chars & GEANY_AC_DQUOTE)
 				closing_char = "\"";
 			break;
+		case '`':
+			if (editor_prefs.autoclose_chars & GEANY_AC_BTICK)
+				closing_char = "`";
+			break;
 	}
 
 	if (closing_char != NULL)

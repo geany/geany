@@ -214,7 +214,8 @@ enum {
 	GEANY_AC_CBRACKET		= 2,
 	GEANY_AC_SBRACKET		= 4,
 	GEANY_AC_SQUOTE			= 8,
-	GEANY_AC_DQUOTE			= 16
+	GEANY_AC_DQUOTE			= 16,
+	GEANY_AC_BTICK			= 32
 };
 
 typedef struct
