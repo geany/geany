@@ -320,49 +320,42 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
 	guint i, j;
-
-	GtkEntry  *tfentry = NULL; // entry_tagfilter
-	gchar    **tfarray = NULL; // Array of the Tag Filter
-	guint      tfarlen = 0;    // Length of the tfarray
-	gboolean   tfapres = TRUE; // Result of the Tag Filter Applying
+	GtkEntry *tf_entry;
+	gchar **tf_strv;
 
 	g_return_val_if_fail(doc, NULL);
 
 	if (! doc->tm_file || ! doc->tm_file->tags_array)
 		return NULL;
 
-	tfentry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
-	tfarray = g_strsplit_set(gtk_entry_get_text(tfentry), " ", -1);
-	tfarlen = g_strv_length(tfarray);
+	tf_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
+	tf_strv = g_strsplit_set(gtk_entry_get_text(tf_entry), " ", -1);
 
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
 	{
 		TMTag *tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
 
-		if (G_UNLIKELY(tag == NULL))
-			return NULL;
-
 		if (tag->type & tag_types)
 		{
-			tfapres = TRUE;
-			for (j = 0; j < tfarlen; j++)
+			gboolean filtered = FALSE;
+			gchar **val;
+
+			foreach_strv(val, tf_strv)
 			{
-				if (tfarray[j][0] != '\0')
+				if (strstr(tag->name, *val) == NULL)
 				{
-					if (g_strrstr(tag->name, tfarray[j]) == NULL)
-					{
-						tfapres = FALSE;
-						break;
-					}
+					filtered = TRUE;
+					break;
 				}
 			}
-			if (tfapres) tag_names = g_list_prepend(tag_names, tag);
+			if (!filtered)
+				tag_names = g_list_prepend(tag_names, tag);
 		}
 	}
 	tag_names = g_list_sort(tag_names, compare_symbol_lines);
-	
-	g_strfreev(tfarray);
-	
+
+	g_strfreev(tf_strv);
+
 	return tag_names;
 }
 
