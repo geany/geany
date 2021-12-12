@@ -440,6 +440,10 @@ void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
 void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	/* make sure the tree is fully re-created so it appears correctly
+	 * after applying filter */
+	if (doc->priv->tag_store)
+		gtk_tree_store_clear(doc->priv->tag_store);
 	sidebar_update_tag_list(doc, TRUE);
 }
 
