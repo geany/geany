@@ -440,6 +440,10 @@ void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
 void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+
+	if (!doc)
+		return;
+
 	/* make sure the tree is fully re-created so it appears correctly
 	 * after applying filter */
 	if (doc->priv->tag_store)
@@ -452,6 +456,17 @@ void on_entry_tagfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_po
 {
 	if (event->button.button == 1)
 		gtk_entry_set_text(entry, "");
+}
+
+
+void on_entry_tagfilter_activate(GtkEntry *entry, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (!doc)
+		return;
+
+	gtk_widget_grab_focus(doc->priv->tag_tree);
 }
 
 

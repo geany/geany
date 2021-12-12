@@ -8252,14 +8252,16 @@
                           <object class="GtkEntry" id="entry_tagfilter">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">Filter the Symbol List</property>
+                            <property name="tooltip_text" translatable="yes">Filter the symbol list using the entered text. Separate multiple filters with a space.</property>
                             <property name="invisible_char">•</property>
+                            <property name="primary_icon_stock">gtk-find</property>
                             <property name="secondary_icon_stock">gtk-clear</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">True</property>
                             <property name="primary_icon_sensitive">True</property>
                             <property name="secondary_icon_sensitive">True</property>
                             <signal name="changed" handler="on_entry_tagfilter_changed" swapped="no"/>
+                            <signal name="activate" handler="on_entry_tagfilter_activate" swapped="no"/>
                             <signal name="icon-press" handler="on_entry_tagfilter_icon_press" swapped="no"/>
                           </object>
                           <packing>
