@@ -339,7 +339,10 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 		{
 			gboolean filtered = FALSE;
 			gchar **val;
-			gchar *normalized_tagname = g_utf8_normalize(tag->name, -1, G_NORMALIZE_ALL);
+			gchar *full_tagname = g_strconcat(tag->scope ? tag->scope : "",
+				tag->scope ? tm_parser_context_separator(tag->lang) : "",
+				tag->name, NULL);
+			gchar *normalized_tagname = g_utf8_normalize(full_tagname, -1, G_NORMALIZE_ALL);
 
 			foreach_strv(val, tf_strv)
 			{
@@ -363,6 +366,7 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 				tag_names = g_list_prepend(tag_names, tag);
 
 			g_free(normalized_tagname);
+			g_free(full_tagname);
 		}
 	}
 	tag_names = g_list_sort(tag_names, compare_symbol_lines);
