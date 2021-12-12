@@ -1142,6 +1142,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_dquote");
 		autoclose_brackets[4] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_btick");
+		autoclose_brackets[5] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 		editor_prefs.autoclose_chars =
 		  (autoclose_brackets[0] ? GEANY_AC_PARENTHESIS : 0u)
 		| (autoclose_brackets[1] ? GEANY_AC_CBRACKET : 0u)
