@@ -339,17 +339,30 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 		{
 			gboolean filtered = FALSE;
 			gchar **val;
+			gchar *normalized_tagname = g_utf8_normalize(tag->name, -1, G_NORMALIZE_ALL);
 
 			foreach_strv(val, tf_strv)
 			{
-				if (strstr(tag->name, *val) == NULL)
+				gchar *normalized_val = g_utf8_normalize(*val, -1, G_NORMALIZE_ALL);
+
+				if (normalized_tagname != NULL && normalized_val != NULL)
 				{
-					filtered = TRUE;
-					break;
+					gchar *case_normalized_tagname = g_utf8_casefold(normalized_tagname, -1);
+					gchar *case_normalized_val = g_utf8_casefold(normalized_val, -1);
+
+					filtered = strstr(case_normalized_tagname, case_normalized_val) == NULL;
+					g_free(case_normalized_tagname);
+					g_free(case_normalized_val);
 				}
+				g_free(normalized_val);
+
+				if (filtered)
+					break;
 			}
 			if (!filtered)
 				tag_names = g_list_prepend(tag_names, tag);
+
+			g_free(normalized_tagname);
 		}
 	}
 	tag_names = g_list_sort(tag_names, compare_symbol_lines);
