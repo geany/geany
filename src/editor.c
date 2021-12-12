@@ -850,6 +850,7 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case '[':
 		case '"':
 		case '\'':
+		case '`':
 		{
 			auto_close_chars(sci, pos, nt->ch);
 			break;
