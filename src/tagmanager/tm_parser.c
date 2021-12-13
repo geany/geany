@@ -882,6 +882,76 @@ gboolean tm_parser_enable_kind(TMParserType lang, gchar kind)
 }
 
 
+gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gchar *type)
+{
+	if (!type)
+		return NULL;
+
+	switch (lang)
+	{
+		case TM_PARSER_PASCAL:
+			return g_strconcat(name, " : ", type, NULL);
+		case TM_PARSER_GO:
+			return g_strconcat(name, " ", type, NULL);
+		default:
+			return g_strconcat(type, " ", name, NULL);
+	}
+}
+
+
+gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gchar *args,
+	const gchar *retval, const gchar *scope)
+{
+	GString *str;
+
+	if (!args)  /* not a function */
+		return NULL;
+
+	str = g_string_new(NULL);
+
+	if (scope)
+	{
+		g_string_append(str, scope);
+		g_string_append(str, tm_parser_context_separator(lang));
+	}
+	g_string_append(str, fname);
+	g_string_append_c(str, ' ');
+	g_string_append(str, args);
+
+	if (retval)
+	{
+		switch (lang)
+		{
+			case TM_PARSER_PASCAL:
+			case TM_PARSER_GO:
+			{
+				/* retval after function */
+				const gchar *sep;
+				switch (lang)
+				{
+					case TM_PARSER_PASCAL:
+						sep = " : ";
+						break;
+					default:
+						sep = " ";
+						break;
+				}
+				g_string_append(str, sep);
+				g_string_append(str, retval);
+				break;
+			}
+			default:
+				/* retval before function */
+				g_string_prepend_c(str, ' ');
+				g_string_prepend(str, retval);
+				break;
+		}
+	}
+
+	return g_string_free(str, FALSE);
+}
+
+
 const gchar *tm_parser_context_separator(TMParserType lang)
 {
 	switch (lang)

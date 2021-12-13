@@ -1847,53 +1847,6 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 }
 
 
-static gboolean append_calltip(GString *str, const TMTag *tag, GeanyFiletypeID ft_id)
-{
-	if (! tag->arglist)
-		return FALSE;
-
-	if (ft_id != GEANY_FILETYPES_PASCAL && ft_id != GEANY_FILETYPES_GO)
-	{	/* usual calltips: "retval tagname (arglist)" */
-		if (tag->var_type)
-		{
-			guint i;
-
-			g_string_append(str, tag->var_type);
-			for (i = 0; i < tag->pointerOrder; i++)
-			{
-				g_string_append_c(str, '*');
-			}
-			g_string_append_c(str, ' ');
-		}
-		if (tag->scope)
-		{
-			const gchar *cosep = symbols_get_context_separator(ft_id);
-
-			g_string_append(str, tag->scope);
-			g_string_append(str, cosep);
-		}
-		g_string_append(str, tag->name);
-		g_string_append_c(str, ' ');
-		g_string_append(str, tag->arglist);
-	}
-	else
-	{	/* special case Pascal/Go calltips: "tagname (arglist) : retval"
-		 * (with ':' omitted for Go) */
-		g_string_append(str, tag->name);
-		g_string_append_c(str, ' ');
-		g_string_append(str, tag->arglist);
-
-		if (!EMPTY(tag->var_type))
-		{
-			g_string_append(str, ft_id == GEANY_FILETYPES_PASCAL ? " : " : " ");
-			g_string_append(str, tag->var_type);
-		}
-	}
-
-	return TRUE;
-}
-
-
 static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 {
 	GPtrArray *tags;
@@ -1964,10 +1917,13 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 		if (str == NULL)
 		{
+			gchar *f = tm_parser_format_function(tag->lang, tag->name,
+				tag->arglist, tag->var_type, tag->scope);
 			str = g_string_new(NULL);
 			if (calltip.tag_index > 0)
 				g_string_prepend(str, "\001 ");	/* up arrow */
-			append_calltip(str, tag, FILETYPE_ID(ft));
+			g_string_append(str, f);
+			g_free(f);
 		}
 		else /* add a down arrow */
 		{
@@ -2058,20 +2014,6 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 		return TRUE;
 	}
 	return FALSE;
-}
-
-
-gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag)
-{
-	GString *str;
-
-	g_return_val_if_fail(editor != NULL, NULL);
-
-	str = g_string_new(NULL);
-	if (append_calltip(str, tag, editor->document->file_type->id))
-		return g_string_free(str, FALSE);
-	else
-		return g_string_free(str, TRUE);
 }
 
 

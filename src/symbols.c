@@ -946,18 +946,13 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 
 static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 {
-	gchar *utf8_name = editor_get_calltip_text(doc->editor, tag);
+	gchar *utf8_name = tm_parser_format_function(tag->lang, tag->name,
+		tag->arglist, tag->var_type, tag->scope);
 
 	if (!utf8_name && tag->var_type &&
 		tag->type & (tm_tag_field_t | tm_tag_member_t | tm_tag_variable_t | tm_tag_externvar_t))
 	{
-		if (tag->lang != TM_PARSER_PASCAL && tag->lang != TM_PARSER_GO)
-			utf8_name = g_strconcat(tag->var_type, " ", tag->name, NULL);
-		else
-		{
-			const gchar *sep = tag->lang == TM_PARSER_PASCAL ? " : " : " ";
-			utf8_name = g_strconcat(tag->name, sep, tag->var_type, NULL);
-		}
+		utf8_name = tm_parser_format_variable(tag->lang, tag->name, tag->var_type);
 	}
 
 	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
