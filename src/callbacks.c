@@ -440,9 +440,14 @@ void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
 void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	GtkEntry *filter_entry;
 
 	if (!doc)
 		return;
+
+	filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
+	g_free(doc->priv->tag_filter);
+	doc->priv->tag_filter = g_strdup(gtk_entry_get_text(filter_entry));
 
 	/* make sure the tree is fully re-created so it appears correctly
 	 * after applying filter */
@@ -524,6 +529,9 @@ static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
 
 	if (doc != NULL)
 	{
+		GtkEntry *filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
+		const gchar *entry_text = gtk_entry_get_text(filter_entry);
+
 		sidebar_select_openfiles_item(doc);
 		ui_save_buttons_toggle(doc->changed);
 		ui_set_window_title(doc);
@@ -531,7 +539,13 @@ static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
 		ui_update_popup_reundo_items(doc);
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
-		sidebar_update_tag_list(doc, TRUE);
+		if (g_strcmp0(entry_text, doc->priv->tag_filter) != 0)
+		{
+			/* calls sidebar_update_tag_list() in on_entry_tagfilter_changed() */
+			gtk_entry_set_text(filter_entry, doc->priv->tag_filter);
+		}
+		else
+			sidebar_update_tag_list(doc, TRUE);
 		document_highlight_tags(doc);
 
 		document_check_disk_status(doc, TRUE);

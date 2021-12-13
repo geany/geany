@@ -647,6 +647,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	/* initialize default document settings */
 	doc->priv = g_new0(GeanyDocumentPrivate, 1);
+	doc->priv->tag_filter = g_strdup("");
 	doc->id = ++doc_id_counter;
 	doc->index = new_idx;
 	doc->file_name = g_strdup(utf8_filename);
@@ -734,6 +735,7 @@ static gboolean remove_page(guint page_num)
 	}
 	g_free(doc->encoding);
 	g_free(doc->priv->saved_encoding.encoding);
+	g_free(doc->priv->tag_filter);
 	g_free(doc->file_name);
 	g_free(doc->real_path);
 	if (doc->tm_file)

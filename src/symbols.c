@@ -320,7 +320,6 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
 	guint i, j;
-	GtkEntry *tf_entry;
 	gchar **tf_strv;
 
 	g_return_val_if_fail(doc, NULL);
@@ -328,8 +327,7 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 	if (! doc->tm_file || ! doc->tm_file->tags_array)
 		return NULL;
 
-	tf_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
-	tf_strv = g_strsplit_set(gtk_entry_get_text(tf_entry), " ", -1);
+	tf_strv = g_strsplit_set(doc->priv->tag_filter, " ", -1);
 
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
 	{
