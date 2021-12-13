@@ -154,36 +154,6 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 }
 
 
-/* add argument list of __init__() Python methods to the class tag */
-static void update_python_arglist(const TMTag *tag, TMSourceFile *source_file)
-{
-	guint i;
-	const gchar *parent_tag_name;
-
-	if (tag->type != tm_tag_method_t || tag->scope == NULL ||
-		g_strcmp0(tag->name, "__init__") != 0)
-		return;
-
-	parent_tag_name = strrchr(tag->scope, '.');
-	if (parent_tag_name)
-		parent_tag_name++;
-	else
-		parent_tag_name = tag->scope;
-
-	/* going in reverse order because the tag was added recently */
-	for (i = source_file->tags_array->len; i > 0; i--)
-	{
-		TMTag *prev_tag = (TMTag *) source_file->tags_array->pdata[i - 1];
-		if (g_strcmp0(prev_tag->name, parent_tag_name) == 0)
-		{
-			g_free(prev_tag->arglist);
-			prev_tag->arglist = g_strdup(tag->arglist);
-			break;
-		}
-	}
-}
-
-
 static gint write_entry(tagWriter *writer, MIO * mio, const tagEntryInfo *const tag, void *user_data)
 {
 	TMSourceFile *source_file = user_data;
@@ -196,9 +166,6 @@ static gint write_entry(tagWriter *writer, MIO * mio, const tagEntryInfo *const 
 		tm_tag_unref(tm_tag);
 		return 0;
 	}
-
-	if (tm_tag->lang == TM_PARSER_PYTHON)
-		update_python_arglist(tm_tag, source_file);
 
 	g_ptr_array_add(source_file->tags_array, tm_tag);
 

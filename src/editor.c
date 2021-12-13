@@ -1850,8 +1850,6 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 {
 	GPtrArray *tags;
-	const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
-		tm_tag_method_t | tm_tag_macro_with_arg_t;
 	TMTag *tag;
 	GString *str = NULL;
 	guint i;
@@ -1868,12 +1866,21 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 	tag = TM_TAG(tags->pdata[0]);
 
-	if (ft->id == GEANY_FILETYPES_D &&
+	if ((ft->id == GEANY_FILETYPES_D || ft->id == GEANY_FILETYPES_PYTHON) &&
 		(tag->type == tm_tag_class_t || tag->type == tm_tag_struct_t))
 	{
+		const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
+			tm_tag_method_t | tm_tag_macro_with_arg_t;
+		const gchar *scope_sep = tm_parser_context_separator(ft->lang);
+		gchar *scope = EMPTY(tag->scope) ? g_strdup(tag->name) :
+			g_strjoin(scope_sep, tag->scope, tag->name, NULL);
+
 		g_ptr_array_free(tags, TRUE);
-		/* user typed e.g. 'new Classname(' so lookup D constructor Classname::this() */
-		tags = tm_workspace_find("this", tag->name, arg_types, NULL, ft->lang);
+		/* user typed e.g. 'new Classname(' so lookup D constructor Classname::this() 
+		 * same for Python __init__() */
+		tags = tm_workspace_find(ft->id == GEANY_FILETYPES_D ? "this" : "__init__",
+			scope, arg_types, NULL, ft->lang);
+		g_free(scope);
 		if (tags->len == 0)
 		{
 			g_ptr_array_free(tags, TRUE);
