@@ -818,6 +818,33 @@ void tm_parser_verify_type_mappings(void)
 }
 
 
+/* When the suffix of 'str' is an operator that should trigger scope
+ * autocompletion, this function should return the length of the operator,
+ * zero otherwise. */
+gint tm_parser_scope_autocomplete_suffix(TMParserType lang, const gchar *str)
+{
+	const gchar *sep = tm_parser_context_separator(lang);
+
+	if (g_str_has_suffix(str, sep))
+		return strlen(sep);
+
+	switch (lang)
+	{
+		case TM_PARSER_C:
+		case TM_PARSER_CPP:
+			if (g_str_has_suffix(str, "."))
+				return 1;
+			else if (g_str_has_suffix(str, "->"))
+				return 2;
+			else if (lang == TM_PARSER_CPP && g_str_has_suffix(str, "->*"))
+				return 3;
+		default:
+			break;
+	}
+	return 0;
+}
+
+
 /* Get the name of constructor method. Arguments of this method will be used
  * for calltips when creating an object using the class name
  * (e.g. after the opening brace in 'c = MyClass()' in Python) */
