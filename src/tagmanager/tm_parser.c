@@ -818,6 +818,23 @@ void tm_parser_verify_type_mappings(void)
 }
 
 
+/* Get the name of constructor method. Arguments of this method will be used
+ * for calltips when creating an object using the class name
+ * (e.g. after the opening brace in 'c = MyClass()' in Python) */
+const gchar *tm_parser_get_constructor_method(TMParserType lang)
+{
+	switch (lang)
+	{
+		case TM_PARSER_D:
+			return "this";
+		case TM_PARSER_PYTHON:
+			return "__init__";
+		default:
+			return NULL;
+	}
+}
+
+
 static gchar *replace_string_if_present(gchar *haystack, gchar *needle, gchar *subst)
 {
 	if (strstr(haystack, needle))
