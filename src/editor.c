@@ -642,20 +642,23 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 }
 
 
-/* do not use with long strings */
-static gboolean match_last_chars(ScintillaObject *sci, gint pos, const gchar *str)
+static gint scope_autocomplete_suffix(ScintillaObject *sci, TMParserType lang,
+	gint pos, gboolean *scope_sep)
 {
-	gsize len = strlen(str);
+	const gchar *sep = tm_parser_context_separator(lang);
+	const gsize max_len = 3;
+	gboolean is_scope_sep;
 	gchar *buf;
 
-	g_return_val_if_fail(len < 100, FALSE);
+	buf = g_alloca(max_len + 1);
+	sci_get_text_range(sci, pos - max_len, pos, buf);
 
-	if ((gint)len > pos)
-		return FALSE;
-
-	buf = g_alloca(len + 1);
-	sci_get_text_range(sci, pos - len, pos, buf);
-	return strcmp(str, buf) == 0;
+	is_scope_sep = g_str_has_suffix(buf, sep);
+	if (scope_sep)
+		*scope_sep = is_scope_sep;
+	if (is_scope_sep)
+		return strlen(sep);
+	return tm_parser_scope_autocomplete_suffix(lang, buf);
 }
 
 
@@ -706,6 +709,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	gboolean ret = FALSE;
 	const gchar *current_scope;
 	const gchar *context_sep = tm_parser_context_separator(ft->lang);
+	gint autocomplete_suffix_len;
 
 	if (autocomplete_scope_shown)
 	{
@@ -720,21 +724,12 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 			typed = sci_get_char_at(sci, pos - 1);
 	}
 
-	/* make sure to keep in sync with similar checks below */
-	if (match_last_chars(sci, pos, context_sep))
-	{
-		pos -= strlen(context_sep);
-		scope_sep_typed = TRUE;
-	}
-	else if (typed == '.')
-		pos -= 1;
-	else if ((ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP) &&
-			match_last_chars(sci, pos, "->"))
-		pos -= 2;
-	else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
-		pos -= 3;
-	else
+	autocomplete_suffix_len = scope_autocomplete_suffix(sci, ft->lang, pos,
+		&scope_sep_typed);
+	if (autocomplete_suffix_len == 0)
 		return FALSE;
+
+	pos -= autocomplete_suffix_len;
 
 	/* allow for a space between word and operator */
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
@@ -765,9 +760,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	pos -= strlen(name);
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 		pos--;
-	/* make sure to keep in sync with similar checks above */
-	member = match_last_chars(sci, pos, ".") || match_last_chars(sci, pos, context_sep) ||
-			 match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "->*");
+	member = scope_autocomplete_suffix(sci, ft->lang, pos, NULL) > 0;
 
 	if (symbols_get_current_scope(editor->document, &current_scope) == -1)
 		current_scope = "";
