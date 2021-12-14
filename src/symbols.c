@@ -2511,11 +2511,7 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
 {
 	TMTagType tag_types = (tm_tag_function_t | tm_tag_method_t | tm_tag_class_t |
-			tm_tag_struct_t | tm_tag_enum_t | tm_tag_union_t);
-
-	/* Python parser reports imports as namespaces which confuses the scope detection */
-	if (doc && doc->file_type->lang != filetypes[GEANY_FILETYPES_PYTHON]->lang)
-		tag_types |= tm_tag_namespace_t;
+			tm_tag_struct_t | tm_tag_enum_t | tm_tag_union_t | tm_tag_namespace_t);
 
 	return get_current_tag_name_cached(doc, tagname, tag_types);
 }
