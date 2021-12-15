@@ -115,12 +115,30 @@ enum
 	TM_PARSER_COUNT
 };
 
+/* keep in sync with icon names in symbols.c */
+enum
+{
+	TM_ICON_CLASS,
+	TM_ICON_MACRO,
+	TM_ICON_MEMBER,
+	TM_ICON_METHOD,
+	TM_ICON_NAMESPACE,
+	TM_ICON_OTHER,
+	TM_ICON_STRUCT,
+	TM_ICON_VAR,
+	TM_ICON_NONE,
+	TM_N_ICONS = TM_ICON_NONE
+};
 
 void tm_parser_verify_type_mappings(void);
 
 TMTagType tm_parser_get_tag_type(gchar kind, TMParserType lang);
 
 gchar tm_parser_get_tag_kind(TMTagType type, TMParserType lang);
+
+gint tm_parser_get_sidebar_group(TMParserType lang, TMTagType type);
+
+const gchar *tm_parser_get_sidebar_info(TMParserType lang, gint group, guint *icon);
 
 TMTagType tm_parser_get_subparser_type(TMParserType lang, TMParserType sublang, TMTagType type);
 
