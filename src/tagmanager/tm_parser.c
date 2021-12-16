@@ -1148,6 +1148,8 @@ void tm_parser_verify_type_mappings(void)
 		const gchar *kinds = tm_ctags_get_lang_kinds(lang);
 		TMParserMap *map = &parser_map[lang];
 		gchar presence_map[256];
+		TMTagType lang_types = 0;
+		TMTagType group_types = 0;
 		guint i;
 
 		if (! map->entries || map->size < 1)
@@ -1184,6 +1186,7 @@ void tm_parser_verify_type_mappings(void)
 					kinds[i], tm_ctags_get_lang_name(lang));
 
 			presence_map[(unsigned char) map->entries[i].kind]++;
+			lang_types |= map->entries[i].type;
 		}
 
 		for (i = 0; i < sizeof(presence_map); i++)
@@ -1192,6 +1195,13 @@ void tm_parser_verify_type_mappings(void)
 				g_error("Duplicate tag type '%c' found for %s",
 					(gchar)i, tm_ctags_get_lang_name(lang));
 		}
+
+		for (i = 0; i < map->group_num; i++)
+			group_types |= map->groups[i].types;
+
+		if ((group_types & lang_types) != lang_types)
+			g_warning("Not all tag types mapped to symbol tree groups for %s",
+				tm_ctags_get_lang_name(lang));
 	}
 }
 
