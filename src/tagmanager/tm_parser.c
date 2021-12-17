@@ -933,10 +933,11 @@ gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gch
 
 	switch (lang)
 	{
-		case TM_PARSER_PASCAL:
-			return g_strconcat(name, " : ", type, NULL);
 		case TM_PARSER_GO:
 			return g_strconcat(name, " ", type, NULL);
+		case TM_PARSER_PASCAL:
+		case TM_PARSER_PYTHON:
+			return g_strconcat(name, ": ", type, NULL);
 		default:
 			return g_strconcat(type, " ", name, NULL);
 	}
@@ -966,15 +967,19 @@ gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gc
 	{
 		switch (lang)
 		{
-			case TM_PARSER_PASCAL:
 			case TM_PARSER_GO:
+			case TM_PARSER_PASCAL:
+			case TM_PARSER_PYTHON:
 			{
 				/* retval after function */
 				const gchar *sep;
 				switch (lang)
 				{
 					case TM_PARSER_PASCAL:
-						sep = " : ";
+						sep = ": ";
+						break;
+					case TM_PARSER_PYTHON:
+						sep = " -> ";
 						break;
 					default:
 						sep = " ";
