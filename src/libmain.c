@@ -205,7 +205,7 @@ static void apply_settings(void)
 	/* hide statusbar if desired */
 	if (! interface_prefs.statusbar_visible)
 	{
-		gtk_widget_hide(ui_widgets.statusbar);
+		gtk_widget_hide(ui_widgets.statusbar_box);
 	}
 
 	/* set the tab placements of the notebooks */

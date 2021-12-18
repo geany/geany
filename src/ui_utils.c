@@ -117,7 +117,6 @@ static void update_recent_menu(GeanyRecentFiles *grf);
 static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf);
 static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static void recent_project_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
-static GtkWidget *progress_bar_create(void);
 static void ui_menu_sort_by_label(GtkMenu *menu);
 
 
@@ -133,7 +132,6 @@ void ui_widget_set_sensitive(GtkWidget *widget, gboolean set)
  * that didn't use allow_override and has not timed out. */
 static void set_statusbar(const gchar *text, gboolean allow_override)
 {
-	static guint id = 0;
 	static glong last_time = 0;
 	GTimeVal timeval;
 	const gint GEANY_STATUS_TIMEOUT = 1;
@@ -141,23 +139,15 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	if (! interface_prefs.statusbar_visible)
 		return; /* just do nothing if statusbar is not visible */
 
-	if (id == 0)
-		id = gtk_statusbar_get_context_id(GTK_STATUSBAR(ui_widgets.statusbar), "geany-main");
-
 	g_get_current_time(&timeval);
 
 	if (! allow_override)
 	{
-		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), id);
-		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), id, text);
+		gtk_label_set_text(GTK_LABEL(ui_widgets.statusbar_label), text);
 		last_time = timeval.tv_sec;
 	}
-	else
-	if (timeval.tv_sec > last_time + GEANY_STATUS_TIMEOUT)
-	{
-		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), id);
-		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), id, text);
-	}
+	else if (timeval.tv_sec > last_time + GEANY_STATUS_TIMEOUT)
+		gtk_label_set_text(GTK_LABEL(ui_widgets.statusbar_label), text);
 }
 
 
@@ -2048,11 +2038,11 @@ void ui_statusbar_showhide(gboolean state)
 	/* handle statusbar visibility */
 	if (state)
 	{
-		gtk_widget_show(ui_widgets.statusbar);
+		gtk_widget_show(ui_widgets.statusbar_box);
 		ui_update_statusbar(NULL, -1);
 	}
 	else
-		gtk_widget_hide(ui_widgets.statusbar);
+		gtk_widget_hide(ui_widgets.statusbar_box);
 }
 
 
@@ -2582,10 +2572,15 @@ void ui_init(void)
 	init_css_styles();
 	init_recent_files();
 
-	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
+	ui_widgets.statusbar_box = ui_lookup_widget(main_widgets.window, "statusbar_box");
+	ui_widgets.statusbar_label = ui_lookup_widget(main_widgets.window, "statusbar_label");
 	ui_widgets.print_page_setup = ui_lookup_widget(main_widgets.window, "page_setup1");
 
-	main_widgets.progressbar = progress_bar_create();
+	main_widgets.progressbar = ui_lookup_widget(main_widgets.window, "statusbar_progress");
+#if GTK_CHECK_VERSION(3,12,0)
+	gtk_widget_set_margin_start(ui_widgets.statusbar_box, 10);
+	gtk_widget_set_margin_end(ui_widgets.statusbar_box, 10);
+#endif
 
 	/* current word sensitive items */
 	widgets.popup_goto_items[0] = ui_lookup_widget(main_widgets.editor_menu, "goto_tag_definition2");
@@ -2780,18 +2775,6 @@ gpointer ui_builder_get_object (const gchar *name)
 
 /* Progress Bar */
 static guint progress_bar_timer_id = 0;
-
-
-static GtkWidget *progress_bar_create(void)
-{
-	GtkWidget *bar = gtk_progress_bar_new();
-
-	/* Set the progressbar's height to 1 to fit it in the statusbar */
-	gtk_widget_set_size_request(bar, -1, 1);
-	gtk_box_pack_start (GTK_BOX(ui_widgets.statusbar), bar, FALSE, FALSE, 3);
-
-	return bar;
-}
 
 
 static gboolean progress_bar_pulse(gpointer data)

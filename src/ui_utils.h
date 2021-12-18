@@ -201,7 +201,8 @@ typedef struct UIWidgets
 	GtkWidget	*prefs_dialog;
 
 	/* other widgets not needed in GeanyMainWidgets */
-	GtkWidget	*statusbar;			/* use ui_set_statusbar() to set */
+	GtkWidget	*statusbar_box;
+	GtkWidget	*statusbar_label;	/* use ui_set_statusbar() to set */
 }
 UIWidgets;
 
