@@ -19,6 +19,7 @@
 #include "trashbox_p.h"
 #include "writer_p.h"
 #include "xtag_p.h"
+#include "param_p.h"
 
 #include <string.h>
 
@@ -246,6 +247,27 @@ void tm_ctags_init(void)
 
 	/* some kinds we are interested in are disabled by default */
 	enable_kinds_and_roles();
+}
+
+
+void tm_ctags_add_ignore_symbol(const char *value)
+{
+	langType lang = getNamedLanguage ("CPreProcessor", 0);
+	gchar *val = g_strdup(value);
+
+	/* make sure we don't enter empty string - passing NULL or "" clears
+	 * the ignore list in ctags */
+	val = g_strstrip(val);
+	if (*val)
+		applyParameter (lang, "ignore", val);
+	g_free(val);
+}
+
+
+void tm_ctags_clear_ignore_symbols(void)
+{
+	langType lang = getNamedLanguage ("CPreProcessor", 0);
+	applyParameter (lang, "ignore", NULL);
 }
 
 

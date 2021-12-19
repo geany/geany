@@ -15,10 +15,19 @@ dstdir = os.path.abspath(sys.argv[2])
 os.chdir(dstdir + '/parsers')
 parser_dst_files = glob.glob('*.c') + glob.glob('*.h')
 parser_dst_files = list(filter(lambda x: not x.startswith('geany_'), parser_dst_files))
+cxx_parser_dst_files = glob.glob('cxx/*.c') + glob.glob('cxx/*.h')
+for f in cxx_parser_dst_files:
+    os.remove(f)
+
 os.chdir(srcdir + '/parsers')
 print('Copying parsers... ({} files)'.format(len(parser_dst_files)))
 for f in parser_dst_files:
     shutil.copy(f, dstdir + '/parsers')
+
+cxx_parser_src_files = glob.glob('cxx/*.c') + glob.glob('cxx/*.h')
+print('Copying cxx parser files... ({} files)'.format(len(cxx_parser_src_files)))
+for f in cxx_parser_src_files:
+    shutil.copy(f, dstdir + '/parsers/cxx')
 
 print('Copying dsl files...')
 for f in ['dsl/es.c', 'dsl/es.h', 'dsl/optscript.c', 'dsl/optscript.h']:

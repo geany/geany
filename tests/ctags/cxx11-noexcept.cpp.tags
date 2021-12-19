@@ -1,5 +1,5 @@
 # format=tagmanager
 BaseÌ1Ö0
-barÌ1024Í()ÎBaseÖ0Ïvirtual void
+barÌ1024Í() constÎBaseÖ0Ïvoid
 bazÌ16Í()ÎBaseÖ0Ïint
-fooÌ1024Í()ÎBaseÖ0Ïvirtual void
+fooÌ1024Í()ÎBaseÖ0Ïvoid

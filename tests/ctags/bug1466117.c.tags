@@ -1,8 +1,8 @@
 # format=tagmanager
-aÌ64Îanon_struct_0Ö0Ïint
+__anon1Ì2048Ö0
+aÌ64Î__anon1Ö0Ïint
 aÌ64ÎmystructÖ0Ïint
-anon_struct_0Ì2048Ö0
-bÌ64Îanon_struct_0Ö0Ïint
+bÌ64Î__anon1Ö0Ïint
 bÌ64ÎmystructÖ0Ïint
 mystructÌ2048Ö0
-mystructÌ4096Ö0Ïanon_struct_0
+mystructÌ4096Ö0Ï__anon1

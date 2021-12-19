@@ -1717,33 +1717,25 @@ Example::
     G_GNUC_NULL_TERMINATED
     G_GNUC_PRINTF
     G_GNUC_WARN_UNUSED_RESULT
+    BAR
 
-This will parse code like:
+This will ignore the above macros and will correctly detect 'Foo' as a type
+instead of 'BAR' in the following code:
 
-``gchar **utils_strv_new(const gchar *first, ...)
-G_GNUC_NULL_TERMINATED;``
+``struct Foo BAR { int i; };``
 
-More detailed information about ignore.tags usage from the Exuberant Ctags
-manual page:
+In addition, it is possible to specify macro definition similarly to the
+gcc '-D' option:
 
-    Specifies a list of identifiers which are to be specially handled
-    while  parsing C and C++ source files. This option is specifically
-    provided to handle special cases arising through the use of
-    pre-processor macros. When the identifiers listed are simple identifiers,
-    these identifiers will be ignored during parsing of the source files.
-    If an identifier is suffixed with a '+' character, ctags will also
-    ignore any parenthesis-enclosed argument list which may immediately
-    follow the identifier in the source files.
-    If two identifiers are separated with the '=' character, the first
-    identifiers is replaced by the second identifiers for parsing purposes.
+    <macro>=<definition>
+    Defines a C preprocessor <macro>. This emulates the behavior  of
+    the corresponding gcc option. All types of macros are supported,
+    including the  ones  with  parameters  and  variable  arguments.
+    Stringification, token pasting and recursive macro expansion are
+    also supported.
 
 For even more detailed information please read the manual page of
-Exuberant Ctags.
-
-Geany extends Ctags with a '*' character suffix - this means use
-prefix matching, e.g. G_GNUC_* will match G_GNUC_NULL_TERMINATED, etc.
-Note that prefix match items should be put after other items to ensure
-that items like G_GNUC_PRINTF+ get parsed correctly.
+Universal Ctags.
 
 
 Preferences

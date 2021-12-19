@@ -3,7 +3,7 @@ BaseÌ1Ö0
 DerivedÌ1Ö0
 fooÌ16Í()ÎBaseÖ0Ïvoid
 fooÌ16Í()ÎDerivedÖ0Ïvoid
-fooÌ1024Í()ÎBaseÖ0Ïvirtual void
-fooÌ1024Í()ÎDerivedÖ0Ïvirtual void
+fooÌ1024Í()ÎBaseÖ0Ïvoid
+fooÌ1024Í()ÎDerivedÖ0Ïvoid
 overrideÌ16Í()ÎDerivedÖ0Ïvoid
-overrideÌ1024Í()ÎDerivedÖ0Ïvirtual void
+overrideÌ1024Í()ÎDerivedÖ0Ïvoid
