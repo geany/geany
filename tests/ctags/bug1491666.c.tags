@@ -1,6 +1,5 @@
 # format=tagmanager
-__anon1Ì2048Ö0
 mainÌ16Í(void)Ö0Ïvoid
-my_structÌ4096Ö0Ï__anon1
-xÌ64Î__anon1Ö0Ïint
-yÌ64Î__anon1Ö0Ïfloat
+my_structÌ2048Ö0
+xÌ64Îmy_structÖ0Ïint
+yÌ64Îmy_structÖ0Ïfloat
