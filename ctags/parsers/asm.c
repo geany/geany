@@ -15,18 +15,23 @@
 
 #include <string.h>
 
+#include "cpreprocessor.h"
 #include "debug.h"
+#include "entry.h"
 #include "keyword.h"
 #include "parse.h"
 #include "read.h"
 #include "routines.h"
+#include "selectors.h"
 #include "vstring.h"
 
 /*
 *   DATA DECLARATIONS
 */
 typedef enum {
-	K_NONE = -1, K_DEFINE, K_LABEL, K_MACRO, K_TYPE
+	K_PSUEDO_MACRO_END = -2,
+	K_NONE = -1, K_DEFINE, K_LABEL, K_MACRO, K_TYPE,
+	K_SECTION,
 } AsmKind;
 
 typedef enum {
@@ -45,10 +50,15 @@ typedef enum {
 	OP_PROC,
 	OP_RECORD,
 	OP_SECTIONS,
+	OP_SECTION,
 	OP_SET,
 	OP_STRUCT,
 	OP_LAST
 } opKeyword;
+
+typedef enum {
+	ASM_SECTION_PLACEMENT,
+} asmSectionRole;
 
 typedef struct {
 	opKeyword keyword;
@@ -60,11 +70,17 @@ typedef struct {
 */
 static langType Lang_asm;
 
+static roleDefinition asmSectionRoles [] = {
+	{ true, "placement", "placement where the assembled code goes" },
+};
+
 static kindDefinition AsmKinds [] = {
 	{ true, 'd', "define", "defines" },
 	{ true, 'l', "label",  "labels"  },
 	{ true, 'm', "macro",  "macros"  },
-	{ true, 't', "type",   "types (structs and records)"   }
+	{ true, 't', "type",   "types (structs and records)"   },
+	{ true, 's', "section",   "sections",
+	  .referenceOnly = true, ATTACH_ROLES(asmSectionRoles)},
 };
 
 static const keywordTable AsmKeywords [] = {
@@ -82,6 +98,12 @@ static const keywordTable AsmKeywords [] = {
 	{ "proc",     OP_PROC        },
 	{ "record",   OP_RECORD      },
 	{ "sections", OP_SECTIONS    },
+
+	/* These are used in GNU as. */
+	{ "section",  OP_SECTION     },
+	{ "equiv",    OP_EQU         },
+	{ "eqv",      OP_EQU         },
+
 	{ "set",      OP_SET         },
 	{ "struct",   OP_STRUCT      }
 };
@@ -91,7 +113,7 @@ static const opKind OpKinds [] = {
 	{ OP_ALIGN,       K_NONE   },
 	{ OP_COLON_EQUAL, K_DEFINE },
 	{ OP_END,         K_NONE   },
-	{ OP_ENDM,        K_NONE   },
+	{ OP_ENDM,        K_PSUEDO_MACRO_END },
 	{ OP_ENDMACRO,    K_NONE   },
 	{ OP_ENDP,        K_NONE   },
 	{ OP_ENDS,        K_NONE   },
@@ -102,6 +124,7 @@ static const opKind OpKinds [] = {
 	{ OP_PROC,        K_LABEL  },
 	{ OP_RECORD,      K_TYPE   },
 	{ OP_SECTIONS,    K_NONE   },
+	{ OP_SECTION,     K_SECTION },
 	{ OP_SET,         K_DEFINE },
 	{ OP_STRUCT,      K_TYPE   }
 };
@@ -131,33 +154,6 @@ static bool isSymbolCharacter (int c)
 	return (bool) (c != '\0' && (isalnum (c) || strchr ("_$?", c) != NULL));
 }
 
-static bool readPreProc (const unsigned char *const line)
-{
-	bool result;
-	const unsigned char *cp = line;
-	vString *name = vStringNew ();
-	while (isSymbolCharacter ((int) *cp))
-	{
-		vStringPut (name, *cp);
-		++cp;
-	}
-	result = (bool) (strcmp (vStringValue (name), "define") == 0);
-	if (result)
-	{
-		while (isspace ((int) *cp))
-			++cp;
-		vStringClear (name);
-		while (isSymbolCharacter ((int) *cp))
-		{
-			vStringPut (name, *cp);
-			++cp;
-		}
-		makeSimpleTag (name, K_DEFINE);
-	}
-	vStringDelete (name);
-	return result;
-}
-
 static AsmKind operatorKind (
 		const vString *const operator,
 		bool *const found)
@@ -178,7 +174,7 @@ static AsmKind operatorKind (
 static bool isDefineOperator (const vString *const operator)
 {
 	const unsigned char *const op =
-		(unsigned char*) vStringValue (operator); 
+		(unsigned char*) vStringValue (operator);
 	const size_t length = vStringLength (operator);
 	const bool result = (bool) (length > 0  &&
 		toupper ((int) *op) == 'D'  &&
@@ -192,7 +188,9 @@ static void makeAsmTag (
 		const vString *const name,
 		const vString *const operator,
 		const bool labelCandidate,
-		const bool nameFollows)
+		const bool nameFollows,
+		const bool directive,
+		int *lastMacroCorkIndex)
 {
 	if (vStringLength (name) > 0)
 	{
@@ -200,7 +198,7 @@ static void makeAsmTag (
 		const AsmKind kind = operatorKind (operator, &found);
 		if (found)
 		{
-			if (kind != K_NONE)
+			if (kind > K_NONE)
 				makeSimpleTag (name, kind);
 		}
 		else if (isDefineOperator (operator))
@@ -213,6 +211,37 @@ static void makeAsmTag (
 			operatorKind (name, &found);
 			if (! found)
 				makeSimpleTag (name, K_LABEL);
+		}
+		else if (directive)
+		{
+			bool found_dummy;
+			const AsmKind kind_for_directive = operatorKind (name, &found_dummy);
+			tagEntryInfo *macro_tag;
+
+			switch (kind_for_directive)
+			{
+			case K_NONE:
+				break;
+			case K_MACRO:
+				*lastMacroCorkIndex = makeSimpleTag (operator,
+													 kind_for_directive);
+				if (*lastMacroCorkIndex != CORK_NIL)
+					registerEntry (*lastMacroCorkIndex);
+				break;
+			case K_PSUEDO_MACRO_END:
+				macro_tag = getEntryInCorkQueue (*lastMacroCorkIndex);
+				if (macro_tag)
+					macro_tag->extensionFields.endLine = getInputLineNumber ();
+				*lastMacroCorkIndex = CORK_NIL;
+				break;
+			case K_SECTION:
+				makeSimpleRefTag (operator,
+								  kind_for_directive,
+								  ASM_SECTION_PLACEMENT);
+				break;
+			default:
+				makeSimpleTag (operator, kind_for_directive);
+			}
 		}
 	}
 }
@@ -240,7 +269,7 @@ static const unsigned char *readOperator (
 {
 	const unsigned char *cp = start;
 	vStringClear (operator);
-	while (*cp != '\0'  &&  ! isspace ((int) *cp))
+	while (*cp != '\0'  &&  ! isspace ((int) *cp) && *cp != ',')
 	{
 		vStringPut (operator, *cp);
 		++cp;
@@ -248,61 +277,83 @@ static const unsigned char *readOperator (
 	return cp;
 }
 
+static const unsigned char *asmReadLineFromInputFile (void)
+{
+	static vString *line;
+	int c;
+
+	line = vStringNewOrClear (line);
+
+	while ((c = cppGetc()) != EOF)
+	{
+		if (c == '\n')
+			break;
+		else if (c == STRING_SYMBOL || c == CHAR_SYMBOL)
+		{
+			/* We cannot store these values to vString
+			 * Store a whitespace as a dummy value for them.
+			 */
+			vStringPut (line, ' ');
+		}
+		else
+			vStringPut (line, c);
+	}
+
+	if ((vStringLength (line) == 0)&& (c == EOF))
+		return NULL;
+	else
+		return (unsigned char *)vStringValue (line);
+}
+
 static void findAsmTags (void)
 {
 	vString *name = vStringNew ();
 	vString *operator = vStringNew ();
 	const unsigned char *line;
-	bool inCComment = false;
 
-	while ((line = readLineFromInputFile ()) != NULL)
+	cppInit (false, false, false, false,
+			 KIND_GHOST_INDEX, 0, KIND_GHOST_INDEX, KIND_GHOST_INDEX, 0, 0,
+			 FIELD_UNKNOWN);
+
+	 int lastMacroCorkIndex = CORK_NIL;
+
+	while ((line = asmReadLineFromInputFile ()) != NULL)
 	{
 		const unsigned char *cp = line;
 		bool labelCandidate = (bool) (! isspace ((int) *cp));
 		bool nameFollows = false;
+		bool directive = false;
 		const bool isComment = (bool)
 				(*cp != '\0' && strchr (";*@", *cp) != NULL);
 
 		/* skip comments */
-		if (strncmp ((const char*) cp, "/*", (size_t) 2) == 0)
-		{
-			inCComment = true;
-			cp += 2;
-		}
-		if (inCComment)
-		{
-			do
-			{
-				if (strncmp ((const char*) cp, "*/", (size_t) 2) == 0)
-				{
-					inCComment = false;
-					cp += 2;
-					break;
-				}
-				++cp;
-			} while (*cp != '\0');
-		}
-		if (isComment || inCComment)
+		if (isComment)
 			continue;
-
-		/* read preprocessor defines */
-		if (*cp == '#')
-		{
-			++cp;
-			readPreProc (cp);
-			continue;
-		}
 
 		/* skip white space */
 		while (isspace ((int) *cp))
 			++cp;
 
 		/* read symbol */
-		cp = readSymbol (cp, name);
-		if (vStringLength (name) > 0  &&  *cp == ':')
+		if (*cp == '.')
 		{
-			labelCandidate = true;
+			directive = true;
+			labelCandidate = false;
 			++cp;
+		}
+
+		cp = readSymbol (cp, name);
+		if (vStringLength (name) > 0)
+		{
+			if (*cp == ':')
+			{
+				labelCandidate = true;
+				++cp;
+			}
+			else if (anyKindEntryInScope (CORK_NIL,
+										  vStringValue (name),
+										  K_MACRO))
+				labelCandidate = false;
 		}
 
 		if (! isspace ((int) *cp)  &&  *cp != '\0')
@@ -328,8 +379,12 @@ static void findAsmTags (void)
 			cp = readSymbol (cp, name);
 			nameFollows = true;
 		}
-		makeAsmTag (name, operator, labelCandidate, nameFollows);
+		makeAsmTag (name, operator, labelCandidate, nameFollows, directive,
+					&lastMacroCorkIndex);
 	}
+
+	cppTerminate ();
+
 	vStringDelete (name);
 	vStringDelete (operator);
 }
@@ -351,8 +406,11 @@ extern parserDefinition* AsmParser (void)
 		"*.[xX][68][68]",
 		NULL
 	};
+	static selectLanguage selectors[] = { selectByArrowOfR,
+					      NULL };
+
 	parserDefinition* def = parserNew ("Asm");
-	def->kindTable  = AsmKinds;
+	def->kindTable      = AsmKinds;
 	def->kindCount  = ARRAY_SIZE (AsmKinds);
 	def->extensions = extensions;
 	def->patterns   = patterns;
@@ -360,5 +418,7 @@ extern parserDefinition* AsmParser (void)
 	def->initialize = initialize;
 	def->keywordTable = AsmKeywords;
 	def->keywordCount = ARRAY_SIZE (AsmKeywords);
+	def->selectLanguage = selectors;
+	def->useCork = CORK_QUEUE | CORK_SYMTAB;
 	return def;
 }
