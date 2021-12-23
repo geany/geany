@@ -154,7 +154,7 @@ gboolean tm_tag_is_anon(const TMTag *tag);
 
 const char *tm_tag_type_name(const TMTag *tag);
 
-TMTagType tm_tag_name_type(const char* tag_name);
+TMTagType tm_tag_name_type(const char* tag_name, TMParserType lang);
 
 void tm_tag_print(TMTag *tag, FILE *fp);
 
