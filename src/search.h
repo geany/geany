@@ -28,6 +28,7 @@
 #define GEANY_SEARCH_H 1
 
 #include <glib.h>
+#include <gmodule.h>
 
 
 G_BEGIN_DECLS
@@ -79,6 +80,7 @@ typedef struct GeanyMatchInfo
 }
 GeanyMatchInfo;
 
+G_MODULE_EXPORT
 void search_show_find_in_files_dialog(const gchar *dir);
 
 

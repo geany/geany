@@ -49,6 +49,7 @@ typedef struct GeanyTemplatePrefs
 GeanyTemplatePrefs;
 
 
+G_MODULE_EXPORT
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
 
 

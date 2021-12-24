@@ -281,21 +281,27 @@ enum GeanyKeyBindingID
 };
 
 
+G_MODULE_EXPORT
 void keybindings_send_command(guint group_id, guint key_id);
 
+G_MODULE_EXPORT
 GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		const gchar *name, const gchar *label, GtkWidget *menu_item);
 
+G_MODULE_EXPORT
 GeanyKeyBinding *keybindings_set_item_full(GeanyKeyGroup *group, gsize key_id,
 		guint key, GdkModifierType mod, const gchar *kf_name, const gchar *label,
 		GtkWidget *menu_item, GeanyKeyBindingFunc func, gpointer pdata,
 		GDestroyNotify destroy_notify);
 
+G_MODULE_EXPORT
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
 
+G_MODULE_EXPORT
 GdkModifierType keybindings_get_modifiers(GdkModifierType mods);
 
+G_MODULE_EXPORT
 void keybindings_load_keyfile(void);
 
 #ifdef GEANY_PRIVATE

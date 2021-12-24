@@ -92,7 +92,9 @@ struct _GeanyObjectClass
 	GObjectClass parent_class;
 };
 
+G_MODULE_EXPORT
 GType		geany_object_get_type	(void);
+G_MODULE_EXPORT
 GObject*	geany_object_new		(void);
 
 G_END_DECLS

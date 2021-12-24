@@ -45,12 +45,17 @@ typedef struct GeanyLexerStyle
 GeanyLexerStyle;
 
 
+G_MODULE_EXPORT
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id);
 
+G_MODULE_EXPORT
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
 
+G_MODULE_EXPORT
 gboolean highlighting_is_string_style(gint lexer, gint style);
+G_MODULE_EXPORT
 gboolean highlighting_is_comment_style(gint lexer, gint style);
+G_MODULE_EXPORT
 gboolean highlighting_is_code_style(gint lexer, gint style);
 
 

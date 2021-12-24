@@ -4730,7 +4730,6 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gboolean offset)
  *
  *  @since 0.20
  **/
-GEANY_API_SYMBOL
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 {
 	g_return_val_if_fail(editor, FALSE);
@@ -5337,7 +5336,6 @@ const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name)
  * @param pos .
  * @param snippet .
  */
-GEANY_API_SYMBOL
 void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet)
 {
 	GString *pattern;
@@ -5355,7 +5353,6 @@ static void         free_(void *doc) { }
  * Gets the GType of GeanyEditor
  *
  * @return the GeanyEditor type */
-GEANY_API_SYMBOL
 GType editor_get_type (void);
 
 G_DEFINE_BOXED_TYPE(GeanyEditor, editor, copy_, free_);

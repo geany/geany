@@ -72,6 +72,7 @@ GeanyFilePrefs;
 
 
 #define GEANY_TYPE_DOCUMENT (document_get_type())
+G_MODULE_EXPORT
 GType document_get_type (void);
 
 /**
@@ -163,56 +164,81 @@ GeanyDocument;
 	(G_LIKELY((doc)->file_name != NULL) ? ((doc)->file_name) : GEANY_STRING_UNTITLED)
 
 
+G_MODULE_EXPORT
 GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
+G_MODULE_EXPORT
 GeanyDocument *document_get_current(void);
 
+G_MODULE_EXPORT
 GeanyDocument *document_get_from_notebook_child(GtkWidget *page);
 
+G_MODULE_EXPORT
 GeanyDocument* document_get_from_page(guint page_num);
 
+G_MODULE_EXPORT
 GeanyDocument* document_find_by_filename(const gchar *utf8_filename);
 
+G_MODULE_EXPORT
 GeanyDocument* document_find_by_real_path(const gchar *realname);
 
+G_MODULE_EXPORT
 gboolean document_save_file(GeanyDocument *doc, gboolean force);
 
+G_MODULE_EXPORT
 GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonly,
 		GeanyFiletype *ft, const gchar *forced_enc);
 
+G_MODULE_EXPORT
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc);
 
+G_MODULE_EXPORT
 gboolean document_remove_page(guint page_num);
 
+G_MODULE_EXPORT
 gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc);
 
+G_MODULE_EXPORT
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
+G_MODULE_EXPORT
 void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
+G_MODULE_EXPORT
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
 
+G_MODULE_EXPORT
 gboolean document_close(GeanyDocument *doc);
 
+G_MODULE_EXPORT
 GeanyDocument *document_index(gint idx);
 
+G_MODULE_EXPORT
 gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname);
 
+G_MODULE_EXPORT
 void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
 
+G_MODULE_EXPORT
 const GdkColor *document_get_status_color(GeanyDocument *doc);
 
+G_MODULE_EXPORT
 gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
 
+G_MODULE_EXPORT
 gint document_get_notebook_page(GeanyDocument *doc);
 
+G_MODULE_EXPORT
 gint document_compare_by_display_name(gconstpointer a, gconstpointer b);
 
+G_MODULE_EXPORT
 gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
 
+G_MODULE_EXPORT
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
+G_MODULE_EXPORT
 GeanyDocument *document_find_by_id(guint id);
 
 

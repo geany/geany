@@ -663,7 +663,6 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
  *
  *  @return @c TRUE if the file was saved, otherwise @c FALSE.
  **/
-GEANY_API_SYMBOL
 gboolean dialogs_show_save_as(void)
 {
 	GeanyDocument *doc = document_get_current();
@@ -725,7 +724,6 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
  *  @param text Printf()-style format string.
  *  @param ... Arguments for the @a text format string.
  **/
-GEANY_API_SYMBOL
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 {
 #ifndef G_OS_WIN32
