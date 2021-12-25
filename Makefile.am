@@ -21,25 +21,13 @@ EXTRA_DIST = \
 	HACKING \
 	README.I18N \
 	README.Packagers \
-	intltool-extract.in \
-	intltool-merge.in \
-	intltool-update.in \
 	$(WIN32_BUILD_FILES)
 
 DISTCLEANFILES = \
-	geany.desktop \
-	intltool-extract \
-	intltool-merge \
-	intltool-update
+	geany.desktop
 
 uninstall-local:
 	rm -rf $(DESTDIR)$(pkgdatadir);
-
-# Remove po/.intltool-merge-cache.lock on "distcheck" which is left over by various incorrectly
-# patched versions of intltool, e.g. https://bugs.archlinux.org/task/67098 or
-# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=991623
-distclean-local:
-	rm -f $(top_builddir)/po/.intltool-merge-cache.lock
 
 # manually install some files under another name
 install-data-local:
@@ -85,6 +73,8 @@ pkgconfig_DATA = geany.pc
 pkgconfigdir = $(libdir)/pkgconfig
 
 desktopdir = $(datadir)/applications
-desktop_in_files = geany.desktop
+desktop_in_files = geany.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
+
+$(desktop_DATA): $(desktop_in_files) $(wildcard $(top_srcdir)/po/*.po)
+	$(AM_V_GEN)$(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@

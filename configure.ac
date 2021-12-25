@@ -9,6 +9,9 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.11 -Wall parallel-tests subdir-objects])
 AC_CONFIG_HEADERS([config.h])
 
+AM_GNU_GETTEXT_VERSION([0.19.8])
+AM_GNU_GETTEXT([external])
+
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 GEANY_PREFIX
@@ -122,13 +125,14 @@ GEANY_CHECK_VTE
 GEANY_CHECK_MAC_INTEGRATION
 GEANY_CHECK_THE_FORCE dnl hehe
 
-# i18n
-GEANY_I18N
+AC_SUBST([GETTEXT_PACKAGE],[$PACKAGE])
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$PACKAGE"], [Gettext package.])
 
 # double eval since datarootdir is usually defined as ${prefix}/share
 AM_COND_IF([MINGW],
   [pkgdatadir='${prefix}/data'],
   [pkgdatadir='${datarootdir}/geany'])
+AM_COND_IF([MINGW],[LIBS="$LIBS -liconv"])
 AC_SUBST([GEANY_DATA_DIR], [$(eval echo $(eval echo $pkgdatadir))])
 AC_SUBST([pkgdatadir])
 

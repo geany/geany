@@ -78,10 +78,10 @@ and open the online version instead when requested.
 Installing from a Git clone
 +++++++++++++++++++++++++++
 
-Install Autotools (*automake*, *autoconf* and *libtool*), *intltool*,
-and the GLib development files **before** running any of the following
-commands, as well as *rst2html* from Docutils (see above for details).
-Then, run ``./autogen.sh`` and then follow the instructions for
+Install Autotools (*autopoint*, *automake*, *autoconf* and *libtool*),
+*gettext*, and the GLib development files **before** running any of the
+following commands, as well as *rst2html* from Docutils (see above for
+details). Then, run ``./autogen.sh`` and then follow the instructions for
 `installing from a release tarball`_.
 
 Installing from a release tarball
