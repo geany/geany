@@ -274,44 +274,6 @@ static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 }
 
 
-static void read_key_group(Plugin *plugin)
-{
-	GeanyKeyGroupInfo *p_key_info;
-	GeanyKeyGroup **p_key_group;
-	GModule *module = plugin->proxy_data;
-
-	g_module_symbol(module, "plugin_key_group_info", (void *) &p_key_info);
-	g_module_symbol(module, "plugin_key_group", (void *) &p_key_group);
-	if (p_key_info && p_key_group)
-	{
-		GeanyKeyGroupInfo *key_info = p_key_info;
-
-		if (*p_key_group)
-			geany_debug("Ignoring plugin_key_group symbol for plugin '%s' - "
-				"use plugin_set_key_group() instead to allocate keybindings dynamically.",
-				plugin->info.name);
-		else
-		{
-			if (key_info->count)
-			{
-				GeanyKeyGroup *key_group =
-					plugin_set_key_group(&plugin->public, key_info->name, key_info->count, NULL);
-				if (key_group)
-					*p_key_group = key_group;
-			}
-			else
-				geany_debug("Ignoring plugin_key_group_info symbol for plugin '%s' - "
-					"count field is zero. Maybe use plugin_set_key_group() instead?",
-					plugin->info.name);
-		}
-	}
-	else if (p_key_info || p_key_group)
-		geany_debug("Ignoring only one of plugin_key_group[_info] symbols defined for plugin '%s'. "
-			"Maybe use plugin_set_key_group() instead?",
-			plugin->info.name);
-}
-
-
 static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
 {
 	const Plugin *pa = a;
@@ -551,7 +513,6 @@ plugin_load(Plugin *plugin)
 	{
 		GeanyPlugin **p_geany_plugin;
 		PluginInfo **p_info;
-		PluginFields **plugin_fields;
 		GModule *module = plugin->proxy_data;
 		/* set these symbols before plugin_init() is called
 		 * we don't set geany_data since it is set directly by plugin_new() */
@@ -561,19 +522,9 @@ plugin_load(Plugin *plugin)
 		g_module_symbol(module, "plugin_info", (void *) &p_info);
 		if (p_info)
 			*p_info = &plugin->info;
-		g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
-		if (plugin_fields)
-			*plugin_fields = &plugin->fields;
-		read_key_group(plugin);
 
 		/* Legacy plugin_init() cannot fail. */
 		plugin->cbs.init(&plugin->public, plugin->cb_data);
-
-		/* now read any plugin-owned data that might have been set in plugin_init() */
-		if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
-		{
-			ui_add_document_sensitive(plugin->fields.menu_item);
-		}
 	}
 	else
 	{
