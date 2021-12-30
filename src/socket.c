@@ -762,6 +762,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 
 				handle_input_project(buf);
 			}
+			popup = TRUE;
 		}
 		else if (strncmp(buf, "folder", 6) == 0)
 		{
@@ -775,6 +776,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 
 				project_open_folder(buf, TRUE);
 			}
+			popup = TRUE;
 		}
 		else if (strncmp(buf, "line", 4) == 0)
 		{
