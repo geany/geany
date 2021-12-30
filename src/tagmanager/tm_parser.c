@@ -402,7 +402,7 @@ static TMParserMapEntry map_F77[] = {
 
 #define map_FORTRAN map_F77
 
-#define map_FERITE map_C_old_parser
+#define map_UNUSED1 map_HASKELL
 
 /* different parser than in universal-ctags */
 static TMParserMapEntry map_MATLAB[] = {
@@ -640,7 +640,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(SH),
 	MAP_ENTRY(D),
 	MAP_ENTRY(FORTRAN),
-	MAP_ENTRY(FERITE),
+	MAP_ENTRY(UNUSED1),
 	MAP_ENTRY(DIFF),
 	MAP_ENTRY(VHDL),
 	MAP_ENTRY(LUA),
@@ -1057,7 +1057,6 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_CSHARP:
 		case TM_PARSER_COBOL:
 		case TM_PARSER_D:
-		case TM_PARSER_FERITE:
 		case TM_PARSER_GDSCRIPT:
 		case TM_PARSER_GLSL:
 		case TM_PARSER_GO:

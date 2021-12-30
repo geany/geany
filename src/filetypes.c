@@ -146,7 +146,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( RUBY,       RUBY,         "Ruby",             NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( TCL,        TCL,          "Tcl",              NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( LUA,        LUA,          "Lua",              NULL,                      SOURCE_FILE, SCRIPT   );
-	FT_INIT( FERITE,     FERITE,       "Ferite",           NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( FERITE,     NONE,         "Ferite",           NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( HASKELL,    HASKELL,      "Haskell",          NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( MARKDOWN,   MARKDOWN,     "Markdown",         NULL,                      SOURCE_FILE, MARKUP   );
 	FT_INIT( TXT2TAGS,   TXT2TAGS,     "Txt2tags",         NULL,                      SOURCE_FILE, MARKUP   );

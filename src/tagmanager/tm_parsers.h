@@ -34,7 +34,7 @@
 	ShParser, \
 	DParser, \
 	FortranParser, \
-	FeriteParser, \
+	LiterateHaskellParser, /* dummy for removed Ferite parser */ \
 	DiffParser, \
 	VhdlParser, \
 	LuaParser, \

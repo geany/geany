@@ -268,7 +268,6 @@ static langType Lang_csharp;
 static langType Lang_java;
 static langType Lang_d;
 static langType Lang_glsl;
-static langType Lang_ferite;
 static langType Lang_vala;
 
 /* Used to index into the CKinds table. */
@@ -1147,7 +1146,7 @@ static const char* accessField (const statementInfo *const st)
 {
 	const char* result = NULL;
 
-	if ((isInputLanguage (Lang_cpp) || isInputLanguage (Lang_d) || isInputLanguage (Lang_ferite))  &&
+	if ((isInputLanguage (Lang_cpp) || isInputLanguage (Lang_d))  &&
 			st->scope == SCOPE_FRIEND)
 		result = "friend";
 	else if (st->member.access != ACCESS_UNDEFINED)
@@ -1198,7 +1197,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 			}
 			if (st->implementation != IMP_DEFAULT &&
 				(isInputLanguage (Lang_cpp) || isInputLanguage (Lang_csharp) || isInputLanguage (Lang_vala) ||
-				 isInputLanguage (Lang_java) || isInputLanguage (Lang_d) || isInputLanguage (Lang_ferite)))
+				 isInputLanguage (Lang_java) || isInputLanguage (Lang_d)))
 			{
 				tag->extensionFields.implementation =
 						implementationString (st->implementation);
@@ -1322,7 +1321,7 @@ static void addContextSeparator (vString *const scope)
 {
 	if (isInputLanguage (Lang_c)  ||  isInputLanguage (Lang_cpp))
 		vStringCatS (scope, "::");
-	else if (isInputLanguage (Lang_java) || isInputLanguage (Lang_d) || isInputLanguage (Lang_ferite) ||
+	else if (isInputLanguage (Lang_java) || isInputLanguage (Lang_d) ||
 			 isInputLanguage (Lang_csharp) || isInputLanguage (Lang_vala))
 		vStringCatS (scope, ".");
 }
@@ -1427,13 +1426,6 @@ static void makeTag (const tokenInfo *const token,
 	{
 		vString *scope;
 		tagEntryInfo e;
-
-		/* take only functions which are introduced by "function ..." */
-		if (type == TAG_FUNCTION && isInputLanguage (Lang_ferite) &&
-			strncmp("function", st->firstToken->name->buffer, 8) != 0)
-		{
-			return;
-		}
 
 		initTagEntry (&e, vStringValue (token->name), kindIndexForType (type));
 
@@ -1927,7 +1919,7 @@ static void setAccess (statementInfo *const st, const accessType laccess)
 {
 	if (isMember (st))
 	{
-		if (isInputLanguage (Lang_cpp) || isInputLanguage (Lang_d) || isInputLanguage (Lang_ferite))
+		if (isInputLanguage (Lang_cpp) || isInputLanguage (Lang_d))
 		{
 			int c = skipToNonWhite ();
 
@@ -2625,7 +2617,7 @@ static void addContext (statementInfo *const st, const tokenInfo* const token)
 			if (isInputLanguage (Lang_c)  ||  isInputLanguage (Lang_cpp))
 				vStringCatS (st->context->name, "::");
 			else if (isInputLanguage (Lang_java) ||
-					 isInputLanguage (Lang_d) || isInputLanguage (Lang_ferite) ||
+					 isInputLanguage (Lang_d) ||
 					 isInputLanguage (Lang_csharp) || isInputLanguage (Lang_vala))
 				vStringCatS (st->context->name, ".");
 		}
@@ -3211,12 +3203,6 @@ static void initializeGLSLParser (const langType language)
 	buildKeywordHash (language, 0); /* C keywords */
 }
 
-static void initializeFeriteParser (const langType language)
-{
-	Lang_ferite = language;
-	buildKeywordHash (language, 1);	/* C++ keywords */
-}
-
 static void initializeCsharpParser (const langType language)
 {
 	Lang_csharp = language;
@@ -3298,18 +3284,6 @@ extern parserDefinition* GLSLParser (void)
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeGLSLParser;
-	return def;
-}
-
-extern parserDefinition* FeriteParser (void)
-{
-	static const char *const extensions [] = { "fe", NULL };
-	parserDefinition* def = parserNew ("Ferite");
-	def->kindTable  = CKinds;
-	def->kindCount  = ARRAY_SIZE (CKinds);
-	def->extensions = extensions;
-	def->parser2    = findCTags;
-	def->initialize = initializeFeriteParser;
 	return def;
 }
 
