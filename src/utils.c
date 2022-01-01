@@ -1049,6 +1049,10 @@ gint utils_parse_color_to_bgr(const gchar *spec)
  * The returned string should be freed with g_free(). */
 gchar *utils_get_current_time_string(gboolean include_microseconds)
 {
+	// "%f" specifier for microseconds is only available since GLib 2.66
+	if (glib_check_version(2, 66, 0) != NULL)
+		include_microseconds = FALSE;
+
 	GDateTime *now = g_date_time_new_now_local();
 	const gchar *format = include_microseconds ? "%H:%M:%S.%f" : "%H:%M:%S";
 	gchar *time_string = g_date_time_format(now, format);
