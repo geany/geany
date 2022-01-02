@@ -88,10 +88,10 @@ Var UNINSTDIR
 !include "MUI2.nsh"
 
 ;Reserve files used in .onInit, for faster start-up
-ReserveFile "${NSISDIR}\Plugins\x86-unicode\System.dll"
-ReserveFile "${NSISDIR}\Plugins\x86-unicode\UserInfo.dll"
-ReserveFile "${NSISDIR}\Plugins\x86-unicode\InstallOptions.dll"
-ReserveFile "${NSISDIR}\Plugins\x86-unicode\LangDLL.dll"
+ReserveFile /plugin "System.dll"
+ReserveFile /plugin "UserInfo.dll"
+ReserveFile /plugin "InstallOptions.dll"
+ReserveFile /plugin "LangDLL.dll"
 
 !define MUI_ABORTWARNING
 !define MUI_ICON "icons\geany.ico"
