@@ -191,7 +191,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
-	if (update)
+	if (update && doc != NULL)
 		doc->priv->tag_tree_dirty = TRUE;
 
 	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) != TREEVIEW_SYMBOL)
