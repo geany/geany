@@ -48,8 +48,10 @@ libepoxy
 libffi
 libiconv
 libpng
+librsvg
 libthai
 libwinpthread-git
+libxml2
 pango
 pcre
 pixman
@@ -214,6 +216,7 @@ cleanup_unnecessary_files() {
 	rm -rf lib/gettext
 	rm -rf lib/libffi-*
 	rm -rf lib/pkgconfig
+	rm -rf lib/python3.9
 	find lib -name '*.a' -delete
 	find lib -name '*.typelib' -delete
 	find lib -name '*.def' -delete
@@ -238,6 +241,7 @@ cleanup_unnecessary_files() {
 	rm -rf share/info
 	rm -rf share/man
 	rm -rf share/thumbnailers
+	rm -rf share/vala
 	rm -rf share/xml
 	rm -rf usr/share/libalpm
 	# cleanup binaries and libs (delete anything except *.dll and GSpawn helper binaries)
