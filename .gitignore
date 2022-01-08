@@ -99,6 +99,7 @@ Makefile.in
 /po/Makevars.template
 /po/*.mo
 /po/*.pot
+/po/*.po~
 /po/POTFILES
 /po/POTFILES.ignore
 /po/POTFILES.in.missing
