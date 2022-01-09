@@ -84,7 +84,7 @@ git apply -p0 scintilla/scintilla_changes.patch || {
 }
 
 echo "Upstream lexer catalogue changes:"
-git diff -p -R --src-prefix= --dst-prefix= scintilla/lexilla/src/Lexilla.cxx
+git diff -p --src-prefix= --dst-prefix= scintilla/lexilla/src/Lexilla.cxx
 
 # show a nice success banner
 echo "Scintilla update successful!" | sed 'h;s/./=/g;p;x;p;x'

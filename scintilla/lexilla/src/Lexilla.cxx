@@ -33,6 +33,7 @@ extern LexerModule lmAbaqus;
 extern LexerModule lmAda;
 extern LexerModule lmAPDL;
 extern LexerModule lmAs;
+extern LexerModule lmAsciidoc;
 extern LexerModule lmAsm;
 extern LexerModule lmAsn1;
 extern LexerModule lmASY;
@@ -76,6 +77,7 @@ extern LexerModule lmFortran;
 extern LexerModule lmFreeBasic;
 extern LexerModule lmFSharp;
 extern LexerModule lmGAP;
+extern LexerModule lmGDScript;
 extern LexerModule lmGui4Cli;
 extern LexerModule lmHaskell;
 extern LexerModule lmHollywood;
@@ -235,6 +237,7 @@ void AddEachLexer() {
 		&lmAda,
 		&lmAPDL,
 		&lmAs,
+		&lmAsciidoc,
 		&lmAsm,
 		&lmAsn1,
 		&lmASY,
@@ -278,6 +281,7 @@ void AddEachLexer() {
 		&lmFreeBasic,
 		&lmFSharp,
 		&lmGAP,
+		&lmGDScript,
 		&lmGui4Cli,
 		&lmHaskell,
 		&lmHollywood,
