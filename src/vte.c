@@ -240,6 +240,10 @@ static void on_startup_complete(G_GNUC_UNUSED GObject *dummy)
 {
 	GeanyDocument *doc = document_get_current();
 
+	/* ensure the widget is mapped and fully initialized, so actions like pasting text work
+	 * (see https://github.com/geany/geany/issues/2813 for details) */
+	gtk_widget_realize(vc->vte);
+
 	if (doc)
 		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
 }
