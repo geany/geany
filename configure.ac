@@ -9,6 +9,10 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.11 -Wall parallel-tests subdir-objects])
 AC_CONFIG_HEADERS([config.h])
 
+# Silence "AC_LINK_IFELSE before AC_USE_SYSTEM_EXTENSIONS" warnings
+# Note: Enables _GNU_SOURCE on Linux
+AC_USE_SYSTEM_EXTENSIONS
+
 AM_GNU_GETTEXT_VERSION([0.19.8])
 AM_GNU_GETTEXT([external])
 
@@ -23,21 +27,20 @@ if test -n "${build}" -a -n "${target}"; then
 	GEANY_STATUS_ADD([Building Geany for], [${target}])
 fi
 
-# why do we use this?
-AC_USE_SYSTEM_EXTENSIONS
-
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
 LT_INIT([disable-static])
 AC_PROG_CC
-AC_PROG_CC_C99
 AM_PROG_CC_C_O
-
 AC_PROG_CXX
 GEANY_PROG_CXX
 AX_CXX_COMPILE_STDCXX_17
 
 AC_PROG_INSTALL
 AC_PROG_LN_S
+
+if test "$ac_cv_prog_cc_c99" = "no"; then
+	AC_MSG_ERROR([Need a C99 compiler])
+fi
 
 # autoscan start
 
