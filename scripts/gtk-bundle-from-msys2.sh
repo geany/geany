@@ -55,6 +55,7 @@ libxml2
 pango
 pcre
 pixman
+xz
 zlib
 "
 
