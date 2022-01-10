@@ -253,6 +253,31 @@ The position of the tabs can be selected in the interface preferences.
 The sizes of the sidebar and message window can be adjusted by
 dragging the dividers.
 
+Sidebar Usage
+^^^^^^^^^^^^^
+
+The sidebar has a right click menu that can control what is visible and
+has actions specific to the tab (other tabs added by plugins are
+described by that plugin documentation):
+
+* Symbols
+
+  * expand/collapse the tree
+  * control sorting order
+  * locate the symbol in documents
+
+  The symbols tab can also be filtered by typing a string into
+  the entry at the top of the tab. All symbols that contain the entered
+  string as a substring will be shown in the tree. Multiple filters can
+  be separated by a space.
+
+* Documents
+
+  * expand/collapse the tree
+  * save to or reload from files
+  * search tree based at selected file
+  * show or hide the document paths
+
 Command line options
 --------------------
 
