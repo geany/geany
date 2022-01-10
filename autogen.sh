@@ -30,7 +30,7 @@ fi
 
 echo "Processing configure.ac"
 
-autoreconf --install --verbose
+(cd $srcdir; autoreconf --install --verbose)
 
 if [ "$NOCONFIGURE" = 1 ]; then
     echo "Done. configure skipped."
