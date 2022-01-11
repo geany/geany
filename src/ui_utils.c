@@ -227,7 +227,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				break;
 			case 's':
 			{
-				gint len = sci_get_selected_text_length(sci) - 1;
+				gint len = sci_get_selected_text_length(sci);
 				/* check if whole lines are selected */
 				if (!len || sci_get_col_from_position(sci,
 						sci_get_selection_start(sci)) != 0 ||
@@ -241,7 +241,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 			}
 			case 'n' :
 				g_string_append_printf(stats_str, "%d",
-					sci_get_selected_text_length(doc->editor->sci) - 1);
+					sci_get_selected_text_length(doc->editor->sci));
 				break;
 			case 'w':
 				/* RO = read-only */

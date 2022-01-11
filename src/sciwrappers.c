@@ -726,14 +726,12 @@ gchar *sci_get_line(ScintillaObject *sci, gint line_num)
  *
  * @param sci Scintilla widget.
  * @param len Length of @a text buffer, usually sci_get_length() + 1.
- * @param text Text buffer; must be allocated @a len + 1 bytes for null-termination. */
+ * @param text Text buffer; must be allocated @a len bytes for null-termination. */
 GEANY_API_SYMBOL
 void sci_get_text(ScintillaObject *sci, gint len, gchar *text)
 {
-	if (len > 0) {
-		SSM(sci, SCI_GETTEXT, (uptr_t) len - 1, (sptr_t) text);
-		text[len] = '\0';
-	}
+	g_return_if_fail(len > 0);
+	SSM(sci, SCI_GETTEXT, (uptr_t) len - 1, (sptr_t) text);
 }
 
 
@@ -751,15 +749,13 @@ gchar *sci_get_contents(ScintillaObject *sci, gint buffer_len)
 {
 	gchar *text;
 
-	if (buffer_len < 0)
-		return sci_get_string(sci, SCI_GETTEXT, 0);
+	g_return_if_fail(buffer_len != 0);
 
-	text = NULL;
-	if (buffer_len > 0) {
-		text = g_malloc(buffer_len);
-		sci_get_text(sci, buffer_len - 1, text);
-		text[buffer_len - 1] = '\0';
-	}
+	if (buffer_len < 0)
+		buffer_len = sci_get_length(sci) + 1;
+
+	text = g_malloc(buffer_len);
+	SSM(sci, SCI_GETTEXT, (uptr_t) buffer_len - 1, (sptr_t) text);
 	return text;
 }
 
