@@ -2526,9 +2526,8 @@ msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
 
 #: src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Ви дійсно хочете перевідкрити \"%s\"?"
+msgstr "Ви дійсно хочете перевідкрити всі файли?"
 
 #: src/callbacks.c:920 src/keybindings.c:567
 msgid "Go to Line"
@@ -3305,9 +3304,8 @@ msgid "Reload file"
 msgstr "Перевідкрити файл"
 
 #: src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Перевідкрити файл"
+msgstr "Перевідкрити всі файли"
 
 #: src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -3917,7 +3915,7 @@ msgid ""
 msgstr ""
 "Не вдалось створити каталог конфігурації (%s).\n"
 "Використання Geany без каталогу конфігурації може призвести до деяких "
-"помилок.Продовжувати запуск Geany?"
+"помилок. Продовжити запуск Geany?"
 
 #: src/libmain.c:1158
 #, c-format
@@ -4808,14 +4806,12 @@ msgid "Classes"
 msgstr ""
 
 #: src/symbols.c:640
-#, fuzzy
 msgid "Fields"
-msgstr "Перейти до рядка"
+msgstr ""
 
 #: src/symbols.c:644
-#, fuzzy
 msgid "Unknowns"
-msgstr "невідомо"
+msgstr ""
 
 #: src/symbols.c:652
 msgid "Anchors"
@@ -5886,9 +5882,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Резервна копія: Не вдалось зберегти файл (%s)."
 
 #: plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Не вдалось записати файл проекту (%s)."
+msgstr "Автозбереження: Не вдалось зберегти створений файл (%s)."
 
 #: plugins/saveactions.c:386
 #, c-format
@@ -5903,9 +5899,8 @@ msgid "Select Directory"
 msgstr "Вибрати каталог"
 
 #: plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "Каталог для резервних копій не існує або не дозволяє запис."
+msgstr "Каталог для автозбереження файлів не існує або не дозволяє запис."
 
 #: plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -5956,6 +5951,7 @@ msgstr "_Тип файлу для створених файлів:"
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
+"_Каталог для автозбереження створених файлів (за замовчуванням: \"%s\"):"
 
 #: plugins/saveactions.c:766
 msgid ""
@@ -5964,6 +5960,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>Файли, автоматично збережені при створенні, залишаться у встановленому "
+"каталозі.\n"
+"Каталог для автозбереження створених файлів необхідно очищати вручну або "
+"іншим способом.</i>"
 
 #: plugins/saveactions.c:784
 msgid "Backup Copy"
