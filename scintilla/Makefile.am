@@ -14,6 +14,7 @@ lexilla/include/SciLexer.h
 LEXER_SRCS =                           \
 lexilla/lexers/LexAbaqus.cxx           \
 lexilla/lexers/LexAda.cxx              \
+lexilla/lexers/LexAsciidoc.cxx         \
 lexilla/lexers/LexAsm.cxx              \
 lexilla/lexers/LexBash.cxx             \
 lexilla/lexers/LexBasic.cxx            \

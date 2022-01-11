@@ -1000,6 +1000,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 	{
 		init_styleset_case(ABAQUS);
 		init_styleset_case(ADA);
+		init_styleset_case(ASCIIDOC);
 		init_styleset_case(ASM);
 		init_styleset_case(BASIC);
 		init_styleset_case(BATCH);
@@ -1091,6 +1092,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 	{
 		styleset_case(ABAQUS);
 		styleset_case(ADA);
+		styleset_case(ASCIIDOC);
 		styleset_case(ASM);
 		styleset_case(BASIC);
 		styleset_case(BATCH);
