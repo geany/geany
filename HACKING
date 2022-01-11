@@ -113,7 +113,7 @@ it's for.
 Plugin API code
 ---------------
 Please be aware that anything with a doc-comment (a comment with an
-extra asterix: ``/**``) is something in the plugin API. Things like
+extra asterisk: ``/**``) is something in the plugin API. Things like
 enums and structs can usually still be appended to, ensuring that all
 the existing elements stay in place - this will keep the ABI stable.
 
