@@ -1,0 +1,39 @@
+# format=tagmanager
+ALFNUMÌ16384Ö0
+Circle2DÌ1Ö0
+LobbyÌ1Ö0
+PeerÌ1Ö0
+SEAL_TIMEÌ16384Ö0
+TIMEOUTÌ16384Ö0
+_alfnumÌ16384Ö0
+_drawÌ128Í()ÎCircle2DÖ0
+_initÌ128Í()Ö0
+_initÌ128Í(host_id: int)ÎLobbyÖ0
+_initÌ128Í(peer_id)ÎPeerÖ0
+centerÌ16384ÎCircle2DÖ0
+closeÌ524288ÎLobby.leaveÖ0
+colorÌ16384ÎCircle2DÖ0
+hostÌ16384ÎLobbyÖ0Ïint
+host_idÌ524288ÎLobby._initÖ0Ïint
+idÌ16384ÎPeerÖ0
+joinÌ128Í(peer_id, server)ÎLobbyÖ0Ïbool
+leaveÌ128Í(peer_id, server)ÎLobbyÖ0Ïbool
+lobbiesÌ16384Ö0ÏDictionary
+lobbyÌ16384ÎPeerÖ0
+new_peerÌ524288ÎLobby.joinÖ0ÏWebSocketPeer
+peer_idÌ524288ÎLobby.joinÖ0
+peer_idÌ524288ÎLobby.leaveÖ0
+peer_idÌ524288ÎLobby.sealÖ0
+peer_idÌ524288ÎPeer._initÖ0
+peersÌ16384Ö0ÏDictionary
+peersÌ16384ÎLobbyÖ0ÏArray
+radiusÌ16384ÎCircle2DÖ0
+randÌ16384Ö0ÏRandomNumberGenerator
+sealÌ128Í(peer_id, server)ÎLobbyÖ0Ïbool
+sealedÌ16384ÎLobbyÖ0Ïbool
+serverÌ16384Ö0ÏWebSocketServer
+serverÌ524288ÎLobby.joinÖ0
+serverÌ524288ÎLobby.leaveÖ0
+serverÌ524288ÎLobby.sealÖ0
+timeÌ16384ÎLobbyÖ0
+timeÌ16384ÎPeerÖ0

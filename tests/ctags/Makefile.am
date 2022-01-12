@@ -166,6 +166,9 @@ test_sources = \
 	fortran_associate.f90			\
 	fortran_line_continuation.f90	\
 	func_typedef.h					\
+	gdscript-inner-class.gd			\
+	gdscript-modifiers.gd			\
+	gdscript-no-implicit-class.gd	\
 	geany.nsi						\
 	general.cs						\
 	hex2dec.sql						\
