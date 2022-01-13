@@ -1030,7 +1030,7 @@ const gchar *tm_parser_scope_separator(TMParserType lang)
 }
 
 
-gboolean tm_parser_has_full_context(TMParserType lang)
+gboolean tm_parser_has_full_scope(TMParserType lang)
 {
 	switch (lang)
 	{

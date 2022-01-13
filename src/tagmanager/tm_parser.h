@@ -141,7 +141,7 @@ gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gc
 
 const gchar *tm_parser_scope_separator(TMParserType lang);
 
-gboolean tm_parser_has_full_context(TMParserType lang);
+gboolean tm_parser_has_full_scope(TMParserType lang);
 
 gboolean tm_parser_langs_compatible(TMParserType lang, TMParserType other);
 
