@@ -960,7 +960,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (!found_parent && scope &&
 		strpbrk(scope, GEANY_WORDCHARS) == scope)
 	{
-		const gchar *sep = symbols_get_context_separator(doc->file_type->id);
+		const gchar *sep = tm_parser_scope_separator(tag->lang);
 
 		g_string_append(buffer, scope);
 		g_string_append(buffer, sep);
@@ -2451,7 +2451,7 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, TMTagType 
 			{
 				if (tag->scope)
 					*tagname = g_strconcat(tag->scope,
-							symbols_get_context_separator(doc->file_type->id), tag->name, NULL);
+							tm_parser_scope_separator(tag->lang), tag->name, NULL);
 				else
 					*tagname = g_strdup(tag->name);
 
