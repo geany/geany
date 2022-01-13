@@ -750,7 +750,7 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 		member_types = tm_tag_max_t;
 
 	if (type_tag->scope && *(type_tag->scope))
-		scope = g_strconcat(type_tag->scope, tm_parser_context_separator(type_tag->lang), type_tag->name, NULL);
+		scope = g_strconcat(type_tag->scope, tm_parser_scope_separator(type_tag->lang), type_tag->name, NULL);
 	else
 		scope = g_strdup(type_tag->name);
 
@@ -785,7 +785,7 @@ static gchar *strip_type(const gchar *scoped_name, TMParserType lang)
 	if (scoped_name != NULL)
 	{
 		/* remove scope prefix */
-		const gchar *sep = tm_parser_context_separator(lang);
+		const gchar *sep = tm_parser_scope_separator(lang);
 		const gchar *base = g_strrstr(scoped_name, sep);
 		gchar *name = base ? g_strdup(base + strlen(sep)) : g_strdup(scoped_name);
 
@@ -881,7 +881,7 @@ find_scope_members (const GPtrArray *tags_array, const gchar *name, TMSourceFile
 static gboolean member_at_method_scope(const GPtrArray *tags, const gchar *method_scope, TMTag *member_tag,
 	TMParserType lang)
 {
-	const gchar *sep = tm_parser_context_separator(lang);
+	const gchar *sep = tm_parser_scope_separator(lang);
 	gboolean ret = FALSE;
 	gchar **comps;
 	guint len;

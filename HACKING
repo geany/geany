@@ -676,7 +676,7 @@ MAP_ENTRY(FOO) to parser_map.
 (You may want to make the symbols.c change before doing this).
 
 In src/tagmanager/tm_parser.c:
-Update tm_parser_context_separator() and tm_parser_has_full_context() to
+Update tm_parser_scope_separator() and tm_parser_has_full_context() to
 handle the new parser if applicable, by adding a TM_PARSER_FOO case entry.
 
 In filetypes.c, init_builtin_filetypes():

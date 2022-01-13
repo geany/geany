@@ -823,7 +823,7 @@ void tm_parser_verify_type_mappings(void)
  * zero otherwise. */
 gint tm_parser_scope_autocomplete_suffix(TMParserType lang, const gchar *str)
 {
-	const gchar *sep = tm_parser_context_separator(lang);
+	const gchar *sep = tm_parser_scope_separator(lang);
 
 	if (g_str_has_suffix(str, sep))
 		return strlen(sep);
@@ -957,7 +957,7 @@ gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gc
 	if (scope)
 	{
 		g_string_append(str, scope);
-		g_string_append(str, tm_parser_context_separator(lang));
+		g_string_append(str, tm_parser_scope_separator(lang));
 	}
 	g_string_append(str, fname);
 	g_string_append_c(str, ' ');
@@ -1001,7 +1001,7 @@ gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gc
 }
 
 
-const gchar *tm_parser_context_separator(TMParserType lang)
+const gchar *tm_parser_scope_separator(TMParserType lang)
 {
 	switch (lang)
 	{
@@ -1034,7 +1034,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 {
 	switch (lang)
 	{
-		/* These parsers include full hierarchy in the tag scope, separated by tm_parser_context_separator() */
+		/* These parsers include full hierarchy in the tag scope, separated by tm_parser_scope_separator() */
 		case TM_PARSER_ACTIONSCRIPT:
 		case TM_PARSER_C:
 		case TM_PARSER_CPP:

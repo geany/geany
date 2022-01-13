@@ -645,7 +645,7 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 static gint scope_autocomplete_suffix(ScintillaObject *sci, TMParserType lang,
 	gint pos, gboolean *scope_sep)
 {
-	const gchar *sep = tm_parser_context_separator(lang);
+	const gchar *sep = tm_parser_scope_separator(lang);
 	const gsize max_len = 3;
 	gboolean is_scope_sep;
 	gchar *buf;
@@ -708,7 +708,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	gboolean scope_sep_typed = FALSE;
 	gboolean ret = FALSE;
 	const gchar *current_scope;
-	const gchar *context_sep = tm_parser_context_separator(ft->lang);
+	const gchar *context_sep = tm_parser_scope_separator(ft->lang);
 	gint autocomplete_suffix_len;
 
 	if (autocomplete_scope_shown)
@@ -1866,7 +1866,7 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	{
 		const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
 			tm_tag_method_t | tm_tag_macro_with_arg_t;
-		const gchar *scope_sep = tm_parser_context_separator(ft->lang);
+		const gchar *scope_sep = tm_parser_scope_separator(ft->lang);
 		gchar *scope = EMPTY(tag->scope) ? g_strdup(tag->name) :
 			g_strjoin(scope_sep, tag->scope, tag->name, NULL);
 

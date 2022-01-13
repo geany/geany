@@ -781,7 +781,7 @@ void tm_tags_array_print(GPtrArray *tags, FILE *fp)
 */
 gint tm_tag_scope_depth(const TMTag *t)
 {
-	const gchar *context_sep = tm_parser_context_separator(t->lang);
+	const gchar *context_sep = tm_parser_scope_separator(t->lang);
 	gint depth;
 	char *s;
 	if(!(t && t->scope))

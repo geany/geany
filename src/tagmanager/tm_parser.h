@@ -139,7 +139,7 @@ gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gch
 gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gchar *args,
 	const gchar *retval, const gchar *scope);
 
-const gchar *tm_parser_context_separator(TMParserType lang);
+const gchar *tm_parser_scope_separator(TMParserType lang);
 
 gboolean tm_parser_has_full_context(TMParserType lang);
 
