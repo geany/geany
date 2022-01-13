@@ -792,12 +792,24 @@ gchar *sci_get_selection_contents(ScintillaObject *sci)
 
 
 /** Gets selected text length including the terminating NUL character.
+ * @deprecated sci_get_selected_text_length is deprecated and should not be used in newly-written code.
+ * Use sci_get_selected_text_length2() instead.
  * @param sci Scintilla widget.
  * @return Length. */
 GEANY_API_SYMBOL
 gint sci_get_selected_text_length(ScintillaObject *sci)
 {
 	return (gint) SSM(sci, SCI_GETSELTEXT, 0, 0) + 1;
+}
+
+
+/** Gets selected text length without the terminating NUL character.
+ * @param sci Scintilla widget.
+ * @return Length. */
+GEANY_API_SYMBOL
+gint sci_get_selected_text_length2(ScintillaObject *sci)
+{
+	return (gint) SSM(sci, SCI_GETSELTEXT, 0, 0);
 }
 
 
