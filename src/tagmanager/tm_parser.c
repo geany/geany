@@ -957,7 +957,7 @@ gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gc
 	if (scope)
 	{
 		g_string_append(str, scope);
-		g_string_append(str, tm_parser_scope_separator(lang));
+		g_string_append(str, tm_parser_scope_separator_printable(lang));
 	}
 	g_string_append(str, fname);
 	g_string_append_c(str, ' ');
@@ -1026,6 +1026,22 @@ const gchar *tm_parser_scope_separator(TMParserType lang)
 
 		default:
 			return ".";
+	}
+}
+
+
+const gchar *tm_parser_scope_separator_printable(TMParserType lang)
+{
+	switch (lang)
+	{
+		case TM_PARSER_TXT2TAGS:
+		case TM_PARSER_ASCIIDOC:
+		case TM_PARSER_CONF:
+		case TM_PARSER_REST:
+			return " > ";
+
+		default:
+			return tm_parser_scope_separator(lang);
 	}
 }
 

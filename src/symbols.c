@@ -338,7 +338,7 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 			gboolean filtered = FALSE;
 			gchar **val;
 			gchar *full_tagname = g_strconcat(tag->scope ? tag->scope : "",
-				tag->scope ? tm_parser_scope_separator(tag->lang) : "",
+				tag->scope ? tm_parser_scope_separator_printable(tag->lang) : "",
 				tag->name, NULL);
 			gchar *normalized_tagname = g_utf8_normalize(full_tagname, -1, G_NORMALIZE_ALL);
 
@@ -960,7 +960,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (!found_parent && scope &&
 		strpbrk(scope, GEANY_WORDCHARS) == scope)
 	{
-		const gchar *sep = tm_parser_scope_separator(tag->lang);
+		const gchar *sep = tm_parser_scope_separator_printable(tag->lang);
 
 		g_string_append(buffer, scope);
 		g_string_append(buffer, sep);
