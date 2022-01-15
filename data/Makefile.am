@@ -30,7 +30,6 @@ filetypes_dist = \
 	filedefs/filetypes.docbook \
 	filedefs/filetypes.erlang \
 	filedefs/filetypes.f77 \
-	filedefs/filetypes.ferite \
 	filedefs/filetypes.forth \
 	filedefs/filetypes.fortran \
 	filedefs/filetypes.freebasic \

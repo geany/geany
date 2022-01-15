@@ -34,7 +34,7 @@
 	ShParser, \
 	DParser, \
 	FortranParser, \
-	LiterateHaskellParser, /* dummy for removed Ferite parser */ \
+	GDScriptParser, \
 	DiffParser, \
 	VhdlParser, \
 	LuaParser, \
@@ -67,7 +67,6 @@
 	PowerShellParser, \
 	JuliaParser, \
 	BibtexParser, \
-	CPreProParser, \
-	GDScriptParser
+	CPreProParser
 
 #endif

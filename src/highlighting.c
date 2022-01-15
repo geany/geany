@@ -1015,7 +1015,6 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(LISP);
 		init_styleset_case(ERLANG);
 		init_styleset_case(DOCBOOK);
-		init_styleset_case(FERITE);
 		init_styleset_case(F77);
 		init_styleset_case(FORTH);
 		init_styleset_case(FORTRAN);
@@ -1106,7 +1105,6 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(LISP);
 		styleset_case(ERLANG);
 		styleset_case(DOCBOOK);
-		styleset_case(FERITE);
 		styleset_case(F77);
 		styleset_case(FORTH);
 		styleset_case(FORTRAN);
