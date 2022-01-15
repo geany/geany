@@ -1,0 +1,69 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+commentline=comment_line
+number=number_1
+string=string_1
+character=character
+word=keyword_1
+triple=string_2
+tripledouble=string_2
+classname=type
+defname=function
+operator=operator
+identifier=identifier_1
+commentblock=comment
+stringeol=string_eol
+word2=keyword_2
+decorator=decorator
+
+[keywords]
+# all items must be in one line
+# both primary and identifiers are collected from https://github.com/godotengine/godot-docs/blob/master/_extensions/gdscript.py and https://docs.godotengine.org/en/stable/getting_started/scripting/gdscript/gdscript_basics.html
+primary=and in not or as breakpoint class class_name extends is func signal const enum static var break continue if elif else for pass return match while setget yield
+# additional keywords, will be highlighted with style "word2"
+# Using GDScript 2 keyword classification
+identifiers=PI TAU INF NAN Color8 ColorN abs acos asin assert atan atan2 await bytes2var ceil char clamp convert cos cosh db2linear decimals dectime deg2rad dict2inst ease exp floor fmod fposmod funcref hash inst2dict instance_from_id is_inf is_nan lerp linear2db load log max min nearest_po2 pow preload print print_stack printerr printraw prints printt rad2deg rand_range rand_seed randf randi randomize range round seed sign sin sinh sqrt stepify str str2var tan tan tanh type_exist typeof var2bytes var2str weakref set get self remote master puppet remotesync mastersync puppetsync icon export onready tool export_enum export_file export_dir export_global_file export_global_dir export_multiline export_placeholder export_range export_exp_easing export_color_no_alpha export_node_path export_flags export_flags_2d_render export_flags_2d_physics export_flags_2d_navigation export_flags_3d_render export_flags_3d_physics export_flags_3d_navigation rpc
+
+[lexer_properties]
+fold.gdscript.quotes=1
+lexer.gdscript.keywords2.no.sub.identifiers=1
+
+[settings]
+# default extension used when saving files
+extension=gd
+
+# MIME type
+mime_type=application/x-gdscript
+
+# single comment char, like # in this file
+comment_single=#\s
+
+# set to false if a comment character/string should start at column 0 of a line, true uses any
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true
+
+[indentation]
+width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+type=1
+
+[build-menu]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+FT_00_LB=_Compile
+FT_00_CM=
+FT_00_WD=
+FT_02_LB=_Lint
+FT_02_CM=
+FT_02_WD=
+error_regex=(.+):([0-9]+):([0-9]+)
+EX_00_LB=_Execute
+EX_00_CM=
+EX_00_WD=

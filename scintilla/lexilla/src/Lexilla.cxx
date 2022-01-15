@@ -188,6 +188,7 @@ static void AddGeanyLexers()
 		&lmForth,
 		&lmFortran,
 		&lmFreeBasic,
++		&lmGDScript,
 		&lmHaskell,
 		&lmHTML,
 		&lmJulia,
