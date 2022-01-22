@@ -1837,7 +1837,7 @@ Use Windows File Open/Save dialogs
 Auto-focus widgets (focus follows mouse)
     Give the focus automatically to widgets below the mouse cursor.
     This works for the main editor widget, the scribble, the toolbar search field
-    goto line fields and the VTE.
+    go to line fields and the VTE.
 
 Search
 ``````
@@ -3613,7 +3613,7 @@ Navigate back a location        Alt-Left  (C)             Switches to the previo
 Go to line                      Ctrl-L                    Focuses the Go to Line entry (if visible) or
                                                           shows the Go to line dialog.
 
-Goto matching brace             Ctrl-B                    If the cursor is ahead or behind a brace, then it
+Go to matching brace             Ctrl-B                    If the cursor is ahead or behind a brace, then it
                                                           is moved to the brace which belongs to the current
                                                           one. If this keyboard shortcut is pressed again,
                                                           the cursor is moved back to the first brace.
@@ -3621,9 +3621,9 @@ Goto matching brace             Ctrl-B                    If the cursor is ahead
 Toggle marker                   Ctrl-M                    Set a marker on the current line, or clear the
                                                           marker if there already is one.
 
-Goto next marker                Ctrl-.                    Goto the next marker in the current document.
+Go to next marker                Ctrl-.                    Go to the next marker in the current document.
 
-Goto previous marker            Ctrl-,                    Goto the previous marker in the current document.
+Go to previous marker            Ctrl-,                    Go to the previous marker in the current document.
 
 Go to symbol definition         Ctrl-T                    Jump to the definition of the current word or
                                                           selection. See `Go to symbol definition`_.
@@ -3647,9 +3647,9 @@ Go to End of Display Line       Alt-End                   Move the caret to the 
                                                           If the line is not wrapped, it behaves like
                                                           `Go to End of Line`.
 
-Go to Previous Word Part        Ctrl-/                    Goto the previous part of the current word.
+Go to Previous Word Part        Ctrl-/                    Go to the previous part of the current word.
 
-Go to Next Word Part            Ctrl-\\                   Goto the next part of the current word.
+Go to Next Word Part            Ctrl-\\                   Go to the next part of the current word.
 =============================== ========================= ==================================================
 
 View keybindings
