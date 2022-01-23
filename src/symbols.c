@@ -265,7 +265,7 @@ GString *symbols_find_typenames_as_string(TMParserType lang, gboolean global)
 GEANY_API_SYMBOL
 const gchar *symbols_get_context_separator(gint ft_id)
 {
-	return tm_parser_context_separator(filetypes[ft_id]->lang);
+	return tm_parser_scope_separator(filetypes[ft_id]->lang);
 }
 
 
@@ -319,26 +319,58 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
-	guint i;
+	guint i, j;
+	gchar **tf_strv;
 
 	g_return_val_if_fail(doc, NULL);
 
 	if (! doc->tm_file || ! doc->tm_file->tags_array)
 		return NULL;
 
+	tf_strv = g_strsplit_set(doc->priv->tag_filter, " ", -1);
+
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
 	{
 		TMTag *tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
 
-		if (G_UNLIKELY(tag == NULL))
-			return NULL;
-
 		if (tag->type & tag_types)
 		{
-			tag_names = g_list_prepend(tag_names, tag);
+			gboolean filtered = FALSE;
+			gchar **val;
+			gchar *full_tagname = g_strconcat(tag->scope ? tag->scope : "",
+				tag->scope ? tm_parser_scope_separator_printable(tag->lang) : "",
+				tag->name, NULL);
+			gchar *normalized_tagname = g_utf8_normalize(full_tagname, -1, G_NORMALIZE_ALL);
+
+			foreach_strv(val, tf_strv)
+			{
+				gchar *normalized_val = g_utf8_normalize(*val, -1, G_NORMALIZE_ALL);
+
+				if (normalized_tagname != NULL && normalized_val != NULL)
+				{
+					gchar *case_normalized_tagname = g_utf8_casefold(normalized_tagname, -1);
+					gchar *case_normalized_val = g_utf8_casefold(normalized_val, -1);
+
+					filtered = strstr(case_normalized_tagname, case_normalized_val) == NULL;
+					g_free(case_normalized_tagname);
+					g_free(case_normalized_val);
+				}
+				g_free(normalized_val);
+
+				if (filtered)
+					break;
+			}
+			if (!filtered)
+				tag_names = g_list_prepend(tag_names, tag);
+
+			g_free(normalized_tagname);
+			g_free(full_tagname);
 		}
 	}
 	tag_names = g_list_sort(tag_names, compare_symbol_lines);
+
+	g_strfreev(tf_strv);
+
 	return tag_names;
 }
 
@@ -940,7 +972,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (!found_parent && scope &&
 		strpbrk(scope, GEANY_WORDCHARS) == scope)
 	{
-		const gchar *sep = symbols_get_context_separator(doc->file_type->id);
+		const gchar *sep = tm_parser_scope_separator_printable(tag->lang);
 
 		g_string_append(buffer, scope);
 		g_string_append(buffer, sep);
@@ -1196,7 +1228,7 @@ static void update_parents_table(GHashTable *table, const TMTag *tag, const GtkT
 		/* simple case, just use the tag name */
 		name = tag->name;
 	}
-	else if (! tm_parser_has_full_context(tag->lang))
+	else if (! tm_parser_has_full_scope(tag->lang))
 	{
 		/* if the parser doesn't use fully qualified scope, use the name alone but
 		 * prevent Foo::Foo from making parent = child */
@@ -1208,7 +1240,7 @@ static void update_parents_table(GHashTable *table, const TMTag *tag, const GtkT
 	else
 	{
 		/* build the fully qualified scope as get_parent_name() would return it for a child tag */
-		name_free = g_strconcat(tag->scope, tm_parser_context_separator(tag->lang), tag->name, NULL);
+		name_free = g_strconcat(tag->scope, tm_parser_scope_separator(tag->lang), tag->name, NULL);
 		name = name_free;
 	}
 
@@ -1378,7 +1410,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	/* Build hash tables holding tags and parents */
 	/* parent table is GHashTable<tag_name, GTree<line_num, GtkTreeIter>>
 	 * where tag_name might be a fully qualified name (with scope) if the language
-	 * parser reports scope properly (see tm_parser_has_full_context()). */
+	 * parser reports scope properly (see tm_parser_has_full_scope()). */
 	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, parents_table_value_free);
 	/* tags table is another representation of the @tags list,
 	 * GHashTable<TMTag, GTree<line_num, GList<GList<TMTag>>>> */
@@ -2431,7 +2463,7 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, TMTagType 
 			{
 				if (tag->scope)
 					*tagname = g_strconcat(tag->scope,
-							symbols_get_context_separator(doc->file_type->id), tag->name, NULL);
+							tm_parser_scope_separator(tag->lang), tag->name, NULL);
 				else
 					*tagname = g_strdup(tag->name);
 
