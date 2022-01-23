@@ -3613,7 +3613,7 @@ Navigate back a location        Alt-Left  (C)             Switches to the previo
 Go to line                      Ctrl-L                    Focuses the Go to Line entry (if visible) or
                                                           shows the Go to line dialog.
 
-Go to matching brace             Ctrl-B                    If the cursor is ahead or behind a brace, then it
+Go to matching brace             Ctrl-B                   If the cursor is ahead or behind a brace, then it
                                                           is moved to the brace which belongs to the current
                                                           one. If this keyboard shortcut is pressed again,
                                                           the cursor is moved back to the first brace.
