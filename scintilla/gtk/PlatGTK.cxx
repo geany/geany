@@ -59,7 +59,7 @@ constexpr double degrees = kPi / 180.0;
 // is more complex than simply implementing these here.
 
 constexpr int pangoUnitsFromDouble(double d) noexcept {
-	return static_cast<int>(d * PANGO_SCALE + 0.5);
+	return static_cast<int>(std::lround(d * PANGO_SCALE + 0.5));
 }
 
 constexpr float floatFromPangoUnits(int pu) noexcept {
@@ -318,6 +318,7 @@ SurfaceImpl::SurfaceImpl(cairo_t *context_, int width, int height, SurfaceMode m
 		PLATFORM_ASSERT(pcontext);
 		layout = pango_layout_new(pcontext);
 		PLATFORM_ASSERT(layout);
+		pango_context_set_round_glyph_positions(pcontext, false);
 		cairo_rectangle(context, 0, 0, width, height);
 		cairo_set_source_rgb(context, 1.0, 0, 0);
 		cairo_fill(context);
@@ -388,6 +389,7 @@ void SurfaceImpl::Init(WindowID wid) {
 	createdGC = false;
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
 	PLATFORM_ASSERT(pcontext);
+	pango_context_set_round_glyph_positions(pcontext, false);
 	layout = pango_layout_new(pcontext);
 	PLATFORM_ASSERT(layout);
 	inited = true;
@@ -400,6 +402,7 @@ void SurfaceImpl::Init(SurfaceID sid, WindowID wid) {
 	PLATFORM_ASSERT(wid);
 	context = cairo_reference(static_cast<cairo_t *>(sid));
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
+	pango_context_set_round_glyph_positions(pcontext, false);
 	// update the Pango context in case sid isn't the widget's surface
 	pango_cairo_update_context(context, pcontext);
 	layout = pango_layout_new(pcontext);
