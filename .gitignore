@@ -20,6 +20,9 @@ Makefile.in
 /ABOUT-NLS
 /aclocal.m4
 /autom4te.cache
+/build/
+/builddir/
+/build-*/
 /build-aux/
 /build-stamp
 /codenames
