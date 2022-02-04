@@ -30,6 +30,9 @@
  * - it will be loaded at next startup.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include "geanyplugin.h"	/* plugin API, always comes first */
 #include "Scintilla.h"	/* for the SCNotification struct */
@@ -216,7 +219,7 @@ static void demo_cleanup(GeanyPlugin *plugin, gpointer data)
 void geany_load_module(GeanyPlugin *plugin)
 {
 	/* main_locale_init() must be called for your package before any localization can be done */
-	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+	main_locale_init(GEANY_LOCALEDIR, GETTEXT_PACKAGE);
 	plugin->info->name = _("Demo");
 	plugin->info->description = _("Example plugin.");
 	plugin->info->version = "0.4";

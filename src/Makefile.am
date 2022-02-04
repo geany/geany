@@ -179,11 +179,7 @@ callbacks.c: signallist.i
 glade_file=$(top_srcdir)/data/geany.glade
 
 signallist.i: $(glade_file) Makefile
-	$(AM_V_GEN)( \
-		echo '/* This file is auto-generated, do not edit. */' && \
-		$(SED) -n 's/^.*handler="\([^"]\{1,\}\)".*$$/ITEM(\1)/p' "$(glade_file)" \
-			| $(SORT) | $(UNIQ) \
-	) > $@ || { $(RM) $@ && exit 1; }
+	$(AM_V_GEN)$(top_srcdir)/scripts/gen-signallist.sh $(glade_file) $@
 
 CLEANFILES += signallist.i
 

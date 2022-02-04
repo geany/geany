@@ -31,7 +31,7 @@ GeanyData		*geany_data;
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
-PLUGIN_SET_INFO(_("Class Builder"), _("Creates source files for new class types."), VERSION,
+PLUGIN_SET_INFO(_("Class Builder"), _("Creates source files for new class types."), PACKAGE_VERSION,
 	"Alexander Rodin, Ondrej Donek, the Geany developer team")
 
 
