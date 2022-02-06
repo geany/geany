@@ -749,7 +749,7 @@ gchar *sci_get_contents(ScintillaObject *sci, gint buffer_len)
 {
 	gchar *text;
 
-	g_return_if_fail(buffer_len != 0);
+	g_return_val_if_fail(buffer_len != 0, NULL);
 
 	if (buffer_len < 0)
 		buffer_len = sci_get_length(sci) + 1;
