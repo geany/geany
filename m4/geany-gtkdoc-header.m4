@@ -21,7 +21,7 @@ AC_DEFUN([GEANY_CHECK_GTKDOC_HEADER],
 	      [test "x$geany_enable_gtkdoc_header" != "xno"],
 	[
 		dnl python
-		AM_PATH_PYTHON([2.7], [have_python=yes], [have_python=no])
+		AM_PATH_PYTHON([3], [have_python=yes], [have_python=no])
 		dnl lxml module
 		AS_IF([test "x$have_python" = xyes],
 		      [have_python_and_lxml=yes
