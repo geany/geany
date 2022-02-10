@@ -37,6 +37,7 @@
 #include "geanyobject.h"
 #include "keyfile.h"
 #include "main.h"
+#include "msgwindow.h"
 #include "projectprivate.h"
 #include "sidebar.h"
 #include "stash.h"
@@ -92,8 +93,24 @@ static void init_stash_prefs(void);
 static void destroy_project(gboolean open_default);
 
 
-#define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
-#define SHOW_ERR1(args, more) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args, more)
+#define SHOW_ERR(args)                                    \
+	do {                                                  \
+		if (interface_prefs.warn_on_project_unwritable) { \
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR, args); \
+		} else {                                          \
+			msgwin_status_add(args);                      \
+		}                                                 \
+	} while (0)
+
+#define SHOW_ERR1(args, more)                                   \
+	do {                                                        \
+		if (interface_prefs.warn_on_project_unwritable) {       \
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR, args, more); \
+		} else {                                                \
+			msgwin_status_add(args, more);                      \
+		}                                                       \
+	} while (0)
+
 #define MAX_NAME_LEN 50
 /* "projects" is part of the default project base path so be careful when translating
  * please avoid special characters and spaces, look at the source for details or ask Frank */
@@ -411,7 +428,12 @@ gboolean project_close(gboolean open_default)
 
 	/* save project session files, etc */
 	if (!write_config())
-		g_warning("Project file \"%s\" could not be written", app->project->file_name);
+	{
+		if (interface_prefs.warn_on_project_unwritable)
+			g_warning("Project file \"%s\" could not be written", app->project->file_name);
+		else
+			msgwin_status_add("Project file \"%s\" could not be written", app->project->file_name);
+	}
 
 	if (project_prefs.project_session)
 	{
