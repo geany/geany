@@ -97,6 +97,11 @@
 #endif
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
+#ifdef __APPLE__
+# define GEANY_DEFAULT_TOOLS_SHELL "/bin/bash"
+#else
+# define GEANY_DEFAULT_TOOLS_SHELL "/bin/sh"
+#endif
 #define GEANY_DEFAULT_MRU_LENGTH		10
 #define GEANY_TOGGLE_MARK				"~ "
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
@@ -535,6 +540,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, "tools", "terminal_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", tool_prefs.browser_cmd ? tool_prefs.browser_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", tool_prefs.grep_cmd ? tool_prefs.grep_cmd : "");
+	g_key_file_set_string(config, "tools", "shell_cmd", tool_prefs.shell_cmd ? tool_prefs.shell_cmd : "");
 	g_key_file_set_string(config, PACKAGE, "context_action_cmd", tool_prefs.context_action_cmd);
 
 	/* build menu */
@@ -919,13 +925,6 @@ static void load_dialog_prefs(GKeyFile *config)
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
-#ifdef __APPLE__
-		/* Geany is started using launchd on OS X and we don't get any environment variables
-		 * so PS1 isn't defined. Start as a login shell to read the corresponding config files. */
-		if (strcmp(shell, "/bin/bash") == 0)
-			shell = "/bin/bash -l";
-#endif
-
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
@@ -999,6 +998,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	tool_prefs.term_cmd = cmd;
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
+	tool_prefs.shell_cmd = utils_get_setting_string(config, "tools", "shell_cmd", GEANY_DEFAULT_TOOLS_SHELL);
 
 	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 

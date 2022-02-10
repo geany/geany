@@ -682,6 +682,8 @@ static void prefs_init_dialog(void)
 	if (tool_prefs.grep_cmd)
 		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep")), tool_prefs.grep_cmd);
 
+	if (tool_prefs.shell_cmd)
+		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell1")), tool_prefs.shell_cmd);
 
 	/* Template settings */
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer");
@@ -1159,6 +1161,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		g_free(tool_prefs.grep_cmd);
 		tool_prefs.grep_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell1");
+		g_free(tool_prefs.shell_cmd);
+		tool_prefs.shell_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		/* Template settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_template_developer");
@@ -1726,6 +1731,7 @@ void prefs_show_dialog(void)
 				"entry_com_term",
 				"entry_browser",
 				"entry_grep",
+				"entry_shell1",
 				"entry_contextaction",
 				"entry_template_developer",
 				"entry_template_initial",
@@ -1786,6 +1792,10 @@ void prefs_show_dialog(void)
 			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_grep")));
+		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_shell"),
+			NULL,
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell1")));
 
 		/* tools commands */
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_contextaction"),

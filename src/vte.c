@@ -473,8 +473,17 @@ static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer us
 
 static void vte_start(GtkWidget *widget)
 {
+	gchar *shell = g_strdup(vc->shell);
+
+#ifdef __APPLE__
+	/* run as a login shell as macOS doesn't load any configuration when
+	 * user is logged in and this is the only way to load config files */
+	if (strstr(shell, " -l") == NULL)
+		SETPTR(shell, g_strconcat(shell, " -l", NULL));
+#endif
+
 	/* split the shell command line, so arguments will work too */
-	gchar **argv = g_strsplit(vc->shell, " ", -1);
+	gchar **argv = g_strsplit(shell, " ", -1);
 
 	if (argv != NULL)
 	{
@@ -501,6 +510,7 @@ static void vte_start(GtkWidget *widget)
 		pid = 0; /* use 0 as invalid pid */
 
 	set_clean(TRUE);
+	g_free(shell);
 }
 
 
