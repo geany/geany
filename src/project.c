@@ -1136,7 +1136,7 @@ static gboolean write_config(void)
 
 	/* store the session files into the project too */
 	if (project_prefs.project_session)
-		configuration_save_session_files(config);
+		configuration_save_session_files(config, TRUE);
 	build_save_menu(config, (gpointer)p, GEANY_BCS_PROJ);
 	g_signal_emit_by_name(geany_object, "project-save", config);
 	/* write the file */
