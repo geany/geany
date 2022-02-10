@@ -7396,7 +7396,7 @@
                           <object class="GtkCheckMenuItem" id="menu_markers_margin1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show _Markers Margin</property>
+                            <property name="label" translatable="yes">_Markers Margin</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <signal name="toggled" handler="on_markers_margin1_toggled" swapped="no"/>
@@ -7406,7 +7406,7 @@
                           <object class="GtkCheckMenuItem" id="menu_linenumber_margin1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show _Line Numbers</property>
+                            <property name="label" translatable="yes">_Line Numbers</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <signal name="toggled" handler="on_show_line_numbers1_toggled" swapped="no"/>
@@ -7416,7 +7416,7 @@
                           <object class="GtkCheckMenuItem" id="menu_show_white_space1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show White S_pace</property>
+                            <property name="label" translatable="yes">White S_pace</property>
                             <property name="use_underline">True</property>
                             <signal name="toggled" handler="on_menu_show_white_space1_toggled" swapped="no"/>
                           </object>
@@ -7425,7 +7425,7 @@
                           <object class="GtkCheckMenuItem" id="menu_show_line_endings1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show Line _Endings</property>
+                            <property name="label" translatable="yes">Line _Endings</property>
                             <property name="use_underline">True</property>
                             <signal name="toggled" handler="on_menu_show_line_endings1_toggled" swapped="no"/>
                           </object>
@@ -7434,7 +7434,7 @@
                           <object class="GtkCheckMenuItem" id="menu_show_indentation_guides1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show Indentation _Guides</property>
+                            <property name="label" translatable="yes">Indentation _Guides</property>
                             <property name="use_underline">True</property>
                             <signal name="toggled" handler="on_menu_show_indentation_guides1_toggled" swapped="no"/>
                           </object>
@@ -7467,7 +7467,7 @@
                           <object class="GtkCheckMenuItem" id="menu_show_messages_window1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show Message _Window</property>
+                            <property name="label" translatable="yes">Message _Window</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <signal name="toggled" handler="on_show_messages_window1_toggled" swapped="no"/>
@@ -7477,7 +7477,7 @@
                           <object class="GtkCheckMenuItem" id="menu_show_toolbar1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show _Toolbar</property>
+                            <property name="label" translatable="yes">_Toolbar</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <signal name="toggled" handler="on_show_toolbar1_toggled" swapped="no"/>
@@ -7487,7 +7487,7 @@
                           <object class="GtkCheckMenuItem" id="menu_show_sidebar1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show Side_bar</property>
+                            <property name="label" translatable="yes">Side_bar</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <signal name="toggled" handler="on_menu_show_sidebar1_toggled" swapped="no"/>
