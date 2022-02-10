@@ -45,6 +45,7 @@
 #include "geanyobject.h"
 #include "highlighting.h"
 #include "keybindings.h"
+#include "navqueue.h"
 #include "main.h"
 #include "prefs.h"
 #include "projectprivate.h"
@@ -328,7 +329,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 	}
 
 	/* calls the edit popup menu in the editor */
-	if (event->button == 3)
+	else if (event->button == 3)
 	{
 		gboolean can_goto;
 
@@ -351,6 +352,20 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 
 		return TRUE;
 	}
+
+	else if (event->button == 8 /*backwards*/ && editor_prefs.mouse_back_forward_enabled)
+	{
+		navqueue_go_back();
+	}
+
+	else if (event->button == 9 /*forwards*/ && editor_prefs.mouse_back_forward_enabled)
+	{
+		navqueue_go_forward();
+	}
+
+	else if (event->button > 5 && app->debug_mode)
+		g_warning("Unknown mouse button was pressed %i", event->button);
+
 	return FALSE;
 }
 
