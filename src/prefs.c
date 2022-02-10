@@ -397,12 +397,14 @@ static void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
 	GdkColor color = {0};
+	gboolean project_open;
 
 	/* Synchronize with Stash settings */
 	prefs_action(PREF_DISPLAY);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "label_project_indent_warning");
 	ui_widget_show_hide(widget, app->project != NULL);
+	project_open = app->project != NULL;
 
 	/* General settings */
 	/* startup */
@@ -575,6 +577,17 @@ static void prefs_init_dialog(void)
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.strip_trailing_spaces);
+
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "frame2");
+	gtk_widget_set_sensitive(widget, ! project_open);
+	const char* tooltip = project_open ? _("These settings are overridden by your project settings") : "";
+	gtk_widget_set_tooltip_text(widget, tooltip);
+
+	const gchar* label_text = _("<b>Saving files</b>");
+	if( project_open )
+		label_text = _("<b>Saving files</b> (using project settings)");
+	widget = gtk_frame_get_label_widget(GTK_FRAME(widget));
+	gtk_label_set_markup(GTK_LABEL(widget), label_text);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.final_new_line);
