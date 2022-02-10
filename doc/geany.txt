@@ -1766,17 +1766,22 @@ Universal Ctags.
 Preferences
 -----------
 
-You may adjust Geany's settings using the Edit --> Preferences
+You may adjust Geany's settings using the Preferences
 dialog. Any changes you make there can be applied by hitting either
 the Apply or the OK button. These settings will persist between Geany
 sessions. Note that most settings here have descriptive popup bubble
 help -- just hover the mouse over the item in question to get help
-on it.
+on it. (Known as tooltips).
 
 You may also adjust some View settings (under the View menu) that
 persist between Geany sessions. The settings under the Document menu,
 however, are only for the current document and revert to defaults
-when restarting Geany.
+when opening a new document.
+
+Some preferences are overridden when a project is open, and will be 
+disabled. These have info icons next to them with a tooltip reminder. 
+Clicking the icon will enable editing of all overridden preferences 
+until the dialog is closed.
 
 .. note::
     In the paragraphs that follow, the text describing a dialog tab

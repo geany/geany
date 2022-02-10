@@ -392,6 +392,12 @@ static void kb_init(KbData *kbdata)
 }
 
 
+// pref dialog widget names that should start off disabled when project open
+const gchar *proj_overrides[] = {
+	"vbox6", "table13", "check_line_wrapping", "hbox14",
+	"check_auto_multiline", "table7"
+};
+
 /* note: new 'simple' prefs should use Stash code in keyfile.c */
 static void prefs_init_dialog(void)
 {
@@ -802,6 +808,23 @@ static void prefs_init_dialog(void)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->cursor_blinks);
 	}
 #endif
+	for (guint i = 0; i < G_N_ELEMENTS(proj_overrides); i++)
+	{
+		GtkWidget *w = ui_lookup_widget(ui_widgets.prefs_dialog, proj_overrides[i]);
+		gtk_widget_set_sensitive(w, !app->project);
+	}
+}
+
+
+gboolean on_prefs_edit_override(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	// all overridden widgets will stay enabled until dialog is closed
+	for (guint i = 0; i < G_N_ELEMENTS(proj_overrides); i++)
+	{
+		GtkWidget *w = ui_lookup_widget(ui_widgets.prefs_dialog, proj_overrides[i]);
+		gtk_widget_set_sensitive(w, TRUE);
+	}
+	return TRUE;
 }
 
 
