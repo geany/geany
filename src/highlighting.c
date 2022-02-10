@@ -935,7 +935,8 @@ static void read_properties(GeanyFiletype *ft, GKeyFile *config, GKeyFile *confi
 
 	/* merge sys and user keys */
 	keys = g_key_file_get_keys(config, group, NULL, NULL);
-	keys = utils_strv_join(keys, keysh);
+	SETPTR(keys, utils_strv_join(keys, keysh));
+	g_free(keysh);
 
 	if (keys)
 	{

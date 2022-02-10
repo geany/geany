@@ -2033,7 +2033,7 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 }
 
 
-/* Joins @a first and @a second into a new string vector, freeing the originals.
+/* Joins @a first and @a second into a new string vector.
  * The original contents are reused. */
 gchar **utils_strv_join(gchar **first, gchar **second)
 {
@@ -2052,9 +2052,6 @@ gchar **utils_strv_join(gchar **first, gchar **second)
 		*wptr++ = *rptr;
 	foreach_strv(rptr, second)
 		*wptr++ = *rptr;
-
-	g_free(first);
-	g_free(second);
 	return strv;
 }
 
@@ -2362,7 +2359,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 }
 
 
-void utils_start_new_geany_instance(const gchar *doc_path)
+void utils_start_new_geany_instance(const gchar **filev)
 {
 	const gchar *command = is_osx_bundle() ? "open" : "geany";
 	gchar *exec_path = g_find_program_in_path(command);
@@ -2370,7 +2367,7 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 	if (exec_path)
 	{
 		GError *err = NULL;
-		const gchar *argv[6]; // max args + 1
+		const gchar *argv[5]; // max args + 1
 		gint argc = 0;
 
 		argv[argc++] = exec_path;
@@ -2379,20 +2376,20 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 			argv[argc++] = "-n";
 			argv[argc++] = "-a";
 			argv[argc++] = "Geany";
-			argv[argc++] = doc_path;
 		}
 		else
 		{
 			argv[argc++] = "-i";
-			argv[argc++] = doc_path;
 		}
 		argv[argc] = NULL;
+		gchar **strv = utils_strv_join((gchar**)argv, (gchar**)filev);
 
-		if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &err))
+		if (!utils_spawn_async(NULL, strv, NULL, 0, NULL, NULL, NULL, &err))
 		{
 			g_printerr("Unable to open new window: %s\n", err->message);
 			g_error_free(err);
 		}
+		g_free(strv);
 		g_free(exec_path);
 	}
 	else
