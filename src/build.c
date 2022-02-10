@@ -793,7 +793,7 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 
 	gtk_list_store_clear(msgwindow.store_compiler);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
-	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), cmd, utf8_working_dir);
+	msgwin_compiler_add(COLOR_MESSAGE, _("%s (in directory: %s)"), cmd, utf8_working_dir);
 	g_free(utf8_working_dir);
 
 #ifdef G_OS_UNIX
@@ -1024,7 +1024,7 @@ static void process_build_output_line(gchar *msg, gint color)
 			editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
 		}
 		build_info.message_count++;
-		color = COLOR_RED;	/* error message parsed on the line */
+		color = COLOR_ERROR;	/* error message parsed on the line */
 
 		if (build_info.message_count == 1)
 		{
@@ -1043,7 +1043,7 @@ static void build_iofunc(GString *string, GIOCondition condition, gpointer data)
 	if (condition & (G_IO_IN | G_IO_PRI))
 	{
 		process_build_output_line(string->str,
-			(GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK);
+			(GPOINTER_TO_INT(data)) ? COLOR_CONTEXT : COLOR_TEXT);
 	}
 }
 
@@ -1096,7 +1096,7 @@ static void show_build_result_message(gboolean failure)
 	if (failure)
 	{
 		msg = _("Compilation failed.");
-		msgwin_compiler_add_string(COLOR_BLUE, msg);
+		msgwin_compiler_add_string(COLOR_MESSAGE, msg);
 		/* If msgwindow is hidden, user will want to display it to see the error */
 		if (! ui_prefs.msgwindow_visible)
 		{
@@ -1110,7 +1110,7 @@ static void show_build_result_message(gboolean failure)
 	else
 	{
 		msg = _("Compilation finished successfully.");
-		msgwin_compiler_add_string(COLOR_BLUE, msg);
+		msgwin_compiler_add_string(COLOR_MESSAGE, msg);
 		if (! ui_prefs.msgwindow_visible ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
 				ui_set_statusbar(FALSE, "%s", msg);

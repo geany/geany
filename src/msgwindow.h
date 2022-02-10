@@ -25,19 +25,32 @@
 
 #include "gtkcompat.h"
 
-
 G_BEGIN_DECLS
 
 /**
- * Various colors for use in the compiler and messages treeviews when adding messages.
+ * Colors for use when adding messages to the compiler and messages treeviews.
+ * Defined in ``geany.css``
  **/
 enum MsgColors
 {
-	COLOR_RED,		/**< Color red */
-	COLOR_DARK_RED,	/**< Color dark red */
-	COLOR_BLACK,	/**< Color black */
-	COLOR_BLUE		/**< Color blue */
+	COLOR_ERROR,	/**< Color for ``geany-compiler-error``.  Default is red. */
+	COLOR_CONTEXT,	/**< Color for ``geany-compiler-context``.  Default is orange. */
+	COLOR_TEXT,		/**< Color for normal text.  Default is black. */
+	COLOR_MESSAGE,	/**< Color for ``geany-compiler-message``.  Default is blue. */
+
+#ifndef GEANY_DISABLE_DEPRECATED
+	/* 2021/12 */
+	/** @deprecated since 1.39 (API 243)  Use COLOR_ERROR instead. */
+	COLOR_RED		GEANY_DEPRECATED = COLOR_ERROR,
+	/** @deprecated since 1.39 (API 243)  Use COLOR_CONTEXT instead. */
+	COLOR_DARK_RED	GEANY_DEPRECATED = COLOR_CONTEXT,
+	/** @deprecated since 1.39 (API 243)  Use COLOR_TEXT instead. */
+	COLOR_BLACK		GEANY_DEPRECATED = COLOR_TEXT,
+	/** @deprecated since 1.39 (API 243)  Use COLOR_MESSAGE instead. */
+	COLOR_BLUE		GEANY_DEPRECATED = COLOR_MESSAGE,
+#endif  /* GEANY_DISABLE_DEPRECATED */
 };
+
 
 /** Indices of the notebooks in the messages window. */
 typedef enum
