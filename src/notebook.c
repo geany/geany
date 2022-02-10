@@ -457,23 +457,14 @@ static void on_close_documents_right_activate(GtkMenuItem *menuitem, GeanyDocume
 static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 {
 	GtkWidget *menu_item;
+	// menu has to persist after calling gtk_menu_popup
 	static GtkWidget *menu = NULL;
 
-	if (menu == NULL)
-		menu = gtk_menu_new();
-
-	/* clear the old menu items */
-	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
-
-	ui_menu_add_document_items(GTK_MENU(menu), document_get_current(),
-		G_CALLBACK(tab_bar_menu_activate_cb));
-
-	menu_item = gtk_separator_menu_item_new();
-	gtk_widget_show(menu_item);
-	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	if (menu)
+		gtk_widget_destroy(menu); // recreate to update menu item sensitivity
+	menu = gtk_menu_new();
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open in New _Window"));
-	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate",
 		G_CALLBACK(on_open_in_new_window_activate), doc);
@@ -482,32 +473,28 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 		gtk_widget_set_sensitive(menu_item, FALSE);
 
 	menu_item = gtk_separator_menu_item_new();
-	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
 	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE, NULL);
-	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(notebook_tab_close_clicked_cb), doc);
-	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (doc != NULL));
+	gtk_widget_set_sensitive(menu_item, (doc != NULL));
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Ot_her Documents"));
-	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), doc);
-	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (doc != NULL));
+	gtk_widget_set_sensitive(menu_item, (doc != NULL));
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Documents to the _Right"));
-	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_documents_right_activate), doc);
-	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), doc != NULL && has_tabs_on_right(doc));
+	gtk_widget_set_sensitive(menu_item, doc != NULL && has_tabs_on_right(doc));
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("C_lose All"));
-	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);
 
+	gtk_widget_show_all(menu);
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
 }
 
@@ -544,8 +531,31 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 }
 
 
+static gboolean notebook_menu_btn_press(GtkWidget *widget, GdkEventButton *event,
+	gpointer user_data)
+{
+	// menu has to persist after calling gtk_menu_popup
+	static GtkWidget *menu = NULL;
+
+	if (menu)
+		gtk_widget_destroy(menu);
+		
+	menu = gtk_menu_new();
+	ui_menu_add_document_items(GTK_MENU(menu), document_get_current(),
+		G_CALLBACK(tab_bar_menu_activate_cb));
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
+	return TRUE;
+}
+
 void notebook_init(void)
 {
+	GtkWidget *btn = gtk_button_new_with_label("☰");
+
+	gtk_widget_show(btn);
+	gtk_notebook_set_action_widget(GTK_NOTEBOOK(main_widgets.notebook), btn,
+		GTK_PACK_END);
+	g_signal_connect(btn, "button-press-event", G_CALLBACK(notebook_menu_btn_press), NULL);
+
 	g_signal_connect_after(main_widgets.notebook, "button-press-event",
 		G_CALLBACK(notebook_tab_bar_click_cb), NULL);
 
