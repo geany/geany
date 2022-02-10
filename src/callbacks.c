@@ -1133,15 +1133,39 @@ static void insert_comment_template(GeanyDocument *doc, gint pos, guint template
 }
 
 
-static void on_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
+static void on_comments_gplv3_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_GPL);
+	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_GPLV3);
 }
 
 
-static void on_menu_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
+static void on_menu_comments_gplv3_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_GPL);
+	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_GPLV3);
+}
+
+
+static void on_comments_gplv2_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_GPLV2);
+}
+
+
+static void on_menu_comments_gplv2_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_GPLV2);
+}
+
+
+static void on_comments_agplv3_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_AGPLV3);
+}
+
+
+static void on_menu_comments_agplv3_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_AGPLV3);
 }
 
 
