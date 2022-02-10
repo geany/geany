@@ -1751,13 +1751,12 @@ static void on_search1_activate(GtkMenuItem *menuitem, gpointer user_data)
  * if user_data is set, it is the GeanyDocument to keep */
 void on_close_other_documents1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	guint i;
 	GeanyDocument *cur_doc = user_data;
 
 	if (cur_doc == NULL)
 		cur_doc = document_get_current();
 
-	for (i = 0; i < documents_array->len; i++)
+	for (guint i = 0; i < documents_array->len; i++)
 	{
 		GeanyDocument *doc = documents[i];
 
