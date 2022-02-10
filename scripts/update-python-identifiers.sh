@@ -26,7 +26,7 @@ print(" ".join(sorted([i for i in items if i not in exclude])))
 '
 }
 
-keywords=$(py_2_and_3 -c 'from keyword import kwlist; print("\n".join(kwlist))')
+keywords=$(py_2_and_3 -c 'from keyword import kwlist; kwlist.append("self"); print("\n".join(sorted(kwlist)))')
 builtins=$(py_2_and_3 -c 'print("\n".join(dir(__builtins__)))')
 
 primary=$(echo "$keywords" | sort_filter)
