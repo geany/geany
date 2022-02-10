@@ -365,13 +365,22 @@ gboolean sci_is_modified(ScintillaObject *sci)
 
 void sci_zoom_in(ScintillaObject *sci)
 {
-	SSM(sci, SCI_ZOOMIN, 0, 0);
+	// SCI_ZOOMIN is limited to 20, SCI_SETZOOM is unlimited
+	int curr_zoom = SSM(sci, SCI_GETZOOM, 0, 0);
+	++curr_zoom;
+	SSM(sci, SCI_SETZOOM, curr_zoom, curr_zoom);
 }
 
 
 void sci_zoom_out(ScintillaObject *sci)
 {
-	SSM(sci, SCI_ZOOMOUT, 0, 0);
+	// SCI_ZOOMOUT is limited to -10, SCI_SETZOOM is unlimited.
+	int curr_zoom = SSM(sci, SCI_GETZOOM, 0, 0);
+	--curr_zoom;
+	SSM(sci, SCI_SETZOOM, curr_zoom, curr_zoom);
+
+	// Minimum font size is 2pt, but it is not necessary to check here
+	// because it is checked in on_editor_notify() in editor.c.
 }
 
 

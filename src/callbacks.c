@@ -487,10 +487,18 @@ static void on_hide_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_zoom_in1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	gboolean zoom_disable_restore;
 
 	g_return_if_fail(doc != NULL);
 
+	/* Need to temporarily enable zoom to allow keybindings to work */
+	zoom_disable_restore = editor_prefs.zoom_disable_scrollwheel;
+	editor_prefs.zoom_disable_scrollwheel = FALSE;
+
 	sci_zoom_in(doc->editor->sci);
+
+	/* Restore previous setting */
+	editor_prefs.zoom_disable_scrollwheel = zoom_disable_restore;
 }
 
 
@@ -498,20 +506,36 @@ void on_zoom_in1_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_zoom_out1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	gboolean zoom_disable_restore;
 
 	g_return_if_fail(doc != NULL);
 
+	/* Need to temporarily enable zoom to allow keybindings to work */
+	zoom_disable_restore = editor_prefs.zoom_disable_scrollwheel;
+	editor_prefs.zoom_disable_scrollwheel = FALSE;
+
 	sci_zoom_out(doc->editor->sci);
+
+	/* Restore previous setting */
+	editor_prefs.zoom_disable_scrollwheel = zoom_disable_restore;
 }
 
 
 void on_normal_size1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
+	gboolean zoom_disable_restore;
 
 	g_return_if_fail(doc != NULL);
 
+	/* Need to temporarily enable zoom to allow keybindings to work */
+	zoom_disable_restore = editor_prefs.zoom_disable_scrollwheel;
+	editor_prefs.zoom_disable_scrollwheel = FALSE;
+
 	sci_zoom_off(doc->editor->sci);
+
+	/* Restore previous setting */
+	editor_prefs.zoom_disable_scrollwheel = zoom_disable_restore;
 }
 
 
