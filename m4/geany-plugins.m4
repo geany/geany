@@ -5,7 +5,7 @@ dnl Result is available in the geany_enable_plugins variable
 AC_DEFUN([GEANY_CHECK_PLUGINS],
 [
 	AC_REQUIRE([AC_DISABLE_STATIC])
-	AC_REQUIRE([AM_PROG_LIBTOOL])
+	AC_REQUIRE([LT_INIT])
 
 	AC_ARG_ENABLE([plugins],
 			[AS_HELP_STRING([--disable-plugins], [compile without plugin support [default=no]])],
