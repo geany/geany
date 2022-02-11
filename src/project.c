@@ -50,7 +50,7 @@
 #include <errno.h>
 
 
-ProjectPrefs project_prefs = { NULL, FALSE, FALSE };
+ProjectPrefs project_prefs = { NULL, FALSE };
 
 
 static GeanyProjectPrivate priv;
@@ -112,7 +112,7 @@ static gboolean have_session_docs(void)
 
 static gboolean handle_current_session(void)
 {
-	if (!app->project && project_prefs.project_session)
+	if (!app->project)
 	{
 		/* save session in case the dialog is cancelled */
 		configuration_save_default_session();
@@ -275,12 +275,9 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 {
 	if (project_load_file(locale_file_name))
 	{
-		if (project_prefs.project_session)
-		{
-			configuration_open_files();
-			document_new_file_if_non_open();
-			ui_focus_current_document();
-		}
+		configuration_open_files();
+		document_new_file_if_non_open();
+		ui_focus_current_document();
 		return TRUE;
 	}
 	return FALSE;
@@ -413,12 +410,10 @@ gboolean project_close(gboolean open_default)
 	if (!write_config())
 		g_warning("Project file \"%s\" could not be written", app->project->file_name);
 
-	if (project_prefs.project_session)
-	{
-		/* close all existing tabs first */
-		if (!document_close_all())
-			return FALSE;
-	}
+	/* close all existing tabs first */
+	if (!document_close_all())
+		return FALSE;
+
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 	destroy_project(open_default);
 	return TRUE;
@@ -461,16 +456,13 @@ static void destroy_project(gboolean open_default)
 
 	apply_editor_prefs(); /* ensure that global settings are restored */
 
-	if (project_prefs.project_session)
+	/* after closing all tabs let's open the tabs found in the default config */
+	if (open_default && cl_options.load_session)
 	{
-		/* after closing all tabs let's open the tabs found in the default config */
-		if (open_default && cl_options.load_session)
-		{
-			configuration_reload_default_session();
-			configuration_open_files();
-			document_new_file_if_non_open();
-			ui_focus_current_document();
-		}
+		configuration_reload_default_session();
+		configuration_open_files();
+		document_new_file_if_non_open();
+		ui_focus_current_document();
 	}
 	g_signal_emit_by_name(geany_object, "project-close");
 
@@ -1072,15 +1064,12 @@ static gboolean load_config(const gchar *filename)
 	apply_editor_prefs();
 
 	build_load_menu(config, GEANY_BCS_PROJ, (gpointer)p);
-	if (project_prefs.project_session)
-	{
-		/* save current (non-project) session (it could have been changed since program startup) */
-		configuration_save_default_session();
-		/* now close all open files */
-		document_close_all();
-		/* read session files so they can be opened with configuration_open_files() */
-		configuration_load_session_files(config, FALSE);
-	}
+	/* save current (non-project) session (it could have been changed since program startup) */
+	configuration_save_default_session();
+	/* now close all open files */
+	document_close_all();
+	/* read session files so they can be opened with configuration_open_files() */
+	configuration_load_session_files(config, FALSE);
 	g_signal_emit_by_name(geany_object, "project-open", config);
 	g_key_file_free(config);
 
@@ -1135,8 +1124,7 @@ static gboolean write_config(void)
 	g_key_file_set_integer(config, "long line marker", "long_line_column", p->priv->long_line_column);
 
 	/* store the session files into the project too */
-	if (project_prefs.project_session)
-		configuration_save_session_files(config);
+	configuration_save_session_files(config);
 	build_save_menu(config, (gpointer)p, GEANY_BCS_PROJ);
 	g_signal_emit_by_name(geany_object, "project-save", config);
 	/* write the file */

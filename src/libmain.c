@@ -957,7 +957,7 @@ static void load_startup_files(gint argc, gchar **argv)
 		main_load_project_from_command_line(filename, FALSE);
 		argc--, argv++;
 		/* force session load if using project-based session files */
-		load_session = project_prefs.project_session;
+		load_session = TRUE;
 		g_free(filename);
 	}
 
