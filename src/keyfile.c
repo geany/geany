@@ -1130,7 +1130,7 @@ static void load_ui_session(GKeyFile *config)
  */
 void configuration_save_default_session(void)
 {
-	gchar *configfile = g_build_filename(app->configdir, PREFS_FILE, NULL);
+	gchar *configfile = g_build_filename(app->configdir, SESSION_FILE, NULL);
 	gchar *data;
 	GKeyFile *config = g_key_file_new();
 
