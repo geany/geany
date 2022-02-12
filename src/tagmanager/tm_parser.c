@@ -874,6 +874,27 @@ const gchar *tm_parser_get_constructor_method(TMParserType lang)
 }
 
 
+/* determine anonymous tags from tag names only when corresponding
+ * ctags information is not available */
+gboolean tm_parser_is_anon_name(TMParserType lang, gchar *name)
+{
+	guint i;
+	char dummy;
+
+	if (sscanf(name, "__anon%u%c", &i, &dummy) == 1)  /* uctags tags files */
+		return TRUE;
+	else if (lang == TM_PARSER_C || lang == TM_PARSER_CPP)  /* legacy Geany tags files */
+		return sscanf(name, "anon_%*[a-z]_%u%c", &i, &dummy) == 1;
+	else if (lang == TM_PARSER_FORTRAN || lang == TM_PARSER_F77)  /* legacy Geany tags files */
+	{
+		return sscanf(name, "Structure#%u%c", &i, &dummy) == 1 ||
+			sscanf(name, "Interface#%u%c", &i, &dummy) == 1 ||
+			sscanf(name, "Enum#%u%c", &i, &dummy) == 1;
+	}
+	return FALSE;
+}
+
+
 static gchar *replace_string_if_present(gchar *haystack, gchar *needle, gchar *subst)
 {
 	if (strstr(haystack, needle))

@@ -228,7 +228,7 @@ gboolean tm_tags_equal(const TMTag *a, const TMTag *b)
 			strcmp(FALLBACK(a->name, ""), FALLBACK(b->name, "")) == 0 &&
 			a->type == b->type &&
 			a->local == b->local &&
-			a->pointerOrder == b->pointerOrder &&
+			a->flags == b->flags &&
 			a->access == b->access &&
 			a->impl == b->impl &&
 			a->lang == b->lang &&
@@ -665,18 +665,10 @@ tm_get_current_tag (GPtrArray * file_tags, const gulong line, const TMTagType ta
 	return matching_tag;
 }
 
+
 gboolean tm_tag_is_anon(const TMTag *tag)
 {
-	guint i;
-	char dummy;
-
-	if (tag->lang == TM_PARSER_C || tag->lang == TM_PARSER_CPP)
-		return sscanf(tag->name, "__anon%u%c", &i, &dummy) == 1;
-	else if (tag->lang == TM_PARSER_FORTRAN || tag->lang == TM_PARSER_F77)
-		return sscanf(tag->name, "Structure#%u%c", &i, &dummy) == 1 ||
-			sscanf(tag->name, "Interface#%u%c", &i, &dummy) == 1 ||
-			sscanf(tag->name, "Enum#%u%c", &i, &dummy) == 1;
-	return FALSE;
+	return tag->flags & tm_tag_flag_anon_t;
 }
 
 

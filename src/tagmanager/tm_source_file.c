@@ -65,7 +65,7 @@ enum
 	TA_IMPL,
 	TA_LANG,
 	TA_INACTIVE, /* Obsolete */
-	TA_POINTER
+	TA_FLAGS
 };
 
 
@@ -175,7 +175,7 @@ gchar tm_source_file_get_tag_access(const gchar *access)
  @param fp FILE pointer from where the tag line is read
  @return TRUE on success, FALSE on FAILURE
 */
-static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
+static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, TMParserType lang)
 {
 	guchar buf[BUFSIZ];
 	guchar *start, *end;
@@ -198,7 +198,11 @@ static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 			if (!isprint(*start))
 				return FALSE;
 			else
+			{
 				tag->name = g_strdup((gchar*)start);
+				if (tm_parser_is_anon_name(lang, tag->name))
+					tag->flags |= tm_tag_flag_anon_t;
+			}
 		}
 		else
 		{
@@ -219,8 +223,8 @@ static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 				case TA_SCOPE:
 					tag->scope = g_strdup((gchar*)start + 1);
 					break;
-				case TA_POINTER:
-					tag->pointerOrder = atoi((gchar*)start + 1);
+				case TA_FLAGS:
+					tag->flags |= atoi((gchar*)start + 1);
 					break;
 				case TA_VARTYPE:
 					tag->var_type = g_strdup((gchar*)start + 1);
@@ -324,6 +328,9 @@ static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *f
 	tag->name = g_strndup(p, (gsize)(tab - p));
 	p = tab + 1;
 
+	if (tm_parser_is_anon_name(lang, tag->name))
+		tag->flags |= tm_tag_flag_anon_t;
+
 	/* tagfile, unused */
 	if (! (tab = strchr(p, '\t')))
 	{
@@ -376,9 +383,10 @@ static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *f
 				const gchar *kind = value ? value : key;
 
 				if (kind[0] && kind[1])
-					tag->type = tm_parser_get_tag_type(tm_ctags_get_kind_from_name(kind, lang), lang);
+					tag->kind_letter = tm_ctags_get_kind_from_name(kind, lang);
 				else
-					tag->type = tm_parser_get_tag_type(*kind, lang);
+					tag->kind_letter = *kind;
+				tag->type = tm_parser_get_tag_type(tag->kind_letter, lang);
 			}
 			else if (0 == strcmp(key, "inherits")) /* comma-separated list of classes this class inherits from */
 			{
@@ -422,7 +430,7 @@ static TMTag *new_tag_from_tags_file(TMSourceFile *file, FILE *fp, TMParserType 
 	switch (format)
 	{
 		case TM_FILE_FORMAT_TAGMANAGER:
-			result = init_tag_from_file(tag, file, fp);
+			result = init_tag_from_file(tag, file, fp, mode);
 			break;
 		case TM_FILE_FORMAT_PIPE:
 			result = init_tag_from_file_alt(tag, file, fp);
@@ -463,8 +471,8 @@ static gboolean write_tag(TMTag *tag, FILE *fp, TMTagAttrType attrs)
 		fprintf(fp, "%c%s", TA_SCOPE, tag->scope);
 	if ((attrs & tm_tag_attr_inheritance_t) && (NULL != tag->inheritance))
 		fprintf(fp, "%c%s", TA_INHERITS, tag->inheritance);
-	if (attrs & tm_tag_attr_pointer_t)
-		fprintf(fp, "%c%d", TA_POINTER, tag->pointerOrder);
+	if (attrs & tm_tag_attr_flags_t)
+		fprintf(fp, "%c%d", TA_FLAGS, tag->flags);
 	if ((attrs & tm_tag_attr_vartype_t) && (NULL != tag->var_type))
 		fprintf(fp, "%c%s", TA_VARTYPE, tag->var_type);
 	if ((attrs & tm_tag_attr_access_t) && (TAG_ACCESS_UNKNOWN != tag->access))
@@ -551,7 +559,7 @@ gboolean tm_source_file_write_tags_file(const gchar *tags_file, GPtrArray *tags_
 
 		ret = write_tag(tag, fp, tm_tag_attr_type_t
 		  | tm_tag_attr_scope_t | tm_tag_attr_arglist_t | tm_tag_attr_vartype_t
-		  | tm_tag_attr_pointer_t);
+		  | tm_tag_attr_flags_t);
 
 		if (!ret)
 			break;

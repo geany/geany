@@ -51,6 +51,3 @@ if main_diff:
 main_diff = set(main_src_files) - set(main_dst_files)
 if main_diff:
     print('Files added to main: ' + str(main_diff))
-
-os.chdir(dstdir)
-os.system('patch -p1 <ctags_changes.patch')

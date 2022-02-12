@@ -1,26 +1,24 @@
 # format=tagmanager
-__anon1Ì2048Ö0
-__anon2Ì2048Ö0
-__anon3Ì2048Ö0
 aÌ64Îbit_fieldsÖ0Ïunsigned int:1
+anon_struct_1Ì2048Ö1
 bÌ64Îbit_fieldsÖ0Ïunsigned int:1
-bad2Ì64Î__anon2Ö0ÏBYTE:1
+bad2Ì64Îbitfield_flagsÖ0ÏBYTE:1
 bit_fieldsÌ2048Ö0
-bitfield_flagsÌ4096Ö0Ï__anon2
+bitfield_flagsÌ2048Ö0
 cÌ64Îbit_fieldsÖ0Ïunsigned int:2
-expÌ64Î__anon1Ö0Ïunsigned
-frac0Ì64Î__anon1Ö0Ïunsigned
-frac1Ì64Î__anon1Ö0Ïunsigned
-groupÌ64Î__anon2Ö0ÏBYTE:1
+expÌ64Îanon_struct_1Ö0Ïunsigned
+frac0Ì64Îanon_struct_1Ö0Ïunsigned
+frac1Ì64Îanon_struct_1Ö0Ïunsigned
+groupÌ64Îbitfield_flagsÖ0ÏBYTE:1
 lowerÌ64Îshortname_infoÖ0Ïunsigned char:1
-mystructÌ4096Ö0Ï__anon3
-personalÌ64Î__anon2Ö0ÏBYTE:1
-privateÌ64Î__anon3Ö0ÏBYTE
-publicÌ64Î__anon2Ö0ÏBYTE:1
-publicÌ64Î__anon3Ö0ÏBYTE
+mystructÌ2048Ö0
+personalÌ64Îbitfield_flagsÖ0ÏBYTE:1
+privateÌ64ÎmystructÖ0ÏBYTE
+publicÌ64Îbitfield_flagsÖ0ÏBYTE:1
+publicÌ64ÎmystructÖ0ÏBYTE
 shortname_infoÌ2048Ö0
-signÌ64Î__anon1Ö0Ïunsigned:1
-thatÌ64Î__anon3Ö0ÏBYTE
-thisÌ64Î__anon3Ö0ÏBYTE
+signÌ64Îanon_struct_1Ö0Ïunsigned:1
+thatÌ64ÎmystructÖ0ÏBYTE
+thisÌ64ÎmystructÖ0ÏBYTE
 upperÌ64Îshortname_infoÖ0Ïunsigned char:1
 validÌ64Îshortname_infoÖ0Ïunsigned char:1

@@ -65,7 +65,7 @@ typedef enum
 	tm_tag_attr_impl_t = 4096, /**< Implementation (e.g. virtual) */
 	tm_tag_attr_lang_t = 8192, /**< Language (File tag only) */
 	tm_tag_attr_inactive_t = 16384, /**< Inactive file (File tag only, obsolete) */
-	tm_tag_attr_pointer_t = 32768, /**< Pointer type */
+	tm_tag_attr_flags_t = 32768, /**< Additional flags */
 	tm_tag_attr_max_t = 65535 /**< Maximum value */
 } TMTagAttrType;
 
@@ -81,6 +81,13 @@ typedef enum
 #define TAG_IMPL_VIRTUAL 'v' /**< Virtual implementation */
 #define TAG_IMPL_UNKNOWN 'x' /**< Unknown implementation */
 
+enum
+{
+	tm_tag_flag_none_t = 0, /**< No flags */
+	tm_tag_flag_anon_t = 1, /**< Anonymous tag */
+	tm_tag_flag_max_t = 1, /**< Maximum value */
+};
+
 /**
  * The TMTag structure represents a single tag in the tag manager.
  **/
@@ -94,7 +101,7 @@ typedef struct TMTag
 	TMSourceFile *file; /**< File in which the tag occurs; NULL for global tags */
 	gulong line; /**< Line number of the tag */
 	gboolean local; /**< Is the tag of local scope */
-	guint pointerOrder;
+	guint flags; /**< Additional flags */
 	char *arglist; /**< Argument list (functions/prototypes/macros) */
 	char *scope; /**< Scope of tag */
 	char *inheritance; /**< Parent classes */
@@ -102,6 +109,7 @@ typedef struct TMTag
 	char access; /**< Access type (public/protected/private/etc.) */
 	char impl; /**< Implementation (e.g. virtual) */
 	TMParserType lang; /* Programming language of the file */
+	gchar kind_letter; /* Kind letter from ctags */
 } TMTag;
 
 /* The GType for a TMTag */
