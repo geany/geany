@@ -46,6 +46,7 @@
 #include "navqueue.h"
 #include "notebook.h"
 #include "plugins.h"
+#include "projectprivate.h"
 #include "prefs.h"
 #include "printing.h"
 #include "sidebar.h"
@@ -970,13 +971,23 @@ static void load_startup_files(gint argc, gchar **argv)
 	{
 		if (app->project == NULL)
 			load_session_project_file();
+		if (app->project == NULL)
+			configuration_load_default_session();
 		load_session = TRUE;
 	}
 
 	if (load_session)
 	{
 		/* load session files into tabs, as they are found in the session_files variable */
-		configuration_open_files();
+		if (app->project != NULL)
+		{
+			configuration_open_files(app->project->priv->session_files);
+			app->project->priv->session_files = NULL;
+		}
+		else
+		{
+			configuration_open_default_session();
+		}
 
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		{

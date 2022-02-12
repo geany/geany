@@ -46,15 +46,17 @@ void configuration_save(void);
 
 gboolean configuration_load(void);
 
-void configuration_open_files(void);
+void configuration_open_files(GPtrArray *session_files);
 
-void configuration_reload_default_session(void);
+void configuration_load_default_session(void);
+
+void configuration_open_default_session(void);
 
 void configuration_save_default_session(void);
 
 void configuration_clear_default_session(void);
 
-void configuration_load_session_files(GKeyFile *config, gboolean read_recent_files);
+GPtrArray *configuration_load_session_files(GKeyFile *config);
 
 void configuration_save_session_files(GKeyFile *config);
 
