@@ -263,7 +263,7 @@ static void main_init(void)
 	ignore_callback	= FALSE;
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
-	main_status.opening_session_files	= FALSE;
+	main_status.opening_session_files	= 0;
 
 	main_widgets.window = create_window1();
 	g_signal_connect(main_widgets.window, "notify::is-active", G_CALLBACK(on_window_active_changed), NULL);
@@ -1194,9 +1194,9 @@ gint main_lib(gint argc, gchar **argv)
 	tools_create_insert_custom_command_menu_items();
 
 	/* load any command line files or session files */
-	main_status.opening_session_files = TRUE;
+	main_status.opening_session_files++;
 	load_startup_files(argc, argv);
-	main_status.opening_session_files = FALSE;
+	main_status.opening_session_files--;
 
 	/* open a new file if no other file was opened */
 	document_new_file_if_non_open();
