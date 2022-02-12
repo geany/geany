@@ -60,7 +60,6 @@ lexilla/lexers/LexVerilog.cxx          \
 lexilla/lexers/LexYAML.cxx
 
 LEXLIB_SRCS =                          \
-lexilla/include/LexicalStyles.iface    \
 lexilla/include/Lexilla.h              \
 lexilla/include/SciLexer.h             \
 lexilla/lexlib/Accessor.cxx            \
