@@ -30,6 +30,7 @@
 #include "search.h"
 
 #include "app.h"
+#include "dialogs.h"
 #include "document.h"
 #include "encodings.h"
 #include "encodingsprivate.h"
@@ -1453,6 +1454,14 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	{
 		gtk_widget_hide(replace_dlg.dialog);
 		return;
+	}
+
+	if (response == GEANY_RESPONSE_REPLACE_IN_SESSION) {
+		if (! dialogs_show_question_full(replace_dlg.dialog, NULL, NULL,
+			_("This operation will modify all open files which contain the text to replace."),
+			_("Are you sure to replace in the whole session?"))) {
+			return;
+		}
 	}
 
 	search_backwards_re = settings.replace_search_backwards;
