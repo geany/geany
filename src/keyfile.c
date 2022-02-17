@@ -113,9 +113,16 @@ static gint vpan_position;
 static guint document_list_update_idle_func_id = 0;
 static const gchar atomic_file_saving_key[] = "use_atomic_file_saving";
 
-static GPtrArray *keyfile_groups = NULL;
+typedef enum
+{
+	PREFS,
+	SESSION,
 
-GPtrArray *pref_groups = NULL;
+	MAX_PAYLOAD
+} ConfigPayload;
+
+static GPtrArray *keyfile_groups[MAX_PAYLOAD];
+GPtrArray *pref_groups;
 
 static struct
 {
@@ -125,12 +132,11 @@ static struct
 }
 build_menu_prefs;
 
-
 /* The group will be free'd on quitting.
  * @param for_prefs_dialog is whether the group also has Prefs dialog items. */
 void configuration_add_pref_group(struct StashGroup *group, gboolean for_prefs_dialog)
 {
-	g_ptr_array_add(keyfile_groups, group);
+	g_ptr_array_add(keyfile_groups[PREFS], group);
 
 	if (for_prefs_dialog)
 		g_ptr_array_add(pref_groups, group);
@@ -144,6 +150,14 @@ void configuration_add_various_pref_group(struct StashGroup *group,
 {
 	configuration_add_pref_group(group, TRUE);
 	stash_group_set_various(group, TRUE, prefix);
+}
+
+
+/* The group will be free'd on quitting.
+ * @param for_prefs_dialog is whether the group also has Prefs dialog items. */
+void configuration_add_session_group(struct StashGroup *group)
+{
+	g_ptr_array_add(keyfile_groups[SESSION], group);
 }
 
 
@@ -309,12 +323,12 @@ typedef enum SettingAction
 }
 SettingAction;
 
-static void settings_action(GKeyFile *config, SettingAction action)
+static void settings_action(GKeyFile *config, SettingAction action, ConfigPayload payload)
 {
 	guint i;
 	StashGroup *group;
 
-	foreach_ptr_array(group, i, keyfile_groups)
+	foreach_ptr_array(group, i, keyfile_groups[payload])
 	{
 		switch (action)
 		{
@@ -440,9 +454,6 @@ void configuration_save_session_files(GKeyFile *config)
 
 static void save_dialog_prefs(GKeyFile *config)
 {
-	/* new settings should be added in init_pref_groups() */
-	settings_action(config, SETTING_WRITE);
-
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
 
 	/* general */
@@ -578,12 +589,6 @@ static void save_dialog_prefs(GKeyFile *config)
 #endif
 }
 
-typedef enum ConfigPayload
-{
-	PREFS,
-	SESSION
-}
-ConfigPayload;
 
 static void save_ui_prefs(GKeyFile *config)
 {
@@ -672,6 +677,10 @@ void write_config_file(gchar const *filename, ConfigPayload payload)
 #endif
 			break;
 	}
+
+	/* new settings should be added in init_pref_groups() */
+	settings_action(config, SETTING_WRITE, payload);
+
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
 	utils_write_file(configfile, data);
@@ -1028,16 +1037,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	printing_prefs.print_page_header = utils_get_setting_boolean(config, "printing", "print_page_header", TRUE);
 	printing_prefs.page_header_basename = utils_get_setting_boolean(config, "printing", "page_header_basename", FALSE);
 	printing_prefs.page_header_datefmt = utils_get_setting_string(config, "printing", "page_header_datefmt", "%c");
-
-	/* read stash prefs */
-	settings_action(config, SETTING_READ);
-
-	/* build menu
-	 * after stash prefs as it uses some of them */
-	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
-	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
-	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
-	build_load_menu(config, GEANY_BCS_PREF, NULL);
 }
 
 
@@ -1200,17 +1199,27 @@ gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 	g_free(configfile);
 
+	/* read stash prefs */
+	settings_action(config, SETTING_READ, payload);
+
 	switch (payload)
 	{
 		case PREFS:
 			load_dialog_prefs(config);
 			load_ui_prefs(config);
+
+			/* build menu, after stash prefs as it uses some of them */
+			build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
+			build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
+			build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
+			build_load_menu(config, GEANY_BCS_PREF, NULL);
 			/* this signal can be used e.g. to delay building UI elements until settings have been read */
 			g_signal_emit_by_name(geany_object, "load-settings", config);
 			break;
 		case SESSION:
 			project_load_prefs(config);
 			load_ui_session(config);
+			/* read stash prefs */
 			configuration_load_session_files(config, TRUE);
 			break;
 	}
@@ -1432,7 +1441,8 @@ static void document_list_changed_cb(GObject *obj, GeanyDocument *doc, gpointer 
 
 void configuration_init(void)
 {
-	keyfile_groups = g_ptr_array_new();
+	keyfile_groups[PREFS] = g_ptr_array_new_with_free_func((GDestroyNotify) stash_group_free);
+	keyfile_groups[SESSION] = g_ptr_array_new_with_free_func((GDestroyNotify) stash_group_free);
 	pref_groups = g_ptr_array_new();
 	init_pref_groups();
 
@@ -1449,9 +1459,7 @@ void configuration_finalize(void)
 
 	g_signal_handlers_disconnect_by_func(geany_object, G_CALLBACK(document_list_changed_cb), NULL);
 
-	foreach_ptr_array(group, i, keyfile_groups)
-		stash_group_free(group);
-
-	g_ptr_array_free(keyfile_groups, TRUE);
 	g_ptr_array_free(pref_groups, TRUE);
+	g_ptr_array_free(keyfile_groups[SESSION], TRUE);
+	g_ptr_array_free(keyfile_groups[PREFS], TRUE);
 }

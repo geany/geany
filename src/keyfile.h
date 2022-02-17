@@ -40,6 +40,8 @@ void configuration_add_pref_group(struct StashGroup *group, gboolean for_prefs_d
 void configuration_add_various_pref_group(struct StashGroup *group,
 	const gchar *prefix);
 
+void configuration_add_session_group(struct StashGroup *group);
+
 void configuration_save(void);
 
 gboolean configuration_load(void);
