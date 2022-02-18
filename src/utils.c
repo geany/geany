@@ -36,7 +36,6 @@
 #include "sciwrappers.h"
 #include "spawn.h"
 #include "support.h"
-#include "tm_source_file.h" // for tm_get_real_path()
 #include "templates.h"
 #include "ui_utils.h"
 #include "win32.h"
@@ -55,6 +54,12 @@
 #endif
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
+#endif
+
+#ifdef G_OS_WIN32
+# define VC_EXTRALEAN
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h> /* for GetFullPathName */
 #endif
 
 #include <glib/gstdio.h>
@@ -2400,16 +2405,38 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 }
 
 
+#if defined(G_OS_WIN32) && !defined(HAVE_REALPATH)
+/* realpath implementation for Windows found at http://bugzilla.gnome.org/show_bug.cgi?id=342926
+ * this one is better than e.g. liberty's lrealpath because this one uses Win32 API and works
+ * with special chars within the filename */
+static char *realpath(const char *pathname, char *resolved_path)
+{
+	int size;
+
+	if (resolved_path != NULL)
+	{
+		size = GetFullPathNameA(pathname, PATH_MAX, resolved_path, NULL);
+		if (size > PATH_MAX)
+			return NULL;
+		else
+			return resolved_path;
+	}
+	else
+	{
+		size = GetFullPathNameA(pathname, 0, NULL, NULL);
+		resolved_path = g_new0(char, size);
+		GetFullPathNameA(pathname, size, resolved_path, NULL);
+		return resolved_path;
+	}
+}
+#endif
+
+
 /**
  * Get a link-dereferenced, absolute version of a file name.
  *
  * This is similar to the POSIX `realpath` function when passed a
  * @c NULL argument.
- *
- * @warning This function suffers the same problems as the POSIX
- * function `realpath()`, namely that it's impossible to determine
- * a suitable size for the returned buffer, and so it's limited to a
- * maximum of `PATH_MAX`.
  *
  * @param file_name The file name to get the real path of.
  *
@@ -2422,7 +2449,12 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 GEANY_API_SYMBOL
 gchar *utils_get_real_path(const gchar *file_name)
 {
-	return tm_get_real_path(file_name);
+	gchar *path = NULL;
+
+	if (file_name)
+		path = realpath(file_name, NULL);
+
+	return path;
 }
 
 

@@ -23,16 +23,14 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <glib/gstdio.h>
-#ifdef G_OS_WIN32
-# define VC_EXTRALEAN
-# define WIN32_LEAN_AND_MEAN
-# include <windows.h> /* for GetFullPathName */
-#endif
 
 #include "tm_source_file.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
 #include "tm_ctags.h"
+
+#include "../utils.h"
+
 
 typedef struct
 {
@@ -72,69 +70,6 @@ enum
 #define SOURCE_FILE_NEW(S) ((S) = g_slice_new(TMSourceFilePriv))
 #define SOURCE_FILE_FREE(S) g_slice_free(TMSourceFilePriv, (TMSourceFilePriv *) S)
 
-static int get_path_max(const char *path)
-{
-#ifdef PATH_MAX
-	return PATH_MAX;
-#else
-	int path_max = pathconf(path, _PC_PATH_MAX);
-	if (path_max <= 0)
-		path_max = 4096;
-	return path_max;
-#endif
-}
-
-
-#if defined(G_OS_WIN32) && !defined(HAVE_REALPATH)
-/* realpath implementation for Windows found at http://bugzilla.gnome.org/show_bug.cgi?id=342926
- * this one is better than e.g. liberty's lrealpath because this one uses Win32 API and works
- * with special chars within the filename */
-static char *realpath (const char *pathname, char *resolved_path)
-{
-	int size;
-
-	if (resolved_path != NULL)
-	{
-		int path_max = get_path_max(pathname);
-		size = GetFullPathNameA (pathname, path_max, resolved_path, NULL);
-		if (size > path_max)
-			return NULL;
-		else
-			return resolved_path;
-	}
-	else
-	{
-		size = GetFullPathNameA (pathname, 0, NULL, NULL);
-		resolved_path = g_new0 (char, size);
-		GetFullPathNameA (pathname, size, resolved_path, NULL);
-		return resolved_path;
-	}
-}
-#endif
-
-/**
- Given a file name, returns a newly allocated string containing the realpath()
- of the file.
- @param file_name The original file_name
- @return A newly allocated string containing the real path to the file. NULL if none is available.
- @deprecated since 1.32 (ABI 235)
- @see utils_get_real_path()
-*/
-GEANY_API_SYMBOL
-gchar *tm_get_real_path(const gchar *file_name)
-{
-	if (file_name)
-	{
-		gsize len = get_path_max(file_name) + 1;
-		gchar *path = g_malloc0(len);
-
-		if (realpath(file_name, path))
-			return path;
-		else
-			g_free(path);
-	}
-	return NULL;
-}
 
 gchar tm_source_file_get_tag_impl(const gchar *impl)
 {
@@ -594,7 +529,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 			g_warning("%s: Not a regular file", file_name);
 			return FALSE;
 		}
-		source_file->file_name = tm_get_real_path(file_name);
+		source_file->file_name = utils_get_real_path(file_name);
 		source_file->short_name = strrchr(source_file->file_name, '/');
 		if (source_file->short_name)
 			++ source_file->short_name;
