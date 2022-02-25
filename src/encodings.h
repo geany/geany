@@ -125,13 +125,16 @@ typedef enum
 }
 GeanyEncodingIndex;
 
+G_MODULE_EXPORT
 gchar *encodings_convert_to_utf8(const gchar *buffer, gssize size, gchar **used_encoding);
 
 /* Converts a string from the given charset to UTF-8.
  * If fast is set, no further checks are performed. */
+G_MODULE_EXPORT
 gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 											  const gchar *charset, gboolean fast);
 
+G_MODULE_EXPORT
 const gchar* encodings_get_charset_from_index(gint idx);
 
 G_END_DECLS

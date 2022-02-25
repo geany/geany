@@ -51,20 +51,29 @@ typedef enum
 } MessageWindowTabNum;
 
 
+G_MODULE_EXPORT
 void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+G_MODULE_EXPORT
 void msgwin_status_add_string(const gchar *msg);
 
+G_MODULE_EXPORT
 void msgwin_compiler_add(gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+G_MODULE_EXPORT
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg);
 
+G_MODULE_EXPORT
 void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 			G_GNUC_PRINTF (4, 5);
+G_MODULE_EXPORT
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const char *msg);
 
+G_MODULE_EXPORT
 void msgwin_clear_tab(gint tabnum);
 
+G_MODULE_EXPORT
 void msgwin_switch_tab(gint tabnum, gboolean show);
 
+G_MODULE_EXPORT
 void msgwin_set_messages_dir(const gchar *messages_dir);
 
 

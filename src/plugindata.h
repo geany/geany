@@ -306,12 +306,17 @@ struct GeanyPluginFuncs
 	void        (*cleanup)   (GeanyPlugin *plugin, gpointer pdata);
 };
 
+
+G_MODULE_EXPORT
 gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,
                                gint min_api_version, gint abi_version);
+G_MODULE_EXPORT
 gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version,
                                     gint min_api_version, gint abi_version,
                                     gpointer data, GDestroyNotify free_func);
+G_MODULE_EXPORT
 gpointer geany_plugin_get_data(const GeanyPlugin *plugin);
+G_MODULE_EXPORT
 void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify free_func);
 
 /** Convenience macro to register a plugin.
@@ -384,6 +389,7 @@ struct GeanyProxyFuncs
 	void		(*unload)    (GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer load_data, gpointer pdata);
 };
 
+G_MODULE_EXPORT
 gint geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions);
 
 /* Deprecated aliases */

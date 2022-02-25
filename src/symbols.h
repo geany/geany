@@ -28,6 +28,7 @@
 
 G_BEGIN_DECLS
 
+G_MODULE_EXPORT
 const gchar *symbols_get_context_separator(gint ft_id);
 
 

@@ -23,13 +23,17 @@
 #define GEANY_MAIN_H 1
 
 #include <glib.h>
+#include <gmodule.h>
 
 G_BEGIN_DECLS
 
+G_MODULE_EXPORT
 void main_reload_configuration(void);
 
+G_MODULE_EXPORT
 void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
 
+G_MODULE_EXPORT
 gboolean main_is_realized(void);
 
 

@@ -33,6 +33,7 @@
 
 G_BEGIN_DECLS
 
+G_MODULE_EXPORT
 gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line);
 
 

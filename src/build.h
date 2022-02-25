@@ -60,16 +60,21 @@ typedef enum GeanyBuildCmdEntries
 	GEANY_BC_CMDENTRIES_COUNT	/**< Count of entries */
 } GeanyBuildCmdEntries;
 
+G_MODULE_EXPORT
 void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd);
 
+G_MODULE_EXPORT
 const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd,
                                          const GeanyBuildCmdEntries field);
 
+G_MODULE_EXPORT
 void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd);
 
+G_MODULE_EXPORT
 void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
                          const guint cmd, const GeanyBuildCmdEntries field, const gchar *value);
 
+G_MODULE_EXPORT
 guint build_get_group_count(const GeanyBuildGroup grp);
 
 

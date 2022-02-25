@@ -24,6 +24,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gmodule.h>
 
 G_BEGIN_DECLS
 
@@ -47,6 +48,7 @@ typedef struct GeanyProject
 GeanyProject;
 
 
+G_MODULE_EXPORT
 void project_write_config(void);
 
 

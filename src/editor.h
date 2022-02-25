@@ -143,6 +143,7 @@ GeanyEditorPrefs;
 
 
 #define GEANY_TYPE_EDITOR (editor_get_type())
+G_MODULE_EXPORT
 GType editor_get_type (void);
 
 /** Editor-owned fields for each document. */
@@ -161,38 +162,54 @@ typedef struct GeanyEditor
 GeanyEditor;
 
 
+G_MODULE_EXPORT
 const GeanyIndentPrefs *editor_get_indent_prefs(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 ScintillaObject *editor_create_widget(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 void editor_indicator_set_on_range(GeanyEditor *editor, gint indic, gint start, gint end);
 
+G_MODULE_EXPORT
 void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line);
 
+G_MODULE_EXPORT
 void editor_indicator_clear(GeanyEditor *editor, gint indic);
 
+G_MODULE_EXPORT
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type);
 
+G_MODULE_EXPORT
 void editor_set_indent_width(GeanyEditor *editor, gint width);
 
+G_MODULE_EXPORT
 gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordchars);
 
+G_MODULE_EXPORT
 const gchar *editor_get_eol_char_name(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 gint editor_get_eol_char_len(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 const gchar *editor_get_eol_char(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 void editor_insert_text_block(GeanyEditor *editor, const gchar *text,
 	 						  gint insert_pos, gint cursor_index,
 	 						  gint newline_indent_size, gboolean replace_newlines);
 
+G_MODULE_EXPORT
 gint editor_get_eol_char_mode(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark);
 
+G_MODULE_EXPORT
 const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name);
 
+G_MODULE_EXPORT
 void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet);
 
 

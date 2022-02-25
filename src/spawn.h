@@ -23,6 +23,7 @@
 #define GEANY_SPAWN_H 1
 
 #include <glib.h>
+#include <gmodule.h>
 
 #ifdef G_OS_WIN32
 # define SPAWN_WIFEXITED(status) TRUE
@@ -38,10 +39,13 @@
 
 G_BEGIN_DECLS
 
+G_MODULE_EXPORT
 gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError **error);
 
+G_MODULE_EXPORT
 gboolean spawn_kill_process(GPid pid, GError **error);
 
+G_MODULE_EXPORT
 gboolean spawn_async(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, GPid *child_pid, GError **error);
 
@@ -79,6 +83,7 @@ typedef enum
  */
 typedef void (*SpawnReadFunc)(GString *string, GIOCondition condition, gpointer data);
 
+G_MODULE_EXPORT
 gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *command_line,
 	gchar **argv, gchar **envp, SpawnFlags spawn_flags, GIOFunc stdin_cb, gpointer stdin_data,
 	SpawnReadFunc stdout_cb, gpointer stdout_data, gsize stdout_max_length,
@@ -95,8 +100,10 @@ typedef struct _SpawnWriteData
 	gsize size;         /**< Size of the data. */
 } SpawnWriteData;
 
+G_MODULE_EXPORT
 gboolean spawn_write_data(GIOChannel *channel, GIOCondition condition, SpawnWriteData *data);
 
+G_MODULE_EXPORT
 gboolean spawn_sync(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, SpawnWriteData *stdin_data, GString *stdout_data, GString *stderr_data,
 	gint *exit_status, GError **error);

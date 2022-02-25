@@ -175,18 +175,24 @@ GeanyFiletype;
 #define filetypes	((GeanyFiletype **)GEANY(filetypes_array)->pdata)
 
 
+G_MODULE_EXPORT
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename);
 
+G_MODULE_EXPORT
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name);
 
+G_MODULE_EXPORT
 GeanyFiletype *filetypes_index(gint idx);
 
+G_MODULE_EXPORT
 const gchar *filetypes_get_display_name(GeanyFiletype *ft);
 
+G_MODULE_EXPORT
 const GSList *filetypes_get_sorted_by_name(void);
 
 #define GEANY_TYPE_FILETYPE (filetype_get_type())
 
+G_MODULE_EXPORT
 GType filetype_get_type (void);
 
 #ifdef GEANY_PRIVATE

@@ -100,50 +100,71 @@ GeanyMainWidgets;
 #define GEANY_STOCK_BUILD "geany-build"
 
 
+G_MODULE_EXPORT
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
 
+G_MODULE_EXPORT
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
+G_MODULE_EXPORT
 void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 
+G_MODULE_EXPORT
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 
+G_MODULE_EXPORT
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
 
+G_MODULE_EXPORT
 void ui_add_document_sensitive(GtkWidget *widget);
 
+G_MODULE_EXPORT
 GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
 
+G_MODULE_EXPORT
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
+G_MODULE_EXPORT
 void ui_progress_bar_start(const gchar *text);
 
+G_MODULE_EXPORT
 void ui_progress_bar_stop(void);
 
+G_MODULE_EXPORT
 void ui_entry_add_clear_icon(GtkEntry *entry);
 
+G_MODULE_EXPORT
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback);
 
+G_MODULE_EXPORT
 void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 		GCallback callback, GCompareFunc sort_func);
 
+G_MODULE_EXPORT
 void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
 
+G_MODULE_EXPORT
 gboolean ui_is_keyval_enter_or_return(guint keyval);
 
+G_MODULE_EXPORT
 gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value);
 
+G_MODULE_EXPORT
 void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 		const gchar *text, gint history_len);
 
+G_MODULE_EXPORT
 const gchar *ui_lookup_stock_label(const gchar *stock_id);
 
+G_MODULE_EXPORT
 void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column);
 
 
 #ifndef GEANY_DISABLE_DEPRECATED
+G_MODULE_EXPORT
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment) GEANY_DEPRECATED;
 
+G_MODULE_EXPORT
 void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text) GEANY_DEPRECATED_FOR(gtk_widget_set_tooltip_text);
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

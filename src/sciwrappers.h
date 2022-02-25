@@ -39,72 +39,124 @@ sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject
 # endif
 #endif
 
+G_MODULE_EXPORT
 void 				sci_set_text				(ScintillaObject *sci,  const gchar *text);
+G_MODULE_EXPORT
 gboolean			sci_has_selection			(ScintillaObject *sci);
+G_MODULE_EXPORT
 void 				sci_end_undo_action			(ScintillaObject *sci);
+G_MODULE_EXPORT
 void 				sci_start_undo_action		(ScintillaObject *sci);
 
+G_MODULE_EXPORT
 void				sci_set_marker_at_line		(ScintillaObject *sci, gint line_number, gint marker);
+G_MODULE_EXPORT
 void				sci_delete_marker_at_line	(ScintillaObject *sci, gint line_number, gint marker);
+G_MODULE_EXPORT
 gboolean 			sci_is_marker_set_at_line	(ScintillaObject *sci, gint line, gint marker);
 
+G_MODULE_EXPORT
 gint 				sci_get_col_from_position	(ScintillaObject *sci, gint position);
+G_MODULE_EXPORT
 gint 				sci_get_line_from_position	(ScintillaObject *sci, gint position);
+G_MODULE_EXPORT
 gint 				sci_get_position_from_line	(ScintillaObject *sci, gint line);
+G_MODULE_EXPORT
 gint 				sci_get_current_position	(ScintillaObject *sci);
+G_MODULE_EXPORT
 void 				sci_set_current_position	(ScintillaObject *sci, gint position, gboolean scroll_to_caret);
 
+G_MODULE_EXPORT
 gint				sci_get_selection_start		(ScintillaObject *sci);
+G_MODULE_EXPORT
 gint				sci_get_selection_end		(ScintillaObject *sci);
+G_MODULE_EXPORT
 void 				sci_replace_sel				(ScintillaObject *sci, const gchar *text);
+G_MODULE_EXPORT
 gint				sci_get_selection_mode		(ScintillaObject *sci);
+G_MODULE_EXPORT
 void				sci_set_selection_mode		(ScintillaObject *sci, gint mode);
+G_MODULE_EXPORT
 void 				sci_set_selection_start		(ScintillaObject *sci, gint position);
+G_MODULE_EXPORT
 void				sci_set_selection_end		(ScintillaObject *sci, gint position);
 
+G_MODULE_EXPORT
 gint				sci_get_length				(ScintillaObject *sci);
+G_MODULE_EXPORT
 gchar*				sci_get_contents			(ScintillaObject *sci, gint buffer_len);
+G_MODULE_EXPORT
 gint				sci_get_selected_text_length(ScintillaObject *sci);
+G_MODULE_EXPORT
 gchar*				sci_get_selection_contents	(ScintillaObject *sci);
+G_MODULE_EXPORT
 gchar*				sci_get_line				(ScintillaObject *sci, gint line_num);
+G_MODULE_EXPORT
 gint 				sci_get_line_length			(ScintillaObject *sci, gint line);
+G_MODULE_EXPORT
 gint				sci_get_line_count			(ScintillaObject *sci);
 
+G_MODULE_EXPORT
 gint				sci_get_line_end_position	(ScintillaObject *sci, gint line);
 
+G_MODULE_EXPORT
 gboolean			sci_get_line_is_visible		(ScintillaObject *sci, gint line);
+G_MODULE_EXPORT
 void				sci_ensure_line_is_visible	(ScintillaObject *sci, gint line);
 
+G_MODULE_EXPORT
 gint				sci_get_tab_width			(ScintillaObject *sci);
+G_MODULE_EXPORT
 gchar				sci_get_char_at				(ScintillaObject *sci, gint pos);
 
+G_MODULE_EXPORT
 void				sci_scroll_caret			(ScintillaObject *sci);
+G_MODULE_EXPORT
 gint				sci_find_text				(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf);
+G_MODULE_EXPORT
 void				sci_set_font				(ScintillaObject *sci, gint style, const gchar *font, gint size);
+G_MODULE_EXPORT
 void				sci_goto_line				(ScintillaObject *sci, gint line, gboolean unfold);
+G_MODULE_EXPORT
 gint				sci_get_style_at			(ScintillaObject *sci, gint position);
+G_MODULE_EXPORT
 gchar*				sci_get_contents_range		(ScintillaObject *sci, gint start, gint end);
+G_MODULE_EXPORT
 void				sci_insert_text				(ScintillaObject *sci, gint pos, const gchar *text);
 
+G_MODULE_EXPORT
 void				sci_set_target_start		(ScintillaObject *sci, gint start);
+G_MODULE_EXPORT
 void				sci_set_target_end			(ScintillaObject *sci, gint end);
+G_MODULE_EXPORT
 gint				sci_replace_target			(ScintillaObject *sci, const gchar *text, gboolean regex);
 
+G_MODULE_EXPORT
 gint				sci_get_lexer				(ScintillaObject *sci);
+G_MODULE_EXPORT
 void				sci_send_command			(ScintillaObject *sci, gint cmd);
 
+G_MODULE_EXPORT
 gint				sci_get_current_line		(ScintillaObject *sci);
 
+G_MODULE_EXPORT
 void				sci_indicator_set			(ScintillaObject *sci, gint indic);
+G_MODULE_EXPORT
 void				sci_indicator_clear			(ScintillaObject *sci, gint pos, gint len);
 
+G_MODULE_EXPORT
 void				sci_set_line_indentation	(ScintillaObject *sci, gint line, gint indent);
+G_MODULE_EXPORT
 gint				sci_get_line_indentation	(ScintillaObject *sci, gint line);
+G_MODULE_EXPORT
 gint				sci_find_matching_brace		(ScintillaObject *sci, gint pos);
 
 #ifndef GEANY_DISABLE_DEPRECATED
+G_MODULE_EXPORT
 void				sci_get_text				(ScintillaObject *sci, gint len, gchar *text) GEANY_DEPRECATED_FOR(sci_get_contents);
+G_MODULE_EXPORT
 void				sci_get_selected_text		(ScintillaObject *sci, gchar *text) GEANY_DEPRECATED_FOR(sci_get_selection_contents);
+G_MODULE_EXPORT
 void				sci_get_text_range			(ScintillaObject *sci, gint start, gint end, gchar *text) GEANY_DEPRECATED_FOR(sci_get_contents_range);
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

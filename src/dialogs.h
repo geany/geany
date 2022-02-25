@@ -33,15 +33,20 @@
 
 G_BEGIN_DECLS
 
+G_MODULE_EXPORT
 gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 
+G_MODULE_EXPORT
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 
+G_MODULE_EXPORT
 gboolean dialogs_show_save_as(void);
 
+G_MODULE_EXPORT
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 	gdouble *value, gdouble min, gdouble max, gdouble step);
 
+G_MODULE_EXPORT
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent,
 	const gchar *label_text, const gchar *default_text);
 

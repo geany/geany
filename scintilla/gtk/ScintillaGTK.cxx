@@ -3142,13 +3142,11 @@ sptr_t ScintillaGTK::DirectStatusFunction(
 }
 
 /* legacy name for scintilla_object_send_message */
-GEANY_API_SYMBOL
 sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	ScintillaGTK *psci = static_cast<ScintillaGTK *>(sci->pscin);
 	return psci->WndProc(static_cast<Message>(iMessage), wParam, lParam);
 }
 
-GEANY_API_SYMBOL
 gintptr scintilla_object_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	return scintilla_send_message(sci, iMessage, wParam, lParam);
 }
@@ -3157,7 +3155,6 @@ static void scintilla_class_init(ScintillaClass *klass);
 static void scintilla_init(ScintillaObject *sci);
 
 /* legacy name for scintilla_object_get_type */
-GEANY_API_SYMBOL
 GType scintilla_get_type() {
 	static GType scintilla_type = 0;
 	try {
@@ -3187,7 +3184,6 @@ GType scintilla_get_type() {
 	return scintilla_type;
 }
 
-GEANY_API_SYMBOL
 GType scintilla_object_get_type() {
 	return scintilla_get_type();
 }
@@ -3293,7 +3289,6 @@ static void scintilla_init(ScintillaObject *sci) {
 }
 
 /* legacy name for scintilla_object_new */
-GEANY_API_SYMBOL
 GtkWidget *scintilla_new() {
 	GtkWidget *widget = GTK_WIDGET(g_object_new(scintilla_get_type(), nullptr));
 	gtk_widget_set_direction(widget, GTK_TEXT_DIR_LTR);
@@ -3301,7 +3296,6 @@ GtkWidget *scintilla_new() {
 	return widget;
 }
 
-GEANY_API_SYMBOL
 GtkWidget *scintilla_object_new() {
 	return scintilla_new();
 }
@@ -3324,7 +3318,6 @@ void scintilla_release_resources(void) {
 static void *copy_(void *src) { return src; }
 static void free_(void *) { }
 
-GEANY_API_SYMBOL
 GType scnotification_get_type(void) {
 	static gsize type_id = 0;
 	if (g_once_init_enter(&type_id)) {
