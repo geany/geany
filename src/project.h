@@ -67,22 +67,26 @@ void project_init(void);
 void project_finalize(void);
 
 
-void project_new(void);
+void project_new_dialog(void);
 
-void project_open(void);
+gint project_new(gchar const *name, gchar const *file_name, gchar const *base_path);
+
+void project_open_dialog(void);
+
+void project_open_folder_dialog(void);
+
+gint project_open_folder(gchar *folder_name, gboolean use_session);
+
+void project_save_as_dialog(void);
 
 gboolean project_close(gboolean open_default);
 
-void project_properties(void);
-
-void project_build_properties(void);
-
 gboolean project_ask_close(void);
 
+void project_properties_dialog(gchar const *page_name);
 
-gboolean project_load_file(const gchar *locale_file_name);
 
-gboolean project_load_file_with_session(const gchar *locale_file_name);
+gboolean project_load_file(const gchar *locale_file_name, gboolean with_session);
 
 gchar *project_get_base_path(void);
 

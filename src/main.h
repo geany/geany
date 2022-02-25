@@ -45,6 +45,7 @@ typedef struct
 	gboolean	ignore_global_tags;
 	gboolean	list_documents;
 	gboolean 	readonly;
+	gchar		*project_path;
 }
 CommandLineOptions;
 
@@ -71,8 +72,6 @@ gchar *main_get_argv_filename(const gchar *filename);
 gboolean main_quit(void);
 
 gboolean main_handle_filename(const gchar *locale_filename);
-
-void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session);
 
 gint main_lib(gint argc, gchar **argv);
 
