@@ -544,6 +544,33 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 }
 
 
+static gboolean notebook_tab_bar_scroll_cb(GtkWidget *widget, GdkEventScroll *event)
+{
+	GtkNotebook *notebook = GTK_NOTEBOOK(widget);
+	GtkWidget *child;
+
+	child = gtk_notebook_get_nth_page(notebook, gtk_notebook_get_current_page(notebook));
+	if (child == NULL)
+		return FALSE;
+
+	switch (event->direction)
+	{
+		case GDK_SCROLL_RIGHT:
+		case GDK_SCROLL_DOWN:
+			gtk_notebook_next_page(notebook);
+			break;
+		case GDK_SCROLL_LEFT:
+		case GDK_SCROLL_UP:
+			gtk_notebook_prev_page(notebook);
+			break;
+		default:
+			break;
+	}
+
+	return TRUE;
+}
+
+
 void notebook_init(void)
 {
 	g_signal_connect_after(main_widgets.notebook, "button-press-event",
@@ -557,6 +584,9 @@ void notebook_init(void)
 		G_CALLBACK(on_notebook_switch_page), NULL);
 	g_signal_connect(geany_object, "document-close",
 		G_CALLBACK(on_document_close), NULL);
+
+	gtk_widget_add_events(main_widgets.notebook, GDK_SCROLL_MASK);
+	g_signal_connect(main_widgets.notebook, "scroll-event", G_CALLBACK(notebook_tab_bar_scroll_cb), NULL);
 
 	/* in case the switch dialog misses an event while drawing the dialog */
 	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
@@ -692,6 +722,10 @@ gint notebook_new_tab(GeanyDocument *this)
 	/* focus the current document after clicking on a tab */
 	g_signal_connect_after(ebox, "button-release-event",
 		G_CALLBACK(focus_sci), NULL);
+
+    /* switch tab by scrolling - GTK2 behaviour for GTK3 */
+	gtk_widget_add_events(GTK_WIDGET(ebox), GDK_SCROLL_MASK);
+	gtk_widget_add_events(GTK_WIDGET(this->priv->tab_label), GDK_SCROLL_MASK);
 
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), this->priv->tab_label, FALSE, FALSE, 0);
