@@ -106,11 +106,10 @@
 
 static gchar *scribble_text = NULL;
 static gint scribble_pos = -1;
-static GPtrArray *session_files = NULL;
+static GPtrArray *default_session_files = NULL;
 static gint session_notebook_page;
 static gint hpan_position;
 static gint vpan_position;
-static guint document_list_update_idle_func_id = 0;
 static const gchar atomic_file_saving_key[] = "use_atomic_file_saving";
 
 typedef enum
@@ -458,7 +457,6 @@ static void save_dialog_prefs(GKeyFile *config)
 
 	/* general */
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", project_prefs.project_file_in_basedir);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_wingeom);
@@ -666,7 +664,7 @@ void write_config_file(gchar const *filename, ConfigPayload payload)
 			save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 			project_save_prefs(config);	/* save project filename, etc. */
 			save_ui_session(config);
-			if (cl_options.load_session)
+			if (cl_options.load_session && app->project == NULL)
 				configuration_save_session_files(config);
 #ifdef HAVE_VTE
 			else if (vte_info.have_vte)
@@ -718,34 +716,20 @@ static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
 
 
 /*
- * Load session list from the given keyfile, and store it in the global
- * session_files variable for later file loading
+ * Load session list from the given keyfile and return an array containg the file names
  * */
-void configuration_load_session_files(GKeyFile *config, gboolean read_recent_files)
+GPtrArray *configuration_load_session_files(GKeyFile *config)
 {
 	guint i;
 	gboolean have_session_files;
 	gchar entry[16];
 	gchar **tmp_array;
 	GError *error = NULL;
+	GPtrArray *files;
 
 	session_notebook_page = utils_get_setting_integer(config, "files", "current_page", -1);
 
-	if (read_recent_files)
-	{
-		load_recent_files(config, ui_prefs.recent_queue, "recent_files");
-		load_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
-	}
-
-	/* the project may load another list than the main setting */
-	if (session_files != NULL)
-	{
-		foreach_ptr_array(tmp_array, i, session_files)
-			g_strfreev(tmp_array);
-		g_ptr_array_free(session_files, TRUE);
-	}
-
-	session_files = g_ptr_array_new();
+	files = g_ptr_array_new();
 	have_session_files = TRUE;
 	i = 0;
 	while (have_session_files)
@@ -758,7 +742,7 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 			error = NULL;
 			have_session_files = FALSE;
 		}
-		g_ptr_array_add(session_files, tmp_array);
+		g_ptr_array_add(files, tmp_array);
 		i++;
 	}
 
@@ -771,6 +755,8 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 		g_free(tmp_string);
 	}
 #endif
+
+	return files;
 }
 
 
@@ -815,7 +801,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
-	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
 	project_prefs.project_file_in_basedir = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", FALSE);
 	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
 	prefs.save_wingeom = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_winpos);
@@ -1172,15 +1157,17 @@ void configuration_clear_default_session(void)
 /*
  * Only reload the session part of the default configuration
  */
-void configuration_reload_default_session(void)
+void configuration_load_default_session(void)
 {
 	gchar *configfile = g_build_filename(app->configdir, SESSION_FILE, NULL);
 	GKeyFile *config = g_key_file_new();
 
+	g_return_if_fail(default_session_files == NULL);
+
 	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
 	g_free(configfile);
 
-	configuration_load_session_files(config, FALSE);
+	default_session_files = configuration_load_session_files(config);
 
 	g_key_file_free(config);
 }
@@ -1219,8 +1206,8 @@ gboolean read_config_file(gchar const *filename, ConfigPayload payload)
 		case SESSION:
 			project_load_prefs(config);
 			load_ui_session(config);
-			/* read stash prefs */
-			configuration_load_session_files(config, TRUE);
+			load_recent_files(config, ui_prefs.recent_queue, "recent_files");
+			load_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
 			break;
 	}
 
@@ -1309,17 +1296,39 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	return ret;
 }
 
+/* trigger a notebook page switch after unsetting main_status.opening_session_files
+ * for callbacks to run (and update window title, encoding settings, and so on)
+ */
+static gboolean switch_to_session_page(gpointer data)
+{
+	gint n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+	gint target_page = session_notebook_page >= 0 ? session_notebook_page : cur_page;
+
+	if (n_pages > 0)
+	{
+		if (target_page != cur_page)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), target_page);
+		else
+			g_signal_emit_by_name(GTK_NOTEBOOK(main_widgets.notebook), "switch-page",
+			                      gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), target_page),
+			                      target_page);
+	}
+	session_notebook_page = -1;
+
+	return G_SOURCE_REMOVE;
+}
 
 /* Open session files
  * Note: notebook page switch handler and adding to recent files list is always disabled
  * for all files opened within this function */
-void configuration_open_files(void)
+void configuration_open_files(GPtrArray *session_files)
 {
 	gint i;
 	gboolean failure = FALSE;
 
 	/* necessary to set it to TRUE for project session support */
-	main_status.opening_session_files = TRUE;
+	main_status.opening_session_files++;
 
 	i = file_prefs.tab_order_ltr ? 0 : (session_files->len - 1);
 	while (TRUE)
@@ -1349,26 +1358,25 @@ void configuration_open_files(void)
 	}
 
 	g_ptr_array_free(session_files, TRUE);
-	session_files = NULL;
 
 	if (failure)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
 	else
-	{
-		/* explicitly trigger a notebook page switch after unsetting main_status.opening_session_files
-		 * for callbacks to run (and update window title, encoding settings, and so on) */
-		gint n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-		gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-		gint target_page = session_notebook_page >= 0 ? session_notebook_page : cur_page;
+		g_idle_add(switch_to_session_page, NULL);
 
-		/* if target page is current page, switch to another page first to really trigger an event */
-		if (target_page == cur_page && n_pages > 0)
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), (cur_page + 1) % n_pages);
+	main_status.opening_session_files--;
+}
 
-		main_status.opening_session_files = FALSE;
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), target_page);
-	}
-	main_status.opening_session_files = FALSE;
+
+/* Open session files
+ * Note: notebook page switch handler and adding to recent files list is always disabled
+ * for all files opened within this function */
+void configuration_open_default_session(void)
+{
+	g_return_if_fail(default_session_files != NULL);
+
+	configuration_open_files(default_session_files);
+	default_session_files = NULL;
 }
 
 
@@ -1410,12 +1418,10 @@ void configuration_apply_settings(void)
 
 static gboolean save_configuration_cb(gpointer data)
 {
-	configuration_save();
 	if (app->project != NULL)
-	{
 		project_write_config();
-	}
-	document_list_update_idle_func_id = 0;
+	else
+		configuration_save_default_session();
 	return G_SOURCE_REMOVE;
 }
 
@@ -1431,10 +1437,8 @@ static void document_list_changed_cb(GObject *obj, GeanyDocument *doc, gpointer 
 		!main_status.opening_session_files &&
 		!main_status.quitting)
 	{
-		if (document_list_update_idle_func_id == 0)
-		{
-			document_list_update_idle_func_id = g_idle_add(save_configuration_cb, NULL);
-		}
+		g_idle_remove_by_data(save_configuration_cb);
+		g_idle_add(save_configuration_cb, save_configuration_cb);
 	}
 }
 

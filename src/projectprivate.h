@@ -45,6 +45,7 @@ typedef struct GeanyProjectPrivate
 	gint		long_line_column; /* Long line marker position. */
 
 	GPtrArray *build_filetypes_list; /* Project has custom filetype builds for these. */
+	GPtrArray *session_files;
 }
 GeanyProjectPrivate;
 

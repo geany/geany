@@ -55,7 +55,6 @@ void project_write_config(void);
 typedef struct ProjectPrefs
 {
 	gchar *session_file;
-	gboolean project_session;
 	gboolean project_file_in_basedir;
 } ProjectPrefs;
 
