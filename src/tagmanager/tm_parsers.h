@@ -46,7 +46,7 @@
 	RstParser, \
 	HtmlParser, \
 	F77Parser, \
-	GLSLParser, \
+	CUDAParser, \
 	MatLabParser, \
 	ValaParser, \
 	FlexParser, \

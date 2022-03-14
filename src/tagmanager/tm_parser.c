@@ -409,7 +409,7 @@ static TMParserMapEntry map_MATLAB[] = {
 	{'s', tm_tag_struct_t},
 };
 
-#define map_GLSL map_C_old_parser
+#define map_CUDA map_C
 
 /* not in universal-ctags */
 static TMParserMapEntry map_VALA[] = {
@@ -651,7 +651,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(REST),
 	MAP_ENTRY(HTML),
 	MAP_ENTRY(F77),
-	MAP_ENTRY(GLSL),
+	MAP_ENTRY(CUDA),
 	MAP_ENTRY(MATLAB),
 	MAP_ENTRY(VALA),
 	MAP_ENTRY(ACTIONSCRIPT),
@@ -1042,7 +1042,7 @@ const gchar *tm_parser_scope_separator(TMParserType lang)
 	{
 		case TM_PARSER_C:	/* for C++ .h headers or C structs */
 		case TM_PARSER_CPP:
-		case TM_PARSER_GLSL:	/* for structs */
+		case TM_PARSER_CUDA:
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_RUST:
@@ -1089,11 +1089,11 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_ACTIONSCRIPT:
 		case TM_PARSER_C:
 		case TM_PARSER_CPP:
+		case TM_PARSER_CUDA:
 		case TM_PARSER_CSHARP:
 		case TM_PARSER_COBOL:
 		case TM_PARSER_D:
 		case TM_PARSER_GDSCRIPT:
-		case TM_PARSER_GLSL:
 		case TM_PARSER_GO:
 		case TM_PARSER_JAVA:
 		case TM_PARSER_JAVASCRIPT:
