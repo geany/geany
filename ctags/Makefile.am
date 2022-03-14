@@ -82,16 +82,17 @@ parsers = \
 	parsers/php.c \
 	parsers/powershell.c \
 	parsers/geany_python.c \
-	parsers/geany_r.c \
+	parsers/r.c \
+	parsers/r.h \
 	parsers/rst.c \
 	parsers/ruby.c \
 	parsers/rust.c \
-	parsers/geany_sh.c \
+	parsers/sh.c \
 	parsers/sql.c \
 	parsers/geany_tcl.c \
 	parsers/geany_tex.c \
 	parsers/txt2tags.c \
-	parsers/geany_verilog.c \
+	parsers/verilog.c \
 	parsers/geany_vhdl.c
 
 # skip cmd.c and mini-geany.c which define main()

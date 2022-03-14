@@ -253,7 +253,10 @@ static TMParserMapEntry map_TCL[] = {
 };
 
 static TMParserMapEntry map_SH[] = {
+	{'a', tm_tag_undef_t},
 	{'f', tm_tag_function_t},
+	{'s', tm_tag_undef_t},
+	{'h', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_D[] = {
@@ -476,12 +479,21 @@ static TMParserMapEntry map_VERILOG[] = {
 	{'p', tm_tag_variable_t},
 	{'r', tm_tag_variable_t},
 	{'t', tm_tag_function_t},
+	{'b', tm_tag_undef_t},
+	{'i', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_R[] = {
 	{'f', tm_tag_function_t},
 	{'l', tm_tag_other_t},
 	{'s', tm_tag_other_t},
+	{'g', tm_tag_undef_t},
+	{'v', tm_tag_undef_t},
+	{'z', tm_tag_undef_t},
+	{'c', tm_tag_undef_t},
+	{'L', tm_tag_undef_t},
+	{'d', tm_tag_undef_t},
+	{'n', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_COBOL[] = {
@@ -1102,11 +1114,13 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_PYTHON:
+		case TM_PARSER_R:
 		case TM_PARSER_RUBY:
 		case TM_PARSER_RUST:
 		case TM_PARSER_SQL:
 		case TM_PARSER_TXT2TAGS:
 		case TM_PARSER_VALA:
+		case TM_PARSER_VERILOG:
 		case TM_PARSER_ZEPHIR:
 			return TRUE;
 
