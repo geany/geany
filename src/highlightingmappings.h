@@ -639,18 +639,6 @@ static const HLKeyword highlighting_keywords_F77[] =
 #define highlighting_properties_F77		EMPTY_PROPERTIES
 
 
-/* Ferite */
-#define highlighting_lexer_FERITE		SCLEX_CPP
-#define highlighting_styles_FERITE		highlighting_styles_C
-static const HLKeyword highlighting_keywords_FERITE[] =
-{
-	{ 0, "primary",		FALSE },
-	{ 1, "types",		FALSE },
-	{ 2, "docComment",	FALSE }
-};
-#define highlighting_properties_FERITE	highlighting_properties_C
-
-
 /* Forth */
 #define highlighting_lexer_FORTH		SCLEX_FORTH
 static const HLStyle highlighting_styles_FORTH[] =

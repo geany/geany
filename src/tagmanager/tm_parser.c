@@ -403,8 +403,6 @@ static TMParserMapEntry map_F77[] = {
 
 #define map_FORTRAN map_F77
 
-#define map_FERITE map_C_old_parser
-
 /* different parser than in universal-ctags */
 static TMParserMapEntry map_MATLAB[] = {
 	{'f', tm_tag_function_t},
@@ -641,7 +639,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(SH),
 	MAP_ENTRY(D),
 	MAP_ENTRY(FORTRAN),
-	MAP_ENTRY(FERITE),
+	MAP_ENTRY(GDSCRIPT),
 	MAP_ENTRY(DIFF),
 	MAP_ENTRY(VHDL),
 	MAP_ENTRY(LUA),
@@ -674,7 +672,6 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(POWERSHELL),
 	MAP_ENTRY(JULIA),
 	MAP_ENTRY(CPREPROCESSOR),
-	MAP_ENTRY(GDSCRIPT),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -1095,7 +1092,6 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_CSHARP:
 		case TM_PARSER_COBOL:
 		case TM_PARSER_D:
-		case TM_PARSER_FERITE:
 		case TM_PARSER_GDSCRIPT:
 		case TM_PARSER_GLSL:
 		case TM_PARSER_GO:
