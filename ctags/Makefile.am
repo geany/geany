@@ -46,7 +46,7 @@ parsers = \
 	parsers/abaqus.c \
 	parsers/abc.c \
 	parsers/asciidoc.c \
-	parsers/geany_asm.c \
+	parsers/asm.c \
 	parsers/basic.c \
 	parsers/bibtex.c \
 	parsers/geany_c.c \

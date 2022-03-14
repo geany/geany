@@ -174,6 +174,7 @@ static TMParserMapEntry map_ASM[] = {
 	{'l', tm_tag_namespace_t},
 	{'m', tm_tag_function_t},
 	{'t', tm_tag_struct_t},
+	{'s', tm_tag_undef_t},
 };
 
 /* not in universal-ctags */
