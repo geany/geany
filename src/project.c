@@ -157,7 +157,19 @@ void project_new(gboolean from_folder)
 
 	if (from_folder)
 	{
-		base_path = ui_get_project_directory(local_prefs.project_file_path);
+		GeanyDocument *doc = document_get_current();
+		gchar *start_path;
+
+		if (doc && doc->file_name)
+			start_path = g_path_get_dirname(doc->file_name);
+		else if (!EMPTY(local_prefs.project_file_path))
+			start_path = g_strdup(local_prefs.project_file_path);
+		else
+			start_path = utils_get_utf8_from_locale(g_get_home_dir());
+
+		base_path = ui_get_project_directory(start_path);
+		g_free(start_path);
+
 		if (!base_path)
 			return;
 	}
@@ -973,11 +985,22 @@ static void update_new_project_dlg(GtkEditable *editable, PropertyDialogElements
 {
 	gchar *base_path;
 	gchar *file_name;
-	gchar *name;
-	const gchar *project_dir = local_prefs.project_file_path;
+	gchar *project_dir = NULL;
 
 	if (e->entries_modified)
 		return;
+
+	if (!EMPTY(local_prefs.project_file_path))
+		project_dir = g_strdup(local_prefs.project_file_path);
+	else
+	{
+		GeanyDocument *doc = document_get_current();
+
+		if (doc && doc->file_name)
+			project_dir = g_path_get_dirname(doc->file_name);
+		else
+			project_dir = utils_get_utf8_from_locale(g_get_home_dir());
+	}
 
 	if (!EMPTY(base_p))
 	{
@@ -1022,6 +1045,7 @@ static void update_new_project_dlg(GtkEditable *editable, PropertyDialogElements
 
 	g_free(base_path);
 	g_free(file_name);
+	g_free(project_dir);
 }
 
 
