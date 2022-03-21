@@ -23,7 +23,11 @@
 
 #include <string.h>
 
+#include "config.h"
 
+
+/* Only for the command-line xgettext tool to find translatable strings.
+ * The gettext() function is invoked manually using glib g_dgettext() */
 #define _(String) (String)
 
 typedef struct
@@ -1073,7 +1077,11 @@ const gchar *tm_parser_get_sidebar_info(TMParserType lang, gint group, guint *ic
 
 	grp = &map->groups[group];
 	*icon = grp->icon;
+#ifdef GETTEXT_PACKAGE
+	return g_dgettext(GETTEXT_PACKAGE, grp->name);
+#else
 	return grp->name;
+#endif
 }
 
 
