@@ -1458,9 +1458,6 @@ void configuration_init(void)
 
 void configuration_finalize(void)
 {
-	guint i;
-	StashGroup *group;
-
 	g_signal_handlers_disconnect_by_func(geany_object, G_CALLBACK(document_list_changed_cb), NULL);
 
 	g_ptr_array_free(pref_groups, TRUE);

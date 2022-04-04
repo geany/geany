@@ -307,7 +307,7 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
-	guint i, j;
+	guint i;
 	gchar **tf_strv;
 
 	g_return_val_if_fail(doc, NULL);
