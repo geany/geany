@@ -806,6 +806,8 @@ static GtkWidget *vte_create_popup_menu(void)
  * on the prompt). */
 gboolean vte_send_cmd(const gchar *cmd)
 {
+	g_return_val_if_fail(cmd != NULL, FALSE);
+
 	if (clean)
 	{
 		vf->vte_terminal_feed_child(VTE_TERMINAL(vte_config.vte), cmd, strlen(cmd));
@@ -879,7 +881,8 @@ void vte_cwd(const gchar *filename, gboolean force)
 		{
 			/* use g_shell_quote to avoid problems with spaces, '!' or something else in path */
 			gchar *quoted_path = g_shell_quote(path);
-			gchar *cmd = g_strconcat(vte_config.send_cmd_prefix, "cd ", quoted_path, "\n", NULL);
+			const gchar *cmd_prefix = vte_config.send_cmd_prefix ? vte_config.send_cmd_prefix : "";
+			gchar *cmd = g_strconcat(cmd_prefix, "cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
 			{
 				const gchar *msg = _("Directory not changed because the terminal may contain some input (press Ctrl+C or Enter to clear it).");
