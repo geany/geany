@@ -15,6 +15,7 @@ WIN32_BUILD_FILES = \
 EXTRA_DIST = \
 	autogen.sh \
 	scripts/gen-api-gtkdoc.py \
+	scripts/gen-signallist.sh \
 	geany.desktop.in \
 	geany.pc.in \
 	ChangeLog.pre-1-22 \

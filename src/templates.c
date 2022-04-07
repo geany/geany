@@ -533,7 +533,7 @@ static void replace_static_values(GString *text)
 	utils_string_replace_all(text, "{mail}", template_prefs.mail);
 	utils_string_replace_all(text, "{company}", template_prefs.company);
 	utils_string_replace_all(text, "{untitled}", GEANY_STRING_UNTITLED);
-	utils_string_replace_all(text, "{geanyversion}", "Geany " VERSION);
+	utils_string_replace_all(text, "{geanyversion}", PACKAGE_STRING);
 }
 
 
