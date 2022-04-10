@@ -1281,7 +1281,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 		case MSG_STATUS: widget = msgwindow.tree_status; break;
 		case MSG_MESSAGE: widget = msgwindow.tree_msg; break;
 #ifdef HAVE_VTE
-		case MSG_VTE: widget = (vte_info.have_vte) ? vc->vte : NULL; break;
+		case MSG_VTE: widget = (vte_info.have_vte) ? vte_config.vte : NULL; break;
 #endif
 		default: break;
 	}

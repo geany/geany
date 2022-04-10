@@ -1204,7 +1204,7 @@ static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, gu
 		 || focusw == msgwindow.tree_msg
 		 || focusw == msgwindow.scribble
 #ifdef HAVE_VTE
-		 || (vte_info.have_vte && focusw == vc->vte)
+		 || (vte_info.have_vte && focusw == vte_config.vte)
 #endif
 		)
 		{
@@ -1231,12 +1231,12 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	GeanyKeyGroup *group;
 	GtkWidget *widget;
 
-	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != vc->vte)
+	if (gtk_window_get_focus(GTK_WINDOW(main_widgets.window)) != vte_config.vte)
 		return FALSE;
 	/* let VTE copy/paste override any user keybinding */
 	if (state == (GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK) && (keyval == GDK_KEY_c || keyval == GDK_KEY_v))
 		return TRUE;
-	if (! vc->enable_bash_keys)
+	if (! vte_config.enable_bash_keys)
 		return FALSE;
 	/* prevent menubar flickering: */
 	if (state == GDK_SHIFT_MASK && (keyval >= GDK_KEY_a && keyval <= GDK_KEY_z))

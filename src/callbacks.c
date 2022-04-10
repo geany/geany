@@ -1259,7 +1259,7 @@ void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	}
 	/* special case for Select All in the VTE widget */
 #ifdef HAVE_VTE
-	else if (vte_info.have_vte && focusw == vc->vte)
+	else if (vte_info.have_vte && focusw == vte_config.vte)
 	{
 		vte_select_all();
 	}

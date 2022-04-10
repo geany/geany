@@ -563,6 +563,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, "VTE", "load_vte", vte_info.load_vte);
 	if (vte_info.have_vte)
 	{
+		VteConfig *vc = &vte_config;
 		gchar *tmp_string;
 
 		g_key_file_set_string(config, "VTE", "font", vc->font);
@@ -909,6 +910,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	vte_info.load_vte = utils_get_setting_boolean(config, "VTE", "load_vte", TRUE);
 	if (vte_info.load_vte && vte_info.load_vte_cmdline /* not disabled on the cmdline */)
 	{
+		VteConfig *vc = &vte_config;
 		StashGroup *group;
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
@@ -920,7 +922,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			shell = "/bin/bash -l";
 #endif
 
-		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
 			/* last dir is not set, fallback to user's home directory */
