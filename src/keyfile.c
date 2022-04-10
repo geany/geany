@@ -299,6 +299,17 @@ static void init_pref_groups(void)
 		"socket_remote_cmd_port", SOCKET_WINDOWS_REMOTE_CMD_PORT);
 #endif
 
+#ifdef HAVE_VTE
+	/* various VTE prefs. */
+	group = stash_group_new("VTE");
+	configuration_add_various_pref_group(group, "terminal");
+
+	stash_group_add_string(group, &vte_config.send_cmd_prefix,
+		"send_cmd_prefix", "");
+	stash_group_add_boolean(group, &vte_config.send_selection_unsafe,
+		"send_selection_unsafe", FALSE);
+#endif
+
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
 	/* various build-menu prefs */
@@ -911,7 +922,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	if (vte_info.load_vte && vte_info.load_vte_cmdline /* not disabled on the cmdline */)
 	{
 		VteConfig *vc = &vte_config;
-		StashGroup *group;
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
@@ -943,15 +953,6 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		get_setting_color(config, "VTE", "colour_fore", &vc->colour_fore, "#ffffff");
 		get_setting_color(config, "VTE", "colour_back", &vc->colour_back, "#000000");
-
-		/* various VTE prefs.
-		 * this can't be done in init_pref_groups() because we need to know the value of
-		 * vte_info.load_vte, and `vc` to be initialized */
-		group = stash_group_new("VTE");
-		configuration_add_various_pref_group(group, "terminal");
-
-		stash_group_add_string(group, &vc->send_cmd_prefix, "send_cmd_prefix", "");
-		stash_group_add_boolean(group, &vc->send_selection_unsafe, "send_selection_unsafe", FALSE);
 	}
 #endif
 	/* templates */
