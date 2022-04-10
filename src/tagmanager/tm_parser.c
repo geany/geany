@@ -694,10 +694,21 @@ static TMParserMapGroup group_NSIS[] = {
 };
 
 static TMParserMapEntry map_MARKDOWN[] = {
-	{'v', tm_tag_variable_t},
+	{'c', tm_tag_namespace_t},  //chapter
+	{'s', tm_tag_member_t},     //section
+	{'S', tm_tag_macro_t},      //subsection
+	{'t', tm_tag_variable_t},   //subsubsection
+	{'T', tm_tag_struct_t},     //l4subsection
+	{'u', tm_tag_union_t},      //l5subsection
+	{'n', tm_tag_undef_t},      //footnote
 };
 static TMParserMapGroup group_MARKDOWN[] = {
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{_("Chapters"), TM_ICON_NONE, tm_tag_namespace_t},
+	{_("Sections"), TM_ICON_NONE, tm_tag_member_t},
+	{_("Subsections"), TM_ICON_NONE, tm_tag_macro_t},
+	{_("Subsubsections"), TM_ICON_NONE, tm_tag_variable_t},
+	{_("Level 4 sections"), TM_ICON_NONE, tm_tag_struct_t},
+	{_("Level 5 sections"), TM_ICON_NONE, tm_tag_union_t},
 };
 
 static TMParserMapEntry map_TXT2TAGS[] = {
@@ -1435,6 +1446,7 @@ const gchar *tm_parser_scope_separator(TMParserType lang)
 		case TM_PARSER_ZEPHIR:
 			return "::";
 
+		case TM_PARSER_MARKDOWN:
 		case TM_PARSER_TXT2TAGS:
 			return "\"\"";
 
@@ -1455,10 +1467,11 @@ const gchar *tm_parser_scope_separator_printable(TMParserType lang)
 {
 	switch (lang)
 	{
-		case TM_PARSER_TXT2TAGS:
 		case TM_PARSER_ASCIIDOC:
 		case TM_PARSER_CONF:
+		case TM_PARSER_MARKDOWN:
 		case TM_PARSER_REST:
+		case TM_PARSER_TXT2TAGS:
 			return " > ";
 
 		default:
@@ -1485,6 +1498,7 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_JAVASCRIPT:
 		case TM_PARSER_JSON:
 		case TM_PARSER_LUA:
+		case TM_PARSER_MARKDOWN:
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_PYTHON:
