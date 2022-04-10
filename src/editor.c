@@ -708,7 +708,6 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	gboolean scope_sep_typed = FALSE;
 	gboolean ret = FALSE;
 	const gchar *current_scope;
-	const gchar *context_sep = tm_parser_scope_separator(ft->lang);
 	gint autocomplete_suffix_len;
 
 	if (autocomplete_scope_shown)

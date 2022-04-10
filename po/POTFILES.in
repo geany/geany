@@ -40,6 +40,7 @@ src/ui_utils.c
 src/utils.c
 src/vte.c
 src/win32.c
+src/tagmanager/tm_parser.c
 plugins/classbuilder.c
 plugins/htmlchars.c
 plugins/export.c

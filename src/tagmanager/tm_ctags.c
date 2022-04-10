@@ -69,7 +69,7 @@ static void enable_kinds_and_roles()
 {
 	TMParserType lang;
 
-	for (lang = 0; lang < countParsers(); lang++)
+	for (lang = 0; lang < (gint)countParsers(); lang++)
 	{
 		guint kind_num = countLanguageKinds(lang);
 		guint kind;
