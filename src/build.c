@@ -861,9 +861,9 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	cmd_string = utils_get_locale_from_utf8(cmd_string_utf8);
 
 #ifdef HAVE_VTE
-	if (vte_info.have_vte && vc->run_in_vte)
+	if (vte_info.have_vte && vte_config.run_in_vte)
 	{
-		if (vc->skip_run_script)
+		if (vte_config.skip_run_script)
 		{
 			utils_free_pointers(2, cmd_string_utf8, working_dir_utf8, NULL);
 			return cmd_string;
@@ -914,7 +914,7 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 	run_info[cmdindex].file_type_id = doc->file_type->id;
 
 #ifdef HAVE_VTE
-	if (vte_info.have_vte && vc->run_in_vte)
+	if (vte_info.have_vte && vte_config.run_in_vte)
 	{
 		gchar *vte_cmd;
 
@@ -922,7 +922,7 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		SETPTR(run_cmd, utils_get_utf8_from_locale(run_cmd));
 		SETPTR(working_dir, utils_get_utf8_from_locale(working_dir));
 
-		if (vc->skip_run_script)
+		if (vte_config.skip_run_script)
 			vte_cmd = g_strconcat(run_cmd, "\n", NULL);
 		else
 			vte_cmd = g_strconcat("\n/bin/sh ", run_cmd, "\n", NULL);
@@ -933,13 +933,13 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 			const gchar *msg = _("File not executed because the terminal may contain some input (press Ctrl+C or Enter to clear it).");
 			ui_set_statusbar(FALSE, "%s", msg);
 			geany_debug("%s", msg);
-			if (!vc->skip_run_script)
+			if (!vte_config.skip_run_script)
 				g_unlink(run_cmd);
 		}
 
 		/* show the VTE */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
-		gtk_widget_grab_focus(vc->vte);
+		gtk_widget_grab_focus(vte_config.vte);
 		msgwin_show_hide(TRUE);
 
 		run_info[cmdindex].pid = 1;
@@ -2823,4 +2823,3 @@ gboolean build_keybinding(guint key_id)
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 	return TRUE;
 }
-

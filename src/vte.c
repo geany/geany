@@ -55,7 +55,7 @@
 
 
 VteInfo vte_info = { FALSE, FALSE, FALSE, NULL, NULL };
-VteConfig *vc;
+VteConfig vte_config;
 
 static GPid pid = 0;
 static gboolean clean = TRUE;
@@ -227,7 +227,7 @@ static void override_menu_key(void)
 		g_object_get(G_OBJECT(gtk_settings_get_default()),
 			"gtk-menu-bar-accel", &gtk_menu_key_accel, NULL);
 
-	if (vc->ignore_menu_bar_accel)
+	if (vte_config.ignore_menu_bar_accel)
 		gtk_settings_set_string_property(gtk_settings_get_default(),
 			"gtk-menu-bar-accel", "<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
 	else
@@ -242,7 +242,7 @@ static void on_startup_complete(G_GNUC_UNUSED GObject *dummy)
 
 	/* ensure the widget is mapped and fully initialized, so actions like pasting text work
 	 * (see https://github.com/geany/geany/issues/2813 for details) */
-	gtk_widget_realize(vc->vte);
+	gtk_widget_realize(vte_config.vte);
 
 	if (doc)
 		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
@@ -324,14 +324,14 @@ static void on_vte_realize(void)
 	/* the vte widget has to be realised before color changes take effect */
 	vte_apply_user_settings();
 
-	if (vf->vte_terminal_im_append_menuitems && vc->im_submenu)
-		vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vc->vte), GTK_MENU_SHELL(vc->im_submenu));
+	if (vf->vte_terminal_im_append_menuitems && vte_config.im_submenu)
+		vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vte_config.vte), GTK_MENU_SHELL(vte_config.im_submenu));
 }
 
 
 static gboolean vte_start_idle(G_GNUC_UNUSED gpointer user_data)
 {
-	vte_start(vc->vte);
+	vte_start(vte_config.vte);
 	return FALSE;
 }
 
@@ -340,13 +340,13 @@ static void create_vte(void)
 {
 	GtkWidget *vte, *scrollbar, *hbox;
 
-	vc->vte = vte = vf->vte_terminal_new();
+	vte_config.vte = vte = vf->vte_terminal_new();
 	scrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, vf->vte_terminal_get_adjustment(VTE_TERMINAL(vte)));
 	gtk_widget_set_can_focus(scrollbar, FALSE);
 
 	/* create menu now so copy/paste shortcuts work */
-	vc->menu = vte_create_popup_menu();
-	g_object_ref_sink(vc->menu);
+	vte_config.menu = vte_create_popup_menu();
+	g_object_ref_sink(vte_config.menu);
 
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), vte, TRUE, TRUE, 0);
@@ -389,14 +389,13 @@ void vte_close(void)
 {
 	/* free the vte widget before unloading vte module
 	 * this prevents a segfault on X close window if the message window is hidden */
-	g_signal_handlers_disconnect_by_func(vc->vte, G_CALLBACK(vte_start), NULL);
-	gtk_widget_destroy(vc->vte);
-	gtk_widget_destroy(vc->menu);
-	g_object_unref(vc->menu);
-	g_free(vc->shell);
-	g_free(vc->font);
-	g_free(vc->send_cmd_prefix);
-	g_free(vc);
+	g_signal_handlers_disconnect_by_func(vte_config.vte, G_CALLBACK(vte_start), NULL);
+	gtk_widget_destroy(vte_config.vte);
+	gtk_widget_destroy(vte_config.menu);
+	g_object_unref(vte_config.menu);
+	g_free(vte_config.shell);
+	g_free(vte_config.font);
+	g_free(vte_config.send_cmd_prefix);
 	g_free(vf);
 	g_free(gtk_menu_key_accel);
 	/* Don't unload the module explicitly because it causes a segfault on FreeBSD. The segfault
@@ -449,7 +448,7 @@ static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointe
 
 static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-	if (vc->enable_bash_keys)
+	if (vte_config.enable_bash_keys)
 		return FALSE;	/* Ctrl-[CD] will be handled by the VTE itself */
 
 	if (event->type != GDK_KEY_RELEASE)
@@ -478,7 +477,7 @@ static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer us
 static void vte_start(GtkWidget *widget)
 {
 	/* split the shell command line, so arguments will work too */
-	gchar **argv = g_strsplit(vc->shell, " ", -1);
+	gchar **argv = g_strsplit(vte_config.shell, " ", -1);
 
 	if (argv != NULL)
 	{
@@ -526,8 +525,8 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 {
 	if (event->button == 3)
 	{
-		gtk_widget_grab_focus(vc->vte);
-		gtk_menu_popup(GTK_MENU(vc->menu), NULL, NULL, NULL, NULL, event->button, event->time);
+		gtk_widget_grab_focus(vte_config.vte);
+		gtk_menu_popup(GTK_MENU(vte_config.menu), NULL, NULL, NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 	else if (event->button == 2)
@@ -542,11 +541,11 @@ static void vte_set_cursor_blink_mode(void)
 {
 	if (vf->vte_terminal_set_cursor_blink_mode != NULL)
 		/* vte >= 0.17.1 */
-		vf->vte_terminal_set_cursor_blink_mode(VTE_TERMINAL(vc->vte),
-			(vc->cursor_blinks) ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
+		vf->vte_terminal_set_cursor_blink_mode(VTE_TERMINAL(vte_config.vte),
+			(vte_config.cursor_blinks) ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
 	else
 		/* vte < 0.17.1 */
-		vf->vte_terminal_set_cursor_blinks(VTE_TERMINAL(vc->vte), vc->cursor_blinks);
+		vf->vte_terminal_set_cursor_blinks(VTE_TERMINAL(vte_config.vte), vte_config.cursor_blinks);
 }
 
 
@@ -643,6 +642,7 @@ static gboolean vte_register_symbols(GModule *mod)
 
 void vte_apply_user_settings(void)
 {
+	VteConfig *vc = &vte_config;
 	PangoFontDescription *font_desc;
 
 	if (! ui_prefs.msgwindow_visible)
@@ -670,13 +670,13 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 	{
 		case POPUP_COPY:
 		{
-			if (vf->vte_terminal_get_has_selection(VTE_TERMINAL(vc->vte)))
-				vf->vte_terminal_copy_clipboard(VTE_TERMINAL(vc->vte));
+			if (vf->vte_terminal_get_has_selection(VTE_TERMINAL(vte_config.vte)))
+				vf->vte_terminal_copy_clipboard(VTE_TERMINAL(vte_config.vte));
 			break;
 		}
 		case POPUP_PASTE:
 		{
-			vf->vte_terminal_paste_clipboard(VTE_TERMINAL(vc->vte));
+			vf->vte_terminal_paste_clipboard(VTE_TERMINAL(vte_config.vte));
 			break;
 		}
 		case POPUP_SELECTALL:
@@ -693,7 +693,7 @@ static void vte_popup_menu_clicked(GtkMenuItem *menuitem, gpointer user_data)
 		}
 		case POPUP_RESTARTTERMINAL:
 		{
-			vte_restart(vc->vte);
+			vte_restart(vte_config.vte);
 			break;
 		}
 		case POPUP_PREFERENCES:
@@ -780,7 +780,7 @@ static GtkWidget *vte_create_popup_menu(void)
 		g_object_get(gtk_settings_get_default(), "gtk-show-input-method-menu", &show_im_menu, NULL);
 
 	if (! show_im_menu)
-		vc->im_submenu = NULL;
+		vte_config.im_submenu = NULL;
 	else
 	{
 		item = gtk_separator_menu_item_new();
@@ -788,13 +788,13 @@ static GtkWidget *vte_create_popup_menu(void)
 		gtk_container_add(GTK_CONTAINER(menu), item);
 
 		/* the IM submenu should always be the last item to be consistent with other GTK popup menus */
-		vc->im_submenu = gtk_menu_new();
+		vte_config.im_submenu = gtk_menu_new();
 
 		item = gtk_image_menu_item_new_with_mnemonic(_("_Input Methods"));
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
 
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vc->im_submenu);
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vte_config.im_submenu);
 		/* submenu populated after vte realized */
 	}
 
@@ -808,7 +808,7 @@ gboolean vte_send_cmd(const gchar *cmd)
 {
 	if (clean)
 	{
-		vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), cmd, strlen(cmd));
+		vf->vte_terminal_feed_child(VTE_TERMINAL(vte_config.vte), cmd, strlen(cmd));
 		set_clean(TRUE); /* vte_terminal_feed_child() also marks the vte as not clean */
 		return TRUE;
 	}
@@ -864,7 +864,7 @@ const gchar *vte_get_working_directory(void)
  */
 void vte_cwd(const gchar *filename, gboolean force)
 {
-	if (vte_info.have_vte && (vc->follow_path || force) &&
+	if (vte_info.have_vte && (vte_config.follow_path || force) &&
 		filename != NULL && g_path_is_absolute(filename))
 	{
 		gchar *path;
@@ -879,7 +879,7 @@ void vte_cwd(const gchar *filename, gboolean force)
 		{
 			/* use g_shell_quote to avoid problems with spaces, '!' or something else in path */
 			gchar *quoted_path = g_shell_quote(path);
-			gchar *cmd = g_strconcat(vc->send_cmd_prefix, "cd ", quoted_path, "\n", NULL);
+			gchar *cmd = g_strconcat(vte_config.send_cmd_prefix, "cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
 			{
 				const gchar *msg = _("Directory not changed because the terminal may contain some input (press Ctrl+C or Enter to clear it).");
@@ -926,9 +926,9 @@ static void on_term_font_set(GtkFontButton *widget, gpointer user_data)
 {
 	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
 
-	if (! utils_str_equal(fontbtn, vc->font))
+	if (! utils_str_equal(fontbtn, vte_config.font))
 	{
-		SETPTR(vc->font, g_strdup(gtk_font_button_get_font_name(widget)));
+		SETPTR(vte_config.font, g_strdup(gtk_font_button_get_font_name(widget)));
 		vte_apply_user_settings();
 	}
 }
@@ -936,13 +936,13 @@ static void on_term_font_set(GtkFontButton *widget, gpointer user_data)
 
 static void on_term_fg_color_set(GtkColorButton *widget, gpointer user_data)
 {
-	gtk_color_button_get_color(widget, &vc->colour_fore);
+	gtk_color_button_get_color(widget, &vte_config.colour_fore);
 }
 
 
 static void on_term_bg_color_set(GtkColorButton *widget, gpointer user_data)
 {
-	gtk_color_button_get_color(widget, &vc->colour_back);
+	gtk_color_button_get_color(widget, &vte_config.colour_back);
 }
 
 
@@ -960,7 +960,7 @@ void vte_append_preferences_tab(void)
 			GTK_FILE_CHOOSER_ACTION_OPEN, GTK_ENTRY(entry_shell));
 
 		check_skip_script = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "check_skip_script"));
-		gtk_widget_set_sensitive(check_skip_script, vc->run_in_vte);
+		gtk_widget_set_sensitive(check_skip_script, vte_config.run_in_vte);
 
 		check_run_in_vte = GTK_WIDGET(ui_lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte"));
 		g_signal_connect(G_OBJECT(check_run_in_vte), "toggled",
@@ -984,7 +984,7 @@ void vte_append_preferences_tab(void)
 void vte_select_all(void)
 {
 	if (vf->vte_terminal_select_all != NULL)
-		vf->vte_terminal_select_all(VTE_TERMINAL(vc->vte));
+		vf->vte_terminal_select_all(VTE_TERMINAL(vte_config.vte));
 }
 
 
@@ -1009,7 +1009,7 @@ void vte_send_selection_to_vte(void)
 
 	len = strlen(text);
 
-	if (vc->send_selection_unsafe)
+	if (vte_config.send_selection_unsafe)
 	{	/* Explicitly append a trailing newline character to get the command executed,
 		   this is disabled by default as it could cause all sorts of damage. */
 		if (text[len-1] != '\n' && text[len-1] != '\r')
@@ -1027,11 +1027,11 @@ void vte_send_selection_to_vte(void)
 		}
 	}
 
-	vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), text, len);
+	vf->vte_terminal_feed_child(VTE_TERMINAL(vte_config.vte), text, len);
 
 	/* show the VTE */
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
-	gtk_widget_grab_focus(vc->vte);
+	gtk_widget_grab_focus(vte_config.vte);
 	msgwin_show_hide(TRUE);
 
 	g_free(text);

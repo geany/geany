@@ -759,6 +759,8 @@ static void prefs_init_dialog(void)
 	/* VTE settings */
 	if (vte_info.have_vte)
 	{
+		VteConfig *vc = &vte_config;
+
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "font_term");
 		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
 
@@ -1232,6 +1234,8 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		/* VTE settings */
 		if (vte_info.have_vte)
 		{
+			VteConfig *vc = &vte_config;
+
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 			gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));

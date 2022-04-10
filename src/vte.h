@@ -61,8 +61,8 @@ typedef struct
 	GdkColor colour_fore;
 	GdkColor colour_back;
 } VteConfig;
-extern VteConfig *vc;
 
+extern VteConfig vte_config;
 
 void vte_init(void);
 
