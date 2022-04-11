@@ -155,6 +155,10 @@ package body types_util is
     variable s : string(1 to slen);
     variable nz : boolean := false;
     variable index : integer := -1;
+    variable vector : bit_vector(0 TO 7);
+    alias reverse_vector : bit_vector
+       ( vector'length DOWNTO 1 )
+         IS vector ;
   begin
     vv(slen*4-vlen to slen*4-1) := v;
     for i in 0 to slen-1 loop

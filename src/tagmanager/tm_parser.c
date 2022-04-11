@@ -432,21 +432,24 @@ static TMParserMapGroup group_DIFF[] = {
 };
 
 static TMParserMapEntry map_VHDL[] = {
-	{'c', tm_tag_variable_t},
-	{'t', tm_tag_typedef_t},
-	{'v', tm_tag_variable_t},
-	{'a', tm_tag_undef_t},
-	{'s', tm_tag_variable_t},
-	{'f', tm_tag_function_t},
-	{'p', tm_tag_function_t},
-	{'k', tm_tag_member_t},
-	{'l', tm_tag_namespace_t},
-	{'m', tm_tag_member_t},
-	{'n', tm_tag_class_t},
-	{'o', tm_tag_struct_t},
-	{'u', tm_tag_undef_t},
-	{'b', tm_tag_member_t},
-	{'A', tm_tag_typedef_t},
+	{'c', tm_tag_variable_t},   // constant
+	{'t', tm_tag_typedef_t},    // type
+	{'T', tm_tag_typedef_t},    // subtype
+	{'r', tm_tag_undef_t},      // record
+	{'e', tm_tag_class_t},      // entity
+	{'C', tm_tag_member_t},     // component
+	{'d', tm_tag_undef_t},      // prototype
+	{'f', tm_tag_function_t},   // function
+	{'p', tm_tag_function_t},   // procedure
+	{'P', tm_tag_namespace_t},  // package
+	{'l', tm_tag_variable_t},   // local
+	{'a', tm_tag_struct_t},     // architecture
+	{'q', tm_tag_variable_t},   // port
+	{'g', tm_tag_undef_t},      // generic
+	{'s', tm_tag_variable_t},   // signal
+	{'Q', tm_tag_member_t},     // process
+	{'v', tm_tag_variable_t},   // variable
+	{'A', tm_tag_typedef_t},    // alias
 };
 static TMParserMapGroup group_VHDL[] = {
 	{_("Package"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
@@ -454,7 +457,7 @@ static TMParserMapGroup group_VHDL[] = {
 	{_("Architectures"), TM_ICON_STRUCT, tm_tag_struct_t},
 	{_("Types"), TM_ICON_OTHER, tm_tag_typedef_t},
 	{_("Functions / Procedures"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Variables / Signals"), TM_ICON_VAR, tm_tag_variable_t},
+	{_("Variables / Signals / Ports"), TM_ICON_VAR, tm_tag_variable_t},
 	{_("Processes / Blocks / Components"), TM_ICON_MEMBER, tm_tag_member_t},
 };
 
@@ -1494,6 +1497,7 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_SQL:
 		case TM_PARSER_TXT2TAGS:
 		case TM_PARSER_VALA:
+		case TM_PARSER_VHDL:
 		case TM_PARSER_VERILOG:
 		case TM_PARSER_ZEPHIR:
 			return TRUE;
