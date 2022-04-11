@@ -89,7 +89,9 @@ parsers = \
 	parsers/rust.c \
 	parsers/sh.c \
 	parsers/sql.c \
-	parsers/geany_tcl.c \
+	parsers/tcl.c \
+	parsers/tcl.h \
+	parsers/tcloo.c \
 	parsers/geany_tex.c \
 	parsers/txt2tags.c \
 	parsers/verilog.c \

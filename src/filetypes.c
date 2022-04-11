@@ -144,7 +144,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( JS,         JAVASCRIPT,   "Javascript",       NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( PYTHON,     PYTHON,       "Python",           NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( RUBY,       RUBY,         "Ruby",             NULL,                      SOURCE_FILE, SCRIPT   );
-	FT_INIT( TCL,        TCL,          "Tcl",              NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( TCL,        TCLOO,        "Tcl",              NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( LUA,        LUA,          "Lua",              NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( GDSCRIPT,   GDSCRIPT,     "GDScript",         NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( HASKELL,    HASKELL,      "Haskell",          NULL,                      SOURCE_FILE, COMPILED );

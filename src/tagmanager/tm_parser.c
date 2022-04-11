@@ -372,16 +372,28 @@ static TMParserMapGroup group_RUBY[] = {
 };
 
 static TMParserMapEntry map_TCL[] = {
-	{'c', tm_tag_class_t},      // class
-	{'m', tm_tag_member_t},     // method
 	{'p', tm_tag_function_t},   // procedure
-	{'n', tm_tag_namespace_t},  // module
+	{'n', tm_tag_namespace_t},  // namespace
+	{'z', tm_tag_undef_t},      // parameter
 };
 static TMParserMapGroup group_TCL[] = {
 	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
 	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{_("Methods"), TM_ICON_METHOD, tm_tag_member_t},
 	{_("Procedures"), TM_ICON_OTHER, tm_tag_function_t},
+};
+
+static TMParserMapEntry map_TCLOO[] = {
+	{'c', tm_tag_class_t},   // class
+	{'m', tm_tag_member_t},  // method
+};
+#define group_TCLOO group_TCL
+
+static TMSubparserMapEntry subparser_TCLOO_TCL_map[] = {
+	{tm_tag_namespace_t, tm_tag_namespace_t},
+	{tm_tag_class_t, tm_tag_class_t},
+	{tm_tag_member_t, tm_tag_member_t},
+	{tm_tag_function_t, tm_tag_function_t},
 };
 
 static TMParserMapEntry map_SH[] = {
@@ -1008,6 +1020,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(POWERSHELL),
 	MAP_ENTRY(JULIA),
 	MAP_ENTRY(CPREPROCESSOR),
+	MAP_ENTRY(TCLOO),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -1110,6 +1123,7 @@ static void add_subparser(TMParserType lang, TMParserType sublang, TMSubparserMa
 static void init_subparser_map(void)
 {
 	SUBPARSER_MAP_ENTRY(HTML, JAVASCRIPT, subparser_HTML_javascript_map);
+	SUBPARSER_MAP_ENTRY(TCLOO, TCL, subparser_TCLOO_TCL_map);
 }
 
 
@@ -1302,6 +1316,13 @@ gchar *tm_parser_update_scope(TMParserType lang, gchar *scope)
 			/* PHP parser uses two different scope separators but this would
 			 * complicate things in Geany so make sure there's just one type */
 			return replace_string_if_present(scope, "\\", "::");
+		case TM_PARSER_TCL:
+		case TM_PARSER_TCLOO:
+			/* The TCL(OO) parser returns scope prefixed with :: which we don't
+			 * want. */
+			if (g_str_has_prefix(scope, "::"))
+				return g_strdup(scope + 2);
+			break;
 	}
 	return scope;
 }
@@ -1432,6 +1453,8 @@ const gchar *tm_parser_scope_separator(TMParserType lang)
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_RUST:
+		case TM_PARSER_TCL:
+		case TM_PARSER_TCLOO:
 		case TM_PARSER_ZEPHIR:
 			return "::";
 
@@ -1492,6 +1515,8 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_RUBY:
 		case TM_PARSER_RUST:
 		case TM_PARSER_SQL:
+		case TM_PARSER_TCL:
+		case TM_PARSER_TCLOO:
 		case TM_PARSER_TXT2TAGS:
 		case TM_PARSER_VALA:
 		case TM_PARSER_VERILOG:

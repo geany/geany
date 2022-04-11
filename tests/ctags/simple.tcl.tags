@@ -1,7 +1,14 @@
 # format=tagmanager
-itcl_classÌ1Ö0
-method1Ì64Ö0
-method2Ì64Ö0
-method3Ì64Ö0
-simple1Ì16Ö0
-tcl_classÌ1Ö0
+AÌ256Ö0
+A::BÌ256Ö0
+CÌ256ÎAÖ0
+XÌ1Ö0
+addÌ64ÎXÖ0
+doSomethingÌ64ÎXÖ0
+pr1Ì16Í{s}ÎAÖ0
+pr2Ì16Í{s}ÎBÖ0
+pr3Ì16Í{s}ÎA::CÖ0
+pr4Ì16Í{s}Ö0
+pr5Ì16Í{s}Ö0
+pr6Ì16Í{s}Ö0
+simple1Ì16Í{}Ö0
