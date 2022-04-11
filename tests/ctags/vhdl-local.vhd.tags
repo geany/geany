@@ -1,0 +1,27 @@
+# format=tagmanager
+LÌ16384Ö0
+SignalFromStringÌ16Ö0
+StringToSVectorÌ16Ö0
+StringToUVectorÌ16Ö0
+SymbolToSVectorÌ16Ö0
+UnsignedToSignedÌ16Ö0
+bodyÌ256Ö0
+cÌ16384Ö0
+iÌ16384Ö0
+indexÌ16384Ö0
+nÌ16384Ö0
+nibbleÌ4096Ö0
+nzÌ16384Ö0
+printÌ16Ö0
+sÌ16384Ö0
+sjÌ16384Ö0
+slenÌ16384Ö0
+ssÌ16384Ö0
+strlenÌ16Ö0
+tempÌ16384Ö0
+todecÌ16Ö0
+tohexÌ16Ö0
+tostÌ16Ö0
+types_utilÌ256Ö0
+vlenÌ16384Ö0
+vvÌ16384Ö0

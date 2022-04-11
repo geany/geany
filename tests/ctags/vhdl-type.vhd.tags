@@ -1,0 +1,25 @@
+# format=tagmanager
+CFG_IRQ_ETHMACÌ16384Ö0
+CFG_IRQ_GNSSENGINEÌ16384Ö0
+CFG_IRQ_GPTIMERSÌ16384Ö0
+CFG_IRQ_TOTALÌ16384Ö0
+CFG_IRQ_UART1Ì16384Ö0
+CFG_IRQ_UNUSEDÌ16384Ö0
+axi4_flashspiÌ64Ö0
+axi4_gpioÌ64Ö0
+axi4_gptimersÌ64Ö0
+axi4_irqctrlÌ64Ö0
+axi4_otpÌ64Ö0
+axi4_pnpÌ64Ö0
+axi4_romÌ64Ö0
+axi4_sramÌ64Ö0
+axi4_uartÌ64Ö0
+reset_globalÌ64Ö0
+spi_in_typeÌ4096Ö0
+spi_out_noneÌ16384Ö0
+spi_out_typeÌ4096Ö0
+tap_jtagÌ64Ö0
+types_miscÌ256Ö0
+uart_in_typeÌ4096Ö0
+uart_out_typeÌ4096Ö0
+uart_tapÌ64Ö0

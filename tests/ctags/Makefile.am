@@ -327,7 +327,6 @@ test_sources = \
 	test.erl						\
 	test.go							\
 	test.py							\
-	test.vhd						\
 	test_input.rs					\
 	test_input2.rs					\
 	titles.t2t						\
@@ -337,6 +336,11 @@ test_sources = \
 	union.f							\
 	value.f							\
 	var-and-return-type.cpp			\
+	vhdl-component.vhd				\
+	vhdl-local.vhd					\
+	vhdl-port.vhd					\
+	vhdl-process.vhd				\
+	vhdl-type.vhd					\
 	whitespaces.php					\
 	$(NULL)
 test_results = $(test_sources:=.tags)
