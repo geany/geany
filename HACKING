@@ -504,7 +504,7 @@ We use an unmodified subset of universal-ctags sources
 (https://github.com/universal-ctags/ctags) to parse open documents. We
 also use the great majority of unmodified universal-ctags parsers except
 a few outliers that are maintained by us (those whose file names start
-with geany_). We normally update to the latest version of
+with `geany_`). We normally update to the latest version of
 universal-ctags shortly after making a Geany release and keep this
 version during the rest of the development cycle.
 
