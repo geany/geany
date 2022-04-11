@@ -500,6 +500,9 @@ static TMParserMapGroup group_HASKELL[] = {
 	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 };
 
+#define map_UNUSED1 map_HASKELL
+#define group_UNUSED1 group_HASKELL
+
 static TMParserMapEntry map_CSHARP[] = {
 	{'c', tm_tag_class_t},       // class
 	{'d', tm_tag_macro_t},       // macro
@@ -590,25 +593,28 @@ static TMSubparserMapEntry subparser_HTML_javascript_map[] = {
 	{tm_tag_function_t, tm_tag_function_t},
 };
 
-static TMParserMapEntry map_F77[] = {
+static TMParserMapEntry map_FORTRAN[] = {
 	{'b', tm_tag_undef_t},       // blockData
 	{'c', tm_tag_macro_t},       // common
 	{'e', tm_tag_undef_t},       // entry
+	{'E', tm_tag_enum_t},        // enum
 	{'f', tm_tag_function_t},    // function
 	{'i', tm_tag_interface_t},   // interface
 	{'k', tm_tag_member_t},      // component
 	{'l', tm_tag_undef_t},       // label
 	{'L', tm_tag_undef_t},       // local
 	{'m', tm_tag_namespace_t},   // module
+	{'M', tm_tag_member_t},      // method
 	{'n', tm_tag_undef_t},       // namelist
+	{'N', tm_tag_enumerator_t},  // enumerator
 	{'p', tm_tag_struct_t},      // program
+	{'P', tm_tag_undef_t},       // prototype
 	{'s', tm_tag_method_t},      // subroutine
 	{'t', tm_tag_class_t},       // type
 	{'v', tm_tag_variable_t},    // variable
-	{'E', tm_tag_enum_t},        // enum
-	{'N', tm_tag_enumerator_t},  // enumerator
+	{'S', tm_tag_undef_t},       // submodule
 };
-static TMParserMapGroup group_F77[] = {
+static TMParserMapGroup group_FORTRAN[] = {
 	{_("Module"), TM_ICON_CLASS, tm_tag_namespace_t},
 	{_("Programs"), TM_ICON_CLASS, tm_tag_struct_t},
 	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
@@ -619,9 +625,6 @@ static TMParserMapGroup group_F77[] = {
 	{_("Blocks"), TM_ICON_MEMBER, tm_tag_macro_t},
 	{_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
 };
-
-#define map_FORTRAN map_F77
-#define group_FORTRAN group_F77
 
 static TMParserMapEntry map_MATLAB[] = {
 	{'f', tm_tag_function_t},  // function
@@ -986,7 +989,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(HAXE),
 	MAP_ENTRY(REST),
 	MAP_ENTRY(HTML),
-	MAP_ENTRY(F77),
+	MAP_ENTRY(UNUSED1),
 	MAP_ENTRY(CUDA),
 	MAP_ENTRY(MATLAB),
 	MAP_ENTRY(VALA),
@@ -1269,7 +1272,7 @@ gboolean tm_parser_is_anon_name(TMParserType lang, gchar *name)
 		return TRUE;
 	else if (lang == TM_PARSER_C || lang == TM_PARSER_CPP)  /* legacy Geany tags files */
 		return sscanf(name, "anon_%*[a-z]_%u%c", &i, &dummy) == 1;
-	else if (lang == TM_PARSER_FORTRAN || lang == TM_PARSER_F77)  /* legacy Geany tags files */
+	else if (lang == TM_PARSER_FORTRAN)  /* legacy Geany tags files */
 	{
 		return sscanf(name, "Structure#%u%c", &i, &dummy) == 1 ||
 			sscanf(name, "Interface#%u%c", &i, &dummy) == 1 ||
@@ -1503,7 +1506,6 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_ASCIIDOC:
 		case TM_PARSER_CONF:
 		case TM_PARSER_ERLANG:
-		case TM_PARSER_F77:
 		case TM_PARSER_FORTRAN:
 		case TM_PARSER_OBJC:
 		case TM_PARSER_REST:

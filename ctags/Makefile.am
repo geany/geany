@@ -58,7 +58,7 @@ parsers = \
 	parsers/geany_docbook.c \
 	parsers/erlang.c \
 	parsers/flex.c \
-	parsers/geany_fortran.c \
+	parsers/fortran.c \
 	parsers/gdscript.c \
 	parsers/go.c \
 	parsers/haskell.c \

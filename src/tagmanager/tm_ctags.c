@@ -342,7 +342,7 @@ static void rename_anon_tags(TMSourceFile *source_file)
 				 * we need to skip past the tags on the same scope and only
 				 * afterwards we get the nested tags.
 				 * */
-				if ((source_file->lang == TM_PARSER_F77 || source_file->lang == TM_PARSER_FORTRAN) &&
+				if (source_file->lang == TM_PARSER_FORTRAN &&
 					!inside_nesting && nested_scope_len == scope_len)
 					continue;
 
