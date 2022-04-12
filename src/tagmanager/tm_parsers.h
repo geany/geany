@@ -45,7 +45,7 @@
 	HaxeParser,\
 	RstParser, \
 	HtmlParser, \
-	LiterateHaskellParser,  /* dummy entry, replace with some new parser */  \
+	AdaParser, \
 	CUDAParser, \
 	MatLabParser, \
 	ValaParser, \

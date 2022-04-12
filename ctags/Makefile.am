@@ -45,6 +45,7 @@ parsers = \
 	parsers/cpreprocessor.h \
 	parsers/abaqus.c \
 	parsers/abc.c \
+	parsers/ada.c \
 	parsers/asciidoc.c \
 	parsers/asm.c \
 	parsers/basic.c \

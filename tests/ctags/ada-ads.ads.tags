@@ -1,0 +1,17 @@
+# format=tagmanager
+AdjustÌ1024ÎGenStackÖ0
+DataÌ64ÎNodeÖ0
+Data_PtrÌ4096ÎGenStackÖ0
+EmptyÌ1024ÎGenStackÖ0
+FinalizeÌ1024ÎGenStackÖ0
+GenStackÌ512Ö0
+HeadÌ64ÎStackÖ0
+InitializeÌ1024ÎGenStackÖ0
+NextÌ64ÎNodeÖ0
+NodeÌ4096ÎGenStackÖ0
+Node_PtrÌ4096ÎGenStackÖ0
+PopÌ1024ÎGenStackÖ0
+PushÌ1024ÎGenStackÖ0
+StackÌ4096ÎGenStackÖ0
+StackDataÌ4096ÎGenStackÖ0
+TopÌ1024ÎGenStackÖ0
