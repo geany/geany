@@ -1,10 +1,14 @@
 # format=tagmanager
-IntroductionÌ64Ö0
+IntroductionÌ64Îchapter textÖ0
+Part1Ì2Ö0
+Part2Ì2Ö0
 chapter textÌ256Ö0
-chapter2Ì256Ö0
-section1 textÌ64Ö0
-section4 textÌ64Ö0
-subsection2Ì65536Ö0
-subsubsection3 with extra textÌ16384Ö0
-subsubsection6 with extra textÌ16384Ö0
+chapter2Ì256ÎPart2Ö0
+section1 textÌ64Îchapter textÖ0
+short section4Ì64ÎPart1Ö0
+shorter intro2Ì64ÎPart2Ö0
+subsec5 textÌ65536ÎPart2""shorter intro2Ö0
+subsection2Ì65536ÎPart1Ö0
+subsubsection3 with extra textÌ16384ÎPart1""subsection2Ö0
+subsubsection6 with extra textÌ16384ÎPart2""shorter intro2""subsec5 textÖ0
 verbatimÌ1Ö0

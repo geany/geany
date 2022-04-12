@@ -93,7 +93,8 @@ parsers = \
 	parsers/tcl.c \
 	parsers/tcl.h \
 	parsers/tcloo.c \
-	parsers/geany_tex.c \
+	parsers/tex.c \
+	parsers/tex.h \
 	parsers/txt2tags.c \
 	parsers/verilog.c \
 	parsers/vhdl.c

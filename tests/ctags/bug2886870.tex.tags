@@ -1,16 +1,19 @@
 # format=tagmanager
-Common Greek lettersÌ65536Ö0
+Common Greek lettersÌ65536ÎSpecial SymbolsÖ0
 EquationsÌ64Ö0
 FiguresÌ64Ö0
 IntroductionÌ64Ö0
 ListsÌ64Ö0
 Literal textÌ64Ö0
 Special SymbolsÌ64Ö0
-Special symbolsÌ65536Ö0
+Special symbolsÌ65536ÎSpecial SymbolsÖ0
 TablesÌ64Ö0
-Test for ctagsÌ16384Ö0
-\color{redÌ64Ö0
-\label{morefigÌ64Ö0
+Test for ctagsÌ16384ÎSpecial Symbols""Common Greek lettersÖ0
+\color{red}Use of ColorÌ64Ö0
+\label{morefig}SubfiguresÌ64Ö0
+\lbÌ16Ö0
+\rbÌ16Ö0
+\rvÌ16Ö0
 alignÌ1Ö0
 casesÌ1Ö0
 centerÌ1Ö0
@@ -26,14 +29,12 @@ fig:qm/complexfunctionsÌ2048Ö0
 fig:typicalÌ2048Ö0
 figureÌ1Ö0
 itemizeÌ1Ö0
-lbÌ16Ö0
-morefigÌ2048Ö0
+latexÌ8Ö0
 pmatrixÌ1Ö0
-rbÌ16Ö0
-rvÌ16Ö0
 subequationsÌ1Ö0
 tab:5/tcÌ2048Ö0
 tableÌ1Ö0
 tabularÌ1Ö0
 thebibliographyÌ1Ö0
 verbatimÌ1Ö0
+websiteÌ8Ö0

@@ -20,6 +20,21 @@
 \setlength{\marginparpush}{1.0cm}
 \setlength{\textwidth}{150mm}
 
+\newenvironment{boxed}
+    {\begin{center}
+    \begin{tabular}{|p{0.9\textwidth}|}
+    \hline\\
+    }
+    { 
+    \\\\\hline
+    \end{tabular} 
+    \end{center}
+    }
+
+\DeclareMathOperator{\End}{End}
+
+\newtheorem{theorem1}{Theorem}
+
 \begin{comment}
 \pagestyle{empty} % use if page numbers not wanted
 \end{comment}
