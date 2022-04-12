@@ -310,6 +310,7 @@ ctags_tests = files([
 	'ctags/simple.lua.tags',
 	'ctags/simple.mak.tags',
 	'ctags/simple.md.tags',
+	'ctags/simple.ml.tags',
 	'ctags/simple.php.tags',
 	'ctags/simple.pl.tags',
 	'ctags/simple.ps1.tags',
