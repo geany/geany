@@ -68,6 +68,7 @@
 	JuliaParser, \
 	BibtexParser, \
 	CPreProParser, \
-	TclOOParser
+	TclOOParser, \
+	ClojureParser
 
 #endif
