@@ -164,7 +164,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( VHDL,       VHDL,         "VHDL",             NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( VERILOG,    VERILOG,      "Verilog",          NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( DIFF,       DIFF,         "Diff",             NULL,                      FILE,        MISC     );
-	FT_INIT( LISP,       NONE,         "Lisp",             NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( LISP,       LISP,         "Lisp",             NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( ERLANG,     ERLANG,       "Erlang",           NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( CONF,       CONF,         "Conf",             _("Config"),               FILE,        MISC     );
 	FT_INIT( PO,         NONE,         "Po",               _("Gettext translation"),  FILE,        MISC     );

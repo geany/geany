@@ -300,6 +300,7 @@ test_sources = \
 	simple.js						\
 	simple.json						\
 	simple.ksh						\
+	simple.lisp						\
 	simple.lua						\
 	simple.mak						\
 	simple.md						\
