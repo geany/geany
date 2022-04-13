@@ -98,6 +98,7 @@ parsers = \
 	parsers/tex.c \
 	parsers/tex.h \
 	parsers/txt2tags.c \
+	parsers/typescript.c \
 	parsers/verilog.c \
 	parsers/vhdl.c
 

@@ -308,6 +308,7 @@ ctags_tests = files([
 	'ctags/simple.rst.tags',
 	'ctags/simple.sh.tags',
 	'ctags/simple.tcl.tags',
+	'ctags/simple.ts.tags',
 	'ctags/simple.vala.tags',
 	'ctags/simple.zep.tags',
 	'ctags/size_t_wchar_t_alias.d.tags',

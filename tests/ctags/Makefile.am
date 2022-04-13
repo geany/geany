@@ -312,6 +312,7 @@ test_sources = \
 	simple.rst						\
 	simple.sh						\
 	simple.tcl						\
+	simple.ts						\
 	simple.vala						\
 	simple.zep						\
 	size_t_wchar_t_alias.d			\
