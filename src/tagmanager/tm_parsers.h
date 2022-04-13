@@ -73,6 +73,7 @@
 	LispParser, \
 	TypeScriptParser, \
 	DosBatchParser, \
-	AutoItParser
+	AutoItParser, \
+	Perl6Parser
 
 #endif

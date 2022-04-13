@@ -189,6 +189,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( SMALLTALK,  NONE,         "Smalltalk",        NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( JULIA,      JULIA,        "Julia",            NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( AU3,        AUTOIT,       "AutoIt",           NULL,                      SCRIPT,      SCRIPT   );
+	FT_INIT( RAKU,       RAKU,         "Raku",             NULL,                      SOURCE_FILE, SCRIPT   );
 }
 
 

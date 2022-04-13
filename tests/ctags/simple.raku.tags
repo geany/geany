@@ -1,0 +1,68 @@
+AreaÌ1Ö0
+class:      Area
+BUILDÌ128Ö0
+method:     BUILD
+Foo:verÌ512Ö0
+package:    Foo:ver
+JSONPrettyActionsÌ1Ö0
+class:      JSONPrettyActions
+JSONPrettyGrammarÌ2048Ö0
+struct:     JSONPrettyGrammar
+MÌ256Ö0
+namespace:  M
+NotableÌ1Ö0
+class:      Notable
+TOPÌ128Ö0
+method:     TOP
+TOPÌ16384Ö0
+variable:   TOP
+arrayÌ128Ö0
+method:     array
+arrayÌ16384Ö0
+variable:   array
+arraylistÌ128Ö0
+method:     arraylist
+arraylistÌ16384Ö0
+variable:   arraylist
+friendly-greetingÌ16Ö0
+function:   friendly-greeting
+from-jsonÌ16Ö0
+function:   from-json
+greetingÌ16Ö0
+function:   greeting
+loud-greetingÌ16Ö0
+function:   loud-greeting
+notesÌ128Ö0
+method:     notes
+objectÌ128Ö0
+method:     object
+objectÌ16384Ö0
+variable:   object
+pairÌ128Ö0
+method:     pair
+pairÌ16384Ö0
+variable:   pair
+pairlistÌ128Ö0
+method:     pairlist
+pairlistÌ16384Ö0
+variable:   pairlist
+strÌ128Ö0
+method:     str
+strÌ16384Ö0
+variable:   str
+str_escapeÌ128Ö0
+method:     str_escape
+str_escapeÌ16384Ö0
+variable:   str_escape
+stringÌ128Ö0
+method:     string
+stringÌ16384Ö0
+variable:   string
+to-jsonÌ16Ö0
+function:   to-json
+valueÌ16384Ö0
+variable:   value
+value:symÌ128Ö0
+method:     value:sym
+value:symÌ16384Ö0
+variable:   value:sym

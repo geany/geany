@@ -210,6 +210,7 @@ static void AddGeanyLexers()
 		&lmProps,
 		&lmPython,
 		&lmR,
+		&lmRaku,
 		&lmRuby,
 		&lmRust,
 		&lmSmalltalk,
