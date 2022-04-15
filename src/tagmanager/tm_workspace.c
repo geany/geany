@@ -388,7 +388,7 @@ static gboolean write_includes_file(const gchar *outf, GList *includes_files)
 }
 
 
-static gboolean combine_include_files(const gchar *outf, GList *file_list)
+static gboolean combine_source_files(const gchar *outf, GList *file_list)
 {
 	FILE *fp = g_fopen(outf, "w");
 	GList *node = file_list;
@@ -435,28 +435,28 @@ static gchar *create_temp_file(const gchar *tpl)
 	return name;
 }
 
-static GList *lookup_includes(const gchar **includes, gint includes_count)
+static GList *lookup_sources(const gchar **sources, gint sources_count)
 {
-	GList *includes_files = NULL;
+	GList *source_files = NULL;
 	GHashTable *table; /* used for deduping */
 	gint i;
 
 	table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, NULL);
 
-	for (i = 0; i < includes_count; i++)
+	for (i = 0; i < sources_count; i++)
 	{
-		if (!g_hash_table_lookup(table, includes[i]))
+		if (!g_hash_table_lookup(table, sources[i]))
 		{
-			gchar* file_name_copy = g_strdup(includes[i]);
+			gchar* file_name_copy = g_strdup(sources[i]);
 
-			includes_files = g_list_prepend(includes_files, file_name_copy);
+			source_files = g_list_prepend(source_files, file_name_copy);
 			g_hash_table_insert(table, file_name_copy, file_name_copy);
 		}
 	}
 
 	g_hash_table_destroy(table);
 
-	return g_list_reverse(includes_files);
+	return g_list_reverse(source_files);
 }
 
 static gchar *pre_process_file(const gchar *cmd, const gchar *inf)
@@ -506,44 +506,44 @@ static gchar *pre_process_file(const gchar *cmd, const gchar *inf)
 /* Creates a list of global tags. Ideally, this should be created once during
  installations so that all users can use the same file. This is because a full
  scale global tag list can occupy several megabytes of disk space.
- @param pre_process The pre-processing command. This is executed via system(),
+ @param pre_process_cmd The pre-processing command. This is executed via system(),
  so you can pass stuff like 'gcc -E -dD -P `gnome-config --cflags gnome`'.
- @param includes Include files to process. Wildcards such as '/usr/include/a*.h'
+ @param sources Source files to process. Wildcards such as '/usr/include/a*.h'
  are allowed.
  @param tags_file The file where the tags will be stored.
  @param lang The language to use for the tags file.
  @return TRUE on success, FALSE on failure.
 */
-gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
-	int includes_count, const char *tags_file, TMParserType lang)
+gboolean tm_workspace_create_global_tags(const char *pre_process_cmd, const char **sources,
+	int sources_count, const char *tags_file, TMParserType lang)
 {
 	gboolean ret = FALSE;
 	TMSourceFile *source_file;
-	GList *includes_files;
+	GList *source_files;
 	gchar *temp_file = create_temp_file("tmp_XXXXXX.cpp");
 	GPtrArray *filtered_tags;
 
 	if (!temp_file)
 		return FALSE;
 
-	includes_files = lookup_includes(includes, includes_count);
+	source_files = lookup_sources(sources, sources_count);
 
 #ifdef TM_DEBUG
 	g_message ("writing out files to %s\n", temp_file);
 #endif
-	if (pre_process)
-		ret = write_includes_file(temp_file, includes_files);
+	if (pre_process_cmd)
+		ret = write_includes_file(temp_file, source_files);
 	else
-		ret = combine_include_files(temp_file, includes_files);
+		ret = combine_source_files(temp_file, source_files);
 
-	g_list_free_full(includes_files, g_free);
+	g_list_free_full(source_files, g_free);
 	if (!ret)
 		goto cleanup;
 	ret = FALSE;
 
-	if (pre_process)
+	if (pre_process_cmd)
 	{
-		gchar *temp_file2 = pre_process_file(pre_process, temp_file);
+		gchar *temp_file2 = pre_process_file(pre_process_cmd, temp_file);
 
 		if (temp_file2)
 		{
