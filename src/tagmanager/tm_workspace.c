@@ -387,40 +387,6 @@ static gboolean write_includes_file(const gchar *outf, GList *includes_files)
 	return fclose(fp) == 0;
 }
 
-
-static gboolean combine_source_files(const gchar *outf, GList *file_list)
-{
-	FILE *fp = g_fopen(outf, "w");
-	GList *node = file_list;
-
-	if (!fp)
-		return FALSE;
-
-	while (node)
-	{
-		const char *fname = node->data;
-		char *contents;
-		size_t length;
-		GError *err = NULL;
-
-		if (! g_file_get_contents(fname, &contents, &length, &err))
-		{
-			fprintf(stderr, "Unable to read file: %s\n", err->message);
-			g_error_free(err);
-		}
-		else
-		{
-			fwrite(contents, length, 1, fp);
-			fwrite("\n", 1, 1, fp);	/* in case file doesn't end in newline (e.g. windows). */
-			g_free(contents);
-		}
-		node = g_list_next (node);
-	}
-
-	return fclose(fp) == 0;
-}
-
-
 static gchar *create_temp_file(const gchar *tpl)
 {
 	gchar *name;
@@ -503,57 +469,35 @@ static gchar *pre_process_file(const gchar *cmd, const gchar *inf)
 	return outf;
 }
 
-/* Creates a list of global tags. Ideally, this should be created once during
- installations so that all users can use the same file. This is because a full
- scale global tag list can occupy several megabytes of disk space.
- @param pre_process_cmd The pre-processing command. This is executed via system(),
- so you can pass stuff like 'gcc -E -dD -P `gnome-config --cflags gnome`'.
- @param sources Source files to process. Wildcards such as '/usr/include/a*.h'
- are allowed.
- @param tags_file The file where the tags will be stored.
- @param lang The language to use for the tags file.
- @return TRUE on success, FALSE on failure.
-*/
-gboolean tm_workspace_create_global_tags(const char *pre_process_cmd, const char **sources,
-	int sources_count, const char *tags_file, TMParserType lang)
+static gboolean create_global_tags_preprocessed(const char *pre_process_cmd,
+	GList *source_files, const char *tags_file, TMParserType lang)
 {
-	gboolean ret = FALSE;
 	TMSourceFile *source_file;
-	GList *source_files;
+	gboolean ret = FALSE;
+	gchar *temp_file2;
 	gchar *temp_file = create_temp_file("tmp_XXXXXX.cpp");
 	GPtrArray *filtered_tags;
-
-	if (!temp_file)
-		return FALSE;
-
-	source_files = lookup_sources(sources, sources_count);
 
 #ifdef TM_DEBUG
 	g_message ("writing out files to %s\n", temp_file);
 #endif
-	if (pre_process_cmd)
-		ret = write_includes_file(temp_file, source_files);
-	else
-		ret = combine_source_files(temp_file, source_files);
 
-	g_list_free_full(source_files, g_free);
-	if (!ret)
+	if (!temp_file)
+		return FALSE;
+
+	if (!write_includes_file(temp_file, source_files))
 		goto cleanup;
-	ret = FALSE;
 
-	if (pre_process_cmd)
+	temp_file2 = pre_process_file(pre_process_cmd, temp_file);
+
+	if (temp_file2)
 	{
-		gchar *temp_file2 = pre_process_file(pre_process_cmd, temp_file);
-
-		if (temp_file2)
-		{
-			g_unlink(temp_file);
-			g_free(temp_file);
-			temp_file = temp_file2;
-		}
-		else
-			goto cleanup;
+		g_unlink(temp_file);
+		g_free(temp_file);
+		temp_file = temp_file2;
 	}
+	else
+		goto cleanup;
 
 	source_file = tm_source_file_new(temp_file, tm_source_file_get_lang_name(lang));
 	if (!source_file)
@@ -577,6 +521,66 @@ cleanup:
 	return ret;
 }
 
+static gboolean create_global_tags_direct(GList *source_files, const char *tags_file,
+	TMParserType lang)
+{
+	GList *node;
+	GPtrArray *filtered_tags;
+	GPtrArray *tags = g_ptr_array_new();
+	GSList *tm_source_files = NULL;
+	gboolean ret = FALSE;
+
+	for (node = source_files; node; node = node->next)
+	{
+		TMSourceFile *source_file = tm_source_file_new(node->data, tm_source_file_get_lang_name(lang));
+		if (source_file)
+		{
+			guint i;
+			tm_source_files = g_slist_prepend(tm_source_files, source_file);
+			tm_source_file_parse(source_file, NULL, 0, FALSE);
+			for (i = 0; i < source_file->tags_array->len; i++)
+				g_ptr_array_add(tags, source_file->tags_array->pdata[i]);
+		}
+	}
+
+	filtered_tags = tm_tags_extract(tags, ~tm_tag_local_var_t);
+	tm_tags_sort(filtered_tags, global_tags_sort_attrs, TRUE, FALSE);
+
+	if (filtered_tags->len > 0)
+		ret = tm_source_file_write_tags_file(tags_file, filtered_tags);
+
+	g_ptr_array_free(tags, TRUE);
+	g_ptr_array_free(filtered_tags, TRUE);
+	g_slist_free_full(tm_source_files, (GDestroyNotify)tm_source_file_free);
+
+	return ret;
+}
+
+/* Creates a list of global tags. Ideally, this should be created once during
+ installations so that all users can use the same file. This is because a full
+ scale global tag list can occupy several megabytes of disk space.
+ @param pre_process_cmd The pre-processing command. This is executed via system(),
+ so you can pass stuff like 'gcc -E -dD -P `gnome-config --cflags gnome`'.
+ @param sources Source files to process. Wildcards such as '/usr/include/a*.h'
+ are allowed.
+ @param tags_file The file where the tags will be stored.
+ @param lang The language to use for the tags file.
+ @return TRUE on success, FALSE on failure.
+*/
+gboolean tm_workspace_create_global_tags(const char *pre_process_cmd, const char **sources,
+	int sources_count, const char *tags_file, TMParserType lang)
+{
+	gboolean ret = FALSE;
+	GList *source_files = lookup_sources(sources, sources_count);
+
+	if (pre_process_cmd)
+		ret = create_global_tags_preprocessed(pre_process_cmd, source_files, tags_file, lang);
+	else
+		ret = create_global_tags_direct(source_files, tags_file, lang);
+
+	g_list_free_full(source_files, g_free);
+	return ret;
+}
 
 static void fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
 	const char *name, const char *scope, TMTagType type, TMParserType lang)

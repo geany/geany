@@ -2,11 +2,9 @@ I1_E1Ì4Îanon_enum_1Ö0
 enumerator: anon_enum_1 :: I1_E1
 I1_E2Ì4Îanon_enum_1Ö0
 enumerator: anon_enum_1 :: I1_E2
-I2_E1Ì4Îanon_enum_2Ö0
-enumerator: anon_enum_2 :: I2_E1
-I2_E2Ì4Îanon_enum_2Ö0
-enumerator: anon_enum_2 :: I2_E2
+I2_E1Ì4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: I2_E1
+I2_E2Ì4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: I2_E2
 anon_enum_1Ì2Ö1
 enum:       anon_enum_1    flags: 1
-anon_enum_2Ì2Ö1
-enum:       anon_enum_2    flags: 1
