@@ -119,6 +119,7 @@ index cd4b23617..af4a73db4 100644
 +		&lmTxt2tags,
 +		&lmVerilog,
 +		&lmVHDL,
++		&lmVisualProlog,
 +		&lmXML,
 +		&lmYAML,
 +	});
