@@ -1327,6 +1327,42 @@ static const HLKeyword highlighting_keywords_POWERSHELL[] =
 #define highlighting_properties_POWERSHELL	EMPTY_PROPERTIES
 
 
+/* Prolog */
+#define highlighting_lexer_PROLOG			SCLEX_VISUALPROLOG
+static const HLStyle highlighting_styles_PROLOG[] =
+{
+	{ SCE_VISUALPROLOG_DEFAULT,					"default",					FALSE },
+	{ SCE_VISUALPROLOG_KEY_MAJOR,				"key_major",				FALSE },
+	{ SCE_VISUALPROLOG_KEY_MINOR,				"key_minor",				FALSE },
+	{ SCE_VISUALPROLOG_KEY_DIRECTIVE,			"key_directive",			FALSE },
+	{ SCE_VISUALPROLOG_COMMENT_BLOCK,			"comment_block",			FALSE },
+	{ SCE_VISUALPROLOG_COMMENT_LINE,			"comment_line",				FALSE },
+	{ SCE_VISUALPROLOG_COMMENT_KEY,				"comment_key",				FALSE },
+	{ SCE_VISUALPROLOG_COMMENT_KEY_ERROR,		"comment_key_error",		FALSE },
+	{ SCE_VISUALPROLOG_IDENTIFIER,				"identifier",				FALSE },
+	{ SCE_VISUALPROLOG_VARIABLE,				"variable",					FALSE },
+	{ SCE_VISUALPROLOG_ANONYMOUS,				"anonymous",				FALSE },
+	{ SCE_VISUALPROLOG_NUMBER,					"number",					FALSE },
+	{ SCE_VISUALPROLOG_OPERATOR,				"operator",					FALSE },
+	{ SCE_VISUALPROLOG_CHARACTER,				"character",				FALSE },
+	{ SCE_VISUALPROLOG_CHARACTER_TOO_MANY,		"character_too_many",		FALSE },
+	{ SCE_VISUALPROLOG_CHARACTER_ESCAPE_ERROR,	"character_escape_error",	FALSE },
+	{ SCE_VISUALPROLOG_STRING,					"string",					FALSE },
+	{ SCE_VISUALPROLOG_STRING_ESCAPE,			"string_escape",			FALSE },
+	{ SCE_VISUALPROLOG_STRING_ESCAPE_ERROR,		"string_escape_error",		FALSE },
+	{ SCE_VISUALPROLOG_STRING_EOL_OPEN,			"string_eol_open",			FALSE },
+	{ SCE_VISUALPROLOG_STRING_VERBATIM,			"string_verbatim",			FALSE },
+	{ SCE_VISUALPROLOG_STRING_VERBATIM_SPECIAL,	"string_verbatim_special",	FALSE },
+	{ SCE_VISUALPROLOG_STRING_VERBATIM_EOL,		"string_verbatim_eol",		FALSE },
+};
+static const HLKeyword highlighting_keywords_PROLOG[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "secondary",	FALSE },
+};
+#define highlighting_properties_PROLOG	EMPTY_PROPERTIES
+
+
 /* Python */
 #define highlighting_lexer_PYTHON		SCLEX_PYTHON
 static const HLStyle highlighting_styles_PYTHON[] =
