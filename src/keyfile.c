@@ -187,7 +187,7 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &file_prefs.tab_close_switch_to_mru,
 		"tab_close_switch_to_mru", FALSE, "check_tab_close_switch_to_mru");
 	stash_group_add_integer(group, &interface_prefs.tab_pos_sidebar, "tab_pos_sidebar", GTK_POS_TOP);
-	stash_group_add_integer(group, &interface_prefs.documents_show_paths, "documents_show_paths", SHOW_PATHS_LIST);
+	stash_group_add_integer(group, &interface_prefs.openfiles_path_mode, "openfiles_path_mode", -1);
 	stash_group_add_radio_buttons(group, &interface_prefs.sidebar_pos,
 		"sidebar_pos", GTK_POS_LEFT,
 		"radio_sidebar_left", GTK_POS_LEFT,

@@ -71,7 +71,7 @@ typedef struct GeanyInterfacePrefs
 	gint 			symbols_sort_mode;			/**< symbol list sorting mode */
 	/** whether to show a warning when closing a project to open a new one */
 	gboolean		warn_on_project_close;
-	gint			documents_show_paths;
+	gint			openfiles_path_mode;
 }
 GeanyInterfacePrefs;
 

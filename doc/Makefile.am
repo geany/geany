@@ -23,7 +23,10 @@ dist_htmldocimages_DATA = \
 	images/pref_dialog_tools.png \
 	images/pref_dialog_various.png \
 	images/pref_dialog_vte.png \
-	images/replace_dialog.png
+	images/replace_dialog.png \
+	images/sidebar_documents_only.png \
+	images/sidebar_show_paths.png \
+	images/sidebar_show_tree.png
 endif
 
 doc_DATA = \

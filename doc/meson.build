@@ -39,6 +39,9 @@ if tarball.returncode() == 0 or rst2html.found()
 		'images/pref_dialog_various.png',
 		'images/pref_dialog_vte.png',
 		'images/replace_dialog.png',
+		'images/sidebar_documents_only.png',
+		'images/sidebar_show_paths.png',
+		'images/sidebar_show_tree.png',
 		install_dir: join_paths(cdata.get('GEANY_DOC_DIR'), 'html', 'images')
 	)
 	if tarball.returncode() == 0
