@@ -89,6 +89,7 @@ GEANY_CHECK_REVISION([dnl force debug mode for a VCS working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
 
 GEANY_CHECK_GTK
+GEANY_CHECK_GTK_FUNCS([g_strv_equal])
 
 # --disable-deprecated switch for GTK purification
 AC_ARG_ENABLE([deprecated],

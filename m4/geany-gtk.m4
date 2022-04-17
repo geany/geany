@@ -16,3 +16,18 @@ AC_DEFUN([GEANY_CHECK_GTK],
 
 	GEANY_STATUS_ADD([Using GTK version], [${GTK_VERSION}])
 ])
+
+dnl GEANY_CHECK_GTK_FUNCS
+dnl Like AC_CHECK_FUNCS but adds GTK flags so that tests for GLib/GTK functions may succeed.
+AC_DEFUN([GEANY_CHECK_GTK_FUNCS],
+[
+	AC_REQUIRE([GEANY_CHECK_GTK])
+
+	CFLAGS_save=$CFLAGS
+	CFLAGS=$GTK_CFLAGS
+	LIBS_save=$LIBS
+	LIBS=$GTK_LIBS
+	AC_CHECK_FUNCS([$1])
+	CFLAGS=$CFLAGS_save
+	LIBS=$LIBS_save
+])

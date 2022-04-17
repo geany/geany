@@ -85,7 +85,7 @@ check_functions = [
 	['truncate', '#include <unistd.h>'],
 	['wcrtomb', '#include <wchar.h>'],
 	['wcscoll', '#include <wchar.h>'],
-
+	['g_strv_equal', '#include <glib.h>']
 ]
 
 foreach h : check_headers
@@ -100,7 +100,7 @@ endforeach
 foreach f : check_functions
 	define = 'HAVE_' + f.get(0).underscorify().to_upper()
 	ccprefix = '\n'.join([gnu_source ? '#define _GNU_SOURCE' : '', f.get(1)])
-	if cc.has_function(f.get(0), prefix : ccprefix)
+	if cc.has_function(f.get(0), prefix: ccprefix, dependencies: deps)
 		cdata.set(define, 1)
 	else
 		cdata.set(define, false)
@@ -846,7 +846,7 @@ libgeany = shared_library('geany',
 )
 dep_libgeany = declare_dependency(
 	link_with: libgeany,
-	include_directories: [igeany]
+	include_directories: [iscintilla, itagmanager, igeany]
 )
 
 executable('geany',

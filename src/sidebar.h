@@ -27,6 +27,8 @@
 
 #include "gtkcompat.h"
 
+#ifdef GEANY_PRIVATE
+
 G_BEGIN_DECLS
 
 typedef struct SidebarTreeviews
@@ -46,6 +48,25 @@ enum
 	SYMBOLS_COLUMN_TAG,
 	SYMBOLS_COLUMN_TOOLTIP,
 	SYMBOLS_N_COLUMNS
+};
+
+enum
+{
+	OPENFILES_PATHS_NONE,
+	OPENFILES_PATHS_LIST,
+	OPENFILES_PATHS_TREE,
+	OPENFILES_PATHS_COUNT
+};
+
+/* documents tree model columns */
+enum
+{
+	DOCUMENTS_ICON,
+	DOCUMENTS_SHORTNAME,    /* dirname for parents, basename for children */
+	DOCUMENTS_DOCUMENT,
+	DOCUMENTS_COLOR,
+	DOCUMENTS_FILENAME,     /* full filename */
+	DOCUMENTS_FOLD,         /* fold state stored when folding parent rows */
 };
 
 void sidebar_init(void);
@@ -70,6 +91,10 @@ void sidebar_focus_openfiles_tab(void);
 
 void sidebar_focus_symbols_tab(void);
 
+GtkTreeStore *sidebar_create_store_openfiles(void);
+#endif
+
 G_END_DECLS
+
 
 #endif /* GEANY_SIDEBAR_H */

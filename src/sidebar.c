@@ -51,14 +51,6 @@ SidebarTreeviews tv = {NULL, NULL, NULL};
 /* while typeahead searching, editor should not get focus */
 static gboolean may_steal_focus = FALSE;
 
-enum
-{
-	OPENFILES_PATHS_NONE,
-	OPENFILES_PATHS_LIST,
-	OPENFILES_PATHS_TREE,
-	OPENFILES_PATHS_COUNT
-};
-
 static struct
 {
 	GtkWidget *close;
@@ -83,19 +75,6 @@ enum
 	OPENFILES_ACTION_SAVE,
 	OPENFILES_ACTION_RELOAD
 };
-
-
-/* documents tree model columns */
-enum
-{
-	DOCUMENTS_ICON,
-	DOCUMENTS_SHORTNAME,    /* dirname for parents, basename for children */
-	DOCUMENTS_DOCUMENT,
-	DOCUMENTS_COLOR,
-	DOCUMENTS_FILENAME,     /* full filename */
-	DOCUMENTS_FOLD,         /* fold state stored when folding parent rows */
-};
-
 
 static GtkTreeStore *store_openfiles;
 static GtkWidget *openfiles_popup_menu;
@@ -300,8 +279,8 @@ static gint documents_sort_func(GtkTreeModel *model, GtkTreeIter *iter_a,
 	return cmp;
 }
 
-
-static void sidebar_create_store_openfiles(void)
+GEANY_EXPORT_SYMBOL
+GtkTreeStore *sidebar_create_store_openfiles(void)
 {
 	GtkTreeSortable *sortable;
 	GtkTreeStore *store;
@@ -316,6 +295,7 @@ static void sidebar_create_store_openfiles(void)
 	gtk_tree_sortable_set_sort_column_id(sortable, DOCUMENTS_SHORTNAME, GTK_SORT_ASCENDING);
 
 	store_openfiles = store;
+	return store;
 }
 
 
@@ -907,6 +887,7 @@ static void expand_iter(GtkTreeIter *iter)
 
 /* Also sets doc->priv->iter.
  * This is called recursively in sidebar_openfiles_update_all(). */
+GEANY_EXPORT_SYMBOL
 void sidebar_openfiles_add(GeanyDocument *doc)
 {
 	GtkTreeIter *iter = &doc->priv->iter;
@@ -934,8 +915,9 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 		-1);
 	g_free(basename);
 
-	/* expand new parent if necessary */
-	if (expand)
+	/* Expand new parent if necessary. Beware: this is executed by unit tests
+	 * which don't create the tree view. */
+	if (expand && G_LIKELY(tv.tree_openfiles))
 		expand_iter(&parent);
 }
 

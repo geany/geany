@@ -1,5 +1,6 @@
 test_deps = declare_dependency(compile_args: geany_cflags + [ '-DG_LOG_DOMAIN="Geany"' ],
-                               dependencies: [deps, dep_libgeany])
+                               dependencies: [deps, dep_libgeany],
+                               include_directories: '..')
 
 ctags_tests = files([
 	'ctags/1795612.js.tags',
@@ -352,3 +353,4 @@ test('ctags/processing-order', runner,
      args: [join_paths(meson.build_root(), 'geany'), '--result', process_order_sources],
      env: ['top_srcdir='+meson.source_root(), 'top_builddir='+meson.build_root()])
 test('utils', executable('test_utils', 'test_utils.c', dependencies: test_deps))
+test('sidebar', executable('test_sidebar', 'test_sidebar.c', dependencies: test_deps))
