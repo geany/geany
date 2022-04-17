@@ -1133,7 +1133,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 
 	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 
-	tags = get_tag_list(doc, tm_tag_max_t);
+	tags = get_tag_list(doc, ~tm_tag_local_var_t);
 	if (tags == NULL)
 		return FALSE;
 
