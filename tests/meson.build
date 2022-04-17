@@ -292,6 +292,7 @@ ctags_tests = files([
 	'ctags/simple.abc.tags',
 	'ctags/simple.asciidoc.tags',
 	'ctags/simple.bas.tags',
+	'ctags/simple.bat.tags',
 	'ctags/simple.clj.tags',
 	'ctags/simple.conf.tags',
 	'ctags/simple.d.tags',

@@ -1067,6 +1067,15 @@ static TMParserMapGroup group_ADA[] = {
 	{_("Other"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_enumerator_t},
 };
 
+static TMParserMapEntry map_BATCH[] = {
+	{'l', tm_tag_other_t},     // label
+	{'v', tm_tag_variable_t},  // variable
+};
+static TMParserMapGroup group_BATCH[] = {
+	{_("Labels"), TM_ICON_OTHER, tm_tag_other_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1137,6 +1146,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(CLOJURE),
 	MAP_ENTRY(LISP),
 	MAP_ENTRY(TYPESCRIPT),
+	MAP_ENTRY(BATCH),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);

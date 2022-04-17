@@ -295,6 +295,7 @@ test_sources = \
 	simple.abc						\
 	simple.asciidoc					\
 	simple.bas						\
+	simple.bat						\
 	simple.clj						\
 	simple.conf						\
 	simple.d						\
