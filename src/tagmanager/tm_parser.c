@@ -70,8 +70,8 @@ static GHashTable *subparser_map = NULL;
 	{'v', tm_tag_variable_t},    /* variable */   \
 	{'x', tm_tag_externvar_t},   /* externvar */  \
 	{'h', tm_tag_undef_t},       /* header */     \
-	{'l', tm_tag_undef_t},       /* local */      \
-	{'z', tm_tag_undef_t},       /* parameter */  \
+	{'l', tm_tag_local_var_t},   /* local */      \
+	{'z', tm_tag_local_var_t},   /* parameter */  \
 	{'L', tm_tag_undef_t},       /* label */      \
 	{'D', tm_tag_undef_t},       /* macroparam */
 
@@ -1194,7 +1194,11 @@ void tm_parser_verify_type_mappings(void)
 					kinds[i], tm_ctags_get_lang_name(lang));
 
 			presence_map[(unsigned char) map->entries[i].kind]++;
-			lang_types |= map->entries[i].type;
+
+			/* we don't display local variables in the symbol tree so don't
+			 * check whether they are mapped to some group */
+			if (map->entries[i].type != tm_tag_local_var_t)
+				lang_types |= map->entries[i].type;
 		}
 
 		for (i = 0; i < sizeof(presence_map); i++)

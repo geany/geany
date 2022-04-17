@@ -580,6 +580,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	TMSourceFile *source_file;
 	GList *includes_files;
 	gchar *temp_file = create_temp_file("tmp_XXXXXX.cpp");
+	GPtrArray *filtered_tags;
 
 	if (!temp_file)
 		return FALSE;
@@ -624,7 +625,9 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	}
 
 	tm_tags_sort(source_file->tags_array, global_tags_sort_attrs, TRUE, FALSE);
-	ret = tm_source_file_write_tags_file(tags_file, source_file->tags_array);
+	filtered_tags = tm_tags_extract(source_file->tags_array, ~tm_tag_local_var_t);
+	ret = tm_source_file_write_tags_file(tags_file, filtered_tags);
+	g_ptr_array_free(filtered_tags, TRUE);
 	tm_source_file_free(source_file);
 
 cleanup:
