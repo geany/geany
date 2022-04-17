@@ -58,6 +58,7 @@ parsers = \
 	parsers/css.c \
 	parsers/diff.c \
 	parsers/geany_docbook.c \
+	parsers/dosbatch.c \
 	parsers/erlang.c \
 	parsers/flex.c \
 	parsers/fortran.c \

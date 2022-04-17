@@ -71,6 +71,7 @@
 	TclOOParser, \
 	ClojureParser, \
 	LispParser, \
-	TypeScriptParser
+	TypeScriptParser, \
+	DosBatchParser
 
 #endif
