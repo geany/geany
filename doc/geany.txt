@@ -264,6 +264,7 @@ described by that plugin documentation):
 
   * expand/collapse the tree
   * control sorting order
+  * control whether to group symbols by their type
   * locate the symbol in documents
 
   The symbols tab can also be filtered by typing a string into

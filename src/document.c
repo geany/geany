@@ -648,6 +648,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	/* initialize default document settings */
 	doc->priv = g_new0(GeanyDocumentPrivate, 1);
 	doc->priv->tag_filter = g_strdup("");
+	doc->priv->symbols_group_by_type = TRUE;
 	doc->id = ++doc_id_counter;
 	doc->index = new_idx;
 	doc->file_name = g_strdup(utf8_filename);
