@@ -1597,13 +1597,24 @@ static TMTag *find_best_goto_tag(GeanyDocument *doc, GPtrArray *tags)
 
 static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean definition)
 {
+	GeanyDocument *doc = document_get_current();
+	guint current_line = sci_get_current_line(doc->editor->sci) + 1;
 	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
 	TMTag *tmtag, *last_tag = NULL;
+	const gchar *current_scope = NULL;
 	GPtrArray *filtered_tags = g_ptr_array_new();
 	guint i;
 
+	symbols_get_current_function(doc, &current_scope);
+
 	foreach_ptr_array(tmtag, i, tags)
 	{
+		if (tmtag->type & tm_tag_local_var_t &&
+			(doc->tm_file != tmtag->file ||
+			 current_line < tmtag->line ||
+			 g_strcmp0(current_scope, tmtag->scope) != 0))
+			continue;
+
 		if ((definition && !(tmtag->type & forward_types)) ||
 			(!definition && (tmtag->type & forward_types)))
 		{
