@@ -684,8 +684,25 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 }
 
 
+static gboolean is_valid_autocomplete_tag(TMTag *tag,
+	TMSourceFile *current_file,
+	guint current_line,
+	const gchar *current_scope)
+{
+	/* ignore local variables from other files/functions or after current line */
+	return !(tag->type & tm_tag_local_var_t) ||
+		(current_file == tag->file &&
+		 current_line >= tag->line &&
+		 g_strcmp0(current_scope, tag->scope) == 0);
+}
+
+
 static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
-	const char *name, TMParserType lang, guint max_num)
+	const char *name,
+	TMSourceFile *current_file,
+	guint current_line,
+	const gchar *current_scope,
+	TMParserType lang, guint max_num)
 {
 	TMTag **tag, *last = NULL;
 	guint i, count, num;
@@ -697,20 +714,24 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 	tag = tm_tags_find(src, name, TRUE, &count);
 	for (i = 0; i < count && num < max_num; ++i)
 	{
-		if (tm_parser_langs_compatible(lang, (*tag)->lang) &&
-			!tm_tag_is_anon(*tag) &&
-			(!last || g_strcmp0(last->name, (*tag)->name) != 0))
+		if (is_valid_autocomplete_tag(*tag, current_file, current_line, current_scope))
 		{
-			g_ptr_array_add(dst, *tag);
-			last = *tag;
-			num++;
+			if (tm_parser_langs_compatible(lang, (*tag)->lang) &&
+				!tm_tag_is_anon(*tag) &&
+				(!last || g_strcmp0(last->name, (*tag)->name) != 0))
+			{
+				g_ptr_array_add(dst, *tag);
+				last = *tag;
+				num++;
+			}
 		}
 		tag++;
 	}
 }
 
 
-/* Returns tags with the specified prefix sorted by name. If there are several
+/* Returns tags with the specified prefix sorted by name, ignoring local
+ variables from other files/functions or after current line. If there are several
  tags with the same name, only one of them appears in the resulting array.
  @param prefix The prefix of the tag to find.
  @param lang Specifies the language(see the table in tm_parsers.h) of the tags to be found,
@@ -718,13 +739,19 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
  @param max_num The maximum number of tags to return.
  @return Array of matching tags sorted by their name.
 */
-GPtrArray *tm_workspace_find_prefix(const char *prefix, TMParserType lang, guint max_num)
+GPtrArray *tm_workspace_find_prefix(const char *prefix,
+	TMSourceFile *current_file,
+	guint current_line,
+	const gchar *current_scope,
+	TMParserType lang, guint max_num)
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags = g_ptr_array_new();
 
-	fill_find_tags_array_prefix(tags, theWorkspace->tags_array, prefix, lang, max_num);
-	fill_find_tags_array_prefix(tags, theWorkspace->global_tags, prefix, lang, max_num);
+	fill_find_tags_array_prefix(tags, theWorkspace->tags_array, prefix,
+		current_file, current_line, current_scope, lang, max_num);
+	fill_find_tags_array_prefix(tags, theWorkspace->global_tags, prefix,
+		current_file, current_line, current_scope, lang, max_num);
 
 	tm_tags_sort(tags, attrs, TRUE, FALSE);
 	if (tags->len > max_num)
