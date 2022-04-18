@@ -2019,12 +2019,19 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 static gboolean
 autocomplete_tags(GeanyEditor *editor, GeanyFiletype *ft, const gchar *root, gsize rootlen)
 {
+	GeanyDocument *doc = editor->document;
+	const gchar *current_scope = NULL;
+	guint current_line;
 	GPtrArray *tags;
 	gboolean found;
 
-	g_return_val_if_fail(editor, FALSE);
+	g_return_val_if_fail(editor && doc, FALSE);
 
-	tags = tm_workspace_find_prefix(root, ft->lang, editor_prefs.autocompletion_max_entries);
+	symbols_get_current_function(doc, &current_scope);
+	current_line = sci_get_current_line(editor->sci) + 1;
+
+	tags = tm_workspace_find_prefix(root, doc->tm_file, current_line, current_scope,
+		ft->lang, editor_prefs.autocompletion_max_entries);
 	found = tags->len > 0;
 	if (found)
 		show_tags_list(editor, tags, rootlen);
