@@ -1609,10 +1609,9 @@ static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean defi
 
 	foreach_ptr_array(tmtag, i, tags)
 	{
-		if (tmtag->type & tm_tag_local_var_t &&
-			(doc->tm_file != tmtag->file ||
-			 current_line < tmtag->line ||
-			 g_strcmp0(current_scope, tmtag->scope) != 0))
+		/* don't show local variables outside current function or other
+		 * irrelevant tags - same as in the autocomplete case */
+		if (!tm_workspace_is_autocomplete_tag(tmtag, doc->tm_file, current_line, current_scope))
 			continue;
 
 		if ((definition && !(tmtag->type & forward_types)) ||

@@ -684,16 +684,19 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 }
 
 
-static gboolean is_valid_autocomplete_tag(TMTag *tag,
+gboolean tm_workspace_is_autocomplete_tag(TMTag *tag,
 	TMSourceFile *current_file,
 	guint current_line,
 	const gchar *current_scope)
 {
+	TMParserType lang = current_file ? current_file->lang : TM_PARSER_NONE;
+
 	/* ignore local variables from other files/functions or after current line */
-	return !(tag->type & tm_tag_local_var_t) ||
+	gboolean valid = !(tag->type & tm_tag_local_var_t) ||
 		(current_file == tag->file &&
 		 current_line >= tag->line &&
 		 g_strcmp0(current_scope, tag->scope) == 0);
+	return valid && !tm_tag_is_anon(tag) && tm_parser_langs_compatible(lang, tag->lang);
 }
 
 
@@ -714,7 +717,7 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 	tag = tm_tags_find(src, name, TRUE, &count);
 	for (i = 0; i < count && num < max_num; ++i)
 	{
-		if (is_valid_autocomplete_tag(*tag, current_file, current_line, current_scope))
+		if (tm_workspace_is_autocomplete_tag(*tag, current_file, current_line, current_scope))
 		{
 			if (tm_parser_langs_compatible(lang, (*tag)->lang) &&
 				!tm_tag_is_anon(*tag) &&
@@ -727,6 +730,39 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 		}
 		tag++;
 	}
+}
+
+
+typedef struct
+{
+	TMSourceFile *file;
+} SortInfo;
+
+
+static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data)
+{
+	SortInfo *info = user_data;
+	const TMTag *t1 = *((TMTag **) a);
+	const TMTag *t2 = *((TMTag **) b);
+
+	/* sort local vars first (with highest line number first), followed
+	 * by tags from current file, followed by workspace tags, followed by
+	 * global tags */
+	if (t1->type & tm_tag_local_var_t && t2->type & tm_tag_local_var_t)
+		return t2->line - t1->line;
+	else if (t1->type & tm_tag_local_var_t)
+		return -1;
+	else if (t2->type & tm_tag_local_var_t)
+		return 1;
+	else if (t1->file == info->file && t2->file != info->file)
+		return -1;
+	else if (t2->file == info->file && t1->file != info->file)
+		return 1;
+	else if (t1->file && !t2->file)
+		return -1;
+	else if (t2->file && !t1->file)
+		return 1;
+	return 0;
 }
 
 
@@ -1026,11 +1062,13 @@ static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrAr
  @param function TRUE if the name is a name of a function
  @param member TRUE if invoked on class/struct member (e.g. after the last dot in foo.bar.)
  @param current_scope The current scope in the editor
+ @param current_line The current line in the editor
  @param search_namespace Whether to search the contents of namespace (e.g. after MyNamespace::)
  @return A GPtrArray of TMTag pointers to struct/union/class members or NULL when not found */
 GPtrArray *
 tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
-	gboolean function, gboolean member, const gchar *current_scope, gboolean search_namespace)
+	gboolean function, gboolean member, const gchar *current_scope, guint current_line,
+	gboolean search_namespace)
 {
 	TMParserType lang = source_file ? source_file->lang : TM_PARSER_NONE;
 	GPtrArray *tags, *member_tags = NULL;
@@ -1053,11 +1091,26 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 
 	if (!member_tags)
 	{
+		SortInfo info;
+		guint i;
+
 		if (function)
 			tag_type = function_types;
 
 		/* tags corresponding to the variable/type name */
 		tags = tm_workspace_find(name, NULL, tag_type, NULL, lang);
+
+		/* remove invalid local tags and sort tags so "nearest" tags are first */
+		for (i = 0; i < tags->len; i++)
+		{
+			TMTag *tag = tags->pdata[i];
+			if (!tm_workspace_is_autocomplete_tag(tag, source_file, current_line, current_scope))
+				tags->pdata[i] = NULL;
+		}
+		tm_tags_prune(tags);
+
+		info.file = source_file;
+		g_ptr_array_sort_with_data(tags, sort_found_tags, &info);
 
 		/* Start searching inside the source file, continue with workspace tags and
 		 * end with global tags. This way we find the "closest" tag to the current
