@@ -1019,6 +1019,33 @@ static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrAr
 }
 
 
+static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data)
+{
+	TMSourceFile *file = user_data;
+	const TMTag *t1 = *((TMTag **) a);
+	const TMTag *t2 = *((TMTag **) b);
+
+	/* sort local vars first (with highest line number first), followed
+	 * by tags from current file, followed by workspace tags followed
+	 * by global tags */
+	if (t1->type & tm_tag_local_var_t && t2->type & tm_tag_local_var_t)
+		return t2->line - t1->line;
+	else if (t1->type & tm_tag_local_var_t)
+		return -1;
+	else if (t2->type & tm_tag_local_var_t)
+		return 1;
+	else if (t1->file == file && t2->file != file)
+		return -1;
+	else if (t2->file == file && t1->file != file)
+		return 1;
+	else if (t1->file && !t2->file)
+		return -1;
+	else if (t2->file && !t1->file)
+		return 1;
+	return 0;
+}
+
+
 /* Returns all member tags of a struct/union/class if the provided name is a variable
  of such a type or the name of the type.
  @param source_file TMSourceFile of the edited source file
@@ -1026,11 +1053,13 @@ static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrAr
  @param function TRUE if the name is a name of a function
  @param member TRUE if invoked on class/struct member (e.g. after the last dot in foo.bar.)
  @param current_scope The current scope in the editor
+ @param current_line The current line in the editor
  @param search_namespace Whether to search the contents of namespace (e.g. after MyNamespace::)
  @return A GPtrArray of TMTag pointers to struct/union/class members or NULL when not found */
 GPtrArray *
 tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
-	gboolean function, gboolean member, const gchar *current_scope, gboolean search_namespace)
+	gboolean function, gboolean member, const gchar *current_scope, guint current_line,
+	gboolean search_namespace)
 {
 	TMParserType lang = source_file ? source_file->lang : TM_PARSER_NONE;
 	GPtrArray *tags, *member_tags = NULL;
@@ -1053,11 +1082,23 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 
 	if (!member_tags)
 	{
+		guint i;
+
 		if (function)
 			tag_type = function_types;
 
 		/* tags corresponding to the variable/type name */
 		tags = tm_workspace_find(name, NULL, tag_type, NULL, lang);
+
+		/* sort tags so "nearest" tags are first and remove invalid local tags */
+		g_ptr_array_sort_with_data(tags, sort_found_tags, source_file);
+		for (i = 0; i < tags->len; i++)
+		{
+			TMTag *tag = tags->pdata[i];
+			if (!is_valid_tag(tag, source_file, current_line, current_scope))
+				tags->pdata[i] = NULL;
+		}
+		tm_tags_prune(tags);
 
 		/* Start searching inside the source file, continue with workspace tags and
 		 * end with global tags. This way we find the "closest" tag to the current
