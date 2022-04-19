@@ -797,6 +797,79 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 }
 
 
+static gboolean replace_with_char(gchar *haystack, const gchar *needle, char replacement)
+{
+	gchar *pos = strstr(haystack, needle);
+	if (pos)
+	{
+		while (*needle)
+		{
+			*pos = replacement;
+			needle++;
+			pos++;
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
+static gboolean replace_parens_with_char(gchar *haystack, gchar paren_begin, gchar paren_end, char replacement)
+{
+	gchar needle[2] = {paren_begin, '\0'};
+	gchar *pos = strstr(haystack, needle);
+	gint nesting = 0;
+
+	if (pos)
+	{
+		while (*pos)
+		{
+			if (*pos == paren_begin)
+				nesting++;
+			else if (*pos == paren_end)
+				nesting--;
+			*pos = replacement;
+			if (nesting == 0)
+				break;
+			pos++;
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
+static gchar *strip_type(const gchar *scoped_name, TMParserType lang)
+{
+	if (scoped_name != NULL)
+	{
+		const gchar *sep = tm_parser_scope_separator(lang);
+		gchar *name = g_strdup(scoped_name);
+		gchar *scope_suffix;
+
+		/* remove pointers, parens and keywords appearing in types */
+		g_strdelimit(name, "*^&", ' ');
+		while (replace_parens_with_char(name, '[', ']', ' ')) {}
+		while (replace_parens_with_char(name, '<', '>', ' ')) {}
+		while (replace_with_char(name, "const ", ' ')) {}
+		while (replace_with_char(name, " const", ' ')) {}
+		while (replace_with_char(name, " struct", ' ')) {}
+		/* remove everything before final scope separator */
+		if (scope_suffix = g_strrstr(name, sep))
+		{
+			scope_suffix += strlen(sep);
+			scope_suffix = g_strdup(scope_suffix);
+			g_free(name);
+			name = scope_suffix;
+		}
+		g_strstrip(name);
+
+		return name;
+	}
+	return NULL;
+}
+
+
 /* Gets all members of type_tag; search them inside the all array.
  * The namespace parameter determines whether we are performing the "namespace"
  * search (user has typed something like "A::" where A is a type) or "scope" search
@@ -843,25 +916,6 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 	}
 
 	return tags;
-}
-
-
-static gchar *strip_type(const gchar *scoped_name, TMParserType lang)
-{
-	if (scoped_name != NULL)
-	{
-		/* remove scope prefix */
-		const gchar *sep = tm_parser_scope_separator(lang);
-		const gchar *base = g_strrstr(scoped_name, sep);
-		gchar *name = base ? g_strdup(base + strlen(sep)) : g_strdup(scoped_name);
-
-		/* remove pointers */
-		g_strdelimit(name, "*^", ' ');
-		g_strstrip(name);
-
-		return name;
-	}
-	return NULL;
 }
 
 
