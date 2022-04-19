@@ -61,7 +61,7 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 	TMParserType lang, guint max_num);
 
 GPtrArray *tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
-	gboolean function, gboolean member, const gchar *current_scope, gboolean search_namespace);
+	gboolean function, gboolean member, const gchar *current_scope, guint current_line, gboolean search_namespace);
 
 
 void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file);
@@ -71,6 +71,8 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
 
 void tm_workspace_free(void);
 
+gboolean tm_workspace_is_autocomplete_tag(TMTag *tag, TMSourceFile *current_file,
+	guint current_line, const gchar *current_scope);
 
 #ifdef TM_DEBUG
 void tm_workspace_dump(void);

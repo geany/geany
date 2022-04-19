@@ -698,6 +698,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 {
 	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_current_position(editor->sci);
+	gint line = sci_get_current_line(editor->sci) + 1;
 	gchar typed = sci_get_char_at(sci, pos - 1);
 	gchar brace_char;
 	gchar *name;
@@ -764,7 +765,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	if (symbols_get_current_scope(editor->document, &current_scope) == -1)
 		current_scope = "";
 	tags = tm_workspace_find_scope_members(editor->document->tm_file, name, function,
-				member, current_scope, scope_sep_typed);
+				member, current_scope, line, scope_sep_typed);
 	if (tags)
 	{
 		GPtrArray *filtered = g_ptr_array_new();
