@@ -761,55 +761,6 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 }
 
 
-/* Gets all members of type_tag; search them inside the all array.
- * The namespace parameter determines whether we are performing the "namespace"
- * search (user has typed something like "A::" where A is a type) or "scope" search
- * (user has typed "a." where a is a global struct-like variable). With the
- * namespace search we return all direct descendants of any type while with the
- * scope search we return only those which can be invoked on a variable (member,
- * method, etc.). */
-static GPtrArray *
-find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespace)
-{
-	TMTagType member_types = tm_tag_max_t & ~(TM_TYPE_WITH_MEMBERS | tm_tag_typedef_t);
-	GPtrArray *tags = g_ptr_array_new();
-	gchar *scope;
-	guint i;
-
-	if (namespace)
-		member_types = tm_tag_max_t;
-
-	if (type_tag->scope && *(type_tag->scope))
-		scope = g_strconcat(type_tag->scope, tm_parser_scope_separator(type_tag->lang), type_tag->name, NULL);
-	else
-		scope = g_strdup(type_tag->name);
-
-	for (i = 0; i < all->len; ++i)
-	{
-		TMTag *tag = TM_TAG (all->pdata[i]);
-
-		if (tag && (tag->type & member_types) &&
-			tag->scope && tag->scope[0] != '\0' &&
-			tm_parser_langs_compatible(tag->lang, type_tag->lang) &&
-			strcmp(scope, tag->scope) == 0 &&
-			(!namespace || !tm_tag_is_anon(tag)))
-		{
-			g_ptr_array_add (tags, tag);
-		}
-	}
-
-	g_free(scope);
-
-	if (tags->len == 0)
-	{
-		g_ptr_array_free(tags, TRUE);
-		return NULL;
-	}
-
-	return tags;
-}
-
-
 static gboolean replace_with_char(gchar *haystack, const gchar *needle, char replacement)
 {
 	gchar *pos = strstr(haystack, needle);
@@ -880,6 +831,73 @@ static gchar *strip_type(const gchar *scoped_name, TMParserType lang)
 		return name;
 	}
 	return NULL;
+}
+
+
+/* Gets all members of type_tag; search them inside the all array.
+ * The namespace parameter determines whether we are performing the "namespace"
+ * search (user has typed something like "A::" where A is a type) or "scope" search
+ * (user has typed "a." where a is a global struct-like variable). With the
+ * namespace search we return all direct descendants of any type while with the
+ * scope search we return only those which can be invoked on a variable (member,
+ * method, etc.). */
+static GPtrArray *
+find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespace)
+{
+	TMTagType member_types = tm_tag_max_t & ~(TM_TYPE_WITH_MEMBERS | tm_tag_typedef_t);
+	GPtrArray *tags = g_ptr_array_new();
+	gchar *scope;
+	guint i;
+
+	if (namespace)
+		member_types = tm_tag_max_t;
+
+	if (type_tag->scope && *(type_tag->scope))
+		scope = g_strconcat(type_tag->scope, tm_parser_scope_separator(type_tag->lang), type_tag->name, NULL);
+	else
+		scope = g_strdup(type_tag->name);
+
+	for (i = 0; i < all->len; ++i)
+	{
+		TMTag *tag = TM_TAG (all->pdata[i]);
+
+		if (tag && (tag->type & member_types) &&
+			tag->scope && tag->scope[0] != '\0' &&
+			tm_parser_langs_compatible(tag->lang, type_tag->lang) &&
+			strcmp(scope, tag->scope) == 0 &&
+			(!namespace || !tm_tag_is_anon(tag)))
+		{
+			g_ptr_array_add (tags, tag);
+		}
+	}
+
+	g_free(scope);
+
+	if (tags->len == 0)
+	{
+		g_ptr_array_free(tags, TRUE);
+		return NULL;
+	}
+
+	return tags;
+}
+
+
+		for (i = 0; parent = split_strv[i]; i++)
+		{
+			GPtrArray *parent_tags;
+		}
+
+	}
+
+
+	if (tags->len == 0)
+
+	if (depth == 0)
+	{
+		TMTagAttrType sort_attrs[] = {tm_tag_attr_name_t, 0};
+	}
+
 }
 
 
