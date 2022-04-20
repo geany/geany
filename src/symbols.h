@@ -63,6 +63,8 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname);
 
 gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname);
 
+const gchar *symbols_get_icon_name(guint icon_id);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

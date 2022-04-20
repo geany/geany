@@ -619,6 +619,8 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 		for (j = 0; j < tags->len; ++j)
 		{
 			TMTag *tag = tags->pdata[j];
+			gint group;
+			guint icon_id;
 
 			if (j > 0)
 				g_string_append_c(words, '\n');
@@ -630,11 +632,13 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 			}
 			g_string_append(words, tag->name);
 
-			/* for now, tag types don't all follow C, so just look at arglist */
-			if (!EMPTY(tag->arglist))
-				g_string_append(words, "?2");
-			else
-				g_string_append(words, "?1");
+			group = tm_parser_get_sidebar_group(tag->lang, tag->type);
+			if (group >= 0 && tm_parser_get_sidebar_info(tag->lang, group, &icon_id))
+			{
+				gchar buf[10];
+				sprintf(buf, "?%u", icon_id + 1);
+				g_string_append(words, buf);
+			}
 		}
 		show_autocomplete(sci, rootlen, words);
 		g_string_free(words, TRUE);
@@ -4850,6 +4854,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 {
 	ScintillaObject *sci;
 	int rectangular_selection_modifier;
+	guint i;
 
 	sci = SCINTILLA(scintilla_new());
 
@@ -4874,8 +4879,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
 	/* tag autocompletion images */
-	register_named_icon(sci, 1, "classviewer-var");
-	register_named_icon(sci, 2, "classviewer-method");
+	for (i = 0; i < TM_N_ICONS; i++)
+	{
+		const gchar *icon_name = symbols_get_icon_name(i);
+		register_named_icon(sci, i + 1, icon_name);
+	}
 
 	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
 	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);

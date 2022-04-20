@@ -2023,6 +2023,14 @@ gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
 }
 
 
+const gchar *symbols_get_icon_name(guint icon_id)
+{
+	if (icon_id < TM_N_ICONS)
+		return symbols_icons[icon_id].icon_name;
+	return NULL;
+}
+
+
 static void on_symbol_tree_sort_clicked(GtkMenuItem *menuitem, gpointer user_data)
 {
 	gint sort_mode = GPOINTER_TO_INT(user_data);
