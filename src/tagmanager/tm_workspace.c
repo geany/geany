@@ -803,7 +803,7 @@ static gboolean replace_parens_with_char(gchar *haystack, gchar paren_begin, gch
 }
 
 
-static gchar *strip_type(const gchar *scoped_name, TMParserType lang)
+static gchar *strip_type(const gchar *scoped_name, TMParserType lang, gboolean remove_scope)
 {
 	if (scoped_name != NULL)
 	{
@@ -819,7 +819,7 @@ static gchar *strip_type(const gchar *scoped_name, TMParserType lang)
 		while (replace_with_char(name, " const", ' ')) {}
 		while (replace_with_char(name, " struct", ' ')) {}
 		/* remove everything before final scope separator */
-		if (scope_suffix = g_strrstr(name, sep))
+		if (remove_scope && (scope_suffix = g_strrstr(name, sep)))
 		{
 			scope_suffix += strlen(sep);
 			scope_suffix = g_strdup(scope_suffix);
@@ -842,12 +842,17 @@ static gchar *strip_type(const gchar *scoped_name, TMParserType lang)
  * scope search we return only those which can be invoked on a variable (member,
  * method, etc.). */
 static GPtrArray *
-find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespace)
+find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespace, guint depth)
 {
 	TMTagType member_types = tm_tag_max_t & ~(TM_TYPE_WITH_MEMBERS | tm_tag_typedef_t);
-	GPtrArray *tags = g_ptr_array_new();
+	GPtrArray *tags;
 	gchar *scope;
 	guint i;
+
+	if (depth == 10)
+		return NULL;  /* simple inheritence cycle avoidance */
+
+	tags = g_ptr_array_new();
 
 	if (namespace)
 		member_types = tm_tag_max_t;
@@ -871,6 +876,45 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 		}
 	}
 
+	/* add members from parent classes */
+	if (!namespace && (type_tag->type & (tm_tag_class_t | tm_tag_struct_t)) &&
+		type_tag->inheritance && *type_tag->inheritance)
+	{
+		gchar *stripped = strip_type(type_tag->inheritance, type_tag->lang, FALSE);
+		gchar **split_strv = g_strsplit(stripped, ",", -1);  /* parent classes */
+		const gchar *parent;
+
+		g_free(stripped);
+
+		for (i = 0; parent = split_strv[i]; i++)
+		{
+			GPtrArray *parent_tags;
+
+			stripped = strip_type(parent, type_tag->lang, TRUE);
+			parent_tags = tm_workspace_find(stripped, NULL, tm_tag_class_t | tm_tag_struct_t,
+				NULL, type_tag->lang);
+
+			if (parent_tags->len > 0)
+			{
+				GPtrArray *parent_members = find_scope_members_tags (all, parent_tags->pdata[0],
+					FALSE, depth + 1);
+
+				if (parent_members)
+				{
+					guint j;
+					for (j = 0; j < parent_members->len; j++)
+						g_ptr_array_add (tags, parent_members->pdata[j]);
+					g_ptr_array_free(parent_members, TRUE);
+				}
+			}
+
+			g_ptr_array_free(parent_tags, TRUE);
+			g_free(stripped);
+		}
+
+		g_strfreev(split_strv);
+	}
+
 	g_free(scope);
 
 	if (tags->len == 0)
@@ -879,25 +923,13 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 		return NULL;
 	}
 
-	return tags;
-}
-
-
-		for (i = 0; parent = split_strv[i]; i++)
-		{
-			GPtrArray *parent_tags;
-		}
-
-	}
-
-
-	if (tags->len == 0)
-
 	if (depth == 0)
 	{
 		TMTagAttrType sort_attrs[] = {tm_tag_attr_name_t, 0};
+		tm_tags_sort(tags, sort_attrs, TRUE, FALSE);
 	}
 
+	return tags;
 }
 
 
@@ -959,7 +991,7 @@ find_scope_members (const GPtrArray *tags_array, const gchar *name, TMSourceFile
 			if (tag->var_type && tag->var_type[0] != '\0')
 			{
 				g_free(type_name);
-				type_name = strip_type(tag->var_type, tag->lang);
+				type_name = strip_type(tag->var_type, tag->lang, TRUE);
 				file = tag->file;
 				continue;
 			}
@@ -968,7 +1000,7 @@ find_scope_members (const GPtrArray *tags_array, const gchar *name, TMSourceFile
 		else /* real type with members */
 		{
 			/* use the same file as the composite type if file information available */
-			res = find_scope_members_tags(tag->file ? tag->file->tags_array : tags_array, tag, namespace);
+			res = find_scope_members_tags(tag->file ? tag->file->tags_array : tags_array, tag, namespace, 0);
 			break;
 		}
 	}
@@ -1051,7 +1083,7 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, T
 				member_tags = find_scope_members(searched_array, tag->name, tag->file, lang, TRUE);
 			else
 				member_tags = find_scope_members_tags(tag->file ? tag->file->tags_array : searched_array,
-					tag, TRUE);
+					tag, TRUE, 0);
 		}
 		else if (tag->var_type)  /* variable: scope search */
 		{
@@ -1063,7 +1095,7 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, T
 			if (!(tag->type & member_types) || member ||
 				member_at_method_scope(tags, current_scope, tag, lang))
 			{
-				gchar *tag_type = strip_type(tag->var_type, tag->lang);
+				gchar *tag_type = strip_type(tag->var_type, tag->lang, TRUE);
 
 				member_tags = find_scope_members(searched_array, tag_type, tag->file, lang, FALSE);
 				g_free(tag_type);
@@ -1084,7 +1116,7 @@ static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrAr
 	{
 		TMTag *tag = TM_TAG(tags->pdata[i]);
 
-		member_tags = find_scope_members_tags(searched_array, tag, TRUE);
+		member_tags = find_scope_members_tags(searched_array, tag, TRUE, 0);
 	}
 
 	return member_tags;
@@ -1212,59 +1244,3 @@ void tm_workspace_dump(void)
 	}
 }
 #endif /* TM_DEBUG */
-
-
-#if 0
-
-/* Returns a list of parent classes for the given class name
- @param name Name of the class
- @return A GPtrArray of TMTag pointers (includes the TMTag for the class) */
-static const GPtrArray *tm_workspace_get_parents(const gchar *name)
-{
-	static TMTagAttrType type[] = { tm_tag_attr_name_t, tm_tag_attr_none_t };
-	static GPtrArray *parents = NULL;
-	const GPtrArray *matches;
-	guint i = 0;
-	guint j;
-	gchar **klasses;
-	gchar **klass;
-	TMTag *tag;
-
-	g_return_val_if_fail(name && isalpha(*name),NULL);
-
-	if (NULL == parents)
-		parents = g_ptr_array_new();
-	else
-		g_ptr_array_set_size(parents, 0);
-	matches = tm_workspace_find(name, NULL, tm_tag_class_t, type, -1);
-	if ((NULL == matches) || (0 == matches->len))
-		return NULL;
-	g_ptr_array_add(parents, matches->pdata[0]);
-	while (i < parents->len)
-	{
-		tag = TM_TAG(parents->pdata[i]);
-		if ((NULL != tag->inheritance) && (isalpha(tag->inheritance[0])))
-		{
-			klasses = g_strsplit(tag->inheritance, ",", 10);
-			for (klass = klasses; (NULL != *klass); ++ klass)
-			{
-				for (j=0; j < parents->len; ++j)
-				{
-					if (0 == strcmp(*klass, TM_TAG(parents->pdata[j])->name))
-						break;
-				}
-				if (parents->len == j)
-				{
-					matches = tm_workspace_find(*klass, NULL, tm_tag_class_t, type, -1);
-					if ((NULL != matches) && (0 < matches->len))
-						g_ptr_array_add(parents, matches->pdata[0]);
-				}
-			}
-			g_strfreev(klasses);
-		}
-		++ i;
-	}
-	return parents;
-}
-
-#endif
