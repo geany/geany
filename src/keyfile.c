@@ -91,7 +91,8 @@
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
 #define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
 #else
-#define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
+/* Browser chosen by GTK */
+#define GEANY_DEFAULT_TOOLS_BROWSER		""
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
 #define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"

@@ -64,8 +64,10 @@
 /**
  *  Tries to open the given URI in a browser.
  *  On Windows, the system's default browser is opened.
- *  On non-Windows systems, the browser command set in the preferences dialog is used. In case
- *  that fails or it is unset, the user is asked to correct or fill it.
+ *  On non-Windows systems, the browser command can be set in the preferences dialog.
+ *    If unset (empty) the system's default browser is used. If set it specifies the
+ *    command to execute. Either way, if it fails the user is prompted to correct the
+ *    pref.
  *
  *  @param uri The URI to open in the web browser.
  *
@@ -78,15 +80,26 @@ void utils_open_browser(const gchar *uri)
 	g_return_if_fail(uri != NULL);
 	win32_open_browser(uri);
 #else
-	gchar *argv[2] = { (gchar *) uri, NULL };
+	gchar *new_cmd, *argv[2] = { (gchar *) uri, NULL };
 
 	g_return_if_fail(uri != NULL);
 
-	while (!spawn_async(NULL, tool_prefs.browser_cmd, argv, NULL, NULL, NULL))
+	while (1)
 	{
-		gchar *new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
-			_("Failed to spawn the configured browser command. "
-			  "Please correct it or enter another one."),
+		/* Uses the user's default browser akin to xdg-open (in flatpak through a portal) */
+		if (EMPTY(tool_prefs.browser_cmd))
+		{
+			if (gtk_show_uri_on_window(GTK_WINDOW(main_widgets.window), uri, GDK_CURRENT_TIME, NULL))
+				break;
+		}
+		else if (spawn_async(NULL, tool_prefs.browser_cmd, argv, NULL, NULL, NULL))
+			break;
+
+		/* Allow the user to correct the pref. new_cmd may become empty. */
+		new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
+			_("Failed to spawn the configured browser command. Please "
+			  "enter a valid command or leave it empty in order "
+			  "to spawn the system default browser."),
 			tool_prefs.browser_cmd);
 
 		if (new_cmd == NULL) /* user canceled */
