@@ -1049,8 +1049,8 @@ find_scope_members (const GPtrArray *tags_array, const gchar *name, TMSourceFile
 }
 
 
-/* Checks whether a member tag is directly accessible from method with method_scope */
-static gboolean member_at_method_scope(const GPtrArray *tags, const gchar *method_scope, TMTag *member_tag,
+/* Checks whether a member tag is directly accessible from method */
+static gboolean member_accessible(const GPtrArray *tags, const gchar *method_scope, TMTag *member_tag,
 	TMParserType lang)
 {
 	const gchar *sep = tm_parser_scope_separator(lang);
@@ -1063,35 +1063,31 @@ static gboolean member_at_method_scope(const GPtrArray *tags, const gchar *metho
 	len = g_strv_length(comps);
 	if (len > 1)
 	{
-		gchar *method, *member_scope, *cls, *cls_scope;
+		gchar *cls = comps[len - 2];
 
-		/* get method/member scope */
-		method = comps[len - 1];
-		comps[len - 1] = NULL;
-		member_scope = g_strjoinv(sep, comps);
-		comps[len - 1] = method;
-
-		/* get class scope */
-		cls = comps[len - 2];
-		comps[len - 2] = NULL;
-		cls_scope = g_strjoinv(sep, comps);
-		comps[len - 2] = cls;
-		cls_scope = strlen(cls_scope) > 0 ? cls_scope : NULL;
-
-		/* check whether member inside the class */
-		if (g_strcmp0(member_tag->scope, member_scope) == 0)
+		if (*cls)
 		{
-			const GPtrArray *src = member_tag->file ? member_tag->file->tags_array : tags;
-			GPtrArray *cls_tags = g_ptr_array_new();
+			/* find method's class members */
+			GPtrArray *cls_tags = find_scope_members(tags, cls, NULL, lang, FALSE);
 
-			/* check whether the class exists */
-			fill_find_tags_array(cls_tags, src, cls, cls_scope, TM_TYPE_WITH_MEMBERS | tm_tag_namespace_t, lang);
-			ret = cls_tags->len > 0;
-			g_ptr_array_free(cls_tags, TRUE);
+			if (cls_tags)
+			{
+				guint i;
+
+				/* check if one of the class members is member_tag */
+				for (i = 0; i < cls_tags->len; i++)
+				{
+					TMTag *t = cls_tags->pdata[i];
+
+					if (t == member_tag)
+					{
+						ret = TRUE;
+						break;
+					}
+				}
+				g_ptr_array_free(cls_tags, TRUE);
+			}
 		}
-
-		g_free(cls_scope);
-		g_free(member_scope);
 	}
 
 	g_strfreev(comps);
@@ -1131,7 +1127,7 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, T
 			 * inside a method where foo is a class member, we want scope completion
 			 * for foo. */
 			if (!(tag->type & member_types) || member ||
-				member_at_method_scope(tags, current_scope, tag, lang))
+				member_accessible(searched_array, current_scope, tag, lang))
 			{
 				gchar *tag_type = strip_type(tag->var_type, tag->lang, TRUE);
 
