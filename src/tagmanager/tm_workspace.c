@@ -701,28 +701,22 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 	TMSourceFile *current_file,
 	guint current_line,
 	const gchar *current_scope,
-	TMParserType lang, guint max_num)
+	TMParserType lang)
 {
-	TMTag **tag, *last = NULL;
-	guint i, count, num;
+	TMTag **tag;
+	guint i, count;
 
 	if (!src || !dst || !name || !*name)
 		return;
 
-	num = 0;
 	tag = tm_tags_find(src, name, TRUE, &count);
-	for (i = 0; i < count && num < max_num; ++i)
+	for (i = 0; i < count; ++i)
 	{
-		if (is_valid_tag(*tag, current_file, current_line, current_scope))
+		if (is_valid_tag(*tag, current_file, current_line, current_scope) &&
+			tm_parser_langs_compatible(lang, (*tag)->lang) &&
+			!tm_tag_is_anon(*tag))
 		{
-			if (tm_parser_langs_compatible(lang, (*tag)->lang) &&
-				!tm_tag_is_anon(*tag) &&
-				(!last || g_strcmp0(last->name, (*tag)->name) != 0))
-			{
-				g_ptr_array_add(dst, *tag);
-				last = *tag;
-				num++;
-			}
+			g_ptr_array_add(dst, *tag);
 		}
 		tag++;
 	}
@@ -797,6 +791,7 @@ typedef struct
 {
 	TMSourceFile *file;
 	TMSourceFile *header_file;
+	gboolean sort_by_name;
 } SortInfo;
 
 
@@ -810,7 +805,7 @@ static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data
 	 * by tags from current file, followed by files from header, followed
 	 * by workspace tags, followed by global tags */
 	if (t1->type & tm_tag_local_var_t && t2->type & tm_tag_local_var_t)
-		return t2->line - t1->line;
+		return info->sort_by_name ? g_strcmp0(t1->name, t2->name) : t2->line - t1->line;
 	else if (t1->type & tm_tag_local_var_t)
 		return -1;
 	else if (t2->type & tm_tag_local_var_t)
@@ -829,7 +824,7 @@ static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data
 		return -1;
 	else if (t2->file && !t1->file)
 		return 1;
-	return 0;
+	return g_strcmp0(t1->name, t2->name);
 }
 
 
@@ -850,13 +845,35 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags = g_ptr_array_new();
+	SortInfo info;
 
 	fill_find_tags_array_prefix(tags, theWorkspace->tags_array, prefix,
-		current_file, current_line, current_scope, lang, max_num);
+		current_file, current_line, current_scope, lang);
 	fill_find_tags_array_prefix(tags, theWorkspace->global_tags, prefix,
-		current_file, current_line, current_scope, lang, max_num);
+		current_file, current_line, current_scope, lang);
 
-	tm_tags_sort(tags, attrs, TRUE, FALSE);
+	/* sort based on how "close" the tag is to current line with local
+	 * variables first */
+	info.file = current_file;
+	info.header_file = find_header(current_file);
+	info.sort_by_name = TRUE;
+	g_ptr_array_sort_with_data(tags, sort_found_tags, &info);
+
+	/* remove duplicates - like tm_tags_dedup() but preserving the first
+	 * entry in a sequence of duplicates instead of the last one */
+	if (tags->len >= 2)
+	{
+		gint i;
+		for (i = tags->len - 2; i >= 0; i--)
+		{
+			TMTag *t1 = tags->pdata[i];
+			TMTag *t2 = tags->pdata[i + 1];
+			if (g_strcmp0(t1->name, t2->name) == 0)
+				tags->pdata[i + 1] = NULL;
+		}
+		tm_tags_prune(tags);
+	}
+
 	if (tags->len > max_num)
 		tags->len = max_num;
 
@@ -1278,6 +1295,7 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 
 		info.file = source_file;
 		info.header_file = find_header(source_file);
+		info.sort_by_name = FALSE;
 		g_ptr_array_sort_with_data(tags, sort_found_tags, &info);
 
 		/* Start searching inside the source file, continue with workspace tags and
