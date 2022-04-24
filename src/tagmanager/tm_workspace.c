@@ -729,6 +729,109 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 }
 
 
+/* return header file with the same name as source; return NULL if not found
+ * or if source itself is a header */
+static TMSourceFile *find_header(TMSourceFile *source)
+{
+	const gchar *header_exts[] = {"h", "H", "hh", "hpp", "hxx", "h++", NULL};
+	gboolean stop = FALSE;
+	TMSourceFile *res = NULL;
+	gchar *src_name, *src_ext;
+	guint i;
+
+	if ((source->lang != TM_PARSER_C && source->lang != TM_PARSER_CPP) ||
+		!source->short_name)
+		return NULL;
+
+	src_name = g_strdup(source->short_name);
+	src_ext = strrchr(src_name, '.');
+	if (!src_ext)
+	{
+		g_free(src_name);
+		return NULL;
+	}
+	*src_ext = '\0';
+	src_ext++;
+
+	for (i = 0; !stop && i < theWorkspace->source_files->len; i++)
+	{
+		TMSourceFile *header = theWorkspace->source_files->pdata[i];
+		gchar *hdr_name = g_strdup(header->short_name);
+		gchar *hdr_ext = strrchr(hdr_name, '.');
+
+		if (hdr_ext)
+		{
+			*hdr_ext = '\0';
+			hdr_ext++;
+			if (g_strcmp0(src_name, hdr_name) == 0)
+			{
+				const gchar *hdr;
+				for (hdr = *header_exts; !stop && *hdr; hdr++)
+				{
+					if (g_strcmp0(src_ext, hdr) == 0)
+					{
+						/* input source is header */
+						stop = TRUE;
+						break;
+					}
+					if (g_strcmp0(hdr_ext, hdr) == 0)
+					{
+						/* we found the header */
+						stop = TRUE;
+						res = header;
+						break;
+					}
+				}
+			}
+		}
+		g_free(hdr_name);
+	}
+	g_free(src_name);
+
+	return res;
+}
+
+
+typedef struct
+{
+	TMSourceFile *file;
+	TMSourceFile *header_file;
+} SortInfo;
+
+
+static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data)
+{
+	SortInfo *info = user_data;
+	const TMTag *t1 = *((TMTag **) a);
+	const TMTag *t2 = *((TMTag **) b);
+
+	/* sort local vars first (with highest line number first), followed
+	 * by tags from current file, followed by files from header, followed
+	 * by workspace tags, followed by global tags */
+	if (t1->type & tm_tag_local_var_t && t2->type & tm_tag_local_var_t)
+		return t2->line - t1->line;
+	else if (t1->type & tm_tag_local_var_t)
+		return -1;
+	else if (t2->type & tm_tag_local_var_t)
+		return 1;
+	else if (t1->file == info->file && t2->file != info->file)
+		return -1;
+	else if (t2->file == info->file && t1->file != info->file)
+		return 1;
+	else if (info->header_file &&
+			 t1->file == info->header_file && t2->file != info->header_file)
+		return -1;
+	else if (info->header_file &&
+			 t2->file == info->header_file && t1->file != info->header_file)
+		return 1;
+	else if (t1->file && !t2->file)
+		return -1;
+	else if (t2->file && !t1->file)
+		return 1;
+	return 0;
+}
+
+
 /* Returns tags with the specified prefix sorted by name, ignoring local
  variables from other files/functions or after current line. If there are several
  tags with the same name, only one of them appears in the resulting array.
@@ -1115,109 +1218,6 @@ static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrAr
 	}
 
 	return member_tags;
-}
-
-
-/* return header file with the same name as source; return NULL if not found
- * or if source itself is a header */
-static TMSourceFile *find_header(TMSourceFile *source)
-{
-	const gchar *header_exts[] = {"h", "H", "hh", "hpp", "hxx", "h++", NULL};
-	gboolean stop = FALSE;
-	TMSourceFile *res = NULL;
-	gchar *src_name, *src_ext;
-	guint i;
-
-	if ((source->lang != TM_PARSER_C && source->lang != TM_PARSER_CPP) ||
-		!source->short_name)
-		return NULL;
-
-	src_name = g_strdup(source->short_name);
-	src_ext = strrchr(src_name, '.');
-	if (!src_ext)
-	{
-		g_free(src_name);
-		return NULL;
-	}
-	*src_ext = '\0';
-	src_ext++;
-
-	for (i = 0; !stop && i < theWorkspace->source_files->len; i++)
-	{
-		TMSourceFile *header = theWorkspace->source_files->pdata[i];
-		gchar *hdr_name = g_strdup(header->short_name);
-		gchar *hdr_ext = strrchr(hdr_name, '.');
-
-		if (hdr_ext)
-		{
-			*hdr_ext = '\0';
-			hdr_ext++;
-			if (g_strcmp0(src_name, hdr_name) == 0)
-			{
-				const gchar *hdr;
-				for (hdr = *header_exts; !stop && *hdr; hdr++)
-				{
-					if (g_strcmp0(src_ext, hdr) == 0)
-					{
-						/* input source is header */
-						stop = TRUE;
-						break;
-					}
-					if (g_strcmp0(hdr_ext, hdr) == 0)
-					{
-						/* we found the header */
-						stop = TRUE;
-						res = header;
-						break;
-					}
-				}
-			}
-		}
-		g_free(hdr_name);
-	}
-	g_free(src_name);
-
-	return res;
-}
-
-
-typedef struct
-{
-	TMSourceFile *file;
-	TMSourceFile *header_file;
-} SortInfo;
-
-
-static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data)
-{
-	SortInfo *info = user_data;
-	const TMTag *t1 = *((TMTag **) a);
-	const TMTag *t2 = *((TMTag **) b);
-
-	/* sort local vars first (with highest line number first), followed
-	 * by tags from current file, followed by files from header, followed
-	 * by workspace tags, followed by global tags */
-	if (t1->type & tm_tag_local_var_t && t2->type & tm_tag_local_var_t)
-		return t2->line - t1->line;
-	else if (t1->type & tm_tag_local_var_t)
-		return -1;
-	else if (t2->type & tm_tag_local_var_t)
-		return 1;
-	else if (t1->file == info->file && t2->file != info->file)
-		return -1;
-	else if (t2->file == info->file && t1->file != info->file)
-		return 1;
-	else if (info->header_file &&
-			 t1->file == info->header_file && t2->file != info->header_file)
-		return -1;
-	else if (info->header_file &&
-			 t2->file == info->header_file && t1->file != info->header_file)
-		return 1;
-	else if (t1->file && !t2->file)
-		return -1;
-	else if (t2->file && !t1->file)
-		return 1;
-	return 0;
 }
 
 
