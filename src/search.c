@@ -201,7 +201,7 @@ static void init_prefs(void)
 
 	/* dialog layout & positions */
 	group = stash_group_new("search");
-	configuration_add_session_group(group);
+	configuration_add_session_group(group, FALSE);
 	stash_group_add_boolean(group, &find_dlg.all_expanded, "find_all_expanded", FALSE);
 	stash_group_add_boolean(group, &replace_dlg.all_expanded, "replace_all_expanded", FALSE);
 	stash_group_add_integer(group, &find_dlg.position[0], "position_find_x", -1);

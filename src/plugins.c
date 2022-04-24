@@ -1332,7 +1332,7 @@ void plugins_init(void)
 	g_free(path);
 
 	group = stash_group_new("plugins");
-	configuration_add_pref_group(group, TRUE);
+	configuration_add_session_group(group, TRUE);
 
 	stash_group_add_toggle_button(group, &prefs.load_plugins,
 		"load_plugins", TRUE, "check_plugins");
