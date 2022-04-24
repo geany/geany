@@ -1611,7 +1611,6 @@ static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean defi
 	{
 		if (tmtag->type & tm_tag_local_var_t &&
 			(doc->tm_file != tmtag->file ||
-			 current_line < tmtag->line ||
 			 g_strcmp0(current_scope, tmtag->scope) != 0))
 			continue;
 
