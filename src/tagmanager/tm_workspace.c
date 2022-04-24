@@ -739,7 +739,8 @@ static TMSourceFile *find_header(TMSourceFile *source)
 	gchar *src_name, *src_ext;
 	guint i;
 
-	if ((source->lang != TM_PARSER_C && source->lang != TM_PARSER_CPP) ||
+	if (!source ||
+		(source->lang != TM_PARSER_C && source->lang != TM_PARSER_CPP) ||
 		!source->short_name)
 		return NULL;
 
