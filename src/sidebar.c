@@ -88,7 +88,6 @@ enum
 
 static GtkTreeStore	*store_openfiles;
 static GtkWidget *openfiles_popup_menu;
-static gboolean documents_show_paths;
 static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
 /* callback prototypes */
@@ -425,7 +424,7 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
 	static GIcon *dir_icon = NULL;
 
-	if (!documents_show_paths)
+	if (!interface_prefs.documents_show_paths)
 		return NULL;
 
 	path = g_path_get_dirname(DOC_FILENAME(doc));
@@ -620,10 +619,9 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 	g_signal_connect(item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
 }
 
-
 static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
-	documents_show_paths = gtk_check_menu_item_get_active(item);
+	interface_prefs.documents_show_paths = gtk_check_menu_item_get_active(item);
 	sidebar_openfiles_update_all();
 }
 
@@ -728,7 +726,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
 	doc_items.show_paths = gtk_check_menu_item_new_with_mnemonic(_("Show _Paths"));
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), documents_show_paths);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), interface_prefs.documents_show_paths);
 	gtk_widget_show(doc_items.show_paths);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.show_paths);
 	g_signal_connect(doc_items.show_paths, "activate",
@@ -1050,9 +1048,9 @@ static void documents_menu_update(GtkTreeSelection *selection)
 	gtk_widget_set_sensitive(doc_items.find_in_files, sel);
 	g_free(shortname);
 
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), documents_show_paths);
-	gtk_widget_set_sensitive(doc_items.expand_all, documents_show_paths);
-	gtk_widget_set_sensitive(doc_items.collapse_all, documents_show_paths);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(doc_items.show_paths), interface_prefs.documents_show_paths);
+	gtk_widget_set_sensitive(doc_items.expand_all, interface_prefs.documents_show_paths);
+	gtk_widget_set_sensitive(doc_items.collapse_all, interface_prefs.documents_show_paths);
 }
 
 
@@ -1089,10 +1087,9 @@ void sidebar_init(void)
 	StashGroup *group;
 
 	group = stash_group_new(PACKAGE);
-	stash_group_add_boolean(group, &documents_show_paths, "documents_show_paths", TRUE);
 	stash_group_add_widget_property(group, &ui_prefs.sidebar_page, "sidebar_page", GINT_TO_POINTER(0),
 		main_widgets.sidebar_notebook, "page", 0);
-	configuration_add_pref_group(group, FALSE);
+	configuration_add_session_group(group);
 	stash_group = group;
 
 	/* delay building documents treeview until sidebar font has been read */

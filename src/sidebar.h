@@ -48,6 +48,12 @@ enum
 	SYMBOLS_N_COLUMNS
 };
 
+enum
+{
+	SHOW_PATHS_NONE,
+	SHOW_PATHS_LIST
+};
+
 void sidebar_init(void);
 
 void sidebar_finalize(void);

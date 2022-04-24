@@ -46,6 +46,7 @@
 #include "printing.h"
 #include "project.h"
 #include "sciwrappers.h"
+#include "sidebar.h"
 #include "socket.h"
 #include "stash.h"
 #include "support.h"
@@ -152,8 +153,7 @@ void configuration_add_various_pref_group(struct StashGroup *group,
 }
 
 
-/* The group will be free'd on quitting.
- * @param for_prefs_dialog is whether the group also has Prefs dialog items. */
+/* The group will be free'd on quitting. */
 void configuration_add_session_group(struct StashGroup *group)
 {
 	g_ptr_array_add(keyfile_groups[SESSION], group);
@@ -177,6 +177,7 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &file_prefs.tab_close_switch_to_mru,
 		"tab_close_switch_to_mru", FALSE, "check_tab_close_switch_to_mru");
 	stash_group_add_integer(group, &interface_prefs.tab_pos_sidebar, "tab_pos_sidebar", GTK_POS_TOP);
+	stash_group_add_integer(group, &interface_prefs.documents_show_paths, "documents_show_paths", SHOW_PATHS_LIST);
 	stash_group_add_radio_buttons(group, &interface_prefs.sidebar_pos,
 		"sidebar_pos", GTK_POS_LEFT,
 		"radio_sidebar_left", GTK_POS_LEFT,
