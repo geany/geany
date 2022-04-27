@@ -89,7 +89,7 @@ static TMParserMapGroup group_C[] = {
 	{_("Structs"), TM_ICON_STRUCT, tm_tag_union_t | tm_tag_struct_t},
 	{_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
 	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t | tm_tag_macro_with_arg_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t | tm_tag_local_var_t},
 	{_("Extern Variables"), TM_ICON_VAR, tm_tag_externvar_t},
 	{_("Other"), TM_ICON_OTHER, tm_tag_other_t},
 };
@@ -1194,11 +1194,7 @@ void tm_parser_verify_type_mappings(void)
 					kinds[i], tm_ctags_get_lang_name(lang));
 
 			presence_map[(unsigned char) map->entries[i].kind]++;
-
-			/* we don't display local variables in the symbol tree so don't
-			 * check whether they are mapped to some group */
-			if (map->entries[i].type != tm_tag_local_var_t)
-				lang_types |= map->entries[i].type;
+			lang_types |= map->entries[i].type;
 		}
 
 		for (i = 0; i < sizeof(presence_map); i++)
