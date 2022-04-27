@@ -1089,7 +1089,7 @@ void sidebar_init(void)
 	group = stash_group_new(PACKAGE);
 	stash_group_add_widget_property(group, &ui_prefs.sidebar_page, "sidebar_page", GINT_TO_POINTER(0),
 		main_widgets.sidebar_notebook, "page", 0);
-	configuration_add_session_group(group);
+	configuration_add_session_group(group, FALSE);
 	stash_group = group;
 
 	/* delay building documents treeview until sidebar font has been read */

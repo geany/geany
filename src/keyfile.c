@@ -153,10 +153,20 @@ void configuration_add_various_pref_group(struct StashGroup *group,
 }
 
 
-/* The group will be free'd on quitting. */
-void configuration_add_session_group(struct StashGroup *group)
+/* The group will be free'd on quitting.
+ *
+ * @a for_prefs_dialog is typically @c FALSE as session configuration is not
+ * well suited for the Preferences dialog. Probably only existing prefs that
+ * migrated to session data should set this to @c TRUE.
+ *
+ * @param for_prefs_dialog is whether the group also has Prefs dialog items.
+ */
+void configuration_add_session_group(struct StashGroup *group, gboolean for_prefs_dialog)
 {
 	g_ptr_array_add(keyfile_groups[SESSION], group);
+
+	if (for_prefs_dialog)
+		g_ptr_array_add(pref_groups, group);
 }
 
 
