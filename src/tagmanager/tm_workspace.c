@@ -760,16 +760,16 @@ static TMSourceFile *find_header(TMSourceFile *source)
 			hdr_ext++;
 			if (g_strcmp0(src_name, hdr_name) == 0)
 			{
-				const gchar *hdr;
-				for (hdr = *header_exts; !stop && *hdr; hdr++)
+				const gchar **hdr;
+				for (hdr = header_exts; !stop && *hdr; hdr++)
 				{
-					if (g_strcmp0(src_ext, hdr) == 0)
+					if (g_strcmp0(src_ext, *hdr) == 0)
 					{
 						/* input source is header */
 						stop = TRUE;
 						break;
 					}
-					if (g_strcmp0(hdr_ext, hdr) == 0)
+					if (g_strcmp0(hdr_ext, *hdr) == 0)
 					{
 						/* we found the header */
 						stop = TRUE;
