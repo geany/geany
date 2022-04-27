@@ -516,7 +516,14 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 	/* brace highlighting */
 	editor_highlight_braces(editor, pos);
 
-	ui_update_statusbar(editor->document, pos);
+	/* update status bar */
+	const gchar *scope = NULL;
+	const gint scope_tag_line = symbols_get_current_scope(editor->document, &scope);
+	ui_update_statusbar_with_scope(editor->document, pos, scope);
+
+	/* update selection in symbols window */
+	gint cursor_line = sci_get_current_line(sci);
+	ui_update_symbols_window_selection(scope_tag_line, cursor_line);
 
 #if 0
 	/** experimental code for inverting selections */

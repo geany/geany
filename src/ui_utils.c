@@ -186,7 +186,7 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 
 /* note: some comments below are for translators */
 static gchar *create_statusbar_statistics(GeanyDocument *doc,
-	guint line, guint vcol, guint pos)
+	guint line, guint vcol, guint pos, const gchar *scope)
 {
 	const gchar *cur_tag;
 	const gchar *fmt;
@@ -295,8 +295,9 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				g_string_append(stats_str, filetypes_get_display_name(doc->file_type));
 				break;
 			case 'S':
-				symbols_get_current_scope(doc, &cur_tag);
-				g_string_append(stats_str, cur_tag);
+				if (!scope)
+					symbols_get_current_scope(doc, &scope);
+				g_string_append(stats_str, scope);
 				break;
 			case 'Y':
 				g_string_append_c(stats_str, ' ');
@@ -319,9 +320,13 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 	return g_string_free(stats_str, FALSE);
 }
 
+/* updates the status bar, in case we don't already know the scope */
+void ui_update_statusbar(GeanyDocument *doc, gint pos) {
+	ui_update_statusbar_with_scope(doc, pos, NULL);
+}
 
 /* updates the status bar document statistics */
-void ui_update_statusbar(GeanyDocument *doc, gint pos)
+void ui_update_statusbar_with_scope(GeanyDocument *doc, gint pos, const gchar *scope)
 {
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
@@ -349,7 +354,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 			vcol = 0;
 		vcol += sci_get_cursor_virtual_space(doc->editor->sci);
 
-		stats_str = create_statusbar_statistics(doc, line, vcol, pos);
+		stats_str = create_statusbar_statistics(doc, line, vcol, pos, scope);
 
 		/* can be overridden by status messages */
 		set_statusbar(stats_str, TRUE);
@@ -564,6 +569,25 @@ void ui_update_fold_items(void)
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_fold_all1"), editor_prefs.folding);
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_unfold_all1"), editor_prefs.folding);
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "separator22"), editor_prefs.folding);
+}
+
+
+/* Resolve the most accurate symbol of the cursor line */
+void ui_update_symbols_window_selection(gint scope_tag_line, gint cursor_line)
+{
+	/* First try to find a symbol exactly at cursor line. */
+	if (!symbols_select_tag_at_line(cursor_line + 1))
+	{
+		/* If not resolving the cursor line, maybe we are in scope of something. */
+		if (scope_tag_line != -1)
+		{
+			TMTag* selection_tag = symbols_get_current_selection_tag();
+			if (!selection_tag || selection_tag->line != scope_tag_line + 1)
+				symbols_select_tag_at_line(scope_tag_line + 1);
+		}
+		else
+			symbols_clear_selection();
+	}
 }
 
 
