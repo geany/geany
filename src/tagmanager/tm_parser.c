@@ -192,14 +192,14 @@ static TMParserMapEntry map_PYTHON[] = {
     /* defined as externvar to get those excluded as forward type in symbols.c:goto_tag()
      * so we can jump to the real implementation (if known) instead of to the import statement */
 	{'x', tm_tag_externvar_t},  // unknown
-	{'z', tm_tag_local_var_t},  // parameter
-	{'l', tm_tag_local_var_t},  // local
+	{'z', tm_tag_undef_t},      // parameter
+	{'l', tm_tag_undef_t},      // local
 };
 static TMParserMapGroup group_PYTHON[] = {
 	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{_("Methods"), TM_ICON_MACRO, tm_tag_method_t},
 	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 	{_("Imports"), TM_ICON_NAMESPACE, tm_tag_externvar_t},
 };
 
@@ -930,14 +930,14 @@ static TMParserMapEntry map_GDSCRIPT[] = {
 	{'C', tm_tag_variable_t},  // const
 	{'g', tm_tag_enum_t},      // enum
 	{'e', tm_tag_variable_t},  // enumerator
-	{'z', tm_tag_local_var_t}, // parameter
-	{'l', tm_tag_local_var_t}, // local
+	{'z', tm_tag_other_t},     // parameter
+	{'l', tm_tag_other_t},     // local
 	{'s', tm_tag_variable_t},  // signal
 };
 static TMParserMapGroup group_GDSCRIPT[] = {
 	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{_("Methods"), TM_ICON_MACRO, tm_tag_method_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 	{_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
 	{_("Other"), TM_ICON_OTHER, tm_tag_other_t},
 };
