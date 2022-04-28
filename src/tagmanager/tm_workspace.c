@@ -696,29 +696,110 @@ static gboolean is_valid_tag(TMTag *tag,
 }
 
 
-static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
-	const char *name,
-	TMSourceFile *current_file,
-	guint current_line,
-	const gchar *current_scope,
-	TMParserType lang)
+typedef struct
 {
-	TMTag **tag;
-	guint i, count;
+	TMSourceFile *file;
+	TMSourceFile *header;
+	guint line;
+	const gchar *scope;
+	TMParserType lang;
+} CopyInfo;
 
-	if (!src || !dst || !name || !*name)
+
+static gboolean is_autocomplete_tag(TMTag *tag, CopyInfo *info)
+{
+	return is_valid_tag(tag, info->file, info->line, info->scope) &&
+		tm_parser_langs_compatible(info->lang, tag->lang) &&
+		!tm_tag_is_anon(tag);
+}
+
+static gboolean is_local_tag(TMTag *tag, CopyInfo *info)
+{
+	return (tag->type & tm_tag_local_var_t) &&
+		is_autocomplete_tag(tag, info);
+}
+
+/* tag from current file but not local tag */
+static gboolean is_current_file_tag(TMTag *tag, CopyInfo *info)
+{
+	return tag->file == info->file &&
+		!(tag->type & tm_tag_local_var_t) &&
+		is_autocomplete_tag(tag, info);
+}
+
+/* tag from current file's header but not local tag */
+static gboolean is_header_file_tag(TMTag *tag, CopyInfo *info)
+{
+	return tag->file == info->header &&
+		!(tag->type & tm_tag_local_var_t) &&
+		is_autocomplete_tag(tag, info);
+}
+
+/* any tag except the above categories */
+static gboolean is_workspace_tag(TMTag *tag, CopyInfo *info)
+{
+	return  tag->file != info->file &&
+		tag->file != info->header &&
+		!(tag->type & tm_tag_local_var_t) &&
+		is_autocomplete_tag(tag, info);
+}
+
+
+static guint copy_tags(GPtrArray *dst, TMTag **src, guint src_len, gint num,
+	gboolean (*predicate) (TMTag *, CopyInfo *), CopyInfo *info)
+{
+	TMTag *prev_tag = NULL;
+	guint i;
+
+	g_return_val_if_fail(src && dst, 0);
+
+	for (i = 0; i < src_len && num > 0; i++)
+	{
+		TMTag *tag = *src;
+		if (predicate(tag, info))
+		{
+			if (!prev_tag || g_strcmp0(tag->name, prev_tag->name) != 0)
+			{
+				g_ptr_array_add(dst, tag);
+				prev_tag = tag;
+				num--;
+			}
+		}
+		src++;
+	}
+}
+
+
+static void fill_find_tags_array_prefix(GPtrArray *dst, const char *name,
+	CopyInfo *info, guint max_num)
+{
+	TMTag **found;
+	guint count;
+
+	if (!dst || !name || !*name)
 		return;
 
-	tag = tm_tags_find(src, name, TRUE, &count);
-	for (i = 0; i < count; ++i)
+	/* while copy_tags() removes duplicate names, those duplicates are
+	 * removed only within the same category (like local tags) but not
+	 * across categories (e.g. there can be a tag with the same name in
+	 * local tags and header file tags). After final sorting and deduplication
+	 * this could lead to less resulting tags so request twice as many tags
+	 * here (which is more than enough in practice) */
+	max_num *= 2;
+
+	found = tm_tags_find(theWorkspace->tags_array, name, TRUE, &count);
+	if (found)
 	{
-		if (is_valid_tag(*tag, current_file, current_line, current_scope) &&
-			tm_parser_langs_compatible(lang, (*tag)->lang) &&
-			!tm_tag_is_anon(*tag))
-		{
-			g_ptr_array_add(dst, *tag);
-		}
-		tag++;
+		copy_tags(dst, found, count, max_num - dst->len, is_local_tag, info);
+		copy_tags(dst, found, count, max_num - dst->len, is_current_file_tag, info);
+		copy_tags(dst, found, count, max_num - dst->len, is_header_file_tag, info);
+		copy_tags(dst, found, count, max_num - dst->len, is_workspace_tag, info);
+	}
+	if (dst->len < max_num)
+	{
+		found = tm_tags_find(theWorkspace->global_tags, name, TRUE, &count);
+		if (found)
+			copy_tags(dst, found, count, max_num - dst->len, is_autocomplete_tag, info);
 	}
 }
 
@@ -845,19 +926,23 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags = g_ptr_array_new();
-	SortInfo info;
+	TMSourceFile *header_file = find_header(current_file);
+	SortInfo sort_info;
+	CopyInfo copy_info;
 
-	fill_find_tags_array_prefix(tags, theWorkspace->tags_array, prefix,
-		current_file, current_line, current_scope, lang);
-	fill_find_tags_array_prefix(tags, theWorkspace->global_tags, prefix,
-		current_file, current_line, current_scope, lang);
+	copy_info.file = current_file;
+	copy_info.header = header_file;
+	copy_info.line = current_line;
+	copy_info.scope = current_scope;
+	copy_info.lang = lang;
+	fill_find_tags_array_prefix(tags, prefix, &copy_info, max_num);
 
 	/* sort based on how "close" the tag is to current line with local
 	 * variables first */
-	info.file = current_file;
-	info.header_file = find_header(current_file);
-	info.sort_by_name = TRUE;
-	g_ptr_array_sort_with_data(tags, sort_found_tags, &info);
+	sort_info.file = current_file;
+	sort_info.header_file = header_file;
+	sort_info.sort_by_name = TRUE;
+	g_ptr_array_sort_with_data(tags, sort_found_tags, &sort_info);
 
 	/* remove duplicates - like tm_tags_dedup() but preserving the first
 	 * entry in a sequence of duplicates instead of the last one */
