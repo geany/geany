@@ -689,9 +689,10 @@ static gboolean is_valid_tag(TMTag *tag,
 	guint current_line,
 	const gchar *current_scope)
 {
-	/* ignore local variables from other files/functions */
+	/* ignore local variables from other files/functions or after current line */
 	return !(tag->type & tm_tag_local_var_t) ||
 		(current_file == tag->file &&
+		 current_line >= tag->line &&
 		 g_strcmp0(current_scope, tag->scope) == 0);
 }
 
