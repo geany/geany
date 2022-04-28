@@ -22,14 +22,10 @@ _initÌ128Í(peer_id)ÎPeerÖ0
 method:     Peer :: _init(peer_id)
 centerÌ16384ÎCircle2DÖ0
 variable:   Circle2D :: center
-closeÌ524288ÎLobby.leaveÖ0
-other:      Lobby.leave :: close
 colorÌ16384ÎCircle2DÖ0
 variable:   Circle2D :: color
 hostÌ16384ÎLobbyÖ0Ïint
 variable:   int Lobby :: host
-host_idÌ524288ÎLobby._initÖ0Ïint
-other:      int Lobby._init :: host_id
 idÌ16384ÎPeerÖ0
 variable:   Peer :: id
 joinÌ128Í(peer_id, server)ÎLobbyÖ0Ïbool
@@ -40,16 +36,6 @@ lobbiesÌ16384Ö0ÏDictionary
 variable:   Dictionary lobbies
 lobbyÌ16384ÎPeerÖ0
 variable:   Peer :: lobby
-new_peerÌ524288ÎLobby.joinÖ0ÏWebSocketPeer
-other:      WebSocketPeer Lobby.join :: new_peer
-peer_idÌ524288ÎLobby.joinÖ0
-other:      Lobby.join :: peer_id
-peer_idÌ524288ÎLobby.leaveÖ0
-other:      Lobby.leave :: peer_id
-peer_idÌ524288ÎLobby.sealÖ0
-other:      Lobby.seal :: peer_id
-peer_idÌ524288ÎPeer._initÖ0
-other:      Peer._init :: peer_id
 peersÌ16384Ö0ÏDictionary
 variable:   Dictionary peers
 peersÌ16384ÎLobbyÖ0ÏArray
@@ -64,12 +50,6 @@ sealedÌ16384ÎLobbyÖ0Ïbool
 variable:   bool Lobby :: sealed
 serverÌ16384Ö0ÏWebSocketServer
 variable:   WebSocketServer server
-serverÌ524288ÎLobby.joinÖ0
-other:      Lobby.join :: server
-serverÌ524288ÎLobby.leaveÖ0
-other:      Lobby.leave :: server
-serverÌ524288ÎLobby.sealÖ0
-other:      Lobby.seal :: server
 timeÌ16384ÎLobbyÖ0
 variable:   Lobby :: time
 timeÌ16384ÎPeerÖ0
