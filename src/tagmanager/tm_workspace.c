@@ -745,10 +745,9 @@ static gboolean is_workspace_tag(TMTag *tag, CopyInfo *info)
 }
 
 
-static guint copy_tags(GPtrArray *dst, TMTag **src, guint src_len, gint num,
-	gboolean (*predicate) (TMTag *, CopyInfo *), CopyInfo *info)
+static guint copy_tags(GPtrArray *dst, TMTag **src, guint src_len, GHashTable *name_table,
+	gint num, gboolean (*predicate) (TMTag *, CopyInfo *), CopyInfo *info)
 {
-	TMTag *prev_tag = NULL;
 	guint i;
 
 	g_return_val_if_fail(src && dst, 0);
@@ -756,14 +755,12 @@ static guint copy_tags(GPtrArray *dst, TMTag **src, guint src_len, gint num,
 	for (i = 0; i < src_len && num > 0; i++)
 	{
 		TMTag *tag = *src;
-		if (predicate(tag, info))
+		if (predicate(tag, info) &&
+			!g_hash_table_contains(name_table, tag->name))
 		{
-			if (!prev_tag || g_strcmp0(tag->name, prev_tag->name) != 0)
-			{
-				g_ptr_array_add(dst, tag);
-				prev_tag = tag;
-				num--;
-			}
+			g_ptr_array_add(dst, tag);
+			g_hash_table_add(name_table, tag->name);
+			num--;
 		}
 		src++;
 	}
@@ -775,32 +772,29 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const char *name,
 {
 	TMTag **found;
 	guint count;
+	GHashTable *name_table;
 
 	if (!dst || !name || !*name)
 		return;
 
-	/* while copy_tags() removes duplicate names, those duplicates are
-	 * removed only within the same category (like local tags) but not
-	 * across categories (e.g. there can be a tag with the same name in
-	 * local tags and header file tags). After final sorting and deduplication
-	 * this could lead to less resulting tags so request twice as many tags
-	 * here (which is more than enough in practice) */
-	max_num *= 2;
+	name_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, NULL);
 
 	found = tm_tags_find(theWorkspace->tags_array, name, TRUE, &count);
 	if (found)
 	{
-		copy_tags(dst, found, count, max_num - dst->len, is_local_tag, info);
-		copy_tags(dst, found, count, max_num - dst->len, is_current_file_tag, info);
-		copy_tags(dst, found, count, max_num - dst->len, is_header_file_tag, info);
-		copy_tags(dst, found, count, max_num - dst->len, is_workspace_tag, info);
+		copy_tags(dst, found, count, name_table, max_num - dst->len, is_local_tag, info);
+		copy_tags(dst, found, count, name_table, max_num - dst->len, is_current_file_tag, info);
+		copy_tags(dst, found, count, name_table, max_num - dst->len, is_header_file_tag, info);
+		copy_tags(dst, found, count, name_table, max_num - dst->len, is_workspace_tag, info);
 	}
 	if (dst->len < max_num)
 	{
 		found = tm_tags_find(theWorkspace->global_tags, name, TRUE, &count);
 		if (found)
-			copy_tags(dst, found, count, max_num - dst->len, is_autocomplete_tag, info);
+			copy_tags(dst, found, count, name_table, max_num - dst->len, is_autocomplete_tag, info);
 	}
+
+	g_hash_table_unref(name_table);
 }
 
 
@@ -943,24 +937,6 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 	sort_info.header_file = header_file;
 	sort_info.sort_by_name = TRUE;
 	g_ptr_array_sort_with_data(tags, sort_found_tags, &sort_info);
-
-	/* remove duplicates - like tm_tags_dedup() but preserving the first
-	 * entry in a sequence of duplicates instead of the last one */
-	if (tags->len >= 2)
-	{
-		gint i;
-		for (i = tags->len - 2; i >= 0; i--)
-		{
-			TMTag *t1 = tags->pdata[i];
-			TMTag *t2 = tags->pdata[i + 1];
-			if (g_strcmp0(t1->name, t2->name) == 0)
-				tags->pdata[i + 1] = NULL;
-		}
-		tm_tags_prune(tags);
-	}
-
-	if (tags->len > max_num)
-		tags->len = max_num;
 
 	return tags;
 }
