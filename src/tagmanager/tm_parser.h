@@ -167,6 +167,8 @@ gboolean tm_parser_has_full_scope(TMParserType lang);
 
 gboolean tm_parser_langs_compatible(TMParserType lang, TMParserType other);
 
+gboolean tm_parser_var_valid_before_declare(TMParserType lang);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

@@ -1528,3 +1528,23 @@ gboolean tm_parser_langs_compatible(TMParserType lang, TMParserType other)
 
 	return FALSE;
 }
+
+
+/* For languages using tm_tag_local_var_t mapping this function returns
+ * TRUE if variables can be used before their declaration or first
+ * assignment (typically dynamically typed languages), or FALSE if
+ * variables are valid only after their previous declaration
+ * (typically statically typed languages). Used to determine what
+ * variables to show in autocompletion popup. */
+gboolean tm_parser_var_valid_before_declare(TMParserType lang)
+{
+	switch (lang)
+	{
+		case TM_PARSER_PYTHON:
+			return TRUE;
+		case TM_PARSER_C:
+		case TM_PARSER_CPP:
+		default:
+			return FALSE;
+	}
+}
