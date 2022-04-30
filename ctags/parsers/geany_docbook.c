@@ -78,6 +78,8 @@ static void createTag(docbookKind kind, const char *buf)
 		++buf;
 	} while ((*buf != '\0') && (*buf != '"'));
 	makeSimpleTag(name, kind);
+
+	vStringDelete(name);
 }
 
 
