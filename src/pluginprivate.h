@@ -55,7 +55,6 @@ typedef struct GeanyPluginPrivate
 	void		(*configure_single) (GtkWidget *parent); /* plugin configure dialog, optional and deprecated */
 
 	/* extra stuff */
-	PluginFields	fields;
 	GeanyKeyGroup	*key_group;
 	GeanyAutoSeparator	toolbar_separator;
 	GArray			*signal_ids;			/* SignalConnection's to disconnect when unloading */
