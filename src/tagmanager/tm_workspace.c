@@ -540,7 +540,7 @@ static gboolean create_global_tags_preprocessed(const char *pre_process_cmd,
 	}
 
 	tm_tags_sort(source_file->tags_array, global_tags_sort_attrs, TRUE, FALSE);
-	filtered_tags = tm_tags_extract(source_file->tags_array, ~tm_tag_local_var_t);
+	filtered_tags = tm_tags_extract(source_file->tags_array, ~(tm_tag_local_var_t | tm_tag_include_t));
 	ret = tm_source_file_write_tags_file(tags_file, filtered_tags);
 	g_ptr_array_free(filtered_tags, TRUE);
 	tm_source_file_free(source_file);
@@ -573,7 +573,7 @@ static gboolean create_global_tags_direct(GList *source_files, const char *tags_
 		}
 	}
 
-	filtered_tags = tm_tags_extract(tags, ~tm_tag_local_var_t);
+	filtered_tags = tm_tags_extract(tags, ~(tm_tag_local_var_t | tm_tag_include_t));
 	tm_tags_sort(filtered_tags, global_tags_sort_attrs, TRUE, FALSE);
 
 	if (filtered_tags->len > 0)
@@ -676,7 +676,8 @@ gboolean tm_workspace_is_autocomplete_tag(TMTag *tag,
 	gboolean valid_local = !tag->local || current_file == tag->file;
 
 	return valid && valid_local &&
-		!tm_tag_is_anon(tag) && tm_parser_langs_compatible(lang, tag->lang);
+		!tm_tag_is_anon(tag) && tm_parser_langs_compatible(lang, tag->lang) &&
+		!(tag->type & tm_tag_include_t);
 }
 
 
