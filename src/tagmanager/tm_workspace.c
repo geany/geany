@@ -64,6 +64,12 @@ static TMTagType TM_GLOBAL_TYPE_MASK =
 static TMWorkspace *theWorkspace = NULL;
 
 
+static void free_ptr_array(gpointer arr)
+{
+	g_ptr_array_free(arr, TRUE);
+}
+
+
 static gboolean tm_create_workspace(void)
 {
 	theWorkspace = g_new(TMWorkspace, 1);
@@ -73,6 +79,8 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->source_files = g_ptr_array_new();
 	theWorkspace->typename_array = g_ptr_array_new();
 	theWorkspace->global_typename_array = g_ptr_array_new();
+	theWorkspace->source_file_map = g_hash_table_new_full(g_str_hash, g_str_equal, NULL,
+		free_ptr_array);
 
 	tm_ctags_init();
 	tm_parser_verify_type_mappings();
@@ -92,6 +100,7 @@ void tm_workspace_free(void)
 	g_message("Workspace destroyed");
 #endif
 
+	g_hash_table_destroy(theWorkspace->source_file_map);
 	for (i=0; i < theWorkspace->source_files->len; ++i)
 		tm_source_file_free(theWorkspace->source_files->pdata[i]);
 	g_ptr_array_free(theWorkspace->source_files, TRUE);
@@ -171,6 +180,24 @@ static void update_source_file(TMSourceFile *source_file, guchar* text_buf,
 }
 
 
+void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
+{
+	GPtrArray *file_arr;
+
+	g_return_if_fail(source_file != NULL);
+
+	g_ptr_array_add(theWorkspace->source_files, source_file);
+
+	file_arr = g_hash_table_lookup(theWorkspace->source_file_map, source_file->short_name);
+	if (!file_arr)
+	{
+		file_arr = g_ptr_array_new();
+		g_hash_table_insert(theWorkspace->source_file_map, source_file->short_name, file_arr);
+	}
+	g_ptr_array_add(file_arr, source_file);
+}
+
+
 /** Adds a source file to the workspace, parses it and updates the workspace tags.
  @param source_file The source file to add to the workspace.
 */
@@ -179,16 +206,8 @@ void tm_workspace_add_source_file(TMSourceFile *source_file)
 {
 	g_return_if_fail(source_file != NULL);
 
-	g_ptr_array_add(theWorkspace->source_files, source_file);
+	tm_workspace_add_source_file_noupdate(source_file);
 	update_source_file(source_file, NULL, 0, FALSE, TRUE);
-}
-
-
-void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
-{
-	g_return_if_fail(source_file != NULL);
-
-	g_ptr_array_add(theWorkspace->source_files, source_file);
 }
 
 
@@ -211,6 +230,15 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
 }
 
 
+static void remove_source_file_map(TMSourceFile *source_file)
+{
+	GPtrArray *file_arr = g_hash_table_lookup(theWorkspace->source_file_map, source_file->short_name);
+
+	if (file_arr)
+		g_ptr_array_remove_fast(file_arr, source_file);
+}
+
+
 /** Removes a source file from the workspace if it exists. This function also removes
  the tags belonging to this file from the workspace. To completely free the TMSourceFile
  pointer call tm_source_file_free() on it.
@@ -229,6 +257,7 @@ void tm_workspace_remove_source_file(TMSourceFile *source_file)
 		{
 			tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
 			tm_tags_remove_file_tags(source_file, theWorkspace->typename_array);
+			remove_source_file_map(source_file);
 			g_ptr_array_remove_index_fast(theWorkspace->source_files, i);
 			return;
 		}
@@ -326,6 +355,7 @@ void tm_workspace_remove_source_files(GPtrArray *source_files)
 		{
 			if (theWorkspace->source_files->pdata[j] == source_file)
 			{
+				remove_source_file_map(source_file);
 				g_ptr_array_remove_index_fast(theWorkspace->source_files, j);
 				break;
 			}
