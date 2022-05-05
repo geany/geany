@@ -595,7 +595,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 			return FALSE;
 		}
 		source_file->file_name = tm_get_real_path(file_name);
-		source_file->short_name = strrchr(source_file->file_name, '/');
+		source_file->short_name = strrchr(source_file->file_name, G_DIR_SEPARATOR);
 		if (source_file->short_name)
 			++ source_file->short_name;
 		else
