@@ -354,6 +354,26 @@ static void rename_anon_tags(TMSourceFile *source_file)
 				}
 			}
 
+			/* We are out of the nesting - the next tags could be variables
+			 * of an anonymous struct such as "struct {} a, b;" */
+			while (j < source_file->tags_array->len)
+			{
+				TMTag *var_tag = TM_TAG(source_file->tags_array->pdata[j]);
+				guint var_scope_len = var_tag->scope ? strlen(var_tag->scope) : 0;
+
+				/* Should be at the same scope level as the anon tag */
+				if (var_scope_len == scope_len &&
+					g_strcmp0(var_tag->var_type, orig_name) == 0)
+				{
+					g_free(var_tag->var_type);
+					var_tag->var_type = g_strdup(new_name);
+				}
+				else
+					break;
+
+				j++;
+			}
+
 			g_free(orig_name);
 		}
 	}
