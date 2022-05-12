@@ -72,7 +72,8 @@ parsers = \
 	parsers/lua.c \
 	parsers/make.c \
 	parsers/make.h \
-	parsers/geany_markdown.c \
+	parsers/markdown.c \
+	parsers/markdown.h \
 	parsers/geany_matlab.c \
 	parsers/nsis.c \
 	parsers/objc.c \
