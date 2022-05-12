@@ -323,7 +323,6 @@ ctags_tests = files([
 	'ctags/test.erl.tags',
 	'ctags/test.go.tags',
 	'ctags/test.py.tags',
-	'ctags/test.vhd.tags',
 	'ctags/test_input.rs.tags',
 	'ctags/test_input2.rs.tags',
 	'ctags/titles.t2t.tags',
@@ -333,6 +332,11 @@ ctags_tests = files([
 	'ctags/union.f.tags',
 	'ctags/value.f.tags',
 	'ctags/var-and-return-type.cpp.tags',
+	'ctags/vhdl-component.vhd.tags',
+	'ctags/vhdl-local.vhd.tags',
+	'ctags/vhdl-port.vhd.tags',
+	'ctags/vhdl-process.vhd.tags',
+	'ctags/vhdl-type.vhd.tags',
 	'ctags/whitespaces.php.tags'
 ])
 

@@ -95,7 +95,7 @@ parsers = \
 	parsers/geany_tex.c \
 	parsers/txt2tags.c \
 	parsers/verilog.c \
-	parsers/geany_vhdl.c
+	parsers/vhdl.c
 
 # skip cmd.c and mini-geany.c which define main()
 # also skip lregex-pcre2.c which we don't use
