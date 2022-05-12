@@ -69,6 +69,7 @@
 	BibtexParser, \
 	CPreProParser, \
 	TclOOParser, \
-	ClojureParser
+	ClojureParser, \
+	LispParser
 
 #endif

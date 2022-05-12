@@ -987,6 +987,20 @@ static TMParserMapGroup group_CLOJURE[] = {
 	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 };
 
+static TMParserMapEntry map_LISP[] = {
+	{'u', tm_tag_undef_t},     // unknown
+	{'f', tm_tag_function_t},  // function
+	{'v', tm_tag_variable_t},  // variable
+	{'m', tm_tag_macro_t},     // macro
+	{'c', tm_tag_field_t},     // const
+};
+static TMParserMapGroup group_LISP[] = {
+	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{_("Constants"), TM_ICON_VAR, tm_tag_field_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1055,6 +1069,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(CPREPROCESSOR),
 	MAP_ENTRY(TCLOO),
 	MAP_ENTRY(CLOJURE),
+	MAP_ENTRY(LISP),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);

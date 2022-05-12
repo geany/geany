@@ -296,6 +296,7 @@ ctags_tests = files([
 	'ctags/simple.js.tags',
 	'ctags/simple.json.tags',
 	'ctags/simple.ksh.tags',
+	'ctags/simple.lisp.tags',
 	'ctags/simple.lua.tags',
 	'ctags/simple.mak.tags',
 	'ctags/simple.md.tags',
