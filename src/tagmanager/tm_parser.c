@@ -204,22 +204,32 @@ static TMParserMapGroup group_PYTHON[] = {
 };
 
 static TMParserMapEntry map_LATEX[] = {
-	{'f', tm_tag_function_t},
-	{'c', tm_tag_class_t},
-	{'m', tm_tag_member_t},
-	{'d', tm_tag_macro_t},
-	{'v', tm_tag_variable_t},
-	{'n', tm_tag_namespace_t},
-	{'s', tm_tag_struct_t},
+	{'p', tm_tag_enum_t},       // part
+	{'c', tm_tag_namespace_t},  // chapter
+	{'s', tm_tag_member_t},     // section
+	{'u', tm_tag_macro_t},      // subsection
+	{'b', tm_tag_variable_t},   // subsubsection
+	{'P', tm_tag_undef_t},      // paragraph
+	{'G', tm_tag_undef_t},      // subparagraph
+	{'l', tm_tag_struct_t},     // label
+	{'i', tm_tag_undef_t},      // xinput
+	{'B', tm_tag_field_t},      // bibitem
+	{'C', tm_tag_function_t},   // command
+	{'o', tm_tag_function_t},   // operator
+	{'e', tm_tag_class_t},      // environment
+	{'t', tm_tag_class_t},      // theorem
+	{'N', tm_tag_undef_t},      // counter
 };
 static TMParserMapGroup group_LATEX[] = {
 	{_("Command"), TM_ICON_NONE, tm_tag_function_t},
 	{_("Environment"), TM_ICON_NONE, tm_tag_class_t},
+	{_("Part"), TM_ICON_NONE, tm_tag_enum_t},
+	{_("Chapter"), TM_ICON_NONE, tm_tag_namespace_t},
 	{_("Section"), TM_ICON_NONE, tm_tag_member_t},
 	{_("Subsection"), TM_ICON_NONE, tm_tag_macro_t},
 	{_("Subsubsection"), TM_ICON_NONE, tm_tag_variable_t},
+	{_("Bibitem"), TM_ICON_NONE, tm_tag_field_t},
 	{_("Label"), TM_ICON_NONE, tm_tag_struct_t},
-	{_("Chapter"), TM_ICON_NONE, tm_tag_namespace_t},
 };
 
 // no scope information
@@ -1472,6 +1482,7 @@ const gchar *tm_parser_scope_separator(TMParserType lang)
 		case TM_PARSER_ZEPHIR:
 			return "::";
 
+		case TM_PARSER_LATEX:
 		case TM_PARSER_MARKDOWN:
 		case TM_PARSER_TXT2TAGS:
 			return "\"\"";
@@ -1495,6 +1506,7 @@ const gchar *tm_parser_scope_separator_printable(TMParserType lang)
 	{
 		case TM_PARSER_ASCIIDOC:
 		case TM_PARSER_CONF:
+		case TM_PARSER_LATEX:
 		case TM_PARSER_MARKDOWN:
 		case TM_PARSER_REST:
 		case TM_PARSER_TXT2TAGS:
@@ -1523,6 +1535,7 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_JAVA:
 		case TM_PARSER_JAVASCRIPT:
 		case TM_PARSER_JSON:
+		case TM_PARSER_LATEX:
 		case TM_PARSER_LUA:
 		case TM_PARSER_MARKDOWN:
 		case TM_PARSER_PHP:
