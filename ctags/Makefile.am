@@ -50,6 +50,7 @@ parsers = \
 	parsers/basic.c \
 	parsers/bibtex.c \
 	parsers/geany_c.c \
+	parsers/clojure.c \
 	parsers/cobol.c \
 	parsers/iniconf.c \
 	parsers/iniconf.h \

@@ -288,6 +288,7 @@ test_sources = \
 	simple.abc						\
 	simple.asciidoc					\
 	simple.bas						\
+	simple.clj						\
 	simple.conf						\
 	simple.d						\
 	simple.diff						\

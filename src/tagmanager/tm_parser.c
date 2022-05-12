@@ -978,6 +978,15 @@ static TMParserMapGroup group_GDSCRIPT[] = {
 	{_("Other"), TM_ICON_OTHER, tm_tag_other_t},
 };
 
+static TMParserMapEntry map_CLOJURE[] = {
+	{'f', tm_tag_function_t},   // function
+	{'n', tm_tag_namespace_t},  // namespace
+};
+static TMParserMapGroup group_CLOJURE[] = {
+	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1045,6 +1054,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(JULIA),
 	MAP_ENTRY(CPREPROCESSOR),
 	MAP_ENTRY(TCLOO),
+	MAP_ENTRY(CLOJURE),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -1557,6 +1567,7 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		/* These make use of the scope, but don't include nested hierarchy
 		 * (either as a parser limitation or a language semantic) */
 		case TM_PARSER_ASCIIDOC:
+		case TM_PARSER_CLOJURE:
 		case TM_PARSER_CONF:
 		case TM_PARSER_ERLANG:
 		case TM_PARSER_F77:
