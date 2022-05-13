@@ -70,6 +70,7 @@
 	CPreProParser, \
 	TclOOParser, \
 	ClojureParser, \
-	LispParser
+	LispParser, \
+	TypeScriptParser
 
 #endif

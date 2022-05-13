@@ -1001,6 +1001,33 @@ static TMParserMapGroup group_LISP[] = {
 	{_("Constants"), TM_ICON_VAR, tm_tag_field_t},
 };
 
+static TMParserMapEntry map_TYPESCRIPT[] = {
+	{'f', tm_tag_function_t},    // function
+	{'c', tm_tag_class_t},       // class
+	{'i', tm_tag_interface_t},   // interface
+	{'g', tm_tag_enum_t},        // enum
+	{'e', tm_tag_enumerator_t},  // enumerator
+	{'m', tm_tag_method_t},      // method
+	{'n', tm_tag_namespace_t},   // namespace
+	{'z', tm_tag_undef_t},       // parameter
+	{'p', tm_tag_member_t},      // property
+	{'v', tm_tag_variable_t},    // variable
+	{'l', tm_tag_undef_t},       // local
+	{'C', tm_tag_macro_t},       // constant
+	{'G', tm_tag_undef_t},       // generator
+	{'a', tm_tag_undef_t},       // alias
+};
+static TMParserMapGroup group_TYPESCRIPT[] = {
+	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
+	{_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
+	{_("Other"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_enumerator_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1070,6 +1097,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(TCLOO),
 	MAP_ENTRY(CLOJURE),
 	MAP_ENTRY(LISP),
+	MAP_ENTRY(TYPESCRIPT),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -1573,6 +1601,7 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_TCL:
 		case TM_PARSER_TCLOO:
 		case TM_PARSER_TXT2TAGS:
+		case TM_PARSER_TYPESCRIPT:
 		case TM_PARSER_VALA:
 		case TM_PARSER_VHDL:
 		case TM_PARSER_VERILOG:
