@@ -83,6 +83,8 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElements *e);
 static gboolean load_config(const gchar *filename);
 static gboolean write_config(void);
+static void update_new_project_dlg(GtkEditable *editable, PropertyDialogElements *e,
+	const gchar *base_p);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
@@ -141,7 +143,7 @@ static gboolean handle_current_session(void)
 /* TODO: this should be ported to Glade like the project preferences dialog,
  * then we can get rid of the PropertyDialogElements struct altogether as
  * widgets pointers can be accessed through ui_lookup_widget(). */
-void project_new(void)
+void project_new(gboolean from_folder)
 {
 	GtkWidget *vbox;
 	GtkWidget *table;
@@ -150,7 +152,27 @@ void project_new(void)
 	GtkWidget *bbox;
 	GtkWidget *label;
 	gchar *tooltip;
+	gchar *base_path = NULL;
 	PropertyDialogElements e = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, FALSE };
+
+	if (from_folder)
+	{
+		GeanyDocument *doc = document_get_current();
+		gchar *start_path;
+
+		if (doc && doc->file_name)
+			start_path = g_path_get_dirname(doc->file_name);
+		else if (!EMPTY(local_prefs.project_file_path))
+			start_path = g_strdup(local_prefs.project_file_path);
+		else
+			start_path = utils_get_utf8_from_locale(g_get_home_dir());
+
+		base_path = ui_get_project_directory(start_path);
+		g_free(start_path);
+
+		if (!base_path)
+			return;
+	}
 
 	e.dialog = gtk_dialog_new_with_buttons(_("New Project"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -185,7 +207,7 @@ void project_new(void)
 	e.file_name = gtk_entry_new();
 	gtk_entry_set_activates_default(GTK_ENTRY(e.file_name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e.file_name));
-	gtk_entry_set_width_chars(GTK_ENTRY(e.file_name), 30);
+	gtk_entry_set_width_chars(GTK_ENTRY(e.file_name), 40);
 	tooltip = g_strdup_printf(
 		_("Path of the file representing the project and storing its settings. "
 		"It should normally have the \"%s\" extension."), "."GEANY_PROJECT_EXT);
@@ -218,13 +240,20 @@ void project_new(void)
 
 	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 
-	/* signals */
-	g_signal_connect(e.name, "changed", G_CALLBACK(on_name_entry_changed), &e);
-	/* run the callback manually to initialise the base_path and file_name fields */
-	on_name_entry_changed(GTK_EDITABLE(e.name), &e);
+	if (base_path)
+	{
+		update_new_project_dlg(GTK_EDITABLE(e.name), &e, base_path);
+		g_free(base_path);
+	}
+	else
+	{
+		/* signals */
+		g_signal_connect(e.name, "changed", G_CALLBACK(on_name_entry_changed), &e);
+		g_signal_connect(e.file_name, "changed", G_CALLBACK(on_entries_changed), &e);
+		g_signal_connect(e.base_path, "changed", G_CALLBACK(on_entries_changed), &e);
 
-	g_signal_connect(e.file_name, "changed", G_CALLBACK(on_entries_changed), &e);
-	g_signal_connect(e.base_path, "changed", G_CALLBACK(on_entries_changed), &e);
+		update_new_project_dlg(GTK_EDITABLE(e.name), &e, NULL);
+	}
 
 	gtk_widget_show_all(e.dialog);
 	run_new_dialog(&e);
@@ -950,35 +979,64 @@ static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElement
 }
 
 
-/* sets the project base path and the project file name according to the project name */
-static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e)
+/* sets the New Project dialog entries according to the base path or project name */
+static void update_new_project_dlg(GtkEditable *editable, PropertyDialogElements *e,
+	const gchar *base_p)
 {
 	gchar *base_path;
 	gchar *file_name;
-	gchar *name;
-	const gchar *project_dir = local_prefs.project_file_path;
+	gchar *project_dir = NULL;
 
 	if (e->entries_modified)
 		return;
 
-	name = gtk_editable_get_chars(editable, 0, -1);
-	if (!EMPTY(name))
+	if (!EMPTY(local_prefs.project_file_path))
+		project_dir = g_strdup(local_prefs.project_file_path);
+	else
 	{
-		base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
-			name, G_DIR_SEPARATOR_S, NULL);
+		GeanyDocument *doc = document_get_current();
+
+		if (doc && doc->file_name)
+			project_dir = g_path_get_dirname(doc->file_name);
+		else
+			project_dir = utils_get_utf8_from_locale(g_get_home_dir());
+	}
+
+	if (!EMPTY(base_p))
+	{
+		gchar *name = g_path_get_basename(base_p);
+
+		base_path = g_strdup(base_p);
+		gtk_entry_set_text(GTK_ENTRY(e->name), name);
 		if (project_prefs.project_file_in_basedir)
-			file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S, name, G_DIR_SEPARATOR_S,
+			file_name = g_strconcat(base_path, G_DIR_SEPARATOR_S,
 				name, "." GEANY_PROJECT_EXT, NULL);
 		else
 			file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
 				name, "." GEANY_PROJECT_EXT, NULL);
+		g_free(name);
 	}
 	else
 	{
-		base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S, NULL);
-		file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S, NULL);
+		gchar *name = gtk_editable_get_chars(editable, 0, -1);
+		if (!EMPTY(name))
+		{
+			base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
+				name, G_DIR_SEPARATOR_S, NULL);
+			if (project_prefs.project_file_in_basedir)
+				file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S, name, G_DIR_SEPARATOR_S,
+					name, "." GEANY_PROJECT_EXT, NULL);
+			else
+				file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S,
+					name, "." GEANY_PROJECT_EXT, NULL);
+		}
+		else
+		{
+			base_path = g_strconcat(project_dir, G_DIR_SEPARATOR_S, NULL);
+			file_name = g_strconcat(project_dir, G_DIR_SEPARATOR_S, NULL);
+		}
+		g_free(name);
 	}
-	g_free(name);
 
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), base_path);
 	gtk_entry_set_text(GTK_ENTRY(e->file_name), file_name);
@@ -987,6 +1045,13 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 
 	g_free(base_path);
 	g_free(file_name);
+	g_free(project_dir);
+}
+
+
+static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e)
+{
+	update_new_project_dlg(editable, e, NULL);
 }
 
 

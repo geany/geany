@@ -2776,14 +2776,35 @@ The project menu items are detailed below.
 New project
 ^^^^^^^^^^^
 
-To create a new project, fill in the *Name* field. By default this
-will setup a new project file ``~/projects/name.geany``. Usually it's
-best to store all your project files in the same directory (they are
-independent of any source directory trees).
+There are two ways of creating new projects, either by using
+*Project->New* menu item or by using *Project->New from Folder* menu
+item.
 
-The Base path text field is setup to use ``~/projects/name``. This
-can safely be set to any existing path -- it will not touch the file
-structure contained in it.
+New
+    This method is more suitable for creating new, empty projects from
+    scratch at the default location without having any existing sources.
+
+    To create a new project, fill in the *Name* field. By default this
+    will setup a new project file ``~/projects/name/name.geany``.
+
+    The *Base path* text field is setup to use ``~/projects/name``. This
+    can safely be set to any existing path -- it will not touch the file
+    structure contained in it.
+
+New from Folder
+    This method is more suitable when there is already some folder
+    containing source files for which you want to create a new project.
+
+    When using this method, Geany first opens a directory selection
+    dialog to select the folder containing the sources, and the
+    *Base path* field is set to that value.
+
+    Afterwards, Geany shows the same dialog as the *Project->New*
+    method but already pre-filled with the values based on the
+    *Base path* selection. The *Name* field is filled with the folder
+    name, the *Filename* field is filled with
+    ``base_path/name.geany`` and the *Base path* field is filled with
+    the path specified in the previous dialog.
 
 
 Project properties

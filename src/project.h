@@ -66,7 +66,7 @@ void project_init(void);
 void project_finalize(void);
 
 
-void project_new(void);
+void project_new(gboolean from_folder);
 
 void project_open(void);
 

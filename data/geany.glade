@@ -704,6 +704,12 @@
     <property name="stock">gtk-find</property>
     <property name="icon_size">1</property>
   </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-new</property>
+    <property name="icon-size">1</property>
+  </object>
   <object class="GtkListStore" id="indent_mode_list">
     <columns>
       <!-- column-name item -->
@@ -7895,6 +7901,17 @@
                             <property name="image">image4077</property>
                             <property name="use-stock">False</property>
                             <signal name="activate" handler="on_project_new1_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImageMenuItem" id="project_new_from_folder1">
+                            <property name="label" translatable="yes">New from _Folder...</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="image">image7</property>
+                            <property name="use_stock">False</property>
+                            <signal name="activate" handler="on_project_new_from_folder1_activate" swapped="no"/>
                           </object>
                         </child>
                         <child>

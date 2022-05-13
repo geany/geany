@@ -144,6 +144,8 @@ void on_next_message1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_project_new1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
+void on_project_new_from_folder1_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_project_open1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_project_close1_activate(GtkMenuItem *menuitem, gpointer user_data);

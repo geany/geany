@@ -277,6 +277,8 @@ enum GeanyKeyBindingID
 												 * @since 1.34 (API 238) */
 	GEANY_KEYS_FILE_RELOAD_ALL,					/**< Keybinding.
 												 * @since 1.38 (API 240) */
+	GEANY_KEYS_PROJECT_NEW_FROM_FOLDER,			/**< Keybinding.
+												 * @since 1.39 (API 243) */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
