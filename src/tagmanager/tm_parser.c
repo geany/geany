@@ -1031,6 +1031,43 @@ static TMParserMapGroup group_TYPESCRIPT[] = {
 	{_("Other"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_enumerator_t},
 };
 
+static TMParserMapEntry map_ADA[] = {
+	{'P', tm_tag_package_t},     // packspec
+	{'p', tm_tag_package_t},     // package
+	{'T', tm_tag_typedef_t},     // typespec
+	{'t', tm_tag_typedef_t},     // type
+	{'U', tm_tag_undef_t},       // subspec
+	{'u', tm_tag_typedef_t},     // subtype
+	{'c', tm_tag_member_t},      // component
+	{'l', tm_tag_enumerator_t},  // literal
+	{'V', tm_tag_undef_t},       // varspec
+	{'v', tm_tag_variable_t},    // variable
+	{'f', tm_tag_undef_t},       // formal
+	{'n', tm_tag_macro_t},       // constant
+	{'x', tm_tag_undef_t},       // exception
+	{'R', tm_tag_prototype_t},   // subprogspec
+	{'r', tm_tag_function_t},    // subprogram
+	{'K', tm_tag_prototype_t},   // taskspec
+	{'k', tm_tag_method_t},      // task
+	{'O', tm_tag_undef_t},       // protectspec
+	{'o', tm_tag_undef_t},       // protected
+	{'E', tm_tag_undef_t},       // entryspec
+	{'e', tm_tag_undef_t},       // entry
+	{'b', tm_tag_undef_t},       // label
+	{'i', tm_tag_undef_t},       // identifier
+	{'a', tm_tag_undef_t},       // autovar
+	{'y', tm_tag_undef_t},       // anon
+};
+static TMParserMapGroup group_ADA[] = {
+	{_("Packages"), TM_ICON_NAMESPACE, tm_tag_package_t},
+	{_("Types"), TM_ICON_STRUCT, tm_tag_typedef_t},
+	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
+	{_("Tasks"), TM_ICON_METHOD, tm_tag_method_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
+	{_("Other"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_enumerator_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1075,7 +1112,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(HAXE),
 	MAP_ENTRY(REST),
 	MAP_ENTRY(HTML),
-	MAP_ENTRY(UNUSED1),
+	MAP_ENTRY(ADA),
 	MAP_ENTRY(CUDA),
 	MAP_ENTRY(MATLAB),
 	MAP_ENTRY(VALA),
@@ -1613,6 +1650,7 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 
 		/* These make use of the scope, but don't include nested hierarchy
 		 * (either as a parser limitation or a language semantic) */
+		case TM_PARSER_ADA:
 		case TM_PARSER_ASCIIDOC:
 		case TM_PARSER_CLOJURE:
 		case TM_PARSER_CONF:

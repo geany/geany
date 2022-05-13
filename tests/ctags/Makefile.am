@@ -19,6 +19,13 @@ test_sources = \
 	actionscript/method-attributes.as	\
 	actionscript/packages.as		\
 	actionscript/sampler.as			\
+	ada-adb.adb						\
+	ada-ads.ads						\
+	ada-expression-function.adb		\
+	ada-expression-function-generic.adb	\
+	ada-overriding.ads				\
+	ada-package-generic.ads			\
+	ada-task.adb					\
 	angle_bracket.cpp				\
 	anonymous_functions.php			\
 	arraylist.js					\

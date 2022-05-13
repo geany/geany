@@ -89,7 +89,7 @@ enum
 	TM_PARSER_HAXE,
 	TM_PARSER_REST,
 	TM_PARSER_HTML,
-	TM_PARSER_UNUSED1,  /* dummy entry, replace with some new parser */
+	TM_PARSER_ADA,
 	TM_PARSER_CUDA,
 	TM_PARSER_MATLAB,
 	TM_PARSER_VALA,
