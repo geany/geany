@@ -257,6 +257,7 @@ static void rename_anon_tags(TMSourceFile *source_file)
 			gchar *orig_name, *new_name = NULL;
 			guint j;
 			guint new_name_len, orig_name_len;
+			gboolean inside_nesting = FALSE;
 			guint scope_len = tag->scope ? strlen(tag->scope) : 0;
 			gchar kind = tag->kind_letter;
 
@@ -331,6 +332,21 @@ static void rename_anon_tags(TMSourceFile *source_file)
 				TMTag *nested_tag = TM_TAG(source_file->tags_array->pdata[j]);
 				guint nested_scope_len = nested_tag->scope ? strlen(nested_tag->scope) : 0;
 				gchar *pos;
+
+				/* In Fortran, we can create variables of anonymous structures:
+				 *     structure var1, var2
+				 *         integer a
+				 *     end structure
+				 * and the parser first generates tags for var1 and var2 which
+				 * are on the same scope as the structure itself. So first
+				 * we need to skip past the tags on the same scope and only
+				 * afterwards we get the nested tags.
+				 * */
+				if (source_file->lang == TM_PARSER_FORTRAN &&
+					!inside_nesting && nested_scope_len == scope_len)
+					continue;
+
+				inside_nesting = TRUE;
 
 				/* Terminate if outside of tag scope, see above */
 				if (nested_scope_len <= scope_len)

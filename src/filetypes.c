@@ -136,7 +136,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( ASM,        ASM,          "ASM",              "Assembler",               SOURCE_FILE, COMPILED );
 	FT_INIT( BASIC,      FREEBASIC,    "FreeBasic",        NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( FORTRAN,    FORTRAN,      "Fortran",          "Fortran (F90)",           SOURCE_FILE, COMPILED );
-	FT_INIT( F77,        F77,          "F77",              "Fortran (F77)",           SOURCE_FILE, COMPILED );
+	FT_INIT( F77,        FORTRAN,      "F77",              "Fortran (F77)",           SOURCE_FILE, COMPILED );
 	FT_INIT( GLSL,       C,            "GLSL",             NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( CAML,       NONE,         "CAML",             "(O)Caml",                 SOURCE_FILE, COMPILED );
 	FT_INIT( PERL,       PERL,         "Perl",             NULL,                      SOURCE_FILE, SCRIPT   );
