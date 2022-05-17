@@ -46,7 +46,6 @@ check_headers = [
 	'errno.h',
 	'fcntl.h',
 	'fnmatch.h',
-	'glob.h',
 	'inttypes.h',
 	'io.h',
 	'langinfo.h',
