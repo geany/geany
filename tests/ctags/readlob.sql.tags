@@ -1,10 +1,10 @@
 # format=tagmanager
-b_fileÌ8Îlob_tableÖ0
-b_lobÌ8Îlob_tableÖ0
-c_lobÌ8Îlob_tableÖ0
-charbufÌ16384Ö0
-clob_locatorÌ16384Ö0
-idÌ8Îlob_tableÖ0
-lob_tableÌ1Ö0
-read_amountÌ16384Ö0
-read_offsetÌ16384Ö0
+b_fileÑEÌ8Îlob_tableÖ0
+b_lobÑEÌ8Îlob_tableÖ0
+c_lobÑEÌ8Îlob_tableÖ0
+charbufÑvÌ16384Ö0
+clob_locatorÑvÌ16384Ö0
+idÑEÌ8Îlob_tableÖ0
+lob_tableÑtÌ1Ö0
+read_amountÑvÌ16384Ö0
+read_offsetÑvÌ16384Ö0

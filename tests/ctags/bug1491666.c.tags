@@ -1,5 +1,5 @@
 # format=tagmanager
-mainÌ16Í(void)Ö0Ïvoid
-my_structÌ2048Ö0
-xÌ64Îmy_structÖ0Ïint
-yÌ64Îmy_structÖ0Ïfloat
+mainÑfÌ16Í(void)Ö0Ïvoid
+my_structÑsÌ2048Ö0
+xÑmÌ64Îmy_structÖ0Ïint
+yÑmÌ64Îmy_structÖ0Ïfloat

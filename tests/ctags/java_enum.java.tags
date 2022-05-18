@@ -1,15 +1,15 @@
 # format=tagmanager
-AÌ4ÎC.FancyEnumÖ0
-BÌ4ÎC.FancyEnumÖ0
-CÌ1Ö0
-FIRST_VALUEÌ4ÎC.TrivialEnumÖ0
-FancyEnumÌ2ÎCÖ0
-FancyEnumÌ128Í(int i)ÎC.FancyEnumÖ0
-FancyEnum2Ì2ÎCÖ0
-SECOND_VALUEÌ4ÎC.TrivialEnumÖ0
-TrivialEnumÌ2ÎCÖ0
-XÌ4ÎC.FancyEnum2Ö0
-YÌ4ÎC.FancyEnum2Ö0
-iÌ8ÎC.FancyEnumÖ0Ïint
-mÌ128Í()ÎC.FancyEnumÖ0Ïvoid
-m2Ì128Í()ÎC.FancyEnum2Ö0Ïvoid
+AÑeÌ4ÎC.FancyEnumÖ0
+BÑeÌ4ÎC.FancyEnumÖ0
+CÑcÌ1Ö0
+FIRST_VALUEÑeÌ4ÎC.TrivialEnumÖ0
+FancyEnumÑgÌ2ÎCÖ0
+FancyEnumÑmÌ128Í(int i)ÎC.FancyEnumÖ0
+FancyEnum2ÑgÌ2ÎCÖ0
+SECOND_VALUEÑeÌ4ÎC.TrivialEnumÖ0
+TrivialEnumÑgÌ2ÎCÖ0
+XÑeÌ4ÎC.FancyEnum2Ö0
+YÑeÌ4ÎC.FancyEnum2Ö0
+iÑfÌ8ÎC.FancyEnumÖ0Ïint
+mÑmÌ128Í()ÎC.FancyEnumÖ0Ïvoid
+m2ÑmÌ128Í()ÎC.FancyEnum2Ö0Ïvoid

@@ -1,8 +1,8 @@
 # format=tagmanager
-NÌ16384Îctags_bugÖ0
-barÌ64Îfoo_tÖ0
-ctags_bugÌ256Ö0
-foo_getbarÌ16Îctags_bugÖ0
-foo_set_barÌ128Í(f, b)Îctags_bugÖ0
-foo_setbarÌ128Í(f, b)Îctags_bugÖ0
-foo_tÌ1Îctags_bugÖ0
+NÑvÌ16384Îctags_bugÖ0
+barÑkÌ64Îfoo_tÖ0
+ctags_bugÑmÌ256Ö0
+foo_getbarÑfÌ16Îctags_bugÖ0
+foo_set_barÑsÌ128Í(f, b)Îctags_bugÖ0
+foo_setbarÑsÌ128Í(f, b)Îctags_bugÖ0
+foo_tÑtÌ1Îctags_bugÖ0

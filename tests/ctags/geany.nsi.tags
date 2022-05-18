@@ -1,21 +1,21 @@
 # format=tagmanager
-!Program FilesÌ256Ö0
--AdditionalIconsÌ256Ö0
--PostÌ256Ö0
-.onInitÌ16Ö0
-AnswerÌ16384Ö0
-Autocompletion TagsÌ256Ö0
-Context MenusÌ256Ö0
-Desktop ShortcutsÌ256Ö0
-Development filesÌ256Ö0
-DocumentationÌ256Ö0
-GTK ${GTK_VERSION} Runtime EnvironmentÌ256Ö0
-Language FilesÌ256Ö0
-OnDirLeaveÌ16Ö0
-PluginsÌ256Ö0
-StartmenuFolderÌ16384Ö0
-UNINSTDIRÌ16384Ö0
-UninstallÌ256Ö0
-UserNameÌ16384Ö0
-un.onInitÌ16Ö0
-un.onUninstSuccessÌ16Ö0
+!Program FilesÑsÌ256Ö0
+-AdditionalIconsÑsÌ256Ö0
+-PostÑsÌ256Ö0
+.onInitÑfÌ16Ö0
+AnswerÑvÌ16384Ö0
+Autocompletion TagsÑsÌ256Ö0
+Context MenusÑsÌ256Ö0
+Desktop ShortcutsÑsÌ256Ö0
+Development filesÑsÌ256Ö0
+DocumentationÑsÌ256Ö0
+GTK ${GTK_VERSION} Runtime EnvironmentÑsÌ256Ö0
+Language FilesÑsÌ256Ö0
+OnDirLeaveÑfÌ16Ö0
+PluginsÑsÌ256Ö0
+StartmenuFolderÑvÌ16384Ö0
+UNINSTDIRÑvÌ16384Ö0
+UninstallÑsÌ256Ö0
+UserNameÑvÌ16384Ö0
+un.onInitÑfÌ16Ö0
+un.onUninstSuccessÑfÌ16Ö0

@@ -1,8 +1,8 @@
 # format=tagmanager
-Func1Ì16ÎHasInterfacesÖ0
-Func2Ì16ÎHasInterfacesÖ0
-HasInterfacesÌ256Ö0
-MainÌ2048Ö0
-MyFuncÌ32ÎHasInterfacesÖ0
-MySubroutineÌ32ÎMainÖ0
-anon_interface_1Ì32ÎHasInterfacesÖ1
+Func1ÑfÌ16ÎHasInterfacesÖ0
+Func2ÑfÌ16ÎHasInterfacesÖ0
+HasInterfacesÑmÌ256Ö0
+MainÑpÌ2048Ö0
+MyFuncÑiÌ32ÎHasInterfacesÖ0
+MySubroutineÑiÌ32ÎMainÖ0
+anon_interface_1ÑiÌ32ÎHasInterfacesÖ1

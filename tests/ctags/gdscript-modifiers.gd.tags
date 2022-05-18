@@ -1,14 +1,14 @@
 # format=tagmanager
-_create_block_colliderÌ128Í(block_sub_position)Ö0
-aÌ524288ÎidÖ0
-bÌ524288ÎrÖ0
-block_idÌ524288Îcalculate_block_uvsÖ0
-block_sub_positionÌ524288Î_create_block_colliderÖ0
-cÌ524288ÎxÖ0
-calculate_block_uvsÌ128Í(block_id)Ö0
-colÌ524288Îcalculate_block_uvsÖ0
-colliderÌ524288Î_create_block_colliderÖ0
-idÌ128Í(a)Ö0
-rÌ128Í(b)Ö0
-rowÌ524288Îcalculate_block_uvsÖ0
-xÌ128Í(c)Ö0
+_create_block_colliderÑmÌ128Í(block_sub_position)Ö0
+aÑzÌ524288ÎidÖ0
+bÑzÌ524288ÎrÖ0
+block_idÑzÌ524288Îcalculate_block_uvsÖ0
+block_sub_positionÑzÌ524288Î_create_block_colliderÖ0
+cÑzÌ524288ÎxÖ0
+calculate_block_uvsÑmÌ128Í(block_id)Ö0
+colÑlÌ524288Îcalculate_block_uvsÖ0
+colliderÑlÌ524288Î_create_block_colliderÖ0
+idÑmÌ128Í(a)Ö0
+rÑmÌ128Í(b)Ö0
+rowÑlÌ524288Îcalculate_block_uvsÖ0
+xÑmÌ128Í(c)Ö0

@@ -1,7 +1,7 @@
 # format=tagmanager
-BlocksÌ256Ö0
-MainÌ2048Ö0
-MyFuncÌ16ÎBlocksÖ0
-iÌ16384ÎBlocksÖ0
-moreintÌ16384ÎMainÖ0
-otherintÌ16384ÎMainÖ0
+BlocksÑmÌ256Ö0
+MainÑpÌ2048Ö0
+MyFuncÑfÌ16ÎBlocksÖ0
+iÑvÌ16384ÎBlocksÖ0
+moreintÑvÌ16384ÎMainÖ0
+otherintÑvÌ16384ÎMainÖ0

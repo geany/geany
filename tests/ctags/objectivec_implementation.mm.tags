@@ -1,12 +1,12 @@
 # format=tagmanager
-addChild:Ã128Õ(FileTree*)ŒFolderTree÷0
-createFileList:atPlace:Ã1Õ(NSString*,FolderTree*)ŒFolderTree÷0
-createLayoutTreeÃ128Õ()ŒFileTree÷0
-createLayoutTreeÃ128Õ()ŒFolderTree÷0
-deallocÃ128Õ()ŒFileTree÷0
-deallocÃ128Õ()ŒFolderTree÷0
-getDiskSizeÃ128Õ()ŒFileTree÷0
-initWithName:andSize:atPlace:Ã128Õ(NSString*,FileSize,FolderTree*)ŒFileTree÷0
-initWithName:atPlace:Ã128Õ(NSString*,FolderTree*)ŒFileTree÷0
-initWithName:atPlace:Ã128Õ(NSString*,FolderTree*)ŒFolderTree÷0
-populateChildList:Ã128Õ(NSString*)ŒFolderTree÷0
+addChild:—mÃ128Õ(FileTree*)ŒFolderTree÷0
+createFileList:atPlace:—cÃ1Õ(NSString*,FolderTree*)ŒFolderTree÷0
+createLayoutTree—mÃ128Õ()ŒFileTree÷0
+createLayoutTree—mÃ128Õ()ŒFolderTree÷0
+dealloc—mÃ128Õ()ŒFileTree÷0
+dealloc—mÃ128Õ()ŒFolderTree÷0
+getDiskSize—mÃ128Õ()ŒFileTree÷0
+initWithName:andSize:atPlace:—mÃ128Õ(NSString*,FileSize,FolderTree*)ŒFileTree÷0
+initWithName:atPlace:—mÃ128Õ(NSString*,FolderTree*)ŒFileTree÷0
+initWithName:atPlace:—mÃ128Õ(NSString*,FolderTree*)ŒFolderTree÷0
+populateChildList:—mÃ128Õ(NSString*)ŒFolderTree÷0

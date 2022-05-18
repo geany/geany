@@ -1,12 +1,12 @@
 # format=tagmanager
-CDefClassÌ1Ö0
-StdClassÌ1Ö0
-__init__Ì128Í(self)ÎCDefClassÖ0
-c_methodÌ128Í(self,int i)ÎCDefClassÖ0
-identityÌ16Í(x)Ö0
-int2stringÌ16Í(int i)Ö0
-int_identityÌ16Í(int i)Ö0
-python_varÌ16384Ö0
-return_meÌ128Í(self)ÎStdClassÖ0
-standard_methodÌ128Í(self,i)ÎCDefClassÖ0
-stdObjÌ16384Ö0
+CDefClassÑcÌ1Ö0
+StdClassÑcÌ1Ö0
+__init__ÑmÌ128Í(self)ÎCDefClassÖ0
+c_methodÑmÌ128Í(self,int i)ÎCDefClassÖ0
+identityÑfÌ16Í(x)Ö0
+int2stringÑfÌ16Í(int i)Ö0
+int_identityÑfÌ16Í(int i)Ö0
+python_varÑvÌ16384Ö0
+return_meÑmÌ128Í(self)ÎStdClassÖ0
+standard_methodÑmÌ128Í(self,i)ÎCDefClassÖ0
+stdObjÑvÌ16384Ö0

@@ -1,4 +1,4 @@
 # format=tagmanager
-my_funÌ16Í(np.ndarray[dtype=double, ndim=1] x)Ö0
-npÌ32768Ö0
-numpyÌ32768Ö0
+my_funÑfÌ16Í(np.ndarray[dtype=double, ndim=1] x)Ö0
+npÑIÌ32768Ö0
+numpyÑiÌ32768Ö0

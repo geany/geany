@@ -1,8 +1,8 @@
 # format=tagmanager
-AccessSalaryÌ128Í()ÎEmployeeÖ0Ïpublic double
-EmployeeÌ1Ö0
-MainÌ128Í()ÎMainClassÖ0Ïpublic void
-MainClassÌ1Ö0
-nameÌ8ÎEmployeeÖ0
-not_visibleÌ8ÎEmployeeÖ0Ïint
-salaryÌ8ÎEmployeeÖ0Ïdouble
+AccessSalaryÑmÌ128Í()ÎEmployeeÖ0Ïpublic double
+EmployeeÑcÌ1Ö0
+MainÑmÌ128Í()ÎMainClassÖ0Ïpublic void
+MainClassÑcÌ1Ö0
+nameÑfÌ8ÎEmployeeÖ0
+not_visibleÑfÌ8ÎEmployeeÖ0Ïint
+salaryÑfÌ8ÎEmployeeÖ0Ïdouble

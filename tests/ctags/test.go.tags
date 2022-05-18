@@ -1,39 +1,39 @@
 # format=tagmanager
-AÃ65536Œmain÷0
-BÃ65536Œmain÷0
-CÃ65536Œmain÷0
-DÃ65536Œmain÷0
-EÃ65536Œmain÷0
-FÃ65536Œmain÷0
-GÃ65536Œmain÷0
-HÃ65536Œmain÷0
-IÃ65536Œmain÷0
-T1Ã4096Œmain÷0œmap[string]int
-T2Ã4096Œmain÷0œ<-chan float32
-T3Ã4096Œmain÷0œchan []string
-T4Ã4096Œmain÷0œchan<- *[12]string
-T5Ã32Œmain÷0
-T6Ã2048Œmain÷0
-T7Ã4096Œmain÷0œfunc (a struct{_ int; _ float32}, b int) (int, map[string]int)
-T8Ã4096Œmain÷0œfloat32
-T9Ã4096Œmain÷0œint
-_aÃ64Œmain.T6÷0œint
-_bÃ64Œmain.T6÷0œint
-_cÃ64Œmain.T6÷0œint
-_dÃ64Œmain.T6÷0œint
-_eÃ64Œmain.T6÷0œfloat32
-aÃ16384Œmain÷0œint
-bÃ16384Œmain÷0œint
-cÃ16384Œmain÷0œint
-dÃ16384Œmain÷0œT5
-eÃ16384Œmain÷0œT4
-fÃ16384Œmain÷0œinterface{}
-f1Ã16Õ()Œmain÷0
-f2Ã16Õ()Œmain÷0
-f3Ã16Õ()Œmain.T1÷0œ(a, b int)
-f4Ã16Õ(a func () func ())Œmain.T7÷0œ(func (), int)
-f5Ã16Õ()Œmain÷0
-gÃ16384Œmain÷0œint
-hÃ16384Œmain÷0œint
-mainÃ16Õ()Œmain÷0
-mainÃ256÷0
+A—cÃ65536Œmain÷0
+B—cÃ65536Œmain÷0
+C—cÃ65536Œmain÷0
+D—cÃ65536Œmain÷0
+E—cÃ65536Œmain÷0
+F—cÃ65536Œmain÷0
+G—cÃ65536Œmain÷0
+H—cÃ65536Œmain÷0
+I—cÃ65536Œmain÷0
+T1—tÃ4096Œmain÷0œmap[string]int
+T2—tÃ4096Œmain÷0œ<-chan float32
+T3—tÃ4096Œmain÷0œchan []string
+T4—tÃ4096Œmain÷0œchan<- *[12]string
+T5—iÃ32Œmain÷0
+T6—sÃ2048Œmain÷0
+T7—tÃ4096Œmain÷0œfunc (a struct{_ int; _ float32}, b int) (int, map[string]int)
+T8—tÃ4096Œmain÷0œfloat32
+T9—tÃ4096Œmain÷0œint
+_a—mÃ64Œmain.T6÷0œint
+_b—mÃ64Œmain.T6÷0œint
+_c—mÃ64Œmain.T6÷0œint
+_d—mÃ64Œmain.T6÷0œint
+_e—mÃ64Œmain.T6÷0œfloat32
+a—vÃ16384Œmain÷0œint
+b—vÃ16384Œmain÷0œint
+c—vÃ16384Œmain÷0œint
+d—vÃ16384Œmain÷0œT5
+e—vÃ16384Œmain÷0œT4
+f—vÃ16384Œmain÷0œinterface{}
+f1—fÃ16Õ()Œmain÷0
+f2—fÃ16Õ()Œmain÷0
+f3—fÃ16Õ()Œmain.T1÷0œ(a, b int)
+f4—fÃ16Õ(a func () func ())Œmain.T7÷0œ(func (), int)
+f5—fÃ16Õ()Œmain÷0
+g—vÃ16384Œmain÷0œint
+h—vÃ16384Œmain÷0œint
+main—fÃ16Õ()Œmain÷0
+main—pÃ256÷0

@@ -1,66 +1,66 @@
 # format=tagmanager
-BaseÃ256÷0
-FooÃ2048÷0
-FooÃ4096÷0
-Mod1Ã256÷0
-Mod2Ã256÷0
-Module1Ã256÷0
-Module10Ã256ŒMyModule÷0
-Module11Ã256ŒMyModule÷0
-Module13Ã256÷0
-Module2Ã256÷0
-Module3Ã256÷0
-Module4Ã256÷0
-Module5Ã256÷0
-Module6Ã256÷0
-Module7Ã256÷0
-Module8Ã256ŒMyModule÷0
-Module9Ã256ŒMyModule÷0
-MyModuleÃ256÷0
-OurRationalÃ2048Õ{T<:Integer}÷0
-OurRational{Int16}Ã16Õ(num::T, den::T) where T<:Integer ÷0
-OurRational{Int64}Ã16Õ(num::T, den::T, test::T) where T<:Integer ŒOurRational÷0
-OurRational{Int8}Ã16Õ(num::T, den::T) where T<:Integer ŒOurRational÷0
-OurRational{T}Ã16Õ(num::T, den::T) where T<:IntegerŒOurRational÷0
-PointÃ2048Õ{T}÷0
-PointyÃ4096÷0
-TestÃ2048÷0
-aÃ64Õ::Float64ŒTest÷0
-bÃ64Õ::Float64ŒTest÷0
-barÃ16Õ(x, y)ŒFoo÷0
-cellÃ16Õ(dims::(Integer...))÷0
-denÃ64Õ::TŒOurRational÷0
-elsizeÃ16Õ(::AbstractArray{T}) where {T} ÷0
-elsizeÃ16Õ(::AbstractArray{T}) where T÷0
-fÃ16Õ(x::FooBar)÷0
-fooÃ16Õ(x::(Int,))÷0
-fooÃ16Õ()÷0
-fooÃ16Õ(x)ŒBaz÷0
-foo_bar!Ã16Õ(x,y)÷0
-func1Ã32768ŒModule11÷0
-func1Ã32768ŒModule13÷0
-func1Ã32768ŒModule2÷0
-func1Ã32768ŒModule4÷0
-func1Ã32768ŒModule7÷0
-func2Ã32768ŒModule11÷0
-func2Ã32768ŒModule2÷0
-func2Ã32768ŒModule6÷0
-func2Ã32768ŒModule7÷0
-func3Ã16Õ(a::Int)ŒMyModule÷0
-func3Ã32768ŒModule11÷0
-func4Ã16Õ(a::Int)ŒMyModule÷0
-func5Ã16Õ(b::Int)ŒMyModule.func4÷0
-gÃ16Õ(x, y)::Int8÷0
-myfunÃ16Õ()÷0
-normÃ16Õ(p::Point{<:Real})÷0
-numÃ64Õ::TŒOurRational÷0
-same_type_numericÃ16Õ(x::T, y::T) where {T <: Number} ÷0
-same_type_numericÃ16Õ(x::T, y::T) where T ÷0
-showÃ32768ŒBase÷0
-testÃ16Õ(x)÷0
-testÃ64Õ::TŒOurRational÷0
-test_docstringÃ16÷0
-xÃ64Õ::BarŒFoo÷0
-xÃ64Õ::TŒPoint÷0
-yÃ64Õ::TŒPoint÷0
-yÃ16384÷0
+Base—nÃ256÷0
+Foo—sÃ2048÷0
+Foo—tÃ4096÷0
+Mod1—nÃ256÷0
+Mod2—nÃ256÷0
+Module1—nÃ256÷0
+Module10—nÃ256ŒMyModule÷0
+Module11—nÃ256ŒMyModule÷0
+Module13—nÃ256÷0
+Module2—nÃ256÷0
+Module3—nÃ256÷0
+Module4—nÃ256÷0
+Module5—nÃ256÷0
+Module6—nÃ256÷0
+Module7—nÃ256÷0
+Module8—nÃ256ŒMyModule÷0
+Module9—nÃ256ŒMyModule÷0
+MyModule—nÃ256÷0
+OurRational—sÃ2048Õ{T<:Integer}÷0
+OurRational{Int16}—fÃ16Õ(num::T, den::T) where T<:Integer ÷0
+OurRational{Int64}—fÃ16Õ(num::T, den::T, test::T) where T<:Integer ŒOurRational÷0
+OurRational{Int8}—fÃ16Õ(num::T, den::T) where T<:Integer ŒOurRational÷0
+OurRational{T}—fÃ16Õ(num::T, den::T) where T<:IntegerŒOurRational÷0
+Point—sÃ2048Õ{T}÷0
+Pointy—tÃ4096÷0
+Test—sÃ2048÷0
+a—gÃ64Õ::Float64ŒTest÷0
+b—gÃ64Õ::Float64ŒTest÷0
+bar—fÃ16Õ(x, y)ŒFoo÷0
+cell—fÃ16Õ(dims::(Integer...))÷0
+den—gÃ64Õ::TŒOurRational÷0
+elsize—fÃ16Õ(::AbstractArray{T}) where {T} ÷0
+elsize—fÃ16Õ(::AbstractArray{T}) where T÷0
+f—fÃ16Õ(x::FooBar)÷0
+foo—fÃ16Õ(x::(Int,))÷0
+foo—fÃ16Õ()÷0
+foo—fÃ16Õ(x)ŒBaz÷0
+foo_bar!—fÃ16Õ(x,y)÷0
+func1—xÃ32768ŒModule11÷0
+func1—xÃ32768ŒModule13÷0
+func1—xÃ32768ŒModule2÷0
+func1—xÃ32768ŒModule4÷0
+func1—xÃ32768ŒModule7÷0
+func2—xÃ32768ŒModule11÷0
+func2—xÃ32768ŒModule2÷0
+func2—xÃ32768ŒModule6÷0
+func2—xÃ32768ŒModule7÷0
+func3—fÃ16Õ(a::Int)ŒMyModule÷0
+func3—xÃ32768ŒModule11÷0
+func4—fÃ16Õ(a::Int)ŒMyModule÷0
+func5—fÃ16Õ(b::Int)ŒMyModule.func4÷0
+g—fÃ16Õ(x, y)::Int8÷0
+myfun—fÃ16Õ()÷0
+norm—fÃ16Õ(p::Point{<:Real})÷0
+num—gÃ64Õ::TŒOurRational÷0
+same_type_numeric—fÃ16Õ(x::T, y::T) where {T <: Number} ÷0
+same_type_numeric—fÃ16Õ(x::T, y::T) where T ÷0
+show—xÃ32768ŒBase÷0
+test—fÃ16Õ(x)÷0
+test—gÃ64Õ::TŒOurRational÷0
+test_docstring—fÃ16÷0
+x—gÃ64Õ::BarŒFoo÷0
+x—gÃ64Õ::TŒPoint÷0
+y—gÃ64Õ::TŒPoint÷0
+y—cÃ16384÷0

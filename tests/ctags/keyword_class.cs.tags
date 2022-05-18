@@ -1,9 +1,9 @@
 # format=tagmanager
-KidÌ1Ö0
-KidÌ128Í()ÎKidÖ0
-KidÌ128Í(string name, int age)ÎKidÖ0
-MainÌ128Í()ÎMainClassÖ0Ïpublic void
-MainClassÌ1Ö0
-PrintKidÌ128Í()ÎKidÖ0Ïpublic void
-ageÌ8ÎKidÖ0Ïint
-nameÌ8ÎKidÖ0
+KidÑcÌ1Ö0
+KidÑmÌ128Í()ÎKidÖ0
+KidÑmÌ128Í(string name, int age)ÎKidÖ0
+MainÑmÌ128Í()ÎMainClassÖ0Ïpublic void
+MainClassÑcÌ1Ö0
+PrintKidÑmÌ128Í()ÎKidÖ0Ïpublic void
+ageÑfÌ8ÎKidÖ0Ïint
+nameÑfÌ8ÎKidÖ0

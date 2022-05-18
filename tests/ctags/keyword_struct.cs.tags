@@ -1,7 +1,7 @@
 # format=tagmanager
-MainÌ128Í()ÎMainClassÖ0Ïpublic void
-MainClassÌ1Ö0
-PointÌ128Í(int p1, int p2)ÎPointÖ0
-PointÌ2048Ö0
-xÌ8ÎPointÖ0Ïint
-yÌ8ÎPointÖ0Ïint
+MainÑmÌ128Í()ÎMainClassÖ0Ïpublic void
+MainClassÑcÌ1Ö0
+PointÑmÌ128Í(int p1, int p2)ÎPointÖ0
+PointÑsÌ2048Ö0
+xÑfÌ8ÎPointÖ0Ïint
+yÑfÌ8ÎPointÖ0Ïint

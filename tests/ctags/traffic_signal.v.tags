@@ -1,14 +1,14 @@
 # format=tagmanager
-amberÌ16384ÎtrafficÖ0
-amber_ticsÌ16384ÎtrafficÖ0
-clockÌ16384ÎtrafficÖ0
-colorÌ16384Îtraffic.lightÖ0
-greenÌ16384ÎtrafficÖ0
-green_ticsÌ16384ÎtrafficÖ0
-lightÌ16ÎtrafficÖ0
-offÌ16384ÎtrafficÖ0
-onÌ16384ÎtrafficÖ0
-redÌ16384ÎtrafficÖ0
-red_ticsÌ16384ÎtrafficÖ0
-ticsÌ16384Îtraffic.lightÖ0
-trafficÌ1Ö0
+amberÑrÌ16384ÎtrafficÖ0
+amber_ticsÑcÌ16384ÎtrafficÖ0
+clockÑrÌ16384ÎtrafficÖ0
+colorÑpÌ16384Îtraffic.lightÖ0
+greenÑrÌ16384ÎtrafficÖ0
+green_ticsÑcÌ16384ÎtrafficÖ0
+lightÑtÌ16ÎtrafficÖ0
+offÑcÌ16384ÎtrafficÖ0
+onÑcÌ16384ÎtrafficÖ0
+redÑrÌ16384ÎtrafficÖ0
+red_ticsÑcÌ16384ÎtrafficÖ0
+ticsÑpÌ16384Îtraffic.lightÖ0
+trafficÑmÌ1Ö0

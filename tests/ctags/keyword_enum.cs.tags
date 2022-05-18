@@ -1,14 +1,14 @@
 # format=tagmanager
-DaysÌ2ÎEnumTestÖ0
-EnumTestÌ1Ö0
-FriÌ4ÎEnumTest.DaysÖ0
-MainÌ128Í()ÎEnumTestÖ0Ïpublic void
-MaxÌ4ÎEnumTest.RangeÖ0
-MinÌ4ÎEnumTest.RangeÖ0
-MonÌ4ÎEnumTest.DaysÖ0
-RangeÌ2ÎEnumTestÖ0
-SatÌ4ÎEnumTest.DaysÖ0
-SunÌ4ÎEnumTest.DaysÖ0
-ThuÌ4ÎEnumTest.DaysÖ0
-TueÌ4ÎEnumTest.DaysÖ0
-WedÌ4ÎEnumTest.DaysÖ0
+DaysÑgÌ2ÎEnumTestÖ0
+EnumTestÑcÌ1Ö0
+FriÑeÌ4ÎEnumTest.DaysÖ0
+MainÑmÌ128Í()ÎEnumTestÖ0Ïpublic void
+MaxÑeÌ4ÎEnumTest.RangeÖ0
+MinÑeÌ4ÎEnumTest.RangeÖ0
+MonÑeÌ4ÎEnumTest.DaysÖ0
+RangeÑgÌ2ÎEnumTestÖ0
+SatÑeÌ4ÎEnumTest.DaysÖ0
+SunÑeÌ4ÎEnumTest.DaysÖ0
+ThuÑeÌ4ÎEnumTest.DaysÖ0
+TueÑeÌ4ÎEnumTest.DaysÖ0
+WedÑeÌ4ÎEnumTest.DaysÖ0

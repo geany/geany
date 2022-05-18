@@ -1,4 +1,4 @@
 # format=tagmanager
-MainÌ128Í()ÎMyClassÖ0Ïpublic void
-MyClassÌ1Ö0
-MyFnÌ128Í(string s)ÎMyClassÖ0Ïpublic void
+MainÑmÌ128Í()ÎMyClassÖ0Ïpublic void
+MyClassÑcÌ1Ö0
+MyFnÑmÌ128Í(string s)ÎMyClassÖ0Ïpublic void

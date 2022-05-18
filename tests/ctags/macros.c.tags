@@ -1,6 +1,6 @@
 # format=tagmanager
-FUNCTION_LIKEÃ131072Õ(a,b)÷0
-MACROÃ1024Õ(foo)÷0
-VARIABLE_LIKEÃ65536÷0
-WeakSymbolÃ65536÷0
-prototypeÃ1024Õ(int arg1,void * arg2)÷0œvoid
+FUNCTION_LIKE—dÃ131072Õ(a,b)÷0
+MACRO—pÃ1024Õ(foo)÷0
+VARIABLE_LIKE—dÃ65536÷0
+WeakSymbol—dÃ65536÷0
+prototype—pÃ1024Õ(int arg1,void * arg2)÷0œvoid

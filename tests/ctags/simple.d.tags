@@ -1,24 +1,24 @@
 # format=tagmanager
-AliasIntÌ4096Ö0
-ClassÌ1Ö0
-EnumÌ2Ö0
-InterfaceÌ32Ö0
-StructÌ2048Ö0
-TemplateÌ256Ö0
-TemplateAliasÌ4096ÎTemplateÖ0
-UnionÌ8192ÎStructÖ0
-_barÌ64ÎClassÖ0ÏAliasInt
-barÌ4ÎEnumÖ0
-barÌ16Í()ÎClassÖ0Ïpublic AliasInt
-barÌ1024Í()ÎInterfaceÖ0Ïpublic AliasInt
-conditionalÌ16384Ö0ÏT
-fooÌ4ÎEnumÖ0
-globalVarÌ16384Ö0Ï__gshared int
-iÌ16384Ö0Ïint
-mainÌ16Í(string[] args)Ö0Ïvoid
-objÌ16384Ö0ÏObject
-qarÌ64ÎStruct.UnionÖ0Ïint
-quxxÌ64ÎStruct.UnionÖ0Ïbool
-test.simpleÌ256Ö0
-tfunÌ16Í(T v)ÎClassÖ0Ïauto
-thisÌ16Í(AliasInt x)ÎClassÖ0
+AliasIntÑtÌ4096Ö0
+ClassÑcÌ1Ö0
+EnumÑgÌ2Ö0
+InterfaceÑiÌ32Ö0
+StructÑsÌ2048Ö0
+TemplateÑnÌ256Ö0
+TemplateAliasÑtÌ4096ÎTemplateÖ0
+UnionÑuÌ8192ÎStructÖ0
+_barÑmÌ64ÎClassÖ0ÏAliasInt
+barÑeÌ4ÎEnumÖ0
+barÑfÌ16Í()ÎClassÖ0Ïpublic AliasInt
+barÑpÌ1024Í()ÎInterfaceÖ0Ïpublic AliasInt
+conditionalÑvÌ16384Ö0ÏT
+fooÑeÌ4ÎEnumÖ0
+globalVarÑvÌ16384Ö0Ï__gshared int
+iÑvÌ16384Ö0Ïint
+mainÑfÌ16Í(string[] args)Ö0Ïvoid
+objÑvÌ16384Ö0ÏObject
+qarÑmÌ64ÎStruct.UnionÖ0Ïint
+quxxÑmÌ64ÎStruct.UnionÖ0Ïbool
+test.simpleÑnÌ256Ö0
+tfunÑfÌ16Í(T v)ÎClassÖ0Ïauto
+thisÑfÌ16Í(AliasInt x)ÎClassÖ0

@@ -1,6 +1,6 @@
 # format=tagmanager
-bÌ16384Ö0Ïchar
-barÌ16Í(char * c,double d[]) constÎBARÖ0Ïchar *
-barÌ1024Í(a,b)Ö0Ïint
-fooÌ16Í(int a,char b)Ö0Ïvoid
-foobarÌ1024Í(int a,char b)Ö0Ïvoid
+bÑvÌ16384Ö0Ïchar
+barÑfÌ16Í(char * c,double d[]) constÎBARÖ0Ïchar *
+barÑpÌ1024Í(a,b)Ö0Ïint
+fooÑfÌ16Í(int a,char b)Ö0Ïvoid
+foobarÑpÌ1024Í(int a,char b)Ö0Ïvoid

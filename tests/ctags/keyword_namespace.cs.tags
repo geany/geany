@@ -1,9 +1,9 @@
 # format=tagmanager
-AlternativeNestedNameSpaceClassÌ1ÎSomeNameSpace.NestedÖ0
-MainÌ128Í()ÎSomeNameSpace.MyClassÖ0Ïpublic void
-MyClassÌ1ÎSomeNameSpaceÖ0
-NestedÌ256ÎSomeNameSpaceÖ0
-NestedNameSpaceClassÌ1ÎSomeNameSpace.NestedÖ0
-SayHelloÌ128Í()ÎSomeNameSpace.Nested.NestedNameSpaceClassÖ0Ïpublic void
-SomeNameSpaceÌ256Ö0
-SomeNameSpace.NestedÌ256Ö0
+AlternativeNestedNameSpaceClassÑcÌ1ÎSomeNameSpace.NestedÖ0
+MainÑmÌ128Í()ÎSomeNameSpace.MyClassÖ0Ïpublic void
+MyClassÑcÌ1ÎSomeNameSpaceÖ0
+NestedÑnÌ256ÎSomeNameSpaceÖ0
+NestedNameSpaceClassÑcÌ1ÎSomeNameSpace.NestedÖ0
+SayHelloÑmÌ128Í()ÎSomeNameSpace.Nested.NestedNameSpaceClassÖ0Ïpublic void
+SomeNameSpaceÑnÌ256Ö0
+SomeNameSpace.NestedÑnÌ256Ö0

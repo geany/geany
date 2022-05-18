@@ -1,4 +1,4 @@
 # format=tagmanager
-f1Ì16Í()Ö0Ïstd::string &
-f2Ì16Í()Ö0Ïconst std::string &
-f3Ì16Í()Ö0Ïstd::string const &
+f1ÑfÌ16Í()Ö0Ïstd::string &
+f2ÑfÌ16Í()Ö0Ïconst std::string &
+f3ÑfÌ16Í()Ö0Ïstd::string const &

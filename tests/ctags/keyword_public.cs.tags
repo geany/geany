@@ -1,6 +1,6 @@
 # format=tagmanager
-MainÌ128Í()ÎMyClass2Ö0Ïpublic void
-MyClass1Ì1Ö0
-MyClass2Ì1Ö0
-xÌ8ÎMyClass1Ö0Ïint
-yÌ8ÎMyClass1Ö0Ïint
+MainÑmÌ128Í()ÎMyClass2Ö0Ïpublic void
+MyClass1ÑcÌ1Ö0
+MyClass2ÑcÌ1Ö0
+xÑfÌ8ÎMyClass1Ö0Ïint
+yÑfÌ8ÎMyClass1Ö0Ïint

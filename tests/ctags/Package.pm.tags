@@ -1,13 +1,13 @@
 # format=tagmanager
-CONSTÌ2Ö0
-ENDÌ65536Ö0
-END2Ì65536Ö0
-TestÌ512Ö0
-Test::OneÌ512Ö0
-Test::One::TwoÌ512Ö0
-dudeÌ16Ö0
-initÌ16Ö0
-quoÌ16Ö0
-quoÌ1024Ö0
-xtzÌ1024Ö0
-xuzÌ1024Ö0
+CONSTÑcÌ2Ö0
+ENDÑlÌ65536Ö0
+END2ÑlÌ65536Ö0
+TestÑpÌ512Ö0
+Test::OneÑpÌ512Ö0
+Test::One::TwoÑpÌ512Ö0
+dudeÑsÌ16Ö0
+initÑsÌ16Ö0
+quoÑsÌ16Ö0
+quoÑdÌ1024Ö0
+xtzÑdÌ1024Ö0
+xuzÑdÌ1024Ö0

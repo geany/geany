@@ -1,7 +1,7 @@
 # format=tagmanager
-another.nameÌ256Ö0
-app.controllerÌ256Ö0
-core-function-with-bodyÌ16Îapp.controllerÖ0
-empty-fnÌ16Îapp.controllerÖ0
-function-with-bodyÌ16Îapp.controllerÖ0
-xÌ16Îanother.nameÖ0
+another.nameÑnÌ256Ö0
+app.controllerÑnÌ256Ö0
+core-function-with-bodyÑfÌ16Îapp.controllerÖ0
+empty-fnÑfÌ16Îapp.controllerÖ0
+function-with-bodyÑfÌ16Îapp.controllerÖ0
+xÑfÌ16Îanother.nameÖ0

@@ -1,7 +1,7 @@
 # format=tagmanager
-CÌ2048Ö0
-DÌ16Í()ÎDÖ0
-DÌ2048Ö0
-mainÌ16Í(void)Ö0Ïint
-xÌ64ÎCÖ0Ïint
-~DÌ16Í()ÎDÖ0
+CÑsÌ2048Ö0
+DÑfÌ16Í()ÎDÖ0
+DÑsÌ2048Ö0
+mainÑfÌ16Í(void)Ö0Ïint
+xÑmÌ64ÎCÖ0Ïint
+~DÑfÌ16Í()ÎDÖ0

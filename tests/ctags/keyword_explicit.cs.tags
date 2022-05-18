@@ -1,7 +1,7 @@
 # format=tagmanager
-DigitÌ128Í(byte value)ÎDigitÖ0
-DigitÌ2048Ö0
-MainÌ128Í()ÎTestÖ0Ïpublic void
-TestÌ1Ö0
-operator DigitÌ128Í(byte b)ÎDigitÖ0
-valueÌ8ÎDigitÖ0Ïbyte
+DigitÑmÌ128Í(byte value)ÎDigitÖ0
+DigitÑsÌ2048Ö0
+MainÑmÌ128Í()ÎTestÖ0Ïpublic void
+TestÑcÌ1Ö0
+operator DigitÑmÌ128Í(byte b)ÎDigitÖ0
+valueÑfÌ8ÎDigitÖ0Ïbyte

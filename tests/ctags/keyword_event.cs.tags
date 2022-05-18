@@ -1,22 +1,22 @@
 # format=tagmanager
-ExplicitEventsSampleÌ1Ö0
-FireAwayÌ128Í()ÎIÖ0Ïvoid
-FireAwayÌ128Í()ÎMyClassÖ0Ïpublic void
-FireEventsÌ128Í()ÎExplicitEventsSampleÖ0Ïprivate void
-IÌ32Ö0
-I1Ì32Ö0
-I2Ì32Ö0
-MainÌ128Í()ÎMainClassÖ0Ïpublic void
-MainÌ128Í()ÎMyClassÖ0Ïpublic void
-MainClassÌ1Ö0
-MyClassÌ1Ö0
-MyDelegateÌ128Í()Ö0Ïpublic delegate void
-MyDelegate1Ì128Í(int i)Ö0Ïpublic delegate void
-MyDelegate1Ì128Í()Ö0Ïpublic delegate void
-MyDelegate2Ì128Í(string s)Ö0Ïpublic delegate int
-MyDelegate3Ì128Í(int i, object o)Ö0Ïpublic delegate void
-MyDelegate4Ì128Í()Ö0Ïpublic delegate void
-MyEvent2StorageÌ8ÎExplicitEventsSampleÖ0ÏMyDelegate2
-PropertyEventsSampleÌ1Ö0
-eventTableÌ8ÎPropertyEventsSampleÖ0ÏHashtable
-fÌ128Í()ÎMainClassÖ0Ïprivate void
+ExplicitEventsSampleÑcÌ1Ö0
+FireAwayÑmÌ128Í()ÎIÖ0Ïvoid
+FireAwayÑmÌ128Í()ÎMyClassÖ0Ïpublic void
+FireEventsÑmÌ128Í()ÎExplicitEventsSampleÖ0Ïprivate void
+IÑiÌ32Ö0
+I1ÑiÌ32Ö0
+I2ÑiÌ32Ö0
+MainÑmÌ128Í()ÎMainClassÖ0Ïpublic void
+MainÑmÌ128Í()ÎMyClassÖ0Ïpublic void
+MainClassÑcÌ1Ö0
+MyClassÑcÌ1Ö0
+MyDelegateÑmÌ128Í()Ö0Ïpublic delegate void
+MyDelegate1ÑmÌ128Í(int i)Ö0Ïpublic delegate void
+MyDelegate1ÑmÌ128Í()Ö0Ïpublic delegate void
+MyDelegate2ÑmÌ128Í(string s)Ö0Ïpublic delegate int
+MyDelegate3ÑmÌ128Í(int i, object o)Ö0Ïpublic delegate void
+MyDelegate4ÑmÌ128Í()Ö0Ïpublic delegate void
+MyEvent2StorageÑfÌ8ÎExplicitEventsSampleÖ0ÏMyDelegate2
+PropertyEventsSampleÑcÌ1Ö0
+eventTableÑfÌ8ÎPropertyEventsSampleÖ0ÏHashtable
+fÑmÌ128Í()ÎMainClassÖ0Ïprivate void

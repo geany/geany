@@ -1,6 +1,6 @@
 # format=tagmanager
-barÌ16Í()ÎmainÖ0Ï(a int, b func(a int), c interface{}, d string)
-bazÌ16Í()ÎmainÖ0Ï*[20*3+1]map[chan<- <-chan int]map[interface{}]*string
-fooÌ16Í()ÎmainÖ0Ï*struct {a int; b func()}
-mainÌ16Í()ÎmainÖ0
-mainÌ256Ö0
+barÑfÌ16Í()ÎmainÖ0Ï(a int, b func(a int), c interface{}, d string)
+bazÑfÌ16Í()ÎmainÖ0Ï*[20*3+1]map[chan<- <-chan int]map[interface{}]*string
+fooÑfÌ16Í()ÎmainÖ0Ï*struct {a int; b func()}
+mainÑfÌ16Í()ÎmainÖ0
+mainÑpÌ256Ö0

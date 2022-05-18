@@ -1,4 +1,4 @@
 # format=tagmanager
-MainÌ128Í()ÎMyClassÖ0Ïpublic void
-MyClassÌ1Ö0
-TestOutÌ128Í(out char i)ÎMyClassÖ0Ïpublic int
+MainÑmÌ128Í()ÎMyClassÖ0Ïpublic void
+MyClassÑcÌ1Ö0
+TestOutÑmÌ128Í(out char i)ÎMyClassÖ0Ïpublic int

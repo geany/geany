@@ -1,6 +1,6 @@
 # format=tagmanager
-IMyInterfaceÌ32Ö0
-IndexerClassÌ1Ö0
-MainÌ128Í()ÎMainClassÖ0Ïpublic void
-MainClassÌ1Ö0
-myArrayÌ8ÎIndexerClassÖ0Ïint[]
+IMyInterfaceÑiÌ32Ö0
+IndexerClassÑcÌ1Ö0
+MainÑmÌ128Í()ÎMainClassÖ0Ïpublic void
+MainClassÑcÌ1Ö0
+myArrayÑfÌ8ÎIndexerClassÖ0Ïint[]

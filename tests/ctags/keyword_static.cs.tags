@@ -1,10 +1,10 @@
 # format=tagmanager
-AddEmployeeÌ128Í()ÎEmployeeÖ0Ïpublic int
-EmployeeÌ1Ö0
-EmployeeÌ128Í()ÎEmployeeÖ0
-EmployeeÌ128Í(string name, string id)ÎEmployeeÖ0
-MainÌ128Í()ÎMainClassÖ0Ïpublic void
-MainClassÌ1Ö0
-employeeCounterÌ8ÎEmployeeÖ0Ïint
-idÌ8ÎEmployeeÖ0
-nameÌ8ÎEmployeeÖ0
+AddEmployeeÑmÌ128Í()ÎEmployeeÖ0Ïpublic int
+EmployeeÑcÌ1Ö0
+EmployeeÑmÌ128Í()ÎEmployeeÖ0
+EmployeeÑmÌ128Í(string name, string id)ÎEmployeeÖ0
+MainÑmÌ128Í()ÎMainClassÖ0Ïpublic void
+MainClassÑcÌ1Ö0
+employeeCounterÑfÌ8ÎEmployeeÖ0Ïint
+idÑfÌ8ÎEmployeeÖ0
+nameÑfÌ8ÎEmployeeÖ0
