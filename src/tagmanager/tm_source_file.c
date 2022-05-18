@@ -60,7 +60,7 @@ enum
 	TA_SCOPE,
 	TA_VARTYPE,
 	TA_INHERITS,
-	TA_TIME,
+	TA_KIND_LETTER,
 	TA_ACCESS,
 	TA_IMPL,
 	TA_LANG,
@@ -232,7 +232,8 @@ static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, TMP
 				case TA_INHERITS:
 					tag->inheritance = g_strdup((gchar*)start + 1);
 					break;
-				case TA_TIME:  /* Obsolete */
+				case TA_KIND_LETTER:
+					tag->kind_letter = *(start + 1);
 					break;
 				case TA_LANG:  /* Obsolete */
 					break;
@@ -256,6 +257,8 @@ static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, TMP
 	if (NULL == tag->name)
 		return FALSE;
 	tag->file = file;
+	if (tag->kind_letter)
+		tag->type = tm_parser_get_tag_type(tag->kind_letter, lang);
 	return TRUE;
 }
 
@@ -459,6 +462,8 @@ static TMTag *new_tag_from_tags_file(TMSourceFile *file, FILE *fp, TMParserType 
 static gboolean write_tag(TMTag *tag, FILE *fp, TMTagAttrType attrs)
 {
 	fprintf(fp, "%s", tag->name);
+	if (attrs & tm_tag_attr_kind_t)
+		fprintf(fp, "%c%c", TA_KIND_LETTER, tag->kind_letter);
 	if (attrs & tm_tag_attr_type_t)
 		fprintf(fp, "%c%d", TA_TYPE, tag->type);
 	if ((attrs & tm_tag_attr_arglist_t) && (NULL != tag->arglist))
@@ -559,7 +564,7 @@ gboolean tm_source_file_write_tags_file(const gchar *tags_file, GPtrArray *tags_
 
 		ret = write_tag(tag, fp, tm_tag_attr_type_t
 		  | tm_tag_attr_scope_t | tm_tag_attr_arglist_t | tm_tag_attr_vartype_t
-		  | tm_tag_attr_flags_t);
+		  | tm_tag_attr_flags_t | tm_tag_attr_kind_t);
 
 		if (!ret)
 			break;
