@@ -258,7 +258,11 @@ static gboolean init_tag_from_file(TMTag *tag, TMSourceFile *file, FILE *fp, TMP
 		return FALSE;
 	tag->file = file;
 	if (tag->kind_letter)
-		tag->type = tm_parser_get_tag_type(tag->kind_letter, lang);
+	{
+		TMTagType type = tm_parser_get_tag_type(tag->kind_letter, lang);
+		if (type != tm_tag_undef_t)
+			tag->type = type;
+	}
 	return TRUE;
 }
 
