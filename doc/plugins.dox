@@ -671,7 +671,7 @@ The @ref plugin_callbacks array is supported by assigning the GeanyPluginFuncs::
 the array.
 
 @ref plugin_fields is not supported anymore. Use ui_add_document_sensitive() instead.
-@ref PLUGIN_KEY_GROUP and @ref plugin_key_group are also not supported anymore. Use
+@c PLUGIN_KEY_GROUP and @ref plugin_key_group are also not supported anymore. Use
 plugin_set_key_group() and keybindings_set_item() respectively.
 
 Additionally, Geany traditionally set a few variables. This is not the case anymore. @ref
