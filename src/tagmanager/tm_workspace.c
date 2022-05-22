@@ -24,9 +24,6 @@
 #include <sys/types.h>
 #include <string.h>
 #include <sys/stat.h>
-#ifdef HAVE_GLOB_H
-# include <glob.h>
-#endif
 #include <glib/gstdio.h>
 
 #include "tm_workspace.h"
@@ -443,73 +440,17 @@ static GList *lookup_includes(const gchar **includes, gint includes_count)
 	GList *includes_files = NULL;
 	GHashTable *table; /* used for deduping */
 	gint i;
-#ifdef HAVE_GLOB_H
-	glob_t globbuf;
-	size_t idx_glob;
-#endif
 
 	table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, NULL);
 
-#ifdef HAVE_GLOB_H
-	globbuf.gl_offs = 0;
-
-	if (includes[0][0] == '"')	/* leading \" char for glob matching */
+	for (i = 0; i < includes_count; i++)
 	{
-		for (i = 0; i < includes_count; i++)
+		if (!g_hash_table_lookup(table, includes[i]))
 		{
-			size_t dirty_len = strlen(includes[i]);
-			gchar *clean_path;
+			gchar* file_name_copy = g_strdup(includes[i]);
 
-			if (dirty_len < 2)
-				continue;
-
-			clean_path = g_malloc(dirty_len - 1);
-
-			strncpy(clean_path, includes[i] + 1, dirty_len - 1);
-			clean_path[dirty_len - 2] = 0;
-
-#ifdef TM_DEBUG
-			g_message ("[o][%s]\n", clean_path);
-#endif
-			glob(clean_path, 0, NULL, &globbuf);
-
-#ifdef TM_DEBUG
-			g_message ("matches: %d\n", globbuf.gl_pathc);
-#endif
-
-			for (idx_glob = 0; idx_glob < globbuf.gl_pathc; idx_glob++)
-			{
-#ifdef TM_DEBUG
-				g_message (">>> %s\n", globbuf.gl_pathv[idx_glob]);
-#endif
-				if (!g_hash_table_lookup(table, globbuf.gl_pathv[idx_glob]))
-				{
-					gchar *file_name_copy = g_strdup(globbuf.gl_pathv[idx_glob]);
-
-					includes_files = g_list_prepend(includes_files, file_name_copy);
-					g_hash_table_insert(table, file_name_copy, file_name_copy);
-#ifdef TM_DEBUG
-					g_message ("Added ...\n");
-#endif
-				}
-			}
-			globfree(&globbuf);
-			g_free(clean_path);
-		}
-	}
-	else
-#endif /* HAVE_GLOB_H */
-	{
-		/* no glob support or globbing not wanted */
-		for (i = 0; i < includes_count; i++)
-		{
-			if (!g_hash_table_lookup(table, includes[i]))
-			{
-				gchar* file_name_copy = g_strdup(includes[i]);
-
-				includes_files = g_list_prepend(includes_files, file_name_copy);
-				g_hash_table_insert(table, file_name_copy, file_name_copy);
-			}
+			includes_files = g_list_prepend(includes_files, file_name_copy);
+			g_hash_table_insert(table, file_name_copy, file_name_copy);
 		}
 	}
 

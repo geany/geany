@@ -45,7 +45,7 @@ fi
 # autoscan start
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h glob.h stdlib.h sys/time.h errno.h limits.h])
+AC_CHECK_HEADERS([fcntl.h stdlib.h sys/time.h errno.h limits.h])
 
 # Checks for dependencies needed by ctags
 AC_CHECK_HEADERS([dirent.h fnmatch.h direct.h io.h sys/dir.h])
