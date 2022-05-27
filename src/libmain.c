@@ -878,10 +878,6 @@ static void open_cl_files(gint argc, gchar **argv)
 			continue;
 		}
 
-#ifdef G_OS_WIN32
-		/* It seems argv elements are encoded in CP1252 on a German Windows */
-		SETPTR(filename, g_locale_to_utf8(filename, -1, NULL, NULL, NULL));
-#endif
 		if (filename && ! main_handle_filename(filename))
 		{
 			const gchar *msg = _("Could not find file '%s'.");
@@ -1020,6 +1016,9 @@ static const gchar *get_locale(void)
 GEANY_EXPORT_SYMBOL
 gint main_lib(gint argc, gchar **argv)
 {
+#ifdef G_OS_WIN32
+	win32_make_argc_and_argv_in_utf8(&argc, &argv);
+#endif
 	GeanyDocument *doc;
 	gint config_dir_result;
 	const gchar *locale;
@@ -1249,6 +1248,9 @@ gint main_lib(gint argc, gchar **argv)
 #endif
 
 	gtk_main();
+#ifdef G_OS_WIN32
+	win32_free_argv_made_in_utf8(argc, argv);
+#endif
 	return 0;
 }
 

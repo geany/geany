@@ -1033,4 +1033,31 @@ gchar *win32_get_user_config_dir(void)
 	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
 }
 
+
+void win32_make_argc_and_argv_in_utf8(gint *pargc, gchar ***pargv)
+{
+	int num_arg;
+	LPWSTR *szarglist = CommandLineToArgvW(GetCommandLineW(), &num_arg);
+	char **utf8argv = g_new0(char *, num_arg + 1);
+	int i = num_arg;
+	while(i)
+	{
+		i--;
+		utf8argv[i] = g_utf16_to_utf8((gunichar2 *)szarglist[i], -1, NULL, NULL, NULL);
+	}
+	*pargc = num_arg;
+	*pargv = utf8argv;
+	LocalFree(szarglist);
+}
+
+void win32_free_argv_made_in_utf8(gint argc, gchar **argv)
+{
+	int i = argc;
+	while(i){
+		i--;
+		g_free(argv[i]);
+	}
+	g_free(argv);
+}
+
 #endif
