@@ -1,5 +1,7 @@
 Geany 1.39 (unreleased)
-
+    Interface
+    * The document list in the sidebar has a new tree view. This mode is the
+      new default and existing installations automatically use it (PR#1813).
 
 Geany 1.38 (October 09, 2021)
 

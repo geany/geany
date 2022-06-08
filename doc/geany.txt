@@ -229,7 +229,7 @@ The workspace has the following parts:
 * An optional toolbar.
 * An optional sidebar that can show the following tabs:
 
-  * Documents - A document list, and
+  * Documents - A document list, see `Document list views`_.
   * Symbols - A list of symbols in your code.
 
 * The main editor window.
@@ -512,6 +512,48 @@ order. It is not alphabetical as shown in the documents list
 
 See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
+
+Document list views
+^^^^^^^^^^^^^^^^^^^
+
+There are three different ways to display documents on the sidebar if *Show
+documents list* is active.  To switch between views press the right mouse button
+on the documents list and select one of these items:
+
+Documents Only
+    Show only file names of open documents in sorted order.
+
+    .. image:: ./images/sidebar_documents_only.png
+
+Show Paths
+    Show open documents as a two-level tree in which first level is the paths
+    of directories containing open files and the second level is the file names of
+    the documents open in that path.  All documents with the same path are grouped
+    together under the same first level item.  Paths are in sorted order and
+    documents are sorted within each group.
+
+    .. image:: ./images/sidebar_show_paths.png
+
+Show Tree
+    Show paths as above, but as a multiple level partial tree.  The tree is only
+    expanded at positions where two or more directory paths to open documents
+    share the same prefix.  The common prefix is shown as a parent level, and
+    the remainder of those paths are shown as child levels.  This applies
+    recursively down the paths making a tree to the file names of open documents,
+    which are grouped in sorted order as an additional level below the last path
+    segment.
+
+    For convenience two common file locations are handled specially, open
+    files below the users home directory and open files below an open project
+    base path.  Each of these is moved to its own top level tree instead of
+    being in place in the normal tree.  The top level of these trees are each
+    labelled differently.  For the home directory tree the path of the home
+    directory is shown as ``~``, and for the project tree the path to the project
+    base path is shown simply as the project name.
+
+    .. image:: ./images/sidebar_show_tree.png
+
+In all cases paths and file names that do not fit in the width available are ellipsised.
 
 Cloning documents
 ^^^^^^^^^^^^^^^^^

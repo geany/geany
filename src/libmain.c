@@ -1018,19 +1018,11 @@ static const gchar *get_locale(void)
 
 
 GEANY_EXPORT_SYMBOL
-gint main_lib(gint argc, gchar **argv)
+void main_init_headless(void)
 {
-	GeanyDocument *doc;
-	gint config_dir_result;
-	const gchar *locale;
-	gchar *utf8_configdir;
-	gchar *os_info;
-
 #if ! GLIB_CHECK_VERSION(2, 36, 0)
 	g_type_init();
 #endif
-
-	log_handlers_init();
 
 	app = g_new0(GeanyApp, 1);
 	memset(&main_status, 0, sizeof(GeanyStatus));
@@ -1043,6 +1035,21 @@ gint main_lib(gint argc, gchar **argv)
 	memset(&template_prefs, 0, sizeof(GeanyTemplatePrefs));
 	memset(&ui_prefs, 0, sizeof(UIPrefs));
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
+}
+
+
+GEANY_EXPORT_SYMBOL
+gint main_lib(gint argc, gchar **argv)
+{
+	GeanyDocument *doc;
+	gint config_dir_result;
+	const gchar *locale;
+	gchar *utf8_configdir;
+	gchar *os_info;
+
+	main_init_headless();
+
+	log_handlers_init();
 
 	setup_paths();
 

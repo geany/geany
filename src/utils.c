@@ -468,7 +468,7 @@ gdouble utils_scale_round(gdouble val, gdouble factor)
 
 /* like g_utf8_strdown() but if @str is not valid UTF8, convert it from locale first.
  * returns NULL on charset conversion failure */
-static gchar *utf8_strdown(const gchar *str)
+gchar *utils_utf8_strdown(const gchar *str)
 {
 	gchar *down;
 
@@ -512,10 +512,10 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 	g_return_val_if_fail(s2 != NULL, -1);
 
 	/* ensure strings are UTF-8 and lowercase */
-	tmp1 = utf8_strdown(s1);
+	tmp1 = utils_utf8_strdown(s1);
 	if (! tmp1)
 		return 1;
-	tmp2 = utf8_strdown(s2);
+	tmp2 = utils_utf8_strdown(s2);
 	if (! tmp2)
 	{
 		g_free(tmp1);

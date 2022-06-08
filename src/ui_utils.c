@@ -68,7 +68,7 @@
 	"filetype: %f      " \
 	"scope: %S")
 
-GeanyInterfacePrefs	interface_prefs;
+GEANY_EXPORT_SYMBOL GeanyInterfacePrefs interface_prefs;
 GeanyMainWidgets	main_widgets;
 
 UIPrefs			ui_prefs;
