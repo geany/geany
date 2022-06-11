@@ -937,6 +937,10 @@ preferences`_, default 4) or when the *Complete word*
 keybinding is pressed (configurable, see `Editor keybindings`_,
 default Ctrl-Space).
 
+For some languages the autocompletion list is ordered by heuristics to
+attempt to show names that are more likely to be what the user wants
+close to the top of the list.
+
 When the defined keybinding is typed and the *Autocomplete all words in
 document* preference (in `Editor Completions preferences`_)
 is selected then the autocompletion list will show all matching words
@@ -986,9 +990,11 @@ When you type ``foo.`` it will show an autocompletion list with 'i' and
 'c' symbols.
 
 It only works for languages that set parent scope names for e.g. struct
-members. Currently this means C-like languages. The C parser only
-parses global scopes, so this won't work for structs or objects declared
-in local scope.
+members. Most languages only parse global definitions and so scope
+autocompletion will not work for names declared in local scope
+(e.g. inside functions). A few languages parse both local and global
+symbols (e.g. C/C++ parsers) and for these parsers scope autocompletion
+works also for local variables.
 
 
 User-definable snippets
