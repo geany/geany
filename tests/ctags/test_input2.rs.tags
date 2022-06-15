@@ -1,21 +1,40 @@
-# format=tagmanager
 SomeLongStructNameÌ1Ö0
+class:      SomeLongStructName
 SomeLongStructNameÌ2048Ö0
+struct:     SomeLongStructName
 SomeStructÌ2048ÎfruitÖ0
+struct:     fruit :: SomeStruct
 another_functionÌ16Í(a:isize,b:isize,c:isize)->isizeÎvegÖ0
+function:   veg :: another_function(a:isize,b:isize,c:isize)->isize
 baazÌ128Í()ÎSomeLongStructNameÖ0
+method:     SomeLongStructName :: baaz()
 blue_valueÌ8Îfruit::SomeStructÖ0
+field:      fruit::SomeStruct :: blue_value
 chalkÌ16Í()ÎmineralÖ0
+function:   mineral :: chalk()
 foo_bar_test_funcÌ16Í(apples:fruit::SomeStruct,(oranges,lemon):(isize,isize))->isizeÖ0
+function:   foo_bar_test_func(apples:fruit::SomeStruct,(oranges,lemon):(isize,isize))->isize
 foooÌ128Í()ÎSomeLongStructNameÖ0
+method:     SomeLongStructName :: fooo()
 free_funcÌ16Í()Ö0
+function:   free_func()
 fruitÌ256Ö0
+namespace:  fruit
 graniteÌ16Í()ÎmineralÖ0
+function:   mineral :: granite()
 green_valueÌ8Îfruit::SomeStructÖ0
+field:      fruit::SomeStruct :: green_value
 limestoneÌ16Í()ÎmineralÖ0
+function:   mineral :: limestone()
 mainÌ16Í()Ö0
+function:   main()
 mineralÌ256Ö0
+namespace:  mineral
 not_hashbangÌ16Í()Ö0
+function:   not_hashbang()
 red_valueÌ8Îfruit::SomeStructÖ0
+field:      fruit::SomeStruct :: red_value
 vÌ8ÎSomeLongStructNameÖ0
+field:      SomeLongStructName :: v
 vegÌ256Ö0
+namespace:  veg

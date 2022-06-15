@@ -1,5 +1,8 @@
-# format=tagmanager
 allÌ16Ö0
+function:   all
 barÌ16Ö0
+function:   bar
 bazÌ16Ö0
+function:   baz
 fooÌ16Ö0
+function:   foo

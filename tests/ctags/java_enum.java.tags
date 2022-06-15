@@ -1,15 +1,28 @@
-# format=tagmanager
 AÃ4ŒC.FancyEnum÷0
+enumerator: C.FancyEnum :: A
 BÃ4ŒC.FancyEnum÷0
+enumerator: C.FancyEnum :: B
 CÃ1÷0
+class:      C
 FIRST_VALUEÃ4ŒC.TrivialEnum÷0
+enumerator: C.TrivialEnum :: FIRST_VALUE
 FancyEnumÃ2ŒC÷0
+enum:       C :: FancyEnum
 FancyEnumÃ128Õ(int i)ŒC.FancyEnum÷0
+method:     C.FancyEnum :: FancyEnum(int i)
 FancyEnum2Ã2ŒC÷0
+enum:       C :: FancyEnum2
 SECOND_VALUEÃ4ŒC.TrivialEnum÷0
+enumerator: C.TrivialEnum :: SECOND_VALUE
 TrivialEnumÃ2ŒC÷0
+enum:       C :: TrivialEnum
 XÃ4ŒC.FancyEnum2÷0
+enumerator: C.FancyEnum2 :: X
 YÃ4ŒC.FancyEnum2÷0
+enumerator: C.FancyEnum2 :: Y
 iÃ8ŒC.FancyEnum÷0œint
+field:      int C.FancyEnum :: i
 mÃ128Õ()ŒC.FancyEnum÷0œvoid
+method:     void C.FancyEnum :: m()
 m2Ã128Õ()ŒC.FancyEnum2÷0œvoid
+method:     void C.FancyEnum2 :: m2()

@@ -1,5 +1,8 @@
-# format=tagmanager
 containerÃ16384÷0
+variable:   container
 method1Ã16Õ()Œcontainer.object÷0
+function:   container.object :: method1()
 method2Ã16Õ()Œcontainer.object÷0
+function:   container.object :: method2()
 objectÃ16Õ()Œcontainer÷0
+function:   container :: object()

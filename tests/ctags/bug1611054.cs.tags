@@ -1,4 +1,6 @@
-# format=tagmanager
 CÌ1Ö0
+class:      C
 aÌ128Í()ÎCÖ0Ïpublic String
+method:     public String C :: a()
 bÌ128Í()ÎCÖ0Ïpublic void
+method:     public void C :: b()

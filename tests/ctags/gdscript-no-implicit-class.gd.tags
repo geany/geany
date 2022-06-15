@@ -1,35 +1,68 @@
-# format=tagmanager
 ANOTHER_THINGÃ16384ŒNamed÷0
+variable:   Named :: ANOTHER_THING
 ANSWERÃ16384÷0
+variable:   ANSWER
 MyClassÃ1÷0
+class:      MyClass
 NamedÃ2÷0
+enum:       Named
 SomethingÃ1÷0
+class:      Something
 THE_NAMEÃ16384÷0œString
+variable:   String THE_NAME
 THING_1Ã16384ŒNamed÷0
+variable:   Named :: THING_1
 THING_2Ã16384ŒNamed÷0
+variable:   Named :: THING_2
 UNIT_ALLÃ16384Œanon_enum_1÷0
+variable:   anon_enum_1 :: UNIT_ALL
 UNIT_ENEMYÃ16384Œanon_enum_1÷0
+variable:   anon_enum_1 :: UNIT_ENEMY
 UNIT_NEUTRALÃ16384Œanon_enum_1÷0
+variable:   anon_enum_1 :: UNIT_NEUTRAL
 _initÃ128Õ()÷0
+method:     _init()
 _private_varÃ16384ŒSomething÷0œString
+variable:   String Something :: _private_var
 aÃ16384÷0
+variable:   a
 aÃ16384ŒSomething÷0
+variable:   Something :: a
 anon_enum_1Ã2÷1
+enum:       anon_enum_1    flags: 1
 arrÃ16384÷0
+variable:   arr
 dictÃ16384÷0
+variable:   dict
 fooooooooÃ128Õ()ŒSomething÷0œString
+method:     String Something :: foooooooo()
 inferred_typeÃ16384÷0
+variable:   inferred_type
 local_varÃ524288Œsome_function÷0
+other:      some_function :: local_var
 local_var2Ã524288Œsome_function÷0
+other:      some_function :: local_var2
 lvÃ524288Œ_init÷0
+other:      _init :: lv
 p1Ã524288Œsomething÷0
+other:      something :: p1
 p2Ã524288Œsomething÷0
+other:      something :: p2
 param1Ã524288Œsome_function÷0œVector3
+other:      Vector3 some_function :: param1
 param2Ã524288Œsome_function÷0œint
+other:      int some_function :: param2
 sÃ16384÷0
+variable:   s
 sigÃ16384÷0
+variable:   sig
 some_functionÃ128Õ(param1: Vector3, param2: int)÷0œint
+method:     int some_function(param1: Vector3, param2: int)
 somethingÃ128Õ(p1, p2)÷0
+method:     something(p1, p2)
 typed_varÃ16384÷0œint
+variable:   int typed_var
 v2Ã16384÷0
+variable:   v2
 v3Ã16384÷0
+variable:   v3

@@ -1,15 +1,28 @@
-# format=tagmanager
 AÌ256Ö0
+namespace:  A
 BÌ256Ö0
+namespace:  B
 CÌ256ÎAÖ0
+namespace:  A :: C
 PÌ1Ö0
+class:      P
 PÌ1ÎAÖ0
+class:      A :: P
 QÌ1ÎAÖ0
+class:      A :: Q
 RÌ1ÎA::CÖ0
+class:      A::C :: R
 SÌ1ÎBÖ0
+class:      B :: S
 fÌ16Í(int v)ÎA::C::RÖ0Ïint
+function:   int A::C::R :: f(int v)
 tÌ64ÎB::SÖ0Ïint
+member:     int B::S :: t
 xÌ64ÎA::PÖ0Ïint
+member:     int A::P :: x
 xÌ64ÎPÖ0Ïint
+member:     int P :: x
 yÌ64ÎA::QÖ0Ïint
+member:     int A::Q :: y
 zÌ64ÎA::C::RÖ0Ïint
+member:     int A::C::R :: z

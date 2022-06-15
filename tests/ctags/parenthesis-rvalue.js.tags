@@ -1,23 +1,44 @@
-# format=tagmanager
 aÌ64Îd1Ö0
+member:     d1 :: a
 aÌ64Îd2Ö0
+member:     d2 :: a
 a1Ì16384Ö0
+variable:   a1
 a2Ì16384Ö0
+variable:   a2
 bÌ64Îd1Ö0
+member:     d1 :: b
 bÌ64Îd2Ö0
+member:     d2 :: b
 b1Ì16Í()Ö0
+function:   b1()
 b1subÌ16Í()Îb1Ö0
+function:   b1 :: b1sub()
 b2Ì16Í()Ö0
+function:   b2()
 b2subÌ16Í()Îb2Ö0
+function:   b2 :: b2sub()
 b3Ì16Í()Ö0
+function:   b3()
 b3subÌ16Í()Îb3Ö0
+function:   b3 :: b3sub()
 c1Ì16384Ö0
+variable:   c1
 c2Ì16384Ö0
+variable:   c2
 d1Ì1Ö0
+class:      d1
 d2Ì1Ö0
+class:      d2
 e1Ì16Í()Ö0
+function:   e1()
 e1subÌ16Í()Îe1Ö0
+function:   e1 :: e1sub()
 e2Ì16Í()Ö0
+function:   e2()
 e2subÌ16Í()Îe2Ö0
+function:   e2 :: e2sub()
 e3Ì16Í()Ö0
+function:   e3()
 e3subÌ16Í()Îe3Ö0
+function:   e3 :: e3sub()

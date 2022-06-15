@@ -1,13 +1,24 @@
-# format=tagmanager
 AÌ4ÎeÖ0
+enumerator: e :: A
 BÌ4ÎeÖ0
+enumerator: e :: B
 CÌ4ÎeÖ0
+enumerator: e :: C
 DÌ4ÎeÖ0
+enumerator: e :: D
 EÌ4ÎeÖ0
+enumerator: e :: E
 FÌ4ÎeÖ0
+enumerator: e :: F
 eÌ2Ö0
+enum:       e
 getShapeÌ128Í()ÎeÖ0Ïpublic final Shape
+method:     public final Shape e :: getShape()
 getStringÌ128Í()ÎeÖ0Ïpublic String
+method:     public String e :: getString()
 shapeÌ8ÎeÖ0ÏShape
+field:      Shape e :: shape
 stringÌ8ÎeÖ0ÏString
+field:      String e :: string
 twoKeywordsInARowÌ8ÎeÖ0Ïboolean
+field:      boolean e :: twoKeywordsInARow

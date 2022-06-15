@@ -1,8 +1,14 @@
-# format=tagmanager
 aÌ16384Ö0
+variable:   a
 bÌ16384Ö0
+variable:   b
 fÌ16Ö0
+function:   f
 oneÌ65536Ö0
+macro:      one
 startÌ256Ö0
+namespace:  start
 strÌ16384Ö0
+variable:   str
 testÌ2048Ö0
+struct:     test

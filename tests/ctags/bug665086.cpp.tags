@@ -1,4 +1,6 @@
-# format=tagmanager
 C12Ì1ÎN1::N2Ö0
+class:      N1::N2 :: C12
 N1Ì256Ö0
+namespace:  N1
 N2Ì256ÎN1Ö0
+namespace:  N1 :: N2

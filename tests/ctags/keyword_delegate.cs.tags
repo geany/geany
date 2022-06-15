@@ -1,12 +1,22 @@
-# format=tagmanager
 DelegateFunctionÃ128Õ(int i)ŒProgram÷0œpublic void
+method:     public void Program :: DelegateFunction(int i)
 InstanceMethodÃ128Õ()ŒMyClass÷0œpublic void
+method:     public void MyClass :: InstanceMethod()
 MainÃ128Õ()ŒMainClass÷0œpublic void
+method:     public void MainClass :: Main()
 MainÃ128Õ()ŒProgram÷0œpublic void
+method:     public void Program :: Main()
 MainClassÃ1÷0
+class:      MainClass
 MyClassÃ1÷0
+class:      MyClass
 MyDelegateÃ128Õ(int i)÷0œdelegate void
+method:     delegate void MyDelegate(int i)
 MyDelegateÃ128Õ()÷0œdelegate void
+method:     delegate void MyDelegate()
 ProgramÃ1÷0
+class:      Program
 StaticMethodÃ128Õ()ŒMyClass÷0œpublic void
+method:     public void MyClass :: StaticMethod()
 TakesADelegateÃ128Õ(MyDelegate SomeFunction)ŒProgram÷0œpublic void
+method:     public void Program :: TakesADelegate(MyDelegate SomeFunction)

@@ -1,10 +1,18 @@
-# format=tagmanager
 AddEmployeeÌ128Í()ÎEmployeeÖ0Ïpublic int
+method:     public int Employee :: AddEmployee()
 EmployeeÌ1Ö0
+class:      Employee
 EmployeeÌ128Í()ÎEmployeeÖ0
+method:     Employee :: Employee()
 EmployeeÌ128Í(string name, string id)ÎEmployeeÖ0
+method:     Employee :: Employee(string name, string id)
 MainÌ128Í()ÎMainClassÖ0Ïpublic void
+method:     public void MainClass :: Main()
 MainClassÌ1Ö0
+class:      MainClass
 employeeCounterÌ8ÎEmployeeÖ0Ïint
+field:      int Employee :: employeeCounter
 idÌ8ÎEmployeeÖ0
+field:      Employee :: id
 nameÌ8ÎEmployeeÖ0
+field:      Employee :: name

@@ -1,4 +1,6 @@
-# format=tagmanager
 c2Ì16384ÎtestÖ0
+variable:   test :: c2
 cm1Ì16384ÎtestÖ0
+variable:   test :: cm1
 testÌ2048Ö0
+struct:     test

@@ -1,4 +1,6 @@
-# format=tagmanager
 aÌ64ÎmystructÖ0Ïint
+member:     int mystruct :: a
 bÌ64ÎmystructÖ0Ïint
+member:     int mystruct :: b
 mystructÌ2048Ö0
+struct:     mystruct

@@ -1,5 +1,8 @@
-# format=tagmanager
 mainÌ16Í(void)Ö0Ïvoid
+function:   void main(void)
 my_structÌ2048Ö0
+struct:     my_struct
 xÌ64Îmy_structÖ0Ïint
+member:     int my_struct :: x
 yÌ64Îmy_structÖ0Ïfloat
+member:     float my_struct :: y

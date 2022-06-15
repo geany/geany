@@ -1,4 +1,6 @@
-# format=tagmanager
 *|divÌ2048Ö0
+struct:     *|div
 svg|aÌ2048Ö0
+struct:     svg|a
 |aÌ2048Ö0
+struct:     |a

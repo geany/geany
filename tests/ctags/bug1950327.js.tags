@@ -1,14 +1,26 @@
-# format=tagmanager
 *Ì64Îcontainer.dirtyTabÖ0
+member:     container.dirtyTab :: *
 DifferentÌ1Ö0
+class:      Different
 TabChromeÌ1Ö0
+class:      TabChrome
 createTabTileÌ128Í(browser)ÎDifferentÖ0
+method:     Different :: createTabTile(browser)
 createTabTileÌ128Í(browser)ÎTabChromeÖ0
+method:     TabChrome :: createTabTile(browser)
 destroyTabTileÌ128Í(tile)ÎDifferentÖ0
+method:     Different :: destroyTabTile(tile)
 destroyTabTileÌ128Í(tile)ÎTabChromeÖ0
+method:     TabChrome :: destroyTabTile(tile)
 dirtyTabÌ1ÎcontainerÖ0
+class:      container :: dirtyTab
 initÌ128Í()ÎDifferentÖ0
+method:     Different :: init()
 initÌ128Í()ÎTabChromeÖ0
+method:     TabChrome :: init()
 snapshotÌ64Îcontainer.dirtyTabÖ0
+member:     container.dirtyTab :: snapshot
 titleÌ64Îcontainer.dirtyTabÖ0
+member:     container.dirtyTab :: title
 urlÌ64Îcontainer.dirtyTabÖ0
+member:     container.dirtyTab :: url

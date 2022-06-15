@@ -1,5 +1,8 @@
-# format=tagmanager
 InvisibleÌ256Ö0
+namespace:  Invisible
 MainÌ2048Ö0
+struct:     Main
 SpillsOutsideÌ16ÎInvisibleÖ0
+function:   Invisible :: SpillsOutside
 nopeÌ16384ÎInvisibleÖ0
+variable:   Invisible :: nope

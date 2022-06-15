@@ -1,14 +1,26 @@
-# format=tagmanager
 DaysÌ2ÎEnumTestÖ0
+enum:       EnumTest :: Days
 EnumTestÌ1Ö0
+class:      EnumTest
 FriÌ4ÎEnumTest.DaysÖ0
+enumerator: EnumTest.Days :: Fri
 MainÌ128Í()ÎEnumTestÖ0Ïpublic void
+method:     public void EnumTest :: Main()
 MaxÌ4ÎEnumTest.RangeÖ0
+enumerator: EnumTest.Range :: Max
 MinÌ4ÎEnumTest.RangeÖ0
+enumerator: EnumTest.Range :: Min
 MonÌ4ÎEnumTest.DaysÖ0
+enumerator: EnumTest.Days :: Mon
 RangeÌ2ÎEnumTestÖ0
+enum:       EnumTest :: Range
 SatÌ4ÎEnumTest.DaysÖ0
+enumerator: EnumTest.Days :: Sat
 SunÌ4ÎEnumTest.DaysÖ0
+enumerator: EnumTest.Days :: Sun
 ThuÌ4ÎEnumTest.DaysÖ0
+enumerator: EnumTest.Days :: Thu
 TueÌ4ÎEnumTest.DaysÖ0
+enumerator: EnumTest.Days :: Tue
 WedÌ4ÎEnumTest.DaysÖ0
+enumerator: EnumTest.Days :: Wed

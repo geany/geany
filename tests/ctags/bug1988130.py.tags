@@ -1,3 +1,4 @@
-# format=tagmanager
 mainÌ16Í()Ö0
+function:   main()
 testFuncÌ16Í()Ö0
+function:   testFunc()

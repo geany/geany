@@ -1,3 +1,4 @@
-# format=tagmanager
 $(obj)/raid6int1.cÌ16Ö0
+function:   $(obj)/raid6int1.c
 FÌ65536Ö0
+macro:      F

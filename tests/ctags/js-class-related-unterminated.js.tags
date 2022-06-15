@@ -1,17 +1,32 @@
-# format=tagmanager
 AÃ64ŒCls÷0
+member:     Cls :: A
 BÃ1Õ(a, b)ŒCls÷0
+class:      Cls :: B(a, b)
 CÃ1Õ()ŒCls÷0
+class:      Cls :: C()
 ClsÃ1÷0
+class:      Cls
 SubÃ1÷0
+class:      Sub
 SubÃ1Õ()ŒCls.B÷0
+class:      Cls.B :: Sub()
 dyn1Ã128ŒSub÷0
+method:     Sub :: dyn1
 m1Ã128Õ(a)ŒCls.B÷0
+method:     Cls.B :: m1(a)
 m2Ã128Õ(b)ŒCls.B÷0
+method:     Cls.B :: m2(b)
 m3Ã128Õ(c)ŒCls.B÷0
+method:     Cls.B :: m3(c)
 m4Ã128Õ(d)ŒCls.B÷0
+method:     Cls.B :: m4(d)
 m5Ã128Õ(e)ŒCls.B÷0
+method:     Cls.B :: m5(e)
 m6Ã128Õ(f)ŒCls.B÷0
+method:     Cls.B :: m6(f)
 mainÃ16Õ()÷0
+function:   main()
 n1Ã128Õ()ŒCls.C÷0
+method:     Cls.C :: n1()
 n2Ã128Õ()ŒCls.C÷0
+method:     Cls.C :: n2()

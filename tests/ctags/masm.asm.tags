@@ -1,12 +1,22 @@
-# format=tagmanager
 BYTE_BUFFERÌ256Ö0
+namespace:  BYTE_BUFFER
 LabelMaker1Ì256Ö0
+namespace:  LabelMaker1
 LabelMaker2Ì256Ö0
+namespace:  LabelMaker2
 MsgÌ65536Ö0
+macro:      Msg
 QUACKÌ256Ö0
+namespace:  QUACK
 WORD_BUFFERÌ65536Ö0
+macro:      WORD_BUFFER
 hllequalÌ65536Ö0
+macro:      hllequal
 myequÌ65536Ö0
+macro:      myequ
 myequalÌ65536Ö0
+macro:      myequal
 mymacroÌ16Ö0
+function:   mymacro
 mystructÌ2048Ö0
+struct:     mystruct

@@ -1,6 +1,10 @@
-# format=tagmanager
 BaseÌ2048Ö0
+struct:     Base
 FooÌ2048Ö0
+struct:     Foo
 barÌ16Í()ÎFooÖ0Ïauto
+function:   auto Foo :: bar()
 bazÌ1024Í() constÎBaseÖ0Ïvoid
+prototype:  void Base :: baz() const
 bazÌ1024Í() constÎFooÖ0Ïvoid
+prototype:  void Foo :: baz() const

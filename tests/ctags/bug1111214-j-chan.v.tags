@@ -1,4 +1,6 @@
-# format=tagmanager
 insigÌ16384ÎtopÖ0
+variable:   top :: insig
 outsigÌ16384ÎtopÖ0
+variable:   top :: outsig
 topÌ1Ö0
+class:      top

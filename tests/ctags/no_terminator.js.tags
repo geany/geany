@@ -1,6 +1,10 @@
-# format=tagmanager
 checkForUpdateÌ16Í()Ö0
+function:   checkForUpdate()
 checkForUpdate2Ì16Í()Ö0
+function:   checkForUpdate2()
 getParentÌ16Í(el, pTagName)Ö0
+function:   getParent(el, pTagName)
 ts_resortTableÌ16Í(lnk)Ö0
+function:   ts_resortTable(lnk)
 ts_sort_currencyÌ16Í(a,b)Ö0
+function:   ts_sort_currency(a,b)

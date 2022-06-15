@@ -1,26 +1,50 @@
-# format=tagmanager
 DatabaseÌ1Ö0
+class:      Database
 ValidClassOneÌ1Í(a,b)Îtestlib.extrasÖ0
+class:      testlib.extras :: ValidClassOne(a,b)
 ValidClassTwoÌ1Í()Ö0
+class:      ValidClassTwo()
 calculateÌ16Í(number)ÎgetHalfOfÖ0
+function:   getHalfOf :: calculate(number)
 executeQueryStringÌ128ÎDatabaseÖ0
+method:     Database :: executeQueryString
 getHalfOfÌ16Í(num1, num2, num3)Ö0
+function:   getHalfOf(num1, num2, num3)
 getTodaysDateÌ128ÎDatabaseÖ0
+method:     Database :: getTodaysDate
 innerThreeÌ16Í(a,b)ÎvalidFunctionThreeÖ0
+function:   validFunctionThree :: innerThree(a,b)
 invalidInnerFunctionÌ16Í(a,b)Ö0
+function:   invalidInnerFunction(a,b)
 my_global_var1Ì16384Ö0
+variable:   my_global_var1
 my_global_var2Ì16384Ö0
+variable:   my_global_var2
 my_global_var3Ì16384Ö0
+variable:   my_global_var3
 my_global_var4Ì16384Ö0
+variable:   my_global_var4
 onchangeÌ16Í()Îmy_global_var4Ö0
+function:   my_global_var4 :: onchange()
 originalvalueÌ16384Ö0
+variable:   originalvalue
 validFunctionFiveÌ16Í(a,b)ÎtestlibÖ0
+function:   testlib :: validFunctionFive(a,b)
 validFunctionFourÌ16Í(a,b)ÎextraÖ0
+function:   extra :: validFunctionFour(a,b)
 validFunctionOneÌ16Í(a,b)Ö0
+function:   validFunctionOne(a,b)
 validFunctionSixÌ16Í(a,b)Îtestlib.coreÖ0
+function:   testlib.core :: validFunctionSix(a,b)
 validFunctionThreeÌ16Í(a,b)Ö0
+function:   validFunctionThree(a,b)
 validFunctionTwoÌ16Í(a,b)Ö0
+function:   validFunctionTwo(a,b)
 validMethodFourÌ128Í()ÎValidClassTwoÖ0
+method:     ValidClassTwo :: validMethodFour()
 validMethodOneÌ128Í(a,b)Îtestlib.extras.ValidClassOneÖ0
+method:     testlib.extras.ValidClassOne :: validMethodOne(a,b)
 validMethodThreeÌ128Í()ÎValidClassTwoÖ0
+method:     ValidClassTwo :: validMethodThree()
 validMethodTwoÌ128Í(a,b)Îtestlib.extras.ValidClassOneÖ0
+method:     testlib.extras.ValidClassOne :: validMethodTwo(a,b)

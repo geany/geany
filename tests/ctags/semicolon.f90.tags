@@ -1,4 +1,6 @@
-# format=tagmanager
 SEMIÌ256Ö0
+namespace:  SEMI
 VAR1Ì16384ÎSEMIÖ0
+variable:   SEMI :: VAR1
 VAR2Ì16384ÎSEMIÖ0
+variable:   SEMI :: VAR2

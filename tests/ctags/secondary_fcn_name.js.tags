@@ -1,6 +1,10 @@
-# format=tagmanager
 D1Ì16Í(a, b)Ö0
+function:   D1(a, b)
 D2Ì16Í(a, b)Ö0
+function:   D2(a, b)
 D2AÌ16Í(a, b)Ö0
+function:   D2A(a, b)
 my_global_var1Ì16384Ö0
+variable:   my_global_var1
 theAddÌ16Í(a, b)Ö0
+function:   theAdd(a, b)

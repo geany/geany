@@ -1,4 +1,6 @@
-# format=tagmanager
 objLiteralMethodÃ128Õ()ŒobjectLiteral÷0
+method:     objectLiteral :: objLiteralMethod()
 objLiteralPropertyÃ64ŒobjectLiteral÷0
+member:     objectLiteral :: objLiteralProperty
 objectLiteralÃ1÷0
+class:      objectLiteral

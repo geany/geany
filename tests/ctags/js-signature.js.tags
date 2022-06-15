@@ -1,10 +1,18 @@
-# format=tagmanager
 ClsÃ1Õ(name)÷0
+class:      Cls(name)
 f1Ã16Õ()÷0
+function:   f1()
 f2Ã16Õ(arg1, arg2)÷0
+function:   f2(arg1, arg2)
 f3Ã16Õ( arg1,  arg2,  arg3 )÷0
+function:   f3( arg1,  arg2,  arg3 )
 f4Ã16Õ(a, b, c)÷0
+function:   f4(a, b, c)
 get_nameÃ128Õ()ŒCls÷0
+method:     Cls :: get_name()
 helloÃ128Õ(tpl)ŒCls÷0
+method:     Cls :: hello(tpl)
 mainÃ16Õ()÷0
+function:   main()
 set_nameÃ128Õ(name)ŒCls÷0
+method:     Cls :: set_name(name)

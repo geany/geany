@@ -1,4 +1,6 @@
-# format=tagmanager
 MainÌ128Í()ÎMyClassÖ0Ïpublic void
+method:     public void MyClass :: Main()
 MyClassÌ1Ö0
+class:      MyClass
 MyFnÌ128Í(string s)ÎMyClassÖ0Ïpublic void
+method:     public void MyClass :: MyFn(string s)

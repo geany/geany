@@ -1,9 +1,16 @@
-# format=tagmanager
 cur1Ì16384Ö0
+variable:   cur1
 long_lenÌ16384Ö0
+variable:   long_len
 long_pieceÌ16384Ö0
+variable:   long_piece
 long_tabÌ16384Ö0
+variable:   long_tab
 longcolÌ8ÎlongtableÖ0
+field:      longtable :: longcol
 longtableÌ1Ö0
+class:      longtable
 piece_lenÌ16384Ö0
+variable:   piece_len
 rcÌ16384Ö0
+variable:   rc

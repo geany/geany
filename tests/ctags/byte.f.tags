@@ -1,11 +1,20 @@
-# format=tagmanager
 AÌ16384Îbyte_testÖ0
+variable:   byte_test :: A
 A1Ì16384Îbyte_testÖ0
+variable:   byte_test :: A1
 A2Ì16384Îbyte_testÖ0
+variable:   byte_test :: A2
 BÌ16384Îbyte_testÖ0
+variable:   byte_test :: B
 B1Ì16384Îbyte_testÖ0
+variable:   byte_test :: B1
 B2Ì16384Îbyte_testÖ0
+variable:   byte_test :: B2
 CÌ16384Îbyte_testÖ0
+variable:   byte_test :: C
 C1Ì16384Îbyte_testÖ0
+variable:   byte_test :: C1
 C2Ì16384Îbyte_testÖ0
+variable:   byte_test :: C2
 byte_testÌ2048Ö0
+struct:     byte_test

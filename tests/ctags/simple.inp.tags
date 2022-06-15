@@ -1,4 +1,6 @@
-# format=tagmanager
 AssemblyÌ64Ö0
+member:     Assembly
 Part-1Ì1Ö0
+class:      Part-1
 Step-1Ì32Ö0
+interface:  Step-1

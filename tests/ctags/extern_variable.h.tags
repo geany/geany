@@ -1,3 +1,4 @@
-# format=tagmanager
 aÌ32768Ö0Ïint
+externvar:  int a
 bÌ32768Ö0ÏB
+externvar:  B b

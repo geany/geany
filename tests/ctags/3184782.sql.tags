@@ -1,6 +1,10 @@
-# format=tagmanager
 do_this_stuffÌ256Îp_testÖ0
+namespace:  p_test :: do_this_stuff
 myfn1Ì256Îp_testÖ0
+namespace:  p_test :: myfn1
 myfn2Ì256Îp_testÖ0
+namespace:  p_test :: myfn2
 p_testÌ512Ö0
+package:    p_test
 process_thisÌ256Îp_testÖ0
+namespace:  p_test :: process_this

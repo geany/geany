@@ -1,11 +1,20 @@
-# format=tagmanager
 c1Ã64Œgoodtype÷0
+member:     goodtype :: c1
 c2Ã64Œgoodtype÷0
+member:     goodtype :: c2
 c3Ã64Œgoodtype÷0
+member:     goodtype :: c3
 c4Ã64Œgoodtype÷0
+member:     goodtype :: c4
 goodtypeÃ1Œtest÷0
+class:      test :: goodtype
 p1Ã64Œgoodtype÷0
+member:     goodtype :: p1
 p2Ã64Œgoodtype÷0
+member:     goodtype :: p2
 p3Ã64Œgoodtype÷0
+member:     goodtype :: p3
 p4Ã64Œgoodtype÷0
+member:     goodtype :: p4
 testÃ256÷0
+namespace:  test

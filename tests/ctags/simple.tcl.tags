@@ -1,14 +1,26 @@
-# format=tagmanager
 AÌ256Ö0
+namespace:  A
 A::BÌ256Ö0
+namespace:  A::B
 CÌ256ÎAÖ0
+namespace:  A :: C
 XÌ1Ö0
+class:      X
 addÌ64ÎXÖ0
+member:     X :: add
 doSomethingÌ64ÎXÖ0
+member:     X :: doSomething
 pr1Ì16Í{s}ÎAÖ0
+function:   A :: pr1{s}
 pr2Ì16Í{s}ÎBÖ0
+function:   B :: pr2{s}
 pr3Ì16Í{s}ÎA::CÖ0
+function:   A::C :: pr3{s}
 pr4Ì16Í{s}Ö0
+function:   pr4{s}
 pr5Ì16Í{s}Ö0
+function:   pr5{s}
 pr6Ì16Í{s}Ö0
+function:   pr6{s}
 simple1Ì16Í{}Ö0
+function:   simple1{}

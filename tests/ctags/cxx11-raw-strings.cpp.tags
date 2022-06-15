@@ -1,23 +1,44 @@
-# format=tagmanager
 FOURÌ65536Ö0
+macro:      FOUR
 memb1Ì64Îtyp1Ö0Ïint
+member:     int typ1 :: memb1
 memb2Ì64Îtyp2Ö0Ïint
+member:     int typ2 :: memb2
 memb3Ì64Îtyp3Ö0Ïint
+member:     int typ3 :: memb3
 memb4Ì64Îtyp4Ö0Ïint
+member:     int typ4 :: memb4
 memb5Ì64Îtyp5Ö0Ïint
+member:     int typ5 :: memb5
 memb6Ì64Îtyp6Ö0Ïint
+member:     int typ6 :: memb6
 memb7Ì64Îtyp7Ö0Ïint
+member:     int typ7 :: memb7
 str1Ì16384Ö0Ïconst char *
+variable:   const char * str1
 str2Ì16384Ö0Ïconst char *
+variable:   const char * str2
 str3Ì16384Ö0Ïconst char *
+variable:   const char * str3
 str4Ì16384Ö0Ïconst char *
+variable:   const char * str4
 str5Ì16384Ö0Ïconst char *
+variable:   const char * str5
 str6Ì16384Ö0Ïconst char *
+variable:   const char * str6
 str7Ì16384Ö0Ïconst char *
+variable:   const char * str7
 typ1Ì2048Ö0
+struct:     typ1
 typ2Ì2048Ö0
+struct:     typ2
 typ3Ì2048Ö0
+struct:     typ3
 typ4Ì2048Ö0
+struct:     typ4
 typ5Ì2048Ö0
+struct:     typ5
 typ6Ì2048Ö0
+struct:     typ6
 typ7Ì2048Ö0
+struct:     typ7

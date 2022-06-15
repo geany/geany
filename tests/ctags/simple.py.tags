@@ -1,29 +1,56 @@
-# format=tagmanager
 ALLÃ16384÷0
+variable:   ALL
 DATAÃ16384÷0
+variable:   DATA
 INDENTÃ16384÷0
+variable:   INDENT
 KEYÃ16384÷0
+variable:   KEY
 TREEIDÃ16384÷0
+variable:   TREEID
 VERSIONÃ16384÷0
+variable:   VERSION
 __init__Ã128Õ(self, filename, pathsep='', treegap=64)Œone÷0
+method:     one :: __init__(self, filename, pathsep='', treegap=64)
 __private_function__Ã128Õ(self, key, data)Œone÷0
+method:     one :: __private_function__(self, key, data)
 _packÃ128Õ(self, i, s)Œone÷0
+method:     one :: _pack(self, i, s)
 _testÃ16Õ(test, code, outcome, exception)÷0
+function:   _test(test, code, outcome, exception)
 bsddbÃ32768÷0
+externvar:  bsddb
 btopenÃ32768Œbsddb÷0
+externvar:  bsddb :: btopen
 deeply_nestedÃ1Œ_test.ignored_function.more_nesting÷0
+class:      _test.ignored_function.more_nesting :: deeply_nested
 even_moreÃ128Õ()Œ_test.ignored_function.more_nesting.deeply_nested÷0
+method:     _test.ignored_function.more_nesting.deeply_nested :: even_more()
 fooÃ16Õ( x , y, z)÷0
+function:   foo( x , y, z)
 ignored_functionÃ16Õ()Œ_test÷0
+function:   _test :: ignored_function()
 more_nestingÃ16Õ()Œ_test.ignored_function÷0
+function:   _test.ignored_function :: more_nesting()
 oneÃ1÷0
+class:      one
 onlyÃ128Õ(arg)Œtwo÷0
+method:     two :: only(arg)
 public_functionÃ128Õ(self, key)Œone÷0
+method:     one :: public_function(self, key)
 so_is_thisÃ1Œone÷0
+class:      one :: so_is_this
 thisÃ1Œ_test.ignored_function.more_nesting.deeply_nested.even_more÷0
+class:      _test.ignored_function.more_nesting.deeply_nested.even_more :: this
 thisÃ128Œ_test.ignored_function.more_nesting.deeply_nested.even_more.this÷0
+method:     _test.ignored_function.more_nesting.deeply_nested.even_more.this :: this
 this_is_ignoredÃ1Œone.public_function÷0
+class:      one.public_function :: this_is_ignored
 threeÃ1÷0
+class:      three
 twoÃ1÷0
+class:      two
 xÃ128Õ(x)Œone÷0
+method:     one :: x(x)
 yÃ16384Œone÷0
+variable:   one :: y

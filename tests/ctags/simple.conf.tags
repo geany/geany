@@ -1,24 +1,46 @@
-# format=tagmanager
 argsÌ65536Îhandler_hand01Ö0
+macro:      handler_hand01 :: args
 classÌ65536Îformatter_form01Ö0
+macro:      formatter_form01 :: class
 classÌ65536Îhandler_hand01Ö0
+macro:      handler_hand01 :: class
 datefmtÌ65536Îformatter_form01Ö0
+macro:      formatter_form01 :: datefmt
 formatÌ65536Îformatter_form01Ö0
+macro:      formatter_form01 :: format
 formatterÌ65536Îhandler_hand01Ö0
+macro:      handler_hand01 :: formatter
 formatter_form01Ì256Ö0
+namespace:  formatter_form01
 formattersÌ256Ö0
+namespace:  formatters
 handler_hand01Ì256Ö0
+namespace:  handler_hand01
 handlersÌ256Ö0
+namespace:  handlers
 handlersÌ65536Îlogger_parserÖ0
+macro:      logger_parser :: handlers
 handlersÌ65536Îlogger_rootÖ0
+macro:      logger_root :: handlers
 keysÌ65536ÎformattersÖ0
+macro:      formatters :: keys
 keysÌ65536ÎhandlersÖ0
+macro:      handlers :: keys
 keysÌ65536ÎloggersÖ0
+macro:      loggers :: keys
 levelÌ65536Îhandler_hand01Ö0
+macro:      handler_hand01 :: level
 levelÌ65536Îlogger_parserÖ0
+macro:      logger_parser :: level
 levelÌ65536Îlogger_rootÖ0
+macro:      logger_root :: level
 logger_parserÌ256Ö0
+namespace:  logger_parser
 logger_rootÌ256Ö0
+namespace:  logger_root
 loggersÌ256Ö0
+namespace:  loggers
 propagateÌ65536Îlogger_parserÖ0
+macro:      logger_parser :: propagate
 qualnameÌ65536Îlogger_parserÖ0
+macro:      logger_parser :: qualname

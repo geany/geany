@@ -1,13 +1,24 @@
-# format=tagmanager
 C1Ì1Ö0
+class:      C1
 C2Ì1Ö0
+class:      C2
 C3Ì1Ö0
+class:      C3
 C4Ì1Ö0
+class:      C4
 C5Ì1Ö0
+class:      C5
 C6Ì1Ö0
+class:      C6
 C7Ì1Ö0
+class:      C7
 I1Ì32Ö0
+interface:  I1
 I2Ì32Ö0
+interface:  I2
 I3Ì32Ö0
+interface:  I3
 I4Ì32Ö0
+interface:  I4
 m1Ì128ÎC1Ö0
+method:     C1 :: m1

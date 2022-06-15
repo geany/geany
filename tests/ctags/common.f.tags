@@ -1,5 +1,8 @@
-# format=tagmanager
 common1Ã65536Œmain÷0
+macro:      main :: common1
 common2Ã65536Œmain÷0
+macro:      main :: common2
 common3Ã65536Œmain÷0
+macro:      main :: common3
 mainÃ2048÷0
+struct:     main
