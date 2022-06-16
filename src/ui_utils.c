@@ -191,7 +191,6 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 	const gchar *cur_tag;
 	const gchar *fmt;
 	const gchar *expos;	/* % expansion position */
-	const gchar sp[] = "      ";
 	GString *stats_str;
 	ScintillaObject *sci = doc->editor->sci;
 
@@ -206,24 +205,27 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 	{
 		/* append leading text before % char */
 		g_string_append_len(stats_str, fmt, expos - fmt);
-
-		switch (*++expos)
+		++expos; /* skip % */
+		/* parse integer number, if any */
+		long l = strtol( expos, (char**)&expos, 10 );
+		int w = l > 100 ? 100 : l < -100 ? -100 : l; /* l may be too large, clip it */
+		switch (*expos)
 		{
 			case 'l':
-				g_string_append_printf(stats_str, "%d", line + 1);
+				g_string_append_printf(stats_str, "%*d", w, line + 1);
 				break;
 			case 'L':
-				g_string_append_printf(stats_str, "%d",
+				g_string_append_printf(stats_str, "%*d", w,
 					sci_get_line_count(doc->editor->sci));
 				break;
 			case 'c':
-				g_string_append_printf(stats_str, "%d", vcol);
+				g_string_append_printf(stats_str, "%*d", w, vcol);
 				break;
 			case 'C':
-				g_string_append_printf(stats_str, "%d", vcol + 1);
+				g_string_append_printf(stats_str, "%*d", w, vcol + 1);
 				break;
 			case 'p':
-				g_string_append_printf(stats_str, "%u", pos);
+				g_string_append_printf(stats_str, "%*u", w, pos);
 				break;
 			case 's':
 			{
@@ -233,74 +235,73 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 						sci_get_selection_start(sci)) != 0 ||
 					sci_get_col_from_position(sci,
 						sci_get_selection_end(sci)) != 0)
-					g_string_append_printf(stats_str, "%d", len);
+					g_string_append_printf(stats_str, "%*d", w, len);
 				else /* L = lines */
-					g_string_append_printf(stats_str, _("%dL"),
+					g_string_append_printf(stats_str, _("%*dL"), w,
 						sci_get_lines_selected(doc->editor->sci) - 1);
 				break;
 			}
 			case 'n' :
-				g_string_append_printf(stats_str, "%d",
+				g_string_append_printf(stats_str, "%*d", w,
 					sci_get_selected_text_length2(doc->editor->sci));
 				break;
 			case 'w':
 				/* RO = read-only */
-				g_string_append(stats_str, (doc->readonly) ? _("RO ") :
+				g_string_append_printf(stats_str, "%*s", w, (doc->readonly) ? _("RO") :
 					/* OVR = overwrite/overtype, INS = insert */
 					(sci_get_overtype(doc->editor->sci) ? _("OVR") : _("INS")));
 				break;
 			case 'r':
-				if (doc->readonly)
-				{
-					g_string_append(stats_str, _("RO "));	/* RO = read-only */
-					g_string_append(stats_str, sp + 1);
-				}
+				g_string_append_printf(stats_str, "%*s", w,
+					doc->readonly ? _("RO") : "");	/* RO = read-only */
 				break;
 			case 't':
 			{
 				switch (editor_get_indent_prefs(doc->editor)->type)
 				{
 					case GEANY_INDENT_TYPE_TABS:
-						g_string_append(stats_str, _("TAB"));
+						g_string_append_printf(stats_str, "%*s", w, _("TAB"));
 						break;
 					case GEANY_INDENT_TYPE_SPACES:	/* SP = space */
-						g_string_append(stats_str, _("SP"));
+						g_string_append_printf(stats_str, "%*s", w, _("SP"));
 						break;
 					case GEANY_INDENT_TYPE_BOTH:	/* T/S = tabs and spaces */
-						g_string_append(stats_str, _("T/S"));
+						g_string_append_printf(stats_str, "%*s", w, _("T/S"));
 						break;
 				}
 				break;
 			}
 			case 'm':
-				if (doc->changed)
-				{
-					g_string_append(stats_str, _("MOD"));	/* MOD = modified */
-					g_string_append(stats_str, sp);
-				}
+				g_string_append_printf(stats_str, "%*s", w,
+					doc->changed ? _("MOD") : "");	/* MOD = modified */
 				break;
 			case 'M':
-				g_string_append(stats_str, utils_get_eol_short_name(sci_get_eol_mode(doc->editor->sci)));
+				g_string_append_printf(stats_str, "%*s", w,
+					utils_get_eol_short_name(sci_get_eol_mode(doc->editor->sci)));
 				break;
 			case 'e':
-				g_string_append(stats_str,
-					doc->encoding ? doc->encoding : _("unknown"));
-				if (encodings_is_unicode_charset(doc->encoding) && (doc->has_bom))
 				{
-					g_string_append_c(stats_str, ' ');
-					g_string_append(stats_str, _("(with BOM)"));	/* BOM = byte order mark */
+					GString * encoding = g_string_sized_new(32);
+					g_string_append(encoding,
+						doc->encoding ? doc->encoding : _("unknown"));
+					if (encodings_is_unicode_charset(doc->encoding) && (doc->has_bom))
+					{
+						g_string_append_c(encoding, ' ');
+						g_string_append(encoding, _("(with BOM)"));	/* BOM = byte order mark */
+					}
+					g_string_append_printf(stats_str, "%*s", w, encoding->str);
+					g_string_free(encoding, TRUE);
 				}
 				break;
 			case 'f':
-				g_string_append(stats_str, filetypes_get_display_name(doc->file_type));
+				g_string_append_printf(stats_str, "%*s", w, filetypes_get_display_name(doc->file_type));
 				break;
 			case 'S':
 				symbols_get_current_scope(doc, &cur_tag);
-				g_string_append(stats_str, cur_tag);
+				g_string_append_printf(stats_str, "%*s", w, cur_tag);
 				break;
 			case 'Y':
-				g_string_append_c(stats_str, ' ');
-				g_string_append_printf(stats_str, "%d",
+				g_string_append_printf(stats_str, "%*d", w,
 					sci_get_style_at(doc->editor->sci, pos));
 				break;
 			default:
@@ -2464,7 +2465,7 @@ void ui_init_builder(void)
 	gtk_builder_set_translation_domain(builder, GETTEXT_PACKAGE);
 
 	error = NULL;
-	interface_file = g_build_filename(app->datadir, "geany.glade", NULL);
+	interface_file = g_build_filename("." /*app->datadir */, "geany.glade", NULL);
 	if (! gtk_builder_add_from_file(builder, interface_file, &error))
 	{
 		/* Show the user this message so they know WTF happened */
