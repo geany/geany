@@ -2465,7 +2465,7 @@ void ui_init_builder(void)
 	gtk_builder_set_translation_domain(builder, GETTEXT_PACKAGE);
 
 	error = NULL;
-	interface_file = g_build_filename("." /*app->datadir */, "geany.glade", NULL);
+	interface_file = g_build_filename(app->datadir, "geany.glade", NULL);
 	if (! gtk_builder_add_from_file(builder, interface_file, &error))
 	{
 		/* Show the user this message so they know WTF happened */
