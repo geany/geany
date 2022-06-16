@@ -207,7 +207,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 		g_string_append_len(stats_str, fmt, expos - fmt);
 		++expos; /* skip % */
 		/* parse integer number, if any */
-		long l = strtol( expos, (char**)&expos, 10 );
+		long l = strtol(expos, (char**)&expos, 10);
 		int w = l > 100 ? 100 : l < -100 ? -100 : l; /* l may be too large, clip it */
 		switch (*expos)
 		{
