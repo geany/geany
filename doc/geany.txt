@@ -2733,9 +2733,10 @@ Placeholder   Description
 ============  ===========================================================
 
 Every placeholder may also specify width, e. g. ``%3l``. Width is the minimum
-number of characters to be shown. If the value is shorter than width, the
-result is left-padded with spaces, or right-padded in case of negative width.
-The value is not truncated even if the result is larger.
+number of characters to be shown. If the value to show is shorter than width,
+the result is left-padded with spaces, or right-padded in case of negative
+width. The value is not truncated even if the result is larger. Width should be
+in range [-300..300], if width is out of the range, it will be clipped.
 
 Terminal (VTE) preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

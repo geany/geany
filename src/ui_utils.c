@@ -209,7 +209,12 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 		++expos; /* skip % */
 		/* parse integer number, if any */
 		long l = strtol(expos, (char**)&expos, 10);
-		int w = l > 100 ? 100 : l < -100 ? -100 : l; /* l may be too large, clip it */
+		int w = l > 300 ? 300 : l < -300 ? -300 : l;
+			/*
+				l may be too large, clip it just in case. Also, allowed width
+				range is documented, do not forget to update `geany.txt` in
+				case of change.
+			*/
 		switch (*expos)
 		{
 			case 'l':
