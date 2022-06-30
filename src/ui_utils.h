@@ -232,6 +232,15 @@ typedef enum
 GeanyUIEditorFeatures;
 
 
+typedef enum
+{
+	GEANY_MENU_COMPILE_NEXT_ERROR,
+	GEANY_MENU_COMPILE_PREV_ERROR,
+	GEANY_MENU_COMPILE_CUR_LINE_ERROR
+}
+GeanyMenuCompileErrorSearchMode;
+
+
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 
 gchar *ui_menu_item_get_text(GtkMenuItem *menu_item);
@@ -345,6 +354,8 @@ typedef gboolean TVMatchCallback(gboolean);
 gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb);
 
 gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
+
+gboolean ui_tree_view_find_cur_line(GtkTreeView *treeview, TVMatchCallback cb);
 
 gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gboolean down);
 

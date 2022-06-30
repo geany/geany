@@ -705,6 +705,8 @@ static void init_default_kb(void)
 		0, 0, "build_nexterror", _("Next error"), NULL);
 	add_kb(group, GEANY_KEYS_BUILD_PREVIOUSERROR, NULL,
 		0, 0, "build_previouserror", _("Previous error"), NULL);
+	add_kb(group, GEANY_KEYS_BUILD_CURRENTLINEERROR, NULL,
+		GDK_KEY_F3, 0, "build_currentlineerror", _("Current line error"), NULL);
 	add_kb(group, GEANY_KEYS_BUILD_RUN, NULL,
 		GDK_KEY_F5, 0, "build_run", _("Run"), NULL);
 	add_kb(group, GEANY_KEYS_BUILD_OPTIONS, NULL,

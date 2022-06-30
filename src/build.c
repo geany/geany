@@ -168,6 +168,7 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void on_set_build_commands_activate(GtkWidget *w, gpointer u);
 static void on_build_next_error(GtkWidget *menuitem, gpointer user_data);
 static void on_build_previous_error(GtkWidget *menuitem, gpointer user_data);
+static void on_build_current_line_error(GtkWidget *menuitem, gpointer user_data);
 static void kill_process(GPid *pid);
 static void show_build_result_message(gboolean failure);
 static void process_build_output_line(gchar *msg, gint color);
@@ -1030,6 +1031,7 @@ static void process_build_output_line(gchar *msg, gint color)
 		{
 			gtk_widget_set_sensitive(build_get_menu_items(-1)->menu_item[GBG_FIXED][GBF_NEXT_ERROR], TRUE);
 			gtk_widget_set_sensitive(build_get_menu_items(-1)->menu_item[GBG_FIXED][GBF_PREV_ERROR], TRUE);
+			gtk_widget_set_sensitive(build_get_menu_items(-1)->menu_item[GBG_FIXED][GBF_CUR_LINE_ERROR], TRUE);
 		}
 	}
 	g_free(filename);
@@ -1318,7 +1320,8 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 /* the fixed items */
 #define MENU_NEXT_ERROR  (MENU_SEPARATOR + 1)
 #define MENU_PREV_ERROR  (MENU_NEXT_ERROR + 1)
-#define MENU_COMMANDS	(MENU_PREV_ERROR + 1)
+#define MENU_CUR_LINE_ERROR  (MENU_PREV_ERROR + 1)
+#define MENU_COMMANDS	(MENU_CUR_LINE_ERROR + 1)
 #define MENU_DONE		(MENU_COMMANDS + 1)
 
 
@@ -1352,6 +1355,8 @@ static struct BuildMenuItemSpec {
 		GBF_NEXT_ERROR, N_("_Next Error"), on_build_next_error},
 	{GTK_STOCK_GO_UP, GEANY_KEYS_BUILD_PREVIOUSERROR, MENU_PREV_ERROR,
 		GBF_PREV_ERROR, N_("_Previous Error"), on_build_previous_error},
+	{NULL, GEANY_KEYS_BUILD_CURRENTLINEERROR, MENU_CUR_LINE_ERROR,
+		GBF_CUR_LINE_ERROR, N_("Current _Line Error"), on_build_current_line_error},
 	{NULL, -1, MENU_SEPARATOR,
 		GBF_SEP_3, NULL, NULL},
 	{GTK_STOCK_EXECUTE, GEANY_KEYS_BUILD_RUN, GBO_TO_GBG(GEANY_GBO_EXEC),
@@ -1489,6 +1494,7 @@ void build_menu_update(GeanyDocument *doc)
 				break;
 			case MENU_NEXT_ERROR:
 			case MENU_PREV_ERROR:
+			case MENU_CUR_LINE_ERROR:
 				gtk_widget_set_sensitive(menu_items.menu_item[GBG_FIXED][bs->build_cmd], have_errors);
 				vis |= TRUE;
 				break;
@@ -1694,6 +1700,18 @@ static void on_build_previous_error(GtkWidget *menuitem, gpointer user_data)
 {
 	if (ui_tree_view_find_previous(GTK_TREE_VIEW(msgwindow.tree_compiler),
 		msgwin_goto_compiler_file_line))
+	{
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
+	}
+	else
+		ui_set_statusbar(FALSE, _("No more build errors."));
+}
+
+
+static void on_build_current_line_error(GtkWidget *menuitem, gpointer user_data)
+{
+	if (ui_tree_view_find_cur_line(GTK_TREE_VIEW(msgwindow.tree_compiler),
+		msgwin_goto_compiler_file_cur_line))
 	{
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
 	}
@@ -2806,6 +2824,9 @@ gboolean build_keybinding(guint key_id)
 			break;
 		case GEANY_KEYS_BUILD_PREVIOUSERROR:
 			item = menu_items->menu_item[GBG_FIXED][GBF_PREV_ERROR];
+			break;
+		case GEANY_KEYS_BUILD_CURRENTLINEERROR:
+			item = menu_items->menu_item[GBG_FIXED][GBF_CUR_LINE_ERROR];
 			break;
 		case GEANY_KEYS_BUILD_RUN:
 			item = menu_items->menu_item[GEANY_GBG_EXEC][GBO_TO_CMD(GEANY_GBO_EXEC)];

@@ -82,6 +82,7 @@ enum GeanyBuildFixedMenuItems
 {
 	GBF_NEXT_ERROR,
 	GBF_PREV_ERROR,
+	GBF_CUR_LINE_ERROR,
 	GBF_COMMANDS,
 	GBF_SEP_1,
 	GBF_SEP_2,

@@ -229,6 +229,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_SELECT_ALL,						/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_RELOADTAGLIST,			/**< Keybinding. */
 	GEANY_KEYS_BUILD_NEXTERROR,					/**< Keybinding. */
+	GEANY_KEYS_BUILD_CURRENTLINEERROR,			/**< Keybinding. */
 	GEANY_KEYS_NOTEBOOK_MOVETABLAST,			/**< Keybinding. */
 	GEANY_KEYS_SELECT_PARAGRAPH,				/**< Keybinding. */
 	GEANY_KEYS_EDITOR_DELETELINE,				/**< Keybinding. */

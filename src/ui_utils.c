@@ -1768,23 +1768,36 @@ static gboolean tree_model_iter_get_next(GtkTreeModel *model, GtkTreeIter *iter,
 
 /* note: the while loop might be more efficient when searching upwards if it
  * used tree paths instead of tree iters, but in practice it probably doesn't matter much. */
-static gboolean tree_view_find(GtkTreeView *treeview, TVMatchCallback cb, gboolean down)
+static gboolean tree_view_find(GtkTreeView *treeview, TVMatchCallback cb,
+		GeanyMenuCompileErrorSearchMode err_search_mode)
 {
 	GtkTreeSelection *treesel;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 
 	treesel = gtk_tree_view_get_selection(treeview);
-	if (gtk_tree_selection_get_selected(treesel, &model, &iter))
+	gboolean active_selection = gtk_tree_selection_get_selected(treesel, &model, &iter);
+	gboolean down = err_search_mode != GEANY_MENU_COMPILE_PREV_ERROR;
+	if (err_search_mode == GEANY_MENU_COMPILE_CUR_LINE_ERROR)
 	{
-		/* get the next selected item */
-		if (! tree_model_iter_get_next(model, &iter, down))
-			return FALSE;	/* no more items */
-	}
-	else	/* no selection */
-	{
+		if (active_selection)
+			tree_model_iter_get_next(model, &iter, TRUE);
 		if (! gtk_tree_model_get_iter_first(model, &iter))
-			return TRUE;	/* no items */
+			return TRUE;
+	}
+	else
+	{
+		if (active_selection)
+		{
+			/* get the next selected item */
+			if (! tree_model_iter_get_next(model, &iter, down))
+				return FALSE;	/* no more items */
+		}
+		else	/* no selection */
+		{
+			if (! gtk_tree_model_get_iter_first(model, &iter))
+				return TRUE;	/* no items */
+		}
 	}
 	while (TRUE)
 	{
@@ -1811,14 +1824,21 @@ static gboolean tree_view_find(GtkTreeView *treeview, TVMatchCallback cb, gboole
 /* Returns FALSE if the treeview has items but no matching next item. */
 gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb)
 {
-	return tree_view_find(treeview, cb, TRUE);
+	return tree_view_find(treeview, cb, GEANY_MENU_COMPILE_NEXT_ERROR);
 }
 
 
 /* Returns FALSE if the treeview has items but no matching next item. */
 gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb)
 {
-	return tree_view_find(treeview, cb, FALSE);
+	return tree_view_find(treeview, cb, GEANY_MENU_COMPILE_PREV_ERROR);
+}
+
+
+/* Returns FALSE if the treeview has items but no matching next item. */
+gboolean ui_tree_view_find_cur_line(GtkTreeView *treeview, TVMatchCallback cb)
+{
+	return tree_view_find(treeview, cb, GEANY_MENU_COMPILE_CUR_LINE_ERROR);
 }
 
 
