@@ -102,6 +102,8 @@ void msgwin_menu_add_common_items(GtkMenu *menu);
 
 gboolean msgwin_goto_compiler_file_line(gboolean focus_editor);
 
+gboolean msgwin_goto_compiler_file_cur_line(gboolean focus_editor);
+
 void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 									  gchar **filename, gint *line);
 
