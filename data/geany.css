@@ -28,27 +28,34 @@
 
 /* document status colors */
 #geany-document-status-changed {
-	color: #ff0000;
+	color: #ff3030;
 }
 #geany-document-status-disk-changed {
-	color: #ff7f00;
+	color: #ee8000;
 }
 #geany-document-status-readonly {
-	color: #007f00;
+	color: #309030;
 }
 
 /* compiler message colors */
 #geany-compiler-error {
-    color: #ff0000;
+    color: #ff3030;
 }
 #geany-compiler-context {
-    color: #7f0000;
+    color: #ee8000;
 }
 #geany-compiler-message {
-    color: #0000D0;
+    color: #006eff;
 }
 
 /* red "Terminal" label when terminal dirty */
 #geany-terminal-dirty {
-	color: #ff0000;
+	color: #ff3030;
 }
+
+/* Uncomment the following to reduce the size of the statusbar if needed */
+/*
+statusbar {
+	margin: -6px 0;
+}
+*/

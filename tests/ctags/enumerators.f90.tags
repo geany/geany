@@ -1,29 +1,56 @@
-# format=tagmanager
 Aster_colonÌ2ÎEnumsÖ0
+enum:       Enums :: Aster_colon
 Aster_kindÌ2ÎEnumsÖ0
+enum:       Enums :: Aster_kind
 BodyPartÌ2ÎEnumsÖ0
+enum:       Enums :: BodyPart
 ColonsÌ2ÎEnumsÖ0
-Enum#0Ì2ÎEnumsÖ0
-Enum#1Ì2ÎEnumsÖ0
+enum:       Enums :: Colons
 EnumsÌ256Ö0
+namespace:  Enums
 FuncÌ16ÎEnumsÖ0
+function:   Enums :: Func
 Name_colonÌ2ÎEnumsÖ0
+enum:       Enums :: Name_colon
 Paren_colonÌ2ÎEnumsÖ0
+enum:       Enums :: Paren_colon
 Paren_kindÌ2ÎEnumsÖ0
+enum:       Enums :: Paren_kind
+anon_enum_1Ì2ÎEnumsÖ1
+enum:       Enums :: anon_enum_1    flags: 1
+anon_enum_2Ì2ÎEnumsÖ1
+enum:       Enums :: anon_enum_2    flags: 1
 armÌ4ÎBodyPartÖ0
+enumerator: BodyPart :: arm
 bÌ4ÎParen_kindÖ0
-blueÌ4ÎEnum#0Ö0
-bronzeÌ4ÎEnum#0Ö0
+enumerator: Paren_kind :: b
+blueÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: blue
+bronzeÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: bronze
 cÌ4ÎAster_kindÖ0
+enumerator: Aster_kind :: c
 dÌ4ÎName_colonÖ0
+enumerator: Name_colon :: d
 dÌ4ÎParen_colonÖ0
+enumerator: Paren_colon :: d
 eÌ4ÎAster_colonÖ0
-goldÌ4ÎEnum#0Ö0
+enumerator: Aster_colon :: e
+goldÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: gold
 legÌ4ÎBodyPartÖ0
-no_c_bindingÌ4ÎEnum#1Ö0
+enumerator: BodyPart :: leg
+no_c_bindingÌ4Îanon_enum_2Ö0
+enumerator: anon_enum_2 :: no_c_binding
 othervarÌ16384ÎEnumsÖ0
-purpleÌ4ÎEnum#0Ö0
+variable:   Enums :: othervar
+purpleÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: purple
 rÌ4ÎColonsÖ0
-redÌ4ÎEnum#0Ö0
-silverÌ4ÎEnum#0Ö0
+enumerator: Colons :: r
+redÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: red
+silverÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: silver
 somevarÌ16384ÎEnumsÖ0
+variable:   Enums :: somevar

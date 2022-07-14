@@ -1,38 +1,82 @@
-# format=tagmanager
-Common Greek lettersÌ65536Ö0
+Common Greek lettersÌ65536ÎSpecial SymbolsÖ0
+macro:      Special Symbols :: Common Greek letters
 EquationsÌ64Ö0
+member:     Equations
 FiguresÌ64Ö0
+member:     Figures
 IntroductionÌ64Ö0
+member:     Introduction
 ListsÌ64Ö0
+member:     Lists
 Literal textÌ64Ö0
+member:     Literal text
 Special SymbolsÌ64Ö0
-Special symbolsÌ65536Ö0
+member:     Special Symbols
+Special symbolsÌ65536ÎSpecial SymbolsÖ0
+macro:      Special Symbols :: Special symbols
 TablesÌ64Ö0
-\color{redÌ64Ö0
-\label{morefigÌ64Ö0
+member:     Tables
+\EndÌ16Ö0
+function:   \End
+\color{red}Use of ColorÌ64Ö0
+member:     \color{red}Use of Color
+\label{morefig}SubfiguresÌ64Ö0
+member:     \label{morefig}Subfigures
+\lbÌ16Ö0
+function:   \lb
+\rbÌ16Ö0
+function:   \rb
+\rvÌ16Ö0
+function:   \rv
 alignÌ1Ö0
+class:      align
+boxedÌ1Ö0
+class:      boxed
 casesÌ1Ö0
+class:      cases
 centerÌ1Ö0
+class:      center
 commentÌ1Ö0
+class:      comment
 documentÌ1Ö0
+class:      document
 enumerateÌ1Ö0
+class:      enumerate
 eq:fineÌ2048Ö0
+struct:     eq:fine
 eq:isingÌ2048Ö0
+struct:     eq:ising
 eq:mdivÌ2048Ö0
+struct:     eq:mdiv
 equationÌ1Ö0
+class:      equation
 fig:ljÌ2048Ö0
+struct:     fig:lj
 fig:qm/complexfunctionsÌ2048Ö0
+struct:     fig:qm/complexfunctions
 fig:typicalÌ2048Ö0
+struct:     fig:typical
 figureÌ1Ö0
+class:      figure
 itemizeÌ1Ö0
-lbÌ16Ö0
-morefigÌ2048Ö0
+class:      itemize
+latexÌ8Ö0
+field:      latex
 pmatrixÌ1Ö0
-rbÌ16Ö0
-rvÌ16Ö0
+class:      pmatrix
 subequationsÌ1Ö0
+class:      subequations
 tab:5/tcÌ2048Ö0
+struct:     tab:5/tc
 tableÌ1Ö0
+class:      table
 tabularÌ1Ö0
+class:      tabular
 thebibliographyÌ1Ö0
+class:      thebibliography
+theorem1Ì1Ö0
+class:      theorem1
 verbatimÌ1Ö0
+class:      verbatim
+websiteÌ8Ö0
+field:      website

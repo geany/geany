@@ -1,10 +1,26 @@
-# format=tagmanager
-IntroductionÃ64÷0
+IntroductionÃ64Œchapter text÷0
+member:     chapter text :: Introduction
+Part1Ã2÷0
+enum:       Part1
+Part2Ã2÷0
+enum:       Part2
 chapter textÃ256÷0
-chapter2Ã256÷0
-section1 textÃ64÷0
-section4 textÃ64÷0
-subsection2Ã65536÷0
-subsubsection3 with extra textÃ16384÷0
-subsubsection6 with extra textÃ16384÷0
+namespace:  chapter text
+chapter2Ã256ŒPart2÷0
+namespace:  Part2 :: chapter2
+section1 textÃ64Œchapter text÷0
+member:     chapter text :: section1 text
+short section4Ã64ŒPart1÷0
+member:     Part1 :: short section4
+shorter intro2Ã64ŒPart2÷0
+member:     Part2 :: shorter intro2
+subsec5 textÃ65536ŒPart2""shorter intro2÷0
+macro:      Part2""shorter intro2 :: subsec5 text
+subsection2Ã65536ŒPart1÷0
+macro:      Part1 :: subsection2
+subsubsection3 with extra textÃ16384ŒPart1""subsection2÷0
+variable:   Part1""subsection2 :: subsubsection3 with extra text
+subsubsection6 with extra textÃ16384ŒPart2""shorter intro2""subsec5 text÷0
+variable:   Part2""shorter intro2""subsec5 text :: subsubsection6 with extra text
 verbatimÃ1÷0
+class:      verbatim

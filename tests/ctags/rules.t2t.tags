@@ -1,22 +1,42 @@
-# format=tagmanager
 CommentÌ64Ö0
+member:     Comment
 Definition ListÌ64Ö0
+member:     Definition List
 ImageÌ64Ö0
+member:     Image
 InlineÌ64Ö0
+member:     Inline
 LineÌ64Ö0
+member:     Line
 LinkÌ64Ö0
+member:     Link
 ListÌ64Ö0
+member:     List
 MacroÌ64Ö0
+member:     Macro
 Numbered ListÌ64Ö0
+member:     Numbered List
 Numbered TitleÌ64Ö0
+member:     Numbered Title
 ParagraphÌ64Ö0
+member:     Paragraph
 QuoteÌ64Ö0
+member:     Quote
 RawÌ64Ö0
+member:     Raw
 TableÌ64Ö0
+member:     Table
 TitleÌ64Ö0
+member:     Title
 Title Level 1Ì64Ö0
+member:     Title Level 1
 Title Level 2Ì64ÎTitle Level 1Ö0
-Title Level 3Ì64ÎTitle Level 1Title Level 2Ö0
-Title Level 4Ì64ÎTitle Level 1Title Level 2Title Level 3Ö0
-Title Level 5Ì64ÎTitle Level 1Title Level 2Title Level 3Title Level 4Ö0
+member:     Title Level 1 :: Title Level 2
+Title Level 3Ì64ÎTitle Level 1""Title Level 2Ö0
+member:     Title Level 1""Title Level 2 :: Title Level 3
+Title Level 4Ì64ÎTitle Level 1""Title Level 2""Title Level 3Ö0
+member:     Title Level 1""Title Level 2""Title Level 3 :: Title Level 4
+Title Level 5Ì64ÎTitle Level 1""Title Level 2""Title Level 3""Title Level 4Ö0
+member:     Title Level 1""Title Level 2""Title Level 3""Title Level 4 :: Title Level 5
 VerbatimÌ64Ö0
+member:     Verbatim

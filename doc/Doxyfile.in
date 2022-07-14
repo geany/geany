@@ -248,7 +248,7 @@ ALIASES                = "signal=- @ref  " \
                          "signaldesc=" \
                          "signals=@b Signals:  " \
                          "endsignals=  " \
-                         "gironly=@internal"
+                         "gironly=@GIRONLY@"
 
 # Apparently Doxygen doesn't seem to like \<type>only without a previous command, so create a no-op
 ALIASES               += "noop=\if FALSE \endif"
@@ -567,7 +567,7 @@ INLINE_INFO            = NO
 # name. If set to NO the members will appear in declaration order.
 # The default value is: YES.
 
-SORT_MEMBER_DOCS       = YES
+SORT_MEMBER_DOCS       = @SORT@
 
 # If the SORT_BRIEF_DOCS tag is set to YES then doxygen will sort the brief
 # descriptions of file, namespace and class members alphabetically by member
@@ -575,7 +575,7 @@ SORT_MEMBER_DOCS       = YES
 # this will also influence the order of the classes in the class list.
 # The default value is: NO.
 
-SORT_BRIEF_DOCS        = YES
+SORT_BRIEF_DOCS        = @SORT@
 
 # If the SORT_MEMBERS_CTORS_1ST tag is set to YES then doxygen will sort the
 # (brief and detailed) documentation of class members so that constructors and
@@ -848,8 +848,7 @@ RECURSIVE              = NO
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = @top_srcdir@/doc/geany-gtkdoc.h \
-                         @top_srcdir@/doc/geany-sciwrappers-gtkdoc.h
+EXCLUDE                = @top_srcdir@/src/callbacks.c
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -1068,13 +1067,6 @@ VERBATIM_HEADERS       = NO
 
 ALPHABETICAL_INDEX     = NO
 
-# The COLS_IN_ALPHA_INDEX tag can be used to specify the number of columns in
-# which the alphabetical index list will be split.
-# Minimum value: 1, maximum value: 20, default value: 5.
-# This tag requires that the tag ALPHABETICAL_INDEX is set to YES.
-
-COLS_IN_ALPHA_INDEX    = 5
-
 # In case all classes in a project start with a common prefix, all classes will
 # be put under the same header in the alphabetical index. The IGNORE_PREFIX tag
 # can be used to specify a prefix (or a list of prefixes) that should be ignored
@@ -1090,7 +1082,7 @@ IGNORE_PREFIX          =
 # If the GENERATE_HTML tag is set to YES doxygen will generate HTML output
 # The default value is: YES.
 
-GENERATE_HTML          = YES
+GENERATE_HTML          = @HTML@
 
 # The HTML_OUTPUT tag is used to specify where the HTML docs will be put. If a
 # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
@@ -1881,7 +1873,7 @@ MAN_LINKS              = NO
 # captures the structure of the code including all documentation.
 # The default value is: NO.
 
-GENERATE_XML           = NO
+GENERATE_XML           = @XML@
 
 # The XML_OUTPUT tag is used to specify where the XML pages will be put. If a
 # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
@@ -2016,7 +2008,7 @@ SEARCH_INCLUDES        = NO
 # preprocessor.
 # This tag requires that the tag SEARCH_INCLUDES is set to YES.
 
-INCLUDE_PATH           = @top_builddir@/src/
+INCLUDE_PATH           =
 
 # You can use the INCLUDE_FILE_PATTERNS tag to specify one or more wildcard
 # patterns (like *.h and *.hpp) to filter out the header-files in the

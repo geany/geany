@@ -1,2 +1,4 @@
-# format=tagmanager
-A1Ì131072Í(_type, _length)Ö0
+A1Ì131072Í(_type,_length)Ö0
+macro_arg:  A1(_type,_length)
+QtypeÌ4096Ö0
+typedef:    Qtype

@@ -1,0 +1,18 @@
+Another_Boolean_As_StringÌ16ÎTagged_ProcedureÖ0
+function:   Tagged_Procedure :: Another_Boolean_As_String
+Boolean_As_StringÌ16ÎTagged_ProcedureÖ0
+function:   Tagged_Procedure :: Boolean_As_String
+My_TypeÌ16384ÎTestÖ0
+variable:   Test :: My_Type
+Not_Tagged_ProcedureÌ16ÎTestÖ0
+function:   Test :: Not_Tagged_Procedure
+Tagged_ProcedureÌ16ÎTestÖ0
+function:   Test :: Tagged_Procedure
+TestÌ16Ö0
+function:   Test
+Yet_Boolean_As_StringÌ16ÎTagged_ProcedureÖ0
+function:   Tagged_Procedure :: Yet_Boolean_As_String
+p0Ì16ÎTagged_ProcedureÖ0
+function:   Tagged_Procedure :: p0
+p1Ì16ÎTagged_ProcedureÖ0
+function:   Tagged_Procedure :: p1

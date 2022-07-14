@@ -1,13 +1,24 @@
-# format=tagmanager
 MainÌ2048Ö0
+struct:     Main
 MyOtherProcÌ16384ÎTestÖ0
+variable:   Test :: MyOtherProc
 MyProcÌ16384ÎTestÖ0
+variable:   Test :: MyProc
 ProcOneÌ16ÎTestÖ0
+function:   Test :: ProcOne
 ProcPointOneÌ16384ÎMainÖ0
+variable:   Main :: ProcPointOne
 ProcPointTwoÌ16384ÎMainÖ0
+variable:   Main :: ProcPointTwo
 ProcTwoÌ16ÎTestÖ0
+function:   Test :: ProcTwo
 TestÌ256Ö0
+namespace:  Test
 myparameterÌ16384ÎTestÖ0
+variable:   Test :: myparameter
 variableÌ16384ÎMainÖ0
+variable:   Main :: variable
 variable_threeÌ16384ÎMainÖ0
+variable:   Main :: variable_three
 variable_twoÌ16384ÎMainÖ0
+variable:   Main :: variable_two

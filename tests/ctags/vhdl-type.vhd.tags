@@ -1,0 +1,240 @@
+CFG_IRQ_ETHMACÌ16384Îtypes_miscÖ0
+variable:   types_misc :: CFG_IRQ_ETHMAC
+CFG_IRQ_GNSSENGINEÌ16384Îtypes_miscÖ0
+variable:   types_misc :: CFG_IRQ_GNSSENGINE
+CFG_IRQ_GPTIMERSÌ16384Îtypes_miscÖ0
+variable:   types_misc :: CFG_IRQ_GPTIMERS
+CFG_IRQ_TOTALÌ16384Îtypes_miscÖ0
+variable:   types_misc :: CFG_IRQ_TOTAL
+CFG_IRQ_UART1Ì16384Îtypes_miscÖ0
+variable:   types_misc :: CFG_IRQ_UART1
+CFG_IRQ_UNUSEDÌ16384Îtypes_miscÖ0
+variable:   types_misc :: CFG_IRQ_UNUSED
+adc_clkÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: adc_clk
+axi4_flashspiÌ64Îtypes_miscÖ0
+member:     types_misc :: axi4_flashspi
+axi4_gpioÌ64Îtypes_miscÖ0
+member:     types_misc :: axi4_gpio
+axi4_gptimersÌ64Îtypes_miscÖ0
+member:     types_misc :: axi4_gptimers
+axi4_irqctrlÌ64Îtypes_miscÖ0
+member:     types_misc :: axi4_irqctrl
+axi4_otpÌ64Îtypes_miscÖ0
+member:     types_misc :: axi4_otp
+axi4_pnpÌ64Îtypes_miscÖ0
+member:     types_misc :: axi4_pnp
+axi4_romÌ64Îtypes_miscÖ0
+member:     types_misc :: axi4_rom
+axi4_sramÌ64Îtypes_miscÖ0
+member:     types_misc :: axi4_sram
+axi4_uartÌ64Îtypes_miscÖ0
+member:     types_misc :: axi4_uart
+cfgÌ16384Îtypes_misc.axi4_flashspiÖ0
+variable:   types_misc.axi4_flashspi :: cfg
+cfgÌ16384Îtypes_misc.axi4_gpioÖ0
+variable:   types_misc.axi4_gpio :: cfg
+cfgÌ16384Îtypes_misc.axi4_gptimersÖ0
+variable:   types_misc.axi4_gptimers :: cfg
+cfgÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: cfg
+cfgÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: cfg
+cfgÌ16384Îtypes_misc.axi4_romÖ0
+variable:   types_misc.axi4_rom :: cfg
+cfgÌ16384Îtypes_misc.axi4_sramÖ0
+variable:   types_misc.axi4_sram :: cfg
+cfgÌ16384Îtypes_misc.axi4_uartÖ0
+variable:   types_misc.axi4_uart :: cfg
+clkÌ16384Îtypes_misc.axi4_flashspiÖ0
+variable:   types_misc.axi4_flashspi :: clk
+clkÌ16384Îtypes_misc.axi4_gpioÖ0
+variable:   types_misc.axi4_gpio :: clk
+clkÌ16384Îtypes_misc.axi4_gptimersÖ0
+variable:   types_misc.axi4_gptimers :: clk
+clkÌ16384Îtypes_misc.axi4_irqctrlÖ0
+variable:   types_misc.axi4_irqctrl :: clk
+clkÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: clk
+clkÌ16384Îtypes_misc.axi4_romÖ0
+variable:   types_misc.axi4_rom :: clk
+clkÌ16384Îtypes_misc.axi4_sramÖ0
+variable:   types_misc.axi4_sram :: clk
+clkÌ16384Îtypes_misc.axi4_uartÖ0
+variable:   types_misc.axi4_uart :: clk
+clkÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: clk
+clkÌ16384Îtypes_misc.uart_tapÖ0
+variable:   types_misc.uart_tap :: clk
+iÌ16384Îtypes_misc.axi4_gpioÖ0
+variable:   types_misc.axi4_gpio :: i
+iÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: i
+iÌ16384Îtypes_misc.axi4_romÖ0
+variable:   types_misc.axi4_rom :: i
+iÌ16384Îtypes_misc.axi4_sramÖ0
+variable:   types_misc.axi4_sram :: i
+i_axiÌ16384Îtypes_misc.axi4_flashspiÖ0
+variable:   types_misc.axi4_flashspi :: i_axi
+i_axiÌ16384Îtypes_misc.axi4_gptimersÖ0
+variable:   types_misc.axi4_gptimers :: i_axi
+i_axiÌ16384Îtypes_misc.axi4_irqctrlÖ0
+variable:   types_misc.axi4_irqctrl :: i_axi
+i_axiÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: i_axi
+i_axiÌ16384Îtypes_misc.axi4_uartÖ0
+variable:   types_misc.axi4_uart :: i_axi
+i_cfg_rsetupÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: i_cfg_rsetup
+i_cfg_wactiveÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: i_cfg_wactive
+i_cfg_wadrsetupÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: i_cfg_wadrsetup
+i_cfg_wholdÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: i_cfg_whold
+i_gpioÌ16384Îtypes_misc.axi4_gpioÖ0
+variable:   types_misc.axi4_gpio :: i_gpio
+i_irqsÌ16384Îtypes_misc.axi4_irqctrlÖ0
+variable:   types_misc.axi4_irqctrl :: i_irqs
+i_mstiÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: i_msti
+i_mstiÌ16384Îtypes_misc.uart_tapÖ0
+variable:   types_misc.uart_tap :: i_msti
+i_ntrstÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: i_ntrst
+i_otp_busyÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: i_otp_busy
+i_otp_rdataÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: i_otp_rdata
+i_spiÌ16384Îtypes_misc.axi4_flashspiÖ0
+variable:   types_misc.axi4_flashspi :: i_spi
+i_tckÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: i_tck
+i_tdiÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: i_tdi
+i_tmsÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: i_tms
+i_uartÌ16384Îtypes_misc.axi4_uartÖ0
+variable:   types_misc.axi4_uart :: i_uart
+i_uartÌ16384Îtypes_misc.uart_tapÖ0
+variable:   types_misc.uart_tap :: i_uart
+inSysClkÌ16384Îtypes_misc.reset_globalÖ0
+variable:   types_misc.reset_global :: inSysClk
+inSysResetÌ16384Îtypes_misc.reset_globalÖ0
+variable:   types_misc.reset_global :: inSysReset
+mstcfgÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: mstcfg
+nrstÌ16384Îtypes_misc.axi4_flashspiÖ0
+variable:   types_misc.axi4_flashspi :: nrst
+nrstÌ16384Îtypes_misc.axi4_gpioÖ0
+variable:   types_misc.axi4_gpio :: nrst
+nrstÌ16384Îtypes_misc.axi4_gptimersÖ0
+variable:   types_misc.axi4_gptimers :: nrst
+nrstÌ16384Îtypes_misc.axi4_irqctrlÖ0
+variable:   types_misc.axi4_irqctrl :: nrst
+nrstÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: nrst
+nrstÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: nrst
+nrstÌ16384Îtypes_misc.axi4_romÖ0
+variable:   types_misc.axi4_rom :: nrst
+nrstÌ16384Îtypes_misc.axi4_sramÖ0
+variable:   types_misc.axi4_sram :: nrst
+nrstÌ16384Îtypes_misc.axi4_uartÖ0
+variable:   types_misc.axi4_uart :: nrst
+nrstÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: nrst
+nrstÌ16384Îtypes_misc.uart_tapÖ0
+variable:   types_misc.uart_tap :: nrst
+oÌ16384Îtypes_misc.axi4_gpioÖ0
+variable:   types_misc.axi4_gpio :: o
+oÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: o
+oÌ16384Îtypes_misc.axi4_romÖ0
+variable:   types_misc.axi4_rom :: o
+oÌ16384Îtypes_misc.axi4_sramÖ0
+variable:   types_misc.axi4_sram :: o
+o_axiÌ16384Îtypes_misc.axi4_flashspiÖ0
+variable:   types_misc.axi4_flashspi :: o_axi
+o_axiÌ16384Îtypes_misc.axi4_gptimersÖ0
+variable:   types_misc.axi4_gptimers :: o_axi
+o_axiÌ16384Îtypes_misc.axi4_irqctrlÖ0
+variable:   types_misc.axi4_irqctrl :: o_axi
+o_axiÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: o_axi
+o_axiÌ16384Îtypes_misc.axi4_uartÖ0
+variable:   types_misc.axi4_uart :: o_axi
+o_busyÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: o_busy
+o_cfgÌ16384Îtypes_misc.axi4_irqctrlÖ0
+variable:   types_misc.axi4_irqctrl :: o_cfg
+o_gpioÌ16384Îtypes_misc.axi4_gpioÖ0
+variable:   types_misc.axi4_gpio :: o_gpio
+o_gpio_dirÌ16384Îtypes_misc.axi4_gpioÖ0
+variable:   types_misc.axi4_gpio :: o_gpio_dir
+o_irqÌ16384Îtypes_misc.axi4_gptimersÖ0
+variable:   types_misc.axi4_gptimers :: o_irq
+o_irqÌ16384Îtypes_misc.axi4_uartÖ0
+variable:   types_misc.axi4_uart :: o_irq
+o_irq_meipÌ16384Îtypes_misc.axi4_irqctrlÖ0
+variable:   types_misc.axi4_irqctrl :: o_irq_meip
+o_jtag_vrefÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: o_jtag_vref
+o_mstcfgÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: o_mstcfg
+o_mstcfgÌ16384Îtypes_misc.uart_tapÖ0
+variable:   types_misc.uart_tap :: o_mstcfg
+o_mstoÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: o_msto
+o_mstoÌ16384Îtypes_misc.uart_tapÖ0
+variable:   types_misc.uart_tap :: o_msto
+o_otp_addrÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: o_otp_addr
+o_otp_cfg_rsetupÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: o_otp_cfg_rsetup
+o_otp_cfg_wactiveÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: o_otp_cfg_wactive
+o_otp_cfg_wadrsetupÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: o_otp_cfg_wadrsetup
+o_otp_cfg_wholdÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: o_otp_cfg_whold
+o_otp_reÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: o_otp_re
+o_otp_wdataÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: o_otp_wdata
+o_otp_weÌ16384Îtypes_misc.axi4_otpÖ0
+variable:   types_misc.axi4_otp :: o_otp_we
+o_pwmÌ16384Îtypes_misc.axi4_gptimersÖ0
+variable:   types_misc.axi4_gptimers :: o_pwm
+o_spiÌ16384Îtypes_misc.axi4_flashspiÖ0
+variable:   types_misc.axi4_flashspi :: o_spi
+o_tdoÌ16384Îtypes_misc.tap_jtagÖ0
+variable:   types_misc.tap_jtag :: o_tdo
+o_uartÌ16384Îtypes_misc.axi4_uartÖ0
+variable:   types_misc.axi4_uart :: o_uart
+o_uartÌ16384Îtypes_misc.uart_tapÖ0
+variable:   types_misc.uart_tap :: o_uart
+outResetÌ16384Îtypes_misc.reset_globalÖ0
+variable:   types_misc.reset_global :: outReset
+reset_globalÌ64Îtypes_miscÖ0
+member:     types_misc :: reset_global
+slvcfgÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: slvcfg
+spi_in_typeÌ4096Îtypes_miscÖ0
+typedef:    types_misc :: spi_in_type
+spi_out_noneÌ16384Îtypes_miscÖ0
+variable:   types_misc :: spi_out_none
+spi_out_typeÌ4096Îtypes_miscÖ0
+typedef:    types_misc :: spi_out_type
+sys_clkÌ16384Îtypes_misc.axi4_pnpÖ0
+variable:   types_misc.axi4_pnp :: sys_clk
+tap_jtagÌ64Îtypes_miscÖ0
+member:     types_misc :: tap_jtag
+types_miscÌ256Ö0
+namespace:  types_misc
+uart_in_typeÌ4096Îtypes_miscÖ0
+typedef:    types_misc :: uart_in_type
+uart_out_typeÌ4096Îtypes_miscÖ0
+typedef:    types_misc :: uart_out_type
+uart_tapÌ64Îtypes_miscÖ0
+member:     types_misc :: uart_tap

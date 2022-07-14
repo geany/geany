@@ -1,22 +1,42 @@
-# format=tagmanager
 D02CJWÌ16384Ö0
-FCNÌ128Ö0
+variable:   D02CJW
+FCNÌ128Í(T, Y, F)Ö0
+method:     FCN(T, Y, F)
 GÌ16Ö0
+function:   G
 GÌ16384Ö0
+variable:   G
 HÌ16384Ö0
+variable:   H
 IÌ16384Ö0
+variable:   I
 IFAILÌ16384Ö0
+variable:   IFAIL
 IWÌ16384Ö0
+variable:   IW
 JÌ16384Ö0
+variable:   J
 KÌ16384Ö0
+variable:   K
 NÌ16384Ö0
+variable:   N
 NOUTÌ16384Ö0
-OUTÌ128Ö0
+variable:   NOUT
+OUTÌ128Í(X, Y)Ö0
+method:     OUT(X, Y)
 PIÌ16384Ö0
+variable:   PI
 RELABSÌ16384Ö0
+variable:   RELABS
 TOLÌ16384Ö0
+variable:   TOL
 WÌ16384Ö0
+variable:   W
 XÌ16384Ö0
+variable:   X
 X01AAFÌ16384Ö0
+variable:   X01AAF
 XENDÌ16384Ö0
+variable:   XEND
 YÌ16384Ö0
+variable:   Y

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Fetch and extract Geany dependencies for Windows/MSYS2
 # This script will download (or use Pacman's cache) to extract
@@ -6,51 +6,57 @@
 # To be run within a MSYS2 shell. The extracted files will be
 # placed into the current directory.
 
-ABI=i686
+ABI=x86_64  # do not change, i686 is not supported any longer
 use_cache="no"
 make_zip="no"
 gtkv="3"
 run_pi="y"
+cross="no"
 
 UNX_UTILS_URL="https://download.geany.org/contrib/UnxUpdates.zip"
-# path to an installation of a MSYS2 installation in the native architecture matching $ABI
-# leave empty if the script is called already from the same MSYS2 architecture as $ABI
-MSYS2_ABI_PATH="/c/msys32"
+
+# Wine commands for 32bit and 64bit binaries (we still need 32bit for UnxUtils sort.exe)
+# Used only when "-x" is set
+EXE_WRAPPER_32="mingw-w64-i686-wine"
+EXE_WRAPPER_64="mingw-w64-x86_64-wine"
 
 package_urls=""
-gtk2_dependency_pkgs=""
-gtk3_dependency_pkgs="
-libepoxy
-hicolor-icon-theme
-adwaita-icon-theme
-"
+gtk3_dependency_pkgs=""
+gtk4_dependency_pkgs=""
 
 packages="
-gcc-libs
-pcre
-zlib
-expat
-libffi
-libiconv
+adwaita-icon-theme
+atk
 brotli
 bzip2
-libffi
-libpng
+cairo
+expat
+fontconfig
+freetype
+fribidi
+gcc-libs
+gdk-pixbuf2
 gettext
 glib2
 graphite2
-libwinpthread-git
+grep
+gtk-update-icon-cache
 harfbuzz
-fontconfig
-freetype
-atk
-fribidi
+hicolor-icon-theme
 libdatrie
+libepoxy
+libffi
+libiconv
+libpng
+librsvg
 libthai
+libwinpthread-git
+libxml2
 pango
-cairo
+pcre
 pixman
-gdk-pixbuf2
+xz
+zlib
 "
 
 handle_command_line_options() {
@@ -62,24 +68,28 @@ handle_command_line_options() {
 		"-z"|"--zip")
 			make_zip="yes"
 			;;
-		"-2")
-			gtkv="2"
-			;;
 		"-3")
 			gtkv="3"
+			;;
+		"-4")
+			gtkv="4"
 			;;
 		"-n")
 			run_pi=""
 			;;
+		"-x")
+			cross="yes"
+			;;
 		"-h"|"--help")
-			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-2 | -3] [CACHEDIR]"
+			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-3 | -4] [CACHEDIR]"
 			echo "      -c Use pacman cache. Otherwise pacman will download"
 			echo "         archive files"
 			echo "      -h Show this help screen"
 			echo "      -n Do not run post install scripts of the packages"
 			echo "      -z Create a zip afterwards"
-			echo "      -2 Prefer gtk2"
 			echo "      -3 Prefer gtk3"
+			echo "      -4 Prefer gtk4"
+			echo "      -x Set when the script is executed in a cross-compilation context (e.g. to use wine)"
 			echo "CACHEDIR Directory where to look for cached packages (default: /var/cache/pacman/pkg)"
 			exit 1
 			;;
@@ -90,6 +100,10 @@ handle_command_line_options() {
 	done
 }
 
+set -e  # stop on errors
+# enable extended globbing as we need it in _getpkg
+shopt -s extglob
+
 initialize() {
 	if [ -z "$cachedir" ]; then
 		cachedir="/var/cache/pacman/pkg"
@@ -98,6 +112,12 @@ initialize() {
 	if [ "$use_cache" = "yes" ] && ! [ -d "$cachedir" ]; then
 		echo "Cache dir \"$cachedir\" not a directory"
 		exit 1
+	fi
+
+	if [ "$cross" != "yes" ]; then
+		# if running natively, we do not need wine or any other wrappers
+		EXE_WRAPPER_32=""
+		EXE_WRAPPER_64=""
 	fi
 
 	gtk="gtk$gtkv"
@@ -112,17 +132,20 @@ ${gtk}
 
 _getpkg() {
 	if [ "$use_cache" = "yes" ]; then
-		package_info=`pacman -Qi mingw-w64-$ABI-$1`
-		package_version=`echo "$package_info" | grep "^Version " | cut -d':' -f 2 | tr -d '[[:space:]]'`
-		ls $cachedir/mingw-w64-${ABI}-${1}-${package_version}-* | sort -V | tail -n 1
+		package_info=$(pacman -Qi mingw-w64-$ABI-$1)
+		package_version=$(echo "$package_info" | grep "^Version " | cut -d':' -f 2 | tr -d '[[:space:]]')
+		# use @(gz|xz|zst) to filter out signature files (e.g. mingw-w64-x86_64-...-any.pkg.tar.zst.sig)
+		ls $cachedir/mingw-w64-${ABI}-${1}-${package_version}-*.tar.@(gz|xz|zst) | sort -V | tail -n 1
 	else
-		pacman -Sp mingw-w64-${ABI}-${1}
+		# -dd to ignore dependencies as we listed them already above in $packages and
+		# make pacman ignore its possibly existing cache (otherwise we would get an URL to the cache)
+		pacman -Sddp --cachedir /nonexistent mingw-w64-${ABI}-${1}
 	fi
 }
 
 _remember_package_source() {
 	if [ "$use_cache" = "yes" ]; then
-		package_url=`pacman -Sp mingw-w64-${ABI}-${2}`
+		package_url=$(pacman -Sddp mingw-w64-${ABI}-${2})
 	else
 		package_url="${1}"
 	fi
@@ -143,11 +166,10 @@ extract_packages() {
 			fi
 		else
 			echo "Download $pkg using curl"
-			curl -L "$pkg" | tar -x --xz
-		fi
-		if [ -n "$run_pi" ] && [ -f .INSTALL ]; then
-			echo "Running post_install script for \"$i\""
-			/bin/bash -c ". .INSTALL; post_install"
+			filename=$(basename "$pkg")
+			curl --silent --location --output "$filename" "$pkg"
+			tar xf "$filename"
+			rm "$filename"
 		fi
 		if [ "$make_zip" = "yes" -a "$i" = "$gtk" ]; then
 			VERSION=$(grep ^pkgver .PKGINFO | sed -e 's,^pkgver = ,,' -e 's,-.*$,,')
@@ -158,16 +180,28 @@ extract_packages() {
 
 move_extracted_files() {
 	echo "Move extracted data to destination directory"
-	if [ -d mingw32 ]; then
+	if [ -d mingw64 ]; then
 		for d in bin etc home include lib locale share var; do
-			if [ -d "mingw32/$d" ]; then
+			if [ -d "mingw64/$d" ]; then
 				rm -rf $d
 				# prevent sporadic 'permission denied' errors on my system, not sure why they happen
 				sleep 0.5
-				mv mingw32/$d .
+				mv mingw64/$d .
 			fi
 		done
-		rmdir mingw32
+		rmdir mingw64
+	fi
+}
+
+delayed_post_install() {
+	if [ "$run_pi" ]; then
+		echo "Execute delayed post install tasks"
+		# Commands have been collected manually from the various .INSTALL scripts
+		${EXE_WRAPPER_64} bin/fc-cache.exe -f
+		${EXE_WRAPPER_64} bin/gdk-pixbuf-query-loaders.exe --update-cache
+		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/hicolor
+		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/Adwaita
+		${EXE_WRAPPER_64} bin/glib-compile-schemas share/glib-2.0/schemas/
 	fi
 }
 
@@ -183,6 +217,7 @@ cleanup_unnecessary_files() {
 	rm -rf lib/gettext
 	rm -rf lib/libffi-*
 	rm -rf lib/pkgconfig
+	rm -rf lib/python3.9
 	find lib -name '*.a' -delete
 	find lib -name '*.typelib' -delete
 	find lib -name '*.def' -delete
@@ -195,39 +230,25 @@ cleanup_unnecessary_files() {
 	rm -rf share/doc
 	rm -rf share/gdb
 	rm -rf share/gettext
+	rm -rf share/gettext-*
 	rm -rf share/gir-1.0
 	rm -rf share/glib-2.0/codegen
 	rm -rf share/glib-2.0/gdb
 	rm -rf share/glib-2.0/gettext
 	rm -rf share/graphite2
-	rm -rf share/gtk-2.0
 	rm -rf share/gtk-3.0
 	rm -rf share/gtk-doc
+	rm -rf share/icons/Adwaita/cursors
 	rm -rf share/info
 	rm -rf share/man
+	rm -rf share/thumbnailers
+	rm -rf share/vala
 	rm -rf share/xml
+	rm -rf usr/share/libalpm
 	# cleanup binaries and libs (delete anything except *.dll and GSpawn helper binaries)
-	find bin ! -name '*.dll' ! -name 'gspawn-win32-helper*.exe' -type f -delete
+	find bin ! -name '*.dll' ! -name 'grep.exe' ! -name 'gspawn-win32-helper*.exe' -type f -delete
 	# cleanup empty directories
 	find . -type d -empty -delete
-}
-
-copy_grep_and_dependencies() {
-	own_arch=$(arch)
-	if [ "${own_arch}" == "${ABI}" -o -z "${MSYS2_ABI_PATH}" ]; then
-		bin_dir="/usr/bin"
-	else
-		# TODO extract grep and dependencies from Pacman packages according to the target ABI
-		bin_dir="${MSYS2_ABI_PATH}/usr/bin"
-	fi
-	echo "Copy 'grep' from ${bin_dir}"
-	cp "${bin_dir}/grep.exe" "bin/"
-	# dependencies for grep.exe
-	cp "${bin_dir}/msys-2.0.dll" "bin/"
-	cp "${bin_dir}/msys-gcc_s-1.dll" "bin/"
-	cp "${bin_dir}/msys-iconv-2.dll" "bin/"
-	cp "${bin_dir}/msys-intl-8.dll" "bin/"
-	cp "${bin_dir}/msys-pcre-1.dll" "bin/"
 }
 
 download_and_extract_sort() {
@@ -240,8 +261,11 @@ download_and_extract_sort() {
 }
 
 create_bundle_dependency_info_file() {
-	grep_version="$(bin/grep --version | head -n1)"
-	sort_version="$(bin/sort --version | head -n1)"
+	# sort.exe from UnxUtils is a 32bit binary, so use $EXE_WRAPPER_32
+	sort_version="$(${EXE_WRAPPER_32} bin/sort.exe --version | sed -n 1p)"
+	# use "sed -n 1p" instead of "head -n1" as grep will otherwise prints a weird error,
+	# probably because the output pipe is closed prematurely
+	grep_version="$(${EXE_WRAPPER_64} bin/grep.exe --version | sed -n 1p)"
 	filename="ReadMe.Dependencies.Geany.txt"
 	cat << EOF > "${filename}"
 This installation contains dependencies for Geany which are distributed
@@ -254,7 +278,7 @@ sort.exe is extracted from the ZIP archive at
 ${UNX_UTILS_URL}.
 Sort version: ${sort_version}
 
-grep.exe is taken from a 32bit MSYS2 installation and
+grep.exe is taken from a 64bit MSYS2 installation and
 is bundled together with its dependencies.
 Grep version: ${grep_version}
 
@@ -281,8 +305,8 @@ handle_command_line_options $@
 initialize
 extract_packages
 move_extracted_files
+delayed_post_install
 cleanup_unnecessary_files
-copy_grep_and_dependencies
 download_and_extract_sort
 create_bundle_dependency_info_file
 create_zip_archive

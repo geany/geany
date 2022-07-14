@@ -1,5 +1,8 @@
-# format=tagmanager
-barÌ128ÎfoobarÖ0
+barÌ128Í(n)ÎfoobarÖ0
+method:     foobar :: bar(n)
 fÌ16ÎfooÖ0
+function:   foo :: f
 fooÌ16ÎfoobarÖ0
+function:   foobar :: foo
 foobarÌ256Ö0
+namespace:  foobar

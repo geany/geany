@@ -1,5 +1,8 @@
-# format=tagmanager
-m1Ì16Í()ÎC::CÖ0ÏC::T *
-m2Ì16Í()ÎC::CÖ0ÏC::T *const
-m3Ì16Í()ÎC::CÖ0ÏC::T const *
-m4Ì16Í()ÎC::CÖ0ÏC::T const *const
+m1Ì16Í()ÎCÖ0ÏC::T *
+function:   C::T * C :: m1()
+m2Ì16Í()ÎCÖ0ÏC::T * const
+function:   C::T * const C :: m2()
+m3Ì16Í()ÎCÖ0ÏC::T const *
+function:   C::T const * C :: m3()
+m4Ì16Í()ÎCÖ0ÏC::T const * const
+function:   C::T const * const C :: m4()

@@ -53,7 +53,7 @@ extern CommandLineOptions cl_options;
 
 typedef struct GeanyStatus
 {
-	gboolean	opening_session_files;	/* state at startup while opening session files */
+	gint	opening_session_files;	/* >0 indicates batch-opening of session files */
 	gboolean	closing_all; /* the state while closing all tabs
 							  * (used to prevent notebook switch page signals) */
 	gboolean	quitting;	/* state when Geany is quitting completely */
@@ -75,6 +75,8 @@ gboolean main_handle_filename(const gchar *locale_filename);
 void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session);
 
 gint main_lib(gint argc, gchar **argv);
+
+void main_init_headless(void);
 
 #endif /* GEANY_PRIVATE */
 

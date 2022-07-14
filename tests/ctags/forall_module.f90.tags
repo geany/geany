@@ -1,5 +1,8 @@
-# format=tagmanager
 aÃ16384Œwith_forall÷0
-sub_with_forallÃ128Œwith_forall÷0
+variable:   with_forall :: a
+sub_with_forallÃ128Õ(x)Œwith_forall÷0
+method:     with_forall :: sub_with_forall(x)
 twoÃ16Œwith_forall÷0
+function:   with_forall :: two
 with_forallÃ256÷0
+namespace:  with_forall

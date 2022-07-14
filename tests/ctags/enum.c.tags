@@ -1,5 +1,8 @@
-# format=tagmanager
 ENUM_1Ã4Œtest_enumeration÷0
+enumerator: test_enumeration :: ENUM_1
 ENUM_2Ã4Œtest_enumeration÷0
+enumerator: test_enumeration :: ENUM_2
 ENUM_3Ã4Œtest_enumeration÷0
+enumerator: test_enumeration :: ENUM_3
 test_enumerationÃ2÷0
+enum:       test_enumeration

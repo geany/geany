@@ -1,5 +1,4 @@
-# format=tagmanager
-ENTSEQNOÌ16Í(seq)Ö0ÏFUNCSTS
-MEMTXTÌ16Í(mail)Ö0Ï
-MEMTXTÌ1024Í(form_msg)Ö0ÏFUNCSTS
-MEMTXTÌ1024Í(text)Ö0Ï
+func1Ì16Í(ENTSEQNO (seq))Ö0ÏFUNCSTS
+function:   FUNCSTS func1(ENTSEQNO (seq))
+func2Ì16Í(MEMTXT (form_msg),MEMTXT (text),MEMTXT (mail))Ö0ÏFUNCSTS
+function:   FUNCSTS func2(MEMTXT (form_msg),MEMTXT (text),MEMTXT (mail))

@@ -1,4 +1,6 @@
-# format=tagmanager
 aÌ16384Ö0Ïint
+variable:   int a
 bÌ16384Ö0Ïint
+variable:   int b
 cÌ16384Ö0Ïint
+variable:   int c

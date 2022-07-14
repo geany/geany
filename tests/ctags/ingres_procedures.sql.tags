@@ -1,7 +1,12 @@
-# format=tagmanager
 db0001Ì256Ö0
+namespace:  db0001
 db0002Ì256Ö0
+namespace:  db0002
 db0003Ì256Ö0
+namespace:  db0003
 errÌ16384Ö0
+variable:   err
 nÌ16384Ö0
+variable:   n
 xÌ16384Ö0
+variable:   x

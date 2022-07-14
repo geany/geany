@@ -1,16 +1,48 @@
-# format=tagmanager
-HttpResponseÌ32768Ö0
-HttpResponseBadRequestÌ32768Ö0
-InterfaceDataValidationErrorÌ32768Ö0
-RequestContextÌ32768Ö0
-SomeClassÌ1Í(self, filename, pathsep='', treegap=64)Ö0
+HttpResponseÌ32768Îdjango.httpÖ0
+externvar:  django.http :: HttpResponse
+HttpResponseBadRequestÌ32768Îdjango.httpÖ0
+externvar:  django.http :: HttpResponseBadRequest
+InterfaceDataValidationErrorÌ32768Îvnstat.api.errorÖ0
+externvar:  vnstat.api.error :: InterfaceDataValidationError
+RequestContextÌ32768Îdjango.template.contextÖ0
+externvar:  django.template.context :: RequestContext
+SomeClassÌ1Ö0
+class:      SomeClass
 __init__Ì128Í(self, filename, pathsep='', treegap=64)ÎSomeClassÖ0
-btopenÌ32768Ö0
-csrf_exemptÌ32768Ö0
-csrf_exempt2Ì32768Ö0
-login_requiredÌ32768Ö0
-permission_requiredÌ32768Ö0
-render_to_responseÌ32768Ö0
-require_POSTÌ32768Ö0
-simplejsonÌ32768Ö0
+method:     SomeClass :: __init__(self, filename, pathsep='', treegap=64)
+bsddbÌ32768Ö0
+externvar:  bsddb
+btopenÌ32768ÎbsddbÖ0
+externvar:  bsddb :: btopen
+csrf_exemptÌ32768Îdjango.views.decorators.csrfÖ0
+externvar:  django.views.decorators.csrf :: csrf_exempt
+csrf_exempt2Ì32768Îdjango.views.decorators.csrfÖ0
+externvar:  django.views.decorators.csrf :: csrf_exempt2
+django.contrib.auth.decoratorsÌ32768Ö0
+externvar:  django.contrib.auth.decorators
+django.httpÌ32768Ö0
+externvar:  django.http
+django.shortcutsÌ32768Ö0
+externvar:  django.shortcuts
+django.template.contextÌ32768Ö0
+externvar:  django.template.context
+django.utilsÌ32768Ö0
+externvar:  django.utils
+django.views.decorators.csrfÌ32768Ö0
+externvar:  django.views.decorators.csrf
+django.views.decorators.httpÌ32768Ö0
+externvar:  django.views.decorators.http
+login_requiredÌ32768Îdjango.contrib.auth.decoratorsÖ0
+externvar:  django.contrib.auth.decorators :: login_required
+permission_requiredÌ32768Îdjango.contrib.auth.decoratorsÖ0
+externvar:  django.contrib.auth.decorators :: permission_required
+render_to_responseÌ32768Îdjango.shortcutsÖ0
+externvar:  django.shortcuts :: render_to_response
+require_POSTÌ32768Îdjango.views.decorators.httpÖ0
+externvar:  django.views.decorators.http :: require_POST
+simplejsonÌ32768Îdjango.utilsÖ0
+externvar:  django.utils :: simplejson
 sysÌ32768Ö0
+externvar:  sys
+vnstat.api.errorÌ32768Ö0
+externvar:  vnstat.api.error

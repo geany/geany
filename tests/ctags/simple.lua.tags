@@ -1,3 +1,4 @@
-# format=tagmanager
-test.i_123 Ì16Ö0
-test.me_12aÌ16Ö0
+i_123Ì16ÎtestÖ0
+function:   test :: i_123
+me_12aÌ16ÎtestÖ0
+function:   test :: me_12a

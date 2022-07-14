@@ -30,6 +30,7 @@
 #include "search.h"
 
 #include "app.h"
+#include "dialogs.h"
 #include "document.h"
 #include "encodings.h"
 #include "encodingsprivate.h"
@@ -44,12 +45,11 @@
 #include "ui_utils.h"
 #include "utils.h"
 
-#include "gtkcompat.h"
-
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
 
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 enum
@@ -198,9 +198,12 @@ static void init_prefs(void)
 		"pref_search_always_wrap", FALSE, "check_hide_find_dialog");
 	stash_group_add_toggle_button(group, &search_prefs.use_current_file_dir,
 		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
+
+	/* dialog layout & positions */
+	group = stash_group_new("search");
+	configuration_add_session_group(group, FALSE);
 	stash_group_add_boolean(group, &find_dlg.all_expanded, "find_all_expanded", FALSE);
 	stash_group_add_boolean(group, &replace_dlg.all_expanded, "replace_all_expanded", FALSE);
-	/* dialog positions */
 	stash_group_add_integer(group, &find_dlg.position[0], "position_find_x", -1);
 	stash_group_add_integer(group, &find_dlg.position[1], "position_find_y", -1);
 	stash_group_add_integer(group, &replace_dlg.position[0], "position_replace_x", -1);
@@ -332,7 +335,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 		"of the input and can be captured as normal characters by the pattern."));
 
 	/* Search features */
-	fbox = gtk_vbox_new(FALSE, 0);
+	fbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start(GTK_BOX(fbox), check_regexp, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(fbox), check_multiline, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(fbox), checkbox7, FALSE, FALSE, 0);
@@ -362,12 +365,13 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 		G_CALLBACK(on_widget_toggled_set_insensitive), checkbox5);
 
 	/* Matching options */
-	mbox = gtk_vbox_new(FALSE, 0);
+	mbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_pack_start(GTK_BOX(mbox), checkbox1, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(mbox), checkbox2, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(mbox), checkbox5, FALSE, FALSE, 0);
 
-	hbox = gtk_hbox_new(TRUE, 6);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_box_set_homogeneous(GTK_BOX(hbox), TRUE);
 	gtk_container_add(GTK_CONTAINER(hbox), fbox);
 	gtk_container_add(GTK_CONTAINER(hbox), mbox);
 	return hbox;
@@ -497,7 +501,7 @@ static void create_find_dialog(void)
 	g_signal_connect(find_dlg.dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
-	sbox = gtk_hbox_new(FALSE, 6);
+	sbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(sbox), entry, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
@@ -511,7 +515,7 @@ static void create_find_dialog(void)
 	g_signal_connect_after(exp, "activate",
 		G_CALLBACK(on_expander_activated), &find_dlg.all_expanded);
 
-	bbox = gtk_hbutton_box_new();
+	bbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
 
 	button = gtk_button_new_with_mnemonic(_("_Mark"));
 	gtk_widget_set_tooltip_text(button,
@@ -602,7 +606,7 @@ static void send_replace_dialog_response(GtkButton *button, gpointer user_data)
 static gboolean
 on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-	if (event->keyval == GDK_Tab)
+	if (event->keyval == GDK_KEY_Tab)
 	{
 		gtk_widget_grab_focus(GTK_WIDGET(user_data));
 		return TRUE;
@@ -671,11 +675,11 @@ static void create_replace_dialog(void)
 	g_signal_connect(replace_dlg.dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
-	fbox = gtk_hbox_new(FALSE, 6);
+	fbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_box_pack_start(GTK_BOX(fbox), label_find, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(fbox), replace_dlg.find_combobox, TRUE, TRUE, 0);
 
-	rbox = gtk_hbox_new(FALSE, 6);
+	rbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_box_pack_start(GTK_BOX(rbox), label_replace, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(rbox), replace_dlg.replace_combobox, TRUE, TRUE, 0);
 
@@ -695,7 +699,7 @@ static void create_replace_dialog(void)
 	g_signal_connect_after(exp, "activate",
 		G_CALLBACK(on_expander_activated), &replace_dlg.all_expanded);
 
-	bbox = gtk_hbutton_box_new();
+	bbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
 
 	button = gtk_button_new_with_mnemonic(_("In Sessi_on"));
 	gtk_container_add(GTK_CONTAINER(bbox), button);
@@ -890,7 +894,7 @@ static void create_fif_dialog(void)
 	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 	fif_dlg.search_combo = combo;
 
-	sbox = gtk_hbox_new(FALSE, 6);
+	sbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_box_pack_start(GTK_BOX(sbox), label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(sbox), combo, TRUE, TRUE, 0);
 
@@ -918,7 +922,7 @@ static void create_fif_dialog(void)
 	/* update the entry when selection is changed */
 	g_signal_connect(combo_files_mode, "changed", G_CALLBACK(update_file_patterns), fcombo);
 
-	hbox = gtk_hbox_new(FALSE, 6);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_box_pack_start(GTK_BOX(hbox), label3, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), combo_files_mode, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), fcombo, TRUE, TRUE, 0);
@@ -949,7 +953,7 @@ static void create_fif_dialog(void)
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label2), e_combo);
 	fif_dlg.encoding_combo = e_combo;
 
-	ebox = gtk_hbox_new(FALSE, 6);
+	ebox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_box_pack_start(GTK_BOX(ebox), label2, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(ebox), e_combo, TRUE, TRUE, 0);
 
@@ -987,17 +991,17 @@ static void create_fif_dialog(void)
 	gtk_widget_set_tooltip_text(checkbox2,
 			_("Invert the sense of matching, to select non-matching lines"));
 
-	lbox = gtk_vbox_new(FALSE, 0);
+	lbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(lbox), check_regexp);
 	gtk_container_add(GTK_CONTAINER(lbox), checkbox2);
 	gtk_container_add(GTK_CONTAINER(lbox), check_recursive);
 
-	rbox = gtk_vbox_new(FALSE, 0);
+	rbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(rbox), checkbox1);
 	gtk_container_add(GTK_CONTAINER(rbox), check_wholeword);
 	gtk_container_add(GTK_CONTAINER(rbox), gtk_label_new(NULL));
 
-	hbox = gtk_hbox_new(FALSE, 6);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_container_add(GTK_CONTAINER(hbox), lbox);
 	gtk_container_add(GTK_CONTAINER(hbox), rbox);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
@@ -1017,7 +1021,7 @@ static void create_fif_dialog(void)
 	g_signal_connect(check_extra, "toggled",
 		G_CALLBACK(on_widget_toggled_set_sensitive), entry_extra);
 
-	hbox = gtk_hbox_new(FALSE, 6);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_box_pack_start(GTK_BOX(hbox), check_extra, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), entry_extra, TRUE, TRUE, 0);
 	gtk_container_add(GTK_CONTAINER(vbox), hbox);
@@ -1453,6 +1457,14 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	{
 		gtk_widget_hide(replace_dlg.dialog);
 		return;
+	}
+
+	if (response == GEANY_RESPONSE_REPLACE_IN_SESSION) {
+		if (! dialogs_show_question_full(replace_dlg.dialog, NULL, NULL,
+			_("This operation will modify all open files which contain the text to replace."),
+			_("Are you sure to replace in the whole session?"))) {
+			return;
+		}
 	}
 
 	search_backwards_re = settings.replace_search_backwards;

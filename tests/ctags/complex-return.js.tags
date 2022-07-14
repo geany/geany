@@ -1,20 +1,38 @@
-# format=tagmanager
-AnonymousFunction1Ì16Í()Îclass2.c2m1Ö0
-AnonymousFunction2Ì16Í(n)Îclass3.c3m1Ö0
+anon_function_1Ì16Í()Îclass2.c2m1Ö1
+function:   class2.c2m1 :: anon_function_1()    flags: 1
+anon_function_2Ì16Í(n)Îclass3.c3m1Ö1
+function:   class3.c3m1 :: anon_function_2(n)    flags: 1
 c2m1Ì128Í()Îclass2Ö0
+method:     class2 :: c2m1()
 c2m2Ì128Í(f)Îclass2Ö0
+method:     class2 :: c2m2(f)
 c2m3Ì128Í(f)Îclass2Ö0
+method:     class2 :: c2m3(f)
 c3m1Ì128Í()Îclass3Ö0
+method:     class3 :: c3m1()
 c3m2Ì128Í()Îclass3Ö0
+method:     class3 :: c3m2()
 class1Ì1Í()Ö0
+class:      class1()
 class2Ì1Í()Ö0
+class:      class2()
 class3Ì1Í()Ö0
+class:      class3()
 class4Ì1Í()Ö0
+class:      class4()
 func1Ì16Í()Ö0
+function:   func1()
 func2Ì16Í()Ö0
+function:   func2()
 method1Ì128Í()Îclass1Ö0
+method:     class1 :: method1()
 method1Ì128Í()Îclass4Ö0
+method:     class4 :: method1()
 method2Ì128Í()Îclass1Ö0
+method:     class1 :: method2()
 method2Ì128Í()Îclass4Ö0
+method:     class4 :: method2()
 method3Ì128Í()Îclass1Ö0
+method:     class1 :: method3()
 method4Ì128Í()Îclass1Ö0
+method:     class1 :: method4()

@@ -1,5 +1,8 @@
-# format=tagmanager
 RPCÃ1ŒTest÷0
+class:      Test :: RPC
 asyncMethodÃ128Õ(  uri,  method,  params,  callback)ŒTest.RPC÷0
+method:     Test.RPC :: asyncMethod(  uri,  method,  params,  callback)
 asyncRequestÃ128Õ(  uri,  data,  callback)ŒTest.RPC÷0
+method:     Test.RPC :: asyncRequest(  uri,  data,  callback)
 request_idÃ64ŒTest.RPC÷0
+member:     Test.RPC :: request_id

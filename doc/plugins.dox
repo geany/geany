@@ -159,7 +159,7 @@ following.
 First you need to have Geany installed. Then install the development files for GTK
 and its dependencies. The easiest way to do this is to use your distribution's package
 management system, e.g. on Debian and Ubuntu systems you can use
-@code apt-get install libgtk2.0-dev intltool @endcode
+@code apt-get install libgtk-3-dev autoconf automake autopoint gettext @endcode
 This will install all necessary files to be able to compile plugins for Geany. On other
 distributions, the package names and commands to use may differ.
 
@@ -671,7 +671,7 @@ The @ref plugin_callbacks array is supported by assigning the GeanyPluginFuncs::
 the array.
 
 @ref plugin_fields is not supported anymore. Use ui_add_document_sensitive() instead.
-@ref PLUGIN_KEY_GROUP and @ref plugin_key_group are also not supported anymore. Use
+@c PLUGIN_KEY_GROUP and @ref plugin_key_group are also not supported anymore. Use
 plugin_set_key_group() and keybindings_set_item() respectively.
 
 Additionally, Geany traditionally set a few variables. This is not the case anymore. @ref

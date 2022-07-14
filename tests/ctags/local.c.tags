@@ -1,3 +1,4 @@
-# format=tagmanager
-isContextualKeywordÌ16Í(const tokenInfo *const token)Ö0Ïboolean
+isContextualKeywordÌ16Í(const tokenInfo * const token)Ö0Ïboolean
+function:   boolean isContextualKeyword(const tokenInfo * const token)
 mainÌ16Í()Ö0
+function:   main()

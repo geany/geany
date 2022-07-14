@@ -46,8 +46,8 @@
  * property. Macros could be added for common widget properties such as @c GtkExpander:"expanded".
  *
  * @section settings-example Settings Example
- * Here we have some settings for how to make a cup - whether it should be made of china
- * and who's going to make it. (Yes, it's a stupid example).
+ * Here we have some settings for a cup - whether it is made of porcelain, who made it,
+ * how many we have, and how much they cost. (Yes, it's a stupid example).
  * @include stash-example.c
  * @note You might want to handle the warning/error conditions differently from above.
  *
@@ -85,13 +85,10 @@
 
 /* GTK3 removed ComboBoxEntry, but we need a value to differentiate combo box with and
  * without entries, and it must not collide with other GTypes */
-#ifdef GTK_TYPE_COMBO_BOX_ENTRY
-#	define TYPE_COMBO_BOX_ENTRY GTK_TYPE_COMBO_BOX_ENTRY
-#else /* !GTK_TYPE_COMBO_BOX_ENTRY */
-#	define TYPE_COMBO_BOX_ENTRY get_combo_box_entry_type()
+#define TYPE_COMBO_BOX_ENTRY get_combo_box_entry_type()
 static GType get_combo_box_entry_type(void)
 {
-	static volatile gsize type = 0;
+	static gsize type = 0;
 	if (g_once_init_enter(&type))
 	{
 		GType g_type = g_type_register_static_simple(GTK_TYPE_COMBO_BOX, "dummy-combo-box-entry",
@@ -100,15 +97,25 @@ static GType get_combo_box_entry_type(void)
 	}
 	return type;
 }
-#endif /* !GTK_TYPE_COMBO_BOX_ENTRY */
 
+/* storage for StashPref default values */
+union Value
+{
+	gboolean bool_val;
+	gint int_val;
+	gdouble double_val;
+	gchar *str_val;
+	gchar **strv_val;
+	gpointer *ptr_val;
+	GtkWidget *widget_val;
+};
 
 struct StashPref
 {
 	GType setting_type;			/* e.g. G_TYPE_INT */
 	gpointer setting;			/* Address of a variable */
 	const gchar *key_name;
-	gpointer default_value;		/* Default value, e.g. (gpointer)1 */
+	union Value default_value;	/* Default value, as per setting_type above, e.g. .int_val */
 	GType widget_type;			/* e.g. GTK_TYPE_TOGGLE_BUTTON */
 	StashWidgetID widget_id;	/* (GtkWidget*) or (gchar*) */
 	union
@@ -162,10 +169,28 @@ static void handle_boolean_setting(StashGroup *group, StashPref *se,
 	{
 		case SETTING_READ:
 			*setting = utils_get_setting_boolean(config, group->name, se->key_name,
-				GPOINTER_TO_INT(se->default_value));
+				se->default_value.bool_val);
 			break;
 		case SETTING_WRITE:
 			g_key_file_set_boolean(config, group->name, se->key_name, *setting);
+			break;
+	}
+}
+
+
+static void handle_double_setting(StashGroup *group, StashPref *se,
+		GKeyFile *config, SettingAction action)
+{
+	gdouble *setting = se->setting;
+
+	switch (action)
+	{
+		case SETTING_READ:
+			*setting = utils_get_setting_double(config, group->name, se->key_name,
+				se->default_value.double_val);
+			break;
+		case SETTING_WRITE:
+			g_key_file_set_double(config, group->name, se->key_name, *setting);
 			break;
 	}
 }
@@ -180,7 +205,7 @@ static void handle_integer_setting(StashGroup *group, StashPref *se,
 	{
 		case SETTING_READ:
 			*setting = utils_get_setting_integer(config, group->name, se->key_name,
-				GPOINTER_TO_INT(se->default_value));
+				se->default_value.int_val);
 			break;
 		case SETTING_WRITE:
 			g_key_file_set_integer(config, group->name, se->key_name, *setting);
@@ -199,7 +224,7 @@ static void handle_string_setting(StashGroup *group, StashPref *se,
 		case SETTING_READ:
 			g_free(*setting);
 			*setting = utils_get_setting_string(config, group->name, se->key_name,
-				se->default_value);
+				se->default_value.str_val);
 			break;
 		case SETTING_WRITE:
 			g_key_file_set_string(config, group->name, se->key_name,
@@ -221,7 +246,7 @@ static void handle_strv_setting(StashGroup *group, StashPref *se,
 			*setting = g_key_file_get_string_list(config, group->name, se->key_name,
 				NULL, NULL);
 			if (*setting == NULL)
-				*setting = g_strdupv(se->default_value);
+				*setting = g_strdupv(se->default_value.strv_val);
 			break;
 
 		case SETTING_WRITE:
@@ -256,6 +281,8 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
 				handle_boolean_setting(group, entry, keyfile, action); break;
 			case G_TYPE_INT:
 				handle_integer_setting(group, entry, keyfile, action); break;
+			case G_TYPE_DOUBLE:
+				handle_double_setting(group, entry, keyfile, action); break;
 			case G_TYPE_STRING:
 				handle_string_setting(group, entry, keyfile, action); break;
 			default:
@@ -449,18 +476,17 @@ void stash_group_set_use_defaults(StashGroup *group, gboolean use_defaults)
 
 static StashPref *
 add_pref(StashGroup *group, GType type, gpointer setting,
-		const gchar *key_name, gpointer default_value)
+		const gchar *key_name, union Value default_value)
 {
-	StashPref init = {type, setting, key_name, default_value, G_TYPE_NONE, NULL, {NULL}};
 	StashPref *entry = g_slice_new(StashPref);
 
-	*entry = init;
+	*entry = (StashPref) {type, setting, key_name, default_value, G_TYPE_NONE, NULL, {NULL}};
 
 	/* init any pointer settings to NULL so they can be freed later */
-	if (type == G_TYPE_STRING ||
-		type == G_TYPE_STRV)
+	if (type == G_TYPE_STRING || type == G_TYPE_STRV) {
 		if (group->use_defaults)
 			*(gpointer**)setting = NULL;
+	}
 
 	g_ptr_array_add(group->entries, entry);
 	return entry;
@@ -476,7 +502,20 @@ GEANY_API_SYMBOL
 void stash_group_add_boolean(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value)
 {
-	add_pref(group, G_TYPE_BOOLEAN, setting, key_name, GINT_TO_POINTER(default_value));
+	add_pref(group, G_TYPE_BOOLEAN, setting, key_name, (union Value) {.bool_val = default_value});
+}
+
+
+/** Adds double setting.
+ * @param group .
+ * @param setting Address of setting variable.
+ * @param key_name Name for key in a @c GKeyFile.
+ * @param default_value Value to use if the key doesn't exist when loading. */
+GEANY_API_SYMBOL
+void stash_group_add_double(StashGroup *group, gdouble *setting,
+		const gchar *key_name, gdouble default_value)
+{
+	add_pref(group, G_TYPE_DOUBLE, setting, key_name, (union Value) {.double_val = default_value});
 }
 
 
@@ -489,7 +528,7 @@ GEANY_API_SYMBOL
 void stash_group_add_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value)
 {
-	add_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value));
+	add_pref(group, G_TYPE_INT, setting, key_name, (union Value) {.int_val = default_value});
 }
 
 
@@ -503,7 +542,7 @@ GEANY_API_SYMBOL
 void stash_group_add_string(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value)
 {
-	add_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value);
+	add_pref(group, G_TYPE_STRING, setting, key_name, (union Value) {.str_val = (gchar *) default_value});
 }
 
 
@@ -517,7 +556,7 @@ GEANY_API_SYMBOL
 void stash_group_add_string_vector(StashGroup *group, gchar ***setting,
 		const gchar *key_name, const gchar **default_value)
 {
-	add_pref(group, G_TYPE_STRV, setting, key_name, (gpointer)default_value);
+	add_pref(group, G_TYPE_STRV, setting, key_name, (union Value) {.strv_val = (gchar **) default_value});
 }
 
 
@@ -803,7 +842,7 @@ void stash_group_update(StashGroup *group, GtkWidget *owner)
 
 static StashPref *
 add_widget_pref(StashGroup *group, GType setting_type, gpointer setting,
-		const gchar *key_name, gpointer default_value,
+		const gchar *key_name, union Value default_value,
 		GType widget_type, StashWidgetID widget_id)
 {
 	StashPref *entry =
@@ -826,7 +865,7 @@ GEANY_API_SYMBOL
 void stash_group_add_toggle_button(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_BOOLEAN, setting, key_name, GINT_TO_POINTER(default_value),
+	add_widget_pref(group, G_TYPE_BOOLEAN, setting, key_name, (union Value) {.bool_val = default_value},
 		GTK_TYPE_TOGGLE_BUTTON, widget_id);
 }
 
@@ -851,7 +890,7 @@ void stash_group_add_radio_buttons(StashGroup *group, gint *setting,
 		StashWidgetID widget_id, gint enum_id, ...)
 {
 	StashPref *entry =
-		add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
+		add_widget_pref(group, G_TYPE_INT, setting, key_name, (union Value) {.int_val = default_value},
 			GTK_TYPE_RADIO_BUTTON, NULL);
 	va_list args;
 	gsize count = 1;
@@ -900,8 +939,8 @@ GEANY_API_SYMBOL
 void stash_group_add_spin_button_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
-		GTK_TYPE_SPIN_BUTTON, widget_id);
+	add_widget_pref(group, G_TYPE_INT, setting, key_name,
+		(union Value) {.int_val = default_value}, GTK_TYPE_SPIN_BUTTON, widget_id);
 }
 
 
@@ -916,8 +955,8 @@ GEANY_API_SYMBOL
 void stash_group_add_combo_box(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_INT, setting, key_name, GINT_TO_POINTER(default_value),
-		GTK_TYPE_COMBO_BOX, widget_id);
+	add_widget_pref(group, G_TYPE_INT, setting, key_name,
+		(union Value) {.int_val = default_value}, GTK_TYPE_COMBO_BOX, widget_id);
 }
 
 
@@ -933,8 +972,8 @@ GEANY_API_SYMBOL
 void stash_group_add_combo_box_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
-		TYPE_COMBO_BOX_ENTRY, widget_id);
+	add_widget_pref(group, G_TYPE_STRING, setting, key_name,
+		(union Value) {.str_val = (gchar *) default_value}, TYPE_COMBO_BOX_ENTRY, widget_id);
 }
 
 
@@ -948,8 +987,8 @@ GEANY_API_SYMBOL
 void stash_group_add_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id)
 {
-	add_widget_pref(group, G_TYPE_STRING, setting, key_name, (gpointer)default_value,
-		GTK_TYPE_ENTRY, widget_id);
+	add_widget_pref(group, G_TYPE_STRING, setting, key_name,
+		(union Value) {.str_val = (gchar *) default_value}, GTK_TYPE_ENTRY, widget_id);
 }
 
 
@@ -982,11 +1021,14 @@ void stash_group_add_widget_property(StashGroup *group, gpointer setting,
 		const gchar *key_name, gpointer default_value, StashWidgetID widget_id,
 		const gchar *property_name, GType type)
 {
+	StashPref *entry;
+
 	if (!type)
 		type = object_get_property_type(G_OBJECT(widget_id), property_name);
 
-	add_widget_pref(group, type, setting, key_name, default_value,
-		G_TYPE_PARAM, widget_id)->extra.property_name = property_name;
+	entry = add_widget_pref(group, type, setting, key_name,
+			(union Value) {.ptr_val = default_value}, G_TYPE_PARAM, widget_id);
+	entry->extra.property_name = property_name;
 }
 
 

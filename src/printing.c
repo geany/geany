@@ -231,7 +231,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 
 	gtk_print_operation_set_custom_tab_label(operation, _("Document Setup"));
 
-	page = gtk_vbox_new(FALSE, 0);
+	page = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_set_border_width(GTK_CONTAINER(page), 5);
 
 	w->check_print_linenumbers = gtk_check_button_new_with_mnemonic(_("Print line numbers"));
@@ -259,7 +259,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	gtk_container_add(GTK_CONTAINER(frame33), alignment36);
 	gtk_alignment_set_padding(GTK_ALIGNMENT(alignment36), 0, 0, 12, 0);
 
-	vbox30 = gtk_vbox_new(FALSE, 1);
+	vbox30 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
 	gtk_container_add(GTK_CONTAINER(alignment36), vbox30);
 
 	w->check_print_basename = gtk_check_button_new_with_mnemonic(_("Use the basename of the printed file"));
@@ -267,7 +267,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	gtk_widget_set_tooltip_text(w->check_print_basename, _("Print only the basename(without the path) of the printed file"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_basename), printing_prefs.page_header_basename);
 
-	hbox10 = gtk_hbox_new(FALSE, 5);
+	hbox10 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_pack_start(GTK_BOX(vbox30), hbox10, TRUE, TRUE, 0);
 
 	label203 = gtk_label_new(_("Date format:"));
@@ -276,7 +276,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	w->entry_print_dateformat = gtk_entry_new();
 	ui_entry_add_clear_icon(GTK_ENTRY(w->entry_print_dateformat));
 	gtk_box_pack_start(GTK_BOX(hbox10), w->entry_print_dateformat, TRUE, TRUE, 0);
-	gtk_widget_set_tooltip_text(w->entry_print_dateformat, _("Specify a format for the date and time stamp which is added to the page header on each page. You can use any conversion specifiers which can be used with the ANSI C strftime function."));
+	gtk_widget_set_tooltip_text(w->entry_print_dateformat, _("Specify a format for the date and time stamp which is added to the page header on each page. For a list of available conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."));
 	gtk_entry_set_text(GTK_ENTRY(w->entry_print_dateformat), printing_prefs.page_header_datefmt);
 
 	on_page_header_toggled(GTK_TOGGLE_BUTTON(w->check_print_pageheader), w);

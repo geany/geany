@@ -120,7 +120,6 @@ void msgwin_set_messages_dir(const gchar *messages_dir)
 
 static void load_color(const gchar *color_name, GdkColor *color)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
 	GdkRGBA rgba_color;
 	GtkWidgetPath *path = gtk_widget_path_new();
 	GtkStyleContext *ctx = gtk_style_context_new();
@@ -137,15 +136,6 @@ static void load_color(const gchar *color_name, GdkColor *color)
 
 	gtk_widget_path_unref(path);
 	g_object_unref(ctx);
-#else
-	gchar *path = g_strconcat("*.", color_name, NULL);
-
-	GtkSettings *settings = gtk_settings_get_default();
-	GtkStyle *style = gtk_rc_get_style_by_paths(settings, path, NULL, GTK_TYPE_WIDGET);
-	*color = style->fg[GTK_STATE_NORMAL];
-
-	g_free(path);
-#endif
 }
 
 
@@ -184,7 +174,7 @@ static gboolean on_msgwin_key_press_event(GtkWidget *widget, GdkEventKey *event,
 {
 	gboolean enter_or_return = ui_is_keyval_enter_or_return(event->keyval);
 
-	if (enter_or_return || event->keyval == GDK_space)
+	if (enter_or_return || event->keyval == GDK_KEY_space)
 	{
 		switch (GPOINTER_TO_INT(data))
 		{
@@ -494,7 +484,7 @@ void msgwin_status_add_string(const gchar *string)
 	gchar *statusmsg, *time_str;
 
 	/* add a timestamp to status messages */
-	time_str = utils_get_current_time_string();
+	time_str = utils_get_current_time_string(FALSE);
 	statusmsg = g_strconcat(time_str, ": ", string, NULL);
 	g_free(time_str);
 
@@ -1018,26 +1008,6 @@ static void parse_compiler_error_line(const gchar *string,
 			}
 			break;
 		}
-		case GEANY_FILETYPES_FERITE:
-		{
-			/* Error: Parse Error: on line 5 in "/tmp/hello.fe"
-			 * Error: Compile Error: on line 24, in /test/class.fe */
-			if (strncmp(string, "Error: Compile Error", 20) == 0)
-			{
-				data.pattern = " ";
-				data.min_fields = 8;
-				data.line_idx = 5;
-				data.file_idx = 7;
-			}
-			else
-			{
-				data.pattern = " \"";
-				data.min_fields = 10;
-				data.line_idx = 5;
-				data.file_idx = 8;
-			}
-			break;
-		}
 		case GEANY_FILETYPES_HTML:
 		{
 			/* line 78 column 7 - Warning: <table> missing '>' for end of tag */
@@ -1311,7 +1281,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 		case MSG_STATUS: widget = msgwindow.tree_status; break;
 		case MSG_MESSAGE: widget = msgwindow.tree_msg; break;
 #ifdef HAVE_VTE
-		case MSG_VTE: widget = (vte_info.have_vte) ? vc->vte : NULL; break;
+		case MSG_VTE: widget = (vte_info.have_vte) ? vte_config.vte : NULL; break;
 #endif
 		default: break;
 	}

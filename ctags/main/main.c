@@ -57,6 +57,7 @@
 #include "keyword_p.h"
 #include "main_p.h"
 #include "options_p.h"
+#include "optscript.h"
 #include "parse_p.h"
 #include "read_p.h"
 #include "routines_p.h"
@@ -120,8 +121,9 @@ static bool recurseUsingOpendir (const char *const dirName)
 	}
 	return resize;
 }
+#endif
 
-#elif defined (HAVE__FINDFIRST)
+#ifdef HAVE__FINDFIRST
 
 static bool createTagsForWildcardEntry (
 		const char *const pattern, const size_t dirLength,
@@ -144,9 +146,8 @@ static bool createTagsForWildcardUsingFindfirst (const char *const pattern)
 {
 	bool resize = false;
 	const size_t dirLength = baseFilename (pattern) - pattern;
-#if defined (HAVE__FINDFIRST)
 	struct _finddata_t fileInfo;
-	findfirst_t hFile = _findfirst (pattern, &fileInfo);
+	intptr_t hFile = _findfirst (pattern, &fileInfo);
 	if (hFile != -1L)
 	{
 		do
@@ -156,7 +157,6 @@ static bool createTagsForWildcardUsingFindfirst (const char *const pattern)
 		} while (_findnext (hFile, &fileInfo) == 0);
 		_findclose (hFile);
 	}
-#endif
 	return resize;
 }
 
@@ -577,6 +577,7 @@ extern int ctags_cli_main (int argc CTAGS_ATTR_UNUSED, char **argv)
 	initializeParsing ();
 	testEtagsInvocation ();
 	initOptions ();
+	initRegexOptscript ();
 	readOptionConfiguration ();
 	verbose ("Reading initial options from command line\n");
 	parseCmdlineOptions (args);

@@ -54,8 +54,7 @@
 #include "utils.h"
 #include "win32.h"
 
-#include "gtkcompat.h"
-
+#include <gtk/gtk.h>
 #include <string.h>
 
 
@@ -272,44 +271,6 @@ static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 		plugin_signal_connect(&plugin->public, NULL, cb->signal_name, cb->after,
 			cb->callback, cb->user_data ? cb->user_data : plugin->cb_data);
 	}
-}
-
-
-static void read_key_group(Plugin *plugin)
-{
-	GeanyKeyGroupInfo *p_key_info;
-	GeanyKeyGroup **p_key_group;
-	GModule *module = plugin->proxy_data;
-
-	g_module_symbol(module, "plugin_key_group_info", (void *) &p_key_info);
-	g_module_symbol(module, "plugin_key_group", (void *) &p_key_group);
-	if (p_key_info && p_key_group)
-	{
-		GeanyKeyGroupInfo *key_info = p_key_info;
-
-		if (*p_key_group)
-			geany_debug("Ignoring plugin_key_group symbol for plugin '%s' - "
-				"use plugin_set_key_group() instead to allocate keybindings dynamically.",
-				plugin->info.name);
-		else
-		{
-			if (key_info->count)
-			{
-				GeanyKeyGroup *key_group =
-					plugin_set_key_group(&plugin->public, key_info->name, key_info->count, NULL);
-				if (key_group)
-					*p_key_group = key_group;
-			}
-			else
-				geany_debug("Ignoring plugin_key_group_info symbol for plugin '%s' - "
-					"count field is zero. Maybe use plugin_set_key_group() instead?",
-					plugin->info.name);
-		}
-	}
-	else if (p_key_info || p_key_group)
-		geany_debug("Ignoring only one of plugin_key_group[_info] symbols defined for plugin '%s'. "
-			"Maybe use plugin_set_key_group() instead?",
-			plugin->info.name);
 }
 
 
@@ -552,7 +513,6 @@ plugin_load(Plugin *plugin)
 	{
 		GeanyPlugin **p_geany_plugin;
 		PluginInfo **p_info;
-		PluginFields **plugin_fields;
 		GModule *module = plugin->proxy_data;
 		/* set these symbols before plugin_init() is called
 		 * we don't set geany_data since it is set directly by plugin_new() */
@@ -562,19 +522,9 @@ plugin_load(Plugin *plugin)
 		g_module_symbol(module, "plugin_info", (void *) &p_info);
 		if (p_info)
 			*p_info = &plugin->info;
-		g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
-		if (plugin_fields)
-			*plugin_fields = &plugin->fields;
-		read_key_group(plugin);
 
 		/* Legacy plugin_init() cannot fail. */
 		plugin->cbs.init(&plugin->public, plugin->cb_data);
-
-		/* now read any plugin-owned data that might have been set in plugin_init() */
-		if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
-		{
-			ui_add_document_sensitive(plugin->fields.menu_item);
-		}
 	}
 	else
 	{
@@ -1333,7 +1283,7 @@ void plugins_init(void)
 	g_free(path);
 
 	group = stash_group_new("plugins");
-	configuration_add_pref_group(group, TRUE);
+	configuration_add_session_group(group, TRUE);
 
 	stash_group_add_toggle_button(group, &prefs.load_plugins,
 		"load_plugins", TRUE, "check_plugins");
@@ -1997,7 +1947,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	pm_widgets.popup_help_menu_item = menu_item;
 
 	/* put it together */
-	vbox2 = gtk_vbox_new(FALSE, 6);
+	vbox2 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), filter_entry, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);

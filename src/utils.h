@@ -182,6 +182,8 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
 
 gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key, const gint default_value);
 
+gdouble utils_get_setting_double(GKeyFile *config, const gchar *section, const gchar *key, const gdouble default_value);
+
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value);
 
 gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
@@ -191,6 +193,8 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error);
+
+gchar *utils_utf8_strdown(const gchar *str);
 
 gint utils_str_casecmp(const gchar *s1, const gchar *s2);
 
@@ -287,7 +291,7 @@ gint utils_color_to_bgr(const GdkColor *color);
 
 gint utils_parse_color_to_bgr(const gchar *spec);
 
-gchar *utils_get_current_time_string(void);
+gchar *utils_get_current_time_string(gboolean include_microseconds);
 
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, gboolean nblock,
 									GIOFunc func, gpointer data);

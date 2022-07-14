@@ -1,3 +1,4 @@
-# format=tagmanager
-arch_resetÌ16Í(char mode)Ö0Ïinline void
-omap1_arch_resetÌ16Í(char mode)Ö0Ïinline void
+arch_resetÌ16Í(char mode)Ö0Ïvoid
+function:   void arch_reset(char mode)
+omap1_arch_resetÌ16Í(char mode)Ö0Ïvoid
+function:   void omap1_arch_reset(char mode)

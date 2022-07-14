@@ -1,4 +1,6 @@
-# format=tagmanager
 MainÌ128Í()ÎMyClassÖ0Ïpublic int
+method:     public int MyClass :: Main()
 MessageBoxÌ128Í(int h, string m, string c, int type)ÎMyClassÖ0Ï[]public int
+method:     []public int MyClass :: MessageBox(int h, string m, string c, int type)
 MyClassÌ1Ö0
+class:      MyClass

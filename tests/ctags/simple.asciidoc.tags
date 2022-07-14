@@ -1,13 +1,24 @@
-# format=tagmanager
 Chapter 1 (Level 0)Ã256÷0
+namespace:  Chapter 1 (Level 0)
 Chapter 2Ã256÷0
+namespace:  Chapter 2
 Level 3 Section 1.1.1.1 TitleÃ16384ŒSubsection 1.1.1÷0
+variable:   Subsection 1.1.1 :: Level 3 Section 1.1.1.1 Title
 Level 3 Section 2.1.1.1 TitleÃ16384ŒSubsection 2.1.1÷0
+variable:   Subsection 2.1.1 :: Level 3 Section 2.1.1.1 Title
 Level 4 Section 1.1.1.1.1 TitleÃ2048ŒLevel 3 Section 1.1.1.1 Title÷0
+struct:     Level 3 Section 1.1.1.1 Title :: Level 4 Section 1.1.1.1.1 Title
 Level 4 Section 2.1.1.1.1 TitleÃ2048ŒLevel 3 Section 2.1.1.1 Title÷0
+struct:     Level 3 Section 2.1.1.1 Title :: Level 4 Section 2.1.1.1.1 Title
 Section 1.1Ã64ŒChapter 1 (Level 0)÷0
+member:     Chapter 1 (Level 0) :: Section 1.1
 Section 1.2Ã64ŒChapter 1 (Level 0)÷0
+member:     Chapter 1 (Level 0) :: Section 1.2
 Section 2.1Ã64ŒChapter 2÷0
+member:     Chapter 2 :: Section 2.1
 Section 2.2Ã64ŒChapter 2÷0
+member:     Chapter 2 :: Section 2.2
 Subsection 1.1.1Ã65536ŒSection 1.1÷0
+macro:      Section 1.1 :: Subsection 1.1.1
 Subsection 2.1.1Ã65536ŒSection 2.1÷0
+macro:      Section 2.1 :: Subsection 2.1.1

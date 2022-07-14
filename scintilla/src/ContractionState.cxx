@@ -10,11 +10,13 @@
 #include <cstring>
 
 #include <stdexcept>
+#include <string_view>
 #include <vector>
+#include <optional>
 #include <algorithm>
 #include <memory>
 
-#include "Platform.h"
+#include "Debugging.h"
 
 #include "Position.h"
 #include "UniqueString.h"
@@ -24,7 +26,7 @@
 #include "SparseVector.h"
 #include "ContractionState.h"
 
-using namespace Scintilla;
+using namespace Scintilla::Internal;
 
 namespace {
 
@@ -93,18 +95,16 @@ ContractionState<LINE>::ContractionState() noexcept : linesInDocument(1) {
 }
 
 template <typename LINE>
-ContractionState<LINE>::~ContractionState() {
-	Clear();
-}
+ContractionState<LINE>::~ContractionState() = default;
 
 template <typename LINE>
 void ContractionState<LINE>::EnsureData() {
 	if (OneToOne()) {
-		visible = Sci::make_unique<RunStyles<LINE, char>>();
-		expanded = Sci::make_unique<RunStyles<LINE, char>>();
-		heights = Sci::make_unique<RunStyles<LINE, int>>();
-		foldDisplayTexts = Sci::make_unique<SparseVector<UniqueString>>();
-		displayLines = Sci::make_unique<Partitioning<LINE>>(4);
+		visible = std::make_unique<RunStyles<LINE, char>>();
+		expanded = std::make_unique<RunStyles<LINE, char>>();
+		heights = std::make_unique<RunStyles<LINE, int>>();
+		foldDisplayTexts = std::make_unique<SparseVector<UniqueString>>();
+		displayLines = std::make_unique<Partitioning<LINE>>(4);
 		InsertLines(0, linesInDocument);
 	}
 }
@@ -195,7 +195,7 @@ Sci::Line ContractionState<LINE>::DocFromDisplay(Sci::Line lineDisplay) const no
 	if (OneToOne()) {
 		return lineDisplay;
 	} else {
-		if (lineDisplay <= 0) {
+		if (lineDisplay < 0) {
 			return 0;
 		}
 		if (lineDisplay > LinesDisplayed()) {
@@ -408,13 +408,13 @@ void ContractionState<LINE>::Check() const noexcept {
 
 }
 
-namespace Scintilla {
+namespace Scintilla::Internal {
 
 std::unique_ptr<IContractionState> ContractionStateCreate(bool largeDocument) {
 	if (largeDocument)
-		return Sci::make_unique<ContractionState<Sci::Line>>();
+		return std::make_unique<ContractionState<Sci::Line>>();
 	else
-		return Sci::make_unique<ContractionState<int>>();
+		return std::make_unique<ContractionState<int>>();
 }
 
 }

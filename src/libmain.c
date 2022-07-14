@@ -46,6 +46,7 @@
 #include "navqueue.h"
 #include "notebook.h"
 #include "plugins.h"
+#include "projectprivate.h"
 #include "prefs.h"
 #include "printing.h"
 #include "sidebar.h"
@@ -63,8 +64,6 @@
 #include "win32.h"
 #include "osx.h"
 
-#include "gtkcompat.h"
-
 #include <signal.h>
 #include <time.h>
 #include <sys/types.h>
@@ -73,6 +72,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
 #ifdef G_OS_UNIX
@@ -264,7 +264,7 @@ static void main_init(void)
 	ignore_callback	= FALSE;
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
-	main_status.opening_session_files	= FALSE;
+	main_status.opening_session_files	= 0;
 
 	main_widgets.window = create_window1();
 	g_signal_connect(main_widgets.window, "notify::is-active", G_CALLBACK(on_window_active_changed), NULL);
@@ -290,7 +290,7 @@ static void main_init(void)
 	osx_ui_init();
 #endif
 
-	/* set widget names for matching with .gtkrc-2.0 */
+	/* set widget names for matching with GTK CSS */
 	gtk_widget_set_name(main_widgets.window, "GeanyMainWindow");
 	gtk_widget_set_name(ui_widgets.toolbar_menu, "GeanyToolbarMenu");
 	gtk_widget_set_name(main_widgets.editor_menu, "GeanyEditMenu");
@@ -304,10 +304,10 @@ static void main_init(void)
 
 const gchar *main_get_version_string(void)
 {
-	static gchar full[] = VERSION " (git >= " REVISION ")";
+	static gchar full[] = PACKAGE_VERSION " (git >= " REVISION ")";
 
 	if (utils_str_equal(REVISION, "-1"))
-		return VERSION;
+		return PACKAGE_VERSION;
 	else
 		return full;
 }
@@ -958,7 +958,7 @@ static void load_startup_files(gint argc, gchar **argv)
 		main_load_project_from_command_line(filename, FALSE);
 		argc--, argv++;
 		/* force session load if using project-based session files */
-		load_session = project_prefs.project_session;
+		load_session = TRUE;
 		g_free(filename);
 	}
 
@@ -971,13 +971,23 @@ static void load_startup_files(gint argc, gchar **argv)
 	{
 		if (app->project == NULL)
 			load_session_project_file();
+		if (app->project == NULL)
+			configuration_load_default_session();
 		load_session = TRUE;
 	}
 
 	if (load_session)
 	{
 		/* load session files into tabs, as they are found in the session_files variable */
-		configuration_open_files();
+		if (app->project != NULL)
+		{
+			configuration_open_files(app->project->priv->session_files);
+			app->project->priv->session_files = NULL;
+		}
+		else
+		{
+			configuration_open_default_session();
+		}
 
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
 		{
@@ -1007,66 +1017,12 @@ static const gchar *get_locale(void)
 }
 
 
-#if ! GTK_CHECK_VERSION(3, 0, 0)
-/* This prepends our own gtkrc file to the list of RC files to be loaded by GTK at startup.
- * This function *has* to be called before gtk_init().
- *
- * We have a custom RC file defining various styles we need, and we want the user to be
- * able to override them (e.g. if they want -- or need -- other colors).  Fair enough, one
- * would simply call gtk_rc_parse() with the appropriate filename.  However, the styling
- * rules applies in the order they are loaded, then if we load our styles after GTK has
- * loaded the user's ones we'd override them.
- *
- * There are 2 solutions to fix this:
- * 1) set our styles' priority to something with lower than "user" (actually "theme"
- *    priority because rules precedence are first calculated depending on the priority
- *    no matter of how precise the rules is, so we need to override the theme).
- * 2) prepend our custom style to GTK's list while keeping priority to user (which is the
- *    default), so it gets loaded before real user's ones and so gets overridden by them.
- *
- * One would normally go for 1 because it's ways simpler and requires less code: you just
- * have to add the priorities to your styles, which is a matter of adding a few ":theme" in
- * the RC file.  However, KDE being a bitch it doesn't set the gtk-theme-name but rather
- * directly includes the style to use in a user gtkrc file, which makes the theme have
- * "user" priority, hence overriding our styles.  So, we cannot set priorities in the RC
- * file if we want to support running under KDE, which pretty much leave us with no choice
- * but to go with solution 2, which unfortunately requires writing ugly code since GTK
- * don't have a gtk_rc_prepend_default_file() function.  Thank you very much KDE.
- *
- * Though, as a side benefit it also makes the code work with people using gtk-chtheme,
- * which also found it funny to include the theme in the user RC file. */
-static void setup_gtk2_styles(void)
-{
-	gchar **gtk_files = gtk_rc_get_default_files();
-	gchar **new_files = g_malloc(sizeof *new_files * (g_strv_length(gtk_files) + 2));
-	guint i = 0;
-
-	new_files[i++] = g_build_filename(app->datadir, "geany.gtkrc", NULL);
-	for (; *gtk_files; gtk_files++)
-		new_files[i++] = g_strdup(*gtk_files);
-	new_files[i] = NULL;
-
-	gtk_rc_set_default_files(new_files);
-
-	g_strfreev(new_files);
-}
-#endif
-
-
 GEANY_EXPORT_SYMBOL
-gint main_lib(gint argc, gchar **argv)
+void main_init_headless(void)
 {
-	GeanyDocument *doc;
-	gint config_dir_result;
-	const gchar *locale;
-	gchar *utf8_configdir;
-	gchar *os_info;
-
 #if ! GLIB_CHECK_VERSION(2, 36, 0)
 	g_type_init();
 #endif
-
-	log_handlers_init();
 
 	app = g_new0(GeanyApp, 1);
 	memset(&main_status, 0, sizeof(GeanyStatus));
@@ -1079,11 +1035,24 @@ gint main_lib(gint argc, gchar **argv)
 	memset(&template_prefs, 0, sizeof(GeanyTemplatePrefs));
 	memset(&ui_prefs, 0, sizeof(UIPrefs));
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
+}
+
+
+GEANY_EXPORT_SYMBOL
+gint main_lib(gint argc, gchar **argv)
+{
+	GeanyDocument *doc;
+	gint config_dir_result;
+	const gchar *locale;
+	gchar *utf8_configdir;
+	gchar *os_info;
+
+	main_init_headless();
+
+	log_handlers_init();
 
 	setup_paths();
-#if ! GTK_CHECK_VERSION(3, 0, 0)
-	setup_gtk2_styles();
-#endif
+
 #ifdef ENABLE_NLS
 	main_locale_init(utils_resource_dir(RESOURCE_DIR_LOCALE), GETTEXT_PACKAGE);
 #endif
@@ -1243,9 +1212,9 @@ gint main_lib(gint argc, gchar **argv)
 	tools_create_insert_custom_command_menu_items();
 
 	/* load any command line files or session files */
-	main_status.opening_session_files = TRUE;
+	main_status.opening_session_files++;
 	load_startup_files(argc, argv);
-	main_status.opening_session_files = FALSE;
+	main_status.opening_session_files--;
 
 	/* open a new file if no other file was opened */
 	document_new_file_if_non_open();
@@ -1258,11 +1227,6 @@ gint main_lib(gint argc, gchar **argv)
 	build_menu_update(doc);
 	sidebar_update_tag_list(doc, FALSE);
 
-#ifdef G_OS_WIN32
-	/* Manually realise the main window to be able to set the position but don't show it.
-	 * We don't set the position after showing the window to avoid flickering. */
-	gtk_widget_realize(main_widgets.window);
-#endif
 	setup_window_position();
 
 	/* finally show the window */

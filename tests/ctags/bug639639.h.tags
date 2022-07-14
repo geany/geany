@@ -1,5 +1,8 @@
-# format=tagmanager
 Namespace1Ì256Ö0
-anon2Ì4Îanon_enum_0Ö0
-anon_enum_0Ì2Ö0
-function2Ì1024Í(char* str)ÎNamespace1Ö0Ïint
+namespace:  Namespace1
+anon2Ì4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: anon2
+anon_enum_1Ì2Ö1
+enum:       anon_enum_1    flags: 1
+function2Ì1024Í(char * str)ÎNamespace1Ö0Ïint
+prototype:  int Namespace1 :: function2(char * str)

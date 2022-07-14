@@ -18,6 +18,8 @@ G_BEGIN_DECLS
 #ifdef GEANY_PRIVATE
 
 void tm_ctags_init(void);
+void tm_ctags_add_ignore_symbol(const char *value);
+void tm_ctags_clear_ignore_symbols(void);
 void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 	const gchar *file_name, TMParserType language, TMSourceFile *source_file);
 const gchar *tm_ctags_get_lang_name(TMParserType lang);

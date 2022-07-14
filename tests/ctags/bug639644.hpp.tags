@@ -1,3 +1,4 @@
-# format=tagmanager
-anon_namespace_0Ì256Ö0
-fooÌ64Îanon_namespace_0Ö0Ïint
+anon_namespace_1Ì256Ö1
+namespace:  anon_namespace_1    flags: 1
+fooÌ16384Îanon_namespace_1Ö0Ïint
+variable:   int anon_namespace_1 :: foo

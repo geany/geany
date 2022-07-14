@@ -1,6 +1,10 @@
-# format=tagmanager
 IMyInterfaceÌ32Ö0
+interface:  IMyInterface
 IndexerClassÌ1Ö0
+class:      IndexerClass
 MainÌ128Í()ÎMainClassÖ0Ïpublic void
+method:     public void MainClass :: Main()
 MainClassÌ1Ö0
+class:      MainClass
 myArrayÌ8ÎIndexerClassÖ0Ïint[]
+field:      int[] IndexerClass :: myArray

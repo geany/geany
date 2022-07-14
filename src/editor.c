@@ -57,11 +57,10 @@
 
 #include "SciLexer.h"
 
-#include "gtkcompat.h"
-
 #include <ctype.h>
 #include <string.h>
 
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 
@@ -223,13 +222,15 @@ static void add_kb(GKeyFile *keyfile, const gchar *group, gchar **keys)
 		gchar *accel_string = g_key_file_get_value(keyfile, group, keys[i], NULL);
 
 		gtk_accelerator_parse(accel_string, &key, &mods);
-		g_free(accel_string);
 
 		if (key == 0 && mods == 0)
 		{
 			g_warning("Can not parse accelerator \"%s\" from user snippets.conf", accel_string);
+			g_free(accel_string);
 			continue;
 		}
+		g_free(accel_string);
+
 		gtk_accel_group_connect(snippet_accel_group, key, mods, 0,
 			g_cclosure_new_swap((GCallback)on_snippet_keybinding_activate,
 				g_strdup(keys[i]), (GClosureNotify)g_free));
@@ -625,6 +626,8 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 		for (j = 0; j < tags->len; ++j)
 		{
 			TMTag *tag = tags->pdata[j];
+			gint group;
+			guint icon_id;
 
 			if (j > 0)
 				g_string_append_c(words, '\n');
@@ -636,11 +639,13 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 			}
 			g_string_append(words, tag->name);
 
-			/* for now, tag types don't all follow C, so just look at arglist */
-			if (!EMPTY(tag->arglist))
-				g_string_append(words, "?2");
-			else
-				g_string_append(words, "?1");
+			group = tm_parser_get_sidebar_group(tag->lang, tag->type);
+			if (group >= 0 && tm_parser_get_sidebar_info(tag->lang, group, &icon_id))
+			{
+				gchar buf[10];
+				sprintf(buf, "?%u", icon_id + 1);
+				g_string_append(words, buf);
+			}
 		}
 		show_autocomplete(sci, rootlen, words);
 		g_string_free(words, TRUE);
@@ -648,20 +653,23 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 }
 
 
-/* do not use with long strings */
-static gboolean match_last_chars(ScintillaObject *sci, gint pos, const gchar *str)
+static gint scope_autocomplete_suffix(ScintillaObject *sci, TMParserType lang,
+	gint pos, gboolean *scope_sep)
 {
-	gsize len = strlen(str);
+	const gchar *sep = tm_parser_scope_separator(lang);
+	const gsize max_len = 3;
+	gboolean is_scope_sep;
 	gchar *buf;
 
-	g_return_val_if_fail(len < 100, FALSE);
+	buf = g_alloca(max_len + 1);
+	sci_get_text_range(sci, pos - max_len, pos, buf);
 
-	if ((gint)len > pos)
-		return FALSE;
-
-	buf = g_alloca(len + 1);
-	sci_get_text_range(sci, pos - len, pos, buf);
-	return strcmp(str, buf) == 0;
+	is_scope_sep = g_str_has_suffix(buf, sep);
+	if (scope_sep)
+		*scope_sep = is_scope_sep;
+	if (is_scope_sep)
+		return strlen(sep);
+	return tm_parser_scope_autocomplete_suffix(lang, buf);
 }
 
 
@@ -711,7 +719,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	gboolean scope_sep_typed = FALSE;
 	gboolean ret = FALSE;
 	const gchar *current_scope;
-	const gchar *context_sep = tm_parser_context_separator(ft->lang);
+	gint autocomplete_suffix_len;
 
 	if (autocomplete_scope_shown)
 	{
@@ -726,21 +734,12 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 			typed = sci_get_char_at(sci, pos - 1);
 	}
 
-	/* make sure to keep in sync with similar checks below */
-	if (match_last_chars(sci, pos, context_sep))
-	{
-		pos -= strlen(context_sep);
-		scope_sep_typed = TRUE;
-	}
-	else if (typed == '.')
-		pos -= 1;
-	else if ((ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP) &&
-			match_last_chars(sci, pos, "->"))
-		pos -= 2;
-	else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
-		pos -= 3;
-	else
+	autocomplete_suffix_len = scope_autocomplete_suffix(sci, ft->lang, pos,
+		&scope_sep_typed);
+	if (autocomplete_suffix_len == 0)
 		return FALSE;
+
+	pos -= autocomplete_suffix_len;
 
 	/* allow for a space between word and operator */
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
@@ -771,9 +770,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	pos -= strlen(name);
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 		pos--;
-	/* make sure to keep in sync with similar checks above */
-	member = match_last_chars(sci, pos, ".") || match_last_chars(sci, pos, context_sep) ||
-			 match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "->*");
+	member = scope_autocomplete_suffix(sci, ft->lang, pos, NULL) > 0;
 
 	if (symbols_get_current_scope(editor->document, &current_scope) == -1)
 		current_scope = "";
@@ -1853,58 +1850,10 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 }
 
 
-static gboolean append_calltip(GString *str, const TMTag *tag, GeanyFiletypeID ft_id)
-{
-	if (! tag->arglist)
-		return FALSE;
-
-	if (ft_id != GEANY_FILETYPES_PASCAL && ft_id != GEANY_FILETYPES_GO)
-	{	/* usual calltips: "retval tagname (arglist)" */
-		if (tag->var_type)
-		{
-			guint i;
-
-			g_string_append(str, tag->var_type);
-			for (i = 0; i < tag->pointerOrder; i++)
-			{
-				g_string_append_c(str, '*');
-			}
-			g_string_append_c(str, ' ');
-		}
-		if (tag->scope)
-		{
-			const gchar *cosep = symbols_get_context_separator(ft_id);
-
-			g_string_append(str, tag->scope);
-			g_string_append(str, cosep);
-		}
-		g_string_append(str, tag->name);
-		g_string_append_c(str, ' ');
-		g_string_append(str, tag->arglist);
-	}
-	else
-	{	/* special case Pascal/Go calltips: "tagname (arglist) : retval"
-		 * (with ':' omitted for Go) */
-		g_string_append(str, tag->name);
-		g_string_append_c(str, ' ');
-		g_string_append(str, tag->arglist);
-
-		if (!EMPTY(tag->var_type))
-		{
-			g_string_append(str, ft_id == GEANY_FILETYPES_PASCAL ? " : " : " ");
-			g_string_append(str, tag->var_type);
-		}
-	}
-
-	return TRUE;
-}
-
-
 static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 {
+	const gchar *constructor_method;
 	GPtrArray *tags;
-	const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
-		tm_tag_method_t | tm_tag_macro_with_arg_t;
 	TMTag *tag;
 	GString *str = NULL;
 	guint i;
@@ -1921,12 +1870,19 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 	tag = TM_TAG(tags->pdata[0]);
 
-	if (ft->id == GEANY_FILETYPES_D &&
-		(tag->type == tm_tag_class_t || tag->type == tm_tag_struct_t))
+	/* user typed e.g. 'a = Classname(' in Python so lookup __init__() arguments */
+	constructor_method = tm_parser_get_constructor_method(tag->lang);
+	if (constructor_method && (tag->type == tm_tag_class_t || tag->type == tm_tag_struct_t))
 	{
+		const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
+			tm_tag_method_t | tm_tag_macro_with_arg_t;
+		const gchar *scope_sep = tm_parser_scope_separator(ft->lang);
+		gchar *scope = EMPTY(tag->scope) ? g_strdup(tag->name) :
+			g_strjoin(scope_sep, tag->scope, tag->name, NULL);
+
 		g_ptr_array_free(tags, TRUE);
-		/* user typed e.g. 'new Classname(' so lookup D constructor Classname::this() */
-		tags = tm_workspace_find("this", tag->name, arg_types, NULL, ft->lang);
+		tags = tm_workspace_find(constructor_method, scope, arg_types, NULL, ft->lang);
+		g_free(scope);
 		if (tags->len == 0)
 		{
 			g_ptr_array_free(tags, TRUE);
@@ -1970,10 +1926,13 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 		if (str == NULL)
 		{
+			gchar *f = tm_parser_format_function(tag->lang, tag->name,
+				tag->arglist, tag->var_type, tag->scope);
 			str = g_string_new(NULL);
 			if (calltip.tag_index > 0)
 				g_string_prepend(str, "\001 ");	/* up arrow */
-			append_calltip(str, tag, FILETYPE_ID(ft));
+			g_string_append(str, f);
+			g_free(f);
 		}
 		else /* add a down arrow */
 		{
@@ -2064,20 +2023,6 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 		return TRUE;
 	}
 	return FALSE;
-}
-
-
-gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag)
-{
-	GString *str;
-
-	g_return_val_if_fail(editor != NULL, NULL);
-
-	str = g_string_new(NULL);
-	if (append_calltip(str, tag, editor->document->file_type->id))
-		return g_string_free(str, FALSE);
-	else
-		return g_string_free(str, TRUE);
 }
 
 
@@ -2674,7 +2619,7 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 		return FALSE;
 	/* return if we are editing an existing line (chars on right of cursor) */
 	if (keybindings_lookup_item(GEANY_KEY_GROUP_EDITOR,
-			GEANY_KEYS_EDITOR_COMPLETESNIPPET)->key == GDK_space &&
+			GEANY_KEYS_EDITOR_COMPLETESNIPPET)->key == GDK_KEY_space &&
 		! editor_prefs.complete_snippets_whilst_editing && ! at_eol(sci, pos))
 		return FALSE;
 
@@ -4705,24 +4650,24 @@ void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width)
 }
 
 
-/* Convenience function for editor_goto_pos() to pass in a line number. */
-gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
+/* Convenience function for editor_goto_pos() to pass a line number.
+ * line_no is 1 based */
+gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gboolean offset)
 {
-	gint pos;
-
 	g_return_val_if_fail(editor, FALSE);
-	if (line_no < 0 || line_no >= sci_get_line_count(editor->sci))
-		return FALSE;
+	gint line_count = sci_get_line_count(editor->sci);
 
-	if (offset != 0)
-	{
-		gint current_line = sci_get_current_line(editor->sci);
-		line_no *= offset;
-		line_no = current_line + line_no;
-	}
+	if (offset)
+		line_no += sci_get_current_line(editor->sci) + 1;
 
-	pos = sci_get_position_from_line(editor->sci, line_no);
-	return editor_goto_pos(editor, pos, TRUE);
+	/* ensure line_no is in bounds and determine whether to set line marker */
+	gboolean set_marker = line_no > 0 && line_no < line_count;
+	line_no = line_no <= 0          ? 0
+			: line_no >= line_count ? line_count - 1
+			: line_no - 1;
+
+	gint pos = sci_get_position_from_line(editor->sci, line_no);
+	return editor_goto_pos(editor, pos, set_marker);
 }
 
 
@@ -4821,8 +4766,7 @@ static gboolean on_editor_focus_in(GtkWidget *widget, GdkEventFocus *event, gpoi
 }
 
 
-static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
-		gpointer user_data)
+static gboolean on_editor_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
 	GeanyEditor *editor = user_data;
 
@@ -4831,14 +4775,6 @@ static gboolean on_editor_expose_event(GtkWidget *widget, GdkEventExpose *event,
 	editor_check_colourise(editor);
 	return FALSE;
 }
-
-
-#if GTK_CHECK_VERSION(3, 0, 0)
-static gboolean on_editor_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
-{
-	return on_editor_expose_event(widget, NULL, user_data);
-}
-#endif
 
 
 static void setup_sci_keys(ScintillaObject *sci)
@@ -4925,6 +4861,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 {
 	ScintillaObject *sci;
 	int rectangular_selection_modifier;
+	guint i;
 
 	sci = SCINTILLA(scintilla_new());
 
@@ -4949,8 +4886,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	SSM(sci, SCI_SETSCROLLWIDTHTRACKING, 1, 0);
 
 	/* tag autocompletion images */
-	register_named_icon(sci, 1, "classviewer-var");
-	register_named_icon(sci, 2, "classviewer-method");
+	for (i = 0; i < TM_N_ICONS; i++)
+	{
+		const gchar *icon_name = symbols_get_icon_name(i);
+		register_named_icon(sci, i + 1, icon_name);
+	}
 
 	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
 	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
@@ -4985,11 +4925,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 		g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), editor);
 		g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 		g_signal_connect(sci, "focus-in-event", G_CALLBACK(on_editor_focus_in), editor);
-#if GTK_CHECK_VERSION(3, 0, 0)
 		g_signal_connect(sci, "draw", G_CALLBACK(on_editor_draw), editor);
-#else
-		g_signal_connect(sci, "expose-event", G_CALLBACK(on_editor_expose_event), editor);
-#endif
 	}
 	return sci;
 }

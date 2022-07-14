@@ -1,11 +1,20 @@
-# format=tagmanager
 MyClassÌ1Ö0
+class:      MyClass
 MyClassÌ16Í()Ö0
+function:   MyClass()
 function1Ì16Í()Ö0
+function:   function1()
 function2Ì16Í()Ö0
+function:   function2()
 method2Ì128Í()ÎMyClassÖ0
+method:     MyClass :: method2()
 nestedFunction1Ì16Í()ÎMyClass.method2Ö0
+function:   MyClass.method2 :: nestedFunction1()
 nestedFunction2Ì16Í()ÎMyClass.method2Ö0
+function:   MyClass.method2 :: nestedFunction2()
 nestedFunction3Ì16Í()Îfunction1Ö0
+function:   function1 :: nestedFunction3()
 nestedFunction4Ì16Í()Îfunction2Ö0
+function:   function2 :: nestedFunction4()
 nestedFunction5Ì16Í()Îfunction2Ö0
+function:   function2 :: nestedFunction5()

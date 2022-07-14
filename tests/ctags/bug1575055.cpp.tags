@@ -1,4 +1,6 @@
-# format=tagmanager
 MyClassÌ1ÎTheNamespaceÖ0
+class:      TheNamespace :: MyClass
 TheNamespaceÌ256Ö0
-variableÌ64ÎTheNamespaceÖ0Ïint
+namespace:  TheNamespace
+variableÌ16384ÎTheNamespaceÖ0Ïint
+variable:   int TheNamespace :: variable

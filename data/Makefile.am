@@ -30,10 +30,10 @@ filetypes_dist = \
 	filedefs/filetypes.docbook \
 	filedefs/filetypes.erlang \
 	filedefs/filetypes.f77 \
-	filedefs/filetypes.ferite \
 	filedefs/filetypes.forth \
 	filedefs/filetypes.fortran \
 	filedefs/filetypes.freebasic \
+	filedefs/filetypes.gdscript \
 	filedefs/filetypes.Genie.conf \
 	filedefs/filetypes.glsl \
 	filedefs/filetypes.go \
@@ -44,6 +44,7 @@ filetypes_dist = \
 	filedefs/filetypes.html \
 	filedefs/filetypes.java \
 	filedefs/filetypes.javascript \
+	filedefs/filetypes.julia \
 	filedefs/filetypes.JSON.conf \
 	filedefs/filetypes.latex \
 	filedefs/filetypes.lisp \
@@ -52,6 +53,7 @@ filetypes_dist = \
 	filedefs/filetypes.makefile \
 	filedefs/filetypes.markdown \
 	filedefs/filetypes.matlab \
+	filedefs/filetypes.Meson.conf \
 	filedefs/filetypes.Nim.conf \
 	filedefs/filetypes.nsis \
 	filedefs/filetypes.objectivec \
@@ -121,17 +123,10 @@ nobase_dist_pkgdata_DATA = \
 	filetype_extensions.conf \
 	snippets.conf \
 	ui_toolbar.xml \
-	geany.glade
-
-nobase_pkgdata_DATA = \
-	$(filetypes_nodist)
-
-if GTK3
-nobase_dist_pkgdata_DATA += \
+	geany.glade \
 	geany-3.0.css \
 	geany-3.20.css \
 	geany.css
-else
-nobase_dist_pkgdata_DATA += geany.gtkrc
-endif
 
+nobase_pkgdata_DATA = \
+	$(filetypes_nodist)

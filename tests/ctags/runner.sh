@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 # error out on undefined variable expansion, useful for debugging
 set -u
 
-# FIXME: get this from automake so we have $(EXEEXT)
-GEANY="${top_builddir:-../..}/src/geany"
+GEANY="$1"
+PRINTER="${top_srcdir:-../..}"/scripts/print-tags.py
 TMPDIR=$(mktemp -d) || exit 99
 CONFDIR="$TMPDIR/config/"
 
@@ -14,9 +14,10 @@ trap 'rm -rf "$TMPDIR"' EXIT
 # related configuration files
 mkdir -p "$CONFDIR" || exit 99
 mkdir -p "$CONFDIR/filedefs/" || exit 99
-cp "${srcdir:-.}"/../../data/filetype_extensions.conf "$CONFDIR" || exit 99
-cp "${srcdir:-.}"/../../data/filedefs/filetypes.* "$CONFDIR/filedefs/" || exit 99
+cp "${top_srcdir:-../..}"/data/filetype_extensions.conf "$CONFDIR" || exit 99
+cp "${top_srcdir:-../..}"/data/filedefs/filetypes.* "$CONFDIR/filedefs/" || exit 99
 
+shift
 if [ "$1" = "--result" ]; then
   # --result $result $source...
   [ $# -gt 2 ] || exit 99
@@ -32,6 +33,8 @@ fi
 shift
 
 tagfile="$TMPDIR/test.${source##*.}.tags"
+outfile="$TMPDIR/test.${source##*.}.out"
 
 "$GEANY" -c "$CONFDIR" -P -g "$tagfile" "$source" "$@" || exit 1
-diff -u "$result" "$tagfile" || exit 2
+cat "$tagfile" | "$PRINTER" > "$outfile" || exit 3
+diff -u "$result" "$outfile" || exit 2

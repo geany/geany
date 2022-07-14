@@ -10,16 +10,21 @@
 SCI_SRC=
 
 # parse arguments
-if [ $# -eq 1 ]; then
+if [ $# -eq 2 ]; then
 	SCI_SRC="$1"
+	LEX_SRC="$2"
 else
-	echo "USAGE: $0 SCINTILLA_SOURCE_DIRECTORY" >&2
+	echo "USAGE: $0 SCINTILLA_SOURCE_DIRECTORY LEXILLA_SOURCE_DIRECTORY" >&2
 	exit 1
 fi
 
 # check source directory
-if ! [ -f "$SCI_SRC"/version.txt ]; then
+if ! [ -f "$SCI_SRC/src/ScintillaBase.cxx" ]; then
 	echo "'$SCI_SRC' is not a valid Scintilla source directory!" >&2
+	exit 1
+fi
+if ! [ -f "$LEX_SRC/src/Lexilla.cxx" ]; then
+	echo "'$LEX_SRC' is not a valid Lexilla source directory!" >&2
 	exit 1
 fi
 # check destination directory
@@ -34,31 +39,52 @@ if git status -unormal -s scintilla | grep '^??'; then
 	exit 1
 fi
 
+copy_to()
+{
+	dest="$1"
+	shift
+
+	if ! [ -d "$dest" ]; then
+		echo "$dest does not exist." >&2;
+		exit 1
+	fi
+	for f in $@; do
+		dos2unix -k -q -n $f $dest/$(basename $f) || (echo "dos2unix $f failed" >&2 ; exit 1)
+	done || exit 1
+}
+
+# purge executbale bits
+umask 111
 # copy everything from scintilla but lexers
-cp -v "$SCI_SRC"/src/*.cxx        scintilla/src     || exit 1
-cp -v "$SCI_SRC"/src/*.h          scintilla/src     || exit 1
-cp -v "$SCI_SRC"/include/*.h      scintilla/include || exit 1
-cp -v "$SCI_SRC"/include/*.iface  scintilla/include || exit 1
-cp -v "$SCI_SRC"/gtk/*.c          scintilla/gtk     || exit 1
-cp -v "$SCI_SRC"/gtk/*.cxx        scintilla/gtk     || exit 1
-cp -v "$SCI_SRC"/gtk/*.h          scintilla/gtk     || exit 1
-cp -v "$SCI_SRC"/gtk/*.list       scintilla/gtk     || exit 1
-cp -v "$SCI_SRC"/lexlib/*.cxx     scintilla/lexlib  || exit 1
-cp -v "$SCI_SRC"/lexlib/*.h       scintilla/lexlib  || exit 1
-cp -v "$SCI_SRC"/License.txt      scintilla         || exit 1
-cp -v "$SCI_SRC"/version.txt      scintilla         || exit 1
+copy_to scintilla/src             "$SCI_SRC"/src/*.cxx
+copy_to scintilla/src             "$SCI_SRC"/src/*.h
+copy_to scintilla/include         "$SCI_SRC"/include/*.h
+copy_to scintilla/include         "$SCI_SRC"/include/*.iface
+copy_to scintilla/gtk             "$SCI_SRC"/gtk/*.c
+copy_to scintilla/gtk             "$SCI_SRC"/gtk/*.cxx
+copy_to scintilla/gtk             "$SCI_SRC"/gtk/*.h
+copy_to scintilla/gtk             "$SCI_SRC"/gtk/*.list
+copy_to scintilla                 "$SCI_SRC"/License.txt
+copy_to scintilla                 "$SCI_SRC"/version.txt
+copy_to scintilla/lexilla/src     "$LEX_SRC"/src/*.cxx
+copy_to scintilla/lexilla/include "$LEX_SRC"/include/*.h
+copy_to scintilla/lexilla/lexlib  "$LEX_SRC"/lexlib/*.cxx
+copy_to scintilla/lexilla/lexlib  "$LEX_SRC"/lexlib/*.h
+copy_to scintilla/lexilla/        "$LEX_SRC"/License.txt
+copy_to scintilla/lexilla/        "$LEX_SRC"/version.txt
 # now copy the lexers we use
-git ls-files scintilla/lexers/*.cxx | sed 's%^scintilla/%./%' | while read f; do
-  cp -v "$SCI_SRC/$f" "scintilla/$f" || exit 1
-done || exit 1
+git -C scintilla/lexilla/lexers/ ls-files *.cxx | while read f; do
+  copy_to "scintilla/lexilla/lexers" "$LEX_SRC/lexers/$f"
+done
 
 # apply our patch
 git apply -p0 scintilla/scintilla_changes.patch || {
 	echo "scintilla_changes.patch doesn't apply, please update it and retry."
-	echo "Changes for the catalogue are:"
-	git diff -p -R --src-prefix= --dst-prefix= scintilla/src/Catalogue.cxx | cat
 	exit 1
 }
+
+echo "Upstream lexer catalogue changes:"
+git diff -p --src-prefix= --dst-prefix= scintilla/lexilla/src/Lexilla.cxx
 
 # show a nice success banner
 echo "Scintilla update successful!" | sed 'h;s/./=/g;p;x;p;x'
@@ -78,12 +104,12 @@ EOF
 fi
 
 # check for possible changes to styles
-if ! git diff --quiet scintilla/include/SciLexer.h; then
+if ! git diff --quiet scintilla/lexilla/include/SciLexer.h; then
 	cat << EOF
 
-Check the diff of scintilla/include/SciLexer.h to see whether and which
+Check the diff of scintilla/lexilla/include/SciLexer.h to see whether and which
 mapping to add or update in src/highlightingmappings.h
-(use git diff scintilla/include/SciLexer.h).
+(use git diff scintilla/lexilla/include/SciLexer.h).
 Don't forget to also update the comment and string styles in
 src/highlighting.c.
 EOF

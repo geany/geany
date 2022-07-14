@@ -1,8 +1,14 @@
-# format=tagmanager
 MainÌ128Í()ÎMyDerivedCÖ0Ïpublic void
+method:     public void MyDerivedC :: Main()
 MyBaseCÌ1Ö0
+class:      MyBaseC
 MyDerivedCÌ1Ö0
+class:      MyDerivedC
 MyMethodÌ128Í()ÎMyBaseCÖ0Ïpublic abstract void
+method:     public abstract void MyBaseC :: MyMethod()
 MyMethodÌ128Í()ÎMyDerivedCÖ0Ïpublic override void
+method:     public override void MyDerivedC :: MyMethod()
 xÌ8ÎMyBaseCÖ0Ïint
+field:      int MyBaseC :: x
 yÌ8ÎMyBaseCÖ0Ïint
+field:      int MyBaseC :: y

@@ -1,5 +1,8 @@
-# format=tagmanager
 aÌ16384Îwith_associateÖ0
-do_other_stuffÌ128Îwith_associateÖ0
+variable:   with_associate :: a
+do_other_stuffÌ128Í(a)Îwith_associateÖ0
+method:     with_associate :: do_other_stuff(a)
 do_stuffÌ16Îwith_associateÖ0
+function:   with_associate :: do_stuff
 with_associateÌ256Ö0
+namespace:  with_associate

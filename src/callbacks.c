@@ -63,11 +63,10 @@
 #include "utils.h"
 #include "vte.h"
 
-#include "gtkcompat.h"
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gstdio.h>
 #include <time.h>
@@ -336,6 +335,43 @@ void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 	document_reload_prompt(doc, NULL);
 }
 
+/* reload all files */
+void on_reload_all(GtkAction *action, gpointer user_data)
+{
+	guint i;
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+
+	if (!file_prefs.keep_edit_history_on_reload)
+	{
+		GeanyDocument *doc;
+		foreach_document(i)
+		{
+			doc = documents[i];
+			if (doc->changed || document_can_undo(doc) || document_can_redo(doc))
+			{
+				if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
+					_("Changes detected, reloading all will lose any changes and history."),
+					_("Are you sure you want to reload all files?")))
+				{
+					break; // break the loop and continue with reloading below
+				}
+				else
+				{
+					return; // cancel reloading
+				}
+			}
+		}
+	}
+
+	foreach_document(i)
+	{
+		if (! (documents[i]->file_name == NULL))
+			document_reload_force(documents[i], documents[i]->encoding);
+	}
+
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
+}
+
 
 static void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
@@ -401,6 +437,44 @@ void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
 }
 
 
+void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	GtkEntry *filter_entry;
+
+	if (!doc)
+		return;
+
+	filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
+	g_free(doc->priv->tag_filter);
+	doc->priv->tag_filter = g_strdup(gtk_entry_get_text(filter_entry));
+
+	/* make sure the tree is fully re-created so it appears correctly
+	 * after applying filter */
+	if (doc->priv->tag_store)
+		gtk_tree_store_clear(doc->priv->tag_store);
+	sidebar_update_tag_list(doc, TRUE);
+}
+
+
+void on_entry_tagfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data)
+{
+	if (event->button.button == 1)
+		gtk_entry_set_text(entry, "");
+}
+
+
+void on_entry_tagfilter_activate(GtkEntry *entry, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (!doc)
+		return;
+
+	gtk_widget_grab_focus(doc->priv->tag_tree);
+}
+
+
 /* hides toolbar from toolbar popup menu */
 static void on_hide_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
@@ -455,6 +529,9 @@ static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
 
 	if (doc != NULL)
 	{
+		GtkEntry *filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
+		const gchar *entry_text = gtk_entry_get_text(filter_entry);
+
 		sidebar_select_openfiles_item(doc);
 		ui_save_buttons_toggle(doc->changed);
 		ui_set_window_title(doc);
@@ -462,7 +539,13 @@ static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
 		ui_update_popup_reundo_items(doc);
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
-		sidebar_update_tag_list(doc, FALSE);
+		if (g_strcmp0(entry_text, doc->priv->tag_filter) != 0)
+		{
+			/* calls sidebar_update_tag_list() in on_entry_tagfilter_changed() */
+			gtk_entry_set_text(filter_entry, doc->priv->tag_filter);
+		}
+		else
+			sidebar_update_tag_list(doc, TRUE);
 		document_highlight_tags(doc);
 
 		document_check_disk_status(doc, TRUE);
@@ -875,21 +958,6 @@ void on_find_in_files1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static void get_line_and_offset_from_text(const gchar *text, gint *line_no, gint *offset)
-{
-	if (*text == '+' || *text == '-')
-	{
-		*line_no = atoi(text + 1);
-		*offset = (*text == '+') ? 1 : -1;
-	}
-	else
-	{
-		*line_no = atoi(text) - 1;
-		*offset = 0;
-	}
-}
-
-
 void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	static gchar value[16] = "";
@@ -900,18 +968,10 @@ void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data)
 		_("Enter the line you want to go to:"), value);
 	if (result != NULL)
 	{
-		GeanyDocument *doc = document_get_current();
-		gint offset;
-		gint line_no;
+		on_toolbutton_goto_entry_activate(NULL, result, NULL);
 
-		g_return_if_fail(doc != NULL);
-
-		get_line_and_offset_from_text(result, &line_no, &offset);
-		if (! editor_goto_line(doc->editor, line_no, offset))
-			utils_beep();
 		/* remember value for future calls */
 		g_snprintf(value, sizeof(value), "%s", result);
-
 		g_free(result);
 	}
 }
@@ -920,12 +980,11 @@ void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	gint offset;
-	gint line_no;
-
 	g_return_if_fail(doc != NULL);
 
-	get_line_and_offset_from_text(text, &line_no, &offset);
+	gint line_no = atoi(text);
+	gboolean offset = (*text == '+' || *text == '-');
+
 	if (! editor_goto_line(doc->editor, line_no, offset))
 		utils_beep();
 	else
@@ -1200,7 +1259,7 @@ void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	}
 	/* special case for Select All in the VTE widget */
 #ifdef HAVE_VTE
-	else if (vte_info.have_vte && focusw == vc->vte)
+	else if (vte_info.have_vte && focusw == vte_config.vte)
 	{
 		vte_select_all();
 	}
@@ -1328,7 +1387,13 @@ void on_previous_message1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_project_new1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	project_new();
+	project_new(FALSE);
+}
+
+
+void on_project_new_from_folder1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	project_new(TRUE);
 }
 
 
@@ -1640,7 +1705,7 @@ gboolean on_escape_key_press_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	guint state = keybindings_get_modifiers(event->state);
 
 	/* make pressing escape in the sidebar and toolbar focus the editor */
-	if (event->keyval == GDK_Escape && state == 0)
+	if (event->keyval == GDK_KEY_Escape && state == 0)
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 		return TRUE;

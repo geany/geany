@@ -1,11 +1,20 @@
-# format=tagmanager
 MXDDIÌ16384ÎOUT_RD5Ö0
+variable:   OUT_RD5 :: MXDDI
 OUT_RD5Ì256Ö0
+namespace:  OUT_RD5
 fpshapeÌ16384ÎOUT_RD5Ö0
+variable:   OUT_RD5 :: fpshape
 fpshape2Ì16384ÎOUT_RD5Ö0
+variable:   OUT_RD5 :: fpshape2
 lastÌ16384ÎOUT_RD5Ö0
+variable:   OUT_RD5 :: last
 listÌ16384ÎOUT_RD5Ö0
+variable:   OUT_RD5 :: list
 noutÌ16384ÎOUT_RD5Ö0
+variable:   OUT_RD5 :: nout
 tempÌ16384ÎOUT_RD5Ö0
+variable:   OUT_RD5 :: temp
 titlesÌ16384ÎOUT_RD5Ö0
+variable:   OUT_RD5 :: titles
 unitsÌ16384ÎOUT_RD5Ö0
+variable:   OUT_RD5 :: units

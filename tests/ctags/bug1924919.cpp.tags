@@ -1,4 +1,6 @@
-# format=tagmanager
-MajorVersionÌ64ÎmudÖ0Ïstd::string
-MinorVersionÌ64ÎmudÖ0Ïstd::string
+MajorVersionÌ16384ÎmudÖ0Ïstd::string
+variable:   std::string mud :: MajorVersion
+MinorVersionÌ16384ÎmudÖ0Ïstd::string
+variable:   std::string mud :: MinorVersion
 mudÌ256Ö0
+namespace:  mud

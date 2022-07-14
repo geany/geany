@@ -1,3 +1,6 @@
-# format=tagmanager
-Interface#0Ã32Œnumerical_libraries÷0
+anon_interface_1Ã32Œnumerical_libraries÷1
+interface:  numerical_libraries :: anon_interface_1    flags: 1
+anon_interface_2Ã32Œb2lsf÷1
+interface:  b2lsf :: anon_interface_2    flags: 1
 numerical_librariesÃ256÷0
+namespace:  numerical_libraries

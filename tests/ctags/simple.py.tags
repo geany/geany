@@ -1,27 +1,56 @@
-# format=tagmanager
 ALLÌ16384Ö0
+variable:   ALL
 DATAÌ16384Ö0
+variable:   DATA
 INDENTÌ16384Ö0
+variable:   INDENT
 KEYÌ16384Ö0
+variable:   KEY
 TREEIDÌ16384Ö0
+variable:   TREEID
 VERSIONÌ16384Ö0
+variable:   VERSION
 __init__Ì128Í(self, filename, pathsep='', treegap=64)ÎoneÖ0
+method:     one :: __init__(self, filename, pathsep='', treegap=64)
 __private_function__Ì128Í(self, key, data)ÎoneÖ0
+method:     one :: __private_function__(self, key, data)
+_packÌ128Í(self, i, s)ÎoneÖ0
+method:     one :: _pack(self, i, s)
 _testÌ16Í(test, code, outcome, exception)Ö0
-btopenÌ32768Ö0
+function:   _test(test, code, outcome, exception)
+bsddbÌ32768Ö0
+externvar:  bsddb
+btopenÌ32768ÎbsddbÖ0
+externvar:  bsddb :: btopen
 deeply_nestedÌ1Î_test.ignored_function.more_nestingÖ0
+class:      _test.ignored_function.more_nesting :: deeply_nested
 even_moreÌ128Í()Î_test.ignored_function.more_nesting.deeply_nestedÖ0
-fooÌ16Í(Ö0
+method:     _test.ignored_function.more_nesting.deeply_nested :: even_more()
+fooÌ16Í( x , y, z)Ö0
+function:   foo( x , y, z)
 ignored_functionÌ16Í()Î_testÖ0
+function:   _test :: ignored_function()
 more_nestingÌ16Í()Î_test.ignored_functionÖ0
-oneÌ1Í(self, filename, pathsep='', treegap=64)Ö0
+function:   _test.ignored_function :: more_nesting()
+oneÌ1Ö0
+class:      one
 onlyÌ128Í(arg)ÎtwoÖ0
+method:     two :: only(arg)
 public_functionÌ128Í(self, key)ÎoneÖ0
+method:     one :: public_function(self, key)
 so_is_thisÌ1ÎoneÖ0
+class:      one :: so_is_this
 thisÌ1Î_test.ignored_function.more_nesting.deeply_nested.even_moreÖ0
+class:      _test.ignored_function.more_nesting.deeply_nested.even_more :: this
 thisÌ128Î_test.ignored_function.more_nesting.deeply_nested.even_more.thisÖ0
+method:     _test.ignored_function.more_nesting.deeply_nested.even_more.this :: this
 this_is_ignoredÌ1Îone.public_functionÖ0
+class:      one.public_function :: this_is_ignored
 threeÌ1Ö0
+class:      three
 twoÌ1Ö0
+class:      two
 xÌ128Í(x)ÎoneÖ0
+method:     one :: x(x)
 yÌ16384ÎoneÖ0
+variable:   one :: y

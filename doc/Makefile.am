@@ -23,7 +23,10 @@ dist_htmldocimages_DATA = \
 	images/pref_dialog_tools.png \
 	images/pref_dialog_various.png \
 	images/pref_dialog_vte.png \
-	images/replace_dialog.png
+	images/replace_dialog.png \
+	images/sidebar_documents_only.png \
+	images/sidebar_show_paths.png \
+	images/sidebar_show_tree.png
 endif
 
 doc_DATA = \
@@ -82,8 +85,22 @@ clean-pdf-local:
 
 endif
 
+AT=@
+
 # API Documentation
 if WITH_DOXYGEN
+
+# $(AT) instead of @ so that configure doesn't mess up the rules already
+Doxyfile: Doxyfile.in
+	$(AM_V_GEN)$(SED) \
+		-e 's,$(AT)top_srcdir$(AT),$(top_srcdir),' \
+		-e 's,$(AT)top_builddir$(AT),$(top_builddir),' \
+		-e 's,$(AT)VERSION$(AT),$(VERSION),' \
+		-e 's,$(AT)GIRONLY$(AT),@internal,' \
+		-e 's,$(AT)HTML$(AT),YES,' \
+		-e 's,$(AT)XML$(AT),NO,' \
+		-e 's,$(AT)SORT$(AT),YES,' \
+		$< > $@ || ( $(RM) -f $@ ; exit 1 )
 
 doxygen_sources = \
 	$(srcdir)/plugins.dox \
@@ -92,7 +109,7 @@ doxygen_sources = \
 	$(srcdir)/stash-example.c \
 	$(srcdir)/stash-gui-example.c
 
-EXTRA_DIST += $(doxygen_sources)
+EXTRA_DIST += Doxyfile.in $(doxygen_sources)
 
 doxygen_dependencies = \
 	$(doxygen_sources) \
@@ -114,18 +131,16 @@ clean-api-docs-local:
 
 if ENABLE_GTKDOC_HEADER
 
-# set WARN_IF_UNDOCUMENTED because apparently doxygens warns for undocumented stuff
-# in headers (even though it's correctly documented in the corresponding .c file) only
-# for xml output
-Doxyfile-gi: Doxyfile
+Doxyfile-gi: Doxyfile.in
 	$(AM_V_GEN)$(SED) \
-		-e 's,gironly=@internal,gironly=,' \
-		-e 's,^\(GENERATE_HTML.*\)YES,\1NO,' \
-		-e 's,^\(GENERATE_XML.*\)NO,\1YES,' \
-		-e 's,^\(WARN_IF_UNDOCUMENTED.*\)YES,\1NO,' \
-		-e 's,^\(SORT_MEMBER_DOCS.*\)YES,\1NO,' \
-		-e 's,^\(SORT_BRIEF_DOCS.*\)YES,\1NO,' \
-		$< > $@ || { $(RM) $@ && exit 1; }
+		-e 's,$(AT)top_srcdir$(AT),$(top_srcdir),' \
+		-e 's,$(AT)top_builddir$(AT),$(top_builddir),' \
+		-e 's,$(AT)VERSION$(AT),$(VERSION),' \
+		-e 's,$(AT)GIRONLY$(AT),,' \
+		-e 's,$(AT)HTML$(AT),NO,' \
+		-e 's,$(AT)XML$(AT),YES,' \
+		-e 's,$(AT)SORT$(AT),NO,' \
+		$< > $@ || ( $(RM) -f $@ ; exit 1 )
 
 # we depend on Doxyfile.stamp not have this run in parallel with it to avoid
 # concurrent Doxygen runs, which might overwrite each other's files
@@ -145,7 +160,9 @@ ALL_LOCAL_TARGETS += geany-gtkdoc.h geany-sciwrappers-gtkdoc.h
 CLEAN_LOCAL_TARGETS += clean-gtkdoc-header-local
 
 clean-gtkdoc-header-local:
-	-rm -rf xml/ Doxyfile-gi Doxyfile-gi.stamp geany-gtkdoc.h geany-sciwrappers-gtkdoc.h
+	rm -rf xml/ \
+		Doxyfile Doxyfile.stamp Doxyfile-gi Doxyfile-gi.stamp \
+		geany-gtkdoc.h geany-sciwrappers-gtkdoc.h
 
 endif
 
@@ -158,6 +175,7 @@ uninstall-local:
 	rm -f $(DOCDIR)/html/index.html
 	rm -f $(DOCDIR)/manual.txt
 	rm -f $(DOCDIR)/ScintillaLicense.txt
+	rm -f $(DOCDIR)/LexillaLicense.txt
 
 # manually install some files under another name
 install-data-local:
@@ -171,3 +189,4 @@ endif
 	$(mkinstalldirs) $(DOCDIR)
 	$(INSTALL_DATA) $(srcdir)/geany.txt $(DOCDIR)/manual.txt
 	$(INSTALL_DATA) $(top_srcdir)/scintilla/License.txt $(DOCDIR)/ScintillaLicense.txt
+	$(INSTALL_DATA) $(top_srcdir)/scintilla/lexilla/License.txt $(DOCDIR)/LexillaLicense.txt

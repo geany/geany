@@ -1,16 +1,30 @@
-# format=tagmanager
 CHECK2Ì256Ö0
+namespace:  CHECK2
 DUMMYÌ65536Ö0
+macro:      DUMMY
 F_NAMEÌ65536Ö0
+macro:      F_NAME
 INITIALÌ256Ö0
+namespace:  INITIAL
 PRNSURNAMEÌ256Ö0
+namespace:  PRNSURNAME
 PROMPT1Ì65536Ö0
+macro:      PROMPT1
 PROMPT2Ì65536Ö0
+macro:      PROMPT2
 PRTSTRÌ65536Ö0
+macro:      PRTSTR
 QUITÌ256Ö0
+namespace:  QUIT
 READSTRÌ65536Ö0
+macro:      READSTR
 RETURNFALSEÌ256Ö0
+namespace:  RETURNFALSE
 RETURNTRUEÌ256Ö0
+namespace:  RETURNTRUE
 STARTÌ256Ö0
+namespace:  START
 SURNAMEÌ256Ö0
+namespace:  SURNAME
 S_NAMEÌ65536Ö0
+macro:      S_NAME

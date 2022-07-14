@@ -1,5 +1,8 @@
-# format=tagmanager
 ERROR_HAPPENEDÌ65536Ö0
+macro:      ERROR_HAPPENED
 NEXT_DEFINEÌ65536Ö0
+macro:      NEXT_DEFINE
 OKÌ65536Ö0
-mainÌ16Í(int argc, char* argv[])Ö0Ïint
+macro:      OK
+mainÌ16Í(int argc,char * argv[])Ö0Ïint
+function:   int main(int argc,char * argv[])

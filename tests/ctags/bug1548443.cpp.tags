@@ -1,5 +1,8 @@
-# format=tagmanager
 TestStructÌ2048Ö0
+struct:     TestStruct
 TestUnionÌ8192Ö0
+union:      TestUnion
 _numberÌ64ÎTestStructÖ0Ïint
+member:     int TestStruct :: _number
 _numberÌ64ÎTestUnionÖ0Ïint
+member:     int TestUnion :: _number

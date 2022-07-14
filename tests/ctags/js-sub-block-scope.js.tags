@@ -1,8 +1,14 @@
-# format=tagmanager
 barÌ16Í()ÎparentÖ0
+function:   parent :: bar()
 fooÌ16Í()ÎparentÖ0
+function:   parent :: foo()
 helloÌ16Í()Îparent.fooÖ0
+function:   parent.foo :: hello()
 hello2Ì16Í()Îparent.barÖ0
+function:   parent.bar :: hello2()
 hiÌ16Í()Îparent.fooÖ0
+function:   parent.foo :: hi()
 hi2Ì16Í()Îparent.barÖ0
+function:   parent.bar :: hi2()
 parentÌ16Í()Ö0
+function:   parent()

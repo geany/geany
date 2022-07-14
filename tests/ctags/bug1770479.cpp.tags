@@ -1,3 +1,4 @@
-# format=tagmanager
 fooÌ16Í(int i)Ö0Ïint
-mainÌ16Í(int argc, char **argv)Ö0Ïint
+function:   int foo(int i)
+mainÌ16Í(int argc,char ** argv)Ö0Ïint
+function:   int main(int argc,char ** argv)

@@ -1,5 +1,8 @@
-# format=tagmanager
 aÌ16384Îproc_pointerÖ0
+variable:   proc_pointer :: a
 my_pointerÌ16384Îproc_pointerÖ0
+variable:   proc_pointer :: my_pointer
 proc_pointerÌ256Ö0
-subÌ128Îproc_pointerÖ0
+namespace:  proc_pointer
+subÌ128Í(x)Îproc_pointerÖ0
+method:     proc_pointer :: sub(x)

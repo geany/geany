@@ -51,16 +51,16 @@
 #include "support.h"
 #include "tm_parser.h"
 #include "tm_tag.h"
+#include "tm_ctags.h"
 #include "ui_utils.h"
 #include "utils.h"
 
 #include "SciLexer.h"
 
-#include "gtkcompat.h"
-
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <gtk/gtk.h>
 
 
 typedef struct
@@ -79,34 +79,22 @@ typedef struct
 
 static GPtrArray *top_level_iter_names = NULL;
 
-enum
-{
-	ICON_CLASS,
-	ICON_MACRO,
-	ICON_MEMBER,
-	ICON_METHOD,
-	ICON_NAMESPACE,
-	ICON_OTHER,
-	ICON_STRUCT,
-	ICON_VAR,
-	ICON_NONE,
-	N_ICONS = ICON_NONE
-};
 
 static struct
 {
 	const gchar *icon_name;
 	GdkPixbuf *pixbuf;
 }
-symbols_icons[N_ICONS] = {
-	[ICON_CLASS]		= { "classviewer-class", NULL },
-	[ICON_MACRO]		= { "classviewer-macro", NULL },
-	[ICON_MEMBER]		= { "classviewer-member", NULL },
-	[ICON_METHOD]		= { "classviewer-method", NULL },
-	[ICON_NAMESPACE]	= { "classviewer-namespace", NULL },
-	[ICON_OTHER]		= { "classviewer-other", NULL },
-	[ICON_STRUCT]		= { "classviewer-struct", NULL },
-	[ICON_VAR]			= { "classviewer-var", NULL },
+/* keep in sync with enum in tm_parser.h */
+symbols_icons[TM_N_ICONS] = {
+	[TM_ICON_CLASS]		= { "classviewer-class", NULL },
+	[TM_ICON_MACRO]		= { "classviewer-macro", NULL },
+	[TM_ICON_MEMBER]	= { "classviewer-member", NULL },
+	[TM_ICON_METHOD]	= { "classviewer-method", NULL },
+	[TM_ICON_NAMESPACE]	= { "classviewer-namespace", NULL },
+	[TM_ICON_OTHER]		= { "classviewer-other", NULL },
+	[TM_ICON_STRUCT]	= { "classviewer-struct", NULL },
+	[TM_ICON_VAR]		= { "classviewer-var", NULL },
 };
 
 static struct
@@ -123,7 +111,7 @@ symbol_menu;
 
 static void load_user_tags(GeanyFiletypeID ft_id);
 
-/* get the tags_ignore list, exported by tagmanager's geany.c */
+/* get the tags_ignore list, exported by geany_lcpp.c */
 extern gchar **c_tags_ignore;
 
 /* ignore certain tokens when parsing C-like syntax.
@@ -135,11 +123,22 @@ static void load_c_ignore_tags(void)
 
 	if (g_file_get_contents(path, &content, NULL, NULL))
 	{
+		gchar **line;
+
 		/* historically we ignore the glib _DECLS for tag generation */
 		SETPTR(content, g_strconcat("G_BEGIN_DECLS G_END_DECLS\n", content, NULL));
 
 		g_strfreev(c_tags_ignore);
+		tm_ctags_clear_ignore_symbols();
+
+		/* for old c.c parser */
 		c_tags_ignore = g_strsplit_set(content, " \n\r", -1);
+		/* for new cxx parser */
+		foreach_strv(line, c_tags_ignore)
+		{
+			tm_ctags_add_ignore_symbol(*line);
+		}
+
 		g_free(content);
 	}
 	g_free(path);
@@ -260,7 +259,7 @@ GString *symbols_find_typenames_as_string(TMParserType lang, gboolean global)
 GEANY_API_SYMBOL
 const gchar *symbols_get_context_separator(gint ft_id)
 {
-	return tm_parser_context_separator(filetypes[ft_id]->lang);
+	return tm_parser_scope_separator(filetypes[ft_id]->lang);
 }
 
 
@@ -315,63 +314,74 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
 	guint i;
+	gchar **tf_strv;
 
 	g_return_val_if_fail(doc, NULL);
 
 	if (! doc->tm_file || ! doc->tm_file->tags_array)
 		return NULL;
 
+	tf_strv = g_strsplit_set(doc->priv->tag_filter, " ", -1);
+
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
 	{
 		TMTag *tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
 
-		if (G_UNLIKELY(tag == NULL))
-			return NULL;
-
 		if (tag->type & tag_types)
 		{
-			tag_names = g_list_prepend(tag_names, tag);
+			gboolean filtered = FALSE;
+			gchar **val;
+			gchar *full_tagname = g_strconcat(tag->scope ? tag->scope : "",
+				tag->scope ? tm_parser_scope_separator_printable(tag->lang) : "",
+				tag->name, NULL);
+			gchar *normalized_tagname = g_utf8_normalize(full_tagname, -1, G_NORMALIZE_ALL);
+
+			foreach_strv(val, tf_strv)
+			{
+				gchar *normalized_val = g_utf8_normalize(*val, -1, G_NORMALIZE_ALL);
+
+				if (normalized_tagname != NULL && normalized_val != NULL)
+				{
+					gchar *case_normalized_tagname = g_utf8_casefold(normalized_tagname, -1);
+					gchar *case_normalized_val = g_utf8_casefold(normalized_val, -1);
+
+					filtered = strstr(case_normalized_tagname, case_normalized_val) == NULL;
+					g_free(case_normalized_tagname);
+					g_free(case_normalized_val);
+				}
+				g_free(normalized_val);
+
+				if (filtered)
+					break;
+			}
+			if (!filtered)
+				tag_names = g_list_prepend(tag_names, tag);
+
+			g_free(normalized_tagname);
+			g_free(full_tagname);
 		}
 	}
 	tag_names = g_list_sort(tag_names, compare_symbol_lines);
+
+	g_strfreev(tf_strv);
+
 	return tag_names;
 }
 
 
-/* amount of types in the symbol list (currently max. 8 are used) */
-#define MAX_SYMBOL_TYPES	(sizeof(tv_iters) / sizeof(GtkTreeIter))
+/* amount of types in the symbol list - can be increased if needed */
+#define MAX_SYMBOL_TYPES 15
 
-struct TreeviewSymbols
-{
-	GtkTreeIter		 tag_function;
-	GtkTreeIter		 tag_class;
-	GtkTreeIter		 tag_macro;
-	GtkTreeIter		 tag_member;
-	GtkTreeIter		 tag_variable;
-	GtkTreeIter		 tag_externvar;
-	GtkTreeIter		 tag_namespace;
-	GtkTreeIter		 tag_struct;
-	GtkTreeIter		 tag_interface;
-	GtkTreeIter		 tag_type;
-	GtkTreeIter		 tag_other;
-} tv_iters;
+GtkTreeIter tv_iters[MAX_SYMBOL_TYPES];
 
 
 static void init_tag_iters(void)
 {
+	guint i;
 	/* init all GtkTreeIters with -1 to make them invalid to avoid crashes when switching between
 	 * filetypes(e.g. config file to Python crashes Geany without this) */
-	tv_iters.tag_function.stamp = -1;
-	tv_iters.tag_class.stamp = -1;
-	tv_iters.tag_member.stamp = -1;
-	tv_iters.tag_macro.stamp = -1;
-	tv_iters.tag_variable.stamp = -1;
-	tv_iters.tag_externvar.stamp = -1;
-	tv_iters.tag_namespace.stamp = -1;
-	tv_iters.tag_struct.stamp = -1;
-	tv_iters.tag_interface.stamp = -1;
-	tv_iters.tag_type.stamp = -1;
-	tv_iters.tag_other.stamp = -1;
+	for (i = 0; i < MAX_SYMBOL_TYPES; i++)
+		tv_iters[i].stamp = -1;
 }
 
 
@@ -417,28 +427,24 @@ static gboolean find_toplevel_iter(GtkTreeStore *store, GtkTreeIter *iter, const
 }
 
 
-/* Adds symbol list groups in (iter*, title) pairs.
- * The list must be ended with NULL. */
-static void G_GNUC_NULL_TERMINATED
-tag_list_add_groups(GtkTreeStore *tree_store, ...)
+static void tag_list_add_groups(GtkTreeStore *tree_store, TMParserType lang)
 {
-	va_list args;
-	GtkTreeIter *iter;
+	const gchar *title;
+	guint i;
+	guint icon_id;
 
 	g_return_if_fail(top_level_iter_names);
 
-	va_start(args, tree_store);
-	for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
+	for (i = 0; title = tm_parser_get_sidebar_info(lang, i, &icon_id); i++)
 	{
-		gchar *title = va_arg(args, gchar*);
-		guint icon_id = va_arg(args, guint);
+		GtkTreeIter *iter = &tv_iters[i];
 		GdkPixbuf *icon = NULL;
 
-		if (icon_id < N_ICONS)
+		if (icon_id < TM_N_ICONS)
 			icon = symbols_icons[icon_id].pixbuf;
 
 		g_assert(title != NULL);
-		g_ptr_array_add(top_level_iter_names, title);
+		g_ptr_array_add(top_level_iter_names, (gchar *)title);
 
 		if (!find_toplevel_iter(tree_store, iter, title))
 			gtk_tree_store_append(tree_store, iter, NULL);
@@ -447,13 +453,12 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon, -1);
 		gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
 	}
-	va_end(args);
 }
 
 
 static void add_top_level_items(GeanyDocument *doc)
 {
-	GeanyFiletypeID ft_id = doc->file_type->id;
+	TMParserType lang = doc->file_type->lang;
 	GtkTreeStore *tag_store = doc->priv->tag_store;
 
 	if (top_level_iter_names == NULL)
@@ -463,396 +468,7 @@ static void add_top_level_items(GeanyDocument *doc)
 
 	init_tag_iters();
 
-	switch (ft_id)
-	{
-		case GEANY_FILETYPES_DIFF:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Files"), ICON_NONE, NULL);
-			break;
-		}
-		case GEANY_FILETYPES_DOCBOOK:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Chapter"), ICON_NONE,
-				&(tv_iters.tag_class), _("Section"), ICON_NONE,
-				&(tv_iters.tag_member), _("Sect1"), ICON_NONE,
-				&(tv_iters.tag_macro), _("Sect2"), ICON_NONE,
-				&(tv_iters.tag_variable), _("Sect3"), ICON_NONE,
-				&(tv_iters.tag_struct), _("Appendix"), ICON_NONE,
-				&(tv_iters.tag_other), _("Other"), ICON_NONE,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_HASKELL:
-			tag_list_add_groups(tag_store,
-				&tv_iters.tag_namespace, _("Module"), ICON_NONE,
-				&tv_iters.tag_type, _("Types"), ICON_NONE,
-				&tv_iters.tag_macro, _("Type constructors"), ICON_NONE,
-				&tv_iters.tag_function, _("Functions"), ICON_METHOD,
-				NULL);
-			break;
-		case GEANY_FILETYPES_COBOL:
-			tag_list_add_groups(tag_store,
-				&tv_iters.tag_class, _("Program"), ICON_CLASS,
-				&tv_iters.tag_function, _("File"), ICON_METHOD,
-				&tv_iters.tag_interface, _("Divisions"), ICON_NAMESPACE,
-				&tv_iters.tag_namespace, _("Sections"), ICON_NAMESPACE,
-				&tv_iters.tag_macro, _("Paragraph"), ICON_OTHER,
-				&tv_iters.tag_struct, _("Group"), ICON_STRUCT,
-				&tv_iters.tag_variable, _("Data"), ICON_VAR,
-				&tv_iters.tag_externvar, _("Copies"), ICON_NAMESPACE,
-				NULL);
-			break;
-		case GEANY_FILETYPES_CONF:
-			tag_list_add_groups(tag_store,
-				&tv_iters.tag_namespace, _("Sections"), ICON_OTHER,
-				&tv_iters.tag_macro, _("Keys"), ICON_VAR,
-				NULL);
-			break;
-		case GEANY_FILETYPES_NSIS:
-			tag_list_add_groups(tag_store,
-				&tv_iters.tag_namespace, _("Sections"), ICON_OTHER,
-				&tv_iters.tag_function, _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				NULL);
-			break;
-		case GEANY_FILETYPES_LATEX:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Command"), ICON_NONE,
-				&(tv_iters.tag_class), _("Environment"), ICON_NONE,
-				&(tv_iters.tag_member), _("Section"), ICON_NONE,
-				&(tv_iters.tag_macro), _("Subsection"), ICON_NONE,
-				&(tv_iters.tag_variable), _("Subsubsection"), ICON_NONE,
-				&(tv_iters.tag_struct), _("Label"), ICON_NONE,
-				&(tv_iters.tag_namespace), _("Chapter"), ICON_NONE,
-				&(tv_iters.tag_other), _("Other"), ICON_NONE,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_BIBTEX:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Articles"), ICON_NONE,
-				&(tv_iters.tag_macro), _("Book Chapters"), ICON_NONE,
-				&(tv_iters.tag_class), _("Books & Conference Proceedings"), ICON_NONE,
-				&(tv_iters.tag_member), _("Conference Papers"), ICON_NONE,
-				&(tv_iters.tag_variable), _("Theses"), ICON_NONE,
-				&(tv_iters.tag_namespace), _("Strings"), ICON_NONE,
-				&(tv_iters.tag_externvar), _("Unpublished"), ICON_NONE,
-				&(tv_iters.tag_other), _("Other"), ICON_NONE,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_MATLAB:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_struct), _("Structures"), ICON_STRUCT,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_ABAQUS:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Parts"), ICON_NONE,
-				&(tv_iters.tag_member), _("Assembly"), ICON_NONE,
-				&(tv_iters.tag_namespace), _("Steps"), ICON_NONE,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_R:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_other), _("Other"), ICON_NONE,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_RUST:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Modules"), ICON_NAMESPACE,
-				&(tv_iters.tag_struct), _("Structures"), ICON_STRUCT,
-				&(tv_iters.tag_interface), _("Traits"), ICON_CLASS,
-				&(tv_iters.tag_class), _("Implementations"), ICON_CLASS,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_type), _("Typedefs / Enums"), ICON_STRUCT,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_macro), _("Macros"), ICON_MACRO,
-				&(tv_iters.tag_member), _("Methods"), ICON_MEMBER,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_GO:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
-				&(tv_iters.tag_struct), _("Structs"), ICON_STRUCT,
-				&(tv_iters.tag_type), _("Types"), ICON_STRUCT,
-				&(tv_iters.tag_macro), _("Constants"), ICON_MACRO,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_member), _("Members"), ICON_MEMBER,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_PERL:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_macro), _("Labels"), ICON_NONE,
-				&(tv_iters.tag_type), _("Constants"), ICON_NONE,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_PHP:
-		case GEANY_FILETYPES_ZEPHIR:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Namespaces"), ICON_NAMESPACE,
-				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
-				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_macro), _("Constants"), ICON_MACRO,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_struct), _("Traits"), ICON_STRUCT,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_HTML:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), ICON_NONE,
-				&(tv_iters.tag_member), _("Anchors"), ICON_NONE,
-				&(tv_iters.tag_namespace), _("H1 Headings"), ICON_NONE,
-				&(tv_iters.tag_class), _("H2 Headings"), ICON_NONE,
-				&(tv_iters.tag_variable), _("H3 Headings"), ICON_NONE,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_CSS:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
-				&(tv_iters.tag_variable), _("ID Selectors"), ICON_VAR,
-				&(tv_iters.tag_struct), _("Type Selectors"), ICON_STRUCT, NULL);
-			break;
-		}
-		case GEANY_FILETYPES_REST:
-		case GEANY_FILETYPES_TXT2TAGS:
-		case GEANY_FILETYPES_ABC:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Chapter"), ICON_NONE,
-				&(tv_iters.tag_member), _("Section"), ICON_NONE,
-				&(tv_iters.tag_macro), _("Subsection"), ICON_NONE,
-				&(tv_iters.tag_variable), _("Subsubsection"), ICON_NONE,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_ASCIIDOC:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Document"), ICON_NONE,
-				&(tv_iters.tag_member), _("Section Level 1"), ICON_NONE,
-				&(tv_iters.tag_macro), _("Section Level 2"), ICON_NONE,
-				&(tv_iters.tag_variable), _("Section Level 3"), ICON_NONE,
-				&(tv_iters.tag_struct), _("Section Level 4"), ICON_NONE,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_RUBY:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Modules"), ICON_NAMESPACE,
-				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
-				&(tv_iters.tag_member), _("Singletons"), ICON_STRUCT,
-				&(tv_iters.tag_function), _("Methods"), ICON_METHOD,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_TCL:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Namespaces"), ICON_NAMESPACE,
-				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
-				&(tv_iters.tag_member), _("Methods"), ICON_METHOD,
-				&(tv_iters.tag_function), _("Procedures"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_PYTHON:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
-				&(tv_iters.tag_member), _("Methods"), ICON_MACRO,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_externvar), _("Imports"), ICON_NAMESPACE,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_VHDL:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
-				&(tv_iters.tag_class), _("Entities"), ICON_CLASS,
-				&(tv_iters.tag_struct), _("Architectures"), ICON_STRUCT,
-				&(tv_iters.tag_type), _("Types"), ICON_OTHER,
-				&(tv_iters.tag_function), _("Functions / Procedures"), ICON_METHOD,
-				&(tv_iters.tag_variable), _("Variables / Signals"), ICON_VAR,
-				&(tv_iters.tag_member), _("Processes / Blocks / Components"), ICON_MEMBER,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_VERILOG:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_type), _("Events"), ICON_MACRO,
-				&(tv_iters.tag_class), _("Modules"), ICON_CLASS,
-				&(tv_iters.tag_function), _("Functions / Tasks"), ICON_METHOD,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_JAVA:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
-				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
-				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
-				&(tv_iters.tag_function), _("Methods"), ICON_METHOD,
-				&(tv_iters.tag_member), _("Members"), ICON_MEMBER,
-				&(tv_iters.tag_type), _("Enums"), ICON_STRUCT,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_AS:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_externvar), _("Imports"), ICON_NAMESPACE,
-				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
-				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
-				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_member), _("Properties"), ICON_MEMBER,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_macro), _("Constants"), ICON_MACRO,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_HAXE:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
-				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
-				&(tv_iters.tag_function), _("Methods"), ICON_METHOD,
-				&(tv_iters.tag_type), _("Types"), ICON_MACRO,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_BASIC:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_macro), _("Constants"), ICON_MACRO,
-				&(tv_iters.tag_struct), _("Types"), ICON_NAMESPACE,
-				&(tv_iters.tag_namespace), _("Labels"), ICON_MEMBER,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_F77:
-		case GEANY_FILETYPES_FORTRAN:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Module"), ICON_CLASS,
-				&(tv_iters.tag_struct), _("Programs"), ICON_CLASS,
-				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
-				&(tv_iters.tag_function), _("Functions / Subroutines"), ICON_METHOD,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_class), _("Types"), ICON_CLASS,
-				&(tv_iters.tag_member), _("Components"), ICON_MEMBER,
-				&(tv_iters.tag_macro), _("Blocks"), ICON_MEMBER,
-				&(tv_iters.tag_type), _("Enums"), ICON_STRUCT,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_ASM:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Labels"), ICON_NAMESPACE,
-				&(tv_iters.tag_function), _("Macros"), ICON_METHOD,
-				&(tv_iters.tag_macro), _("Defines"), ICON_MACRO,
-				&(tv_iters.tag_struct), _("Types"), ICON_STRUCT,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_MAKE:
-			tag_list_add_groups(tag_store,
-				&tv_iters.tag_function, _("Targets"), ICON_METHOD,
-				&tv_iters.tag_macro, _("Macros"), ICON_MACRO,
-				NULL);
-			break;
-		case GEANY_FILETYPES_SQL:
-		{
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_namespace), _("Procedures"), ICON_NAMESPACE,
-				&(tv_iters.tag_struct), _("Indexes"), ICON_STRUCT,
-				&(tv_iters.tag_class), _("Tables"), ICON_CLASS,
-				&(tv_iters.tag_macro), _("Triggers"), ICON_MACRO,
-				&(tv_iters.tag_member), _("Views"), ICON_VAR,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				NULL);
-			break;
-		}
-		case GEANY_FILETYPES_D:
-		default:
-		{
-			if (ft_id == GEANY_FILETYPES_D)
-				tag_list_add_groups(tag_store,
-					&(tv_iters.tag_namespace), _("Module"), ICON_NONE, NULL);
-			else
-				tag_list_add_groups(tag_store,
-					&(tv_iters.tag_namespace), _("Namespaces"), ICON_NAMESPACE, NULL);
-
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
-				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
-				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
-				&(tv_iters.tag_member), _("Members"), ICON_MEMBER,
-				&(tv_iters.tag_struct), _("Structs"), ICON_STRUCT,
-				&(tv_iters.tag_type), _("Typedefs / Enums"), ICON_STRUCT,
-				NULL);
-
-			if (ft_id != GEANY_FILETYPES_D)
-			{
-				tag_list_add_groups(tag_store,
-					&(tv_iters.tag_macro), _("Macros"), ICON_MACRO, NULL);
-			}
-			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
-				&(tv_iters.tag_externvar), _("Extern Variables"), ICON_VAR,
-				&(tv_iters.tag_other), _("Other"), ICON_OTHER, NULL);
-		}
-	}
+	tag_list_add_groups(tag_store, lang);
 }
 
 
@@ -909,7 +525,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (!found_parent && scope &&
 		strpbrk(scope, GEANY_WORDCHARS) == scope)
 	{
-		const gchar *sep = symbols_get_context_separator(doc->file_type->id);
+		const gchar *sep = tm_parser_scope_separator_printable(tag->lang);
 
 		g_string_append(buffer, scope);
 		g_string_append(buffer, sep);
@@ -927,18 +543,13 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 
 static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 {
-	gchar *utf8_name = editor_get_calltip_text(doc->editor, tag);
+	gchar *utf8_name = tm_parser_format_function(tag->lang, tag->name,
+		tag->arglist, tag->var_type, tag->scope);
 
 	if (!utf8_name && tag->var_type &&
 		tag->type & (tm_tag_field_t | tm_tag_member_t | tm_tag_variable_t | tm_tag_externvar_t))
 	{
-		if (tag->lang != TM_PARSER_PASCAL && tag->lang != TM_PARSER_GO)
-			utf8_name = g_strconcat(tag->var_type, " ", tag->name, NULL);
-		else
-		{
-			const gchar *sep = tag->lang == TM_PARSER_PASCAL ? " : " : " ";
-			utf8_name = g_strconcat(tag->name, sep, tag->var_type, NULL);
-		}
+		utf8_name = tm_parser_format_variable(tag->lang, tag->name, tag->var_type);
 	}
 
 	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
@@ -961,76 +572,17 @@ static const gchar *get_parent_name(const TMTag *tag)
 }
 
 
-static GtkTreeIter *get_tag_type_iter(TMTagType tag_type)
+static GtkTreeIter *get_tag_type_iter(TMParserType lang, TMTagType tag_type)
 {
-	GtkTreeIter *iter = NULL;
+	/* TODO: tm_parser_get_sidebar_group() goes through groups one by one.
+	 * If this happens to be slow for tree construction, create a lookup
+	 * table for them. */
+	gint group = tm_parser_get_sidebar_group(lang, tag_type);
 
-	switch (tag_type)
-	{
-		case tm_tag_prototype_t:
-		case tm_tag_method_t:
-		case tm_tag_function_t:
-		{
-			iter = &tv_iters.tag_function;
-			break;
-		}
-		case tm_tag_externvar_t:
-		{
-			iter = &tv_iters.tag_externvar;
-			break;
-		}
-		case tm_tag_macro_t:
-		case tm_tag_macro_with_arg_t:
-		{
-			iter = &tv_iters.tag_macro;
-			break;
-		}
-		case tm_tag_class_t:
-		{
-			iter = &tv_iters.tag_class;
-			break;
-		}
-		case tm_tag_member_t:
-		case tm_tag_field_t:
-		{
-			iter = &tv_iters.tag_member;
-			break;
-		}
-		case tm_tag_typedef_t:
-		case tm_tag_enum_t:
-		{
-			iter = &tv_iters.tag_type;
-			break;
-		}
-		case tm_tag_union_t:
-		case tm_tag_struct_t:
-		{
-			iter = &tv_iters.tag_struct;
-			break;
-		}
-		case tm_tag_interface_t:
-			iter = &tv_iters.tag_interface;
-			break;
-		case tm_tag_variable_t:
-		{
-			iter = &tv_iters.tag_variable;
-			break;
-		}
-		case tm_tag_namespace_t:
-		case tm_tag_package_t:
-		{
-			iter = &tv_iters.tag_namespace;
-			break;
-		}
-		default:
-		{
-			iter = &tv_iters.tag_other;
-		}
-	}
-	if (G_LIKELY(iter->stamp != -1))
-		return iter;
-	else
+	if (group < 0)
 		return NULL;
+
+	return &tv_iters[group];
 }
 
 
@@ -1038,10 +590,6 @@ static GdkPixbuf *get_child_icon(GtkTreeStore *tree_store, GtkTreeIter *parent)
 {
 	GdkPixbuf *icon = NULL;
 
-	if (parent == &tv_iters.tag_other)
-	{
-		return g_object_ref(symbols_icons[ICON_VAR].pixbuf);
-	}
 	/* copy parent icon */
 	gtk_tree_model_get(GTK_TREE_MODEL(tree_store), parent,
 		SYMBOLS_COLUMN_ICON, &icon, -1);
@@ -1170,7 +718,7 @@ static void update_parents_table(GHashTable *table, const TMTag *tag, const GtkT
 		/* simple case, just use the tag name */
 		name = tag->name;
 	}
-	else if (! tm_parser_has_full_context(tag->lang))
+	else if (! tm_parser_has_full_scope(tag->lang))
 	{
 		/* if the parser doesn't use fully qualified scope, use the name alone but
 		 * prevent Foo::Foo from making parent = child */
@@ -1182,7 +730,7 @@ static void update_parents_table(GHashTable *table, const TMTag *tag, const GtkT
 	else
 	{
 		/* build the fully qualified scope as get_parent_name() would return it for a child tag */
-		name_free = g_strconcat(tag->scope, tm_parser_context_separator(tag->lang), tag->name, NULL);
+		name_free = g_strconcat(tag->scope, tm_parser_scope_separator(tag->lang), tag->name, NULL);
 		name = name_free;
 	}
 
@@ -1352,7 +900,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	/* Build hash tables holding tags and parents */
 	/* parent table is GHashTable<tag_name, GTree<line_num, GtkTreeIter>>
 	 * where tag_name might be a fully qualified name (with scope) if the language
-	 * parser reports scope properly (see tm_parser_has_full_context()). */
+	 * parser reports scope properly (see tm_parser_has_full_scope()). */
 	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, parents_table_value_free);
 	/* tags table is another representation of the @tags list,
 	 * GHashTable<TMTag, GTree<line_num, GList<GList<TMTag>>>> */
@@ -1435,10 +983,8 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		TMTag *tag = item->data;
 		GtkTreeIter *parent;
 
-		parent = get_tag_type_iter(tag->type);
-		if (G_UNLIKELY(! parent))
-			geany_debug("Missing symbol-tree parent iter for type %d!", tag->type);
-		else
+		parent = get_tag_type_iter(tag->lang, tag->type);
+		if (parent)
 		{
 			gboolean expand;
 			const gchar *name;
@@ -1841,38 +1387,18 @@ static void on_goto_popup_item_activate(GtkMenuItem *item, TMTag *tag)
 }
 
 
-/* FIXME: use the same icons as in the symbols tree defined in add_top_level_items() */
 static guint get_tag_class(const TMTag *tag)
 {
-	switch (tag->type)
+	gint group = tm_parser_get_sidebar_group(tag->lang, tag->type);
+
+	if (group >= 0)
 	{
-		case tm_tag_prototype_t:
-		case tm_tag_method_t:
-		case tm_tag_function_t:
-			return ICON_METHOD;
-		case tm_tag_variable_t:
-		case tm_tag_externvar_t:
-			return ICON_VAR;
-		case tm_tag_macro_t:
-		case tm_tag_macro_with_arg_t:
-			return ICON_MACRO;
-		case tm_tag_class_t:
-			return ICON_CLASS;
-		case tm_tag_member_t:
-		case tm_tag_field_t:
-			return ICON_MEMBER;
-		case tm_tag_typedef_t:
-		case tm_tag_enum_t:
-		case tm_tag_union_t:
-		case tm_tag_struct_t:
-			return ICON_STRUCT;
-		case tm_tag_namespace_t:
-		case tm_tag_package_t:
-			return ICON_NAMESPACE;
-		default:
-			break;
+		guint icon_id;
+		if (tm_parser_get_sidebar_info(tag->lang, group, &icon_id))
+			return icon_id;
 	}
-	return ICON_STRUCT;
+
+	return TM_ICON_STRUCT;
 }
 
 
@@ -1911,11 +1437,7 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 
 	monitor_num = gdk_screen_get_monitor_at_point(screen, *x, *y);
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 	gtk_widget_get_preferred_size(GTK_WIDGET(menu), NULL, &req);
-#else
-	gtk_widget_size_request(GTK_WIDGET(menu), &req);
-#endif
 
 #if GTK_CHECK_VERSION(3, 4, 0)
 	gdk_screen_get_monitor_workarea(screen, monitor_num, &monitor);
@@ -2409,7 +1931,7 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, TMTagType 
 			{
 				if (tag->scope)
 					*tagname = g_strconcat(tag->scope,
-							symbols_get_context_separator(doc->file_type->id), tag->name, NULL);
+							tm_parser_scope_separator(tag->lang), tag->name, NULL);
 				else
 					*tagname = g_strdup(tag->name);
 
@@ -2501,11 +2023,7 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
 {
 	TMTagType tag_types = (tm_tag_function_t | tm_tag_method_t | tm_tag_class_t |
-			tm_tag_struct_t | tm_tag_enum_t | tm_tag_union_t);
-
-	/* Python parser reports imports as namespaces which confuses the scope detection */
-	if (doc && doc->file_type->lang != filetypes[GEANY_FILETYPES_PYTHON]->lang)
-		tag_types |= tm_tag_namespace_t;
+			tm_tag_struct_t | tm_tag_enum_t | tm_tag_union_t | tm_tag_namespace_t);
 
 	return get_current_tag_name_cached(doc, tagname, tag_types);
 }
@@ -2593,6 +2111,12 @@ void symbols_clear_selection()
 	gtk_tree_selection_unselect_all(selection);
 }
 
+const gchar *symbols_get_icon_name(guint icon_id)
+{
+	if (icon_id < TM_N_ICONS)
+		return symbols_icons[icon_id].icon_name;
+	return NULL;
+}
 
 static void on_symbol_tree_sort_clicked(GtkMenuItem *menuitem, gpointer user_data)
 {

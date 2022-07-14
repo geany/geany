@@ -1,12 +1,22 @@
-# format=tagmanager
-CDefClassÌ1Í(self)Ö0
+CDefClassÌ1Ö0
+class:      CDefClass
 StdClassÌ1Ö0
+class:      StdClass
 __init__Ì128Í(self)ÎCDefClassÖ0
+method:     CDefClass :: __init__(self)
 c_methodÌ128Í(self,int i)ÎCDefClassÖ0
+method:     CDefClass :: c_method(self,int i)
 identityÌ16Í(x)Ö0
+function:   identity(x)
 int2stringÌ16Í(int i)Ö0
+function:   int2string(int i)
 int_identityÌ16Í(int i)Ö0
+function:   int_identity(int i)
 python_varÌ16384Ö0
+variable:   python_var
 return_meÌ128Í(self)ÎStdClassÖ0
+method:     StdClass :: return_me(self)
 standard_methodÌ128Í(self,i)ÎCDefClassÖ0
+method:     CDefClass :: standard_method(self,i)
 stdObjÌ16384Ö0
+variable:   stdObj

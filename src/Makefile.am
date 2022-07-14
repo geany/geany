@@ -15,18 +15,19 @@ EXTRA_DIST = \
 AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/scintilla/include \
+	-I$(top_srcdir)/scintilla/lexilla/include \
 	-I$(srcdir)/tagmanager \
 	-DGTK \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\""Geany"\" \
-	@GTK_CFLAGS@ @GTHREAD_CFLAGS@ \
+	@GTK_CFLAGS@ \
 	$(MAC_INTEGRATION_CFLAGS)
 
 bin_PROGRAMS = geany
 lib_LTLIBRARIES = libgeany.la
 
 geany_SOURCES = main.c
-geany_LDADD = libgeany.la $(GTK_LIBS) $(GTHREAD_LIBS) $(INTLLIBS)
+geany_LDADD = libgeany.la $(GTK_LIBS) $(INTLLIBS)
 geany_LDFLAGS =
 
 if ENABLE_BINRELOC
@@ -119,10 +120,10 @@ libgeany_la_CFLAGS  = $(AM_CPPFLAGS) @LIBGEANY_CFLAGS@
 libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 libgeany_la_LIBADD = \
+	$(top_builddir)/scintilla/liblexilla.la \
 	$(top_builddir)/scintilla/libscintilla.la \
 	$(builddir)/tagmanager/libtagmanager.la \
 	@GTK_LIBS@ \
-	@GTHREAD_LIBS@ \
 	$(MAC_INTEGRATION_LIBS) \
 	$(INTLLIBS)
 
@@ -177,11 +178,7 @@ callbacks.c: signallist.i
 glade_file=$(top_srcdir)/data/geany.glade
 
 signallist.i: $(glade_file) Makefile
-	$(AM_V_GEN)( \
-		echo '/* This file is auto-generated, do not edit. */' && \
-		$(SED) -n 's/^.*handler="\([^"]\{1,\}\)".*$$/ITEM(\1)/p' "$(glade_file)" \
-			| $(SORT) | $(UNIQ) \
-	) > $@ || { $(RM) $@ && exit 1; }
+	$(AM_V_GEN)$(top_srcdir)/scripts/gen-signallist.sh $(glade_file) $@
 
 CLEANFILES += signallist.i
 

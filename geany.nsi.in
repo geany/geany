@@ -42,7 +42,6 @@ Unicode true
 !define PRODUCT_EXE "$INSTDIR\bin\Geany.exe"
 !define PRODUCT_REGNAME "Geany.ProjectFile"
 !define PRODUCT_EXT ".geany"
-!define RESOURCEDIR "geany-${PRODUCT_VERSION}"
 !define GTK_VERSION @GTK_VERSION@
 
 ;;;;;;;;;;;;;;;;;;;;;
@@ -55,19 +54,28 @@ VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "LegalCopyright" "Copyright 2005 The Geany contributors"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
-BrandingText "$(^NAME) installer (NSIS 3.04)"
-InstallDir "$PROGRAMFILES\Geany"
+BrandingText "$(^NAME) installer (NSIS ${NSIS_VERSION})"
+InstallDir "$PROGRAMFILES64\Geany"
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 SetCompressor /SOLID lzma
 ShowInstDetails hide
 ShowUnInstDetails hide
 XPStyle on
 ManifestSupportedOS all
-!ifdef INCLUDE_GTK
-OutFile "geany-${PRODUCT_VERSION}_setup.exe"
-!else
-OutFile "geany-${PRODUCT_VERSION}_nogtk_setup.exe"
+!ifndef GEANY_INSTALLER_NAME
+!define GEANY_INSTALLER_NAME "geany-${PRODUCT_VERSION}_setup.exe"
 !endif
+!ifndef GEANY_RELEASE_DIR
+!define GEANY_RELEASE_DIR "geany-${PRODUCT_VERSION}"
+!endif
+!ifndef GEANY_THEMES_DIR
+!define GEANY_THEMES_DIR "..\geany-themes"
+!endif
+!ifndef GTK_BUNDLE_DIR
+!define GTK_BUNDLE_DIR "gtk"
+!endif
+
+OutFile "${GEANY_INSTALLER_NAME}"
 
 Var Answer
 Var UserName
@@ -80,10 +88,10 @@ Var UNINSTDIR
 !include "MUI2.nsh"
 
 ;Reserve files used in .onInit, for faster start-up
-ReserveFile "${NSISDIR}\Plugins\x86-unicode\System.dll"
-ReserveFile "${NSISDIR}\Plugins\x86-unicode\UserInfo.dll"
-ReserveFile "${NSISDIR}\Plugins\x86-unicode\InstallOptions.dll"
-ReserveFile "${NSISDIR}\Plugins\x86-unicode\LangDLL.dll"
+ReserveFile /plugin "System.dll"
+ReserveFile /plugin "UserInfo.dll"
+ReserveFile /plugin "InstallOptions.dll"
+ReserveFile /plugin "LangDLL.dll"
 
 !define MUI_ABORTWARNING
 !define MUI_ICON "icons\geany.ico"
@@ -93,7 +101,7 @@ ReserveFile "${NSISDIR}\Plugins\x86-unicode\LangDLL.dll"
 !insertmacro MUI_PAGE_WELCOME
 ; License page
 ;!define MUI_LICENSEPAGE_RADIOBUTTONS
-!insertmacro MUI_PAGE_LICENSE "${RESOURCEDIR}\Copying.txt"
+!insertmacro MUI_PAGE_LICENSE "${GEANY_RELEASE_DIR}\Copying.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
@@ -129,45 +137,41 @@ Section "!Program Files" SEC01
 	SetOverwrite ifnewer
 
 	SetOutPath "$INSTDIR"
-	File "${RESOURCEDIR}\*.txt"
+	File "${GEANY_RELEASE_DIR}\*.txt"
 
 	SetOutPath "$INSTDIR\bin"
-	File "${RESOURCEDIR}\bin\Geany.exe"
-	File "${RESOURCEDIR}\bin\*Geany*.dll"
+	File "${GEANY_RELEASE_DIR}\bin\Geany.exe"
+	File "${GEANY_RELEASE_DIR}\bin\*Geany*.dll"
 	# non-GTK dependencies
-	File "gtk\bin\libgcc_s_dw*.dll"
-	File "gtk\bin\libstdc++-*.dll"
-	File "gtk\bin\libwinpthread*.dll"
+	File "${GTK_BUNDLE_DIR}\bin\libgcc_s_seh*.dll"
+	File "${GTK_BUNDLE_DIR}\bin\libstdc++-*.dll"
+	File "${GTK_BUNDLE_DIR}\bin\libwinpthread*.dll"
 
 	SetOutPath "$INSTDIR\libexec"
-	File /r "${RESOURCEDIR}\libexec\*"
+	File /r "${GEANY_RELEASE_DIR}\libexec\*"
 
 	SetOutPath "$INSTDIR\data"
-	File "${RESOURCEDIR}\data\GPL-2"
-	File "${RESOURCEDIR}\data\filetype_extensions.conf"
-	File "${RESOURCEDIR}\data\geany.glade"
-!if ${GTK_VERSION} >= 3
-	File "${RESOURCEDIR}\data\geany-3.20.css"
-	File "${RESOURCEDIR}\data\geany.css"
-!else
-	File "${RESOURCEDIR}\data\geany.gtkrc"
-!endif
-	File "${RESOURCEDIR}\data\snippets.conf"
-	File "${RESOURCEDIR}\data\ui_toolbar.xml"
+	File "${GEANY_RELEASE_DIR}\data\GPL-2"
+	File "${GEANY_RELEASE_DIR}\data\filetype_extensions.conf"
+	File "${GEANY_RELEASE_DIR}\data\geany.glade"
+	File "${GEANY_RELEASE_DIR}\data\geany-3.20.css"
+	File "${GEANY_RELEASE_DIR}\data\geany.css"
+	File "${GEANY_RELEASE_DIR}\data\snippets.conf"
+	File "${GEANY_RELEASE_DIR}\data\ui_toolbar.xml"
 
 	SetOutPath "$INSTDIR\data\filedefs"
-	File /r "${RESOURCEDIR}\data\filedefs\*"
+	File /r "${GEANY_RELEASE_DIR}\data\filedefs\*"
 
 	SetOutPath "$INSTDIR\data\templates"
-	File /r "${RESOURCEDIR}\data\templates\*"
+	File /r "${GEANY_RELEASE_DIR}\data\templates\*"
 
 	SetOutPath "$INSTDIR\data\colorschemes"
-	File /r "${RESOURCEDIR}\data\colorschemes\*"
+	File /r "${GEANY_RELEASE_DIR}\data\colorschemes\*"
 	# Geany color schemes project, don't bail out if they are missing
-	File /nonfatal /r "..\geany-themes\colorschemes\*.conf"
+	File /nonfatal /r "${GEANY_THEMES_DIR}\colorschemes\*.conf"
 
 	SetOutPath "$INSTDIR\share\icons"
-	File /r "${RESOURCEDIR}\share\icons\*"
+	File /r "${GEANY_RELEASE_DIR}\share\icons\*"
 
 	SetOutPath "$INSTDIR"
 
@@ -192,24 +196,22 @@ Section "Plugins" SEC02
 	SectionIn 1
 	SetOverwrite ifnewer
 	SetOutPath "$INSTDIR\lib\geany"
-	File "${RESOURCEDIR}\lib\geany\*.dll"
+	File "${GEANY_RELEASE_DIR}\lib\geany\*.dll"
 SectionEnd
 
 Section "Language Files" SEC03
 	SectionIn 1
 	SetOutPath "$INSTDIR\share\locale"
-	File /r "${RESOURCEDIR}\share\locale\*"
-!ifdef INCLUDE_GTK
+	File /r "${GEANY_RELEASE_DIR}\share\locale\*"
 	SetOutPath "$INSTDIR\share\locale"
-	File /r "gtk\share\locale\*"
-!endif
+	File /r "${GTK_BUNDLE_DIR}\share\locale\*"
 SectionEnd
 
 Section "Documentation" SEC04
 	SectionIn 1
 	SetOverwrite ifnewer
 	SetOutPath "$INSTDIR\share\doc"
-	File /r "${RESOURCEDIR}\share\doc\*"
+	File /r "${GEANY_RELEASE_DIR}\share\doc\*"
 	WriteIniStr "$INSTDIR\Documentation.url" "InternetShortcut" "URL" "$INSTDIR\share\doc\geany\html\index.html"
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN ${PRODUCT_NAME}
 	CreateShortCut "$SMPROGRAMS\$StartmenuFolder\Documentation.lnk" "$INSTDIR\Documentation.url"
@@ -220,26 +222,24 @@ Section "Autocompletion Tags" SEC05
 	SectionIn 1
 	SetOverwrite ifnewer
 	SetOutPath "$INSTDIR\data\tags"
-	File /r "${RESOURCEDIR}\data\tags\*"
+	File /r "${GEANY_RELEASE_DIR}\data\tags\*"
 SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
-!ifdef INCLUDE_GTK
 Section "GTK ${GTK_VERSION} Runtime Environment" SEC06
 	SectionIn 1
 	SetOverwrite ifnewer
 	SetOutPath "$INSTDIR"
-	File "gtk\ReadMe.Dependencies.Geany.txt"
+	File "${GTK_BUNDLE_DIR}\ReadMe.Dependencies.Geany.txt"
 	SetOutPath "$INSTDIR\bin"
-	File /r "gtk\bin\*"
+	File /r "${GTK_BUNDLE_DIR}\bin\*"
 	SetOutPath "$INSTDIR\etc"
-	File /r "gtk\etc\*"
+	File /r "${GTK_BUNDLE_DIR}\etc\*"
 	SetOutPath "$INSTDIR\lib"
-	File /r "gtk\lib\*"
+	File /r "${GTK_BUNDLE_DIR}\lib\*"
 	SetOutPath "$INSTDIR\share"
-	File /r /x "*.mo" "gtk\share\*"
+	File /r /x "*.mo" "${GTK_BUNDLE_DIR}\share\*"
 SectionEnd
-!endif
 
 Section "Context Menus" SEC07
 	SectionIn 1
@@ -256,12 +256,13 @@ SectionEnd
 
 ; Development files
 Section "Development files" SEC09
+	SectionIn 1
 	SetOverwrite ifnewer
 	SetOutPath "$INSTDIR\include"
-	File /r "${RESOURCEDIR}\include\*"
+	File /r "${GEANY_RELEASE_DIR}\include\*"
 
 	SetOutPath "$INSTDIR\lib\pkgconfig"
-	File "${RESOURCEDIR}\lib\pkgconfig\geany.pc"
+	File "${GEANY_RELEASE_DIR}\lib\pkgconfig\geany.pc"
 SectionEnd
 
 Section -AdditionalIcons
@@ -348,9 +349,7 @@ SectionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Various translations of Geany's interface."
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Manual in Text and HTML format."
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "Symbol lists necessary for auto completion of symbols."
-!ifdef INCLUDE_GTK
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "You need these files to run Geany. If you have already installed a GTK Runtime Environment (${GTK_VERSION} or higher), you can skip it."
-!endif
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC07} "Add context menu item 'Open With Geany'"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC08} "Create shortcuts for Geany on the desktop and in the Quicklaunch Bar"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC09} "You need these files only if you want to develop own plugins for Geany. If unsure, you can skip it."

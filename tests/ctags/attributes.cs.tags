@@ -1,7 +1,12 @@
-# format=tagmanager
 AuthorÌ1Ö0
+class:      Author
 AuthorÌ128Í(string name)ÎAuthorÖ0
+method:     Author :: Author(string name)
 MyDllimportClassÌ1Ö0
+class:      MyDllimportClass
 TraceMethodÌ128Í()Ö0Ï[][][][]void
+method:     [][][][]void TraceMethod()
 nameÌ8ÎAuthorÖ0
+field:      Author :: name
 versionÌ8ÎAuthorÖ0Ïdouble
+field:      double Author :: version

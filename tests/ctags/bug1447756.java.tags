@@ -1,3 +1,4 @@
-# format=tagmanager
 FooÌ32Ö0
+interface:  Foo
 barÌ128Í()ÎFooÖ0Ïpublic T
+method:     public T Foo :: bar()

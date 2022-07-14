@@ -1,4 +1,6 @@
-# format=tagmanager
 FooÌ1Ö0
-barÌ128ÎFooÖ0
-fooÌ128ÎFooÖ0
+class:      Foo
+barÌ128Í()ÎFooÖ0
+method:     Foo :: bar()
+fooÌ128Í()ÎFooÖ0
+method:     Foo :: foo()

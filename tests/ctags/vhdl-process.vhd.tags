@@ -1,0 +1,24 @@
+StackTraceBufferÌ1Ö0
+class:      StackTraceBuffer
+arch_StackTraceBufferÌ2048ÎStackTraceBufferÖ0
+struct:     StackTraceBuffer :: arch_StackTraceBuffer
+i_clkÌ16384ÎStackTraceBufferÖ0
+variable:   StackTraceBuffer :: i_clk
+i_raddrÌ16384ÎStackTraceBufferÖ0
+variable:   StackTraceBuffer :: i_raddr
+i_waddrÌ16384ÎStackTraceBufferÖ0
+variable:   StackTraceBuffer :: i_waddr
+i_wdataÌ16384ÎStackTraceBufferÖ0
+variable:   StackTraceBuffer :: i_wdata
+i_weÌ16384ÎStackTraceBufferÖ0
+variable:   StackTraceBuffer :: i_we
+o_rdataÌ16384ÎStackTraceBufferÖ0
+variable:   StackTraceBuffer :: o_rdata
+raddrÌ16384ÎStackTraceBuffer.arch_StackTraceBufferÖ0
+variable:   StackTraceBuffer.arch_StackTraceBuffer :: raddr
+ram_typeÌ4096ÎStackTraceBuffer.arch_StackTraceBufferÖ0
+typedef:    StackTraceBuffer.arch_StackTraceBuffer :: ram_type
+regsÌ64ÎStackTraceBuffer.arch_StackTraceBufferÖ0
+member:     StackTraceBuffer.arch_StackTraceBuffer :: regs
+stackbufÌ16384ÎStackTraceBuffer.arch_StackTraceBufferÖ0
+variable:   StackTraceBuffer.arch_StackTraceBuffer :: stackbuf

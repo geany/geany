@@ -1,8 +1,14 @@
-# format=tagmanager
 Func1Ã16ŒHasInterfaces÷0
+function:   HasInterfaces :: Func1
 Func2Ã16ŒHasInterfaces÷0
+function:   HasInterfaces :: Func2
 HasInterfacesÃ256÷0
-Interface#0Ã32ŒHasInterfaces÷0
+namespace:  HasInterfaces
 MainÃ2048÷0
+struct:     Main
 MyFuncÃ32ŒHasInterfaces÷0
+interface:  HasInterfaces :: MyFunc
 MySubroutineÃ32ŒMain÷0
+interface:  Main :: MySubroutine
+anon_interface_1Ã32ŒHasInterfaces÷1
+interface:  HasInterfaces :: anon_interface_1    flags: 1

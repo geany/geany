@@ -1,22 +1,40 @@
-# format=tagmanager
-AÃ4Œanon_enum_0÷0
-INDX_C1Ã4Œanon_enum_0÷0
-INDX_C2Ã4Œanon_enum_0÷0
-INDX_IM1Ã4Œanon_enum_0÷0
-INDX_IM2Ã4Œanon_enum_0÷0
-INDX_LÃ4Œanon_enum_0÷0
-INDX_L2Ã4Œanon_enum_0÷0
-INDX_MÃ4Œanon_enum_0÷0
-INDX_NILÃ4Œanon_enum_0÷0
-INDX_PÃ4Œanon_enum_0÷0
-INDX_RÃ4Œanon_enum_0÷0
-INDX_R2Ã4Œanon_enum_0÷0
-INDX_SÃ4Œanon_enum_0÷0
-INDX_S1Ã4Œanon_enum_0÷0
-INDX_S2Ã4Œanon_enum_0÷0
-INDX_S3Ã4Œanon_enum_0÷0
-INDX_S4Ã4Œanon_enum_0÷0
-INDX_TÃ4Œanon_enum_0÷0
-INDX_T2Ã4Œanon_enum_0÷0
-anon_enum_0Ã2÷0
-task_indx_typeÃ4096÷0œanon_enum_0
+AÃ4Œtask_indx_type÷0
+enumerator: task_indx_type :: A
+INDX_C1Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_C1
+INDX_C2Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_C2
+INDX_IM1Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_IM1
+INDX_IM2Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_IM2
+INDX_LÃ4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_L
+INDX_L2Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_L2
+INDX_MÃ4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_M
+INDX_NILÃ4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_NIL
+INDX_PÃ4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_P
+INDX_RÃ4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_R
+INDX_R2Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_R2
+INDX_SÃ4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_S
+INDX_S1Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_S1
+INDX_S2Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_S2
+INDX_S3Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_S3
+INDX_S4Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_S4
+INDX_TÃ4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_T
+INDX_T2Ã4Œtask_indx_type÷0
+enumerator: task_indx_type :: INDX_T2
+task_indx_typeÃ2÷0
+enum:       task_indx_type

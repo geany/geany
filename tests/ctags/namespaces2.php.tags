@@ -1,12 +1,22 @@
-# format=tagmanager
-BÃ1ŒBar\Baz÷0
+BÃ1ŒBar::Baz÷0
+class:      Bar::Baz :: B
 Bar\BazÃ256÷0
+namespace:  Bar\Baz
 CÃ1ŒFoo÷0
+class:      Foo :: C
 FooÃ256÷0
-__constructÃ16Õ()ŒBar\Baz::B÷0
+namespace:  Foo
+__constructÃ16Õ()ŒBar::Baz::B÷0
+function:   Bar::Baz::B :: __construct()
 __constructÃ16Õ()ŒFoo::C÷0
-aÃ16Õ()ŒBar\Baz÷0
+function:   Foo::C :: __construct()
+aÃ16Õ()ŒBar::Baz÷0
+function:   Bar::Baz :: a()
 aÃ16Õ()ŒFoo÷0
+function:   Foo :: a()
 bÃ16Õ()ŒFoo÷0
-cÃ16Õ()ŒBar\Baz::B÷0
+function:   Foo :: b()
+cÃ16Õ()ŒBar::Baz::B÷0
+function:   Bar::Baz::B :: c()
 dÃ16Õ()ŒFoo::C÷0
+function:   Foo::C :: d()

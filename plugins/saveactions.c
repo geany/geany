@@ -40,7 +40,7 @@ GeanyData		*geany_data;
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
 PLUGIN_SET_INFO(_("Save Actions"), _("This plugin provides different actions related to saving of files."),
-	VERSION, _("The Geany developer team"))
+	PACKAGE_VERSION, _("The Geany developer team"))
 
 
 enum
@@ -63,6 +63,7 @@ static struct
 	GtkWidget *autosave_save_all_radio2;
 
 	GtkWidget *instantsave_ft_combo;
+	GtkWidget *instantsave_entry_dir;
 
 	GtkWidget *backupcopy_entry_dir;
 	GtkWidget *backupcopy_entry_time;
@@ -82,6 +83,7 @@ static gboolean autosave_save_all;
 static guint autosave_src_id = 0;
 
 static gchar *instantsave_default_ft;
+static gchar *instantsave_target_dir;
 
 static gchar *backupcopy_backup_dir; /* path to an existing directory in locale encoding */
 static gchar *backupcopy_time_fmt;
@@ -91,12 +93,12 @@ static gchar *config_file;
 
 
 /* Ensures utf8_dir exists and is writable and
- * set backup_dir to the locale encoded form of utf8_dir */
-static gboolean backupcopy_set_backup_dir(const gchar *utf8_dir)
+ * set target to the locale encoded form of utf8_dir */
+static gboolean store_target_directory(const gchar *utf8_dir, gchar **target)
 {
 	gchar *tmp;
 
-	if (G_UNLIKELY(EMPTY(utf8_dir)))
+	if (G_UNLIKELY(EMPTY(utf8_dir)) || target == NULL)
 		return FALSE;
 
 	tmp = utils_get_locale_from_utf8(utf8_dir);
@@ -110,7 +112,7 @@ static gboolean backupcopy_set_backup_dir(const gchar *utf8_dir)
 	}
 	/** TODO add utils_is_file_writeable() to the plugin API and make use of it **/
 
-	SETPTR(backupcopy_backup_dir, tmp);
+	SETPTR(*target, tmp);
 
 	return TRUE;
 }
@@ -260,26 +262,40 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 {
     if (enable_instantsave && doc->file_name == NULL)
     {
+		const gchar *directory;
 		gchar *new_filename;
 		gint fd;
 		GeanyFiletype *ft = doc->file_type;
-
-		fd = g_file_open_tmp("gis_XXXXXX", &new_filename, NULL);
-		if (fd != -1)
-			close(fd); /* close the returned file descriptor as we only need the filename */
 
 		if (ft == NULL || ft->id == GEANY_FILETYPES_NONE)
 			/* ft is NULL when a new file without template was opened, so use the
 			 * configured default file type */
 			ft = filetypes_lookup_by_name(instantsave_default_ft);
 
-		if (ft != NULL)
-			/* add the filetype's default extension to the new filename */
+		/* construct filename */
+		directory = !EMPTY(instantsave_target_dir) ? instantsave_target_dir : g_get_tmp_dir();
+		new_filename = g_build_filename(directory, "gis_XXXXXX", NULL);
+		if (ft != NULL && !EMPTY(ft->extension))
 			SETPTR(new_filename, g_strconcat(new_filename, ".", ft->extension, NULL));
+
+		/* create new file */
+		fd = g_mkstemp(new_filename);
+		if (fd == -1)
+		{
+			gchar *message = g_strdup_printf(
+				_("Instant Save filename could not be generated (%s)."), g_strerror(errno));
+			ui_set_statusbar(TRUE, "%s", message);
+			g_warning("%s", message);
+			g_free(message);
+			g_free(new_filename);
+			return;
+		}
+
+		close(fd); /* close the returned file descriptor as we only need the filename */
 
 		doc->file_name = new_filename;
 
-		if (doc->file_type->id == GEANY_FILETYPES_NONE)
+		if (ft != NULL && ft->id == GEANY_FILETYPES_NONE)
 			document_set_filetype(doc, filetypes_lookup_by_name(instantsave_default_ft));
 
 		/* force saving the file to enable all the related actions(tab name, filetype, etc.) */
@@ -407,6 +423,9 @@ void plugin_init(GeanyData *data)
 
 	instantsave_default_ft = utils_get_setting_string(config, "instantsave", "default_ft",
 		filetypes[GEANY_FILETYPES_NONE]->name);
+	tmp = utils_get_setting_string(config, "instantsave", "target_dir", NULL);
+	store_target_directory(tmp, &instantsave_target_dir);
+	g_free(tmp);
 
 	autosave_src_id = 0; /* mark as invalid */
 	autosave_interval = utils_get_setting_integer(config, "autosave", "interval", 300);
@@ -419,21 +438,15 @@ void plugin_init(GeanyData *data)
 	backupcopy_time_fmt = utils_get_setting_string(
 		config, "backupcopy", "time_fmt", "%Y-%m-%d-%H-%M-%S");
 	tmp = utils_get_setting_string(config, "backupcopy", "backup_dir", g_get_tmp_dir());
-	backupcopy_set_backup_dir(tmp);
+	store_target_directory(tmp, &backupcopy_backup_dir);
+	g_free(tmp);
 
 	g_key_file_free(config);
-	g_free(tmp);
 }
 
 
-static void backupcopy_dir_button_clicked_cb(GtkButton *button, gpointer item)
+static void target_directory_button_clicked_cb(GtkButton *button, gpointer item)
 {
-	/** TODO add win32_show_pref_file_dialog to the plugin API and use it **/
-/*
-#ifdef G_OS_WIN32
-	win32_show_pref_file_dialog(item);
-#else
-*/
 	GtkWidget *dialog;
 	gchar *text;
 
@@ -471,7 +484,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 	{
 		GKeyFile *config = g_key_file_new();
 		gchar *str;
-		const gchar *text_dir, *text_time;
+		const gchar *backupcopy_text_dir, *instantsave_text_dir, *text_time;
 		gchar *config_dir = g_path_get_dirname(config_file);
 
 		enable_autosave = gtk_toggle_button_get_active(
@@ -493,8 +506,9 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		g_free(instantsave_default_ft);
 		instantsave_default_ft = gtk_combo_box_text_get_active_text(
 			GTK_COMBO_BOX_TEXT(pref_widgets.instantsave_ft_combo));
+		instantsave_text_dir = gtk_entry_get_text(GTK_ENTRY(pref_widgets.instantsave_entry_dir));
 
-		text_dir = gtk_entry_get_text(GTK_ENTRY(pref_widgets.backupcopy_entry_dir));
+		backupcopy_text_dir = gtk_entry_get_text(GTK_ENTRY(pref_widgets.backupcopy_entry_dir));
 		text_time = gtk_entry_get_text(GTK_ENTRY(pref_widgets.backupcopy_entry_time));
 		backupcopy_dir_levels = gtk_spin_button_get_value_as_int(
 			GTK_SPIN_BUTTON(pref_widgets.backupcopy_spin_dir_levels));
@@ -513,15 +527,33 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 
 		if (instantsave_default_ft != NULL)
 			g_key_file_set_string(config, "instantsave", "default_ft", instantsave_default_ft);
+		if (enable_instantsave)
+		{
+			if (EMPTY(instantsave_text_dir))
+			{
+				g_key_file_set_string(config, "instantsave", "target_dir", "");
+				SETPTR(instantsave_target_dir, NULL);
+			}
+			else if (store_target_directory(instantsave_text_dir, &instantsave_target_dir))
+			{
+				g_key_file_set_string(config, "instantsave", "target_dir", instantsave_target_dir);
+			}
+			else
+			{
+				dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+						_("Instantsave directory does not exist or is not writable."));
+			}
+		}
 
 		g_key_file_set_integer(config, "backupcopy", "dir_levels", backupcopy_dir_levels);
 		g_key_file_set_string(config, "backupcopy", "time_fmt", text_time);
 		SETPTR(backupcopy_time_fmt, g_strdup(text_time));
 		if (enable_backupcopy)
 		{
-			if (!EMPTY(text_dir) && backupcopy_set_backup_dir(text_dir))
+			if (!EMPTY(backupcopy_text_dir) && store_target_directory(
+					backupcopy_text_dir, &backupcopy_backup_dir))
 			{
-				g_key_file_set_string(config, "backupcopy", "backup_dir", text_dir);
+				g_key_file_set_string(config, "backupcopy", "backup_dir", backupcopy_text_dir);
 			}
 			else
 			{
@@ -589,7 +621,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	GtkWidget *vbox, *label, *notebook_vbox, *checkbox_enable;
 	GtkWidget *notebook, *inner_vbox;
 
-	vbox = gtk_vbox_new(FALSE, 6);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 
 	notebook = gtk_notebook_new();
 	gtk_widget_set_can_focus(notebook, FALSE);
@@ -602,8 +634,8 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	{
 		GtkWidget *spin, *hbox, *checkbox, *checkbox_enable_as_lf, *radio1, *radio2;
 
-		notebook_vbox = gtk_vbox_new(FALSE, 2);
-		inner_vbox = gtk_vbox_new(FALSE, 5);
+		notebook_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+		inner_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_vbox), 5);
 		gtk_box_pack_start(GTK_BOX(notebook_vbox), inner_vbox, TRUE, TRUE, 5);
 		gtk_notebook_insert_page(GTK_NOTEBOOK(notebook),
@@ -633,7 +665,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		label = gtk_label_new(_("seconds"));
 
-		hbox = gtk_hbox_new(FALSE, 5);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 		gtk_box_pack_start(GTK_BOX(hbox), spin, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
@@ -666,12 +698,13 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	 * Instant Save
 	 */
 	{
-		GtkWidget *combo;
+		GtkWidget *combo, *hbox, *entry_dir, *button, *image, *help_label;
 		guint i;
 		const GSList *node;
+		gchar *entry_dir_label_text;
 
-		notebook_vbox = gtk_vbox_new(FALSE, 2);
-		inner_vbox = gtk_vbox_new(FALSE, 5);
+		notebook_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+		inner_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_vbox), 5);
 		gtk_box_pack_start(GTK_BOX(notebook_vbox), inner_vbox, TRUE, TRUE, 5);
 		gtk_notebook_insert_page(GTK_NOTEBOOK(notebook),
@@ -704,6 +737,38 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(combo), 3);
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), combo);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), combo, FALSE, FALSE, 0);
+
+		entry_dir_label_text = g_strdup_printf(
+			_("_Directory to save files in (leave empty to use the default: %s):"), g_get_tmp_dir());
+		label = gtk_label_new_with_mnemonic(entry_dir_label_text);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
+		g_free(entry_dir_label_text);
+
+		pref_widgets.instantsave_entry_dir = entry_dir = gtk_entry_new();
+		gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry_dir);
+		if (!EMPTY(instantsave_target_dir))
+			gtk_entry_set_text(GTK_ENTRY(entry_dir), instantsave_target_dir);
+
+		button = gtk_button_new();
+		g_signal_connect(button, "clicked",
+			G_CALLBACK(target_directory_button_clicked_cb), entry_dir);
+
+		image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
+		gtk_container_add(GTK_CONTAINER(button), image);
+
+		hbox = gtk_hbox_new(FALSE, 6);
+		gtk_box_pack_start(GTK_BOX(hbox), entry_dir, TRUE, TRUE, 0);
+		gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 0);
+
+		help_label = gtk_label_new(
+			_("<i>If you set the Instant Save directory to a directory "
+			  "which is not automatically cleared,\nyou will need to cleanup instantly saved files "
+			  "manually. The Instant Save plugin will not delete the created files.</i>"));
+		gtk_label_set_use_markup(GTK_LABEL(help_label), TRUE);
+		gtk_misc_set_alignment(GTK_MISC(help_label), 0, 0.5);
+		gtk_box_pack_start(GTK_BOX(inner_vbox), help_label, FALSE, FALSE, 0);
 	}
 	/*
 	 * Backup Copy
@@ -711,8 +776,8 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	{
 		GtkWidget *hbox, *entry_dir, *entry_time, *button, *image, *spin_dir_levels;
 
-		notebook_vbox = gtk_vbox_new(FALSE, 2);
-		inner_vbox = gtk_vbox_new(FALSE, 5);
+		notebook_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+		inner_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
 		gtk_container_set_border_width(GTK_CONTAINER(inner_vbox), 5);
 		gtk_box_pack_start(GTK_BOX(notebook_vbox), inner_vbox, TRUE, TRUE, 5);
 		gtk_notebook_insert_page(GTK_NOTEBOOK(notebook),
@@ -737,19 +802,19 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		button = gtk_button_new();
 		g_signal_connect(button, "clicked",
-			G_CALLBACK(backupcopy_dir_button_clicked_cb), entry_dir);
+			G_CALLBACK(target_directory_button_clicked_cb), entry_dir);
 
 		image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
 		gtk_container_add(GTK_CONTAINER(button), image);
 
-		hbox = gtk_hbox_new(FALSE, 6);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 		gtk_box_pack_start(GTK_BOX(hbox), entry_dir, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 
 		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 0);
 
 		label = gtk_label_new_with_mnemonic(
-			_("Date/_Time format for backup files (\"man strftime\" for details):"));
+			_("Date/_Time format for backup files (for a list of available conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 7);
 
@@ -759,7 +824,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 			gtk_entry_set_text(GTK_ENTRY(entry_time), backupcopy_time_fmt);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), entry_time, FALSE, FALSE, 0);
 
-		hbox = gtk_hbox_new(FALSE, 6);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 
 		label = gtk_label_new_with_mnemonic(
 			_("Directory _levels to include in the backup destination:"));
@@ -793,6 +858,7 @@ void plugin_cleanup(void)
 		g_source_remove(autosave_src_id);
 
 	g_free(instantsave_default_ft);
+	g_free(instantsave_target_dir);
 
 	g_free(backupcopy_backup_dir);
 	g_free(backupcopy_time_fmt);

@@ -9,17 +9,16 @@
 
 #include <stdexcept>
 #include <string>
+#include <string_view>
 
 #include "UniConversion.h"
 
-using namespace Scintilla;
+namespace Scintilla::Internal {
 
-namespace Scintilla {
-
-size_t UTF8Length(const wchar_t *uptr, size_t tlen) noexcept {
+size_t UTF8Length(std::wstring_view wsv) noexcept {
 	size_t len = 0;
-	for (size_t i = 0; i < tlen && uptr[i];) {
-		const unsigned int uch = uptr[i];
+	for (size_t i = 0; i < wsv.length() && wsv[i];) {
+		const unsigned int uch = wsv[i];
 		if (uch < 0x80) {
 			len++;
 		} else if (uch < 0x800) {
@@ -36,10 +35,22 @@ size_t UTF8Length(const wchar_t *uptr, size_t tlen) noexcept {
 	return len;
 }
 
-void UTF8FromUTF16(const wchar_t *uptr, size_t tlen, char *putf, size_t len) noexcept {
+size_t UTF8PositionFromUTF16Position(std::string_view u8Text, size_t positionUTF16) noexcept {
+	size_t positionUTF8 = 0;
+	for (size_t lengthUTF16 = 0; (positionUTF8 < u8Text.length()) && (lengthUTF16 < positionUTF16);) {
+		const unsigned char uch = u8Text[positionUTF8];
+		const unsigned int byteCount = UTF8BytesOfLead[uch];
+		lengthUTF16 += UTF16LengthFromUTF8ByteCount(byteCount);
+		positionUTF8 += byteCount;
+	}
+
+	return positionUTF8;
+}
+
+void UTF8FromUTF16(std::wstring_view wsv, char *putf, size_t len) noexcept {
 	size_t k = 0;
-	for (size_t i = 0; i < tlen && uptr[i];) {
-		const unsigned int uch = uptr[i];
+	for (size_t i = 0; i < wsv.length() && wsv[i];) {
+		const unsigned int uch = wsv[i];
 		if (uch < 0x80) {
 			putf[k++] = static_cast<char>(uch);
 		} else if (uch < 0x800) {
@@ -49,7 +60,7 @@ void UTF8FromUTF16(const wchar_t *uptr, size_t tlen, char *putf, size_t len) noe
 			(uch <= SURROGATE_TRAIL_LAST)) {
 			// Half a surrogate pair
 			i++;
-			const unsigned int xch = 0x10000 + ((uch & 0x3ff) << 10) + (uptr[i] & 0x3ff);
+			const unsigned int xch = 0x10000 + ((uch & 0x3ff) << 10) + (wsv[i] & 0x3ff);
 			putf[k++] = static_cast<char>(0xF0 | (xch >> 18));
 			putf[k++] = static_cast<char>(0x80 | ((xch >> 12) & 0x3f));
 			putf[k++] = static_cast<char>(0x80 | ((xch >> 6) & 0x3f));
@@ -85,14 +96,14 @@ void UTF8FromUTF32Character(int uch, char *putf) noexcept {
 	putf[k] = '\0';
 }
 
-size_t UTF16Length(const char *s, size_t len) noexcept {
+size_t UTF16Length(std::string_view svu8) noexcept {
 	size_t ulen = 0;
-	for (size_t i = 0; i < len;) {
-		const unsigned char ch = s[i];
+	for (size_t i = 0; i< svu8.length();) {
+		const unsigned char ch = svu8[i];
 		const unsigned int byteCount = UTF8BytesOfLead[ch];
 		const unsigned int utf16Len = UTF16LengthFromUTF8ByteCount(byteCount);
 		i += byteCount;
-		ulen += (i > len) ? 1 : utf16Len;
+		ulen += (i > svu8.length()) ? 1 : utf16Len;
 	}
 	return ulen;
 }
@@ -100,20 +111,20 @@ size_t UTF16Length(const char *s, size_t len) noexcept {
 constexpr unsigned char TrailByteValue(unsigned char c) {
 	// The top 2 bits are 0b10 to indicate a trail byte.
 	// The lower 6 bits contain the value.
-	return c & 0x3F;
+	return c & 0b0011'1111;
 }
 
-size_t UTF16FromUTF8(const char *s, size_t len, wchar_t *tbuf, size_t tlen) {
+size_t UTF16FromUTF8(std::string_view svu8, wchar_t *tbuf, size_t tlen) {
 	size_t ui = 0;
-	for (size_t i = 0; i < len;) {
-		unsigned char ch = s[i];
+	for (size_t i = 0; i < svu8.length();) {
+		unsigned char ch = svu8[i];
 		const unsigned int byteCount = UTF8BytesOfLead[ch];
 		unsigned int value;
 
-		if (i + byteCount > len) {
+		if (i + byteCount > svu8.length()) {
 			// Trying to read past end but still have space to write
 			if (ui < tlen) {
-			tbuf[ui] = ch;
+				tbuf[ui] = ch;
 				ui++;
 			}
 			break;
@@ -131,26 +142,26 @@ size_t UTF16FromUTF8(const char *s, size_t len, wchar_t *tbuf, size_t tlen) {
 			break;
 		case 2:
 			value = (ch & 0x1F) << 6;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch);
 			tbuf[ui] = static_cast<wchar_t>(value);
 			break;
 		case 3:
 			value = (ch & 0xF) << 12;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += (TrailByteValue(ch) << 6);
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch);
 			tbuf[ui] = static_cast<wchar_t>(value);
 			break;
 		default:
 			// Outside the BMP so need two surrogates
 			value = (ch & 0x7) << 18;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch) << 12;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch) << 6;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch);
 			tbuf[ui] = static_cast<wchar_t>(((value - 0x10000) >> 10) + SURROGATE_LEAD_FIRST);
 			ui++;
@@ -162,10 +173,10 @@ size_t UTF16FromUTF8(const char *s, size_t len, wchar_t *tbuf, size_t tlen) {
 	return ui;
 }
 
-size_t UTF32Length(const char *s, size_t len) noexcept {
+size_t UTF32Length(std::string_view svu8) noexcept {
 	size_t ulen = 0;
-	for (size_t i = 0; i < len;) {
-		const unsigned char ch = s[i];
+	for (size_t i = 0; i < svu8.length();) {
+		const unsigned char ch = svu8[i];
 		const unsigned int byteCount = UTF8BytesOfLead[ch];
 		i += byteCount;
 		ulen++;
@@ -173,14 +184,14 @@ size_t UTF32Length(const char *s, size_t len) noexcept {
 	return ulen;
 }
 
-size_t UTF32FromUTF8(const char *s, size_t len, unsigned int *tbuf, size_t tlen) {
+size_t UTF32FromUTF8(std::string_view svu8, unsigned int *tbuf, size_t tlen) {
 	size_t ui = 0;
-	for (size_t i = 0; i < len;) {
-		unsigned char ch = s[i];
+	for (size_t i = 0; i < svu8.length();) {
+		unsigned char ch = svu8[i];
 		const unsigned int byteCount = UTF8BytesOfLead[ch];
 		unsigned int value;
 
-		if (i + byteCount > len) {
+		if (i + byteCount > svu8.length()) {
 			// Trying to read past end but still have space to write
 			if (ui < tlen) {
 				tbuf[ui] = ch;
@@ -200,23 +211,23 @@ size_t UTF32FromUTF8(const char *s, size_t len, unsigned int *tbuf, size_t tlen)
 			break;
 		case 2:
 			value = (ch & 0x1F) << 6;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch);
 			break;
 		case 3:
 			value = (ch & 0xF) << 12;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch) << 6;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch);
 			break;
 		default:
 			value = (ch & 0x7) << 18;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch) << 12;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch) << 6;
-			ch = s[i++];
+			ch = svu8[i++];
 			value += TrailByteValue(ch);
 			break;
 		}
@@ -226,18 +237,18 @@ size_t UTF32FromUTF8(const char *s, size_t len, unsigned int *tbuf, size_t tlen)
 	return ui;
 }
 
-std::wstring WStringFromUTF8(const char *s, size_t len) {
-#ifdef _WIN32
-		const size_t len16 = UTF16Length(s, len);
+std::wstring WStringFromUTF8(std::string_view svu8) {
+	if constexpr (sizeof(wchar_t) == 2) {
+		const size_t len16 = UTF16Length(svu8);
 		std::wstring ws(len16, 0);
-		UTF16FromUTF8(s, len, &ws[0], len16);
+		UTF16FromUTF8(svu8, &ws[0], len16);
 		return ws;
-#else
-		const size_t len32 = UTF32Length(s, len);
+	} else {
+		const size_t len32 = UTF32Length(svu8);
 		std::wstring ws(len32, 0);
-		UTF32FromUTF8(s, len, reinterpret_cast<unsigned int *>(&ws[0]), len32);
+		UTF32FromUTF8(svu8, reinterpret_cast<unsigned int *>(&ws[0]), len32);
 		return ws;
-#endif
+	}
 }
 
 unsigned int UTF16FromUTF32Character(unsigned int val, wchar_t *tbuf) noexcept {
@@ -352,9 +363,9 @@ int UTF8DrawBytes(const unsigned char *us, int len) noexcept {
 	return (utf8StatusNext & UTF8MaskInvalid) ? 1 : (utf8StatusNext & UTF8MaskWidth);
 }
 
-bool UTF8IsValid(const char *s, size_t len) noexcept {
-	const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
-	size_t remaining = len;
+bool UTF8IsValid(std::string_view svu8) noexcept {
+	const unsigned char *us = reinterpret_cast<const unsigned char *>(svu8.data());
+	size_t remaining = svu8.length();
 	while (remaining > 0) {
 		const int utf8Status = UTF8Classify(us, remaining);
 		if (utf8Status & UTF8MaskInvalid) {

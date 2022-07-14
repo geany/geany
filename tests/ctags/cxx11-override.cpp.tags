@@ -1,9 +1,16 @@
-# format=tagmanager
 BaseÌ1Ö0
+class:      Base
 DerivedÌ1Ö0
+class:      Derived
 fooÌ16Í()ÎBaseÖ0Ïvoid
+function:   void Base :: foo()
 fooÌ16Í()ÎDerivedÖ0Ïvoid
-fooÌ1024Í()ÎBaseÖ0Ïvirtual void
-fooÌ1024Í()ÎDerivedÖ0Ïvirtual void
+function:   void Derived :: foo()
+fooÌ1024Í()ÎBaseÖ0Ïvoid
+prototype:  void Base :: foo()
+fooÌ1024Í()ÎDerivedÖ0Ïvoid
+prototype:  void Derived :: foo()
 overrideÌ16Í()ÎDerivedÖ0Ïvoid
-overrideÌ1024Í()ÎDerivedÖ0Ïvirtual void
+function:   void Derived :: override()
+overrideÌ1024Í()ÎDerivedÖ0Ïvoid
+prototype:  void Derived :: override()

@@ -1,8 +1,14 @@
-# format=tagmanager
 NÌ16384Îctags_bugÖ0
+variable:   ctags_bug :: N
 barÌ64Îfoo_tÖ0
+member:     foo_t :: bar
 ctags_bugÌ256Ö0
+namespace:  ctags_bug
 foo_getbarÌ16Îctags_bugÖ0
-foo_set_barÌ128Îctags_bugÖ0
-foo_setbarÌ128Îctags_bugÖ0
+function:   ctags_bug :: foo_getbar
+foo_set_barÌ128Í(f, b)Îctags_bugÖ0
+method:     ctags_bug :: foo_set_bar(f, b)
+foo_setbarÌ128Í(f, b)Îctags_bugÖ0
+method:     ctags_bug :: foo_setbar(f, b)
 foo_tÌ1Îctags_bugÖ0
+class:      ctags_bug :: foo_t

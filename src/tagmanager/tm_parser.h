@@ -78,7 +78,7 @@ enum
 	TM_PARSER_SH,
 	TM_PARSER_D,
 	TM_PARSER_FORTRAN,
-	TM_PARSER_FERITE,
+	TM_PARSER_GDSCRIPT,
 	TM_PARSER_DIFF,
 	TM_PARSER_VHDL,
 	TM_PARSER_LUA,
@@ -89,8 +89,8 @@ enum
 	TM_PARSER_HAXE,
 	TM_PARSER_REST,
 	TM_PARSER_HTML,
-	TM_PARSER_F77,
-	TM_PARSER_GLSL,
+	TM_PARSER_ADA,
+	TM_PARSER_CUDA,
 	TM_PARSER_MATLAB,
 	TM_PARSER_VALA,
 	TM_PARSER_ACTIONSCRIPT,
@@ -109,10 +109,30 @@ enum
 	TM_PARSER_JSON,
 	TM_PARSER_ZEPHIR,
 	TM_PARSER_POWERSHELL,
+	TM_PARSER_JULIA,
 	TM_PARSER_BIBTEX,
+	TM_PARSER_CPREPROCESSOR,
+	TM_PARSER_TCLOO,
+	TM_PARSER_CLOJURE,
+	TM_PARSER_LISP,
+	TM_PARSER_TYPESCRIPT,
 	TM_PARSER_COUNT
 };
 
+/* keep in sync with icon names in symbols.c */
+enum
+{
+	TM_ICON_CLASS,
+	TM_ICON_MACRO,
+	TM_ICON_MEMBER,
+	TM_ICON_METHOD,
+	TM_ICON_NAMESPACE,
+	TM_ICON_OTHER,
+	TM_ICON_STRUCT,
+	TM_ICON_VAR,
+	TM_ICON_NONE,
+	TM_N_ICONS = TM_ICON_NONE
+};
 
 void tm_parser_verify_type_mappings(void);
 
@@ -120,11 +140,34 @@ TMTagType tm_parser_get_tag_type(gchar kind, TMParserType lang);
 
 gchar tm_parser_get_tag_kind(TMTagType type, TMParserType lang);
 
+gint tm_parser_get_sidebar_group(TMParserType lang, TMTagType type);
+
+const gchar *tm_parser_get_sidebar_info(TMParserType lang, gint group, guint *icon);
+
 TMTagType tm_parser_get_subparser_type(TMParserType lang, TMParserType sublang, TMTagType type);
 
-const gchar *tm_parser_context_separator(TMParserType lang);
+gint tm_parser_scope_autocomplete_suffix(TMParserType lang, const gchar *str);
 
-gboolean tm_parser_has_full_context(TMParserType lang);
+const gchar *tm_parser_get_constructor_method(TMParserType lang);
+
+gboolean tm_parser_is_anon_name(TMParserType lang, gchar *name);
+
+gchar *tm_parser_update_scope(TMParserType lang, gchar *scope);
+
+gboolean tm_parser_enable_role(TMParserType lang, gchar kind);
+
+gboolean tm_parser_enable_kind(TMParserType lang, gchar kind);
+
+gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gchar *type);
+
+gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gchar *args,
+	const gchar *retval, const gchar *scope);
+
+const gchar *tm_parser_scope_separator(TMParserType lang);
+
+const gchar *tm_parser_scope_separator_printable(TMParserType lang);
+
+gboolean tm_parser_has_full_scope(TMParserType lang);
 
 gboolean tm_parser_langs_compatible(TMParserType lang, TMParserType other);
 

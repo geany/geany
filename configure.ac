@@ -1,13 +1,20 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.38],
+AC_INIT([Geany], [1.39],
 		[https://github.com/geany/geany/issues])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.11 -Wall parallel-tests subdir-objects])
 AC_CONFIG_HEADERS([config.h])
+
+# Silence "AC_LINK_IFELSE before AC_USE_SYSTEM_EXTENSIONS" warnings
+# Note: Enables _GNU_SOURCE on Linux
+AC_USE_SYSTEM_EXTENSIONS
+
+AM_GNU_GETTEXT_VERSION([0.19.8])
+AM_GNU_GETTEXT([external])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
@@ -20,29 +27,28 @@ if test -n "${build}" -a -n "${target}"; then
 	GEANY_STATUS_ADD([Building Geany for], [${target}])
 fi
 
-# why do we use this?
-AC_USE_SYSTEM_EXTENSIONS
-
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
 LT_INIT([disable-static])
 AC_PROG_CC
-AC_PROG_CC_C99
 AM_PROG_CC_C_O
-
 AC_PROG_CXX
 GEANY_PROG_CXX
-AX_CXX_COMPILE_STDCXX_11
+AX_CXX_COMPILE_STDCXX_17
 
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
+if test "$ac_cv_prog_cc_c99" = "no"; then
+	AC_MSG_ERROR([Need a C99 compiler])
+fi
+
 # autoscan start
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h glob.h stdlib.h sys/time.h errno.h limits.h])
+AC_CHECK_HEADERS([fcntl.h stdlib.h sys/time.h errno.h limits.h])
 
 # Checks for dependencies needed by ctags
-AC_CHECK_HEADERS([fnmatch.h direct.h io.h sys/dir.h])
+AC_CHECK_HEADERS([dirent.h fnmatch.h direct.h io.h sys/dir.h])
 AC_DEFINE([HAVE_STDBOOL_H], [1], [whether or not to use <stdbool.h>.])
 AC_CHECK_FUNC([regcomp],
 		[have_regcomp=yes],
@@ -82,45 +88,8 @@ AC_CHECK_DECLS([_NSGetEnviron],,,[[#include <crt_externs.h>]])
 GEANY_CHECK_REVISION([dnl force debug mode for a VCS working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
 
-# GTK version check
-AC_ARG_ENABLE([gtk2],
-		[AS_HELP_STRING([--enable-gtk2],
-						[compile against deprecated GTK2 [default=no]])],
-		[enable_gtk2=$enableval],
-		[enable_gtk2=no])
-
-gtk2_package=gtk+-2.0
-gtk2_min_version=2.24
-gtk3_package=gtk+-3.0
-gtk3_min_version=3.0
-
-AS_IF([test "x$enable_gtk2" = "xyes"],
-	[gtk_package=$gtk2_package
-	 gtk_min_version=$gtk2_min_version],
-	[gtk_package=$gtk3_package
-	 gtk_min_version=$gtk3_min_version])
-
-AM_CONDITIONAL([GTK3], [test "x$gtk_package" = "x$gtk3_package"])
-
-# GTK/GLib/GIO checks
-gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.32"
-gtk_modules_private="gio-2.0 >= 2.32 gmodule-no-export-2.0"
-PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
-AC_SUBST([DEPENDENCIES], [$gtk_modules])
-AS_VAR_APPEND([GTK_CFLAGS], [" -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_32"])
-dnl Disable all GTK deprecations on 3.x so long as we want to keep 2.x support and only require 3.0.
-dnl No need on 2.x as we target the latest version.
-AM_COND_IF([GTK3], [AS_VAR_APPEND([GTK_CFLAGS], [" -DGDK_DISABLE_DEPRECATION_WARNINGS"])])
-AC_SUBST([GTK_CFLAGS])
-AC_SUBST([GTK_LIBS])
-GTK_VERSION=`$PKG_CONFIG --modversion $gtk_package`
-AC_SUBST([GTK_VERSION])
-GEANY_STATUS_ADD([Using GTK version], [${GTK_VERSION}])
-# GTHREAD checks
-gthread_modules="gthread-2.0"
-PKG_CHECK_MODULES([GTHREAD], [$gthread_modules])
-AC_SUBST([GTHREAD_CFLAGS])
-AC_SUBST([GTHREAD_LIBS])
+GEANY_CHECK_GTK
+GEANY_CHECK_GTK_FUNCS([g_strv_equal])
 
 # --disable-deprecated switch for GTK purification
 AC_ARG_ENABLE([deprecated],
@@ -143,13 +112,14 @@ GEANY_CHECK_VTE
 GEANY_CHECK_MAC_INTEGRATION
 GEANY_CHECK_THE_FORCE dnl hehe
 
-# i18n
-GEANY_I18N
+AC_SUBST([GETTEXT_PACKAGE],[$PACKAGE])
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$PACKAGE"], [Gettext package.])
 
 # double eval since datarootdir is usually defined as ${prefix}/share
 AM_COND_IF([MINGW],
   [pkgdatadir='${prefix}/data'],
   [pkgdatadir='${datarootdir}/geany'])
+AM_COND_IF([MINGW],[LIBS="$LIBS -liconv"])
 AC_SUBST([GEANY_DATA_DIR], [$(eval echo $(eval echo $pkgdatadir))])
 AC_SUBST([pkgdatadir])
 
@@ -188,7 +158,6 @@ AC_CONFIG_FILES([
 		icons/tango/scalable/Makefile
 		ctags/Makefile
 		scintilla/Makefile
-		scintilla/include/Makefile
 		src/Makefile
 		src/tagmanager/Makefile
 		plugins/Makefile
@@ -199,7 +168,6 @@ AC_CONFIG_FILES([
 		doc/geany.1
 		geany.pc
 		geany.nsi
-		doc/Doxyfile
 		tests/Makefile
 		tests/ctags/Makefile
 ])

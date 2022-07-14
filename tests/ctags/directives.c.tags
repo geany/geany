@@ -1,20 +1,38 @@
-# format=tagmanager
 FUNCTION_LIKEÌ131072Í(a,b)Ö0
+macro_arg:  FUNCTION_LIKE(a,b)
 MACRO_TO_SEE1Ì65536Ö0
+macro:      MACRO_TO_SEE1
 MACRO_TO_SEE2Ì65536Ö0
+macro:      MACRO_TO_SEE2
 MACRO_TO_SEE3Ì65536Ö0
+macro:      MACRO_TO_SEE3
 MACRO_TO_SEE4Ì65536Ö0
+macro:      MACRO_TO_SEE4
 PATH1Ì65536Ö0
+macro:      PATH1
 PATH1bÌ65536Ö0
+macro:      PATH1b
 SEE_THIS_MACROÌ65536Ö0
+macro:      SEE_THIS_MACRO
 VARIABLE_LIKEÌ65536Ö0
+macro:      VARIABLE_LIKE
 WeakSymbolÌ65536Ö0
+macro:      WeakSymbol
 aÌ16384Ö0Ïint
+variable:   int a
 bÌ16384Ö0Ïint
+variable:   int b
 bar1Ì16Í(void)Ö0Ïint
+function:   int bar1(void)
 cÌ16384Ö0Ïint
+variable:   int c
 dÌ16384Ö0Ïint
+variable:   int d
 foo1Ì16Í(void)Ö0Ïint
+function:   int foo1(void)
 gÌ16384Ö0Ïint
+variable:   int g
 p1Ì16384Ö0Ïint
+variable:   int p1
 with_long_commentÌ65536Ö0
+macro:      with_long_comment

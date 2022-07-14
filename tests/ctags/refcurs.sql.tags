@@ -1,8 +1,14 @@
-# format=tagmanager
 get_cursor_refÌ16Îtest_ref_cursorÖ0
+function:   test_ref_cursor :: get_cursor_ref
 mainÌ256Îtest_ref_cursorÖ0
+namespace:  test_ref_cursor :: main
 mainÌ1024Îtest_ref_cursorÖ0
+prototype:  test_ref_cursor :: main
 process_cursorÌ256Îtest_ref_cursorÖ0
+namespace:  test_ref_cursor :: process_cursor
 process_cursorÌ1024Îtest_ref_cursorÖ0
+prototype:  test_ref_cursor :: process_cursor
 test_ref_cursorÌ512Ö0
+package:    test_ref_cursor
 typesÌ512Ö0
+package:    types

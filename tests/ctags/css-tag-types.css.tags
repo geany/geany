@@ -1,37 +1,72 @@
-# format=tagmanager
 #a #fooÌ16384Ö0
+variable:   #a #foo
 #a #foo #barÌ16384Ö0
+variable:   #a #foo #bar
 #a #foo .barÌ1Ö0
+class:      #a #foo .bar
 #a #foo barÌ2048Ö0
+struct:     #a #foo bar
 #a .fooÌ1Ö0
+class:      #a .foo
 #a .foo #barÌ16384Ö0
+variable:   #a .foo #bar
 #a .foo .barÌ1Ö0
+class:      #a .foo .bar
 #a .foo barÌ2048Ö0
+struct:     #a .foo bar
 #a fooÌ2048Ö0
+struct:     #a foo
 #a foo #barÌ16384Ö0
+variable:   #a foo #bar
 #a foo .barÌ1Ö0
+class:      #a foo .bar
 #a foo barÌ2048Ö0
+struct:     #a foo bar
 .a #fooÌ16384Ö0
+variable:   .a #foo
 .a #foo #barÌ16384Ö0
+variable:   .a #foo #bar
 .a #foo .barÌ1Ö0
+class:      .a #foo .bar
 .a #foo barÌ2048Ö0
+struct:     .a #foo bar
 .a .fooÌ1Ö0
+class:      .a .foo
 .a .foo #barÌ16384Ö0
+variable:   .a .foo #bar
 .a .foo .barÌ1Ö0
+class:      .a .foo .bar
 .a .foo barÌ2048Ö0
+struct:     .a .foo bar
 .a fooÌ2048Ö0
+struct:     .a foo
 .a foo #barÌ16384Ö0
+variable:   .a foo #bar
 .a foo .barÌ1Ö0
+class:      .a foo .bar
 .a foo barÌ2048Ö0
+struct:     .a foo bar
 a #fooÌ16384Ö0
+variable:   a #foo
 a #foo #barÌ16384Ö0
+variable:   a #foo #bar
 a #foo .barÌ1Ö0
+class:      a #foo .bar
 a #foo barÌ2048Ö0
+struct:     a #foo bar
 a .fooÌ1Ö0
+class:      a .foo
 a .foo #barÌ16384Ö0
+variable:   a .foo #bar
 a .foo .barÌ1Ö0
+class:      a .foo .bar
 a .foo barÌ2048Ö0
+struct:     a .foo bar
 a fooÌ2048Ö0
+struct:     a foo
 a foo #barÌ16384Ö0
+variable:   a foo #bar
 a foo .barÌ1Ö0
+class:      a foo .bar
 a foo barÌ2048Ö0
+struct:     a foo bar

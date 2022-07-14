@@ -33,7 +33,7 @@
 #include "utils.h"
 #include "ui_utils.h"
 
-#include "gtkcompat.h"
+#include <gtk/gtk.h>
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
@@ -137,7 +137,7 @@ static void handler_log(const gchar *domain, GLogLevelFlags level, const gchar *
 #endif
 	}
 
-	time_str = utils_get_current_time_string();
+	time_str = utils_get_current_time_string(TRUE);
 
 	g_string_append_printf(log_buffer, "%s: %s %s: %s\n", time_str, domain,
 		get_log_prefix(level), msg);

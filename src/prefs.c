@@ -57,10 +57,9 @@
 #include "vte.h"
 #include "osx.h"
 
-#include "gtkcompat.h"
-
 #include <stdlib.h>
 #include <string.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 
@@ -409,9 +408,6 @@ static void prefs_init_dialog(void)
 	/* startup */
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.load_session);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), project_prefs.project_session);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), project_prefs.project_file_in_basedir);
@@ -763,6 +759,8 @@ static void prefs_init_dialog(void)
 	/* VTE settings */
 	if (vte_info.have_vte)
 	{
+		VteConfig *vc = &vte_config;
+
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "font_term");
 		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
 
@@ -892,9 +890,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		/* startup */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
 		prefs.load_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
-		project_prefs.project_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
 		project_prefs.project_file_in_basedir = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1239,6 +1234,8 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		/* VTE settings */
 		if (vte_info.have_vte)
 		{
+			VteConfig *vc = &vte_config;
+
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 			gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
@@ -1420,7 +1417,7 @@ static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *
 
 	state = keybindings_get_modifiers(event->state);
 
-	if (event->keyval == GDK_Escape)
+	if (event->keyval == GDK_KEY_Escape)
 		return FALSE;	/* close the dialog, don't allow escape when detecting keybindings. */
 
 	str = gtk_accelerator_name(event->keyval, state);

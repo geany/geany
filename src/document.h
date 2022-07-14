@@ -129,14 +129,6 @@ GeanyDocument;
  * @see documents_array(). */
 #define documents ((GeanyDocument **)GEANY(documents_array)->pdata)
 
-/** @deprecated Use @ref foreach_document() instead.
- * Iterates all valid documents.
- * Use like a @c for statement.
- * @param i @c guint index for document_index(). */
-#ifndef GEANY_DISABLE_DEPRECATED
-#define documents_foreach(i) foreach_document(i)
-#endif
-
 /** Iterates all valid document indexes.
  * Use like a @c for statement.
  * @param i @c guint index for @ref GeanyData::documents_array.

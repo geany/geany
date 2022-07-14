@@ -106,17 +106,17 @@ static cppState Cpp = {
 *   FUNCTION DEFINITIONS
 */
 
-extern bool cppIsBraceFormat (void)
+extern bool lcppIsBraceFormat (void)
 {
 	return BraceFormat;
 }
 
-extern unsigned int cppGetDirectiveNestLevel (void)
+extern unsigned int lcppGetDirectiveNestLevel (void)
 {
 	return Cpp.directive.nestLevel;
 }
 
-extern void cppInit (const bool state, const bool hasAtLiteralStrings,
+extern void lcppInit (const bool state, const bool hasAtLiteralStrings,
                      const bool hasCxxRawLiteralStrings,
                      int defineMacroKindIndex)
 {
@@ -141,7 +141,7 @@ extern void cppInit (const bool state, const bool hasAtLiteralStrings,
 	Cpp.directive.name = vStringNewOrClear (Cpp.directive.name);
 }
 
-extern void cppTerminate (void)
+extern void lcppTerminate (void)
 {
 	if (Cpp.directive.name != NULL)
 	{
@@ -150,12 +150,12 @@ extern void cppTerminate (void)
 	}
 }
 
-extern void cppBeginStatement (void)
+extern void lcppBeginStatement (void)
 {
 	Cpp.resolveRequired = true;
 }
 
-extern void cppEndStatement (void)
+extern void lcppEndStatement (void)
 {
 	Cpp.resolveRequired = false;
 }
@@ -170,7 +170,7 @@ extern void cppEndStatement (void)
 /*  This puts a character back into the input queue for the input File.
  *  Up to two characters may be ungotten.
  */
-extern void cppUngetc (const int c)
+extern void lcppUngetc (const int c)
 {
 	Assert (Cpp.ungetch2 == '\0');
 	Cpp.ungetch2 = Cpp.ungetch;
@@ -228,7 +228,7 @@ static void readIdentifier (int c, vString *const name)
 	{
 		vStringPut (name, c);
 		c = getcAndCollect ();
-	} while (c != EOF && cppIsident (c));
+	} while (c != EOF && lcppIsident (c));
 	ungetcAndCollect (c);
 }
 
@@ -342,7 +342,7 @@ static int makeDefineTag (const char *const name, bool parameterized, bool undef
 		e.isFileScope  = isFileScope;
 		e.truncateLineAfterTag = true;
 		if (parameterized)
-			e.extensionFields.signature = cppGetSignature ();
+			e.extensionFields.signature = lcppGetSignature ();
 		makeTagEntry (&e);
 		if (parameterized)
 			eFree((char *) e.extensionFields.signature);
@@ -354,7 +354,7 @@ static int directiveDefine (const int c, bool undef)
 {
 	int r = CORK_NIL;
 
-	if (cppIsident1 (c))
+	if (lcppIsident1 (c))
 	{
 		bool parameterized;
 		int nc;
@@ -364,7 +364,7 @@ static int directiveDefine (const int c, bool undef)
 		parameterized = (nc == '(');
 		if (parameterized)
 		{
-			cppStartCollectingSignature ();
+			lcppStartCollectingSignature ();
 			while (nc != EOF)
 			{
 				int lastC = nc;
@@ -372,7 +372,7 @@ static int directiveDefine (const int c, bool undef)
 				if (nc == '\n' && lastC != '\\')
 					break;
 			}
-			cppStopCollectingSignature ();
+			lcppStopCollectingSignature ();
 		}
 		ungetcAndCollect (nc);
 		if (! isIgnore ())
@@ -396,7 +396,7 @@ static void directiveUndef (const int c)
 
 static void directivePragma (int c)
 {
-	if (cppIsident1 (c))
+	if (lcppIsident1 (c))
 	{
 		readIdentifier (c, Cpp.directive.name);
 		if (stringMatch (vStringValue (Cpp.directive.name), "weak"))
@@ -406,7 +406,7 @@ static void directivePragma (int c)
 			{
 				c = getcAndCollect ();
 			} while (c == SPACE);
-			if (cppIsident1 (c))
+			if (lcppIsident1 (c))
 			{
 				readIdentifier (c, Cpp.directive.name);
 				makeDefineTag (vStringValue (Cpp.directive.name), NULL, false);
@@ -507,7 +507,7 @@ static Comment isComment (void)
 /*  Skips over a C style comment. According to ANSI specification a comment
  *  is treated as white space, so we perform this substitution.
  */
-int cppSkipOverCComment (void)
+int lcppSkipOverCComment (void)
 {
 	int c = getcAndCollect ();
 
@@ -669,7 +669,7 @@ static int skipToEndOfChar (void)
  *  quoted strings. In short, strip anything which places a burden upon
  *  the tokenizer.
  */
-extern int cppGetc (void)
+extern int lcppGetc (void)
 {
 	bool directive = false;
 	bool ignore = false;
@@ -735,7 +735,7 @@ process:
 				const Comment comment = isComment ();
 
 				if (comment == COMMENT_C)
-					c = cppSkipOverCComment ();
+					c = lcppSkipOverCComment ();
 				else if (comment == COMMENT_CPLUS)
 				{
 					c = skipOverCplusComment ();
@@ -859,9 +859,9 @@ process:
 					int prev2 = getNthPrevCFromInputFile (2, '\0');
 					int prev3 = getNthPrevCFromInputFile (3, '\0');
 
-					if (! cppIsident (prev) ||
-					    (! cppIsident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
-					    (! cppIsident (prev3) && (prev2 == 'u' && prev == '8')))
+					if (! lcppIsident (prev) ||
+					    (! lcppIsident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
+					    (! lcppIsident (prev3) && (prev2 == 'u' && prev == '8')))
 					{
 						int next = getcAndCollect ();
 						if (next != DOUBLE_QUOTE)
@@ -977,7 +977,7 @@ static void stripCodeBuffer(char *buf)
 	return;
 }
 
-extern char *cppGetSignature(void)
+extern char *lcppGetSignature(void)
 {
 	char *start, *end;
 	int level;
@@ -1000,19 +1000,19 @@ extern char *cppGetSignature(void)
 	return start;
 }
 
-extern void cppStartCollectingSignature (void)
+extern void lcppStartCollectingSignature (void)
 {
 	signature = vStringNewOrClear (signature);
 	vStringPut (signature, '(');
 	collectingSignature = true;
 }
 
-extern void cppStopCollectingSignature (void)
+extern void lcppStopCollectingSignature (void)
 {
 	collectingSignature = false;
 }
 
-extern void cppClearSignature (void)
+extern void lcppClearSignature (void)
 {
 	signature = vStringNewOrClear (signature);
 	collectingSignature = false;

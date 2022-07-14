@@ -1,170 +1,196 @@
+noinst_LTLIBRARIES = libscintilla.la liblexilla.la
 
-SUBDIRS = include
+AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DNO_CXX11_REGEX -std=c++17
+AM_CPPFLAGS = @GTK_CFLAGS@ @LIBGEANY_CFLAGS@
 
-noinst_LTLIBRARIES=libscintilla.la
+scintilla_includedir = $(includedir)/geany/scintilla/
+scintilla_include_HEADERS =            \
+include/Scintilla.h                    \
+include/Scintilla.iface                \
+include/ScintillaWidget.h              \
+include/Sci_Position.h                 \
+lexilla/include/SciLexer.h
 
-AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DNO_CXX11_REGEX
+LEXER_SRCS =                           \
+lexilla/lexers/LexAbaqus.cxx           \
+lexilla/lexers/LexAda.cxx              \
+lexilla/lexers/LexAsciidoc.cxx         \
+lexilla/lexers/LexAsm.cxx              \
+lexilla/lexers/LexBash.cxx             \
+lexilla/lexers/LexBasic.cxx            \
+lexilla/lexers/LexBatch.cxx            \
+lexilla/lexers/LexCOBOL.cxx            \
+lexilla/lexers/LexCPP.cxx              \
+lexilla/lexers/LexCSS.cxx              \
+lexilla/lexers/LexCaml.cxx             \
+lexilla/lexers/LexCmake.cxx            \
+lexilla/lexers/LexCoffeeScript.cxx     \
+lexilla/lexers/LexD.cxx                \
+lexilla/lexers/LexDiff.cxx             \
+lexilla/lexers/LexErlang.cxx           \
+lexilla/lexers/LexForth.cxx            \
+lexilla/lexers/LexFortran.cxx          \
+lexilla/lexers/LexGDScript.cxx         \
+lexilla/lexers/LexHTML.cxx             \
+lexilla/lexers/LexHaskell.cxx          \
+lexilla/lexers/LexJulia.cxx            \
+lexilla/lexers/LexLaTeX.cxx            \
+lexilla/lexers/LexLisp.cxx             \
+lexilla/lexers/LexLua.cxx              \
+lexilla/lexers/LexMake.cxx             \
+lexilla/lexers/LexMarkdown.cxx         \
+lexilla/lexers/LexMatlab.cxx           \
+lexilla/lexers/LexNsis.cxx             \
+lexilla/lexers/LexNull.cxx             \
+lexilla/lexers/LexPascal.cxx           \
+lexilla/lexers/LexPerl.cxx             \
+lexilla/lexers/LexPowerShell.cxx       \
+lexilla/lexers/LexProps.cxx            \
+lexilla/lexers/LexPython.cxx           \
+lexilla/lexers/LexPO.cxx               \
+lexilla/lexers/LexR.cxx                \
+lexilla/lexers/LexRuby.cxx             \
+lexilla/lexers/LexRust.cxx             \
+lexilla/lexers/LexSmalltalk.cxx        \
+lexilla/lexers/LexSQL.cxx              \
+lexilla/lexers/LexTCL.cxx              \
+lexilla/lexers/LexTxt2tags.cxx         \
+lexilla/lexers/LexVHDL.cxx             \
+lexilla/lexers/LexVerilog.cxx          \
+lexilla/lexers/LexYAML.cxx
 
-LEXER_SRCS= \
-lexers/LexAbaqus.cxx \
-lexers/LexAda.cxx \
-lexers/LexAsm.cxx \
-lexers/LexBash.cxx \
-lexers/LexBasic.cxx \
-lexers/LexBatch.cxx \
-lexers/LexCOBOL.cxx \
-lexers/LexCPP.cxx \
-lexers/LexCSS.cxx \
-lexers/LexCaml.cxx \
-lexers/LexCmake.cxx \
-lexers/LexCoffeeScript.cxx \
-lexers/LexD.cxx \
-lexers/LexDiff.cxx \
-lexers/LexErlang.cxx \
-lexers/LexForth.cxx \
-lexers/LexFortran.cxx \
-lexers/LexHTML.cxx \
-lexers/LexHaskell.cxx \
-lexers/LexLaTeX.cxx \
-lexers/LexLisp.cxx \
-lexers/LexLua.cxx \
-lexers/LexMake.cxx \
-lexers/LexMarkdown.cxx \
-lexers/LexMatlab.cxx \
-lexers/LexNsis.cxx \
-lexers/LexNull.cxx \
-lexers/LexPascal.cxx \
-lexers/LexPerl.cxx \
-lexers/LexPowerShell.cxx \
-lexers/LexProps.cxx \
-lexers/LexPython.cxx \
-lexers/LexPO.cxx \
-lexers/LexR.cxx \
-lexers/LexRuby.cxx \
-lexers/LexRust.cxx \
-lexers/LexSmalltalk.cxx \
-lexers/LexSQL.cxx \
-lexers/LexTCL.cxx \
-lexers/LexTxt2tags.cxx \
-lexers/LexVHDL.cxx \
-lexers/LexVerilog.cxx \
-lexers/LexYAML.cxx
+LEXLIB_SRCS =                          \
+lexilla/include/Lexilla.h              \
+lexilla/include/SciLexer.h             \
+lexilla/lexlib/Accessor.cxx            \
+lexilla/lexlib/Accessor.h              \
+lexilla/lexlib/CatalogueModules.h      \
+lexilla/lexlib/CharacterCategory.cxx   \
+lexilla/lexlib/CharacterCategory.h     \
+lexilla/lexlib/CharacterSet.cxx        \
+lexilla/lexlib/CharacterSet.h          \
+lexilla/lexlib/DefaultLexer.cxx        \
+lexilla/lexlib/DefaultLexer.h          \
+lexilla/lexlib/LexAccessor.cxx         \
+lexilla/lexlib/LexAccessor.h           \
+lexilla/lexlib/LexerBase.cxx           \
+lexilla/lexlib/LexerBase.h             \
+lexilla/lexlib/LexerModule.cxx         \
+lexilla/lexlib/LexerModule.h           \
+lexilla/lexlib/LexerNoExceptions.cxx   \
+lexilla/lexlib/LexerNoExceptions.h     \
+lexilla/lexlib/LexerSimple.cxx         \
+lexilla/lexlib/LexerSimple.h           \
+lexilla/lexlib/OptionSet.h             \
+lexilla/lexlib/PropSetSimple.cxx       \
+lexilla/lexlib/PropSetSimple.h         \
+lexilla/lexlib/SparseState.h           \
+lexilla/lexlib/StringCopy.h            \
+lexilla/lexlib/StyleContext.cxx        \
+lexilla/lexlib/StyleContext.h          \
+lexilla/lexlib/SubStyles.h             \
+lexilla/lexlib/WordList.cxx            \
+lexilla/lexlib/WordList.h              \
+lexilla/src/Lexilla.cxx
 
-SRCS= \
-gtk/Converter.h \
-gtk/PlatGTK.cxx \
-gtk/ScintillaGTK.cxx \
-gtk/ScintillaGTK.h \
-gtk/ScintillaGTKAccessible.cxx \
-gtk/ScintillaGTKAccessible.h \
-gtk/scintilla-marshal.c \
-gtk/scintilla-marshal.h \
-lexlib/Accessor.cxx \
-lexlib/Accessor.h \
-lexlib/CatalogueModules.h \
-lexlib/CharacterCategory.cxx \
-lexlib/CharacterCategory.h \
-lexlib/CharacterSet.cxx \
-lexlib/CharacterSet.h \
-lexlib/DefaultLexer.cxx \
-lexlib/DefaultLexer.h \
-lexlib/LexAccessor.h \
-lexlib/LexerBase.cxx \
-lexlib/LexerBase.h \
-lexlib/LexerModule.cxx \
-lexlib/LexerModule.h \
-lexlib/LexerNoExceptions.cxx \
-lexlib/LexerNoExceptions.h \
-lexlib/LexerSimple.cxx \
-lexlib/LexerSimple.h \
-lexlib/OptionSet.h \
-lexlib/PropSetSimple.cxx \
-lexlib/PropSetSimple.h \
-lexlib/SparseState.h \
-lexlib/StringCopy.h \
-lexlib/StyleContext.cxx \
-lexlib/StyleContext.h \
-lexlib/SubStyles.h \
-lexlib/WordList.cxx \
-lexlib/WordList.h \
-src/AutoComplete.cxx \
-src/AutoComplete.h \
-src/CallTip.cxx \
-src/CallTip.h \
-src/CaseConvert.cxx \
-src/CaseConvert.h \
-src/CaseFolder.cxx \
-src/CaseFolder.h \
-src/Catalogue.cxx \
-src/Catalogue.h \
-src/CellBuffer.cxx \
-src/CellBuffer.h \
-src/CharClassify.cxx \
-src/CharClassify.h \
-src/ContractionState.cxx \
-src/ContractionState.h \
-src/DBCS.cxx \
-src/DBCS.h \
-src/Decoration.cxx \
-src/Decoration.h \
-src/Document.cxx \
-src/Document.h \
-src/Editor.cxx \
-src/Editor.h \
-src/EditModel.cxx \
-src/EditModel.h \
-src/EditView.cxx \
-src/EditView.h \
-src/ElapsedPeriod.h \
-src/ExternalLexer.cxx \
-src/ExternalLexer.h \
-src/FontQuality.h \
-src/Indicator.cxx \
-src/Indicator.h \
-src/IntegerRectangle.h \
-src/KeyMap.cxx \
-src/KeyMap.h \
-src/LineMarker.cxx \
-src/LineMarker.h \
-src/MarginView.cxx \
-src/MarginView.h \
-src/Partitioning.h \
-src/PerLine.cxx \
-src/PerLine.h \
-src/Position.h \
-src/PositionCache.cxx \
-src/PositionCache.h \
-src/RESearch.cxx \
-src/RESearch.h \
-src/RunStyles.cxx \
-src/RunStyles.h \
-src/SVector.h \
-src/ScintillaBase.cxx \
-src/ScintillaBase.h \
-src/Selection.cxx \
-src/Selection.h \
-src/SparseVector.h \
-src/SplitVector.h \
-src/Style.cxx \
-src/Style.h \
-src/UniConversion.cxx \
-src/UniConversion.h \
-src/UnicodeFromUTF8.h \
-src/UniqueString.cxx \
-src/UniqueString.h \
-src/ViewStyle.cxx \
-src/ViewStyle.h \
-src/XPM.cxx \
-src/XPM.h \
-$(LEXER_SRCS)
+SRCS =                                 \
+include/ILexer.h                       \
+include/ILoader.h                      \
+include/ScintillaCall.h                \
+include/ScintillaMessages.h            \
+include/ScintillaStructures.h          \
+include/ScintillaTypes.h               \
+include/ScintillaWidget.h              \
+gtk/Converter.h                        \
+gtk/PlatGTK.cxx                        \
+gtk/ScintillaGTK.cxx                   \
+gtk/ScintillaGTK.h                     \
+gtk/ScintillaGTKAccessible.cxx         \
+gtk/ScintillaGTKAccessible.h           \
+gtk/scintilla-marshal.c                \
+gtk/scintilla-marshal.h                \
+src/AutoComplete.cxx                   \
+src/AutoComplete.h                     \
+src/CallTip.cxx                        \
+src/CallTip.h                          \
+src/CaseConvert.cxx                    \
+src/CaseConvert.h                      \
+src/CaseFolder.cxx                     \
+src/CaseFolder.h                       \
+src/CellBuffer.cxx                     \
+src/CellBuffer.h                       \
+src/CharacterCategoryMap.cxx           \
+src/CharacterCategoryMap.h             \
+src/CharacterType.cxx                  \
+src/CharacterType.h                    \
+src/CharClassify.cxx                   \
+src/CharClassify.h                     \
+src/ContractionState.cxx               \
+src/ContractionState.h                 \
+src/DBCS.cxx                           \
+src/DBCS.h                             \
+src/Debugging.h                        \
+src/Decoration.cxx                     \
+src/Decoration.h                       \
+src/Document.cxx                       \
+src/Document.h                         \
+src/EditModel.cxx                      \
+src/EditModel.h                        \
+src/Editor.cxx                         \
+src/Editor.h                           \
+src/EditView.cxx                       \
+src/EditView.h                         \
+src/ElapsedPeriod.h                    \
+src/FontQuality.h                      \
+src/Geometry.cxx                       \
+src/Geometry.h                         \
+src/Indicator.cxx                      \
+src/Indicator.h                        \
+src/KeyMap.cxx                         \
+src/KeyMap.h                           \
+src/LineMarker.cxx                     \
+src/LineMarker.h                       \
+src/MarginView.cxx                     \
+src/MarginView.h                       \
+src/Partitioning.h                     \
+src/PerLine.cxx                        \
+src/PerLine.h                          \
+src/Platform.h                         \
+src/PositionCache.cxx                  \
+src/PositionCache.h                    \
+src/Position.h                         \
+src/RESearch.cxx                       \
+src/RESearch.h                         \
+src/RunStyles.cxx                      \
+src/RunStyles.h                        \
+src/ScintillaBase.cxx                  \
+src/ScintillaBase.h                    \
+src/Selection.cxx                      \
+src/Selection.h                        \
+src/SparseVector.h                     \
+src/SplitVector.h                      \
+src/Style.cxx                          \
+src/Style.h                            \
+src/UniConversion.cxx                  \
+src/UniConversion.h                    \
+src/UniqueString.cxx                   \
+src/UniqueString.h                     \
+src/ViewStyle.cxx                      \
+src/ViewStyle.h                        \
+src/XPM.cxx                            \
+src/XPM.h
 
+liblexilla_la_CPPFLAGS = $(AM_CPPFLAGS)
+liblexilla_la_CPPFLAGS += -I$(srcdir)/lexilla/include -I$(srcdir)/lexilla/lexlib -I$(srcdir)/include
+liblexilla_la_SOURCES = $(LEXLIB_SRCS) $(LEXER_SRCS)
+
+libscintilla_la_CPPFLAGS = $(AM_CPPFLAGS)
+libscintilla_la_CPPFLAGS += -I$(srcdir)/src -I$(srcdir)/include -I$(srcdir)/lexilla/include
 libscintilla_la_SOURCES = $(SRCS)
-
-AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib \
-	@GTK_CFLAGS@ @LIBGEANY_CFLAGS@
 
 marshallers: gtk/scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --header > gtk/scintilla-marshal.h
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --body > gtk/scintilla-marshal.c
 
-EXTRA_DIST=gtk/scintilla-marshal.list License.txt README version.txt
+EXTRA_DIST = gtk/scintilla-marshal.list License.txt README version.txt
+EXTRA_DIST += lexilla/License.txt lexilla/version.txt

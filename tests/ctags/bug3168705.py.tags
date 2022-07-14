@@ -1,4 +1,6 @@
-# format=tagmanager
 AÌ1Ö0
+class:      A
 func1Ì128Í()ÎAÖ0
+method:     A :: func1()
 func2Ì128Í()ÎAÖ0
+method:     A :: func2()

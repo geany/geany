@@ -1,4 +1,6 @@
-# format=tagmanager
 CÌ1Ö0
-barÌ128ÎCÖ0
-fooÌ64ÎCÖ0
+class:      C
+barÌ128Í()ÎCÖ0
+method:     C :: bar()
+fooÌ64Í()ÎCÖ0
+member:     C :: foo()

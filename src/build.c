@@ -50,13 +50,12 @@
 #include "vte.h"
 #include "win32.h"
 
-#include "gtkcompat.h"
-
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
+#include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
 
@@ -862,9 +861,9 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	cmd_string = utils_get_locale_from_utf8(cmd_string_utf8);
 
 #ifdef HAVE_VTE
-	if (vte_info.have_vte && vc->run_in_vte)
+	if (vte_info.have_vte && vte_config.run_in_vte)
 	{
-		if (vc->skip_run_script)
+		if (vte_config.skip_run_script)
 		{
 			utils_free_pointers(2, cmd_string_utf8, working_dir_utf8, NULL);
 			return cmd_string;
@@ -915,7 +914,7 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 	run_info[cmdindex].file_type_id = doc->file_type->id;
 
 #ifdef HAVE_VTE
-	if (vte_info.have_vte && vc->run_in_vte)
+	if (vte_info.have_vte && vte_config.run_in_vte)
 	{
 		gchar *vte_cmd;
 
@@ -923,7 +922,7 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		SETPTR(run_cmd, utils_get_utf8_from_locale(run_cmd));
 		SETPTR(working_dir, utils_get_utf8_from_locale(working_dir));
 
-		if (vc->skip_run_script)
+		if (vte_config.skip_run_script)
 			vte_cmd = g_strconcat(run_cmd, "\n", NULL);
 		else
 			vte_cmd = g_strconcat("\n/bin/sh ", run_cmd, "\n", NULL);
@@ -934,13 +933,13 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 			const gchar *msg = _("File not executed because the terminal may contain some input (press Ctrl+C or Enter to clear it).");
 			ui_set_statusbar(FALSE, "%s", msg);
 			geany_debug("%s", msg);
-			if (!vc->skip_run_script)
+			if (!vte_config.skip_run_script)
 				g_unlink(run_cmd);
 		}
 
 		/* show the VTE */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
-		gtk_widget_grab_focus(vc->vte);
+		gtk_widget_grab_focus(vte_config.vte);
 		msgwin_show_hide(TRUE);
 
 		run_info[cmdindex].pid = 1;
@@ -1733,14 +1732,10 @@ typedef struct RowWidgets
 	gboolean used_dst;
 } RowWidgets;
 
-#if GTK_CHECK_VERSION(3,0,0)
-typedef GdkRGBA InsensitiveColor;
-#else
-typedef GdkColor InsensitiveColor;
-#endif
-static InsensitiveColor insensitive_color;
 
-static void set_row_color(RowWidgets *r, InsensitiveColor *color)
+static GdkRGBA insensitive_color;
+
+static void set_row_color(RowWidgets *r, GdkRGBA *color)
 {
 	enum GeanyBuildCmdEntries i;
 
@@ -1749,11 +1744,7 @@ static void set_row_color(RowWidgets *r, InsensitiveColor *color)
 		if (i == GEANY_BC_LABEL)
 			continue;
 
-#if GTK_CHECK_VERSION(3,0,0)
 		gtk_widget_override_color(r->entries[i], GTK_STATE_FLAG_NORMAL, color);
-#else
-		gtk_widget_modify_text(r->entries[i], GTK_STATE_NORMAL, color);
-#endif
 	}
 }
 
@@ -1866,23 +1857,19 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	enum GeanyBuildCmdEntries i;
 	guint column = 0;
 	gchar *text;
+	GtkStyleContext *ctx;
 
 	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
 
 	text = g_strdup_printf("%d.", cmd + 1);
 	label = gtk_label_new(text);
 	g_free(text);
-#if GTK_CHECK_VERSION(3,0,0)
-{
-	GtkStyleContext *ctx = gtk_widget_get_style_context(label);
 
+	ctx = gtk_widget_get_style_context(label);
 	gtk_style_context_save(ctx);
 	gtk_style_context_get_color(ctx, GTK_STATE_FLAG_INSENSITIVE, &insensitive_color);
 	gtk_style_context_restore(ctx);
-}
-#else
-	insensitive_color = gtk_widget_get_style(label)->text[GTK_STATE_INSENSITIVE];
-#endif
+
 	gtk_table_attach(table, label, column, column + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	roww = g_new0(RowWidgets, 1);
@@ -1979,7 +1966,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 		gtk_table_attach(table, label, col, col + 1, 0, 1,
 			GTK_FILL, GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	}
-	sep = gtk_hseparator_new();
+	sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_table_attach(table, sep, 0, DC_N_COL, 1, 2, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	if (ft != NULL && ft->id != GEANY_FILETYPES_NONE)
@@ -2018,7 +2005,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_widget_set_sensitive(fields->fileregex, sensitivity);
 	gtk_widget_set_sensitive(clear, sensitivity);
 	++row;
-	sep = gtk_hseparator_new();
+	sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
@@ -2059,7 +2046,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
 	++row;
-	sep = gtk_hseparator_new();
+	sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
@@ -2069,7 +2056,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 		entry_x_padding, entry_y_padding);
 	for (++row, cmd = 0; cmd < build_groups_count[GEANY_GBG_EXEC]; ++row, ++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(doc, table, row, dst, GEANY_GBG_EXEC, cmd, TRUE);
-	sep = gtk_hseparator_new();
+	sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_table_attach(table, sep, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, sep_padding);
 	++row;
@@ -2836,4 +2823,3 @@ gboolean build_keybinding(guint key_id)
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
 	return TRUE;
 }
-

@@ -80,7 +80,6 @@
 			verbose ("Entering configuration stage: loading %s\n", StageDescription[Stage]); \
 		}																\
 	} while (0)
-#define ACCEPT(STAGE) (1UL << OptionLoadingStage##STAGE)
 
 /*
 *   Data declarations
@@ -93,6 +92,7 @@ enum eOptionLimits {
 
 typedef struct sOptionDescription {
 	int usedByEtags;
+	int experimentalOption;
 	const char *description;
 } optionDescription;
 
@@ -173,6 +173,7 @@ optionValues Option = {
 	.putFieldPrefix = false,
 	.maxRecursionDepth = 0xffffffff,
 	.interactive = false,
+	.fieldsReset = false,
 #ifdef WIN32
 	.useSlashAsFilenameSeparator = FILENAME_SEP_UNSET,
 #endif
@@ -189,6 +190,16 @@ struct localOptionValues {
 	.withListHeader = true,
 };
 
+typedef enum eOptionLoadingStage {
+	OptionLoadingStageNone,
+	OptionLoadingStageCustom,
+	OptionLoadingStageXdg,
+	OptionLoadingStageHomeRecursive,
+	OptionLoadingStageCurrentRecursive,
+	OptionLoadingStageEnvVar,
+	OptionLoadingStageCmdline,
+} OptionLoadingStage;
+
 static OptionLoadingStage Stage = OptionLoadingStageNone;
 #define STAGE_ANY ~0UL
 
@@ -197,307 +208,321 @@ static OptionLoadingStage Stage = OptionLoadingStageNone;
 */
 
 static optionDescription LongOptionDescription [] = {
- {1,"  -?   Print this option summary."},
- {1,"  -a   Append the tags to an existing tag file."},
-#ifdef DEBUG
- {1,"  -b <line>"},
- {1,"       Set break line."},
-#endif
- {0,"  -B   Use backward searching patterns (?...?)."},
-#ifdef DEBUG
- {1,"  -d <level>"},
- {1,"       Set debug level."},
-#endif
- {1,"  -D <macro>=<definition>"},
- {1,"       (CPreProcessor) Give definition for macro."},
- {0,"  -e   Output tag file for use with Emacs."},
- {1,"  -f <name>"},
- {1,"       Write tags to specified file. Value of \"-\" writes tags to stdout"},
- {1,"       [\"tags\"; or \"TAGS\" when -e supplied]."},
- {0,"  -F   Use forward searching patterns (/.../; default)."},
- {1,"  -G   Equivalent to --guess-language-eagerly."},
- {1,"  -h <list>"},
- {1,"       Specify list of file extensions to be treated as include files"},
- {1,"       [\".h.H.hh.hpp.hxx.h++.inc.def\"]."},
- {1,"  -I <list|@file>"},
- {1,"       A list of tokens to be specially handled is read from either the"},
- {1,"       command line or the specified file."},
- {1,"  -L <file>"},
- {1,"       A list of input file names is read from the specified file."},
- {1,"       If specified as \"-\", then standard input is read."},
- {0,"  -n   Equivalent to --excmd=number."},
- {0,"  -N   Equivalent to --excmd=pattern."},
- {1,"  -o   Alternative for -f."},
+ {1,0,"Input/Output Options"},
+ {1,0,"  --exclude=<pattern>"},
+ {1,0,"       Exclude files and directories matching <pattern>."},
+ {1,0,"       See also --exclude-exception option."},
+ {1,0,"  --exclude-exception=<pattern>"},
+ {1,0,"      Don't exclude files and directories matching <pattern> even if"},
+ {1,0,"      they match the pattern specified with --exclude option."},
+ {1,0,"  --filter[=(yes|no)]"},
+ {1,0,"       Behave as a filter, reading file names from standard input and"},
+ {1,0,"       writing tags to standard output [no]."},
+ {1,0,"  --filter-terminator=<string>"},
+ {1,0,"       Specify <string> to print to stdout following the tags for each file"},
+ {1,0,"       parsed when --filter is enabled."},
+ {1,0,"  --links[=(yes|no)]"},
+ {1,0,"       Indicate whether symbolic links should be followed [yes]."},
+ {1,0,"  --maxdepth=<N>"},
 #ifdef RECURSE_SUPPORTED
- {1,"  -R   Equivalent to --recurse."},
+ {1,0,"       Specify maximum recursion depth."},
 #else
- {1,"  -R   Not supported on this platform."},
+ {1,0,"       Not supported on this platform."},
 #endif
- {0,"  -u   Equivalent to --sort=no."},
- {1,"  -V   Equivalent to --verbose."},
- {1,"  -x   Print a tabular cross reference file to standard output."},
- {1,"  --alias-<LANG>=[+|-]aliasPattern"},
- {1,"       Add a pattern detecting a name, can be used as an alternative name"},
- {1,"       for LANG."},
- {1,"  --append=[yes|no]"},
- {1,"       Should tags should be appended to existing tag file [no]?"},
- {1,"  --etags-include=file"},
- {1,"       Include reference to 'file' in Emacs-style tag file (requires -e)."},
- {1,"  --exclude=pattern"},
- {1,"       Exclude files and directories matching 'pattern'."},
- {1,"       See also --exclude-exception option."},
- {1,"  --exclude-exception=pattern"},
- {1,"      Don't exclude files and directories matching 'pattern' even if"},
- {1,"      they match the pattern specified with --exclude option."},
- {0,"  --excmd=number|pattern|mix|combine"},
-#ifdef MACROS_USE_PATTERNS
- {0,"       Uses the specified type of EX command to locate tags [pattern]."},
+ {1,0,"  --recurse[=(yes|no)]"},
+#ifdef RECURSE_SUPPORTED
+ {1,0,"       Recurse into directories supplied on command line [no]."},
+ {1,0,"  -R   Equivalent to --recurse."},
 #else
- {0,"       Uses the specified type of EX command to locate tags [mix]."},
+ {1,0,"       Not supported on this platform."},
+ {1,0,"  -R   Not supported on this platform."},
 #endif
- {1,"  --extras=[+|-]flags"},
- {1,"       Include extra tag entries for selected information (flags: \"fFgpqrs\") [F]."},
- {1,"  --extras-<LANG|all>=[+|-]flags"},
- {1,"       Include <LANG> own extra tag entries for selected information"},
- {1,"       (flags: see the output of --list-extras=<LANG> option)."},
- {1,"  --fields=[+|-]flags"},
- {1,"       Include selected extension fields (flags: \"aCeEfFikKlmnNpPrRsStxzZ\") [fks]."},
- {1,"  --fields-<LANG|all>=[+|-]flags"},
- {1,"       Include selected <LANG> own extension fields"},
- {1,"       (flags: see the output of --list-fields=<LANG> option)."},
- {1,"  --filter=[yes|no]"},
- {1,"       Behave as a filter, reading file names from standard input and"},
- {1,"       writing tags to standard output [no]."},
- {1,"  --filter-terminator=string"},
- {1,"       Specify string to print to stdout following the tags for each file"},
- {1,"       parsed when --filter is enabled."},
- {0,"  --format=level"},
+ {1,0,"  -L <file>"},
+ {1,0,"       A list of input file names is read from the specified <file>."},
+ {1,0,"       If specified as \"-\", then standard input is read."},
+ {1,0,"  --append[=(yes|no)]"},
+ {1,0,"       Should tags should be appended to existing tag file [no]?"},
+ {1,0,"  -a   Append the tags to an existing tag file."},
+ {1,0,"  -f <tagfile>"},
+ {1,0,"       Write tags to specified <tagfile>. Value of \"-\" writes tags to stdout"},
+ {1,0,"       [\"tags\"; or \"TAGS\" when -e supplied]."},
+ {1,0,"  -o   Alternative for -f."},
+ {1,0,""},
+ {1,0,"Output Format Options"},
+ {0,0,"  --format=(1|2)"},
 #if DEFAULT_FILE_FORMAT == 1
- {0,"       Force output of specified tag file format [1]."},
+ {0,0,"       Force output of specified tag file format [1]."},
 #else
- {0,"       Force output of specified tag file format [2]."},
+ {0,0,"       Force output of specified tag file format [2]."},
 #endif
- {1,"  --guess-language-eagerly"},
- {1,"       Guess the language of input file more eagerly"},
- {1,"       (but taking longer time for guessing):"},
- {1,"       o shebang, even if the input file is not executable,"},
- {1,"       o emacs mode specification at the beginning and end of input file, and"},
- {1,"       o vim syntax specification at the end of input file."},
- {1,"  --help"},
- {1,"       Print this option summary."},
- {1,"  --help-full"},
- {1,"       Print this option summary including experimental features."},
- {1,"  --if0=[yes|no]"},
- {1,"       Should code within #if 0 conditional branches be parsed [no]?"},
-#ifdef HAVE_ICONV
- {1,"  --input-encoding=encoding"},
- {1,"       Specify encoding of all input files."},
- {1,"  --input-encoding-<LANG>=encoding"},
- {1,"       Specify encoding of the LANG input files."},
-#endif
- {1,"  --kinddef-<LANG>=letter,name,desc"},
- {1,"       Define new kind for <LANG>."},
- {1,"  --kinds-<LANG>=[+|-]kinds, or"},
- {1,"       Enable/disable tag kinds for language <LANG>."},
- {1,"  --langdef=name"},
- {1,"       Define a new language to be parsed with regular expressions."},
- {1,"  --langmap=map(s)"},
- {1,"       Override default mapping of language to input file extension."},
- {1,"  --language-force=language"},
- {1,"       Force all files to be interpreted using specified language."},
- {1,"  --languages=[+|-]list"},
- {1,"       Restrict files scanned for tags to those mapped to languages"},
- {1,"       specified in the comma-separated 'list'. The list can contain any"},
- {1,"       built-in or user-defined language [all]."},
- {1,"  --license"},
- {1,"       Print details of software license."},
- {0,"  --line-directives=[yes|no]"},
- {0,"       Should #line directives be processed [no]?"},
- {1,"  --links=[yes|no]"},
- {1,"       Indicate whether symbolic links should be followed [yes]."},
- {1,"  --list-aliases=[language|all]"},
- {1,"       Output list of alias patterns."},
- {1,"  --list-excludes"},
- {1,"       Output list of exclude patterns for excluding files/directories."},
- {1,"  --list-extras=[language|all]"},
- {1,"       Output list of extra tag flags."},
- {1,"  --list-features"},
- {1,"       Output list of compiled features."},
- {1,"  --list-fields=[language|all]"},
- {1,"       Output list of fields."},
- {1,"  --list-kinds=[language|all]"},
- {1,"       Output a list of all tag kinds for specified language or all."},
- {1,"  --list-kinds-full=[language|all]"},
- {1,"       List the details of all tag kinds for specified language or all"},
- {1,"       For each line, associated language name is printed when \"all\" is"},
- {1,"       specified as language."},
- {1,"  --list-languages"},
- {1,"       Output list of supported languages."},
- {1,"  --list-map-extensions=[language|all]"},
- {1,"       Output list of language extensions in mapping."},
- {1,"  --list-map-patterns=[language|all]"},
- {1,"       Output list of language patterns in mapping."},
- {1,"  --list-maps=[language|all]"},
- {1,"       Output list of language mappings(both extensions and patterns)."},
- {1,"  --list-mline-regex-flags"},
- {1,"       Output list of flags which can be used in a multiline regex parser definition."},
- {1,"  --list-params=[language|all]"},
- {1,"       Output list of language parameters. This works with --machinable."},
- {0,"  --list-pseudo-tags"},
- {0,"       Output list of pseudo tags."},
- {1,"  --list-regex-flags"},
- {1,"       Output list of flags which can be used in a regex parser definition."},
- {1,"  --list-roles=[[language|all].[kindspecs|*]]"},
- {1,"       Output list of all roles of tag kind(s) specified for language(s)."},
- {1,"       Both letters and names can be used in kindspecs."},
- {1,"       e.g. --list-roles=C.{header}d"},
- {1,"  --list-subparsers=[baselang|all]"},
- {1,"       Output list of subparsers for the base language."},
- {1,"  --machinable=[yes|no]"},
- {1,"       Use tab separated representation in --list- option output. [no]"},
- {1,"       --list-{aliases,extras,features,fields,kind-full,langdef-flags,params," },
- {1,"       pseudo-tags,regex-flags,roles,subparsers} support this option."},
- {1,"       Suitable for scripting. Specify before --list-* option."},
- {1,"  --map-<LANG>=[+|-]extension|pattern"},
- {1,"       Set, add(+) or remove(-) the map for <LANG>."},
- {1,"       Unlike --langmap, this doesn't take a list; only one file name pattern"},
- {1,"       or one file extension can be specified at once."},
- {1,"       Unlike --langmap the change with this option affects mapping of <LANG> only."},
- {1,"  --maxdepth=N"},
-#ifdef RECURSE_SUPPORTED
- {1,"       Specify maximum recursion depth."},
-#else
- {1,"       Not supported on this platform."},
-#endif
- {1,"  --mline-regex-<LANG>=/line_pattern/name_pattern/[flags]"},
- {1,"       Define multiline regular expression for locating tags in specific language."},
- {1,"  --options=path"},
- {1,"       Specify file(or directory) from which command line options should be read."},
- {1,"  --options-maybe=path"},
- {1,"       Do the same as --options but this doesn't make an error for non-existing file."},
- {1,"  --optlib-dir=[+]DIR"},
- {1,"       Add or set DIR to optlib search path."},
-#ifdef HAVE_ICONV
- {1,"  --output-encoding=encoding"},
- {1,"       The encoding to write the tag file in. Defaults to UTF-8 if --input-encoding"},
- {1,"       is specified, otherwise no conversion is performed."},
-#endif
- {0,"  --output-format=u-ctags|e-ctags|etags|xref"
 #ifdef HAVE_JANSSON
-  "|json"
-#endif
- },
- {0,"      Specify the output format. [u-ctags]"},
- {1,"  --param-<LANG>:name=argument"},
- {1,"       Set <LANG> specific parameter. Available parameters can be listed with --list-params."},
- {0,"  --pattern-length-limit=N"},
- {0,"      Cutoff patterns of tag entries after N characters. Disable by setting to 0. [96]"},
- {0,"  --print-language"},
- {0,"       Don't make tags file but just print the guessed language name for"},
- {0,"       input file."},
- {0,"  --pseudo-tags=[+|-]ptag"},
- {0,"  --pseudo-tags=*"},
- {0,"       Enable/disable emitting pseudo tag named ptag."},
- {0,"       if * is given, enable emitting all pseudo tags."},
- {0,"  --put-field-prefix"},
- {0,"       Put \"" CTAGS_FIELD_PREFIX "\" as prefix for the name of fields newly introduced in"},
- {0,"       universal-ctags."},
- {1,"  --quiet=[yes|no]"},
- {0,"       Don't print NOTICE class messages [no]."},
- {1,"  --recurse=[yes|no]"},
-#ifdef RECURSE_SUPPORTED
- {1,"       Recurse into directories supplied on command line [no]."},
+ {0,0,"  --output-format=(u-ctags|e-ctags|etags|xref|json)"},
 #else
- {1,"       Not supported on this platform."},
+ {0,0,"  --output-format=(u-ctags|e-ctags|etags|xref)"},
 #endif
- {1,"  --regex-<LANG>=/line_pattern/name_pattern/[flags]"},
- {1,"       Define regular expression for locating tags in specific language."},
- {1,"  --roles-<LANG>.kind=[+|-]role, or"},
- {1,"       Enable/disable tag roles for kinds of language <LANG>."},
- {0,"  --sort=[yes|no|foldcase]"},
- {0,"       Should tags be sorted (optionally ignoring case) [yes]?"},
- {0,"  --tag-relative=[yes|no|always|never]"},
- {0,"       Should paths be relative to location of tag file [no; yes when -e]?"},
- {0,"       always: be relative even if input files are passed in with absolute paths" },
- {0,"       never:  be absolute even if input files are passed in with relative paths" },
- {1,"  --totals=[yes|no|extra]"},
- {1,"       Print statistics about input and tag files [no]."},
+ {0,0,"      Specify the output format. [u-ctags]"},
+ {0,0,"  -e   Output tag file for use with Emacs."},
+ {1,0,"  -x   Print a tabular cross reference file to standard output."},
+ {0,0,"  --sort=(yes|no|foldcase)"},
+ {0,0,"       Should tags be sorted (optionally ignoring case) [yes]?"},
+ {0,0,"  -u   Equivalent to --sort=no."},
+ {1,0,"  --etags-include=<file>"},
+ {1,0,"       Include reference to <file> in Emacs-style tag file (requires -e)."},
+#ifdef HAVE_ICONV
+ {1,0,"  --input-encoding=<encoding>"},
+ {1,0,"       Specify <encoding> of all input files."},
+ {1,0,"  --input-encoding-<LANG>=<encoding>"},
+ {1,0,"       Specify <encoding> of the <LANG> input files."},
+ {1,0,"  --output-encoding=<encoding>"},
+ {1,0,"       The <encoding> to write the tag file in. Defaults to UTF-8 if --input-encoding"},
+ {1,0,"       is specified, otherwise no conversion is performed."},
+#endif
+ {1,1,"  --_xformat=<field_format>"},
+ {1,1,"       Specify custom format for tabular cross reference (-x)."},
+ {1,1,"       Fields can be specified with letter listed in --list-fields."},
+ {1,1,"       e.g. --_xformat=%10N %10l:%K @ %-20F:%-20n"},
+ {1,0,""},
+ {1,0,"Language Selection and Mapping Options"},
+ {1,0,"  --language-force=(<language>|auto)"},
+ {1,0,"       Force all files to be interpreted using specified <language>."},
+ {1,0,"  --languages=[+|-](<list>|all)"},
+ {1,0,"       Restrict files scanned for tags to those mapped to languages"},
+ {1,0,"       specified in the comma-separated <list>. The list can contain any"},
+ {1,0,"       built-in or user-defined language [all]."},
+ {1,0,"  --alias-<LANG>=[+|-](<pattern>|default)"},
+ {1,0,"       Add a <pattern> detecting a name, can be used as an alternative name"},
+ {1,0,"       for <LANG>."},
+ {1,0,"  --guess-language-eagerly"},
+ {1,0,"       Guess the language of input file more eagerly"},
+ {1,0,"       (but taking longer time for guessing):"},
+ {1,0,"       o shebang, even if the input file is not executable,"},
+ {1,0,"       o emacs mode specification at the beginning and end of input file, and"},
+ {1,0,"       o vim syntax specification at the end of input file."},
+ {1,0,"  -G   Equivalent to --guess-language-eagerly."},
+ {1,0,"  --langmap=<map>[,<map>[...]]"},
+ {1,0,"       Override default mapping of language to input file extension."},
+ {1,0,"       e.g. --langmap=c:.c.x,java:+.j,make:([Mm]akefile).mak"},
+ {1,0,"  --map-<LANG>=[+|-]<extension>|<pattern>"},
+ {1,0,"       Set, add(+) or remove(-) the map for <LANG>."},
+ {1,0,"       Unlike --langmap, this doesn't take a list; only one file name <pattern>"},
+ {1,0,"       or one file <extension> can be specified at once."},
+ {1,0,"       Unlike --langmap the change with this option affects mapping of <LANG> only."},
+ {1,0,""},
+ {1,0,"Tags File Contents Options"},
+ {0,0,"  --excmd=(number|pattern|mix|combine)"},
+#ifdef MACROS_USE_PATTERNS
+ {0,0,"       Uses the specified type of EX command to locate tags [pattern]."},
+#else
+ {0,0,"       Uses the specified type of EX command to locate tags [mix]."},
+#endif
+ {0,0,"  -n   Equivalent to --excmd=number."},
+ {0,0,"  -N   Equivalent to --excmd=pattern."},
+ {1,0,"  --extras=[+|-][<flags>|*]"},
+ {1,0,"       Include extra tag entries for selected information (<flags>: \"fFgpqrs\") [F]."},
+ {1,0,"  --extras-(<LANG>|all)=[+|-][<flags>|*]"},
+ {1,0,"       Include <LANG> own extra tag entries for selected information"},
+ {1,0,"       (<flags>: see the output of --list-extras=<LANG> option)."},
+ {1,0,"  --fields=[+|-][<flags>|*]"},
+ {1,0,"       Include selected extension fields (<flags>: \"aCeEfFikKlmnNpPrRsStxzZ\") [fks]."},
+ {1,0,"  --fields-(<LANG>|all)=[+|-][<flags>|*]"},
+ {1,0,"       Include selected <LANG> own extension fields"},
+ {1,0,"       (<flags>: see the output of --list-fields=<LANG> option)."},
+ {1,0,"  --kinds-(<LANG>|all)=[+|-](<kinds>|*)"},
+ {1,0,"       Enable/disable tag <kinds> for language <LANG>."},
+ {0,0,"  --pattern-length-limit=<N>"},
+ {0,0,"      Cutoff patterns of tag entries after <N> characters. Disable by setting to 0. [96]"},
+ {0,0,"  --pseudo-tags=[+|-](<pseudo-tag>|*)"},
+ {0,0,"       Enable/disable emitting pseudo tag named <pseudo-tag>."},
+ {0,0,"       if '*' is given, enable emitting all pseudo tags."},
+ {0,0,"  --put-field-prefix"},
+ {0,0,"       Put \"" CTAGS_FIELD_PREFIX "\" as prefix for the name of fields newly introduced in"},
+ {0,0,"       universal-ctags."},
+ {1,0,"  --roles-(<LANG>|all).(<kind>|all)=[+|-][<roles>|*]"},
+ {1,0,"       Enable/disable tag roles for kinds of language <LANG>."},
+ {0,0,"  --tag-relative=(yes|no|always|never)"},
+ {0,0,"       Should paths be relative to location of tag file [no; yes when -e]?"},
+ {0,0,"       always: be relative even if input files are passed in with absolute paths" },
+ {0,0,"       never:  be absolute even if input files are passed in with relative paths" },
 #ifdef WIN32
- {1,"  --use-slash-as-filename-separator=[yes|no]"},
- {1,"       Use slash as filename separator [yes] for u-ctags output format."},
+ {1,0,"  --use-slash-as-filename-separator[=(yes|no)]"},
+ {1,0,"       Use slash as filename separator [yes] for u-ctags output format."},
 #endif
- {1,"  --verbose=[yes|no]"},
- {1,"       Enable verbose messages describing actions on each input file."},
- {1,"  --version"},
- {1,"       Print version identifier to standard output."},
- {1,"  --with-list-header=[yes|no]"},
- {1,"       Prepend the column descriptions in --list- output. [yes]"},
- {1,"       --list-{aliases,extras,features,fields,kind-full,langdef-flags,params," },
- {1,"       pseudo-tags,regex-flags,roles,subparsers} support this option."},
- {1,"       Specify before --list-* option."},
- {1, NULL}
-};
+ {0,0,"  -B   Use backward searching patterns (?...?)."},
+ {0,0,"  -F   Use forward searching patterns (/.../; default)."},
+ {1,0,""},
+ {1,0,"Option File Options"},
+ {1,0,"  --options=<pathname>"},
+ {1,0,"       Specify file (or directory) <pathname> from which command line options should be read."},
+ {1,0,"  --options-maybe=<pathname>"},
+ {1,0,"       Do the same as --options but this doesn't make an error for non-existing file."},
+ {1,0,"  --optlib-dir=[+]<directory>"},
+ {1,0,"       Add or set <directory> to optlib search path."},
+ {1,1,"  --_echo=<msg>"},
+ {1,1,"       Echo <msg> to standard error. Useful to debug the chain"},
+ {1,1,"       of loading option files."},
+ {1,1,"  --_force-quit[=<num>]"},
+ {1,1,"       Quit when loading the option files is processed."},
+ {1,1,"       Useful to debug the chain of loading option files."},
+ {1,0,""},
+ {1,0,"optlib Options"},
+ {1,0,"  --kinddef-<LANG>=<letter>,<name>,<description>"},
+ {1,0,"       Define new kind for <LANG>."},
+ {1,0,"  --langdef=<name>"},
+ {1,0,"       Define a new language to be parsed with regular expressions."},
+ {1,0,"  --mline-regex-<LANG>=/<line_pattern>/<name_pattern>/<kind-spec>/[<flags>]"},
+ {1,0,"       Define multiline regular expression for locating tags in specific language."},
+ {1,0,"  --regex-<LANG>=/<line_pattern>/<name_pattern>/<kind-spec>/[<flags>]"},
+ {1,0,"       Define single-line regular expression for locating tags in specific language."},
+ {1,1,"  --_extradef-<LANG>=<name>,<description>"},
+ {1,1,"       Define new extra for <LANG>. --extras-<LANG>=+{name} enables it."},
+ {1,1,"  --_fielddef-<LANG>=<name>,<description>"},
+ {1,1,"       Define new field for <LANG>."},
+ {1,1,"  --_mtable-extend-<LANG>=disttable+srctable."},
+ {1,1,"       Copy patterns of a regex table to another regex table."},
+ {1,1,"  --_mtable-regex-<LANG>=<table>/<line_pattern>/<name_pattern>/[<flags>]"},
+ {1,1,"       Define multitable regular expression for locating tags in specific language."},
+ {1,1,"  --_prelude-<LANG>={{ optscript-code }}"},
+ {1,1,"       Specify code run before parsing with <LANG> parser."},
+ {1,1,"  --_pretend-<NEWLANG>=<OLDLANG>"},
+ {1,1,"       Make NEWLANG parser pretend OLDLANG parser in lang: field."},
+ {1,1,"  --_roledef-<LANG>.<kind>=<name>,<description>"},
+ {1,1,"       Define new role for the kind in <LANG>."},
+ {1,1,"  --_scopesep-<LANG>=[<parent_kind_letter>|*]/(<child_kind_letter>|*):<separator>"},
+ {1,1,"       Specify scope separator between <PARENT_KIND> and <KIND>."},
+ {1,1,"  --_sequel-<LANG>={{ optscript-code }}"},
+ {1,1,"       Specify code run after parsing with <LANG> parser."},
+ {1,1,"  --_tabledef-<LANG>=<name>"},
+ {1,1,"       Define new regex table for <LANG>."},
+ {1,0,""},
+ {1,0,"Language Specific Options"},
+ {1,0,"  --if0[=(yes|no)]"},
+ {1,0,"       Should code within #if 0 conditional branches be parsed [no]?"},
+ {0,0,"  --line-directives[=(yes|no)]"},
+ {0,0,"       Should '#line' directives be processed [no]?"},
+ {1,0,"  -D <macro>=<definition>"},
+ {1,0,"       (CPreProcessor) Give <definition> for <macro>."},
+ {1,0,"  -h (<list>|default)"},
+ {1,0,"       Specify a <list> of file extensions to be treated as include files"},
+ {1,0,"       [\".h.H.hh.hpp.hxx.h++.inc.def\"]."},
+ {1,0,"  -I [+|-]<list>|@<file>"},
+ {1,0,"       A <list> of tokens to be specially handled is read from either the"},
+ {1,0,"       command line or the specified <file>."},
+ {1,0,"  --param-<LANG>.<name>=<argument>"},
+ {1,0,"       Set <LANG> specific parameter. Available parameters can be listed with --list-params."},
+ {1,0,""},
+ {1,0,"Listing Options"},
+ {1,0,"  --list-aliases[=(<language>|all)]"},
+ {1,0,"       Output list of alias patterns."},
+ {1,0,"  --list-excludes"},
+ {1,0,"       Output list of exclude patterns for excluding files/directories."},
+ {1,0,"  --list-extras[=(<language>|all)]"},
+ {1,0,"       Output list of extra tag flags."},
+ {1,0,"  --list-features"},
+ {1,0,"       Output list of compiled features."},
+ {1,0,"  --list-fields[=(<language>|all)]"},
+ {1,0,"       Output list of fields."},
+ {1,0,"  --list-kinds[=(<language>|all)]"},
+ {1,0,"       Output a list of all tag kinds for specified <language> or all."},
+ {1,0,"  --list-kinds-full[=(<language>|all)]"},
+ {1,0,"       List the details of all tag kinds for specified <language> or all"},
+ {1,0,"       For each line, associated language name is printed when \"all\" is"},
+ {1,0,"       specified as language."},
+ {1,0,"  --list-languages"},
+ {1,0,"       Output list of supported languages."},
+ {1,0,"  --list-map-extensions[=(<language>|all)]"},
+ {1,0,"       Output list of language extensions in mapping."},
+ {1,0,"  --list-map-patterns[=(<language>|all)]"},
+ {1,0,"       Output list of language patterns in mapping."},
+ {1,0,"  --list-maps[=(<language>|all)]"},
+ {1,0,"       Output list of language mappings (both extensions and patterns)."},
+ {1,0,"  --list-mline-regex-flags"},
+ {1,0,"       Output list of flags which can be used in a multiline regex parser definition."},
+ {1,0,"  --list-params[=(<language>|all)]"},
+ {1,0,"       Output list of language parameters. This works with --machinable."},
+ {0,0,"  --list-pseudo-tags"},
+ {0,0,"       Output list of pseudo tags."},
+ {1,0,"  --list-regex-flags"},
+ {1,0,"       Output list of flags which can be used in a regex parser definition."},
+ {1,0,"  --list-roles[=(<language>|all)[.(<kindspecs>|*)]]"},
+ {1,0,"       Output list of all roles of tag kind(s) specified for <language>."},
+ {1,0,"       Both letters and names can be used in <kindspecs>."},
+ {1,0,"       e.g. --list-roles=C.{header}d"},
+ {1,0,"  --list-subparsers[=(<baselang>|all)]"},
+ {1,0,"       Output list of subparsers for the base language."},
+ {1,0,"  --machinable[=(yes|no)]"},
+ {1,0,"       Use tab separated representation in --list-* option output. [no]"},
+ {1,0,"       --list-{aliases,extras,features,fields,kind-full,langdef-flags,params," },
+ {1,0,"       pseudo-tags,regex-flags,roles,subparsers} support this option."},
+ {1,0,"       Suitable for scripting. Specify before --list-* option."},
+ {1,0,"  --with-list-header[=(yes|no)]"},
+ {1,0,"       Prepend the column descriptions in --list- output. [yes]"},
+ {1,0,"       --list-{aliases,extras,features,fields,kind-full,langdef-flags,params," },
+ {1,0,"       pseudo-tags,regex-flags,roles,subparsers} support this option."},
+ {1,0,"       Specify before --list-* option."},
+ {1,1,"  --_list-kinddef-flags"},
+ {1,1,"       Output list of flags which can be used with --kinddef option."},
+ {1,1,"  --_list-langdef-flags"},
+ {1,1,"       Output list of flags which can be used with --langdef option."},
+ {1,1,"  --_list-mtable-regex-flags"},
+ {1,1,"       Output list of flags which can be used in a multitable regex parser definition."},
+ {1,1,"  --_list-operators"},
+ {1,1,"       Output list of optscript operators."},
+ {1,0,""},
+ {1,0,"Miscellaneous Options"},
+ {1,0,"  --help"},
+ {1,0,"       Print this option summary."},
+ {1,0,"  -?   Print this option summary."},
+ {1,0,"  --help-full"},
+ {1,0,"       Print this option summary including experimental features."},
+ {1,0,"  --license"},
+ {1,0,"       Print details of software license."},
+ {0,0,"  --print-language"},
+ {0,0,"       Don't make tags file but just print the guessed language name for"},
+ {0,0,"       input file."},
+ {1,0,"  --quiet[=(yes|no)]"},
+ {0,0,"       Don't print NOTICE class messages [no]."},
+ {1,0,"  --totals[=(yes|no|extra)]"},
+ {1,0,"       Print statistics about input and tag files [no]."},
+ {1,0,"  --verbose[=(yes|no)]"},
+ {1,0,"       Enable verbose messages describing actions on each input file."},
+ {1,0,"  --version"},
+ {1,0,"       Print version identifier to standard output."},
+ {1,0,"  -V   Equivalent to --verbose."},
+#ifdef DEBUG
+ {1,0,"  -b <line>"},
+ {1,0,"       Set break line. (for DEBUG)"},
+ {1,0,"  -d <level>"},
+ {1,0,"       Set debug level. (for DEBUG)"},
+#endif
 
-static optionDescription ExperimentalLongOptionDescription [] = {
- {1,"  --_anonhash=fname"},
- {1,"       Used in u-ctags test harness"},
- {1,"  --_dump-keywords"},
- {1,"       Dump keywords of initialized parser(s)."},
- {1,"  --_dump-options"},
- {1,"       Dump options."},
- {1,"  --_echo=msg"},
- {1,"       Echo MSG to standard error. Useful to debug the chain"},
- {1,"       of loading option files."},
- {1,"  --_extradef-<LANG>=name,desc"},
- {1,"       Define new extra for <LANG>. \"--extras-<LANG>=+{name}\" enables it."},
- {1,"  --_fatal-warnings"},
- {1,"       Make all warnings fatal."},
- {1,"  --_fielddef-<LANG>=name,description"},
- {1,"       EXPERIMENTAL, Define new field for <LANG>."},
- {1,"  --_force-initializing"},
- {1,"       Initialize all parsers in early stage"},
- {1,"  --_force-quit=[num]"},
- {1,"       Quit when the option is processed. Useful to debug the chain"},
- {1,"       of loading option files."},
+ {1,1,"  --_anonhash=<fname>"},
+ {1,1,"       Used in u-ctags test harness"},
+ {1,1,"  --_dump-keywords"},
+ {1,1,"       Dump keywords of initialized parser(s)."},
+ {1,1,"  --_dump-options"},
+ {1,1,"       Dump options."},
+ {1,1,"  --_dump-prelude"},
+ {1,1,"       Dump contents of optscript prelude."},
+ {1,1,"  --_fatal-warnings"},
+ {1,1,"       Make all warnings fatal."},
+ {1,1,"  --_force-initializing"},
+ {1,1,"       Initialize all parsers in early stage"},
 #ifdef HAVE_JANSSON
- {0,"  --_interactive"
+ {0,1,"  --_interactive"
 #ifdef HAVE_SECCOMP
-  "=[default|sandbox]"
+  "[=(default|sandbox)]"
 #endif
  },
- {0,"       Enter interactive mode (json over stdio)."},
+ {0,1,"       Enter interactive mode (JSON over stdio)."},
 #ifdef HAVE_SECCOMP
- {0,"       Enter file I/O limited interactive mode if sandbox is specified. [default]"},
+ {0,1,"       Enter file I/O limited interactive mode if sandbox is specified. [default]"},
 #endif
 #endif
- {1,"  --_list-kinddef-flags"},
- {1,"       Output list of flags which can be used with --kinddef option."},
- {1,"  --_list-langdef-flags"},
- {1,"       Output list of flags which can be used with --langdef option."},
- {1,"  --_list-mtable-regex-flags"},
- {1,"       Output list of flags which can be used in a multitable regex parser definition."},
- {1,"  --_mtable-extend-<LANG>=disttable+srctable."},
- {1,"       Copy patterns of a regex table to another regex table."},
- {1,"  --_mtable-regex-<LANG>=table/line_pattern/name_pattern/[flags]"},
- {1,"       Define multitable regular expression for locating tags in specific language."},
- {1,"  --_pretend-<NEWLANG>=<OLDLANG>"},
- {1,"       Make NEWLANG parser pretend OLDLANG parser in lang: field."},
- {1,"  --_roledef-<LANG>.kind=role_name,role_desc"},
- {1,"       Define new role for the kind in <LANG>."},
- {1,"  --_scopesep-<LANG>=[parent_kind_letter]/child_kind_letter:separator"},
- {1,"       Specify scope separator between <PARENT_KIND> and <KIND>."},
- {1,"       * as a kind letter matches any kind."},
- {1,"  --_tabledef-<LANG>=name"},
- {1,"       Define new regex table for <LANG>."},
 #ifdef DO_TRACING
- {1,"  --_trace=list"},
- {1,"       Trace parsers for the languages."},
+ {1,1,"  --_trace=<list>"},
+ {1,1,"       Trace parsers for the languages."},
 #endif
- {1,"  --_xformat=field_format"},
- {1,"       Specify custom format for tabular cross reference (-x)."},
- {1,"       Fields can be specified with letter listed in --list-fields."},
- {1,"       e.g. --_xformat=%10N %10l:%K @ %-20F:%-20n"},
- {1, NULL}
+ {1,1, NULL}
 };
 
 static const char* const License1 =
@@ -529,7 +554,13 @@ static struct Feature {
 	/* Following two features are always available on universal ctags */
 	{"wildcards", "can use glob matching"},
 	{"regex", "can use regular expression based pattern matching"},
-
+#ifdef USE_GNULIB_FNMATCH
+	{"gnulib_fnmatch", "linked with the Gnulib fnmatch library"},
+#endif
+/* https://lists.gnu.org/archive/html/bug-gnulib/2011-07/msg00435.html */
+#ifdef _REGEX_INCLUDE_LIMITS_H
+	{"gnulib_regex", "linked with the Gnulib regular expression library"},
+#endif
 #ifndef EXTERNAL_SORT
 	{"internal-sort", "uses internal sort routine instead of invoking sort command"},
 #endif
@@ -571,20 +602,19 @@ static struct Feature {
 	/* The test harnesses use this as hints for skipping test cases */
 	{"packcc", "has peg based parser(s)"},
 #endif
+	{"optscript", "can use the interpreter"},
+#ifdef HAVE_PCRE2
+	{"pcre2", "has pcre2 regex engine"},
+#endif
 	{NULL,}
 };
 
 static const char *const StageDescription [] = {
 	[OptionLoadingStageNone]   = "not initialized",
 	[OptionLoadingStageCustom] = "custom file",
-	[OptionLoadingStageDosCnf] = "DOS .cnf file",
-	[OptionLoadingStageEtc] = "file under /etc (e.g. ctags.conf)",
-	[OptionLoadingStageLocalEtc] = "file under /usr/local/etc (e.g. ctags.conf)",
 	[OptionLoadingStageXdg] = "file(s) under $XDG_CONFIG_HOME and $HOME/.config",
 	[OptionLoadingStageHomeRecursive] = "file(s) under $HOME",
 	[OptionLoadingStageCurrentRecursive] = "file(s) under the current directory",
-	[OptionLoadingStagePreload] = "optlib preload files",
-	[OptionLoadingStageEnvVar] = "environment variable",
 	[OptionLoadingStageCmdline] = "command line",
 };
 
@@ -662,20 +692,6 @@ extern void verbose (const char *const format, ...)
 		va_end (ap);
 	}
 }
-
-extern void notice (const char *const format, ...)
-{
-	if (!Option.quiet)
-	{
-		va_list ap;
-		fprintf (stderr, "%s: Notice: ", getExecutableName ());
-		va_start (ap, format);
-		vfprintf (stderr, format, ap);
-		va_end (ap);
-		fputs ("\n", stderr);
-	}
-}
-
 
 static char *stringCopy (const char *const string)
 {
@@ -756,7 +772,7 @@ extern void checkOptions (void)
 		if (Option.tagFileName != NULL)
 			error (WARNING, "%s ignores output tag file name", notice);
 	}
-	writerCheckOptions ();
+	writerCheckOptions (Option.fieldsReset);
 }
 
 extern langType getLanguageComponentInOptionFull (const char *const option,
@@ -783,12 +799,18 @@ extern langType getLanguageComponentInOptionFull (const char *const option,
 	}
 
 	/* Extract <LANG> from
-	 * --param-<LANG>:<PARAM>=..., and
+	 * --param-<LANG>.<PARAM>=..., and
 	 * --_roledef-<LANG>.<KIND>=... */
+
+	/*  `:' is only for keeping self compatibility. */
 	sep = strpbrk (lang, ":.");
 	if (sep)
+	{
+		if (*sep == ':')
+			error (WARNING, "using `:' as a separator is obsolete; use `.' instead: --%s", option);
 		lang_len = sep - lang;
-	language = getNamedLanguageFull (lang, lang_len, noPretending);
+	}
+	language = getNamedLanguageFull (lang, lang_len, noPretending, false);
 	if (language == LANG_IGNORE)
 	{
 		const char *langName = (lang_len == 0)? lang: eStrndup (lang, lang_len);
@@ -1325,7 +1347,10 @@ static void resetFieldsOption (langType lang, bool mode)
 
 	for (i = 0; i < countFields (); ++i)
 		if ((lang == LANG_AUTO) || (lang == getFieldOwner (i)))
-			enableField (i, mode, false);
+			enableField (i, mode);
+
+	if ((lang == LANG_AUTO || lang == LANG_IGNORE)&& !mode)
+		Option.fieldsReset = true;
 }
 
 static void processFieldsOption (
@@ -1340,6 +1365,8 @@ static void processFieldsOption (
 	bool inLongName = false;
 
 	longName = vStringNewOrClearWithAutoRelease (longName);
+
+	Option.fieldsReset = false;
 
 	if (*p == '*')
 	{
@@ -1384,7 +1411,7 @@ static void processFieldsOption (
 			if (t == FIELD_UNKNOWN)
 				error(FATAL, "no such field: \'%s\'", vStringValue (longName));
 
-			enableField (t, mode, true);
+			enableField (t, mode);
 
 			inLongName = false;
 			vStringClear (longName);
@@ -1399,7 +1426,7 @@ static void processFieldsOption (
 					error(WARNING, "Unsupported parameter '%c' for \"%s\" option",
 					      c, option);
 				else
-					enableField (t, mode, true);
+					enableField (t, mode);
 			}
 			break;
 	}
@@ -1452,17 +1479,6 @@ static void printInvocationDescription (void)
 {
 	printf (INVOCATION, getExecutableName ());
 }
-
-static void printOptionDescriptions (const optionDescription *const optDesc)
-{
-	int i;
-	for (i = 0 ; optDesc [i].description != NULL ; ++i)
-	{
-		if (! Option.etags || optDesc [i].usedByEtags)
-			puts (optDesc [i].description);
-	}
-}
-
 
 static int excludesCompare (struct colprintLine *a, struct colprintLine *b)
 {
@@ -1550,6 +1566,9 @@ static void processListFeaturesOption(const char *const option CTAGS_ATTR_UNUSED
 static void processListFieldsOption(const char *const option CTAGS_ATTR_UNUSED,
 				    const char *const parameter)
 {
+	/* Before listing, adjust states of enabled/disabled for fixed fields. */
+	writerCheckOptions (Option.fieldsReset);
+
 	struct colprintTable * table = fieldColprintTableNew ();
 
 	if (parameter [0] == '\0' || strcasecmp (parameter, RSV_LANG_ALL) == 0)
@@ -1607,9 +1626,14 @@ static void processHelpOptionCommon (
 	putchar ('\n');
 	printInvocationDescription ();
 	putchar ('\n');
-	printOptionDescriptions (LongOptionDescription);
-	if (includingExperimentalOptions)
-		printOptionDescriptions (ExperimentalLongOptionDescription);
+
+	int i;
+	for (i = 0 ; LongOptionDescription [i].description != NULL ; ++i)
+	{
+		if ((! Option.etags || LongOptionDescription [i].usedByEtags)
+			&& (! LongOptionDescription [i].experimentalOption || includingExperimentalOptions))
+			puts (LongOptionDescription [i].description);
+	}
 }
 
 static void processHelpOption (
@@ -2003,12 +2027,13 @@ extern bool processParamOption (
 		return false;
 
 	sep = option + strlen ("param-") + strlen (getLanguageName (language));
-	if (*sep != ':')
-		error (FATAL, "no separator(:) is given for %s=%s", option, value);
+	/* `:' is only for keeping self compatibility */
+	if (! (*sep == '.' || *sep == ':' ))
+		error (FATAL, "no separator(.) is given for %s=%s", option, value);
 	name = sep + 1;
 
 	if (value == NULL || value [0] == '\0')
-		error (FATAL, "no parameter is given for %s", option);
+		error (FATAL, "no value is given for %s", option);
 
 	applyParameter (language, name, value);
 
@@ -2174,25 +2199,25 @@ static void processListPseudoTagsOptions (
 
 static void processListRegexFlagsOptions (
 		const char *const option CTAGS_ATTR_UNUSED,
-		const char *const parameter CTAGS_ATTR_UNUSED)
+		const char *const parameter)
 {
-	printRegexFlags (localOption.withListHeader, localOption.machinable, stdout);
+	printRegexFlags (localOption.withListHeader, localOption.machinable, parameter, stdout);
 	exit (0);
 }
 
 static void processListMultilineRegexFlagsOptions (
 		const char *const option CTAGS_ATTR_UNUSED,
-		const char *const parameter CTAGS_ATTR_UNUSED)
+		const char *const parameter)
 {
-	printMultilineRegexFlags (localOption.withListHeader, localOption.machinable, stdout);
+	printMultilineRegexFlags (localOption.withListHeader, localOption.machinable, parameter, stdout);
 	exit (0);
 }
 
 static void processListMultitableRegexFlagsOptions (
 		const char *const option CTAGS_ATTR_UNUSED,
-		const char *const parameter CTAGS_ATTR_UNUSED)
+		const char *const parameter)
 {
-	printMultitableRegexFlags (localOption.withListHeader, localOption.machinable, stdout);
+	printMultitableRegexFlags (localOption.withListHeader, localOption.machinable, parameter, stdout);
 	exit (0);
 }
 
@@ -2283,6 +2308,13 @@ static void processListSubparsersOptions (const char *const option CTAGS_ATTR_UN
 	printLanguageSubparsers(lang,
 							localOption.withListHeader, localOption.machinable,
 							stdout);
+	exit (0);
+}
+
+static void processListOperators (const char *const option CTAGS_ATTR_UNUSED,
+								  const char *const parameter)
+{
+	listRegexOpscriptOperators (stdout);
 	exit (0);
 }
 
@@ -2799,6 +2831,7 @@ static void setBooleanToXtagWithWarning(booleanOption *const option, bool value)
  */
 
 static void processDumpOptionsOption (const char *const option, const char *const parameter);
+static void processDumpPreludeOption (const char *const option, const char *const parameter);
 
 static parametricOption ParametricOptions [] = {
 	{ "etags-include",          processEtagsInclude,            false,  STAGE_ANY },
@@ -2855,15 +2888,17 @@ static parametricOption ParametricOptions [] = {
 	{ "_anonhash",              processAnonHashOption,          false,  STAGE_ANY },
 	{ "_dump-keywords",         processDumpKeywordsOption,      false,  STAGE_ANY },
 	{ "_dump-options",          processDumpOptionsOption,       false,  STAGE_ANY },
+	{ "_dump-prelude",          processDumpPreludeOption,       false,  STAGE_ANY },
 	{ "_echo",                  processEchoOption,              false,  STAGE_ANY },
-	{ "_force-initializing",    processForceInitOption,         false, STAGE_ANY },
+	{ "_force-initializing",    processForceInitOption,         false,  STAGE_ANY },
 	{ "_force-quit",            processForceQuitOption,         false,  STAGE_ANY },
 #ifdef HAVE_JANSSON
 	{ "_interactive",           processInteractiveOption,       true,   STAGE_ANY },
 #endif
-	{ "_list-kinddef-flags",     processListKinddefFlagsOptions, true,   STAGE_ANY },
-	{ "_list-langdef-flags",     processListLangdefFlagsOptions, true,   STAGE_ANY },
+	{ "_list-kinddef-flags",    processListKinddefFlagsOptions, true,   STAGE_ANY },
+	{ "_list-langdef-flags",    processListLangdefFlagsOptions, true,   STAGE_ANY },
 	{ "_list-mtable-regex-flags", processListMultitableRegexFlagsOptions, true, STAGE_ANY },
+	{ "_list-operators",        processListOperators,           true,   STAGE_ANY },
 #ifdef DO_TRACING
 	{ "_trace",                 processTraceOption,             false,  STAGE_ANY },
 #endif
@@ -2976,13 +3011,13 @@ static void enableLanguageField (langType language, const char *field, bool mode
 	t = getFieldTypeForNameAndLanguage (field, language);
 	if (t == FIELD_UNKNOWN)
 		error(FATAL, "no such field: \'%s\'", field);
-	enableField (t, mode, (language != LANG_AUTO));
+	enableField (t, mode);
 	if (language == LANG_AUTO)
 	{
 		fieldType ftype_next = t;
 
 		while ((ftype_next = nextSiblingField (ftype_next)) != FIELD_UNKNOWN)
-			enableField (ftype_next, mode, (language != LANG_AUTO));
+			enableField (ftype_next, mode);
 	}
 }
 
@@ -3314,9 +3349,17 @@ static void processLongOption (
 		;
 	else if (processScopesepOption (option, parameter))
 		;
+	else if (processPreludeOption (option, parameter))
+		;
+	else if (processSequelOption (option, parameter))
+		;
 	else if (processPretendOption (option, parameter))
 		;
 	else if (processRolesOption (option, parameter))
+		;
+	else if (option[0] == '_' && option[1] == '_')
+		/* ctags ignores an argument started from --__.
+		 * optlib2c may handle the argument. */
 		;
 	else
 		error (FATAL, "Unknown option: --%s", option);
@@ -3761,40 +3804,10 @@ static void parseConfigurationFileOptions (void)
 	preload (preload_path_list);
 }
 
-static void parseEnvironmentOptions (void)
-{
-	const char *envOptions = NULL;
-	const char* var = NULL;
-
-	ENTER(EnvVar);
-	if (Option.etags)
-	{
-		var = ETAGS_ENVIRONMENT;
-		envOptions = getenv (var);
-	}
-	if (envOptions == NULL)
-	{
-		var = CTAGS_ENVIRONMENT;
-		envOptions = getenv (var);
-	}
-	if (envOptions != NULL  &&  envOptions [0] != '\0')
-	{
-		cookedArgs* const args = cArgNewFromString (envOptions);
-		verbose ("Reading options from $CTAGS\n");
-		parseOptions (args);
-		cArgDelete (args);
-		if (NonOptionEncountered)
-			error (WARNING, "Ignoring non-option in %s variable", var);
-	}
-}
-
 extern void readOptionConfiguration (void)
 {
 	if (! SkipConfiguration)
-	{
 		parseConfigurationFileOptions ();
-		parseEnvironmentOptions ();
-	}
 }
 
 /*
@@ -3903,6 +3916,13 @@ static void processDumpOptionsOption (const char *const option CTAGS_ATTR_UNUSED
 	fprintf(stdout, "# %s\n", "BooleanOptions");
 	for (unsigned int i = 0; i < ARRAY_SIZE(BooleanOptions); i++)
 		fprintf(stdout, "%s\n", BooleanOptions[i].name);
+}
+
+static void processDumpPreludeOption (const char *const option CTAGS_ATTR_UNUSED, const char *const parameter CTAGS_ATTR_UNUSED)
+{
+	extern const char ctagsCommonPrelude[];
+	fprintf(stdout, "%s\n", ctagsCommonPrelude);
+	exit (0);
 }
 
 extern bool inSandbox (void)

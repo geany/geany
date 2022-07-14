@@ -36,13 +36,17 @@
 
 #ifdef HAVE_PACKCC
 #define PEG_PARSER_LIST						\
-	VarlinkParser
+	VarlinkParser, \
+	KotlinParser,  \
+	ThriftParser
 #else
 #define PEG_PARSER_LIST
 #endif
 
 /* Add the name of any new parser definition function here */
 #define PARSER_LIST \
+	AbaqusParser, \
+	AbcParser, \
 	AdaParser, \
 	AntParser, \
 	AsciidocParser, \
@@ -64,6 +68,8 @@
 	CsharpParser, \
 	CtagsParser, \
 	CobolParser, \
+	CobolFreeParser, \
+	CobolVariableParser, \
 	CUDAParser, \
 	DParser, \
 	DiffParser, \
@@ -78,26 +84,35 @@
 	FalconParser, \
 	FlexParser, \
 	FortranParser, \
+	FunctionParametersParser, \
 	FyppParser,	   \
 	GdbinitParser, \
 	GoParser, \
+	HaskellParser, \
+	HaxeParser, \
 	HtmlParser, \
 	IniconfParser, \
 	InkoParser, \
+	IPythonCellParser, \
 	ITclParser, \
 	JavaParser, \
 	JavaPropertiesParser, \
 	JavaScriptParser, \
 	JsonParser, \
+	JuliaParser, \
 	KconfigParser, \
 	LdScriptParser, \
+	LEXParser, \
 	LispParser, \
+	LiterateHaskellParser, \
 	LuaParser, \
 	M4Parser, \
 	ManParser, \
 	MakefileParser, \
 	MarkdownParser, \
 	MatLabParser, \
+	MesonParser, \
+	MesonOptionsParser, \
 	MooseParser, \
 	MyrddinParser, \
 	NsisParser, \
@@ -123,6 +138,7 @@
 	RSpecParser, \
 	RexxParser, \
 	RobotParser, \
+	RpmMacrosParser, \
 	RpmSpecParser, \
 	RstParser, \
 	RubyParser, \
@@ -141,6 +157,7 @@
 	TexParser, \
 	TexBeamerParser, \
 	TTCNParser, \
+	Txt2tagsParser, \
 	TypeScriptParser, \
 	VeraParser, \
 	VerilogParser, \
@@ -148,7 +165,7 @@
 	VhdlParser, \
 	VimParser, \
 	WindResParser, \
-	YaccParser, \
+	YACCParser, \
 	YumRepoParser, \
 	ZephirParser
 

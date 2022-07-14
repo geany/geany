@@ -19,6 +19,7 @@
 #include "trashbox_p.h"
 #include "writer_p.h"
 #include "xtag_p.h"
+#include "param_p.h"
 
 #include <string.h>
 
@@ -49,11 +50,26 @@ static bool nonfatal_error_printer(const errorSelection selection,
 }
 
 
-static void enable_all_lang_kinds()
+static void enable_roles(const TMParserType lang, guint kind)
+{
+	unsigned int c = countLanguageRoles(lang, kind);
+	kindDefinition *def = getLanguageKind(lang, kind);
+	gchar kind_letter = def->letter;
+
+	for (unsigned int i = 0; i < c; i++)
+	{
+		roleDefinition* rdef = getLanguageRole(lang, kind, (int)i);
+		gboolean should_enable = tm_parser_enable_role(lang, kind_letter);
+		enableRole(rdef, should_enable);
+	}
+}
+
+
+static void enable_kinds_and_roles()
 {
 	TMParserType lang;
 
-	for (lang = 0; lang < countParsers(); lang++)
+	for (lang = 0; lang < (gint)countParsers(); lang++)
 	{
 		guint kind_num = countLanguageKinds(lang);
 		guint kind;
@@ -61,7 +77,11 @@ static void enable_all_lang_kinds()
 		for (kind = 0; kind < kind_num; kind++)
 		{
 			kindDefinition *def = getLanguageKind(lang, kind);
-			enableKind(def, true);
+			gboolean should_enable = tm_parser_enable_kind(lang, def->letter);
+
+			enableKind(def, should_enable);
+			if (should_enable)
+				enable_roles(lang, kind);
 		}
 	}
 }
@@ -100,7 +120,10 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	tag->name = g_strdup(tag_entry->name);
 	tag->type = type;
 	tag->local = tag_entry->isFileScope;
-	tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
+	tag->flags = tm_tag_flag_none_t;
+	if (isTagExtraBitMarked(tag_entry, XTAG_ANONYMOUS))
+		tag->flags |= tm_tag_flag_anon_t;
+	tag->kind_letter = kind_letter;
 	tag->line = tag_entry->lineNumber;
 	if (NULL != tag_entry->extensionFields.signature)
 		tag->arglist = g_strdup(tag_entry->extensionFields.signature);
@@ -121,37 +144,16 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	/* redefine lang also for subparsers because the rest of Geany assumes that
 	 * tags from a single file are from a single language */
 	tag->lang = file->lang;
-	return TRUE;
-}
-
-
-/* add argument list of __init__() Python methods to the class tag */
-static void update_python_arglist(const TMTag *tag, TMSourceFile *source_file)
-{
-	guint i;
-	const gchar *parent_tag_name;
-
-	if (tag->type != tm_tag_method_t || tag->scope == NULL ||
-		g_strcmp0(tag->name, "__init__") != 0)
-		return;
-
-	parent_tag_name = strrchr(tag->scope, '.');
-	if (parent_tag_name)
-		parent_tag_name++;
-	else
-		parent_tag_name = tag->scope;
-
-	/* going in reverse order because the tag was added recently */
-	for (i = source_file->tags_array->len; i > 0; i--)
+	if (tag->scope)
 	{
-		TMTag *prev_tag = (TMTag *) source_file->tags_array->pdata[i - 1];
-		if (g_strcmp0(prev_tag->name, parent_tag_name) == 0)
+		gchar *new_scope = tm_parser_update_scope(tag->lang, tag->scope);
+		if (new_scope != tag->scope)
 		{
-			g_free(prev_tag->arglist);
-			prev_tag->arglist = g_strdup(tag->arglist);
-			break;
+			g_free(tag->scope);
+			tag->scope = new_scope;
 		}
 	}
+	return TRUE;
 }
 
 
@@ -167,9 +169,6 @@ static gint write_entry(tagWriter *writer, MIO * mio, const tagEntryInfo *const 
 		tm_tag_unref(tm_tag);
 		return 0;
 	}
-
-	if (tm_tag->lang == TM_PARSER_PYTHON)
-		update_python_arglist(tm_tag, source_file);
 
 	g_ptr_array_add(source_file->tags_array, tm_tag);
 
@@ -207,6 +206,7 @@ void tm_ctags_init(void)
 
 	initializeParsing();
 	initOptions();
+	initRegexOptscript();
 
 	/* make sure all parsers are initialized */
 	initializeParser(LANG_AUTO);
@@ -216,7 +216,202 @@ void tm_ctags_init(void)
 	enableXtag(XTAG_REFERENCE_TAGS, true);
 
 	/* some kinds we are interested in are disabled by default */
-	enable_all_lang_kinds();
+	enable_kinds_and_roles();
+}
+
+
+void tm_ctags_add_ignore_symbol(const char *value)
+{
+	langType lang = getNamedLanguage ("CPreProcessor", 0);
+	gchar *val = g_strdup(value);
+
+	/* make sure we don't enter empty string - passing NULL or "" clears
+	 * the ignore list in ctags */
+	val = g_strstrip(val);
+	if (*val)
+		applyParameter (lang, "ignore", val);
+	g_free(val);
+}
+
+
+void tm_ctags_clear_ignore_symbols(void)
+{
+	langType lang = getNamedLanguage ("CPreProcessor", 0);
+	applyParameter (lang, "ignore", NULL);
+}
+
+
+/* call after all tags have been collected so we don't have to handle reparses
+ * with the counter (which gets complicated when also subparsers are involved) */
+static void rename_anon_tags(TMSourceFile *source_file)
+{
+	gint *anon_counter_table = NULL;
+	GPtrArray *removed_typedefs = NULL;
+	guint i;
+
+	for (i = 0; i < source_file->tags_array->len; i++)
+	{
+		TMTag *tag = TM_TAG(source_file->tags_array->pdata[i]);
+		if (tm_tag_is_anon(tag))
+		{
+			gchar *orig_name, *new_name = NULL;
+			guint j;
+			guint new_name_len, orig_name_len;
+			gboolean inside_nesting = FALSE;
+			guint scope_len = tag->scope ? strlen(tag->scope) : 0;
+			gchar kind = tag->kind_letter;
+
+			orig_name = tag->name;
+			orig_name_len = strlen(orig_name);
+
+			if (source_file->lang == TM_PARSER_C || source_file->lang == TM_PARSER_CPP)
+			{
+				/* First check if there's a typedef behind the scope nesting
+				 * such as typedef struct {} Foo; - in this case we can replace
+				 * the anon tag with Foo */
+				for (j = i + 1; j < source_file->tags_array->len; j++)
+				{
+					TMTag *nested_tag = TM_TAG(source_file->tags_array->pdata[j]);
+					guint nested_scope_len = nested_tag->scope ? strlen(nested_tag->scope) : 0;
+
+					/* Nested tags have longer scope than the parent - once the scope
+					 * is equal or lower than the parent scope, we are outside the tag's
+					 * scope. */
+					if (nested_scope_len <= scope_len)
+						break;
+				}
+
+				/* We are out of the nesting - the next tag could be a typedef */
+				if (j < source_file->tags_array->len)
+				{
+					TMTag *typedef_tag = TM_TAG(source_file->tags_array->pdata[j]);
+					guint typedef_scope_len = typedef_tag->scope ? strlen(typedef_tag->scope) : 0;
+
+					/* Should be at the same scope level as the anon tag */
+					if (typedef_tag->type == tm_tag_typedef_t &&
+						typedef_scope_len == scope_len &&
+						g_strcmp0(typedef_tag->var_type, tag->name) == 0)
+					{
+						/* set the name of the original anon tag and pretend
+						 * it wasn't a anon tag */
+						tag->name = g_strdup(typedef_tag->name);
+						tag->flags &= ~tm_tag_flag_anon_t;
+						new_name = tag->name;
+						/* the typedef tag will be removed */
+						if (!removed_typedefs)
+							removed_typedefs = g_ptr_array_new();
+						g_ptr_array_add(removed_typedefs, GUINT_TO_POINTER(j));
+					}
+				}
+			}
+
+			/* there's no typedef name for the anon tag so let's generate one  */
+			if (!new_name)
+			{
+				gchar buf[50];
+				guint anon_counter;
+				const gchar *kind_name = tm_ctags_get_kind_name(kind, tag->lang);
+
+				if (!anon_counter_table)
+					anon_counter_table = g_new0(gint, 256);
+
+				anon_counter = ++anon_counter_table[kind];
+
+				sprintf(buf, "anon_%s_%u", kind_name, anon_counter);
+				tag->name = g_strdup(buf);
+				new_name = tag->name;
+			}
+
+			new_name_len = strlen(new_name);
+
+			/* Check if this tag is parent of some other tag - if so, we have to
+			 * update the scope. It can only be parent of the following tags
+			 * so start with the next tag. */
+			for (j = i + 1; j < source_file->tags_array->len; j++)
+			{
+				TMTag *nested_tag = TM_TAG(source_file->tags_array->pdata[j]);
+				guint nested_scope_len = nested_tag->scope ? strlen(nested_tag->scope) : 0;
+				gchar *pos;
+
+				/* In Fortran, we can create variables of anonymous structures:
+				 *     structure var1, var2
+				 *         integer a
+				 *     end structure
+				 * and the parser first generates tags for var1 and var2 which
+				 * are on the same scope as the structure itself. So first
+				 * we need to skip past the tags on the same scope and only
+				 * afterwards we get the nested tags.
+				 * */
+				if (source_file->lang == TM_PARSER_FORTRAN &&
+					!inside_nesting && nested_scope_len == scope_len)
+					continue;
+
+				inside_nesting = TRUE;
+
+				/* Terminate if outside of tag scope, see above */
+				if (nested_scope_len <= scope_len)
+					break;
+
+				pos = strstr(nested_tag->scope, orig_name);
+				/* We found the parent name in the nested tag scope - replace it
+				 * with the new name. Note: anonymous tag names generated by
+				 * ctags are unique enough that we don't have to check for
+				 * scope separators here. */
+				if (pos)
+				{
+					gchar *str = g_malloc(nested_scope_len + 50);
+					guint prefix_len = pos - nested_tag->scope;
+
+					strncpy(str, nested_tag->scope, prefix_len);
+					strcpy(str + prefix_len, new_name);
+					strcpy(str + prefix_len + new_name_len, pos + orig_name_len);
+					g_free(nested_tag->scope);
+					nested_tag->scope = str;
+				}
+			}
+
+			/* We are out of the nesting - the next tags could be variables
+			 * of an anonymous struct such as "struct {} a, b;" */
+			while (j < source_file->tags_array->len)
+			{
+				TMTag *var_tag = TM_TAG(source_file->tags_array->pdata[j]);
+				guint var_scope_len = var_tag->scope ? strlen(var_tag->scope) : 0;
+
+				/* Should be at the same scope level as the anon tag */
+				if (var_scope_len == scope_len &&
+					g_strcmp0(var_tag->var_type, orig_name) == 0)
+				{
+					g_free(var_tag->var_type);
+					var_tag->var_type = g_strdup(new_name);
+				}
+				else
+					break;
+
+				j++;
+			}
+
+			g_free(orig_name);
+		}
+	}
+
+	if (removed_typedefs)
+	{
+		for (i = 0; i < removed_typedefs->len; i++)
+		{
+			guint j = GPOINTER_TO_UINT(removed_typedefs->pdata[i]);
+			TMTag *tag = TM_TAG(source_file->tags_array->pdata[j]);
+			tm_tag_unref(tag);
+			source_file->tags_array->pdata[j] = NULL;
+		}
+
+		/* remove NULL entries from the array */
+		tm_tags_prune(source_file->tags_array);
+
+		g_ptr_array_free(removed_typedefs, TRUE);
+	}
+
+	if (anon_counter_table)
+		g_free(anon_counter_table);
 }
 
 
@@ -226,6 +421,8 @@ void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 	g_return_if_fail(buffer != NULL || file_name != NULL);
 
 	parseRawBuffer(file_name, buffer, buffer_size, language, source_file);
+
+	rename_anon_tags(source_file);
 }
 
 

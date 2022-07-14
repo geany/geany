@@ -1,12 +1,22 @@
-# format=tagmanager
 MACRO1Ì65536Ö0
+macro:      MACRO1
 MACRO2Ì131072Í(x)Ö0
+macro_arg:  MACRO2(x)
 MACRO3Ì131072Í(y)Ö0
+macro_arg:  MACRO3(y)
 TÌ4096Ö0Ïint
-func1Ì1024Í(int var1, int var2, ...)Ö0Ïint
-func2Ì1024Í(int var1, int var2, ...)Ö0Ïint
-func3Ì1024Í(T var1, T var2, ...)Ö0Ïint
-func4Ì1024Í(T var1, T var2, ...)Ö0Ïint
-func5Ì1024Í(int var1, int var2, ...)Ö0Ïint
+typedef:    int T
+func1Ì1024Í(int var1,int var2,...)Ö0Ïint
+prototype:  int func1(int var1,int var2,...)
+func2Ì1024Í(int var1,int var2,...)Ö0Ïint
+prototype:  int func2(int var1,int var2,...)
+func3Ì1024Í(T var1,T var2,...)Ö0Ïint
+prototype:  int func3(T var1,T var2,...)
+func4Ì1024Í(T var1,T var2,...)Ö0Ïint
+prototype:  int func4(T var1,T var2,...)
+func5Ì1024Í(int var1,int var2,...)Ö0Ïint
+prototype:  int func5(int var1,int var2,...)
 func6Ì1024Í(void)Ö0Ïint
+prototype:  int func6(void)
 func7Ì1024Í(int a)Ö0Ïint
+prototype:  int func7(int a)

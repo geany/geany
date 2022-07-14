@@ -1,9 +1,16 @@
-# format=tagmanager
-Interface#0Ã32Œapprox÷0
-Interface#1Ã32Œapprox2÷0
+anon_interface_1Ã32Œapprox÷1
+interface:  approx :: anon_interface_1    flags: 1
+anon_interface_2Ã32Œapprox2÷1
+interface:  approx2 :: anon_interface_2    flags: 1
 approxÃ256÷0
+namespace:  approx
 approx2Ã256÷0
+namespace:  approx2
 partsÃ16384Œapprox÷0
+variable:   approx :: parts
 parts2Ã16384Œapprox2÷0
+variable:   approx2 :: parts2
 yÃ16384Œapprox÷0
+variable:   approx :: y
 zÃ16384Œapprox2÷0
+variable:   approx2 :: z

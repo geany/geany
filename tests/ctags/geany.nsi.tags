@@ -1,21 +1,40 @@
-# format=tagmanager
 !Program FilesÌ256Ö0
+namespace:  !Program Files
 -AdditionalIconsÌ256Ö0
+namespace:  -AdditionalIcons
 -PostÌ256Ö0
+namespace:  -Post
 .onInitÌ16Ö0
+function:   .onInit
 AnswerÌ16384Ö0
+variable:   Answer
 Autocompletion TagsÌ256Ö0
+namespace:  Autocompletion Tags
 Context MenusÌ256Ö0
+namespace:  Context Menus
 Desktop ShortcutsÌ256Ö0
+namespace:  Desktop Shortcuts
 Development filesÌ256Ö0
+namespace:  Development files
 DocumentationÌ256Ö0
-GTK Ì256Ö0
+namespace:  Documentation
+GTK ${GTK_VERSION} Runtime EnvironmentÌ256Ö0
+namespace:  GTK ${GTK_VERSION} Runtime Environment
 Language FilesÌ256Ö0
+namespace:  Language Files
 OnDirLeaveÌ16Ö0
+function:   OnDirLeave
 PluginsÌ256Ö0
+namespace:  Plugins
 StartmenuFolderÌ16384Ö0
+variable:   StartmenuFolder
 UNINSTDIRÌ16384Ö0
+variable:   UNINSTDIR
 UninstallÌ256Ö0
+namespace:  Uninstall
 UserNameÌ16384Ö0
+variable:   UserName
 un.onInitÌ16Ö0
+function:   un.onInit
 un.onUninstSuccessÌ16Ö0
+function:   un.onUninstSuccess

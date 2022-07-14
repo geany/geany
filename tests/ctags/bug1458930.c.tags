@@ -1,3 +1,4 @@
-# format=tagmanager
 xÌ1024Í()Ö0Ïchar
+prototype:  char x()
 yÌ1024Í()Ö0Ïwchar_t
+prototype:  wchar_t y()

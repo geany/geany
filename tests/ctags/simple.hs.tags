@@ -1,9 +1,16 @@
-# format=tagmanager
 BoolÌ4096Ö0
+typedef:    Bool
 CardsÌ256Ö0
+namespace:  Cards
 FalseÌ65536Ö0
+macro:      False
 FdÌ4096Ö0
+typedef:    Fd
 FdÌ65536Ö0
+macro:      Fd
 IntÌ4096Ö0
+typedef:    Int
 TrueÌ65536Ö0
+macro:      True
 addÌ16Ö0
+function:   add

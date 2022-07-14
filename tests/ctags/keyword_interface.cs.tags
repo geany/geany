@@ -1,9 +1,16 @@
-# format=tagmanager
 IPointÃ32÷0
+interface:  IPoint
 MainÃ128Õ()ŒMainClass÷0œpublic void
+method:     public void MainClass :: Main()
 MainClassÃ1÷0
+class:      MainClass
 MyPointÃ1÷0
+class:      MyPoint
 MyPointÃ128Õ(int x, int y)ŒMyPoint÷0
+method:     MyPoint :: MyPoint(int x, int y)
 PrintPointÃ128Õ(IPoint p)ŒMainClass÷0œprivate void
+method:     private void MainClass :: PrintPoint(IPoint p)
 myXÃ8ŒMyPoint÷0œint
+field:      int MyPoint :: myX
 myYÃ8ŒMyPoint÷0œint
+field:      int MyPoint :: myY

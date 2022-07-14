@@ -1,0 +1,10 @@
+Digit_To_CharacterÌ16ÎGeneric_Integer_ImagesÖ0
+function:   Generic_Integer_Images :: Digit_To_Character
+Digit_To_CharacterÌ1024ÎGeneric_Integer_ImagesÖ0
+prototype:  Generic_Integer_Images :: Digit_To_Character
+Generic_Integer_ImagesÌ512ÎMy_PackageÖ0
+package:    My_Package :: Generic_Integer_Images
+My_PackageÌ16Ö0
+function:   My_Package
+Signed_AddressÌ4096ÎMy_PackageÖ0
+typedef:    My_Package :: Signed_Address

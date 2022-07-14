@@ -1,17 +1,32 @@
-# format=tagmanager
 align_second_16Ì64Îmy_structÖ0
+member:     my_struct :: align_second_16
 base_typeÌ16384ÎtestallocÖ0
+variable:   testalloc :: base_type
 first_byteÌ64Îmy_structÖ0
+member:     my_struct :: first_byte
 iÌ16384ÎtestallocÖ0
+variable:   testalloc :: i
 i2Ì16384ÎtestallocÖ0
+variable:   testalloc :: i2
 i3Ì16384ÎtestallocÖ0
+variable:   testalloc :: i3
 i4Ì16384ÎtestallocÖ0
+variable:   testalloc :: i4
 i5Ì16384ÎtestallocÖ0
+variable:   testalloc :: i5
 i6Ì16384ÎtestallocÖ0
+variable:   testalloc :: i6
 i7Ì16384ÎtestallocÖ0
+variable:   testalloc :: i7
 i8Ì16384ÎtestallocÖ0
+variable:   testalloc :: i8
 listÌ16384ÎtestallocÖ0
+variable:   testalloc :: list
 my_structÌ1ÎtestallocÖ0
+class:      testalloc :: my_struct
 statusÌ16384ÎtestallocÖ0
+variable:   testalloc :: status
 testallocÌ2048Ö0
+struct:     testalloc
 the_structÌ16384ÎtestallocÖ0
+variable:   testalloc :: the_struct

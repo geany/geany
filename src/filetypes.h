@@ -50,7 +50,7 @@ typedef enum
 	GEANY_FILETYPES_MATLAB,
 	GEANY_FILETYPES_RUBY,
 	GEANY_FILETYPES_LUA,
-	GEANY_FILETYPES_FERITE,
+	GEANY_FILETYPES_GDSCRIPT,
 	GEANY_FILETYPES_YAML,
 	GEANY_FILETYPES_C,
 	GEANY_FILETYPES_NSIS,
@@ -107,15 +107,12 @@ typedef enum
 	GEANY_FILETYPES_ZEPHIR,
 	GEANY_FILETYPES_BIBTEX,
 	GEANY_FILETYPES_SMALLTALK,
+	GEANY_FILETYPES_JULIA,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }
 GeanyFiletypeID;
 
-#ifndef GEANY_DISABLE_DEPRECATED
-/* compat define - should be removed in the future */
-typedef GeanyFiletypeID filetype_id GEANY_DEPRECATED_FOR(GeanyFiletypeID);
-#endif /* GEANY_DISABLE_DEPRECATED */
 
 /** @gironly
  * Filetype categories

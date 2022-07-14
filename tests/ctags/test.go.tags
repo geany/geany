@@ -1,39 +1,76 @@
-# format=tagmanager
-AÃ65536÷0
-BÃ65536÷0
-CÃ65536÷0
-DÃ65536÷0
-EÃ65536÷0
-FÃ65536÷0
-GÃ65536÷0
-HÃ65536÷0
-IÃ65536÷0
-T1Ã4096÷0
-T2Ã4096÷0
-T3Ã4096÷0
-T4Ã4096÷0
-T5Ã32÷0
-T6Ã2048÷0
-T7Ã4096÷0
-T8Ã4096÷0
-T9Ã4096÷0
-_aÃ64ŒT6÷0
-_bÃ64ŒT6÷0
-_cÃ64ŒT6÷0
-_dÃ64ŒT6÷0
-_eÃ64ŒT6÷0
-aÃ16384÷0
-bÃ16384÷0
-cÃ16384÷0
-dÃ16384÷0
-eÃ16384÷0
-fÃ16384÷0
-f1Ã16Õ()÷0œ
-f2Ã16Õ()÷0œ
-f3Ã16Õ()÷0œ(a, b int)
-f4Ã16Õ(a func () func ())÷0œ(func (), int)
-f5Ã16Õ()÷0œ
-gÃ16384÷0
-hÃ16384÷0
-mainÃ16Õ()÷0œ
+AÃ65536Œmain÷0
+macro:      main :: A
+BÃ65536Œmain÷0
+macro:      main :: B
+CÃ65536Œmain÷0
+macro:      main :: C
+DÃ65536Œmain÷0
+macro:      main :: D
+EÃ65536Œmain÷0
+macro:      main :: E
+FÃ65536Œmain÷0
+macro:      main :: F
+GÃ65536Œmain÷0
+macro:      main :: G
+HÃ65536Œmain÷0
+macro:      main :: H
+IÃ65536Œmain÷0
+macro:      main :: I
+T1Ã4096Œmain÷0œmap[string]int
+typedef:    map[string]int main :: T1
+T2Ã4096Œmain÷0œ<-chan float32
+typedef:    <-chan float32 main :: T2
+T3Ã4096Œmain÷0œchan []string
+typedef:    chan []string main :: T3
+T4Ã4096Œmain÷0œchan<- *[12]string
+typedef:    chan<- *[12]string main :: T4
+T5Ã32Œmain÷0
+interface:  main :: T5
+T6Ã2048Œmain÷0
+struct:     main :: T6
+T7Ã4096Œmain÷0œfunc (a struct{_ int; _ float32}, b int) (int, map[string]int)
+typedef:    func (a struct{_ int; _ float32}, b int) (int, map[string]int) main :: T7
+T8Ã4096Œmain÷0œfloat32
+typedef:    float32 main :: T8
+T9Ã4096Œmain÷0œint
+typedef:    int main :: T9
+_aÃ64Œmain.T6÷0œint
+member:     int main.T6 :: _a
+_bÃ64Œmain.T6÷0œint
+member:     int main.T6 :: _b
+_cÃ64Œmain.T6÷0œint
+member:     int main.T6 :: _c
+_dÃ64Œmain.T6÷0œint
+member:     int main.T6 :: _d
+_eÃ64Œmain.T6÷0œfloat32
+member:     float32 main.T6 :: _e
+aÃ16384Œmain÷0œint
+variable:   int main :: a
+bÃ16384Œmain÷0œint
+variable:   int main :: b
+cÃ16384Œmain÷0œint
+variable:   int main :: c
+dÃ16384Œmain÷0œT5
+variable:   T5 main :: d
+eÃ16384Œmain÷0œT4
+variable:   T4 main :: e
+fÃ16384Œmain÷0œinterface{}
+variable:   interface{} main :: f
+f1Ã16Õ()Œmain÷0
+function:   main :: f1()
+f2Ã16Õ()Œmain÷0
+function:   main :: f2()
+f3Ã16Õ()Œmain.T1÷0œ(a, b int)
+function:   (a, b int) main.T1 :: f3()
+f4Ã16Õ(a func () func ())Œmain.T7÷0œ(func (), int)
+function:   (func (), int) main.T7 :: f4(a func () func ())
+f5Ã16Õ()Œmain÷0
+function:   main :: f5()
+gÃ16384Œmain÷0œint
+variable:   int main :: g
+hÃ16384Œmain÷0œint
+variable:   int main :: h
+mainÃ16Õ()Œmain÷0
+function:   main :: main()
 mainÃ256÷0
+namespace:  main

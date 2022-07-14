@@ -1,0 +1,12 @@
+another.nameÃ256÷0
+namespace:  another.name
+app.controllerÃ256÷0
+namespace:  app.controller
+core-function-with-bodyÃ16Œapp.controller÷0
+function:   app.controller :: core-function-with-body
+empty-fnÃ16Œapp.controller÷0
+function:   app.controller :: empty-fn
+function-with-bodyÃ16Œapp.controller÷0
+function:   app.controller :: function-with-body
+xÃ16Œanother.name÷0
+function:   another.name :: x

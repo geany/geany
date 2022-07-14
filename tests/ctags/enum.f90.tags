@@ -1,48 +1,94 @@
-# format=tagmanager
 ConstantsÌ256Ö0
+namespace:  Constants
 E_eÌ16384ÎConstantsÖ0
-Enum#0Ì2ÎConstantsÖ0
-Enum#1Ì2ÎConstantsÖ0
+variable:   Constants :: E_e
 Named1Ì2ÎConstantsÖ0
+enum:       Constants :: Named1
 Named2Ì2ÎConstantsÖ0
+enum:       Constants :: Named2
 Named3Ì2ÎConstantsÖ0
+enum:       Constants :: Named3
 Named4Ì2ÎConstantsÖ0
+enum:       Constants :: Named4
 Named5Ì2ÎConstantsÖ0
+enum:       Constants :: Named5
 Named6Ì2ÎConstantsÖ0
+enum:       Constants :: Named6
 Named7Ì2ÎConstantsÖ0
-aÌ4ÎEnum#1Ö0
-bÌ4ÎEnum#1Ö0
-blackÌ4ÎEnum#0Ö0
-blueÌ4ÎEnum#0Ö0
-bronzeÌ4ÎEnum#0Ö0
-cÌ4ÎEnum#1Ö0
-goldÌ4ÎEnum#0Ö0
+enum:       Constants :: Named7
+aÌ4Îanon_enum_2Ö0
+enumerator: anon_enum_2 :: a
+anon_enum_1Ì2ÎConstantsÖ1
+enum:       Constants :: anon_enum_1    flags: 1
+anon_enum_2Ì2ÎConstantsÖ1
+enum:       Constants :: anon_enum_2    flags: 1
+bÌ4Îanon_enum_2Ö0
+enumerator: anon_enum_2 :: b
+blackÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: black
+blueÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: blue
+bronzeÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: bronze
+cÌ4Îanon_enum_2Ö0
+enumerator: anon_enum_2 :: c
+goldÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: gold
 hcÌ16384ÎConstantsÖ0
-lavenderÌ4ÎEnum#0Ö0
+variable:   Constants :: hc
+lavenderÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: lavender
 piÌ16384ÎConstantsÖ0
-pinkÌ4ÎEnum#0Ö0
-purpleÌ4ÎEnum#0Ö0
-redÌ4ÎEnum#0Ö0
-silverÌ4ÎEnum#0Ö0
+variable:   Constants :: pi
+pinkÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: pink
+purpleÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: purple
+redÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: red
+silverÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: silver
 x1Ì4ÎNamed1Ö0
+enumerator: Named1 :: x1
 x2Ì4ÎNamed2Ö0
+enumerator: Named2 :: x2
 x3Ì4ÎNamed3Ö0
+enumerator: Named3 :: x3
 x4Ì4ÎNamed4Ö0
+enumerator: Named4 :: x4
 x5Ì4ÎNamed5Ö0
+enumerator: Named5 :: x5
 x6Ì4ÎNamed6Ö0
+enumerator: Named6 :: x6
 x7Ì4ÎNamed7Ö0
+enumerator: Named7 :: x7
 y1Ì4ÎNamed1Ö0
+enumerator: Named1 :: y1
 y2Ì4ÎNamed2Ö0
+enumerator: Named2 :: y2
 y3Ì4ÎNamed3Ö0
+enumerator: Named3 :: y3
 y4Ì4ÎNamed4Ö0
+enumerator: Named4 :: y4
 y5Ì4ÎNamed5Ö0
+enumerator: Named5 :: y5
 y6Ì4ÎNamed6Ö0
+enumerator: Named6 :: y6
 y7Ì4ÎNamed7Ö0
-yellowÌ4ÎEnum#0Ö0
+enumerator: Named7 :: y7
+yellowÌ4Îanon_enum_1Ö0
+enumerator: anon_enum_1 :: yellow
 z1Ì4ÎNamed1Ö0
+enumerator: Named1 :: z1
 z2Ì4ÎNamed2Ö0
+enumerator: Named2 :: z2
 z3Ì4ÎNamed3Ö0
+enumerator: Named3 :: z3
 z4Ì4ÎNamed4Ö0
+enumerator: Named4 :: z4
 z5Ì4ÎNamed5Ö0
+enumerator: Named5 :: z5
 z6Ì4ÎNamed6Ö0
+enumerator: Named6 :: z6
 z7Ì4ÎNamed7Ö0
+enumerator: Named7 :: z7

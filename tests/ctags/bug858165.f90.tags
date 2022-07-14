@@ -1,6 +1,10 @@
-# format=tagmanager
 aÌ16384ÎtestÖ0
+variable:   test :: a
 bÌ16384ÎtestÖ0
+variable:   test :: b
 cÌ16384ÎtestÖ0
+variable:   test :: c
 dÌ16384ÎtestÖ0
+variable:   test :: d
 testÌ2048Ö0
+struct:     test

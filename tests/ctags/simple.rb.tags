@@ -1,10 +1,18 @@
-# format=tagmanager
 ClassExampleÃ1ŒModuleExample÷0
+class:      ModuleExample :: ClassExample
 ModuleExampleÃ256÷0
-`Ã128ŒModuleExample.ClassExample÷0
-class_methodÃ128ŒModuleExample.ClassExample÷0
-class_method_exclamation!Ã128ŒModuleExample.ClassExample÷0
-class_method_question?Ã128ŒModuleExample.ClassExample÷0
-module_methodÃ128ŒModuleExample÷0
-singleton_class_methodÃ64ŒModuleExample.ClassExample÷0
-singleton_module_methodÃ64ŒModuleExample÷0
+namespace:  ModuleExample
+`Ã128Õ(command)ŒModuleExample.ClassExample÷0
+method:     ModuleExample.ClassExample :: `(command)
+class_methodÃ128Õ()ŒModuleExample.ClassExample÷0
+method:     ModuleExample.ClassExample :: class_method()
+class_method_exclamation!Ã128Õ()ŒModuleExample.ClassExample÷0
+method:     ModuleExample.ClassExample :: class_method_exclamation!()
+class_method_question?Ã128Õ()ŒModuleExample.ClassExample÷0
+method:     ModuleExample.ClassExample :: class_method_question?()
+module_methodÃ128Õ()ŒModuleExample÷0
+method:     ModuleExample :: module_method()
+singleton_class_methodÃ64Õ()ŒModuleExample.ClassExample÷0
+member:     ModuleExample.ClassExample :: singleton_class_method()
+singleton_module_methodÃ64Õ()ŒModuleExample÷0
+member:     ModuleExample :: singleton_module_method()

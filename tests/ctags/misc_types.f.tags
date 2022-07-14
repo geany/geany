@@ -1,4 +1,6 @@
-# format=tagmanager
 INFOOBARÃ16384Œspecs÷0
+variable:   specs :: INFOOBAR
 MÃ16384Œspecs÷0
+variable:   specs :: M
 specsÃ2048÷0
+struct:     specs

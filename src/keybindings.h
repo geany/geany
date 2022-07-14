@@ -73,7 +73,7 @@ typedef gboolean (*GeanyKeyBindingFunc)(GeanyKeyBinding *key, guint key_id, gpoi
  * Use keybindings_set_item() to set. */
 struct GeanyKeyBinding
 {
-	guint key;				/**< Key value in lower-case, such as @c GDK_a or 0 */
+	guint key;				/**< Key value in lower-case, such as @c GDK_KEY_a or 0 */
 	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK or 0 */
 	gchar *name;			/**< Key name for the configuration file, such as @c "menu_new" */
 	/** Label used in the preferences dialog keybindings tab.
@@ -275,6 +275,10 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_EDITOR_DELETELINETOBEGINNING,	/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_STRIPTRAILINGSPACES,	/**< Keybinding.
 												 * @since 1.34 (API 238) */
+	GEANY_KEYS_FILE_RELOAD_ALL,					/**< Keybinding.
+												 * @since 1.38 (API 240) */
+	GEANY_KEYS_PROJECT_NEW_FROM_FOLDER,			/**< Keybinding.
+												 * @since 1.39 (API 243) */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 

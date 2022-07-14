@@ -1,28 +1,54 @@
-# format=tagmanager
-# aÌ16384Ö0
-# g #Ì16384Ö0
-# h ##Ì16384Ö0
-## bÌ16384Ö0
-## i #Ì16384Ö0
-## j ##Ì16384Ö0
-## k ###Ì16384Ö0
-### cÌ16384Ö0
-### l #Ì16384Ö0
-### m ##Ì16384Ö0
-### n ###Ì16384Ö0
-### o ###Ì16384Ö0
-#### dÌ16384Ö0
-#### p #Ì16384Ö0
-#### q #####Ì16384Ö0
-##### eÌ16384Ö0
-##### r #Ì16384Ö0
-##### s ######Ì16384Ö0
-###### fÌ16384Ö0
-###### t #Ì16384Ö0
-###### u #######Ì16384Ö0
-AÌ16384Ö0
-BÌ16384Ö0
-CÌ16384Ö0
-DÌ16384Ö0
-EÌ16384Ö0
-FÌ16384Ö0
+AÌ256Ö0
+namespace:  A
+BÌ256Ö0
+namespace:  B
+CÌ256Ö0
+namespace:  C
+DÌ64ÎCÖ0
+member:     C :: D
+EÌ64ÎCÖ0
+member:     C :: E
+FÌ64ÎCÖ0
+member:     C :: F
+aÌ256Ö0
+namespace:  a
+bÌ64ÎaÖ0
+member:     a :: b
+cÌ65536Îa""bÖ0
+macro:      a""b :: c
+dÌ16384Îa""b""cÖ0
+variable:   a""b""c :: d
+eÌ2048Îa""b""c""dÖ0
+struct:     a""b""c""d :: e
+fÌ8192Îa""b""c""d""eÖ0
+union:      a""b""c""d""e :: f
+gÌ256Ö0
+namespace:  g
+hÌ256Ö0
+namespace:  h
+iÌ64ÎhÖ0
+member:     h :: i
+jÌ64ÎhÖ0
+member:     h :: j
+kÌ64ÎhÖ0
+member:     h :: k
+lÌ65536Îh""kÖ0
+macro:      h""k :: l
+mÌ65536Îh""kÖ0
+macro:      h""k :: m
+nÌ65536Îh""kÖ0
+macro:      h""k :: n
+oÌ65536Îh""kÖ0
+macro:      h""k :: o
+pÌ16384Îh""k""oÖ0
+variable:   h""k""o :: p
+qÌ16384Îh""k""oÖ0
+variable:   h""k""o :: q
+rÌ2048Îh""k""o""qÖ0
+struct:     h""k""o""q :: r
+sÌ2048Îh""k""o""qÖ0
+struct:     h""k""o""q :: s
+tÌ8192Îh""k""o""q""sÖ0
+union:      h""k""o""q""s :: t
+uÌ8192Îh""k""o""q""sÖ0
+union:      h""k""o""q""s :: u

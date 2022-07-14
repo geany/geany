@@ -1,7 +1,12 @@
-# format=tagmanager
 DigitÌ128Í(byte value)ÎDigitÖ0
+method:     Digit :: Digit(byte value)
 DigitÌ2048Ö0
+struct:     Digit
 MainÌ128Í()ÎTestÖ0Ïpublic void
+method:     public void Test :: Main()
 TestÌ1Ö0
+class:      Test
 operator DigitÌ128Í(byte b)ÎDigitÖ0
+method:     Digit :: operator Digit(byte b)
 valueÌ8ÎDigitÖ0Ïbyte
+field:      byte Digit :: value

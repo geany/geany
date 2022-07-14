@@ -1,20 +1,38 @@
-# format=tagmanager
 func1Ì1024Í()Ö0Ïconst volatile unsigned int
-func2Ì1024Í()Ö0Ïtype1
+prototype:  const volatile unsigned int func1()
+func2Ì1024Í()Ö0Ïconst struct type1
+prototype:  const struct type1 func2()
 func3Ì1024Í()Ö0Ïconst type1_t
+prototype:  const type1_t func3()
 func4Ì1024Í()Ö0Ïtype1
+prototype:  type1 func4()
 func5Ì1024Í()Ö0Ïtype1_t
+prototype:  type1_t func5()
 func6Ì1024Í()Ö0Ïconst std::string
+prototype:  const std::string func6()
 func7Ì1024Í()Ö0Ïstd::string
+prototype:  std::string func7()
 memb1Ì64Îtype1Ö0Ïunsigned int
-nextÌ64Îtype1Ö0Ïtype1
+member:     unsigned int type1 :: memb1
+nextÌ64Îtype1Ö0Ïtype1 *
+member:     type1 * type1 :: next
 type1Ì2048Ö0
+struct:     type1
 type1_tÌ4096Ö0Ïtype1
+typedef:    type1 type1_t
 type2_tÌ4096Ö0Ïunsigned long int
+typedef:    unsigned long int type2_t
 var1Ì16384Ö0Ïconst volatile unsigned int
-var2Ì16384Ö0Ïtype1
+variable:   const volatile unsigned int var1
+var2Ì16384Ö0Ïconst struct type1
+variable:   const struct type1 var2
 var3Ì16384Ö0Ïconst type1_t
+variable:   const type1_t var3
 var4Ì16384Ö0Ïtype1
+variable:   type1 var4
 var5Ì16384Ö0Ïtype1_t
+variable:   type1_t var5
 var6Ì16384Ö0Ïconst std::string
+variable:   const std::string var6
 var7Ì16384Ö0Ïstd::string
+variable:   std::string var7

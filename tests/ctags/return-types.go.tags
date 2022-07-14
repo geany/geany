@@ -1,6 +1,10 @@
-# format=tagmanager
-barÌ16Í()Ö0Ï(a int, b func(a int), c interface{}, d string)
-bazÌ16Í()Ö0Ï*[20*3+1]map[chan<- <-chan int]map[interface{}]*string
-fooÌ16Í()Ö0Ï*struct {a int; b func()}
-mainÌ16Í()Ö0Ï
+barÌ16Í()ÎmainÖ0Ï(a int, b func(a int), c interface{}, d string)
+function:   (a int, b func(a int), c interface{}, d string) main :: bar()
+bazÌ16Í()ÎmainÖ0Ï*[20*3+1]map[chan<- <-chan int]map[interface{}]*string
+function:   *[20*3+1]map[chan<- <-chan int]map[interface{}]*string main :: baz()
+fooÌ16Í()ÎmainÖ0Ï*struct {a int; b func()}
+function:   *struct {a int; b func()} main :: foo()
+mainÌ16Í()ÎmainÖ0
+function:   main :: main()
 mainÌ256Ö0
+namespace:  main

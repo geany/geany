@@ -1,5 +1,6 @@
-# format=tagmanager
 IntroduceBitDefÌ2048Ö0
-IntroduceBitDefÌ32768Ö0
+struct:     IntroduceBitDef
 fÌ16Í()ÎIntroduceBitDefÖ0Ïint
+function:   int IntroduceBitDef :: f()
 gÌ16Í()Ö0Ïint
+function:   int g()

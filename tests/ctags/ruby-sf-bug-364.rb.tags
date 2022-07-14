@@ -1,8 +1,14 @@
-# format=tagmanager
 DÌ1Ö0
-_a?Ì64ÎDÖ0
-_b!Ì64ÎDÖ0
-_c=Ì64ÎDÖ0
-x?Ì64ÎDÖ0
-y!Ì64ÎDÖ0
-z=Ì64ÎDÖ0
+class:      D
+_a?Ì64Í()ÎDÖ0
+member:     D :: _a?()
+_b!Ì64Í()ÎDÖ0
+member:     D :: _b!()
+_c=Ì64Í(a)ÎDÖ0
+member:     D :: _c=(a)
+x?Ì64Í()ÎDÖ0
+member:     D :: x?()
+y!Ì64Í()ÎDÖ0
+member:     D :: y!()
+z=Ì64Í(a)ÎDÖ0
+member:     D :: z=(a)

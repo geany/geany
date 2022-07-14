@@ -1,0 +1,16 @@
+ENTITY_1Ã64ŒENTITY_TOP.arch÷0
+member:     ENTITY_TOP.arch :: ENTITY_1
+ENTITY_2Ã64ŒENTITY_TOP.arch÷0
+member:     ENTITY_TOP.arch :: ENTITY_2
+ENTITY_TOPÃ1÷0
+class:      ENTITY_TOP
+INPÃ16384ŒENTITY_TOP÷0
+variable:   ENTITY_TOP :: INP
+INPÃ16384ŒENTITY_TOP.arch.ENTITY_1÷0
+variable:   ENTITY_TOP.arch.ENTITY_1 :: INP
+INPÃ16384ŒENTITY_TOP.arch.ENTITY_2÷0
+variable:   ENTITY_TOP.arch.ENTITY_2 :: INP
+archÃ2048ŒENTITY_TOP÷0
+struct:     ENTITY_TOP :: arch
+sigÃ16384ŒENTITY_TOP.arch÷0
+variable:   ENTITY_TOP.arch :: sig

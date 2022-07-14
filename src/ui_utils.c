@@ -51,11 +51,10 @@
 #include "win32.h"
 #include "osx.h"
 
-#include "gtkcompat.h"
-
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 
@@ -69,7 +68,7 @@
 	"filetype: %f      " \
 	"scope: %S")
 
-GeanyInterfacePrefs	interface_prefs;
+GEANY_EXPORT_SYMBOL GeanyInterfacePrefs interface_prefs;
 GeanyMainWidgets	main_widgets;
 
 UIPrefs			ui_prefs;
@@ -228,7 +227,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				break;
 			case 's':
 			{
-				gint len = sci_get_selected_text_length(sci) - 1;
+				gint len = sci_get_selected_text_length2(sci);
 				/* check if whole lines are selected */
 				if (!len || sci_get_col_from_position(sci,
 						sci_get_selection_start(sci)) != 0 ||
@@ -242,7 +241,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 			}
 			case 'n' :
 				g_string_append_printf(stats_str, "%d",
-					sci_get_selected_text_length(doc->editor->sci) - 1);
+					sci_get_selected_text_length2(doc->editor->sci));
 				break;
 			case 'w':
 				/* RO = read-only */
@@ -755,7 +754,7 @@ static void insert_date(GeanyDocument *doc, gint pos, const gchar *date_style)
 	{
 		gchar *str = dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
 				_("Enter here a custom date and time format. "
-				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
+				"For a list of available conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."),
 				ui_prefs.custom_date_format);
 		if (str)
 			SETPTR(ui_prefs.custom_date_format, str);
@@ -1525,7 +1524,7 @@ GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alig
 GEANY_API_SYMBOL
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 {
-	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
+	GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);	/* need child vbox to set a separate border. */
 
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox, TRUE, TRUE, 0);
@@ -1660,7 +1659,7 @@ void ui_entry_add_activate_backward_signal(GtkEntry *entry)
 			G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION, 0, NULL, NULL,
 			g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 		binding_set = gtk_binding_set_by_class(GTK_ENTRY_GET_CLASS(entry));
-		gtk_binding_entry_add_signal(binding_set, GDK_Return, GDK_SHIFT_MASK, "activate-backward", 0);
+		gtk_binding_entry_add_signal(binding_set, GDK_KEY_Return, GDK_SHIFT_MASK, "activate-backward", 0);
 	}
 }
 
@@ -1945,11 +1944,11 @@ GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkE
 {
 	GtkWidget *vbox, *dirbtn, *openimg, *hbox, *path_entry, *parent, *next_parent;
 
-	hbox = gtk_hbox_new(FALSE, 6);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	path_entry = GTK_WIDGET(entry);
 
 	/* prevent path_entry being vertically stretched to the height of dirbtn */
-	vbox = gtk_vbox_new(FALSE, 0);
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
 	parent = path_entry;
 	while ((next_parent = gtk_widget_get_parent(parent)) != NULL)
@@ -2024,6 +2023,21 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	return ret_path;
 }
 #endif
+
+
+gchar *ui_get_project_directory(const gchar *path)
+{
+	gchar *utf8_path;
+	const gchar *title = _("Select Project Base Path");
+
+#ifdef G_OS_WIN32
+	utf8_path = win32_show_folder_dialog(ui_widgets.prefs_dialog, title, path);
+#else
+	utf8_path = run_file_chooser(title, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, path);
+#endif
+
+	return utf8_path;
+}
 
 
 static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
@@ -2379,6 +2393,8 @@ void ui_init_prefs(void)
 		"msgwin_messages_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.msgwin_scribble_visible,
 		"msgwin_scribble_visible", TRUE);
+	stash_group_add_boolean(group, &interface_prefs.warn_on_project_close,
+		"warn_on_project_close", TRUE);
 }
 
 
@@ -2531,7 +2547,6 @@ void ui_init_builder(void)
 }
 
 
-#if GTK_CHECK_VERSION(3, 0, 0)
 static void load_css_theme(const gchar *fn, guint priority)
 {
 	GtkCssProvider *provider = gtk_css_provider_new();
@@ -2552,7 +2567,6 @@ static void load_css_theme(const gchar *fn, guint priority)
 }
 
 
-// see setup_gtk2_styles() in libmain.c for GTK+ 2-specific theme initialization
 static void init_css_styles(void)
 {
 	gchar *theme_fn;
@@ -2602,15 +2616,11 @@ static void add_css_config_file_item(void)
 	ui_add_config_file_menu_item(theme_fn, NULL, NULL);
 	g_free(theme_fn);
 }
-#endif // GTK3
 
 
 void ui_init(void)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
 	init_css_styles();
-#endif
-
 	init_recent_files();
 
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
@@ -2658,9 +2668,7 @@ void ui_init(void)
 	init_document_widgets();
 
 	create_config_files_menu();
-#if GTK_CHECK_VERSION(3, 0, 0)
 	add_css_config_file_item();
-#endif
 }
 
 
@@ -3035,7 +3043,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 
 /** Checks whether the passed @a keyval is the Enter or Return key.
  * There are three different Enter/Return key values
- * (@c GDK_Return, @c GDK_ISO_Enter, @c GDK_KP_Enter).
+ * (@c GDK_KEY_Return, @c GDK_KEY_ISO_Enter, @c GDK_KEY_KP_Enter).
  * This is just a convenience function.
  * @param keyval A keyval.
  * @return @c TRUE if @a keyval is the one of the Enter/Return key values, otherwise @c FALSE.
@@ -3043,7 +3051,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 GEANY_API_SYMBOL
 gboolean ui_is_keyval_enter_or_return(guint keyval)
 {
-	return (keyval == GDK_Return || keyval == GDK_ISO_Enter|| keyval == GDK_KP_Enter);
+	return (keyval == GDK_KEY_Return || keyval == GDK_KEY_ISO_Enter|| keyval == GDK_KEY_KP_Enter);
 }
 
 

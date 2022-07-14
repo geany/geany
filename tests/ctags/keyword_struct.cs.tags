@@ -1,7 +1,12 @@
-# format=tagmanager
 MainÌ128Í()ÎMainClassÖ0Ïpublic void
+method:     public void MainClass :: Main()
 MainClassÌ1Ö0
+class:      MainClass
 PointÌ128Í(int p1, int p2)ÎPointÖ0
+method:     Point :: Point(int p1, int p2)
 PointÌ2048Ö0
+struct:     Point
 xÌ8ÎPointÖ0Ïint
+field:      int Point :: x
 yÌ8ÎPointÖ0Ïint
+field:      int Point :: y

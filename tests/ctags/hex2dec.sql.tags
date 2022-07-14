@@ -1,3 +1,4 @@
-# format=tagmanager
 hex2decÌ16Ö0
+function:   hex2dec
 num2hexÌ16Ö0
+function:   num2hex

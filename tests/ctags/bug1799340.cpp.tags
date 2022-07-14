@@ -1,4 +1,6 @@
-# format=tagmanager
-f1Ã16Õ()÷0œstd::string
-f2Ã16Õ()÷0œconst std::string
-f3Ã16Õ()Œstd÷0œstd::string const
+f1Ã16Õ()÷0œstd::string &
+function:   std::string & f1()
+f2Ã16Õ()÷0œconst std::string &
+function:   const std::string & f2()
+f3Ã16Õ()÷0œstd::string const &
+function:   std::string const & f3()

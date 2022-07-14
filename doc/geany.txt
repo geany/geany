@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.38
+.. |(version)| replace:: 1.39
 .. -*- reStructuredText -*-
 
 =======
@@ -14,7 +14,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2020-11-08
+:Date: 2021-10-09
 :Version: |(version)|
 
 Copyright © 2005 The Geany contributors
@@ -229,7 +229,7 @@ The workspace has the following parts:
 * An optional toolbar.
 * An optional sidebar that can show the following tabs:
 
-  * Documents - A document list, and
+  * Documents - A document list, see `Document list views`_.
   * Symbols - A list of symbols in your code.
 
 * The main editor window.
@@ -252,6 +252,31 @@ The position of the tabs can be selected in the interface preferences.
 
 The sizes of the sidebar and message window can be adjusted by
 dragging the dividers.
+
+Sidebar Usage
+^^^^^^^^^^^^^
+
+The sidebar has a right click menu that can control what is visible and
+has actions specific to the tab (other tabs added by plugins are
+described by that plugin documentation):
+
+* Symbols
+
+  * expand/collapse the tree
+  * control sorting order
+  * locate the symbol in documents
+
+  The symbols tab can also be filtered by typing a string into
+  the entry at the top of the tab. All symbols that contain the entered
+  string as a substring will be shown in the tree. Multiple filters can
+  be separated by a space.
+
+* Documents
+
+  * expand/collapse the tree
+  * save to or reload from files
+  * search tree based at selected file
+  * show or hide the document paths
 
 Command line options
 --------------------
@@ -452,50 +477,8 @@ by specifying the command line option ``--with-vte-module-path`` to
 ./configure.
 
 
-Defining own widget styles using .gtkrc-2.0
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can define your widget style for many of Geany's GUI parts. To
-do this, just edit your ``.gtkrc-2.0`` (usually found in your home
-directory on UNIX-like systems and in the etc subdirectory of your
-Geany installation on Windows).
-
-To have a defined style used by Geany you must assign it to
-at least one of Geany's widgets. For example use the following line::
-
-    widget "Geany*" style "geanyStyle"
-
-This would assign your style "geany_style" to all Geany
-widgets. You can also assign styles only to specific widgets. At the
-moment you can use the following widgets:
-
-* GeanyMainWindow
-* GeanyEditMenu
-* GeanyToolbarMenu
-* GeanyDialog
-* GeanyDialogPrefs
-* GeanyDialogProject
-* GeanyDialogSearch
-* GeanyMenubar
-* GeanyToolbar
-
-An example of a simple ``.gtkrc-2.0``::
-
-    style "geanyStyle"
-    {
-        font_name="Sans 12"
-    }
-    widget "GeanyMainWindow" style "geanyStyle"
-
-    style "geanyStyle"
-    {
-        font_name="Sans 10"
-    }
-    widget "GeanyPrefsDialog" style "geanyStyle"
-
-
-Customizing Geany's appearance using GTK+ 3 CSS
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Customizing Geany's appearance using GTK+ CSS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To override GTK+ CSS styles, you can use traditional mechanisms or you
 can create a file named ``geany.css`` in the user configuration directory
@@ -503,7 +486,7 @@ can create a file named ``geany.css`` in the user configuration directory
 are applied to allow overriding the default styles.
 
 Geany offers a number of CSS IDs which can be used to taylor its
-appearence. Among the more interesting include:
+appearance. Among the more interesting include:
 
 * ``geany-compiler-context`` - the style used for build command output surrounding errors
 * ``geany-compiler-error`` - the style used for build command errors
@@ -511,7 +494,7 @@ appearence. Among the more interesting include:
 * ``geany-document-status-changed`` - the style for document tab labels when the document is changed
 * ``geany-document-status-disk-changed`` - the style for document tab labels when the file on disk has changed
 * ``geany-document-status-readyonly``` - the style for document tab labels when the document is read-only
-* ``geany-search-entry-no-match`` - the style of find/replace diaog entries when no match is found
+* ``geany-search-entry-no-match`` - the style of find/replace dialog entries when no match is found
 * ``geany-terminal-dirty`` - the style for the message window Terminal tab label when the terminal output has changed.
 
 
@@ -529,6 +512,48 @@ order. It is not alphabetical as shown in the documents list
 
 See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
+
+Document list views
+^^^^^^^^^^^^^^^^^^^
+
+There are three different ways to display documents on the sidebar if *Show
+documents list* is active.  To switch between views press the right mouse button
+on the documents list and select one of these items:
+
+Documents Only
+    Show only file names of open documents in sorted order.
+
+    .. image:: ./images/sidebar_documents_only.png
+
+Show Paths
+    Show open documents as a two-level tree in which first level is the paths
+    of directories containing open files and the second level is the file names of
+    the documents open in that path.  All documents with the same path are grouped
+    together under the same first level item.  Paths are in sorted order and
+    documents are sorted within each group.
+
+    .. image:: ./images/sidebar_show_paths.png
+
+Show Tree
+    Show paths as above, but as a multiple level partial tree.  The tree is only
+    expanded at positions where two or more directory paths to open documents
+    share the same prefix.  The common prefix is shown as a parent level, and
+    the remainder of those paths are shown as child levels.  This applies
+    recursively down the paths making a tree to the file names of open documents,
+    which are grouped in sorted order as an additional level below the last path
+    segment.
+
+    For convenience two common file locations are handled specially, open
+    files below the users home directory and open files below an open project
+    base path.  Each of these is moved to its own top level tree instead of
+    being in place in the normal tree.  The top level of these trees are each
+    labelled differently.  For the home directory tree the path of the home
+    directory is shown as ``~``, and for the project tree the path to the project
+    base path is shown simply as the project name.
+
+    .. image:: ./images/sidebar_show_tree.png
+
+In all cases paths and file names that do not fit in the width available are ellipsised.
 
 Cloning documents
 ^^^^^^^^^^^^^^^^^
@@ -1085,7 +1110,7 @@ will be replaced when using the snippet:
 Snippet names must not contain spaces otherwise they won't
 work correctly. But beside that you can define almost any
 string as a snippet and use it later in Geany. It is not limited
-to existing contructs of certain programming languages(like ``if``,
+to existing constructs of certain programming languages(like ``if``,
 ``for``, ``switch``). Define whatever you need.
 
 **Template wildcards**
@@ -1240,25 +1265,18 @@ Remove Markers command from the Document menu.
 Change font in search dialog text fields
 ````````````````````````````````````````
 
-All search related dialogs use a Monospace for the text input fields to
+All search related dialogs use a Monospace font for the text input fields to
 increase the readability of input text. This is useful when you are
 typing input such as regular expressions with spaces, periods and commas which
-might it hard to read with a proportional font.
+might be hard to read with a proportional font.
 
-If you want to change the font, you can do this easily
-by inserting the following style into your ``.gtkrc-2.0``
-(usually found in your home directory on UNIX-like systems and in the
-etc subdirectory of your Geany installation on Windows)::
+If you want to change the font, you can do this easily by using the following
+custom CSS snippet, see `Customizing Geany's appearance using GTK+ CSS`_::
 
-    style "search_style"
-    {
-        font_name="Monospace 8"
+    #GeanyDialogSearch GtkEntry /* GTK < 3.20 */,
+    #GeanyDialogSearch entry /* GTK >= 3.20 */ {
+        font: 8pt monospace;
     }
-    widget "GeanyDialogSearch.*.GtkEntry" style:highest "search_style"
-
-Please note the addition of ":highest" in the last line which sets the priority
-of this style to the highest available. Otherwise, the style is ignored
-for the search dialogs.
 
 
 Find selection
@@ -1766,33 +1784,25 @@ Example::
     G_GNUC_NULL_TERMINATED
     G_GNUC_PRINTF
     G_GNUC_WARN_UNUSED_RESULT
+    BAR
 
-This will parse code like:
+This will ignore the above macros and will correctly detect 'Foo' as a type
+instead of 'BAR' in the following code:
 
-``gchar **utils_strv_new(const gchar *first, ...)
-G_GNUC_NULL_TERMINATED;``
+``struct Foo BAR { int i; };``
 
-More detailed information about ignore.tags usage from the Exuberant Ctags
-manual page:
+In addition, it is possible to specify macro definition similarly to the
+gcc '-D' option:
 
-    Specifies a list of identifiers which are to be specially handled
-    while  parsing C and C++ source files. This option is specifically
-    provided to handle special cases arising through the use of
-    pre-processor macros. When the identifiers listed are simple identifiers,
-    these identifiers will be ignored during parsing of the source files.
-    If an identifier is suffixed with a '+' character, ctags will also
-    ignore any parenthesis-enclosed argument list which may immediately
-    follow the identifier in the source files.
-    If two identifiers are separated with the '=' character, the first
-    identifiers is replaced by the second identifiers for parsing purposes.
+    <macro>=<definition>
+    Defines a C preprocessor <macro>. This emulates the behavior  of
+    the corresponding gcc option. All types of macros are supported,
+    including the  ones  with  parameters  and  variable  arguments.
+    Stringification, token pasting and recursive macro expansion are
+    also supported.
 
 For even more detailed information please read the manual page of
-Exuberant Ctags.
-
-Geany extends Ctags with a '*' character suffix - this means use
-prefix matching, e.g. G_GNUC_* will match G_GNUC_NULL_TERMINATED, etc.
-Note that prefix match items should be put after other items to ensure
-that items like G_GNUC_PRINTF+ get parsed correctly.
+Universal Ctags.
 
 
 Preferences
@@ -1894,7 +1904,7 @@ Use Windows File Open/Save dialogs
 Auto-focus widgets (focus follows mouse)
     Give the focus automatically to widgets below the mouse cursor.
     This works for the main editor widget, the scribble, the toolbar search field
-    goto line fields and the VTE.
+    go to line fields and the VTE.
 
 Search
 ``````
@@ -2483,19 +2493,16 @@ Initial version
     The initial version of files you will be creating.
 
 Year
-    Specify a format for the {year} wildcard. You can use any conversion specifiers
-    which can be used with the ANSI C strftime function.  For details please see
-    http://man.cx/strftime.
+    Specify a format for the {year} wildcard. For a list of available conversion
+    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 Date
-    Specify a format for the {date} wildcard. You can use any conversion specifiers
-    which can be used with the ANSI C strftime function.  For details please see
-    http://man.cx/strftime.
+    Specify a format for the {date} wildcard. For a list of available conversion
+    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 Date & Time
-    Specify a format for the {datetime} wildcard. You can use any conversion specifiers
-    which can be used with the ANSI C strftime function.  For details please see
-    http://man.cx/strftime.
+    Specify a format for the {datetime} wildcard. For a list of available conversion
+    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 
 Keybinding preferences
@@ -2534,9 +2541,8 @@ Use base name of the printed file
     Don't use the entire path for the header, only the filename.
 
 Date format
-    How the date should be printed. You can use the same format
-    specifiers as in the ANSI C function strftime(). For details please
-    see http://man.cx/strftime.
+    How the date should be printed. For a list of available conversion
+    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 
 Various preferences
@@ -2591,6 +2597,8 @@ msgwin_messages_visible           Whether to show the Messages tab in the      t
                                   Messages Window
 msgwin_scribble_visible           Whether to show the Scribble tab in the      true        immediately
                                   Messages Window
+warn_on_project_close             Whether to show a warning when opening       true        immediately
+                                  a project while one is already open.
 **``terminal`` group**
 send_selection_unsafe             By default, Geany strips any trailing        false       immediately
                                   newline characters from the current
@@ -2810,14 +2818,35 @@ The project menu items are detailed below.
 New project
 ^^^^^^^^^^^
 
-To create a new project, fill in the *Name* field. By default this
-will setup a new project file ``~/projects/name.geany``. Usually it's
-best to store all your project files in the same directory (they are
-independent of any source directory trees).
+There are two ways of creating new projects, either by using
+*Project->New* menu item or by using *Project->New from Folder* menu
+item.
 
-The Base path text field is setup to use ``~/projects/name``. This
-can safely be set to any existing path -- it will not touch the file
-structure contained in it.
+New
+    This method is more suitable for creating new, empty projects from
+    scratch at the default location without having any existing sources.
+
+    To create a new project, fill in the *Name* field. By default this
+    will setup a new project file ``~/projects/name/name.geany``.
+
+    The *Base path* text field is setup to use ``~/projects/name``. This
+    can safely be set to any existing path -- it will not touch the file
+    structure contained in it.
+
+New from Folder
+    This method is more suitable when there is already some folder
+    containing source files for which you want to create a new project.
+
+    When using this method, Geany first opens a directory selection
+    dialog to select the folder containing the sources, and the
+    *Base path* field is set to that value.
+
+    Afterwards, Geany shows the same dialog as the *Project->New*
+    method but already pre-filled with the values based on the
+    *Base path* selection. The *Name* field is filled with the folder
+    name, the *Filename* field is filled with
+    ``base_path/name.geany`` and the *Base path* field is filled with
+    the path specified in the previous dialog.
 
 
 Project properties
@@ -3260,8 +3289,8 @@ the date and time of printing. By default, the file name of the document
 with full path information is added to the header. If you prefer to add
 only the basename of the file(without any path information) you can set it
 in the preferences dialog. You can also adjust the format of the date and
-time added to the page header. The available conversion specifiers are the
-same as the ones which can be used with the ANSI C strftime function.
+time added to the page header. For a list of available conversion
+specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 All of these settings can also be changed in the print dialog just before
 actual printing is done.
@@ -3269,13 +3298,19 @@ On Unix-like systems the provided print dialog offers a print preview. The
 preview file is opened with a PDF viewer and by default GTK uses ``evince``
 for print preview. If you have not installed evince or just want to use
 another PDF viewer, you can change the program to use in the file
-``.gtkrc-2.0`` (usually found in your home directory). Simply add a line
-like::
+``settings.ini`` (usually found in ``~/.config/gtk-3.0``, see the
+`GTK documentation`_). For example, use::
 
-    gtk-print-preview-command = "epdfview %f"
+    [Settings]
+    gtk-print-preview-command = epdfview %f
 
-at the end of the file. Of course, you can also use xpdf, kpdf or whatever
-as the print preview command.
+Of course, you can also use xpdf, kpdf or whatever as the print preview
+command.  That command should ideally delete the temporary file referenced by
+``%f``.  See the `GTK documentation for the setting`_ for more details.
+
+.. _GTK documentation: https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings.description
+.. _GTK documentation for the setting: https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings--gtk-print-preview-command
+
 
 Geany also provides an alternative basic printing support using a custom
 print command. However, the printed document contains no syntax highlighting.
@@ -3391,6 +3426,8 @@ Close all                       Ctrl-Shift-W              Closes all open files.
 Close                           Ctrl-W  (C)               Closes the current file.
 
 Reload file                     Ctrl-R  (C)               Reloads the current file.
+
+Reload all                                                Reloads all open files. If the reload will not be 'undo'-able and changes that will be lost are detected (unsaved or saved) the reload will be confirmed, otherwise the reload will proceed without confirmation.
 
 Print                           Ctrl-P  (C)               Prints the current file.
 
@@ -3660,7 +3697,7 @@ Navigate back a location        Alt-Left  (C)             Switches to the previo
 Go to line                      Ctrl-L                    Focuses the Go to Line entry (if visible) or
                                                           shows the Go to line dialog.
 
-Goto matching brace             Ctrl-B                    If the cursor is ahead or behind a brace, then it
+Go to matching brace             Ctrl-B                   If the cursor is ahead or behind a brace, then it
                                                           is moved to the brace which belongs to the current
                                                           one. If this keyboard shortcut is pressed again,
                                                           the cursor is moved back to the first brace.
@@ -3668,9 +3705,9 @@ Goto matching brace             Ctrl-B                    If the cursor is ahead
 Toggle marker                   Ctrl-M                    Set a marker on the current line, or clear the
                                                           marker if there already is one.
 
-Goto next marker                Ctrl-.                    Goto the next marker in the current document.
+Go to next marker                Ctrl-.                    Go to the next marker in the current document.
 
-Goto previous marker            Ctrl-,                    Goto the previous marker in the current document.
+Go to previous marker            Ctrl-,                    Go to the previous marker in the current document.
 
 Go to symbol definition         Ctrl-T                    Jump to the definition of the current word or
                                                           selection. See `Go to symbol definition`_.
@@ -3694,9 +3731,9 @@ Go to End of Display Line       Alt-End                   Move the caret to the 
                                                           If the line is not wrapped, it behaves like
                                                           `Go to End of Line`.
 
-Go to Previous Word Part        Ctrl-/                    Goto the previous part of the current word.
+Go to Previous Word Part        Ctrl-/                    Go to the previous part of the current word.
 
-Go to Next Word Part            Ctrl-\\                   Goto the next part of the current word.
+Go to Next Word Part            Ctrl-\\                   Go to the next part of the current word.
 =============================== ========================= ==================================================
 
 View keybindings
@@ -4970,9 +5007,8 @@ version        The initial version of a new file.            file templates, fil
 **Date & time wildcards**
 
 The format for these wildcards can be changed in the preferences
-dialog, see `Template preferences`_. You can use any conversion
-specifiers which can be used with the ANSI C strftime function.
-For details please see http://man.cx/strftime.
+dialog, see `Template preferences`_. For a list of available conversion
+specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
 
 ============== ============================================= =======================================
 Wildcard       Description                                   Available in

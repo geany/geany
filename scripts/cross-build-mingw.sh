@@ -15,24 +15,18 @@
 
 # You may change those
 HOST=i686-w64-mingw32
-GTK2_BUNDLE_ZIP="https://download.geany.org/contrib/gtk/gtk+-bundle_2.24.10-20120208_win32.zip"
-GTK3_BUNDLE_ZIP="https://download.geany.org/contrib/gtk/gtk+-bundle_3.8.2-20131001_win32.zip"
+GTK_BUNDLE_ZIP="https://download.geany.org/contrib/gtk/gtk+-bundle_3.8.2-20131001_win32.zip"
 BUILDDIR=_build-cross-mingw
-GTK3=yes
 CONFIGUREFLAGS="--enable-nls"
 MAKEFLAGS="${MAKEFLAGS:--j2}"
 
 while getopts '32b:h' o; do
   case "$o" in
-    3) GTK3=yes;;
-    2) GTK3=no;;
     b) BUILDDIR="$OPTARG";;
     h)
       cat <<EOF
-USAGE: $0 [-2|-3] [-b DIR] [-h]
+USAGE: $0 [-b DIR] [-h]
 
--2      Build against GTK2 (deprecated)
--3      Build against GTK3 (default)
 -b DIR  Use DIR as build directory
 -h      Show this help and exit
 EOF
@@ -81,14 +75,7 @@ cd "$BUILDDIR"
 
 mkdir _deps
 
-# both the GTK2 and GTK3 build require files from the GTK3 bundle
-# so download and unzip it unconditionally
-fetch_and_unzip "$GTK3_BUNDLE_ZIP" _deps
-
-if [ "$GTK3" = no ]; then
-  fetch_and_unzip "$GTK2_BUNDLE_ZIP" _deps
-  CONFIGUREFLAGS="$CONFIGUREFLAGS --enable-gtk2=yes"
-fi
+fetch_and_unzip "$GTK_BUNDLE_ZIP" _deps
 
 # fixup the prefix= in the pkg-config files
 sed -i "s%^\(prefix=\).*$%\1$PWD/_deps%" _deps/lib/pkgconfig/*.pc

@@ -1,20 +1,38 @@
-# format=tagmanager
-Structure#0Ì1ÎnestedÖ0
-aÌ64ÎStructure#0Ö0
+aÌ64Îanon_type_1Ö0
+member:     anon_type_1 :: a
+anon_type_1Ì1ÎnestedÖ1
+class:      nested :: anon_type_1    flags: 1
 cloudsÌ64ÎweatherÖ0
+member:     weather :: clouds
 dayÌ64ÎweatherÖ0
+member:     weather :: day
 initialized_structureÌ2048Ö0
+struct:     initialized_structure
 latestÌ16384Îinitialized_structureÖ0
+variable:   initialized_structure :: latest
 latestÌ16384Îuninitialized_structureÖ0
+variable:   uninitialized_structure :: latest
 level2Ì64ÎtopÖ0
+member:     top :: level2
 level3aÌ64ÎnestedÖ0
+member:     nested :: level3a
 level3bÌ64ÎnestedÖ0
+member:     nested :: level3b
 monthÌ64ÎweatherÖ0
+member:     weather :: month
 nestedÌ1ÎtopÖ0
+class:      top :: nested
 nested_structureÌ2048Ö0
+struct:     nested_structure
 rainfallÌ64ÎweatherÖ0
+member:     weather :: rainfall
 topÌ1Înested_structureÖ0
+class:      nested_structure :: top
 uninitialized_structureÌ2048Ö0
+struct:     uninitialized_structure
 weatherÌ1Îinitialized_structureÖ0
+class:      initialized_structure :: weather
 weatherÌ1Îuninitialized_structureÖ0
+class:      uninitialized_structure :: weather
 yearÌ64ÎweatherÖ0
+member:     weather :: year

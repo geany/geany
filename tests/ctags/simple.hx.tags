@@ -1,10 +1,18 @@
-# format=tagmanager
 ColorÌ2Ö0
+enum:       Color
 MainÌ1Ö0
+class:      Main
 PrintableÌ32Ö0
+interface:  Printable
 UserÌ4096Ö0
+typedef:    User
 ageÌ16384Ö0
+variable:   age
 mainÌ128Ö0
+method:     main
 memberÌ16384Ö0
+variable:   member
 nameÌ16384Ö0
+variable:   name
 toStringÌ128Ö0
+method:     toString

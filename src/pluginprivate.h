@@ -26,8 +26,6 @@
 #include "ui_utils.h"	/* GeanyAutoSeparator */
 #include "keybindings.h"	/* GeanyKeyGroup */
 
-#include "gtkcompat.h"
-
 
 G_BEGIN_DECLS
 
@@ -57,7 +55,6 @@ typedef struct GeanyPluginPrivate
 	void		(*configure_single) (GtkWidget *parent); /* plugin configure dialog, optional and deprecated */
 
 	/* extra stuff */
-	PluginFields	fields;
 	GeanyKeyGroup	*key_group;
 	GeanyAutoSeparator	toolbar_separator;
 	GArray			*signal_ids;			/* SignalConnection's to disconnect when unloading */

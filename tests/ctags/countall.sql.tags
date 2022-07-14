@@ -1,8 +1,14 @@
-# format=tagmanager
 row_countÌ16384Ö0
+variable:   row_count
 statÌ16384Ö0
+variable:   stat
 t_c1_tnameÌ16384Ö0
+variable:   t_c1_tname
 t_cidÌ16384Ö0
+variable:   t_cid
 t_commandÌ16384Ö0
+variable:   t_command
 t_limitÌ16384Ö0
+variable:   t_limit
 t_total_recordsÌ16384Ö0
+variable:   t_total_records

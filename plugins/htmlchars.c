@@ -35,8 +35,8 @@ GeanyData		*geany_data;
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 
-PLUGIN_SET_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."), VERSION,
-	_("The Geany developer team"))
+PLUGIN_SET_INFO(_("HTML Characters"), _("Inserts HTML character entities like '&amp;'."),
+	PACKAGE_VERSION, _("The Geany developer team"))
 
 
 /* Keybinding(s) */

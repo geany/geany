@@ -15,22 +15,18 @@ WIN32_BUILD_FILES = \
 EXTRA_DIST = \
 	autogen.sh \
 	scripts/gen-api-gtkdoc.py \
+	scripts/gen-signallist.sh \
+	scripts/print-tags.py \
 	geany.desktop.in \
 	geany.pc.in \
 	ChangeLog.pre-1-22 \
 	HACKING \
 	README.I18N \
 	README.Packagers \
-	intltool-extract.in \
-	intltool-merge.in \
-	intltool-update.in \
 	$(WIN32_BUILD_FILES)
 
 DISTCLEANFILES = \
-	geany.desktop \
-	intltool-extract \
-	intltool-merge \
-	intltool-update
+	geany.desktop
 
 uninstall-local:
 	rm -rf $(DESTDIR)$(pkgdatadir);
@@ -79,6 +75,8 @@ pkgconfig_DATA = geany.pc
 pkgconfigdir = $(libdir)/pkgconfig
 
 desktopdir = $(datadir)/applications
-desktop_in_files = geany.desktop
+desktop_in_files = geany.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
+
+$(desktop_DATA): $(desktop_in_files) $(wildcard $(top_srcdir)/po/*.po)
+	$(AM_V_GEN)$(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@

@@ -1,24 +1,46 @@
-# format=tagmanager
 ANOTHER_MACROÃ65536÷0
+macro:      ANOTHER_MACRO
 A_MACRO_TESTÃ65536÷0
+macro:      A_MACRO_TEST
 FileTreeÃ32ŒaStruct÷0
+interface:  aStruct :: FileTree
 FolderTreeÃ32÷0
+interface:  FolderTree
 SampleTypedefObjCÃ4096÷0
+typedef:    SampleTypedefObjC
 aStructÃ2048÷0
+struct:     aStruct
 aStructMemberÃ8ŒaStruct÷0
-addChild:Ã128ŒFolderTree÷0
+field:      aStruct :: aStructMember
+addChild:Ã128Õ(FileTree*)ŒFolderTree÷0
+method:     FolderTree :: addChild:(FileTree*)
 anotherStructMemberÃ8ŒaStruct÷0
+field:      aStruct :: anotherStructMember
 childrenÃ8ŒFolderTree÷0
-createLayoutTreeÃ128ŒFileTree÷0
-createLayoutTreeÃ128ŒFolderTree÷0
-deallocÃ128ŒFileTree÷0
-deallocÃ128ŒFolderTree÷0
+field:      FolderTree :: children
+createLayoutTreeÃ128Õ()ŒFileTree÷0
+method:     FileTree :: createLayoutTree()
+createLayoutTreeÃ128Õ()ŒFolderTree÷0
+method:     FolderTree :: createLayoutTree()
+deallocÃ128Õ()ŒFileTree÷0
+method:     FileTree :: dealloc()
+deallocÃ128Õ()ŒFolderTree÷0
+method:     FolderTree :: dealloc()
 diskSizeÃ8ŒFileTree÷0
-getDiskSizeÃ128ŒFileTree÷0
-initWithName:andSize:atPlace:Ã128ŒFileTree÷0
-initWithName:atPlace:Ã128ŒFileTree÷0
-initWithName:atPlace:Ã128ŒFolderTree÷0
+field:      FileTree :: diskSize
+getDiskSizeÃ128Õ()ŒFileTree÷0
+method:     FileTree :: getDiskSize()
+initWithName:andSize:atPlace:Ã128Õ(NSString*,uint64_t,FolderTree*)ŒFileTree÷0
+method:     FileTree :: initWithName:andSize:atPlace:(NSString*,uint64_t,FolderTree*)
+initWithName:atPlace:Ã128Õ(NSString*,FolderTree*)ŒFileTree÷0
+method:     FileTree :: initWithName:atPlace:(NSString*,FolderTree*)
+initWithName:atPlace:Ã128Õ(NSString*,FolderTree*)ŒFolderTree÷0
+method:     FolderTree :: initWithName:atPlace:(NSString*,FolderTree*)
 nameÃ8ŒFileTree÷0
+field:      FileTree :: name
 parentÃ8ŒFileTree÷0
-populateChildList:Ã128ŒFolderTree÷0
+field:      FileTree :: parent
+populateChildList:Ã128Õ(NSString*)ŒFolderTree÷0
+method:     FolderTree :: populateChildList:(NSString*)
 representationÃ8ŒFileTree÷0
+field:      FileTree :: representation

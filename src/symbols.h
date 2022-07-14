@@ -69,6 +69,8 @@ gboolean symbols_select_tag_at_line(gint line);
 
 void symbols_clear_selection();
 
+const gchar *symbols_get_icon_name(guint icon_id);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

@@ -72,6 +72,12 @@ void on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpoin
 
 void on_toolbar_search_entry_activate(GtkAction *action, const gchar *text, gpointer user_data);
 
+void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data);
+
+void on_entry_tagfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data);
+
+void on_entry_tagfilter_activate(GtkEntry *entry, gpointer user_data);
+
 void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_find_usage1_activate(GtkMenuItem *menuitem, gpointer user_data);
@@ -97,6 +103,8 @@ void on_replace1_activate(GtkMenuItem *menuitem, gpointer user_data);
 void on_find_in_files1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data);
+
+void on_reload_all(GtkAction *action, gpointer user_data);
 
 void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data);
 
@@ -135,6 +143,8 @@ void on_menu_toggle_line_commentation1_activate(GtkMenuItem *menuitem, gpointer 
 void on_next_message1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_project_new1_activate(GtkMenuItem *menuitem, gpointer user_data);
+
+void on_project_new_from_folder1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_project_open1_activate(GtkMenuItem *menuitem, gpointer user_data);
 

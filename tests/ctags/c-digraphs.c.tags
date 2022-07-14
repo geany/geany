@@ -1,12 +1,22 @@
-# format=tagmanager
 AÃ65536÷0
+macro:      A
 BÃ65536÷0
-M3_INITÃ131072Õ(a, b, c)÷0
+macro:      B
+M3_INITÃ131072Õ(a,b,c)÷0
+macro_arg:  M3_INIT(a,b,c)
 STRINGIFYÃ131072Õ(x)÷0
+macro_arg:  STRINGIFY(x)
 STRINGIFY_INTERNÃ131072Õ(x)÷0
+macro_arg:  STRINGIFY_INTERN(x)
 bufÃ64Œstr÷0œchar *
+member:     char * str :: buf
 lenÃ64Œstr÷0œunsigned int
+member:     unsigned int str :: len
 mainÃ16Õ(void)÷0œint
-matrix3Ã4096÷0œint
-sizeÃ64Œstr÷0œint
+function:   int main(void)
+matrix3Ã4096÷0œint[3]
+typedef:    int[3] matrix3
+sizeÃ64Œstr÷0œunsigned int
+member:     unsigned int str :: size
 strÃ2048÷0
+struct:     str

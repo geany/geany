@@ -1,5 +1,10 @@
-# format=tagmanager
-barÌ16Í(a, b)Ö0Ïint
-barÌ16Í(char *c, double d[])ÎBARÖ0Ïchar *
-fooÌ16Í(int a, char b)Ö0Ïvoid
-foobarÌ1024Í((int a, char b))Ö0Ïvoid
+bÌ16384Ö0Ïchar
+variable:   char b
+barÌ16Í(char * c,double d[]) constÎBARÖ0Ïchar *
+function:   char * BAR :: bar(char * c,double d[]) const
+barÌ1024Í(a,b)Ö0Ïint
+prototype:  int bar(a,b)
+fooÌ16Í(int a,char b)Ö0Ïvoid
+function:   void foo(int a,char b)
+foobarÌ1024Í(int a,char b)Ö0Ïvoid
+prototype:  void foobar(int a,char b)

@@ -1,15 +1,28 @@
-# format=tagmanager
 SymmetryÌ1ÎsquaretestÖ0
+class:      squaretest :: Symmetry
 assigneeÌ16384ÎsquaretestÖ0
-executeÌ128ÎsquaretestÖ0
+variable:   squaretest :: assignee
+executeÌ128Í(state)ÎsquaretestÖ0
+method:     squaretest :: execute(state)
 invisibleÌ16384ÎsquaretestÖ0
+variable:   squaretest :: invisible
 invisible_fourÌ16384ÎsquaretestÖ0
+variable:   squaretest :: invisible_four
 invisible_threeÌ16384ÎsquaretestÖ0
+variable:   squaretest :: invisible_three
 invisible_twoÌ16384ÎsquaretestÖ0
+variable:   squaretest :: invisible_two
 iterationsÌ64ÎSymmetryÖ0
+member:     Symmetry :: iterations
 mainÌ2048Ö0
+struct:     main
 matrixÌ64ÎSymmetryÖ0
+member:     Symmetry :: matrix
 squaretestÌ256Ö0
+namespace:  squaretest
 stateÌ16384ÎsquaretestÖ0
+variable:   squaretest :: state
 state_twoÌ16384ÎsquaretestÖ0
+variable:   squaretest :: state_two
 symmetriesÌ16384ÎsquaretestÖ0
+variable:   squaretest :: symmetries

@@ -1,0 +1,214 @@
+AÌ1Ö0
+class:      A
+AÌ4ÎTestÖ0
+enumerator: Test :: A
+ArrayÌ32Ö0
+interface:  Array
+BÌ4ÎTestÖ0
+enumerator: Test :: B
+BankAccountÌ1Ö0
+class:      BankAccount
+BlueÌ4ÎColorÖ0
+enumerator: Color :: Blue
+BoldÌ4ÎStyleÖ0
+enumerator: Style :: Bold
+CÌ1Ö0
+class:      C
+CÌ4ÎTestÖ0
+enumerator: Test :: C
+CPointÌ1Ö0
+class:      CPoint
+CheckingAccountÌ1Ö0
+class:      CheckingAccount
+ColorÌ2Ö0
+enum:       Color
+ComparisonÌ2Ö0
+enum:       Comparison
+CompilerOptionsÌ32Ö0
+interface:  CompilerOptions
+DÌ1Ö0
+class:      D
+DÌ4ÎTestÖ0
+enumerator: Test :: D
+DocumentÌ32Ö0
+interface:  Document
+EÌ4ÎTestÖ0
+enumerator: Test :: E
+EmphasisÌ4ÎStyleÖ0
+enumerator: Style :: Emphasis
+EqualToÌ4ÎComparisonÖ0
+enumerator: Comparison :: EqualTo
+GreaterThanÌ4ÎComparisonÖ0
+enumerator: Comparison :: GreaterThan
+GreenÌ4ÎColorÖ0
+enumerator: Color :: Green
+HyperlinkÌ4ÎStyleÖ0
+enumerator: Style :: Hyperlink
+ItalicÌ4ÎStyleÖ0
+enumerator: Style :: Italic
+JQueryÌ32Ö0
+interface:  JQuery
+JQueryStaticÌ32Ö0
+interface:  JQueryStatic
+LessThanÌ4ÎComparisonÖ0
+enumerator: Comparison :: LessThan
+LettersOnlyValidatorÌ1ÎValidationÖ0
+class:      Validation :: LettersOnlyValidator
+ListÌ1Ö0
+class:      List
+ListÌ32Ö0
+interface:  List
+MessengerÌ1Ö0
+class:      Messenger
+MoverÌ32Ö0
+interface:  Mover
+MoverShakerÌ32Ö0
+interface:  MoverShaker
+NoneÌ4ÎStyleÖ0
+enumerator: Style :: None
+PointÌ1Ö0
+class:      Point
+RedÌ4ÎColorÖ0
+enumerator: Color :: Red
+ShakerÌ32Ö0
+interface:  Shaker
+SimpleRecordÌ32Ö0
+interface:  SimpleRecord
+StringValidatorÌ32ÎValidationÖ0
+interface:  Validation :: StringValidator
+StyleÌ2Ö0
+enum:       Style
+TestÌ2Ö0
+enum:       Test
+UnderlineÌ4ÎStyleÖ0
+enumerator: Style :: Underline
+ValidationÌ256Ö0
+namespace:  Validation
+ZipCodeValidatorÌ1ÎValidationÖ0
+class:      Validation :: ZipCodeValidator
+addÌ16Ö0
+function:   add
+balanceÌ64ÎBankAccountÖ0
+member:     BankAccount :: balance
+closureÌ128ÎAÖ0
+method:     A :: closure
+constructorÌ128ÎCPointÖ0
+method:     CPoint :: constructor
+constructorÌ128ÎCheckingAccountÖ0
+method:     CheckingAccount :: constructor
+constructorÌ128ÎListÖ0
+method:     List :: constructor
+constructorÌ128ÎPointÖ0
+method:     Point :: constructor
+createElementÌ128ÎDocumentÖ0
+method:     Document :: createElement
+dataÌ64ÎDÖ0
+member:     D :: data
+dataÌ64ÎListÖ0
+member:     List :: data
+depositÌ128ÎBankAccountÖ0
+method:     BankAccount :: deposit
+fÌ128ÎAÖ0
+method:     A :: f
+fakePointBuilderÌ64ÎPointÖ0
+member:     Point :: fakePointBuilder
+funÌ64ÎAÖ0
+member:     A :: fun
+getÌ128ÎJQueryStaticÖ0
+method:     JQueryStatic :: get
+getDataÌ128ÎDÖ0
+method:     D :: getData
+getSomethingÌ128ÎMoverShakerÖ0
+method:     MoverShaker :: getSomething
+getSomethingSophisticatedÌ128ÎMoverShakerÖ0
+method:     MoverShaker :: getSomethingSophisticated
+getStatusÌ128ÎMoverÖ0
+method:     Mover :: getStatus
+getStatusÌ128ÎMoverShakerÖ0
+method:     MoverShaker :: getStatus
+getStatusÌ128ÎShakerÖ0
+method:     Shaker :: getStatus
+getTplÌ128ÎMoverShakerÖ0
+method:     MoverShaker :: getTpl
+getXAsTÌ128ÎAÖ0
+method:     A :: getXAsT
+insertAfterÌ128ÎListÖ0
+method:     List :: insertAfter
+isAcceptableÌ128ÎValidation.LettersOnlyValidatorÖ0
+method:     Validation.LettersOnlyValidator :: isAcceptable
+isAcceptableÌ128ÎValidation.StringValidatorÖ0
+method:     Validation.StringValidator :: isAcceptable
+isAcceptableÌ128ÎValidation.ZipCodeValidatorÖ0
+method:     Validation.ZipCodeValidator :: isAcceptable
+itemÌ64ÎListÖ0
+member:     List :: item
+lengthÌ64ÎArrayÖ0
+member:     Array :: length
+lengthÌ128ÎPointÖ0
+method:     Point :: length
+lettersRegexpÌ65536ÎValidationÖ0
+macro:      Validation :: lettersRegexp
+logÌ128ÎListÖ0
+method:     List :: log
+longArgsFunÌ128ÎAÖ0
+method:     A :: longArgsFun
+messageÌ64ÎMessengerÖ0
+member:     Messenger :: message
+moveÌ128ÎMoverÖ0
+method:     Mover :: move
+nameÌ16384Ö0
+variable:   name
+nextÌ64ÎListÖ0
+member:     List :: next
+normalizedPathÌ65536ÎA.closureÖ0
+macro:      A.closure :: normalizedPath
+numberRegexpÌ65536ÎValidationÖ0
+macro:      Validation :: numberRegexp
+originÌ64ÎPointÖ0
+member:     Point :: origin
+ownerÌ64ÎListÖ0
+member:     List :: owner
+propertyAÌ64ÎSimpleRecordÖ0
+member:     SimpleRecord :: propertyA
+propertyBÌ64ÎSimpleRecordÖ0
+member:     SimpleRecord :: propertyB
+propertyCÌ64ÎSimpleRecordÖ0
+member:     SimpleRecord :: propertyC
+registerÌ128ÎAÖ0
+method:     A :: register
+sÌ16384Ö0
+variable:   s
+shakeÌ128ÎShakerÖ0
+method:     Shaker :: shake
+sourcePathÌ64ÎCompilerOptionsÖ0
+member:     CompilerOptions :: sourcePath
+startÌ128ÎMessengerÖ0
+method:     Messenger :: start
+strictÌ64ÎCompilerOptionsÖ0
+member:     CompilerOptions :: strict
+stringsÌ16384Ö0
+variable:   strings
+targetPathÌ64ÎCompilerOptionsÖ0
+member:     CompilerOptions :: targetPath
+textÌ128ÎJQueryÖ0
+method:     JQuery :: text
+validatorsÌ16384Ö0
+variable:   validators
+withoutTypeÌ64ÎSimpleRecordÖ0
+member:     SimpleRecord :: withoutType
+writeCheckÌ128ÎCheckingAccountÖ0
+method:     CheckingAccount :: writeCheck
+xÌ64ÎAÖ0
+member:     A :: x
+xÌ64ÎCÖ0
+member:     C :: x
+xÌ64ÎCPointÖ0
+member:     CPoint :: x
+xÌ64ÎPointÖ0
+member:     Point :: x
+yÌ64ÎAÖ0
+member:     A :: y
+yÌ64ÎCPointÖ0
+member:     CPoint :: y
+yÌ64ÎPointÖ0
+member:     Point :: y

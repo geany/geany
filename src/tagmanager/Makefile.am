@@ -1,8 +1,14 @@
 AM_CPPFLAGS = \
 	-I$(srcdir) \
 	-I$(top_srcdir)/ctags/main \
+	-I$(top_srcdir)/ctags/dsl \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\"Tagmanager\"
+
+if USE_BUNDLED_REGEX
+AM_CPPFLAGS += -I$(top_srcdir)/ctags/gnu_regex
+endif
+
 AM_CFLAGS = \
 	$(GTK_CFLAGS) \
 	@LIBGEANY_CFLAGS@

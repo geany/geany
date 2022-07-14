@@ -8,24 +8,25 @@
 #ifndef UNICONVERSION_H
 #define UNICONVERSION_H
 
-namespace Scintilla {
+namespace Scintilla::Internal {
 
 constexpr int UTF8MaxBytes = 4;
 
 constexpr int unicodeReplacementChar = 0xFFFD;
 
-size_t UTF8Length(const wchar_t *uptr, size_t tlen) noexcept;
-void UTF8FromUTF16(const wchar_t *uptr, size_t tlen, char *putf, size_t len) noexcept;
+size_t UTF8Length(std::wstring_view wsv) noexcept;
+size_t UTF8PositionFromUTF16Position(std::string_view u8Text, size_t positionUTF16) noexcept;
+void UTF8FromUTF16(std::wstring_view wsv, char *putf, size_t len) noexcept;
 void UTF8FromUTF32Character(int uch, char *putf) noexcept;
-size_t UTF16Length(const char *s, size_t len) noexcept;
-size_t UTF16FromUTF8(const char *s, size_t len, wchar_t *tbuf, size_t tlen);
-size_t UTF32Length(const char *s, size_t len) noexcept;
-size_t UTF32FromUTF8(const char *s, size_t len, unsigned int *tbuf, size_t tlen);
+size_t UTF16Length(std::string_view svu8) noexcept;
+size_t UTF16FromUTF8(std::string_view svu8, wchar_t *tbuf, size_t tlen);
+size_t UTF32Length(std::string_view svu8) noexcept;
+size_t UTF32FromUTF8(std::string_view svu8, unsigned int *tbuf, size_t tlen);
 // WStringFromUTF8 does the right thing when wchar_t is 2 or 4 bytes so
 // works on both Windows and Unix.
-std::wstring WStringFromUTF8(const char *s, size_t len);
+std::wstring WStringFromUTF8(std::string_view svu8);
 unsigned int UTF16FromUTF32Character(unsigned int val, wchar_t *tbuf) noexcept;
-bool UTF8IsValid(const char *s, size_t len) noexcept;
+bool UTF8IsValid(std::string_view svu8) noexcept;
 std::string FixInvalidUTF8(const std::string &text);
 
 extern const unsigned char UTF8BytesOfLead[256];
@@ -47,12 +48,20 @@ inline constexpr bool UTF8IsTrailByte(unsigned char ch) noexcept {
 	return (ch >= 0x80) && (ch < 0xc0);
 }
 
-inline constexpr bool UTF8IsAscii(int ch) noexcept {
+inline constexpr bool UTF8IsAscii(unsigned char ch) noexcept {
 	return ch < 0x80;
+}
+
+inline constexpr bool UTF8IsAscii(char ch) noexcept {
+	const unsigned char uch = ch;
+	return uch < 0x80;
 }
 
 enum { UTF8MaskWidth=0x7, UTF8MaskInvalid=0x8 };
 int UTF8Classify(const unsigned char *us, size_t len) noexcept;
+inline int UTF8Classify(std::string_view sv) noexcept {
+	return UTF8Classify(reinterpret_cast<const unsigned char *>(sv.data()), sv.length());
+}
 
 // Similar to UTF8Classify but returns a length of 1 for invalid bytes
 // instead of setting the invalid flag
@@ -71,7 +80,7 @@ inline bool UTF8IsNEL(const unsigned char *us) noexcept {
 	return (us[0] == 0xc2) && (us[1] == 0x85);
 }
 
-// Is the sequence of 3 char a UTF-8 line end? Only the last two char are tested for a NEL. 
+// Is the sequence of 3 char a UTF-8 line end? Only the last two char are tested for a NEL.
 constexpr bool UTF8IsMultibyteLineEnd(unsigned char ch0, unsigned char ch1, unsigned char ch2) noexcept {
 	return
 		((ch0 == 0xe2) && (ch1 == 0x80) && ((ch2 == 0xa8) || (ch2 == 0xa9))) ||

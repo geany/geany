@@ -1,5 +1,8 @@
-# format=tagmanager
 a/Units/review-needed.r/simple.ksh.t/expected.tagsÌ16Ö0
+function:   a/Units/review-needed.r/simple.ksh.t/expected.tags
 a/main/parsers.hÌ16Ö0
+function:   a/main/parsers.h
 a/source.makÌ16Ö0
+function:   a/source.mak
 b/parsers/diff.cÌ16Ö0
+function:   b/parsers/diff.c

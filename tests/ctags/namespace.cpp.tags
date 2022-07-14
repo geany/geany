@@ -1,7 +1,12 @@
-# format=tagmanager
 aÃ256÷0
+namespace:  a
 a_b_fÃ16Õ()Œa::b÷0œvoid
+function:   void a::b :: a_b_f()
 a_fÃ16Õ()Œa÷0œvoid
-anon_fÃ16Õ()Œanon_namespace_0÷0œvoid
-anon_namespace_0Ã256÷0
+function:   void a :: a_f()
+anon_fÃ16Õ()Œanon_namespace_1÷0œvoid
+function:   void anon_namespace_1 :: anon_f()
+anon_namespace_1Ã256÷1
+namespace:  anon_namespace_1    flags: 1
 bÃ256Œa÷0
+namespace:  a :: b

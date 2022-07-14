@@ -21,15 +21,15 @@
 /*  Is the character valid as a character of a C identifier?
  *  VMS allows '$' in identifiers.
  */
-#define cppIsident(c)  (isalnum(c) || (c) == '_' || (c) == '$')
+#define lcppIsident(c)  (isalnum(c) || (c) == '_' || (c) == '$')
 
 /*  Is the character valid as the first character of a C identifier?
  *  C++ allows '~' in destructors.
  *  VMS allows '$' in identifiers.
  *  Vala allows '@' in identifiers.
  */
-#define cppIsident1(c)  ( ((c >= 0) && (c < 0x80) && isalpha(c)) \
-		       || (c) == '_' || (c) == '~' || (c) == '$' || (c) == '@')
+#define lcppIsident1(c)  ( ((c >= 0) && (c < 0x80) && isalpha(c)) \
+		        || (c) == '_' || (c) == '~' || (c) == '$' || (c) == '@')
 /* NOTE about isident1 profitability
 
    Doing the same as isascii before passing value to isalpha
@@ -58,24 +58,24 @@
 /*
 *   FUNCTION PROTOTYPES
 */
-extern bool cppIsBraceFormat (void);
-extern unsigned int cppGetDirectiveNestLevel (void);
+extern bool lcppIsBraceFormat (void);
+extern unsigned int lcppGetDirectiveNestLevel (void);
 
-extern void cppInit (const bool state,
+extern void lcppInit (const bool state,
 		     const bool hasAtLiteralStrings,
 		     const bool hasCxxRawLiteralStrings,
 		     int defineMacroKindIndex);
-extern void cppTerminate (void);
-extern void cppBeginStatement (void);
-extern void cppEndStatement (void);
-extern void cppUngetc (const int c);
-extern int cppGetc (void);
-extern int cppSkipOverCComment (void);
+extern void lcppTerminate (void);
+extern void lcppBeginStatement (void);
+extern void lcppEndStatement (void);
+extern void lcppUngetc (const int c);
+extern int lcppGetc (void);
+extern int lcppSkipOverCComment (void);
 
-extern char *cppGetSignature (void);
-extern void cppStartCollectingSignature (void);
-extern void cppStopCollectingSignature (void);
-extern void cppClearSignature (void);
+extern char *lcppGetSignature (void);
+extern void lcppStartCollectingSignature (void);
+extern void lcppStopCollectingSignature (void);
+extern void lcppClearSignature (void);
 
 extern bool cppIsIgnoreToken (const char *const name,
 			      bool *const pIgnoreParens,

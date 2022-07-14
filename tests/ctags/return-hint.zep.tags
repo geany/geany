@@ -1,5 +1,8 @@
-# format=tagmanager
 TestÌ1Ö0
-firstÌ16Í(string str)ÎTestÖ0
+class:      Test
+firstÌ16Í(string str)ÎTestÖ0Ïstring
+function:   string Test :: first(string str)
 nestedÌ16Í()ÎTest::firstÖ0
-secondÌ16Í(int i)ÎTestÖ0
+function:   Test::first :: nested()
+secondÌ16Í(int i)ÎTestÖ0Ïint
+function:   int Test :: second(int i)

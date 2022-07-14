@@ -1,0 +1,32 @@
+AdjustÌ1024ÎGenStackÖ0
+prototype:  GenStack :: Adjust
+DataÌ64ÎNodeÖ0
+member:     Node :: Data
+Data_PtrÌ4096ÎGenStackÖ0
+typedef:    GenStack :: Data_Ptr
+EmptyÌ1024ÎGenStackÖ0
+prototype:  GenStack :: Empty
+FinalizeÌ1024ÎGenStackÖ0
+prototype:  GenStack :: Finalize
+GenStackÌ512Ö0
+package:    GenStack
+HeadÌ64ÎStackÖ0
+member:     Stack :: Head
+InitializeÌ1024ÎGenStackÖ0
+prototype:  GenStack :: Initialize
+NextÌ64ÎNodeÖ0
+member:     Node :: Next
+NodeÌ4096ÎGenStackÖ0
+typedef:    GenStack :: Node
+Node_PtrÌ4096ÎGenStackÖ0
+typedef:    GenStack :: Node_Ptr
+PopÌ1024ÎGenStackÖ0
+prototype:  GenStack :: Pop
+PushÌ1024ÎGenStackÖ0
+prototype:  GenStack :: Push
+StackÌ4096ÎGenStackÖ0
+typedef:    GenStack :: Stack
+StackDataÌ4096ÎGenStackÖ0
+typedef:    GenStack :: StackData
+TopÌ1024ÎGenStackÖ0
+prototype:  GenStack :: Top

@@ -1,20 +1,38 @@
-# format=tagmanager
 0Ì64ÎphoneNumbersÖ0
+member:     phoneNumbers :: 0
 1Ì64ÎphoneNumbersÖ0
+member:     phoneNumbers :: 1
 addressÌ64Ö0
+member:     address
 ageÌ64Ö0
+member:     age
 childrenÌ64Ö0
+member:     children
 cityÌ64ÎaddressÖ0
+member:     address :: city
 firstNameÌ64Ö0
+member:     firstName
 height_cmÌ64Ö0
+member:     height_cm
 isAliveÌ64Ö0
+member:     isAlive
 lastNameÌ64Ö0
+member:     lastName
 numberÌ64ÎphoneNumbers.0Ö0
+member:     phoneNumbers.0 :: number
 numberÌ64ÎphoneNumbers.1Ö0
+member:     phoneNumbers.1 :: number
 phoneNumbersÌ64Ö0
+member:     phoneNumbers
 postalCodeÌ64ÎaddressÖ0
+member:     address :: postalCode
 spouseÌ64Ö0
+member:     spouse
 stateÌ64ÎaddressÖ0
+member:     address :: state
 streetAddressÌ64ÎaddressÖ0
+member:     address :: streetAddress
 typeÌ64ÎphoneNumbers.0Ö0
+member:     phoneNumbers.0 :: type
 typeÌ64ÎphoneNumbers.1Ö0
+member:     phoneNumbers.1 :: type

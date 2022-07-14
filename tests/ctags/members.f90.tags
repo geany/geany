@@ -1,8 +1,14 @@
-# format=tagmanager
 HasMembersÌ1ÎMembersÖ0
+class:      Members :: HasMembers
 MembersÌ256Ö0
+namespace:  Members
 MyMethodÌ64ÎHasMembersÖ0
-MySubroutineÌ128ÎMembersÖ0
+member:     HasMembers :: MyMethod
+MySubroutineÌ128Í(arg)ÎMembersÖ0
+method:     Members :: MySubroutine(arg)
 kind_memberÌ64ÎHasMembersÖ0
+member:     HasMembers :: kind_member
 len_memberÌ64ÎHasMembersÖ0
+member:     HasMembers :: len_member
 memberÌ64ÎHasMembersÖ0
+member:     HasMembers :: member

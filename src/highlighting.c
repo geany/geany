@@ -1000,6 +1000,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 	{
 		init_styleset_case(ABAQUS);
 		init_styleset_case(ADA);
+		init_styleset_case(ASCIIDOC);
 		init_styleset_case(ASM);
 		init_styleset_case(BASIC);
 		init_styleset_case(BATCH);
@@ -1015,10 +1016,10 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(LISP);
 		init_styleset_case(ERLANG);
 		init_styleset_case(DOCBOOK);
-		init_styleset_case(FERITE);
 		init_styleset_case(F77);
 		init_styleset_case(FORTH);
 		init_styleset_case(FORTRAN);
+		init_styleset_case(GDSCRIPT);
 		init_styleset_case(GO);
 		init_styleset_case(HASKELL);
 		init_styleset_case(HAXE);
@@ -1026,6 +1027,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(HTML);
 		init_styleset_case(JAVA);
 		init_styleset_case(JS);
+		init_styleset_case(JULIA);
 		init_styleset_case(LATEX);
 		init_styleset_case(LUA);
 		init_styleset_case(MAKE);
@@ -1089,6 +1091,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 	{
 		styleset_case(ABAQUS);
 		styleset_case(ADA);
+		styleset_case(ASCIIDOC);
 		styleset_case(ASM);
 		styleset_case(BASIC);
 		styleset_case(BATCH);
@@ -1104,10 +1107,10 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(LISP);
 		styleset_case(ERLANG);
 		styleset_case(DOCBOOK);
-		styleset_case(FERITE);
 		styleset_case(F77);
 		styleset_case(FORTH);
 		styleset_case(FORTRAN);
+		styleset_case(GDSCRIPT);
 		styleset_case(GO);
 		styleset_case(HASKELL);
 		styleset_case(HAXE);
@@ -1115,6 +1118,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(HTML);
 		styleset_case(JAVA);
 		styleset_case(JS);
+		styleset_case(JULIA);
 		styleset_case(LATEX);
 		styleset_case(LUA);
 		styleset_case(MAKE);
@@ -1166,7 +1170,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
  * (e.g. by by opening a file of this type), it will be initialised. The returned pointer is
  * owned by Geany and must not be freed.
  * @param ft_id Filetype ID, e.g. @c GEANY_FILETYPES_DIFF.
- * @param style_id A Scintilla lexer style, e.g. @c SCE_DIFF_ADDED. See scintilla/include/SciLexer.h.
+ * @param style_id A Scintilla lexer style, e.g. @c SCE_DIFF_ADDED. See scintilla/lexilla/include/SciLexer.h.
  * @return A pointer to the style struct.
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
 GEANY_API_SYMBOL
@@ -1434,6 +1438,13 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_P_FTRIPLEDOUBLE ||
 				style == SCE_P_STRINGEOL);
 
+		case SCLEX_GDSCRIPT:
+			return (style == SCE_GD_STRING ||
+				style == SCE_GD_TRIPLE ||
+				style == SCE_GD_TRIPLEDOUBLE ||
+				style == SCE_GD_CHARACTER ||
+				style == SCE_GD_STRINGEOL);
+
 		case SCLEX_F77:
 		case SCLEX_FORTRAN:
 			return (style == SCE_F_STRING1 ||
@@ -1513,6 +1524,13 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_OCTAVE:
 			return (style == SCE_MATLAB_STRING ||
 				style == SCE_MATLAB_DOUBLEQUOTESTRING);
+
+		case SCLEX_JULIA:
+			return (style == SCE_JULIA_CHAR  ||
+				style == SCE_JULIA_STRING    ||
+				style == SCE_JULIA_DOCSTRING ||
+				style == SCE_JULIA_COMMAND   ||
+				style == SCE_JULIA_STRINGINTERP);
 
 		case SCLEX_XML:
 		case SCLEX_HTML:
@@ -1718,6 +1736,9 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_OCTAVE:
 			return (style == SCE_MATLAB_COMMENT);
 
+		case SCLEX_JULIA:
+			return (style == SCE_JULIA_COMMENT);
+
 		case SCLEX_LUA:
 			return (style == SCE_LUA_COMMENT ||
 				style == SCE_LUA_COMMENTLINE ||
@@ -1843,6 +1864,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_MARKDOWN:
 			/* there is no comment type in those lexers, listing here just for completeness */
 			return FALSE;
+			
+		case SCLEX_GDSCRIPT:
+			return (style == SCE_GD_COMMENTLINE ||
+				style == SCE_GD_COMMENTBLOCK);
 	}
 	return FALSE;
 }

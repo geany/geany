@@ -1,0 +1,18 @@
+BlueÌ4ÎPrimary_ColorÖ0
+enumerator: Primary_Color :: Blue
+ConversionsÌ512ÎMy_PackageÖ0
+package:    My_Package :: Conversions
+From_Big_RealÌ1024ÎConversionsÖ0
+prototype:  Conversions :: From_Big_Real
+GreenÌ4ÎPrimary_ColorÖ0
+enumerator: Primary_Color :: Green
+Missing_TagÌ4096ÎMy_PackageÖ0
+typedef:    My_Package :: Missing_Tag
+My_PackageÌ512Ö0
+package:    My_Package
+NumÌ64ÎMissing_TagÖ0
+member:     Missing_Tag :: Num
+Primary_ColorÌ4096ÎMy_PackageÖ0
+typedef:    My_Package :: Primary_Color
+RedÌ4ÎPrimary_ColorÖ0
+enumerator: Primary_Color :: Red

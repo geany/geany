@@ -67,7 +67,7 @@
 #include "utils.h"
 #include "win32.h"
 
-#include "gtkcompat.h"
+#include <gtk/gtk.h>
 
 
 #ifndef G_OS_WIN32
@@ -722,12 +722,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 #ifdef G_OS_WIN32
 		else if (strncmp(buf, "window", 6) == 0)
 		{
-#	if GTK_CHECK_VERSION(3, 0, 0)
 			HWND hwnd = (HWND) gdk_win32_window_get_handle(gtk_widget_get_window(window));
-#	else
-			HWND hwnd = (HWND) gdk_win32_drawable_get_handle(
-				GDK_DRAWABLE(gtk_widget_get_window(window)));
-#	endif
 			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
 		}
 #endif
@@ -742,9 +737,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 		 * gtk_window_present() really bring the main window into the foreground on some
 		 * window managers like Gnome's metacity.
 		 * Code taken from Gedit. */
-#	if GTK_CHECK_VERSION(3, 0, 0)
 		if (GDK_IS_X11_WINDOW(x11_window))
-#	endif
 		{
 			gdk_x11_window_set_user_time(x11_window, gdk_x11_get_server_time(x11_window));
 		}

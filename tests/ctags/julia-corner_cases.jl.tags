@@ -1,0 +1,130 @@
+BaseÃ256÷0
+namespace:  Base
+FooÃ2048÷0
+struct:     Foo
+FooÃ4096÷0
+typedef:    Foo
+Mod1Ã256÷0
+namespace:  Mod1
+Mod2Ã256÷0
+namespace:  Mod2
+Module1Ã256÷0
+namespace:  Module1
+Module10Ã256ŒMyModule÷0
+namespace:  MyModule :: Module10
+Module11Ã256ŒMyModule÷0
+namespace:  MyModule :: Module11
+Module13Ã256÷0
+namespace:  Module13
+Module2Ã256÷0
+namespace:  Module2
+Module3Ã256÷0
+namespace:  Module3
+Module4Ã256÷0
+namespace:  Module4
+Module5Ã256÷0
+namespace:  Module5
+Module6Ã256÷0
+namespace:  Module6
+Module7Ã256÷0
+namespace:  Module7
+Module8Ã256ŒMyModule÷0
+namespace:  MyModule :: Module8
+Module9Ã256ŒMyModule÷0
+namespace:  MyModule :: Module9
+MyModuleÃ256÷0
+namespace:  MyModule
+OurRationalÃ2048Õ{T<:Integer}÷0
+struct:     OurRational{T<:Integer}
+OurRational{Int16}Ã16Õ(num::T, den::T) where T<:Integer ÷0
+function:   OurRational{Int16}(num::T, den::T) where T<:Integer 
+OurRational{Int64}Ã16Õ(num::T, den::T, test::T) where T<:Integer ŒOurRational÷0
+function:   OurRational :: OurRational{Int64}(num::T, den::T, test::T) where T<:Integer 
+OurRational{Int8}Ã16Õ(num::T, den::T) where T<:Integer ŒOurRational÷0
+function:   OurRational :: OurRational{Int8}(num::T, den::T) where T<:Integer 
+OurRational{T}Ã16Õ(num::T, den::T) where T<:IntegerŒOurRational÷0
+function:   OurRational :: OurRational{T}(num::T, den::T) where T<:Integer
+PointÃ2048Õ{T}÷0
+struct:     Point{T}
+PointyÃ4096÷0
+typedef:    Pointy
+TestÃ2048÷0
+struct:     Test
+aÃ64Õ::Float64ŒTest÷0
+member:     Test :: a::Float64
+bÃ64Õ::Float64ŒTest÷0
+member:     Test :: b::Float64
+barÃ16Õ(x, y)ŒFoo÷0
+function:   Foo :: bar(x, y)
+cellÃ16Õ(dims::(Integer...))÷0
+function:   cell(dims::(Integer...))
+denÃ64Õ::TŒOurRational÷0
+member:     OurRational :: den::T
+elsizeÃ16Õ(::AbstractArray{T}) where {T} ÷0
+function:   elsize(::AbstractArray{T}) where {T} 
+elsizeÃ16Õ(::AbstractArray{T}) where T÷0
+function:   elsize(::AbstractArray{T}) where T
+fÃ16Õ(x::FooBar)÷0
+function:   f(x::FooBar)
+fooÃ16Õ(x::(Int,))÷0
+function:   foo(x::(Int,))
+fooÃ16Õ()÷0
+function:   foo()
+fooÃ16Õ(x)ŒBaz÷0
+function:   Baz :: foo(x)
+foo_bar!Ã16Õ(x,y)÷0
+function:   foo_bar!(x,y)
+func1Ã32768ŒModule11÷0
+externvar:  Module11 :: func1
+func1Ã32768ŒModule13÷0
+externvar:  Module13 :: func1
+func1Ã32768ŒModule2÷0
+externvar:  Module2 :: func1
+func1Ã32768ŒModule4÷0
+externvar:  Module4 :: func1
+func1Ã32768ŒModule7÷0
+externvar:  Module7 :: func1
+func2Ã32768ŒModule11÷0
+externvar:  Module11 :: func2
+func2Ã32768ŒModule2÷0
+externvar:  Module2 :: func2
+func2Ã32768ŒModule6÷0
+externvar:  Module6 :: func2
+func2Ã32768ŒModule7÷0
+externvar:  Module7 :: func2
+func3Ã16Õ(a::Int)ŒMyModule÷0
+function:   MyModule :: func3(a::Int)
+func3Ã32768ŒModule11÷0
+externvar:  Module11 :: func3
+func4Ã16Õ(a::Int)ŒMyModule÷0
+function:   MyModule :: func4(a::Int)
+func5Ã16Õ(b::Int)ŒMyModule.func4÷0
+function:   MyModule.func4 :: func5(b::Int)
+gÃ16Õ(x, y)::Int8÷0
+function:   g(x, y)::Int8
+myfunÃ16Õ()÷0
+function:   myfun()
+normÃ16Õ(p::Point{<:Real})÷0
+function:   norm(p::Point{<:Real})
+numÃ64Õ::TŒOurRational÷0
+member:     OurRational :: num::T
+same_type_numericÃ16Õ(x::T, y::T) where {T <: Number} ÷0
+function:   same_type_numeric(x::T, y::T) where {T <: Number} 
+same_type_numericÃ16Õ(x::T, y::T) where T ÷0
+function:   same_type_numeric(x::T, y::T) where T 
+showÃ32768ŒBase÷0
+externvar:  Base :: show
+testÃ16Õ(x)÷0
+function:   test(x)
+testÃ64Õ::TŒOurRational÷0
+member:     OurRational :: test::T
+test_docstringÃ16÷0
+function:   test_docstring
+xÃ64Õ::BarŒFoo÷0
+member:     Foo :: x::Bar
+xÃ64Õ::TŒPoint÷0
+member:     Point :: x::T
+yÃ64Õ::TŒPoint÷0
+member:     Point :: y::T
+yÃ16384÷0
+variable:   y

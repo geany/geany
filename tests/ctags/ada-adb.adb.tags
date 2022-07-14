@@ -1,0 +1,38 @@
+AltivecÃ16÷0
+function:   Altivec
+DaysÃ4096ŒGreet÷0
+typedef:    Greet :: Days
+FridayÃ4ŒDays÷0
+enumerator: Days :: Friday
+GreetÃ16÷0
+function:   Greet
+MÃ16384ŒGreet÷0
+variable:   Greet :: M
+MondayÃ4ŒDays÷0
+enumerator: Days :: Monday
+SÃ16384ŒGreet÷0
+variable:   Greet :: S
+SaturdayÃ4ŒDays÷0
+enumerator: Days :: Saturday
+SundayÃ4ŒDays÷0
+enumerator: Days :: Sunday
+ThursdayÃ4ŒDays÷0
+enumerator: Days :: Thursday
+TuesdayÃ4ŒDays÷0
+enumerator: Days :: Tuesday
+Vector_AÃ65536ŒAltivec÷0
+macro:      Altivec :: Vector_A
+Vector_BÃ65536ŒAltivec÷0
+macro:      Altivec :: Vector_B
+Vector_CÃ16384ŒAltivec÷0
+variable:   Altivec :: Vector_C
+View_AÃ65536ŒAltivec÷0
+macro:      Altivec :: View_A
+View_BÃ65536ŒAltivec÷0
+macro:      Altivec :: View_B
+View_CÃ16384ŒAltivec÷0
+variable:   Altivec :: View_C
+WednesdayÃ4ŒDays÷0
+enumerator: Days :: Wednesday
+Weekend_DaysÃ4096ŒGreet÷0
+typedef:    Greet :: Weekend_Days

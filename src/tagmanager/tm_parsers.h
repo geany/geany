@@ -24,7 +24,7 @@
 	PythonParser, \
 	TexParser, \
 	AsmParser, \
-	ConfParser, \
+	IniconfParser, \
 	SqlParser, \
 	DocBookParser, \
 	ErlangParser, \
@@ -34,7 +34,7 @@
 	ShParser, \
 	DParser, \
 	FortranParser, \
-	FeriteParser, \
+	GDScriptParser, \
 	DiffParser, \
 	VhdlParser, \
 	LuaParser, \
@@ -45,8 +45,8 @@
 	HaxeParser,\
 	RstParser, \
 	HtmlParser, \
-	F77Parser, \
-	GLSLParser, \
+	AdaParser, \
+	CUDAParser, \
 	MatLabParser, \
 	ValaParser, \
 	FlexParser, \
@@ -65,6 +65,12 @@
 	JsonParser, \
 	ZephirParser, \
 	PowerShellParser, \
-	BibtexParser
+	JuliaParser, \
+	BibtexParser, \
+	CPreProParser, \
+	TclOOParser, \
+	ClojureParser, \
+	LispParser, \
+	TypeScriptParser
 
 #endif

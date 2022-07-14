@@ -113,7 +113,7 @@ it's for.
 Plugin API code
 ---------------
 Please be aware that anything with a doc-comment (a comment with an
-extra asterix: ``/**``) is something in the plugin API. Things like
+extra asterisk: ``/**``) is something in the plugin API. Things like
 enums and structs can usually still be appended to, ensuring that all
 the existing elements stay in place - this will keep the ABI stable.
 
@@ -126,10 +126,18 @@ the existing elements stay in place - this will keep the ABI stable.
 
 Keeping the plugin ABI stable
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Before the 1.0 release series, the ABI can change when necessary, and
-even the API can change. An ABI change just means that all plugins will
-not load and they must be rebuilt. An API change means that some plugins
-might not build correctly.
+In general the ABI changes as little as we can manage. The ABI number
+must match exactly between Geany and plugins, so an ABI change breaks
+all plugins until they are re-compiled. But sometimes it is absolutely
+necessary. Removing a feature or significantly changing the semantics
+of an existing feature require an ABI change since existing plugins may
+no longer work with the modified version of Geany.
+
+The API identifying number is increased whenever anything is added to
+the API so plugins can test if the feature is available. The API number
+required by a plugin needs only to be lower than the API Geany provides,
+so an increase in API number without a change in ABI will not stop
+plugins that need a lower number from working.
 
 If you're reordering or changing existing elements of structs that are
 used as part of the plugin API, you must increment GEANY_ABI_VERSION
@@ -167,11 +175,11 @@ unmanageable diffs.
 
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 2.24 or GTK 3 (with the --enable-gtk3 configure option)
-and GLib >= 2.32. API symbols from newer GTK/GLib versions should be 
-avoided or made optional to keep the source code building on older systems.
+Geany requires GTK >= 3.0 and GLib >= 2.32. API symbols from newer GTK/GLib
+versions should be avoided or made optional to keep the source code building
+on older systems.
 
-It is recommended to use the 2.24 API documentation of the GTK
+It is recommended to use the 3.0 API documentation of the GTK
 libs (including GLib, GDK and Pango) has the advantages
 that you don't get confused by any newer API additions and you
 don't have to take care about whether you can use them or not.
@@ -196,8 +204,8 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.32 and GTK 2.24. At least for the
-  moment, we want to keep the minimum requirement for GTK at 2.24 (of
+* Your code should build against GLib 2.32 and GTK 3.0. At least for the
+  moment, we want to keep the minimum requirement for GTK at 3.0 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
 * Variables should be declared (and initialized) as close as practical
@@ -492,13 +500,13 @@ other changes should be passed on to the maintainers at
 http://scintilla.org. We normally update to a new Scintilla release
 shortly after one is made. See also scintilla/README.
 
-Tagmanager was originally taken from Anjuta 1.2.2, and parts of it
-(notably c.c) have been merged from later versions of Anjuta and
-CTags. The independent Tagmanager library itself ceased development
-before Geany was started. It's source code parsing is mostly taken from
-Exuberant CTags (see http://ctags.sf.net). If appropriate it's good to
-pass language parser changes back to the CTags project.
-
+We use an unmodified subset of universal-ctags sources
+(https://github.com/universal-ctags/ctags) to parse open documents. We
+also use the great majority of unmodified universal-ctags parsers except
+a few outliers that are maintained by us (those whose file names start
+with `geany_`). We normally update to the latest version of
+universal-ctags shortly after making a Geany release and keep this
+version during the rest of the development cycle.
 
 Notes
 =====
@@ -642,17 +650,12 @@ indentation after ':' is done from on_new_line_added().
 If the Scintilla lexer supports user type keyword highlighting (e.g.
 SCLEX_CPP), update document_update_tags() in document.c.
 
-Adding a TagManager parser
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Adding a CTags parser
+^^^^^^^^^^^^^^^^^^^^^
 This assumes the filetype for Geany already exists.
 
 First write or find a CTags compatible parser, foo.c. Check this fork:
 https://github.com/universal-ctags/ctags
-
-There may be some unmerged language patches for CTags at:
-http://sf.net/projects/ctags - see the tracker.
-
-(You can also try the Anjuta project's anjuta-tags codebase.)
 
 Method
 ``````
@@ -665,19 +668,21 @@ In src/tagmanager/tm_parser.c:
 Add a map_FOO TMParserMapEntry mapping each kind's letter from foo.c's
 FooKinds to the appropriate TMTagType, and add the corresponding
 MAP_ENTRY(FOO) to parser_map.
-(You may want to make the symbols.c change before doing this).
 
 In src/tagmanager/tm_parser.c:
-Update tm_parser_context_separator() and tm_parser_has_full_context() to
-handle the new parser if applicable, by adding a TM_PARSER_FOO case entry.
+Add a group_FOO TMParserMapGroup defining root nodes of the symbol tree,
+used icons and TMTagType values grouped under the specified root.
+Multiple TMTagType values can be combined under a single root using |
+(bitwise OR).
+
+In src/tagmanager/tm_parser.c:
+Update various functions at the end of tm_parser.c to adjust Geany
+behavior to the behavior of the added parser. In particular, update
+tm_parser_scope_separator() and tm_parser_has_full_scope() so
+scope-related functionality works correctly.
 
 In filetypes.c, init_builtin_filetypes():
 Set the 2nd argument of the FT_INIT() macro for this filetype to FOO.
-
-In symbols.c:
-Unless your parser uses C-like tag type kinds, update
-add_top_level_items() for foo, calling tag_list_add_groups(). See
-get_tag_type_iter() for which tv_iters fields to use.
 
 Tests
 `````
@@ -780,9 +785,6 @@ Building Plugins
 
 The geany-plugins autotools script automatically detects the
 installed system Geany and builds the plugins against that.
-
-Plugins will build with either GTK2 or GTK3, whichever the detected
-Geany was built with.
 
 To use plugins with a development version of Geany built with
 a different prefix, the plugins will need to be compiled against
