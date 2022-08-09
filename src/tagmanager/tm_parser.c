@@ -871,7 +871,7 @@ static TMParserMapEntry map_RUST[] = {
 static TMParserMapGroup group_RUST[] = {
 	{_("Modules"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
 	{_("Structures"), TM_ICON_STRUCT, tm_tag_struct_t},
-	{_("Traits)"), TM_ICON_CLASS, tm_tag_interface_t},
+	{_("Traits"), TM_ICON_CLASS, tm_tag_interface_t},
 	{_("Implementations"), TM_ICON_CLASS, tm_tag_class_t},
 	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
 	{_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
