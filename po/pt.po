@@ -1,17 +1,18 @@
 # Portuguese translation for geany
-# Copyright (C) 2006-2021 The Geany contributors.
+# Copyright (C) 2006-2022 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 #
-# André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
+# André Glória <gloria_dot_andre_at_gmail_dot_com>, 2009 - 2014.
 # Pedro Albuquerque <pmra@protonmail.com>, 2015 - 2021.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.38\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-24 02:11+0000\n"
-"PO-Revision-Date: 2021-09-24 07:03+0100\n"
-"Last-Translator: Pedro Albuquerque <pmra@protonmail.com>\n"
+"PO-Revision-Date: 2022-08-12 12:03+0100\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <translation-team-pt@lists.sourceforge.net>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -342,11 +343,11 @@ msgstr "Ajustar sempre a procura em todo o documento"
 
 #: ../data/geany.glade.h:66
 msgid "Hide the Find dialog"
-msgstr "Esconder a janela Localizar"
+msgstr "Ocultar a janela Localizar"
 
 #: ../data/geany.glade.h:67
 msgid "Hide the Find dialog after clicking Find Next/Previous"
-msgstr "Esconde a janela Localizar após clicar em Localizar Anterior/Seguinte"
+msgstr "Oculta a janela Localizar após clicar em Localizar Anterior/Seguinte"
 
 #: ../data/geany.glade.h:68
 msgid "Use the current word under the cursor for Find dialogs"
@@ -1040,12 +1041,13 @@ msgstr ""
 
 #: ../data/geany.glade.h:212
 msgid "Stop scrolling at last line"
-msgstr "Parar rolamento na última linha"
+msgstr "Parar deslocamento na última linha"
 
 #: ../data/geany.glade.h:213
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr ""
-"Se o rolamento de uma página deve terminar após a última linha do documento"
+"Se o deslocamento de uma página deve terminar após a última linha do "
+"documento"
 
 #: ../data/geany.glade.h:214
 msgid "Lines visible _around the cursor:"
@@ -1530,7 +1532,7 @@ msgstr "Cor de fundo:"
 
 #: ../data/geany.glade.h:316
 msgid "Scrollback lines:"
-msgstr "Linhas de rolamento:"
+msgstr "Linhas de deslocamento:"
 
 #: ../data/geany.glade.h:317
 msgid "Shell:"
@@ -1562,20 +1564,21 @@ msgstr ""
 
 #: ../data/geany.glade.h:322
 msgid "Scroll on keystroke"
-msgstr "Rolar ao premir uma tecla"
+msgstr "Deslocar ao premir uma tecla"
 
 #: ../data/geany.glade.h:323
 msgid "Whether to scroll to the bottom if a key was pressed"
-msgstr "Se se rola o texto até ao fim caso uma tecla seja premida"
+msgstr "Se deve deslocar o texto até ao fim caso uma tecla seja premida"
 
 #: ../data/geany.glade.h:324
 msgid "Scroll on output"
-msgstr "Rolar na saída"
+msgstr "Deslocar na saída"
 
 #: ../data/geany.glade.h:325
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr ""
-"Se se rola o texto até ao fim sempre que algum texto é gerado por um comando"
+"Se deve deslocar o texto até ao fim sempre que algum texto é gerado por um "
+"comando"
 
 #: ../data/geany.glade.h:326
 msgid "Cursor blinks"
@@ -2094,7 +2097,7 @@ msgstr "Aj_uda"
 
 #: ../data/geany.glade.h:451
 msgid "Keyboard _Shortcuts"
-msgstr "Atalho_s de teclado"
+msgstr "Tec_las de atalho"
 
 #: ../data/geany.glade.h:452
 msgid "Debug _Messages"
@@ -2717,7 +2720,7 @@ msgstr "Não gra_var"
 #: ../src/dialogs.c:811
 #, c-format
 msgid "The file '%s' is not saved."
-msgstr "O ficheiro \"%s\" não está gravado."
+msgstr "O ficheiro '%s' não está gravado."
 
 #: ../src/dialogs.c:812
 msgid "Do you want to save it before closing?"
@@ -2868,7 +2871,7 @@ msgstr "Histórico de desfazer será perdido."
 #: ../src/document.c:1657
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
-msgstr "Tem a certeza que quer recarregar \"%s\"?"
+msgstr "Tem a certeza que quer recarregar '%s'?"
 
 #: ../src/document.c:1763
 msgid "Error renaming file."
@@ -2901,7 +2904,7 @@ msgstr "Mensagem de erro: %s."
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
-"Falha ao abrir o ficheiro \"%s\" para escrita: a função fopen() falhou: %s"
+"Falha ao abrir o ficheiro '%s' para escrita: a função fopen() falhou: %s"
 
 #: ../src/document.c:1987
 #, c-format
@@ -2911,7 +2914,7 @@ msgstr "Falha ao escrever o ficheiro \"%s\": a função fwrite() falhou: %s"
 #: ../src/document.c:2001
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr "Falha ao fechar o ficheiro \"%s\": a função fclose() falhou: %s"
+msgstr "Falha ao fechar o ficheiro '%s': a função fclose() falhou: %s"
 
 #: ../src/document.c:2051 ../src/document.c:3605
 msgid "_Overwrite"
@@ -2920,7 +2923,7 @@ msgstr "S_obrescrever"
 #: ../src/document.c:2053 ../src/document.c:3608
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
-msgstr "O ficheiro \"%s\" em disco é mais recente que o da memória actual."
+msgstr "O ficheiro '%s' em disco é mais recente que o da memória actual."
 
 #: ../src/document.c:2061 ../src/document.c:3657
 msgid "Try to resave the file?"
@@ -2934,7 +2937,7 @@ msgstr "O ficheiro \"%s\" não foi encontrado no disco!"
 #: ../src/document.c:2125
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr "Impossível gravar o documento \"%s\". É só de leitura!"
+msgstr "Impossível gravar o documento '%s'. É só de leitura!"
 
 #: ../src/document.c:2193
 #, c-format
@@ -3119,7 +3122,7 @@ msgstr "Ási_a de Leste"
 
 #: ../src/encodings.c:416
 msgid "_SE & SW Asian"
-msgstr "Ásia _Sudeste & Sudoeste"
+msgstr "Ásia _Sudeste e Sudoeste"
 
 #: ../src/encodings.c:417
 msgid "_Middle Eastern"
@@ -3143,7 +3146,7 @@ msgstr "Ásia de Leste"
 
 #: ../src/encodings.c:540
 msgid "SE & SW Asian"
-msgstr "Ásia Sudeste & Sudoeste"
+msgstr "Ásia Sudeste e Sudoeste"
 
 #: ../src/encodings.c:542
 msgid "Middle Eastern"
@@ -3228,7 +3231,7 @@ msgstr "sem título"
 #: ../src/templates.c:230
 #, c-format
 msgid "Could not find file '%s'."
-msgstr "Impossível encontrar o ficheiro \"%s\"."
+msgstr "Não foi possível encontrar o ficheiro '%s'."
 
 #: ../src/highlighting.c:1303
 msgid "Default"
@@ -3382,15 +3385,15 @@ msgstr "_Transpor a linha actual"
 
 #: ../src/keybindings.c:399
 msgid "Scroll to current line"
-msgstr "Rolar até à linha actual"
+msgstr "Deslocar até à linha actual"
 
 #: ../src/keybindings.c:401
 msgid "Scroll up the view by one line"
-msgstr "Rolar a vista uma linha para cima"
+msgstr "Deslocar a vista uma linha para cima"
 
 #: ../src/keybindings.c:403
 msgid "Scroll down the view by one line"
-msgstr "Rolar a vista uma linha para baixo"
+msgstr "Deslocar a vista uma linha para baixo"
 
 #: ../src/keybindings.c:405
 msgid "Complete snippet"
@@ -3953,7 +3956,7 @@ msgid ""
 "Please move manually the directory to the new location."
 msgstr ""
 "A pasta de configurações antiga \"%s\" não pôde ser movida para \"%s\" (%s). "
-"Por favor, mova a pasta manualmente para a nova localização."
+"Mova a pasta manualmente para a nova localização."
 
 #: ../src/libmain.c:786
 #, c-format
@@ -3962,8 +3965,8 @@ msgid ""
 "There could be some problems using Geany without a configuration directory.\n"
 "Start Geany anyway?"
 msgstr ""
-"A pasta de configurações não pôde ser criada (%s).\n"
-"Podem ocorrer problemas ao usar o Geany sem pasta de configurações.\n"
+"Não foi possível criar a pasta de configurações (%s).\n"
+"Podem ocorrer problemas ao usar o Geany sem uma pasta de configurações.\n"
 "Iniciar o Geany mesmo assim?"
 
 #: ../src/libmain.c:1158
@@ -3974,12 +3977,12 @@ msgstr "Este é o Geany %s."
 #: ../src/libmain.c:1161
 #, c-format
 msgid "Configuration directory could not be created (%s)."
-msgstr "A pasta de configurações não pôde ser criada (%s)."
+msgstr "Não foi possível criar a pasta de configurações (%s)."
 
 #: ../src/libmain.c:1169
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
-"Impossível criar o socket IPC, veja Ajuda->Mensagens de depuração para "
+"Não foi possível criar o socket IPC, veja Ajuda->Mensagens de depuração para "
 "detalhes."
 
 #: ../src/libmain.c:1400
@@ -4018,7 +4021,7 @@ msgstr "_Ocultar janela de mensagens"
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
-"Impossível encontrar o ficheiro \"%s\" - a tentar no caminho do ficheiro "
+"Impossível encontrar o ficheiro '%s' - a tentar no caminho do ficheiro "
 "activo."
 
 #: ../src/msgwindow.c:1194
@@ -4098,7 +4101,7 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
-"Extensão \"%s\" do proxy %s começa com um ponto. Por favor, repare a "
+"Extensão '%s' do proxy '%s' começa com um ponto. Por favor, repare a "
 "extensão do proxy."
 
 #: ../src/pluginutils.c:426
@@ -4145,7 +4148,7 @@ msgstr "Substituir este atalho?"
 #: ../src/prefs.c:1487
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
-msgstr "A combinação \"%s\" já está a ser usada para \"%s\"."
+msgstr "A combinação '%s' já está a ser usada para \"%s\"."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
@@ -4333,7 +4336,7 @@ msgstr "Quer fechá-lo antes de prosseguir?"
 #: ../src/project.c:666
 #, c-format
 msgid "The '%s' project is open."
-msgstr "O projecto \"%s\" está aberto."
+msgstr "O projecto '%s' está aberto."
 
 #: ../src/project.c:715
 msgid "The specified project name is too short."
@@ -4375,7 +4378,7 @@ msgstr "Substitui_r"
 #: ../src/project.c:787 ../plugins/export.c:330
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
-msgstr "O ficheiro \"%s\" já existe. Quer substituí-lo?"
+msgstr "O ficheiro '%s' já existe. Quer substituí-lo?"
 
 #. initialise the dialog
 #: ../src/project.c:933 ../src/project.c:944
@@ -4487,7 +4490,7 @@ msgstr "Desactive esta opção para manter o diálogo aberto"
 
 #: ../src/search.c:635
 msgid "Replace & Fi_nd"
-msgstr "Substituir & Proc_urar"
+msgstr "Substituir e Proc_urar"
 
 #: ../src/search.c:644
 msgid "Replace wit_h:"
@@ -5062,12 +5065,12 @@ msgstr "Ficheiro de etiquetas do Geany (*.*.tags)"
 #: ../src/symbols.c:1751
 #, c-format
 msgid "Loaded %s tags file '%s'."
-msgstr "Carregadas etiquetas %s do ficheiro \"%s\"."
+msgstr "Carregadas etiquetas %s do ficheiro '%s'."
 
 #: ../src/symbols.c:1754
 #, c-format
 msgid "Could not load tags file '%s'."
-msgstr "Impossível carregar o ficheiro de etiquetas \"%s\"."
+msgstr "Impossível carregar o ficheiro de etiquetas '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1993
@@ -5836,12 +5839,12 @@ msgstr ""
 #: ../plugins/export.c:278
 #, c-format
 msgid "Document successfully exported as '%s'."
-msgstr "Documento exportado com sucesso como \"%s\"."
+msgstr "Documento exportado com sucesso como '%s'."
 
 #: ../plugins/export.c:280
 #, c-format
 msgid "File '%s' could not be written (%s)."
-msgstr "O ficheiro \"%s\" não pôde ser escrito (%s)."
+msgstr "O ficheiro '%s' não pôde ser escrito (%s)."
 
 #: ../plugins/export.c:746
 msgid "_Export"
@@ -5872,7 +5875,7 @@ msgstr "Demasiados itens seleccionados!"
 #: ../plugins/filebrowser.c:493
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
-msgstr "Impossível executar o comando externo personalizado \"%s\" (%s)."
+msgstr "Impossível executar o comando externo personalizado '%s' (%s)."
 
 #: ../plugins/filebrowser.c:657
 msgid "Open in _Geany"
@@ -6040,7 +6043,7 @@ msgstr ""
 
 #: ../plugins/saveactions.c:683
 msgid "Save only current open _file"
-msgstr "Gravar só o _ficheiro actualmente aberto"
+msgstr "Gravar apenas o _ficheiro actualmente aberto"
 
 #: ../plugins/saveactions.c:690
 msgid "Sa_ve all open files"
