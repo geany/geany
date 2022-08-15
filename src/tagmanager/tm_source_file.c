@@ -112,7 +112,7 @@ static char *realpath (const char *pathname, char *resolved_path)
 }
 #endif
 
-/**
+/*
  Given a file name, returns a newly allocated string containing the realpath()
  of the file.
  @param file_name The original file_name
