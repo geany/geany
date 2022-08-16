@@ -240,7 +240,7 @@ sci_cflags += [ '-std=c++17', '-Wno-non-virtual-dtor', '-DNDEBUG', '-DSCI_LEXER'
 
 iregex = include_directories('ctags/gnu_regex')
 ifnmatch = include_directories('ctags/fnmatch')
-ictags = include_directories('ctags/main', 'ctags/parsers', 'ctags/dsl', 'ctags/libreadtags')
+ictags = include_directories('ctags/main', 'ctags/parsers', 'ctags/dsl', 'ctags/libreadtags', 'ctags')
 itagmanager = include_directories('src/tagmanager')
 iscintilla = include_directories('scintilla/include', 'scintilla/lexilla/include')
 igeany = include_directories('src')
@@ -726,6 +726,11 @@ ctags = static_library('ctags',
 	'ctags/parsers/typescript.c',
 	'ctags/parsers/verilog.c',
 	'ctags/parsers/vhdl.c',
+	'ctags/peg/peg_common.h',
+	'ctags/peg/kotlin.c',
+	'ctags/peg/kotlin.h',
+	'ctags/peg/kotlin_post.h',
+	'ctags/peg/kotlin_pre.h',
 	c_args: geany_cflags + [ '-DG_LOG_DOMAIN="CTags"',
 	                         '-DEXTERNAL_PARSER_LIST_FILE="src/tagmanager/tm_parsers.h"' ],
 	dependencies: deps + [dep_fnmatch, dep_regex],
