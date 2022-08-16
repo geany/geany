@@ -229,6 +229,7 @@ ctags_tests = [
 	'ctags/keyword_struct.cs.tags',
 	'ctags/keyword_virtual.cs.tags',
 	'ctags/keyword_volatile.cs.tags',
+	'ctags/kotlin.kt.tags',
 	'ctags/labels.sql.tags',
 	'ctags/lanus.for.tags',
 	'ctags/line_directives.c.tags',
