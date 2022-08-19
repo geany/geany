@@ -145,12 +145,7 @@ on_default_tag_tree_button_press_event(GtkWidget *widget, GdkEventButton *event,
 {
 	if (event->button == 3)
 	{
-#if GTK_CHECK_VERSION(3,22,0)
-		gtk_menu_popup_at_pointer(GTK_MENU(tv.popup_taglist), NULL);
-#else
-		gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
-			event->button, event->time);
-#endif
+		ui_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 	return FALSE;
@@ -1492,21 +1487,13 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 
 			/* update menu item sensitivity */
 			documents_menu_update(selection);
-#if GTK_CHECK_VERSION(3,22,0)
-			gtk_menu_popup_at_pointer(GTK_MENU(openfiles_popup_menu), NULL);
-#else
-			gtk_menu_popup(GTK_MENU(openfiles_popup_menu), NULL, NULL, NULL, NULL,
-					event->button, event->time);
-#endif
+			ui_menu_popup(GTK_MENU(openfiles_popup_menu), NULL, NULL,
+						  event->button, event->time);
 		}
 		else
 		{
-#if GTK_CHECK_VERSION(3,22,0)
-			gtk_menu_popup_at_pointer(GTK_MENU(tv.popup_taglist), NULL);
-#else
-			gtk_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, NULL, NULL,
-					event->button, event->time);
-#endif
+			ui_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL,
+						  event->button, event->time);
 		}
 		handled = TRUE;
 	}

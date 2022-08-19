@@ -346,12 +346,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		g_signal_emit_by_name(geany_object, "update-editor-menu",
 			current_word, editor_info.click_pos, doc);
 
-#if GTK_CHECK_VERSION(3,22,0)
-		gtk_menu_popup_at_pointer(GTK_MENU(main_widgets.editor_menu), NULL);
-#else
-		gtk_menu_popup(GTK_MENU(main_widgets.editor_menu),
-			NULL, NULL, NULL, NULL, event->button, event->time);
-#endif
+		ui_menu_popup(GTK_MENU(main_widgets.editor_menu), NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 	return FALSE;

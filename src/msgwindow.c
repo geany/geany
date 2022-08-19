@@ -1236,32 +1236,20 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 		{
 			case MSG_STATUS:
 			{
-#if GTK_CHECK_VERSION(3,22,0)
-				gtk_menu_popup_at_pointer(GTK_MENU(msgwindow.popup_status_menu), NULL);
-#else
-				gtk_menu_popup(GTK_MENU(msgwindow.popup_status_menu), NULL, NULL, NULL, NULL,
-																	event->button, event->time);
-#endif
+				ui_menu_popup(GTK_MENU(msgwindow.popup_status_menu), NULL, NULL,
+							  event->button, event->time);
 				break;
 			}
 			case MSG_MESSAGE:
 			{
-#if GTK_CHECK_VERSION(3,22,0)
-				gtk_menu_popup_at_pointer(GTK_MENU(msgwindow.popup_msg_menu), NULL);
-#else
-				gtk_menu_popup(GTK_MENU(msgwindow.popup_msg_menu), NULL, NULL, NULL, NULL,
-																	event->button, event->time);
-#endif
+				ui_menu_popup(GTK_MENU(msgwindow.popup_msg_menu), NULL, NULL,
+							  event->button, event->time);
 				break;
 			}
 			case MSG_COMPILER:
 			{
-#if GTK_CHECK_VERSION(3,22,0)
-				gtk_menu_popup_at_pointer(GTK_MENU(msgwindow.popup_compiler_menu), NULL);
-#else
-				gtk_menu_popup(GTK_MENU(msgwindow.popup_compiler_menu), NULL, NULL, NULL, NULL,
-																	event->button, event->time);
-#endif
+				ui_menu_popup(GTK_MENU(msgwindow.popup_compiler_menu), NULL, NULL,
+							  event->button, event->time);
 				break;
 			}
 		}

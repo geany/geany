@@ -634,11 +634,7 @@ gboolean toolbar_popup_menu(GtkWidget *widget, GdkEventButton *event, gpointer u
 {
 	if (event->button == 3)
 	{
-#if GTK_CHECK_VERSION(3,22,0)
-		gtk_menu_popup_at_pointer(GTK_MENU(ui_widgets.toolbar_menu), NULL);
-#else
-		gtk_menu_popup(GTK_MENU(ui_widgets.toolbar_menu), NULL, NULL, NULL, NULL, event->button, event->time);
-#endif
+		ui_menu_popup(GTK_MENU(ui_widgets.toolbar_menu), NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 	return FALSE;

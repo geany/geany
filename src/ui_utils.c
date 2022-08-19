@@ -3229,3 +3229,15 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 	}
 	return FALSE;
 }
+
+void ui_menu_popup(GtkMenu* menu, GtkMenuPositionFunc func, gpointer data, guint button, guint32 activate_time)
+{
+	/* Use appropriate function for menu popup:
+		- gtk_menu_popup_at_pointer is not available on GTK older than 3.22
+		- gtk_menu_popup is deprecated and causes issues on multimonitor wayland setups */
+#if GTK_CHECK_VERSION(3,22,0)
+	gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
+#else
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, func, data, button, activate_time);
+#endif
+}
