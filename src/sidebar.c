@@ -1093,7 +1093,22 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 
 static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
-	interface_prefs.openfiles_path_mode = GPOINTER_TO_INT(user_data);
+	gint new_mode = GPOINTER_TO_INT(user_data);
+	/* This is also called for menu items that became inactive (in response to activating
+	 * another one in the same group).
+	 */
+	if (!gtk_check_menu_item_get_active(item))
+		return;
+
+	/* Only if the mode changes...otherwise sidebar_openfiles_update_all() recreates the
+	 * list which messes up the current selection and more.
+	 *
+	 * This can happen (for example) right after startup, when no menu item was active yet.
+	 */
+	if (interface_prefs.openfiles_path_mode == new_mode)
+		return;
+
+	interface_prefs.openfiles_path_mode = new_mode;
 	sidebar_openfiles_update_all();
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(tv.tree_openfiles));
 	sidebar_select_openfiles_item(document_get_current());
