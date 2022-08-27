@@ -58,7 +58,7 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 
 GPtrArray *tm_workspace_find_prefix(const char *prefix,
 	TMSourceFile *current_file, guint current_line, const gchar *current_scope,
-	TMParserType lang, guint max_num);
+	guint max_num);
 
 GPtrArray *tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 	gboolean function, gboolean member, const gchar *current_scope, guint current_line, gboolean search_namespace);
