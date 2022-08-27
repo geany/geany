@@ -705,7 +705,6 @@ typedef struct
 	TMSourceFile *file;
 	guint line;
 	const gchar *scope;
-	TMParserType lang;
 } CopyInfo;
 
 static gboolean is_any_tag(TMTag *tag, CopyInfo *info)
@@ -840,7 +839,7 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 	TMSourceFile *current_file,
 	guint current_line,
 	const gchar *current_scope,
-	TMParserType lang, guint max_num)
+	guint max_num)
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags = g_ptr_array_new();
@@ -850,7 +849,6 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 	copy_info.file = current_file;
 	copy_info.line = current_line;
 	copy_info.scope = current_scope;
-	copy_info.lang = lang;
 	fill_find_tags_array_prefix(tags, prefix, &copy_info, max_num);
 
 	/* sort based on how "close" the tag is to current line with local
@@ -1207,7 +1205,7 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, T
 }
 
 
-static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrArray *searched_array, TMParserType lang)
+static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrArray *searched_array)
 {
 	GPtrArray *member_tags = NULL;
 	guint i;
@@ -1250,9 +1248,9 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 	{
 		tags = tm_workspace_find(name, NULL, tm_tag_namespace_t, NULL, lang);
 
-		member_tags = find_namespace_members_all(tags, theWorkspace->tags_array, lang);
+		member_tags = find_namespace_members_all(tags, theWorkspace->tags_array);
 		if (!member_tags)
-			member_tags = find_namespace_members_all(tags, theWorkspace->global_tags, lang);
+			member_tags = find_namespace_members_all(tags, theWorkspace->global_tags);
 
 		g_ptr_array_free(tags, TRUE);
 	}

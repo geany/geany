@@ -2033,7 +2033,7 @@ autocomplete_tags(GeanyEditor *editor, GeanyFiletype *ft, const gchar *root, gsi
 	current_line = sci_get_current_line(editor->sci) + 1;
 
 	tags = tm_workspace_find_prefix(root, doc->tm_file, current_line, current_scope,
-		ft->lang, editor_prefs.autocompletion_max_entries);
+		editor_prefs.autocompletion_max_entries);
 	found = tags->len > 0;
 	if (found)
 		show_tags_list(editor, tags, rootlen);
