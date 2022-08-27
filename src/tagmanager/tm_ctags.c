@@ -245,6 +245,7 @@ void tm_ctags_clear_ignore_symbols(void)
  * with the counter (which gets complicated when also subparsers are involved) */
 static void rename_anon_tags(TMSourceFile *source_file)
 {
+	gboolean is_c = source_file->lang == TM_PARSER_C || source_file->lang == TM_PARSER_CPP;
 	gint *anon_counter_table = NULL;
 	GPtrArray *removed_typedefs = NULL;
 	guint i;
@@ -264,7 +265,7 @@ static void rename_anon_tags(TMSourceFile *source_file)
 			orig_name = tag->name;
 			orig_name_len = strlen(orig_name);
 
-			if (source_file->lang == TM_PARSER_C || source_file->lang == TM_PARSER_CPP)
+			if (is_c)
 			{
 				/* First check if there's a typedef behind the scope nesting
 				 * such as typedef struct {} Foo; - in this case we can replace
@@ -273,6 +274,10 @@ static void rename_anon_tags(TMSourceFile *source_file)
 				{
 					TMTag *nested_tag = TM_TAG(source_file->tags_array->pdata[j]);
 					guint nested_scope_len = nested_tag->scope ? strlen(nested_tag->scope) : 0;
+
+					/* Tags can be interleaved with scopeless macros - skip those */
+					if (nested_tag->type & (tm_tag_macro_t | tm_tag_macro_with_arg_t))
+						continue;
 
 					/* Nested tags have longer scope than the parent - once the scope
 					 * is equal or lower than the parent scope, we are outside the tag's
@@ -332,6 +337,10 @@ static void rename_anon_tags(TMSourceFile *source_file)
 				TMTag *nested_tag = TM_TAG(source_file->tags_array->pdata[j]);
 				guint nested_scope_len = nested_tag->scope ? strlen(nested_tag->scope) : 0;
 				gchar *pos;
+
+				/* Tags can be interleaved with scopeless macros - skip those */
+				if (is_c && nested_tag->type & (tm_tag_macro_t | tm_tag_macro_with_arg_t))
+					continue;
 
 				/* In Fortran, we can create variables of anonymous structures:
 				 *     structure var1, var2
