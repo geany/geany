@@ -1133,7 +1133,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 
 	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 
-	tags = get_tag_list(doc, tm_tag_max_t);
+	tags = get_tag_list(doc, ~tm_tag_local_var_t);
 	if (tags == NULL)
 		return FALSE;
 
@@ -1597,13 +1597,23 @@ static TMTag *find_best_goto_tag(GeanyDocument *doc, GPtrArray *tags)
 
 static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean definition)
 {
+	GeanyDocument *doc = document_get_current();
+	guint current_line = sci_get_current_line(doc->editor->sci) + 1;
 	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
 	TMTag *tmtag, *last_tag = NULL;
+	const gchar *current_scope = NULL;
 	GPtrArray *filtered_tags = g_ptr_array_new();
 	guint i;
 
+	symbols_get_current_function(doc, &current_scope);
+
 	foreach_ptr_array(tmtag, i, tags)
 	{
+		/* don't show local variables outside current function or other
+		 * irrelevant tags - same as in the autocomplete case */
+		if (!tm_workspace_is_autocomplete_tag(tmtag, doc->tm_file, current_line, current_scope))
+			continue;
+
 		if ((definition && !(tmtag->type & forward_types)) ||
 			(!definition && (tmtag->type & forward_types)))
 		{

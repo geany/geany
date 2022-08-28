@@ -70,8 +70,8 @@ static GHashTable *subparser_map = NULL;
 	{'v', tm_tag_variable_t},    /* variable */   \
 	{'x', tm_tag_externvar_t},   /* externvar */  \
 	{'h', tm_tag_undef_t},       /* header */     \
-	{'l', tm_tag_undef_t},       /* local */      \
-	{'z', tm_tag_undef_t},       /* parameter */  \
+	{'l', tm_tag_local_var_t},   /* local */      \
+	{'z', tm_tag_local_var_t},   /* parameter */  \
 	{'L', tm_tag_undef_t},       /* label */      \
 	{'D', tm_tag_undef_t},       /* macroparam */
 
@@ -89,7 +89,7 @@ static TMParserMapGroup group_C[] = {
 	{_("Structs"), TM_ICON_STRUCT, tm_tag_union_t | tm_tag_struct_t},
 	{_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
 	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t | tm_tag_macro_with_arg_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t | tm_tag_local_var_t},
 	{_("Extern Variables"), TM_ICON_VAR, tm_tag_externvar_t},
 	{_("Other"), TM_ICON_OTHER, tm_tag_other_t},
 };

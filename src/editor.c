@@ -601,6 +601,7 @@ static void show_autocomplete(ScintillaObject *sci, gsize rootlen, GString *word
 	}
 	/* store whether a calltip is showing, so we can reshow it after autocompletion */
 	calltip.set = (gboolean) SSM(sci, SCI_CALLTIPACTIVE, 0, 0);
+	SSM(sci, SCI_AUTOCSETORDER, SC_ORDER_CUSTOM, 0);
 	SSM(sci, SCI_AUTOCSHOW, rootlen, (sptr_t) words->str);
 }
 
@@ -702,6 +703,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 {
 	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_current_position(editor->sci);
+	gint line = sci_get_current_line(editor->sci) + 1;
 	gchar typed = sci_get_char_at(sci, pos - 1);
 	gchar brace_char;
 	gchar *name;
@@ -768,7 +770,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	if (symbols_get_current_scope(editor->document, &current_scope) == -1)
 		current_scope = "";
 	tags = tm_workspace_find_scope_members(editor->document->tm_file, name, function,
-				member, current_scope, scope_sep_typed);
+				member, current_scope, line, scope_sep_typed);
 	if (tags)
 	{
 		GPtrArray *filtered = g_ptr_array_new();
@@ -2023,12 +2025,19 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 static gboolean
 autocomplete_tags(GeanyEditor *editor, GeanyFiletype *ft, const gchar *root, gsize rootlen)
 {
+	GeanyDocument *doc = editor->document;
+	const gchar *current_scope = NULL;
+	guint current_line;
 	GPtrArray *tags;
 	gboolean found;
 
-	g_return_val_if_fail(editor, FALSE);
+	g_return_val_if_fail(editor && doc, FALSE);
 
-	tags = tm_workspace_find_prefix(root, ft->lang, editor_prefs.autocompletion_max_entries);
+	symbols_get_current_function(doc, &current_scope);
+	current_line = sci_get_current_line(editor->sci) + 1;
+
+	tags = tm_workspace_find_prefix(root, doc->tm_file, current_line, current_scope,
+		editor_prefs.autocompletion_max_entries);
 	found = tags->len > 0;
 	if (found)
 		show_tags_list(editor, tags, rootlen);
