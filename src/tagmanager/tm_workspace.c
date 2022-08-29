@@ -637,7 +637,12 @@ gboolean tm_workspace_is_autocomplete_tag(TMTag *tag,
 		(current_file == tag->file &&
 		 current_line >= tag->line &&
 		 g_strcmp0(current_scope, tag->scope) == 0);
-	return valid && !tm_tag_is_anon(tag) && tm_parser_langs_compatible(lang, tag->lang);
+
+	/* tag->local indicates per-file-only visibility such as static C functions */
+	gboolean valid_local = !tag->local || current_file == tag->file;
+
+	return valid && valid_local &&
+		!tm_tag_is_anon(tag) && tm_parser_langs_compatible(lang, tag->lang);
 }
 
 
