@@ -63,7 +63,7 @@
 	"col: %c\t "         \
 	"sel: %s\t "         \
 	"%w      %t      %m" \
-	"mode: %M      "     \
+	"EOL: %M      "      \
 	"encoding: %e      " \
 	"filetype: %f      " \
 	"scope: %S")
