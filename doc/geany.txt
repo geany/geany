@@ -2301,6 +2301,10 @@ Show line endings
     Display a symbol everywhere that a carriage return or line feed
     is present.
 
+Show only non-default line endings
+    Shows line ending characters only when they differ from the
+    file default line ending character.
+
 Show line numbers
     Show or hide the Line Number margin.
 

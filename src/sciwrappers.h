@@ -130,6 +130,7 @@ void				sci_set_visible_white_spaces(ScintillaObject *sci, gboolean set);
 void 				sci_convert_eols			(ScintillaObject *sci, gint eolmode);
 gint				sci_get_eol_mode			(ScintillaObject *sci);
 void 				sci_set_eol_mode			(ScintillaObject *sci, gint eolmode);
+void				sci_set_eol_representation_characters(ScintillaObject *sci, gint new_eolmode);
 void 				sci_zoom_in					(ScintillaObject *sci);
 void 				sci_zoom_out				(ScintillaObject *sci);
 void 				sci_zoom_off				(ScintillaObject *sci);

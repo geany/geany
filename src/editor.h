@@ -138,6 +138,7 @@ typedef struct GeanyEditorPrefs
 	gint		autocompletion_update_freq;
 	gint		scroll_lines_around_cursor;
 	gint		ime_interaction; /* input method editor's candidate window behaviour */
+	gboolean	show_line_endings_only_when_differ;
 }
 GeanyEditorPrefs;
 
