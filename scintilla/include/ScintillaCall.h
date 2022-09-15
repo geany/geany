@@ -68,6 +68,7 @@ public:
 	char CharacterAt(Position position);
 	int UnsignedStyleAt(Position position);
 	std::string StringOfSpan(Span span);
+	std::string StringOfRange(Span span);
 	Position ReplaceTarget(std::string_view text);
 	Position ReplaceTargetRE(std::string_view text);
 	Position SearchInTarget(std::string_view text);
@@ -88,6 +89,7 @@ public:
 	Position CurrentPos();
 	Position Anchor();
 	int StyleAt(Position pos);
+	int StyleIndexAt(Position pos);
 	void Redo();
 	void SetUndoCollection(bool collectUndo);
 	void SelectAll();
@@ -321,7 +323,11 @@ public:
 	void SetPrintColourMode(Scintilla::PrintOption mode);
 	Scintilla::PrintOption PrintColourMode();
 	Position FindText(Scintilla::FindOption searchFlags, void *ft);
+	Position FindTextFull(Scintilla::FindOption searchFlags, void *ft);
 	Position FormatRange(bool draw, void *fr);
+	Position FormatRangeFull(bool draw, void *fr);
+	void SetChangeHistory(Scintilla::ChangeHistoryOption changeHistory);
+	Scintilla::ChangeHistoryOption ChangeHistory();
 	Line FirstVisibleLine();
 	Position GetLine(Line line, char *text);
 	std::string GetLine(Line line);
@@ -336,7 +342,9 @@ public:
 	Position GetSelText(char *text);
 	std::string GetSelText();
 	Position GetTextRange(void *tr);
+	Position GetTextRangeFull(void *tr);
 	void HideSelection(bool hide);
+	bool SelectionHidden();
 	int PointXFromPosition(Position pos);
 	int PointYFromPosition(Position pos);
 	Line LineFromPosition(Position pos);
@@ -682,6 +690,8 @@ public:
 	Position IndicatorEnd(int indicator, Position pos);
 	void SetPositionCache(int size);
 	int PositionCache();
+	void SetLayoutThreads(int threads);
+	int LayoutThreads();
 	void CopyAllowLine();
 	void *CharacterPointer();
 	void *RangePointer(Position start, Position lengthRange);

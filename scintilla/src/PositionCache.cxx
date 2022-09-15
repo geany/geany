@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <mutex>
 
 #include "ScintillaTypes.h"
 #include "ScintillaMessages.h"
@@ -86,11 +87,12 @@ LineLayout::~LineLayout() {
 void LineLayout::Resize(int maxLineLength_) {
 	if (maxLineLength_ > maxLineLength) {
 		Free();
-		chars = std::make_unique<char[]>(maxLineLength_ + 1);
-		styles = std::make_unique<unsigned char []>(maxLineLength_ + 1);
+		const size_t lineAllocation = maxLineLength_ + 1;
+		chars = std::make_unique<char[]>(lineAllocation);
+		styles = std::make_unique<unsigned char []>(lineAllocation);
 		// Extra position allocated as sometimes the Windows
 		// GetTextExtentExPoint API writes an extra element.
-		positions = std::make_unique<XYPOSITION []>(maxLineLength_ + 1 + 1);
+		positions = std::make_unique<XYPOSITION []>(lineAllocation + 1);
 		if (bidiData) {
 			bidiData->Resize(maxLineLength_);
 		}
@@ -112,6 +114,10 @@ void LineLayout::Free() noexcept {
 	positions.reset();
 	lineStarts.reset();
 	bidiData.reset();
+}
+
+void LineLayout::ClearPositions() {
+	std::fill(&positions[0], &positions[maxLineLength + 2], 0.0f);
 }
 
 void LineLayout::Invalidate(ValidLevel validity_) noexcept {
@@ -185,9 +191,10 @@ int LineLayout::SubLineFromPosition(int posInLine, PointEnd pe) const noexcept {
 	return lines - 1;
 }
 
-void LineLayout::SetLineStart(int line, int start) {
-	if ((line >= lenLineStarts) && (line != 0)) {
-		const int newMaxLines = line + 20;
+void LineLayout::AddLineStart(Sci::Position start) {
+	lines++;
+	if (lines >= lenLineStarts) {
+		const int newMaxLines = lines + 20;
 		std::unique_ptr<int[]> newLineStarts = std::make_unique<int[]>(newMaxLines);
 		if (lenLineStarts) {
 			std::copy(lineStarts.get(), lineStarts.get() + lenLineStarts, newLineStarts.get());
@@ -195,7 +202,7 @@ void LineLayout::SetLineStart(int line, int start) {
 		lineStarts = std::move(newLineStarts);
 		lenLineStarts = newMaxLines;
 	}
-	lineStarts[line] = start;
+	lineStarts[lines] = static_cast<int>(start);
 }
 
 void LineLayout::SetBracesHighlight(Range rangeLine, const Sci::Position braces[],
@@ -298,6 +305,15 @@ Point LineLayout::PointFromPosition(int posInLine, int lineHeight, PointEnd pe) 
 	return pt;
 }
 
+XYPOSITION LineLayout::XInLine(Sci::Position index) const noexcept {
+	// For positions inside line return value from positions
+	// For positions after line return last position + 1.0
+	if (index <= numCharsInLine) {
+		return positions[index];
+	}
+	return positions[numCharsInLine] + 1.0;
+}
+
 int LineLayout::EndLineStyle() const noexcept {
 	return styles[numCharsBeforeEOL > 0 ? numCharsBeforeEOL-1 : 0];
 }
@@ -382,7 +398,7 @@ constexpr bool GraphicASCII(char ch) noexcept {
 	return ch >= ' ' && ch <= '~';
 }
 
-bool AllGraphicASCII(std::string_view text) noexcept {
+bool AllGraphicASCII(std::string_view text) {
 	return std::all_of(text.cbegin(), text.cend(), GraphicASCII);
 }
 
@@ -661,11 +677,10 @@ void BreakFinder::Insert(Sci::Position val) {
 	}
 }
 
-BreakFinder::BreakFinder(const LineLayout *ll_, const Selection *psel, Range lineRange_, Sci::Position posLineStart_,
+BreakFinder::BreakFinder(const LineLayout *ll_, const Selection *psel, Range lineRange_, Sci::Position posLineStart,
 	XYPOSITION xStart, BreakFor breakFor, const Document *pdoc_, const SpecialRepresentations *preprs_, const ViewStyle *pvsDraw) :
 	ll(ll_),
 	lineRange(lineRange_),
-	posLineStart(posLineStart_),
 	nextBreak(static_cast<int>(lineRange_.start)),
 	saeCurrentPos(0),
 	saeNext(0),
@@ -740,7 +755,7 @@ TextSegment BreakFinder::Next() {
 			const unsigned char ch = chars[0];
 			if (!UTF8IsAscii(ch) && encodingFamily != EncodingFamily::eightBit) {
 				if (encodingFamily == EncodingFamily::unicode) {
-					charWidth = UTF8DrawBytes(reinterpret_cast<const unsigned char *>(chars), static_cast<int>(lineRange.end - nextBreak));
+					charWidth = UTF8DrawBytes(chars, lineRange.end - nextBreak);
 				} else {
 					charWidth = pdoc->DBCSDrawBytes(std::string_view(chars, lineRange.end - nextBreak));
 				}
@@ -798,6 +813,49 @@ TextSegment BreakFinder::Next() {
 bool BreakFinder::More() const noexcept {
 	return (subBreak >= 0) || (nextBreak < lineRange.end);
 }
+
+class PositionCacheEntry {
+	uint16_t styleNumber;
+	uint16_t len;
+	uint16_t clock;
+	std::unique_ptr<XYPOSITION[]> positions;
+public:
+	PositionCacheEntry() noexcept;
+	// Copy constructor not currently used, but needed for being element in std::vector.
+	PositionCacheEntry(const PositionCacheEntry &);
+	PositionCacheEntry(PositionCacheEntry &&) noexcept = default;
+	// Deleted so PositionCacheEntry objects can not be assigned.
+	void operator=(const PositionCacheEntry &) = delete;
+	void operator=(PositionCacheEntry &&) = delete;
+	~PositionCacheEntry();
+	void Set(unsigned int styleNumber_, std::string_view sv, const XYPOSITION *positions_, uint16_t clock_);
+	void Clear() noexcept;
+	bool Retrieve(unsigned int styleNumber_, std::string_view sv, XYPOSITION *positions_) const noexcept;
+	static size_t Hash(unsigned int styleNumber_, std::string_view sv) noexcept;
+	bool NewerThan(const PositionCacheEntry &other) const noexcept;
+	void ResetClock() noexcept;
+};
+
+class PositionCache : public IPositionCache {
+	std::vector<PositionCacheEntry> pces;
+	std::mutex mutex;
+	uint16_t clock;
+	bool allClear;
+public:
+	PositionCache();
+	// Deleted so LineAnnotation objects can not be copied.
+	PositionCache(const PositionCache &) = delete;
+	PositionCache(PositionCache &&) = delete;
+	void operator=(const PositionCache &) = delete;
+	void operator=(PositionCache &&) = delete;
+	~PositionCache() override = default;
+
+	void Clear() noexcept override;
+	void SetSize(size_t size_) override;
+	size_t GetSize() const noexcept override;
+	void MeasureWidths(Surface *surface, const ViewStyle &vstyle, unsigned int styleNumber,
+		std::string_view sv, XYPOSITION *positions, bool needsLocking) override;
+};
 
 PositionCacheEntry::PositionCacheEntry() noexcept :
 	styleNumber(0), len(0), clock(0) {
@@ -893,7 +951,7 @@ size_t PositionCache::GetSize() const noexcept {
 }
 
 void PositionCache::MeasureWidths(Surface *surface, const ViewStyle &vstyle, unsigned int styleNumber,
-	std::string_view sv, XYPOSITION *positions) {
+	std::string_view sv, XYPOSITION *positions, bool needsLocking) {
 	const Style &style = vstyle.styles[styleNumber];
 	if (style.monospaceASCII) {
 		if (AllGraphicASCII(sv)) {
@@ -913,6 +971,10 @@ void PositionCache::MeasureWidths(Surface *surface, const ViewStyle &vstyle, uns
 		// Two way associative: try two probe positions.
 		const size_t hashValue = PositionCacheEntry::Hash(styleNumber, sv);
 		probe = hashValue % pces.size();
+		std::unique_lock<std::mutex> guard(mutex, std::defer_lock);
+		if (needsLocking) {
+			guard.lock();
+		}
 		if (pces[probe].Retrieve(styleNumber, sv, positions)) {
 			return;
 		}
@@ -930,6 +992,10 @@ void PositionCache::MeasureWidths(Surface *surface, const ViewStyle &vstyle, uns
 	surface->MeasureWidths(fontStyle, sv, positions);
 	if (probe < pces.size()) {
 		// Store into cache
+		std::unique_lock<std::mutex> guard(mutex, std::defer_lock);
+		if (needsLocking) {
+			guard.lock();
+		}
 		clock++;
 		if (clock > 60000) {
 			// Since there are only 16 bits for the clock, wrap it round and
@@ -942,4 +1008,8 @@ void PositionCache::MeasureWidths(Surface *surface, const ViewStyle &vstyle, uns
 		allClear = false;
 		pces[probe].Set(styleNumber, sv, positions, clock);
 	}
+}
+
+std::unique_ptr<IPositionCache> Scintilla::Internal::CreatePositionCache() {
+	return std::make_unique<PositionCache>();
 }

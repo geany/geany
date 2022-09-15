@@ -58,7 +58,6 @@ LexInterface::~LexInterface() noexcept = default;
 
 void LexInterface::SetInstance(ILexer5 *instance_) {
 	instance.reset(instance_);
-	pdoc->LexerChanged();
 }
 
 void LexInterface::Colourise(Sci::Position start, Sci::Position end) {
@@ -339,8 +338,32 @@ void Document::TentativeUndo() {
 	}
 }
 
-int Document::GetMark(Sci::Line line) const noexcept {
-	return Markers()->MarkValue(line);
+int Document::GetMark(Sci::Line line, bool includeChangeHistory) const {
+	int marksHistory = 0;
+	if (includeChangeHistory && (line < LinesTotal())) {
+		int marksEdition = 0;
+
+		const Sci::Position start = LineStart(line);
+		const Sci::Position lineNext = LineStart(line + 1);
+		for (Sci::Position position = start; position < lineNext;) {
+			const int edition = EditionAt(position);
+			if (edition) {
+				marksEdition |= 1 << (edition-1);
+			}
+			position = EditionEndRun(position);
+		}
+		const Sci::Position lineEnd = LineEnd(line);
+		for (Sci::Position position = start; position <= lineEnd;) {
+			marksEdition |= EditionDeletesAt(position);
+			position = EditionNextDelete(position);
+		}
+
+		/* Bits: RevertedToOrigin, Saved, Modified, RevertedToModified */
+		constexpr unsigned int editionShift = static_cast<unsigned int>(MarkerOutline::HistoryRevertedToOrigin);
+		marksHistory = marksEdition << editionShift;
+	}
+
+	return marksHistory | Markers()->MarkValue(line);
 }
 
 Sci::Line Document::MarkerNext(Sci::Line lineStart, int mask) const noexcept {
@@ -348,7 +371,7 @@ Sci::Line Document::MarkerNext(Sci::Line lineStart, int mask) const noexcept {
 }
 
 int Document::AddMark(Sci::Line line, int markerNum) {
-	if (line >= 0 && line <= LinesTotal()) {
+	if (line >= 0 && line < LinesTotal()) {
 		const int prev = Markers()->AddMark(line, markerNum, LinesTotal());
 		const DocModification mh(ModificationFlags::ChangeMarker, LineStart(line), 0, 0, nullptr, line);
 		NotifyModified(mh);
@@ -359,7 +382,7 @@ int Document::AddMark(Sci::Line line, int markerNum) {
 }
 
 void Document::AddMarkSet(Sci::Line line, int valueSet) {
-	if (line < 0 || line > LinesTotal()) {
+	if (line < 0 || line >= LinesTotal()) {
 		return;
 	}
 	unsigned int m = valueSet;
@@ -1576,6 +1599,9 @@ Sci::Position Document::GetColumn(Sci::Position pos) {
 				return column;
 			} else if (i >= Length()) {
 				return column;
+			} else if (UTF8IsAscii(ch)) {
+				column++;
+				i++;
 			} else {
 				column++;
 				i = NextPosition(i, 1);
@@ -2405,13 +2431,6 @@ void Document::StyleToAdjustingLineDuration(Sci::Position pos) {
 	durationStyleOneByte.AddSample(pos - stylingStart, epStyling.Duration());
 }
 
-void Document::LexerChanged() {
-	// Tell the watchers the lexer has changed.
-	for (const WatcherWithUserData &watcher : watchers) {
-		watcher.watcher->NotifyLexerChanged(this, watcher.userData);
-	}
-}
-
 LexInterface *Document::GetLexInterface() const noexcept {
 	return pli.get();
 }
@@ -2421,7 +2440,7 @@ void Document::SetLexInterface(std::unique_ptr<LexInterface> pLexInterface) noex
 }
 
 int SCI_METHOD Document::SetLineState(Sci_Position line, int state) {
-	const int statePrevious = States()->SetLineState(line, state);
+	const int statePrevious = States()->SetLineState(line, state, LinesTotal());
 	if (state != statePrevious) {
 		const DocModification mh(ModificationFlags::ChangeLineState, LineStart(line), 0, 0, nullptr,
 			static_cast<Sci::Line>(line));
@@ -2515,6 +2534,9 @@ int Document::AnnotationLines(Sci::Line line) const noexcept {
 }
 
 void Document::AnnotationClearAll() {
+	if (Annotations()->Empty()) {
+		return;
+	}
 	const Sci::Line maxEditorLine = LinesTotal();
 	for (Sci::Line l=0; l<maxEditorLine; l++)
 		AnnotationSetText(l, nullptr);
@@ -2547,6 +2569,9 @@ void Document::EOLAnnotationSetStyle(Sci::Line line, int style) {
 }
 
 void Document::EOLAnnotationClearAll() {
+	if (EOLAnnotations()->Empty()) {
+		return;
+	}
 	const Sci::Line maxEditorLine = LinesTotal();
 	for (Sci::Line l=0; l<maxEditorLine; l++)
 		EOLAnnotationSetText(l, nullptr);
@@ -3152,6 +3177,10 @@ Sci::Position Cxx11RegexFindText(const Document *doc, Sci::Position minPos, Sci:
 		// | std::regex::collate | std::regex::extended;
 		if (!caseSensitive)
 			flagsRe = flagsRe | std::regex::icase;
+
+#if defined(REGEX_MULTILINE) && !defined(_MSC_VER)
+		flagsRe = flagsRe | std::regex::multiline;
+#endif
 
 		// Clear the RESearch so can fill in matches
 		search.Clear();

@@ -109,6 +109,7 @@ gtk/ScintillaGTKAccessible.cxx         \
 gtk/ScintillaGTKAccessible.h           \
 gtk/scintilla-marshal.c                \
 gtk/scintilla-marshal.h                \
+gtk/Wrappers.h                         \
 src/AutoComplete.cxx                   \
 src/AutoComplete.h                     \
 src/CallTip.cxx                        \
@@ -119,6 +120,8 @@ src/CaseFolder.cxx                     \
 src/CaseFolder.h                       \
 src/CellBuffer.cxx                     \
 src/CellBuffer.h                       \
+src/ChangeHistory.cxx                  \
+src/ChangeHistory.h                    \
 src/CharacterCategoryMap.cxx           \
 src/CharacterCategoryMap.h             \
 src/CharacterType.cxx                  \
@@ -141,7 +144,6 @@ src/Editor.h                           \
 src/EditView.cxx                       \
 src/EditView.h                         \
 src/ElapsedPeriod.h                    \
-src/FontQuality.h                      \
 src/Geometry.cxx                       \
 src/Geometry.h                         \
 src/Indicator.cxx                      \

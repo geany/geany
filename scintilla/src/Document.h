@@ -383,6 +383,12 @@ public:
 	void TentativeUndo();
 	bool TentativeActive() const noexcept { return cb.TentativeActive(); }
 
+	void ChangeHistorySet(bool set) { cb.ChangeHistorySet(set); }
+	[[nodiscard]] int EditionAt(Sci::Position pos) const noexcept { return cb.EditionAt(pos); }
+	[[nodiscard]] Sci::Position EditionEndRun(Sci::Position pos) const noexcept { return cb.EditionEndRun(pos); }
+	[[nodiscard]] unsigned int EditionDeletesAt(Sci::Position pos) const noexcept { return cb.EditionDeletesAt(pos); }
+	[[nodiscard]] Sci::Position EditionNextDelete(Sci::Position pos) const noexcept { return cb.EditionNextDelete(pos); }
+
 	const char * SCI_METHOD BufferPointer() override { return cb.BufferPointer(); }
 	const char *RangePointer(Sci::Position position, Sci::Position rangeLength) noexcept { return cb.RangePointer(position, rangeLength); }
 	Sci::Position GapPosition() const noexcept { return cb.GapPosition(); }
@@ -414,7 +420,7 @@ public:
 	void GetStyleRange(unsigned char *buffer, Sci::Position position, Sci::Position lengthRetrieve) const {
 		cb.GetStyleRange(buffer, position, lengthRetrieve);
 	}
-	int GetMark(Sci::Line line) const noexcept;
+	int GetMark(Sci::Line line, bool includeChangeHistory) const;
 	Sci::Line MarkerNext(Sci::Line lineStart, int mask) const noexcept;
 	int AddMark(Sci::Line line, int markerNum);
 	void AddMarkSet(Sci::Line line, int valueSet);
@@ -478,7 +484,6 @@ public:
 	Sci::Position GetEndStyled() const noexcept { return endStyled; }
 	void EnsureStyledTo(Sci::Position pos);
 	void StyleToAdjustingLineDuration(Sci::Position pos);
-	void LexerChanged();
 	int GetStyleClock() const noexcept { return styleClock; }
 	void IncrementStyleClock() noexcept;
 	void SCI_METHOD DecorationSetCurrentIndicator(int indicator) override;
@@ -615,7 +620,6 @@ public:
 	virtual void NotifyModified(Document *doc, DocModification mh, void *userData) = 0;
 	virtual void NotifyDeleted(Document *doc, void *userData) noexcept = 0;
 	virtual void NotifyStyleNeeded(Document *doc, void *userData, Sci::Position endPos) = 0;
-	virtual void NotifyLexerChanged(Document *doc, void *userData) = 0;
 	virtual void NotifyErrorOccurred(Document *doc, void *userData, Scintilla::Status status) = 0;
 };
 
