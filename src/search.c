@@ -37,7 +37,6 @@
 #include "keyfile.h"
 #include "msgwindow.h"
 #include "prefs.h"
-#include "sciwrappers.h"
 #include "spawn.h"
 #include "stash.h"
 #include "support.h"
@@ -594,6 +593,24 @@ void search_show_find_dialog(void)
 	}
 
 	g_free(sel);
+}
+
+void search_show_find_bar(void)
+{
+	GeanyDocument *doc = document_get_current();
+	GtkWidget *sbox, *entry_what_to_search;
+	sbox = get_search_bar_sbox(doc);
+	gtk_widget_show_all(sbox);
+	GList *sbox_children = gtk_container_get_children(GTK_CONTAINER(sbox));
+	entry_what_to_search = (GtkWidget*)sbox_children->data;
+	if (sci_has_selection(doc->editor->sci))
+	{
+		gchar *selection_text = sci_get_selection_contents(doc->editor->sci);
+		gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_what_to_search))), selection_text);
+		g_free(selection_text);
+	}
+	gtk_widget_grab_focus(entry_what_to_search);
+	g_list_free(sbox_children);
 }
 
 
@@ -1198,7 +1215,7 @@ void geany_match_info_free(GeanyMatchInfo *info)
  * 	foreach_slist(node, matches)
  * 		geany_match_info_free(node->data);
  * 	g_slist_free(matches); */
-static GSList *find_range(ScintillaObject *sci, GeanyFindFlags flags, struct Sci_TextToFind *ttf)
+GSList *find_range(ScintillaObject *sci, GeanyFindFlags flags, struct Sci_TextToFind *ttf)
 {
 	GSList *matches = NULL;
 	GeanyMatchInfo *info;
@@ -1285,7 +1302,7 @@ on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data)
 }
 
 
-static GeanyFindFlags int_search_flags(gint match_case, gint whole_word, gint regexp, gint multiline, gint word_start)
+GeanyFindFlags int_search_flags(gint match_case, gint whole_word, gint regexp, gint multiline, gint word_start)
 {
 	return (match_case ? GEANY_FIND_MATCHCASE : 0) |
 		(regexp ? GEANY_FIND_REGEXP : 0) |
@@ -2158,7 +2175,7 @@ gint search_find_text(ScintillaObject *sci, GeanyFindFlags flags, struct Sci_Tex
 }
 
 
-static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, GeanyFindFlags flags)
+gint find_document_usage(GeanyDocument *doc, const gchar *search_text, GeanyFindFlags flags)
 {
 	gchar *buffer, *short_file_name;
 	struct Sci_TextToFind ttf;
@@ -2310,4 +2327,9 @@ void search_find_again(gboolean change_direction)
 			ui_set_search_entry_background(
 				toolbar_get_widget_child_by_name("SearchEntry"), (result > -1));
 	}
+}
+
+GtkWidget* get_find_dialog()
+{
+	return find_dlg.dialog;
 }

@@ -558,6 +558,8 @@ static void init_default_kb(void)
 		_("Find Document Usage"), "find_document_usage1");
 	add_kb(group, GEANY_KEYS_SEARCH_MARKALL, NULL,
 		GDK_KEY_m, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "find_markall", _("_Mark All"), "mark_all1");
+	add_kb(group, GEANY_KEYS_SEARCH_BAR_CLOSE, NULL,
+		GDK_KEY_Escape, 0, "search_bar_close", _("_Close search bar"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_GOTO);
 
@@ -1580,6 +1582,8 @@ static gboolean cb_func_search_action(guint key_id)
 			on_find_usage1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE:
 			on_find_document_usage1_activate(NULL, NULL); break;
+		case GEANY_KEYS_SEARCH_BAR_CLOSE:
+			ui_emit_search_bar_close_button_clicked(doc); break;
 		case GEANY_KEYS_SEARCH_MARKALL:
 		{
 			gchar *text = NULL;

@@ -240,6 +240,12 @@ static void init_pref_groups(void)
 		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
 		"radio_msgwin_horizontal", GTK_ORIENTATION_HORIZONTAL,
 		NULL);
+	stash_group_add_radio_buttons(group, &interface_prefs.search_bar_position,
+		"search_bar_position", SEARCH_BAR_POSITION_TOP,
+		"search_bar_position_top", SEARCH_BAR_POSITION_TOP,
+		"search_bar_position_bottom", SEARCH_BAR_POSITION_BOTTOM,
+		"search_bar_position_none", SEARCH_BAR_POSITION_NONE,
+		NULL);
 
 	/* editor display */
 	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
