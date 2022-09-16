@@ -1638,11 +1638,6 @@ void EditView::DrawAnnotation(Surface *surface, const EditModel &model, const Vi
 				surface->FillRectangle(Side(rcBorder, Edge::bottom, 1), colourBorder);
 			}
 		}
-	} else {
-		// No annotation to draw so show bug with bugColour
-		if (FlagSet(phase, DrawPhase::back)) {
-			surface->FillRectangle(rcSegment, bugColour.Opaque());
-		}
 	}
 }
 

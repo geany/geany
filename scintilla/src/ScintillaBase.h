@@ -82,6 +82,7 @@ protected:
 	void RightButtonDownWithModifiers(Point pt, unsigned int curTime, Scintilla::KeyMod modifiers) override;
 
 	void NotifyStyleToNeeded(Sci::Position endStyleNeeded) override;
+	void NotifyLexerChanged(Document *doc, void *userData) override;
 
 public:
 	~ScintillaBase() override;

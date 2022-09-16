@@ -2379,6 +2379,9 @@ void Editor::NotifyStyleNeeded(Document *, void *, Sci::Position endStyleNeeded)
 	NotifyStyleToNeeded(endStyleNeeded);
 }
 
+void Editor::NotifyLexerChanged(Document *, void *) {
+}
+
 void Editor::NotifyErrorOccurred(Document *, void *, Status status) {
 	errorStatus = status;
 }
