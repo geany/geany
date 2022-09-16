@@ -1349,7 +1349,7 @@ static const HLStyle highlighting_styles_PYTHON[] =
 	{ SCE_P_FCHARACTER,		"fcharacter",		FALSE },
 	{ SCE_P_FTRIPLE,		"ftriple",		FALSE },
 	{ SCE_P_FTRIPLEDOUBLE,		"ftripledouble",	FALSE },
-	{ SCE_P_ATTRIBUTE,		"fattribute",		FALSE },
+	{ SCE_P_ATTRIBUTE,		"attribute",		FALSE },
 	{ SCE_P_DECORATOR,		"decorator",		FALSE }
 };
 static const HLKeyword highlighting_keywords_PYTHON[] =

@@ -1436,8 +1436,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_P_FCHARACTER ||
 				style == SCE_P_FTRIPLE ||
 				style == SCE_P_FTRIPLEDOUBLE ||
-				style == SCE_P_STRINGEOL ||
-				style == SCE_P_ATTRIBUTE);
+				style == SCE_P_STRINGEOL);
 
 		case SCLEX_GDSCRIPT:
 			return (style == SCE_GD_STRING ||
