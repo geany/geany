@@ -1536,8 +1536,8 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 
 	g_object_set_data_full(G_OBJECT(menu), "geany-button-event", button_event,
 	                       button_event ? (GDestroyNotify) gdk_event_free : NULL);
-	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, goto_popup_position_func, doc->editor->sci,
-				   button_event ? button_event->button : 0, gtk_get_current_event_time ());
+	ui_menu_popup(GTK_MENU(menu), goto_popup_position_func, doc->editor->sci,
+				  button_event ? button_event->button : 0, gtk_get_current_event_time ());
 }
 
 
