@@ -1903,10 +1903,6 @@ Suppress status messages in the status bar
         reshows the document statistics on the status bar. See `Focus
         keybindings`_.
 
-Use Windows File Open/Save dialogs
-    Defines whether to use the native Windows File Open/Save dialogs or
-    whether to use the GTK default dialogs.
-
 Auto-focus widgets (focus follows mouse)
     Give the focus automatically to widgets below the mouse cursor.
     This works for the main editor widget, the scribble, the toolbar search field

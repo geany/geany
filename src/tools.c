@@ -36,7 +36,6 @@
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
-#include "win32.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -830,14 +829,6 @@ void tools_color_chooser(const gchar *color)
 {
 	GdkColor gc;
 	GtkWidget *colorsel;
-
-#ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
-	{
-		win32_show_color_dialog(color);
-		return;
-	}
-#endif
 
 	if (ui_widgets.open_colorsel == NULL)
 	{
