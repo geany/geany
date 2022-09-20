@@ -1008,6 +1008,19 @@ static void parse_compiler_error_line(const gchar *string,
 			}
 			break;
 		}
+		case GEANY_FILETYPES_RUST:
+		{
+			data.pattern = ":";
+			data.min_fields = 3;
+			data.line_idx = 1;
+			data.file_idx = 0;	
+
+			/*--> main.rs:40:8 */
+			if (strncmp(string, "--> ", 4) == 0)
+				data.string += 4;
+
+			break;
+		}
 		case GEANY_FILETYPES_HTML:
 		{
 			/* line 78 column 7 - Warning: <table> missing '>' for end of tag */
