@@ -653,6 +653,7 @@ static void save_ui_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
+	g_key_file_set_boolean(config, PACKAGE, "symbols_group_by_type", ui_prefs.symbols_group_by_type);
 	g_key_file_set_string(config, PACKAGE, "color_picker_palette", ui_prefs.color_picker_palette);
 
 	/* get the text from the scribble textview */
@@ -1083,6 +1084,7 @@ static void load_ui_prefs(GKeyFile *config)
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
+	ui_prefs.symbols_group_by_type = utils_get_setting_boolean(config, PACKAGE, "symbols_group_by_type", TRUE);
 	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	ui_prefs.custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);
 	ui_prefs.custom_commands_labels = g_key_file_get_string_list(config, PACKAGE, "custom_commands_labels", NULL, NULL);

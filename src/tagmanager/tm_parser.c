@@ -1186,7 +1186,7 @@ gint tm_parser_get_sidebar_group(TMParserType lang, TMTagType type)
 	for (i = 0; i < map->group_num; i++)
 	{
 		if (map->groups[i].types & type)
-			return i;
+			return i + 1;  // "Symbols" group is always first
 	}
 	return -1;
 }
@@ -1194,22 +1194,32 @@ gint tm_parser_get_sidebar_group(TMParserType lang, TMTagType type)
 
 const gchar *tm_parser_get_sidebar_info(TMParserType lang, gint group, guint *icon)
 {
+	const gchar *name;
 	TMParserMap *map;
 	TMParserMapGroup *grp;
 
 	if (lang >= TM_PARSER_COUNT)
 		return NULL;
 
-	map = &parser_map[lang];
-	if (group >= (gint)map->group_num)
-		return NULL;
+	if (group == 0)
+	{
+		name = _("Symbols");
+		*icon = TM_ICON_NAMESPACE;
+	}
+	else
+	{
+		map = &parser_map[lang];
+		if (group > (gint)map->group_num)
+			return NULL;
 
-	grp = &map->groups[group];
-	*icon = grp->icon;
+		grp = &map->groups[group - 1];
+		name = grp->name;
+		*icon = grp->icon;
+	}
 #ifdef GETTEXT_PACKAGE
-	return g_dgettext(GETTEXT_PACKAGE, grp->name);
+	return g_dgettext(GETTEXT_PACKAGE, name);
 #else
-	return grp->name;
+	return name;
 #endif
 }
 
