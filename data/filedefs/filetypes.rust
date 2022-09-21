@@ -81,3 +81,4 @@ EX_00_WD=
 EX_01_LB=Cargo Run
 EX_01_CM=cargo run
 EX_01_WD=
+error_regex=  --> (.+):([0-9]+):([0-9]+)
