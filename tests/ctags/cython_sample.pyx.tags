@@ -4,8 +4,8 @@ StdClassÌ1Ö0
 class:      StdClass
 __init__Ì128Í(self)ÎCDefClassÖ0
 method:     CDefClass :: __init__(self)
-c_methodÌ128Í(self,int i)ÎCDefClassÖ0
-method:     CDefClass :: c_method(self,int i)
+c_methodÌ128Í(self, int i)ÎCDefClassÖ0
+method:     CDefClass :: c_method(self, int i)
 identityÌ16Í(x)Ö0
 function:   identity(x)
 int2stringÌ16Í(int i)Ö0

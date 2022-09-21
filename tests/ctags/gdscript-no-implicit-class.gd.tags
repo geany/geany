@@ -38,20 +38,6 @@ fooooooooÃ128Õ()ŒSomething÷0œString
 method:     String Something :: foooooooo()
 inferred_typeÃ16384÷0
 variable:   inferred_type
-local_varÃ524288Œsome_function÷0
-other:      some_function :: local_var
-local_var2Ã524288Œsome_function÷0
-other:      some_function :: local_var2
-lvÃ524288Œ_init÷0
-other:      _init :: lv
-p1Ã524288Œsomething÷0
-other:      something :: p1
-p2Ã524288Œsomething÷0
-other:      something :: p2
-param1Ã524288Œsome_function÷0œVector3
-other:      Vector3 some_function :: param1
-param2Ã524288Œsome_function÷0œint
-other:      int some_function :: param2
 sÃ16384÷0
 variable:   s
 sigÃ16384÷0

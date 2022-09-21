@@ -1,26 +1,10 @@
 _create_block_colliderÌ128Í(block_sub_position)Ö0
 method:     _create_block_collider(block_sub_position)
-aÌ524288ÎidÖ0
-other:      id :: a
-bÌ524288ÎrÖ0
-other:      r :: b
-block_idÌ524288Îcalculate_block_uvsÖ0
-other:      calculate_block_uvs :: block_id
-block_sub_positionÌ524288Î_create_block_colliderÖ0
-other:      _create_block_collider :: block_sub_position
-cÌ524288ÎxÖ0
-other:      x :: c
 calculate_block_uvsÌ128Í(block_id)Ö0
 method:     calculate_block_uvs(block_id)
-colÌ524288Îcalculate_block_uvsÖ0
-other:      calculate_block_uvs :: col
-colliderÌ524288Î_create_block_colliderÖ0
-other:      _create_block_collider :: collider
 idÌ128Í(a)Ö0
 method:     id(a)
 rÌ128Í(b)Ö0
 method:     r(b)
-rowÌ524288Îcalculate_block_uvsÖ0
-other:      calculate_block_uvs :: row
 xÌ128Í(c)Ö0
 method:     x(c)
