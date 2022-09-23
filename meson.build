@@ -852,7 +852,7 @@ libgeany = shared_library('geany',
 	soversion: '0',
 	c_args: geany_cflags + [ '-DG_LOG_DOMAIN="Geany"' ],
 	include_directories: [iscintilla],
-	dependencies: [dep_tagmanager, dep_ctags, dep_scintilla] + deps + win_deps,
+	dependencies: [dep_tagmanager, dep_ctags, dep_scintilla, mac_integration] + deps + win_deps,
 	install: true
 )
 dep_libgeany = declare_dependency(
