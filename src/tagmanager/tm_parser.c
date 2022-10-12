@@ -166,7 +166,7 @@ static TMParserMapEntry map_PHP[] = {
 	{'d', tm_tag_macro_t},      // define
 	{'f', tm_tag_function_t},   // function
 	{'i', tm_tag_interface_t},  // interface
-	{'l', tm_tag_undef_t},      // local
+	{'l', tm_tag_local_var_t},  // local
 	{'n', tm_tag_namespace_t},  // namespace
 	{'t', tm_tag_struct_t},     // trait
 	{'v', tm_tag_variable_t},   // variable
@@ -178,7 +178,7 @@ static TMParserMapGroup group_PHP[] = {
 	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
 	{_("Traits"), TM_ICON_STRUCT, tm_tag_struct_t},
 };
 
@@ -192,14 +192,14 @@ static TMParserMapEntry map_PYTHON[] = {
     /* defined as externvar to get those excluded as forward type in symbols.c:goto_tag()
      * so we can jump to the real implementation (if known) instead of to the import statement */
 	{'x', tm_tag_externvar_t},  // unknown
-	{'z', tm_tag_undef_t},      // parameter
-	{'l', tm_tag_undef_t},      // local
+	{'z', tm_tag_local_var_t},  // parameter
+	{'l', tm_tag_local_var_t},  // local
 };
 static TMParserMapGroup group_PYTHON[] = {
 	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{_("Methods"), TM_ICON_MACRO, tm_tag_method_t},
 	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
 	{_("Imports"), TM_ICON_NAMESPACE, tm_tag_externvar_t},
 };
 
@@ -969,16 +969,15 @@ static TMParserMapEntry map_GDSCRIPT[] = {
 	{'C', tm_tag_variable_t},  // const
 	{'g', tm_tag_enum_t},      // enum
 	{'e', tm_tag_variable_t},  // enumerator
-	{'z', tm_tag_other_t},     // parameter
-	{'l', tm_tag_other_t},     // local
+	{'z', tm_tag_local_var_t}, // parameter
+	{'l', tm_tag_local_var_t}, // local
 	{'s', tm_tag_variable_t},  // signal
 };
 static TMParserMapGroup group_GDSCRIPT[] = {
 	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{_("Methods"), TM_ICON_MACRO, tm_tag_method_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
 	{_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
-	{_("Other"), TM_ICON_OTHER, tm_tag_other_t},
 };
 
 static TMParserMapEntry map_CLOJURE[] = {
@@ -1012,10 +1011,10 @@ static TMParserMapEntry map_TYPESCRIPT[] = {
 	{'e', tm_tag_enumerator_t},  // enumerator
 	{'m', tm_tag_method_t},      // method
 	{'n', tm_tag_namespace_t},   // namespace
-	{'z', tm_tag_undef_t},       // parameter
+	{'z', tm_tag_local_var_t},   // parameter
 	{'p', tm_tag_member_t},      // property
 	{'v', tm_tag_variable_t},    // variable
-	{'l', tm_tag_undef_t},       // local
+	{'l', tm_tag_local_var_t},   // local
 	{'C', tm_tag_macro_t},       // constant
 	{'G', tm_tag_undef_t},       // generator
 	{'a', tm_tag_undef_t},       // alias
@@ -1026,7 +1025,7 @@ static TMParserMapGroup group_TYPESCRIPT[] = {
 	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
 	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
 	{_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
 	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
 	{_("Other"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_enumerator_t},
 };
@@ -1187,7 +1186,7 @@ gint tm_parser_get_sidebar_group(TMParserType lang, TMTagType type)
 	for (i = 0; i < map->group_num; i++)
 	{
 		if (map->groups[i].types & type)
-			return i;
+			return i + 1;  // "Symbols" group is always first
 	}
 	return -1;
 }
@@ -1195,22 +1194,32 @@ gint tm_parser_get_sidebar_group(TMParserType lang, TMTagType type)
 
 const gchar *tm_parser_get_sidebar_info(TMParserType lang, gint group, guint *icon)
 {
+	const gchar *name;
 	TMParserMap *map;
 	TMParserMapGroup *grp;
 
 	if (lang >= TM_PARSER_COUNT)
 		return NULL;
 
-	map = &parser_map[lang];
-	if (group >= (gint)map->group_num)
-		return NULL;
+	if (group == 0)
+	{
+		name = _("Symbols");
+		*icon = TM_ICON_NAMESPACE;
+	}
+	else
+	{
+		map = &parser_map[lang];
+		if (group > (gint)map->group_num)
+			return NULL;
 
-	grp = &map->groups[group];
-	*icon = grp->icon;
+		grp = &map->groups[group - 1];
+		name = grp->name;
+		*icon = grp->icon;
+	}
 #ifdef GETTEXT_PACKAGE
-	return g_dgettext(GETTEXT_PACKAGE, grp->name);
+	return g_dgettext(GETTEXT_PACKAGE, name);
 #else
-	return grp->name;
+	return name;
 #endif
 }
 

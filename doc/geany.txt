@@ -264,6 +264,7 @@ described by that plugin documentation):
 
   * expand/collapse the tree
   * control sorting order
+  * control whether to group symbols by their type
   * locate the symbol in documents
 
   The symbols tab can also be filtered by typing a string into
@@ -1902,10 +1903,6 @@ Suppress status messages in the status bar
         Another option is to use the *Switch to Editor* keybinding - it
         reshows the document statistics on the status bar. See `Focus
         keybindings`_.
-
-Use Windows File Open/Save dialogs
-    Defines whether to use the native Windows File Open/Save dialogs or
-    whether to use the GTK default dialogs.
 
 Auto-focus widgets (focus follows mouse)
     Give the focus automatically to widgets below the mouse cursor.

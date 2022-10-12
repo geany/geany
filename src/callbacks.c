@@ -634,7 +634,7 @@ gboolean toolbar_popup_menu(GtkWidget *widget, GdkEventButton *event, gpointer u
 {
 	if (event->button == 3)
 	{
-		gtk_menu_popup(GTK_MENU(ui_widgets.toolbar_menu), NULL, NULL, NULL, NULL, event->button, event->time);
+		ui_menu_popup(GTK_MENU(ui_widgets.toolbar_menu), NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 	return FALSE;
