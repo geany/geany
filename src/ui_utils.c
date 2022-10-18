@@ -3259,93 +3259,9 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 }
 
 
-#if GTK_CHECK_VERSION(3,22,0)
-/* positions a popup at the caret from the ScintillaObject in @p data */
-static void position_at_caret(GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer data)
-{
-	gint line_height;
-	GdkScreen *screen = gtk_widget_get_screen(GTK_WIDGET(menu));
-	gint monitor_num;
-	GdkRectangle monitor;
-	GtkRequisition req;
-	GdkEventButton *event_button = g_object_get_data(G_OBJECT(menu), "geany-button-event");
-
-	if (event_button)
-	{
-		/* if we got a mouse click, popup at that position */
-		*x = (gint) event_button->x_root;
-		*y = (gint) event_button->y_root;
-		line_height = 0; /* we don't want to offset below the line or anything */
-	}
-	else /* keyboard positioning */
-	{
-		ScintillaObject *sci = data;
-		GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
-		gint pos = sci_get_current_position(sci);
-		gint line = sci_get_line_from_position(sci, pos);
-		gint pos_x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
-		gint pos_y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos);
-
-		line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
-
-		gdk_window_get_origin(window, x, y);
-		*x += pos_x;
-		*y += pos_y;
-	}
-
-	monitor_num = gdk_screen_get_monitor_at_point(screen, *x, *y);
-
-	gtk_widget_get_preferred_size(GTK_WIDGET(menu), NULL, &req);
-
-#if GTK_CHECK_VERSION(3, 4, 0)
-	gdk_screen_get_monitor_workarea(screen, monitor_num, &monitor);
-#else
-	gdk_screen_get_monitor_geometry(screen, monitor_num, &monitor);
-#endif
-
-	/* put on one size of the X position, but within the monitor */
-	if (gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL)
-	{
-		if (*x - req.width - 1 >= monitor.x)
-			*x -= req.width + 1;
-		else if (*x + req.width > monitor.x + monitor.width)
-			*x = monitor.x;
-		else
-			*x += 1;
-	}
-	else
-	{
-		if (*x + req.width + 1 <= monitor.x + monitor.width)
-			*x = MAX(monitor.x, *x + 1);
-		else if (*x - req.width - 1 >= monitor.x)
-			*x -= req.width + 1;
-		else
-			*x = monitor.x + MAX(0, monitor.width - req.width);
-	}
-
-	/* try to put, in order:
-	 * 1. below the Y position, under the line
-	 * 2. above the Y position
-	 * 3. within the monitor */
-	if (*y + line_height + req.height <= monitor.y + monitor.height)
-		*y = MAX(monitor.y, *y + line_height);
-	else if (*y - req.height >= monitor.y)
-		*y = *y - req.height;
-	else
-		*y = monitor.y + MAX(0, monitor.height - req.height);
-
-	*push_in = FALSE;
-}
-#endif
-
-
 /* opens menu at caret position (if ScintillaObject is passed) or at current pointer position */
-void ui_menu_popup(GtkMenu* menu, ScintillaObject *sci, guint button, guint32 activate_time)
+void ui_menu_popup(GtkMenu* menu, ScintillaObject *sci)
 {
-	/* Use appropriate function for menu popup:
-		- gtk_menu_popup_at_pointer is not available on GTK older than 3.22
-		- gtk_menu_popup is deprecated and causes issues on multimonitor wayland setups */
-#if GTK_CHECK_VERSION(3,22,0)
 	if (!sci)
 		gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
 	else
@@ -3360,7 +3276,4 @@ void ui_menu_popup(GtkMenu* menu, ScintillaObject *sci, guint button, guint32 ac
 		GdkGravity rect_anchor = gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_NORTH_WEST;
 		gtk_menu_popup_at_rect(GTK_MENU(menu), window, &rect, rect_anchor, GDK_GRAVITY_NORTH_WEST, NULL);
 	}
-#else
-	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, sci ? position_at_caret : NULL, sci, button, activate_time);
-#endif
 }

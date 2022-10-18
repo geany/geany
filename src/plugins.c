@@ -1642,8 +1642,7 @@ static gboolean pm_treeview_button_press_cb(GtkWidget *widget, GdkEventButton *e
 {
 	if (event->button == 3)
 	{
-		ui_menu_popup(GTK_MENU(pm_widgets.popup_menu), NULL,
-					  event->button, event->time);
+		ui_menu_popup(GTK_MENU(pm_widgets.popup_menu), NULL);
 	}
 	return FALSE;
 }

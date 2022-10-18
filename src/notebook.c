@@ -458,7 +458,7 @@ static void on_close_documents_right_activate(GtkMenuItem *menuitem, GeanyDocume
 }
 
 
-static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
+static void show_tab_bar_popup_menu(GeanyDocument *doc)
 {
 	GtkWidget *menu_item;
 	static GtkWidget *menu = NULL;
@@ -512,7 +512,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);
 
-	ui_menu_popup(GTK_MENU(menu), NULL, event->button, event->time);
+	ui_menu_popup(GTK_MENU(menu), NULL);
 }
 
 
@@ -541,7 +541,7 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 	 * on a tab directly */
 	else if (event->button == 3)
 	{
-		show_tab_bar_popup_menu(event, NULL);
+		show_tab_bar_popup_menu(NULL);
 		return TRUE;
 	}
 	return FALSE;
@@ -676,7 +676,7 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 	/* right-click is first handled here if it happened on a notebook tab */
 	if (event->button == 3)
 	{
-		show_tab_bar_popup_menu(event, doc);
+		show_tab_bar_popup_menu(doc);
 		return TRUE;
 	}
 

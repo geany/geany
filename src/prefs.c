@@ -211,11 +211,9 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 }
 
 
-static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget, GdkEventButton *event)
+static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget)
 {
 	static GtkWidget *menu = NULL;
-	guint button;
-	guint32 event_time;
 
 	if (menu == NULL)
 	{
@@ -236,24 +234,13 @@ static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget, GdkEventButton
 		gtk_menu_attach_to_widget(GTK_MENU(menu), widget, NULL);
 	}
 
-	if (event != NULL)
-	{
-		button = event->button;
-		event_time = event->time;
-	}
-	else
-	{
-		button = 0;
-		event_time = gtk_get_current_event_time();
-	}
-
-	ui_menu_popup(GTK_MENU(menu), NULL, button, event_time);
+	ui_menu_popup(GTK_MENU(menu), NULL);
 }
 
 
 static gboolean kb_popup_menu_cb(GtkWidget *widget, KbData *kbdata)
 {
-	kb_show_popup_menu(kbdata, widget, NULL);
+	kb_show_popup_menu(kbdata, widget);
 	return TRUE;
 }
 
@@ -263,7 +250,7 @@ static gboolean kb_tree_view_button_press_event_cb(GtkWidget *widget, GdkEventBu
 {
 	if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
 	{
-		kb_show_popup_menu(kbdata, widget, event);
+		kb_show_popup_menu(kbdata, widget);
 		return TRUE;
 	}
 	else if (event->type == GDK_2BUTTON_PRESS)

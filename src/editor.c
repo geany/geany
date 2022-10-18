@@ -346,7 +346,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		g_signal_emit_by_name(geany_object, "update-editor-menu",
 			current_word, editor_info.click_pos, doc);
 
-		ui_menu_popup(GTK_MENU(main_widgets.editor_menu), NULL, event->button, event->time);
+		ui_menu_popup(GTK_MENU(main_widgets.editor_menu), NULL);
 		return TRUE;
 	}
 	return FALSE;
