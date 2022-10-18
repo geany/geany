@@ -247,7 +247,7 @@ static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget, GdkEventButton
 		event_time = gtk_get_current_event_time();
 	}
 
-	ui_menu_popup(GTK_MENU(menu), NULL, NULL, button, event_time);
+	ui_menu_popup(GTK_MENU(menu), NULL, button, event_time);
 }
 
 

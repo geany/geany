@@ -373,7 +373,7 @@ gchar *ui_get_project_directory(const gchar *path);
 
 void ui_menu_sort_by_label(GtkMenu *menu);
 
-void ui_menu_popup(GtkMenu* menu, GtkMenuPositionFunc func, gpointer data, guint button, guint32 activate_time);
+void ui_menu_popup(GtkMenu* menu, ScintillaObject *sci, guint button, guint32 activate_time);
 
 #endif /* GEANY_PRIVATE */
 
