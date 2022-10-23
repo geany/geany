@@ -978,15 +978,18 @@ static void load_startup_files(gint argc, gchar **argv)
 
 	if (load_session)
 	{
+		/* do not activate the last active page stored in the session when we also open
+		 * additional files from the command line */
+		gboolean switch_to_last_session_page = (argc == 1);
 		/* load session files into tabs, as they are found in the session_files variable */
 		if (app->project != NULL)
 		{
-			configuration_open_files(app->project->priv->session_files);
+			configuration_open_files(app->project->priv->session_files, switch_to_last_session_page);
 			app->project->priv->session_files = NULL;
 		}
 		else
 		{
-			configuration_open_default_session();
+			configuration_open_default_session(switch_to_last_session_page);
 		}
 
 		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)

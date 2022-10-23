@@ -1366,7 +1366,7 @@ static gboolean switch_to_session_page(gpointer data)
 /* Open session files
  * Note: notebook page switch handler and adding to recent files list is always disabled
  * for all files opened within this function */
-void configuration_open_files(GPtrArray *session_files)
+void configuration_open_files(GPtrArray *session_files, gboolean switch_to_last_session_page)
 {
 	gint i;
 	gboolean failure = FALSE;
@@ -1405,7 +1405,7 @@ void configuration_open_files(GPtrArray *session_files)
 
 	if (failure)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
-	else
+	else if (switch_to_last_session_page)
 		g_idle_add(switch_to_session_page, NULL);
 
 	main_status.opening_session_files--;
@@ -1415,11 +1415,11 @@ void configuration_open_files(GPtrArray *session_files)
 /* Open session files
  * Note: notebook page switch handler and adding to recent files list is always disabled
  * for all files opened within this function */
-void configuration_open_default_session(void)
+void configuration_open_default_session(gboolean switch_to_last_session_page)
 {
 	g_return_if_fail(default_session_files != NULL);
 
-	configuration_open_files(default_session_files);
+	configuration_open_files(default_session_files, switch_to_last_session_page);
 	default_session_files = NULL;
 }
 

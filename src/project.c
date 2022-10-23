@@ -294,7 +294,7 @@ static void run_new_dialog(PropertyDialogElements *e)
 	{
 		// reload any documents that were closed
 		configuration_load_default_session();
-		configuration_open_default_session();
+		configuration_open_default_session(TRUE);
 	}
 }
 
@@ -303,7 +303,7 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 {
 	if (project_load_file(locale_file_name))
 	{
-		configuration_open_files(app->project->priv->session_files);
+		configuration_open_files(app->project->priv->session_files, TRUE);
 		app->project->priv->session_files = NULL;
 		document_new_file_if_non_open();
 		ui_focus_current_document();
@@ -469,7 +469,7 @@ static void destroy_project(gboolean open_default)
 	if (open_default && cl_options.load_session)
 	{
 		configuration_load_default_session();
-		configuration_open_default_session();
+		configuration_open_default_session(TRUE);
 		document_new_file_if_non_open();
 		ui_focus_current_document();
 	}

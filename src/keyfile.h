@@ -46,11 +46,11 @@ void configuration_save(void);
 
 gboolean configuration_load(void);
 
-void configuration_open_files(GPtrArray *session_files);
+void configuration_open_files(GPtrArray *session_files, gboolean switch_to_last_session_page);
 
 void configuration_load_default_session(void);
 
-void configuration_open_default_session(void);
+void configuration_open_default_session(gboolean switch_to_last_session_page);
 
 void configuration_save_default_session(void);
 
