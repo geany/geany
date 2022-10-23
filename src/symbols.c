@@ -1407,6 +1407,20 @@ static guint get_tag_class(const TMTag *tag)
 	return TM_ICON_STRUCT;
 }
 
+/* opens menu at caret position */
+static void show_menu_at_caret(GtkMenu* menu, ScintillaObject *sci)
+{
+	GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
+	gint pos = sci_get_current_position(sci);
+	gint line = sci_get_line_from_position(sci, pos);
+	gint line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
+	gint x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
+	gint y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos) + line_height;
+	GdkRectangle rect = {x, y, 0, 0};
+	GdkGravity rect_anchor = gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_NORTH_WEST;
+	gtk_menu_popup_at_rect(GTK_MENU(menu), window, &rect, rect_anchor, GDK_GRAVITY_NORTH_WEST, NULL);
+}
+
 
 static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_best)
 {
@@ -1478,7 +1492,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 	if (first) /* always select the first item for better keyboard navigation */
 		g_signal_connect(menu, "realize", G_CALLBACK(gtk_menu_shell_select_item), first);
 
-	ui_menu_popup(GTK_MENU(menu), doc->editor->sci);
+	show_menu_at_caret(GTK_MENU(menu), doc->editor->sci);
 
 	g_object_unref(group);
 }

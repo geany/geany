@@ -234,7 +234,7 @@ static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget)
 		gtk_menu_attach_to_widget(GTK_MENU(menu), widget, NULL);
 	}
 
-	ui_menu_popup(GTK_MENU(menu), NULL);
+	gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
 }
 
 

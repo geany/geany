@@ -3257,23 +3257,3 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 	}
 	return FALSE;
 }
-
-
-/* opens menu at caret position (if ScintillaObject is passed) or at current pointer position */
-void ui_menu_popup(GtkMenu* menu, ScintillaObject *sci)
-{
-	if (!sci)
-		gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
-	else
-	{
-		GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
-		gint pos = sci_get_current_position(sci);
-		gint line = sci_get_line_from_position(sci, pos);
-		gint line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
-		gint x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
-		gint y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos) + line_height;
-		GdkRectangle rect = {x, y, 0, 0};
-		GdkGravity rect_anchor = gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_NORTH_WEST;
-		gtk_menu_popup_at_rect(GTK_MENU(menu), window, &rect, rect_anchor, GDK_GRAVITY_NORTH_WEST, NULL);
-	}
-}

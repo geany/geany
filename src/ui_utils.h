@@ -373,8 +373,6 @@ gchar *ui_get_project_directory(const gchar *path);
 
 void ui_menu_sort_by_label(GtkMenu *menu);
 
-void ui_menu_popup(GtkMenu* menu, ScintillaObject *sci);
-
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS
