@@ -286,6 +286,10 @@ void sci_add_text(ScintillaObject *sci, const gchar *text)
 	}
 }
 
+void sci_delete_range(ScintillaObject *sci, const gint pos, const gint length)
+{
+	SSM(sci, SCI_DELETERANGE, pos, length);
+}
 
 /** Sets all text.
  * @param sci Scintilla widget.
@@ -1144,6 +1148,12 @@ void sci_line_duplicate(ScintillaObject *sci)
 void sci_selection_duplicate(ScintillaObject *sci)
 {
 	SSM(sci, SCI_SELECTIONDUPLICATE, 0, 0);
+}
+
+
+void sci_new_line(ScintillaObject *sci)
+{
+	SSM(sci, SCI_NEWLINE, 0, 0);
 }
 
 
