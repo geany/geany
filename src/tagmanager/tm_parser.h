@@ -42,7 +42,8 @@ typedef enum
 	tm_tag_macro_with_arg_t = 131072, /**< Parameterized macro */
 	tm_tag_local_var_t = 262144, /**< Local variable (inside function) */
 	tm_tag_other_t = 524288, /**< Other (non C/C++/Java tag) */
-	tm_tag_max_t = 1048575 /**< Maximum value of TMTagType */
+	tm_tag_include_t = 1048576, /**< C/C++ included header file name */
+	tm_tag_max_t = 2097151 /**< Maximum value of TMTagType */
 } TMTagType;
 
 

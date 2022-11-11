@@ -32,6 +32,7 @@ typedef struct TMWorkspace
 		(just pointers to source file tags, the tag objects are owned by the source files). @elementtype{TMTag} */
 	GPtrArray *typename_array; /* Typename tags for syntax highlighting (pointers owned by source files) */
 	GPtrArray *global_typename_array; /* Like above for global tags */
+	GHashTable *source_file_map; /* File name -> GPtrArray<TMSourceFile> map to speed up lookups based on file name */
 } TMWorkspace;
 
 

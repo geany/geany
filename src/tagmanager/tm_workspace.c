@@ -64,6 +64,12 @@ static TMTagType TM_GLOBAL_TYPE_MASK =
 static TMWorkspace *theWorkspace = NULL;
 
 
+static void free_ptr_array(gpointer arr)
+{
+	g_ptr_array_free(arr, TRUE);
+}
+
+
 static gboolean tm_create_workspace(void)
 {
 	theWorkspace = g_new(TMWorkspace, 1);
@@ -73,6 +79,8 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->source_files = g_ptr_array_new();
 	theWorkspace->typename_array = g_ptr_array_new();
 	theWorkspace->global_typename_array = g_ptr_array_new();
+	theWorkspace->source_file_map = g_hash_table_new_full(g_str_hash, g_str_equal, NULL,
+		free_ptr_array);
 
 	tm_ctags_init();
 	tm_parser_verify_type_mappings();
@@ -92,6 +100,7 @@ void tm_workspace_free(void)
 	g_message("Workspace destroyed");
 #endif
 
+	g_hash_table_destroy(theWorkspace->source_file_map);
 	for (i=0; i < theWorkspace->source_files->len; ++i)
 		tm_source_file_free(theWorkspace->source_files->pdata[i]);
 	g_ptr_array_free(theWorkspace->source_files, TRUE);
@@ -171,6 +180,24 @@ static void update_source_file(TMSourceFile *source_file, guchar* text_buf,
 }
 
 
+void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
+{
+	GPtrArray *file_arr;
+
+	g_return_if_fail(source_file != NULL);
+
+	g_ptr_array_add(theWorkspace->source_files, source_file);
+
+	file_arr = g_hash_table_lookup(theWorkspace->source_file_map, source_file->short_name);
+	if (!file_arr)
+	{
+		file_arr = g_ptr_array_new();
+		g_hash_table_insert(theWorkspace->source_file_map, source_file->short_name, file_arr);
+	}
+	g_ptr_array_add(file_arr, source_file);
+}
+
+
 /** Adds a source file to the workspace, parses it and updates the workspace tags.
  @param source_file The source file to add to the workspace.
 */
@@ -179,16 +206,8 @@ void tm_workspace_add_source_file(TMSourceFile *source_file)
 {
 	g_return_if_fail(source_file != NULL);
 
-	g_ptr_array_add(theWorkspace->source_files, source_file);
+	tm_workspace_add_source_file_noupdate(source_file);
 	update_source_file(source_file, NULL, 0, FALSE, TRUE);
-}
-
-
-void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
-{
-	g_return_if_fail(source_file != NULL);
-
-	g_ptr_array_add(theWorkspace->source_files, source_file);
 }
 
 
@@ -211,6 +230,15 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
 }
 
 
+static void remove_source_file_map(TMSourceFile *source_file)
+{
+	GPtrArray *file_arr = g_hash_table_lookup(theWorkspace->source_file_map, source_file->short_name);
+
+	if (file_arr)
+		g_ptr_array_remove_fast(file_arr, source_file);
+}
+
+
 /** Removes a source file from the workspace if it exists. This function also removes
  the tags belonging to this file from the workspace. To completely free the TMSourceFile
  pointer call tm_source_file_free() on it.
@@ -229,6 +257,7 @@ void tm_workspace_remove_source_file(TMSourceFile *source_file)
 		{
 			tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
 			tm_tags_remove_file_tags(source_file, theWorkspace->typename_array);
+			remove_source_file_map(source_file);
 			g_ptr_array_remove_index_fast(theWorkspace->source_files, i);
 			return;
 		}
@@ -326,6 +355,7 @@ void tm_workspace_remove_source_files(GPtrArray *source_files)
 		{
 			if (theWorkspace->source_files->pdata[j] == source_file)
 			{
+				remove_source_file_map(source_file);
 				g_ptr_array_remove_index_fast(theWorkspace->source_files, j);
 				break;
 			}
@@ -510,7 +540,7 @@ static gboolean create_global_tags_preprocessed(const char *pre_process_cmd,
 	}
 
 	tm_tags_sort(source_file->tags_array, global_tags_sort_attrs, TRUE, FALSE);
-	filtered_tags = tm_tags_extract(source_file->tags_array, ~tm_tag_local_var_t);
+	filtered_tags = tm_tags_extract(source_file->tags_array, ~(tm_tag_local_var_t | tm_tag_include_t));
 	ret = tm_source_file_write_tags_file(tags_file, filtered_tags);
 	g_ptr_array_free(filtered_tags, TRUE);
 	tm_source_file_free(source_file);
@@ -543,7 +573,7 @@ static gboolean create_global_tags_direct(GList *source_files, const char *tags_
 		}
 	}
 
-	filtered_tags = tm_tags_extract(tags, ~tm_tag_local_var_t);
+	filtered_tags = tm_tags_extract(tags, ~(tm_tag_local_var_t | tm_tag_include_t));
 	tm_tags_sort(filtered_tags, global_tags_sort_attrs, TRUE, FALSE);
 
 	if (filtered_tags->len > 0)
@@ -646,13 +676,41 @@ gboolean tm_workspace_is_autocomplete_tag(TMTag *tag,
 	gboolean valid_local = !tag->local || current_file == tag->file;
 
 	return valid && valid_local &&
-		!tm_tag_is_anon(tag) && tm_parser_langs_compatible(lang, tag->lang);
+		!tm_tag_is_anon(tag) && tm_parser_langs_compatible(lang, tag->lang) &&
+		!(tag->type & tm_tag_include_t);
 }
+
+
+#if ! GLIB_CHECK_VERSION(2, 54, 0)
+static gboolean
+g_ptr_array_find (GPtrArray     *haystack,
+                  gconstpointer  needle,
+                  guint         *index_)
+{
+  guint i;
+
+  g_return_val_if_fail (haystack != NULL, FALSE);
+
+  for (i = 0; i < haystack->len; i++)
+    {
+      if (g_direct_equal (g_ptr_array_index (haystack, i), needle))
+        {
+          if (index_ != NULL)
+            *index_ = i;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+#endif
 
 
 typedef struct
 {
 	TMSourceFile *file;
+	GPtrArray *header_candidates;
+	GHashTable *includes;
 	guint line;
 	const gchar *scope;
 } CopyInfo;
@@ -672,10 +730,12 @@ static gboolean is_non_local_tag(TMTag *tag, CopyInfo *info)
 	return !is_local_tag(tag, info);
 }
 
-/* non-local tag not from current file */
+/* non-local tag not from current file, header, or included files */
 static gboolean is_workspace_tag(TMTag *tag, CopyInfo *info)
 {
 	return  tag->file != info->file &&
+		(!info->header_candidates || !g_ptr_array_find(info->header_candidates, tag->file, NULL)) &&
+		!g_hash_table_lookup(info->includes, tag->file) &&
 		is_non_local_tag(tag, info);
 }
 
@@ -725,6 +785,32 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const char *name,
 				copy_tags(dst, found, count, name_table, max_num - dst->len, is_non_local_tag, info);
 		}
 	}
+	if (dst->len < max_num && info->header_candidates)
+	{
+		guint i;
+
+		for (i = 0; i < info->header_candidates->len; i++)
+		{
+			TMSourceFile *hdr = info->header_candidates->pdata[i];
+			found = tm_tags_find(hdr->tags_array, name, TRUE, &count);
+			if (found)
+				copy_tags(dst, found, count, name_table, max_num - dst->len, is_non_local_tag, info);
+		}
+	}
+	if (dst->len < max_num)
+	{
+		GHashTableIter iter;
+		gpointer key;
+
+		g_hash_table_iter_init(&iter, info->includes);
+		while (g_hash_table_iter_next(&iter, &key, NULL))
+		{
+			TMSourceFile *include_file = key;
+			found = tm_tags_find(include_file->tags_array, name, TRUE, &count);
+			if (found)
+				copy_tags(dst, found, count, name_table, max_num - dst->len, is_non_local_tag, info);
+		}
+	}
 	if (dst->len < max_num)
 	{
 		found = tm_tags_find(theWorkspace->tags_array, name, TRUE, &count);
@@ -742,9 +828,67 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const char *name,
 }
 
 
+/* return TMSourceFile files corresponding to files included in 'source';
+ * in addition, fill header_candidates with TMSourceFiles that could be the header
+ * of 'source' based on the file name */
+static GHashTable *get_includes(TMSourceFile *source, GPtrArray **header_candidates)
+{
+	GHashTable *includes = g_hash_table_new(NULL, NULL);
+	GPtrArray *headers;
+	gchar *src_basename, *ptr;
+	guint i;
+
+	*header_candidates = NULL;
+
+	if (!source ||
+		(source->lang != TM_PARSER_C && source->lang != TM_PARSER_CPP))
+		return includes;
+
+	src_basename = g_strdup(source->short_name);
+	if (ptr = strrchr(src_basename, '.'))
+		*ptr = '\0';
+
+	headers = tm_tags_extract(source->tags_array, tm_tag_include_t);
+
+	for (i = 0; i < headers->len; i++)
+	{
+		TMTag *hdr_tag = headers->pdata[i];
+		gchar *hdr_name = g_path_get_basename(hdr_tag->name);
+		GPtrArray *tm_files = g_hash_table_lookup(theWorkspace->source_file_map, hdr_name);
+
+		if (tm_files && tm_files->len > 0)
+		{
+			guint j;
+
+			if (!*header_candidates)
+			{
+				gchar *hdr_basename = g_strdup(hdr_name);
+				if (ptr = strrchr(hdr_basename, '.'))
+					*ptr = '\0';
+
+				if (g_strcmp0(hdr_basename, src_basename) == 0)
+					*header_candidates = tm_files;
+				g_free(hdr_basename);
+			}
+
+			for (j = 0; j < tm_files->len; j++)
+				g_hash_table_add(includes, tm_files->pdata[j]);
+		}
+
+		g_free(hdr_name);
+	}
+
+	g_ptr_array_free(headers, TRUE);
+	g_free(src_basename);
+	return includes;
+}
+
+
 typedef struct
 {
 	TMSourceFile *file;
+	GPtrArray *header_candidates;
+	GHashTable *includes;
 	gboolean sort_by_name;
 } SortInfo;
 
@@ -755,9 +899,12 @@ static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data
 	const TMTag *t1 = *((TMTag **) a);
 	const TMTag *t2 = *((TMTag **) b);
 
-	/* sort local vars first (with highest line number first), followed
-	 * by tags from current file, followed by workspace tags, followed by
-	 * global tags */
+	/* sort local vars first (with highest line number first),
+	 * followed by tags from current file,
+	 * followed by tags from header,
+	 * followed by tags from other included files,
+	 * followed by workspace tags,
+	 * followed by global tags */
 	if (t1->type & tm_tag_local_var_t && t2->type & tm_tag_local_var_t)
 		return info->sort_by_name ? g_strcmp0(t1->name, t2->name) : t2->line - t1->line;
 	else if (t1->type & tm_tag_local_var_t)
@@ -767,6 +914,18 @@ static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data
 	else if (t1->file == info->file && t2->file != info->file)
 		return -1;
 	else if (t2->file == info->file && t1->file != info->file)
+		return 1;
+	else if (info->header_candidates &&
+			 g_ptr_array_find(info->header_candidates, t1->file, NULL) &&
+			 !g_ptr_array_find(info->header_candidates, t2->file, NULL))
+		return -1;
+	else if (info->header_candidates &&
+			 g_ptr_array_find(info->header_candidates, t2->file, NULL) &&
+			 !g_ptr_array_find(info->header_candidates, t1->file, NULL))
+		return 1;
+	else if (g_hash_table_lookup(info->includes, t1->file) && !g_hash_table_lookup(info->includes, t2->file))
+		return -1;
+	else if (g_hash_table_lookup(info->includes, t2->file) && !g_hash_table_lookup(info->includes, t1->file))
 		return 1;
 	else if (t1->file && !t2->file)
 		return -1;
@@ -793,10 +952,14 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags = g_ptr_array_new();
+	GPtrArray *header_candidates;
 	SortInfo sort_info;
 	CopyInfo copy_info;
+	GHashTable *includes = get_includes(current_file, &header_candidates);
 
 	copy_info.file = current_file;
+	copy_info.header_candidates = header_candidates;
+	copy_info.includes = includes;
 	copy_info.line = current_line;
 	copy_info.scope = current_scope;
 	fill_find_tags_array_prefix(tags, prefix, &copy_info, max_num);
@@ -804,8 +967,12 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 	/* sort based on how "close" the tag is to current line with local
 	 * variables first */
 	sort_info.file = current_file;
+	sort_info.header_candidates = header_candidates;
+	sort_info.includes = includes;
 	sort_info.sort_by_name = TRUE;
 	g_ptr_array_sort_with_data(tags, sort_found_tags, &sort_info);
+
+	g_hash_table_destroy(includes);
 
 	return tags;
 }
@@ -1227,6 +1394,7 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 
 		info.file = source_file;
 		info.sort_by_name = FALSE;
+		info.includes = get_includes(source_file, &info.header_candidates);
 		g_ptr_array_sort_with_data(tags, sort_found_tags, &info);
 
 		/* Start searching inside the source file, continue with workspace tags and
@@ -1243,6 +1411,7 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 												 member, current_scope);
 
 		g_ptr_array_free(tags, TRUE);
+		g_hash_table_destroy(info.includes);
 	}
 
 	if (member_tags)

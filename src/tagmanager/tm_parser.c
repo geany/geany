@@ -69,7 +69,7 @@ static GHashTable *subparser_map = NULL;
 	{'u', tm_tag_union_t},       /* union */      \
 	{'v', tm_tag_variable_t},    /* variable */   \
 	{'x', tm_tag_externvar_t},   /* externvar */  \
-	{'h', tm_tag_undef_t},       /* header */     \
+	{'h', tm_tag_include_t},     /* header */     \
 	{'l', tm_tag_local_var_t},   /* local */      \
 	{'z', tm_tag_local_var_t},   /* parameter */  \
 	{'L', tm_tag_undef_t},       /* label */      \
@@ -81,7 +81,7 @@ static TMParserMapEntry map_C[] = {
 /* Used also by other languages than C - keep all the tm_tag_* here even though
  * they aren't used by C as they might be used by some other language */
 static TMParserMapGroup group_C[] = {
-	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t | tm_tag_package_t},
+	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t | tm_tag_package_t | tm_tag_include_t},
 	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
 	{_("Functions"), TM_ICON_METHOD, tm_tag_prototype_t | tm_tag_method_t | tm_tag_function_t},
