@@ -1843,6 +1843,53 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 }
 
 
+static GPtrArray *get_constructor_tags(GeanyFiletype *ft, TMTag *tag,
+									   const gchar *constructor_method)
+{
+	if (constructor_method && (tag->type == tm_tag_class_t || tag->type == tm_tag_struct_t))
+	{
+		const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
+			tm_tag_method_t | tm_tag_macro_with_arg_t;
+		const gchar *scope_sep = tm_parser_scope_separator(ft->lang);
+		gchar *scope = EMPTY(tag->scope) ? g_strdup(tag->name) :
+			g_strjoin(scope_sep, tag->scope, tag->name, NULL);
+		GPtrArray *constructor_tags;
+
+		constructor_tags = tm_workspace_find(constructor_method, scope, arg_types, NULL, ft->lang);
+		g_free(scope);
+		if (constructor_tags->len != 0)
+		{	/* found constructor tag, so use it instead of the class tag */
+			return constructor_tags;
+		}
+		else
+		{
+			g_ptr_array_free(constructor_tags, TRUE);
+		}
+	}
+	return NULL;
+}
+
+
+static void update_tag_name_and_scope_for_calltip(const gchar *word, TMTag *tag,
+												  const gchar *constructor_method,
+												  const gchar **tag_name, const gchar **scope)
+{
+	if (tag_name == NULL || scope == NULL)
+		return;
+
+	/* Remove scope and replace name with the current calltip word if the current tag
+	 * is the constructor method of the current calltip word, e.g. for Python:
+	 * "SomeClass.__init__ (self, arg1, ...)" will be changed to "SomeClass (self, arg1, ...)" */
+	if (constructor_method &&
+		utils_str_equal(constructor_method, tag->name) &&
+		!utils_str_equal(word, tag->name))
+	{
+		*tag_name = word;
+		*scope = NULL;
+	}
+}
+
+
 static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 {
 	const gchar *constructor_method;
@@ -1865,21 +1912,13 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 	/* user typed e.g. 'a = Classname(' in Python so lookup __init__() arguments */
 	constructor_method = tm_parser_get_constructor_method(tag->lang);
-	if (constructor_method && (tag->type == tm_tag_class_t || tag->type == tm_tag_struct_t))
+	if (constructor_method)
 	{
-		const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
-			tm_tag_method_t | tm_tag_macro_with_arg_t;
-		const gchar *scope_sep = tm_parser_scope_separator(ft->lang);
-		gchar *scope = EMPTY(tag->scope) ? g_strdup(tag->name) :
-			g_strjoin(scope_sep, tag->scope, tag->name, NULL);
-
-		g_ptr_array_free(tags, TRUE);
-		tags = tm_workspace_find(constructor_method, scope, arg_types, NULL, ft->lang);
-		g_free(scope);
-		if (tags->len == 0)
+		GPtrArray *constructor_tags = get_constructor_tags(ft, tag, constructor_method);
+		if (constructor_tags)
 		{
 			g_ptr_array_free(tags, TRUE);
-			return NULL;
+			tags = constructor_tags;
 		}
 	}
 
@@ -1919,9 +1958,13 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 		if (str == NULL)
 		{
-			gchar *f = tm_parser_format_function(tag->lang, tag->name,
-				tag->arglist, tag->var_type, tag->scope);
-			str = g_string_new(NULL);
+			const gchar *tag_name = tag->name;
+			const gchar *scope = tag->scope;
+			gchar *f;
+
+			update_tag_name_and_scope_for_calltip(word, tag, constructor_method, &tag_name, &scope);
+			f = tm_parser_format_function(tag->lang, tag_name, tag->arglist, tag->var_type, scope);
+ 			str = g_string_new(NULL);
 			if (calltip.tag_index > 0)
 				g_string_prepend(str, "\001 ");	/* up arrow */
 			g_string_append(str, f);
