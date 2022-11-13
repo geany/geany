@@ -2298,6 +2298,10 @@ Show line endings
     Display a symbol everywhere that a carriage return or line feed
     is present.
 
+Show only non-default line endings
+    Shows line ending characters only when they differ from the
+    file default line ending character.
+
 Show line numbers
     Show or hide the Line Number margin.
 
@@ -2698,7 +2702,7 @@ Statusbar Templates
 
 The default statusbar template is (note ``\t`` = tab):
 
-``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
+``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: %e      filetype: %f      scope: %S``
 
 Settings the preference to an empty string will also cause Geany to use this
 internal default.

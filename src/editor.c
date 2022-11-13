@@ -5148,6 +5148,7 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
 	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+	sci_set_eol_representation_characters(sci, sci_get_eol_mode(sci));
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 
