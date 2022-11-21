@@ -91,7 +91,7 @@ static gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *event, gpoin
 
 void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	document_new_file(NULL, NULL, NULL);
+	keybindings_send_command(GEANY_KEY_GROUP_FILE, GEANY_KEYS_FILE_NEW);
 }
 
 
