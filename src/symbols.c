@@ -1407,6 +1407,7 @@ static guint get_tag_class(const TMTag *tag)
 	return TM_ICON_STRUCT;
 }
 
+
 /* opens menu at caret position */
 static void show_menu_at_caret(GtkMenu* menu, ScintillaObject *sci)
 {
@@ -1415,10 +1416,13 @@ static void show_menu_at_caret(GtkMenu* menu, ScintillaObject *sci)
 	gint line = sci_get_line_from_position(sci, pos);
 	gint line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
 	gint x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
-	gint y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos) + line_height;
-	GdkRectangle rect = {x, y, 0, 0};
-	GdkGravity rect_anchor = gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL ? GDK_GRAVITY_NORTH_EAST : GDK_GRAVITY_NORTH_WEST;
-	gtk_menu_popup_at_rect(GTK_MENU(menu), window, &rect, rect_anchor, GDK_GRAVITY_NORTH_WEST, NULL);
+	gint y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos);
+	gint pos_next = sci_get_position_after(sci, pos);
+	gint char_width = 0;
+	if (sci_get_line_from_position(sci, pos_next) == line)
+		char_width = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos_next) - x;
+	GdkRectangle rect = {x, y, char_width, line_height};
+	gtk_menu_popup_at_rect(GTK_MENU(menu), window, &rect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, NULL);
 }
 
 
