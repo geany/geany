@@ -434,7 +434,7 @@ void document_update_tab_label(GeanyDocument *doc)
 
 	g_return_if_fail(doc != NULL);
 
-	short_name = document_get_basename_for_display(doc, -1);
+	short_name = document_get_basename_for_display(doc, interface_prefs.tab_label_len);
 
 	/* we need to use the event box for the tooltip, labels don't get the necessary events */
 	parent = gtk_widget_get_parent(doc->priv->tab_label);

@@ -72,6 +72,8 @@ typedef struct GeanyInterfacePrefs
 	/** whether to show a warning when closing a project to open a new one */
 	gboolean		warn_on_project_close;
 	gint			openfiles_path_mode;
+	/** number of characters of a filename to be visible on the tab label */
+	gint			tab_label_len;
 }
 GeanyInterfacePrefs;
 

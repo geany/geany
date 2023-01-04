@@ -965,6 +965,8 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
 		interface_prefs.statusbar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_label_len");
+		interface_prefs.tab_label_len = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		/* Toolbar settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
@@ -1303,6 +1305,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		ui_save_buttons_toggle((doc != NULL) ? doc->changed : FALSE);
 		msgwin_show_hide_tabs();
 		ui_update_statusbar(doc, -1);
+		document_update_tab_label(doc);
 
 		/* store all settings */
 		configuration_save();

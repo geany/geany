@@ -2369,6 +2369,8 @@ void ui_init_prefs(void)
 		"msgwin_scribble_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.warn_on_project_close,
 		"warn_on_project_close", TRUE);
+	stash_group_add_spin_button_integer(group, &interface_prefs.tab_label_len,
+		"tab_label_length", 99999, "spin_tab_label_len");
 }
 
 
