@@ -28,7 +28,7 @@ env:
 jobs:
   linux:
     name: Linux Build (BINRELOC=${{ matrix.binreloc }})
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     strategy:
       fail-fast: false
@@ -43,7 +43,7 @@ jobs:
       CXX: ccache g++
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # create and use a timestamp for the cache key: GH Actions will never update a cache
       # only use an existing cache item or create a new one. To use an existing cache *and*
@@ -51,10 +51,10 @@ jobs:
       # the creation of the cache item at the end) in combination with "restore-keys" as fallback
       - name: Prepare ccache timestamp
         id: ccache_cache_timestamp
-        run: echo "::set-output name=timestamp::$(date +%Y-%m-%d-%H-%M)"
+        run: echo "timestamp=$(date +%Y-%m-%d-%H-%M)" >> $GITHUB_OUTPUT
 
       - name: Configure ccache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ${{ runner.os }}-${{ github.job }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
@@ -102,6 +102,7 @@ jobs:
       - name: ccache statistics
         run: ccache --show-stats
         if: ${{ env.DEBUG == '1' }}
+
   linux-meson:
     name: Linux Meson Build
     runs-on: ubuntu-20.04
@@ -114,7 +115,7 @@ jobs:
       CXX: ccache g++
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # create and use a timestamp for the cache key: GH Actions will never update a cache
       # only use an existing cache item or create a new one. To use an existing cache *and*
@@ -122,10 +123,10 @@ jobs:
       # the creation of the cache item at the end) in combination with "restore-keys" as fallback
       - name: Prepare ccache timestamp
         id: ccache_cache_timestamp
-        run: echo "::set-output name=timestamp::$(date +%Y-%m-%d-%H-%M)"
+        run: echo "timestamp=$(date +%Y-%m-%d-%H-%M)" >> $GITHUB_OUTPUT
 
       - name: Configure ccache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ${{ runner.os }}-${{ github.job }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
@@ -167,62 +168,83 @@ jobs:
         run: ccache --show-stats
         if: ${{ env.DEBUG == '1' }}
 
-  mingw:
-    name: Mingw Build
-    # i686-w64-mingw32-pkg-config fails with weird error message on 20.04
-    runs-on: ubuntu-18.04
+  mingw64:
+    name: Mingw-w64 Build (Windows)
+    runs-on: ubuntu-20.04
+
     env:
-      CC: ccache i686-w64-mingw32-gcc
-      CXX: ccache i686-w64-mingw32-g++
+      INFRASTRUCTURE_PATH:      ${{ github.workspace }}/.infrastructure
+      BUILDER_PATH:             ${{ github.workspace }}/.infrastructure/builders
+      DOCKER_REGISTRY:          "ghcr.io"
+      DOCKER_IMAGE_NAME:        "geany-mingw64-ci"
+      DOCKER_IMAGE_TAG:         "ghcr.io/geany/geany-mingw64-ci:latest"
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Geany
+        uses: actions/checkout@v3
 
-      # create and use a timestamp for the cache key: GH Actions will never update a cache
-      # only use an existing cache item or create a new one. To use an existing cache *and*
-      # push back the the updated cache after build, we use a always new cache key (to force
-      # the creation of the cache item at the end) in combination with "restore-keys" as fallback
-      - name: Prepare ccache timestamp
-        id: ccache_cache_timestamp
-        run: echo "::set-output name=timestamp::$(date +%Y-%m-%d-%H-%M)"
-
-      - name: Configure ccache
-        uses: actions/cache@v2
+      - name: Checkout Build Scripts
+        uses: actions/checkout@v3
         with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ runner.os }}-${{ github.job }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
-          restore-keys: ${{ runner.os }}-${{ github.job }}-ccache-
+          ref: master
+          repository: geany/infrastructure
+          path: ${{ env.INFRASTRUCTURE_PATH }}
+          token: ${{ github.token }}
 
-      - name: Show environment
-        run: env | sort
+      - uses: jwalton/gh-find-current-pr@v1
+        id: find_pull_request
+        with:
+          state: open
+
+      - name: Define environment variables
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "GITHUB_PULL_REQUEST=${GITHUB_PULL_REQUEST}" >> $GITHUB_ENV
+          echo "GITHUB_PULL_REQUEST_OR_REF=${GITHUB_PULL_REQUEST:-${{ github.ref_name }}}" | tr '/' '-' >> $GITHUB_ENV
+        env:
+          GITHUB_PULL_REQUEST: ${{ steps.find_pull_request.outputs.pr }}
+
+      - name: Show Environment
         if: ${{ env.DEBUG == '1' }}
-
-      - name: Install dependencies
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install --assume-yes --no-install-recommends \
-            ccache \
-            gettext autopoint \
-            libtool \
-            mingw-w64-tools \
-            g++-mingw-w64-i686 \
-            gcc-mingw-w64-i686 \
-            binutils-mingw-w64-i686 \
-            doxygen \
-            python3-docutils \
-            python3-lxml \
-            rst2pdf
-          # fix broken pkg-config-crosswrapper, see https://bugs.launchpad.net/ubuntu/+source/mingw-w64/+bug/1327242
-          sudo sed -e 's/PKG_CONFIG_PATH=/&$PKG_CONFIG_PATH:/' -i /usr/bin/i686-w64-mingw32-pkg-config
+            env | sort
 
-      - name: Run autogen.sh
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Or Build Docker Image
+        working-directory: ${{ env.BUILDER_PATH }}
         run: |
-          NOCONFIGURE=1 ./autogen.sh
+          docker_image_created=
+          docker pull ${{ env.DOCKER_IMAGE_TAG }} || true
+          if $(docker image inspect ${{ env.DOCKER_IMAGE_TAG }} --format="ignored" >/dev/null 2>&1); then
+              docker tag ${{ env.DOCKER_IMAGE_TAG }} ${{ env.DOCKER_IMAGE_NAME }}
+              docker_image_created=$(docker image inspect ${{ env.DOCKER_IMAGE_NAME }} --format='{{ index .Config.Labels "org.opencontainers.image.created" }}')
+              echo "Docker image built on: ${docker_image_created}"
+          fi
 
-      - name: Build
+          bash start_build.sh --log-to-stdout --mingw64 --rebuild-images
+          docker_image_created_new=$(docker image inspect ${{ env.DOCKER_IMAGE_NAME }} --format='{{ index .Config.Labels "org.opencontainers.image.created" }}')
+          # tag the image
+          if [ "${docker_image_created}" != "${docker_image_created_new}" ]; then
+              docker tag ${{ env.DOCKER_IMAGE_NAME }} ${{ env.DOCKER_IMAGE_TAG }}
+          fi
+
+      - name: Build Geany
+        if: steps.geany_cache.outputs.cache-hit != 'true'
+        working-directory: ${{ env.BUILDER_PATH }}
         run: |
-          sh ./scripts/cross-build-mingw.sh;
+            bash start_build.sh --log-to-stdout --mingw64 --geany --geany-source "${{ github.workspace }}"
 
-      - name: ccache statistics
-        run: ccache --show-stats
-        if: ${{ env.DEBUG == '1' }}
+      - name: Archive Geany Installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: geany-installer-ci-${{ env.SHORT_SHA }}-pr${{ env.GITHUB_PULL_REQUEST_OR_REF }}
+          retention-days: 30
+          path: |
+            ${{ env.BUILDER_PATH }}/output/mingw64/geany-*.exe
+            ${{ env.BUILDER_PATH }}/output/mingw64/geany-*.zip
