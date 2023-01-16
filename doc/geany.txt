@@ -2022,6 +2022,10 @@ Double-clicking hides all additional widgets
     Whether to call the View->Toggle All Additional Widgets command
     when double-clicking on a notebook tab.
 
+Tab label length
+    If filenames are long, set the number of characters that should be
+    visible on each tab's label.
+
 Tab positions
 `````````````
 

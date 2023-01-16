@@ -2211,7 +2211,7 @@
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
                                         <property name="tooltip-text" translatable="yes">Set limit on visible characters in tab label.</property>
-                                        <property name="label" translatable="yes">Tab Label Length:</property>
+                                        <property name="label" translatable="yes">Tab label length:</property>
                                         <property name="mnemonic-widget">spin_tab_label_len</property>
                                       </object>
                                       <packing>

@@ -1296,6 +1296,8 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				editor_apply_update_prefs(documents[i]->editor);
 				if (! editor_prefs.folding)
 					editor_unfold_all(documents[i]->editor);
+
+				document_update_tab_label(documents[i]);
 			}
 		}
 		ui_document_show_hide(NULL);
@@ -1305,7 +1307,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		ui_save_buttons_toggle((doc != NULL) ? doc->changed : FALSE);
 		msgwin_show_hide_tabs();
 		ui_update_statusbar(doc, -1);
-		document_update_tab_label(doc);
+		ui_set_window_title(doc);
 
 		/* store all settings */
 		configuration_save();
