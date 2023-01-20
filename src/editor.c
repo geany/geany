@@ -4689,7 +4689,7 @@ void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width)
 	SSM(sci, SCI_SETINDENT, width, 0);
 
 	/* remove indent spaces on backspace, if using any spaces to indent */
-	SSM(sci, SCI_SETBACKSPACEUNINDENTS, type != GEANY_INDENT_TYPE_TABS, 0);
+	SSM(sci, SCI_SETBACKSPACEUNINDENTS, editor_prefs.backspace_unindent && (type != GEANY_INDENT_TYPE_TABS), 0);
 }
 
 

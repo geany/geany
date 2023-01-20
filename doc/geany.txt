@@ -2176,6 +2176,11 @@ Tab key indents
         unindent, but this preference allows the tab key to have different
         meanings in different contexts - e.g. for snippet completion.
 
+Backspace key unindents
+    If set, pressing backspace while the cursor is in leading whitespace
+    will reduce the indentation level, unless the indentation mode is tabs.
+    Otherwise, the backspace key will delete the character before the cursor.
+
 Editor Completions preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

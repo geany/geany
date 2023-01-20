@@ -255,6 +255,8 @@ static void init_pref_groups(void)
 		"detect_indent_width", FALSE, "check_detect_indent_width");
 	stash_group_add_toggle_button(group, &editor_prefs.use_tab_to_indent,
 		"use_tab_to_indent", TRUE, "check_tab_key_indents");
+	stash_group_add_toggle_button(group, &editor_prefs.backspace_unindent,
+		"backspace_unindent", TRUE, "check_backspace_unindent");
 	stash_group_add_spin_button_integer(group, &editor_prefs.indentation->width,
 		"pref_editor_tab_width", 4, "spin_indent_width");
 	stash_group_add_combo_box(group, (gint*)(void*)&editor_prefs.indentation->auto_indent_mode,
