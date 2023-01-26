@@ -33,6 +33,7 @@
 	TclParser, \
 	ShParser, \
 	DParser, \
+	ForthParser, \
 	FortranParser, \
 	GDScriptParser, \
 	DiffParser, \
