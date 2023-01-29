@@ -383,7 +383,7 @@ void ui_set_window_title(GeanyDocument *doc)
 			g_string_append(str, DOC_FILENAME(doc));
 		else
 		{
-			gchar *short_name = document_get_basename_for_display(doc, 30);
+			gchar *short_name = document_get_basename_for_display(doc, interface_prefs.tab_label_len);
 			gchar *dirname = g_path_get_dirname(DOC_FILENAME(doc));
 
 			g_string_append(str, short_name);
@@ -2369,6 +2369,8 @@ void ui_init_prefs(void)
 		"msgwin_scribble_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.warn_on_project_close,
 		"warn_on_project_close", TRUE);
+	stash_group_add_spin_button_integer(group, &interface_prefs.tab_label_len,
+		"tab_label_length", 99999, "spin_tab_label_len");
 }
 
 
