@@ -286,7 +286,6 @@ Other dependencies are provided by the MSYS2 project
 (https://msys2.github.io) and were downloaded from:
 EOF
 	echo -e "${package_urls}" >> "${filename}"
-	unix2dos "${filename}"
 }
 
 create_zip_archive() {

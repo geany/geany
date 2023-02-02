@@ -115,6 +115,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	unfold_all_children;
 	gboolean	disable_dnd;
 	gboolean	use_tab_to_indent;	/* makes tab key indent instead of insert a tab char */
+	gboolean	backspace_unindent;	/* makes backspace char unindent instead of deleting one char */
 	gboolean	smart_home_key;
 	gboolean	newline_strip;
 	gboolean	auto_complete_symbols;
@@ -138,6 +139,7 @@ typedef struct GeanyEditorPrefs
 	gint		autocompletion_update_freq;
 	gint		scroll_lines_around_cursor;
 	gint		ime_interaction; /* input method editor's candidate window behaviour */
+	gboolean	show_line_endings_only_when_differ;
 }
 GeanyEditorPrefs;
 

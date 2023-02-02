@@ -245,6 +245,7 @@ void tm_ctags_clear_ignore_symbols(void)
  * with the counter (which gets complicated when also subparsers are involved) */
 static void rename_anon_tags(TMSourceFile *source_file)
 {
+	gboolean is_c = source_file->lang == TM_PARSER_C || source_file->lang == TM_PARSER_CPP;
 	gint *anon_counter_table = NULL;
 	GPtrArray *removed_typedefs = NULL;
 	guint i;
@@ -264,7 +265,7 @@ static void rename_anon_tags(TMSourceFile *source_file)
 			orig_name = tag->name;
 			orig_name_len = strlen(orig_name);
 
-			if (source_file->lang == TM_PARSER_C || source_file->lang == TM_PARSER_CPP)
+			if (is_c)
 			{
 				/* First check if there's a typedef behind the scope nesting
 				 * such as typedef struct {} Foo; - in this case we can replace
@@ -273,6 +274,10 @@ static void rename_anon_tags(TMSourceFile *source_file)
 				{
 					TMTag *nested_tag = TM_TAG(source_file->tags_array->pdata[j]);
 					guint nested_scope_len = nested_tag->scope ? strlen(nested_tag->scope) : 0;
+
+					/* Tags can be interleaved with scopeless macros - skip those */
+					if (nested_tag->type & (tm_tag_macro_t | tm_tag_macro_with_arg_t))
+						continue;
 
 					/* Nested tags have longer scope than the parent - once the scope
 					 * is equal or lower than the parent scope, we are outside the tag's
@@ -333,6 +338,10 @@ static void rename_anon_tags(TMSourceFile *source_file)
 				guint nested_scope_len = nested_tag->scope ? strlen(nested_tag->scope) : 0;
 				gchar *pos;
 
+				/* Tags can be interleaved with scopeless macros - skip those */
+				if (is_c && nested_tag->type & (tm_tag_macro_t | tm_tag_macro_with_arg_t))
+					continue;
+
 				/* In Fortran, we can create variables of anonymous structures:
 				 *     structure var1, var2
 				 *         integer a
@@ -371,18 +380,24 @@ static void rename_anon_tags(TMSourceFile *source_file)
 			}
 
 			/* We are out of the nesting - the next tags could be variables
-			 * of an anonymous struct such as "struct {} a, b;" */
+			 * of an anonymous struct such as "struct {} a[2], *b, c;" */
 			while (j < source_file->tags_array->len)
 			{
 				TMTag *var_tag = TM_TAG(source_file->tags_array->pdata[j]);
 				guint var_scope_len = var_tag->scope ? strlen(var_tag->scope) : 0;
+				gchar *pos;
 
 				/* Should be at the same scope level as the anon tag */
 				if (var_scope_len == scope_len &&
-					g_strcmp0(var_tag->var_type, orig_name) == 0)
+					var_tag->var_type && (pos = strstr(var_tag->var_type, orig_name)))
 				{
+					GString *str = g_string_new(var_tag->var_type);
+					gssize p = pos - var_tag->var_type;
+					g_string_erase(str, p, strlen(orig_name));
+					g_string_insert(str, p, new_name);
 					g_free(var_tag->var_type);
-					var_tag->var_type = g_strdup(new_name);
+					var_tag->var_type = str->str;
+					g_string_free(str, FALSE);
 				}
 				else
 					break;

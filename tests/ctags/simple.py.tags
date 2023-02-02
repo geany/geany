@@ -26,8 +26,8 @@ deeply_nestedÌ1Î_test.ignored_function.more_nestingÖ0
 class:      _test.ignored_function.more_nesting :: deeply_nested
 even_moreÌ128Í()Î_test.ignored_function.more_nesting.deeply_nestedÖ0
 method:     _test.ignored_function.more_nesting.deeply_nested :: even_more()
-fooÌ16Í( x , y, z)Ö0
-function:   foo( x , y, z)
+fooÌ16Í( x, y, z)Ö0
+function:   foo( x, y, z)
 ignored_functionÌ16Í()Î_testÖ0
 function:   _test :: ignored_function()
 more_nestingÌ16Í()Î_test.ignored_functionÖ0

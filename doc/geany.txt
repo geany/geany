@@ -264,6 +264,7 @@ described by that plugin documentation):
 
   * expand/collapse the tree
   * control sorting order
+  * control whether to group symbols by their type
   * locate the symbol in documents
 
   The symbols tab can also be filtered by typing a string into
@@ -979,6 +980,10 @@ preferences`_, default 4) or when the *Complete word*
 keybinding is pressed (configurable, see `Editor keybindings`_,
 default Ctrl-Space).
 
+For some languages the autocompletion list is ordered by heuristics to
+attempt to show names that are more likely to be what the user wants
+close to the top of the list.
+
 When the defined keybinding is typed and the *Autocomplete all words in
 document* preference (in `Editor Completions preferences`_)
 is selected then the autocompletion list will show all matching words
@@ -1028,9 +1033,11 @@ When you type ``foo.`` it will show an autocompletion list with 'i' and
 'c' symbols.
 
 It only works for languages that set parent scope names for e.g. struct
-members. Currently this means C-like languages. The C parser only
-parses global scopes, so this won't work for structs or objects declared
-in local scope.
+members. Most languages only parse global definitions and so scope
+autocompletion will not work for names declared in local scope
+(e.g. inside functions). A few languages parse both local and global
+symbols (e.g. C/C++ parsers) and for these parsers scope autocompletion
+works also for local variables.
 
 
 User-definable snippets
@@ -1897,10 +1904,6 @@ Suppress status messages in the status bar
         reshows the document statistics on the status bar. See `Focus
         keybindings`_.
 
-Use Windows File Open/Save dialogs
-    Defines whether to use the native Windows File Open/Save dialogs or
-    whether to use the GTK default dialogs.
-
 Auto-focus widgets (focus follows mouse)
     Give the focus automatically to widgets below the mouse cursor.
     This works for the main editor widget, the scribble, the toolbar search field
@@ -2018,6 +2021,10 @@ Next to current
 Double-clicking hides all additional widgets
     Whether to call the View->Toggle All Additional Widgets command
     when double-clicking on a notebook tab.
+
+Tab label length
+    If filenames are long, set the number of characters that should be
+    visible on each tab's label.
 
 Tab positions
 `````````````
@@ -2173,6 +2180,11 @@ Tab key indents
         unindent, but this preference allows the tab key to have different
         meanings in different contexts - e.g. for snippet completion.
 
+Backspace key unindents
+    If set, pressing backspace while the cursor is in leading whitespace
+    will reduce the indentation level, unless the indentation mode is tabs.
+    Otherwise, the backspace key will delete the character before the cursor.
+
 Editor Completions preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2294,6 +2306,10 @@ Show whitespaces
 Show line endings
     Display a symbol everywhere that a carriage return or line feed
     is present.
+
+Show only non-default line endings
+    Shows line ending characters only when they differ from the
+    file default line ending character.
 
 Show line numbers
     Show or hide the Line Number margin.
@@ -2695,7 +2711,7 @@ Statusbar Templates
 
 The default statusbar template is (note ``\t`` = tab):
 
-``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
+``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: %e      filetype: %f      scope: %S``
 
 Settings the preference to an empty string will also cause Geany to use this
 internal default.

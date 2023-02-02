@@ -1236,20 +1236,20 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 		{
 			case MSG_STATUS:
 			{
-				gtk_menu_popup(GTK_MENU(msgwindow.popup_status_menu), NULL, NULL, NULL, NULL,
-																	event->button, event->time);
+				ui_menu_popup(GTK_MENU(msgwindow.popup_status_menu), NULL, NULL,
+							  event->button, event->time);
 				break;
 			}
 			case MSG_MESSAGE:
 			{
-				gtk_menu_popup(GTK_MENU(msgwindow.popup_msg_menu), NULL, NULL, NULL, NULL,
-																	event->button, event->time);
+				ui_menu_popup(GTK_MENU(msgwindow.popup_msg_menu), NULL, NULL,
+							  event->button, event->time);
 				break;
 			}
 			case MSG_COMPILER:
 			{
-				gtk_menu_popup(GTK_MENU(msgwindow.popup_compiler_menu), NULL, NULL, NULL, NULL,
-																	event->button, event->time);
+				ui_menu_popup(GTK_MENU(msgwindow.popup_compiler_menu), NULL, NULL,
+							  event->button, event->time);
 				break;
 			}
 		}

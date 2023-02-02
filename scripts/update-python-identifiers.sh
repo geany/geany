@@ -4,7 +4,7 @@
 # License: GPL v2 or later
 #
 # Updates the `identifiers` entry in data/filetypes.python.in.
-# Requires Python 3.
+# Requires Python 3.10+.
 
 set -e
 
@@ -22,7 +22,7 @@ print(" ".join(sorted([i for i in items if i not in exclude])))
 '
 }
 
-keywords=$(python3 -c 'from keyword import kwlist; print("\n".join(kwlist))')
+keywords=$(python3 -c 'from keyword import kwlist, softkwlist; print("\n".join(kwlist + softkwlist))')
 builtins=$(python3 -c 'print("\n".join(dir(__builtins__)))')
 
 primary=$(echo "$keywords" | sort_filter)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -31,6 +31,13 @@
   </object>
   <object class="GtkAdjustment" id="adjustment13">
     <property name="upper">100</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment14">
+    <property name="lower">3</property>
+    <property name="upper">100000</property>
+    <property name="value">99999</property>
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
@@ -2193,6 +2200,49 @@
                                     <property name="position">4</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <!-- n-columns=2 n-rows=1 -->
+                                  <object class="GtkGrid">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="column-spacing">10</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label251">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="tooltip-text" translatable="yes">Set limit on visible characters in tab label.</property>
+                                        <property name="label" translatable="yes">Tab label length:</property>
+                                        <property name="mnemonic-widget">spin_tab_label_len</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="spin_tab_label_len">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="tooltip-text" translatable="yes">Characters to be visible on the tab label of the file.</property>
+                                        <property name="primary-icon-activatable">False</property>
+                                        <property name="secondary-icon-activatable">False</property>
+                                        <property name="adjustment">adjustment14</property>
+                                        <property name="climb-rate">1</property>
+                                        <property name="numeric">True</property>
+                                        <property name="update-policy">if-valid</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">1</property>
+                                        <property name="top-attach">0</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">5</property>
+                                  </packing>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -3293,6 +3343,22 @@
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="check_backspace_unindent">
+                                    <property name="label" translatable="yes">_Backspace key unindents</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="tooltip-text" translatable="yes">With the cursor in the indentation, pressing backspace unindents instead of deleting one character</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -3811,19 +3877,45 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="check_line_end">
-                                    <property name="label" translatable="yes">Show line endings</property>
+                                  <object class="GtkFrame">
                                     <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="receives-default">False</property>
-                                    <property name="tooltip-text" translatable="yes">Shows the line ending character</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="draw-indicator">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label-xalign">0</property>
+                                    <property name="shadow-type">none</property>
+                                    <child type="label">
+                                      <object class="GtkCheckButton" id="check_line_end">
+                                        <property name="label" translatable="yes">Show line endings</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="tooltip-text" translatable="yes">Shows the line ending character</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="draw-indicator">True</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkAlignment">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="left-padding">12</property>
+                                        <child>
+                                          <object class="GtkCheckButton" id="check_line_endings_only_when_differ">
+                                            <property name="label" translatable="yes">Show only non-default line endings</property>
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <property name="receives-default">False</property>
+                                            <property name="tooltip-text" translatable="yes">Shows line ending characters only when they differ from the file default line ending character</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="draw-indicator">True</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">3</property>
+                                    <property name="position">4</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3839,7 +3931,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">4</property>
+                                    <property name="position">5</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3855,7 +3947,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">5</property>
+                                    <property name="position">6</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3871,7 +3963,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">6</property>
+                                    <property name="position">7</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -3912,7 +4004,7 @@
                                   <packing>
                                     <property name="expand">True</property>
                                     <property name="fill">True</property>
-                                    <property name="position">7</property>
+                                    <property name="position">8</property>
                                   </packing>
                                 </child>
                               </object>

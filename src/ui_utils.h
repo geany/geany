@@ -63,7 +63,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		msgwin_compiler_visible;	/**< whether message window's compiler tab is visible */
 	gboolean		msgwin_messages_visible;	/**< whether message window's messages tab is visible */
 	gboolean		msgwin_scribble_visible;	/**< whether message window's scribble tab is visible */
-	/** whether to use native Windows' dialogs (only used on Windows) */
+	/** whether to use native Windows' dialogs - ignored and not used anymore */
 	gboolean		use_native_windows_dialogs;
 	/** whether compiler messages window is automatically scrolled to show new messages */
 	gboolean		compiler_tab_autoscroll;
@@ -72,6 +72,8 @@ typedef struct GeanyInterfacePrefs
 	/** whether to show a warning when closing a project to open a new one */
 	gboolean		warn_on_project_close;
 	gint			openfiles_path_mode;
+	/** number of characters of a filename to be visible on the tab label */
+	gint			tab_label_len;
 }
 GeanyInterfacePrefs;
 
@@ -168,6 +170,7 @@ typedef struct UIPrefs
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 	gchar		*statusbar_template;
 	gboolean	new_document_after_close;
+	gboolean	symbols_group_by_type;
 
 	/* Menu-item related data */
 	GQueue		*recent_queue;
@@ -369,6 +372,8 @@ gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo);
 gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc);
 
 gchar *ui_get_project_directory(const gchar *path);
+
+void ui_menu_popup(GtkMenu* menu, GtkMenuPositionFunc func, gpointer data, guint button, guint32 activate_time);
 
 #endif /* GEANY_PRIVATE */
 

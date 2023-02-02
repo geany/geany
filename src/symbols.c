@@ -106,6 +106,7 @@ static struct
 	GtkWidget *find_usage;
 	GtkWidget *find_doc_usage;
 	GtkWidget *find_in_files;
+	GtkWidget *group_by_type;
 }
 symbol_menu;
 
@@ -981,16 +982,18 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	foreach_list (item, *tags)
 	{
 		TMTag *tag = item->data;
-		GtkTreeIter *parent;
+		GtkTreeIter *parent, *parent_group;
 
-		parent = get_tag_type_iter(tag->lang, tag->type);
-		if (parent)
+		parent_group = get_tag_type_iter(tag->lang, tag->type);
+		/* tv_iters[0] is reserved for the "Symbols" group */
+		parent = ui_prefs.symbols_group_by_type ? parent_group : &tv_iters[0];
+		if (parent_group)
 		{
 			gboolean expand;
 			const gchar *name;
 			const gchar *parent_name;
 			gchar *tooltip;
-			GdkPixbuf *icon = get_child_icon(store, parent);
+			GdkPixbuf *icon = get_child_icon(store, parent_group);
 
 			parent_name = get_parent_name(tag);
 			if (parent_name)
@@ -1139,9 +1142,14 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 
 	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 
-	tags = get_tag_list(doc, tm_tag_max_t);
+	tags = get_tag_list(doc, ~(tm_tag_local_var_t | tm_tag_include_t));
 	if (tags == NULL)
 		return FALSE;
+
+	if (doc->priv->symbols_group_by_type != ui_prefs.symbols_group_by_type)
+		gtk_tree_store_clear(doc->priv->tag_store);
+
+	doc->priv->symbols_group_by_type = ui_prefs.symbols_group_by_type;
 
 	/* FIXME: Not sure why we detached the model here? */
 
@@ -1542,8 +1550,8 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 
 	g_object_set_data_full(G_OBJECT(menu), "geany-button-event", button_event,
 	                       button_event ? (GDestroyNotify) gdk_event_free : NULL);
-	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, goto_popup_position_func, doc->editor->sci,
-				   button_event ? button_event->button : 0, gtk_get_current_event_time ());
+	ui_menu_popup(GTK_MENU(menu), goto_popup_position_func, doc->editor->sci,
+				  button_event ? button_event->button : 0, gtk_get_current_event_time ());
 }
 
 
@@ -1603,13 +1611,23 @@ static TMTag *find_best_goto_tag(GeanyDocument *doc, GPtrArray *tags)
 
 static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean definition)
 {
+	GeanyDocument *doc = document_get_current();
+	guint current_line = sci_get_current_line(doc->editor->sci) + 1;
 	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
 	TMTag *tmtag, *last_tag = NULL;
+	const gchar *current_scope = NULL;
 	GPtrArray *filtered_tags = g_ptr_array_new();
 	guint i;
 
+	symbols_get_current_function(doc, &current_scope);
+
 	foreach_ptr_array(tmtag, i, tags)
 	{
+		/* don't show local variables outside current function or other
+		 * irrelevant tags - same as in the autocomplete case */
+		if (!tm_workspace_is_autocomplete_tag(tmtag, doc->tm_file, current_line, current_scope))
+			continue;
+
 		if ((definition && !(tmtag->type & forward_types)) ||
 			(!definition && (tmtag->type & forward_types)))
 		{
@@ -2130,6 +2148,17 @@ static void on_symbol_tree_sort_clicked(GtkMenuItem *menuitem, gpointer user_dat
 		doc->has_tags = symbols_recreate_tag_list(doc, sort_mode);
 }
 
+static void on_symbol_tree_group_by_type_clicked(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (ignore_callback)
+		return;
+
+	ui_prefs.symbols_group_by_type = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menuitem));
+	if (doc != NULL)
+		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
+}
 
 static void on_symbol_tree_menu_show(GtkWidget *widget,
 		gpointer user_data)
@@ -2140,6 +2169,7 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 	enable = doc && doc->has_tags;
 	gtk_widget_set_sensitive(symbol_menu.sort_by_name, enable);
 	gtk_widget_set_sensitive(symbol_menu.sort_by_appearance, enable);
+	gtk_widget_set_sensitive(symbol_menu.group_by_type, enable);
 	gtk_widget_set_sensitive(symbol_menu.expand_all, enable);
 	gtk_widget_set_sensitive(symbol_menu.collapse_all, enable);
 	gtk_widget_set_sensitive(symbol_menu.find_usage, enable);
@@ -2154,6 +2184,9 @@ static void on_symbol_tree_menu_show(GtkWidget *widget,
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(symbol_menu.sort_by_name), TRUE);
 	else
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(symbol_menu.sort_by_appearance), TRUE);
+
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(symbol_menu.group_by_type),
+		ui_prefs.symbols_group_by_type);
 
 	ignore_callback = FALSE;
 }
@@ -2237,6 +2270,15 @@ static void create_taglist_popup_menu(void)
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_symbol_tree_sort_clicked),
 			GINT_TO_POINTER(SYMBOLS_SORT_BY_APPEARANCE));
+
+	item = gtk_separator_menu_item_new();
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+
+	symbol_menu.group_by_type = item = gtk_check_menu_item_new_with_mnemonic(_("_Group by Type"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	g_signal_connect(item, "activate", G_CALLBACK(on_symbol_tree_group_by_type_clicked), NULL);
 
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);

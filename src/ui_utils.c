@@ -63,7 +63,7 @@
 	"col: %c\t "         \
 	"sel: %s\t "         \
 	"%w      %t      %m" \
-	"mode: %M      "     \
+	"EOL: %M      "      \
 	"encoding: %e      " \
 	"filetype: %f      " \
 	"scope: %S")
@@ -409,7 +409,7 @@ void ui_set_window_title(GeanyDocument *doc)
 			g_string_append(str, DOC_FILENAME(doc));
 		else
 		{
-			gchar *short_name = document_get_basename_for_display(doc, 30);
+			gchar *short_name = document_get_basename_for_display(doc, interface_prefs.tab_label_len);
 			gchar *dirname = g_path_get_dirname(DOC_FILENAME(doc));
 
 			g_string_append(str, short_name);
@@ -2395,6 +2395,8 @@ void ui_init_prefs(void)
 		"msgwin_scribble_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.warn_on_project_close,
 		"warn_on_project_close", TRUE);
+	stash_group_add_spin_button_integer(group, &interface_prefs.tab_label_len,
+		"tab_label_length", 99999, "spin_tab_label_len");
 }
 
 
@@ -3254,4 +3256,16 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 		return TRUE;
 	}
 	return FALSE;
+}
+
+void ui_menu_popup(GtkMenu* menu, GtkMenuPositionFunc func, gpointer data, guint button, guint32 activate_time)
+{
+	/* Use appropriate function for menu popup:
+		- gtk_menu_popup_at_pointer is not available on GTK older than 3.22
+		- gtk_menu_popup is deprecated and causes issues on multimonitor wayland setups */
+#if GTK_CHECK_VERSION(3,22,0)
+	gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
+#else
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, func, data, button, activate_time);
+#endif
 }

@@ -449,6 +449,7 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 void dialogs_show_open_file(void)
 {
 	gchar *initdir;
+	GtkWidget *dialog;
 
 	/* set dialog directory to the current file's directory, if present */
 	initdir = utils_get_current_file_dir_utf8();
@@ -460,27 +461,20 @@ void dialogs_show_open_file(void)
 
 	SETPTR(initdir, utils_get_locale_from_utf8(initdir));
 
-#ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
-		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), _("Open File"), initdir);
-	else
-#endif
-	{
-		GtkWidget *dialog = create_open_file_dialog();
+	dialog = create_open_file_dialog();
+	open_file_dialog_apply_settings(dialog);
 
-		open_file_dialog_apply_settings(dialog);
+	if (initdir != NULL && g_path_is_absolute(initdir))
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initdir);
 
-		if (initdir != NULL && g_path_is_absolute(initdir))
-				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initdir);
+	if (app->project && !EMPTY(app->project->base_path))
+		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
+				app->project->base_path, NULL);
 
-		if (app->project && !EMPTY(app->project->base_path))
-			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
-					app->project->base_path, NULL);
+	while (!open_file_dialog_handle_response(dialog,
+		gtk_dialog_run(GTK_DIALOG(dialog))));
+	gtk_widget_destroy(dialog);
 
-		while (!open_file_dialog_handle_response(dialog,
-			gtk_dialog_run(GTK_DIALOG(dialog))));
-		gtk_widget_destroy(dialog);
-	}
 	g_free(initdir);
 }
 
@@ -671,16 +665,6 @@ gboolean dialogs_show_save_as(void)
 
 	g_return_val_if_fail(doc, FALSE);
 
-#ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
-	{
-		gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
-						_("Save File"), doc);
-		if (utf8_name != NULL)
-			result = handle_save_as(utf8_name, FALSE);
-	}
-	else
-#endif
 	result = show_save_as_gtk(doc);
 	return result;
 }
@@ -875,14 +859,6 @@ on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 /* This shows the font selection dialog to choose a font. */
 void dialogs_show_open_font(void)
 {
-#ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
-	{
-		win32_show_font_dialog();
-		return;
-	}
-#endif
-
 	if (ui_widgets.open_fontsel == NULL)
 	{
 		GtkWidget *apply_button;
