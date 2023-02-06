@@ -479,12 +479,11 @@ void dialogs_show_open_file(void)
 }
 
 
-static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
+static gboolean handle_save_as(GeanyDocument *doc,
+	const gchar *utf8_filename, gboolean rename_file)
 {
-	GeanyDocument *doc = document_get_current();
 	gboolean success = FALSE;
-
-	g_return_val_if_fail(doc != NULL, FALSE);
+	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 	g_return_val_if_fail(!EMPTY(utf8_filename), FALSE);
 
 	if (doc->file_name != NULL)
@@ -508,7 +507,8 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 }
 
 
-static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
+static gboolean save_as_dialog_handle_response(GeanyDocument *doc,
+	GtkWidget *dialog, gint response)
 {
 	gboolean rename_file = FALSE;
 	gboolean success = FALSE;
@@ -535,7 +535,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 			gchar *utf8_filename;
 
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
-			success = handle_save_as(utf8_filename, rename_file);
+			success = handle_save_as(doc, utf8_filename, rename_file);
 			g_free(utf8_filename);
 			break;
 		}
@@ -640,7 +640,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 	{
 		resp = gtk_dialog_run(GTK_DIALOG(dialog));
 	}
-	while (! save_as_dialog_handle_response(dialog, resp));
+	while (! save_as_dialog_handle_response(doc, dialog, resp));
 
 	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
