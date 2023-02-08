@@ -139,7 +139,7 @@ GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
 {
-	if (group->plugin)
+	if (group->plugin_keys)
 	{
 		g_assert(key_id < group->plugin_key_count);
 		return &group->plugin_keys[key_id];
@@ -179,7 +179,7 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	g_assert(!kb->name);
 	g_ptr_array_add(group->key_items, kb);
 
-	if (group->plugin)
+	if (group->plugin_keys)
 	{
 		/* some plugins e.g. GeanyLua need these fields duplicated */
 		SETPTR(kb->name, g_strdup(kf_name));
@@ -187,7 +187,7 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	}
 	else
 	{
-		/* we don't touch these strings unless group->plugin is set, const cast is safe */
+		/* we don't touch fixed kb strings, const cast is safe */
 		kb->name = (gchar *)kf_name;
 		kb->label = (gchar *)label;
 	}
@@ -270,8 +270,7 @@ static void add_kb_group(GeanyKeyGroup *group,
 	group->cb_func = NULL;
 	group->cb_data = NULL;
 	group->plugin = plugin;
-	/* Only plugins use the destroy notify thus far */
-	group->key_items = g_ptr_array_new_with_free_func(plugin ? free_key_binding : NULL);
+	group->key_items = g_ptr_array_new();
 }
 
 
@@ -294,6 +293,16 @@ static void add_kb(GeanyKeyGroup *group, gsize key_id,
 
 	keybindings_set_item(group, key_id, callback,
 		key, mod, kf_name, label, widget);
+}
+
+
+static void setup_group_size(GeanyKeyGroup *group, guint count)
+{
+	// TODO: rename to dynamic_keys?
+	group->plugin_keys = g_new0(GeanyKeyBinding, count);
+	group->plugin_key_count = count;
+	// strings are dup'd when plugin_keys is set
+	g_ptr_array_set_free_func(group->key_items, free_key_binding);
 }
 
 
@@ -728,11 +737,12 @@ static void free_key_group(gpointer item)
 
 	g_ptr_array_free(group->key_items, TRUE);
 
+	if (group->cb_data_destroy)
+		group->cb_data_destroy(group->cb_data);
+	if (group->plugin_keys)
+		g_free(group->plugin_keys);
 	if (group->plugin)
 	{
-		if (group->cb_data_destroy)
-			group->cb_data_destroy(group->cb_data);
-		g_free(group->plugin_keys);
 		/* we allocated those in add_kb_group() as it's a plugin group */
 		g_free((gchar *) group->name);
 		g_free((gchar *) group->label);
@@ -2663,9 +2673,11 @@ void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mo
 }
 
 
-/* used for plugins, can be called repeatedly. */
-GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_name,
-		const gchar *label, gsize count, GeanyKeyGroupCallback callback)
+/* used for plugins, can be called repeatedly.
+ * label should be NULL for built-in groups */
+GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group,
+	const gchar *section_name, const gchar *label,
+	gsize count, GeanyKeyGroupCallback callback)
 {
 	g_return_val_if_fail(section_name, NULL);
 	g_return_val_if_fail(count, NULL);
@@ -2682,8 +2694,8 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_
 	 * called before g_free(group->plugin_keys) */
 	g_ptr_array_set_size(group->key_items, 0);
 	g_free(group->plugin_keys);
-	group->plugin_keys = g_new0(GeanyKeyBinding, count);
-	group->plugin_key_count = count;
+
+	setup_group_size(group, count);
 	return group;
 }
 
