@@ -105,6 +105,10 @@ static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_move_tab(guint key_id);
 
+static void cb_build_ft_custom(guint key_id);
+static void cb_build_ind_custom(guint key_id);
+static void cb_build_exec_custom(guint key_id);
+
 static void add_popup_menu_accels(void);
 
 
@@ -269,6 +273,7 @@ static void add_kb_group(GeanyKeyGroup *group,
 	group->callback = callback;
 	group->cb_func = NULL;
 	group->cb_data = NULL;
+	// TODO rename `plugin` field to `dynamic` (used for build commands)
 	group->plugin = plugin;
 	/* Only plugins use the destroy notify thus far */
 	group->key_items = g_ptr_array_new_with_free_func(plugin ? free_key_binding : NULL);
@@ -294,6 +299,30 @@ static void add_kb(GeanyKeyGroup *group, gsize key_id,
 
 	keybindings_set_item(group, key_id, callback,
 		key, mod, kf_name, label, widget);
+}
+
+
+static void add_build_group(guint group_id, const gchar *label,
+	const gchar code[2], guint fixed_count, GeanyKeyCallback callback)
+{
+	const guint max = build_get_group_count(group_id);
+	GeanyKeyGroup *group;
+
+	if (max <= fixed_count)
+		return;
+	group = keybindings_set_group(NULL, FALSE, keybindings_keyfile_group_name, label, 10, NULL);
+	for (guint i = fixed_count; i < max; i++)
+	{
+		char key[11] = "build_??_?";
+		char label[3] = "#?";
+
+		key[6] = code[0];
+		key[7] = code[1];
+		if (i == 10) break;
+		key[sizeof key - 2] = i + '0';
+		label[1] = i + 1 + '0';
+		add_kb(group, i - fixed_count, callback, 0, 0, key, label, NULL);
+	}
 }
 
 
@@ -709,6 +738,10 @@ static void init_default_kb(void)
 		GDK_KEY_F5, 0, "build_run", _("Run"), NULL);
 	add_kb(group, GEANY_KEYS_BUILD_OPTIONS, NULL,
 		0, 0, "build_options", _("Build options"), NULL);
+
+	add_build_group(GEANY_GBG_FT, _("Filetype commands"), "ft", 2, cb_build_ft_custom);
+	add_build_group(GEANY_GBG_NON_FT, _("Independent commands"), "nf", 3, cb_build_ind_custom);
+	add_build_group(GEANY_GBG_EXEC, _("Execute commands"), "ex", 1, cb_build_exec_custom);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_TOOLS);
 
@@ -1920,6 +1953,45 @@ static void cb_func_move_tab(guint key_id)
 }
 
 
+// adapted from build_keybinding
+static void cb_build_custom(guint group_id, guint key_id, guint offset)
+{
+	GtkWidget *item;
+	BuildMenuItems *menu_items;
+	GeanyDocument *doc = document_get_current();
+
+	if (doc == NULL)
+		return;
+
+	if (!gtk_widget_is_sensitive(ui_lookup_widget(main_widgets.window, "menu_build1")))
+		return;
+
+	menu_items = build_get_menu_items(doc->file_type->id);
+	item = menu_items->menu_item[group_id][key_id + offset];
+	/* Note: For Build menu items it's OK (at the moment) to assume they are in the correct
+	 * sensitive state, but some other menus don't update the sensitive status until
+	 * they are redrawn. */
+	if (item && gtk_widget_is_sensitive(item))
+		gtk_menu_item_activate(GTK_MENU_ITEM(item));
+	return;
+}
+
+static void cb_build_ft_custom(guint key_id)
+{
+	cb_build_custom(GEANY_GBG_FT, key_id, 2);
+}
+
+static void cb_build_ind_custom(guint key_id)
+{
+	cb_build_custom(GEANY_GBG_NON_FT, key_id, 3);
+}
+
+static void cb_build_exec_custom(guint key_id)
+{
+	cb_build_custom(GEANY_GBG_EXEC, key_id, 1);
+}
+
+
 static void goto_matching_brace(GeanyDocument *doc)
 {
 	gint pos, new_pos;
@@ -2662,15 +2734,18 @@ void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mo
 }
 
 
-/* used for plugins, can be called repeatedly. */
-GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_name,
-		const gchar *label, gsize count, GeanyKeyGroupCallback callback)
+/* mainly used for plugins, can be called repeatedly.
+ * label should be NULL for built-in groups */
+GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, gboolean plugin,
+	const gchar *section_name, const gchar *label,
+	gsize count, GeanyKeyGroupCallback callback)
 {
 	g_return_val_if_fail(section_name, NULL);
 	g_return_val_if_fail(count, NULL);
 
 	/* prevent conflict with core bindings */
-	g_return_val_if_fail(!g_str_equal(section_name, keybindings_keyfile_group_name), NULL);
+	if (plugin)
+		g_return_val_if_fail(!g_str_equal(section_name, keybindings_keyfile_group_name), NULL);
 
 	if (!group)
 	{

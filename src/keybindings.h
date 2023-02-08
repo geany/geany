@@ -311,8 +311,9 @@ void keybindings_free(void);
 
 GeanyKeyGroup *keybindings_get_core_group(guint id);
 
-GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_name,
-		const gchar *label, gsize count, GeanyKeyGroupCallback callback) G_GNUC_WARN_UNUSED_RESULT;
+GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, gboolean plugin,
+	const gchar *section_name, const gchar *label,
+	gsize count, GeanyKeyGroupCallback callback);
 
 void keybindings_free_group(GeanyKeyGroup *group);
 
