@@ -852,8 +852,6 @@ gboolean main_handle_filename(const gchar *locale_filename)
 			document_show_tab(doc);
 		else
 			doc = document_new_file(utf8_filename, NULL, NULL);
-		if (doc != NULL)
-			ui_add_recent_document(doc);
 		g_free(utf8_filename);
 		g_free(filename);
 		return TRUE;
