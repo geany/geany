@@ -1860,9 +1860,6 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	 * to ignore any earlier events */
 	monitor_file_setup(doc);
 	doc->priv->file_disk_status = FILE_IGNORE;
-
-	if (ret)
-		ui_add_recent_document(doc);
 	return ret;
 }
 
@@ -2038,6 +2035,7 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
 		doc->real_path = utils_get_real_path(locale_filename);
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
 		monitor_file_setup(doc);
+		ui_add_recent_document(doc);
 	}
 	return NULL;
 }
