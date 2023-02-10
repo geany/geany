@@ -274,8 +274,7 @@ static void add_kb_group(GeanyKeyGroup *group,
 	group->cb_func = NULL;
 	group->cb_data = NULL;
 	group->plugin = plugin;
-	/* Only plugins use the destroy notify thus far */
-	group->key_items = g_ptr_array_new_with_free_func(plugin ? free_key_binding : NULL);
+	group->key_items = g_ptr_array_new();
 }
 
 
@@ -301,19 +300,25 @@ static void add_kb(GeanyKeyGroup *group, gsize key_id,
 }
 
 
+static void setup_group_size(GeanyKeyGroup *group, guint count)
+{
+	// TODO: rename to dynamic_keys?
+	group->plugin_keys = g_new0(GeanyKeyBinding, count);
+	group->plugin_key_count = count;
+	// strings are dup'd when plugin_keys is set
+	g_ptr_array_set_free_func(group->key_items, free_key_binding);
+}
+
+
 static void add_build_kbs(guint group_id, guint build_group,
 	const gchar code[2], guint fixed_count)
 {
 	GeanyKeyGroup *group = keybindings_get_core_group(group_id);
 	const guint max = build_get_group_count(build_group);
 
+	setup_group_size(group, max);
 	if (max <= fixed_count)
 		return;
-	// TODO: rename to dynamic_keys?
-	group->plugin_keys = g_new0(GeanyKeyBinding, max);
-	group->plugin_key_count = max;
-	// strings are dup'd when plugin_keys is set
-	g_ptr_array_set_free_func(group->key_items, free_key_binding);
 
 	for (guint i = fixed_count; i < max; i++)
 	{
@@ -2764,8 +2769,7 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group,
 	g_ptr_array_set_size(group->key_items, 0);
 	g_free(group->plugin_keys);
 
-	group->plugin_keys = g_new0(GeanyKeyBinding, count);
-	group->plugin_key_count = count;
+	setup_group_size(group, count);
 	return group;
 }
 
