@@ -105,9 +105,9 @@ static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_move_tab(guint key_id);
 
-static void cb_build_ft_custom(guint key_id);
-static void cb_build_ind_custom(guint key_id);
-static void cb_build_exec_custom(guint key_id);
+static gboolean cb_build_ft_custom(guint key_id);
+static gboolean cb_build_ind_custom(guint key_id);
+static gboolean cb_build_exec_custom(guint key_id);
 
 static void add_popup_menu_accels(void);
 
@@ -143,7 +143,7 @@ GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
 {
-	if (group->plugin)
+	if (group->plugin_keys)
 	{
 		g_assert(key_id < group->plugin_key_count);
 		return &group->plugin_keys[key_id];
@@ -183,7 +183,7 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	g_assert(!kb->name);
 	g_ptr_array_add(group->key_items, kb);
 
-	if (group->plugin)
+	if (group->plugin_keys)
 	{
 		/* some plugins e.g. GeanyLua need these fields duplicated */
 		SETPTR(kb->name, g_strdup(kf_name));
@@ -191,7 +191,7 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	}
 	else
 	{
-		/* we don't touch these strings unless group->plugin is set, const cast is safe */
+		/* we don't touch fixed kb strings, const cast is safe */
 		kb->name = (gchar *)kf_name;
 		kb->label = (gchar *)label;
 	}
@@ -273,7 +273,6 @@ static void add_kb_group(GeanyKeyGroup *group,
 	group->callback = callback;
 	group->cb_func = NULL;
 	group->cb_data = NULL;
-	// TODO rename `plugin` field to `dynamic` (used for build commands)
 	group->plugin = plugin;
 	/* Only plugins use the destroy notify thus far */
 	group->key_items = g_ptr_array_new_with_free_func(plugin ? free_key_binding : NULL);
@@ -302,15 +301,18 @@ static void add_kb(GeanyKeyGroup *group, gsize key_id,
 }
 
 
-static void add_build_group(guint group_id, const gchar *label,
-	const gchar code[2], guint fixed_count, GeanyKeyCallback callback)
+static void add_build_kbs(guint group_id, guint build_group,
+	const gchar code[2], guint fixed_count)
 {
-	const guint max = build_get_group_count(group_id);
-	GeanyKeyGroup *group;
+	GeanyKeyGroup *group = keybindings_get_core_group(group_id);
+	const guint max = build_get_group_count(build_group);
 
 	if (max <= fixed_count)
 		return;
-	group = keybindings_set_group(NULL, FALSE, keybindings_keyfile_group_name, label, 10, NULL);
+	// TODO: rename to dynamic_keys?
+	group->plugin_keys = g_new0(GeanyKeyBinding, max);
+	group->plugin_key_count = max;
+
 	for (guint i = fixed_count; i < max; i++)
 	{
 		char key[11] = "build_??_?";
@@ -321,7 +323,7 @@ static void add_build_group(guint group_id, const gchar *label,
 		if (i == 10) break;
 		key[sizeof key - 2] = i + '0';
 		label[1] = i + 1 + '0';
-		add_kb(group, i - fixed_count, callback, 0, 0, key, label, NULL);
+		add_kb(group, i - fixed_count, NULL, 0, 0, key, label, NULL);
 	}
 }
 
@@ -348,6 +350,9 @@ static void init_default_kb(void)
 	ADD_KB_GROUP(GEANY_KEY_GROUP_DOCUMENT, _("Document"), cb_func_document_action);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_PROJECT, _("Project"), cb_func_project_action);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_BUILD, _("Build"), build_keybinding);
+	ADD_KB_GROUP(GEANY_KEY_GROUP_BUILD_FT, _("Filetype commands"), cb_build_ft_custom);
+	ADD_KB_GROUP(GEANY_KEY_GROUP_BUILD_IND, _("Independent commands"), cb_build_ind_custom);
+	ADD_KB_GROUP(GEANY_KEY_GROUP_BUILD_EXEC, _("Execute commands"), cb_build_exec_custom);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_TOOLS, _("Tools"), NULL);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_HELP, _("Help"), NULL);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_FOCUS, _("Focus"), cb_func_switch_action);
@@ -739,9 +744,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_BUILD_OPTIONS, NULL,
 		0, 0, "build_options", _("Build options"), NULL);
 
-	add_build_group(GEANY_GBG_FT, _("Filetype commands"), "ft", 2, cb_build_ft_custom);
-	add_build_group(GEANY_GBG_NON_FT, _("Independent commands"), "nf", 3, cb_build_ind_custom);
-	add_build_group(GEANY_GBG_EXEC, _("Execute commands"), "ex", 1, cb_build_exec_custom);
+	add_build_kbs(GEANY_KEY_GROUP_BUILD_FT, GEANY_GBG_FT, "ft", 2);
+	add_build_kbs(GEANY_KEY_GROUP_BUILD_IND, GEANY_GBG_NON_FT, "nf", 3);
+	add_build_kbs(GEANY_KEY_GROUP_BUILD_EXEC, GEANY_GBG_EXEC, "ex", 1);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_TOOLS);
 
@@ -761,11 +766,12 @@ static void free_key_group(gpointer item)
 
 	g_ptr_array_free(group->key_items, TRUE);
 
+	if (group->cb_data_destroy)
+		group->cb_data_destroy(group->cb_data);
+	if (group->plugin_keys)
+		g_free(group->plugin_keys);
 	if (group->plugin)
 	{
-		if (group->cb_data_destroy)
-			group->cb_data_destroy(group->cb_data);
-		g_free(group->plugin_keys);
 		/* we allocated those in add_kb_group() as it's a plugin group */
 		g_free((gchar *) group->name);
 		g_free((gchar *) group->label);
@@ -1954,17 +1960,17 @@ static void cb_func_move_tab(guint key_id)
 
 
 // adapted from build_keybinding
-static void cb_build_custom(guint group_id, guint key_id, guint offset)
+static gboolean cb_build_custom(guint group_id, guint key_id, guint offset)
 {
 	GtkWidget *item;
 	BuildMenuItems *menu_items;
 	GeanyDocument *doc = document_get_current();
 
 	if (doc == NULL)
-		return;
+		return TRUE;
 
 	if (!gtk_widget_is_sensitive(ui_lookup_widget(main_widgets.window, "menu_build1")))
-		return;
+		return TRUE;
 
 	menu_items = build_get_menu_items(doc->file_type->id);
 	item = menu_items->menu_item[group_id][key_id + offset];
@@ -1973,22 +1979,22 @@ static void cb_build_custom(guint group_id, guint key_id, guint offset)
 	 * they are redrawn. */
 	if (item && gtk_widget_is_sensitive(item))
 		gtk_menu_item_activate(GTK_MENU_ITEM(item));
-	return;
+	return TRUE;
 }
 
-static void cb_build_ft_custom(guint key_id)
+static gboolean cb_build_ft_custom(guint key_id)
 {
-	cb_build_custom(GEANY_GBG_FT, key_id, 2);
+	return cb_build_custom(GEANY_GBG_FT, key_id, 2);
 }
 
-static void cb_build_ind_custom(guint key_id)
+static gboolean cb_build_ind_custom(guint key_id)
 {
-	cb_build_custom(GEANY_GBG_NON_FT, key_id, 3);
+	return cb_build_custom(GEANY_GBG_NON_FT, key_id, 3);
 }
 
-static void cb_build_exec_custom(guint key_id)
+static gboolean cb_build_exec_custom(guint key_id)
 {
-	cb_build_custom(GEANY_GBG_EXEC, key_id, 1);
+	return cb_build_custom(GEANY_GBG_EXEC, key_id, 1);
 }
 
 
@@ -2734,9 +2740,9 @@ void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mo
 }
 
 
-/* mainly used for plugins, can be called repeatedly.
+/* used for plugins, can be called repeatedly.
  * label should be NULL for built-in groups */
-GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, gboolean plugin,
+GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group,
 	const gchar *section_name, const gchar *label,
 	gsize count, GeanyKeyGroupCallback callback)
 {
@@ -2744,8 +2750,7 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, gboolean plugin,
 	g_return_val_if_fail(count, NULL);
 
 	/* prevent conflict with core bindings */
-	if (plugin)
-		g_return_val_if_fail(!g_str_equal(section_name, keybindings_keyfile_group_name), NULL);
+	g_return_val_if_fail(!g_str_equal(section_name, keybindings_keyfile_group_name), NULL);
 
 	if (!group)
 	{
@@ -2756,6 +2761,7 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, gboolean plugin,
 	 * called before g_free(group->plugin_keys) */
 	g_ptr_array_set_size(group->key_items, 0);
 	g_free(group->plugin_keys);
+
 	group->plugin_keys = g_new0(GeanyKeyBinding, count);
 	group->plugin_key_count = count;
 	return group;

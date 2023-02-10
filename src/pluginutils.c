@@ -333,7 +333,7 @@ GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 {
 	Plugin *priv = plugin->priv;
 
-	priv->key_group = keybindings_set_group(priv->key_group, TRUE, section_name,
+	priv->key_group = keybindings_set_group(priv->key_group, section_name,
 		priv->info.name, count, callback);
 	return priv->key_group;
 }

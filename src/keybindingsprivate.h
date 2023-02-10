@@ -32,10 +32,14 @@ struct GeanyKeyGroup
 	const gchar *name;		/* Group name used in the configuration file, such as @c "html_chars" */
 	const gchar *label;		/* Group label used in the preferences dialog keybindings tab */
 	GeanyKeyGroupCallback callback;	/* use this or individual keybinding callbacks */
-	gboolean plugin;		/* used by plugin or runtime length bindings */
-	GPtrArray *key_items;	/* pointers to GeanyKeyBinding structs */
-	gsize plugin_key_count;			/* number of keybindings the group holds */
-	GeanyKeyBinding *plugin_keys;	/* array of GeanyKeyBinding structs */
+	gboolean plugin;		/* used by plugin */
+	/* pointers to GeanyKeyBinding structs.
+	 * always valid, fixed size or dynamic */
+	GPtrArray *key_items;
+	/* number of keybindings in plugin_keys */
+	gsize plugin_key_count;
+	/* array of GeanyKeyBinding structs, used for a dynamically sized group only. */
+	GeanyKeyBinding *plugin_keys;
 	GeanyKeyGroupFunc cb_func;	/* use this or individual keybinding callbacks (new style) */
 	gpointer cb_data;
 	GDestroyNotify cb_data_destroy; /* used to destroy handler_data */
