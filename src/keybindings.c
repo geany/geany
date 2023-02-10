@@ -312,6 +312,8 @@ static void add_build_kbs(guint group_id, guint build_group,
 	// TODO: rename to dynamic_keys?
 	group->plugin_keys = g_new0(GeanyKeyBinding, max);
 	group->plugin_key_count = max;
+	// strings are dup'd when plugin_keys is set
+	g_ptr_array_set_free_func(group->key_items, free_key_binding);
 
 	for (guint i = fixed_count; i < max; i++)
 	{
