@@ -218,9 +218,9 @@ static GtkWidget *create_switch_dialog(void)
 static void update_filename_label(void)
 {
 	guint i;
-	gchar *msg = NULL;
 	guint queue_length;
 	GeanyDocument *doc;
+	GString *markup = g_string_new(NULL);
 
 	if (!switch_dialog)
 	{
@@ -234,8 +234,10 @@ static void update_filename_label(void)
 		gchar *basename;
 
 		basename = g_path_get_basename(DOC_FILENAME(doc));
+		SETPTR(basename, g_markup_escape_text(basename, -1));
+
 		if (i == mru_pos)
-			msg = g_markup_printf_escaped ("<b>%s</b>", basename);
+			g_string_printf(markup, "<b>%s</b>", basename);
 		else if (i % queue_length == mru_pos)    /* && i != mru_pos */
 		{
 			/* We have wrapped around and got to the starting document again */
@@ -244,13 +246,15 @@ static void update_filename_label(void)
 		}
 		else
 		{
-			SETPTR(basename, g_markup_printf_escaped ("\n%s", basename));
-			SETPTR(msg, g_strconcat(msg, basename, NULL));
+			g_string_append(markup, "\n");
+			if (doc->changed)
+				SETPTR(basename, g_strconcat("<span color='red'>", basename, "</span>", NULL));
+			g_string_append(markup, basename);
 		}
 		g_free(basename);
 	}
-	gtk_label_set_markup(GTK_LABEL(switch_dialog_label), msg);
-	g_free(msg);
+	gtk_label_set_markup(GTK_LABEL(switch_dialog_label), markup->str);
+	g_string_free(markup, TRUE);
 }
 
 
