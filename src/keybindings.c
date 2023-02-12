@@ -1940,21 +1940,6 @@ static void goto_matching_brace(GeanyDocument *doc)
 }
 
 
-static void cut_copy(guint key_id, GtkWidget *focusw)
-{
-	if (IS_SCINTILLA(focusw) && !sci_has_selection(SCINTILLA(focusw)))
-	{
-		// nothing to cut/copy, so select current word ready to cut/copy again
-		keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_WORD);
-		return;
-	}
-	if (key_id == GEANY_KEYS_CLIPBOARD_CUT)
-		on_cut1_activate(NULL, NULL);
-	else
-		on_copy1_activate(NULL, NULL);
-}
-
-
 static gboolean cb_func_clipboard_action(guint key_id)
 {
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
@@ -1962,8 +1947,17 @@ static gboolean cb_func_clipboard_action(guint key_id)
 	switch (key_id)
 	{
 		case GEANY_KEYS_CLIPBOARD_CUT:
+			on_cut1_activate(NULL, NULL);
+			break;
 		case GEANY_KEYS_CLIPBOARD_COPY:
-			cut_copy(key_id, focusw);
+			if (IS_SCINTILLA(focusw) && !sci_has_selection(SCINTILLA(focusw)))
+			{
+				// nothing to cut/copy, so select current word,
+				// which is copied to X clipboard
+				keybindings_send_command(GEANY_KEY_GROUP_SELECT, GEANY_KEYS_SELECT_WORD);
+			}
+			else
+				on_copy1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_PASTE:
 			on_paste1_activate(NULL, NULL);
