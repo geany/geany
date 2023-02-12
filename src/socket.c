@@ -64,6 +64,7 @@
 #include "encodings.h"
 #include "main.h"
 #include "support.h"
+#include "ui_utils.h"
 #include "utils.h"
 #include "win32.h"
 
@@ -616,16 +617,23 @@ static void socket_init_win32(void)
 #endif
 
 
-static void handle_input_filename(const gchar *buf)
+static gboolean handle_input_filename(gpointer p)
 {
+	gchar *buf = p;
 	gchar *utf8_filename, *locale_filename;
+
+	// for some reason the first call happens even when a modal dialog is active
+	if (!gtk_window_is_active(GTK_WINDOW(main_widgets.window)))
+		return G_SOURCE_CONTINUE;
 
 	/* we never know how the input is encoded, so do the best auto detection we can */
 	if (! g_utf8_validate(buf, -1, NULL))
 		utf8_filename = encodings_convert_to_utf8(buf, -1, NULL);
 	else
-		utf8_filename = g_strdup(buf);
-
+	{
+		utf8_filename = buf;
+		buf = NULL;
+	}
 	locale_filename = utils_get_locale_from_utf8(utf8_filename);
 	if (locale_filename)
 	{
@@ -639,6 +647,8 @@ static void handle_input_filename(const gchar *buf)
 	}
 	g_free(utf8_filename);
 	g_free(locale_filename);
+	g_free(buf);
+	return G_SOURCE_REMOVE;
 }
 
 
@@ -688,7 +698,10 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 				if (buf_len > 0 && buf[buf_len - 1] == '\n')
 					buf[buf_len - 1] = '\0';
 
-				handle_input_filename(buf);
+				// Important:
+				// avoid creating documents now because there could be a modal dialog open.
+				// modal code may call document_get_current and assume it hasn't changed
+				g_idle_add(handle_input_filename, g_strdup(buf));
 			}
 			popup = TRUE;
 		}
