@@ -93,7 +93,6 @@ static struct
 	GtkWidget	*redo_items[3];
 	GtkWidget	*undo_items[3];
 	GtkWidget	*save_buttons[4];
-	GtkWidget	*config_files_menu;
 }
 widgets;
 
@@ -2188,7 +2187,7 @@ void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label, Gt
 	GtkWidget *item;
 
 	if (!parent)
-		parent = GTK_CONTAINER(widgets.config_files_menu);
+		parent = GTK_CONTAINER(ui_widgets.config_files_menu);
 
 	if (!label)
 	{
@@ -2219,7 +2218,7 @@ static void create_config_files_menu(void)
 {
 	GtkWidget *menu, *item;
 
-	widgets.config_files_menu = menu = gtk_menu_new();
+	ui_widgets.config_files_menu = menu = gtk_menu_new();
 
 	item = ui_lookup_widget(main_widgets.window, "configuration_files1");
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
@@ -2231,7 +2230,7 @@ static void create_config_files_menu(void)
 	gtk_widget_show(item);
 
 	/* sort menu after all items added */
-	g_idle_add(sort_menu, widgets.config_files_menu);
+	g_idle_add(sort_menu, ui_widgets.config_files_menu);
 }
 
 

@@ -1894,6 +1894,7 @@ GSList *utils_get_config_files(const gchar *subdir)
 
 	if (!list)
 	{
+		// create user config subdirectory
 		utils_mkdir(path, FALSE);
 	}
 	SETPTR(path, g_build_path(G_DIR_SEPARATOR_S, app->datadir, subdir, NULL));

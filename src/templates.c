@@ -309,9 +309,11 @@ static void populate_file_template_menu(GtkWidget *menu)
 }
 
 
-static void create_file_template_menu(void)
+static void create_file_template_menus(void)
 {
-	GtkWidget *item;
+	GtkWidget *item, *menu;
+	GSList *list, *node;
+	const gchar *subdir;
 
 	new_with_template_menu = gtk_menu_new();
 	item = ui_lookup_widget(main_widgets.window, "menu_new_with_template1");
@@ -321,6 +323,31 @@ static void create_file_template_menu(void)
 	g_object_ref(new_with_template_toolbar_menu);
 	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")),
 		new_with_template_toolbar_menu);
+
+	// create config files menu
+	item = gtk_menu_item_new_with_mnemonic(_("Templates"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(ui_widgets.config_files_menu), item);
+	menu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+
+	item = gtk_menu_item_new_with_mnemonic(_("Files"));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	menu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+
+	subdir = GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S "files";
+	list = utils_get_config_files(subdir);
+	foreach_slist(node, list)
+	{
+		gchar *fname = node->data;
+
+		SETPTR(fname, g_build_filename(app->configdir, subdir, fname, NULL));
+		ui_add_config_file_menu_item(fname, NULL, GTK_CONTAINER(menu));
+		g_free(fname);
+	}
+	g_slist_free(list);
 }
 
 
@@ -351,7 +378,7 @@ void templates_init(void)
 
 	if (!init_done)
 	{
-		create_file_template_menu();
+		create_file_template_menus();
 		g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 		init_done = TRUE;
 	}
