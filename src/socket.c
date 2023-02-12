@@ -701,7 +701,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 				// Important:
 				// avoid creating documents now because there could be a modal dialog open.
 				// modal code may call document_get_current and assume it hasn't changed
-				g_idle_add(handle_input_filename, g_strdup(buf));
+				g_timeout_add(100, handle_input_filename, g_strdup(buf));
 			}
 			popup = TRUE;
 		}
