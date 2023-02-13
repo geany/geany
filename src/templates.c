@@ -330,10 +330,21 @@ static void create_file_template_menus(void)
 	gtk_container_add(GTK_CONTAINER(ui_widgets.config_files_menu), item);
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+	list = utils_get_config_files(GEANY_TEMPLATES_SUBDIR);
+	foreach_slist(node, list)
+	{
+		gchar *fname = node->data;
+
+		SETPTR(fname, g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, fname, NULL));
+		if (!g_file_test(fname, G_FILE_TEST_IS_DIR))
+			ui_add_config_file_menu_item(fname, NULL, GTK_CONTAINER(menu));
+		g_free(fname);
+	}
+	g_slist_free(list);
 
 	item = gtk_menu_item_new_with_mnemonic(_("Files"));
 	gtk_widget_show(item);
-	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), item);
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
 
