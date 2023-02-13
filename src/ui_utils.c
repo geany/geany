@@ -2875,11 +2875,11 @@ static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
 	gchar *sa, *sb;
 	gint result;
 
-	/* put entries with submenus at the end of the menu */
+	/* put entries with submenus at the start of the menu */
 	if (gtk_menu_item_get_submenu(item_a) && !gtk_menu_item_get_submenu(item_b))
-		return 1;
-	else if (!gtk_menu_item_get_submenu(item_a) && gtk_menu_item_get_submenu(item_b))
 		return -1;
+	else if (!gtk_menu_item_get_submenu(item_a) && gtk_menu_item_get_submenu(item_b))
+		return 1;
 
 	sa = ui_menu_item_get_text(item_a);
 	sb = ui_menu_item_get_text(item_b);
