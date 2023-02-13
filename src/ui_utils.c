@@ -2133,7 +2133,8 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 			g_file_get_contents(global_file, &global_content, NULL, NULL);
 
 		doc = document_new_file(utf8_filename, ft, global_content);
-		if (global_content)
+		// comment conf entries so we don't override defaults unnecessarily
+		if (g_str_has_suffix(file_name, ".conf") || (ft && ft->id == GEANY_FILETYPES_CONF))
 		{
 			sci_select_all(doc->editor->sci);
 			keybindings_send_command(GEANY_KEY_GROUP_FORMAT,
