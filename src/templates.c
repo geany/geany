@@ -277,17 +277,14 @@ static void populate_file_template_menu(GtkWidget *menu)
 		gchar *fname = node->data;
 		GeanyFiletype *ft = filetypes_detect_from_extension(fname);
 
-		if (ft)
-			ft_groups[ft->id].count++;
+		ft_groups[ft->id].count++;
 	}
 	foreach_slist(node, list)
 	{
 		gchar *fname = node->data;
 		GeanyFiletype *ft = filetypes_detect_from_extension(fname);
-		FTMenu *group = NULL;
+		FTMenu *group = &ft_groups[ft->id];
 
-		if (ft)
-			group = &ft_groups[ft->id];
 		if (group->count == 1)
 			add_file_item(fname, menu);
 		else

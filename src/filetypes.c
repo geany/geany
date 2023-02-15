@@ -513,7 +513,8 @@ static GeanyFiletype *detect_filetype_conf_file(const gchar *utf8_filename)
 
 
 /* Detect filetype only based on the filename extension.
- * utf8_filename can include the full path. */
+ * utf8_filename can include the full path.
+ * Returns: non-NULL */
 GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 {
 	gchar *base_filename;
