@@ -2471,6 +2471,7 @@ Context action
 
 Template preferences
 ^^^^^^^^^^^^^^^^^^^^
+See `Templates`_.
 
 This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
@@ -2480,6 +2481,7 @@ you want to use in your template files.
 
 Template data
 `````````````
+See `Template meta data`_.
 
 Developer
     The name of the developer who will be creating files.
@@ -2500,16 +2502,15 @@ Initial version
     The initial version of files you will be creating.
 
 Year
-    Specify a format for the {year} wildcard. For a list of available conversion
-    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
+    Specify a format for the ``{year}`` wildcard.
 
 Date
-    Specify a format for the {date} wildcard. For a list of available conversion
-    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
+    Specify a format for the ``{date}`` wildcard.
 
 Date & Time
-    Specify a format for the {datetime} wildcard. For a list of available conversion
-    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
+    Specify a format for the ``{datetime}`` wildcard.
+
+See `Date & time wildcards`_ for more information.
 
 
 Keybinding preferences
@@ -2860,7 +2861,7 @@ Project properties
 ^^^^^^^^^^^^^^^^^^
 
 You can set an optional description for the project. Currently it's
-only used for a template wildcard - see `Template wildcards`_.
+only used for the ``{description}}`` template wildcard - see `Dynamic wildcards`_.
 
 The *Base path* field is used as the directory to run the Build menu commands.
 The specified path can be an absolute path or it is considered to be
@@ -3481,16 +3482,16 @@ Complete word                   Ctrl-Space                Shows the autocompleti
 Show calltip                    Ctrl-Shift-Space          Shows a calltip for the current function or
                                                           method.
 
-Complete snippet                Tab                       If you type a construct like if or for and press
+Complete snippet                Tab                       If you type a keyword like ``if`` or ``for`` and press
                                                           this key, it will be completed with a matching
-                                                          template.
+                                                          template - see `User-definable snippets`_.
 
-Suppress snippet completion                               If you type a construct like if or for and press
+Suppress snippet completion                               If you type a construct like ``if`` or ``for`` and press
                                                           this key, it will not be completed, and a space or
                                                           tab will be inserted, depending on what the
                                                           construct completion keybinding is set to. For
                                                           example, if you have set the construct completion
-                                                          keybinding to space, then setting this to
+                                                          keybinding to a space, then setting this to
                                                           Shift+space will prevent construct completion and
                                                           insert a space.
 
@@ -4979,11 +4980,12 @@ Wildcard       Description                                   Available in
 ob             { Opening Brace (used to prevent other        file templates, file header, snippets.
                wildcards being expanded).
 cb             } Closing Brace.                              file templates, file header, snippets.
-pc             \% Percent (used to escape e.g. %block% in
-               snippets).                                    snippets.
+pc             \% Percent (used to escape e.g. ``%block%``
+               in snippets).                                 snippets.
 ============== ============================================= =======================================
 
-**Global wildcards**
+Global wildcards
+****************
 
 These are configurable, see `Template preferences`_.
 
@@ -5011,7 +5013,8 @@ version        The initial version of a new file.            file templates, fil
                                                              bsd, gpl, snippets.
 ============== ============================================= =======================================
 
-**Date & time wildcards**
+Date & time wildcards
+*********************
 
 The format for these wildcards can be changed in the preferences
 dialog, see `Template preferences`_. For a list of available conversion
@@ -5033,7 +5036,8 @@ datetime       The current date and time. Default format:    file templates, fil
                                                              bsd, gpl, snippets.
 ============== ============================================= =======================================
 
-**Dynamic wildcards**
+Dynamic wildcards
+*****************
 
 ============== ============================================= =======================================
 Wildcard       Description                                   Available in
@@ -5066,7 +5070,8 @@ command:path   Executes the specified command and replace    file templates, fil
                for details.
 ============== ============================================= =======================================
 
-**Template insertion wildcards**
+Template insertion wildcards
+****************************
 
 ============== ============================================= =======================================
 Wildcard       Description                                   Available in
@@ -5083,7 +5088,7 @@ fileheader     The file header template. This wildcard       snippets, file temp
 Special {command:} wildcard
 ***************************
 
-The {command:} wildcard is a special one because it can execute
+The ``{command:}`` wildcard is a special one because it can execute
 a specified command and put the command's output (stdout) into
 the template.
 
@@ -5102,7 +5107,7 @@ In the environment of the executed command the variables
 ``GEANY_FILENAME``, ``GEANY_FILETYPE`` and ``GEANY_FUNCNAME`` are set.
 The value of these variables is filled in only if Geany knows about it.
 For example, ``GEANY_FUNCNAME`` is only filled within the function
-description template. However, these variables are ``always`` set,
+description template. However, these variables are *always* set,
 just maybe with an empty value.
 You can easily access them e.g. within an executed shell script using::
 
@@ -5112,7 +5117,7 @@ You can easily access them e.g. within an executed shell script using::
 .. note::
     If the specified command could not be found or not executed, the wildcard is substituted
     by an empty string. In such cases, you can find the occurred error message on Geany's
-    standard error and in the Help->Debug Messages dialog.
+    standard error and in the *Help->Debug Messages* dialog.
 
 
 Customizing the toolbar
