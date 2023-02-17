@@ -96,7 +96,8 @@ struct GeanyKeyBinding
  * the existing enum values stay the same. */
 
 /** Keybinding group IDs for use with keybindings_send_command(). */
-/* These IDs are used to lookup a group. */
+/* These IDs are used to lookup a group.
+ * Append to avoid breaking ABI. */
 enum GeanyKeyGroupID
 {
 	GEANY_KEY_GROUP_FILE,			/**< Group. */
@@ -116,6 +117,7 @@ enum GeanyKeyGroupID
 	GEANY_KEY_GROUP_BUILD,			/**< Group. */
 	GEANY_KEY_GROUP_TOOLS,			/**< Group. */
 	GEANY_KEY_GROUP_HELP,			/**< Group. */
+	GEANY_KEY_GROUP_SEND_SEL,
 	GEANY_KEY_GROUP_COUNT	/* must not be used by plugins */
 };
 

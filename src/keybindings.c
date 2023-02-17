@@ -83,6 +83,7 @@ static gboolean cb_func_project_action(guint key_id);
 static gboolean cb_func_editor_action(guint key_id);
 static gboolean cb_func_select_action(guint key_id);
 static gboolean cb_func_format_action(guint key_id);
+static gboolean cb_func_send_sel(guint key_id);
 static gboolean cb_func_insert_action(guint key_id);
 static gboolean cb_func_search_action(guint key_id);
 static gboolean cb_func_goto_action(guint key_id);
@@ -320,6 +321,7 @@ static void init_default_kb(void)
 	ADD_KB_GROUP(GEANY_KEY_GROUP_CLIPBOARD, _("Clipboard"), cb_func_clipboard_action);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_SELECT, _("Select"), cb_func_select_action);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_FORMAT, _("Format"), cb_func_format_action);
+	ADD_KB_GROUP(GEANY_KEY_GROUP_SEND_SEL, _("_Send Selection to"), cb_func_send_sel);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_INSERT, _("Insert"), cb_func_insert_action);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_SETTINGS, _("Settings"), NULL);
 	ADD_KB_GROUP(GEANY_KEY_GROUP_SEARCH, _("Search"), cb_func_search_action);
@@ -489,24 +491,6 @@ static void init_default_kb(void)
 		0, 0, "edit_decreaseindentbyspace", _("Decrease indent by one space"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_AUTOINDENT, NULL,
 		0, 0, "edit_autoindent", _("S_mart Line Indent"), "smart_line_indent1");
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD1, NULL,
-		GDK_KEY_1, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd1", _("Send to Custom Command 1"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD2, NULL,
-		GDK_KEY_2, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD3, NULL,
-		GDK_KEY_3, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD4, NULL,
-		0, 0, "edit_sendtocmd4", _("Send to Custom Command 4"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD5, NULL,
-		0, 0, "edit_sendtocmd5", _("Send to Custom Command 5"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD6, NULL,
-		0, 0, "edit_sendtocmd6", _("Send to Custom Command 6"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD7, NULL,
-		0, 0, "edit_sendtocmd7", _("Send to Custom Command 7"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD8, NULL,
-		0, 0, "edit_sendtocmd8", _("Send to Custom Command 8"), NULL);
-	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD9, NULL,
-		0, 0, "edit_sendtocmd9", _("Send to Custom Command 9"), NULL);
 	/* may fit better in editor group */
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
 		0, 0, "edit_sendtovte", _("_Send Selection to Terminal"), "send_selection_to_vte1");
@@ -516,6 +500,31 @@ static void init_default_kb(void)
 	keybindings_set_item(group, GEANY_KEYS_FORMAT_JOINLINES, NULL,
 		0, 0, "edit_joinlines", _("Join lines"), NULL);
 
+	group = keybindings_get_core_group(GEANY_KEY_GROUP_SEND_SEL);
+	
+	guint len = ui_prefs.custom_commands ?
+		MAX(g_strv_length(ui_prefs.custom_commands), 3) : 3;
+
+	setup_group_size(group, len);
+	add_kb(group, 0, NULL,
+		GDK_KEY_1, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd1", "#1", NULL);
+	add_kb(group, 1, NULL,         
+		GDK_KEY_2, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd2", "#2", NULL);
+	add_kb(group, 2, NULL,       
+		GDK_KEY_3, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd3", "#3", NULL);
+	for (guint i = 3; i != len; i++)
+	{
+		gchar key[16] = "edit_sendtocmd?";
+		gchar label[3] = "#?";
+		gchar d = i + 1 + '0';
+
+		if (i == 10)
+			break;
+		key[14] = d;
+		label[1] = d;
+		add_kb(group, i, NULL,
+			0, 0, key, label, NULL);
+	}
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_INSERT);
 
 	add_kb(group, GEANY_KEYS_INSERT_DATE, NULL,
@@ -2459,42 +2468,6 @@ static gboolean cb_func_format_action(guint key_id)
 		case GEANY_KEYS_FORMAT_TOGGLECASE:
 			on_toggle_case1_activate(NULL, NULL);
 			break;
-		case GEANY_KEYS_FORMAT_SENDTOCMD1:
-			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 0)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[0]);
-			break;
-		case GEANY_KEYS_FORMAT_SENDTOCMD2:
-			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 1)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[1]);
-			break;
-		case GEANY_KEYS_FORMAT_SENDTOCMD3:
-			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 2)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[2]);
-			break;
-		case GEANY_KEYS_FORMAT_SENDTOCMD4:
-			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 3)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[3]);
-			break;
-		case GEANY_KEYS_FORMAT_SENDTOCMD5:
-			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 4)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[4]);
-			break;
-		case GEANY_KEYS_FORMAT_SENDTOCMD6:
-			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 5)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[5]);
-			break;
-		case GEANY_KEYS_FORMAT_SENDTOCMD7:
-			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 6)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[6]);
-			break;
-		case GEANY_KEYS_FORMAT_SENDTOCMD8:
-			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 7)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[7]);
-			break;
-		case GEANY_KEYS_FORMAT_SENDTOCMD9:
-			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 8)
-				tools_execute_custom_command(doc, ui_prefs.custom_commands[8]);
-			break;
 		case GEANY_KEYS_FORMAT_SENDTOVTE:
 			on_send_selection_to_vte1_activate(NULL, NULL);
 			break;
@@ -2504,7 +2477,33 @@ static gboolean cb_func_format_action(guint key_id)
 		case GEANY_KEYS_FORMAT_JOINLINES:
 			join_paragraph(doc->editor);
 			break;
+		// keybindings_send_command compat, moved to separate group
+		case GEANY_KEYS_FORMAT_SENDTOCMD1: cb_func_send_sel(0); break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD2: cb_func_send_sel(1); break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD3: cb_func_send_sel(2); break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD4: cb_func_send_sel(3); break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD5: cb_func_send_sel(4); break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD6: cb_func_send_sel(5); break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD7: cb_func_send_sel(6); break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD8: cb_func_send_sel(7); break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD9: cb_func_send_sel(8); break;
 	}
+	return TRUE;
+}
+
+
+static gboolean cb_func_send_sel(guint key_id)
+{
+	GeanyDocument *doc = document_get_current();
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
+
+	/* keybindings only valid when scintilla widget has focus */
+	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
+		return TRUE;
+
+	if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > key_id)
+		tools_execute_custom_command(doc, ui_prefs.custom_commands[key_id]);
+
 	return TRUE;
 }
 
