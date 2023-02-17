@@ -421,7 +421,7 @@ following items:
   `Filetype extensions`_)
 * Individual filetypes
 
-Clicking *More options* will reveal controls to open a file with a 
+Clicking *More options* will reveal controls to open files with a 
 specific filetype and/or encoding (see `Character sets and Unicode 
 Byte-Order-Mark (BOM)`_).
 
