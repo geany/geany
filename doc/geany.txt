@@ -364,24 +364,26 @@ Short option  Long option              Function
 
 -?            --help                   Show help information and exit.
 
-*none*        [files ...]              Open all given files at startup. This option causes
-                                       Geany to ignore loading stored files from the last
-                                       session (if enabled).
-                                       Geany also recognizes line and column information when
+*none*        *files ...*              Open all given filenames at startup.
+                                       If a running instance is detected, pass filenames
+              *file:line ...*          to it instead.
+
+              *file:line:col ...*      Geany also recognizes line and column information when
                                        appended to the filename with colons, e.g.
-                                       "geany foo.bar:10:5" will open the file foo.bar and
+                                       ``geany foo.bar:10:5`` will open the file ``foo.bar`` and
                                        place the cursor in line 10 at column 5.
 
-                                       Projects can also be opened but a project file (\*.geany)
-                                       must be the first non-option argument. All additionally
-                                       given files are ignored.
+                                       If a filename does not exist, create a new document 
+                                       with the desired filename if the
+                                       *Open new files from the command-line* 
+                                       `file pref <#files-preferences>`_ is set.
+
+                                       A project can also be opened, but the project filename (\*.geany)
+                                       must be the first non-option argument. Any other
+                                       project filenames will be opened as text files.
 ============  =======================  =================================================
 
-You can also pass line number and column number information, e.g.::
-
-    geany some_file.foo:55:4
-
-Geany supports all generic GTK options, a list is available on the
+Geany also supports all generic GTK options, a list is available on the
 help screen.
 
 
