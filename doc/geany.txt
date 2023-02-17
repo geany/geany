@@ -2217,7 +2217,8 @@ Automatic continuation multi-line comments
       *
 
     on the next line with the correct indentation based on the previous line,
-    as long as the multi-line is not closed by ``*/``.
+    as long as the multi-line is not closed by ``*/``. If the previous line
+    has no ``*`` prefix, no ``*`` will be added to the new line.
 
 Autocomplete symbols
     When you start to type a symbol name, look for the full string to

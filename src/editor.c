@@ -3535,8 +3535,8 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 	if (sci_get_style_at(sci, indent_pos) == style || indent_pos >= sci_get_length(sci))
 	{
 		gchar *previous_line = sci_get_line(sci, cur_line - 1);
-		/* the type of comment, '*' (C/C++/Java), '+' and the others (D) */
-		const gchar *continuation = "*";
+		/* the type of comment, '*' (C/C++/Java), '+' D comment that nests */
+		const gchar *continuation = (style == SCE_D_COMMENTNESTED) ? "+" : "*";
 		const gchar *whitespace = ""; /* to hold whitespace if needed */
 		gchar *result;
 		gint len = strlen(previous_line);
@@ -3569,10 +3569,13 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 		{ /* we are on the second line of a multi line comment, so we have to insert white space */
 			whitespace = " ";
 		}
-
-		if (style == SCE_D_COMMENTNESTED)
-			continuation = "+"; /* for nested comments in D */
-
+		else if (!(g_str_has_prefix(previous_line + i, continuation) &&
+			(i + 1 == len || isspace(previous_line[i + 1]))))
+		{
+			// previous line isn't formatted so abort
+			g_free(previous_line);
+			return;
+		}
 		result = g_strconcat(whitespace, continuation, " ", NULL);
 		sci_add_text(sci, result);
 		g_free(result);
