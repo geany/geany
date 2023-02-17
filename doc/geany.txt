@@ -389,10 +389,8 @@ help screen.
 General
 -------
 
-
-Re-opening files
-^^^^^^^^^^^^^^^^
-
+Startup
+^^^^^^^
 At startup, Geany loads all files from the last time Geany was
 launched. You can disable this feature in the preferences dialog
 (see `General Startup preferences`_).
@@ -409,8 +407,11 @@ the command-line, or disable opening files in a running instance
 using the ``-i`` `command line option <#command-line-options>`_.
 
 
-Opening other files
-^^^^^^^^^^^^^^^^^^^
+Opening files
+^^^^^^^^^^^^^
+
+Open dialog
+```````````
 The *File->Open* command will show a dialog to choose one or more text 
 files to open. There is a list of file filters on the right with the 
 following items:
