@@ -26,9 +26,12 @@
 #include "config.h"
 
 
-/* Only for the command-line xgettext tool to find translatable strings.
- * The gettext() function is invoked manually using glib g_dgettext() */
-#define _(String) (String)
+#ifdef GETTEXT_PACKAGE
+# include <glib/gi18n-lib.h>
+#else
+# define _(String) String
+# define N_(String) String
+#endif
 
 typedef struct
 {
@@ -81,17 +84,17 @@ static TMParserMapEntry map_C[] = {
 /* Used also by other languages than C - keep all the tm_tag_* here even though
  * they aren't used by C as they might be used by some other language */
 static TMParserMapGroup group_C[] = {
-	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t | tm_tag_package_t | tm_tag_include_t},
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_prototype_t | tm_tag_method_t | tm_tag_function_t},
-	{_("Members"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_field_t},
-	{_("Structs"), TM_ICON_STRUCT, tm_tag_union_t | tm_tag_struct_t},
-	{_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
-	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t | tm_tag_macro_with_arg_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t | tm_tag_local_var_t},
-	{_("Extern Variables"), TM_ICON_VAR, tm_tag_externvar_t},
-	{_("Other"), TM_ICON_OTHER, tm_tag_other_t},
+	{N_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t | tm_tag_package_t | tm_tag_include_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_prototype_t | tm_tag_method_t | tm_tag_function_t},
+	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_field_t},
+	{N_("Structs"), TM_ICON_STRUCT, tm_tag_union_t | tm_tag_struct_t},
+	{N_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
+	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t | tm_tag_macro_with_arg_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t | tm_tag_local_var_t},
+	{N_("Extern Variables"), TM_ICON_VAR, tm_tag_externvar_t},
+	{N_("Other"), TM_ICON_OTHER, tm_tag_other_t},
 };
 
 static TMParserMapEntry map_CPP[] = {
@@ -115,13 +118,13 @@ static TMParserMapEntry map_JAVA[] = {
 	{'g', tm_tag_enum_t},       // enum
 };
 static TMParserMapGroup group_JAVA[] = {
-	{_("Package"), TM_ICON_NAMESPACE, tm_tag_package_t},
-	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Methods"), TM_ICON_METHOD, tm_tag_method_t},
-	{_("Members"), TM_ICON_MEMBER, tm_tag_field_t},
-	{_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
-	{_("Other"), TM_ICON_VAR, tm_tag_enumerator_t},
+	{N_("Package"), TM_ICON_NAMESPACE, tm_tag_package_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Methods"), TM_ICON_METHOD, tm_tag_method_t},
+	{N_("Members"), TM_ICON_MEMBER, tm_tag_field_t},
+	{N_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
+	{N_("Other"), TM_ICON_VAR, tm_tag_enumerator_t},
 };
 
 // no scope information
@@ -131,8 +134,8 @@ static TMParserMapEntry map_MAKEFILE[] = {
 	{'I', tm_tag_undef_t},     // makefile
 };
 static TMParserMapGroup group_MAKEFILE[] = {
-	{_("Targets"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Targets"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
 };
 
 static TMParserMapEntry map_PASCAL[] = {
@@ -140,7 +143,7 @@ static TMParserMapEntry map_PASCAL[] = {
 	{'p', tm_tag_function_t},  // procedure
 };
 static TMParserMapGroup group_PASCAL[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 };
 
 // no scope information
@@ -154,11 +157,11 @@ static TMParserMapEntry map_PERL[] = {
 	{'M', tm_tag_undef_t},      // module
 };
 static TMParserMapGroup group_PERL[] = {
-	{_("Package"), TM_ICON_NAMESPACE, tm_tag_package_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
-	{_("Labels"), TM_ICON_NONE, tm_tag_macro_t},
-	{_("Constants"), TM_ICON_NONE, tm_tag_enum_t},
-	{_("Other"), TM_ICON_OTHER, tm_tag_other_t},
+	{N_("Package"), TM_ICON_NAMESPACE, tm_tag_package_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
+	{N_("Labels"), TM_ICON_NONE, tm_tag_macro_t},
+	{N_("Constants"), TM_ICON_NONE, tm_tag_enum_t},
+	{N_("Other"), TM_ICON_OTHER, tm_tag_other_t},
 };
 
 static TMParserMapEntry map_PHP[] = {
@@ -173,13 +176,13 @@ static TMParserMapEntry map_PHP[] = {
 	{'a', tm_tag_undef_t},      // alias
 };
 static TMParserMapGroup group_PHP[] = {
-	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
-	{_("Traits"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
+	{N_("Traits"), TM_ICON_STRUCT, tm_tag_struct_t},
 };
 
 static TMParserMapEntry map_PYTHON[] = {
@@ -196,11 +199,11 @@ static TMParserMapEntry map_PYTHON[] = {
 	{'l', tm_tag_local_var_t},  // local
 };
 static TMParserMapGroup group_PYTHON[] = {
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Methods"), TM_ICON_MACRO, tm_tag_method_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
-	{_("Imports"), TM_ICON_NAMESPACE, tm_tag_externvar_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Methods"), TM_ICON_MACRO, tm_tag_method_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
+	{N_("Imports"), TM_ICON_NAMESPACE, tm_tag_externvar_t},
 };
 
 static TMParserMapEntry map_LATEX[] = {
@@ -221,15 +224,15 @@ static TMParserMapEntry map_LATEX[] = {
 	{'N', tm_tag_undef_t},      // counter
 };
 static TMParserMapGroup group_LATEX[] = {
-	{_("Command"), TM_ICON_NONE, tm_tag_function_t},
-	{_("Environment"), TM_ICON_NONE, tm_tag_class_t},
-	{_("Part"), TM_ICON_NONE, tm_tag_enum_t},
-	{_("Chapter"), TM_ICON_NONE, tm_tag_namespace_t},
-	{_("Section"), TM_ICON_NONE, tm_tag_member_t},
-	{_("Subsection"), TM_ICON_NONE, tm_tag_macro_t},
-	{_("Subsubsection"), TM_ICON_NONE, tm_tag_variable_t},
-	{_("Bibitem"), TM_ICON_NONE, tm_tag_field_t},
-	{_("Label"), TM_ICON_NONE, tm_tag_struct_t},
+	{N_("Command"), TM_ICON_NONE, tm_tag_function_t},
+	{N_("Environment"), TM_ICON_NONE, tm_tag_class_t},
+	{N_("Part"), TM_ICON_NONE, tm_tag_enum_t},
+	{N_("Chapter"), TM_ICON_NONE, tm_tag_namespace_t},
+	{N_("Section"), TM_ICON_NONE, tm_tag_member_t},
+	{N_("Subsection"), TM_ICON_NONE, tm_tag_macro_t},
+	{N_("Subsubsection"), TM_ICON_NONE, tm_tag_variable_t},
+	{N_("Bibitem"), TM_ICON_NONE, tm_tag_field_t},
+	{N_("Label"), TM_ICON_NONE, tm_tag_struct_t},
 };
 
 // no scope information
@@ -251,14 +254,14 @@ static TMParserMapEntry map_BIBTEX[] = {
 	{'u', tm_tag_externvar_t},  // unpublished
 };
 static TMParserMapGroup group_BIBTEX[] = {
-	{_("Articles"), TM_ICON_NONE, tm_tag_function_t},
-	{_("Book Chapters"), TM_ICON_NONE, tm_tag_macro_t},
-	{_("Books & Conference Proceedings"), TM_ICON_NONE, tm_tag_class_t},
-	{_("Conference Papers"), TM_ICON_NONE, tm_tag_member_t},
-	{_("Theses"), TM_ICON_NONE, tm_tag_variable_t},
-	{_("Strings"), TM_ICON_NONE, tm_tag_namespace_t},
-	{_("Unpublished"), TM_ICON_NONE, tm_tag_externvar_t},
-	{_("Other"), TM_ICON_NONE, tm_tag_other_t},
+	{N_("Articles"), TM_ICON_NONE, tm_tag_function_t},
+	{N_("Book Chapters"), TM_ICON_NONE, tm_tag_macro_t},
+	{N_("Books & Conference Proceedings"), TM_ICON_NONE, tm_tag_class_t},
+	{N_("Conference Papers"), TM_ICON_NONE, tm_tag_member_t},
+	{N_("Theses"), TM_ICON_NONE, tm_tag_variable_t},
+	{N_("Strings"), TM_ICON_NONE, tm_tag_namespace_t},
+	{N_("Unpublished"), TM_ICON_NONE, tm_tag_externvar_t},
+	{N_("Other"), TM_ICON_NONE, tm_tag_other_t},
 };
 
 static TMParserMapEntry map_ASM[] = {
@@ -269,10 +272,10 @@ static TMParserMapEntry map_ASM[] = {
 	{'s', tm_tag_undef_t},      // section
 };
 static TMParserMapGroup group_ASM[] = {
-	{_("Labels"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Macros"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Defines"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Types"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Labels"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Macros"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Defines"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Types"), TM_ICON_STRUCT, tm_tag_struct_t},
 };
 
 static TMParserMapEntry map_CONF[] = {
@@ -280,8 +283,8 @@ static TMParserMapEntry map_CONF[] = {
 	{'k', tm_tag_macro_t},      // key
 };
 static TMParserMapGroup group_CONF[] = {
-	{_("Sections"), TM_ICON_OTHER, tm_tag_namespace_t},
-	{_("Keys"), TM_ICON_VAR, tm_tag_macro_t},
+	{N_("Sections"), TM_ICON_OTHER, tm_tag_namespace_t},
+	{N_("Keys"), TM_ICON_VAR, tm_tag_macro_t},
 };
 
 static TMParserMapEntry map_SQL[] = {
@@ -311,13 +314,13 @@ static TMParserMapEntry map_SQL[] = {
 	{'C', tm_tag_undef_t},      // ccflag
 };
 static TMParserMapGroup group_SQL[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
-	{_("Procedures"), TM_ICON_NAMESPACE, tm_tag_namespace_t | tm_tag_package_t},
-	{_("Indexes"), TM_ICON_STRUCT, tm_tag_struct_t},
-	{_("Tables"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Triggers"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Views"), TM_ICON_VAR, tm_tag_field_t | tm_tag_member_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
+	{N_("Procedures"), TM_ICON_NAMESPACE, tm_tag_namespace_t | tm_tag_package_t},
+	{N_("Indexes"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Tables"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Triggers"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Views"), TM_ICON_VAR, tm_tag_field_t | tm_tag_member_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 static TMParserMapEntry map_DOCBOOK[] = {
@@ -329,12 +332,12 @@ static TMParserMapEntry map_DOCBOOK[] = {
 	{'s', tm_tag_struct_t},
 };
 static TMParserMapGroup group_DOCBOOK[] = {
-	{_("Chapter"), TM_ICON_NONE, tm_tag_function_t},
-	{_("Section"), TM_ICON_NONE, tm_tag_class_t},
-	{_("Sect1"), TM_ICON_NONE, tm_tag_member_t},
-	{_("Sect2"), TM_ICON_NONE, tm_tag_macro_t},
-	{_("Sect3"), TM_ICON_NONE, tm_tag_variable_t},
-	{_("Appendix"), TM_ICON_NONE, tm_tag_struct_t},
+	{N_("Chapter"), TM_ICON_NONE, tm_tag_function_t},
+	{N_("Section"), TM_ICON_NONE, tm_tag_class_t},
+	{N_("Sect1"), TM_ICON_NONE, tm_tag_member_t},
+	{N_("Sect2"), TM_ICON_NONE, tm_tag_macro_t},
+	{N_("Sect3"), TM_ICON_NONE, tm_tag_variable_t},
+	{N_("Appendix"), TM_ICON_NONE, tm_tag_struct_t},
 };
 
 // no scope information
@@ -346,10 +349,10 @@ static TMParserMapEntry map_ERLANG[] = {
 	{'t', tm_tag_typedef_t},   // type
 };
 static TMParserMapGroup group_ERLANG[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t},
-	{_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t},
-	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t},
+	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
 };
 
 // no scope information
@@ -359,9 +362,9 @@ static TMParserMapEntry map_CSS[] = {
 	{'i', tm_tag_variable_t},  // id
 };
 static TMParserMapGroup group_CSS[] = {
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("ID Selectors"), TM_ICON_VAR, tm_tag_variable_t},
-	{_("Type Selectors"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("ID Selectors"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Type Selectors"), TM_ICON_STRUCT, tm_tag_struct_t},
 };
 
 static TMParserMapEntry map_RUBY[] = {
@@ -375,10 +378,10 @@ static TMParserMapEntry map_RUBY[] = {
 	{'L', tm_tag_undef_t},      // library
 };
 static TMParserMapGroup group_RUBY[] = {
-	{_("Modules"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Singletons"), TM_ICON_STRUCT, tm_tag_member_t},
-	{_("Methods"), TM_ICON_METHOD, tm_tag_method_t},
+	{N_("Modules"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Singletons"), TM_ICON_STRUCT, tm_tag_member_t},
+	{N_("Methods"), TM_ICON_METHOD, tm_tag_method_t},
 };
 
 static TMParserMapEntry map_TCL[] = {
@@ -387,10 +390,10 @@ static TMParserMapEntry map_TCL[] = {
 	{'z', tm_tag_undef_t},      // parameter
 };
 static TMParserMapGroup group_TCL[] = {
-	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Methods"), TM_ICON_METHOD, tm_tag_member_t},
-	{_("Procedures"), TM_ICON_OTHER, tm_tag_function_t},
+	{N_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Methods"), TM_ICON_METHOD, tm_tag_member_t},
+	{N_("Procedures"), TM_ICON_OTHER, tm_tag_function_t},
 };
 
 static TMParserMapEntry map_TCLOO[] = {
@@ -413,7 +416,7 @@ static TMParserMapEntry map_SH[] = {
 	{'h', tm_tag_undef_t},     // heredoc
 };
 static TMParserMapGroup group_SH[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 };
 
 static TMParserMapEntry map_D[] = {
@@ -432,15 +435,15 @@ static TMParserMapEntry map_D[] = {
 	{'x', tm_tag_externvar_t},   // externvar
 };
 static TMParserMapGroup group_D[] = {
-	{_("Module"), TM_ICON_NONE, tm_tag_namespace_t},
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
-	{_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
-	{_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t | tm_tag_union_t},
-	{_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
-	{_("Extern Variables"), TM_ICON_VAR, tm_tag_externvar_t},
+	{N_("Module"), TM_ICON_NONE, tm_tag_namespace_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
+	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t | tm_tag_union_t},
+	{N_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
+	{N_("Extern Variables"), TM_ICON_VAR, tm_tag_externvar_t},
 };
 
 static TMParserMapEntry map_DIFF[] = {
@@ -450,7 +453,7 @@ static TMParserMapEntry map_DIFF[] = {
 	{'h', tm_tag_undef_t},     // hunk
 };
 static TMParserMapGroup group_DIFF[] = {
-	{_("Files"), TM_ICON_NONE, tm_tag_function_t},
+	{N_("Files"), TM_ICON_NONE, tm_tag_function_t},
 };
 
 static TMParserMapEntry map_VHDL[] = {
@@ -474,13 +477,13 @@ static TMParserMapEntry map_VHDL[] = {
 	{'A', tm_tag_typedef_t},    // alias
 };
 static TMParserMapGroup group_VHDL[] = {
-	{_("Package"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Entities"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Architectures"), TM_ICON_STRUCT, tm_tag_struct_t},
-	{_("Types"), TM_ICON_OTHER, tm_tag_typedef_t},
-	{_("Functions / Procedures"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Variables / Signals / Ports"), TM_ICON_VAR, tm_tag_variable_t},
-	{_("Processes / Blocks / Components"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Package"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Entities"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Architectures"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Types"), TM_ICON_OTHER, tm_tag_typedef_t},
+	{N_("Functions / Procedures"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Variables / Signals / Ports"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Processes / Blocks / Components"), TM_ICON_MEMBER, tm_tag_member_t},
 };
 
 static TMParserMapEntry map_LUA[] = {
@@ -488,7 +491,7 @@ static TMParserMapEntry map_LUA[] = {
 	{'X', tm_tag_undef_t},     // unknown
 };
 static TMParserMapGroup group_LUA[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 };
 
 static TMParserMapEntry map_JAVASCRIPT[] = {
@@ -504,11 +507,11 @@ static TMParserMapEntry map_JAVASCRIPT[] = {
 	{'M', tm_tag_undef_t},     // field
 };
 static TMParserMapGroup group_JAVASCRIPT[] = {
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
-	{_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
-	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
+	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 // no scope information
@@ -519,10 +522,10 @@ static TMParserMapEntry map_HASKELL[] = {
 	{'m', tm_tag_namespace_t},  // module
 };
 static TMParserMapGroup group_HASKELL[] = {
-	{_("Module"), TM_ICON_NONE, tm_tag_namespace_t},
-	{_("Types"), TM_ICON_NONE, tm_tag_typedef_t},
-	{_("Type constructors"), TM_ICON_NONE, tm_tag_macro_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Module"), TM_ICON_NONE, tm_tag_namespace_t},
+	{N_("Types"), TM_ICON_NONE, tm_tag_typedef_t},
+	{N_("Type constructors"), TM_ICON_NONE, tm_tag_macro_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 };
 
 #define map_UNUSED1 map_HASKELL
@@ -555,11 +558,11 @@ static TMParserMapEntry map_FREEBASIC[] = {
 	{'g', tm_tag_externvar_t},  // enum
 };
 static TMParserMapGroup group_FREEBASIC[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_externvar_t},
-	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Types"), TM_ICON_NAMESPACE, tm_tag_struct_t},
-	{_("Labels"), TM_ICON_MEMBER, tm_tag_namespace_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_externvar_t},
+	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Types"), TM_ICON_NAMESPACE, tm_tag_struct_t},
+	{N_("Labels"), TM_ICON_MEMBER, tm_tag_namespace_t},
 };
 
 // no scope information
@@ -572,11 +575,11 @@ static TMParserMapEntry map_HAXE[] = {
 	{'t', tm_tag_typedef_t},    // typedef
 };
 static TMParserMapGroup group_HAXE[] = {
-	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Methods"), TM_ICON_METHOD, tm_tag_method_t},
-	{_("Types"), TM_ICON_MACRO, tm_tag_typedef_t | tm_tag_enum_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Methods"), TM_ICON_METHOD, tm_tag_method_t},
+	{N_("Types"), TM_ICON_MACRO, tm_tag_typedef_t | tm_tag_enum_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 static TMParserMapEntry map_REST[] = {
@@ -589,10 +592,10 @@ static TMParserMapEntry map_REST[] = {
 	{'d', tm_tag_undef_t},      // substdef
 };
 static TMParserMapGroup group_REST[] = {
-	{_("Chapter"), TM_ICON_NONE, tm_tag_namespace_t},
-	{_("Section"), TM_ICON_NONE, tm_tag_member_t},
-	{_("Subsection"), TM_ICON_NONE, tm_tag_macro_t},
-	{_("Subsubsection"), TM_ICON_NONE, tm_tag_variable_t},
+	{N_("Chapter"), TM_ICON_NONE, tm_tag_namespace_t},
+	{N_("Section"), TM_ICON_NONE, tm_tag_member_t},
+	{N_("Subsection"), TM_ICON_NONE, tm_tag_macro_t},
+	{N_("Subsubsection"), TM_ICON_NONE, tm_tag_variable_t},
 };
 
 // no scope information
@@ -607,11 +610,11 @@ static TMParserMapEntry map_HTML[] = {
 	{'J', tm_tag_undef_t},      // script
 };
 static TMParserMapGroup group_HTML[] = {
-	{_("Functions"), TM_ICON_NONE, tm_tag_function_t},  // javascript functions from subparser
-	{_("Anchors"), TM_ICON_NONE, tm_tag_member_t},
-	{_("H1 Headings"), TM_ICON_NONE, tm_tag_namespace_t},
-	{_("H2 Headings"), TM_ICON_NONE, tm_tag_class_t},
-	{_("H3 Headings"), TM_ICON_NONE, tm_tag_variable_t},
+	{N_("Functions"), TM_ICON_NONE, tm_tag_function_t},  // javascript functions from subparser
+	{N_("Anchors"), TM_ICON_NONE, tm_tag_member_t},
+	{N_("H1 Headings"), TM_ICON_NONE, tm_tag_namespace_t},
+	{N_("H2 Headings"), TM_ICON_NONE, tm_tag_class_t},
+	{N_("H3 Headings"), TM_ICON_NONE, tm_tag_variable_t},
 };
 
 static TMSubparserMapEntry subparser_HTML_javascript_map[] = {
@@ -640,15 +643,15 @@ static TMParserMapEntry map_FORTRAN[] = {
 	{'S', tm_tag_undef_t},       // submodule
 };
 static TMParserMapGroup group_FORTRAN[] = {
-	{_("Module"), TM_ICON_CLASS, tm_tag_namespace_t},
-	{_("Programs"), TM_ICON_CLASS, tm_tag_struct_t},
-	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
-	{_("Functions / Subroutines"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
-	{_("Types"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Components"), TM_ICON_MEMBER, tm_tag_member_t},
-	{_("Blocks"), TM_ICON_MEMBER, tm_tag_macro_t},
-	{_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
+	{N_("Module"), TM_ICON_CLASS, tm_tag_namespace_t},
+	{N_("Programs"), TM_ICON_CLASS, tm_tag_struct_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Functions / Subroutines"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
+	{N_("Types"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Components"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Blocks"), TM_ICON_MEMBER, tm_tag_macro_t},
+	{N_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
 };
 
 static TMParserMapEntry map_MATLAB[] = {
@@ -656,8 +659,8 @@ static TMParserMapEntry map_MATLAB[] = {
 	{'s', tm_tag_struct_t},    // struct
 };
 static TMParserMapGroup group_MATLAB[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Structures"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Structures"), TM_ICON_STRUCT, tm_tag_struct_t},
 };
 
 #define map_CUDA map_C
@@ -693,15 +696,15 @@ static TMParserMapEntry map_ACTIONSCRIPT[] = {
 	{'x', tm_tag_other_t},      // mxtag
 };
 static TMParserMapGroup group_ACTIONSCRIPT[] = {
-	{_("Imports"), TM_ICON_NAMESPACE, tm_tag_externvar_t},
-	{_("Package"), TM_ICON_NAMESPACE, tm_tag_package_t},
-	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t| tm_tag_method_t},
-	{_("Properties"), TM_ICON_MEMBER, tm_tag_member_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
-	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Other"), TM_ICON_OTHER, tm_tag_other_t},
+	{N_("Imports"), TM_ICON_NAMESPACE, tm_tag_externvar_t},
+	{N_("Package"), TM_ICON_NAMESPACE, tm_tag_package_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t| tm_tag_method_t},
+	{N_("Properties"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Other"), TM_ICON_OTHER, tm_tag_other_t},
 };
 
 static TMParserMapEntry map_NSIS[] = {
@@ -716,9 +719,9 @@ static TMParserMapEntry map_NSIS[] = {
 	{'i', tm_tag_undef_t},      // script
 };
 static TMParserMapGroup group_NSIS[] = {
-	{_("Sections"), TM_ICON_OTHER, tm_tag_namespace_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Sections"), TM_ICON_OTHER, tm_tag_namespace_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 static TMParserMapEntry map_MARKDOWN[] = {
@@ -731,12 +734,12 @@ static TMParserMapEntry map_MARKDOWN[] = {
 	{'n', tm_tag_undef_t},      //footnote
 };
 static TMParserMapGroup group_MARKDOWN[] = {
-	{_("Chapters"), TM_ICON_NONE, tm_tag_namespace_t},
-	{_("Sections"), TM_ICON_NONE, tm_tag_member_t},
-	{_("Subsections"), TM_ICON_NONE, tm_tag_macro_t},
-	{_("Subsubsections"), TM_ICON_NONE, tm_tag_variable_t},
-	{_("Level 4 sections"), TM_ICON_NONE, tm_tag_struct_t},
-	{_("Level 5 sections"), TM_ICON_NONE, tm_tag_union_t},
+	{N_("Chapters"), TM_ICON_NONE, tm_tag_namespace_t},
+	{N_("Sections"), TM_ICON_NONE, tm_tag_member_t},
+	{N_("Subsections"), TM_ICON_NONE, tm_tag_macro_t},
+	{N_("Subsubsections"), TM_ICON_NONE, tm_tag_variable_t},
+	{N_("Level 4 sections"), TM_ICON_NONE, tm_tag_struct_t},
+	{N_("Level 5 sections"), TM_ICON_NONE, tm_tag_union_t},
 };
 
 static TMParserMapEntry map_TXT2TAGS[] = {
@@ -763,10 +766,10 @@ static TMParserMapEntry map_VERILOG[] = {
 	{'i', tm_tag_undef_t},     // instance
 };
 static TMParserMapGroup group_VERILOG[] = {
-	{_("Events"), TM_ICON_MACRO, tm_tag_typedef_t},
-	{_("Modules"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Functions / Tasks"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Events"), TM_ICON_MACRO, tm_tag_typedef_t},
+	{N_("Modules"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Functions / Tasks"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 static TMParserMapEntry map_R[] = {
@@ -782,8 +785,8 @@ static TMParserMapEntry map_R[] = {
 	{'n', tm_tag_undef_t},     // nameattr
 };
 static TMParserMapGroup group_R[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Other"), TM_ICON_NONE, tm_tag_other_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Other"), TM_ICON_NONE, tm_tag_other_t},
 };
 
 static TMParserMapEntry map_COBOL[] = {
@@ -797,14 +800,14 @@ static TMParserMapEntry map_COBOL[] = {
 	{'S', tm_tag_externvar_t},  // sourcefile
 };
 static TMParserMapGroup group_COBOL[] = {
-	{_("Program"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("File"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Divisions"), TM_ICON_NAMESPACE, tm_tag_interface_t},
-	{_("Sections"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Paragraph"), TM_ICON_OTHER, tm_tag_macro_t},
-	{_("Group"), TM_ICON_STRUCT, tm_tag_struct_t},
-	{_("Data"), TM_ICON_VAR, tm_tag_variable_t},
-	{_("Copies"), TM_ICON_NAMESPACE, tm_tag_externvar_t},
+	{N_("Program"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("File"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Divisions"), TM_ICON_NAMESPACE, tm_tag_interface_t},
+	{N_("Sections"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Paragraph"), TM_ICON_OTHER, tm_tag_macro_t},
+	{N_("Group"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Data"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Copies"), TM_ICON_NAMESPACE, tm_tag_externvar_t},
 };
 
 static TMParserMapEntry map_OBJC[] = {
@@ -835,11 +838,11 @@ static TMParserMapEntry map_ASCIIDOC[] = {
 	{'a', tm_tag_undef_t},      //anchor
 };
 static TMParserMapGroup group_ASCIIDOC[] = {
-	{_("Document"), TM_ICON_NONE, tm_tag_namespace_t},
-	{_("Section Level 1"), TM_ICON_NONE, tm_tag_member_t},
-	{_("Section Level 2"), TM_ICON_NONE, tm_tag_macro_t},
-	{_("Section Level 3"), TM_ICON_NONE, tm_tag_variable_t},
-	{_("Section Level 4"), TM_ICON_NONE, tm_tag_struct_t},
+	{N_("Document"), TM_ICON_NONE, tm_tag_namespace_t},
+	{N_("Section Level 1"), TM_ICON_NONE, tm_tag_member_t},
+	{N_("Section Level 2"), TM_ICON_NONE, tm_tag_macro_t},
+	{N_("Section Level 3"), TM_ICON_NONE, tm_tag_variable_t},
+	{N_("Section Level 4"), TM_ICON_NONE, tm_tag_struct_t},
 };
 
 // no scope information
@@ -849,9 +852,9 @@ static TMParserMapEntry map_ABAQUS[] = {
 	{'s', tm_tag_interface_t},  // step
 };
 static TMParserMapGroup group_ABAQUS[] = {
-	{_("Parts"), TM_ICON_NONE, tm_tag_class_t},
-	{_("Assembly"), TM_ICON_NONE, tm_tag_member_t},
-	{_("Steps"), TM_ICON_NONE, tm_tag_interface_t},
+	{N_("Parts"), TM_ICON_NONE, tm_tag_class_t},
+	{N_("Assembly"), TM_ICON_NONE, tm_tag_member_t},
+	{N_("Steps"), TM_ICON_NONE, tm_tag_interface_t},
 };
 
 static TMParserMapEntry map_RUST[] = {
@@ -869,15 +872,15 @@ static TMParserMapEntry map_RUST[] = {
 	{'P', tm_tag_method_t},      // method
 };
 static TMParserMapGroup group_RUST[] = {
-	{_("Modules"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Structures"), TM_ICON_STRUCT, tm_tag_struct_t},
-	{_("Traits"), TM_ICON_CLASS, tm_tag_interface_t},
-	{_("Implementations"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
-	{_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
-	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Methods"), TM_ICON_MEMBER, tm_tag_field_t},
+	{N_("Modules"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Structures"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Traits"), TM_ICON_CLASS, tm_tag_interface_t},
+	{N_("Implementations"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
+	{N_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
+	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Methods"), TM_ICON_MEMBER, tm_tag_field_t},
 };
 
 static TMParserMapEntry map_GO[] = {
@@ -897,14 +900,14 @@ static TMParserMapEntry map_GO[] = {
 	{'R', tm_tag_undef_t},      // receiver
 };
 static TMParserMapGroup group_GO[] = {
-	{_("Package"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
-	{_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t},
-	{_("Types"), TM_ICON_STRUCT, tm_tag_typedef_t},
-	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
-	{_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Package"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Types"), TM_ICON_STRUCT, tm_tag_typedef_t},
+	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
 };
 
 static TMParserMapEntry map_JSON[] = {
@@ -916,7 +919,7 @@ static TMParserMapEntry map_JSON[] = {
 	{'z', tm_tag_member_t},  // null
 };
 static TMParserMapGroup group_JSON[] = {
-	{_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
 };
 
 /* Zephir, same as PHP */
@@ -928,8 +931,8 @@ static TMParserMapEntry map_POWERSHELL[] = {
 	{'v', tm_tag_variable_t},  // variable
 };
 static TMParserMapGroup group_POWERSHELL[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 static TMParserMapEntry map_JULIA[] = {
@@ -945,14 +948,14 @@ static TMParserMapEntry map_JULIA[] = {
 	{'x', tm_tag_externvar_t},  // unknown
 };
 static TMParserMapGroup group_JULIA[] = {
-	{_("Constants"), TM_ICON_VAR, tm_tag_variable_t},
-	{_("Modules"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Fields"), TM_ICON_MEMBER, tm_tag_member_t},
-	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Structures"), TM_ICON_STRUCT, tm_tag_struct_t},
-	{_("Types"), TM_ICON_CLASS, tm_tag_typedef_t},
-	{_("Unknowns"), TM_ICON_OTHER, tm_tag_externvar_t},
+	{N_("Constants"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Modules"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Fields"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Structures"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Types"), TM_ICON_CLASS, tm_tag_typedef_t},
+	{N_("Unknowns"), TM_ICON_OTHER, tm_tag_externvar_t},
 };
 
 static TMParserMapEntry map_CPREPROCESSOR[] = {
@@ -974,10 +977,10 @@ static TMParserMapEntry map_GDSCRIPT[] = {
 	{'s', tm_tag_variable_t},  // signal
 };
 static TMParserMapGroup group_GDSCRIPT[] = {
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Methods"), TM_ICON_MACRO, tm_tag_method_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
-	{_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Methods"), TM_ICON_MACRO, tm_tag_method_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
+	{N_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
 };
 
 static TMParserMapEntry map_CLOJURE[] = {
@@ -985,8 +988,8 @@ static TMParserMapEntry map_CLOJURE[] = {
 	{'n', tm_tag_namespace_t},  // namespace
 };
 static TMParserMapGroup group_CLOJURE[] = {
-	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 };
 
 static TMParserMapEntry map_LISP[] = {
@@ -997,10 +1000,10 @@ static TMParserMapEntry map_LISP[] = {
 	{'c', tm_tag_field_t},     // const
 };
 static TMParserMapGroup group_LISP[] = {
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
-	{_("Constants"), TM_ICON_VAR, tm_tag_field_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Constants"), TM_ICON_VAR, tm_tag_field_t},
 };
 
 static TMParserMapEntry map_TYPESCRIPT[] = {
@@ -1020,14 +1023,14 @@ static TMParserMapEntry map_TYPESCRIPT[] = {
 	{'a', tm_tag_undef_t},       // alias
 };
 static TMParserMapGroup group_TYPESCRIPT[] = {
-	{_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
-	{_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
-	{_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
-	{_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
-	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Other"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_enumerator_t},
+	{N_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
+	{N_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
+	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Other"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_enumerator_t},
 };
 
 static TMParserMapEntry map_ADA[] = {
@@ -1058,13 +1061,13 @@ static TMParserMapEntry map_ADA[] = {
 	{'y', tm_tag_undef_t},       // anon
 };
 static TMParserMapGroup group_ADA[] = {
-	{_("Packages"), TM_ICON_NAMESPACE, tm_tag_package_t},
-	{_("Types"), TM_ICON_STRUCT, tm_tag_typedef_t},
-	{_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
-	{_("Tasks"), TM_ICON_METHOD, tm_tag_method_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
-	{_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
-	{_("Other"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_enumerator_t},
+	{N_("Packages"), TM_ICON_NAMESPACE, tm_tag_package_t},
+	{N_("Types"), TM_ICON_STRUCT, tm_tag_typedef_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
+	{N_("Tasks"), TM_ICON_METHOD, tm_tag_method_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Other"), TM_ICON_MEMBER, tm_tag_member_t | tm_tag_enumerator_t},
 };
 
 static TMParserMapEntry map_BATCH[] = {
@@ -1072,8 +1075,8 @@ static TMParserMapEntry map_BATCH[] = {
 	{'v', tm_tag_variable_t},  // variable
 };
 static TMParserMapGroup group_BATCH[] = {
-	{_("Labels"), TM_ICON_OTHER, tm_tag_other_t},
-	{_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Labels"), TM_ICON_OTHER, tm_tag_other_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 typedef struct
@@ -1223,14 +1226,11 @@ const gchar *tm_parser_get_sidebar_info(TMParserType lang, gint group, guint *ic
 			return NULL;
 
 		grp = &map->groups[group - 1];
-		name = grp->name;
+		name = _(grp->name);
 		*icon = grp->icon;
 	}
-#ifdef GETTEXT_PACKAGE
-	return g_dgettext(GETTEXT_PACKAGE, name);
-#else
+
 	return name;
-#endif
 }
 
 
