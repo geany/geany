@@ -2096,6 +2096,33 @@ void ui_table_add_row(GtkTable *table, gint row, ...)
 }
 
 
+/* comment-out all lines that are not already commented out except sections */
+static void comment_conf_files(ScintillaObject *sci)
+{
+	gint line, line_count;
+
+	line_count = sci_get_line_count(sci);
+	for (line = 0; line < line_count; line++)
+	{
+		gint pos_start = sci_get_position_from_line(sci, line);
+		gint pos_end = sci_get_line_end_position(sci, line);
+		gint pos;
+
+		for (pos = pos_start; pos < pos_end; pos++)
+		{
+			gchar c = sci_get_char_at(sci, pos);
+			if (c == '[' || c == '#')
+				break;
+			if (!isspace(c))
+			{
+				sci_insert_text(sci, pos_start, "#");
+				break;
+			}
+		}
+	}
+}
+
+
 static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 {
 	const gchar *file_name = user_data;
@@ -2135,9 +2162,14 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 		doc = document_new_file(utf8_filename, ft, global_content);
 		if (global_content)
 		{
-			sci_select_all(doc->editor->sci);
-			keybindings_send_command(GEANY_KEY_GROUP_FORMAT,
-				GEANY_KEYS_FORMAT_COMMENTLINETOGGLE);
+			if (doc->file_type->id == GEANY_FILETYPES_CONF)
+				comment_conf_files(doc->editor->sci);
+			else
+			{
+				sci_select_all(doc->editor->sci);
+				keybindings_send_command(GEANY_KEY_GROUP_FORMAT,
+					GEANY_KEYS_FORMAT_COMMENTLINETOGGLE);
+			}
 			sci_set_current_line(doc->editor->sci, 0);
 			document_set_text_changed(doc, FALSE);
 			sci_empty_undo_buffer(doc->editor->sci);
