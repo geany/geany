@@ -3634,6 +3634,10 @@ Reflow lines/block                                        Reformat selected line
                                                           breaking lines at the long line marker or the
                                                           line breaking column if line breaking is
                                                           enabled for the current document.
+
+Join Lines                                                Replace line endings and following indentation
+                                                          with a single space throughout the selection
+                                                          or current (indented) text block.
 =============================== ========================= ==================================================
 
 

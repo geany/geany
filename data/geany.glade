@@ -6868,6 +6868,15 @@
                               <object class="GtkMenu" id="menu_format1_menu">
                                 <property name="can-focus">False</property>
                                 <child>
+                                  <object class="GtkMenuItem" id="join_lines1">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">_Join Lines</property>
+                                    <property name="use-underline">True</property>
+                                    <signal name="activate" handler="on_join_lines1_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
                                   <object class="GtkMenuItem" id="reflow_lines_block1">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
