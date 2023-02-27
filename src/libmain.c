@@ -648,17 +648,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	vte_info.lib_vte = lib_vte;
 #endif
 	cl_options.ignore_global_tags = ignore_global_tags;
-
-	if (! gtk_init_check(NULL, NULL))
-	{	/* check whether we have a valid X display and exit if not */
-		g_printerr("Geany: cannot open display\n");
-		exit(1);
-	}
-
-#ifdef MAC_INTEGRATION
-	/* Create GtkosxApplication singleton - should be created shortly after gtk_init() */
-	gtkosx_application_get();
-#endif
 }
 
 
@@ -1057,6 +1046,16 @@ gint main_lib(gint argc, gchar **argv)
 	/* initialize TM before parsing command-line - needed for tag file generation */
 	app->tm_workspace = tm_get_workspace();
 	parse_command_line_options(&argc, &argv);
+
+	if (! gtk_init_check(NULL, NULL))
+	{	/* check whether we have a valid X display and exit if not */
+		g_printerr("Geany: cannot open display\n");
+		exit(1);
+	}
+#ifdef MAC_INTEGRATION
+	/* Create GtkosxApplication singleton - should be created shortly after gtk_init() */
+	gtkosx_application_get();
+#endif
 
 #if ! GLIB_CHECK_VERSION(2, 32, 0)
 	/* Initialize GLib's thread system in case any plugins want to use it or their
