@@ -834,7 +834,7 @@ static TMParserMapEntry map_ASCIIDOC[] = {
 	{'S', tm_tag_macro_t},      //subsection
 	{'t', tm_tag_variable_t},   //subsubsection
 	{'T', tm_tag_struct_t},     //l4subsection
-	{'u', tm_tag_undef_t},      //l5subsection
+	{'u', tm_tag_enumerator_t}, //l5subsection
 	{'a', tm_tag_undef_t},      //anchor
 };
 static TMParserMapGroup group_ASCIIDOC[] = {
@@ -843,6 +843,7 @@ static TMParserMapGroup group_ASCIIDOC[] = {
 	{N_("Section Level 2"), TM_ICON_NONE, tm_tag_macro_t},
 	{N_("Section Level 3"), TM_ICON_NONE, tm_tag_variable_t},
 	{N_("Section Level 4"), TM_ICON_NONE, tm_tag_struct_t},
+	{N_("Section Level 5"), TM_ICON_NONE, tm_tag_enumerator_t},
 };
 
 // no scope information
