@@ -255,19 +255,54 @@ static void add_file_item(const gchar *fname, GtkWidget *menu)
 }
 
 
+typedef struct
+{
+	gint count;
+	GtkWidget *menu;
+}
+FTMenu;
+
 static void populate_file_template_menu(GtkWidget *menu)
 {
 	GSList *list = utils_get_config_files(GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S "files");
 	GSList *node;
+	FTMenu *ft_groups;
+	gint nbytes = sizeof(FTMenu) * filetypes_array->len;
+
+	ft_groups = g_alloca(nbytes);
+	memset(ft_groups, 0, nbytes);
 
 	foreach_slist(node, list)
 	{
 		gchar *fname = node->data;
+		GeanyFiletype *ft = filetypes_detect_from_extension(fname);
 
-		add_file_item(fname, menu);
+		ft_groups[ft->id].count++;
+	}
+	foreach_slist(node, list)
+	{
+		gchar *fname = node->data;
+		GeanyFiletype *ft = filetypes_detect_from_extension(fname);
+		FTMenu *group = &ft_groups[ft->id];
+
+		if (group->count == 1)
+			add_file_item(fname, menu);
+		else
+		{
+			if (!group->menu)
+			{
+				GtkWidget *item = gtk_menu_item_new_with_label(ft->name);
+				gtk_widget_show(item);
+				gtk_container_add(GTK_CONTAINER(menu), item);
+				group->menu = gtk_menu_new();
+				gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), group->menu);
+			}
+			add_file_item(fname, group->menu);
+		}
 		g_free(fname);
 	}
 	g_slist_free(list);
+	ui_menu_sort_by_label(GTK_MENU(menu));
 }
 
 

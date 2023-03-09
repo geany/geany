@@ -4944,7 +4944,8 @@ File templates
 
 File templates are templates used as the basis of a new file. To
 use them, choose the *New (with Template)* menu item from the *File*
-menu.
+menu. If there is more than one template for a filetype then they
+will be grouped in a submenu.
 
 By default, file templates are installed for some filetypes. Custom
 file templates can be added by creating the appropriate template file. You can
