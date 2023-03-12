@@ -23,7 +23,8 @@ extension=go
 # MIME type
 mime_type=text/x-go
 
-# the following characters are these which a "word" can contains, see documentation
+# these characters define word boundaries when making selections and searching
+# using word matching options
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comments, like # in this file

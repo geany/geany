@@ -13,7 +13,8 @@ extension=php
 # MIME type
 mime_type=application/x-php
 
-# the following characters are these which a "word" can contains, see documentation
+# these characters define word boundaries when making selections and searching
+# using word matching options
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # these comments are used for PHP, the comments used in HTML are in filetypes.xml
