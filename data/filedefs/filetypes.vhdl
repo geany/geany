@@ -35,7 +35,8 @@ extension=vhd
 # MIME type
 mime_type=text/x-vhdl
 
-# the following characters are these which a "word" can contains, see documentation
+# these characters define word boundaries when making selections and searching
+# using word matching options
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comments, like # in this file
@@ -46,9 +47,9 @@ comment_single=--
 
 # set to false if a comment character/string should start at column 0 of a line, true uses any
 # indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
-	#command_example();
+# 		#command_example();
 # setting to false would generate this
-#	command_example();
+# #		command_example();
 # This setting works only for single line comments
 comment_use_indent=true
 
