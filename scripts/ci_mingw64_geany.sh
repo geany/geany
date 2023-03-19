@@ -97,6 +97,7 @@ git_clone_geany_if_necessary() {
 	if [ -d ${GEANY_SOURCE_DIR} ]; then
 		log "Copying Geany source"
 		cp --archive ${GEANY_SOURCE_DIR}/ ${GEANY_BUILD_DIR}/
+		chown --recursive $(id -u):$(id -g) ${GEANY_BUILD_DIR}/
 	else
 		log "Cloning Geany repository from ${GEANY_GIT_REPOSITORY}"
 		git clone --depth 1 ${GEANY_GIT_REPOSITORY} ${GEANY_BUILD_DIR}
