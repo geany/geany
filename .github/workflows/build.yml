@@ -23,6 +23,7 @@ env:
   CCACHE_COMPRESS: true
   CCACHE_MAXSIZE: 1G
   PYTHON: python3
+  JOBS: 2
   DEBUG: 0
 
 jobs:
@@ -87,17 +88,17 @@ jobs:
       - name: Build
         run: |
           cd _build
-          make
+          make -j ${{ env.JOBS }}
 
       - name: Run Tests
         run: |
           cd _build
-          make -j2 check
+          make -j ${{ env.JOBS }} check
 
       - name: Run distcheck
         run: |
           cd _build
-          make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS";
+          make -j ${{ env.JOBS }} distcheck DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS";
 
       - name: ccache statistics
         run: ccache --show-stats
