@@ -82,6 +82,7 @@ export PKG_CONFIG_SYSROOT_DIR="/windows"
 export PKG_CONFIG_PATH="/windows/${MINGW_ARCH}/lib/pkgconfig/"
 export PKG_CONFIG="/usr/bin/pkg-config"
 export NOCONFIGURE=1
+export JOBS=${JOBS:-1}
 
 # stop on errors
 set -e
@@ -173,7 +174,7 @@ build_geany() {
 	log "Running configure"
 	./configure ${CONFIGURE_OPTIONS}
 	log "Running make"
-	make
+	make -j ${JOBS}
 	log "Running install-strip"
 	make install-strip
 }
