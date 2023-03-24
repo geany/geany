@@ -3,6 +3,8 @@ project('geany', 'c', 'cpp',
         version: '1.38',
         default_options : ['c_std=c11', 'cpp_std=c++17'])
 
+meson_legacy = meson.version().version_compare('<1.0')
+
 gnome = import('gnome')
 pymod = import('python')
 
@@ -437,7 +439,14 @@ dep_scintilla = declare_dependency(
 	include_directories: include_directories('scintilla/include')
 )
 
-if cdata.get('HAVE_FNMATCH') == 1
+have_fnmatch = false
+if meson_legacy
+	have_fnmatch = cdata.get('HAVE_FNMATCH') == 1
+else
+	have_fnmatch = cdata.get('HAVE_FNMATCH')
+endif
+
+if have_fnmatch
 	dep_fnmatch = dependency('', required: false)
 else
 	# use fnmatch bundled with ctags
@@ -450,7 +459,14 @@ else
 	dep_fnmatch = declare_dependency(link_with: [fnmatch], include_directories: [ifnmatch])
 endif
 
-if cdata.get('HAVE_REGCOMP') == 1
+have_regcomp = false
+if meson_legacy
+	have_regcomp = cdata.get('HAVE_REGCOMP') == 1
+else
+	have_regcomp = cdata.get('HAVE_REGCOMP')
+endif
+
+if have_regcomp
 	dep_regex = dependency('', required: false)
 else
 	# use regcomp bundled with ctags
