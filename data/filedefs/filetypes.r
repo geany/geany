@@ -13,6 +13,10 @@ string2=string_2
 identifier=identifier
 infix=function
 infixeol=function
+backticks=string_2
+rawstring=string_1
+rawstring2=string_2
+escapesequence=string_1
 
 [keywords]
 # all items must be in one line

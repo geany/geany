@@ -695,7 +695,8 @@ static const HLStyle highlighting_styles_GDSCRIPT[] =
 	{ SCE_GD_COMMENTBLOCK,	"commentblock",		FALSE },
 	{ SCE_GD_STRINGEOL,		"stringeol",		FALSE },
 	{ SCE_GD_WORD2,			"word2",			FALSE },
-	{ SCE_GD_ANNOTATION,	"annotation",		FALSE }
+	{ SCE_GD_ANNOTATION,	"annotation",		FALSE },
+	{ SCE_GD_NODEPATH,		"nodepath",			FALSE }
 };
 static const HLKeyword highlighting_keywords_GDSCRIPT[] =
 {
@@ -1349,7 +1350,8 @@ static const HLStyle highlighting_styles_PYTHON[] =
 	{ SCE_P_FCHARACTER,		"fcharacter",		FALSE },
 	{ SCE_P_FTRIPLE,		"ftriple",			FALSE },
 	{ SCE_P_FTRIPLEDOUBLE,	"ftripledouble",	FALSE },
-	{ SCE_P_DECORATOR,		"decorator",		FALSE }
+	{ SCE_P_DECORATOR,		"decorator",		FALSE },
+	{ SCE_P_ATTRIBUTE,		"attribute",		FALSE }
 };
 static const HLKeyword highlighting_keywords_PYTHON[] =
 {
@@ -1363,18 +1365,22 @@ static const HLKeyword highlighting_keywords_PYTHON[] =
 #define highlighting_lexer_R		SCLEX_R
 static const HLStyle highlighting_styles_R[] =
 {
-	{ SCE_R_DEFAULT,	"default",		FALSE },
-	{ SCE_R_COMMENT,	"comment",		FALSE },
-	{ SCE_R_KWORD,		"kword",		FALSE },
-	{ SCE_R_OPERATOR,	"operator",		FALSE },
-	{ SCE_R_BASEKWORD,	"basekword",	FALSE },
-	{ SCE_R_OTHERKWORD,	"otherkword",	FALSE },
-	{ SCE_R_NUMBER,		"number",		FALSE },
-	{ SCE_R_STRING,		"string",		FALSE },
-	{ SCE_R_STRING2,	"string2",		FALSE },
-	{ SCE_R_IDENTIFIER,	"identifier",	FALSE },
-	{ SCE_R_INFIX,		"infix",		FALSE },
-	{ SCE_R_INFIXEOL,	"infixeol",		FALSE }
+	{ SCE_R_DEFAULT,		"default",			FALSE },
+	{ SCE_R_COMMENT,		"comment",			FALSE },
+	{ SCE_R_KWORD,			"kword",			FALSE },
+	{ SCE_R_OPERATOR,		"operator",			FALSE },
+	{ SCE_R_BASEKWORD,		"basekword",		FALSE },
+	{ SCE_R_OTHERKWORD,		"otherkword",		FALSE },
+	{ SCE_R_NUMBER,			"number",			FALSE },
+	{ SCE_R_STRING,			"string",			FALSE },
+	{ SCE_R_STRING2,		"string2",			FALSE },
+	{ SCE_R_IDENTIFIER,		"identifier",		FALSE },
+	{ SCE_R_INFIX,			"infix",			FALSE },
+	{ SCE_R_INFIXEOL,		"infixeol",			FALSE },
+	{ SCE_R_BACKTICKS,		"backticks",		FALSE },
+	{ SCE_R_RAWSTRING,		"rawstring",		FALSE },
+	{ SCE_R_RAWSTRING2,		"rawstring2",		FALSE },
+	{ SCE_R_ESCAPESEQUENCE,	"escapesequence",	FALSE },
 };
 static const HLKeyword highlighting_keywords_R[] =
 {
@@ -1420,6 +1426,10 @@ static const HLStyle highlighting_styles_RUBY[] =
 	{ SCE_RB_STRING_QX,		"string_qx",		FALSE },
 	{ SCE_RB_STRING_QR,		"string_qr",		FALSE },
 	{ SCE_RB_STRING_QW,		"string_qw",		FALSE },
+	{ SCE_RB_STRING_W,		"string_w",			FALSE },
+	{ SCE_RB_STRING_I,		"string_i",			FALSE },
+	{ SCE_RB_STRING_QI,		"string_qi",		FALSE },
+	{ SCE_RB_STRING_QS,		"string_qs",		FALSE },
 	{ SCE_RB_UPPER_BOUND,	"upper_bound",		FALSE },
 	{ SCE_RB_ERROR,			"error",			FALSE },
 	{ SCE_RB_POD,			"pod",				FALSE }

@@ -21,6 +21,7 @@ fstring=string_1
 fcharacter=character
 ftriple=string_2
 ftripledouble=string_2
+attribute=identifier_2
 
 [keywords]
 # all items must be in one line

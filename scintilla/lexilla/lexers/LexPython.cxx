@@ -218,6 +218,54 @@ bool IsFirstNonWhitespace(Sci_Position pos, Accessor &styler) {
 	return true;
 }
 
+unsigned char GetNextNonWhitespaceChar(Accessor &styler, Sci_PositionU pos, Sci_PositionU maxPos, Sci_PositionU *charPosPtr = nullptr) {
+	while (pos < maxPos) {
+		const unsigned char ch = styler.SafeGetCharAt(pos, '\0');
+		if (!(ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r')) {
+			if (charPosPtr != nullptr) {
+				*charPosPtr = pos;
+			}
+			return ch;
+		}
+		pos++;
+	}
+
+	return '\0';
+}
+
+// Returns whether symbol is "match" or "case" and it is an identifier &
+// not a keyword. Does not require the line to end with : so "match\n"
+// and "match (x)\n" return false because match could be a keyword once
+// more text is added
+bool IsMatchOrCaseIdentifier(const StyleContext &sc, Accessor &styler, const char *symbol) {
+	if (strcmp(symbol, "match") != 0 && strcmp(symbol, "case") != 0) {
+		return false;
+	}
+
+	if (!IsFirstNonWhitespace(sc.currentPos - strlen(symbol), styler)) {
+		return true;
+	}
+
+	// The match keyword can be followed by an expression; the case keyword
+	// is a bit more restrictive but not much. Here, we look for the next
+	// char and return false if the char cannot start an expression; for '.'
+	// we look at the following char to see if it's a digit because .1 is a
+	// number
+	Sci_PositionU nextCharPos = 0;
+	const unsigned char nextChar = GetNextNonWhitespaceChar(styler, sc.currentPos, sc.lineEnd, &nextCharPos);
+	if (nextChar == '=' || nextChar == '#') {
+		return true;
+	}
+	if (nextChar == '.' && nextCharPos >= sc.currentPos) {
+		const unsigned char followingChar = GetNextNonWhitespaceChar(styler, nextCharPos+1, sc.lineEnd);
+		if (!IsADigit(followingChar)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 // Options used for LexerPython
 struct OptionsPython {
 	int whingeLevel;
@@ -231,6 +279,8 @@ struct OptionsPython {
 	bool foldQuotes;
 	bool foldCompact;
 	bool unicodeIdentifiers;
+	int identifierAttributes;
+	int decoratorAttributes;
 
 	OptionsPython() noexcept {
 		whingeLevel = 0;
@@ -244,6 +294,8 @@ struct OptionsPython {
 		foldQuotes = false;
 		foldCompact = false;
 		unicodeIdentifiers = true;
+		identifierAttributes = 0;
+		decoratorAttributes = 0;
 	}
 
 	literalsAllowed AllowedLiterals() const noexcept {
@@ -302,6 +354,12 @@ struct OptionSetPython : public OptionSet<OptionsPython> {
 		DefineProperty("lexer.python.unicode.identifiers", &OptionsPython::unicodeIdentifiers,
 			       "Set to 0 to not recognise Python 3 Unicode identifiers.");
 
+		DefineProperty("lexer.python.identifier.attributes", &OptionsPython::identifierAttributes,
+			       "Set to 1 to recognise Python identifier attributes.");
+
+		DefineProperty("lexer.python.decorator.attributes", &OptionsPython::decoratorAttributes,
+			       "Set to 1 to recognise Python decorator attributes.");
+
 		DefineWordListSets(pythonWordListDesc);
 	}
 };
@@ -330,6 +388,7 @@ LexicalClass lexicalClasses[] = {
 	17, "SCE_P_FCHARACTER", "literal string interpolated", "Single quoted f-string",
 	18, "SCE_P_FTRIPLE", "literal string interpolated", "Triple quoted f-string",
 	19, "SCE_P_FTRIPLEDOUBLE", "literal string interpolated", "Triple double quoted f-string",
+	20, "SCE_P_ATTRIBUTE", "identifier", "Attribute of identifier",
 };
 
 }
@@ -441,10 +500,7 @@ Sci_Position SCI_METHOD LexerPython::WordListSet(int n, const char *wl) {
 	}
 	Sci_Position firstModification = -1;
 	if (wordListN) {
-		WordList wlNew;
-		wlNew.Set(wl);
-		if (*wordListN != wlNew) {
-			wordListN->Set(wl);
+		if (wordListN->Set(wl)) {
 			firstModification = 0;
 		}
 	}
@@ -602,7 +658,7 @@ void SCI_METHOD LexerPython::Lex(Sci_PositionU startPos, Sci_Position length, in
 				int style = SCE_P_IDENTIFIER;
 				if ((kwLast == kwImport) && (strcmp(s, "as") == 0)) {
 					style = SCE_P_WORD;
-				} else if (keywords.InList(s)) {
+				} else if (keywords.InList(s) && !IsMatchOrCaseIdentifier(sc, styler, s)) {
 					style = SCE_P_WORD;
 				} else if (kwLast == kwClass) {
 					style = SCE_P_CLASSNAME;
@@ -640,6 +696,43 @@ void SCI_METHOD LexerPython::Lex(Sci_PositionU startPos, Sci_Position length, in
 					const int subStyle = classifierIdentifiers.ValueFor(s);
 					if (subStyle >= 0) {
 						style = subStyle;
+					}
+					if (options.identifierAttributes > 0 || options.decoratorAttributes > 0) {
+						// Does the user even want attributes styled?
+						Sci_Position pos = styler.GetStartSegment() - 1;
+						unsigned char ch = styler.SafeGetCharAt(pos, '\0');
+						while (ch != '\0' && (ch == '.' || ch == ' ' || ch == '\\' || ch == '\t' || ch == '\n' || ch == '\r')) {
+							// Backwards search for a . while only allowing certain valid characters
+							if (IsAWordChar(ch, options.unicodeIdentifiers)) {
+								break;
+							}
+							pos--;
+							ch = styler.SafeGetCharAt(pos, '\0');
+						}
+						if (pos < 0 || ch == '.') {
+							// Is this an attribute we could style? if it is, do as asked
+							bool isComment = false;
+							bool isDecoratorAttribute = false;
+							const Sci_Position attrLine = styler.GetLine(pos);
+							for (Sci_Position i = styler.LineStart(attrLine); i < pos; i++) {
+								const char attrCh = styler[i];
+								if (attrCh == '@')
+									isDecoratorAttribute = true;
+								if (attrCh == '#')
+									isComment = true;
+								// Detect if this attribute belongs to a decorator
+								if (!(ch == ' ' || ch == '\t'))
+									break;
+							}
+							if (((isDecoratorAttribute) && (!isComment)) && (((options.decoratorAttributes == 1)  && (style == SCE_P_IDENTIFIER)) || (options.decoratorAttributes == 2))){
+								// Style decorator attributes as decorators but respect already styled identifiers (unless requested to ignore already styled identifiers)
+								style = SCE_P_DECORATOR;
+							}
+							if (((!isDecoratorAttribute) && (!isComment)) && (((options.identifierAttributes == 1) && (style == SCE_P_IDENTIFIER)) || (options.identifierAttributes == 2))){
+								// Style attributes and ignore decorator attributes but respect already styled identifiers (unless requested to ignore already styled identifiers)
+								style = SCE_P_ATTRIBUTE;
+							}
+						}
 					}
 				}
 				sc.ChangeState(style);
