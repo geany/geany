@@ -79,7 +79,9 @@ filetypes_dist = \
 	filedefs/filetypes.vhdl \
 	filedefs/filetypes.xml \
 	filedefs/filetypes.yaml \
-	filedefs/filetypes.zephir
+	filedefs/filetypes.zephir \
+	filedefs/filetypes.scss.conf \
+	filedefs/filetypes.less.conf
 
 # generated filetypes
 filetypes_nodist = \
