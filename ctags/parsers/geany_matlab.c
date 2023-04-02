@@ -50,29 +50,30 @@ static void findMatlabTags (void)
 	{
 		int i, ic;
 
-		/* check for opening/closing block comments (`%{`...`%}`); may be nested */
-		for (i = 0; isspace ((int) line [i]); ++i)
-			;
+		/* trim leading whitespace */
+		while (isspace ((int) *line))
+			++line;
 
-		if (strncmp ((const char *) (line + i), "%{", 2) == 0)
+		/* check for opening/closing block comments (`%{`...`%}`); may be nested */
+		if (strncmp ((const char *) line, "%{", 2) == 0)
 		{
 			/* check if %{ appears on the line on its own (maybe with whitespace) */
-			for (ic = i + 2; isspace ((int) line [ic]); ++ic)
+			for (i = 2; isspace ((int) line [i]); ++i)
 				;
 
-			if (line [ic] == '\0')
+			if (line [i] == '\0')
 			{
 				++blkComm; /* block nesting has incremented by 1 level */
 				continue; /* skip to next line */
 			}
 		}
-		else if (blkComm > 0 && strncmp ((const char *) (line + i), "%}", 2) == 0)
+		else if (blkComm > 0 && strncmp ((const char *) line, "%}", 2) == 0)
 		{
 			/* check if %} appears on the line on its own (maybe with whitespace) */
-			for (ic = i+2; isspace ((int) line [ic]); ++ic)
+			for (i = 2; isspace ((int) line [i]); ++i)
 				;
 
-			if (line [ic] == '\0')
+			if (line [i] == '\0')
 			{
 				--blkComm; /* we've closed a nested block; when 0 we've left all nested comments */
 				continue; /* skip to next line */
