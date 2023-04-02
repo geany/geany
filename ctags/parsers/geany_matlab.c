@@ -44,11 +44,45 @@ static void findMatlabTags (void)
 	vString *name = vStringNew ();
 	const unsigned char *line;
 	const unsigned char *p;
+	unsigned int blkComm = 0; /* 0 = no comment, 1 = block comment, 2+ = nested */
 
 	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		int i, ic;
 
+		/* check for opening/closing block comments (`%{`...`%}`); may be nested */
+		for (i = 0; isspace ((int) line [i]); ++i)
+			;
+
+		if (strncmp ((const char *) (line + i), "%{", 2) == 0)
+		{
+			/* check if %{ appears on the line on its own (maybe with whitespace) */
+			for (ic = i + 2; isspace ((int) line [ic]); ++ic)
+				;
+
+			if (line [ic] == '\0')
+			{
+				++blkComm; /* block nesting has incremented by 1 level */
+				continue; /* skip to next line */
+			}
+		}
+		else if (blkComm > 0 && strncmp ((const char *) (line + i), "%}", 2) == 0)
+		{
+			/* check if %} appears on the line on its own (maybe with whitespace) */
+			for (ic = i+2; isspace ((int) line [ic]); ++ic)
+				;
+
+			if (line [ic] == '\0')
+			{
+				--blkComm; /* we've closed a nested block; when 0 we've left all nested comments */
+				continue; /* skip to next line */
+			}
+		}
+
+		if (blkComm > 0)
+			continue; /* ignore lines within block comments */
+
+		/* ignore lines that are comments */
 		if (line [0] == '\0'  ||  line [0] == '%')
 			continue;
 
