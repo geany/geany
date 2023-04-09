@@ -55,7 +55,6 @@ context_action_cmd=
 [build_settings]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
-# (use only one of it at one time)
 compiler=gcc -Wall -c "%f"
 linker=gnatmake "%e"
 run_cmd="./%e"
