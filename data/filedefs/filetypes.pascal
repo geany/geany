@@ -62,6 +62,5 @@ context_action_cmd=
 [build_settings]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
-# (use only one of it at one time)
 compiler=fpc "%f"
 run_cmd="./%e"

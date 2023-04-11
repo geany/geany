@@ -49,7 +49,6 @@ comment_close=*/
 [build_settings]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
-# (use only one of it at one time)
 compiler=valac -c "%f"
 linker=valac "%f"
 run_cmd=./"%e"

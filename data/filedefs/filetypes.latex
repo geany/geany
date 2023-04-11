@@ -57,7 +57,6 @@ context_action_cmd=
 [build_settings]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
-# (use only one of it at one time)
 compiler=latex --file-line-error-style "%f"
 # it is called linker, but here it is an alternative compiler command
 linker=pdflatex --file-line-error-style "%f"
