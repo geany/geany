@@ -1819,14 +1819,6 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 {
 	gboolean ret;
 	gboolean new_file;
-
-	// if the personne want to save as a file who dosnt exsist
-	if (doc->priv->info_bars[MSG_TYPE_RESAVE] != NULL)
-	{
-		gtk_widget_destroy(doc->priv->info_bars[MSG_TYPE_RESAVE]);
-		doc->priv->info_bars[MSG_TYPE_RESAVE] = NULL;
-	}
-	
 	g_return_val_if_fail(doc != NULL, FALSE);
 
 	new_file = document_need_save_as(doc) || (utf8_fname != NULL && strcmp(doc->file_name, utf8_fname) != 0);
@@ -1862,6 +1854,12 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	replace_header_filename(doc);
 
 	ret = document_save_file(doc, TRUE);
+	//if the user wants to save as a file who doesn't exist and document is save
+	if (ret && doc->priv->info_bars[MSG_TYPE_RESAVE] != NULL)
+	{
+		gtk_widget_destroy(doc->priv->info_bars[MSG_TYPE_RESAVE]);
+		doc->priv->info_bars[MSG_TYPE_RESAVE] = NULL;
+	}
 
 	/* file monitoring support, add file monitoring after the file has been saved
 	 * to ignore any earlier events */
