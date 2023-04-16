@@ -174,6 +174,7 @@ static void AddGeanyLexers()
 		&lmAda,
 		&lmAsm,
 		&lmAsciidoc,
+		&lmAU3,
 		&lmBash,
 		&lmBatch,
 		&lmCaml,

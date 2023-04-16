@@ -10,6 +10,7 @@ filetypes_dist = \
 	filedefs/filetypes.Arduino.conf \
 	filedefs/filetypes.asciidoc \
 	filedefs/filetypes.asm \
+	filedefs/filetypes.autoit \
 	filedefs/filetypes.batch \
 	filedefs/filetypes.bibtex \
 	filedefs/filetypes.c \

@@ -16,6 +16,7 @@ lexilla/lexers/LexAbaqus.cxx           \
 lexilla/lexers/LexAda.cxx              \
 lexilla/lexers/LexAsciidoc.cxx         \
 lexilla/lexers/LexAsm.cxx              \
+lexilla/lexers/LexAU3.cxx              \
 lexilla/lexers/LexBash.cxx             \
 lexilla/lexers/LexBasic.cxx            \
 lexilla/lexers/LexBatch.cxx            \

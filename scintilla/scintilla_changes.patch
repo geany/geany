@@ -62,7 +62,7 @@ diff --git scintilla/lexilla/src/Lexilla.cxx scintilla/lexilla/src/Lexilla.cxx
 index cd4b23617..af4a73db4 100644
 --- scintilla/lexilla/src/Lexilla.cxx
 +++ scintilla/lexilla/src/Lexilla.cxx
-@@ -165,12 +165,68 @@ namespace {
+@@ -165,12 +165,69 @@ namespace {
  
  CatalogueModules catalogueLexilla;
  
@@ -72,6 +72,7 @@ index cd4b23617..af4a73db4 100644
 +		&lmAbaqus,
 +		&lmAda,
 +		&lmAsm,
++		&lmAU3,
 +		&lmBash,
 +		&lmBatch,
 +		&lmCaml,
