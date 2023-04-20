@@ -83,6 +83,7 @@ export PKG_CONFIG_PATH="/windows/${MINGW_ARCH}/lib/pkgconfig/"
 export PKG_CONFIG="/usr/bin/pkg-config"
 export NOCONFIGURE=1
 export JOBS=${JOBS:-1}
+export lt_cv_deplibs_check_method='pass_all'
 
 # stop on errors
 set -e
