@@ -1547,15 +1547,20 @@ gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gc
 				sep = " ";
 				break;
 			default:
-				/* retval before function */
-				g_string_prepend_c(str, ' ');
-				g_string_prepend(str, retval);
 				break;
 		}
+
 		if (sep)
 		{
+			/* retval after function */
 			g_string_append(str, sep);
 			g_string_append(str, retval);
+		}
+		else
+		{
+			/* retval before function */
+			g_string_prepend_c(str, ' ');
+			g_string_prepend(str, retval);
 		}
 	}
 
