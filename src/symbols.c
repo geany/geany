@@ -1523,6 +1523,10 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 		                      tm_tag_ref(tmtag), (GClosureNotify) tm_tag_unref, 0);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
+		gchar *tooltip = get_symbol_tooltip(doc, tmtag);
+		gtk_widget_set_tooltip_text(item, tooltip);
+		g_free(tooltip);
+
 		if (! first)
 			first = item;
 
