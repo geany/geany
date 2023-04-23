@@ -250,3 +250,29 @@ jobs:
           path: |
             ${{ env.BUILDER_PATH }}/output/mingw64/geany-*.exe
             ${{ env.BUILDER_PATH }}/output/mingw64/geany-*.zip
+
+  mingw64-meson:
+    name: Mingw-w64 Meson Build
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Checkout Geany
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          pacboy: cc:p meson:p ninja:p pkgconf:p gtk3:p
+
+      - name: Configuration
+        run: |
+          meson setup build-MINGW64
+
+      - name: Build
+        run: |
+          meson compile -C build-MINGW64
