@@ -4746,8 +4746,12 @@ gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 	sci_goto_pos(editor->sci, pos, TRUE);
 	editor->scroll_percent = 0.25F;
 
-	/* finally switch to the page */
-	document_show_tab(editor->document);
+	/* switch to the page, via idle callback in case of batch-opening */
+	if (main_status.opening_session_files)
+		document_show_tab_idle(editor->document);
+	else
+		document_show_tab(editor->document);
+
 	return TRUE;
 }
 
