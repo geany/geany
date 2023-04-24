@@ -2633,6 +2633,8 @@ void ui_init(void)
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
 	ui_widgets.print_page_setup = ui_lookup_widget(main_widgets.window, "page_setup1");
 
+	ui_notebook_setup(GTK_NOTEBOOK(main_widgets.sidebar_notebook));
+	ui_notebook_setup(GTK_NOTEBOOK(main_widgets.message_window_notebook));
 	main_widgets.progressbar = progress_bar_create();
 
 	/* current word sensitive items */
@@ -3263,6 +3265,7 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 	return FALSE;
 }
 
+
 void ui_menu_popup(GtkMenu* menu, GtkMenuPositionFunc func, gpointer data, guint button, guint32 activate_time)
 {
 	/* Use appropriate function for menu popup:
@@ -3273,4 +3276,68 @@ void ui_menu_popup(GtkMenu* menu, GtkMenuPositionFunc func, gpointer data, guint
 #else
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, func, data, button, activate_time);
 #endif
+}
+
+
+static gboolean notebook_tab_bar_scroll_cb(GtkWidget *widget, GdkEventScroll *event,
+	gpointer user_data)
+{
+	GtkNotebook *notebook = GTK_NOTEBOOK(widget);
+
+	switch (event->direction)
+	{
+		case GDK_SCROLL_RIGHT:
+		case GDK_SCROLL_DOWN:
+			gtk_notebook_next_page(notebook);
+			break;
+		case GDK_SCROLL_LEFT:
+		case GDK_SCROLL_UP:
+			gtk_notebook_prev_page(notebook);
+			break;
+		default:
+			return FALSE;
+	}
+	return TRUE;
+}
+
+
+static void notebook_tab_added_cb(GtkNotebook* nb, GtkWidget* child,
+	guint page_num, gpointer user_data)
+{
+	GtkWidget *wid = gtk_notebook_get_tab_label(GTK_NOTEBOOK(nb), child);
+
+	// label needs an event box
+	if (GTK_IS_LABEL(wid))
+	{
+		GtkWidget *ebox = gtk_event_box_new();
+
+		gtk_widget_set_has_window(ebox, FALSE);
+		g_object_ref(wid);
+		// also removes wid
+		gtk_notebook_set_tab_label(nb, child, ebox);
+		gtk_container_add(GTK_CONTAINER(ebox), wid);
+		g_object_unref(wid);
+		gtk_widget_show_all(ebox);
+		wid = ebox;
+	}
+	gtk_widget_add_events(wid, GDK_SCROLL_MASK);
+}
+
+
+/* Setup switching tab by scrolling mouse wheel - like GTK2.
+ * Each tab label widget must either support events,
+ * or be a label. Any labels will be reparented inside an event box. */
+void ui_notebook_setup(GtkNotebook *nb)
+{
+	g_signal_connect(nb, "scroll-event",
+		G_CALLBACK(notebook_tab_bar_scroll_cb), NULL);
+	g_signal_connect(nb, "page-added",
+		G_CALLBACK(notebook_tab_added_cb), NULL);
+
+	guint n = gtk_notebook_get_n_pages(nb);
+	for (guint i = 0; i != n; i++)
+	{
+		GtkWidget *wid = gtk_notebook_get_nth_page(nb, i);
+		notebook_tab_added_cb(nb, wid, -1, NULL);
+	}
 }
