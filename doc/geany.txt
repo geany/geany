@@ -4015,8 +4015,8 @@ Customizing Geany's appearance using GTK+ CSS
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To override GTK+ CSS styles, you can use traditional mechanisms or you
-can create a file named ``geany.css`` in the user configuration directory
-(usually ``~/.config/geany``) which will be loaded after other CSS styles
+can use the *Tools->Configuration files* menu to open a file named
+``geany.css`` which will be loaded after other CSS styles
 are applied to allow overriding the default styles.
 
 Geany offers a number of CSS IDs which can be used to taylor its
