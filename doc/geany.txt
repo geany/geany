@@ -229,7 +229,7 @@ The workspace has the following parts:
 * An optional toolbar.
 * An optional sidebar that can show the following tabs:
 
-  * Documents - A document list, see `Document list views`_.
+  * Documents - A `document list <#document-list-views>`_.
   * Symbols - A list of symbols in your code.
 
 * The main editor window.
@@ -237,9 +237,9 @@ The workspace has the following parts:
 
   * Status - A list of status messages.
   * Compiler - The output of compiling or building programs.
-  * Messages - Results of 'Find Usage', 'Find in Files' and other actions
+  * Messages - Results of `Find Usage`_, `Find in Files`_ and other actions
   * Scribble - A text scratchpad for any use.
-  * Terminal - An optional terminal window.
+  * Terminal - An optional `terminal window <#virtual-terminal-emulator-widget-vte>`_.
 
 * A status bar
 
