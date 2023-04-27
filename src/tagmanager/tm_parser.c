@@ -1563,6 +1563,8 @@ gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gc
 			case TM_PARSER_PASCAL:
 				sep = ": ";
 				break;
+			case TM_PARSER_CPP:
+				// trailing return syntax (C++ 11) makes it easier to read overloads
 			case TM_PARSER_GDSCRIPT:
 			case TM_PARSER_PYTHON:
 				sep = " -> ";
