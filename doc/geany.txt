@@ -1060,6 +1060,17 @@ symbols (e.g. C/C++ parsers) and for these parsers scope autocompletion
 works also for local variables.
 
 
+Calltips
+^^^^^^^^
+A handy tooltip is shown when typing ``(`` after a symbol name when the
+symbol has a parameter list. The tag parser for the filetype must support
+parsing parameter lists.
+Calltips can also be shown with a `keybinding <#editor-keybindings>`_.
+
+When there is more than one matching symbol, arrows are shown which can
+be clicked to cycle through the signatures.
+
+
 User-definable snippets
 ^^^^^^^^^^^^^^^^^^^^^^^
 
