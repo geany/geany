@@ -420,16 +420,16 @@ static TMParserMapGroup group_SH[] = {
 };
 
 static TMParserMapEntry map_D[] = {
-	{'a', tm_tag_other_t},       // alias
+	{'a', tm_tag_typedef_t},     // alias
 	{'c', tm_tag_class_t},       // class
 	{'g', tm_tag_enum_t},        // enum
 	{'e', tm_tag_enumerator_t},  // enumerator
 	{'x', tm_tag_externvar_t},   // externvar
 	{'f', tm_tag_function_t},    // function
 	{'i', tm_tag_interface_t},   // interface
-	{'l', tm_tag_local_var_t},   // local
+	{'l', tm_tag_undef_t},       // local
 	{'m', tm_tag_member_t},      // member
-	{'X', tm_tag_macro_with_arg_t}, // mixin
+	{'X', tm_tag_other_t},       // mixin
 	{'M', tm_tag_package_t},     // module
 	{'n', tm_tag_namespace_t},   // namespace
 	{'p', tm_tag_prototype_t},   // prototype
@@ -447,9 +447,11 @@ static TMParserMapGroup group_D[] = {
 	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
 	{N_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t | tm_tag_union_t},
 	{N_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
-	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_enumerator_t | tm_tag_variable_t},
 	{N_("Extern Variables"), TM_ICON_VAR, tm_tag_externvar_t},
-	{N_("Other"), TM_ICON_OTHER, tm_tag_other_t | tm_tag_enumerator_t | tm_tag_macro_with_arg_t},
+	{N_("Templates"), TM_ICON_NAMESPACE, tm_tag_macro_with_arg_t},
+	{N_("Aliases"), TM_ICON_OTHER, tm_tag_typedef_t},
+	{N_("Mixins"), TM_ICON_MACRO, tm_tag_other_t},
 };
 
 static TMParserMapEntry map_DIFF[] = {
