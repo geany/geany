@@ -1,4 +1,5 @@
 template Template(alias a, T...)
+if (is(typeof(a)))
 {
 private:
     // no parent:
