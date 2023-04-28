@@ -1,9 +1,3 @@
-$iDoubledÌ16384Ö0
-variable:   $iDoubled
-$iMagicÌ16384Ö0
-variable:   $iMagic
-$iNumberÌ16384Ö0
-variable:   $iNumber
 All functionsÌ524288Ö0
 other:      All functions
 MyDoubleÌ16Í($iValue)ÎAll functionsÖ0
@@ -12,3 +6,9 @@ MyDouble0Ì16Í($iValue)ÎAll functionsÖ0
 function:   All functions :: MyDouble0($iValue)
 MyDouble1Ì16Í($iValue)ÎAll functionsÖ0
 function:   All functions :: MyDouble1($iValue)
+iDoubledÌ16384Ö0
+variable:   iDoubled
+iMagicÌ16384Ö0
+variable:   iMagic
+iNumberÌ16384Ö0
+variable:   iNumber
