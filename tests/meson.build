@@ -334,6 +334,7 @@ ctags_tests = files([
 	'ctags/strings.rb.tags',
 	'ctags/structure.f.tags',
 	'ctags/tabindent.py.tags',
+	'ctags/templates.d.tags',
 	'ctags/test.erl.tags',
 	'ctags/test.go.tags',
 	'ctags/test.py.tags',

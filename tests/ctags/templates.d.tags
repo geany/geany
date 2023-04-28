@@ -1,0 +1,20 @@
+ImplementLengthÌ524288Ö0
+other:      ImplementLength
+RÌ64Ö0ÏisRangeUnaryIterable
+member:     isRangeUnaryIterable R
+TÌ4096Ö0
+typedef:    T
+TemplateÌ131072Í(alias a, T...)Ö0
+macro_arg:  Template(alias a, T...)
+TemplateAliasÌ4096Ö0
+typedef:    TemplateAlias
+bÌ16384Ö0
+variable:   b
+eachÌ131072Í(alias fun = R)Ö0
+macro_arg:  each(alias fun = R)
+membÌ64Ö0
+member:     memb
+sourceÌ524288Ö0
+other:      source
+zeroÌ1024Í(alias a)Ö0
+prototype:  zero(alias a)

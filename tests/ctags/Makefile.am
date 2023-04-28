@@ -337,6 +337,7 @@ test_sources = \
 	strings.rb						\
 	structure.f						\
 	tabindent.py					\
+	templates.d						\
 	test.erl						\
 	test.go							\
 	test.py							\

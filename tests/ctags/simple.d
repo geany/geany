@@ -50,11 +50,6 @@ public
 	int modulevar;
 }
 
-template Template(alias a, T...)
-{
-	alias TemplateAlias = a!T;
-}
-
 Object obj;
 
 private:

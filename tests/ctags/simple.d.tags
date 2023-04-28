@@ -8,10 +8,6 @@ InterfaceÌ32Ö0
 interface:  Interface
 StructÌ2048Ö0
 struct:     Struct
-TemplateÌ131072Í(alias a, T...)Ö0
-macro_arg:  Template(alias a, T...)
-TemplateAliasÌ4096Ö0
-typedef:    TemplateAlias
 UnionÌ8192ÎStructÖ0
 union:      Struct :: Union
 _barÌ64ÎClassÖ0
