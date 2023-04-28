@@ -12,3 +12,6 @@ struct Struct
 	}
 }
 
+version (all) {
+	T versioned_block;
+}
