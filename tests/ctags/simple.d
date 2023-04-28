@@ -47,7 +47,7 @@ class Class : Interface
 
 public
 {
-	int missing; // FIXME - parse protection blocks
+	int modulevar;
 }
 
 template Template(alias a, T...)
@@ -63,9 +63,6 @@ int i;
 /+ 
 int error;
  +/
-
-static if (is(typeof(__traits(getMember, a, name)) == function))
-	T conditional;
 
 static assert( num < TL.length, "Name '"~name~"' is not found");
 

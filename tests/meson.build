@@ -328,6 +328,7 @@ ctags_tests = files([
 	'ctags/square_parens.f90.tags',
 	'ctags/state_machine.v.tags',
 	'ctags/static_array.c.tags',
+	'ctags/static_if.d.tags',
 	'ctags/stdcall.f.tags',
 	'ctags/strings.php.tags',
 	'ctags/strings.rb.tags',

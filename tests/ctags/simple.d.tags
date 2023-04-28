@@ -8,39 +8,39 @@ InterfaceÌ32Ö0
 interface:  Interface
 StructÌ2048Ö0
 struct:     Struct
-TemplateÌ256Ö0
-namespace:  Template
-TemplateAliasÌ4096ÎTemplateÖ0
-typedef:    Template :: TemplateAlias
+TemplateÌ131072Í(alias a, T...)Ö0
+macro_arg:  Template(alias a, T...)
+TemplateAliasÌ4096Ö0
+typedef:    TemplateAlias
 UnionÌ8192ÎStructÖ0
 union:      Struct :: Union
-_barÌ64ÎClassÖ0ÏAliasInt
-member:     AliasInt Class :: _bar
+_barÌ64ÎClassÖ0
+member:     Class :: _bar
 barÌ4ÎEnumÖ0
 enumerator: Enum :: bar
-barÌ16Í()ÎClassÖ0Ïpublic AliasInt
-function:   public AliasInt Class :: bar()
-barÌ1024Í()ÎInterfaceÖ0Ïpublic AliasInt
-prototype:  public AliasInt Interface :: bar()
-conditionalÌ16384Ö0ÏT
-variable:   T conditional
+barÌ16Í()ÎClassÖ0
+function:   Class :: bar()
+barÌ1024Í()ÎInterfaceÖ0
+prototype:  Interface :: bar()
 fooÌ4ÎEnumÖ0
 enumerator: Enum :: foo
-globalVarÌ16384Ö0Ï__gshared int
-variable:   __gshared int globalVar
-iÌ16384Ö0Ïint
-variable:   int i
-mainÌ16Í(string[] args)Ö0Ïvoid
-function:   void main(string[] args)
-objÌ16384Ö0ÏObject
-variable:   Object obj
-qarÌ64ÎStruct.UnionÖ0Ïint
-member:     int Struct.Union :: qar
-quxxÌ64ÎStruct.UnionÖ0Ïbool
-member:     bool Struct.Union :: quxx
-test.simpleÌ256Ö0
-namespace:  test.simple
-tfunÌ16Í(T v)ÎClassÖ0Ïauto
-function:   auto Class :: tfun(T v)
+globalVarÌ16384Ö0
+variable:   globalVar
+iÌ16384Ö0
+variable:   i
+mainÌ16Í(string[] args)Ö0
+function:   main(string[] args)
+modulevarÌ64Ö0
+member:     modulevar
+objÌ16384Ö0
+variable:   obj
+qarÌ64ÎStruct.UnionÖ0
+member:     Struct.Union :: qar
+quxxÌ64ÎStruct.UnionÖ0
+member:     Struct.Union :: quxx
+test.simpleÌ512Ö0
+package:    test.simple
+tfunÌ16Í(T v)ÎClassÖ0
+function:   Class :: tfun(T v)
 thisÌ16Í(AliasInt x)ÎClassÖ0
 function:   Class :: this(AliasInt x)
