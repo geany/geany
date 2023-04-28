@@ -41,6 +41,7 @@ parsers = \
 	parsers/cxx/cxx_token_chain.c \
 	parsers/cxx/cxx_token_chain.h \
 	parsers/cxx/cxx_token.h \
+	parsers/c-based.c \
 	parsers/cpreprocessor.c \
 	parsers/cpreprocessor.h \
 	parsers/abaqus.c \

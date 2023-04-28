@@ -7,7 +7,14 @@
 *   This module contains functions for parsing and scanning C, C++, C#, D and Java
 *   source files.
 *
-*   *** This file is not used for C and C++, see cxx/cxx.c ***
+*   *** This file is legacy ***
+*
+*   C, C++: see cxx/cxx.c
+*   D: see c-based.c
+*
+*   TODO:
+*   C#, Java: need possible changes ported to c-based.c
+*   Vala: not in mainline ctags
 */
 
 /*
@@ -3258,7 +3265,7 @@ extern parserDefinition* JavaParser (void)
 	return def;
 }
 
-extern parserDefinition* DParser (void)
+extern parserDefinition* DParserOld (void)
 {
 	static const char *const extensions [] = { "d", "di", NULL };
 	parserDefinition* def = parserNew ("D");
