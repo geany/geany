@@ -2346,9 +2346,9 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 				break;
 
 			default:
-				if (c == '@' && isInputLanguage (Lang_java))
+				if (c == '@' && (isInputLanguage (Lang_d) || isInputLanguage (Lang_java)))
 				{
-					parseJavaAnnotation(st);
+					parseJavaAnnotation (st);
 				}
 				else if (cppIsident1 (c))
 				{
@@ -2637,7 +2637,7 @@ static void parseGeneralToken (statementInfo *const st, const int c)
 		if (c2 != '=')
 			cppUngetc (c2);
 	}
-	else if (c == '@' && isInputLanguage (Lang_java))
+	else if (c == '@' && (isInputLanguage (Lang_d) || isInputLanguage (Lang_java)))
 	{
 		parseJavaAnnotation (st);
 	}

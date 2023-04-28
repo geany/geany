@@ -12,6 +12,10 @@ UnionÌ8192ÎStructÖ0
 union:      Struct :: Union
 _barÌ64ÎClassÖ0
 member:     Class :: _bar
+attr_declÌ16384Ö0
+variable:   attr_decl
+attr_postÌ1024Í()Ö0
+prototype:  attr_post()
 barÌ4ÎEnumÖ0
 enumerator: Enum :: bar
 barÌ16Í()ÎClassÖ0
