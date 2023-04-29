@@ -67,6 +67,7 @@ static assert( num < TL.length, "Name '"~name~"' is not found");
 __gshared int globalVar;
 
 void main(string[] args)
+in(args.length > 0) // FIXME
 {
 	auto foo = new Class(1337);
 

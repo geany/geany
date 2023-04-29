@@ -28,8 +28,6 @@ globalVarÌ16384Ö0
 variable:   globalVar
 iÌ16384Ö0
 variable:   i
-mainÌ16Í(string[] args)Ö0
-function:   main(string[] args)
 modulevarÌ64Ö0
 member:     modulevar
 objÌ16384Ö0
