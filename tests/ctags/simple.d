@@ -81,3 +81,5 @@ in(args.length > 0)
 
 	writefln("%s", foo.bar());
 }
+
+extern (C++, name) extern_func();

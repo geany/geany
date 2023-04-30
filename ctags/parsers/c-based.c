@@ -1935,6 +1935,8 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 		case KEYWORD_EXTERN:
 			if (! isInputLanguage (Lang_csharp) || !st->gotName)
 			{
+				if (isInputLanguage (Lang_d))
+					skipParens(); // extern (C++, name)
 				reinitStatement (st, false);
 				st->scope = SCOPE_EXTERN;
 				st->declaration = DECL_BASE;

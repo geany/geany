@@ -24,6 +24,8 @@ barÌ16Í()ÎClassÖ0
 function:   Class :: bar()
 barÌ1024Í()ÎInterfaceÖ0
 prototype:  Interface :: bar()
+extern_funcÌ1024Í()Ö0
+prototype:  extern_func()
 fooÌ4ÎEnumÖ0
 enumerator: Enum :: foo
 globalVarÌ16384Ö0
