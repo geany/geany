@@ -1,20 +1,24 @@
 ImplementLengthÌ524288Ö0
 other:      ImplementLength
-RÌ64Ö0ÏisRangeUnaryIterable
-member:     isRangeUnaryIterable R
-TÌ4096Ö0
-typedef:    T
+RÌ64ÎeachÖ0Ïeach.isRangeUnaryIterable
+member:     each.isRangeUnaryIterable each :: R
+TÌ4096ÎeachÖ0
+typedef:    each :: T
 TemplateÌ131072Í(alias a, T...)Ö0
 macro_arg:  Template(alias a, T...)
-TemplateAliasÌ4096Ö0
-typedef:    TemplateAlias
+TemplateAliasÌ4096ÎTemplateÖ0
+typedef:    Template :: TemplateAlias
 bÌ16384Ö0
 variable:   b
+childÌ131072Í()ÎeachÖ0
+macro_arg:  each :: child()
 eachÌ131072Í(alias fun = R)Ö0
 macro_arg:  each(alias fun = R)
-membÌ64Ö0
-member:     memb
+membÌ64ÎTemplateÖ0
+member:     Template :: memb
 sourceÌ524288Ö0
 other:      source
-zeroÌ1024Í(alias a)Ö0
-prototype:  zero(alias a)
+tmethodÌ16Í()ÎeachÖ0
+function:   each :: tmethod()
+zeroÌ1024Í(alias a)ÎeachÖ0
+prototype:  each :: zero(alias a)

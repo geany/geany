@@ -18,6 +18,9 @@ template each(alias fun = "a")
     alias foo(T) = T; // T
     enum isRangeUnaryIterable(R) = // R
         is(typeof(unaryFun!fun(R.init.front)));
+
+    template child(){}
+    void tmethod()(){}
 }
 
 mixin ImplementLength!source; // source too!
