@@ -2069,7 +2069,9 @@ static bool skipPostArgumentStuff (
 				{
 				case KEYWORD_ATTRIBUTE: skipParens ();  break;
 				case KEYWORD_THROW:     skipParens ();  break;
-				case KEYWORD_IF:        if (isInputLanguage (Lang_d)) skipParens ();  break;
+				case KEYWORD_IF: // D template constraint
+				case KEYWORD_IN: // D contract expressions
+				case KEYWORD_OUT:        if (isInputLanguage (Lang_d)) skipParens ();  break;
 				case KEYWORD_TRY:                       break;
 
 				case KEYWORD_CONST:
