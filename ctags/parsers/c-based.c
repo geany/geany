@@ -2363,6 +2363,10 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 				{
 					parseAtMarkStyleAnnotation (st);
 				}
+				else if (isInputLanguage (Lang_d) && c == '!')
+				{	/* template instantiation */
+					info->isNameCandidate = false;
+				}
 				else if (cppIsident1 (c))
 				{
 					readIdentifier (token, c);

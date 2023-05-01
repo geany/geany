@@ -10,6 +10,7 @@ private:
 Foo!x b;
 Foo!(x) c; // FIXME
 Foo!(x < 2) d; // FIXME
+void f(Foo!x);
 
 template each(alias fun = "a")
 {
