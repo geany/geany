@@ -63,6 +63,9 @@ int error;
 @attr(i) attr_decl_infer = 1; // FIXME
 @(obj) T attr_anon;
 void attr_post() @attr(obj); // FIXME
+@attr(i) {
+	int attr_block;
+}
 
 static assert( num < TL.length, "Name '"~name~"' is not found");
 

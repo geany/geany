@@ -14,6 +14,8 @@ _barÌ64ÎClassÖ0
 member:     Class :: _bar
 attr_anonÌ16384Ö0
 variable:   attr_anon
+attr_blockÌ64Ö0
+member:     attr_block
 attr_declÌ16384Ö0
 variable:   attr_decl
 attr_postÌ1024Í()Ö0

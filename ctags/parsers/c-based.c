@@ -2666,6 +2666,13 @@ static void parseGeneralToken (statementInfo *const st, const int c)
 	else if (c == '@' && (isInputLanguage (Lang_d) || isInputLanguage (Lang_java)))
 	{
 		parseAtMarkStyleAnnotation (st);
+		if (isInputLanguage (Lang_d))
+		{
+			const int c = skipToNonWhite ();
+			if (c == '{')
+				st->declaration = DECL_ANNOTATION;
+			cppUngetc (c);
+		}
 	}
 	else if (c == STRING_SYMBOL) {
 		setToken(st, TOKEN_NONE);
