@@ -43,6 +43,8 @@ class Class : Interface
 	{
 		return v;
 	}
+
+	void imm() immutable;
 }
 
 public
@@ -51,6 +53,10 @@ public
 }
 
 Object obj;
+
+const(int)* type_con;
+immutable(int)* type_imm;
+shared(int)[] type_shar;
 
 private:
 int i;

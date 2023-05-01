@@ -36,6 +36,8 @@ globalVarÌ16384Ö0
 variable:   globalVar
 iÌ16384Ö0
 variable:   i
+immÌ1024Í() immutableÎClassÖ0
+prototype:  Class :: imm() immutable
 mainÌ16Í(string[] args)Ö0
 function:   main(string[] args)
 modulevarÌ64Ö0
@@ -54,3 +56,9 @@ tfunÌ16Í(T v)ÎClassÖ0
 function:   Class :: tfun(T v)
 thisÌ16Í(AliasInt x)ÎClassÖ0
 function:   Class :: this(AliasInt x)
+type_conÌ16384Ö0
+variable:   type_con
+type_immÌ16384Ö0
+variable:   type_imm
+type_sharÌ16384Ö0
+variable:   type_shar
