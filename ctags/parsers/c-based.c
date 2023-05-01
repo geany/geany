@@ -1129,8 +1129,7 @@ static bool findScopeHierarchy (vString *const string, const statementInfo *cons
 		const statementInfo *s;
 		for (s = st->parent  ;  s != NULL  ;  s = s->parent)
 		{
-			if (isContextualStatement (s) ||
-				s->declaration == DECL_NAMESPACE)
+			if (isContextualStatement (s))
 			{
 				if (s->declaration == DECL_PRIVATE ||
 					s->declaration == DECL_PROTECTED ||
@@ -1936,7 +1935,17 @@ static void processToken (tokenInfo *const token, statementInfo *const st)
 			if (! isInputLanguage (Lang_csharp) || !st->gotName)
 			{
 				if (isInputLanguage (Lang_d))
+				{
 					skipParens(); // extern (C++, name)
+					const int c = skipToNonWhite ();
+					if (c == '{')
+					{
+						cppUngetc (c);
+						st->declaration = DECL_ANNOTATION;
+						break;
+					}
+					cppUngetc (c);
+				}
 				reinitStatement (st, false);
 				st->scope = SCOPE_EXTERN;
 				st->declaration = DECL_BASE;

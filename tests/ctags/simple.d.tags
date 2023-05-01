@@ -24,6 +24,8 @@ barÌ16Í()ÎClassÖ0
 function:   Class :: bar()
 barÌ1024Í()ÎInterfaceÖ0
 prototype:  Interface :: bar()
+extÌ64Ö0
+member:     ext
 extern_funcÌ1024Í()Ö0
 prototype:  extern_func()
 fooÌ4ÎEnumÖ0

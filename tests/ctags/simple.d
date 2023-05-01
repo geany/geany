@@ -83,3 +83,6 @@ in(args.length > 0)
 }
 
 extern (C++, name) extern_func();
+extern {
+	int ext;
+}
