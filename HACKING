@@ -588,7 +588,7 @@ LexFoo.cxx. Try the official Scintilla project first.
 When adding a lexer, update:
 
 * scintilla/Makefile.am
-* scintilla/src/Catalogue.cxx - add a LINK_LEXER command *manually*
+* scintilla/lexilla/src/Lexilla.cxx - add the lexer module in AddGeanyLexers()
 
 For syntax highlighting, you will need to edit highlighting.c and
 highlightingmappings.h and add the following things:
