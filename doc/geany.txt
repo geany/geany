@@ -498,27 +498,6 @@ by specifying the command line option ``--with-vte-module-path`` to
 ./configure.
 
 
-Customizing Geany's appearance using GTK+ CSS
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-To override GTK+ CSS styles, you can use traditional mechanisms or you
-can create a file named ``geany.css`` in the user configuration directory
-(usually ``~/.config/geany``) which will be loaded after other CSS styles
-are applied to allow overriding the default styles.
-
-Geany offers a number of CSS IDs which can be used to taylor its
-appearance. Among the more interesting include:
-
-* ``geany-compiler-context`` - the style used for build command output surrounding errors
-* ``geany-compiler-error`` - the style used for build command errors
-* ``geany-compiler-message`` - the style other output encountered while running build command
-* ``geany-document-status-changed`` - the style for document tab labels when the document is changed
-* ``geany-document-status-disk-changed`` - the style for document tab labels when the file on disk has changed
-* ``geany-document-status-readyonly``` - the style for document tab labels when the document is read-only
-* ``geany-search-entry-no-match`` - the style of find/replace dialog entries when no match is found
-* ``geany-terminal-dirty`` - the style for the message window Terminal tab label when the terminal output has changed.
-
-
 Documents
 ---------
 
@@ -4041,6 +4020,27 @@ template files.
     Syntax highlighting colors aren't updated in open documents after
     saving filetypes.common as this may take a significant
     amount of time.
+
+
+Customizing Geany's appearance using GTK+ CSS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To override GTK+ CSS styles, you can use traditional mechanisms or you
+can use the *Tools->Configuration files* menu to open a file named
+``geany.css`` which will be loaded after other CSS styles
+are applied to allow overriding the default styles.
+
+Geany offers a number of CSS IDs which can be used to taylor its
+appearance. Among the more interesting include:
+
+* ``geany-compiler-context`` - the style used for build command output surrounding errors
+* ``geany-compiler-error`` - the style used for build command errors
+* ``geany-compiler-message`` - the style other output encountered while running build command
+* ``geany-document-status-changed`` - the style for document tab labels when the document is changed
+* ``geany-document-status-disk-changed`` - the style for document tab labels when the file on disk has changed
+* ``geany-document-status-readyonly``` - the style for document tab labels when the document is read-only
+* ``geany-search-entry-no-match`` - the style of find/replace dialog entries when no match is found
+* ``geany-terminal-dirty`` - the style for the message window Terminal tab label when the terminal output has changed.
 
 
 Global configuration file
