@@ -587,6 +587,7 @@ LexFoo.cxx. Try the official Scintilla project first.
 
 When adding a lexer, update:
 
+* meson.build
 * scintilla/Makefile.am
 * scintilla/lexilla/src/Lexilla.cxx - add the lexer module in AddGeanyLexers()
 
