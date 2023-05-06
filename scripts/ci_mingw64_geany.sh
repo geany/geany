@@ -70,19 +70,12 @@ CFLAGS="\
 ARCH="x86_64"
 MINGW_ARCH="mingw64"
 HOST="x86_64-w64-mingw32"
-export CC="/usr/bin/${HOST}-gcc"
-export CPP="/usr/bin/${HOST}-cpp"
-export CXX="/usr/bin/${HOST}-g++"
-export AR="/usr/bin/${HOST}-ar"
-export STRIP="/usr/bin/${HOST}-strip"
-export WINDRES="/usr/bin/${HOST}-windres"
-export CFLAGS="-I/windows/${MINGW_ARCH}/include/ ${CFLAGS}"
 export LDFLAGS="-static-libgcc ${LDFLAGS}"
 export PKG_CONFIG_SYSROOT_DIR="/windows"
 export PKG_CONFIG_PATH="/windows/${MINGW_ARCH}/lib/pkgconfig/"
-export PKG_CONFIG="/usr/bin/pkg-config"
 export NOCONFIGURE=1
 export JOBS=${JOBS:-1}
+export lt_cv_deplibs_check_method='pass_all'
 
 # stop on errors
 set -e
