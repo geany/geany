@@ -119,7 +119,7 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 
 	tag->name = g_strdup(tag_entry->name);
 	tag->type = type;
-	tag->local = tag_entry->isFileScope;
+	tag->local = tag_entry->isFileScope && file->trust_file_scope;
 	tag->flags = tm_tag_flag_none_t;
 	if (isTagExtraBitMarked(tag_entry, XTAG_ANONYMOUS))
 		tag->flags |= tm_tag_flag_anon_t;
