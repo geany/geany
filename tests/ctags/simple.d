@@ -56,6 +56,7 @@ Object obj;
 
 const(int)* type_con;
 immutable(int)* type_imm;
+inout int* f_inout(inout int* p); // TODO inout(T)
 shared(int)[] type_shar;
 
 private:

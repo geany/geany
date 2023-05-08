@@ -30,6 +30,8 @@ extÌ64Ö0
 member:     ext
 extern_funcÌ1024Í()Ö0
 prototype:  extern_func()
+f_inoutÌ1024Í(inout int* p)Ö0
+prototype:  f_inout(inout int* p)
 fooÌ4ÎEnumÖ0
 enumerator: Enum :: foo
 globalVarÌ16384Ö0

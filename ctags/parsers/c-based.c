@@ -2277,7 +2277,6 @@ static void parseAtMarkStyleAnnotation (statementInfo *const st)
 static int parseParens (statementInfo *const st, parenInfo *const info)
 {
 	tokenInfo *const token = activeToken (st);
-	unsigned int identifierCount = 0;
 	unsigned int depth = 1;
 	bool firstChar = true;
 	int nextChar = '\0';
@@ -2299,8 +2298,6 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 			case '&':
 			case '*':
 				info->isPointer = true;
-				if (identifierCount == 0)
-					info->isParamList = false;
 				initToken (token);
 				break;
 
