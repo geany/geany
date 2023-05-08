@@ -536,6 +536,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 }
 
 
+// Returns NULL if the tag is not a variable or callable
 static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 {
 	gchar *utf8_name = tm_parser_format_function(tag->lang, tag->name,
@@ -1508,14 +1509,18 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 		GtkWidget *image;
 		gchar *fname = short_names[i];
 		gchar *text;
+		gchar *sym = get_symbol_tooltip(doc, tmtag);
 
+		if (!sym)
+			sym = g_strdup("");
 		if (! first && have_best)
 			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("<b>%s: %lu</b>"), fname, tmtag->line);
+			text = g_markup_printf_escaped(_("<b>%s:%lu:</b> %s"), fname, tmtag->line, sym);
 		else
 			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("%s: %lu"), fname, tmtag->line);
+			text = g_markup_printf_escaped(_("<i>%s:%lu:</i> %s"), fname, tmtag->line, sym);
 
+		g_free(sym);
 		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
 		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0, NULL);
 		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", label, "always-show-image", TRUE, NULL);
