@@ -8,13 +8,13 @@
 # This script should be run in the top source directory.
 #
 # Parses all files in the directories given on command line for Python classes or functions and
-# write them into data/tags/std.py.tags (internal tagmanager format).
+# write them into data/tags/std.py.tags (ctags format).
 # If called without command line arguments, a preset of common Python libs is used.
 #
 # WARNING
 # Be aware that running this script will actually *import* all modules given on the command line
 # or in the standard library path of your Python installation. Dependent on what Python modules
-# you have installed, this might not be want you want and can have weird side effects.
+# you have installed, this might not be what you want and can have weird side effects.
 # You have been warned.
 #
 # It should be however relatively safe to execute this script from a fresh Python installation
