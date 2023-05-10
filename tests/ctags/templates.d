@@ -8,8 +8,8 @@ private:
 }
 
 Foo!x b;
-Foo!(x) c; // FIXME
-Foo!(x < 2) d; // FIXME
+Foo!(x) c;
+Foo!(x < 2) d;
 void f(Foo!x);
 
 template each(alias fun = "a")

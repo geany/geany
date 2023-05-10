@@ -14,8 +14,12 @@ VTÌ1024Í(alias a)Ö0
 prototype:  VT(alias a)
 bÌ16384Ö0
 variable:   b
+cÌ16384Ö0
+variable:   c
 childÌ131072Í()ÎeachÖ0
 macro_arg:  each :: child()
+dÌ16384Ö0
+variable:   d
 eachÌ131072Í(alias fun = R)Ö0
 macro_arg:  each(alias fun = R)
 fÌ1024Í(Foo!x)Ö0
