@@ -9,10 +9,12 @@
 # to ../data/tags/std.php.tags (relative to the script's location, not $CWD).
 
 import re
+import sys
 from json import loads
 from os.path import dirname, join
 from urllib.request import urlopen
 
+from create_tags_helper import format_tag, write_ctags_file
 
 UPSTREAM_TAG_DEFINITION = 'http://doc.php.net/downloads/json/php_manual_en.json'
 PROTOTYPE_RE = r'^(?P<return_type>.*) {tag_name}(?P<arg_list>\(.*\))$'
@@ -23,12 +25,11 @@ TA_TYPE = 204
 TA_ARGLIST = 205
 TA_SCOPE = 206
 TA_VARTYPE = 207
-# TMTagType (src/tagmanager/tm_tag.h:49)
-TYPE_CLASS = 1
-TYPE_FUNCTION = 16
-TYPE_MEMBER = 64
-TYPE_METHOD = 128
-TYPE_VARIABLE = 16384
+
+# PHP kinds
+KIND_CLASS = 'class'
+KIND_FUNCTION = 'function'
+KIND_VARIABLE = 'variable'
 
 
 def normalize_name(name):
@@ -70,31 +71,21 @@ def parse_and_create_php_tags_file():
 
             scope, tag_name = split_scope(tag_name)
             if tag_name[0] == '$':
-                tag_type = TYPE_MEMBER if scope is not None else TYPE_VARIABLE
+                kind = KIND_VARIABLE
             else:
-                tag_type = TYPE_METHOD if scope is not None else TYPE_FUNCTION
-            tag_list.append((tag_name, tag_type, return_type, arg_list, scope))
+                kind = KIND_FUNCTION
+
+            tag_list.append(format_tag(tag_name, kind, arg_list, scope, ('unknown', return_type)))
             # Also create a class tag when encountering a __construct()
             if tag_name == '__construct' and scope is not None:
                 scope, tag_name = split_scope(scope)
-                tag_list.append((tag_name, TYPE_CLASS, None, arg_list, scope or ''))
+                tag_list.append(format_tag(tag_name, KIND_CLASS, arg_list, scope or ''))
 
     # write tags
     script_dir = dirname(__file__)
-    tags_file_path = join(script_dir, '..', 'data', 'tags', 'std.php.tags')
-    with open(tags_file_path, 'w', encoding='iso-8859-1') as tags_file:
-        tags_file.write('# format=tagmanager\n')
-        for tag_name, tag_type, return_type, arg_list, scope in sorted(tag_list):
-            tag_line = f'{tag_name}'
-            for attr, type_ in [(tag_type, TA_TYPE),
-                               (arg_list, TA_ARGLIST),
-                               (return_type, TA_VARTYPE),
-                               (scope, TA_SCOPE)]:
-                if attr is not None:
-                    tag_line += f'{type_:c}{attr}'
-
-            tags_file.write(tag_line + '\n')
-    print(f'Created: {tags_file_path} with {len(tag_list)} tags')
+    filename = join(script_dir, '..', 'data', 'tags', 'std.php.tags')
+    write_ctags_file(filename, tag_list, sys.argv[0])
+    print(f'Created: {filename} with {len(tag_list)} tags')
 
 
 if __name__ == '__main__':
