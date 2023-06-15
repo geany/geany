@@ -103,6 +103,7 @@ template_files = \
 	templates/files/main.cxx \
 	templates/files/main.d \
 	templates/files/main.java \
+	templates/files/main.md \
 	templates/files/main.py \
 	templates/files/main.vala \
 	templates/files/module.erl \
