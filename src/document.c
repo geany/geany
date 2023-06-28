@@ -616,6 +616,24 @@ static gboolean on_idle_focus(gpointer doc)
 }
 
 
+// Returns: if a modal window is running
+static gboolean ui_has_modal(void)
+{
+	GList *node, *list = gtk_window_list_toplevels();
+	gboolean r = FALSE;
+
+	foreach_list(node, list)
+	{
+		if (!gtk_widget_is_visible(GTK_WIDGET(node->data)))
+			continue;
+		if (gtk_window_get_modal(GTK_WINDOW(node->data)))
+			r = TRUE;
+	}
+	g_list_free(list);
+	return r;
+}
+
+
 /* Creates a new document and editor, adding a tab in the notebook.
  * @return The created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
@@ -628,9 +646,11 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	{
 		doc = document_get_current();
 		/* remove the empty document first */
-		if (doc != NULL && doc->file_name == NULL && ! doc->changed)
-			/* prevent immediately opening another new doc with
-			 * new_document_after_close pref */
+		if (doc != NULL && doc->file_name == NULL && ! doc->changed &&
+			// check save as dialog isn't running
+			!ui_has_modal())
+			/* don't call document_remove_page to prevent immediately opening
+			 * another new doc with new_document_after_close various pref */
 			remove_page(0);
 	}
 
