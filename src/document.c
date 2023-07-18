@@ -104,6 +104,7 @@ enum
 };
 
 
+static guint show_tab_idle = 0;
 static guint doc_id_counter = 0;
 
 
@@ -609,13 +610,6 @@ void document_try_focus(GeanyDocument *doc, GtkWidget *source_widget)
 }
 
 
-static gboolean on_idle_focus(gpointer doc)
-{
-	document_try_focus(doc, NULL);
-	return FALSE;
-}
-
-
 /* Creates a new document and editor, adding a tab in the notebook.
  * @return The created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
@@ -865,9 +859,6 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 
 	document_set_filetype(doc, ft); /* also re-parses tags */
 
-	/* now the document is fully ready, display it (see notebook_new_tab()) */
-	gtk_widget_show(document_get_notebook_child(doc));
-
 	ui_set_window_title(doc);
 	build_menu_update(doc);
 	document_set_text_changed(doc, FALSE);
@@ -876,7 +867,6 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
 	/* bring it in front, jump to the start and grab the focus */
 	editor_goto_pos(doc->editor, 0, FALSE);
-	document_try_focus(doc, NULL);
 
 #ifdef USE_GIO_FILEMON
 	monitor_file_setup(doc);
@@ -1275,8 +1265,40 @@ void document_apply_indent_settings(GeanyDocument *doc)
 
 void document_show_tab(GeanyDocument *doc)
 {
+	if (show_tab_idle)
+	{
+		g_source_remove(show_tab_idle);
+		show_tab_idle = 0;
+	}
+
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 		document_get_notebook_page(doc));
+
+	/* finally, let the editor widget grab the focus so you can start coding
+	 * right away */
+	document_try_focus(doc, NULL);
+}
+
+
+static gboolean show_tab_cb(gpointer data)
+{
+	GeanyDocument *doc = (GeanyDocument *) data;
+
+	show_tab_idle = 0;
+	/* doc might not be valid e.g. if user closed a tab whilst Geany is opening files */
+	if (DOC_VALID(doc))
+		document_show_tab(doc);
+
+	return G_SOURCE_REMOVE;
+}
+
+
+void document_show_tab_idle(GeanyDocument *doc)
+{
+	if (show_tab_idle)
+		g_source_remove(show_tab_idle);
+
+	show_tab_idle = g_idle_add(show_tab_cb, doc);
 }
 
 
@@ -1327,8 +1349,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		if (doc != NULL)
 		{
 			ui_add_recent_document(doc);	/* either add or reorder recent item */
-			/* show the doc before reload dialog */
-			document_show_tab(doc);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
 		}
 	}
@@ -1498,9 +1518,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 				display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
 				(readonly) ? _(", read-only") : "");
 		}
-
-		/* now the document is fully ready, display it (see notebook_new_tab()) */
-		gtk_widget_show(document_get_notebook_child(doc));
 	}
 
 	g_free(display_filename);
@@ -1512,9 +1529,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	/* now bring the file in front */
 	editor_goto_pos(doc->editor, pos, FALSE);
 
-	/* finally, let the editor widget grab the focus so you can start coding
-	 * right away */
-	g_idle_add(on_idle_focus, doc);
 	return doc;
 }
 

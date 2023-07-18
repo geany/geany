@@ -1345,28 +1345,6 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	return ret;
 }
 
-/* trigger a notebook page switch after unsetting main_status.opening_session_files
- * for callbacks to run (and update window title, encoding settings, and so on)
- */
-static gboolean switch_to_session_page(gpointer data)
-{
-	gint n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-	gint target_page = session_notebook_page >= 0 ? session_notebook_page : cur_page;
-
-	if (n_pages > 0)
-	{
-		if (target_page != cur_page)
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), target_page);
-		else
-			g_signal_emit_by_name(GTK_NOTEBOOK(main_widgets.notebook), "switch-page",
-			                      gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), target_page),
-			                      target_page);
-	}
-	session_notebook_page = -1;
-
-	return G_SOURCE_REMOVE;
-}
 
 /* Open session files
  * Note: notebook page switch handler and adding to recent files list is always disabled
@@ -1411,8 +1389,9 @@ void configuration_open_files(GPtrArray *session_files)
 	if (failure)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
 	else
-		g_idle_add(switch_to_session_page, NULL);
+		document_show_tab_idle(session_notebook_page >= 0 ? document_get_from_page(session_notebook_page) : document_get_current());
 
+	session_notebook_page = -1;
 	main_status.opening_session_files--;
 }
 

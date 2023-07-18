@@ -239,6 +239,7 @@ void document_reload_config(GeanyDocument *doc);
 GeanyDocument *document_find_by_sci(ScintillaObject *sci);
 
 void document_show_tab(GeanyDocument *doc);
+void document_show_tab_idle(GeanyDocument *doc);
 
 void document_init_doclist(void);
 
