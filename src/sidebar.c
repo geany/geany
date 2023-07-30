@@ -924,7 +924,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 /* Returns true if new_node points to a reparented directory, as a result of merging empty
  * directories.
  */
-void sidebar_openfiles_remove_iter(GtkTreeStore *tree, GtkTreeIter *iter_)
+static void sidebar_openfiles_remove_iter(GtkTreeStore *tree, GtkTreeIter *iter_)
 {
 	GtkTreeIter iter = *iter_;
 	GtkTreeIter parent;
