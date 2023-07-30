@@ -1313,24 +1313,28 @@ static void document_action(GeanyDocument *doc, gint action)
 }
 
 
-static void on_openfiles_document_action_apply(GtkTreeModel *model, GtkTreeIter iter, gint action)
+/* Collects all documents under a given iter, filling @doc_array */
+static void on_openfiles_document_action_collect(GtkTreeModel *model, GtkTreeIter *iter,
+												 GPtrArray *doc_array)
 {
 	GeanyDocument *doc;
-	gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
+	gtk_tree_model_get(model, iter, DOCUMENTS_DOCUMENT, &doc, -1);
 	if (doc)
 	{
-		document_action(doc, action);
+		g_ptr_array_add(doc_array, doc);
 	}
 	else
 	{
 		/* parent item selected */
 		GtkTreeIter child;
-		gint i = gtk_tree_model_iter_n_children(model, &iter) - 1;
 
-		while (i >= 0 && gtk_tree_model_iter_nth_child(model, &child, &iter, i))
+		if (gtk_tree_model_iter_children(model, &child, iter))
 		{
-			on_openfiles_document_action_apply(model, child, action);
-			i--;
+			do
+			{
+				on_openfiles_document_action_collect(model, &child, doc_array);
+			}
+			while (gtk_tree_model_iter_next(model, &child));
 		}
 	}
 }
@@ -1344,7 +1348,14 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 	gint action = GPOINTER_TO_INT(user_data);
 
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
-		on_openfiles_document_action_apply(model, iter, action);
+	{
+		GPtrArray *doc_array = g_ptr_array_new();
+
+		on_openfiles_document_action_collect(model, &iter, doc_array);
+		for (guint i = 0; i < doc_array->len; i++)
+			document_action(g_ptr_array_index(doc_array, i), action);
+		g_ptr_array_free(doc_array, TRUE);
+	}
 }
 
 
