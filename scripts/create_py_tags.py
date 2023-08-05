@@ -23,16 +23,16 @@
 # docker run --rm -it --user $(id -u):$(id -g) -v $(pwd):/data --workdir /data python:3.11-alpine python scripts/create_py_tags.py
 #
 
-import datetime
 import importlib.util
 import inspect
 import os
-import platform
 import re
 import sys
 import sysconfig
 import warnings
 from pathlib import Path
+
+from create_tags_helper import format_tag, write_ctags_file
 
 # treat all DeprecationWarnings as errors so we can catch them to ignore the corresponding modules
 warnings.filterwarnings('error', category=DeprecationWarning)
@@ -55,15 +55,6 @@ KIND_MEMBER = 'member'
 TAG_FILENAME = 'data/tags/std.py.tags'
 TAG_REGEXP = re.compile(r'^[ \t]*(def|class)[ \t]+([a-zA-Z0-9_]+)[ \t]*(\(.*\))[:]')
 OBJECT_MEMORY_ADDRESS_REGEXP = re.compile(r'<(.+?) at 0x[0-9a-f]+(?:.+)>', flags=re.IGNORECASE)
-
-CTAGS_FILE_HEADER = f'''!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
-!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
-!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
-!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
-!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
-!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
-!_TAG_PROGRAM_NAME scripts/create_py_tags.py Automatically generated file - do not edit (created on {datetime.datetime.now().ctime()} with Python {platform.python_version()})
-'''
 
 # pylint: disable=no-else-return,no-self-use
 
@@ -89,13 +80,7 @@ class Parser:
         tag_key = (module_path, parent, object_name)
         if tag_key not in self.tags:
             signature = self._create_signature(object_) if object_ is not None else None
-            self.tags[tag_key] = self._format_tag(object_name, kind, signature, parent)
-
-    def _format_tag(self, tagname, kind, signature, parent):
-        signature_field = f'\tsignature:{signature}' if signature else ''
-        parent_field = f'\tclass:{parent}' if parent else ''
-
-        return f'{tagname}\t/unknown\t1;"\tkind:{kind}{parent_field}{signature_field}\n'
+            self.tags[tag_key] = format_tag(object_name, kind, signature, parent)
 
     def _get_safe_parameter_default_value(self, value):
         """
@@ -234,7 +219,7 @@ class Parser:
 
                     kind = KIND_CLASS if tag_type_str == 'class' else KIND_FUNCTION
                     signature = args.strip()
-                    self.tags[tagname] = self._format_tag(tagname, kind, signature, parent=None)
+                    self.tags[tagname] = format_tag(tagname, kind, signature, parent=None)
 
     def add_builtins(self):
         """
@@ -253,13 +238,7 @@ class Parser:
 
         @param filename (str)
         """
-        result = sorted(self.tags.values())
-        # write them
-        with open(filename, 'w') as target_file:
-            target_file.write(CTAGS_FILE_HEADER)
-            for symbol in result:
-                if symbol != '\n':  # skip empty lines
-                    target_file.write(symbol)
+        write_ctags_file(filename, self.tags.values(), sys.argv[0])
 
 
 def is_import(object_, module_path):
