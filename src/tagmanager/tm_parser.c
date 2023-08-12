@@ -1083,13 +1083,14 @@ static TMParserMapGroup group_BATCH[] = {
 static TMParserMapEntry map_AUTOIT[] = {
 	{'f', tm_tag_function_t},
 	{'r', tm_tag_other_t},
-	{'g', tm_tag_undef_t},
-	{'l', tm_tag_undef_t},
+	{'g', tm_tag_variable_t},
+	{'l', tm_tag_variable_t},
 	{'S', tm_tag_undef_t},
 };
 static TMParserMapGroup group_AUTOIT[] = {
 	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 	{N_("Regions"), TM_ICON_OTHER, tm_tag_other_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 typedef struct

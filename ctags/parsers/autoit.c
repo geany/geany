@@ -283,7 +283,7 @@ static void findAutoItTags (void)
 					skipSpaces (&p);
 				if (*p == '$')
 				{
-					vStringPut (name, (int) *p++);
+					p++;
 					while (isIdentChar ((int) *p))
 					{
 						vStringPut (name, (int) *p);
