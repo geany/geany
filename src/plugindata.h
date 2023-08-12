@@ -68,7 +68,7 @@ G_BEGIN_DECLS
  * Changing this forces all plugins to be recompiled before Geany can load them. */
 /* This should usually stay the same if fields are only appended, assuming only pointers to
  * structs and not structs themselves are declared by plugins. */
-#define GEANY_ABI_VERSION (72 << GEANY_ABI_SHIFT)
+#define GEANY_ABI_VERSION (73 << GEANY_ABI_SHIFT)
 
 
 /** Defines a function to check the plugin is safe to load.
