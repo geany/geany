@@ -486,7 +486,7 @@ static void hide_empty_rows(GtkTreeStore *store)
 }
 
 
-static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean found_parent)
+static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean found_parent, gboolean include_line)
 {
 	gchar *utf8_name;
 	const gchar *scope = tag->scope;
@@ -530,7 +530,8 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (! doc_is_utf8)
 		g_free(utf8_name);
 
-	g_string_append_printf(buffer, " [%lu]", tag->line);
+	if (include_line)
+		g_string_append_printf(buffer, " [%lu]", tag->line);
 
 	return buffer->str;
 }
@@ -949,7 +950,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 					/* only update fields that (can) have changed (name that holds line
 					 * number, tooltip, and the tag itself) */
-					name = get_symbol_name(doc, found, parent_name != NULL);
+					name = get_symbol_name(doc, found, parent_name != NULL, TRUE);
 					tooltip = get_symbol_tooltip(doc, found);
 					gtk_tree_store_set(store, &iter,
 							SYMBOLS_COLUMN_NAME, name,
@@ -1006,7 +1007,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			expand = ! gtk_tree_model_iter_has_child(model, parent);
 
 			/* insert the new element */
-			name = get_symbol_name(doc, tag, parent_name != NULL);
+			name = get_symbol_name(doc, tag, parent_name != NULL, TRUE);
 			tooltip = get_symbol_tooltip(doc, tag);
 			gtk_tree_store_insert_with_values(store, &iter, parent, 0,
 					SYMBOLS_COLUMN_NAME, name,
@@ -1509,20 +1510,28 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 		GtkWidget *image;
 		gchar *fname = short_names[i];
 		gchar *text;
+		gchar *tooltip;
 		gchar *sym = get_symbol_tooltip(doc, tmtag);
 
 		if (!sym)
-			sym = g_strdup("");
-		if (! first && have_best)
+			sym = g_strdup(get_symbol_name(doc, tmtag, FALSE, FALSE));
+		if (!sym)
 			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("<b>%s:%lu:</b> %s"), fname, tmtag->line, sym);
+			sym = g_strdup_printf(_("%s: %lu"), fname, tmtag->line);
+		if (! first && have_best)
+			/* For translators: it's the symbol in the goto-symbol popup menu */
+			text = g_markup_printf_escaped(_("<b><tt>%s</tt></b>"), sym);
 		else
 			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("<i>%s:%lu:</i> %s"), fname, tmtag->line, sym);
+			text = g_markup_printf_escaped(_("<tt>%s</tt>"), sym);
+		/* For translators: it's the tooltip for a symbol in the goto-symbol popup menu */
+		tooltip = g_markup_printf_escaped(_("<b>%s:%lu:</b> <small><tt>%s</tt></small>"), fname, tmtag->line, sym);
 
 		g_free(sym);
 		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
-		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0, NULL);
+		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0,
+		                     "tooltip-markup", tooltip, "max-width-chars", 80,
+		                     "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", label, "always-show-image", TRUE, NULL);
 		g_signal_connect_data(item, "activate", G_CALLBACK(on_goto_popup_item_activate),
 		                      tm_tag_ref(tmtag), (GClosureNotify) tm_tag_unref, 0);
@@ -1531,6 +1540,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 		if (! first)
 			first = item;
 
+		g_free(tooltip);
 		g_free(text);
 		g_free(fname);
 	}
