@@ -1517,21 +1517,33 @@ gboolean tm_parser_enable_kind(TMParserType lang, gchar kind)
 }
 
 
-gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gchar *type)
+#include "tm_tag.h"
+
+gchar *tm_parser_format_variable(const TMTag *tag)
 {
-	if (!type)
+	gchar *name = tag->name;
+	gchar *r = NULL;
+
+	if (!tag->var_type)
 		return NULL;
 
-	switch (lang)
+	if (tag->scope)
+		name = g_strconcat(tag->scope,
+			tm_parser_scope_separator_printable(tag->lang), tag->name, NULL);
+
+	switch (tag->lang)
 	{
 		case TM_PARSER_GO:
-			return g_strconcat(name, " ", type, NULL);
+			r = g_strconcat(name, " ", tag->var_type, NULL);
 		case TM_PARSER_PASCAL:
 		case TM_PARSER_PYTHON:
-			return g_strconcat(name, ": ", type, NULL);
+			r = g_strconcat(name, ": ", tag->var_type, NULL);
 		default:
-			return g_strconcat(type, " ", name, NULL);
+			r = g_strconcat(tag->var_type, " ", name, NULL);
 	}
+	if (tag->scope)
+		g_free(name);
+	return r;
 }
 
 

@@ -546,7 +546,7 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 	if (!utf8_name && tag->var_type &&
 		tag->type & (tm_tag_field_t | tm_tag_member_t | tm_tag_variable_t | tm_tag_externvar_t))
 	{
-		utf8_name = tm_parser_format_variable(tag->lang, tag->name, tag->var_type);
+		utf8_name = tm_parser_format_variable(tag);
 	}
 
 	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion

@@ -51,6 +51,7 @@ typedef enum
  * A integral type which can hold known parser type IDs
  **/
 typedef gint TMParserType;
+struct TMTag;
 
 
 #ifdef GEANY_PRIVATE
@@ -161,7 +162,7 @@ gboolean tm_parser_enable_role(TMParserType lang, gchar kind);
 
 gboolean tm_parser_enable_kind(TMParserType lang, gchar kind);
 
-gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gchar *type);
+gchar *tm_parser_format_variable(const struct TMTag* tag);
 
 gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gchar *args,
 	const gchar *retval, const gchar *scope);
