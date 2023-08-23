@@ -1517,21 +1517,33 @@ gboolean tm_parser_enable_kind(TMParserType lang, gchar kind)
 }
 
 
-gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gchar *type)
+gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gchar *type,
+	const gchar *scope)
 {
+	gchar *ret, *name_full;
+
 	if (!type)
 		return NULL;
+
+	if (scope)
+		name_full = g_strconcat(scope, tm_parser_scope_separator_printable(lang),
+			name, NULL);
+	else
+		name_full = g_strdup(name);
 
 	switch (lang)
 	{
 		case TM_PARSER_GO:
-			return g_strconcat(name, " ", type, NULL);
+			ret = g_strconcat(name_full, " ", type, NULL);
 		case TM_PARSER_PASCAL:
 		case TM_PARSER_PYTHON:
-			return g_strconcat(name, ": ", type, NULL);
+			ret = g_strconcat(name_full, ": ", type, NULL);
 		default:
-			return g_strconcat(type, " ", name, NULL);
+			ret = g_strconcat(type, " ", name_full, NULL);
 	}
+
+	g_free(name_full);
+	return ret;
 }
 
 
