@@ -51,6 +51,8 @@ GeanyTemplatePrefs;
 
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
 
+gchar *templates_get_template_fileheader3(gint filetype_idx, const gchar *fname);
+
 
 #ifdef GEANY_PRIVATE
 
@@ -64,8 +66,10 @@ struct filetype;
 enum
 {
 	GEANY_TEMPLATE_GPL = 0,
+	GEANY_TEMPLATE_GPL3,
 	GEANY_TEMPLATE_BSD,
 	GEANY_TEMPLATE_FILEHEADER,
+	GEANY_TEMPLATE_FILEHEADER3,
 	GEANY_TEMPLATE_CHANGELOG,
 	GEANY_TEMPLATE_FUNCTION,
 	GEANY_MAX_TEMPLATES

@@ -1138,12 +1138,20 @@ static void on_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
 	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_GPL);
 }
 
+static void on_comments_gpl3_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_GPL3);
+}
 
 static void on_menu_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_GPL);
 }
 
+static void on_menu_comments_gpl3_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_GPL3);
+}
 
 static void on_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
@@ -1196,6 +1204,25 @@ static void on_comments_fileheader_activate(GtkMenuItem *menuitem, gpointer user
 	g_free(text);
 }
 
+static void on_comments_fileheader3_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	gchar *text;
+	const gchar *fname;
+	GeanyFiletype *ft;
+
+	g_return_if_fail(doc != NULL);
+
+	ft = doc->file_type;
+	fname = doc->file_name;
+	text = templates_get_template_fileheader3(FILETYPE_ID(ft), fname);
+
+	sci_start_undo_action(doc->editor->sci);
+	sci_insert_text(doc->editor->sci, 0, text);
+	sci_goto_pos(doc->editor->sci, 0, FALSE);
+	sci_end_undo_action(doc->editor->sci);
+	g_free(text);
+}
 
 void on_file_properties_activate(GtkMenuItem *menuitem, gpointer user_data)
 {

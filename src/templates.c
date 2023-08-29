@@ -58,6 +58,7 @@ static gchar *templates[GEANY_MAX_TEMPLATES];
 
 static void replace_static_values(GString *text);
 static gchar *get_template_fileheader(GeanyFiletype *ft);
+static gchar *get_template_fileheader3(GeanyFiletype *ft);
 
 /* called by templates_replace_common */
 static void templates_replace_default_dates(GString *text);
@@ -129,7 +130,9 @@ static void init_general_templates(void)
 {
 	/* read the contents */
 	read_template("fileheader", GEANY_TEMPLATE_FILEHEADER);
+	read_template("fileheader3", GEANY_TEMPLATE_FILEHEADER3);
 	read_template("gpl", GEANY_TEMPLATE_GPL);
+	read_template("gpl3", GEANY_TEMPLATE_GPL3);
 	read_template("bsd", GEANY_TEMPLATE_BSD);
 	read_template("function", GEANY_TEMPLATE_FUNCTION);
 	read_template("changelog", GEANY_TEMPLATE_CHANGELOG);
@@ -168,7 +171,7 @@ void templates_replace_common(GString *tmpl, const gchar *fname,
 		NULL);
 }
 
-
+// Maybe a fix to do in this function
 static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc_filename,
 									 GeanyFiletype *ft)
 {
@@ -456,7 +459,10 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 	GString *template;
 
 	g_return_val_if_fail(DOC_VALID(doc), NULL);
-	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL);
+	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL ||
+						licence_type == GEANY_TEMPLATE_GPL3 ||
+						licence_type == GEANY_TEMPLATE_BSD,
+						NULL);
 
 	template = g_string_new(templates[licence_type]);
 	replace_static_values(template);
@@ -478,6 +484,7 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 
 	templates_replace_valist(template,
 		"{gpl}", templates[GEANY_TEMPLATE_GPL],
+		"{gpl3}", templates[GEANY_TEMPLATE_GPL3],
 		"{bsd}", templates[GEANY_TEMPLATE_BSD],
 		NULL);
 
@@ -486,6 +493,22 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 	return g_string_free(template, FALSE);
 }
 
+static gchar *get_template_fileheader3(GeanyFiletype *ft)
+{
+	GString *template = g_string_new(templates[GEANY_TEMPLATE_FILEHEADER3]);
+
+	filetypes_load_config(ft->id, FALSE);	/* load any user extension setting */
+
+	templates_replace_valist(template,
+		"{gpl}", templates[GEANY_TEMPLATE_GPL],
+		"{gpl3}", templates[GEANY_TEMPLATE_GPL3],
+		"{bsd}", templates[GEANY_TEMPLATE_BSD],
+		NULL);
+
+	/* we don't replace other wildcards here otherwise they would get done twice for files */
+	make_comment_block(template, ft->id, GEANY_TEMPLATES_INDENT);
+	return g_string_free(template, FALSE);
+}
 
 /* TODO change the signature to take a GeanyDocument? this would break plugin API/ABI */
 GEANY_API_SYMBOL
@@ -501,6 +524,18 @@ gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 	return g_string_free(template, FALSE);
 }
 
+// The line `GEANY_API_SYMBOL` is needeed ?
+gchar *templates_get_template_fileheader3(gint filetype_idx, const gchar *fname)
+{
+	GeanyFiletype *ft = filetypes[filetype_idx];
+	gchar *str = get_template_fileheader3(ft);
+	GString *template = g_string_new(str);
+
+	g_free(str);
+	templates_replace_common(template, fname, ft, NULL);
+	convert_eol_characters(template, NULL);
+	return g_string_free(template, FALSE);
+}
 
 gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_name)
 {
