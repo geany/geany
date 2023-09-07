@@ -1007,6 +1007,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(BATCH);
 		init_styleset_case(C);
 		init_styleset_case(CAML);
+		init_styleset_case(CIL);
 		init_styleset_case(CMAKE);
 		init_styleset_case(COBOL);
 		init_styleset_case(COFFEESCRIPT);
@@ -1099,6 +1100,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(BATCH);
 		styleset_case(C);
 		styleset_case(CAML);
+		styleset_case(CIL);
 		styleset_case(CMAKE);
 		styleset_case(COBOL);
 		styleset_case(COFFEESCRIPT);
@@ -1567,6 +1569,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_H_SGML_SIMPLESTRING ||
 				style == SCE_H_SINGLESTRING);
 
+		case SCLEX_CIL:
+			return (style == SCE_CIL_STRING);
+
 		case SCLEX_CMAKE:
 			return (style == SCE_CMAKE_STRINGDQ ||
 				style == SCE_CMAKE_STRINGLQ ||
@@ -1787,6 +1792,11 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_HPHP_COMMENTLINE ||
 				style == SCE_H_SGML_COMMENT);
 
+		case SCLEX_CIL:
+			return (
+				style == SCE_CIL_COMMENT ||
+				style == SCE_CIL_COMMENTLINE);
+
 		case SCLEX_CMAKE:
 			return (style == SCE_CMAKE_COMMENT);
 
@@ -1869,7 +1879,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 		case SCLEX_MARKDOWN:
 			/* there is no comment type in those lexers, listing here just for completeness */
 			return FALSE;
-			
+
 		case SCLEX_GDSCRIPT:
 			return (style == SCE_GD_COMMENTLINE ||
 				style == SCE_GD_COMMENTBLOCK);
