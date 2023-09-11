@@ -119,7 +119,6 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$PACKAGE"], [Gettext package.])
 AM_COND_IF([MINGW],
   [pkgdatadir='${prefix}/data'],
   [pkgdatadir='${datarootdir}/geany'])
-AM_COND_IF([MINGW],[LIBS="$LIBS -liconv"])
 AC_SUBST([GEANY_DATA_DIR], [$(eval echo $(eval echo $pkgdatadir))])
 AC_SUBST([pkgdatadir])
 

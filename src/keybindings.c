@@ -504,8 +504,8 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FORMAT_REFLOWPARAGRAPH, NULL,
 		GDK_KEY_j, GEANY_PRIMARY_MOD_MASK, "format_reflowparagraph", _("_Reflow Lines/Block"),
 		"reflow_lines_block1");
-	keybindings_set_item(group, GEANY_KEYS_FORMAT_JOINLINES, NULL,
-		0, 0, "edit_joinlines", _("Join lines"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_JOINLINES, NULL,
+		0, 0, "edit_joinlines", _("_Join Lines"), "join_lines1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_INSERT);
 
@@ -2388,14 +2388,6 @@ static void join_paragraph(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
 	gboolean sel;
-	gint column;
-
-	column = get_reflow_column(editor);
-	if (column == -1)
-	{
-		utils_beep();
-		return;
-	}
 
 	sci_start_undo_action(sci);
 	sel = sci_has_selection(sci);

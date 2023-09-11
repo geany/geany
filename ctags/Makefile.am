@@ -48,6 +48,7 @@ parsers = \
 	parsers/ada.c \
 	parsers/asciidoc.c \
 	parsers/asm.c \
+	parsers/autoit.c \
 	parsers/basic.c \
 	parsers/bibtex.c \
 	parsers/geany_c.c \
@@ -58,6 +59,7 @@ parsers = \
 	parsers/css.c \
 	parsers/diff.c \
 	parsers/geany_docbook.c \
+	parsers/dosbatch.c \
 	parsers/erlang.c \
 	parsers/flex.c \
 	parsers/forth.c \

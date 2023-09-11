@@ -65,7 +65,7 @@ static void enable_roles(const TMParserType lang, guint kind)
 }
 
 
-static void enable_kinds_and_roles()
+static void enable_kinds_and_roles(void)
 {
 	TMParserType lang;
 

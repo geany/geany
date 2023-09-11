@@ -1,14 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Ingmārs Dīriņš <melhiors14@gmail.com>, 2017-2019.
+# Latvian translation for Geany
+# Copyright (C) 2006-2022 The Geany contributors.
+# This file is distributed under the same license as the Geany package.
+# Ingmārs Dīriņš <melhiors14@gmail.com>, 2017-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-03 02:11+0000\n"
-"PO-Revision-Date: 2022-09-03 21:57+0300\n"
+"POT-Creation-Date: 2022-12-02 02:11+0000\n"
+"PO-Revision-Date: 2022-12-04 12:05+0200\n"
 "Last-Translator: Ingmārs Dīriņš <melhiors14@gmail.com>\n"
 "Language-Team: \n"
 "Language: lv\n"
@@ -91,11 +91,11 @@ msgstr "_Meklēt"
 msgid "Open Selected F_ile"
 msgstr "Atvērt atlasīto datn_i"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2168
+#: ../data/geany.glade.h:19 ../src/symbols.c:2200
 msgid "Find _Usage"
 msgstr "Atrast lietoj_umu"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2173
+#: ../data/geany.glade.h:20 ../src/symbols.c:2205
 msgid "Find _Document Usage"
 msgstr "Atrast _dokumenta lietojumu"
 
@@ -379,7 +379,7 @@ msgstr "Dažādi"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../data/geany.glade.h:76 ../src/prefs.c:1599
+#: ../data/geany.glade.h:76 ../src/prefs.c:1608
 msgid "General"
 msgstr "Vispārīgi"
 
@@ -467,7 +467,7 @@ msgstr "Rādīt statusa joslu"
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "Vai rādīt statusa joslu galvenā loga apakšā"
 
-#: ../data/geany.glade.h:98 ../src/prefs.c:1601
+#: ../data/geany.glade.h:98 ../src/prefs.c:1610
 msgid "Interface"
 msgstr "Saskarne"
 
@@ -599,7 +599,7 @@ msgstr "<b>Ikonu izmērs</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>Rīkjosla</b>"
 
-#: ../data/geany.glade.h:129 ../src/prefs.c:1603
+#: ../data/geany.glade.h:129 ../src/prefs.c:1612
 msgid "Toolbar"
 msgstr "Rīkjosla"
 
@@ -978,21 +978,33 @@ msgstr "Rādīt rindu beigas"
 
 #: ../data/geany.glade.h:205
 msgid "Shows the line ending character"
-msgstr "Rāda rindas beigu rakstzīmi"
+msgstr "Rāda rindu beigu rakstzīmi"
 
 #: ../data/geany.glade.h:206
+msgid "Show only non-default line endings"
+msgstr "Rādīt tikai rindu beigas, kas nav noklusējuma"
+
+#: ../data/geany.glade.h:207
+msgid ""
+"Shows line ending characters only when they differ from the file default "
+"line ending character"
+msgstr ""
+"Rāda rindu beigu rakstzīmes tikai, kad tās atšķiras no datnes noklusējuma "
+"rindu beigu rakstzīmes"
+
+#: ../data/geany.glade.h:208
 msgid "Show line numbers"
 msgstr "Rādīt rindu numurus"
 
-#: ../data/geany.glade.h:207
+#: ../data/geany.glade.h:209
 msgid "Shows or hides the Line Number margin"
 msgstr "Rāda vai slēpj rindas numura apmali"
 
-#: ../data/geany.glade.h:208
+#: ../data/geany.glade.h:210
 msgid "Show markers margin"
 msgstr "Rādīt marķieru apmali"
 
-#: ../data/geany.glade.h:209
+#: ../data/geany.glade.h:211
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines"
@@ -1000,39 +1012,39 @@ msgstr ""
 "Rāda vai slēpj mazu apmali pa labi no rindu numuriem, kura tiek lietota, lai "
 "atzīmētu rindas"
 
-#: ../data/geany.glade.h:210
+#: ../data/geany.glade.h:212
 msgid "Stop scrolling at last line"
 msgstr "Apturēt ritināšanu pie pēdējās rindas"
 
-#: ../data/geany.glade.h:211
+#: ../data/geany.glade.h:213
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr "Vai apturēt ritināšanu vienu lappusi pēc dokumenta pēdējās rindas"
 
-#: ../data/geany.glade.h:212
+#: ../data/geany.glade.h:214
 msgid "Lines visible _around the cursor:"
 msgstr "Rindas redzamas _apkārt kursoram:"
 
-#: ../data/geany.glade.h:213
+#: ../data/geany.glade.h:215
 msgid "<b>Display</b>"
 msgstr "<b>Attēlotājs</b>"
 
-#: ../data/geany.glade.h:214
+#: ../data/geany.glade.h:216
 msgid "Column:"
 msgstr "Kolonna:"
 
-#: ../data/geany.glade.h:215
+#: ../data/geany.glade.h:217
 msgid "Color:"
 msgstr "Krāsa:"
 
-#: ../data/geany.glade.h:216
+#: ../data/geany.glade.h:218
 msgid "Sets the color of the long line marker"
 msgstr "Iestata garās rindas marķiera krāsu"
 
-#: ../data/geany.glade.h:217 ../src/toolbar.c:73 ../src/tools.c:844
+#: ../data/geany.glade.h:219 ../src/toolbar.c:73 ../src/tools.c:835
 msgid "Color Chooser"
 msgstr "Krāsu izvēlētājs"
 
-#: ../data/geany.glade.h:218
+#: ../data/geany.glade.h:220
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
@@ -1043,11 +1055,11 @@ msgstr ""
 "šo vērtību uz vērtību, lielāku kā 0, lai norādītu kolonnu, kurā tam "
 "vajadzētu parādīties."
 
-#: ../data/geany.glade.h:219
+#: ../data/geany.glade.h:221
 msgid "Line"
 msgstr "Rinda"
 
-#: ../data/geany.glade.h:220
+#: ../data/geany.glade.h:222
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)"
@@ -1055,11 +1067,11 @@ msgstr ""
 "Drukā vertikālu līniju redaktora logā dotajā kursora novietojumā (skatīt "
 "zemāk)"
 
-#: ../data/geany.glade.h:221
+#: ../data/geany.glade.h:223
 msgid "Background"
 msgstr "Fons"
 
-#: ../data/geany.glade.h:222
+#: ../data/geany.glade.h:224
 msgid ""
 "The background color of characters after the given cursor position (see "
 "below) changed to the color set below, (this is recommended if you use "
@@ -1069,27 +1081,27 @@ msgstr ""
 "uz krāsu, iestatītu zemāk, (šis ir ieteicams, ja jūs lietojat proporcionālos "
 "fontus)"
 
-#: ../data/geany.glade.h:223
+#: ../data/geany.glade.h:225
 msgid "Enabled"
 msgstr "Ieslēgts"
 
-#: ../data/geany.glade.h:224
+#: ../data/geany.glade.h:226
 msgid "<b>Long line marker</b>"
 msgstr "<b>Garais rindas marķieris</b>"
 
-#: ../data/geany.glade.h:225
+#: ../data/geany.glade.h:227
 msgid "Disabled"
 msgstr "Izslēgts"
 
-#: ../data/geany.glade.h:226
+#: ../data/geany.glade.h:228
 msgid "Do not show virtual spaces"
 msgstr "Nerādīt virtuālās atstarpes"
 
-#: ../data/geany.glade.h:227
+#: ../data/geany.glade.h:229
 msgid "Only for rectangular selections"
 msgstr "Tikai taisnstūrainām atlasēm"
 
-#: ../data/geany.glade.h:228
+#: ../data/geany.glade.h:230
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
@@ -1097,56 +1109,56 @@ msgstr ""
 "Tikai rādīt virtuālās atstarpes aiz rindu beigām, kad zīmē taisnstūrainu "
 "atlasi"
 
-#: ../data/geany.glade.h:229
+#: ../data/geany.glade.h:231
 msgid "Always"
 msgstr "Vienmēr"
 
-#: ../data/geany.glade.h:230
+#: ../data/geany.glade.h:232
 msgid "Always show virtual spaces beyond the end of lines"
 msgstr "Vienmēr rādīt virtuālās atstarpes aiz rindu beigām"
 
-#: ../data/geany.glade.h:231
+#: ../data/geany.glade.h:233
 msgid "<b>Virtual spaces</b>"
 msgstr "<b>Virtuālās atstarpes</b>"
 
-#: ../data/geany.glade.h:232
+#: ../data/geany.glade.h:234
 msgid "Display"
 msgstr "Attēlotājs"
 
-#: ../data/geany.glade.h:233 ../src/keybindings.c:310 ../src/prefs.c:1605
+#: ../data/geany.glade.h:235 ../src/keybindings.c:310 ../src/prefs.c:1614
 msgid "Editor"
 msgstr "Redaktors"
 
-#: ../data/geany.glade.h:234
+#: ../data/geany.glade.h:236
 msgid "Open new documents from the command-line"
 msgstr "Atvērt jaunus dokumentus no komandrindas"
 
-#: ../data/geany.glade.h:235
+#: ../data/geany.glade.h:237
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
 "Izveidot jaunu datni katram komandrindas datnes nosaukumam, kurš nepastāv"
 
-#: ../data/geany.glade.h:236
+#: ../data/geany.glade.h:238
 msgid "Default end of line characters:"
 msgstr "Noklusējuma rindas beigu rakstzīmes:"
 
-#: ../data/geany.glade.h:237
+#: ../data/geany.glade.h:239
 msgid "<b>New files</b>"
 msgstr "<b>Jaunas datnes</b>"
 
-#: ../data/geany.glade.h:238
+#: ../data/geany.glade.h:240
 msgid "Default encoding (new files):"
 msgstr "Noklusējuma kodējums (jaunajām datnēm):"
 
-#: ../data/geany.glade.h:239
+#: ../data/geany.glade.h:241
 msgid "Sets the default encoding for newly created files"
 msgstr "Iestata noklusējuma kodējumu jaunizveidotajām datnēm"
 
-#: ../data/geany.glade.h:240
+#: ../data/geany.glade.h:242
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Lietot fiksēto kodējumu, kad atver ne-Unicode datnes"
 
-#: ../data/geany.glade.h:241
+#: ../data/geany.glade.h:243
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
@@ -1155,31 +1167,31 @@ msgstr ""
 "Šī opcija izslēdz automātisko datņu kodējuma noteikšanu, kad atver ne-"
 "Unicode datnes, un atver datni ar norādīto kodējumu (parasti nav vajadzīgs)"
 
-#: ../data/geany.glade.h:242
+#: ../data/geany.glade.h:244
 msgid "Default encoding (existing non-Unicode files):"
 msgstr "Noklusējuma kodējums (esošajām ne-Unicode datnēm):"
 
-#: ../data/geany.glade.h:243
+#: ../data/geany.glade.h:245
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr "Iestata noklusējuma kodējumu pastāvošu ne-Unicode datņu atvēršanai"
 
-#: ../data/geany.glade.h:244
+#: ../data/geany.glade.h:246
 msgid "<b>Encodings</b>"
 msgstr "<b>Kodējumi</b>"
 
-#: ../data/geany.glade.h:245
+#: ../data/geany.glade.h:247
 msgid "Ensure new line at file end"
 msgstr "Nodrošināt jaunu rindu datnes beigās"
 
-#: ../data/geany.glade.h:246
+#: ../data/geany.glade.h:248
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Nodrošina, ka datnes beigās ir jauna rinda"
 
-#: ../data/geany.glade.h:247
+#: ../data/geany.glade.h:249
 msgid "Ensure consistent line endings"
 msgstr "Nodrošināt saskaņotas rindu beigas"
 
-#: ../data/geany.glade.h:248
+#: ../data/geany.glade.h:250
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
@@ -1187,40 +1199,40 @@ msgstr ""
 "Nodrošina, ka jaunas rindas rakstzīmes vienmēr tiek pārveidotas pirms "
 "saglabāšanas, izvairoties no jauktām rindu beigām tajā pašā datnē"
 
-#: ../data/geany.glade.h:249
+#: ../data/geany.glade.h:251
 msgid "Strip trailing spaces and tabs"
 msgstr "Noņemt beigu atstarpes un tabulācijas"
 
-#: ../data/geany.glade.h:250
+#: ../data/geany.glade.h:252
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Noņem beigu atstarpes un tabulācijas rindu beigās"
 
-#: ../data/geany.glade.h:251 ../src/keybindings.c:673
+#: ../data/geany.glade.h:253 ../src/keybindings.c:673
 msgid "Replace tabs with space"
 msgstr "Aizstāt tabulācijas ar atstarpēm"
 
-#: ../data/geany.glade.h:252
+#: ../data/geany.glade.h:254
 msgid "Replaces all tabs in document with spaces"
 msgstr "Aizstāj visas dokumentā esošās tabulācijas ar atstarpēm"
 
-#: ../data/geany.glade.h:253
+#: ../data/geany.glade.h:255
 msgid "<b>Saving files</b>"
 msgstr "<b>Datņu saglabāšana</b>"
 
-#: ../data/geany.glade.h:254
+#: ../data/geany.glade.h:256
 msgid "Recent files list length:"
 msgstr "Saraksta \"Nesenās datnes\" garums:"
 
-#: ../data/geany.glade.h:255
+#: ../data/geany.glade.h:257
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr ""
 "Norāda skaitu datnēm, kuras tiek uzglabātas sarakstā \"Nesenās datnes\""
 
-#: ../data/geany.glade.h:256
+#: ../data/geany.glade.h:258
 msgid "Disk check timeout:"
 msgstr "Diska pārbaudes noilgums:"
 
-#: ../data/geany.glade.h:257
+#: ../data/geany.glade.h:259
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
@@ -1228,20 +1240,20 @@ msgstr ""
 "Cik bieži pārbaudīt pēc izmaiņām uz diska esošajās dokumentu datnēs, "
 "sekundēs. Nulle izslēdz pārbaudīšanu."
 
-#: ../data/geany.glade.h:258 ../src/prefs.c:1607
+#: ../data/geany.glade.h:260 ../src/prefs.c:1616
 #: ../src/tagmanager/tm_parser.c:453 ../plugins/filebrowser.c:1167
 msgid "Files"
 msgstr "Datnes"
 
-#: ../data/geany.glade.h:259
+#: ../data/geany.glade.h:261
 msgid "Terminal:"
 msgstr "Terminālis:"
 
-#: ../data/geany.glade.h:260
+#: ../data/geany.glade.h:262
 msgid "Browser:"
 msgstr "Pārlūks:"
 
-#: ../data/geany.glade.h:262
+#: ../data/geany.glade.h:264
 #, no-c-format
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
@@ -1250,23 +1262,23 @@ msgstr ""
 "Termināļa emulatora komanda (%c tiek aizstāta ar Geany palaišanas skripta "
 "datnes nosaukumu)"
 
-#: ../data/geany.glade.h:263
+#: ../data/geany.glade.h:265
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Ceļš (un, iespējams, papildu argumenti) uz jūsu iecienītāko pārlūku"
 
-#: ../data/geany.glade.h:264
+#: ../data/geany.glade.h:266
 msgid "Grep:"
 msgstr "Grep:"
 
-#: ../data/geany.glade.h:265
+#: ../data/geany.glade.h:267
 msgid "<b>Tool paths</b>"
 msgstr "<b>Rīku ceļi</b>"
 
-#: ../data/geany.glade.h:266
+#: ../data/geany.glade.h:268
 msgid "Context action:"
 msgstr "Konteksta darbība:"
 
-#: ../data/geany.glade.h:268
+#: ../data/geany.glade.h:270
 #, no-c-format
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -1276,67 +1288,67 @@ msgstr ""
 "Konteksta darbības komanda. Pašreiz atlasītais vārds var tikt lietots ar %s. "
 "Tas var parādīties jebkur dotajā komandā un tiks aizstāts pirms izpildīšanas."
 
-#: ../data/geany.glade.h:269
+#: ../data/geany.glade.h:271
 msgid "<b>Commands</b>"
 msgstr "<b>Komandas</b>"
 
-#: ../data/geany.glade.h:270 ../src/keybindings.c:322 ../src/prefs.c:1609
+#: ../data/geany.glade.h:272 ../src/keybindings.c:322 ../src/prefs.c:1618
 msgid "Tools"
 msgstr "Rīki"
 
-#: ../data/geany.glade.h:271
+#: ../data/geany.glade.h:273
 msgid "Email address of the developer"
 msgstr "Izstrādātāja e-pasta adrese"
 
-#: ../data/geany.glade.h:272
+#: ../data/geany.glade.h:274
 msgid "Initials of the developer name"
 msgstr "Izstrādātāja vārda iniciāļi"
 
-#: ../data/geany.glade.h:273
+#: ../data/geany.glade.h:275
 msgid "Initial version:"
 msgstr "Sākotnējā versija:"
 
-#: ../data/geany.glade.h:274
+#: ../data/geany.glade.h:276
 msgid "Version number, which a new file initially has"
 msgstr "Versijas numurs, kurš sākotnēji ir jaunai datnei"
 
-#: ../data/geany.glade.h:275
+#: ../data/geany.glade.h:277
 msgid "Company name"
 msgstr "Uzņēmuma nosaukums"
 
-#: ../data/geany.glade.h:276
+#: ../data/geany.glade.h:278
 msgid "Developer:"
 msgstr "Izstrādātājs:"
 
-#: ../data/geany.glade.h:277
+#: ../data/geany.glade.h:279
 msgid "Company:"
 msgstr "Uzņēmums:"
 
-#: ../data/geany.glade.h:278
+#: ../data/geany.glade.h:280
 msgid "Mail address:"
 msgstr "Pasta adrese:"
 
-#: ../data/geany.glade.h:279
+#: ../data/geany.glade.h:281
 msgid "Initials:"
 msgstr "Iniciāļi:"
 
-#: ../data/geany.glade.h:280
+#: ../data/geany.glade.h:282
 msgid "The name of the developer"
 msgstr "Izstrādātāja vārds"
 
-#: ../data/geany.glade.h:281
+#: ../data/geany.glade.h:283
 msgid "Year:"
 msgstr "Gads:"
 
-#: ../data/geany.glade.h:282
+#: ../data/geany.glade.h:284
 msgid "Date:"
 msgstr "Datums:"
 
-#: ../data/geany.glade.h:283
+#: ../data/geany.glade.h:285
 msgid "Date & time:"
 msgstr "Datums un laiks:"
 
-#: ../data/geany.glade.h:284
+#: ../data/geany.glade.h:286
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
 "conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format."
@@ -1346,7 +1358,7 @@ msgstr ""
 "pārveidošanas norādītājiem skatiet https://docs.gtk.org/glib/method.DateTime."
 "format.html."
 
-#: ../data/geany.glade.h:285
+#: ../data/geany.glade.h:287
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
@@ -1355,7 +1367,7 @@ msgstr ""
 "pārveidošanas norādītājiem skatiet https://docs.gtk.org/glib/method.DateTime."
 "format.html."
 
-#: ../data/geany.glade.h:286
+#: ../data/geany.glade.h:288
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
@@ -1364,64 +1376,64 @@ msgstr ""
 "pārveidošanas norādītājiem skatiet https://docs.gtk.org/glib/method.DateTime."
 "format.html."
 
-#: ../data/geany.glade.h:287
+#: ../data/geany.glade.h:289
 msgid "<b>Template data</b>"
 msgstr "<b>Veidnes dati</b>"
 
-#: ../data/geany.glade.h:288 ../src/prefs.c:1611
+#: ../data/geany.glade.h:290 ../src/prefs.c:1620
 msgid "Templates"
 msgstr "Veidnes"
 
-#: ../data/geany.glade.h:289
+#: ../data/geany.glade.h:291
 msgid "C_hange"
 msgstr "_Izmainīt"
 
-#: ../data/geany.glade.h:290
+#: ../data/geany.glade.h:292
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Tastatūras saīsnes</b>"
 
-#: ../data/geany.glade.h:291 ../src/plugins.c:1900 ../src/plugins.c:1937
-#: ../src/prefs.c:1613
+#: ../data/geany.glade.h:293 ../src/plugins.c:1900 ../src/plugins.c:1937
+#: ../src/prefs.c:1622
 msgid "Keybindings"
 msgstr "Taustiņu sasaistes"
 
-#: ../data/geany.glade.h:292
+#: ../data/geany.glade.h:294
 msgid "Command:"
 msgstr "Komanda:"
 
-#: ../data/geany.glade.h:294
+#: ../data/geany.glade.h:296
 #, no-c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr "Ceļš uz komandu datņu drukāšanai (lietot %f datnes nosaukumam)"
 
-#: ../data/geany.glade.h:295
+#: ../data/geany.glade.h:297
 msgid "Use an external command for printing"
 msgstr "Lietot ārējo komandu drukāšanai"
 
-#: ../data/geany.glade.h:296 ../src/printing.c:237
+#: ../data/geany.glade.h:298 ../src/printing.c:237
 msgid "Print line numbers"
 msgstr "Drukāt rindu numurus"
 
-#: ../data/geany.glade.h:297 ../src/printing.c:239
+#: ../data/geany.glade.h:299 ../src/printing.c:239
 msgid "Add line numbers to the printed page"
 msgstr "Pievienot rindu numurus izdrukātajai lappusei"
 
-#: ../data/geany.glade.h:298 ../src/printing.c:242
+#: ../data/geany.glade.h:300 ../src/printing.c:242
 msgid "Print page numbers"
 msgstr "Drukāt lappušu numurus"
 
-#: ../data/geany.glade.h:299 ../src/printing.c:244
+#: ../data/geany.glade.h:301 ../src/printing.c:244
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
 "Pievienot lappušu numurus katras lappuses apakšā. Tas aizņem 2 rindas no "
 "lappuses."
 
-#: ../data/geany.glade.h:300 ../src/printing.c:247
+#: ../data/geany.glade.h:302 ../src/printing.c:247
 msgid "Print page header"
 msgstr "Drukāt lappuses galveni"
 
-#: ../data/geany.glade.h:301 ../src/printing.c:249
+#: ../data/geany.glade.h:303 ../src/printing.c:249
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
@@ -1430,19 +1442,19 @@ msgstr ""
 "saturošu galveni katrai lappusei (skatīt zemāk). Tas aizņem 3 rindas no "
 "lappuses."
 
-#: ../data/geany.glade.h:302 ../src/printing.c:265
+#: ../data/geany.glade.h:304 ../src/printing.c:265
 msgid "Use the basename of the printed file"
 msgstr "Lietot izdrukātās datnes bāzes nosaukumu"
 
-#: ../data/geany.glade.h:303
+#: ../data/geany.glade.h:305
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Drukāt tikai izdrukātās datnes bāzes nosaukumu (bez ceļa)"
 
-#: ../data/geany.glade.h:304 ../src/printing.c:273
+#: ../data/geany.glade.h:306 ../src/printing.c:273
 msgid "Date format:"
 msgstr "Datuma formāts:"
 
-#: ../data/geany.glade.h:305 ../src/printing.c:279
+#: ../data/geany.glade.h:307 ../src/printing.c:279
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. For a list of available conversion specifiers see "
@@ -1452,105 +1464,105 @@ msgstr ""
 "galvenei katrā lappusē. Sarakstu ar pieejamajiem pārveidošanas norādītājiem "
 "skatiet https://docs.gtk.org/glib/method.DateTime.format.html."
 
-#: ../data/geany.glade.h:306
+#: ../data/geany.glade.h:308
 msgid "Use native GTK printing"
 msgstr "Lietot dzimto GTK drukāšanu"
 
-#: ../data/geany.glade.h:307
+#: ../data/geany.glade.h:309
 msgid "<b>Printing</b>"
 msgstr "<b>Drukāšana</b>"
 
-#: ../data/geany.glade.h:308 ../src/prefs.c:1615
+#: ../data/geany.glade.h:310 ../src/prefs.c:1624
 msgid "Printing"
 msgstr "Drukāšana"
 
-#: ../data/geany.glade.h:309
+#: ../data/geany.glade.h:311
 msgid "Font:"
 msgstr "Fonts:"
 
-#: ../data/geany.glade.h:310
+#: ../data/geany.glade.h:312
 msgid "Sets the font for the terminal widget"
 msgstr "Iestata fontu termināļa logrīkam"
 
-#: ../data/geany.glade.h:311
+#: ../data/geany.glade.h:313
 msgid "Choose Terminal Font"
 msgstr "Izvēlēties termināļa fontu"
 
-#: ../data/geany.glade.h:312
+#: ../data/geany.glade.h:314
 msgid "Foreground color:"
 msgstr "Priekšplāna krāsa:"
 
-#: ../data/geany.glade.h:313
+#: ../data/geany.glade.h:315
 msgid "Background color:"
 msgstr "Fona krāsa:"
 
-#: ../data/geany.glade.h:314
+#: ../data/geany.glade.h:316
 msgid "Scrollback lines:"
 msgstr "Atpakaļritināšanas rindas:"
 
-#: ../data/geany.glade.h:315
+#: ../data/geany.glade.h:317
 msgid "Shell:"
 msgstr "Čaula:"
 
-#: ../data/geany.glade.h:316
+#: ../data/geany.glade.h:318
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Iestata priekšplāna krāsu termināļa logrīkā esošajam tekstam"
 
-#: ../data/geany.glade.h:317
+#: ../data/geany.glade.h:319
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Iestata fona krāsu termināļa logrīkā esošajam tekstam"
 
-#: ../data/geany.glade.h:318
+#: ../data/geany.glade.h:320
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr ""
 "Norāda vēsturi rindās, kuru jūs varat ritināt atpakaļ termināļa logrīkā"
 
-#: ../data/geany.glade.h:319
+#: ../data/geany.glade.h:321
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr "Iestata ceļu uz čaulu, kuru palaist termināļa emulācijā"
 
-#: ../data/geany.glade.h:320
+#: ../data/geany.glade.h:322
 msgid "Scroll on keystroke"
 msgstr "Ritināt, notiekot taustiņsitienam"
 
-#: ../data/geany.glade.h:321
+#: ../data/geany.glade.h:323
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr "Vai ritināt uz apakšu, ja taustiņš tika nospiests"
 
-#: ../data/geany.glade.h:322
+#: ../data/geany.glade.h:324
 msgid "Scroll on output"
 msgstr "Ritināt, notiekot izvadei"
 
-#: ../data/geany.glade.h:323
+#: ../data/geany.glade.h:325
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "Vai ritināt līdz apakšai, kad izvade tiek ģenerēta"
 
-#: ../data/geany.glade.h:324
+#: ../data/geany.glade.h:326
 msgid "Cursor blinks"
 msgstr "Kursors mirgo"
 
-#: ../data/geany.glade.h:325
+#: ../data/geany.glade.h:327
 msgid "Whether to blink the cursor"
 msgstr "Vai mirdzināt kursoru"
 
-#: ../data/geany.glade.h:326
+#: ../data/geany.glade.h:328
 msgid "Override Geany keybindings"
 msgstr "Pārlabot Geany taustiņu sasaistes"
 
-#: ../data/geany.glade.h:327
+#: ../data/geany.glade.h:329
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr "Atļauj VTE saņemt tastatūras saīsnes (neskaitot fokusa komandas)"
 
-#: ../data/geany.glade.h:328
+#: ../data/geany.glade.h:330
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Izslēgt izvēlnes īsinājumtaustiņu (F10 pēc noklusējuma)"
 
-#: ../data/geany.glade.h:329
+#: ../data/geany.glade.h:331
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -1560,20 +1572,20 @@ msgstr ""
 "(noklusējuma ir F10). Tās izslēgšana var būt lietderīga, ja lietojat, "
 "piemēram, \"Midnight Commander\" virtuālajā terminālī."
 
-#: ../data/geany.glade.h:330
+#: ../data/geany.glade.h:332
 msgid "Follow path of the current file"
 msgstr "Sekot pašreizējās datnes ceļam"
 
-#: ../data/geany.glade.h:331
+#: ../data/geany.glade.h:333
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 "Vai izpildīt \"cd $path\", kad jūs pārslēdzaties starp atvērtajām datnēm"
 
-#: ../data/geany.glade.h:332
+#: ../data/geany.glade.h:334
 msgid "Execute programs in the VTE"
 msgstr "Izpildīt programmas iekš VTE"
 
-#: ../data/geany.glade.h:333
+#: ../data/geany.glade.h:335
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
@@ -1581,11 +1593,11 @@ msgstr ""
 "Palaist programmas iekš VTE tā vietā, lai atvērtu termināļa emulācijas logu. "
 "Lūdzu, ņemiet vērā, ka programmas, izpildītas iekš VTE, nevar tikt apturētas"
 
-#: ../data/geany.glade.h:334
+#: ../data/geany.glade.h:336
 msgid "Don't use run script"
 msgstr "Nelietot palaišanas skriptu"
 
-#: ../data/geany.glade.h:335
+#: ../data/geany.glade.h:337
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
@@ -1593,490 +1605,490 @@ msgstr ""
 "Nelietot vienkāršu palaišanas skriptu, kurš parasti tiek lietots, lai "
 "attēlotu izpildītās programmas izejas statusu"
 
-#: ../data/geany.glade.h:336
+#: ../data/geany.glade.h:338
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminālis</b>"
 
-#: ../data/geany.glade.h:337 ../src/prefs.c:1619 ../src/vte.c:381
+#: ../data/geany.glade.h:339 ../src/prefs.c:1628 ../src/vte.c:381
 msgid "Terminal"
 msgstr "Terminālis"
 
-#: ../data/geany.glade.h:338
+#: ../data/geany.glade.h:340
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr ""
 "<i>Brīdinājums: izlasiet pamācību pirms šo iestatījumu izmainīšanas.</i>"
 
-#: ../data/geany.glade.h:339
+#: ../data/geany.glade.h:341
 msgid "<b>Various preferences</b>"
 msgstr "<b>Dažādi iestatījumi</b>"
 
-#: ../data/geany.glade.h:340 ../src/prefs.c:1617
+#: ../data/geany.glade.h:342 ../src/prefs.c:1626
 msgid "Various"
 msgstr "Dažādi"
 
-#: ../data/geany.glade.h:341
+#: ../data/geany.glade.h:343
 msgid "Geany"
 msgstr "Geany"
 
-#: ../data/geany.glade.h:342
+#: ../data/geany.glade.h:344
 msgid "_File"
 msgstr "_Datne"
 
-#: ../data/geany.glade.h:343
+#: ../data/geany.glade.h:345
 msgid "New (with _Template)"
 msgstr "Jauna (ar _veidni)"
 
-#: ../data/geany.glade.h:344
+#: ../data/geany.glade.h:346
 msgid "_Open..."
 msgstr "_Atvērt..."
 
-#: ../data/geany.glade.h:345
+#: ../data/geany.glade.h:347
 msgid "Recent _Files"
 msgstr "Nesenās _datnes"
 
-#: ../data/geany.glade.h:346
+#: ../data/geany.glade.h:348
 msgid "Save _As..."
 msgstr "S_aglabāt kā..."
 
-#: ../data/geany.glade.h:347
+#: ../data/geany.glade.h:349
 msgid "Sa_ve All"
 msgstr "Saglabāt _visas"
 
-#: ../data/geany.glade.h:348 ../src/callbacks.c:352 ../src/document.c:1656
-#: ../src/document.c:3606 ../src/sidebar.c:1201
+#: ../data/geany.glade.h:350 ../src/callbacks.c:352 ../src/document.c:1657
+#: ../src/document.c:3607 ../src/sidebar.c:1215
 msgid "_Reload"
 msgstr "Pā_rlādēt"
 
-#: ../data/geany.glade.h:349
+#: ../data/geany.glade.h:351
 msgid "R_eload As"
 msgstr "_Pārlādēt kā"
 
-#: ../data/geany.glade.h:350
+#: ../data/geany.glade.h:352
 msgid "Page Set_up"
 msgstr "Lapp_uses iestatīšana"
 
-#: ../data/geany.glade.h:351
+#: ../data/geany.glade.h:353
 msgid "_Print..."
 msgstr "_Drukāt..."
 
-#: ../data/geany.glade.h:352 ../src/notebook.c:494
+#: ../data/geany.glade.h:354 ../src/notebook.c:494
 msgid "Close Ot_her Documents"
 msgstr "Aizvērt _citus dokumentus"
 
-#: ../data/geany.glade.h:353 ../src/notebook.c:506
+#: ../data/geany.glade.h:355 ../src/notebook.c:506
 msgid "C_lose All"
 msgstr "_Aizvērt visu"
 
-#: ../data/geany.glade.h:354
+#: ../data/geany.glade.h:356
 msgid "Co_mmands"
 msgstr "Ko_mandas"
 
-#: ../data/geany.glade.h:355 ../src/keybindings.c:439
+#: ../data/geany.glade.h:357 ../src/keybindings.c:439
 msgid "Cu_t Current Line(s)"
 msgstr "Izgriez_t pašreizējo(-ās) rindu(-as)"
 
-#: ../data/geany.glade.h:356 ../src/keybindings.c:436
+#: ../data/geany.glade.h:358 ../src/keybindings.c:436
 msgid "_Copy Current Line(s)"
 msgstr "_Kopēt pašreizējo(-ās) rindu(-as)"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:389
+#: ../data/geany.glade.h:359 ../src/keybindings.c:389
 msgid "_Delete Current Line(s)"
 msgstr "_Dzēst pašreizējo(-ās) rindu(-as)"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:386
+#: ../data/geany.glade.h:360 ../src/keybindings.c:386
 msgid "D_uplicate Line or Selection"
 msgstr "D_ublicēt rindu vai atlasi"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:449
+#: ../data/geany.glade.h:361 ../src/keybindings.c:449
 msgid "S_elect Current Line(s)"
 msgstr "Atlasīt pašr_eizējo(-ās) rindu(-as)"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:452
+#: ../data/geany.glade.h:362 ../src/keybindings.c:452
 msgid "Se_lect Current Paragraph"
 msgstr "At_lasīt pašreizējo rindkopu"
 
-#: ../data/geany.glade.h:361
+#: ../data/geany.glade.h:363
 msgid "_Move Line(s) Up"
 msgstr "_Pārvietot rindu(-as) augšup"
 
-#: ../data/geany.glade.h:362
+#: ../data/geany.glade.h:364
 msgid "M_ove Line(s) Down"
 msgstr "Pārviet_ot rindu(-as) lejup"
 
-#: ../data/geany.glade.h:363 ../src/keybindings.c:503
+#: ../data/geany.glade.h:365 ../src/keybindings.c:503
 msgid "_Send Selection to Terminal"
 msgstr "_Sūtīt atlasi uz termināli"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:505
+#: ../data/geany.glade.h:366 ../src/keybindings.c:505
 msgid "_Reflow Lines/Block"
 msgstr "Sakā_rtot plūdumu rindām/blokam"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:463
+#: ../data/geany.glade.h:367 ../src/keybindings.c:463
 msgid "T_oggle Case of Selection"
 msgstr "_Pārslēgt atlases burteni"
 
-#: ../data/geany.glade.h:366
+#: ../data/geany.glade.h:368
 msgid "_Comment Line(s)"
 msgstr "Aiz_komentēt rindu(-as)"
 
-#: ../data/geany.glade.h:367
+#: ../data/geany.glade.h:369
 msgid "U_ncomment Line(s)"
 msgstr "Atkome_ntēt rindu(-as)"
 
-#: ../data/geany.glade.h:368
+#: ../data/geany.glade.h:370
 msgid "_Toggle Line Commentation"
 msgstr "Pārslēg_t rindu komentēšanu"
 
-#: ../data/geany.glade.h:369
+#: ../data/geany.glade.h:371
 msgid "_Increase Indent"
 msgstr "Pal_ielināt atkāpi"
 
-#: ../data/geany.glade.h:370
+#: ../data/geany.glade.h:372
 msgid "_Decrease Indent"
 msgstr "_Samazināt atkāpi"
 
-#: ../data/geany.glade.h:371 ../src/keybindings.c:482
+#: ../data/geany.glade.h:373 ../src/keybindings.c:482
 msgid "S_mart Line Indent"
 msgstr "_Gudrā rindas atkāpe"
 
-#: ../data/geany.glade.h:372
+#: ../data/geany.glade.h:374
 msgid "_Send Selection to"
 msgstr "_Sūtīt atlasi uz"
 
-#: ../data/geany.glade.h:373
+#: ../data/geany.glade.h:375
 msgid "I_nsert Comments"
 msgstr "Ievietot kome_ntārus"
 
-#: ../data/geany.glade.h:374
+#: ../data/geany.glade.h:376
 msgid "Preference_s"
 msgstr "Ie_statījumi"
 
-#: ../data/geany.glade.h:375 ../src/keybindings.c:529
+#: ../data/geany.glade.h:377 ../src/keybindings.c:529
 msgid "P_lugin Preferences"
 msgstr "_Spraudņu iestatījumi"
 
-#: ../data/geany.glade.h:376
+#: ../data/geany.glade.h:378
 msgid "_Find..."
 msgstr "_Atrast..."
 
-#: ../data/geany.glade.h:377
+#: ../data/geany.glade.h:379
 msgid "Find _Next"
 msgstr "Atrast _nākamo"
 
-#: ../data/geany.glade.h:378
+#: ../data/geany.glade.h:380
 msgid "Find _Previous"
 msgstr "Atrast ie_priekšējo"
 
-#: ../data/geany.glade.h:379 ../src/symbols.c:2178
+#: ../data/geany.glade.h:381 ../src/symbols.c:2210
 msgid "Find in F_iles..."
 msgstr "Atrast _datnēs..."
 
-#: ../data/geany.glade.h:380
+#: ../data/geany.glade.h:382
 msgid "_Replace..."
 msgstr "_Aizstāt..."
 
-#: ../data/geany.glade.h:381
+#: ../data/geany.glade.h:383
 msgid "Next Me_ssage"
 msgstr "Nākamais ziņojum_s"
 
-#: ../data/geany.glade.h:382
+#: ../data/geany.glade.h:384
 msgid "Pr_evious Message"
 msgstr "I_epriekšējais ziņojums"
 
-#: ../data/geany.glade.h:383 ../src/keybindings.c:578
+#: ../data/geany.glade.h:385 ../src/keybindings.c:578
 msgid "Go to Ne_xt Marker"
 msgstr "Iet uz _nākamo marķieri"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:581
+#: ../data/geany.glade.h:386 ../src/keybindings.c:581
 msgid "Go to Pre_vious Marker"
 msgstr "Iet uz _iepriekšējo marķieri"
 
-#: ../data/geany.glade.h:385
+#: ../data/geany.glade.h:387
 msgid "_Go to Line..."
 msgstr "_Iet uz rindu..."
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:541
+#: ../data/geany.glade.h:388 ../src/keybindings.c:541
 msgid "Find Next _Selection"
 msgstr "Atra_st nākamo atlasi"
 
-#: ../data/geany.glade.h:387 ../src/keybindings.c:543
+#: ../data/geany.glade.h:389 ../src/keybindings.c:543
 msgid "Find Pre_vious Selection"
 msgstr "Atrast _iepriekšējo atlasi"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:560
+#: ../data/geany.glade.h:390 ../src/keybindings.c:560
 msgid "_Mark All"
 msgstr "Atzī_mēt visu"
 
-#: ../data/geany.glade.h:389
+#: ../data/geany.glade.h:391
 msgid "Go to Symbol Decl_aration"
 msgstr "Iet uz simbola dekl_arāciju"
 
-#: ../data/geany.glade.h:390
+#: ../data/geany.glade.h:392
 msgid "_View"
 msgstr "_Skats"
 
-#: ../data/geany.glade.h:391
+#: ../data/geany.glade.h:393
 msgid "Change _Font..."
 msgstr "Mainīt _fontu..."
 
-#: ../data/geany.glade.h:392
+#: ../data/geany.glade.h:394
 msgid "Change _Color Scheme..."
 msgstr "Mainīt _krāsu shēmu..."
 
-#: ../data/geany.glade.h:393
+#: ../data/geany.glade.h:395
 msgid "Show _Markers Margin"
 msgstr "Rādīt _marķieru apmali"
 
-#: ../data/geany.glade.h:394
+#: ../data/geany.glade.h:396
 msgid "Show _Line Numbers"
 msgstr "Rādīt _rindu numurus"
 
-#: ../data/geany.glade.h:395
+#: ../data/geany.glade.h:397
 msgid "Show White S_pace"
 msgstr "Rādīt baltstar_pu"
 
-#: ../data/geany.glade.h:396
+#: ../data/geany.glade.h:398
 msgid "Show Line _Endings"
 msgstr "Rādīt rindu b_eigas"
 
-#: ../data/geany.glade.h:397
+#: ../data/geany.glade.h:399
 msgid "Show Indentation _Guides"
 msgstr "Rādīt atkāpju palī_glīnijas"
 
-#: ../data/geany.glade.h:398
+#: ../data/geany.glade.h:400
 msgid "Full_screen"
 msgstr "_Pilnekrāna"
 
-#: ../data/geany.glade.h:399
+#: ../data/geany.glade.h:401
 msgid "Toggle All _Additional Widgets"
 msgstr "Pārslēgt visus p_apildu logrīkus"
 
-#: ../data/geany.glade.h:400
+#: ../data/geany.glade.h:402
 msgid "Show Message _Window"
 msgstr "Rādīt ziņojumu _logu"
 
-#: ../data/geany.glade.h:401
+#: ../data/geany.glade.h:403
 msgid "Show _Toolbar"
 msgstr "Rādī_t rīkjoslu"
 
-#: ../data/geany.glade.h:402
+#: ../data/geany.glade.h:404
 msgid "Show Side_bar"
 msgstr "Rādīt _sānjoslu"
 
-#: ../data/geany.glade.h:403
+#: ../data/geany.glade.h:405
 msgid "_Document"
 msgstr "_Dokuments"
 
-#: ../data/geany.glade.h:404
+#: ../data/geany.glade.h:406
 msgid "_Line Wrapping"
 msgstr "Rindu ap_laušana"
 
-#: ../data/geany.glade.h:405
+#: ../data/geany.glade.h:407
 msgid "Line _Breaking"
 msgstr "Rindu _pārtraukšana"
 
-#: ../data/geany.glade.h:406
+#: ../data/geany.glade.h:408
 msgid "_Auto-indentation"
 msgstr "_Automātiskās atkāpes"
 
-#: ../data/geany.glade.h:407
+#: ../data/geany.glade.h:409
 msgid "In_dent Type"
 msgstr "_Atkāpes tips"
 
-#: ../data/geany.glade.h:408
+#: ../data/geany.glade.h:410
 msgid "_Detect from Content"
 msgstr "_Noteikt no satura"
 
-#: ../data/geany.glade.h:409
+#: ../data/geany.glade.h:411
 msgid "T_abs and Spaces"
 msgstr "T_abulācijas un atstarpes"
 
-#: ../data/geany.glade.h:410
+#: ../data/geany.glade.h:412
 msgid "Indent Widt_h"
 msgstr "Atkāpes _platums"
 
-#: ../data/geany.glade.h:411
+#: ../data/geany.glade.h:413
 msgid "_1"
 msgstr "_1"
 
-#: ../data/geany.glade.h:412
+#: ../data/geany.glade.h:414
 msgid "_2"
 msgstr "_2"
 
-#: ../data/geany.glade.h:413
+#: ../data/geany.glade.h:415
 msgid "_3"
 msgstr "_3"
 
-#: ../data/geany.glade.h:414
+#: ../data/geany.glade.h:416
 msgid "_4"
 msgstr "_4"
 
-#: ../data/geany.glade.h:415
+#: ../data/geany.glade.h:417
 msgid "_5"
 msgstr "_5"
 
-#: ../data/geany.glade.h:416
+#: ../data/geany.glade.h:418
 msgid "_6"
 msgstr "_6"
 
-#: ../data/geany.glade.h:417
+#: ../data/geany.glade.h:419
 msgid "_7"
 msgstr "_7"
 
-#: ../data/geany.glade.h:418
+#: ../data/geany.glade.h:420
 msgid "_8"
 msgstr "_8"
 
-#: ../data/geany.glade.h:419
+#: ../data/geany.glade.h:421
 msgid "Read _Only"
 msgstr "_Tikai lasāms"
 
-#: ../data/geany.glade.h:420
+#: ../data/geany.glade.h:422
 msgid "_Write Unicode BOM"
 msgstr "_Rakstīt Unicode BOM"
 
-#: ../data/geany.glade.h:421
+#: ../data/geany.glade.h:423
 msgid "Set File_type"
 msgstr "Iestatīt datnes _tipu"
 
-#: ../data/geany.glade.h:422
+#: ../data/geany.glade.h:424
 msgid "Set _Encoding"
 msgstr "I_estatīt kodējumu"
 
-#: ../data/geany.glade.h:423
+#: ../data/geany.glade.h:425
 msgid "Set Line E_ndings"
-msgstr "Rādīt ri_ndu beigas"
+msgstr "Iestatīt ri_ndu beigas"
 
-#: ../data/geany.glade.h:424
+#: ../data/geany.glade.h:426
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "Pārveidot un iestatīt uz _CR/LF (Windows)"
 
-#: ../data/geany.glade.h:425
+#: ../data/geany.glade.h:427
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Pārveidot un iestatīt uz _LF (Unix)"
 
-#: ../data/geany.glade.h:426
+#: ../data/geany.glade.h:428
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Pārveidot un iestatīt uz CR (klasiskā _Mac)"
 
-#: ../data/geany.glade.h:427 ../src/keybindings.c:669
+#: ../data/geany.glade.h:429 ../src/keybindings.c:669
 msgid "_Clone"
 msgstr "_Klonēt"
 
-#: ../data/geany.glade.h:428 ../src/keybindings.c:671
+#: ../data/geany.glade.h:430 ../src/keybindings.c:671
 msgid "_Strip Trailing Spaces"
 msgstr "Noņemt beigu at_starpes"
 
-#: ../data/geany.glade.h:429
+#: ../data/geany.glade.h:431
 msgid "Replace Tabs with S_paces"
 msgstr "Aizstāt tabulācijas ar atstar_pēm"
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:432
 msgid "_Replace Spaces with Tabs..."
 msgstr "Aizstāt atsta_rpes ar tabulācijām..."
 
-#: ../data/geany.glade.h:431
+#: ../data/geany.glade.h:433
 msgid "_Fold All"
 msgstr "_Salocīt visu"
 
-#: ../data/geany.glade.h:432
+#: ../data/geany.glade.h:434
 msgid "_Unfold All"
 msgstr "Atlocīt vis_u"
 
-#: ../data/geany.glade.h:433
+#: ../data/geany.glade.h:435
 msgid "Remove _Markers"
 msgstr "Noņemt _marķierus"
 
-#: ../data/geany.glade.h:434
+#: ../data/geany.glade.h:436
 msgid "Remove Error _Indicators"
 msgstr "Noņemt kļūdu _indikatorus"
 
-#: ../data/geany.glade.h:435
+#: ../data/geany.glade.h:437
 msgid "_Project"
 msgstr "_Projekts"
 
-#: ../data/geany.glade.h:436
+#: ../data/geany.glade.h:438
 msgid "_New..."
 msgstr "Jau_ns..."
 
-#: ../data/geany.glade.h:437
+#: ../data/geany.glade.h:439
 msgid "New from _Folder..."
 msgstr "Jauna no _mapes..."
 
-#: ../data/geany.glade.h:438
+#: ../data/geany.glade.h:440
 msgid "_Recent Projects"
 msgstr "Nesenie p_rojekti"
 
-#: ../data/geany.glade.h:439
+#: ../data/geany.glade.h:441
 msgid "_Close"
 msgstr "_Aizvērt"
 
-#: ../data/geany.glade.h:440
+#: ../data/geany.glade.h:442
 msgid "Apply the default indentation settings to all documents"
 msgstr "Pielietot noklusējuma atkāpju iestatījumus uz visiem dokumentiem"
 
-#: ../data/geany.glade.h:441
+#: ../data/geany.glade.h:443
 msgid "_Apply Default Indentation"
 msgstr "Pielietot noklusējum_a atkāpes"
 
 #. build the code
-#: ../data/geany.glade.h:442 ../src/build.c:2446 ../src/build.c:2717
+#: ../data/geany.glade.h:444 ../src/build.c:2446 ../src/build.c:2717
 msgid "_Build"
 msgstr "_Būvēt"
 
-#: ../data/geany.glade.h:443
+#: ../data/geany.glade.h:445
 msgid "_Tools"
 msgstr "_Rīki"
 
-#: ../data/geany.glade.h:444
+#: ../data/geany.glade.h:446
 msgid "_Reload Configuration"
 msgstr "Pā_rlādēt konfigurāciju"
 
-#: ../data/geany.glade.h:445
+#: ../data/geany.glade.h:447
 msgid "C_onfiguration Files"
 msgstr "K_onfigurācijas datnes"
 
-#: ../data/geany.glade.h:446
+#: ../data/geany.glade.h:448
 msgid "_Color Chooser"
 msgstr "_Krāsu izvēlētājs"
 
-#: ../data/geany.glade.h:447
+#: ../data/geany.glade.h:449
 msgid "_Word Count"
 msgstr "_Vārdu skaits"
 
-#: ../data/geany.glade.h:448
+#: ../data/geany.glade.h:450
 msgid "Load Ta_gs File..."
 msgstr "Ielādēt _birku datni..."
 
-#: ../data/geany.glade.h:449
+#: ../data/geany.glade.h:451
 msgid "_Help"
 msgstr "_Palīdzība"
 
-#: ../data/geany.glade.h:450
+#: ../data/geany.glade.h:452
 msgid "Keyboard _Shortcuts"
 msgstr "Tastatūras _saīsnes"
 
-#: ../data/geany.glade.h:451
+#: ../data/geany.glade.h:453
 msgid "Debug _Messages"
 msgstr "Atkļūdošanas ziņoju_mi"
 
-#: ../data/geany.glade.h:452
+#: ../data/geany.glade.h:454
 msgid "_Website"
 msgstr "_Tīmekļa vietne"
 
-#: ../data/geany.glade.h:453
+#: ../data/geany.glade.h:455
 msgid "Wi_ki"
 msgstr "Vi_ki"
 
-#: ../data/geany.glade.h:454
+#: ../data/geany.glade.h:456
 msgid "Report a _Bug..."
 msgstr "Ziņot par _kļūdu..."
 
-#: ../data/geany.glade.h:455
+#: ../data/geany.glade.h:457
 msgid "_Donate..."
 msgstr "Zie_dot..."
 
-#: ../data/geany.glade.h:456
+#: ../data/geany.glade.h:458
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
@@ -2084,55 +2096,56 @@ msgstr ""
 "Filtrējiet simbolu sarakstu, lietojot ievadīto tekstu. Atdaliet vairākus "
 "filtrus ar atstarpi."
 
-#: ../data/geany.glade.h:457 ../src/sidebar.c:114
+#: ../data/geany.glade.h:459 ../src/sidebar.c:114
+#: ../src/tagmanager/tm_parser.c:1206
 msgid "Symbols"
 msgstr "Simboli"
 
-#: ../data/geany.glade.h:458
+#: ../data/geany.glade.h:460
 msgid "Documents"
 msgstr "Dokumenti"
 
-#: ../data/geany.glade.h:459
+#: ../data/geany.glade.h:461
 msgid "Status"
 msgstr "Statuss"
 
-#: ../data/geany.glade.h:460
+#: ../data/geany.glade.h:462
 msgid "Compiler"
 msgstr "Kompilators"
 
-#: ../data/geany.glade.h:461
+#: ../data/geany.glade.h:463
 msgid "Messages"
 msgstr "Ziņojumi"
 
-#: ../data/geany.glade.h:462
+#: ../data/geany.glade.h:464
 msgid "Scribble"
 msgstr "Kricelējums"
 
-#: ../data/geany.glade.h:463
+#: ../data/geany.glade.h:465
 msgid "Project Properties"
 msgstr "Projekta īpašības"
 
-#: ../data/geany.glade.h:464 ../src/project.c:204
+#: ../data/geany.glade.h:466 ../src/project.c:203
 msgid "Filename:"
 msgstr "Datnes nosaukums:"
 
-#: ../data/geany.glade.h:465
+#: ../data/geany.glade.h:467
 msgid "_Name:"
 msgstr "_Nosaukums:"
 
-#: ../data/geany.glade.h:466
+#: ../data/geany.glade.h:468
 msgid "_Description:"
 msgstr "_Apraksts:"
 
-#: ../data/geany.glade.h:467
+#: ../data/geany.glade.h:469
 msgid "_Base path:"
 msgstr "_Bāzes ceļš:"
 
-#: ../data/geany.glade.h:468 ../src/search.c:905
+#: ../data/geany.glade.h:470 ../src/search.c:905
 msgid "File _patterns:"
 msgstr "_Datņu šabloni:"
 
-#: ../data/geany.glade.h:469
+#: ../data/geany.glade.h:471
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
@@ -2140,7 +2153,7 @@ msgstr ""
 "Atstarpju atdalīts saraksts ar datņu šabloniem, lietots dialogam \"Atrast "
 "datnēs\" (piem., *.c *.h)"
 
-#: ../data/geany.glade.h:470 ../src/project.c:233
+#: ../data/geany.glade.h:472 ../src/project.c:232
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -2150,79 +2163,79 @@ msgstr ""
 "ceļš vai pastāvošs datņu kataloga koks. Jūs varat lietot ceļus, relatīvus "
 "pret projekta datnes nosaukumu."
 
-#: ../data/geany.glade.h:471 ../src/keybindings.c:320
+#: ../data/geany.glade.h:473 ../src/keybindings.c:320
 msgid "Project"
 msgstr "Projekts"
 
-#: ../data/geany.glade.h:472
+#: ../data/geany.glade.h:474
 msgid "Display:"
 msgstr "Attēlot:"
 
-#: ../data/geany.glade.h:473
+#: ../data/geany.glade.h:475
 msgid "Custom"
 msgstr "Pielāgots"
 
-#: ../data/geany.glade.h:474
+#: ../data/geany.glade.h:476
 msgid "Use global settings"
 msgstr "Lietot globālos iestatījumus"
 
-#: ../data/geany.glade.h:475
+#: ../data/geany.glade.h:477
 msgid "Size:"
 msgstr "Izmērs:"
 
-#: ../data/geany.glade.h:476
+#: ../data/geany.glade.h:478
 msgid "Location:"
 msgstr "Atrašanās vieta:"
 
-#: ../data/geany.glade.h:477
+#: ../data/geany.glade.h:479
 msgid "Read-only:"
 msgstr "Tikai lasāms:"
 
-#: ../data/geany.glade.h:478
+#: ../data/geany.glade.h:480
 msgid "Encoding:"
 msgstr "Kodējums:"
 
-#: ../data/geany.glade.h:479
+#: ../data/geany.glade.h:481
 msgid "Modified:"
 msgstr "Pārveidots:"
 
-#: ../data/geany.glade.h:480
+#: ../data/geany.glade.h:482
 msgid "Changed:"
 msgstr "Mainīts:"
 
-#: ../data/geany.glade.h:481
+#: ../data/geany.glade.h:483
 msgid "Accessed:"
 msgstr "Piekļūts:"
 
-#: ../data/geany.glade.h:482
+#: ../data/geany.glade.h:484
 msgid "(only inside Geany)"
 msgstr "(tikai Geany)"
 
-#: ../data/geany.glade.h:483
+#: ../data/geany.glade.h:485
 msgid "Permissions:"
 msgstr "Atļaujas:"
 
-#: ../data/geany.glade.h:484
+#: ../data/geany.glade.h:486
 msgid "Read:"
 msgstr "Lasīt:"
 
-#: ../data/geany.glade.h:485
+#: ../data/geany.glade.h:487
 msgid "Write:"
 msgstr "Rakstīt:"
 
-#: ../data/geany.glade.h:486
+#: ../data/geany.glade.h:488
 msgid "Execute:"
 msgstr "Izpildīt:"
 
-#: ../data/geany.glade.h:487
+#: ../data/geany.glade.h:489
 msgid "Owner:"
 msgstr "Īpašnieks:"
 
-#: ../data/geany.glade.h:488
+#: ../data/geany.glade.h:490
 msgid "Group:"
 msgstr "Grupa:"
 
-#: ../data/geany.glade.h:489
+#: ../data/geany.glade.h:491
 msgid "Other:"
 msgstr "Citi:"
 
@@ -2414,12 +2427,12 @@ msgstr "Būvēšanas kļūdu vairāk nav."
 msgid "Set menu item label"
 msgstr "Iestatīt izvēlnes vienuma etiķeti"
 
-#: ../src/build.c:1833 ../src/tools.c:395 ../src/tagmanager/tm_parser.c:232
+#: ../src/build.c:1833 ../src/tools.c:394 ../src/tagmanager/tm_parser.c:232
 msgid "Label"
 msgstr "Etiķete"
 
 #. command column, holding status and command display
-#: ../src/build.c:1834 ../src/tools.c:380 ../src/tagmanager/tm_parser.c:224
+#: ../src/build.c:1834 ../src/tools.c:379 ../src/tagmanager/tm_parser.c:224
 msgid "Command"
 msgstr "Komanda"
 
@@ -2559,8 +2572,8 @@ msgstr "Nevar izpildīt konteksta darbības komandu \"%s\": %s. %s"
 msgid "No context action set."
 msgstr "Nav iestatīta neviena konteksta darbība."
 
-#: ../src/dialogs.c:159 ../src/document.c:2303 ../src/document.c:2368
-#: ../src/document.c:2376
+#: ../src/dialogs.c:159 ../src/document.c:2304 ../src/document.c:2369
+#: ../src/document.c:2377
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" netika atrasts."
@@ -2625,7 +2638,7 @@ msgstr ""
 "Ņemiet vērā, ka, ja jūs izvēlēsieties vairākas datnes, tās visas tiks "
 "atvērtas ar izvēlēto datnes tipu."
 
-#: ../src/dialogs.c:375 ../src/dialogs.c:465
+#: ../src/dialogs.c:375
 msgid "Open File"
 msgstr "Atvērt datni"
 
@@ -2642,61 +2655,61 @@ msgstr ""
 "Atver datni \"tikai lasīšanas\" režīmā. Ja jūs izvēlēsieties vairāk kā vienu "
 "datni, kuru atvērt, visas datnes tiks atvērtas \"tikai lasāmas\"."
 
-#: ../src/dialogs.c:534 ../src/document.c:2054
+#: ../src/dialogs.c:528 ../src/document.c:2055
 msgid "Overwrite?"
 msgstr "Vai pārrakstīt?"
 
-#: ../src/dialogs.c:535
+#: ../src/dialogs.c:529
 msgid "Filename already exists!"
 msgstr "Datnes nosaukums jau pastāv!"
 
-#: ../src/dialogs.c:564 ../src/dialogs.c:678
+#: ../src/dialogs.c:558
 msgid "Save File"
 msgstr "Saglabāt datni"
 
-#: ../src/dialogs.c:573
+#: ../src/dialogs.c:567
 msgid "R_ename"
 msgstr "_Pārdēvēt"
 
-#: ../src/dialogs.c:574
+#: ../src/dialogs.c:568
 msgid "Save the file and rename it"
 msgstr "Saglabāt datni un pārdēvēt to"
 
-#: ../src/dialogs.c:696 ../src/win32.c:726
+#: ../src/dialogs.c:680 ../src/win32.c:291
 msgid "Error"
 msgstr "Kļūda"
 
-#: ../src/dialogs.c:699 ../src/dialogs.c:778 ../src/dialogs.c:1336
-#: ../src/win32.c:732
+#: ../src/dialogs.c:683 ../src/dialogs.c:762 ../src/dialogs.c:1312
+#: ../src/win32.c:297
 msgid "Question"
 msgstr "Jautājums"
 
-#: ../src/dialogs.c:702 ../src/win32.c:738
+#: ../src/dialogs.c:686 ../src/win32.c:303
 msgid "Warning"
 msgstr "Brīdinājums"
 
-#: ../src/dialogs.c:705 ../src/win32.c:744
+#: ../src/dialogs.c:689 ../src/win32.c:309
 msgid "Information"
 msgstr "Informācija"
 
-#: ../src/dialogs.c:782
+#: ../src/dialogs.c:766
 msgid "_Don't save"
 msgstr "_Nesaglabāt"
 
-#: ../src/dialogs.c:811
+#: ../src/dialogs.c:795
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "Datne '%s' nav saglabāta."
 
-#: ../src/dialogs.c:812
+#: ../src/dialogs.c:796
 msgid "Do you want to save it before closing?"
 msgstr "Vai jūs vēlaties to saglabāt pirms aizvēršanas?"
 
-#: ../src/dialogs.c:890
+#: ../src/dialogs.c:866
 msgid "Choose font"
 msgstr "Izvēlēties fontu"
 
-#: ../src/dialogs.c:1184
+#: ../src/dialogs.c:1160
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -2704,46 +2717,46 @@ msgstr ""
 "Atgadījās kļūda vai datnes informācija nevarēja tikt izgūta (piemēram, no "
 "jaunas datnes)."
 
-#: ../src/dialogs.c:1203 ../src/dialogs.c:1204 ../src/dialogs.c:1205
-#: ../src/dialogs.c:1211 ../src/dialogs.c:1212 ../src/dialogs.c:1213
-#: ../src/symbols.c:1978 ../src/symbols.c:1994 ../src/ui_utils.c:287
+#: ../src/dialogs.c:1179 ../src/dialogs.c:1180 ../src/dialogs.c:1181
+#: ../src/dialogs.c:1187 ../src/dialogs.c:1188 ../src/dialogs.c:1189
+#: ../src/symbols.c:1986 ../src/symbols.c:2002 ../src/ui_utils.c:287
 msgid "unknown"
 msgstr "nezināms"
 
-#: ../src/dialogs.c:1218
+#: ../src/dialogs.c:1194
 #, c-format
 msgid "%s Properties"
 msgstr "%s īpašības"
 
-#: ../src/dialogs.c:1250 ../src/ui_utils.c:291
+#: ../src/dialogs.c:1226 ../src/ui_utils.c:291
 msgid "(with BOM)"
 msgstr "(ar BOM)"
 
-#: ../src/dialogs.c:1250
+#: ../src/dialogs.c:1226
 msgid "(without BOM)"
 msgstr "(bez BOM)"
 
-#: ../src/document.c:734
+#: ../src/document.c:735
 #, c-format
 msgid "File %s closed."
 msgstr "Datne %s aizvērta."
 
-#: ../src/document.c:891
+#: ../src/document.c:892
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Jaunā datne \"%s\" atvērta."
 
-#: ../src/document.c:965
+#: ../src/document.c:966
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Nevarēja atvērt datni %s (%s)"
 
-#: ../src/document.c:1014
+#: ../src/document.c:1015
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Datne \"%s\" nav derīga %s."
 
-#: ../src/document.c:1020
+#: ../src/document.c:1021
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -2752,7 +2765,7 @@ msgstr ""
 "Datne \"%s\" neizskatās kā teksta datne, vai arī datnes kodējums nav "
 "atbalstīts."
 
-#: ../src/document.c:1030
+#: ../src/document.c:1031
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -2765,31 +2778,31 @@ msgstr ""
 "izraisīt datu zudumu.\n"
 "Datne tika iestatīta uz tikai lasīšanu."
 
-#: ../src/document.c:1242
+#: ../src/document.c:1243
 msgid "Spaces"
 msgstr "Atstarpes"
 
-#: ../src/document.c:1245
+#: ../src/document.c:1246
 msgid "Tabs"
 msgstr "Tabulācijas"
 
-#: ../src/document.c:1248
+#: ../src/document.c:1249
 msgid "Tabs and Spaces"
 msgstr "Tabulācijas un atstarpes"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1253
+#: ../src/document.c:1254
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Iestata %s atkāpju režīmu priekš %s."
 
-#: ../src/document.c:1264
+#: ../src/document.c:1265
 #, c-format
 msgid "Setting indentation width to %d for %s."
 msgstr "Iestata atkāpju platumu uz %d priekš %s."
 
-#: ../src/document.c:1488
+#: ../src/document.c:1489
 #, c-format
 msgid "File %s reloaded."
 msgstr "Datne %s pārlādēta."
@@ -2797,20 +2810,20 @@ msgstr "Datne %s pārlādēta."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1496
+#: ../src/document.c:1497
 #, c-format
 msgid "File %s opened (%d%s)."
 msgstr "Datne %s atvērta (%d%s)."
 
-#: ../src/document.c:1498
+#: ../src/document.c:1499
 msgid ", read-only"
 msgstr ", tikai lasāms"
 
-#: ../src/document.c:1622
+#: ../src/document.c:1623
 msgid "Discard history"
 msgstr "Atmest vēsturi"
 
-#: ../src/document.c:1623
+#: ../src/document.c:1624
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2821,28 +2834,28 @@ msgstr ""
 "to. Jūs varat izslēgt šo, atmetot vēsturi pie pārlādes. Šis ziņojums netiks "
 "attēlots atkal, bet jūsu izvēle var tikt izmainīta dažādos iestatījumos."
 
-#: ../src/document.c:1627
+#: ../src/document.c:1628
 msgid "The file has been reloaded."
 msgstr "Datne ir tikusi pārlādēta."
 
-#: ../src/document.c:1657
+#: ../src/document.c:1658
 msgid "Any unsaved changes will be lost."
 msgstr "Jebkuras nesaglabātās izmaiņas pazudīs."
 
-#: ../src/document.c:1658
+#: ../src/document.c:1659
 msgid "Undo history will be lost."
 msgstr "Atsaukšanas vēsture pazudīs."
 
-#: ../src/document.c:1659
+#: ../src/document.c:1660
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Vai jūs tiešām vēlaties pārlādēt '%s'?"
 
-#: ../src/document.c:1765
+#: ../src/document.c:1766
 msgid "Error renaming file."
 msgstr "Kļūda, pārdēvējot datni."
 
-#: ../src/document.c:1886
+#: ../src/document.c:1887
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2851,7 +2864,7 @@ msgstr ""
 "Notika kļūda, kamēr pārveidoja datni no UTF-8 iekš \"%s\". Datne paliek "
 "nesaglabāta."
 
-#: ../src/document.c:1907
+#: ../src/document.c:1908
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2860,55 +2873,55 @@ msgstr ""
 "Kļūdas ziņojums: %s\n"
 "Kļūda atgadījās pie \"%s\" (rinda: %d, kolonna: %d)."
 
-#: ../src/document.c:1911
+#: ../src/document.c:1912
 #, c-format
 msgid "Error message: %s."
 msgstr "Kļūdas ziņojums: %s."
 
-#: ../src/document.c:1971
+#: ../src/document.c:1972
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr "Neizdevās atvērt datni '%s' rakstīšanai: fopen() neizdevās: %s"
 
-#: ../src/document.c:1989
+#: ../src/document.c:1990
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "Neizdevās rakstīt datni '%s': fwrite() neizdevās: %s"
 
-#: ../src/document.c:2003
+#: ../src/document.c:2004
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Neizdevās aizvērt datni '%s': fclose() neizdevās: %s"
 
-#: ../src/document.c:2053 ../src/document.c:3607
+#: ../src/document.c:2054 ../src/document.c:3608
 msgid "_Overwrite"
 msgstr "_Pārrakstīt"
 
-#: ../src/document.c:2055 ../src/document.c:3610
+#: ../src/document.c:2056 ../src/document.c:3611
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr "Uz diska esošā datne '%s' ir nesenāka par pašreizējo buferi."
 
-#: ../src/document.c:2063 ../src/document.c:3659
+#: ../src/document.c:2064 ../src/document.c:3660
 msgid "Try to resave the file?"
 msgstr "Vai mēģināt atkārtoti saglabāt datni?"
 
-#: ../src/document.c:2064 ../src/document.c:3660
+#: ../src/document.c:2065 ../src/document.c:3661
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Datne \"%s\" netika atrasta uz diska!"
 
-#: ../src/document.c:2127
+#: ../src/document.c:2128
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr "Nevar saglabāt tikai lasāmu dokumentu '%s'!"
 
-#: ../src/document.c:2195
+#: ../src/document.c:2196
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Kļūda, saglabājot datni (%s)."
 
-#: ../src/document.c:2200
+#: ../src/document.c:2201
 #, c-format
 msgid ""
 "%s\n"
@@ -2919,26 +2932,26 @@ msgstr ""
 "\n"
 "Datne uz diska tagad var tikt saīsināta!"
 
-#: ../src/document.c:2202
+#: ../src/document.c:2203
 msgid "Error saving file."
 msgstr "Kļūda, saglabājot datni."
 
-#: ../src/document.c:2226
+#: ../src/document.c:2227
 #, c-format
 msgid "File %s saved."
 msgstr "Datne %s saglabāta."
 
-#: ../src/document.c:2376
+#: ../src/document.c:2377
 msgid "Wrap search and find again?"
 msgstr "Vai aplauzt meklēšanu un atrast vēlreiz?"
 
-#: ../src/document.c:2465 ../src/search.c:1374 ../src/search.c:1427
+#: ../src/document.c:2466 ../src/search.c:1374 ../src/search.c:1427
 #: ../src/search.c:2237 ../src/search.c:2238
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Nav atrastas sakritības priekš \"%s\"."
 
-#: ../src/document.c:2471
+#: ../src/document.c:2472
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
@@ -2946,20 +2959,20 @@ msgstr[0] "%s: aizstāja %d \"%s\" atgadīšanos ar \"%s\"."
 msgstr[1] "%s: aizstāja %d \"%s\" atgadīšanās ar \"%s\"."
 msgstr[2] "%s: aizstāja %d \"%s\" atgadīšanos ar \"%s\"."
 
-#: ../src/document.c:3609
+#: ../src/document.c:3610
 msgid "Do you want to reload it?"
 msgstr "Vai jūs vēlaties pārlādēt to?"
 
-#: ../src/editor.c:4423
+#: ../src/editor.c:4421
 msgid "Enter Tab Width"
 msgstr "Ievadiet tabulācijas platumu"
 
-#: ../src/editor.c:4424
+#: ../src/editor.c:4422
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Ievadiet atstarpju skaitu, kuras aizstāt ar vienu tabulācijas rakstzīmi."
 
-#: ../src/editor.c:4640
+#: ../src/editor.c:4638
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Brīdinājums: nestandarta stingrās tabulācijas platums: %d != 8!"
@@ -3174,13 +3187,11 @@ msgstr "Iezī_mēšanas valodas"
 msgid "M_iscellaneous"
 msgstr "Dažād_i"
 
-#: ../src/filetypes.c:1188 ../src/win32.c:155
+#: ../src/filetypes.c:1188
 msgid "All Source"
 msgstr "Viss pirmkods"
 
-#. create meta file filter "All files"
-#: ../src/filetypes.c:1213 ../src/project.c:383 ../src/win32.c:145
-#: ../src/win32.c:190 ../src/win32.c:211 ../src/win32.c:216
+#: ../src/filetypes.c:1213 ../src/project.c:363
 msgid "All files"
 msgstr "Visas datnes"
 
@@ -3256,7 +3267,7 @@ msgstr "Skats"
 msgid "Document"
 msgstr "Dokuments"
 
-#: ../src/keybindings.c:321 ../src/keybindings.c:696 ../src/project.c:541
+#: ../src/keybindings.c:321 ../src/keybindings.c:696 ../src/project.c:520
 #: ../src/ui_utils.c:2239
 msgid "Build"
 msgstr "Būvēt"
@@ -3773,12 +3784,12 @@ msgstr "Tastatūras saīsnes"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Šīs tastatūras saīsnes ir konfigurējamas:"
 
-#: ../src/keyfile.c:1087
+#: ../src/keyfile.c:1131
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Ierakstiet šeit, ko jūs vēlaties, lietojiet to kā paziņojumu/uzmetumu dēli"
 
-#: ../src/keyfile.c:1376
+#: ../src/keyfile.c:1409
 msgid "Failed to load one or more session files."
 msgstr "Neizdevās ielādēt vienu vai vairākas sesiju datnes."
 
@@ -4080,58 +4091,58 @@ msgstr ""
 msgid "Configure Plugins"
 msgstr "Konfigurēt spraudņus"
 
-#: ../src/prefs.c:179
+#: ../src/prefs.c:180
 msgid "Grab Key"
 msgstr "Tveršanas taustiņš"
 
-#: ../src/prefs.c:185
+#: ../src/prefs.c:186
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 "Nospiediet taustiņu kombināciju, kuru jūs vēlaties lietot priekš \"%s\"."
 
-#: ../src/prefs.c:225 ../src/symbols.c:2136 ../src/sidebar.c:1230
+#: ../src/prefs.c:226 ../src/symbols.c:2159 ../src/sidebar.c:1244
 msgid "_Expand All"
 msgstr "Izpl_est visu"
 
-#: ../src/prefs.c:230 ../src/symbols.c:2141 ../src/sidebar.c:1236
+#: ../src/prefs.c:231 ../src/symbols.c:2164 ../src/sidebar.c:1250
 msgid "_Collapse All"
 msgstr "_Sakļaut visu"
 
-#: ../src/prefs.c:290
+#: ../src/prefs.c:291
 msgid "Action"
 msgstr "Darbība"
 
-#: ../src/prefs.c:295
+#: ../src/prefs.c:296
 msgid "Shortcut"
 msgstr "Saīsne"
 
-#: ../src/prefs.c:1481
+#: ../src/prefs.c:1482
 msgid "_Allow"
 msgstr "_Atļaut"
 
-#: ../src/prefs.c:1483
+#: ../src/prefs.c:1484
 msgid "_Override"
 msgstr "Pārlab_ot"
 
-#: ../src/prefs.c:1484
+#: ../src/prefs.c:1485
 msgid "Override that keybinding?"
 msgstr "Vai pārlabot šo taustiņu sasaisti?"
 
-#: ../src/prefs.c:1485
+#: ../src/prefs.c:1486
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "Kombinācija '%s' jau tiek lietota priekš \"%s\"."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1694
+#: ../src/prefs.c:1703
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Ievadiet rīku ceļus zemāk. Rīkus, kuri jums nav vajadzīgi, atstājiet tukšus."
 
 #. page Templates
-#: ../src/prefs.c:1699
+#: ../src/prefs.c:1708
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -4140,7 +4151,7 @@ msgstr ""
 "iegūtu sīkāku informāciju."
 
 #. page Keybindings
-#: ../src/prefs.c:1704
+#: ../src/prefs.c:1713
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -4151,7 +4162,7 @@ msgstr ""
 "dubultklikšķi uz darbības, lai rediģētu saīsnes virknes pierakstu tieši."
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1709
+#: ../src/prefs.c:1718
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -4227,32 +4238,32 @@ msgstr "Datne %s izdrukāta."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
-#: ../src/project.c:102
+#: ../src/project.c:101
 msgid "projects"
 msgstr "projekti"
 
-#: ../src/project.c:125
+#: ../src/project.c:124
 msgid "Move the current documents into the new project's session?"
 msgstr "Vai pārvietot pašreizējos dokumentus jaunā projekta sesijā?"
 
-#: ../src/project.c:177
+#: ../src/project.c:176
 msgid "New Project"
 msgstr "Jauns projekts"
 
-#: ../src/project.c:182
+#: ../src/project.c:181
 msgid "C_reate"
 msgstr "_Izveidot"
 
-#: ../src/project.c:193 ../plugins/classbuilder.c:465
+#: ../src/project.c:192 ../plugins/classbuilder.c:465
 #: ../plugins/classbuilder.c:475
 msgid "Name:"
 msgstr "Nosaukums:"
 
-#: ../src/project.c:200
+#: ../src/project.c:199
 msgid "Project name"
 msgstr "Projekta nosaukums"
 
-#: ../src/project.c:212
+#: ../src/project.c:211
 #, c-format
 msgid ""
 "Path of the file representing the project and storing its settings. It "
@@ -4261,102 +4272,102 @@ msgstr ""
 "Datnes, pārstāvošas projektu un uzglabājošas tā iestatījumus, ceļš. Tai "
 "normāli vajadzētu būt paplašinājumam \"%s\"."
 
-#: ../src/project.c:226
+#: ../src/project.c:225
 msgid "Base path:"
 msgstr "Bāzes ceļš:"
 
-#: ../src/project.c:236 ../src/project.c:514
+#: ../src/project.c:235 ../src/project.c:493
 msgid "Choose Project Base Path"
 msgstr "Izvēlēties projekta bāzes ceļu"
 
-#: ../src/project.c:278 ../src/project.c:651 ../src/project.c:1220
+#: ../src/project.c:277 ../src/project.c:630 ../src/project.c:1187
 msgid "Project file could not be written"
 msgstr "Projekta datne nevarēja tikt rakstīta"
 
-#: ../src/project.c:283
+#: ../src/project.c:282
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "Projekts \"%s\" izveidots."
 
-#: ../src/project.c:329 ../src/project.c:355 ../src/project.c:1088
+#: ../src/project.c:328 ../src/project.c:1055
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Projekta datne \"%s\" nevarēja tikt ielādēta."
 
-#: ../src/project.c:348 ../src/project.c:367
+#: ../src/project.c:347
 msgid "Open Project"
 msgstr "Atvērt projektu"
 
-#: ../src/project.c:387
+#: ../src/project.c:367
 msgid "Project files"
 msgstr "Projektu datnes"
 
-#: ../src/project.c:447
+#: ../src/project.c:426
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "Projekts \"%s\" aizvērts."
 
-#: ../src/project.c:654
+#: ../src/project.c:633
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Projekts \"%s\" saglabāts."
 
-#: ../src/project.c:688
+#: ../src/project.c:667
 msgid "Do you want to close it before proceeding?"
 msgstr "Vai jūs vēlaties to aizvērt pirms turpināšanas?"
 
-#: ../src/project.c:689
+#: ../src/project.c:668
 #, c-format
 msgid "The '%s' project is open."
 msgstr "Projekts '%s' ir atvērts."
 
-#: ../src/project.c:738
+#: ../src/project.c:717
 msgid "The specified project name is too short."
 msgstr "Norādītais projekta nosaukums ir pārāk īss."
 
-#: ../src/project.c:744
+#: ../src/project.c:723
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Norādītais projekta nosaukums ir pārāk garš (maks. %d rakstzīmes)."
 
-#: ../src/project.c:756
+#: ../src/project.c:735
 msgid "You have specified an invalid project filename."
 msgstr "Jūs esat norādījis nederīgu projekta datnes nosaukumu."
 
-#: ../src/project.c:779
+#: ../src/project.c:758
 msgid "Create the project's base path directory?"
 msgstr "Vai izveidot projekta bāzes ceļa datņu katalogu?"
 
-#: ../src/project.c:780
+#: ../src/project.c:759
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Ceļš \"%s\" nepastāv."
 
-#: ../src/project.c:789
+#: ../src/project.c:768
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Projekta bāzes datņu katalogs nevarēja tikt izveidots (%s)."
 
-#: ../src/project.c:802
+#: ../src/project.c:781
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Projekta datne nevarēja tikt rakstīta (%s)."
 
-#: ../src/project.c:808 ../src/search.c:634
+#: ../src/project.c:787 ../src/search.c:634
 msgid "_Replace"
 msgstr "_Aizstāt"
 
-#: ../src/project.c:810 ../plugins/export.c:330
+#: ../src/project.c:789 ../plugins/export.c:330
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Datne '%s' jau pastāv. Vai jūs vēlaties to pārrakstīt?"
 
 #. initialise the dialog
-#: ../src/project.c:956 ../src/project.c:967
+#: ../src/project.c:935
 msgid "Choose Project Filename"
 msgstr "Izvēlēties projekta datnes nosaukumu"
 
-#: ../src/project.c:1078
+#: ../src/project.c:1045
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Projekts \"%s\" atvērts."
@@ -4653,19 +4664,19 @@ msgstr "Nezināma kļūda, izpildot bērnprocesu"
 msgid "Value"
 msgstr "Vērtība"
 
-#: ../src/symbols.c:1209
+#: ../src/symbols.c:1217
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Nezināms datnes tipa paplašinājums priekš \"%s\".\n"
 
-#: ../src/symbols.c:1235
+#: ../src/symbols.c:1243
 #, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
 "Neizdevās izveidot birku datni, iespējams, tāpēc, ka netika atrasts neviens "
 "simbols.\n"
 
-#: ../src/symbols.c:1242
+#: ../src/symbols.c:1250
 #, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -4674,7 +4685,7 @@ msgstr ""
 "Lietojums: %s -g <Birku datne> <Datņu saraksts>\n"
 "\n"
 
-#: ../src/symbols.c:1243
+#: ../src/symbols.c:1251
 #, c-format
 msgid ""
 "Example:\n"
@@ -4685,54 +4696,58 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1257
+#: ../src/symbols.c:1265
 msgid "Load Tags File"
 msgstr "Ielādēt birku datni"
 
-#: ../src/symbols.c:1264
+#: ../src/symbols.c:1272
 msgid "Geany tags file (*.*.tags)"
 msgstr "Geany birku datne (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1284
+#: ../src/symbols.c:1292
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Ielādēta %s birku datne '%s'."
 
-#: ../src/symbols.c:1287
+#: ../src/symbols.c:1295
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Nevarēja ielādēt birku datni '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1506
+#: ../src/symbols.c:1514
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1509
+#: ../src/symbols.c:1517
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:1729
+#: ../src/symbols.c:1737
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Iepriekšēja deklarācija \"%s\" nav atrasta."
 
-#: ../src/symbols.c:1731
+#: ../src/symbols.c:1739
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "\"%s\" definīcija nav atrasta."
 
-#: ../src/symbols.c:2151
+#: ../src/symbols.c:2174
 msgid "Sort by _Name"
 msgstr "Kārtot pēc _nosaukuma"
 
-#: ../src/symbols.c:2158
+#: ../src/symbols.c:2181
 msgid "Sort by _Appearance"
 msgstr "Kārtot pēc izsk_ata"
+
+#: ../src/symbols.c:2191
+msgid "_Group by Type"
+msgstr "_Grupēt pēc tipa"
 
 #: ../src/templates.c:81
 #, c-format
@@ -4899,17 +4914,17 @@ msgstr "Pieejamie vienumi"
 msgid "Displayed Items"
 msgstr "Attēlotie vienumi"
 
-#: ../src/tools.c:84
+#: ../src/tools.c:83
 #, c-format
 msgid "Invalid command: %s"
 msgstr "Nederīga komanda: %s"
 
-#: ../src/tools.c:215
+#: ../src/tools.c:214
 #, c-format
 msgid "Passing data and executing custom command: %s"
 msgstr "Padod datus un izpilda pielāgoto komandu: %s"
 
-#: ../src/tools.c:223
+#: ../src/tools.c:222
 #, c-format
 msgid ""
 "The executed custom command returned an error. Your selection was not "
@@ -4918,11 +4933,11 @@ msgstr ""
 "Izpildītā pielāgotā komanda atgrieza kļūdu. Jūsu atlase netika mainīta. "
 "Kļūdas ziņojums: %s"
 
-#: ../src/tools.c:231
+#: ../src/tools.c:230
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Izpildītā pielāgotā komanda izgāja ar neveiksmīgu izejas kodu."
 
-#: ../src/tools.c:240
+#: ../src/tools.c:239
 #, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
@@ -4931,11 +4946,11 @@ msgstr ""
 "Nevar izpildīt pielāgoto komandu \"%s\": %s. Pārbaudiet ceļa iestatījumu "
 "iekš \"Pielāgotās komandas\"."
 
-#: ../src/tools.c:355 ../src/tools.c:624
+#: ../src/tools.c:354 ../src/tools.c:623
 msgid "Set Custom Commands"
 msgstr "Iestatīt pielāgotas komandas"
 
-#: ../src/tools.c:363
+#: ../src/tools.c:362
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
@@ -4943,80 +4958,80 @@ msgstr ""
 "Jūs varat nosūtīt pašreizējo atlasi uz jebkuru no šīm komandām un komandas "
 "izvade aizstās pašreizējo atlasi."
 
-#: ../src/tools.c:377
+#: ../src/tools.c:376
 msgid "ID"
 msgstr "ID"
 
-#: ../src/tools.c:595
+#: ../src/tools.c:594
 msgid "No custom commands defined."
 msgstr "Nav definēta neviena pielāgota komanda."
 
-#: ../src/tools.c:694
+#: ../src/tools.c:693
 msgid "Word Count"
 msgstr "Vārdu skaits"
 
-#: ../src/tools.c:703
+#: ../src/tools.c:702
 msgid "selection"
 msgstr "atlase"
 
-#: ../src/tools.c:708
+#: ../src/tools.c:707
 msgid "whole document"
 msgstr "viss dokuments"
 
-#: ../src/tools.c:717
+#: ../src/tools.c:716
 msgid "Range:"
 msgstr "Diapazons:"
 
-#: ../src/tools.c:729
+#: ../src/tools.c:728
 msgid "Lines:"
 msgstr "Rindas:"
 
-#: ../src/tools.c:743
+#: ../src/tools.c:742
 msgid "Words:"
 msgstr "Vārdi:"
 
-#: ../src/tools.c:757
+#: ../src/tools.c:756
 msgid "Characters:"
 msgstr "Rakstzīmes:"
 
-#: ../src/sidebar.c:166
+#: ../src/sidebar.c:165
 msgid "No symbols found"
 msgstr "Neviens simbols nav atrasts"
 
-#: ../src/sidebar.c:1071
+#: ../src/sidebar.c:1070
 msgid "Show S_ymbol List"
 msgstr "_Rādīt simbolu sarakstu"
 
-#: ../src/sidebar.c:1078
+#: ../src/sidebar.c:1077
 msgid "Show _Document List"
 msgstr "Rādīt _dokumentu sarakstu"
 
-#: ../src/sidebar.c:1085 ../plugins/filebrowser.c:707
+#: ../src/sidebar.c:1084 ../plugins/filebrowser.c:707
 msgid "H_ide Sidebar"
 msgstr "_Slēpt sānjoslu"
 
-#: ../src/sidebar.c:1159
+#: ../src/sidebar.c:1173
 msgid "D_ocuments Only"
 msgstr "Tikai d_okumentus"
 
-#: ../src/sidebar.c:1160
+#: ../src/sidebar.c:1174
 msgid "Show _Paths"
 msgstr "Rādīt _ceļus"
 
-#: ../src/sidebar.c:1161
+#: ../src/sidebar.c:1175
 msgid "Show _Tree"
 msgstr "Rādī_t koku"
 
-#: ../src/sidebar.c:1214 ../plugins/filebrowser.c:678
+#: ../src/sidebar.c:1228 ../plugins/filebrowser.c:678
 msgid "_Find in Files..."
 msgstr "_Atrast datnēs..."
 
 #: ../src/ui_utils.c:62
 msgid ""
-"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
-"encoding: %e      filetype: %f      scope: %S"
+"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: "
+"%e      filetype: %f      scope: %S"
 msgstr ""
-"rinda: %l / %L\t kol.: %c\t atl.: %s\t %w      %t      %mrežīms: %M      "
+"rinda: %l / %L\t kol.: %c\t atl.: %s\t %w      %t      %mEOL: %M      "
 "kodējums: %e      datnes tips: %f      tvērums: %S"
 
 #. L = lines
@@ -5225,22 +5240,14 @@ msgstr ""
 "Datņu katalogs nav izmainīts tāpēc, ka terminālis var saturēt kādu ievadi "
 "(nospiediet \"Ctrl\"+\"C\" vai \"Enter\", lai to attīrītu)."
 
-#: ../src/win32.c:210
-msgid "Geany project files"
-msgstr "Geany projektu datnes"
-
-#: ../src/win32.c:215
-msgid "Executables"
-msgstr "Izpildāmas datnes"
-
-#: ../src/win32.c:798
+#: ../src/win32.c:363
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
 msgstr "Neizdevās atvērt URI \"%s\": %s"
 
 #: ../src/tagmanager/tm_parser.c:84 ../src/tagmanager/tm_parser.c:176
-#: ../src/tagmanager/tm_parser.c:390 ../src/tagmanager/tm_parser.c:989
-#: ../src/tagmanager/tm_parser.c:1024
+#: ../src/tagmanager/tm_parser.c:390 ../src/tagmanager/tm_parser.c:988
+#: ../src/tagmanager/tm_parser.c:1023
 msgid "Namespaces"
 msgstr "Vārdtelpas"
 
@@ -5250,7 +5257,7 @@ msgstr "Vārdtelpas"
 #: ../src/tagmanager/tm_parser.c:391 ../src/tagmanager/tm_parser.c:436
 #: ../src/tagmanager/tm_parser.c:507 ../src/tagmanager/tm_parser.c:576
 #: ../src/tagmanager/tm_parser.c:699 ../src/tagmanager/tm_parser.c:977
-#: ../src/tagmanager/tm_parser.c:1025
+#: ../src/tagmanager/tm_parser.c:1024
 msgid "Classes"
 msgstr "Klases"
 
@@ -5258,7 +5265,7 @@ msgstr "Klases"
 #: ../src/tagmanager/tm_parser.c:177 ../src/tagmanager/tm_parser.c:437
 #: ../src/tagmanager/tm_parser.c:575 ../src/tagmanager/tm_parser.c:645
 #: ../src/tagmanager/tm_parser.c:698 ../src/tagmanager/tm_parser.c:902
-#: ../src/tagmanager/tm_parser.c:1026
+#: ../src/tagmanager/tm_parser.c:1025
 msgid "Interfaces"
 msgstr "Saskarnes"
 
@@ -5273,8 +5280,8 @@ msgstr "Saskarnes"
 #: ../src/tagmanager/tm_parser.c:720 ../src/tagmanager/tm_parser.c:785
 #: ../src/tagmanager/tm_parser.c:876 ../src/tagmanager/tm_parser.c:901
 #: ../src/tagmanager/tm_parser.c:931 ../src/tagmanager/tm_parser.c:950
-#: ../src/tagmanager/tm_parser.c:990 ../src/tagmanager/tm_parser.c:1001
-#: ../src/tagmanager/tm_parser.c:1027 ../src/tagmanager/tm_parser.c:1064
+#: ../src/tagmanager/tm_parser.c:989 ../src/tagmanager/tm_parser.c:1000
+#: ../src/tagmanager/tm_parser.c:1026 ../src/tagmanager/tm_parser.c:1063
 msgid "Functions"
 msgstr "Funkcijas"
 
@@ -5297,7 +5304,7 @@ msgstr "Tipu definīcijas / skaitītāji"
 #: ../src/tagmanager/tm_parser.c:91 ../src/tagmanager/tm_parser.c:135
 #: ../src/tagmanager/tm_parser.c:273 ../src/tagmanager/tm_parser.c:352
 #: ../src/tagmanager/tm_parser.c:510 ../src/tagmanager/tm_parser.c:879
-#: ../src/tagmanager/tm_parser.c:952 ../src/tagmanager/tm_parser.c:1002
+#: ../src/tagmanager/tm_parser.c:952 ../src/tagmanager/tm_parser.c:1001
 msgid "Macros"
 msgstr "Makro"
 
@@ -5309,8 +5316,8 @@ msgstr "Makro"
 #: ../src/tagmanager/tm_parser.c:721 ../src/tagmanager/tm_parser.c:769
 #: ../src/tagmanager/tm_parser.c:878 ../src/tagmanager/tm_parser.c:906
 #: ../src/tagmanager/tm_parser.c:932 ../src/tagmanager/tm_parser.c:979
-#: ../src/tagmanager/tm_parser.c:1003 ../src/tagmanager/tm_parser.c:1029
-#: ../src/tagmanager/tm_parser.c:1066
+#: ../src/tagmanager/tm_parser.c:1002 ../src/tagmanager/tm_parser.c:1028
+#: ../src/tagmanager/tm_parser.c:1065
 msgid "Variables"
 msgstr "Mainīgie"
 
@@ -5321,8 +5328,7 @@ msgstr "Ārējie mainīgie"
 #: ../src/tagmanager/tm_parser.c:94 ../src/tagmanager/tm_parser.c:124
 #: ../src/tagmanager/tm_parser.c:161 ../src/tagmanager/tm_parser.c:261
 #: ../src/tagmanager/tm_parser.c:704 ../src/tagmanager/tm_parser.c:786
-#: ../src/tagmanager/tm_parser.c:981 ../src/tagmanager/tm_parser.c:1031
-#: ../src/tagmanager/tm_parser.c:1068
+#: ../src/tagmanager/tm_parser.c:1030 ../src/tagmanager/tm_parser.c:1067
 msgid "Other"
 msgstr "Citi"
 
@@ -5340,7 +5346,7 @@ msgid "Methods"
 msgstr "Metodes"
 
 #: ../src/tagmanager/tm_parser.c:123 ../src/tagmanager/tm_parser.c:651
-#: ../src/tagmanager/tm_parser.c:980 ../src/tagmanager/tm_parser.c:1028
+#: ../src/tagmanager/tm_parser.c:980 ../src/tagmanager/tm_parser.c:1027
 msgid "Enums"
 msgstr "Skaitītāji"
 
@@ -5356,8 +5362,8 @@ msgstr "Etiķetes"
 #: ../src/tagmanager/tm_parser.c:160 ../src/tagmanager/tm_parser.c:180
 #: ../src/tagmanager/tm_parser.c:560 ../src/tagmanager/tm_parser.c:703
 #: ../src/tagmanager/tm_parser.c:905 ../src/tagmanager/tm_parser.c:948
-#: ../src/tagmanager/tm_parser.c:1004 ../src/tagmanager/tm_parser.c:1030
-#: ../src/tagmanager/tm_parser.c:1067
+#: ../src/tagmanager/tm_parser.c:1003 ../src/tagmanager/tm_parser.c:1029
+#: ../src/tagmanager/tm_parser.c:1066
 msgid "Constants"
 msgstr "Konstantes"
 
@@ -5435,7 +5441,7 @@ msgstr "Definēšanas"
 #: ../src/tagmanager/tm_parser.c:523 ../src/tagmanager/tm_parser.c:561
 #: ../src/tagmanager/tm_parser.c:578 ../src/tagmanager/tm_parser.c:648
 #: ../src/tagmanager/tm_parser.c:904 ../src/tagmanager/tm_parser.c:954
-#: ../src/tagmanager/tm_parser.c:1063
+#: ../src/tagmanager/tm_parser.c:1062
 msgid "Types"
 msgstr "Tipi"
 
@@ -5660,11 +5666,11 @@ msgstr "Lauki"
 msgid "Unknowns"
 msgstr "Nezināmie"
 
-#: ../src/tagmanager/tm_parser.c:1062
+#: ../src/tagmanager/tm_parser.c:1061
 msgid "Packages"
 msgstr "Pakotnes"
 
-#: ../src/tagmanager/tm_parser.c:1065
+#: ../src/tagmanager/tm_parser.c:1064
 msgid "Tasks"
 msgstr "Uzdevumi"
 
@@ -6205,6 +6211,12 @@ msgstr "Sānu pie sāna"
 #: ../plugins/splitwindow.c:463
 msgid "Top and Bottom"
 msgstr "Augša un apakša"
+
+#~ msgid "Geany project files"
+#~ msgstr "Geany projektu datnes"
+
+#~ msgid "Executables"
+#~ msgstr "Izpildāmas datnes"
 
 #~ msgid "Traits)"
 #~ msgstr "Pazīmes)"

@@ -229,7 +229,7 @@ The workspace has the following parts:
 * An optional toolbar.
 * An optional sidebar that can show the following tabs:
 
-  * Documents - A document list, see `Document list views`_.
+  * Documents - A `document list <#document-list-views>`_.
   * Symbols - A list of symbols in your code.
 
 * The main editor window.
@@ -237,9 +237,9 @@ The workspace has the following parts:
 
   * Status - A list of status messages.
   * Compiler - The output of compiling or building programs.
-  * Messages - Results of 'Find Usage', 'Find in Files' and other actions
+  * Messages - Results of `Find Usage`_, `Find in Files`_ and other actions
   * Scribble - A text scratchpad for any use.
-  * Terminal - An optional terminal window.
+  * Terminal - An optional `terminal window <#virtual-terminal-emulator-widget-vte>`_.
 
 * A status bar
 
@@ -364,24 +364,26 @@ Short option  Long option              Function
 
 -?            --help                   Show help information and exit.
 
-*none*        [files ...]              Open all given files at startup. This option causes
-                                       Geany to ignore loading stored files from the last
-                                       session (if enabled).
-                                       Geany also recognizes line and column information when
+*none*        *files ...*              Open all given filenames at startup.
+                                       If a running instance is detected, pass filenames
+              *file:line ...*          to it instead.
+
+              *file:line:col ...*      Geany also recognizes line and column information when
                                        appended to the filename with colons, e.g.
-                                       "geany foo.bar:10:5" will open the file foo.bar and
+                                       ``geany foo.bar:10:5`` will open the file ``foo.bar`` and
                                        place the cursor in line 10 at column 5.
 
-                                       Projects can also be opened but a project file (\*.geany)
-                                       must be the first non-option argument. All additionally
-                                       given files are ignored.
+                                       If a filename does not exist, create a new document 
+                                       with the desired filename if the
+                                       *Open new files from the command-line* 
+                                       `file pref <#files-preferences>`_ is set.
+
+                                       A project can also be opened, but the project filename (\*.geany)
+                                       must be the first non-option argument. Any other
+                                       project filenames will be opened as text files.
 ============  =======================  =================================================
 
-You can also pass line number and column number information, e.g.::
-
-    geany some_file.foo:55:4
-
-Geany supports all generic GTK options, a list is available on the
+Geany also supports all generic GTK options, a list is available on the
 help screen.
 
 
@@ -389,27 +391,45 @@ help screen.
 General
 -------
 
-
 Startup
 ^^^^^^^
-
 At startup, Geany loads all files from the last time Geany was
 launched. You can disable this feature in the preferences dialog
 (see `General Startup preferences`_).
 
 You can start several instances of Geany, but only the first will
 load files from the last session. In the subsequent instances, you
-can find these files in the file menu under the "Recent files" item.
+can find these files in the file menu under the *Recent files* item.
 By default this contains the last 10 recently opened files. You can
-change the number of recently opened files in the preferences dialog.
+change the number of recently opened files in the 
+`Files tab <#files-preferences>`_ of the preferences dialog.
 
 To run a second instance of Geany, do not specify any filenames on
 the command-line, or disable opening files in a running instance
-using the appropriate command line option.
+using the ``-i`` `command line option <#command-line-options>`_.
+
+
+Opening files
+^^^^^^^^^^^^^
+
+Open dialog
+```````````
+The *File->Open* command will show a dialog to choose one or more text 
+files to open. There is a list of file filters on the right with the 
+following items:
+
+* All files (default)
+* All source - a combination of all the patterns for each filetype (see 
+  `Filetype extensions`_)
+* Individual filetypes
+
+Clicking *More options* will reveal controls to open files with a 
+specific filetype and/or encoding (see `Character sets and Unicode 
+Byte-Order-Mark (BOM)`_).
 
 
 Opening files from the command-line in a running instance
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`````````````````````````````````````````````````````````
 
 Geany detects if there is an instance of itself already running and opens files
 from the command-line in that instance. So, Geany can
@@ -476,27 +496,6 @@ You can also specify the filename of the VTE library to use on the command
 line (see the section called `Command line options`_) or at compile time
 by specifying the command line option ``--with-vte-module-path`` to
 ./configure.
-
-
-Customizing Geany's appearance using GTK+ CSS
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-To override GTK+ CSS styles, you can use traditional mechanisms or you
-can create a file named ``geany.css`` in the user configuration directory
-(usually ``~/.config/geany``) which will be loaded after other CSS styles
-are applied to allow overriding the default styles.
-
-Geany offers a number of CSS IDs which can be used to taylor its
-appearance. Among the more interesting include:
-
-* ``geany-compiler-context`` - the style used for build command output surrounding errors
-* ``geany-compiler-error`` - the style used for build command errors
-* ``geany-compiler-message`` - the style other output encountered while running build command
-* ``geany-document-status-changed`` - the style for document tab labels when the document is changed
-* ``geany-document-status-disk-changed`` - the style for document tab labels when the file on disk has changed
-* ``geany-document-status-readyonly``` - the style for document tab labels when the document is read-only
-* ``geany-search-entry-no-match`` - the style of find/replace dialog entries when no match is found
-* ``geany-terminal-dirty`` - the style for the message window Terminal tab label when the terminal output has changed.
 
 
 Documents
@@ -1038,6 +1037,17 @@ autocompletion will not work for names declared in local scope
 (e.g. inside functions). A few languages parse both local and global
 symbols (e.g. C/C++ parsers) and for these parsers scope autocompletion
 works also for local variables.
+
+
+Calltips
+^^^^^^^^
+A handy tooltip is shown when typing ``(`` after a symbol name when the
+symbol has a parameter list. The tag parser for the filetype must support
+parsing parameter lists.
+Calltips can also be shown with a `keybinding <#editor-keybindings>`_.
+
+When there is more than one matching symbol, arrows are shown which can
+be clicked to cycle through the signatures.
 
 
 User-definable snippets
@@ -2022,6 +2032,10 @@ Double-clicking hides all additional widgets
     Whether to call the View->Toggle All Additional Widgets command
     when double-clicking on a notebook tab.
 
+Tab label length
+    If filenames are long, set the number of characters that should be
+    visible on each tab's label.
+
 Tab positions
 `````````````
 
@@ -2213,7 +2227,8 @@ Automatic continuation multi-line comments
       *
 
     on the next line with the correct indentation based on the previous line,
-    as long as the multi-line is not closed by ``*/``.
+    as long as the multi-line is not closed by ``*/``. If the previous line
+    has no ``*`` prefix, no ``*`` will be added to the new line.
 
 Autocomplete symbols
     When you start to type a symbol name, look for the full string to
@@ -2476,6 +2491,7 @@ Context action
 
 Template preferences
 ^^^^^^^^^^^^^^^^^^^^
+See `Templates`_.
 
 This data is used as meta data for various template text to insert into
 a document, such as the file header. You only need to set fields that
@@ -2485,6 +2501,7 @@ you want to use in your template files.
 
 Template data
 `````````````
+See `Template meta data`_.
 
 Developer
     The name of the developer who will be creating files.
@@ -2505,16 +2522,15 @@ Initial version
     The initial version of files you will be creating.
 
 Year
-    Specify a format for the {year} wildcard. For a list of available conversion
-    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
+    Specify a format for the ``{year}`` wildcard.
 
 Date
-    Specify a format for the {date} wildcard. For a list of available conversion
-    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
+    Specify a format for the ``{date}`` wildcard.
 
 Date & Time
-    Specify a format for the {datetime} wildcard. For a list of available conversion
-    specifiers see https://docs.gtk.org/glib/method.DateTime.format.html.
+    Specify a format for the ``{datetime}`` wildcard.
+
+See `Date & time wildcards`_ for more information.
 
 
 Keybinding preferences
@@ -2865,7 +2881,7 @@ Project properties
 ^^^^^^^^^^^^^^^^^^
 
 You can set an optional description for the project. Currently it's
-only used for a template wildcard - see `Template wildcards`_.
+only used for the ``{description}}`` template wildcard - see `Dynamic wildcards`_.
 
 The *Base path* field is used as the directory to run the Build menu commands.
 The specified path can be an absolute path or it is considered to be
@@ -3486,16 +3502,16 @@ Complete word                   Ctrl-Space                Shows the autocompleti
 Show calltip                    Ctrl-Shift-Space          Shows a calltip for the current function or
                                                           method.
 
-Complete snippet                Tab                       If you type a construct like if or for and press
+Complete snippet                Tab                       If you type a keyword like ``if`` or ``for`` and press
                                                           this key, it will be completed with a matching
-                                                          template.
+                                                          template - see `User-definable snippets`_.
 
-Suppress snippet completion                               If you type a construct like if or for and press
+Suppress snippet completion                               If you type a construct like ``if`` or ``for`` and press
                                                           this key, it will not be completed, and a space or
                                                           tab will be inserted, depending on what the
                                                           construct completion keybinding is set to. For
                                                           example, if you have set the construct completion
-                                                          keybinding to space, then setting this to
+                                                          keybinding to a space, then setting this to
                                                           Shift+space will prevent construct completion and
                                                           insert a space.
 
@@ -3629,6 +3645,10 @@ Reflow lines/block                                        Reformat selected line
                                                           breaking lines at the long line marker or the
                                                           line breaking column if line breaking is
                                                           enabled for the current document.
+
+Join Lines                                                Replace line endings and following indentation
+                                                          with a single space throughout the selection
+                                                          or current (indented) text block.
 =============================== ========================= ==================================================
 
 
@@ -4000,6 +4020,27 @@ template files.
     Syntax highlighting colors aren't updated in open documents after
     saving filetypes.common as this may take a significant
     amount of time.
+
+
+Customizing Geany's appearance using GTK+ CSS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To override GTK+ CSS styles, you can use traditional mechanisms or you
+can use the *Tools->Configuration files* menu to open a file named
+``geany.css`` which will be loaded after other CSS styles
+are applied to allow overriding the default styles.
+
+Geany offers a number of CSS IDs which can be used to taylor its
+appearance. Among the more interesting include:
+
+* ``geany-compiler-context`` - the style used for build command output surrounding errors
+* ``geany-compiler-error`` - the style used for build command errors
+* ``geany-compiler-message`` - the style other output encountered while running build command
+* ``geany-document-status-changed`` - the style for document tab labels when the document is changed
+* ``geany-document-status-disk-changed`` - the style for document tab labels when the file on disk has changed
+* ``geany-document-status-readyonly``` - the style for document tab labels when the document is read-only
+* ``geany-search-entry-no-match`` - the style of find/replace dialog entries when no match is found
+* ``geany-terminal-dirty`` - the style for the message window Terminal tab label when the terminal output has changed.
 
 
 Global configuration file
@@ -4935,7 +4976,8 @@ File templates
 
 File templates are templates used as the basis of a new file. To
 use them, choose the *New (with Template)* menu item from the *File*
-menu.
+menu. If there is more than one template for a filetype then they
+will be grouped in a submenu.
 
 By default, file templates are installed for some filetypes. Custom
 file templates can be added by creating the appropriate template file. You can
@@ -4984,11 +5026,12 @@ Wildcard       Description                                   Available in
 ob             { Opening Brace (used to prevent other        file templates, file header, snippets.
                wildcards being expanded).
 cb             } Closing Brace.                              file templates, file header, snippets.
-pc             \% Percent (used to escape e.g. %block% in
-               snippets).                                    snippets.
+pc             \% Percent (used to escape e.g. ``%block%``
+               in snippets).                                 snippets.
 ============== ============================================= =======================================
 
-**Global wildcards**
+Global wildcards
+****************
 
 These are configurable, see `Template preferences`_.
 
@@ -5016,7 +5059,8 @@ version        The initial version of a new file.            file templates, fil
                                                              bsd, gpl, snippets.
 ============== ============================================= =======================================
 
-**Date & time wildcards**
+Date & time wildcards
+*********************
 
 The format for these wildcards can be changed in the preferences
 dialog, see `Template preferences`_. For a list of available conversion
@@ -5038,7 +5082,8 @@ datetime       The current date and time. Default format:    file templates, fil
                                                              bsd, gpl, snippets.
 ============== ============================================= =======================================
 
-**Dynamic wildcards**
+Dynamic wildcards
+*****************
 
 ============== ============================================= =======================================
 Wildcard       Description                                   Available in
@@ -5071,7 +5116,8 @@ command:path   Executes the specified command and replace    file templates, fil
                for details.
 ============== ============================================= =======================================
 
-**Template insertion wildcards**
+Template insertion wildcards
+****************************
 
 ============== ============================================= =======================================
 Wildcard       Description                                   Available in
@@ -5088,7 +5134,7 @@ fileheader     The file header template. This wildcard       snippets, file temp
 Special {command:} wildcard
 ***************************
 
-The {command:} wildcard is a special one because it can execute
+The ``{command:}`` wildcard is a special one because it can execute
 a specified command and put the command's output (stdout) into
 the template.
 
@@ -5107,7 +5153,7 @@ In the environment of the executed command the variables
 ``GEANY_FILENAME``, ``GEANY_FILETYPE`` and ``GEANY_FUNCNAME`` are set.
 The value of these variables is filled in only if Geany knows about it.
 For example, ``GEANY_FUNCNAME`` is only filled within the function
-description template. However, these variables are ``always`` set,
+description template. However, these variables are *always* set,
 just maybe with an empty value.
 You can easily access them e.g. within an executed shell script using::
 
@@ -5117,7 +5163,7 @@ You can easily access them e.g. within an executed shell script using::
 .. note::
     If the specified command could not be found or not executed, the wildcard is substituted
     by an empty string. In such cases, you can find the occurred error message on Geany's
-    standard error and in the Help->Debug Messages dialog.
+    standard error and in the *Help->Debug Messages* dialog.
 
 
 Customizing the toolbar

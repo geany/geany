@@ -294,7 +294,9 @@ test_sources = \
 	signature.cpp					\
 	simple.abc						\
 	simple.asciidoc					\
+	simple.au3						\
 	simple.bas						\
+	simple.bat						\
 	simple.clj						\
 	simple.conf						\
 	simple.d						\

@@ -1740,6 +1740,41 @@ static const HLKeyword highlighting_keywords_YAML[] =
 #define highlighting_keywords_ZEPHIR	highlighting_keywords_PHP
 #define highlighting_properties_ZEPHIR	highlighting_properties_PHP
 
+
+/* AutoIt */
+#define highlighting_lexer_AU3			SCLEX_AU3
+static const HLStyle highlighting_styles_AU3[] =
+{
+	{ SCE_AU3_DEFAULT,		"default",		FALSE},
+	{ SCE_AU3_COMMENT,		"comment",		FALSE},
+	{ SCE_AU3_COMMENTBLOCK,		"commentblock",		FALSE},
+	{ SCE_AU3_NUMBER,		"number",		FALSE},
+	{ SCE_AU3_FUNCTION,		"function",		FALSE},
+	{ SCE_AU3_KEYWORD,		"keyword",		FALSE},
+	{ SCE_AU3_MACRO,		"macro",		FALSE},
+	{ SCE_AU3_STRING,		"string",		FALSE},
+	{ SCE_AU3_OPERATOR,		"operator",		FALSE},
+	{ SCE_AU3_VARIABLE,		"variable",		FALSE},
+	{ SCE_AU3_SENT,			"sent",			FALSE},
+	{ SCE_AU3_PREPROCESSOR,		"preprocessor",		FALSE},
+	{ SCE_AU3_SPECIAL,		"special",		FALSE},
+	{ SCE_AU3_EXPAND,		"expand",		FALSE},
+	{ SCE_AU3_COMOBJ,		"comobj",		FALSE},
+	{ SCE_AU3_UDF,			"udf",			FALSE}
+};
+static const HLKeyword highlighting_keywords_AU3[] =
+{
+	{ 0, "keywords",	FALSE },
+	{ 1, "functions",	FALSE },
+	{ 2, "macros",		FALSE },
+	{ 3, "sent",		FALSE },
+	{ 4, "preprocessor",	FALSE },
+	{ 5, "special",		FALSE },
+	{ 6, "expand",		FALSE },
+	{ 7, "udf",		FALSE }
+};
+#define highlighting_properties_AU3		EMPTY_PROPERTIES
+
 G_END_DECLS
 
 #endif /* GEANY_HIGHLIGHTING_MAPPINGS_H */

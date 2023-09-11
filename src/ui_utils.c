@@ -118,7 +118,6 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static void recent_project_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *progress_bar_create(void);
-static void ui_menu_sort_by_label(GtkMenu *menu);
 
 
 /* simple wrapper for gtk_widget_set_sensitive() to allow widget being NULL */
@@ -383,7 +382,7 @@ void ui_set_window_title(GeanyDocument *doc)
 			g_string_append(str, DOC_FILENAME(doc));
 		else
 		{
-			gchar *short_name = document_get_basename_for_display(doc, 30);
+			gchar *short_name = document_get_basename_for_display(doc, interface_prefs.tab_label_len);
 			gchar *dirname = g_path_get_dirname(DOC_FILENAME(doc));
 
 			g_string_append(str, short_name);
@@ -2096,6 +2095,33 @@ void ui_table_add_row(GtkTable *table, gint row, ...)
 }
 
 
+/* comment-out all lines that are not already commented out except sections */
+static void comment_conf_files(ScintillaObject *sci)
+{
+	gint line, line_count;
+
+	line_count = sci_get_line_count(sci);
+	for (line = 0; line < line_count; line++)
+	{
+		gint pos_start = sci_get_position_from_line(sci, line);
+		gint pos_end = sci_get_line_end_position(sci, line);
+		gint pos;
+
+		for (pos = pos_start; pos < pos_end; pos++)
+		{
+			gchar c = sci_get_char_at(sci, pos);
+			if (c == '[' || c == '#')
+				break;
+			if (!isspace(c))
+			{
+				sci_insert_text(sci, pos_start, "#");
+				break;
+			}
+		}
+	}
+}
+
+
 static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 {
 	const gchar *file_name = user_data;
@@ -2135,9 +2161,14 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 		doc = document_new_file(utf8_filename, ft, global_content);
 		if (global_content)
 		{
-			sci_select_all(doc->editor->sci);
-			keybindings_send_command(GEANY_KEY_GROUP_FORMAT,
-				GEANY_KEYS_FORMAT_COMMENTLINETOGGLE);
+			if (doc->file_type->id == GEANY_FILETYPES_CONF)
+				comment_conf_files(doc->editor->sci);
+			else
+			{
+				sci_select_all(doc->editor->sci);
+				keybindings_send_command(GEANY_KEY_GROUP_FORMAT,
+					GEANY_KEYS_FORMAT_COMMENTLINETOGGLE);
+			}
 			sci_set_current_line(doc->editor->sci, 0);
 			document_set_text_changed(doc, FALSE);
 			sci_empty_undo_buffer(doc->editor->sci);
@@ -2369,6 +2400,8 @@ void ui_init_prefs(void)
 		"msgwin_scribble_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.warn_on_project_close,
 		"warn_on_project_close", TRUE);
+	stash_group_add_spin_button_integer(group, &interface_prefs.tab_label_len,
+		"tab_label_length", 99999, "spin_tab_label_len");
 }
 
 
@@ -2875,11 +2908,11 @@ static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
 	gchar *sa, *sb;
 	gint result;
 
-	/* put entries with submenus at the end of the menu */
+	/* put entries with submenus at the start of the menu */
 	if (gtk_menu_item_get_submenu(item_a) && !gtk_menu_item_get_submenu(item_b))
-		return 1;
-	else if (!gtk_menu_item_get_submenu(item_a) && gtk_menu_item_get_submenu(item_b))
 		return -1;
+	else if (!gtk_menu_item_get_submenu(item_a) && gtk_menu_item_get_submenu(item_b))
+		return 1;
 
 	sa = ui_menu_item_get_text(item_a);
 	sb = ui_menu_item_get_text(item_b);
@@ -2891,7 +2924,7 @@ static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
 
 
 /* Currently @a menu should contain only GtkMenuItems with labels. */
-static void ui_menu_sort_by_label(GtkMenu *menu)
+void ui_menu_sort_by_label(GtkMenu *menu)
 {
 	GList *list = gtk_container_get_children(GTK_CONTAINER(menu));
 	GList *node;

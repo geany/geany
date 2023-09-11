@@ -10,6 +10,8 @@ Level 4 Section 1.1.1.1.1 TitleÃ2048ŒLevel 3 Section 1.1.1.1 Title÷0
 struct:     Level 3 Section 1.1.1.1 Title :: Level 4 Section 1.1.1.1.1 Title
 Level 4 Section 2.1.1.1.1 TitleÃ2048ŒLevel 3 Section 2.1.1.1 Title÷0
 struct:     Level 3 Section 2.1.1.1 Title :: Level 4 Section 2.1.1.1.1 Title
+Level 5 Section 1.1.1.1.1.1 TitleÃ4ŒLevel 4 Section 1.1.1.1.1 Title÷0
+enumerator: Level 4 Section 1.1.1.1.1 Title :: Level 5 Section 1.1.1.1.1.1 Title
 Section 1.1Ã64ŒChapter 1 (Level 0)÷0
 member:     Chapter 1 (Level 0) :: Section 1.1
 Section 1.2Ã64ŒChapter 1 (Level 0)÷0

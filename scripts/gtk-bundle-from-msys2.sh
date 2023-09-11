@@ -53,7 +53,7 @@ libthai
 libwinpthread-git
 libxml2
 pango
-pcre
+pcre2
 pixman
 xz
 zlib

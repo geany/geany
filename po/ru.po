@@ -3,25 +3,27 @@
 # This file is distributed under the same license as the Geany package.
 # John Wehin <john.wehin@gmail.com>, 2008-2009.
 # Denis Koryavov <dkoryavov@yandex.ru>, 2010.
-# Igor Burmistrov <meyday@yandex.ru>, 2012
-# Maxim Musatov <m1kc@yandex.ru>, 2012
-# Pavel Roschin <rpg89(at)post(dot)ru>, 2014-2019
-# Dmitry Unruh <dmitryunruh@googlemail.com>, 2020
+# Igor Burmistrov <meyday@yandex.ru>, 2012.
+# Maxim Musatov <m1kc@yandex.ru>, 2012.
+# Pavel Roschin <rpg89(at)post(dot)ru>, 2014-2019.
+# Dmitry Unruh <dmitryunruh@googlemail.com>, 2020.
+# Olesya Gerasimenko <translation-team@basealt.ru>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.37\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-21 19:03+0200\n"
-"PO-Revision-Date: 2020-10-16 02:00+1000\n"
-"Last-Translator: Dmitry Unruh <dmitryunruh@googlemail.com>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"PO-Revision-Date: 2023-05-17 11:12+0300\n"
+"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
+"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -2529,11 +2531,12 @@ msgstr[2] "%d файлов сохранено."
 #: ../src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
+"Обнаружены изменения. Повторная загрузка всех файлов приведёт к потере"
+" изменений и истории."
 
 #: ../src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Вы уверены, что хотите заново загрузить '%s'?"
+msgstr "Вы уверены, что хотите заново загрузить все файлы?"
 
 #: ../src/callbacks.c:935 ../src/keybindings.c:567
 msgid "Go to Line"
@@ -3336,9 +3339,8 @@ msgid "Reload file"
 msgstr "Обновить файл"
 
 #: ../src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Обновить файл"
+msgstr "Обновить все файлы"
 
 #: ../src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -4873,14 +4875,12 @@ msgid "Classes"
 msgstr "Классы"
 
 #: ../src/symbols.c:628
-#, fuzzy
 msgid "Fields"
-msgstr "Перейти к полю"
+msgstr "Поля"
 
 #: ../src/symbols.c:632
-#, fuzzy
 msgid "Unknowns"
-msgstr "неизвестно"
+msgstr "Неизвестные"
 
 #: ../src/symbols.c:640
 msgid "Anchors"
@@ -5978,9 +5978,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Резервная копия: Файл \"%s\" недоступен для записи."
 
 #: ../plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Не удалось выполнить запись в файл проекта (%s)."
+msgstr "Не удалось создать файл немедленного сохранения (%s)."
 
 #: ../plugins/saveactions.c:386
 #, c-format
@@ -5996,9 +5996,9 @@ msgid "Select Directory"
 msgstr "Выбрать каталог"
 
 #: ../plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "Каталог для резервных копий не существует или недоступен для записи."
+msgstr ""
+"Каталог для немедленного сохранения не существует или недоступен для записи."
 
 #: ../plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -6042,14 +6042,15 @@ msgid "Instant Save"
 msgstr "Немедленное сохранение"
 
 #: ../plugins/saveactions.c:721
-#, fuzzy
 msgid "Default _filetype to use for new files:"
-msgstr "_Тип файла по умолчанию для создаваемых файлов:"
+msgstr "_Тип файла по умолчанию для новых файлов:"
 
 #: ../plugins/saveactions.c:742
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
+"_Каталог для сохранения файлов (оставьте пустым для использования"
+" стандартного каталога: %s):"
 
 #: ../plugins/saveactions.c:766
 msgid ""
@@ -6058,6 +6059,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>Если указать в качестве каталога для немедленного сохранения тот каталог,"
+" который не очищается автоматически,\n"
+"потребуется выполнять очистку сохранённых в нём файлов вручную. Модуль"
+" «Немедленное сохранение» не выполняет удаление созданных файлов.</i>"
 
 #: ../plugins/saveactions.c:784
 msgid "Backup Copy"

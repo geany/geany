@@ -79,7 +79,7 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->source_files = g_ptr_array_new();
 	theWorkspace->typename_array = g_ptr_array_new();
 	theWorkspace->global_typename_array = g_ptr_array_new();
-	theWorkspace->source_file_map = g_hash_table_new_full(g_str_hash, g_str_equal, NULL,
+	theWorkspace->source_file_map = g_hash_table_new_full(g_str_hash, g_str_equal, g_free,
 		free_ptr_array);
 
 	tm_ctags_init();
@@ -192,7 +192,7 @@ void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
 	if (!file_arr)
 	{
 		file_arr = g_ptr_array_new();
-		g_hash_table_insert(theWorkspace->source_file_map, source_file->short_name, file_arr);
+		g_hash_table_insert(theWorkspace->source_file_map, g_strdup(source_file->short_name), file_arr);
 	}
 	g_ptr_array_add(file_arr, source_file);
 }
