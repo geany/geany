@@ -376,7 +376,11 @@ static void kb_init(KbData *kbdata)
 	foreach_ptr_array(group, g, keybinding_groups)
 	{
 		gtk_tree_store_append(kbdata->store, &parent, NULL);
-		gtk_tree_store_set(kbdata->store, &parent, KB_TREE_ACTION, group->label,
+		const gchar *glabel = group->label;
+		// hack to ignore leading mnemonic
+		if (glabel[0] == '_')
+			glabel++;
+		gtk_tree_store_set(kbdata->store, &parent, KB_TREE_ACTION, glabel,
 			KB_TREE_INDEX, g, -1);
 
 		foreach_ptr_array(kb, i, group->key_items)
