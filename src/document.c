@@ -284,7 +284,7 @@ static GtkWidget *document_get_notebook_child(GeanyDocument *doc)
 
 /** Gets the notebook page index for a document.
  * @param doc The document.
- * @return The index.
+ * @return The index, or -1 if @a doc is invalid.
  * @since 0.19 */
 GEANY_API_SYMBOL
 gint document_get_notebook_page(GeanyDocument *doc)
@@ -354,11 +354,9 @@ GeanyDocument *document_get_from_page(guint page_num)
 {
 	GtkWidget *parent;
 
-	if (page_num >= documents_array->len)
-		return NULL;
-
 	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
-
+	if (!parent)
+		return NULL;
 	return document_get_from_notebook_child(parent);
 }
 
@@ -383,6 +381,10 @@ GeanyDocument *document_get_current(void)
 void document_init_doclist(void)
 {
 	documents_array = g_ptr_array_new();
+#ifdef GEANY_DEBUG
+	// add a dummy invalid document to catch naive iteration
+	g_ptr_array_add(documents_array, g_new0(GeanyDocument, 1));
+#endif
 }
 
 
@@ -392,6 +394,7 @@ void document_finalize(void)
 
 	for (i = 0; i < documents_array->len; i++)
 		g_free(documents[i]);
+
 	g_ptr_array_free(documents_array, TRUE);
 }
 
@@ -474,20 +477,27 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed)
 }
 
 
-/* returns the next free place in the document list,
- * or -1 if the documents_array is full */
-static gint document_get_new_idx(void)
+/* Returns: The index of the first unused GeanyDocument in documents_array,
+ * or the index of a newly allocated one if all are in use */
+static guint new_doc_index(void)
 {
-	guint i;
+	guint i = 0;
 
-	for (i = 0; i < documents_array->len; i++)
+#ifdef GEANY_DEBUG
+	// ignore dummy invalid document
+	i = 1;
+#endif
+	for (; i < documents_array->len; i++)
 	{
 		if (documents[i]->editor == NULL)
 		{
-			return (gint) i;
+			return i;
 		}
 	}
-	return -1;
+	/* expand the array, no free places */
+	i = documents_array->len;
+	g_ptr_array_add(documents_array, g_new0(GeanyDocument, 1));
+	return i;
 }
 
 
@@ -615,8 +625,8 @@ void document_try_focus(GeanyDocument *doc, GtkWidget *source_widget)
 static GeanyDocument *document_create(const gchar *utf8_filename)
 {
 	GeanyDocument *doc;
-	gint new_idx;
 	gint cur_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	guint idx;
 
 	if (cur_pages == 1)
 	{
@@ -628,23 +638,15 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 			remove_page(0);
 	}
 
-	new_idx = document_get_new_idx();
-	if (new_idx == -1)	/* expand the array, no free places */
-	{
-		doc = g_new0(GeanyDocument, 1);
-
-		new_idx = documents_array->len;
-		g_ptr_array_add(documents_array, doc);
-	}
-
-	doc = documents[new_idx];
-
+	idx = new_doc_index();
+	doc = documents[idx];
+	doc->index = idx;
+	
 	/* initialize default document settings */
 	doc->priv = g_new0(GeanyDocumentPrivate, 1);
 	doc->priv->tag_filter = g_strdup("");
 	doc->priv->symbols_group_by_type = TRUE;
 	doc->id = ++doc_id_counter;
-	doc->index = new_idx;
 	doc->file_name = g_strdup(utf8_filename);
 	doc->editor = editor_create(doc);
 #ifndef USE_GIO_FILEMON
