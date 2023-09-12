@@ -2267,7 +2267,9 @@ void ui_init_stock_items(void)
 	{
 		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
 		{ GEANY_STOCK_CLOSE_ALL, N_("Close All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
+		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE },
+		{ GEANY_STOCK_GO_NEXT_MARKER, N_("Go to Next Marker"), 0, 0, GETTEXT_PACKAGE },
+		{ GEANY_STOCK_GO_PREV_MARKER, N_("Go to Previous Marker"), 0, 0, GETTEXT_PACKAGE }
 	};
 
 	gtk_stock_add(items, G_N_ELEMENTS(items));

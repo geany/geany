@@ -80,7 +80,9 @@ static const GtkActionEntry ui_entries[] = {
 	{ "Preferences", GTK_STOCK_PREFERENCES, NULL, NULL, N_("Show the preferences dialog"), G_CALLBACK(on_preferences1_activate) },
 	{ "Quit", GTK_STOCK_QUIT, NULL, NULL, N_("Quit Geany"), G_CALLBACK(on_quit1_activate) },
 	{ "Print", GTK_STOCK_PRINT, NULL, NULL, N_("Print document"), G_CALLBACK(on_print1_activate) },
-	{ "Replace", GTK_STOCK_FIND_AND_REPLACE, NULL, NULL, N_("Replace text in the current document"), G_CALLBACK(on_replace1_activate) }
+	{ "Replace", GTK_STOCK_FIND_AND_REPLACE, NULL, NULL, N_("Replace text in the current document"), G_CALLBACK(on_replace1_activate) },
+	{ "NextMarker", GEANY_STOCK_GO_NEXT_MARKER, NULL, NULL, N_("Go to Next Marker"), G_CALLBACK(on_go_to_next_marker1_activate) },
+	{ "PrevMarker", GEANY_STOCK_GO_PREV_MARKER, NULL, NULL, N_("Go to Previous Marker"), G_CALLBACK(on_go_to_previous_marker1_activate) }
 };
 static const guint ui_entries_n = G_N_ELEMENTS(ui_entries);
 

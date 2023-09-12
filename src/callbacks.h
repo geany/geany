@@ -156,6 +156,10 @@ void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem, gpointer user_d
 
 void on_remove_markers1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
+void on_go_to_next_marker1_activate(GtkMenuItem *menuitem, gpointer user_data);
+
+void on_go_to_previous_marker1_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpointer user_data);
