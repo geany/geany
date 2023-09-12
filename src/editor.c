@@ -4960,11 +4960,15 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	/* input method editor's candidate window behaviour */
 	SSM(sci, SCI_SETIMEINTERACTION, editor_prefs.ime_interaction, 0);
 
+	/* default SC_MULTIPASTE_EACH - scintilla def=SC_MULTIPASTE_ONCE */
+	SSM(sci, SCI_SETMULTIPASTE, SC_MULTIPASTE_EACH, 0);
+
 #ifdef GDK_WINDOWING_QUARTZ
 # if ! GTK_CHECK_VERSION(3,16,0)
 	/* "retina" (HiDPI) display support on OS X - requires disabling buffered draw
 	 * on older GTK versions */
 	SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);
+	
 # endif
 #endif
 
@@ -5027,7 +5031,7 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	editor->line_wrapping = get_project_pref(line_wrapping);
 	editor->scroll_percent = -1.0F;
 	editor->line_breaking = FALSE;
-
+	
 	editor->sci = editor_create_widget(editor);
 	return editor;
 }
