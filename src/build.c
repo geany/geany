@@ -81,7 +81,7 @@ static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.sh";
 #endif
 
 /* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
-/* * Geany Known Build Commands.
+/* * Known build commands.
  * These commands are named after their default use.
  * Only these commands can currently have keybindings.
  **/
@@ -94,15 +94,11 @@ typedef enum
 	GEANY_GBO_MAKE_OBJECT,	/* *< default make object, make %e.o */
 	GEANY_GBO_EXEC,			/* *< default execute ./%e */
 	GEANY_GBO_COUNT			/* *< count of how many */
-} GeanyBuildType;
+} GeanyBuildOptions;
 
-/* * Convert @c GeanyBuildType to @c GeanyBuildGroup.
+/* * Finds the group ID for a known build option.
  *
- * This macro converts @c GeanyBuildType enum values (the "known" commands)
- * to the group they are part of.
- *
- * @param gbo the @c GeanyBuildType value.
- *
+ * @param gbo the @c GeanyBuildOptions value.
  * @return the @c GeanyBuildGroup group that @a gbo is in.
  *
  * Note this is a macro so that it can be used in static initialisers.
@@ -112,17 +108,16 @@ typedef enum
 		((gbo) >= GEANY_GBO_EXEC ? GEANY_GBG_EXEC : \
 			 ((gbo) >= GEANY_GBO_MAKE_ALL ? GEANY_GBG_NON_FT : GEANY_GBG_FT)))
 
-/* * Convert @c GeanyBuildType to command index.
+/* * Finds the command array index for a known build option.
  *
- * This macro converts @c GeanyBuildType enum values (the "known" commands)
- * to the index within the group.
- *
- * @param gbo the @c GeanyBuildType value.
- *
+ * @param gbo the @c GeanyBuildOptions value.
  * @return the index of the @a gbo command in its group.
  *
  * Note this is a macro so that it can be used in static initialisers.
  **/
+// For each option yields:
+// [FT]  [  NF ]  EX
+// 0, 1, 0, 1, 2, 0
 #define GBO_TO_CMD(gbo) \
 	((gbo) >= GEANY_GBO_COUNT ? (gbo) - GEANY_GBO_COUNT : \
 		((gbo) >= GEANY_GBO_EXEC ? (gbo) - GEANY_GBO_EXEC : \
