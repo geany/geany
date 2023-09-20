@@ -1421,6 +1421,10 @@ static const HLStyle highlighting_styles_RUBY[] =
 	{ SCE_RB_STRING_QX,		"string_qx",		FALSE },
 	{ SCE_RB_STRING_QR,		"string_qr",		FALSE },
 	{ SCE_RB_STRING_QW,		"string_qw",		FALSE },
+	{ SCE_RB_STRING_W,		"string_qw",		FALSE },
+	{ SCE_RB_STRING_QI,		"symbol",			FALSE },
+	{ SCE_RB_STRING_QS,		"symbol",			FALSE },
+	{ SCE_RB_STRING_I,		"symbol",			FALSE },
 	{ SCE_RB_UPPER_BOUND,	"upper_bound",		FALSE },
 	{ SCE_RB_ERROR,			"error",			FALSE },
 	{ SCE_RB_POD,			"pod",				FALSE }
