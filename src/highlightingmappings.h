@@ -1364,18 +1364,22 @@ static const HLKeyword highlighting_keywords_PYTHON[] =
 #define highlighting_lexer_R		SCLEX_R
 static const HLStyle highlighting_styles_R[] =
 {
-	{ SCE_R_DEFAULT,	"default",		FALSE },
-	{ SCE_R_COMMENT,	"comment",		FALSE },
-	{ SCE_R_KWORD,		"kword",		FALSE },
-	{ SCE_R_OPERATOR,	"operator",		FALSE },
-	{ SCE_R_BASEKWORD,	"basekword",	FALSE },
-	{ SCE_R_OTHERKWORD,	"otherkword",	FALSE },
-	{ SCE_R_NUMBER,		"number",		FALSE },
-	{ SCE_R_STRING,		"string",		FALSE },
-	{ SCE_R_STRING2,	"string2",		FALSE },
-	{ SCE_R_IDENTIFIER,	"identifier",	FALSE },
-	{ SCE_R_INFIX,		"infix",		FALSE },
-	{ SCE_R_INFIXEOL,	"infixeol",		FALSE }
+	{ SCE_R_DEFAULT,		"default",			FALSE },
+	{ SCE_R_COMMENT,		"comment",			FALSE },
+	{ SCE_R_KWORD,			"kword",			FALSE },
+	{ SCE_R_OPERATOR,		"operator",			FALSE },
+	{ SCE_R_BASEKWORD,		"basekword",		FALSE },
+	{ SCE_R_OTHERKWORD,		"otherkword",		FALSE },
+	{ SCE_R_NUMBER,			"number",			FALSE },
+	{ SCE_R_STRING,			"string",			FALSE },
+	{ SCE_R_STRING2,		"string2",			FALSE },
+	{ SCE_R_IDENTIFIER,		"identifier",		FALSE },
+	{ SCE_R_INFIX,			"infix",			FALSE },
+	{ SCE_R_INFIXEOL,		"infixeol",			FALSE },
+	{ SCE_R_BACKTICKS,		"backticks",		FALSE },
+	{ SCE_R_RAWSTRING,		"stringraw",		FALSE },
+	{ SCE_R_RAWSTRING2,		"stringraw",		FALSE },
+	{ SCE_R_ESCAPESEQUENCE,	"escapesequence",	FALSE }
 };
 static const HLKeyword highlighting_keywords_R[] =
 {
