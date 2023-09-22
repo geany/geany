@@ -695,7 +695,8 @@ static const HLStyle highlighting_styles_GDSCRIPT[] =
 	{ SCE_GD_COMMENTBLOCK,	"commentblock",		FALSE },
 	{ SCE_GD_STRINGEOL,		"stringeol",		FALSE },
 	{ SCE_GD_WORD2,			"word2",			FALSE },
-	{ SCE_GD_ANNOTATION,	"annotation",		FALSE }
+	{ SCE_GD_ANNOTATION,	"annotation",		FALSE },
+	{ SCE_GD_NODEPATH,		"notepath",			FALSE }
 };
 static const HLKeyword highlighting_keywords_GDSCRIPT[] =
 {
