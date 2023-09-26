@@ -4908,6 +4908,7 @@
                                     <property name="tooltip-text" translatable="yes">Path (and possibly additional arguments) to your favorite browser</property>
                                     <property name="primary-icon-activatable">False</property>
                                     <property name="secondary-icon-activatable">False</property>
+                                    <property name="placeholder-text" translatable="yes">System default</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
