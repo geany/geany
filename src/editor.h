@@ -140,6 +140,8 @@ typedef struct GeanyEditorPrefs
 	gint		scroll_lines_around_cursor;
 	gint		ime_interaction; /* input method editor's candidate window behaviour */
 	gboolean	show_line_endings_only_when_differ;
+	gboolean	change_history_markers;
+	gboolean	change_history_indicators;
 }
 GeanyEditorPrefs;
 
