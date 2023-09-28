@@ -3012,7 +3012,7 @@ division by zero, constant conditions, etc. Linters inspect the code and
 issue warnings much like the compilers do. This is formally referred to as
 static code analysis.
 
-Some common linters are pre-configured for you in the Build menu (``pep8``
+Some common linters are pre-configured for you in the Build menu (``pycodestyle``
 for Python, ``cppcheck`` for C/C++, JSHint for JavaScript, ``xmllint`` for
 XML, ``hlint`` for Haskell, ``shellcheck`` for shell code, ...), but all
 these are standalone tools you need to obtain before using.
