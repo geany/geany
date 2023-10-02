@@ -711,16 +711,16 @@ static void insert_date(GeanyDocument *doc, gint pos, const gchar *date_style)
 
 	if (utils_str_equal(_("dd.mm.yyyy"), date_style))
 		format = "%d.%m.%Y";
-	else if (utils_str_equal(_("mm.dd.yyyy"), date_style))
-		format = "%m.%d.%Y";
-	else if (utils_str_equal(_("yyyy/mm/dd"), date_style))
-		format = "%Y/%m/%d";
+	else if (utils_str_equal(_("mm/dd/yyyy"), date_style))
+		format = "%m/%d/%Y";
+	else if (utils_str_equal(_("yyyy-mm-dd"), date_style))
+		format = "%Y-%m-%d";
 	else if (utils_str_equal(_("dd.mm.yyyy hh:mm:ss"), date_style))
 		format = "%d.%m.%Y %H:%M:%S";
-	else if (utils_str_equal(_("mm.dd.yyyy hh:mm:ss"), date_style))
-		format = "%m.%d.%Y %H:%M:%S";
-	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), date_style))
-		format = "%Y/%m/%d %H:%M:%S";
+	else if (utils_str_equal(_("mm/dd/yyyy hh:mm:ss"), date_style))
+		format = "%m/%d/%Y %H:%M:%S";
+	else if (utils_str_equal(_("yyyy-mm-dd hh:mm:ss"), date_style))
+		format = "%Y-%m-%d %H:%M:%S";
 	else if (utils_str_equal(_("_Use Custom Date Format"), date_style))
 		format = ui_prefs.custom_date_format;
 	else
@@ -788,8 +788,8 @@ void ui_create_insert_date_menu_items(void)
 	gchar *str;
 
 	insert_date_items(menu_edit, menu_popup, _("dd.mm.yyyy"));
-	insert_date_items(menu_edit, menu_popup, _("mm.dd.yyyy"));
-	insert_date_items(menu_edit, menu_popup, _("yyyy/mm/dd"));
+	insert_date_items(menu_edit, menu_popup, _("mm/dd/yyyy"));
+	insert_date_items(menu_edit, menu_popup, _("yyyy-mm-dd"));
 
 	item = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
@@ -799,8 +799,8 @@ void ui_create_insert_date_menu_items(void)
 	gtk_widget_show(item);
 
 	insert_date_items(menu_edit, menu_popup, _("dd.mm.yyyy hh:mm:ss"));
-	insert_date_items(menu_edit, menu_popup, _("mm.dd.yyyy hh:mm:ss"));
-	insert_date_items(menu_edit, menu_popup, _("yyyy/mm/dd hh:mm:ss"));
+	insert_date_items(menu_edit, menu_popup, _("mm/dd/yyyy hh:mm:ss"));
+	insert_date_items(menu_edit, menu_popup, _("yyyy-mm-dd hh:mm:ss"));
 
 	item = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu_edit), item);
