@@ -1,4 +1,4 @@
-Geany 1.39 (unreleased)
+Geany 2.0 (unreleased)
     Interface
     * The document list in the sidebar has a new tree view. This mode is the
       new default and existing installations automatically use it (PR#1813).
