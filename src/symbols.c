@@ -44,6 +44,7 @@
 #include "filetypesprivate.h"
 #include "geanyobject.h"
 #include "highlighting.h"
+#include "lsp.h"
 #include "main.h"
 #include "navqueue.h"
 #include "sciwrappers.h"
@@ -1688,6 +1689,14 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 
 gboolean symbols_goto_tag(const gchar *name, gboolean definition)
 {
+	GeanyDocument *doc = document_get_current();
+
+	if (lsp_goto_available(doc))
+	{
+		lsp_goto_perform(doc, definition);
+		return TRUE;
+	}
+
 	if (goto_tag(name, definition))
 		return TRUE;
 

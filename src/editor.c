@@ -45,6 +45,7 @@
 #include "geanyobject.h"
 #include "highlighting.h"
 #include "keybindings.h"
+#include "lsp.h"
 #include "main.h"
 #include "prefs.h"
 #include "projectprivate.h"
@@ -671,8 +672,12 @@ static gboolean reshow_calltip(gpointer data)
 
 	g_return_val_if_fail(calltip.sci != NULL, FALSE);
 
-	SSM(calltip.sci, SCI_CALLTIPCANCEL, 0, 0);
 	doc = document_get_current();
+
+	if (lsp_calltips_available(doc))
+		return FALSE;
+
+	SSM(calltip.sci, SCI_CALLTIPCANCEL, 0, 0);
 
 	if (doc && doc->editor->sci == calltip.sci)
 	{
@@ -821,13 +826,15 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case '(':
 		{
 			auto_close_chars(sci, pos, nt->ch);
-			/* show calltips */
-			editor_show_calltip(editor, --pos);
+			if (!lsp_calltips_available(editor->document))
+				/* show calltips */
+				editor_show_calltip(editor, --pos);
 			break;
 		}
 		case ')':
 		{	/* hide calltips */
-			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0))
+			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0) &&
+				!lsp_calltips_available(editor->document))
 			{
 				SSM(sci, SCI_CALLTIPCANCEL, 0, 0);
 			}
@@ -857,13 +864,15 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case ':':	/* C/C++ class:: syntax */
 		/* tag autocompletion */
 		default:
-#if 0
-			if (! editor_start_auto_complete(editor, pos, FALSE))
-				request_reshowing_calltip(nt);
-#else
 			editor_start_auto_complete(editor, pos, FALSE);
-#endif
 	}
+
+	if (lsp_calltips_available(editor->document))
+		lsp_calltips_show(editor->document);
+
+	if (lsp_autocomplete_available(editor->document))
+		lsp_autocomplete_perform(editor->document);
+
 	check_line_breaking(editor, pos);
 }
 
@@ -1171,7 +1180,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
 		case SCN_CALLTIPCLICK:
-			if (nt->position > 0)
+			if (!lsp_calltips_available(doc) && nt->position > 0)
 			{
 				switch (nt->position)
 				{
@@ -2221,6 +2230,9 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	GeanyFiletype *ft;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
+
+	if (lsp_autocomplete_available(editor->document))
+		return FALSE;
 
 	if (! editor_prefs.auto_complete_symbols && ! force)
 		return FALSE;
