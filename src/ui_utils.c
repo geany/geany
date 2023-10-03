@@ -704,7 +704,7 @@ static void insert_date(GeanyDocument *doc, gint pos, const gchar *date_style)
 	if (utils_str_equal("", ui_prefs.custom_date_format))
 	{
 		g_free(ui_prefs.custom_date_format);
-		ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
+		ui_prefs.custom_date_format = g_strdup("%Y-%m-%d");
 	}
 
 	if (utils_str_equal(_("yyyy-mm-dd"), date_style))
