@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
-"POT-Creation-Date: 2023-10-03 19:55+0200\n"
+"POT-Creation-Date: 2023-10-04 23:48+0200\n"
 "PO-Revision-Date: 2021-07-26 18:27+0200\n"
 "Last-Translator: Robin van der Vliet <info@robinvandervliet.com>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
 
-#: geany.desktop.in:5 data/geany.glade:6393
+#: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
 msgstr "Geany"
 
@@ -46,11 +46,11 @@ msgstr "_Werkbalkvoorkeuren"
 msgid "_Hide Toolbar"
 msgstr "Werkbalk _verbergen"
 
-#: data/geany.glade:305 data/geany.glade:6651
+#: data/geany.glade:305 data/geany.glade:6714
 msgid "_Edit"
 msgstr "Be_werken"
 
-#: data/geany.glade:313 data/geany.glade:6866
+#: data/geany.glade:313 data/geany.glade:6929
 msgid "_Format"
 msgstr "Inde_ling"
 
@@ -58,69 +58,69 @@ msgstr "Inde_ling"
 msgid "I_nsert"
 msgstr "I_nvoegen"
 
-#: data/geany.glade:332 data/geany.glade:7019
+#: data/geany.glade:332 data/geany.glade:7082
 msgid "Insert _ChangeLog Entry"
 msgstr "_Logboekitem (ChangeLog) invoegen"
 
-#: data/geany.glade:341 data/geany.glade:7028
+#: data/geany.glade:341 data/geany.glade:7091
 msgid "Insert _Function Description"
 msgstr "_Functieomschrijving invoegen"
 
-#: data/geany.glade:350 data/geany.glade:7037
+#: data/geany.glade:350 data/geany.glade:7100
 msgid "Insert Mu_ltiline Comment"
 msgstr "_Meerregelig commentaar invoegen"
 
-#: data/geany.glade:357 data/geany.glade:7304
+#: data/geany.glade:357 data/geany.glade:7367
 msgid "_More"
 msgstr "_Meer"
 
-#: data/geany.glade:370 data/geany.glade:7052
+#: data/geany.glade:370 data/geany.glade:7115
 msgid "Insert File _Header"
 msgstr "Bestands_hoofd invoegen"
 
-#: data/geany.glade:379 data/geany.glade:7061
+#: data/geany.glade:379 data/geany.glade:7124
 msgid "Insert _GPL Notice"
 msgstr "_GPL-informatie invoegen"
 
-#: data/geany.glade:388 data/geany.glade:7070
+#: data/geany.glade:388 data/geany.glade:7133
 msgid "Insert _BSD License Notice"
 msgstr "_BSD-licentie-informatie invoegen"
 
-#: data/geany.glade:405 data/geany.glade:7081
+#: data/geany.glade:405 data/geany.glade:7144
 msgid "Insert Dat_e"
 msgstr "_Datum invoegen"
 
-#: data/geany.glade:417 data/geany.glade:439 data/geany.glade:6539
-#: data/geany.glade:6986 data/geany.glade:7093 data/geany.glade:7115
-#: data/geany.glade:7822 data/geany.glade:7842
+#: data/geany.glade:417 data/geany.glade:439 data/geany.glade:6602
+#: data/geany.glade:7049 data/geany.glade:7156 data/geany.glade:7178
+#: data/geany.glade:7885 data/geany.glade:7905
 msgid "invisible"
 msgstr "onzichtbaar"
 
-#: data/geany.glade:427 data/geany.glade:7103
+#: data/geany.glade:427 data/geany.glade:7166
 msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" _invoegen"
 
-#: data/geany.glade:457 data/geany.glade:7127 src/keybindings.c:516
+#: data/geany.glade:457 data/geany.glade:7190 src/keybindings.c:516
 msgid "Insert Alternative _White Space"
 msgstr "Alternatieve _witruimte invoegen"
 
-#: data/geany.glade:470 data/geany.glade:7168
+#: data/geany.glade:470 data/geany.glade:7231
 msgid "_Search"
 msgstr "_Zoeken"
 
-#: data/geany.glade:482 data/geany.glade:6463
+#: data/geany.glade:482 data/geany.glade:6526
 msgid "Open Selected F_ile"
 msgstr "Gesele_cteerd bestand openen"
 
-#: data/geany.glade:493 data/geany.glade:7337 src/symbols.c:2205
+#: data/geany.glade:493 data/geany.glade:7400 src/symbols.c:2205
 msgid "Find _Usage"
 msgstr "_Woord zoeken"
 
-#: data/geany.glade:504 data/geany.glade:7346 src/symbols.c:2210
+#: data/geany.glade:504 data/geany.glade:7409 src/symbols.c:2210
 msgid "Find _Document Usage"
 msgstr "Woord zoeken in _document"
 
-#: data/geany.glade:515 data/geany.glade:7376
+#: data/geany.glade:515 data/geany.glade:7439
 msgid "Go to Symbol Defini_tion"
 msgstr "Ga naar symbooldefinitie"
 
@@ -324,7 +324,7 @@ msgstr ""
 "Bepaalt of de dialogen die eigen zijn aan Windows of de standaard GTK-"
 "dialogen gebruikt worden"
 
-#: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4791
+#: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4854
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Varia</b>"
 
@@ -628,11 +628,11 @@ msgstr "<b>Werkbalk</b>"
 msgid "Toolbar"
 msgstr "Werkbalk"
 
-#: data/geany.glade:2852 data/geany.glade:9108
+#: data/geany.glade:2852 data/geany.glade:9171
 msgid "Line wrapping"
 msgstr "Regelterugloop"
 
-#: data/geany.glade:2856 data/geany.glade:9112
+#: data/geany.glade:2856 data/geany.glade:9175
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -712,7 +712,7 @@ msgstr ""
 "Staat Enter toe om witruimte (tabs en spaties) aan het einde van de vorige "
 "regel te verwijderen"
 
-#: data/geany.glade:2970 data/geany.glade:9131
+#: data/geany.glade:2970 data/geany.glade:9194
 msgid "Line breaking column:"
 msgstr "Afbreekkolom:"
 
@@ -729,7 +729,7 @@ msgstr ""
 "in een bronbestand. Deze wordt gebruikt om het actieve commentaar te "
 "markeren."
 
-#: data/geany.glade:3049 data/geany.glade:9174
+#: data/geany.glade:3049 data/geany.glade:9237
 msgid "<b>Features</b>"
 msgstr "<b>Functies</b>"
 
@@ -737,7 +737,7 @@ msgstr "<b>Functies</b>"
 msgid "Features"
 msgstr "Functies"
 
-#: data/geany.glade:3096 data/geany.glade:8872
+#: data/geany.glade:3096 data/geany.glade:8935
 msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
@@ -745,25 +745,25 @@ msgstr ""
 "Opmerking: Om deze instellingen bij alle huidige geopende documenten toe te "
 "passen, gebruik <i>Project->Standaard inspringinstellingen</i>."
 
-#: data/geany.glade:3146 data/geany.glade:8888
+#: data/geany.glade:3146 data/geany.glade:8951
 #, fuzzy
 msgid "_Width:"
 msgstr "Breedte:"
 
-#: data/geany.glade:3160 data/geany.glade:8904
+#: data/geany.glade:3160 data/geany.glade:8967
 msgid "The width in chars of a single indent"
 msgstr "De breedte in tekens van een inspringing"
 
-#: data/geany.glade:3179 data/geany.glade:8925
+#: data/geany.glade:3179 data/geany.glade:8988
 #, fuzzy
 msgid "Auto-indent _mode:"
 msgstr "Automatische inspringingsmodus:"
 
-#: data/geany.glade:3214 data/geany.glade:8960
+#: data/geany.glade:3214 data/geany.glade:9023
 msgid "Detect type from file"
 msgstr "Detecteer type uit bestand"
 
-#: data/geany.glade:3218 data/geany.glade:8964
+#: data/geany.glade:3218 data/geany.glade:9027
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
@@ -771,38 +771,38 @@ msgstr ""
 "Of het inspringingstype van het bestand gedetecteerd moet worden als het is "
 "geopend"
 
-#: data/geany.glade:3233 data/geany.glade:8979
+#: data/geany.glade:3233 data/geany.glade:9042
 msgid "T_abs and spaces"
 msgstr "T_abs en spaties"
 
-#: data/geany.glade:3237 data/geany.glade:8983
+#: data/geany.glade:3237 data/geany.glade:9046
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
 "Gebruik spaties als de inspringing kleiner is dan een tabbreedte, gebruik "
 "anders beide"
 
-#: data/geany.glade:3252 data/geany.glade:7652 data/geany.glade:8998
+#: data/geany.glade:3252 data/geany.glade:7715 data/geany.glade:9061
 msgid "_Spaces"
 msgstr "_Spaties"
 
-#: data/geany.glade:3256 data/geany.glade:9002
+#: data/geany.glade:3256 data/geany.glade:9065
 msgid "Use spaces when inserting indentation"
 msgstr "Voeg spaties toe bij inspringen"
 
-#: data/geany.glade:3272 data/geany.glade:7642 data/geany.glade:9018
+#: data/geany.glade:3272 data/geany.glade:7705 data/geany.glade:9081
 msgid "_Tabs"
 msgstr "_Tabs"
 
-#: data/geany.glade:3276 data/geany.glade:9022
+#: data/geany.glade:3276 data/geany.glade:9085
 msgid "Use one tab per indent"
 msgstr "Gebruik enkele inspringing"
 
-#: data/geany.glade:3292 data/geany.glade:9052
+#: data/geany.glade:3292 data/geany.glade:9115
 msgid "Detect width from file"
 msgstr "Breedte uit bestand afleiden"
 
-#: data/geany.glade:3296 data/geany.glade:9056
+#: data/geany.glade:3296 data/geany.glade:9119
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
@@ -810,8 +810,8 @@ msgstr ""
 "Of het inspringingstype uit de inhoud van het bestand gedetecteerd moet "
 "worden wanneer het geopend wordt"
 
-#: data/geany.glade:3313 data/geany.glade:4082 data/geany.glade:9040
-#: data/geany.glade:9615
+#: data/geany.glade:3313 data/geany.glade:4082 data/geany.glade:9103
+#: data/geany.glade:9678
 msgid "Type:"
 msgstr "Type:"
 
@@ -841,7 +841,7 @@ msgstr ""
 msgid "<b>Indentation</b>"
 msgstr "<b>Inspringing</b>"
 
-#: data/geany.glade:3390 data/geany.glade:9078
+#: data/geany.glade:3390 data/geany.glade:9141
 msgid "Indentation"
 msgstr "Inspringing"
 
@@ -865,11 +865,11 @@ msgstr "Automatische XML/HTML-tag voltooiing"
 msgid "Insert matching closing tag for XML/HTML"
 msgstr "Voeg automatisch XML/HTML-sluithaakje toe"
 
-#: data/geany.glade:3452 data/geany.glade:9198
+#: data/geany.glade:3452 data/geany.glade:9261
 msgid "Automatic continuation of multi-line comments"
 msgstr "Automatisch doorgaan met multiregelcommentaar"
 
-#: data/geany.glade:3456 data/geany.glade:9202
+#: data/geany.glade:3456 data/geany.glade:9265
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
@@ -939,7 +939,7 @@ msgstr ""
 "beïnvloeden, zeker bij grote bestanden. Een vertraging van 0 schakelt de "
 "directe updates uit."
 
-#: data/geany.glade:3667 data/geany.glade:9213
+#: data/geany.glade:3667 data/geany.glade:9276
 msgid "<b>Completions</b>"
 msgstr "<b>Automatisch voltooien</b>"
 
@@ -1077,7 +1077,7 @@ msgstr "Regels zichtbaar _rondom de cursor:"
 msgid "<b>Display</b>"
 msgstr "<b>Weergave</b>"
 
-#: data/geany.glade:4052 data/geany.glade:9265
+#: data/geany.glade:4052 data/geany.glade:9328
 msgid "Column:"
 msgstr "Kolom:"
 
@@ -1089,7 +1089,7 @@ msgstr "Kleur:"
 msgid "Sets the color of the long line marker"
 msgstr "Stelt de kleur van de 'lange regel' marker in"
 
-#: data/geany.glade:4099 data/geany.glade:5990 data/geany.glade:6007
+#: data/geany.glade:4099 data/geany.glade:6053 data/geany.glade:6070
 #: src/toolbar.c:73 src/tools.c:835
 msgid "Color Chooser"
 msgstr "Kleurkiezer"
@@ -1135,11 +1135,11 @@ msgstr ""
 msgid "Enabled"
 msgstr "Aang_ezet"
 
-#: data/geany.glade:4202 data/geany.glade:9358
+#: data/geany.glade:4202 data/geany.glade:9421
 msgid "<b>Long line marker</b>"
 msgstr "<b>Lange regel marker</b>"
 
-#: data/geany.glade:4230 data/geany.glade:9278
+#: data/geany.glade:4230 data/geany.glade:9341
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
@@ -1171,46 +1171,61 @@ msgstr "Laat virtuele spaties aan regeleinden altijd zien"
 msgid "<b>Virtual spaces</b>"
 msgstr "<b>Virtuele spaties</b>"
 
-#: data/geany.glade:4306
+#: data/geany.glade:4315
+#, fuzzy
+msgid "Show in markers margin"
+msgstr "Markeerrand weergeven"
+
+#: data/geany.glade:4329
+#, fuzzy
+msgid "Show as underline indicators"
+msgstr "Toont het regeleindeteken"
+
+#: data/geany.glade:4349
+#, fuzzy
+msgid "<b>Change History</b>"
+msgstr "<b>Gewijzigd:</b>"
+
+#: data/geany.glade:4369
 msgid "Display"
 msgstr "Weergave"
 
-#: data/geany.glade:4322 data/geany.glade:9378 src/keybindings.c:310
+#: data/geany.glade:4385 data/geany.glade:9441 src/keybindings.c:310
 #: src/prefs.c:1619
 msgid "Editor"
 msgstr "Editor"
 
-#: data/geany.glade:4357
+#: data/geany.glade:4420
 msgid "Open new documents from the command-line"
 msgstr "Nieuwe bestanden van de opdrachtregel openen"
 
-#: data/geany.glade:4361
+#: data/geany.glade:4424
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
 "Maakt een nieuw bestand aan voor elke op de opdrachtregel meegegeven niet-"
 "bestaande bestandsnaam"
 
-#: data/geany.glade:4401
+#: data/geany.glade:4464
 msgid "Default end of line characters:"
 msgstr "Standaard regeleindetekens:"
 
-#: data/geany.glade:4432
+#: data/geany.glade:4495
 msgid "<b>New files</b>"
 msgstr "<b>Nieuwe bestanden</b>"
 
-#: data/geany.glade:4467
+#: data/geany.glade:4530
 msgid "Default encoding (new files):"
 msgstr "Standaard codering (van nieuwe bestanden):"
 
-#: data/geany.glade:4481
+#: data/geany.glade:4544
 msgid "Sets the default encoding for newly created files"
 msgstr "Stelt de standaard codering in voor nieuw aangemaakte bestanden"
 
-#: data/geany.glade:4507
+#: data/geany.glade:4570
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Vaste codering gebruiken bij het openen van niet-Unicode bestanden"
 
-#: data/geany.glade:4511
+#: data/geany.glade:4574
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
@@ -1220,33 +1235,33 @@ msgstr ""
 "bij het openen van niet-Unicode bestanden en opent het bestand met de "
 "opgegeven codering (is meestal niet nodig)."
 
-#: data/geany.glade:4529
+#: data/geany.glade:4592
 msgid "Default encoding (existing non-Unicode files):"
 msgstr "Standaard codering (van bestaande niet-Unicode bestanden):"
 
-#: data/geany.glade:4543
+#: data/geany.glade:4606
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr ""
 "Stelt de standaard codering in voor het openen van niet-Unicode bestanden"
 
-#: data/geany.glade:4575
+#: data/geany.glade:4638
 msgid "<b>Encodings</b>"
 msgstr "<b>Coderingen</b>"
 
-#: data/geany.glade:4603 data/geany.glade:9408
+#: data/geany.glade:4666 data/geany.glade:9471
 msgid "Ensure new line at file end"
 msgstr "Nieuwe regel aan einde van het bestand"
 
-#: data/geany.glade:4607
+#: data/geany.glade:4670
 msgid "Ensures that at the end of the file is a new line"
 msgstr ""
 "Voegt aan het einde van het bestand een nieuwe regel toe als er nog geen is"
 
-#: data/geany.glade:4619 data/geany.glade:9423
+#: data/geany.glade:4682 data/geany.glade:9486
 msgid "Ensure consistent line endings"
 msgstr "Voor consistente regeleinden zorgen"
 
-#: data/geany.glade:4623
+#: data/geany.glade:4686
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
@@ -1255,41 +1270,41 @@ msgstr ""
 "wegschrijven, om verschillende soorten regeleindes in hetzelfde bestand te "
 "vermijden"
 
-#: data/geany.glade:4635 data/geany.glade:9438
+#: data/geany.glade:4698 data/geany.glade:9501
 msgid "Strip trailing spaces and tabs"
 msgstr "Witruimte aan regeleinden verwijderen"
 
-#: data/geany.glade:4639
+#: data/geany.glade:4702
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Verwijdert witruimte (spaties en tabs) aan regeleinden"
 
-#: data/geany.glade:4651 data/geany.glade:9453 src/keybindings.c:673
+#: data/geany.glade:4714 data/geany.glade:9516 src/keybindings.c:673
 msgid "Replace tabs with space"
 msgstr "Tabs door spaties vervangen"
 
-#: data/geany.glade:4655
+#: data/geany.glade:4718
 msgid "Replaces all tabs in document with spaces"
 msgstr "Vervangt alle tabs in het document door spaties"
 
-#: data/geany.glade:4673 data/geany.glade:9474
+#: data/geany.glade:4736 data/geany.glade:9537
 msgid "<b>Saving files</b>"
 msgstr "<b>Bij opslaan van bestanden</b>"
 
-#: data/geany.glade:4712
+#: data/geany.glade:4775
 msgid "Recent files list length:"
 msgstr "Lengte van 'laatst geopende bestanden'-lijst:"
 
-#: data/geany.glade:4725
+#: data/geany.glade:4788
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr ""
 "Specificeert het aantal bestanden dat opgeslagen wordt in de 'laatst "
 "geopende bestanden'-lijst"
 
-#: data/geany.glade:4744
+#: data/geany.glade:4807
 msgid "Disk check timeout:"
 msgstr "Time-out van disk:"
 
-#: data/geany.glade:4759
+#: data/geany.glade:4822
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
@@ -1297,20 +1312,20 @@ msgstr ""
 "Hoe vaak er naar veranderingen van documenten op de schijf gekeken moet "
 "worden, uitgedrukt in seconden. Nul zet de controle uit."
 
-#: data/geany.glade:4811 data/geany.glade:9494 src/prefs.c:1621
+#: data/geany.glade:4874 data/geany.glade:9557 src/prefs.c:1621
 #: src/tagmanager/tm_parser.c:456 plugins/filebrowser.c:1167
 msgid "Files"
 msgstr "Bestanden"
 
-#: data/geany.glade:4866
+#: data/geany.glade:4929
 msgid "Terminal:"
 msgstr "Terminal:"
 
-#: data/geany.glade:4879
+#: data/geany.glade:4942
 msgid "Browser:"
 msgstr "Browser:"
 
-#: data/geany.glade:4894
+#: data/geany.glade:4957
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
@@ -1318,28 +1333,28 @@ msgstr ""
 "Een terminalemulatorcommando (%c wordt vervangen door het Geany runscript "
 "bestandsnaam)"
 
-#: data/geany.glade:4908
+#: data/geany.glade:4971
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Pad (en mogelijke bijkomende argumenten)"
 
-#: data/geany.glade:4911
+#: data/geany.glade:4974
 #, fuzzy
 msgid "System default"
 msgstr "S_ysteem standaard"
 
-#: data/geany.glade:4967
+#: data/geany.glade:5030
 msgid "Grep:"
 msgstr "Grep:"
 
-#: data/geany.glade:5030
+#: data/geany.glade:5093
 msgid "<b>Tool paths</b>"
 msgstr "<b>Paden van hulpprogramma's</b>"
 
-#: data/geany.glade:5063
+#: data/geany.glade:5126
 msgid "Context action:"
 msgstr "Contextactie:"
 
-#: data/geany.glade:5075
+#: data/geany.glade:5138
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
 "can appear anywhere in the given command and will be replaced before "
@@ -1348,67 +1363,67 @@ msgstr ""
 "Contextactie-commando. Het geselecteerde woord kan gebruikt worden met %s. "
 "Het kan overal in het commando zitten en wordt vervangen voor uitvoering."
 
-#: data/geany.glade:5114
+#: data/geany.glade:5177
 msgid "<b>Commands</b>"
 msgstr "<b>Commando's</b>"
 
-#: data/geany.glade:5134 src/keybindings.c:322 src/prefs.c:1623
+#: data/geany.glade:5197 src/keybindings.c:322 src/prefs.c:1623
 msgid "Tools"
 msgstr "Hulpprogramma's"
 
-#: data/geany.glade:5189
+#: data/geany.glade:5252
 msgid "Email address of the developer"
 msgstr "E-mailadres van de ontwikkelaar"
 
-#: data/geany.glade:5205
+#: data/geany.glade:5268
 msgid "Initials of the developer name"
 msgstr "Initialen van de ontwikkelaar"
 
-#: data/geany.glade:5221
+#: data/geany.glade:5284
 msgid "Initial version:"
 msgstr "Beginversie:"
 
-#: data/geany.glade:5236
+#: data/geany.glade:5299
 msgid "Version number, which a new file initially has"
 msgstr "Versienummer dat een nieuw bestand in het begin heeft"
 
-#: data/geany.glade:5252
+#: data/geany.glade:5315
 msgid "Company name"
 msgstr "Bedrijfsnaam"
 
-#: data/geany.glade:5268
+#: data/geany.glade:5331
 msgid "Developer:"
 msgstr "Ontwikkelaar:"
 
-#: data/geany.glade:5281
+#: data/geany.glade:5344
 msgid "Company:"
 msgstr "Bedrijf:"
 
-#: data/geany.glade:5296
+#: data/geany.glade:5359
 msgid "Mail address:"
 msgstr "E-mailadres:"
 
-#: data/geany.glade:5311
+#: data/geany.glade:5374
 msgid "Initials:"
 msgstr "Initialen:"
 
-#: data/geany.glade:5326
+#: data/geany.glade:5389
 msgid "The name of the developer"
 msgstr "De naam van de ontwikkelaar"
 
-#: data/geany.glade:5340
+#: data/geany.glade:5403
 msgid "Year:"
 msgstr "Jaar:"
 
-#: data/geany.glade:5355
+#: data/geany.glade:5418
 msgid "Date:"
 msgstr "Datum:"
 
-#: data/geany.glade:5370
+#: data/geany.glade:5433
 msgid "Date & time:"
 msgstr "Datum en tijd:"
 
-#: data/geany.glade:5385
+#: data/geany.glade:5448
 #, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
@@ -1419,7 +1434,7 @@ msgstr ""
 "maken van elke conversie specifieerder die beschikbaar is voor de ANSI C "
 "strftime functie."
 
-#: data/geany.glade:5401
+#: data/geany.glade:5464
 #, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
@@ -1429,7 +1444,7 @@ msgstr ""
 "maken van elke conversie specifieerder die beschikbaar is voor de ANSI C "
 "strftime functie."
 
-#: data/geany.glade:5417
+#: data/geany.glade:5480
 #, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
@@ -1439,64 +1454,64 @@ msgstr ""
 "maken van elke conversie specifieerder die beschikbaar is voor de ANSI C "
 "strftime functie."
 
-#: data/geany.glade:5444
+#: data/geany.glade:5507
 msgid "<b>Template data</b>"
 msgstr "<b>Sjablooninformatie</b>"
 
-#: data/geany.glade:5464 src/prefs.c:1625
+#: data/geany.glade:5527 src/prefs.c:1625
 msgid "Templates"
 msgstr "Sjablonen"
 
-#: data/geany.glade:5532
+#: data/geany.glade:5595
 msgid "C_hange"
 msgstr "_Wijzigen"
 
-#: data/geany.glade:5554
+#: data/geany.glade:5617
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Sneltoetsen</b>"
 
-#: data/geany.glade:5567 src/plugins.c:1900 src/plugins.c:1937 src/prefs.c:1627
+#: data/geany.glade:5630 src/plugins.c:1900 src/plugins.c:1937 src/prefs.c:1627
 msgid "Keybindings"
 msgstr "Sneltoetsen"
 
-#: data/geany.glade:5611
+#: data/geany.glade:5674
 msgid "Command:"
 msgstr "Commando:"
 
-#: data/geany.glade:5624
+#: data/geany.glade:5687
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr ""
 "Pad naar het commando om bestanden mee af te drukken (gebruik %f voor de "
 "bestandsnaam)"
 
-#: data/geany.glade:5659
+#: data/geany.glade:5722
 msgid "Use an external command for printing"
 msgstr "Een extern commando gebruiken om mee af te drukken"
 
-#: data/geany.glade:5691 src/printing.c:237
+#: data/geany.glade:5754 src/printing.c:237
 msgid "Print line numbers"
 msgstr "Regelnummers afdrukken"
 
-#: data/geany.glade:5695 src/printing.c:239
+#: data/geany.glade:5758 src/printing.c:239
 msgid "Add line numbers to the printed page"
 msgstr "Voegt regelnummers toe in de afgedrukte pagina"
 
-#: data/geany.glade:5707 src/printing.c:242
+#: data/geany.glade:5770 src/printing.c:242
 msgid "Print page numbers"
 msgstr "Paginanummers afdrukken"
 
-#: data/geany.glade:5711 src/printing.c:244
+#: data/geany.glade:5774 src/printing.c:244
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
 "Voegt paginanummers toe aan de onderkant van elke pagina. Kost 2 regels per "
 "pagina."
 
-#: data/geany.glade:5723 src/printing.c:247
+#: data/geany.glade:5786 src/printing.c:247
 msgid "Print page header"
 msgstr "Paginahoofd afdrukken"
 
-#: data/geany.glade:5727 src/printing.c:249
+#: data/geany.glade:5790 src/printing.c:249
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
@@ -1504,19 +1519,19 @@ msgstr ""
 "Voegt een klein paginahoofd toe aan elke pagina, met het paginanummer, de "
 "bestandsnaam en de huidige datum (zie hieronder). Kost 3 regels per pagina."
 
-#: data/geany.glade:5757 src/printing.c:265
+#: data/geany.glade:5820 src/printing.c:265
 msgid "Use the basename of the printed file"
 msgstr "De basisnaam van het af te drukken bestand gebruiken"
 
-#: data/geany.glade:5761
+#: data/geany.glade:5824
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Drukt alleen de naam van het bestand af (zonder het pad)"
 
-#: data/geany.glade:5780 src/printing.c:273
+#: data/geany.glade:5843 src/printing.c:273
 msgid "Date format:"
 msgstr "Datumopmaak:"
 
-#: data/geany.glade:5793 src/printing.c:279
+#: data/geany.glade:5856 src/printing.c:279
 #, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
@@ -1527,106 +1542,106 @@ msgstr ""
 "kop van elke pagina. U kunt gebruik maken van elke conversie-specificatie "
 "die beschikbaar is voor de ANSI C strftime()-functie."
 
-#: data/geany.glade:5828
+#: data/geany.glade:5891
 msgid "Use native GTK printing"
 msgstr "Standaard GTK-afdrukken gebruiken"
 
-#: data/geany.glade:5852
+#: data/geany.glade:5915
 msgid "<b>Printing</b>"
 msgstr "<b>Afdrukken</b>"
 
-#: data/geany.glade:5865 src/prefs.c:1629
+#: data/geany.glade:5928 src/prefs.c:1629
 msgid "Printing"
 msgstr "Afdrukken"
 
-#: data/geany.glade:5900
+#: data/geany.glade:5963
 msgid "Font:"
 msgstr "Lettertype:"
 
-#: data/geany.glade:5914
+#: data/geany.glade:5977
 msgid "Sets the font for the terminal widget"
 msgstr "Stelt het lettertype in voor de terminal"
 
-#: data/geany.glade:5916
+#: data/geany.glade:5979
 msgid "Choose Terminal Font"
 msgstr "Kies lettertype voor terminalvenster"
 
-#: data/geany.glade:5928
+#: data/geany.glade:5991
 msgid "Foreground color:"
 msgstr "Letterkleur:"
 
-#: data/geany.glade:5943
+#: data/geany.glade:6006
 msgid "Background color:"
 msgstr "Achtergrondkleur:"
 
-#: data/geany.glade:5958
+#: data/geany.glade:6021
 msgid "Scrollback lines:"
 msgstr "Aantal regels:"
 
-#: data/geany.glade:5973
+#: data/geany.glade:6036
 msgid "Shell:"
 msgstr "Shell:"
 
-#: data/geany.glade:5989
+#: data/geany.glade:6052
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Stelt de letterkleur in van de de tekst in de terminal"
 
-#: data/geany.glade:6006
+#: data/geany.glade:6069
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Stelt de achtergrondkleur in van de tekst in de terminal"
 
-#: data/geany.glade:6022
+#: data/geany.glade:6085
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr "Stelt het aantal regels in die u terug kunt schuiven in de terminal"
 
-#: data/geany.glade:6042
+#: data/geany.glade:6105
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr "Stelt het pad in naar de shell die moet worden gestart in de terminal"
 
-#: data/geany.glade:6091
+#: data/geany.glade:6154
 msgid "Scroll on keystroke"
 msgstr "Schuiven bij toetsaanslag"
 
-#: data/geany.glade:6095
+#: data/geany.glade:6158
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr ""
 "Of de terminal naar beneden moet schuiven als er een toets werd ingedrukt"
 
-#: data/geany.glade:6106
+#: data/geany.glade:6169
 msgid "Scroll on output"
 msgstr "Schuiven bij uitvoer"
 
-#: data/geany.glade:6110
+#: data/geany.glade:6173
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr ""
 "Of de terminal naar beneden moet schuiven als er uitvoer is geproduceert"
 
-#: data/geany.glade:6121
+#: data/geany.glade:6184
 msgid "Cursor blinks"
 msgstr "Knipperende cursor"
 
-#: data/geany.glade:6125
+#: data/geany.glade:6188
 msgid "Whether to blink the cursor"
 msgstr "Of de cursor moet knipperen"
 
-#: data/geany.glade:6136
+#: data/geany.glade:6199
 msgid "Override Geany keybindings"
 msgstr "Geany's toetsbindingen overschrijven"
 
-#: data/geany.glade:6140
+#: data/geany.glade:6203
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr "Laat de terminal sneltoetsen krijgen (op focuscommando's na)."
 
-#: data/geany.glade:6151
+#: data/geany.glade:6214
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Menusneltoets uitschakelen (standaard: F10)"
 
-#: data/geany.glade:6155
+#: data/geany.glade:6218
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -1636,21 +1651,21 @@ msgstr ""
 "brengen (standaard: F10). Dit kan nuttig zijn als u bijvoorbeeld Midnight "
 "Commander gebruikt binnen de VTE."
 
-#: data/geany.glade:6166
+#: data/geany.glade:6229
 msgid "Follow path of the current file"
 msgstr "Pad van het huidige bestand volgen"
 
-#: data/geany.glade:6170
+#: data/geany.glade:6233
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 "Of \"cd $path\" moet worden uitgevoerd als u tussen reeds geopende bestanden "
 "wisselt"
 
-#: data/geany.glade:6181
+#: data/geany.glade:6244
 msgid "Execute programs in the VTE"
 msgstr "Programma's uitvoeren in VTE"
 
-#: data/geany.glade:6185
+#: data/geany.glade:6248
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
@@ -1659,11 +1674,11 @@ msgstr ""
 "een nieuw terminalvenster te openen. Let wel, programma's uitgevoerd in de "
 "VTE kunnen niet gestopt worden"
 
-#: data/geany.glade:6196
+#: data/geany.glade:6259
 msgid "Don't use run script"
 msgstr "Geen runscript gebruiken"
 
-#: data/geany.glade:6201
+#: data/geany.glade:6264
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
@@ -1671,490 +1686,490 @@ msgstr ""
 "Gebruik niet het simpele run-script dat meestal wordt gebruikt om de "
 "afsluitwaarde van een programma weer te geven"
 
-#: data/geany.glade:6225
+#: data/geany.glade:6288
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminal</b>"
 
-#: data/geany.glade:6238 src/prefs.c:1633 src/vte.c:381
+#: data/geany.glade:6301 src/prefs.c:1633 src/vte.c:381
 msgid "Terminal"
 msgstr "Terminal"
 
-#: data/geany.glade:6327
+#: data/geany.glade:6390
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr "<i>Lees de handleiding voor meer details over deze voorkeuren.</i>"
 
-#: data/geany.glade:6353
+#: data/geany.glade:6416
 msgid "<b>Various preferences</b>"
 msgstr "<b>Diverse voorkeuren</b>"
 
-#: data/geany.glade:6366 src/prefs.c:1631
+#: data/geany.glade:6429 src/prefs.c:1631
 msgid "Various"
 msgstr "Diversen"
 
-#: data/geany.glade:6416
+#: data/geany.glade:6479
 msgid "_File"
 msgstr "_Bestand"
 
-#: data/geany.glade:6434
+#: data/geany.glade:6497
 msgid "New (with _Template)"
 msgstr "Nieuw (met sja_bloon)"
 
-#: data/geany.glade:6450 data/geany.glade:8021
+#: data/geany.glade:6513 data/geany.glade:8084
 msgid "_Open..."
 msgstr "_Openen..."
 
-#: data/geany.glade:6472
+#: data/geany.glade:6535
 msgid "Recent _Files"
 msgstr "_Recente bestanden"
 
-#: data/geany.glade:6494
+#: data/geany.glade:6557
 msgid "Save _As..."
 msgstr "Opslaan _als..."
 
-#: data/geany.glade:6505
+#: data/geany.glade:6568
 msgid "Sa_ve All"
 msgstr "A_lles opslaan"
 
-#: data/geany.glade:6516 src/callbacks.c:352 src/document.c:1671
+#: data/geany.glade:6579 src/callbacks.c:352 src/document.c:1671
 #: src/document.c:3619 src/sidebar.c:1215
 msgid "_Reload"
 msgstr "_Herladen"
 
 # Alle letters zijn al in gebruik als hotkey.
-#: data/geany.glade:6527
+#: data/geany.glade:6590
 msgid "R_eload As"
 msgstr "He_rladen als"
 
-#: data/geany.glade:6573
+#: data/geany.glade:6636
 msgid "Page Set_up"
 msgstr "_Paginaopmaak"
 
-#: data/geany.glade:6580
+#: data/geany.glade:6643
 msgid "_Print..."
 msgstr "Af_drukken..."
 
-#: data/geany.glade:6607 src/notebook.c:498
+#: data/geany.glade:6670 src/notebook.c:498
 msgid "Close Ot_her Documents"
 msgstr "Andere docu_menten sluiten"
 
-#: data/geany.glade:6618 src/notebook.c:510
+#: data/geany.glade:6681 src/notebook.c:510
 msgid "C_lose All"
 msgstr "Alles sl_uiten"
 
-#: data/geany.glade:6750
+#: data/geany.glade:6813
 msgid "Co_mmands"
 msgstr "_Commando's"
 
-#: data/geany.glade:6757 src/keybindings.c:439
+#: data/geany.glade:6820 src/keybindings.c:439
 msgid "Cu_t Current Line(s)"
 msgstr "Huidige regel(s) k_nippen"
 
-#: data/geany.glade:6768 src/keybindings.c:436
+#: data/geany.glade:6831 src/keybindings.c:436
 msgid "_Copy Current Line(s)"
 msgstr "Huidige regel(s) _kopiëren"
 
-#: data/geany.glade:6781 src/keybindings.c:389
+#: data/geany.glade:6844 src/keybindings.c:389
 msgid "_Delete Current Line(s)"
 msgstr "Huidige regel(s) _verwijderen"
 
-#: data/geany.glade:6790 src/keybindings.c:386
+#: data/geany.glade:6853 src/keybindings.c:386
 msgid "D_uplicate Line or Selection"
 msgstr "Regel of selectie kl_onen"
 
-#: data/geany.glade:6805 src/keybindings.c:449
+#: data/geany.glade:6868 src/keybindings.c:449
 msgid "S_elect Current Line(s)"
 msgstr "Huidige _regel(s) selecteren"
 
-#: data/geany.glade:6814 src/keybindings.c:452
+#: data/geany.glade:6877 src/keybindings.c:452
 msgid "Se_lect Current Paragraph"
 msgstr "Huidige _alinea selecteren"
 
-#: data/geany.glade:6829
+#: data/geany.glade:6892
 msgid "_Move Line(s) Up"
 msgstr "Regel(s) om_hoog verplaatsen"
 
-#: data/geany.glade:6838
+#: data/geany.glade:6901
 msgid "M_ove Line(s) Down"
 msgstr "Regel(s) om_laag verplaatsen"
 
-#: data/geany.glade:6853 src/keybindings.c:503
+#: data/geany.glade:6916 src/keybindings.c:503
 msgid "_Send Selection to Terminal"
 msgstr "Selectie naar Terminal _sturen"
 
-#: data/geany.glade:6875 src/keybindings.c:508
+#: data/geany.glade:6938 src/keybindings.c:508
 #, fuzzy
 msgid "_Join Lines"
 msgstr "Voeg regels samen"
 
-#: data/geany.glade:6884 src/keybindings.c:505
+#: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
 msgstr "Woorden in regels/tekstblok _herverdelen"
 
-#: data/geany.glade:6893 src/keybindings.c:463
+#: data/geany.glade:6956 src/keybindings.c:463
 msgid "T_oggle Case of Selection"
 msgstr "Onder- en bovenkast in selectie _omdraaien"
 
-#: data/geany.glade:6908
+#: data/geany.glade:6971
 msgid "_Comment Line(s)"
 msgstr "_Commentaarteken voor regel(s) plaatsen"
 
-#: data/geany.glade:6917
+#: data/geany.glade:6980
 msgid "U_ncomment Line(s)"
 msgstr "Commentaartekens _weghalen"
 
-#: data/geany.glade:6926
+#: data/geany.glade:6989
 msgid "_Toggle Line Commentation"
 msgstr "_Regelcommentaar in-/uitschakelen"
 
-#: data/geany.glade:6939
+#: data/geany.glade:7002
 msgid "_Increase Indent"
 msgstr "Inspringing _vergroten"
 
-#: data/geany.glade:6950
+#: data/geany.glade:7013
 msgid "_Decrease Indent"
 msgstr "Inspringing ver_kleinen"
 
-#: data/geany.glade:6963 src/keybindings.c:482
+#: data/geany.glade:7026 src/keybindings.c:482
 msgid "S_mart Line Indent"
 msgstr "_Slimme regelinspringing"
 
-#: data/geany.glade:6978
+#: data/geany.glade:7041
 msgid "_Send Selection to"
 msgstr "Selectie sturen _naar"
 
-#: data/geany.glade:7006
+#: data/geany.glade:7069
 msgid "I_nsert Comments"
 msgstr "Co_mmentaren invoegen"
 
-#: data/geany.glade:7140
+#: data/geany.glade:7203
 msgid "Preference_s"
 msgstr "_Voorkeuren"
 
-#: data/geany.glade:7151 src/keybindings.c:529
+#: data/geany.glade:7214 src/keybindings.c:529
 msgid "P_lugin Preferences"
 msgstr "Pl_ugin-voorkeuren"
 
-#: data/geany.glade:7176
+#: data/geany.glade:7239
 msgid "_Find..."
 msgstr "_Zoeken..."
 
-#: data/geany.glade:7189
+#: data/geany.glade:7252
 msgid "Find _Next"
 msgstr "V_olgende zoeken"
 
-#: data/geany.glade:7198
+#: data/geany.glade:7261
 msgid "Find _Previous"
 msgstr "Vor_ige zoeken"
 
-#: data/geany.glade:7211 src/symbols.c:2215
+#: data/geany.glade:7274 src/symbols.c:2215
 msgid "Find in F_iles..."
 msgstr "Zoeken in _bestanden..."
 
-#: data/geany.glade:7222
+#: data/geany.glade:7285
 msgid "_Replace..."
 msgstr "_Vervangen..."
 
-#: data/geany.glade:7239
+#: data/geany.glade:7302
 msgid "Next Me_ssage"
 msgstr "Vo_lgend bericht"
 
-#: data/geany.glade:7250
+#: data/geany.glade:7313
 msgid "Pr_evious Message"
 msgstr "Vorig b_ericht"
 
-#: data/geany.glade:7269 src/keybindings.c:578
+#: data/geany.glade:7332 src/keybindings.c:578
 msgid "Go to Ne_xt Marker"
 msgstr "Ga naar volgende m_arker"
 
-#: data/geany.glade:7278 src/keybindings.c:581
+#: data/geany.glade:7341 src/keybindings.c:581
 msgid "Go to Pre_vious Marker"
 msgstr "Ga naar vorige ma_rker"
 
-#: data/geany.glade:7291
+#: data/geany.glade:7354
 msgid "_Go to Line..."
 msgstr "_Ga naar regel..."
 
-#: data/geany.glade:7313 src/keybindings.c:541
+#: data/geany.glade:7376 src/keybindings.c:541
 msgid "Find Next _Selection"
 msgstr "Vo_lgende selectie zoeken"
 
-#: data/geany.glade:7322 src/keybindings.c:543
+#: data/geany.glade:7385 src/keybindings.c:543
 msgid "Find Pre_vious Selection"
 msgstr "Vo_rige selectie zoeken"
 
-#: data/geany.glade:7361 src/keybindings.c:560
+#: data/geany.glade:7424 src/keybindings.c:560
 msgid "_Mark All"
 msgstr "_Alles markeren"
 
-#: data/geany.glade:7385
+#: data/geany.glade:7448
 msgid "Go to Symbol Decl_aration"
 msgstr "Ga naar symbooldecl_aratie"
 
-#: data/geany.glade:7402
+#: data/geany.glade:7465
 msgid "_View"
 msgstr "Bee_ld"
 
-#: data/geany.glade:7409
+#: data/geany.glade:7472
 msgid "Change _Font..."
 msgstr "_Lettertype wijzigen..."
 
-#: data/geany.glade:7420
+#: data/geany.glade:7483
 msgid "Change _Color Scheme..."
 msgstr "_Kleurenschema wijzigen..."
 
-#: data/geany.glade:7439
+#: data/geany.glade:7502
 msgid "Show _Markers Margin"
 msgstr "_Markeerrand weergeven"
 
-#: data/geany.glade:7449
+#: data/geany.glade:7512
 msgid "Show _Line Numbers"
 msgstr "_Regelnummers weergeven"
 
-#: data/geany.glade:7459
+#: data/geany.glade:7522
 msgid "Show White S_pace"
 msgstr "Wi_truimte weergeven"
 
-#: data/geany.glade:7468
+#: data/geany.glade:7531
 msgid "Show Line _Endings"
 msgstr "Regel_einden weergeven"
 
-#: data/geany.glade:7477
+#: data/geany.glade:7540
 msgid "Show Indentation _Guides"
 msgstr "In_springingsmarkeringen weergeven"
 
-#: data/geany.glade:7492
+#: data/geany.glade:7555
 msgid "Full_screen"
 msgstr "_Volledig scherm"
 
-#: data/geany.glade:7501
+#: data/geany.glade:7564
 msgid "Toggle All _Additional Widgets"
 msgstr "Alle e_xtra widgets tonen/verbergen"
 
-#: data/geany.glade:7510
+#: data/geany.glade:7573
 msgid "Show Message _Window"
 msgstr "_Berichtenvenster weergeven"
 
-#: data/geany.glade:7520
+#: data/geany.glade:7583
 msgid "Show _Toolbar"
 msgstr "_Werkbalk weergeven"
 
-#: data/geany.glade:7530
+#: data/geany.glade:7593
 msgid "Show Side_bar"
 msgstr "_Zijbalk weergeven"
 
-#: data/geany.glade:7580
+#: data/geany.glade:7643
 msgid "_Document"
 msgstr "_Document"
 
-#: data/geany.glade:7589
+#: data/geany.glade:7652
 msgid "_Line Wrapping"
 msgstr "_Regelterugloop"
 
-#: data/geany.glade:7599
+#: data/geany.glade:7662
 msgid "Line _Breaking"
 msgstr "Regelaf_breking"
 
-#: data/geany.glade:7608
+#: data/geany.glade:7671
 msgid "_Auto-indentation"
 msgstr "_Automatisch inspringen"
 
-#: data/geany.glade:7618
+#: data/geany.glade:7681
 msgid "In_dent Type"
 msgstr "I_nspringingstype"
 
-#: data/geany.glade:7627 data/geany.glade:7685
+#: data/geany.glade:7690 data/geany.glade:7748
 msgid "_Detect from Content"
 msgstr "_Uit inhoud afleiden"
 
-#: data/geany.glade:7662
+#: data/geany.glade:7725
 msgid "T_abs and Spaces"
 msgstr "T_abs en spaties"
 
-#: data/geany.glade:7676
+#: data/geany.glade:7739
 msgid "Indent Widt_h"
 msgstr "Inspringbree_dte"
 
-#: data/geany.glade:7700
+#: data/geany.glade:7763
 msgid "_1"
 msgstr "_1"
 
-#: data/geany.glade:7709
+#: data/geany.glade:7772
 msgid "_2"
 msgstr "_2"
 
-#: data/geany.glade:7719
+#: data/geany.glade:7782
 msgid "_3"
 msgstr "_3"
 
-#: data/geany.glade:7729
+#: data/geany.glade:7792
 msgid "_4"
 msgstr "_4"
 
-#: data/geany.glade:7740
+#: data/geany.glade:7803
 msgid "_5"
 msgstr "_5"
 
-#: data/geany.glade:7750
+#: data/geany.glade:7813
 msgid "_6"
 msgstr "_6"
 
-#: data/geany.glade:7760
+#: data/geany.glade:7823
 msgid "_7"
 msgstr "_7"
 
-#: data/geany.glade:7770
+#: data/geany.glade:7833
 msgid "_8"
 msgstr "_8"
 
-#: data/geany.glade:7790
+#: data/geany.glade:7853
 msgid "Read _Only"
 msgstr "Alleen _lezen"
 
-#: data/geany.glade:7799
+#: data/geany.glade:7862
 msgid "_Write Unicode BOM"
 msgstr "_Unicode BOM schrijven"
 
-#: data/geany.glade:7814
+#: data/geany.glade:7877
 msgid "Set File_type"
 msgstr "Bestandst_ype instellen"
 
-#: data/geany.glade:7834
+#: data/geany.glade:7897
 msgid "Set _Encoding"
 msgstr "_Codering instellen"
 
-#: data/geany.glade:7854
+#: data/geany.glade:7917
 msgid "Set Line E_ndings"
 msgstr "Regel_einden instellen"
 
-#: data/geany.glade:7863
+#: data/geany.glade:7926
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "Omzetten naar en instellen op CR/LF (_Win)"
 
-#: data/geany.glade:7872
+#: data/geany.glade:7935
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Omzetten naar en instellen op LF (_Unix)"
 
-#: data/geany.glade:7883
+#: data/geany.glade:7946
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Omzetten naar en instellen op CR (_Mac)"
 
-#: data/geany.glade:7903 src/keybindings.c:669
+#: data/geany.glade:7966 src/keybindings.c:669
 msgid "_Clone"
 msgstr "_Klonen"
 
-#: data/geany.glade:7912 src/keybindings.c:671
+#: data/geany.glade:7975 src/keybindings.c:671
 msgid "_Strip Trailing Spaces"
 msgstr "L_oze eindwitruimte trimmen"
 
-#: data/geany.glade:7921
+#: data/geany.glade:7984
 msgid "Replace Tabs with S_paces"
 msgstr "Tabs door s_paties vervangen"
 
-#: data/geany.glade:7930
+#: data/geany.glade:7993
 msgid "_Replace Spaces with Tabs..."
 msgstr "Spaties door _tabs vervangen..."
 
-#: data/geany.glade:7945
+#: data/geany.glade:8008
 msgid "_Fold All"
 msgstr "Alles samen_vouwen"
 
-#: data/geany.glade:7954
+#: data/geany.glade:8017
 msgid "_Unfold All"
 msgstr "Alles uitvou_wen"
 
-#: data/geany.glade:7969
+#: data/geany.glade:8032
 msgid "Remove _Markers"
 msgstr "_Markers verwijderen"
 
-#: data/geany.glade:7978
+#: data/geany.glade:8041
 msgid "Remove Error _Indicators"
 msgstr "_Foutindicatoren verwijderen"
 
-#: data/geany.glade:7991
+#: data/geany.glade:8054
 msgid "_Project"
 msgstr "_Project"
 
-#: data/geany.glade:7999
+#: data/geany.glade:8062
 msgid "_New..."
 msgstr "_Nieuw..."
 
-#: data/geany.glade:8010
+#: data/geany.glade:8073
 msgid "New from _Folder..."
 msgstr ""
 
-#: data/geany.glade:8034
+#: data/geany.glade:8097
 msgid "_Recent Projects"
 msgstr "_Recente projecten"
 
-#: data/geany.glade:8040
+#: data/geany.glade:8103
 msgid "_Close"
 msgstr "_Sluiten"
 
-#: data/geany.glade:8059
+#: data/geany.glade:8122
 msgid "Apply the default indentation settings to all documents"
 msgstr "De standaard inspringinstellingen toepassen voor alle documenten"
 
-#: data/geany.glade:8060
+#: data/geany.glade:8123
 msgid "_Apply Default Indentation"
 msgstr "Standaard inspringing _toepassen"
 
-#: data/geany.glade:8089 src/build.c:2446 src/build.c:2717
+#: data/geany.glade:8152 src/build.c:2446 src/build.c:2717
 msgid "_Build"
 msgstr "B_ouwen"
 
-#: data/geany.glade:8097
+#: data/geany.glade:8160
 msgid "_Tools"
 msgstr "_Extra"
 
-#: data/geany.glade:8104
+#: data/geany.glade:8167
 msgid "_Reload Configuration"
 msgstr "Configuratie he_rladen"
 
-#: data/geany.glade:8115
+#: data/geany.glade:8178
 msgid "C_onfiguration Files"
 msgstr "C_onfiguratiebestanden"
 
-#: data/geany.glade:8131
+#: data/geany.glade:8194
 msgid "_Color Chooser"
 msgstr "_Kleurkiezer"
 
-#: data/geany.glade:8144
+#: data/geany.glade:8207
 msgid "_Word Count"
 msgstr "_Woorden tellen"
 
-#: data/geany.glade:8153
+#: data/geany.glade:8216
 msgid "Load Ta_gs File..."
 msgstr "_Labelsbestand laden..."
 
-#: data/geany.glade:8166 data/geany.glade:8173
+#: data/geany.glade:8229 data/geany.glade:8236
 msgid "_Help"
 msgstr "_Hulp"
 
-#: data/geany.glade:8186
+#: data/geany.glade:8249
 msgid "Keyboard _Shortcuts"
 msgstr "_Sneltoetsen"
 
-#: data/geany.glade:8195
+#: data/geany.glade:8258
 msgid "Debug _Messages"
 msgstr "Debug-_berichten"
 
-#: data/geany.glade:8210
+#: data/geany.glade:8273
 msgid "_Website"
 msgstr "_Website"
 
-#: data/geany.glade:8219
+#: data/geany.glade:8282
 msgid "Wi_ki"
 msgstr "Wi_ki"
 
-#: data/geany.glade:8228
+#: data/geany.glade:8291
 msgid "Report a _Bug..."
 msgstr "Rapporteer een _fout..."
 
-#: data/geany.glade:8237
+#: data/geany.glade:8300
 msgid "_Donate..."
 msgstr "_Doneer..."
 
-#: data/geany.glade:8306
+#: data/geany.glade:8369
 #, fuzzy
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
@@ -2163,57 +2178,57 @@ msgstr ""
 "Zeef uw bestanden met de gebruikelijke jokertekens. Scheid meerdere patronen "
 "door een spatie."
 
-#: data/geany.glade:8348 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
+#: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
 msgid "Symbols"
 msgstr "Symbolen"
 
-#: data/geany.glade:8376
+#: data/geany.glade:8439
 msgid "Documents"
 msgstr "Documenten"
 
-#: data/geany.glade:8435
+#: data/geany.glade:8498
 msgid "Status"
 msgstr "Status"
 
-#: data/geany.glade:8464
+#: data/geany.glade:8527
 msgid "Compiler"
 msgstr "Compiler"
 
-#: data/geany.glade:8495
+#: data/geany.glade:8558
 msgid "Messages"
 msgstr "Berichten"
 
-#: data/geany.glade:8523
+#: data/geany.glade:8586
 msgid "Scribble"
 msgstr "Notities"
 
-#: data/geany.glade:8570
+#: data/geany.glade:8633
 msgid "Project Properties"
 msgstr "Projecteigenschappen"
 
-#: data/geany.glade:8640 src/project.c:203
+#: data/geany.glade:8703 src/project.c:203
 msgid "Filename:"
 msgstr "Bestandsnaam:"
 
-#: data/geany.glade:8653
+#: data/geany.glade:8716
 msgid "_Name:"
 msgstr "_Naam:"
 
-#: data/geany.glade:8669
+#: data/geany.glade:8732
 #, fuzzy
 msgid "_Description:"
 msgstr "Beschrijving:"
 
-#: data/geany.glade:8686
+#: data/geany.glade:8749
 #, fuzzy
 msgid "_Base path:"
 msgstr "Basispad:"
 
-#: data/geany.glade:8702 src/search.c:905
+#: data/geany.glade:8765 src/search.c:905
 msgid "File _patterns:"
 msgstr "Bestandnaamspatronen:"
 
-#: data/geany.glade:8763
+#: data/geany.glade:8826
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
@@ -2221,7 +2236,7 @@ msgstr ""
 "Lijst van bestandsnaampatronen voor zoekfunctie in bestandsdialoog (bijv. *."
 "c *.h) gescheiden door spaties"
 
-#: data/geany.glade:8797 src/project.c:232
+#: data/geany.glade:8860 src/project.c:232
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -2231,79 +2246,79 @@ msgstr ""
 "of een bestaande padnaam zijn. U kunt relatieve paden t.o.v. de "
 "projectbestandsnaam gebruiken."
 
-#: data/geany.glade:8841 src/keybindings.c:320
+#: data/geany.glade:8904 src/keybindings.c:320
 msgid "Project"
 msgstr "Project"
 
-#: data/geany.glade:9253
+#: data/geany.glade:9316
 msgid "Display:"
 msgstr "Weergave:"
 
-#: data/geany.glade:9294
+#: data/geany.glade:9357
 msgid "Custom"
 msgstr "Aangepast"
 
-#: data/geany.glade:9313
+#: data/geany.glade:9376
 msgid "Use global settings"
 msgstr "Algemene instellingen gebruiken"
 
-#: data/geany.glade:9640
+#: data/geany.glade:9703
 msgid "Size:"
 msgstr "Grootte:"
 
-#: data/geany.glade:9656
+#: data/geany.glade:9719
 msgid "Location:"
 msgstr "Locatie:"
 
-#: data/geany.glade:9672
+#: data/geany.glade:9735
 msgid "Read-only:"
 msgstr "Alleen-lezen:"
 
-#: data/geany.glade:9688
+#: data/geany.glade:9751
 msgid "Encoding:"
 msgstr "Codering:"
 
-#: data/geany.glade:9704
+#: data/geany.glade:9767
 msgid "Modified:"
 msgstr "Gemodificeerd:"
 
-#: data/geany.glade:9720
+#: data/geany.glade:9783
 msgid "Changed:"
 msgstr "Gewijzigd:"
 
-#: data/geany.glade:9736
+#: data/geany.glade:9799
 msgid "Accessed:"
 msgstr "Geopend:"
 
-#: data/geany.glade:9780
+#: data/geany.glade:9843
 msgid "(only inside Geany)"
 msgstr "(enkel binnen Geany)"
 
-#: data/geany.glade:9879
+#: data/geany.glade:9942
 msgid "Permissions:"
 msgstr "Toegangsrechten:"
 
-#: data/geany.glade:9893
+#: data/geany.glade:9956
 msgid "Read:"
 msgstr "Lezen:"
 
-#: data/geany.glade:9907
+#: data/geany.glade:9970
 msgid "Write:"
 msgstr "Schrijven:"
 
-#: data/geany.glade:9921
+#: data/geany.glade:9984
 msgid "Execute:"
 msgstr "Uitvoeren:"
 
-#: data/geany.glade:9935
+#: data/geany.glade:9998
 msgid "Owner:"
 msgstr "Eigenaar:"
 
-#: data/geany.glade:9947
+#: data/geany.glade:10010
 msgid "Group:"
 msgstr "Groep:"
 
-#: data/geany.glade:9959
+#: data/geany.glade:10022
 msgid "Other:"
 msgstr "Anderen:"
 
@@ -3834,11 +3849,11 @@ msgstr "Sneltoetsen"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "De volgende sneltoetsen zijn gedefinieerd:"
 
-#: src/keyfile.c:1135
+#: src/keyfile.c:1139
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Type hier wat u maar wilt; gebruik het als notitie-/krabbelbord"
 
-#: src/keyfile.c:1391
+#: src/keyfile.c:1395
 msgid "Failed to load one or more session files."
 msgstr "Kan bestanden van vorige sessie niet laden."
 
@@ -6400,9 +6415,6 @@ msgstr "Boven en onder"
 
 #~ msgid "<b>Encoding:</b>"
 #~ msgstr "<b>Codering:</b>"
-
-#~ msgid "<b>Changed:</b>"
-#~ msgstr "<b>Gewijzigd:</b>"
 
 #~ msgid "Shell script"
 #~ msgstr "Shell scriptbestand"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
-"POT-Creation-Date: 2023-10-03 19:55+0200\n"
+"POT-Creation-Date: 2023-10-04 23:48+0200\n"
 "PO-Revision-Date: 2021-09-27 14:34+0800\n"
 "Last-Translator: Dongyuan Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: geany.desktop.in:5 data/geany.glade:6393
+#: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
 msgstr "Geany"
 
@@ -45,11 +45,11 @@ msgstr "工具栏首选项(_T)"
 msgid "_Hide Toolbar"
 msgstr "隐藏工具栏(_H)"
 
-#: data/geany.glade:305 data/geany.glade:6651
+#: data/geany.glade:305 data/geany.glade:6714
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: data/geany.glade:313 data/geany.glade:6866
+#: data/geany.glade:313 data/geany.glade:6929
 msgid "_Format"
 msgstr "格式(_F)"
 
@@ -57,69 +57,69 @@ msgstr "格式(_F)"
 msgid "I_nsert"
 msgstr "插入(_N)"
 
-#: data/geany.glade:332 data/geany.glade:7019
+#: data/geany.glade:332 data/geany.glade:7082
 msgid "Insert _ChangeLog Entry"
 msgstr "插入更改记录(_C)"
 
-#: data/geany.glade:341 data/geany.glade:7028
+#: data/geany.glade:341 data/geany.glade:7091
 msgid "Insert _Function Description"
 msgstr "插入函数描述(_F)"
 
-#: data/geany.glade:350 data/geany.glade:7037
+#: data/geany.glade:350 data/geany.glade:7100
 msgid "Insert Mu_ltiline Comment"
 msgstr "插入多行注释(_M)"
 
-#: data/geany.glade:357 data/geany.glade:7304
+#: data/geany.glade:357 data/geany.glade:7367
 msgid "_More"
 msgstr "更多(_M)"
 
-#: data/geany.glade:370 data/geany.glade:7052
+#: data/geany.glade:370 data/geany.glade:7115
 msgid "Insert File _Header"
 msgstr "插入文件头(_H)"
 
-#: data/geany.glade:379 data/geany.glade:7061
+#: data/geany.glade:379 data/geany.glade:7124
 msgid "Insert _GPL Notice"
 msgstr "插入 GPL 公告(_G)"
 
-#: data/geany.glade:388 data/geany.glade:7070
+#: data/geany.glade:388 data/geany.glade:7133
 msgid "Insert _BSD License Notice"
 msgstr "插入 BSD 许可公告(_B)"
 
-#: data/geany.glade:405 data/geany.glade:7081
+#: data/geany.glade:405 data/geany.glade:7144
 msgid "Insert Dat_e"
 msgstr "插入日期(_E)"
 
-#: data/geany.glade:417 data/geany.glade:439 data/geany.glade:6539
-#: data/geany.glade:6986 data/geany.glade:7093 data/geany.glade:7115
-#: data/geany.glade:7822 data/geany.glade:7842
+#: data/geany.glade:417 data/geany.glade:439 data/geany.glade:6602
+#: data/geany.glade:7049 data/geany.glade:7156 data/geany.glade:7178
+#: data/geany.glade:7885 data/geany.glade:7905
 msgid "invisible"
 msgstr "不可见"
 
-#: data/geany.glade:427 data/geany.glade:7103
+#: data/geany.glade:427 data/geany.glade:7166
 msgid "_Insert \"include <...>\""
 msgstr "插入“include <...>”(_I)"
 
-#: data/geany.glade:457 data/geany.glade:7127 src/keybindings.c:516
+#: data/geany.glade:457 data/geany.glade:7190 src/keybindings.c:516
 msgid "Insert Alternative _White Space"
 msgstr "插入额外的空白(_I)"
 
-#: data/geany.glade:470 data/geany.glade:7168
+#: data/geany.glade:470 data/geany.glade:7231
 msgid "_Search"
 msgstr "搜索(_S)"
 
-#: data/geany.glade:482 data/geany.glade:6463
+#: data/geany.glade:482 data/geany.glade:6526
 msgid "Open Selected F_ile"
 msgstr "打开选择的文件(_I)"
 
-#: data/geany.glade:493 data/geany.glade:7337 src/symbols.c:2205
+#: data/geany.glade:493 data/geany.glade:7400 src/symbols.c:2205
 msgid "Find _Usage"
 msgstr "查找用法(_U)"
 
-#: data/geany.glade:504 data/geany.glade:7346 src/symbols.c:2210
+#: data/geany.glade:504 data/geany.glade:7409 src/symbols.c:2210
 msgid "Find _Document Usage"
 msgstr "查找文档用法(_D)"
 
-#: data/geany.glade:515 data/geany.glade:7376
+#: data/geany.glade:515 data/geany.glade:7439
 msgid "Go to Symbol Defini_tion"
 msgstr "跳转到标记定义(_T)"
 
@@ -309,7 +309,7 @@ msgid ""
 "default dialogs"
 msgstr "选择使用 Windows 原生对话框或者 GTK 默认对话框"
 
-#: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4791
+#: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4854
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>杂项</b>"
 
@@ -602,11 +602,11 @@ msgstr "<b>工具栏</b>"
 msgid "Toolbar"
 msgstr "工具栏"
 
-#: data/geany.glade:2852 data/geany.glade:9108
+#: data/geany.glade:2852 data/geany.glade:9171
 msgid "Line wrapping"
 msgstr "自动换行"
 
-#: data/geany.glade:2856 data/geany.glade:9112
+#: data/geany.glade:2856 data/geany.glade:9175
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -675,7 +675,7 @@ msgstr "换行时去除行尾空白"
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr "在换行时去除上一行的行尾空白"
 
-#: data/geany.glade:2970 data/geany.glade:9131
+#: data/geany.glade:2970 data/geany.glade:9194
 msgid "Line breaking column:"
 msgstr "断行列："
 
@@ -689,7 +689,7 @@ msgid ""
 "used to mark the comment as toggled."
 msgstr "当开关源文件中一个行注释时添加的一个字符串。用于标记注释的开关。"
 
-#: data/geany.glade:3049 data/geany.glade:9174
+#: data/geany.glade:3049 data/geany.glade:9237
 msgid "<b>Features</b>"
 msgstr "<b>功能</b>"
 
@@ -697,72 +697,72 @@ msgstr "<b>功能</b>"
 msgid "Features"
 msgstr "功能"
 
-#: data/geany.glade:3096 data/geany.glade:8872
+#: data/geany.glade:3096 data/geany.glade:8935
 msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
 "注意：如需将这些设置应用到所有打开的文档，使用 <i>项目 -> 使用默认缩进</i>。"
 
-#: data/geany.glade:3146 data/geany.glade:8888
+#: data/geany.glade:3146 data/geany.glade:8951
 msgid "_Width:"
 msgstr "宽度(_W)："
 
-#: data/geany.glade:3160 data/geany.glade:8904
+#: data/geany.glade:3160 data/geany.glade:8967
 msgid "The width in chars of a single indent"
 msgstr "一个缩进的宽度"
 
-#: data/geany.glade:3179 data/geany.glade:8925
+#: data/geany.glade:3179 data/geany.glade:8988
 msgid "Auto-indent _mode:"
 msgstr "自动缩进模式(_M)："
 
-#: data/geany.glade:3214 data/geany.glade:8960
+#: data/geany.glade:3214 data/geany.glade:9023
 msgid "Detect type from file"
 msgstr "根据文件探测类型"
 
-#: data/geany.glade:3218 data/geany.glade:8964
+#: data/geany.glade:3218 data/geany.glade:9027
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr "打开文件时自动探测使用哪种缩进方式"
 
-#: data/geany.glade:3233 data/geany.glade:8979
+#: data/geany.glade:3233 data/geany.glade:9042
 msgid "T_abs and spaces"
 msgstr "制表符和空格(_A)"
 
-#: data/geany.glade:3237 data/geany.glade:8983
+#: data/geany.glade:3237 data/geany.glade:9046
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr "当缩进小于制表符宽度时使用空格，否则两者都使用"
 
-#: data/geany.glade:3252 data/geany.glade:7652 data/geany.glade:8998
+#: data/geany.glade:3252 data/geany.glade:7715 data/geany.glade:9061
 msgid "_Spaces"
 msgstr "空格(_S)"
 
-#: data/geany.glade:3256 data/geany.glade:9002
+#: data/geany.glade:3256 data/geany.glade:9065
 msgid "Use spaces when inserting indentation"
 msgstr "缩进时使用空格"
 
-#: data/geany.glade:3272 data/geany.glade:7642 data/geany.glade:9018
+#: data/geany.glade:3272 data/geany.glade:7705 data/geany.glade:9081
 msgid "_Tabs"
 msgstr "制表符(_T)"
 
-#: data/geany.glade:3276 data/geany.glade:9022
+#: data/geany.glade:3276 data/geany.glade:9085
 msgid "Use one tab per indent"
 msgstr "每个缩进使用一个制表符"
 
-#: data/geany.glade:3292 data/geany.glade:9052
+#: data/geany.glade:3292 data/geany.glade:9115
 msgid "Detect width from file"
 msgstr "根据文件探测宽度"
 
-#: data/geany.glade:3296 data/geany.glade:9056
+#: data/geany.glade:3296 data/geany.glade:9119
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
 msgstr "打开文件时自动探测使用何种缩进宽度"
 
-#: data/geany.glade:3313 data/geany.glade:4082 data/geany.glade:9040
-#: data/geany.glade:9615
+#: data/geany.glade:3313 data/geany.glade:4082 data/geany.glade:9103
+#: data/geany.glade:9678
 msgid "Type:"
 msgstr "类型："
 
@@ -790,7 +790,7 @@ msgstr ""
 msgid "<b>Indentation</b>"
 msgstr "<b>缩进</b>"
 
-#: data/geany.glade:3390 data/geany.glade:9078
+#: data/geany.glade:3390 data/geany.glade:9141
 msgid "Indentation"
 msgstr "缩进"
 
@@ -812,11 +812,11 @@ msgstr "XML/HTML 标记自动完成"
 msgid "Insert matching closing tag for XML/HTML"
 msgstr "为 XML/HTML 插入匹配的闭标记"
 
-#: data/geany.glade:3452 data/geany.glade:9198
+#: data/geany.glade:3452 data/geany.glade:9261
 msgid "Automatic continuation of multi-line comments"
 msgstr "自动多行注释"
 
-#: data/geany.glade:3456 data/geany.glade:9202
+#: data/geany.glade:3456 data/geany.glade:9265
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
@@ -880,7 +880,7 @@ msgstr ""
 "符号列表自动更新的最小间隔 (以毫秒计)。注意：太小的间隔可能会引发性能问题，尤"
 "其对于大文件。间隔为 0 将禁用实时更新。"
 
-#: data/geany.glade:3667 data/geany.glade:9213
+#: data/geany.glade:3667 data/geany.glade:9276
 msgid "<b>Completions</b>"
 msgstr "<b>自动完成</b>"
 
@@ -1009,7 +1009,7 @@ msgstr "光标上下显示的行数(_A)："
 msgid "<b>Display</b>"
 msgstr "<b>显示</b>"
 
-#: data/geany.glade:4052 data/geany.glade:9265
+#: data/geany.glade:4052 data/geany.glade:9328
 msgid "Column:"
 msgstr "列："
 
@@ -1021,7 +1021,7 @@ msgstr "颜色："
 msgid "Sets the color of the long line marker"
 msgstr "设置长行标志颜色"
 
-#: data/geany.glade:4099 data/geany.glade:5990 data/geany.glade:6007
+#: data/geany.glade:4099 data/geany.glade:6053 data/geany.glade:6070
 #: src/toolbar.c:73 src/tools.c:835
 msgid "Color Chooser"
 msgstr "颜色选择器"
@@ -1060,11 +1060,11 @@ msgstr "以背景色来标示长行，当使用等宽字体时适用"
 msgid "Enabled"
 msgstr "启用"
 
-#: data/geany.glade:4202 data/geany.glade:9358
+#: data/geany.glade:4202 data/geany.glade:9421
 msgid "<b>Long line marker</b>"
 msgstr "<b>长行标志</b>"
 
-#: data/geany.glade:4230 data/geany.glade:9278
+#: data/geany.glade:4230 data/geany.glade:9341
 msgid "Disabled"
 msgstr "关闭"
 
@@ -1094,44 +1094,59 @@ msgstr "总在行末显示虚拟空格"
 msgid "<b>Virtual spaces</b>"
 msgstr "<b>虚拟空格</b>"
 
-#: data/geany.glade:4306
+#: data/geany.glade:4315
+#, fuzzy
+msgid "Show in markers margin"
+msgstr "显示页边标记区域"
+
+#: data/geany.glade:4329
+#, fuzzy
+msgid "Show as underline indicators"
+msgstr "显示行尾符号"
+
+#: data/geany.glade:4349
+#, fuzzy
+msgid "<b>Change History</b>"
+msgstr "<b>变更于：</b>"
+
+#: data/geany.glade:4369
 msgid "Display"
 msgstr "显示"
 
-#: data/geany.glade:4322 data/geany.glade:9378 src/keybindings.c:310
+#: data/geany.glade:4385 data/geany.glade:9441 src/keybindings.c:310
 #: src/prefs.c:1619
 msgid "Editor"
 msgstr "编辑器"
 
-#: data/geany.glade:4357
+#: data/geany.glade:4420
 msgid "Open new documents from the command-line"
 msgstr "从命令行打开新文档"
 
-#: data/geany.glade:4361
+#: data/geany.glade:4424
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr "为命令行中每一个不存在的文件名新建一个文件"
 
-#: data/geany.glade:4401
+#: data/geany.glade:4464
 msgid "Default end of line characters:"
 msgstr "缺省文件行尾符："
 
-#: data/geany.glade:4432
+#: data/geany.glade:4495
 msgid "<b>New files</b>"
 msgstr "<b>新建文件</b>"
 
-#: data/geany.glade:4467
+#: data/geany.glade:4530
 msgid "Default encoding (new files):"
 msgstr "缺省编码 (新文件)："
 
-#: data/geany.glade:4481
+#: data/geany.glade:4544
 msgid "Sets the default encoding for newly created files"
 msgstr "设置新建文件的缺省编码"
 
-#: data/geany.glade:4507
+#: data/geany.glade:4570
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "使用固定的编码打开非 Unicode 文件"
 
-#: data/geany.glade:4511
+#: data/geany.glade:4574
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
@@ -1140,115 +1155,115 @@ msgstr ""
 "这个选项禁止打开文件时进行编码检测并且用特定的编码打开非 Unicode 文件 (通常不"
 "需要)"
 
-#: data/geany.glade:4529
+#: data/geany.glade:4592
 msgid "Default encoding (existing non-Unicode files):"
 msgstr "缺省编码 (已存在的非 Unicode 文件)："
 
-#: data/geany.glade:4543
+#: data/geany.glade:4606
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr "设置打开已存在的非 Unicode 文件时的缺省编码"
 
-#: data/geany.glade:4575
+#: data/geany.glade:4638
 msgid "<b>Encodings</b>"
 msgstr "<b>编码</b>"
 
-#: data/geany.glade:4603 data/geany.glade:9408
+#: data/geany.glade:4666 data/geany.glade:9471
 msgid "Ensure new line at file end"
 msgstr "确保文件尾有一个新行"
 
-#: data/geany.glade:4607
+#: data/geany.glade:4670
 msgid "Ensures that at the end of the file is a new line"
 msgstr "确保文件的末端是一个新行"
 
-#: data/geany.glade:4619 data/geany.glade:9423
+#: data/geany.glade:4682 data/geany.glade:9486
 msgid "Ensure consistent line endings"
 msgstr "确保一致的行尾"
 
-#: data/geany.glade:4623
+#: data/geany.glade:4686
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr "确保文件在保存时转换为一致的换行符，避免在同一文件中混合多种行尾"
 
-#: data/geany.glade:4635 data/geany.glade:9438
+#: data/geany.glade:4698 data/geany.glade:9501
 msgid "Strip trailing spaces and tabs"
 msgstr "去除行尾空白"
 
-#: data/geany.glade:4639
+#: data/geany.glade:4702
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "去除行尾空格和制表符"
 
-#: data/geany.glade:4651 data/geany.glade:9453 src/keybindings.c:673
+#: data/geany.glade:4714 data/geany.glade:9516 src/keybindings.c:673
 msgid "Replace tabs with space"
 msgstr "用空格替换制表符"
 
-#: data/geany.glade:4655
+#: data/geany.glade:4718
 msgid "Replaces all tabs in document with spaces"
 msgstr "替换文档中所有制表符为空格"
 
-#: data/geany.glade:4673 data/geany.glade:9474
+#: data/geany.glade:4736 data/geany.glade:9537
 msgid "<b>Saving files</b>"
 msgstr "<b>保存文件</b>"
 
-#: data/geany.glade:4712
+#: data/geany.glade:4775
 msgid "Recent files list length:"
 msgstr "最近文件的个数："
 
-#: data/geany.glade:4725
+#: data/geany.glade:4788
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr "指定最近文件列表的文件个数"
 
-#: data/geany.glade:4744
+#: data/geany.glade:4807
 msgid "Disk check timeout:"
 msgstr "磁盘检查间隔："
 
-#: data/geany.glade:4759
+#: data/geany.glade:4822
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
 msgstr "设置磁盘检查的间隔时间（以秒计时）。零表示不检查。"
 
-#: data/geany.glade:4811 data/geany.glade:9494 src/prefs.c:1621
+#: data/geany.glade:4874 data/geany.glade:9557 src/prefs.c:1621
 #: src/tagmanager/tm_parser.c:456 plugins/filebrowser.c:1167
 msgid "Files"
 msgstr "文件"
 
-#: data/geany.glade:4866
+#: data/geany.glade:4929
 msgid "Terminal:"
 msgstr "虚拟终端："
 
-#: data/geany.glade:4879
+#: data/geany.glade:4942
 msgid "Browser:"
 msgstr "浏览器："
 
-#: data/geany.glade:4894
+#: data/geany.glade:4957
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
 msgstr "虚拟终端命令 (%c 会替换为 Geany 运行脚本文件名)"
 
-#: data/geany.glade:4908
+#: data/geany.glade:4971
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "浏览器的路径和参数"
 
-#: data/geany.glade:4911
+#: data/geany.glade:4974
 #, fuzzy
 msgid "System default"
 msgstr "系统默认(_Y)"
 
-#: data/geany.glade:4967
+#: data/geany.glade:5030
 msgid "Grep:"
 msgstr "Grep："
 
-#: data/geany.glade:5030
+#: data/geany.glade:5093
 msgid "<b>Tool paths</b>"
 msgstr "<b>工具路径</b>"
 
-#: data/geany.glade:5063
+#: data/geany.glade:5126
 msgid "Context action:"
 msgstr "上下文动作："
 
-#: data/geany.glade:5075
+#: data/geany.glade:5138
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
 "can appear anywhere in the given command and will be replaced before "
@@ -1257,67 +1272,67 @@ msgstr ""
 "上下文动作命令。当前选中的文字可以与 %s 一起使用。它可以出现在给出命令的任何"
 "地方，在执行前会被替换。"
 
-#: data/geany.glade:5114
+#: data/geany.glade:5177
 msgid "<b>Commands</b>"
 msgstr "<b>命令</b>"
 
-#: data/geany.glade:5134 src/keybindings.c:322 src/prefs.c:1623
+#: data/geany.glade:5197 src/keybindings.c:322 src/prefs.c:1623
 msgid "Tools"
 msgstr "工具"
 
-#: data/geany.glade:5189
+#: data/geany.glade:5252
 msgid "Email address of the developer"
 msgstr "开发者的电子邮件"
 
-#: data/geany.glade:5205
+#: data/geany.glade:5268
 msgid "Initials of the developer name"
 msgstr "开发者名字的开头字母"
 
-#: data/geany.glade:5221
+#: data/geany.glade:5284
 msgid "Initial version:"
 msgstr "起始版本号："
 
-#: data/geany.glade:5236
+#: data/geany.glade:5299
 msgid "Version number, which a new file initially has"
 msgstr "新建文件使用的版本号"
 
-#: data/geany.glade:5252
+#: data/geany.glade:5315
 msgid "Company name"
 msgstr "公司名称"
 
-#: data/geany.glade:5268
+#: data/geany.glade:5331
 msgid "Developer:"
 msgstr "开发者："
 
-#: data/geany.glade:5281
+#: data/geany.glade:5344
 msgid "Company:"
 msgstr "公司："
 
-#: data/geany.glade:5296
+#: data/geany.glade:5359
 msgid "Mail address:"
 msgstr "电子邮件："
 
-#: data/geany.glade:5311
+#: data/geany.glade:5374
 msgid "Initials:"
 msgstr "开头字母："
 
-#: data/geany.glade:5326
+#: data/geany.glade:5389
 msgid "The name of the developer"
 msgstr "开发者姓名"
 
-#: data/geany.glade:5340
+#: data/geany.glade:5403
 msgid "Year:"
 msgstr "年："
 
-#: data/geany.glade:5355
+#: data/geany.glade:5418
 msgid "Date:"
 msgstr "日期："
 
-#: data/geany.glade:5370
+#: data/geany.glade:5433
 msgid "Date & time:"
 msgstr "日期和时间："
 
-#: data/geany.glade:5385
+#: data/geany.glade:5448
 #, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
@@ -1327,14 +1342,14 @@ msgstr ""
 "定义 {datetime} (日期时间) 通配符的格式。可以使用 ANSI C strftime 函数的转义"
 "符。"
 
-#: data/geany.glade:5401
+#: data/geany.glade:5464
 #, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr "定义 {year} (年) 通配符的格式。可以使用 ANSI C strftime 函数的转义符。"
 
-#: data/geany.glade:5417
+#: data/geany.glade:5480
 #, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
@@ -1342,79 +1357,79 @@ msgid ""
 msgstr ""
 "定义 {date} (日期) 通配符的格式。可以使用 ANSI C strftime 函数的转义符。"
 
-#: data/geany.glade:5444
+#: data/geany.glade:5507
 msgid "<b>Template data</b>"
 msgstr "<b>模板数据</b>"
 
-#: data/geany.glade:5464 src/prefs.c:1625
+#: data/geany.glade:5527 src/prefs.c:1625
 msgid "Templates"
 msgstr "模板"
 
-#: data/geany.glade:5532
+#: data/geany.glade:5595
 msgid "C_hange"
 msgstr "更改(_H)"
 
-#: data/geany.glade:5554
+#: data/geany.glade:5617
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>快捷键</b>"
 
-#: data/geany.glade:5567 src/plugins.c:1900 src/plugins.c:1937 src/prefs.c:1627
+#: data/geany.glade:5630 src/plugins.c:1900 src/plugins.c:1937 src/prefs.c:1627
 msgid "Keybindings"
 msgstr "快捷键"
 
-#: data/geany.glade:5611
+#: data/geany.glade:5674
 msgid "Command:"
 msgstr "命令："
 
-#: data/geany.glade:5624
+#: data/geany.glade:5687
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr "打印文件命令路径 (使用 %f 作为文件名)"
 
-#: data/geany.glade:5659
+#: data/geany.glade:5722
 msgid "Use an external command for printing"
 msgstr "使用外部命令打印"
 
-#: data/geany.glade:5691 src/printing.c:237
+#: data/geany.glade:5754 src/printing.c:237
 msgid "Print line numbers"
 msgstr "打印行号"
 
-#: data/geany.glade:5695 src/printing.c:239
+#: data/geany.glade:5758 src/printing.c:239
 msgid "Add line numbers to the printed page"
 msgstr "在打印的页面上添加行号"
 
-#: data/geany.glade:5707 src/printing.c:242
+#: data/geany.glade:5770 src/printing.c:242
 msgid "Print page numbers"
 msgstr "打印页码"
 
-#: data/geany.glade:5711 src/printing.c:244
+#: data/geany.glade:5774 src/printing.c:244
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr "在每页底部打印页号，占用每页的两行。"
 
-#: data/geany.glade:5723 src/printing.c:247
+#: data/geany.glade:5786 src/printing.c:247
 msgid "Print page header"
 msgstr "打印页头"
 
-#: data/geany.glade:5727 src/printing.c:249
+#: data/geany.glade:5790 src/printing.c:249
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
 "在每页打印页头。页头包括页码、文件名和当前日期 (见下)。页头占用每页三行。"
 
-#: data/geany.glade:5757 src/printing.c:265
+#: data/geany.glade:5820 src/printing.c:265
 msgid "Use the basename of the printed file"
 msgstr "只打印基本文件名"
 
-#: data/geany.glade:5761
+#: data/geany.glade:5824
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "只打印文件的基本文件名，不包括路径"
 
-#: data/geany.glade:5780 src/printing.c:273
+#: data/geany.glade:5843 src/printing.c:273
 msgid "Date format:"
 msgstr "自定义日期格式："
 
-#: data/geany.glade:5793 src/printing.c:279
+#: data/geany.glade:5856 src/printing.c:279
 #, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
@@ -1423,104 +1438,104 @@ msgid ""
 msgstr ""
 "定义用于每页页头的日期和时间戳的格式。可以使用 ANSI C strftime 函数的转义符。"
 
-#: data/geany.glade:5828
+#: data/geany.glade:5891
 msgid "Use native GTK printing"
 msgstr "使用原生的 GTK 打印"
 
-#: data/geany.glade:5852
+#: data/geany.glade:5915
 msgid "<b>Printing</b>"
 msgstr "<b>打印</b>"
 
-#: data/geany.glade:5865 src/prefs.c:1629
+#: data/geany.glade:5928 src/prefs.c:1629
 msgid "Printing"
 msgstr "打印"
 
-#: data/geany.glade:5900
+#: data/geany.glade:5963
 msgid "Font:"
 msgstr "字体："
 
-#: data/geany.glade:5914
+#: data/geany.glade:5977
 msgid "Sets the font for the terminal widget"
 msgstr "设置虚拟终端的字体"
 
-#: data/geany.glade:5916
+#: data/geany.glade:5979
 msgid "Choose Terminal Font"
 msgstr "选择终端字体"
 
-#: data/geany.glade:5928
+#: data/geany.glade:5991
 msgid "Foreground color:"
 msgstr "前景颜色："
 
-#: data/geany.glade:5943
+#: data/geany.glade:6006
 msgid "Background color:"
 msgstr "背景颜色："
 
-#: data/geany.glade:5958
+#: data/geany.glade:6021
 msgid "Scrollback lines:"
 msgstr "回滚条数："
 
-#: data/geany.glade:5973
+#: data/geany.glade:6036
 msgid "Shell:"
 msgstr "Shell："
 
-#: data/geany.glade:5989
+#: data/geany.glade:6052
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "设置终端文本前景色"
 
-#: data/geany.glade:6006
+#: data/geany.glade:6069
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "设置终端文本背景色"
 
-#: data/geany.glade:6022
+#: data/geany.glade:6085
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr "设置终端历史条数，以便于回滚"
 
-#: data/geany.glade:6042
+#: data/geany.glade:6105
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr "设置在终端中启动的 shell 路径"
 
-#: data/geany.glade:6091
+#: data/geany.glade:6154
 msgid "Scroll on keystroke"
 msgstr "按键时滚动"
 
-#: data/geany.glade:6095
+#: data/geany.glade:6158
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr "按键时是否滚动到底端"
 
-#: data/geany.glade:6106
+#: data/geany.glade:6169
 msgid "Scroll on output"
 msgstr "输出时滚动"
 
-#: data/geany.glade:6110
+#: data/geany.glade:6173
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "输出时是否滚动到底端"
 
-#: data/geany.glade:6121
+#: data/geany.glade:6184
 msgid "Cursor blinks"
 msgstr "光标闪烁"
 
-#: data/geany.glade:6125
+#: data/geany.glade:6188
 msgid "Whether to blink the cursor"
 msgstr "是否闪烁光标"
 
-#: data/geany.glade:6136
+#: data/geany.glade:6199
 msgid "Override Geany keybindings"
 msgstr "覆写 Geany 的快捷键"
 
-#: data/geany.glade:6140
+#: data/geany.glade:6203
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr "允许在虚拟终端使用快捷键 (与焦点命令相区别)"
 
-#: data/geany.glade:6151
+#: data/geany.glade:6214
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "禁止菜单快捷键 (缺省为F10)"
 
-#: data/geany.glade:6155
+#: data/geany.glade:6218
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -1529,19 +1544,19 @@ msgstr ""
 "这个选项禁止通过快捷键 (缺省为F10) 弹出菜单。当在虚拟终端中使用类似 Midnight "
 "Commander 这类程序时有用。"
 
-#: data/geany.glade:6166
+#: data/geany.glade:6229
 msgid "Follow path of the current file"
 msgstr "跟随当前文件路径"
 
-#: data/geany.glade:6170
+#: data/geany.glade:6233
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr "当切换打开的文件时是否执行“cd $path”"
 
-#: data/geany.glade:6181
+#: data/geany.glade:6244
 msgid "Execute programs in the VTE"
 msgstr "在虚拟终端中执行程序"
 
-#: data/geany.glade:6185
+#: data/geany.glade:6248
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
@@ -1549,560 +1564,560 @@ msgstr ""
 "在虚拟终端中执行程序，而不是打开新的终端窗口。注意：虚拟终端中的执行的程序不"
 "能停止"
 
-#: data/geany.glade:6196
+#: data/geany.glade:6259
 msgid "Don't use run script"
 msgstr "不要使用运行脚本"
 
-#: data/geany.glade:6201
+#: data/geany.glade:6264
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
 msgstr "不要使用简单运行脚本（通常用于显示程序的退出状态）"
 
-#: data/geany.glade:6225
+#: data/geany.glade:6288
 msgid "<b>Terminal</b>"
 msgstr "<b>终端</b>"
 
-#: data/geany.glade:6238 src/prefs.c:1633 src/vte.c:381
+#: data/geany.glade:6301 src/prefs.c:1633 src/vte.c:381
 msgid "Terminal"
 msgstr "虚拟终端"
 
-#: data/geany.glade:6327
+#: data/geany.glade:6390
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr "<i>警告：在修改这些设置前请阅读文档。</i>"
 
-#: data/geany.glade:6353
+#: data/geany.glade:6416
 msgid "<b>Various preferences</b>"
 msgstr "<b>高级设置</b>"
 
-#: data/geany.glade:6366 src/prefs.c:1631
+#: data/geany.glade:6429 src/prefs.c:1631
 msgid "Various"
 msgstr "高级设置"
 
-#: data/geany.glade:6416
+#: data/geany.glade:6479
 msgid "_File"
 msgstr "文件(_F)"
 
-#: data/geany.glade:6434
+#: data/geany.glade:6497
 msgid "New (with _Template)"
 msgstr "从模板新建(_T)"
 
-#: data/geany.glade:6450 data/geany.glade:8021
+#: data/geany.glade:6513 data/geany.glade:8084
 msgid "_Open..."
 msgstr "打开...(_O)"
 
-#: data/geany.glade:6472
+#: data/geany.glade:6535
 msgid "Recent _Files"
 msgstr "最近打开的文件(_F)"
 
-#: data/geany.glade:6494
+#: data/geany.glade:6557
 msgid "Save _As..."
 msgstr "另存为...(_A)"
 
-#: data/geany.glade:6505
+#: data/geany.glade:6568
 msgid "Sa_ve All"
 msgstr "全部保存(_L)"
 
-#: data/geany.glade:6516 src/callbacks.c:352 src/document.c:1671
+#: data/geany.glade:6579 src/callbacks.c:352 src/document.c:1671
 #: src/document.c:3619 src/sidebar.c:1215
 msgid "_Reload"
 msgstr "重新载入(_R)"
 
-#: data/geany.glade:6527
+#: data/geany.glade:6590
 msgid "R_eload As"
 msgstr "重新载入为(_E)"
 
-#: data/geany.glade:6573
+#: data/geany.glade:6636
 msgid "Page Set_up"
 msgstr "页面设置(_U)"
 
-#: data/geany.glade:6580
+#: data/geany.glade:6643
 msgid "_Print..."
 msgstr "打印...(_P)"
 
-#: data/geany.glade:6607 src/notebook.c:498
+#: data/geany.glade:6670 src/notebook.c:498
 msgid "Close Ot_her Documents"
 msgstr "关闭其它文件(_H)"
 
-#: data/geany.glade:6618 src/notebook.c:510
+#: data/geany.glade:6681 src/notebook.c:510
 msgid "C_lose All"
 msgstr "全部关闭(_L)"
 
-#: data/geany.glade:6750
+#: data/geany.glade:6813
 msgid "Co_mmands"
 msgstr "命令(_C)"
 
-#: data/geany.glade:6757 src/keybindings.c:439
+#: data/geany.glade:6820 src/keybindings.c:439
 msgid "Cu_t Current Line(s)"
 msgstr "剪切当前行(_C)"
 
-#: data/geany.glade:6768 src/keybindings.c:436
+#: data/geany.glade:6831 src/keybindings.c:436
 msgid "_Copy Current Line(s)"
 msgstr "复制当前行(_C)"
 
-#: data/geany.glade:6781 src/keybindings.c:389
+#: data/geany.glade:6844 src/keybindings.c:389
 msgid "_Delete Current Line(s)"
 msgstr "删除当前行(_D)"
 
-#: data/geany.glade:6790 src/keybindings.c:386
+#: data/geany.glade:6853 src/keybindings.c:386
 msgid "D_uplicate Line or Selection"
 msgstr "重复行或选中的文本(_D)"
 
-#: data/geany.glade:6805 src/keybindings.c:449
+#: data/geany.glade:6868 src/keybindings.c:449
 msgid "S_elect Current Line(s)"
 msgstr "选择当前行(_S)"
 
-#: data/geany.glade:6814 src/keybindings.c:452
+#: data/geany.glade:6877 src/keybindings.c:452
 msgid "Se_lect Current Paragraph"
 msgstr "选择当前段落(_S)"
 
-#: data/geany.glade:6829
+#: data/geany.glade:6892
 msgid "_Move Line(s) Up"
 msgstr "上移行(_M)"
 
-#: data/geany.glade:6838
+#: data/geany.glade:6901
 msgid "M_ove Line(s) Down"
 msgstr "下移行(_M)"
 
-#: data/geany.glade:6853 src/keybindings.c:503
+#: data/geany.glade:6916 src/keybindings.c:503
 msgid "_Send Selection to Terminal"
 msgstr "发送选中的文字到终端(_S)"
 
-#: data/geany.glade:6875 src/keybindings.c:508
+#: data/geany.glade:6938 src/keybindings.c:508
 #, fuzzy
 msgid "_Join Lines"
 msgstr "加入行"
 
-#: data/geany.glade:6884 src/keybindings.c:505
+#: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
 msgstr "重排行/区块(_R)"
 
-#: data/geany.glade:6893 src/keybindings.c:463
+#: data/geany.glade:6956 src/keybindings.c:463
 msgid "T_oggle Case of Selection"
 msgstr "切换大小写(_O)"
 
-#: data/geany.glade:6908
+#: data/geany.glade:6971
 msgid "_Comment Line(s)"
 msgstr "转换为注释(_C)"
 
-#: data/geany.glade:6917
+#: data/geany.glade:6980
 msgid "U_ncomment Line(s)"
 msgstr "取消注释(_N)"
 
-#: data/geany.glade:6926
+#: data/geany.glade:6989
 msgid "_Toggle Line Commentation"
 msgstr "切换注释状态(_T)"
 
-#: data/geany.glade:6939
+#: data/geany.glade:7002
 msgid "_Increase Indent"
 msgstr "增加缩进(_I)"
 
-#: data/geany.glade:6950
+#: data/geany.glade:7013
 msgid "_Decrease Indent"
 msgstr "减少缩进(_D)"
 
-#: data/geany.glade:6963 src/keybindings.c:482
+#: data/geany.glade:7026 src/keybindings.c:482
 msgid "S_mart Line Indent"
 msgstr "智能缩进(_S)"
 
-#: data/geany.glade:6978
+#: data/geany.glade:7041
 msgid "_Send Selection to"
 msgstr "发送选中的文字到(_S)"
 
-#: data/geany.glade:7006
+#: data/geany.glade:7069
 msgid "I_nsert Comments"
 msgstr "插入注释(_N)"
 
-#: data/geany.glade:7140
+#: data/geany.glade:7203
 msgid "Preference_s"
 msgstr "首选项(_S)"
 
-#: data/geany.glade:7151 src/keybindings.c:529
+#: data/geany.glade:7214 src/keybindings.c:529
 msgid "P_lugin Preferences"
 msgstr "插件首选项(_L)"
 
-#: data/geany.glade:7176
+#: data/geany.glade:7239
 msgid "_Find..."
 msgstr "查找...(_F)"
 
-#: data/geany.glade:7189
+#: data/geany.glade:7252
 msgid "Find _Next"
 msgstr "查找下一个(_N)"
 
-#: data/geany.glade:7198
+#: data/geany.glade:7261
 msgid "Find _Previous"
 msgstr "查找上一个(_P)"
 
-#: data/geany.glade:7211 src/symbols.c:2215
+#: data/geany.glade:7274 src/symbols.c:2215
 msgid "Find in F_iles..."
 msgstr "在多个文件中查找...(_I)"
 
-#: data/geany.glade:7222
+#: data/geany.glade:7285
 msgid "_Replace..."
 msgstr "替换...(_R)"
 
-#: data/geany.glade:7239
+#: data/geany.glade:7302
 msgid "Next Me_ssage"
 msgstr "下一条信息(_M)"
 
-#: data/geany.glade:7250
+#: data/geany.glade:7313
 msgid "Pr_evious Message"
 msgstr "前一条信息(_E)"
 
-#: data/geany.glade:7269 src/keybindings.c:578
+#: data/geany.glade:7332 src/keybindings.c:578
 msgid "Go to Ne_xt Marker"
 msgstr "到下一个标记(_G)"
 
-#: data/geany.glade:7278 src/keybindings.c:581
+#: data/geany.glade:7341 src/keybindings.c:581
 msgid "Go to Pre_vious Marker"
 msgstr "到上一个标记(_G)"
 
-#: data/geany.glade:7291
+#: data/geany.glade:7354
 msgid "_Go to Line..."
 msgstr "跳转到指定行...(_G)"
 
-#: data/geany.glade:7313 src/keybindings.c:541
+#: data/geany.glade:7376 src/keybindings.c:541
 msgid "Find Next _Selection"
 msgstr "查找下一个选择(_S)"
 
-#: data/geany.glade:7322 src/keybindings.c:543
+#: data/geany.glade:7385 src/keybindings.c:543
 msgid "Find Pre_vious Selection"
 msgstr "查找上一个选择(_S)"
 
-#: data/geany.glade:7361 src/keybindings.c:560
+#: data/geany.glade:7424 src/keybindings.c:560
 msgid "_Mark All"
 msgstr "标记全部(_M)"
 
-#: data/geany.glade:7385
+#: data/geany.glade:7448
 msgid "Go to Symbol Decl_aration"
 msgstr "跳转到符号声明(_A)"
 
-#: data/geany.glade:7402
+#: data/geany.glade:7465
 msgid "_View"
 msgstr "查看(_V)"
 
-#: data/geany.glade:7409
+#: data/geany.glade:7472
 msgid "Change _Font..."
 msgstr "更改字体...(_F)"
 
-#: data/geany.glade:7420
+#: data/geany.glade:7483
 msgid "Change _Color Scheme..."
 msgstr "更改配色方案...(_C)"
 
-#: data/geany.glade:7439
+#: data/geany.glade:7502
 msgid "Show _Markers Margin"
 msgstr "显示页边标注区域(_M)"
 
-#: data/geany.glade:7449
+#: data/geany.glade:7512
 msgid "Show _Line Numbers"
 msgstr "显示行号(_L)"
 
-#: data/geany.glade:7459
+#: data/geany.glade:7522
 msgid "Show White S_pace"
 msgstr "显示空白(_W)"
 
-#: data/geany.glade:7468
+#: data/geany.glade:7531
 msgid "Show Line _Endings"
 msgstr "显示行尾(_E)"
 
-#: data/geany.glade:7477
+#: data/geany.glade:7540
 msgid "Show Indentation _Guides"
 msgstr "显示缩进标记(_I)"
 
-#: data/geany.glade:7492
+#: data/geany.glade:7555
 msgid "Full_screen"
 msgstr "全屏(_S)"
 
-#: data/geany.glade:7501
+#: data/geany.glade:7564
 msgid "Toggle All _Additional Widgets"
 msgstr "开关所有附加部件(_G)"
 
-#: data/geany.glade:7510
+#: data/geany.glade:7573
 msgid "Show Message _Window"
 msgstr "显示信息窗口(_W)"
 
-#: data/geany.glade:7520
+#: data/geany.glade:7583
 msgid "Show _Toolbar"
 msgstr "显示工具栏(_T)"
 
-#: data/geany.glade:7530
+#: data/geany.glade:7593
 msgid "Show Side_bar"
 msgstr "显示侧边栏(_B)"
 
-#: data/geany.glade:7580
+#: data/geany.glade:7643
 msgid "_Document"
 msgstr "文档(_D)"
 
-#: data/geany.glade:7589
+#: data/geany.glade:7652
 msgid "_Line Wrapping"
 msgstr "自动换行(_L)"
 
-#: data/geany.glade:7599
+#: data/geany.glade:7662
 msgid "Line _Breaking"
 msgstr "自动断行(_B)"
 
-#: data/geany.glade:7608
+#: data/geany.glade:7671
 msgid "_Auto-indentation"
 msgstr "自动缩进(_A)"
 
-#: data/geany.glade:7618
+#: data/geany.glade:7681
 msgid "In_dent Type"
 msgstr "缩进类型(_D)"
 
-#: data/geany.glade:7627 data/geany.glade:7685
+#: data/geany.glade:7690 data/geany.glade:7748
 msgid "_Detect from Content"
 msgstr "根据文件探测(_D)"
 
-#: data/geany.glade:7662
+#: data/geany.glade:7725
 msgid "T_abs and Spaces"
 msgstr "制表符和空格(_A)"
 
-#: data/geany.glade:7676
+#: data/geany.glade:7739
 msgid "Indent Widt_h"
 msgstr "缩进宽度(_H)"
 
-#: data/geany.glade:7700
+#: data/geany.glade:7763
 msgid "_1"
 msgstr "_1"
 
-#: data/geany.glade:7709
+#: data/geany.glade:7772
 msgid "_2"
 msgstr "_2"
 
-#: data/geany.glade:7719
+#: data/geany.glade:7782
 msgid "_3"
 msgstr "_3"
 
-#: data/geany.glade:7729
+#: data/geany.glade:7792
 msgid "_4"
 msgstr "_4"
 
-#: data/geany.glade:7740
+#: data/geany.glade:7803
 msgid "_5"
 msgstr "_5"
 
-#: data/geany.glade:7750
+#: data/geany.glade:7813
 msgid "_6"
 msgstr "_6"
 
-#: data/geany.glade:7760
+#: data/geany.glade:7823
 msgid "_7"
 msgstr "_7"
 
-#: data/geany.glade:7770
+#: data/geany.glade:7833
 msgid "_8"
 msgstr "_8"
 
-#: data/geany.glade:7790
+#: data/geany.glade:7853
 msgid "Read _Only"
 msgstr "只读(_O)"
 
-#: data/geany.glade:7799
+#: data/geany.glade:7862
 msgid "_Write Unicode BOM"
 msgstr "写 Unicode BOM (_W)"
 
-#: data/geany.glade:7814
+#: data/geany.glade:7877
 msgid "Set File_type"
 msgstr "设置文件类型(_T)"
 
-#: data/geany.glade:7834
+#: data/geany.glade:7897
 msgid "Set _Encoding"
 msgstr "设置文件编码(_E)"
 
-#: data/geany.glade:7854
+#: data/geany.glade:7917
 msgid "Set Line E_ndings"
 msgstr "设置换行符(_N)"
 
-#: data/geany.glade:7863
+#: data/geany.glade:7926
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "转换并设置为 _CR/LF (Windows)"
 
-#: data/geany.glade:7872
+#: data/geany.glade:7935
 msgid "Convert and Set to _LF (Unix)"
 msgstr "转换并设置为 _LF (Unix)"
 
-#: data/geany.glade:7883
+#: data/geany.glade:7946
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "转换并设置为 CR (早期 _Mac)"
 
-#: data/geany.glade:7903 src/keybindings.c:669
+#: data/geany.glade:7966 src/keybindings.c:669
 msgid "_Clone"
 msgstr "克隆(_C)"
 
-#: data/geany.glade:7912 src/keybindings.c:671
+#: data/geany.glade:7975 src/keybindings.c:671
 msgid "_Strip Trailing Spaces"
 msgstr "去除行尾空白(_S)"
 
-#: data/geany.glade:7921
+#: data/geany.glade:7984
 msgid "Replace Tabs with S_paces"
 msgstr "替换制表符为空格(_R)"
 
-#: data/geany.glade:7930
+#: data/geany.glade:7993
 msgid "_Replace Spaces with Tabs..."
 msgstr "替换空格为制表符...(_Y)"
 
-#: data/geany.glade:7945
+#: data/geany.glade:8008
 msgid "_Fold All"
 msgstr "全部折叠(_F)"
 
-#: data/geany.glade:7954
+#: data/geany.glade:8017
 msgid "_Unfold All"
 msgstr "全部展开(_U)"
 
-#: data/geany.glade:7969
+#: data/geany.glade:8032
 msgid "Remove _Markers"
 msgstr "去除记号(_M)"
 
-#: data/geany.glade:7978
+#: data/geany.glade:8041
 msgid "Remove Error _Indicators"
 msgstr "去除所有出错指示(_I)"
 
-#: data/geany.glade:7991
+#: data/geany.glade:8054
 msgid "_Project"
 msgstr "项目(_P)"
 
-#: data/geany.glade:7999
+#: data/geany.glade:8062
 msgid "_New..."
 msgstr "新建...(_N)"
 
-#: data/geany.glade:8010
+#: data/geany.glade:8073
 msgid "New from _Folder..."
 msgstr ""
 
-#: data/geany.glade:8034
+#: data/geany.glade:8097
 msgid "_Recent Projects"
 msgstr "最近项目(_R)"
 
-#: data/geany.glade:8040
+#: data/geany.glade:8103
 msgid "_Close"
 msgstr "关闭(_C)"
 
-#: data/geany.glade:8059
+#: data/geany.glade:8122
 msgid "Apply the default indentation settings to all documents"
 msgstr "对所有文档使用默认的缩进设置"
 
-#: data/geany.glade:8060
+#: data/geany.glade:8123
 msgid "_Apply Default Indentation"
 msgstr "使用默认缩进(_A)"
 
-#: data/geany.glade:8089 src/build.c:2446 src/build.c:2717
+#: data/geany.glade:8152 src/build.c:2446 src/build.c:2717
 msgid "_Build"
 msgstr "生成(_B)"
 
-#: data/geany.glade:8097
+#: data/geany.glade:8160
 msgid "_Tools"
 msgstr "工具(_T)"
 
-#: data/geany.glade:8104
+#: data/geany.glade:8167
 msgid "_Reload Configuration"
 msgstr "重新载入设置(_R)"
 
-#: data/geany.glade:8115
+#: data/geany.glade:8178
 msgid "C_onfiguration Files"
 msgstr "配置文件(_O)"
 
-#: data/geany.glade:8131
+#: data/geany.glade:8194
 msgid "_Color Chooser"
 msgstr "颜色选择器(_C)"
 
-#: data/geany.glade:8144
+#: data/geany.glade:8207
 msgid "_Word Count"
 msgstr "字数统计(_W)"
 
-#: data/geany.glade:8153
+#: data/geany.glade:8216
 msgid "Load Ta_gs File..."
 msgstr "载入标记文件…(_G)"
 
-#: data/geany.glade:8166 data/geany.glade:8173
+#: data/geany.glade:8229 data/geany.glade:8236
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: data/geany.glade:8186
+#: data/geany.glade:8249
 msgid "Keyboard _Shortcuts"
 msgstr "快捷键(_K)"
 
-#: data/geany.glade:8195
+#: data/geany.glade:8258
 msgid "Debug _Messages"
 msgstr "调试信息(_M)"
 
-#: data/geany.glade:8210
+#: data/geany.glade:8273
 msgid "_Website"
 msgstr "网站(_W)"
 
-#: data/geany.glade:8219
+#: data/geany.glade:8282
 msgid "Wi_ki"
 msgstr "Wi_ki"
 
-#: data/geany.glade:8228
+#: data/geany.glade:8291
 msgid "Report a _Bug..."
 msgstr "报告错误...(_B)"
 
-#: data/geany.glade:8237
+#: data/geany.glade:8300
 msgid "_Donate..."
 msgstr "捐赠...(_D)"
 
-#: data/geany.glade:8306
+#: data/geany.glade:8369
 #, fuzzy
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
 msgstr "用常用的通配符过滤您的文件。用空格分开多个通配符。"
 
-#: data/geany.glade:8348 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
+#: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
 msgid "Symbols"
 msgstr "标记"
 
-#: data/geany.glade:8376
+#: data/geany.glade:8439
 msgid "Documents"
 msgstr "文档"
 
-#: data/geany.glade:8435
+#: data/geany.glade:8498
 msgid "Status"
 msgstr "状态"
 
-#: data/geany.glade:8464
+#: data/geany.glade:8527
 msgid "Compiler"
 msgstr "编译器"
 
-#: data/geany.glade:8495
+#: data/geany.glade:8558
 msgid "Messages"
 msgstr "信息"
 
-#: data/geany.glade:8523
+#: data/geany.glade:8586
 msgid "Scribble"
 msgstr "便签"
 
-#: data/geany.glade:8570
+#: data/geany.glade:8633
 msgid "Project Properties"
 msgstr "项目属性"
 
-#: data/geany.glade:8640 src/project.c:203
+#: data/geany.glade:8703 src/project.c:203
 msgid "Filename:"
 msgstr "文件名："
 
-#: data/geany.glade:8653
+#: data/geany.glade:8716
 msgid "_Name:"
 msgstr "名称(_N)："
 
-#: data/geany.glade:8669
+#: data/geany.glade:8732
 msgid "_Description:"
 msgstr "描述(_D)："
 
-#: data/geany.glade:8686
+#: data/geany.glade:8749
 msgid "_Base path:"
 msgstr "根路径(_B)："
 
-#: data/geany.glade:8702 src/search.c:905
+#: data/geany.glade:8765 src/search.c:905
 msgid "File _patterns:"
 msgstr "文件通配符(_P)："
 
-#: data/geany.glade:8763
+#: data/geany.glade:8826
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr "空格分隔的文件通配符，用于在文件中查找 (例如 *.c *.h)"
 
-#: data/geany.glade:8797 src/project.c:232
+#: data/geany.glade:8860 src/project.c:232
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -2111,79 +2126,79 @@ msgstr ""
 "组成项目的所有文件的根路径，可以是一个新路径或一个已存在的路径。你可以使用与"
 "项目名关联的路径。"
 
-#: data/geany.glade:8841 src/keybindings.c:320
+#: data/geany.glade:8904 src/keybindings.c:320
 msgid "Project"
 msgstr "项目"
 
-#: data/geany.glade:9253
+#: data/geany.glade:9316
 msgid "Display:"
 msgstr "显示："
 
-#: data/geany.glade:9294
+#: data/geany.glade:9357
 msgid "Custom"
 msgstr "自定义"
 
-#: data/geany.glade:9313
+#: data/geany.glade:9376
 msgid "Use global settings"
 msgstr "使用全局设置"
 
-#: data/geany.glade:9640
+#: data/geany.glade:9703
 msgid "Size:"
 msgstr "尺寸："
 
-#: data/geany.glade:9656
+#: data/geany.glade:9719
 msgid "Location:"
 msgstr "位置："
 
-#: data/geany.glade:9672
+#: data/geany.glade:9735
 msgid "Read-only:"
 msgstr "只读："
 
-#: data/geany.glade:9688
+#: data/geany.glade:9751
 msgid "Encoding:"
 msgstr "编码："
 
-#: data/geany.glade:9704
+#: data/geany.glade:9767
 msgid "Modified:"
 msgstr "修改于："
 
-#: data/geany.glade:9720
+#: data/geany.glade:9783
 msgid "Changed:"
 msgstr "变更于 (ctime)："
 
-#: data/geany.glade:9736
+#: data/geany.glade:9799
 msgid "Accessed:"
 msgstr "访问于："
 
-#: data/geany.glade:9780
+#: data/geany.glade:9843
 msgid "(only inside Geany)"
 msgstr "（仅在 Geany 中）"
 
-#: data/geany.glade:9879
+#: data/geany.glade:9942
 msgid "Permissions:"
 msgstr "权限："
 
-#: data/geany.glade:9893
+#: data/geany.glade:9956
 msgid "Read:"
 msgstr "读："
 
-#: data/geany.glade:9907
+#: data/geany.glade:9970
 msgid "Write:"
 msgstr "写："
 
-#: data/geany.glade:9921
+#: data/geany.glade:9984
 msgid "Execute:"
 msgstr "执行："
 
-#: data/geany.glade:9935
+#: data/geany.glade:9998
 msgid "Owner:"
 msgstr "所有者："
 
-#: data/geany.glade:9947
+#: data/geany.glade:10010
 msgid "Group:"
 msgstr "组："
 
-#: data/geany.glade:9959
+#: data/geany.glade:10022
 msgid "Other:"
 msgstr "其他："
 
@@ -3674,11 +3689,11 @@ msgstr "快捷键"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "下列快捷键可定义："
 
-#: src/keyfile.c:1135
+#: src/keyfile.c:1139
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "随便写写，当便签或草稿好了"
 
-#: src/keyfile.c:1391
+#: src/keyfile.c:1395
 msgid "Failed to load one or more session files."
 msgstr "打开一个或多个上次会话的文件失败。"
 
@@ -6156,9 +6171,6 @@ msgstr "上下"
 
 #~ msgid "<b>Encoding:</b>"
 #~ msgstr "<b>编码：</b>"
-
-#~ msgid "<b>Changed:</b>"
-#~ msgstr "<b>变更于：</b>"
 
 #~ msgid "Shell script"
 #~ msgstr "Shell 脚本"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
-"POT-Creation-Date: 2023-10-03 19:55+0200\n"
+"POT-Creation-Date: 2023-10-04 23:48+0200\n"
 "PO-Revision-Date: 2008-11-30 16:22+0200\n"
 "Last-Translator: Atanas Beloborodov <nasko@cod3r.org>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Poedit-Language: Bulgarian\n"
 "X-Poedit-Country: BULGARIA\n"
 
-#: geany.desktop.in:5 data/geany.glade:6393
+#: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
 msgstr "Geany"
 
@@ -47,11 +47,11 @@ msgstr "Предпочитания"
 msgid "_Hide Toolbar"
 msgstr "Скрий лентата с инструментите"
 
-#: data/geany.glade:305 data/geany.glade:6651
+#: data/geany.glade:305 data/geany.glade:6714
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: data/geany.glade:313 data/geany.glade:6866
+#: data/geany.glade:313 data/geany.glade:6929
 msgid "_Format"
 msgstr "_Формат"
 
@@ -60,78 +60,78 @@ msgstr "_Формат"
 msgid "I_nsert"
 msgstr "_Вмъкни"
 
-#: data/geany.glade:332 data/geany.glade:7019
+#: data/geany.glade:332 data/geany.glade:7082
 #, fuzzy
 msgid "Insert _ChangeLog Entry"
 msgstr "Вмъкни запис в дневника на промените"
 
-#: data/geany.glade:341 data/geany.glade:7028
+#: data/geany.glade:341 data/geany.glade:7091
 #, fuzzy
 msgid "Insert _Function Description"
 msgstr "Вмъква коментар на функция"
 
-#: data/geany.glade:350 data/geany.glade:7037
+#: data/geany.glade:350 data/geany.glade:7100
 #, fuzzy
 msgid "Insert Mu_ltiline Comment"
 msgstr "Вмъква многоредов коментар"
 
-#: data/geany.glade:357 data/geany.glade:7304
+#: data/geany.glade:357 data/geany.glade:7367
 msgid "_More"
 msgstr ""
 
-#: data/geany.glade:370 data/geany.glade:7052
+#: data/geany.glade:370 data/geany.glade:7115
 #, fuzzy
 msgid "Insert File _Header"
 msgstr "Вмъкни хедър"
 
-#: data/geany.glade:379 data/geany.glade:7061
+#: data/geany.glade:379 data/geany.glade:7124
 #, fuzzy
 msgid "Insert _GPL Notice"
 msgstr "Вмъква GPL бележка"
 
-#: data/geany.glade:388 data/geany.glade:7070
+#: data/geany.glade:388 data/geany.glade:7133
 #, fuzzy
 msgid "Insert _BSD License Notice"
 msgstr "Вмъкнва BSD лиценз"
 
-#: data/geany.glade:405 data/geany.glade:7081
+#: data/geany.glade:405 data/geany.glade:7144
 msgid "Insert Dat_e"
 msgstr "Вмъкни да_та"
 
-#: data/geany.glade:417 data/geany.glade:439 data/geany.glade:6539
-#: data/geany.glade:6986 data/geany.glade:7093 data/geany.glade:7115
-#: data/geany.glade:7822 data/geany.glade:7842
+#: data/geany.glade:417 data/geany.glade:439 data/geany.glade:6602
+#: data/geany.glade:7049 data/geany.glade:7156 data/geany.glade:7178
+#: data/geany.glade:7885 data/geany.glade:7905
 msgid "invisible"
 msgstr "невидим"
 
-#: data/geany.glade:427 data/geany.glade:7103
+#: data/geany.glade:427 data/geany.glade:7166
 msgid "_Insert \"include <...>\""
 msgstr "Вмъ_кни \"include·<...>\""
 
-#: data/geany.glade:457 data/geany.glade:7127 src/keybindings.c:516
+#: data/geany.glade:457 data/geany.glade:7190 src/keybindings.c:516
 #, fuzzy
 msgid "Insert Alternative _White Space"
 msgstr "Вмъкни другия празен символ"
 
-#: data/geany.glade:470 data/geany.glade:7168
+#: data/geany.glade:470 data/geany.glade:7231
 msgid "_Search"
 msgstr "Тър_си"
 
-#: data/geany.glade:482 data/geany.glade:6463
+#: data/geany.glade:482 data/geany.glade:6526
 msgid "Open Selected F_ile"
 msgstr "Отвори избрания фа_йл"
 
-#: data/geany.glade:493 data/geany.glade:7337 src/symbols.c:2205
+#: data/geany.glade:493 data/geany.glade:7400 src/symbols.c:2205
 #, fuzzy
 msgid "Find _Usage"
 msgstr "Намери къде се използва"
 
-#: data/geany.glade:504 data/geany.glade:7346 src/symbols.c:2210
+#: data/geany.glade:504 data/geany.glade:7409 src/symbols.c:2210
 #, fuzzy
 msgid "Find _Document Usage"
 msgstr "Намери къде се използва"
 
-#: data/geany.glade:515 data/geany.glade:7376
+#: data/geany.glade:515 data/geany.glade:7439
 #, fuzzy
 msgid "Go to Symbol Defini_tion"
 msgstr "Отиди до дефиницията на тага"
@@ -351,7 +351,7 @@ msgid ""
 "default dialogs"
 msgstr ""
 
-#: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4791
+#: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4854
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Разни</b>"
 
@@ -688,11 +688,11 @@ msgstr "<b>Пътища на инструментите</b>"
 msgid "Toolbar"
 msgstr "Лента с инсрументи"
 
-#: data/geany.glade:2852 data/geany.glade:9108
+#: data/geany.glade:2852 data/geany.glade:9171
 msgid "Line wrapping"
 msgstr "Пренасяне на редове"
 
-#: data/geany.glade:2856 data/geany.glade:9112
+#: data/geany.glade:2856 data/geany.glade:9175
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -776,7 +776,7 @@ msgstr "Махни излишните символи на края"
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr "Разреши новия ред да маха всички излишни символи от предния ред."
 
-#: data/geany.glade:2970 data/geany.glade:9131
+#: data/geany.glade:2970 data/geany.glade:9194
 msgid "Line breaking column:"
 msgstr ""
 
@@ -791,7 +791,7 @@ msgid ""
 "used to mark the comment as toggled."
 msgstr ""
 
-#: data/geany.glade:3049 data/geany.glade:9174
+#: data/geany.glade:3049 data/geany.glade:9237
 msgid "<b>Features</b>"
 msgstr "<b>Свойства</b>"
 
@@ -800,81 +800,81 @@ msgstr "<b>Свойства</b>"
 msgid "Features"
 msgstr "<b>Свойства</b>"
 
-#: data/geany.glade:3096 data/geany.glade:8872
+#: data/geany.glade:3096 data/geany.glade:8935
 msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
 
-#: data/geany.glade:3146 data/geany.glade:8888
+#: data/geany.glade:3146 data/geany.glade:8951
 #, fuzzy
 msgid "_Width:"
 msgstr "Писане:"
 
-#: data/geany.glade:3160 data/geany.glade:8904
+#: data/geany.glade:3160 data/geany.glade:8967
 #, fuzzy
 msgid "The width in chars of a single indent"
 msgstr "Широчината, в символи, която ще заема една табулация"
 
-#: data/geany.glade:3179 data/geany.glade:8925
+#: data/geany.glade:3179 data/geany.glade:8988
 #, fuzzy
 msgid "Auto-indent _mode:"
 msgstr "Режим на автоматичния отстъп:"
 
-#: data/geany.glade:3214 data/geany.glade:8960
+#: data/geany.glade:3214 data/geany.glade:9023
 #, fuzzy
 msgid "Detect type from file"
 msgstr "Засечи от файла"
 
-#: data/geany.glade:3218 data/geany.glade:8964
+#: data/geany.glade:3218 data/geany.glade:9027
 #, fuzzy
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr "Дали да засече вида на вмъкване от съдържанието на файла при отваряне."
 
-#: data/geany.glade:3233 data/geany.glade:8979
+#: data/geany.glade:3233 data/geany.glade:9042
 #, fuzzy
 msgid "T_abs and spaces"
 msgstr "_Замени табулациите с интервали"
 
-#: data/geany.glade:3237 data/geany.glade:8983
+#: data/geany.glade:3237 data/geany.glade:9046
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
 
-#: data/geany.glade:3252 data/geany.glade:7652 data/geany.glade:8998
+#: data/geany.glade:3252 data/geany.glade:7715 data/geany.glade:9061
 #, fuzzy
 msgid "_Spaces"
 msgstr "Интервали"
 
-#: data/geany.glade:3256 data/geany.glade:9002
+#: data/geany.glade:3256 data/geany.glade:9065
 msgid "Use spaces when inserting indentation"
 msgstr ""
 
-#: data/geany.glade:3272 data/geany.glade:7642 data/geany.glade:9018
+#: data/geany.glade:3272 data/geany.glade:7705 data/geany.glade:9081
 #, fuzzy
 msgid "_Tabs"
 msgstr "Под-прозорци"
 
-#: data/geany.glade:3276 data/geany.glade:9022
+#: data/geany.glade:3276 data/geany.glade:9085
 msgid "Use one tab per indent"
 msgstr ""
 
-#: data/geany.glade:3292 data/geany.glade:9052
+#: data/geany.glade:3292 data/geany.glade:9115
 #, fuzzy
 msgid "Detect width from file"
 msgstr "Засечи от файла"
 
-#: data/geany.glade:3296 data/geany.glade:9056
+#: data/geany.glade:3296 data/geany.glade:9119
 #, fuzzy
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
 msgstr "Дали да засече вида на вмъкване от съдържанието на файла при отваряне."
 
-#: data/geany.glade:3313 data/geany.glade:4082 data/geany.glade:9040
-#: data/geany.glade:9615
+#: data/geany.glade:3313 data/geany.glade:4082 data/geany.glade:9103
+#: data/geany.glade:9678
 msgid "Type:"
 msgstr "Вид:"
 
@@ -904,7 +904,7 @@ msgstr ""
 msgid "<b>Indentation</b>"
 msgstr "<b>Контекстна команда</b>"
 
-#: data/geany.glade:3390 data/geany.glade:9078
+#: data/geany.glade:3390 data/geany.glade:9141
 #, fuzzy
 msgid "Indentation"
 msgstr "<b>Контекстна команда</b>"
@@ -930,11 +930,11 @@ msgstr "Автоматично завършване на XML-тагове"
 msgid "Insert matching closing tag for XML/HTML"
 msgstr ""
 
-#: data/geany.glade:3452 data/geany.glade:9198
+#: data/geany.glade:3452 data/geany.glade:9261
 msgid "Automatic continuation of multi-line comments"
 msgstr ""
 
-#: data/geany.glade:3456 data/geany.glade:9202
+#: data/geany.glade:3456 data/geany.glade:9265
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
@@ -1006,7 +1006,7 @@ msgid ""
 "with large files. A delay of 0 disables real-time updates."
 msgstr ""
 
-#: data/geany.glade:3667 data/geany.glade:9213
+#: data/geany.glade:3667 data/geany.glade:9276
 #, fuzzy
 msgid "<b>Completions</b>"
 msgstr "<b>Автоматично завършване</b>"
@@ -1151,7 +1151,7 @@ msgstr ""
 msgid "<b>Display</b>"
 msgstr "<b>Покажи</b>"
 
-#: data/geany.glade:4052 data/geany.glade:9265
+#: data/geany.glade:4052 data/geany.glade:9328
 #, fuzzy
 msgid "Column:"
 msgstr "Дружество:"
@@ -1165,7 +1165,7 @@ msgstr "Цвят"
 msgid "Sets the color of the long line marker"
 msgstr "Задава цвета на маркера за дълъг ред"
 
-#: data/geany.glade:4099 data/geany.glade:5990 data/geany.glade:6007
+#: data/geany.glade:4099 data/geany.glade:6053 data/geany.glade:6070
 #: src/toolbar.c:73 src/tools.c:835
 msgid "Color Chooser"
 msgstr "Избери цвят"
@@ -1215,11 +1215,11 @@ msgstr ""
 msgid "Enabled"
 msgstr "_Разреши"
 
-#: data/geany.glade:4202 data/geany.glade:9358
+#: data/geany.glade:4202 data/geany.glade:9421
 msgid "<b>Long line marker</b>"
 msgstr "<b>Маркер за дълъг ред</b>"
 
-#: data/geany.glade:4230 data/geany.glade:9278
+#: data/geany.glade:4230 data/geany.glade:9341
 msgid "Disabled"
 msgstr "Изключен"
 
@@ -1251,49 +1251,64 @@ msgstr "Премахва табулациите, интервалите в кр�
 msgid "<b>Virtual spaces</b>"
 msgstr "<b>Пътища на инструментите</b>"
 
-#: data/geany.glade:4306
+#: data/geany.glade:4315
+#, fuzzy
+msgid "Show in markers margin"
+msgstr "Покажи _отстъпа за отбелязване"
+
+#: data/geany.glade:4329
+#, fuzzy
+msgid "Show as underline indicators"
+msgstr "Показва символа за край на ред"
+
+#: data/geany.glade:4349
+#, fuzzy
+msgid "<b>Change History</b>"
+msgstr "<b>Променен:</b>"
+
+#: data/geany.glade:4369
 #, fuzzy
 msgid "Display"
 msgstr "<b>Покажи</b>"
 
-#: data/geany.glade:4322 data/geany.glade:9378 src/keybindings.c:310
+#: data/geany.glade:4385 data/geany.glade:9441 src/keybindings.c:310
 #: src/prefs.c:1619
 msgid "Editor"
 msgstr "Редактор"
 
-#: data/geany.glade:4357
+#: data/geany.glade:4420
 msgid "Open new documents from the command-line"
 msgstr ""
 
-#: data/geany.glade:4361
+#: data/geany.glade:4424
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
 
-#: data/geany.glade:4401
+#: data/geany.glade:4464
 #, fuzzy
 msgid "Default end of line characters:"
 msgstr "Кодиране по подразбиране:"
 
-#: data/geany.glade:4432
+#: data/geany.glade:4495
 msgid "<b>New files</b>"
 msgstr "<b>Нови·файлове</b>"
 
-#: data/geany.glade:4467
+#: data/geany.glade:4530
 #, fuzzy
 msgid "Default encoding (new files):"
 msgstr "Кодиране по подразбиране:"
 
-#: data/geany.glade:4481
+#: data/geany.glade:4544
 #, fuzzy
 msgid "Sets the default encoding for newly created files"
 msgstr "Задава кодирането по подразбиране на новосъздадените файлове."
 
-#: data/geany.glade:4507
+#: data/geany.glade:4570
 #, fuzzy
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Използвай определено кодиране при отваряне на файлове."
 
-#: data/geany.glade:4511
+#: data/geany.glade:4574
 #, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
@@ -1304,125 +1319,125 @@ msgstr ""
 "отваряне на файлове и зарежда файла с точно определена кодировка (обикновено "
 "ненужно.)"
 
-#: data/geany.glade:4529
+#: data/geany.glade:4592
 #, fuzzy
 msgid "Default encoding (existing non-Unicode files):"
 msgstr "Кодиране по подразбиране:"
 
-#: data/geany.glade:4543
+#: data/geany.glade:4606
 #, fuzzy
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr "Задава кодирането по подразбиране на новосъздадените файлове."
 
-#: data/geany.glade:4575
+#: data/geany.glade:4638
 #, fuzzy
 msgid "<b>Encodings</b>"
 msgstr "<b>Кодировка:</b>"
 
-#: data/geany.glade:4603 data/geany.glade:9408
+#: data/geany.glade:4666 data/geany.glade:9471
 msgid "Ensure new line at file end"
 msgstr "Сложи нов ред в края на файла"
 
-#: data/geany.glade:4607
+#: data/geany.glade:4670
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Ако файлът не завършва с празен ред, такъв ще се вмъкне автоматично"
 
-#: data/geany.glade:4619 data/geany.glade:9423
+#: data/geany.glade:4682 data/geany.glade:9486
 #, fuzzy
 msgid "Ensure consistent line endings"
 msgstr "Сложи нов ред в края на файла"
 
-#: data/geany.glade:4623
+#: data/geany.glade:4686
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
 
-#: data/geany.glade:4635 data/geany.glade:9438
+#: data/geany.glade:4698 data/geany.glade:9501
 #, fuzzy
 msgid "Strip trailing spaces and tabs"
 msgstr "Махни излишните символи на края"
 
-#: data/geany.glade:4639
+#: data/geany.glade:4702
 #, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Премахва табулациите, интервалите в края на реда"
 
-#: data/geany.glade:4651 data/geany.glade:9453 src/keybindings.c:673
+#: data/geany.glade:4714 data/geany.glade:9516 src/keybindings.c:673
 msgid "Replace tabs with space"
 msgstr "Замени табулацията с интервали"
 
-#: data/geany.glade:4655
+#: data/geany.glade:4718
 #, fuzzy
 msgid "Replaces all tabs in document with spaces"
 msgstr "Заменя всички табулации в документа с интервали"
 
-#: data/geany.glade:4673 data/geany.glade:9474
+#: data/geany.glade:4736 data/geany.glade:9537
 msgid "<b>Saving files</b>"
 msgstr "<b>Запазване на файлове</b>"
 
-#: data/geany.glade:4712
+#: data/geany.glade:4775
 msgid "Recent files list length:"
 msgstr "Големина на списъка със скоро отваряни файлове:"
 
-#: data/geany.glade:4725
+#: data/geany.glade:4788
 #, fuzzy
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr ""
 "Указва броя на файловете, които се съхраняват в списъка със скоро отваряни "
 "файлове:"
 
-#: data/geany.glade:4744
+#: data/geany.glade:4807
 msgid "Disk check timeout:"
 msgstr ""
 
-#: data/geany.glade:4759
+#: data/geany.glade:4822
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
 msgstr ""
 
-#: data/geany.glade:4811 data/geany.glade:9494 src/prefs.c:1621
+#: data/geany.glade:4874 data/geany.glade:9557 src/prefs.c:1621
 #: src/tagmanager/tm_parser.c:456 plugins/filebrowser.c:1167
 msgid "Files"
 msgstr "Файлове"
 
-#: data/geany.glade:4866
+#: data/geany.glade:4929
 msgid "Terminal:"
 msgstr "Терминал:"
 
-#: data/geany.glade:4879
+#: data/geany.glade:4942
 msgid "Browser:"
 msgstr "Браузър:"
 
-#: data/geany.glade:4894
+#: data/geany.glade:4957
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
 msgstr ""
 
-#: data/geany.glade:4908
+#: data/geany.glade:4971
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Път (и вероятно допълнителни аргументи) към любимия ви браузър"
 
-#: data/geany.glade:4911
+#: data/geany.glade:4974
 msgid "System default"
 msgstr ""
 
-#: data/geany.glade:4967
+#: data/geany.glade:5030
 msgid "Grep:"
 msgstr "Grep:"
 
-#: data/geany.glade:5030
+#: data/geany.glade:5093
 msgid "<b>Tool paths</b>"
 msgstr "<b>Пътища на инструментите</b>"
 
-#: data/geany.glade:5063
+#: data/geany.glade:5126
 #, fuzzy
 msgid "Context action:"
 msgstr "Контекстно действие"
 
-#: data/geany.glade:5075
+#: data/geany.glade:5138
 #, fuzzy
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -1432,73 +1447,73 @@ msgstr ""
 "Контекстна команда. Избраната дума може да бъде използвана с %s. Тя може да "
 "бъде навсякъде в дадената команда и ще бъде заменена преди изпълнението."
 
-#: data/geany.glade:5114
+#: data/geany.glade:5177
 #, fuzzy
 msgid "<b>Commands</b>"
 msgstr ""
 "\n"
 "<b>Команди за тагове</b>\n"
 
-#: data/geany.glade:5134 src/keybindings.c:322 src/prefs.c:1623
+#: data/geany.glade:5197 src/keybindings.c:322 src/prefs.c:1623
 msgid "Tools"
 msgstr "Инструменти"
 
-#: data/geany.glade:5189
+#: data/geany.glade:5252
 msgid "Email address of the developer"
 msgstr "Адрес на електронната поща на разработчика"
 
-#: data/geany.glade:5205
+#: data/geany.glade:5268
 msgid "Initials of the developer name"
 msgstr "Инициали на името на разработчика"
 
-#: data/geany.glade:5221
+#: data/geany.glade:5284
 #, fuzzy
 msgid "Initial version:"
 msgstr "Първоначална версия:"
 
-#: data/geany.glade:5236
+#: data/geany.glade:5299
 msgid "Version number, which a new file initially has"
 msgstr "Версия, която новия файл има по подразбиране"
 
-#: data/geany.glade:5252
+#: data/geany.glade:5315
 msgid "Company name"
 msgstr "Име на дружеството"
 
-#: data/geany.glade:5268
+#: data/geany.glade:5331
 msgid "Developer:"
 msgstr "Разработчик:"
 
-#: data/geany.glade:5281
+#: data/geany.glade:5344
 msgid "Company:"
 msgstr "Дружество:"
 
-#: data/geany.glade:5296
+#: data/geany.glade:5359
 msgid "Mail address:"
 msgstr "Пощенски адрес:"
 
-#: data/geany.glade:5311
+#: data/geany.glade:5374
 msgid "Initials:"
 msgstr "Инициали:"
 
-#: data/geany.glade:5326
+#: data/geany.glade:5389
 msgid "The name of the developer"
 msgstr "Име на разработчика"
 
-#: data/geany.glade:5340
+#: data/geany.glade:5403
 #, fuzzy
 msgid "Year:"
 msgstr "Странична лента:"
 
-#: data/geany.glade:5355
+#: data/geany.glade:5418
 #, fuzzy
 msgid "Date:"
 msgstr "Make:"
 
-#: data/geany.glade:5370
+#: data/geany.glade:5433
 msgid "Date & time:"
 msgstr ""
 
-#: data/geany.glade:5385
+#: data/geany.glade:5448
 #, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
@@ -1509,7 +1524,7 @@ msgstr ""
 "всякакви общоприети начини на изписване, които могат да бъдат използвани с "
 "ANSI·C функцията strftime . За повече подробности, вижте \"man·strftime\""
 
-#: data/geany.glade:5401
+#: data/geany.glade:5464
 #, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
@@ -1519,7 +1534,7 @@ msgstr ""
 "всякакви общоприети начини на изписване, които могат да бъдат използвани с "
 "ANSI·C функцията strftime . За повече подробности, вижте \"man·strftime\""
 
-#: data/geany.glade:5417
+#: data/geany.glade:5480
 #, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
@@ -1529,69 +1544,69 @@ msgstr ""
 "всякакви общоприети начини на изписване, които могат да бъдат използвани с "
 "ANSI·C функцията strftime . За повече подробности, вижте \"man·strftime\""
 
-#: data/geany.glade:5444
+#: data/geany.glade:5507
 msgid "<b>Template data</b>"
 msgstr "<b>Информация за шаблона</b>"
 
-#: data/geany.glade:5464 src/prefs.c:1625
+#: data/geany.glade:5527 src/prefs.c:1625
 msgid "Templates"
 msgstr "Шаблони"
 
-#: data/geany.glade:5532
+#: data/geany.glade:5595
 #, fuzzy
 msgid "C_hange"
 msgstr "Промени"
 
-#: data/geany.glade:5554
+#: data/geany.glade:5617
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Клавишни комбинации</b>"
 
-#: data/geany.glade:5567 src/plugins.c:1900 src/plugins.c:1937 src/prefs.c:1627
+#: data/geany.glade:5630 src/plugins.c:1900 src/plugins.c:1937 src/prefs.c:1627
 msgid "Keybindings"
 msgstr "Комбинации"
 
-#: data/geany.glade:5611
+#: data/geany.glade:5674
 #, fuzzy
 msgid "Command:"
 msgstr "Команда"
 
-#: data/geany.glade:5624
+#: data/geany.glade:5687
 #, fuzzy
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr ""
 "Път до командата за принтиране на файлове (използвайте %f за името на файла)."
 
-#: data/geany.glade:5659
+#: data/geany.glade:5722
 msgid "Use an external command for printing"
 msgstr "Използвай външна програма за принтиране"
 
-#: data/geany.glade:5691 src/printing.c:237
+#: data/geany.glade:5754 src/printing.c:237
 #, fuzzy
 msgid "Print line numbers"
 msgstr "Покажи _номерата на редовете"
 
-#: data/geany.glade:5695 src/printing.c:239
+#: data/geany.glade:5758 src/printing.c:239
 #, fuzzy
 msgid "Add line numbers to the printed page"
 msgstr "Следвай пътя до текущия файл"
 
-#: data/geany.glade:5707 src/printing.c:242
+#: data/geany.glade:5770 src/printing.c:242
 #, fuzzy
 msgid "Print page numbers"
 msgstr "Покажи _номерата на редовете"
 
-#: data/geany.glade:5711 src/printing.c:244
+#: data/geany.glade:5774 src/printing.c:244
 #, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr "Номерирай страниците в дъното. Отнема 2 реда."
 
-#: data/geany.glade:5723 src/printing.c:247
+#: data/geany.glade:5786 src/printing.c:247
 #, fuzzy
 msgid "Print page header"
 msgstr "Основен път:"
 
-#: data/geany.glade:5727 src/printing.c:249
+#: data/geany.glade:5790 src/printing.c:249
 #, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
@@ -1600,22 +1615,22 @@ msgstr ""
 "Добавя текст към началото на страницата, съдържащ номера на страницата, "
 "името на файла и отнема 3 реда (виж долу)."
 
-#: data/geany.glade:5757 src/printing.c:265
+#: data/geany.glade:5820 src/printing.c:265
 #, fuzzy
 msgid "Use the basename of the printed file"
 msgstr "Следвай пътя до текущия файл"
 
-#: data/geany.glade:5761
+#: data/geany.glade:5824
 #, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Следвай пътя до текущия файл"
 
-#: data/geany.glade:5780 src/printing.c:273
+#: data/geany.glade:5843 src/printing.c:273
 #, fuzzy
 msgid "Date format:"
 msgstr "Потребителски формат за дата"
 
-#: data/geany.glade:5793 src/printing.c:279
+#: data/geany.glade:5856 src/printing.c:279
 #, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
@@ -1626,61 +1641,61 @@ msgstr ""
 "всякакви общоприети начини на изписване, които могат да бъдат използвани с "
 "ANSI·C функцията strftime . За повече подробности, вижте \"man·strftime\""
 
-#: data/geany.glade:5828
+#: data/geany.glade:5891
 msgid "Use native GTK printing"
 msgstr "Използвай отпечатването на GTK"
 
-#: data/geany.glade:5852
+#: data/geany.glade:5915
 #, fuzzy
 msgid "<b>Printing</b>"
 msgstr "<b>Кодировка:</b>"
 
-#: data/geany.glade:5865 src/prefs.c:1629
+#: data/geany.glade:5928 src/prefs.c:1629
 #, fuzzy
 msgid "Printing"
 msgstr "Разпечатай (принтирай)"
 
-#: data/geany.glade:5900
+#: data/geany.glade:5963
 msgid "Font:"
 msgstr ""
 
-#: data/geany.glade:5914
+#: data/geany.glade:5977
 #, fuzzy
 msgid "Sets the font for the terminal widget"
 msgstr "Задава шрифта на джаджата за терминал."
 
-#: data/geany.glade:5916
+#: data/geany.glade:5979
 #, fuzzy
 msgid "Choose Terminal Font"
 msgstr "Терминален шрифт:"
 
-#: data/geany.glade:5928
+#: data/geany.glade:5991
 msgid "Foreground color:"
 msgstr "Нормален цвят:"
 
-#: data/geany.glade:5943
+#: data/geany.glade:6006
 msgid "Background color:"
 msgstr "Фонов цвят:"
 
-#: data/geany.glade:5958
+#: data/geany.glade:6021
 msgid "Scrollback lines:"
 msgstr "Прелистване назад:"
 
-#: data/geany.glade:5973
+#: data/geany.glade:6036
 msgid "Shell:"
 msgstr "Обвивка:"
 
-#: data/geany.glade:5989
+#: data/geany.glade:6052
 #, fuzzy
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Задава нормалия цвят на текста в джаджата за терминал."
 
-#: data/geany.glade:6006
+#: data/geany.glade:6069
 #, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Задава фоновия цвят на текста в джаджата за терминал."
 
-#: data/geany.glade:6022
+#: data/geany.glade:6085
 #, fuzzy
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
@@ -1689,7 +1704,7 @@ msgstr ""
 "Определя историята в редове, която можете да превъртите назад вджаджата за "
 "терминал."
 
-#: data/geany.glade:6042
+#: data/geany.glade:6105
 #, fuzzy
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
@@ -1697,48 +1712,48 @@ msgid ""
 msgstr ""
 "Задава пътя до обвивката, която трябва да се стартира в терминалния имитатор."
 
-#: data/geany.glade:6091
+#: data/geany.glade:6154
 msgid "Scroll on keystroke"
 msgstr "Прелиствай при натискане на клавиш."
 
-#: data/geany.glade:6095
+#: data/geany.glade:6158
 #, fuzzy
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr "Дали да прелиствам до дъното ако се натисне клавиш"
 
-#: data/geany.glade:6106
+#: data/geany.glade:6169
 msgid "Scroll on output"
 msgstr "Прелиствай при изход"
 
-#: data/geany.glade:6110
+#: data/geany.glade:6173
 #, fuzzy
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "Дали да прелиствам до дъното, когато има изход"
 
-#: data/geany.glade:6121
+#: data/geany.glade:6184
 msgid "Cursor blinks"
 msgstr ""
 
-#: data/geany.glade:6125
+#: data/geany.glade:6188
 #, fuzzy
 msgid "Whether to blink the cursor"
 msgstr "Дали да разреши сгъването на кода"
 
-#: data/geany.glade:6136
+#: data/geany.glade:6199
 msgid "Override Geany keybindings"
 msgstr "Смени клавишните комбинации на Geany"
 
-#: data/geany.glade:6140
+#: data/geany.glade:6203
 #, fuzzy
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr "Позволява на VTE да получава клавишни команди (освен фокусните)"
 
-#: data/geany.glade:6151
+#: data/geany.glade:6214
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Изключи комбинацията за меню (F10 по подразбиране)"
 
-#: data/geany.glade:6155
+#: data/geany.glade:6218
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -1748,24 +1763,24 @@ msgstr ""
 "Изключването й би било полезно ако използвате, например, Midnight Commander "
 "в VTE."
 
-#: data/geany.glade:6166
+#: data/geany.glade:6229
 #, fuzzy
 msgid "Follow path of the current file"
 msgstr "Следвай пътя до текущия файл"
 
-#: data/geany.glade:6170
+#: data/geany.glade:6233
 #, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 "Дали да изпълня \"cd $path\" всеки път, когато превключвате между отворените "
 "файлове/"
 
-#: data/geany.glade:6181
+#: data/geany.glade:6244
 #, fuzzy
 msgid "Execute programs in the VTE"
 msgstr "Изпълнявай програмите във VTE"
 
-#: data/geany.glade:6185
+#: data/geany.glade:6248
 #, fuzzy
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
@@ -1774,11 +1789,11 @@ msgstr ""
 "Да изпълнявам програмите във VTE, вместо да отварям прозорец на терминален "
 "емулатор. Моля обърнете внимание, че такива програми не могат да се спират."
 
-#: data/geany.glade:6196
+#: data/geany.glade:6259
 msgid "Don't use run script"
 msgstr "Не използвай скрипта за стартиране"
 
-#: data/geany.glade:6201
+#: data/geany.glade:6264
 #, fuzzy
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
@@ -1787,610 +1802,610 @@ msgstr ""
 "Не използвай простия скрипт за стартиране, който обикновено се използва, за "
 "да покаже с кода, който е върнала програмата при изпълнението си."
 
-#: data/geany.glade:6225
+#: data/geany.glade:6288
 #, fuzzy
 msgid "<b>Terminal</b>"
 msgstr "<b>Разрешения:</b>"
 
-#: data/geany.glade:6238 src/prefs.c:1633 src/vte.c:381
+#: data/geany.glade:6301 src/prefs.c:1633 src/vte.c:381
 msgid "Terminal"
 msgstr "Терминал"
 
-#: data/geany.glade:6327
+#: data/geany.glade:6390
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr ""
 
-#: data/geany.glade:6353
+#: data/geany.glade:6416
 #, fuzzy
 msgid "<b>Various preferences</b>"
 msgstr "<b>Пътища на инструментите</b>"
 
-#: data/geany.glade:6366 src/prefs.c:1631
+#: data/geany.glade:6429 src/prefs.c:1631
 #, fuzzy
 msgid "Various"
 msgstr "_Предишен"
 
-#: data/geany.glade:6416
+#: data/geany.glade:6479
 msgid "_File"
 msgstr "_Файл"
 
-#: data/geany.glade:6434
+#: data/geany.glade:6497
 msgid "New (with _Template)"
 msgstr "Нов (с _шаблон)"
 
-#: data/geany.glade:6450 data/geany.glade:8021
+#: data/geany.glade:6513 data/geany.glade:8084
 #, fuzzy
 msgid "_Open..."
 msgstr "_Отвори"
 
-#: data/geany.glade:6472
+#: data/geany.glade:6535
 msgid "Recent _Files"
 msgstr "Последно отваряни _файлове"
 
-#: data/geany.glade:6494
+#: data/geany.glade:6557
 #, fuzzy
 msgid "Save _As..."
 msgstr "Запази като"
 
-#: data/geany.glade:6505
+#: data/geany.glade:6568
 msgid "Sa_ve All"
 msgstr "Запази _всички"
 
-#: data/geany.glade:6516 src/callbacks.c:352 src/document.c:1671
+#: data/geany.glade:6579 src/callbacks.c:352 src/document.c:1671
 #: src/document.c:3619 src/sidebar.c:1215
 msgid "_Reload"
 msgstr "_Презареди"
 
-#: data/geany.glade:6527
+#: data/geany.glade:6590
 msgid "R_eload As"
 msgstr "Пр_езареди като"
 
-#: data/geany.glade:6573
+#: data/geany.glade:6636
 #, fuzzy
 msgid "Page Set_up"
 msgstr "Настройки на страни_цата"
 
-#: data/geany.glade:6580
+#: data/geany.glade:6643
 #, fuzzy
 msgid "_Print..."
 msgstr "Разпечатай (принтирай)"
 
-#: data/geany.glade:6607 src/notebook.c:498
+#: data/geany.glade:6670 src/notebook.c:498
 #, fuzzy
 msgid "Close Ot_her Documents"
 msgstr "Затвори текущия файл"
 
-#: data/geany.glade:6618 src/notebook.c:510
+#: data/geany.glade:6681 src/notebook.c:510
 msgid "C_lose All"
 msgstr "_Затвори Всички"
 
-#: data/geany.glade:6750
+#: data/geany.glade:6813
 #, fuzzy
 msgid "Co_mmands"
 msgstr "Команда"
 
-#: data/geany.glade:6757 src/keybindings.c:439
+#: data/geany.glade:6820 src/keybindings.c:439
 #, fuzzy
 msgid "Cu_t Current Line(s)"
 msgstr "Затвори текущия файл"
 
-#: data/geany.glade:6768 src/keybindings.c:436
+#: data/geany.glade:6831 src/keybindings.c:436
 #, fuzzy
 msgid "_Copy Current Line(s)"
 msgstr "Компилирай текущия файл"
 
-#: data/geany.glade:6781 src/keybindings.c:389
+#: data/geany.glade:6844 src/keybindings.c:389
 #, fuzzy
 msgid "_Delete Current Line(s)"
 msgstr "Затвори текущия файл"
 
-#: data/geany.glade:6790 src/keybindings.c:386
+#: data/geany.glade:6853 src/keybindings.c:386
 #, fuzzy
 msgid "D_uplicate Line or Selection"
 msgstr "_Удвои реда или избрания текст"
 
-#: data/geany.glade:6805 src/keybindings.c:449
+#: data/geany.glade:6868 src/keybindings.c:449
 #, fuzzy
 msgid "S_elect Current Line(s)"
 msgstr "Избери текущата дума"
 
-#: data/geany.glade:6814 src/keybindings.c:452
+#: data/geany.glade:6877 src/keybindings.c:452
 #, fuzzy
 msgid "Se_lect Current Paragraph"
 msgstr "Избери текущата дума"
 
-#: data/geany.glade:6829
+#: data/geany.glade:6892
 #, fuzzy
 msgid "_Move Line(s) Up"
 msgstr "Коментирай ред(ове)"
 
-#: data/geany.glade:6838
+#: data/geany.glade:6901
 #, fuzzy
 msgid "M_ove Line(s) Down"
 msgstr "Коментирай ред(ове)"
 
-#: data/geany.glade:6853 src/keybindings.c:503
+#: data/geany.glade:6916 src/keybindings.c:503
 #, fuzzy
 msgid "_Send Selection to Terminal"
 msgstr "Из_прати избрания текст на"
 
-#: data/geany.glade:6875 src/keybindings.c:508
+#: data/geany.glade:6938 src/keybindings.c:508
 #, fuzzy
 msgid "_Join Lines"
 msgstr "Коментирай ред(ове)"
 
-#: data/geany.glade:6884 src/keybindings.c:505
+#: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
 msgstr ""
 
-#: data/geany.glade:6893 src/keybindings.c:463
+#: data/geany.glade:6956 src/keybindings.c:463
 #, fuzzy
 msgid "T_oggle Case of Selection"
 msgstr "_Удвои реда или избрания текст"
 
-#: data/geany.glade:6908
+#: data/geany.glade:6971
 msgid "_Comment Line(s)"
 msgstr "_Коментирай ред(ове)"
 
-#: data/geany.glade:6917
+#: data/geany.glade:6980
 msgid "U_ncomment Line(s)"
 msgstr "_Откоментирай ред(ове)"
 
-#: data/geany.glade:6926
+#: data/geany.glade:6989
 msgid "_Toggle Line Commentation"
 msgstr "Об_ърни коментирането на реда"
 
-#: data/geany.glade:6939
+#: data/geany.glade:7002
 msgid "_Increase Indent"
 msgstr "У_величи отстъпа"
 
-#: data/geany.glade:6950
+#: data/geany.glade:7013
 msgid "_Decrease Indent"
 msgstr "_Намали отстъпа"
 
-#: data/geany.glade:6963 src/keybindings.c:482
+#: data/geany.glade:7026 src/keybindings.c:482
 #, fuzzy
 msgid "S_mart Line Indent"
 msgstr "Умно вмъкване на реда"
 
-#: data/geany.glade:6978
+#: data/geany.glade:7041
 msgid "_Send Selection to"
 msgstr "Из_прати избрания текст на"
 
-#: data/geany.glade:7006
+#: data/geany.glade:7069
 msgid "I_nsert Comments"
 msgstr "Вмъкн_и коментари"
 
-#: data/geany.glade:7140
+#: data/geany.glade:7203
 #, fuzzy
 msgid "Preference_s"
 msgstr "Предпочитания"
 
-#: data/geany.glade:7151 src/keybindings.c:529
+#: data/geany.glade:7214 src/keybindings.c:529
 #, fuzzy
 msgid "P_lugin Preferences"
 msgstr "Предпочитания"
 
-#: data/geany.glade:7176
+#: data/geany.glade:7239
 #, fuzzy
 msgid "_Find..."
 msgstr "Намери"
 
-#: data/geany.glade:7189
+#: data/geany.glade:7252
 msgid "Find _Next"
 msgstr "Намери с_ледващото"
 
-#: data/geany.glade:7198
+#: data/geany.glade:7261
 msgid "Find _Previous"
 msgstr "Наимери _предишния"
 
-#: data/geany.glade:7211 src/symbols.c:2215
+#: data/geany.glade:7274 src/symbols.c:2215
 #, fuzzy
 msgid "Find in F_iles..."
 msgstr "Намери въф _файлове"
 
-#: data/geany.glade:7222
+#: data/geany.glade:7285
 #, fuzzy
 msgid "_Replace..."
 msgstr "_Замени"
 
-#: data/geany.glade:7239
+#: data/geany.glade:7302
 msgid "Next Me_ssage"
 msgstr "След_ващо съобщение"
 
-#: data/geany.glade:7250
+#: data/geany.glade:7313
 #, fuzzy
 msgid "Pr_evious Message"
 msgstr "Следващо съобщение"
 
-#: data/geany.glade:7269 src/keybindings.c:578
+#: data/geany.glade:7332 src/keybindings.c:578
 #, fuzzy
 msgid "Go to Ne_xt Marker"
 msgstr "Отиди до следващия маркер"
 
-#: data/geany.glade:7278 src/keybindings.c:581
+#: data/geany.glade:7341 src/keybindings.c:581
 #, fuzzy
 msgid "Go to Pre_vious Marker"
 msgstr "Отиди до предишния маркер"
 
-#: data/geany.glade:7291
+#: data/geany.glade:7354
 #, fuzzy
 msgid "_Go to Line..."
 msgstr "Отско_чи до ред"
 
-#: data/geany.glade:7313 src/keybindings.c:541
+#: data/geany.glade:7376 src/keybindings.c:541
 #, fuzzy
 msgid "Find Next _Selection"
 msgstr "Намери следващото избрано"
 
-#: data/geany.glade:7322 src/keybindings.c:543
+#: data/geany.glade:7385 src/keybindings.c:543
 #, fuzzy
 msgid "Find Pre_vious Selection"
 msgstr "Намери предишното избрано"
 
-#: data/geany.glade:7361 src/keybindings.c:560
+#: data/geany.glade:7424 src/keybindings.c:560
 #, fuzzy
 msgid "_Mark All"
 msgstr "_Направи всички (make)"
 
-#: data/geany.glade:7385
+#: data/geany.glade:7448
 #, fuzzy
 msgid "Go to Symbol Decl_aration"
 msgstr "Отиди до декларацията на тага"
 
-#: data/geany.glade:7402
+#: data/geany.glade:7465
 msgid "_View"
 msgstr "И_зглед"
 
-#: data/geany.glade:7409
+#: data/geany.glade:7472
 #, fuzzy
 msgid "Change _Font..."
 msgstr "Промени _Шрифта"
 
-#: data/geany.glade:7420
+#: data/geany.glade:7483
 #, fuzzy
 msgid "Change _Color Scheme..."
 msgstr "Из_бери цвят"
 
-#: data/geany.glade:7439
+#: data/geany.glade:7502
 msgid "Show _Markers Margin"
 msgstr "Покажи _отстъпа за отбелязване"
 
-#: data/geany.glade:7449
+#: data/geany.glade:7512
 msgid "Show _Line Numbers"
 msgstr "Покажи _номерата на редовете"
 
-#: data/geany.glade:7459
+#: data/geany.glade:7522
 #, fuzzy
 msgid "Show White S_pace"
 msgstr "Показвай интервали и табулации"
 
-#: data/geany.glade:7468
+#: data/geany.glade:7531
 #, fuzzy
 msgid "Show Line _Endings"
 msgstr "Показвай края на редовете"
 
-#: data/geany.glade:7477
+#: data/geany.glade:7540
 #, fuzzy
 msgid "Show Indentation _Guides"
 msgstr "Показвай ориентировачни занци за отстъп"
 
-#: data/geany.glade:7492
+#: data/geany.glade:7555
 msgid "Full_screen"
 msgstr "_Цял екран"
 
-#: data/geany.glade:7501
+#: data/geany.glade:7564
 #, fuzzy
 msgid "Toggle All _Additional Widgets"
 msgstr "Промяеня всички допълнителни Widget-и"
 
-#: data/geany.glade:7510
+#: data/geany.glade:7573
 msgid "Show Message _Window"
 msgstr "Покажи _прозореза за съобщения"
 
-#: data/geany.glade:7520
+#: data/geany.glade:7583
 msgid "Show _Toolbar"
 msgstr "Покажи _лентата с инструменти"
 
-#: data/geany.glade:7530
+#: data/geany.glade:7593
 msgid "Show Side_bar"
 msgstr "Покажи _страничната лента"
 
-#: data/geany.glade:7580
+#: data/geany.glade:7643
 msgid "_Document"
 msgstr "_Документ"
 
-#: data/geany.glade:7589
+#: data/geany.glade:7652
 msgid "_Line Wrapping"
 msgstr "Ре_жим на пренасяне"
 
-#: data/geany.glade:7599
+#: data/geany.glade:7662
 #, fuzzy
 msgid "Line _Breaking"
 msgstr "Пренасяне на редове"
 
-#: data/geany.glade:7608
+#: data/geany.glade:7671
 #, fuzzy
 msgid "_Auto-indentation"
 msgstr "Използва_й автоматично подравняване"
 
-#: data/geany.glade:7618
+#: data/geany.glade:7681
 msgid "In_dent Type"
 msgstr "Ви_д на вмъкването"
 
-#: data/geany.glade:7627 data/geany.glade:7685
+#: data/geany.glade:7690 data/geany.glade:7748
 #, fuzzy
 msgid "_Detect from Content"
 msgstr "Засечи от файла"
 
-#: data/geany.glade:7662
+#: data/geany.glade:7725
 #, fuzzy
 msgid "T_abs and Spaces"
 msgstr "_Замени табулациите с интервали"
 
-#: data/geany.glade:7676
+#: data/geany.glade:7739
 msgid "Indent Widt_h"
 msgstr ""
 
-#: data/geany.glade:7700
+#: data/geany.glade:7763
 msgid "_1"
 msgstr ""
 
-#: data/geany.glade:7709
+#: data/geany.glade:7772
 msgid "_2"
 msgstr ""
 
-#: data/geany.glade:7719
+#: data/geany.glade:7782
 msgid "_3"
 msgstr ""
 
-#: data/geany.glade:7729
+#: data/geany.glade:7792
 msgid "_4"
 msgstr ""
 
-#: data/geany.glade:7740
+#: data/geany.glade:7803
 msgid "_5"
 msgstr ""
 
-#: data/geany.glade:7750
+#: data/geany.glade:7813
 msgid "_6"
 msgstr ""
 
-#: data/geany.glade:7760
+#: data/geany.glade:7823
 msgid "_7"
 msgstr ""
 
-#: data/geany.glade:7770
+#: data/geany.glade:7833
 msgid "_8"
 msgstr ""
 
-#: data/geany.glade:7790
+#: data/geany.glade:7853
 msgid "Read _Only"
 msgstr "Само за _четене"
 
-#: data/geany.glade:7799
+#: data/geany.glade:7862
 msgid "_Write Unicode BOM"
 msgstr "_Напиши Unicode·BOM"
 
-#: data/geany.glade:7814
+#: data/geany.glade:7877
 msgid "Set File_type"
 msgstr "Задай _тип на файла"
 
-#: data/geany.glade:7834
+#: data/geany.glade:7897
 msgid "Set _Encoding"
 msgstr "Задай ко_дировка"
 
-#: data/geany.glade:7854
+#: data/geany.glade:7917
 msgid "Set Line E_ndings"
 msgstr "Задай кра_й на редовете"
 
-#: data/geany.glade:7863
+#: data/geany.glade:7926
 #, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "Преобразувай и сложи на _CR/LF·(Win)"
 
-#: data/geany.glade:7872
+#: data/geany.glade:7935
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Преобразувай и сложи на _LF·(Unix)"
 
-#: data/geany.glade:7883
+#: data/geany.glade:7946
 #, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Преобразувай и сложи на CR·(_Mac)"
 
-#: data/geany.glade:7903 src/keybindings.c:669
+#: data/geany.glade:7966 src/keybindings.c:669
 #, fuzzy
 msgid "_Clone"
 msgstr "За_твори"
 
-#: data/geany.glade:7912 src/keybindings.c:671
+#: data/geany.glade:7975 src/keybindings.c:671
 #, fuzzy
 msgid "_Strip Trailing Spaces"
 msgstr "Махни излишните символи на края"
 
-#: data/geany.glade:7921
+#: data/geany.glade:7984
 msgid "Replace Tabs with S_paces"
 msgstr "_Замени табулациите с интервали"
 
-#: data/geany.glade:7930
+#: data/geany.glade:7993
 #, fuzzy
 msgid "_Replace Spaces with Tabs..."
 msgstr "_Замени табулациите с интервали"
 
-#: data/geany.glade:7945
+#: data/geany.glade:8008
 msgid "_Fold All"
 msgstr "С_гъни всички"
 
-#: data/geany.glade:7954
+#: data/geany.glade:8017
 msgid "_Unfold All"
 msgstr "_Отсгъни всички"
 
-#: data/geany.glade:7969
+#: data/geany.glade:8032
 msgid "Remove _Markers"
 msgstr "Премахни _бележките"
 
-#: data/geany.glade:7978
+#: data/geany.glade:8041
 msgid "Remove Error _Indicators"
 msgstr "Премахни бележките за _грешка"
 
-#: data/geany.glade:7991
+#: data/geany.glade:8054
 msgid "_Project"
 msgstr "_Проект"
 
-#: data/geany.glade:7999
+#: data/geany.glade:8062
 #, fuzzy
 msgid "_New..."
 msgstr "Но_в"
 
-#: data/geany.glade:8010
+#: data/geany.glade:8073
 msgid "New from _Folder..."
 msgstr ""
 
-#: data/geany.glade:8034
+#: data/geany.glade:8097
 #, fuzzy
 msgid "_Recent Projects"
 msgstr "Отвори проект"
 
-#: data/geany.glade:8040
+#: data/geany.glade:8103
 msgid "_Close"
 msgstr "За_твори"
 
-#: data/geany.glade:8059
+#: data/geany.glade:8122
 msgid "Apply the default indentation settings to all documents"
 msgstr ""
 
-#: data/geany.glade:8060
+#: data/geany.glade:8123
 #, fuzzy
 msgid "_Apply Default Indentation"
 msgstr "Използва_й автоматично подравняване"
 
-#: data/geany.glade:8089 src/build.c:2446 src/build.c:2717
+#: data/geany.glade:8152 src/build.c:2446 src/build.c:2717
 msgid "_Build"
 msgstr "_Построй"
 
-#: data/geany.glade:8097
+#: data/geany.glade:8160
 msgid "_Tools"
 msgstr "_Инструменти"
 
-#: data/geany.glade:8104
+#: data/geany.glade:8167
 msgid "_Reload Configuration"
 msgstr ""
 
-#: data/geany.glade:8115
+#: data/geany.glade:8178
 #, fuzzy
 msgid "C_onfiguration Files"
 msgstr "Не успях да компилирам."
 
-#: data/geany.glade:8131
+#: data/geany.glade:8194
 #, fuzzy
 msgid "_Color Chooser"
 msgstr "Из_бери цвят"
 
-#: data/geany.glade:8144
+#: data/geany.glade:8207
 msgid "_Word Count"
 msgstr "Б_рояч на думи"
 
-#: data/geany.glade:8153
+#: data/geany.glade:8216
 #, fuzzy
 msgid "Load Ta_gs File..."
 msgstr "Зареди при_бавки"
 
-#: data/geany.glade:8166 data/geany.glade:8173
+#: data/geany.glade:8229 data/geany.glade:8236
 msgid "_Help"
 msgstr "_Помощ"
 
-#: data/geany.glade:8186
+#: data/geany.glade:8249
 msgid "Keyboard _Shortcuts"
 msgstr "Кл_авишни комбинации"
 
-#: data/geany.glade:8195
+#: data/geany.glade:8258
 #, fuzzy
 msgid "Debug _Messages"
 msgstr "Съобщения"
 
-#: data/geany.glade:8210
+#: data/geany.glade:8273
 msgid "_Website"
 msgstr "И_нтернет сайт"
 
-#: data/geany.glade:8219
+#: data/geany.glade:8282
 msgid "Wi_ki"
 msgstr ""
 
-#: data/geany.glade:8228
+#: data/geany.glade:8291
 msgid "Report a _Bug..."
 msgstr ""
 
-#: data/geany.glade:8237
+#: data/geany.glade:8300
 #, fuzzy
 msgid "_Donate..."
 msgstr "_Не запазвай"
 
-#: data/geany.glade:8306
+#: data/geany.glade:8369
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
 
-#: data/geany.glade:8348 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
+#: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
 msgid "Symbols"
 msgstr "Символи"
 
-#: data/geany.glade:8376
+#: data/geany.glade:8439
 #, fuzzy
 msgid "Documents"
 msgstr "_Документ"
 
-#: data/geany.glade:8435
+#: data/geany.glade:8498
 msgid "Status"
 msgstr "Състояние"
 
-#: data/geany.glade:8464
+#: data/geany.glade:8527
 msgid "Compiler"
 msgstr "Компилатор"
 
-#: data/geany.glade:8495
+#: data/geany.glade:8558
 msgid "Messages"
 msgstr "Съобщения"
 
-#: data/geany.glade:8523
+#: data/geany.glade:8586
 msgid "Scribble"
 msgstr "Бележник"
 
-#: data/geany.glade:8570
+#: data/geany.glade:8633
 msgid "Project Properties"
 msgstr "Свойства на проекта"
 
-#: data/geany.glade:8640 src/project.c:203
+#: data/geany.glade:8703 src/project.c:203
 msgid "Filename:"
 msgstr "Име на файла:"
 
-#: data/geany.glade:8653
+#: data/geany.glade:8716
 #, fuzzy
 msgid "_Name:"
 msgstr "Име:"
 
-#: data/geany.glade:8669
+#: data/geany.glade:8732
 #, fuzzy
 msgid "_Description:"
 msgstr "Описание:"
 
-#: data/geany.glade:8686
+#: data/geany.glade:8749
 #, fuzzy
 msgid "_Base path:"
 msgstr "Основен път:"
 
-#: data/geany.glade:8702 src/search.c:905
+#: data/geany.glade:8765 src/search.c:905
 #, fuzzy
 msgid "File _patterns:"
 msgstr "Файлови образци:"
 
-#: data/geany.glade:8763
+#: data/geany.glade:8826
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr ""
 
-#: data/geany.glade:8797 src/project.c:232
+#: data/geany.glade:8860 src/project.c:232
 #, fuzzy
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
@@ -2400,89 +2415,89 @@ msgstr ""
 "Основната директория на всички файлове, които съставят проекта. Това може да "
 "бъденов път или вече съществуваща йерархия от директории."
 
-#: data/geany.glade:8841 src/keybindings.c:320
+#: data/geany.glade:8904 src/keybindings.c:320
 #, fuzzy
 msgid "Project"
 msgstr "_Проект"
 
-#: data/geany.glade:9253
+#: data/geany.glade:9316
 #, fuzzy
 msgid "Display:"
 msgstr "<b>Покажи</b>"
 
-#: data/geany.glade:9294
+#: data/geany.glade:9357
 #, fuzzy
 msgid "Custom"
 msgstr "Изрежи"
 
-#: data/geany.glade:9313
+#: data/geany.glade:9376
 msgid "Use global settings"
 msgstr ""
 
-#: data/geany.glade:9640
+#: data/geany.glade:9703
 msgid "Size:"
 msgstr ""
 
-#: data/geany.glade:9656
+#: data/geany.glade:9719
 #, fuzzy
 msgid "Location:"
 msgstr "<b>Местоположение:</b>"
 
-#: data/geany.glade:9672
+#: data/geany.glade:9735
 #, fuzzy
 msgid "Read-only:"
 msgstr ", само за четене"
 
-#: data/geany.glade:9688
+#: data/geany.glade:9751
 #, fuzzy
 msgid "Encoding:"
 msgstr "Задайте знаково кодиране:"
 
-#: data/geany.glade:9704
+#: data/geany.glade:9767
 #, fuzzy
 msgid "Modified:"
 msgstr "<b>Променен:</b>"
 
-#: data/geany.glade:9720
+#: data/geany.glade:9783
 #, fuzzy
 msgid "Changed:"
 msgstr "Промени"
 
-#: data/geany.glade:9736
+#: data/geany.glade:9799
 #, fuzzy
 msgid "Accessed:"
 msgstr "<b>Последно променян:</b>"
 
-#: data/geany.glade:9780
+#: data/geany.glade:9843
 msgid "(only inside Geany)"
 msgstr "(само в Geany)"
 
-#: data/geany.glade:9879
+#: data/geany.glade:9942
 #, fuzzy
 msgid "Permissions:"
 msgstr "<b>Разрешения:</b>"
 
-#: data/geany.glade:9893
+#: data/geany.glade:9956
 msgid "Read:"
 msgstr "Четене:"
 
-#: data/geany.glade:9907
+#: data/geany.glade:9970
 msgid "Write:"
 msgstr "Писане:"
 
-#: data/geany.glade:9921
+#: data/geany.glade:9984
 msgid "Execute:"
 msgstr "Изпълни:"
 
-#: data/geany.glade:9935
+#: data/geany.glade:9998
 msgid "Owner:"
 msgstr "Собственик:"
 
-#: data/geany.glade:9947
+#: data/geany.glade:10010
 msgid "Group:"
 msgstr "Група:"
 
-#: data/geany.glade:9959
+#: data/geany.glade:10022
 msgid "Other:"
 msgstr "Други:"
 
@@ -4108,11 +4123,11 @@ msgstr "Кл_авишни комбинации"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Следните клавишни комбинации са определени:"
 
-#: src/keyfile.c:1135
+#: src/keyfile.c:1139
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Въведете тук каквото желаете, използвайте го като бележник"
 
-#: src/keyfile.c:1391
+#: src/keyfile.c:1395
 msgid "Failed to load one or more session files."
 msgstr "Не успях да отворя един или повече от сесийните файлове"
 
@@ -6771,9 +6786,6 @@ msgstr "Долу"
 
 #~ msgid "<b>Encoding:</b>"
 #~ msgstr "<b>Кодировка:</b>"
-
-#~ msgid "<b>Changed:</b>"
-#~ msgstr "<b>Променен:</b>"
 
 #, fuzzy
 #~ msgid "Shell script"

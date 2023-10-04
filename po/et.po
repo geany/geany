@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
-"POT-Creation-Date: 2023-10-03 19:55+0200\n"
+"POT-Creation-Date: 2023-10-04 23:48+0200\n"
 "PO-Revision-Date: 2021-05-29 21:08+0300\n"
 "Last-Translator: Anari Jalakas <anari.jalakas@gmail.com>\n"
 "Language-Team: Estonian\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.3\n"
 
-#: geany.desktop.in:5 data/geany.glade:6393
+#: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
 msgstr "Geany"
 
@@ -43,11 +43,11 @@ msgstr "_Tööriistariba eelistused"
 msgid "_Hide Toolbar"
 msgstr "_Peida tööriistariba"
 
-#: data/geany.glade:305 data/geany.glade:6651
+#: data/geany.glade:305 data/geany.glade:6714
 msgid "_Edit"
 msgstr "_Redigeerimine"
 
-#: data/geany.glade:313 data/geany.glade:6866
+#: data/geany.glade:313 data/geany.glade:6929
 msgid "_Format"
 msgstr "_Vorming"
 
@@ -55,69 +55,69 @@ msgstr "_Vorming"
 msgid "I_nsert"
 msgstr "_Lisamine"
 
-#: data/geany.glade:332 data/geany.glade:7019
+#: data/geany.glade:332 data/geany.glade:7082
 msgid "Insert _ChangeLog Entry"
 msgstr "Lisa _muudatuste logi kirje"
 
-#: data/geany.glade:341 data/geany.glade:7028
+#: data/geany.glade:341 data/geany.glade:7091
 msgid "Insert _Function Description"
 msgstr "Lisa _funktsiooni kirjeldus"
 
-#: data/geany.glade:350 data/geany.glade:7037
+#: data/geany.glade:350 data/geany.glade:7100
 msgid "Insert Mu_ltiline Comment"
 msgstr "Lisa _mitmerealine kommentaar"
 
-#: data/geany.glade:357 data/geany.glade:7304
+#: data/geany.glade:357 data/geany.glade:7367
 msgid "_More"
 msgstr "_Rohkem"
 
-#: data/geany.glade:370 data/geany.glade:7052
+#: data/geany.glade:370 data/geany.glade:7115
 msgid "Insert File _Header"
 msgstr "Lisa faili _päis"
 
-#: data/geany.glade:379 data/geany.glade:7061
+#: data/geany.glade:379 data/geany.glade:7124
 msgid "Insert _GPL Notice"
 msgstr "Lisa _GPL märge"
 
-#: data/geany.glade:388 data/geany.glade:7070
+#: data/geany.glade:388 data/geany.glade:7133
 msgid "Insert _BSD License Notice"
 msgstr "Lisa _BSD litsentsi märge"
 
-#: data/geany.glade:405 data/geany.glade:7081
+#: data/geany.glade:405 data/geany.glade:7144
 msgid "Insert Dat_e"
 msgstr "Lisa _kuupäev"
 
-#: data/geany.glade:417 data/geany.glade:439 data/geany.glade:6539
-#: data/geany.glade:6986 data/geany.glade:7093 data/geany.glade:7115
-#: data/geany.glade:7822 data/geany.glade:7842
+#: data/geany.glade:417 data/geany.glade:439 data/geany.glade:6602
+#: data/geany.glade:7049 data/geany.glade:7156 data/geany.glade:7178
+#: data/geany.glade:7885 data/geany.glade:7905
 msgid "invisible"
 msgstr "nähtamatu"
 
-#: data/geany.glade:427 data/geany.glade:7103
+#: data/geany.glade:427 data/geany.glade:7166
 msgid "_Insert \"include <...>\""
 msgstr "_Lisa \"include <...>\""
 
-#: data/geany.glade:457 data/geany.glade:7127 src/keybindings.c:516
+#: data/geany.glade:457 data/geany.glade:7190 src/keybindings.c:516
 msgid "Insert Alternative _White Space"
 msgstr "_Lisa teistsugune tühimärk"
 
-#: data/geany.glade:470 data/geany.glade:7168
+#: data/geany.glade:470 data/geany.glade:7231
 msgid "_Search"
 msgstr "_Otsi"
 
-#: data/geany.glade:482 data/geany.glade:6463
+#: data/geany.glade:482 data/geany.glade:6526
 msgid "Open Selected F_ile"
 msgstr "Ava valitud fa_il"
 
-#: data/geany.glade:493 data/geany.glade:7337 src/symbols.c:2205
+#: data/geany.glade:493 data/geany.glade:7400 src/symbols.c:2205
 msgid "Find _Usage"
 msgstr "Otsi _kasutamist"
 
-#: data/geany.glade:504 data/geany.glade:7346 src/symbols.c:2210
+#: data/geany.glade:504 data/geany.glade:7409 src/symbols.c:2210
 msgid "Find _Document Usage"
 msgstr "Otsi _dokumendi kasutamist"
 
-#: data/geany.glade:515 data/geany.glade:7376
+#: data/geany.glade:515 data/geany.glade:7439
 msgid "Go to Symbol Defini_tion"
 msgstr "Mine sümboli definitsiooni juurde"
 
@@ -313,7 +313,7 @@ msgstr ""
 "Kas kasutada Windowsile omaseid failiavamis- ja salvestusdialooge või "
 "kasutada GTK vaikimisi dialooge"
 
-#: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4791
+#: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4854
 msgid "<b>Miscellaneous</b>"
 msgstr "<b>Mitmesugust</b>"
 
@@ -612,11 +612,11 @@ msgstr "<b>Tööriistariba</b>"
 msgid "Toolbar"
 msgstr "Tööriistariba"
 
-#: data/geany.glade:2852 data/geany.glade:9108
+#: data/geany.glade:2852 data/geany.glade:9171
 msgid "Line wrapping"
 msgstr "Reamurdmine"
 
-#: data/geany.glade:2856 data/geany.glade:9112
+#: data/geany.glade:2856 data/geany.glade:9175
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -690,7 +690,7 @@ msgstr "Reavahetus kustutab lõputühikud"
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr "Luba uuel real eelmise rea lõppu tühjendamine"
 
-#: data/geany.glade:2970 data/geany.glade:9131
+#: data/geany.glade:2970 data/geany.glade:9194
 msgid "Line breaking column:"
 msgstr "Joone murdmise veerg:"
 
@@ -706,7 +706,7 @@ msgstr ""
 "Stringi, mis lisatakse algfaili reakommentaari lülitamisel, kasutatakse "
 "selle märkimiseks lülitatuks."
 
-#: data/geany.glade:3049 data/geany.glade:9174
+#: data/geany.glade:3049 data/geany.glade:9237
 msgid "<b>Features</b>"
 msgstr "<b>Võimalused</b>"
 
@@ -714,7 +714,7 @@ msgstr "<b>Võimalused</b>"
 msgid "Features"
 msgstr "Võimalused"
 
-#: data/geany.glade:3096 data/geany.glade:8872
+#: data/geany.glade:3096 data/geany.glade:8935
 msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
@@ -722,67 +722,67 @@ msgstr ""
 "Märkus. Nende sätete rakendamiseks kõigi praegu avatud dokumentide jaoks "
 "kasuta käsku <i>Projekt->Rakenda vaikimisi trepp</i>."
 
-#: data/geany.glade:3146 data/geany.glade:8888
+#: data/geany.glade:3146 data/geany.glade:8951
 msgid "_Width:"
 msgstr "La_ius:"
 
-#: data/geany.glade:3160 data/geany.glade:8904
+#: data/geany.glade:3160 data/geany.glade:8967
 msgid "The width in chars of a single indent"
 msgstr "Taande laius sümbolites"
 
-#: data/geany.glade:3179 data/geany.glade:8925
+#: data/geany.glade:3179 data/geany.glade:8988
 msgid "Auto-indent _mode:"
 msgstr "Automaatne _taane:"
 
-#: data/geany.glade:3214 data/geany.glade:8960
+#: data/geany.glade:3214 data/geany.glade:9023
 msgid "Detect type from file"
 msgstr "Tuvasta failitüübist"
 
-#: data/geany.glade:3218 data/geany.glade:8964
+#: data/geany.glade:3218 data/geany.glade:9027
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr "Kas tuvastada treppimise tüüp faili sisust faili avamisel"
 
-#: data/geany.glade:3233 data/geany.glade:8979
+#: data/geany.glade:3233 data/geany.glade:9042
 msgid "T_abs and spaces"
 msgstr "_Tabeldusmärgid ja tühikud"
 
-#: data/geany.glade:3237 data/geany.glade:8983
+#: data/geany.glade:3237 data/geany.glade:9046
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
 "Kasuta tühikuid kui taane on väiksem kui tabeldusmärgi laius, muidu kasuta "
 "mõlemat"
 
-#: data/geany.glade:3252 data/geany.glade:7652 data/geany.glade:8998
+#: data/geany.glade:3252 data/geany.glade:7715 data/geany.glade:9061
 msgid "_Spaces"
 msgstr "_Tühikud"
 
-#: data/geany.glade:3256 data/geany.glade:9002
+#: data/geany.glade:3256 data/geany.glade:9065
 msgid "Use spaces when inserting indentation"
 msgstr "Kasuta taande sisestamisel tühikuid"
 
-#: data/geany.glade:3272 data/geany.glade:7642 data/geany.glade:9018
+#: data/geany.glade:3272 data/geany.glade:7705 data/geany.glade:9081
 msgid "_Tabs"
 msgstr "_Tabeldusmärgid"
 
-#: data/geany.glade:3276 data/geany.glade:9022
+#: data/geany.glade:3276 data/geany.glade:9085
 msgid "Use one tab per indent"
 msgstr "Kasuta ühte tabeldusmärki taande kohta"
 
-#: data/geany.glade:3292 data/geany.glade:9052
+#: data/geany.glade:3292 data/geany.glade:9115
 msgid "Detect width from file"
 msgstr "Tuvasta laius failist"
 
-#: data/geany.glade:3296 data/geany.glade:9056
+#: data/geany.glade:3296 data/geany.glade:9119
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
 msgstr "Kas tuvastada faili avamisel taande laius faili sisust"
 
-#: data/geany.glade:3313 data/geany.glade:4082 data/geany.glade:9040
-#: data/geany.glade:9615
+#: data/geany.glade:3313 data/geany.glade:4082 data/geany.glade:9103
+#: data/geany.glade:9678
 msgid "Type:"
 msgstr "Tüüp:"
 
@@ -812,7 +812,7 @@ msgstr ""
 msgid "<b>Indentation</b>"
 msgstr "<b>Taane</b>"
 
-#: data/geany.glade:3390 data/geany.glade:9078
+#: data/geany.glade:3390 data/geany.glade:9141
 msgid "Indentation"
 msgstr "Taane"
 
@@ -836,11 +836,11 @@ msgstr "XML/HTML siltide automaatne sulgemine"
 msgid "Insert matching closing tag for XML/HTML"
 msgstr "Sisesta vastav sulgev XML/HTML silt"
 
-#: data/geany.glade:3452 data/geany.glade:9198
+#: data/geany.glade:3452 data/geany.glade:9261
 msgid "Automatic continuation of multi-line comments"
 msgstr "Mitmerealiste kommentaaride automaatne jätkamine"
 
-#: data/geany.glade:3456 data/geany.glade:9202
+#: data/geany.glade:3456 data/geany.glade:9265
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
@@ -911,7 +911,7 @@ msgstr ""
 "jõudlust, eriti suurte failide puhul. Viivitus 0 keelab reaalajas "
 "värskendused."
 
-#: data/geany.glade:3667 data/geany.glade:9213
+#: data/geany.glade:3667 data/geany.glade:9276
 msgid "<b>Completions</b>"
 msgstr "<b>Lõpetamised</b>"
 
@@ -1043,7 +1043,7 @@ msgstr "Nähtavad read - kursori ümber:"
 msgid "<b>Display</b>"
 msgstr "<b>Kuvamine</b>"
 
-#: data/geany.glade:4052 data/geany.glade:9265
+#: data/geany.glade:4052 data/geany.glade:9328
 msgid "Column:"
 msgstr "Veerg:"
 
@@ -1055,7 +1055,7 @@ msgstr "Värv:"
 msgid "Sets the color of the long line marker"
 msgstr "Määrab pika joonemärgi värvi"
 
-#: data/geany.glade:4099 data/geany.glade:5990 data/geany.glade:6007
+#: data/geany.glade:4099 data/geany.glade:6053 data/geany.glade:6070
 #: src/toolbar.c:73 src/tools.c:835
 msgid "Color Chooser"
 msgstr "Värvivalija"
@@ -1099,11 +1099,11 @@ msgstr ""
 msgid "Enabled"
 msgstr "Lubatud"
 
-#: data/geany.glade:4202 data/geany.glade:9358
+#: data/geany.glade:4202 data/geany.glade:9421
 msgid "<b>Long line marker</b>"
 msgstr "<b>Pika rea marker</b>"
 
-#: data/geany.glade:4230 data/geany.glade:9278
+#: data/geany.glade:4230 data/geany.glade:9341
 msgid "Disabled"
 msgstr "Keelatud"
 
@@ -1135,44 +1135,59 @@ msgstr "Kuva virtuaalsed tühikud alati ridade lõpust väljapoole"
 msgid "<b>Virtual spaces</b>"
 msgstr "<b>Virtuaalsed tühikud</b>"
 
-#: data/geany.glade:4306
+#: data/geany.glade:4315
+#, fuzzy
+msgid "Show in markers margin"
+msgstr "Näita tähiste serva"
+
+#: data/geany.glade:4329
+#, fuzzy
+msgid "Show as underline indicators"
+msgstr "Näitab realõpumärki"
+
+#: data/geany.glade:4349
+#, fuzzy
+msgid "<b>Change History</b>"
+msgstr "<b>Muudetud:</b>"
+
+#: data/geany.glade:4369
 msgid "Display"
 msgstr "Kuvamine"
 
-#: data/geany.glade:4322 data/geany.glade:9378 src/keybindings.c:310
+#: data/geany.glade:4385 data/geany.glade:9441 src/keybindings.c:310
 #: src/prefs.c:1619
 msgid "Editor"
 msgstr "Redaktor"
 
-#: data/geany.glade:4357
+#: data/geany.glade:4420
 msgid "Open new documents from the command-line"
 msgstr "Ava käsurealt uued dokumendid"
 
-#: data/geany.glade:4361
+#: data/geany.glade:4424
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr "Loo uus fail iga käsurea failinime jaoks, mida pole olemas"
 
-#: data/geany.glade:4401
+#: data/geany.glade:4464
 msgid "Default end of line characters:"
 msgstr "Vaikimisi realõpumärgid:"
 
-#: data/geany.glade:4432
+#: data/geany.glade:4495
 msgid "<b>New files</b>"
 msgstr "<b>Uued failid</b>"
 
-#: data/geany.glade:4467
+#: data/geany.glade:4530
 msgid "Default encoding (new files):"
 msgstr "Vaikimisi kodeering uutele failidele:"
 
-#: data/geany.glade:4481
+#: data/geany.glade:4544
 msgid "Sets the default encoding for newly created files"
 msgstr "Seadistab vastloodud failide vaikekodeeringu"
 
-#: data/geany.glade:4507
+#: data/geany.glade:4570
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Kasuta mitte-Unicode failide avamisel sama kodeeringut"
 
-#: data/geany.glade:4511
+#: data/geany.glade:4574
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
@@ -1182,31 +1197,31 @@ msgstr ""
 "failide avamisel ja avab faili määratud kodeeringuga (tavaliselt pole seda "
 "vaja)"
 
-#: data/geany.glade:4529
+#: data/geany.glade:4592
 msgid "Default encoding (existing non-Unicode files):"
 msgstr "Vaikimisi kodeering olemasolevatele mitte-Unicode failidele:"
 
-#: data/geany.glade:4543
+#: data/geany.glade:4606
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr "Määrab olemasolevate mitte-Unicode-failide avamiseks vaikekodeeringu"
 
-#: data/geany.glade:4575
+#: data/geany.glade:4638
 msgid "<b>Encodings</b>"
 msgstr "<b>Kodeeringud</b>"
 
-#: data/geany.glade:4603 data/geany.glade:9408
+#: data/geany.glade:4666 data/geany.glade:9471
 msgid "Ensure new line at file end"
 msgstr "Taga reavahetus faili lõpus"
 
-#: data/geany.glade:4607
+#: data/geany.glade:4670
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Tagab, et faili lõpus on uus rida"
 
-#: data/geany.glade:4619 data/geany.glade:9423
+#: data/geany.glade:4682 data/geany.glade:9486
 msgid "Ensure consistent line endings"
 msgstr "Taga ühesugused reavahetused"
 
-#: data/geany.glade:4623
+#: data/geany.glade:4686
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
@@ -1214,39 +1229,39 @@ msgstr ""
 "Tagab, et uues reas olevad märgid konverteeritakse enne salvestamist alati "
 "ümber, vältides samasse faili kuuluvaid rea lõppu"
 
-#: data/geany.glade:4635 data/geany.glade:9438
+#: data/geany.glade:4698 data/geany.glade:9501
 msgid "Strip trailing spaces and tabs"
 msgstr "Lõputühikud eemaldatakse"
 
-#: data/geany.glade:4639
+#: data/geany.glade:4702
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Eemaldab rea lõpus olevad tühikud ja sakid"
 
-#: data/geany.glade:4651 data/geany.glade:9453 src/keybindings.c:673
+#: data/geany.glade:4714 data/geany.glade:9516 src/keybindings.c:673
 msgid "Replace tabs with space"
 msgstr "Asenda tabeldusmärgid tühikutega"
 
-#: data/geany.glade:4655
+#: data/geany.glade:4718
 msgid "Replaces all tabs in document with spaces"
 msgstr "Kõik tabeldusmärgid asendatakse tühikutega"
 
-#: data/geany.glade:4673 data/geany.glade:9474
+#: data/geany.glade:4736 data/geany.glade:9537
 msgid "<b>Saving files</b>"
 msgstr "<b>Failide salvestamine</b>"
 
-#: data/geany.glade:4712
+#: data/geany.glade:4775
 msgid "Recent files list length:"
 msgstr "Hiljutiste failide nimekirja pikkus:"
 
-#: data/geany.glade:4725
+#: data/geany.glade:4788
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr "Määrab hiljutiste failide nimekirja pikkuse"
 
-#: data/geany.glade:4744
+#: data/geany.glade:4807
 msgid "Disk check timeout:"
 msgstr "Ketta kontrollimise ajalõpp:"
 
-#: data/geany.glade:4759
+#: data/geany.glade:4822
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
@@ -1254,20 +1269,20 @@ msgstr ""
 "Kui sageli kontrollida ketta dokumendifailides muudatusi, sekundites. Null "
 "keelab kontrollimise."
 
-#: data/geany.glade:4811 data/geany.glade:9494 src/prefs.c:1621
+#: data/geany.glade:4874 data/geany.glade:9557 src/prefs.c:1621
 #: src/tagmanager/tm_parser.c:456 plugins/filebrowser.c:1167
 msgid "Files"
 msgstr "Failid"
 
-#: data/geany.glade:4866
+#: data/geany.glade:4929
 msgid "Terminal:"
 msgstr "Terminal:"
 
-#: data/geany.glade:4879
+#: data/geany.glade:4942
 msgid "Browser:"
 msgstr "Veebilehitseja:"
 
-#: data/geany.glade:4894
+#: data/geany.glade:4957
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
@@ -1275,28 +1290,28 @@ msgstr ""
 "Terminali emulaatori käsk (%c asendatakse Geany käivituse skripti "
 "failinimega)"
 
-#: data/geany.glade:4908
+#: data/geany.glade:4971
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Tee (ja võib-olla täiendavaid argumente) oma lemmikbrauserile"
 
-#: data/geany.glade:4911
+#: data/geany.glade:4974
 #, fuzzy
 msgid "System default"
 msgstr "Süsteemi _vaikimisi"
 
-#: data/geany.glade:4967
+#: data/geany.glade:5030
 msgid "Grep:"
 msgstr "Grep:"
 
-#: data/geany.glade:5030
+#: data/geany.glade:5093
 msgid "<b>Tool paths</b>"
 msgstr "<b>Tööriistade otsinguteed</b>"
 
-#: data/geany.glade:5063
+#: data/geany.glade:5126
 msgid "Context action:"
 msgstr "Kontekstitoiming:"
 
-#: data/geany.glade:5075
+#: data/geany.glade:5138
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
 "can appear anywhere in the given command and will be replaced before "
@@ -1305,67 +1320,67 @@ msgstr ""
 "Kontekstitoimingute käsk. Praegu valitud sõna saab kasutada koos %s. See "
 "võib ilmuda antud käsu suvalisse kohta ja asendatakse enne täitmist."
 
-#: data/geany.glade:5114
+#: data/geany.glade:5177
 msgid "<b>Commands</b>"
 msgstr "<b>Käsud</b>"
 
-#: data/geany.glade:5134 src/keybindings.c:322 src/prefs.c:1623
+#: data/geany.glade:5197 src/keybindings.c:322 src/prefs.c:1623
 msgid "Tools"
 msgstr "Tööriistad"
 
-#: data/geany.glade:5189
+#: data/geany.glade:5252
 msgid "Email address of the developer"
 msgstr "Arendaja meiliaadress"
 
-#: data/geany.glade:5205
+#: data/geany.glade:5268
 msgid "Initials of the developer name"
 msgstr "Arendaja initsiaalid"
 
-#: data/geany.glade:5221
+#: data/geany.glade:5284
 msgid "Initial version:"
 msgstr "Esialgne versioon:"
 
-#: data/geany.glade:5236
+#: data/geany.glade:5299
 msgid "Version number, which a new file initially has"
 msgstr "Uue faili esialgne versioon"
 
-#: data/geany.glade:5252
+#: data/geany.glade:5315
 msgid "Company name"
 msgstr "Firma nimi"
 
-#: data/geany.glade:5268
+#: data/geany.glade:5331
 msgid "Developer:"
 msgstr "Arendaja:"
 
-#: data/geany.glade:5281
+#: data/geany.glade:5344
 msgid "Company:"
 msgstr "Firma:"
 
-#: data/geany.glade:5296
+#: data/geany.glade:5359
 msgid "Mail address:"
 msgstr "Meiliaadress:"
 
-#: data/geany.glade:5311
+#: data/geany.glade:5374
 msgid "Initials:"
 msgstr "Initsiaalid:"
 
-#: data/geany.glade:5326
+#: data/geany.glade:5389
 msgid "The name of the developer"
 msgstr "Arendaja nimi"
 
-#: data/geany.glade:5340
+#: data/geany.glade:5403
 msgid "Year:"
 msgstr "Aasta:"
 
-#: data/geany.glade:5355
+#: data/geany.glade:5418
 msgid "Date:"
 msgstr "Kuupäev:"
 
-#: data/geany.glade:5370
+#: data/geany.glade:5433
 msgid "Date & time:"
 msgstr "Kuupäev ja kellaaeg:"
 
-#: data/geany.glade:5385
+#: data/geany.glade:5448
 #, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
@@ -1375,7 +1390,7 @@ msgstr ""
 "Määra {datetime} metamärgi vorming. Võib kasutada mis tahes teisendamise "
 "täpsustajaid, mida saab kasutada ANSI C strftime funktsiooniga."
 
-#: data/geany.glade:5401
+#: data/geany.glade:5464
 #, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
@@ -1384,7 +1399,7 @@ msgstr ""
 "Määra {aasta} metamärgi vorming. Võib kasutada mis tahes teisendamise "
 "täpsustajaid, mida saab kasutada ANSI C strftime funktsiooniga."
 
-#: data/geany.glade:5417
+#: data/geany.glade:5480
 #, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
@@ -1393,60 +1408,60 @@ msgstr ""
 "Vali {date} metamärgi vorming. Võib kasutada mis tahes teisendamise "
 "täpsustajaid, mida saab kasutada ANSI C strftime funktsiooniga."
 
-#: data/geany.glade:5444
+#: data/geany.glade:5507
 msgid "<b>Template data</b>"
 msgstr "<b>Malli andmed</b>"
 
-#: data/geany.glade:5464 src/prefs.c:1625
+#: data/geany.glade:5527 src/prefs.c:1625
 msgid "Templates"
 msgstr "Mallid"
 
-#: data/geany.glade:5532
+#: data/geany.glade:5595
 msgid "C_hange"
 msgstr "_Muuda"
 
-#: data/geany.glade:5554
+#: data/geany.glade:5617
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Kiirklahvid</b>"
 
-#: data/geany.glade:5567 src/plugins.c:1900 src/plugins.c:1937 src/prefs.c:1627
+#: data/geany.glade:5630 src/plugins.c:1900 src/plugins.c:1937 src/prefs.c:1627
 msgid "Keybindings"
 msgstr "Kiirklahvid"
 
-#: data/geany.glade:5611
+#: data/geany.glade:5674
 msgid "Command:"
 msgstr "Käsk:"
 
-#: data/geany.glade:5624
+#: data/geany.glade:5687
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr "Failide printimise käsu tee (faili nime jaoks kasutage %f)"
 
-#: data/geany.glade:5659
+#: data/geany.glade:5722
 msgid "Use an external command for printing"
 msgstr "Kasuta trükkimiseks välist käsku"
 
-#: data/geany.glade:5691 src/printing.c:237
+#: data/geany.glade:5754 src/printing.c:237
 msgid "Print line numbers"
 msgstr "Reanumbrite trükkimine"
 
-#: data/geany.glade:5695 src/printing.c:239
+#: data/geany.glade:5758 src/printing.c:239
 msgid "Add line numbers to the printed page"
 msgstr "Lisa trükitavale lehele reanumbrid"
 
-#: data/geany.glade:5707 src/printing.c:242
+#: data/geany.glade:5770 src/printing.c:242
 msgid "Print page numbers"
 msgstr "Leheküljenumbrite trükkimine"
 
-#: data/geany.glade:5711 src/printing.c:244
+#: data/geany.glade:5774 src/printing.c:244
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr "Lisa iga lehe allosas lehenumbrid. See võtab lehe 2 rida."
 
-#: data/geany.glade:5723 src/printing.c:247
+#: data/geany.glade:5786 src/printing.c:247
 msgid "Print page header"
 msgstr "Lehe päise trükkimine"
 
-#: data/geany.glade:5727 src/printing.c:249
+#: data/geany.glade:5790 src/printing.c:249
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
@@ -1454,19 +1469,19 @@ msgstr ""
 "Lisa igale lehele väike päis, mis sisaldab lehe numbrit, failinime ja "
 "praegust kuupäeva (vt allpool). See võtab lehe 3 rida."
 
-#: data/geany.glade:5757 src/printing.c:265
+#: data/geany.glade:5820 src/printing.c:265
 msgid "Use the basename of the printed file"
 msgstr "Kasuta prinditud faili baasnime"
 
-#: data/geany.glade:5761
+#: data/geany.glade:5824
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Prindi ainult prinditud faili baasnimi (ilma teekonnata)"
 
-#: data/geany.glade:5780 src/printing.c:273
+#: data/geany.glade:5843 src/printing.c:273
 msgid "Date format:"
 msgstr "Kuupäeva vorming:"
 
-#: data/geany.glade:5793 src/printing.c:279
+#: data/geany.glade:5856 src/printing.c:279
 #, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
@@ -1477,104 +1492,104 @@ msgstr ""
 "päisesse. Võib kasutada mis tahes teisendamise täpsustajaid, mida saab "
 "kasutada ANSI C strftime funktsiooniga."
 
-#: data/geany.glade:5828
+#: data/geany.glade:5891
 msgid "Use native GTK printing"
 msgstr "Kasuta GTK trükkimist"
 
-#: data/geany.glade:5852
+#: data/geany.glade:5915
 msgid "<b>Printing</b>"
 msgstr "<b>Printimine</b>"
 
-#: data/geany.glade:5865 src/prefs.c:1629
+#: data/geany.glade:5928 src/prefs.c:1629
 msgid "Printing"
 msgstr "Trükkimine"
 
-#: data/geany.glade:5900
+#: data/geany.glade:5963
 msgid "Font:"
 msgstr "Font:"
 
-#: data/geany.glade:5914
+#: data/geany.glade:5977
 msgid "Sets the font for the terminal widget"
 msgstr "Määrab terminali vidina kirjatüübi"
 
-#: data/geany.glade:5916
+#: data/geany.glade:5979
 msgid "Choose Terminal Font"
 msgstr "Vali terminali kirjatüüp"
 
-#: data/geany.glade:5928
+#: data/geany.glade:5991
 msgid "Foreground color:"
 msgstr "Esiplaani värv:"
 
-#: data/geany.glade:5943
+#: data/geany.glade:6006
 msgid "Background color:"
 msgstr "Taustavärv:"
 
-#: data/geany.glade:5958
+#: data/geany.glade:6021
 msgid "Scrollback lines:"
 msgstr "Kerimispuhver ridades:"
 
-#: data/geany.glade:5973
+#: data/geany.glade:6036
 msgid "Shell:"
 msgstr "Kest (shell):"
 
-#: data/geany.glade:5989
+#: data/geany.glade:6052
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Seadistab terminali vidinas teksti esiplaani värvi"
 
-#: data/geany.glade:6006
+#: data/geany.glade:6069
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Määrab terminali vidinas teksti taustavärvi"
 
-#: data/geany.glade:6022
+#: data/geany.glade:6085
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr "Määrab ridadena ajaloo, mida saab terminali vidinas tagasi kerida"
 
-#: data/geany.glade:6042
+#: data/geany.glade:6105
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr "Määrab tee kestani, mida tuleks alustada terminaalse emulatsiooni sees"
 
-#: data/geany.glade:6091
+#: data/geany.glade:6154
 msgid "Scroll on keystroke"
 msgstr "Kerimine klahvivajutuse puhul"
 
-#: data/geany.glade:6095
+#: data/geany.glade:6158
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr "Kas kerida klahvivajutuse puhul alla"
 
-#: data/geany.glade:6106
+#: data/geany.glade:6169
 msgid "Scroll on output"
 msgstr "Kerimine väljundi saamisel"
 
-#: data/geany.glade:6110
+#: data/geany.glade:6173
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "Kas kerida väljundi saamisel alla"
 
-#: data/geany.glade:6121
+#: data/geany.glade:6184
 msgid "Cursor blinks"
 msgstr "Vilkuv kursor"
 
-#: data/geany.glade:6125
+#: data/geany.glade:6188
 msgid "Whether to blink the cursor"
 msgstr "Kas vilgutada kursorit"
 
-#: data/geany.glade:6136
+#: data/geany.glade:6199
 msgid "Override Geany keybindings"
 msgstr "Tühista Geany kiirklahvid"
 
-#: data/geany.glade:6140
+#: data/geany.glade:6203
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr "Võimaldab VTE-l vastu võtta kiirklahve (välja arvatud fookuskäsud)"
 
-#: data/geany.glade:6151
+#: data/geany.glade:6214
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Keela menüü kiirklahv (vaikimisi F10)"
 
-#: data/geany.glade:6155
+#: data/geany.glade:6218
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -1584,19 +1599,19 @@ msgstr ""
 "F10). Selle keelamine võib olla kasulik, kui kasutada VTE-s näiteks Midnight "
 "Commanderit."
 
-#: data/geany.glade:6166
+#: data/geany.glade:6229
 msgid "Follow path of the current file"
 msgstr "Järgib aktiivse faili teed"
 
-#: data/geany.glade:6170
+#: data/geany.glade:6233
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr "Kas käivitada avatud failide vahel vahetades \"cd $path\""
 
-#: data/geany.glade:6181
+#: data/geany.glade:6244
 msgid "Execute programs in the VTE"
 msgstr "Käivita programmid virtuaalterminalis"
 
-#: data/geany.glade:6185
+#: data/geany.glade:6248
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
@@ -1604,11 +1619,11 @@ msgstr ""
 "Käivita programme VTE-s, selle asemel, et terminali emulatsiooni akent "
 "avada. Pane tähele, VTE-s käivitatud programme ei saa peatada"
 
-#: data/geany.glade:6196
+#: data/geany.glade:6259
 msgid "Don't use run script"
 msgstr "Ära kasuta käivitusskripti"
 
-#: data/geany.glade:6201
+#: data/geany.glade:6264
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
@@ -1616,489 +1631,489 @@ msgstr ""
 "Ära kasuta lihtsat käivitamisskripti, mida tavaliselt kasutatakse käivitatud "
 "programmi väljumise oleku kuvamiseks"
 
-#: data/geany.glade:6225
+#: data/geany.glade:6288
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminal</b>"
 
-#: data/geany.glade:6238 src/prefs.c:1633 src/vte.c:381
+#: data/geany.glade:6301 src/prefs.c:1633 src/vte.c:381
 msgid "Terminal"
 msgstr "Terminal"
 
-#: data/geany.glade:6327
+#: data/geany.glade:6390
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr "<i>Hoiatus: loe enne nende seadistuste muutmist kasutusjuhendit.</i>"
 
-#: data/geany.glade:6353
+#: data/geany.glade:6416
 msgid "<b>Various preferences</b>"
 msgstr "<b>Mitmesugused seadistused</b>"
 
-#: data/geany.glade:6366 src/prefs.c:1631
+#: data/geany.glade:6429 src/prefs.c:1631
 msgid "Various"
 msgstr "Mitmesugust"
 
-#: data/geany.glade:6416
+#: data/geany.glade:6479
 msgid "_File"
 msgstr "_Fail"
 
-#: data/geany.glade:6434
+#: data/geany.glade:6497
 msgid "New (with _Template)"
 msgstr "Uus (_malli põhjal)"
 
-#: data/geany.glade:6450 data/geany.glade:8021
+#: data/geany.glade:6513 data/geany.glade:8084
 msgid "_Open..."
 msgstr "_Ava..."
 
-#: data/geany.glade:6472
+#: data/geany.glade:6535
 msgid "Recent _Files"
 msgstr "Hiljutised _failid"
 
-#: data/geany.glade:6494
+#: data/geany.glade:6557
 msgid "Save _As..."
 msgstr "Salvesta _kui..."
 
-#: data/geany.glade:6505
+#: data/geany.glade:6568
 msgid "Sa_ve All"
 msgstr "Salvesta _kõik"
 
-#: data/geany.glade:6516 src/callbacks.c:352 src/document.c:1671
+#: data/geany.glade:6579 src/callbacks.c:352 src/document.c:1671
 #: src/document.c:3619 src/sidebar.c:1215
 msgid "_Reload"
 msgstr "_Lae uuesti"
 
-#: data/geany.glade:6527
+#: data/geany.glade:6590
 msgid "R_eload As"
 msgstr "Lae _uuesti kui"
 
-#: data/geany.glade:6573
+#: data/geany.glade:6636
 msgid "Page Set_up"
 msgstr "_Lehekülje sätted"
 
-#: data/geany.glade:6580
+#: data/geany.glade:6643
 msgid "_Print..."
 msgstr "_Prindi..."
 
-#: data/geany.glade:6607 src/notebook.c:498
+#: data/geany.glade:6670 src/notebook.c:498
 msgid "Close Ot_her Documents"
 msgstr "Sulge _teised dokumendid"
 
-#: data/geany.glade:6618 src/notebook.c:510
+#: data/geany.glade:6681 src/notebook.c:510
 msgid "C_lose All"
 msgstr "_Sulge kõik"
 
-#: data/geany.glade:6750
+#: data/geany.glade:6813
 msgid "Co_mmands"
 msgstr "_Käsud"
 
-#: data/geany.glade:6757 src/keybindings.c:439
+#: data/geany.glade:6820 src/keybindings.c:439
 msgid "Cu_t Current Line(s)"
 msgstr "_Lõika aktiivne rida/aktiivsed read"
 
-#: data/geany.glade:6768 src/keybindings.c:436
+#: data/geany.glade:6831 src/keybindings.c:436
 msgid "_Copy Current Line(s)"
 msgstr "_Kopeeri aktiivne rida/aktiivsed read"
 
-#: data/geany.glade:6781 src/keybindings.c:389
+#: data/geany.glade:6844 src/keybindings.c:389
 msgid "_Delete Current Line(s)"
 msgstr "_Kustuta aktiivne rida/aktiivsed read"
 
-#: data/geany.glade:6790 src/keybindings.c:386
+#: data/geany.glade:6853 src/keybindings.c:386
 msgid "D_uplicate Line or Selection"
 msgstr "_Paljunda rida või valikut"
 
-#: data/geany.glade:6805 src/keybindings.c:449
+#: data/geany.glade:6868 src/keybindings.c:449
 msgid "S_elect Current Line(s)"
 msgstr "_Vali aktiivne rida/aktiivsed read"
 
-#: data/geany.glade:6814 src/keybindings.c:452
+#: data/geany.glade:6877 src/keybindings.c:452
 msgid "Se_lect Current Paragraph"
 msgstr "_Vali aktiivne lõik"
 
-#: data/geany.glade:6829
+#: data/geany.glade:6892
 msgid "_Move Line(s) Up"
 msgstr "_Liiguta rida/read üles"
 
-#: data/geany.glade:6838
+#: data/geany.glade:6901
 msgid "M_ove Line(s) Down"
 msgstr "_Liiguta rida/read alla"
 
-#: data/geany.glade:6853 src/keybindings.c:503
+#: data/geany.glade:6916 src/keybindings.c:503
 msgid "_Send Selection to Terminal"
 msgstr "_Saada valik terminali"
 
-#: data/geany.glade:6875 src/keybindings.c:508
+#: data/geany.glade:6938 src/keybindings.c:508
 #, fuzzy
 msgid "_Join Lines"
 msgstr "Ühenda read"
 
-#: data/geany.glade:6884 src/keybindings.c:505
+#: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
 msgstr "_Taasta rida/blokk"
 
-#: data/geany.glade:6893 src/keybindings.c:463
+#: data/geany.glade:6956 src/keybindings.c:463
 msgid "T_oggle Case of Selection"
 msgstr "Lülitab valiku juhtumi sisse"
 
-#: data/geany.glade:6908
+#: data/geany.glade:6971
 msgid "_Comment Line(s)"
 msgstr "_Kommenteeri read"
 
-#: data/geany.glade:6917
+#: data/geany.glade:6980
 msgid "U_ncomment Line(s)"
 msgstr "Eemal_da kommentaarid"
 
-#: data/geany.glade:6926
+#: data/geany.glade:6989
 msgid "_Toggle Line Commentation"
 msgstr "Lülitab otsekommentaari sisse"
 
-#: data/geany.glade:6939
+#: data/geany.glade:7002
 msgid "_Increase Indent"
 msgstr "_Suurenda taanet"
 
-#: data/geany.glade:6950
+#: data/geany.glade:7013
 msgid "_Decrease Indent"
 msgstr "_Vähenda taanet"
 
-#: data/geany.glade:6963 src/keybindings.c:482
+#: data/geany.glade:7026 src/keybindings.c:482
 msgid "S_mart Line Indent"
 msgstr "Nutikas rea taane"
 
-#: data/geany.glade:6978
+#: data/geany.glade:7041
 msgid "_Send Selection to"
 msgstr "_Saada valik asukohta"
 
-#: data/geany.glade:7006
+#: data/geany.glade:7069
 msgid "I_nsert Comments"
 msgstr "Sisesta kommentaarid"
 
-#: data/geany.glade:7140
+#: data/geany.glade:7203
 msgid "Preference_s"
 msgstr "_Eelistused"
 
-#: data/geany.glade:7151 src/keybindings.c:529
+#: data/geany.glade:7214 src/keybindings.c:529
 msgid "P_lugin Preferences"
 msgstr "P_luginate eelistused"
 
-#: data/geany.glade:7176
+#: data/geany.glade:7239
 msgid "_Find..."
 msgstr "_Otsi..."
 
-#: data/geany.glade:7189
+#: data/geany.glade:7252
 msgid "Find _Next"
 msgstr "Otsi _järgmist"
 
-#: data/geany.glade:7198
+#: data/geany.glade:7261
 msgid "Find _Previous"
 msgstr "Otsi _eelmist"
 
-#: data/geany.glade:7211 src/symbols.c:2215
+#: data/geany.glade:7274 src/symbols.c:2215
 msgid "Find in F_iles..."
 msgstr "Otsi _failidest..."
 
-#: data/geany.glade:7222
+#: data/geany.glade:7285
 msgid "_Replace..."
 msgstr "_Asenda..."
 
-#: data/geany.glade:7239
+#: data/geany.glade:7302
 msgid "Next Me_ssage"
 msgstr "Järgmine _sõnum"
 
-#: data/geany.glade:7250
+#: data/geany.glade:7313
 msgid "Pr_evious Message"
 msgstr "_Eelmine sõnum"
 
-#: data/geany.glade:7269 src/keybindings.c:578
+#: data/geany.glade:7332 src/keybindings.c:578
 msgid "Go to Ne_xt Marker"
 msgstr "_Mine järgmise tähise juurde"
 
-#: data/geany.glade:7278 src/keybindings.c:581
+#: data/geany.glade:7341 src/keybindings.c:581
 msgid "Go to Pre_vious Marker"
 msgstr "_Mine eelmise tähise juurde"
 
-#: data/geany.glade:7291
+#: data/geany.glade:7354
 msgid "_Go to Line..."
 msgstr "_Mine reale..."
 
-#: data/geany.glade:7313 src/keybindings.c:541
+#: data/geany.glade:7376 src/keybindings.c:541
 msgid "Find Next _Selection"
 msgstr "Otsi _järgmine valik"
 
-#: data/geany.glade:7322 src/keybindings.c:543
+#: data/geany.glade:7385 src/keybindings.c:543
 msgid "Find Pre_vious Selection"
 msgstr "Otsi _eelmine valik"
 
-#: data/geany.glade:7361 src/keybindings.c:560
+#: data/geany.glade:7424 src/keybindings.c:560
 msgid "_Mark All"
 msgstr "_Märgi kõik"
 
-#: data/geany.glade:7385
+#: data/geany.glade:7448
 msgid "Go to Symbol Decl_aration"
 msgstr "Mine sümbolite deklareerimise juurde"
 
-#: data/geany.glade:7402
+#: data/geany.glade:7465
 msgid "_View"
 msgstr "_Vaade"
 
-#: data/geany.glade:7409
+#: data/geany.glade:7472
 msgid "Change _Font..."
 msgstr "Muuda kirjatüüpi..."
 
-#: data/geany.glade:7420
+#: data/geany.glade:7483
 msgid "Change _Color Scheme..."
 msgstr "Muuda värviskeemi..."
 
-#: data/geany.glade:7439
+#: data/geany.glade:7502
 msgid "Show _Markers Margin"
 msgstr "Näita _tähiste serva"
 
-#: data/geany.glade:7449
+#: data/geany.glade:7512
 msgid "Show _Line Numbers"
 msgstr "Näita _reanumbreid"
 
-#: data/geany.glade:7459
+#: data/geany.glade:7522
 msgid "Show White S_pace"
 msgstr "Näita _tühimärke"
 
-#: data/geany.glade:7468
+#: data/geany.glade:7531
 msgid "Show Line _Endings"
 msgstr "Näita rea_lõppe"
 
-#: data/geany.glade:7477
+#: data/geany.glade:7540
 msgid "Show Indentation _Guides"
 msgstr "Näita _taandejuhised"
 
-#: data/geany.glade:7492
+#: data/geany.glade:7555
 msgid "Full_screen"
 msgstr "_Täisekraan"
 
-#: data/geany.glade:7501
+#: data/geany.glade:7564
 msgid "Toggle All _Additional Widgets"
 msgstr "Lülitab kõik täiendavad vidinad sisse"
 
-#: data/geany.glade:7510
+#: data/geany.glade:7573
 msgid "Show Message _Window"
 msgstr "Näita _sõnumiakent"
 
-#: data/geany.glade:7520
+#: data/geany.glade:7583
 msgid "Show _Toolbar"
 msgstr "Näita _tööriistariba"
 
-#: data/geany.glade:7530
+#: data/geany.glade:7593
 msgid "Show Side_bar"
 msgstr "Näita _külgriba"
 
-#: data/geany.glade:7580
+#: data/geany.glade:7643
 msgid "_Document"
 msgstr "_Dokument"
 
-#: data/geany.glade:7589
+#: data/geany.glade:7652
 msgid "_Line Wrapping"
 msgstr "_Reamurdmine"
 
-#: data/geany.glade:7599
+#: data/geany.glade:7662
 msgid "Line _Breaking"
 msgstr "Rea_katkestused"
 
-#: data/geany.glade:7608
+#: data/geany.glade:7671
 msgid "_Auto-indentation"
 msgstr "_Automaatne taane"
 
-#: data/geany.glade:7618
+#: data/geany.glade:7681
 msgid "In_dent Type"
 msgstr "_Taande tüüp"
 
-#: data/geany.glade:7627 data/geany.glade:7685
+#: data/geany.glade:7690 data/geany.glade:7748
 msgid "_Detect from Content"
 msgstr "_Tuvasta sisust"
 
-#: data/geany.glade:7662
+#: data/geany.glade:7725
 msgid "T_abs and Spaces"
 msgstr "T_abeldusmärgid ja tühikud"
 
-#: data/geany.glade:7676
+#: data/geany.glade:7739
 msgid "Indent Widt_h"
 msgstr "Taande _laius"
 
-#: data/geany.glade:7700
+#: data/geany.glade:7763
 msgid "_1"
 msgstr "_1"
 
-#: data/geany.glade:7709
+#: data/geany.glade:7772
 msgid "_2"
 msgstr "_2"
 
-#: data/geany.glade:7719
+#: data/geany.glade:7782
 msgid "_3"
 msgstr "_3"
 
-#: data/geany.glade:7729
+#: data/geany.glade:7792
 msgid "_4"
 msgstr "_4"
 
-#: data/geany.glade:7740
+#: data/geany.glade:7803
 msgid "_5"
 msgstr "_5"
 
-#: data/geany.glade:7750
+#: data/geany.glade:7813
 msgid "_6"
 msgstr "_6"
 
-#: data/geany.glade:7760
+#: data/geany.glade:7823
 msgid "_7"
 msgstr "_7"
 
-#: data/geany.glade:7770
+#: data/geany.glade:7833
 msgid "_8"
 msgstr "_8"
 
-#: data/geany.glade:7790
+#: data/geany.glade:7853
 msgid "Read _Only"
 msgstr "_Kirjutuskaitstud"
 
-#: data/geany.glade:7799
+#: data/geany.glade:7862
 msgid "_Write Unicode BOM"
 msgstr "_Unicode BOM'i kirjutamine"
 
-#: data/geany.glade:7814
+#: data/geany.glade:7877
 msgid "Set File_type"
 msgstr "Failitüüp"
 
-#: data/geany.glade:7834
+#: data/geany.glade:7897
 msgid "Set _Encoding"
 msgstr "Määra _kodeering"
 
-#: data/geany.glade:7854
+#: data/geany.glade:7917
 msgid "Set Line E_ndings"
 msgstr "Määra rea lõpud"
 
-#: data/geany.glade:7863
+#: data/geany.glade:7926
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "Teisenda ja seadista _CR/LF (Windows)"
 
-#: data/geany.glade:7872
+#: data/geany.glade:7935
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Teisenda ja seadista _LF (Unix)"
 
-#: data/geany.glade:7883
+#: data/geany.glade:7946
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Teisenda ja seadista CR (klassikaline _Mac)"
 
-#: data/geany.glade:7903 src/keybindings.c:669
+#: data/geany.glade:7966 src/keybindings.c:669
 msgid "_Clone"
 msgstr "_Klooni"
 
-#: data/geany.glade:7912 src/keybindings.c:671
+#: data/geany.glade:7975 src/keybindings.c:671
 msgid "_Strip Trailing Spaces"
 msgstr "_Realõputühikute eemaldamine"
 
-#: data/geany.glade:7921
+#: data/geany.glade:7984
 msgid "Replace Tabs with S_paces"
 msgstr "_Asenda tabeldusmärgid tühikutega"
 
-#: data/geany.glade:7930
+#: data/geany.glade:7993
 msgid "_Replace Spaces with Tabs..."
 msgstr "Asenda tühikud tabeldusmärkidega..."
 
-#: data/geany.glade:7945
+#: data/geany.glade:8008
 msgid "_Fold All"
 msgstr "_Voldi kõik kokku"
 
-#: data/geany.glade:7954
+#: data/geany.glade:8017
 msgid "_Unfold All"
 msgstr "_Voldi kõik lahti"
 
-#: data/geany.glade:7969
+#: data/geany.glade:8032
 msgid "Remove _Markers"
 msgstr "_Eemalda tähised"
 
-#: data/geany.glade:7978
+#: data/geany.glade:8041
 msgid "Remove Error _Indicators"
 msgstr "Eemalda vea _indikaatorid"
 
-#: data/geany.glade:7991
+#: data/geany.glade:8054
 msgid "_Project"
 msgstr "_Projekt"
 
-#: data/geany.glade:7999
+#: data/geany.glade:8062
 msgid "_New..."
 msgstr "_Uus..."
 
-#: data/geany.glade:8010
+#: data/geany.glade:8073
 msgid "New from _Folder..."
 msgstr ""
 
-#: data/geany.glade:8034
+#: data/geany.glade:8097
 msgid "_Recent Projects"
 msgstr "_Hiljutised projektid"
 
-#: data/geany.glade:8040
+#: data/geany.glade:8103
 msgid "_Close"
 msgstr "_Sulge"
 
-#: data/geany.glade:8059
+#: data/geany.glade:8122
 msgid "Apply the default indentation settings to all documents"
 msgstr "Rakenda vaikimisi taande seadistused kõigile dokumentidele"
 
-#: data/geany.glade:8060
+#: data/geany.glade:8123
 msgid "_Apply Default Indentation"
 msgstr "_Rakenda vaikimisi taane"
 
-#: data/geany.glade:8089 src/build.c:2446 src/build.c:2717
+#: data/geany.glade:8152 src/build.c:2446 src/build.c:2717
 msgid "_Build"
 msgstr "_Ehitamine"
 
-#: data/geany.glade:8097
+#: data/geany.glade:8160
 msgid "_Tools"
 msgstr "_Tööriistad"
 
-#: data/geany.glade:8104
+#: data/geany.glade:8167
 msgid "_Reload Configuration"
 msgstr "_Seadistuste taaslaadimine"
 
-#: data/geany.glade:8115
+#: data/geany.glade:8178
 msgid "C_onfiguration Files"
 msgstr "S_eadistusfailid"
 
-#: data/geany.glade:8131
+#: data/geany.glade:8194
 msgid "_Color Chooser"
 msgstr "_Värvivalija"
 
-#: data/geany.glade:8144
+#: data/geany.glade:8207
 msgid "_Word Count"
 msgstr "Sõnade _arv"
 
-#: data/geany.glade:8153
+#: data/geany.glade:8216
 msgid "Load Ta_gs File..."
 msgstr "Lae siltide fail..."
 
-#: data/geany.glade:8166 data/geany.glade:8173
+#: data/geany.glade:8229 data/geany.glade:8236
 msgid "_Help"
 msgstr "_Abi"
 
-#: data/geany.glade:8186
+#: data/geany.glade:8249
 msgid "Keyboard _Shortcuts"
 msgstr "_Kiirklahvid"
 
-#: data/geany.glade:8195
+#: data/geany.glade:8258
 msgid "Debug _Messages"
 msgstr "Silumis_teated"
 
-#: data/geany.glade:8210
+#: data/geany.glade:8273
 msgid "_Website"
 msgstr "_Veebileht"
 
-#: data/geany.glade:8219
+#: data/geany.glade:8282
 msgid "Wi_ki"
 msgstr "Vi_ki"
 
-#: data/geany.glade:8228
+#: data/geany.glade:8291
 msgid "Report a _Bug..."
 msgstr "Teata veast..."
 
-#: data/geany.glade:8237
+#: data/geany.glade:8300
 msgid "_Donate..."
 msgstr "_Annetamine..."
 
-#: data/geany.glade:8306
+#: data/geany.glade:8369
 #, fuzzy
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
@@ -2106,55 +2121,55 @@ msgid ""
 msgstr ""
 "Filtreeri oma faile tavaliste metamärkidega. Eralda mitu mustrit tühikuga."
 
-#: data/geany.glade:8348 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
+#: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
 msgid "Symbols"
 msgstr "Sümbolid"
 
-#: data/geany.glade:8376
+#: data/geany.glade:8439
 msgid "Documents"
 msgstr "Dokumendid"
 
-#: data/geany.glade:8435
+#: data/geany.glade:8498
 msgid "Status"
 msgstr "Olek"
 
-#: data/geany.glade:8464
+#: data/geany.glade:8527
 msgid "Compiler"
 msgstr "Kompilaator"
 
-#: data/geany.glade:8495
+#: data/geany.glade:8558
 msgid "Messages"
 msgstr "Sõnumid"
 
-#: data/geany.glade:8523
+#: data/geany.glade:8586
 msgid "Scribble"
 msgstr "Sodi"
 
-#: data/geany.glade:8570
+#: data/geany.glade:8633
 msgid "Project Properties"
 msgstr "Projekti omadused"
 
-#: data/geany.glade:8640 src/project.c:203
+#: data/geany.glade:8703 src/project.c:203
 msgid "Filename:"
 msgstr "Faili nimi:"
 
-#: data/geany.glade:8653
+#: data/geany.glade:8716
 msgid "_Name:"
 msgstr "_Nimi:"
 
-#: data/geany.glade:8669
+#: data/geany.glade:8732
 msgid "_Description:"
 msgstr "_Kirjeldus:"
 
-#: data/geany.glade:8686
+#: data/geany.glade:8749
 msgid "_Base path:"
 msgstr "_Alusrada:"
 
-#: data/geany.glade:8702 src/search.c:905
+#: data/geany.glade:8765 src/search.c:905
 msgid "File _patterns:"
 msgstr "Failinime _mustrid:"
 
-#: data/geany.glade:8763
+#: data/geany.glade:8826
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
@@ -2162,7 +2177,7 @@ msgstr ""
 "Tühikutega loend failide mustritest, mida kasutatakse failide otsimiseks "
 "dialoogiboksis (nt *.c *.h)"
 
-#: data/geany.glade:8797 src/project.c:232
+#: data/geany.glade:8860 src/project.c:232
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -2171,79 +2186,79 @@ msgstr ""
 "Kõigi projekti moodustavate failide aluskataloog. See võib olla uus tee või "
 "olemasolev kataloogipuu. Projekti failinime suhtes saate kasutada teid."
 
-#: data/geany.glade:8841 src/keybindings.c:320
+#: data/geany.glade:8904 src/keybindings.c:320
 msgid "Project"
 msgstr "Projekt"
 
-#: data/geany.glade:9253
+#: data/geany.glade:9316
 msgid "Display:"
 msgstr "Näidatav:"
 
-#: data/geany.glade:9294
+#: data/geany.glade:9357
 msgid "Custom"
 msgstr "Kohandatud"
 
-#: data/geany.glade:9313
+#: data/geany.glade:9376
 msgid "Use global settings"
 msgstr "Kasutatakse globaalseid seadistusi"
 
-#: data/geany.glade:9640
+#: data/geany.glade:9703
 msgid "Size:"
 msgstr "Suurus:"
 
-#: data/geany.glade:9656
+#: data/geany.glade:9719
 msgid "Location:"
 msgstr "Asukoht:"
 
-#: data/geany.glade:9672
+#: data/geany.glade:9735
 msgid "Read-only:"
 msgstr "Kirjutuskaitstud:"
 
-#: data/geany.glade:9688
+#: data/geany.glade:9751
 msgid "Encoding:"
 msgstr "Kodeering:"
 
-#: data/geany.glade:9704
+#: data/geany.glade:9767
 msgid "Modified:"
 msgstr "Muudetud:"
 
-#: data/geany.glade:9720
+#: data/geany.glade:9783
 msgid "Changed:"
 msgstr "Muudetud:"
 
-#: data/geany.glade:9736
+#: data/geany.glade:9799
 msgid "Accessed:"
 msgstr "Viimati avati:"
 
-#: data/geany.glade:9780
+#: data/geany.glade:9843
 msgid "(only inside Geany)"
 msgstr "(ainult Geanys)"
 
-#: data/geany.glade:9879
+#: data/geany.glade:9942
 msgid "Permissions:"
 msgstr "Õigused:"
 
-#: data/geany.glade:9893
+#: data/geany.glade:9956
 msgid "Read:"
 msgstr "Lugemine:"
 
-#: data/geany.glade:9907
+#: data/geany.glade:9970
 msgid "Write:"
 msgstr "Kirjutamine:"
 
-#: data/geany.glade:9921
+#: data/geany.glade:9984
 msgid "Execute:"
 msgstr "Käivitamine:"
 
-#: data/geany.glade:9935
+#: data/geany.glade:9998
 msgid "Owner:"
 msgstr "Omanik:"
 
-#: data/geany.glade:9947
+#: data/geany.glade:10010
 msgid "Group:"
 msgstr "Grupp:"
 
-#: data/geany.glade:9959
+#: data/geany.glade:10022
 msgid "Other:"
 msgstr "Teised:"
 
@@ -3756,11 +3771,11 @@ msgstr "Kiirklahvid"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Need kiirklahvid on muudetavad:"
 
-#: src/keyfile.c:1135
+#: src/keyfile.c:1139
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Tipi siia, mida soovite, kasuta seda teadete/mustanditahvlina"
 
-#: src/keyfile.c:1391
+#: src/keyfile.c:1395
 msgid "Failed to load one or more session files."
 msgstr "Ühe või rohkema sessioonifaili laadimine ebaõnnestus."
 
@@ -6253,9 +6268,6 @@ msgstr "Üleval ja all"
 
 #~ msgid "<b>Encoding:</b>"
 #~ msgstr "<b>Kodeering:</b>"
-
-#~ msgid "<b>Changed:</b>"
-#~ msgstr "<b>Muudetud:</b>"
 
 #~ msgid "Subroutines"
 #~ msgstr "Alamfunktsioonid"
