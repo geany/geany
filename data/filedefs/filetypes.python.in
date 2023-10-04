@@ -21,6 +21,7 @@ fstring=string_1
 fcharacter=character
 ftriple=string_2
 ftripledouble=string_2
+attribute=identifier_1
 
 [keywords]
 # all items must be in one line
@@ -34,6 +35,8 @@ identifiers=ArithmeticError AssertionError AttributeError BaseException Blocking
 [lexer_properties]
 fold.quotes.python=1
 lexer.python.keywords2.no.sub.identifiers=1
+lexer.python.identifier.attributes=1
+lexer.python.identifier.decorator=1
 
 [settings]
 # default extension used when saving files

@@ -13,6 +13,10 @@ string2=string_2
 identifier=identifier
 infix=function
 infixeol=function
+backticks=backticks
+stringraw=string_2
+stringraw=string_2
+escapesequence=string_1
 
 [keywords]
 # all items must be in one line
@@ -22,6 +26,10 @@ primary=attach break detach else for function if in library new next repeat requ
 # use same buildinConstants as in RStudio
 package=F FALSE Inf NA NA_integer_ NA_real_ NA_character_ NA_complex_ NaN NULL T TRUE
 package_other=
+
+[lexer_properties]
+# https://github.com/ScintillaOrg/lexilla/issues/206
+#lexer.r.escape.sequence=1
 
 [settings]
 # default extension used when saving files
@@ -52,4 +60,3 @@ context_action_cmd=
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
-

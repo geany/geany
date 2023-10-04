@@ -56,6 +56,7 @@ copy_to()
 # purge executbale bits
 umask 111
 # copy everything from scintilla but lexers
+copy_to scintilla/README          "$SCI_SRC"/README
 copy_to scintilla/src             "$SCI_SRC"/src/*.cxx
 copy_to scintilla/src             "$SCI_SRC"/src/*.h
 copy_to scintilla/include         "$SCI_SRC"/include/*.h

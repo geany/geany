@@ -5205,6 +5205,15 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
 
+	/* Change history */
+	guint change_history_mask;
+	change_history_mask = SC_CHANGE_HISTORY_DISABLED;
+	if (editor_prefs.change_history_markers)
+		change_history_mask |= SC_CHANGE_HISTORY_ENABLED|SC_CHANGE_HISTORY_MARKERS;
+	if (editor_prefs.change_history_indicators)
+		change_history_mask |= SC_CHANGE_HISTORY_ENABLED|SC_CHANGE_HISTORY_INDICATORS;
+	SSM(sci, SCI_SETCHANGEHISTORY, change_history_mask, 0);
+
 	/* caret Y policy */
 	caret_y_policy = CARET_EVEN;
 	if (editor_prefs.scroll_lines_around_cursor > 0)
