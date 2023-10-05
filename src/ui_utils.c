@@ -2159,16 +2159,9 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 			g_file_get_contents(global_file, &global_content, NULL, NULL);
 
 		doc = document_new_file(utf8_filename, ft, global_content);
-		if (global_content)
+		if (global_content && doc->file_type->id == GEANY_FILETYPES_CONF)
 		{
-			if (doc->file_type->id == GEANY_FILETYPES_CONF)
-				comment_conf_files(doc->editor->sci);
-			else
-			{
-				sci_select_all(doc->editor->sci);
-				keybindings_send_command(GEANY_KEY_GROUP_FORMAT,
-					GEANY_KEYS_FORMAT_COMMENTLINETOGGLE);
-			}
+			comment_conf_files(doc->editor->sci);
 			sci_set_current_line(doc->editor->sci, 0);
 			document_set_text_changed(doc, FALSE);
 			sci_empty_undo_buffer(doc->editor->sci);
