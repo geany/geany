@@ -170,6 +170,8 @@ const gchar *tm_parser_scope_separator(TMParserType lang);
 
 const gchar *tm_parser_scope_separator_printable(TMParserType lang);
 
+gboolean tm_parser_disable_autocomplete(TMParserType lang);
+
 gboolean tm_parser_has_full_scope(TMParserType lang);
 
 gboolean tm_parser_langs_compatible(TMParserType lang, TMParserType other);

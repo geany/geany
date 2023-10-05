@@ -2226,7 +2226,9 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 	g_return_val_if_fail(editor != NULL, FALSE);
 
-	if (! editor_prefs.auto_complete_symbols && ! force)
+	ft = editor->document->file_type;
+
+	if ((! editor_prefs.auto_complete_symbols || tm_parser_disable_autocomplete(ft->lang)) && ! force)
 		return FALSE;
 
 	/* If we are at the beginning of the document, we skip autocompletion as we can't determine the
@@ -2235,7 +2237,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 		return FALSE;
 
 	sci = editor->sci;
-	ft = editor->document->file_type;
 
 	lexer = sci_get_lexer(sci);
 	style = sci_get_style_at(sci, pos - 2);

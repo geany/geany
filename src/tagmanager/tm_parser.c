@@ -1644,6 +1644,29 @@ const gchar *tm_parser_scope_separator_printable(TMParserType lang)
 }
 
 
+gboolean tm_parser_disable_autocomplete(TMParserType lang)
+{
+	switch (lang)
+	{
+		case TM_PARSER_ABC:
+		case TM_PARSER_ASCIIDOC:
+		case TM_PARSER_BIBTEX:
+		case TM_PARSER_CONF:
+		case TM_PARSER_DIFF:
+		case TM_PARSER_DOCBOOK:
+		case TM_PARSER_HTML:
+		case TM_PARSER_JSON:
+		case TM_PARSER_LATEX:
+		case TM_PARSER_MARKDOWN:
+		case TM_PARSER_REST:
+		case TM_PARSER_TXT2TAGS:
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+
 gboolean tm_parser_has_full_scope(TMParserType lang)
 {
 	switch (lang)
