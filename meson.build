@@ -5,6 +5,7 @@ project('geany', 'c', 'cpp',
 
 gnome = import('gnome')
 pymod = import('python')
+fs = import('fs')
 
 cc = meson.get_compiler('c')
 cxx = meson.get_compiler('cpp')
@@ -166,7 +167,7 @@ python = pymod.find_installation('python3', modules: doxygen.found() and get_opt
 rst2html = find_program('rst2html', required: get_option('html-docs'))
 rst2pdf = find_program('rst2pdf', required: get_option('pdf-docs'))
 git = find_program('git', required: false)
-if git.found()
+if git.found() and fs.is_dir('.git')
 	ret = run_command(git, 'rev-parse', '--short', '--revs-only', 'HEAD', check: true)
 	cdata.set_quoted('REVISION', ret.stdout().strip())
 else
