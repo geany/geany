@@ -2824,6 +2824,9 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		editor_set_indentation_guides(doc->editor);
 		build_menu_update(doc);
 		queue_colourise(doc);
+		/* forces re-setting SCI_SETKEYWORDS which seems to be needed with
+		 * Scintilla 5 to colorize them properly */
+		doc->priv->keyword_hash = 0;
 		if (type->priv->symbol_list_sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
 			doc->priv->symbol_list_sort_mode = interface_prefs.symbols_sort_mode;
 		else
