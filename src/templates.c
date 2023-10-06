@@ -307,6 +307,8 @@ static void create_file_template_menus(void)
 	item = gtk_menu_item_new_with_mnemonic(_("Files"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
+	gtk_menu_reorder_child(GTK_MENU(menu), item, 0);
+
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
 
