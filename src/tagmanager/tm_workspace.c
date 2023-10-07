@@ -740,12 +740,12 @@ static gboolean is_workspace_tag(TMTag *tag, CopyInfo *info)
 }
 
 
-static guint copy_tags(GPtrArray *dst, TMTag **src, guint src_len, GHashTable *name_table,
+static void copy_tags(GPtrArray *dst, TMTag **src, guint src_len, GHashTable *name_table,
 	gint num, gboolean (*predicate) (TMTag *, CopyInfo *), CopyInfo *info)
 {
 	guint i;
 
-	g_return_val_if_fail(src && dst, 0);
+	g_return_if_fail(src && dst);
 
 	for (i = 0; i < src_len && num > 0; i++)
 	{
