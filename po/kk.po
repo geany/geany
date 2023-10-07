@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2023-10-04 23:48+0200\n"
-"PO-Revision-Date: 2016-10-31 09:07+0500\n"
+"PO-Revision-Date: 2023-10-07 10:06+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.10\n"
+"X-Generator: Poedit 3.4\n"
 
 #: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
@@ -190,24 +190,20 @@ msgid "<b>Startup</b>"
 msgstr "<b>Іске қосылу</b>"
 
 #: data/geany.glade:958
-#, fuzzy
 msgid "Save window size"
-msgstr "Терезе орналасуын мен өлшемдерін сақтау"
+msgstr "Терезе өлшемін сақтау"
 
 #: data/geany.glade:962
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr "Терезе орналсқан орнын мен өлшемдерін сақтап, қосылғанда орнату"
+msgstr "Терезе өлшемдерін сақтап, қосылғанда қалпына келтіреді"
 
 #: data/geany.glade:974
-#, fuzzy
 msgid "Save window position"
-msgstr "Терезе орналасуын мен өлшемдерін сақтау"
+msgstr "Терезе орналасуын сақтау"
 
 #: data/geany.glade:978
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr "Терезе орналсқан орнын мен өлшемдерін сақтап, қосылғанда орнату"
+msgstr "Терезе орналасқан орнын сақтап, қосылғанда қалпына келтіреді"
 
 #: data/geany.glade:990
 msgid "Confirm exit"
@@ -522,7 +518,7 @@ msgstr ""
 
 #: data/geany.glade:2214
 msgid "Tab label length:"
-msgstr ""
+msgstr "Бет атауының ұзындығы:"
 
 #: data/geany.glade:2226
 msgid "Characters to be visible on the tab label of the file."
@@ -708,18 +704,16 @@ msgid ""
 msgstr ""
 
 #: data/geany.glade:3146 data/geany.glade:8951
-#, fuzzy
 msgid "_Width:"
-msgstr "Ені:"
+msgstr "Е_ні:"
 
 #: data/geany.glade:3160 data/geany.glade:8967
 msgid "The width in chars of a single indent"
 msgstr "Бірлік шегінудің ені, таңбалар санында"
 
 #: data/geany.glade:3179 data/geany.glade:8988
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Автошегіну режимі:"
+msgstr "Автошегіну режи_мі:"
 
 #: data/geany.glade:3214 data/geany.glade:9023
 msgid "Detect type from file"
@@ -772,9 +766,8 @@ msgid "Type:"
 msgstr "Түрі:"
 
 #: data/geany.glade:3332
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Табуляция пернесінің шегінуі"
+msgstr "Табуляция _пернесінің шегінуі"
 
 #: data/geany.glade:3336
 msgid ""
@@ -784,9 +777,8 @@ msgstr ""
 "таңбасын енгізу орнына"
 
 #: data/geany.glade:3348
-#, fuzzy
 msgid "_Backspace key unindents"
-msgstr "Табуляция пернесінің шегінуі"
+msgstr "_Backspace пернесінің кері шегінуі"
 
 #: data/geany.glade:3352
 msgid ""
@@ -978,9 +970,8 @@ msgid "Shows the line ending character"
 msgstr "Жол аяғының таңбасын көрсету"
 
 #: data/geany.glade:3903
-#, fuzzy
 msgid "Show only non-default line endings"
-msgstr "Жол аяқтауларын көрсету"
+msgstr "Тек қалыпты емес жол аяқтауларын көрсету"
 
 #: data/geany.glade:3907
 msgid ""
@@ -1106,19 +1097,16 @@ msgid "<b>Virtual spaces</b>"
 msgstr "<b>Виртуалды бос аралықтар</b>"
 
 #: data/geany.glade:4315
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Шетте маркерлер өрісін көрсету"
+msgstr "Маркерлер өрісінде көрсету"
 
 #: data/geany.glade:4329
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "Жол аяғының таңбасын көрсету"
+msgstr "Жол астындағы индикаторлар ретінде көрсету"
 
 #: data/geany.glade:4349
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>Өзгертілген:</b>"
+msgstr "<b>Өзгертулер тарихы</b>"
 
 #: data/geany.glade:4369
 msgid "Display"
@@ -1202,7 +1190,6 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Артық бос аралықтар мен табуляцияны өшіру"
 
 #: data/geany.glade:4702
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Жолдар соңынан артық бос аралықтар мен табуляцияны өшіреді"
 
@@ -1262,9 +1249,8 @@ msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Қалауыңызша браузеріңізге дейінгі жол (және аргументтері болуы мүмкін)"
 
 #: data/geany.glade:4974
-#, fuzzy
 msgid "System default"
-msgstr "Жүйе _негізгісі"
+msgstr "Жүйе негізгісі"
 
 #: data/geany.glade:5030
 msgid "Grep:"
@@ -1688,9 +1674,8 @@ msgid "_Send Selection to Terminal"
 msgstr "Таңдалғанды  _терминалға жіберу"
 
 #: data/geany.glade:6938 src/keybindings.c:508
-#, fuzzy
 msgid "_Join Lines"
-msgstr "Жолдарды біріктіру"
+msgstr "Жолдарды _біріктіру"
 
 #: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
@@ -2099,24 +2084,20 @@ msgid "Filename:"
 msgstr "Файл аты:"
 
 #: data/geany.glade:8716
-#, fuzzy
 msgid "_Name:"
-msgstr "Аты:"
+msgstr "_Аты:"
 
 #: data/geany.glade:8732
-#, fuzzy
 msgid "_Description:"
-msgstr "Анықтамасы:"
+msgstr "Си_паттамасы:"
 
 #: data/geany.glade:8749
-#, fuzzy
 msgid "_Base path:"
-msgstr "Негізгі жолы:"
+msgstr "_Негізгі орналасу:"
 
 #: data/geany.glade:8765 src/search.c:905
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Файлдар шаблондары:"
+msgstr "Файлдар _шаблондары:"
 
 #: data/geany.glade:8826
 msgid ""
@@ -2313,7 +2294,7 @@ msgstr "\"%s\" жұмыс бумасы жарамсыз"
 #: src/build.c:891
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
-msgstr " \"%s\" орындау сәтсіз (іске қосылу скриптін жасау мүмкін емес: %s)"
+msgstr "\"%s\" орындау сәтсіз (іске қосылу скриптін жасау мүмкін емес: %s)"
 
 #: src/build.c:933
 msgid ""
@@ -2477,9 +2458,8 @@ msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
 
 #: src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "'%s' қайтадан жүктеуді шынымен қалайсыз ба?"
+msgstr "Барлық файлдарды қайтадан жүктеуді шынымен қалайсыз ба?"
 
 #: src/callbacks.c:967 src/keybindings.c:569
 msgid "Go to Line"
@@ -2517,9 +2497,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "\"%s\" контекст әрекеті командасын орындау мүмкін емес: %s. %s"
 
 #: src/callbacks.c:1569
-#, fuzzy
 msgid "No context action set."
-msgstr "Контекст әрекеті:"
+msgstr "Контекст әрекеті орнатылмаған."
 
 #: src/dialogs.c:159 src/document.c:2316 src/document.c:2381
 #: src/document.c:2389
@@ -2744,9 +2723,9 @@ msgid "File %s reloaded."
 msgstr "%s файлы қайта жүктелді."
 
 #: src/document.c:1517
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
-msgstr "%s файлы ашылды(%d%s)."
+msgstr "%s файлы ашылды (%d%s)."
 
 #: src/document.c:1519
 msgid ", read-only"
@@ -2804,7 +2783,7 @@ msgstr ""
 #: src/document.c:1923
 #, c-format
 msgid "Error message: %s."
-msgstr "Қате хабарламасы: %s"
+msgstr "Қате хабарламасы: %s."
 
 #: src/document.c:1983
 #, c-format
@@ -3247,9 +3226,8 @@ msgid "Reload file"
 msgstr "Файлды қайта жүктеу"
 
 #: src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Файлды қайта жүктеу"
+msgstr "Барлық файлдарды қайтадан жүктеу"
 
 #: src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -3708,26 +3686,24 @@ msgid "Failed to load one or more session files."
 msgstr "Бір не одан да көп сессия файлдарын жүктеу сәтсіз."
 
 #: src/libmain.c:121
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Бірінші ашылған файл үшін бастапқы баған нөмірін орнату (--line опциясымен "
-"бірге қолданылғанда пайдалы)"
+"Бірінші рет ашылған файл үшін бастапқы баған нөмірін БАҒАН етіп орнату (--"
+"line опциясымен бірге қолданылғанда пайдалы)"
 
 #: src/libmain.c:121
 msgid "COLUMN"
-msgstr ""
+msgstr "БАҒАН"
 
 #: src/libmain.c:122
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Альтернативті баптаулар бумасын қолдану"
+msgstr "БУМА альтернативті баптаулар бумасын қолдану"
 
 #: src/libmain.c:122
 msgid "DIR"
-msgstr ""
+msgstr "БУМА"
 
 #: src/libmain.c:123
 msgid "Print internal filetype names"
@@ -3748,29 +3724,27 @@ msgstr ""
 "мәжбүрлету"
 
 #: src/libmain.c:128
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
 msgstr ""
-"Іске қосулы тұрған Geany экземплярымен байланысу үшін бұл сокет файл атын "
-"қолданыңыз"
+"Іске қосулы тұрған Geany экземплярымен байланысу үшін ФАЙЛ сокет файл атын "
+"қолдану"
 
 #: src/libmain.c:128 src/libmain.c:142
 msgid "FILE"
-msgstr ""
+msgstr "ФАЙЛ"
 
 #: src/libmain.c:129
 msgid "Return a list of open documents in a running Geany instance"
 msgstr "Орындалып тұрған Geany нұсқасының ашық құжаттар тізімін қайтарады"
 
 #: src/libmain.c:131
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Бірінші ашылған файлдың бастапқы жол нөмірін орнатыңыз"
+msgstr "Бірінші рет ашылған файлдың бастапқы жол нөмірін LINE етіп орнату"
 
 #: src/libmain.c:131
 msgid "LINE"
-msgstr ""
+msgstr "ЖОЛ"
 
 #: src/libmain.c:132
 msgid "Don't show message window at startup"
@@ -3817,9 +3791,8 @@ msgid "[FILES...]"
 msgstr "[ФАЙЛДАР...]"
 
 #: src/libmain.c:557
-#, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Жылдам әрі жеңіл өндіру ортасы"
+msgstr "Жылдам әрі жеңіл өндіру ортасы."
 
 #: src/libmain.c:558
 msgid "Report bugs to https://github.com/geany/geany/issues."
@@ -3828,7 +3801,7 @@ msgstr ""
 #: src/libmain.c:591
 #, c-format
 msgid "built on %s with "
-msgstr "%s жиналған, көмегімен:"
+msgstr "%s жиналған, көмегімен: "
 
 #: src/libmain.c:684
 msgid "Move it now?"
@@ -3925,9 +3898,8 @@ msgid "Open in New _Window"
 msgstr "Жаңа тере_зеде ашу"
 
 #: src/notebook.c:504
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "Құжатты оңға жылжыту"
+msgstr "_Оң жақтағы құжаттарды жабу"
 
 #: src/plugins.c:231
 #, c-format
@@ -4393,9 +4365,8 @@ msgstr ""
 "Таңдауыңызша: файл шаблондарын қолмен көрсету"
 
 #: src/search.c:918
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
-msgstr "Файл шаблондары, мыс. *.c *.h"
+msgstr "Файл шаблондары, бос аралықтармен ажыратылған (мыс. *.c *.h)"
 
 #: src/search.c:930
 msgid "_Directory:"
@@ -4534,7 +4505,7 @@ msgstr "Мәні"
 #: src/symbols.c:1218
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr " \"%s\" үшін белгісіз файл кеңейтуі.\n"
+msgstr "\"%s\" үшін белгісіз файл кеңейтуі.\n"
 
 #: src/symbols.c:1244
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
@@ -4579,14 +4550,14 @@ msgid "Could not load tags file '%s'."
 msgstr "'%s' тегтер файлын жүктеу мүмкін емес."
 
 #: src/symbols.c:1518
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s:%lu:</b> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<b>%s:%lu:</b> %s"
 
 #: src/symbols.c:1521
-#, fuzzy, c-format
+#, c-format
 msgid "<i>%s:%lu:</i> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<i>%s:%lu:</i> %s"
 
 #: src/symbols.c:1742
 #, c-format
@@ -4608,7 +4579,7 @@ msgstr "Көрі_нуі бойынша сұрыптау"
 
 #: src/symbols.c:2196
 msgid "_Group by Type"
-msgstr ""
+msgstr "Түрі бойынша то_птау"
 
 #: src/templates.c:81
 #, c-format
@@ -4765,7 +4736,7 @@ msgstr ""
 
 #: src/toolbar.c:973
 msgid "Available Items"
-msgstr "Қолжетерлік нәрселер."
+msgstr "Қолжетімді элементтер"
 
 #: src/toolbar.c:994
 msgid "Displayed Items"
@@ -4867,31 +4838,28 @@ msgid "H_ide Sidebar"
 msgstr "Бү_йір панелін жасыру"
 
 #: src/sidebar.c:1173
-#, fuzzy
 msgid "D_ocuments Only"
-msgstr "Құжаттар"
+msgstr "Тек құ_жаттар"
 
 #: src/sidebar.c:1174
 msgid "Show _Paths"
 msgstr "Жо_лдарды көрсету"
 
 #: src/sidebar.c:1175
-#, fuzzy
 msgid "Show _Tree"
-msgstr "Саймандар _панелін көрсету"
+msgstr "_Ағашты көрсету"
 
 #: src/sidebar.c:1228 plugins/filebrowser.c:678
 msgid "_Find in Files..."
 msgstr "_Файлдардан табу..."
 
 #: src/ui_utils.c:62
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: "
 "%e      filetype: %f      scope: %S"
 msgstr ""
-"жол: %l / %L\t бағ: %c\t таңд: %s\t %w      %t      %mрежим: %M      "
-"кодталуы: %e      файл түрі: %f      аймақ: %S"
+"жол: %l / %L\t бағ: %c\t таңд: %s\t %w      %t      %mEOL: %M      кодталу: "
+"%e      файл түрі: %f      аумақ: %S"
 
 #: src/ui_utils.c:237
 #, c-format
@@ -5002,9 +4970,8 @@ msgid "_Set Custom Date Format"
 msgstr "Таңдау_ыңызша күн пішімін орнату"
 
 #: src/ui_utils.c:2004
-#, fuzzy
 msgid "Select Project Base Path"
-msgstr "Жобаның басты орналасу жолын көрсетіңіз"
+msgstr "Жобаның басты орналасу жолын таңдау"
 
 #: src/ui_utils.c:2029
 msgid "Select Folder"
@@ -5035,13 +5002,13 @@ msgid "Select Browser"
 msgstr "Шолушыны таңдау"
 
 #: src/utils.c:100
-#, fuzzy
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command "
 "or leave it empty in order to spawn the system default browser."
 msgstr ""
-"Баптауларда сақталып тұрған браузер командасын жөнелту мүмкін емес. Оны "
-"түзетіңіз не басқасын көрсетіңіз."
+"Баптауларда сақталып тұрған браузер командасын жөнелту мүмкін емес. Жарамды "
+"команданы енгізіңіз немесе жүйенің негізгі браузерін ашу үшін оны бос "
+"қалдырыңыз."
 
 #: src/utils.c:388
 msgid "Windows (CRLF)"
@@ -5232,9 +5199,8 @@ msgid "Environment"
 msgstr "Ортасы"
 
 #: src/tagmanager/tm_parser.c:229
-#, fuzzy
 msgid "Part"
-msgstr "Бөліктер"
+msgstr "Бөлік"
 
 #: src/tagmanager/tm_parser.c:230 src/tagmanager/tm_parser.c:335
 #: src/tagmanager/tm_parser.c:595
@@ -5260,12 +5226,11 @@ msgstr ""
 
 #: src/tagmanager/tm_parser.c:257
 msgid "Articles"
-msgstr ""
+msgstr "Мақалалар"
 
 #: src/tagmanager/tm_parser.c:258
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Бөлім"
+msgstr "Кітап бөлімдері"
 
 #: src/tagmanager/tm_parser.c:259
 msgid "Books & Conference Proceedings"
@@ -5280,13 +5245,12 @@ msgid "Theses"
 msgstr ""
 
 #: src/tagmanager/tm_parser.c:262
-#, fuzzy
 msgid "Strings"
-msgstr "Баптаулар"
+msgstr "Жолдар"
 
 #: src/tagmanager/tm_parser.c:263
 msgid "Unpublished"
-msgstr ""
+msgstr "Жарияланбаған"
 
 #: src/tagmanager/tm_parser.c:277
 msgid "Defines"
@@ -5369,7 +5333,7 @@ msgstr "Модуль"
 
 #: src/tagmanager/tm_parser.c:481
 msgid "Entities"
-msgstr ""
+msgstr "Нәрселер"
 
 #: src/tagmanager/tm_parser.c:482
 msgid "Architectures"
@@ -5380,9 +5344,8 @@ msgid "Functions / Procedures"
 msgstr "Функциялар / Процедуралар"
 
 #: src/tagmanager/tm_parser.c:485
-#, fuzzy
 msgid "Variables / Signals / Ports"
-msgstr "Айнымалылар / Сигналдар"
+msgstr "Айнымалылар / Сигналдар / Порттар"
 
 #: src/tagmanager/tm_parser.c:486
 msgid "Processes / Blocks / Components"
@@ -5430,29 +5393,24 @@ msgid "Structures"
 msgstr "Структуралар"
 
 #: src/tagmanager/tm_parser.c:737
-#, fuzzy
 msgid "Chapters"
-msgstr "Бөлім"
+msgstr "Бөлімдер"
 
 #: src/tagmanager/tm_parser.c:739
-#, fuzzy
 msgid "Subsections"
 msgstr "Ішкі санаттар"
 
 #: src/tagmanager/tm_parser.c:740
-#, fuzzy
 msgid "Subsubsections"
 msgstr "Ішкі ішкі санаттар"
 
 #: src/tagmanager/tm_parser.c:741
-#, fuzzy
 msgid "Level 4 sections"
-msgstr "Сақтау әрекеттері"
+msgstr "Деңгей 4 санаттары"
 
 #: src/tagmanager/tm_parser.c:742
-#, fuzzy
 msgid "Level 5 sections"
-msgstr "Сақтау әрекеттері"
+msgstr "Деңгей 5 санаттары"
 
 #: src/tagmanager/tm_parser.c:769
 msgid "Events"
@@ -5484,7 +5442,7 @@ msgstr "Мәлімет"
 
 #: src/tagmanager/tm_parser.c:810
 msgid "Copies"
-msgstr ""
+msgstr "Көшірмелер"
 
 #: src/tagmanager/tm_parser.c:842
 msgid "Section Level 1"
@@ -5503,9 +5461,8 @@ msgid "Section Level 4"
 msgstr "Санат деңгейі 4"
 
 #: src/tagmanager/tm_parser.c:846
-#, fuzzy
 msgid "Section Level 5"
-msgstr "Санат деңгейі 1"
+msgstr "Санат деңгейі 5"
 
 #: src/tagmanager/tm_parser.c:856
 msgid "Parts"
@@ -5524,28 +5481,24 @@ msgid "Implementations"
 msgstr "Іске асырулар"
 
 #: src/tagmanager/tm_parser.c:955
-#, fuzzy
 msgid "Fields"
-msgstr "Өту өрісі"
+msgstr "Өрістер"
 
 #: src/tagmanager/tm_parser.c:959
-#, fuzzy
 msgid "Unknowns"
-msgstr "белгісіз"
+msgstr "Белгісіздер"
 
 #: src/tagmanager/tm_parser.c:1065
-#, fuzzy
 msgid "Packages"
-msgstr "Десте"
+msgstr "Дестелер"
 
 #: src/tagmanager/tm_parser.c:1068
 msgid "Tasks"
-msgstr ""
+msgstr "Тапсырмалар"
 
 #: src/tagmanager/tm_parser.c:1092
-#, fuzzy
 msgid "Regions"
-msgstr "Секциялар"
+msgstr "Аймақтар"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -5932,9 +5885,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Қор көшірме: Файлды сақтау мүмкін емес (%s)."
 
 #: plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Жоба файлын жазу мүмкін емес (%s)."
+msgstr "Жылдам сақтау файл атын жасау мүмкін емес (%s)."
 
 #: plugins/saveactions.c:386
 #, c-format
@@ -5947,9 +5900,8 @@ msgid "Select Directory"
 msgstr "Буманы таңдау"
 
 #: plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "Қор көшірме бумасы жоқ болып тұр не оған жазуға құқық жоқ."
+msgstr "Жылдам сақтау бумасы жоқ болып тұр немесе оған жазуға құқық жоқ."
 
 #: plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -5993,9 +5945,8 @@ msgid "Instant Save"
 msgstr "Лезде сақтау"
 
 #: plugins/saveactions.c:721
-#, fuzzy
 msgid "Default _filetype to use for new files:"
-msgstr "Жаңа а_шылған файлдар үшін қолданылатын файл түрі:"
+msgstr "Жаңа файлдар үшін қолданылатын негізгі _файл түрі:"
 
 #: plugins/saveactions.c:742
 #, c-format
@@ -6038,7 +5989,7 @@ msgstr "Түзетуші терезесін екі терезеге бөліп �
 
 #: plugins/splitwindow.c:297
 msgid "Show the current document"
-msgstr "Ағымдағы құжатты көрсету."
+msgstr "Ағымдағы құжатты көрсету"
 
 #: plugins/splitwindow.c:317 plugins/splitwindow.c:450
 #: plugins/splitwindow.c:465
