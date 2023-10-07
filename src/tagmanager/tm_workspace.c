@@ -845,7 +845,7 @@ static GHashTable *get_includes(TMSourceFile *source, GPtrArray **header_candida
 		return includes;
 
 	src_basename = g_strdup(source->short_name);
-	if (ptr = strrchr(src_basename, '.'))
+	if ((ptr = strrchr(src_basename, '.')) != NULL)
 		*ptr = '\0';
 
 	headers = tm_tags_extract(source->tags_array, tm_tag_include_t);
@@ -863,7 +863,7 @@ static GHashTable *get_includes(TMSourceFile *source, GPtrArray **header_candida
 			if (!*header_candidates)
 			{
 				gchar *hdr_basename = g_strdup(hdr_name);
-				if (ptr = strrchr(hdr_basename, '.'))
+				if ((ptr = strrchr(hdr_basename, '.')) != NULL)
 					*ptr = '\0';
 
 				if (g_strcmp0(hdr_basename, src_basename) == 0)
@@ -1103,7 +1103,7 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 
 		g_free(stripped);
 
-		for (i = 0; parent = split_strv[i]; i++)
+		for (i = 0; (parent = split_strv[i]) != NULL; i++)
 		{
 			GPtrArray *parent_tags;
 

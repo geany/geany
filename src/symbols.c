@@ -430,7 +430,7 @@ static void tag_list_add_groups(GtkTreeStore *tree_store, TMParserType lang)
 
 	g_return_if_fail(top_level_iter_names);
 
-	for (i = 0; title = tm_parser_get_sidebar_info(lang, i, &icon_id); i++)
+	for (i = 0; (title = tm_parser_get_sidebar_info(lang, i, &icon_id)) != NULL; i++)
 	{
 		GtkTreeIter *iter = &tv_iters[i];
 		GdkPixbuf *icon = NULL;
