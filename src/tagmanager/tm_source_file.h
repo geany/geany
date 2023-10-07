@@ -35,6 +35,7 @@ typedef struct TMSourceFile
 	char *file_name; /**< Full file name (inc. path) */
 	char *short_name; /**< Just the name of the file (without the path) */
 	GPtrArray *tags_array; /**< Sorted tag array obtained by parsing the object. @elementtype{TMTag} */
+	gboolean trust_file_scope;
 } TMSourceFile;
 
 GType tm_source_file_get_type(void);

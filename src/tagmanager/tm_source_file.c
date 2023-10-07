@@ -609,6 +609,25 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	else
 		source_file->lang = tm_ctags_get_named_lang(name);
 
+	source_file->trust_file_scope = TRUE;
+
+	if (source_file->lang == TM_PARSER_C || source_file->lang == TM_PARSER_CPP)
+	{
+		const gchar **ext;
+		const gchar *common_src_exts[] =
+			{".c", ".C", ".cc", ".cp", ".cpp", ".cxx", ".c++", ".CPP", ".CXX", NULL};
+
+		source_file->trust_file_scope = FALSE;
+		for (ext = common_src_exts; *ext; ext++)
+		{
+			if (g_str_has_suffix(source_file->short_name, *ext))
+			{
+				source_file->trust_file_scope = TRUE;
+				break;
+			}
+		}
+	}
+
 	return TRUE;
 }
 
