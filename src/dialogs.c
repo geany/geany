@@ -815,20 +815,6 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 }
 
 
-/* Use GtkFontChooserDialog on GTK3.2 for consistency, and because
- * GtkFontSelectionDialog is somewhat broken on 3.4 */
-#if GTK_CHECK_VERSION(3, 2, 0)
-#	undef GTK_FONT_SELECTION_DIALOG
-#	define GTK_FONT_SELECTION_DIALOG				GTK_FONT_CHOOSER_DIALOG
-
-#	define gtk_font_selection_dialog_new(title) \
-		gtk_font_chooser_dialog_new((title), NULL)
-#	define gtk_font_selection_dialog_get_font_name(dlg) \
-		gtk_font_chooser_get_font(GTK_FONT_CHOOSER(dlg))
-#	define gtk_font_selection_dialog_set_font_name(dlg, font) \
-		gtk_font_chooser_set_font(GTK_FONT_CHOOSER(dlg), (font))
-#endif
-
 static void
 on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
@@ -841,8 +827,8 @@ on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			gchar *fontname;
 
-			fontname = gtk_font_selection_dialog_get_font_name(
-				GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
+			fontname = gtk_font_chooser_get_font(
+				GTK_FONT_CHOOSER(ui_widgets.open_fontsel));
 			ui_set_editor_font(fontname);
 			g_free(fontname);
 
@@ -863,7 +849,7 @@ void dialogs_show_open_font(void)
 	{
 		GtkWidget *apply_button;
 
-		ui_widgets.open_fontsel = gtk_font_selection_dialog_new(_("Choose font"));;
+		ui_widgets.open_fontsel = gtk_font_chooser_dialog_new(_("Choose font"), NULL);
 		gtk_container_set_border_width(GTK_CONTAINER(ui_widgets.open_fontsel), 4);
 		gtk_window_set_modal(GTK_WINDOW(ui_widgets.open_fontsel), TRUE);
 		gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.open_fontsel), TRUE);
@@ -883,8 +869,8 @@ void dialogs_show_open_font(void)
 
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(main_widgets.window));
 	}
-	gtk_font_selection_dialog_set_font_name(
-		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
+	gtk_font_chooser_set_font(
+		GTK_FONT_CHOOSER(ui_widgets.open_fontsel), interface_prefs.editor_font);
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_fontsel));
 }

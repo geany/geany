@@ -718,7 +718,6 @@ static GtkWidget *vte_create_popup_menu(void)
 {
 	GtkWidget *menu, *item;
 	GtkAccelGroup *accel_group;
-	gboolean show_im_menu = TRUE;
 
 	menu = gtk_menu_new();
 
@@ -773,30 +772,7 @@ static GtkWidget *vte_create_popup_menu(void)
 
 	msgwin_menu_add_common_items(GTK_MENU(menu));
 
-	/* VTE 2.91 doesn't have IM context items, and GTK >= 3.10 doesn't show them anyway */
-	if (! vf->vte_terminal_im_append_menuitems || gtk_check_version(3, 10, 0) == NULL)
-		show_im_menu = FALSE;
-	else /* otherwise, query the setting */
-		g_object_get(gtk_settings_get_default(), "gtk-show-input-method-menu", &show_im_menu, NULL);
-
-	if (! show_im_menu)
-		vte_config.im_submenu = NULL;
-	else
-	{
-		item = gtk_separator_menu_item_new();
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-
-		/* the IM submenu should always be the last item to be consistent with other GTK popup menus */
-		vte_config.im_submenu = gtk_menu_new();
-
-		item = gtk_image_menu_item_new_with_mnemonic(_("_Input Methods"));
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vte_config.im_submenu);
-		/* submenu populated after vte realized */
-	}
+	vte_config.im_submenu = NULL;
 
 	return menu;
 }
