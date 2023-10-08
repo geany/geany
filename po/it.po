@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2023-10-04 23:48+0200\n"
-"PO-Revision-Date: 2021-09-21 19:17+0100\n"
+"PO-Revision-Date: 2023-10-08 17:13+0100\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team: geany-i18n@uvena.de\n"
 "Language: it\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: iso-8859-15\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
@@ -538,15 +538,15 @@ msgstr "Passa all'ultimo documento usato dopo la chiusura di un tab"
 
 #: data/geany.glade:2213
 msgid "Set limit on visible characters in tab label."
-msgstr ""
+msgstr "Imposta il limite dei caratteri visibili sull'etichetta della scheda."
 
 #: data/geany.glade:2214
 msgid "Tab label length:"
-msgstr ""
+msgstr "Lunghezza etichetta scheda:"
 
 #: data/geany.glade:2226
 msgid "Characters to be visible on the tab label of the file."
-msgstr ""
+msgstr "Caratteri da mostrare sull'etichetta della scheda del file."
 
 #: data/geany.glade:2254
 msgid "<b>Editor tabs</b>"
@@ -827,15 +827,16 @@ msgstr ""
 "invece di inserire un carattere di tabulazione"
 
 #: data/geany.glade:3348
-#, fuzzy
 msgid "_Backspace key unindents"
-msgstr "Tasto _tabulazione indenta"
+msgstr "Tasto _indietro deindenta"
 
 #: data/geany.glade:3352
 msgid ""
 "With the cursor in the indentation, pressing backspace unindents instead of "
 "deleting one character"
 msgstr ""
+"Con il cursore nell'indentazione, premendo indietro deindenta anziché "
+"rimuovere un carattere"
 
 #: data/geany.glade:3370
 msgid "<b>Indentation</b>"
@@ -1039,15 +1040,14 @@ msgid "Shows the line ending character"
 msgstr "Mostra il carattere di fine riga"
 
 #: data/geany.glade:3903
-#, fuzzy
 msgid "Show only non-default line endings"
-msgstr "Mostra i fine riga"
+msgstr "Mostra solo i fine riga non predefiniti"
 
 #: data/geany.glade:3907
 msgid ""
 "Shows line ending characters only when they differ from the file default "
 "line ending character"
-msgstr ""
+msgstr "Mostra I fine riga solo quando differiscono da quelli predefiniti"
 
 #: data/geany.glade:3923
 msgid "Show line numbers"
@@ -1182,19 +1182,16 @@ msgid "<b>Virtual spaces</b>"
 msgstr "<b>Spazi virtuali</b>"
 
 #: data/geany.glade:4315
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Mostra la colonna dei marcatori"
+msgstr "Mostra nella colonna dei marcatori"
 
 #: data/geany.glade:4329
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "Mostra il carattere di fine riga"
+msgstr "Mostra come indicatore sottolineato"
 
 #: data/geany.glade:4349
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>Salvataggio file</b>"
+msgstr "<b>Storico cambiamenti</b>"
 
 #: data/geany.glade:4369
 msgid "Display"
@@ -1344,9 +1341,8 @@ msgstr ""
 "Percorso (e possibilmente argomenti addizionali) del vostro browser preferito"
 
 #: data/geany.glade:4974
-#, fuzzy
 msgid "System default"
-msgstr "_Predefinito di sistema"
+msgstr "Predefinito di sistema"
 
 #: data/geany.glade:5030
 msgid "Grep:"
@@ -1431,35 +1427,32 @@ msgid "Date & time:"
 msgstr "Data & ora:"
 
 #: data/geany.glade:5448
-#, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
 "conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format."
 "html."
 msgstr ""
-"Inserire qui un formato per il jolly {datetime} (data e ora). Si possono "
-"usare tutti gli specificatori di conversione che è possibile usare nella "
-"funzione ANSI C strftime."
+"Inserire qui un formato per il jolly {datetime} (data e ora). Per una lista "
+"degli elementi disponibile vedere https://docs.gtk.org/glib/method.DateTime."
+"format.html."
 
 #: data/geany.glade:5464
-#, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Inserire qui un formato per il jolly {year} (anno). Si possono usare tutti "
-"gli specificatori di conversione che è possibile usare nella funzione ANSI C "
-"strftime."
+"Inserire qui un formato per il jolly {year} (anno). Per una lista degli "
+"elementi disponibile vedere https://docs.gtk.org/glib/method.DateTime.format."
+"html."
 
 #: data/geany.glade:5480
-#, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Inserire qui un formato per il jolly {date} (data). Si possono usare tutti "
-"gli specificatori di conversione che è possibile usare nella funzione ANSI C "
-"strftime."
+"Inserire qui un formato per il jolly {date} (data). Per una lista degli "
+"elementi disponibile vedere https://docs.gtk.org/glib/method.DateTime.format."
+"html."
 
 #: data/geany.glade:5507
 msgid "<b>Template data</b>"
@@ -1538,15 +1531,14 @@ msgid "Date format:"
 msgstr "Formato di data:"
 
 #: data/geany.glade:5856 src/printing.c:279
-#, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. For a list of available conversion specifiers see "
 "https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
 "Inserire qui un formato per data e ora aggiunte all'intestazione di pagina "
-"di ogni pagina. Si possono usare tutti gli specificatori di conversione che "
-"è possibile usare nella funzione ANSI C strftime."
+"di ogni pagina. Per una lista degli elementi disponibile vedere https://docs."
+"gtk.org/glib/method.DateTime.format.html."
 
 #: data/geany.glade:5891
 msgid "Use native GTK printing"
@@ -1806,9 +1798,8 @@ msgid "_Send Selection to Terminal"
 msgstr "_Invia selezione al terminale"
 
 #: data/geany.glade:6938 src/keybindings.c:508
-#, fuzzy
 msgid "_Join Lines"
-msgstr "Unisci righe"
+msgstr "_Unisci righe"
 
 #: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
@@ -2105,7 +2096,7 @@ msgstr "_Nuovo..."
 
 #: data/geany.glade:8073
 msgid "New from _Folder..."
-msgstr ""
+msgstr "Nuovo da _cartella..."
 
 #: data/geany.glade:8097
 msgid "_Recent Projects"
@@ -2185,13 +2176,12 @@ msgid "_Donate..."
 msgstr "_Dona..."
 
 #: data/geany.glade:8369
-#, fuzzy
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"Filtra i file con caratteri jolly usuali. Separa modelli multipli con uno "
-"spazio."
+"Filtra la lista dei simboli utilizzando il testo inserito. Separa modelli "
+"multipli con uno spazio."
 
 #: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
 msgid "Symbols"
@@ -3441,7 +3431,7 @@ msgstr "Chiudi"
 
 #: src/keybindings.c:370
 msgid "New from Folder"
-msgstr ""
+msgstr "Nuovo da cartella"
 
 #: src/keybindings.c:382
 msgid "Undo"
@@ -4661,10 +4651,12 @@ msgstr "Sostituito %u corrispondenze in %u documenti."
 msgid ""
 "This operation will modify all open files which contain the text to replace."
 msgstr ""
+"Questa operazione modificherà tutti I file aperti che contengono il testo da "
+"sostituire."
 
 #: src/search.c:1465
 msgid "Are you sure to replace in the whole session?"
-msgstr ""
+msgstr "Sei sicuro di sostituire nell'intera sessione?"
 
 #: src/search.c:1630
 msgid "Invalid directory for find in files."
@@ -4806,14 +4798,14 @@ msgid "Could not load tags file '%s'."
 msgstr "Impossibile caricare il file dei tag '%s'."
 
 #: src/symbols.c:1518
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s:%lu:</b> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<b>%s:%lu:</b> %s"
 
 #: src/symbols.c:1521
-#, fuzzy, c-format
+#, c-format
 msgid "<i>%s:%lu:</i> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<i>%s:%lu:</i> %s"
 
 #: src/symbols.c:1742
 #, c-format
@@ -4835,7 +4827,7 @@ msgstr "Ordina per _posizione"
 
 #: src/symbols.c:2196
 msgid "_Group by Type"
-msgstr ""
+msgstr "_Raggruppa per tipo"
 
 #: src/templates.c:81
 #, c-format
@@ -5105,31 +5097,28 @@ msgid "H_ide Sidebar"
 msgstr "_Nascondi barra laterale"
 
 #: src/sidebar.c:1173
-#, fuzzy
 msgid "D_ocuments Only"
-msgstr "Documenti"
+msgstr "Solo d_ocumenti"
 
 #: src/sidebar.c:1174
 msgid "Show _Paths"
 msgstr "Mostra il _percorso"
 
 #: src/sidebar.c:1175
-#, fuzzy
 msgid "Show _Tree"
-msgstr "Mostra _barra degli strumenti"
+msgstr "Mostra _Albero"
 
 #: src/sidebar.c:1228 plugins/filebrowser.c:678
 msgid "_Find in Files..."
 msgstr "_Trova in File..."
 
 #: src/ui_utils.c:62
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: "
 "%e      filetype: %f      scope: %S"
 msgstr ""
-"riga: %l / %L\t colonna: %c\t selezione: %s\t %w      %t      %mmodalità: "
-"%M      codifica: %e      tipo di file: %f      funzione corrente: %S"
+"riga: %l / %L\t col: %c\t sel: %s\t %w      %t      %mFineRiga: %M      "
+"codifica: %e      tipo file: %f      ambito: %S"
 
 #: src/ui_utils.c:237
 #, c-format
@@ -5227,14 +5216,13 @@ msgid "Custom Date Format"
 msgstr "Formato di data personalizzato"
 
 #: src/ui_utils.c:729
-#, fuzzy
 msgid ""
 "Enter here a custom date and time format. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Inserire qui un formato di data e ora personalizzato. Si possono usare tutti "
-"gli specificatori di conversione che è possibile usare nella funzione ANSI C "
-"strftime."
+"Inserire qui un formato di data e ora personalizzato. Per una lista degli "
+"elementi disponibile vedere https://docs.gtk.org/glib/method.DateTime.format."
+"html."
 
 #: src/ui_utils.c:750
 msgid "Date format string could not be converted (possibly too long)."
@@ -5247,7 +5235,6 @@ msgid "_Set Custom Date Format"
 msgstr "_Imposta il formato di data personalizzato"
 
 #: src/ui_utils.c:2004
-#, fuzzy
 msgid "Select Project Base Path"
 msgstr "Scegliere il percorso base del progetto"
 
@@ -5280,13 +5267,12 @@ msgid "Select Browser"
 msgstr "Selezionare Browser"
 
 #: src/utils.c:100
-#, fuzzy
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command "
 "or leave it empty in order to spawn the system default browser."
 msgstr ""
-"Impossibile generare il comando browser configurato. Prego correggerlo o "
-"inserirne un'altro."
+"Impossibile generare il comando browser configurato. Prego inserire comando "
+"valido oppure lasciare vuoto per utilizzare il predefinito di sistema."
 
 #: src/utils.c:388
 msgid "Windows (CRLF)"
@@ -5481,9 +5467,8 @@ msgid "Environment"
 msgstr "Ambiente"
 
 #: src/tagmanager/tm_parser.c:229
-#, fuzzy
 msgid "Part"
-msgstr "Parti"
+msgstr "Parte"
 
 #: src/tagmanager/tm_parser.c:230 src/tagmanager/tm_parser.c:335
 #: src/tagmanager/tm_parser.c:595
@@ -5507,7 +5492,7 @@ msgstr "Sottosottosezione"
 
 #: src/tagmanager/tm_parser.c:234
 msgid "Bibitem"
-msgstr ""
+msgstr "Bibitem"
 
 #: src/tagmanager/tm_parser.c:257
 msgid "Articles"
@@ -5631,9 +5616,8 @@ msgid "Functions / Procedures"
 msgstr "Funzioni / Procedure"
 
 #: src/tagmanager/tm_parser.c:485
-#, fuzzy
 msgid "Variables / Signals / Ports"
-msgstr "Variabili / Segnali"
+msgstr "Variabili / Segnali / Porte"
 
 #: src/tagmanager/tm_parser.c:486
 msgid "Processes / Blocks / Components"
@@ -5681,31 +5665,26 @@ msgid "Structures"
 msgstr "Strutture"
 
 #: src/tagmanager/tm_parser.c:737
-#, fuzzy
 msgid "Chapters"
-msgstr "Capitolo"
+msgstr "Capitoli"
 
 # le stringhe di treeviews.c "quasi tutte" fanno riferimento a parti dei vari linguaggi, per esempio, il C (che poi è contrassegnato come defaults) ci sono functions, struct, etc.
 #: src/tagmanager/tm_parser.c:739
-#, fuzzy
 msgid "Subsections"
-msgstr "Sottosezione"
+msgstr "Sottosezioni"
 
 # le stringhe di treeviews.c "quasi tutte" fanno riferimento a parti dei vari linguaggi, per esempio, il C (che poi è contrassegnato come defaults) ci sono functions, struct, etc.
 #: src/tagmanager/tm_parser.c:740
-#, fuzzy
 msgid "Subsubsections"
-msgstr "Sottosottosezione"
+msgstr "Sottosottosezioni"
 
 #: src/tagmanager/tm_parser.c:741
-#, fuzzy
 msgid "Level 4 sections"
-msgstr "Azioni per il salvataggio"
+msgstr "Sezioni livello 4"
 
 #: src/tagmanager/tm_parser.c:742
-#, fuzzy
 msgid "Level 5 sections"
-msgstr "Azioni per il salvataggio"
+msgstr "Sezioni livello 5"
 
 #: src/tagmanager/tm_parser.c:769
 msgid "Events"
@@ -5741,24 +5720,23 @@ msgstr "Copie"
 
 #: src/tagmanager/tm_parser.c:842
 msgid "Section Level 1"
-msgstr "Sezione Livello 1"
+msgstr "Sezione livello 1"
 
 #: src/tagmanager/tm_parser.c:843
 msgid "Section Level 2"
-msgstr "Sezione Livello 2"
+msgstr "Sezione livello 2"
 
 #: src/tagmanager/tm_parser.c:844
 msgid "Section Level 3"
-msgstr "Sezione Livello 3"
+msgstr "Sezione livello 3"
 
 #: src/tagmanager/tm_parser.c:845
 msgid "Section Level 4"
-msgstr "Sezione Livello 4"
+msgstr "Sezione livello 4"
 
 #: src/tagmanager/tm_parser.c:846
-#, fuzzy
 msgid "Section Level 5"
-msgstr "Sezione Livello 1"
+msgstr "Sezione livello 5"
 
 #: src/tagmanager/tm_parser.c:856
 msgid "Parts"
@@ -5785,18 +5763,16 @@ msgid "Unknowns"
 msgstr "Incognite"
 
 #: src/tagmanager/tm_parser.c:1065
-#, fuzzy
 msgid "Packages"
-msgstr "Pacchetto"
+msgstr "Pacchetti"
 
 #: src/tagmanager/tm_parser.c:1068
 msgid "Tasks"
-msgstr ""
+msgstr "Compiti"
 
 #: src/tagmanager/tm_parser.c:1092
-#, fuzzy
 msgid "Regions"
-msgstr "Sezioni"
+msgstr "Regioni"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -6293,6 +6269,8 @@ msgid ""
 "Date/_Time format for backup files (for a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"
 msgstr ""
+"Formato data/ora per file di backup (per una lista dei component disponibili "
+"vedere https://docs.gtk.org/glib/method.DateTime.format.html):"
 
 #: plugins/saveactions.c:830
 msgid "Directory _levels to include in the backup destination:"
