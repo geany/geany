@@ -1490,6 +1490,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 {
 	GtkWidget *first = NULL;
 	GtkWidget *menu;
+	GtkSizeGroup *group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	GdkEvent *event;
 	GdkEventButton *button_event = NULL;
 	TMTag *tmtag;
@@ -1509,6 +1510,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 	{
 		GtkWidget *item;
 		GtkWidget *label;
+		GtkWidget *box;
 		GtkWidget *image;
 		gchar *fname = short_names[i];
 		gchar *text;
@@ -1521,21 +1523,26 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 			sym = g_strdup("");
 
 		if (! first && have_best)
-			/* For translators: it's the filename, line number, and signature of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("<i><b>%s:%lu</b></i><small><tt>  %s</tt></small>"), fname, tmtag->line, sym);
+			/* For translators: it's the filename and the line number of a symbol in the goto-symbol popup menu */
+			text = g_markup_printf_escaped(_("<b>%s:%lu</b>"), fname, tmtag->line);
 		else
-			/* For translators: it's the filename, line number, and signature of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("<i>%s:%lu</i><small><tt>  %s</tt></small>"), fname, tmtag->line, sym);
+			/* For translators: it's the filename and the line number of a symbol in the goto-symbol popup menu */
+			text = g_markup_printf_escaped(_("%s:%lu"), fname, tmtag->line);
 
 		/* For translators: it's the filename, line number, and signature of a symbol in the goto-symbol popup menu */
-		tooltip = g_markup_printf_escaped(_("<i>%s:%lu</i>\n<small><tt>%s</tt></small>"), fname, tmtag->line, sym);
+		tooltip = g_markup_printf_escaped(_("%s:%lu\n<small><tt>%s</tt></small>"), fname, tmtag->line, sym);
 
-		g_free(sym);
 		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
-		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0,
-					"tooltip-markup", tooltip, "max-width-chars", 80,
-					"ellipsize", PANGO_ELLIPSIZE_END, NULL);
-		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", label, "always-show-image", TRUE, NULL);
+		box = g_object_new(GTK_TYPE_BOX, "orientation", GTK_ORIENTATION_HORIZONTAL, "spacing", 12, NULL);
+		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0, NULL);
+		gtk_size_group_add_widget(group, label);
+		gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
+		g_free(text);
+		text = g_markup_printf_escaped("<small><tt>%s</tt></small>", sym);
+		gtk_box_pack_start(GTK_BOX(box), g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0,
+					"max-width-chars", 80, "ellipsize", PANGO_ELLIPSIZE_END, NULL), FALSE, FALSE, 0);
+		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", box, "always-show-image", TRUE,
+					"tooltip-markup", tooltip, NULL);
 		g_signal_connect_data(item, "activate", G_CALLBACK(on_goto_popup_item_activate),
 		                      tm_tag_ref(tmtag), (GClosureNotify) tm_tag_unref, 0);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -1543,6 +1550,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 		if (! first)
 			first = item;
 
+		g_free(sym);
 		g_free(text);
 		g_free(fname);
 	}
@@ -1563,6 +1571,8 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 	                       button_event ? (GDestroyNotify) gdk_event_free : NULL);
 	ui_menu_popup(GTK_MENU(menu), goto_popup_position_func, doc->editor->sci,
 				  button_event ? button_event->button : 0, gtk_get_current_event_time ());
+
+	g_object_unref(group);
 }
 
 
