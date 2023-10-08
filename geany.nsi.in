@@ -154,7 +154,6 @@ Section "!Program Files" SEC01
 	File "${GEANY_RELEASE_DIR}\data\GPL-2"
 	File "${GEANY_RELEASE_DIR}\data\filetype_extensions.conf"
 	File "${GEANY_RELEASE_DIR}\data\geany.glade"
-	File "${GEANY_RELEASE_DIR}\data\geany-3.20.css"
 	File "${GEANY_RELEASE_DIR}\data\geany.css"
 	File "${GEANY_RELEASE_DIR}\data\snippets.conf"
 	File "${GEANY_RELEASE_DIR}\data\ui_toolbar.xml"

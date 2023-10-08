@@ -126,8 +126,6 @@ nobase_dist_pkgdata_DATA = \
 	snippets.conf \
 	ui_toolbar.xml \
 	geany.glade \
-	geany-3.0.css \
-	geany-3.20.css \
 	geany.css
 
 nobase_pkgdata_DATA = \

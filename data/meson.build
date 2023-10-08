@@ -15,8 +15,6 @@ misc = [
     'snippets.conf',
     'ui_toolbar.xml',
     'geany.glade',
-    'geany-3.0.css',
-    'geany-3.20.css',
     'geany.css',
 ]
 install_data(sources: misc, install_dir: cdata.get('GEANY_DATA_DIR'))
