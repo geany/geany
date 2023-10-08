@@ -1419,7 +1419,8 @@ static void show_menu_at_caret(GtkMenu* menu, ScintillaObject *sci)
 	gint y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos);
 	gint pos_next = sci_get_position_after(sci, pos);
 	gint char_width = 0;
-	if (sci_get_line_from_position(sci, pos_next) == line)
+	/* if next pos is on the same Y (same line and not after wrapping), diff the X */
+	if (pos_next > pos && SSM(sci, SCI_POINTYFROMPOSITION, 0, pos_next) == y)
 		char_width = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos_next) - x;
 	GdkRectangle rect = {x, y, char_width, line_height};
 	gtk_menu_popup_at_rect(GTK_MENU(menu), window, &rect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, NULL);
