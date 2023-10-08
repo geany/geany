@@ -122,7 +122,7 @@ Source compilation
 Compiling Geany is quite easy.
 To do so, you need the GTK (>= 3.24) libraries and header files.
 You also need the Pango, GLib and ATK libraries and header files.
-All these files are available at http://www.gtk.org, but very often
+All these files are available at https://www.gtk.org, but very often
 your distro will provide development packages to save the trouble of
 building these yourself.
 
@@ -691,7 +691,7 @@ Unicode Byte-Order-Mark (BOM)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Furthermore, Geany detects a Unicode Byte Order Mark (see
-http://en.wikipedia.org/wiki/Byte_Order_Mark for details). Of course,
+https://en.wikipedia.org/wiki/Byte_Order_Mark for details). Of course,
 this feature is only available if the opened file is in a Unicode
 encoding. The Byte Order Mark helps to detect the encoding of a file,
 e.g. whether it is UTF-16LE or UTF-16BE and so on. On Unix-like systems
@@ -959,12 +959,12 @@ For example a context action can be used to open API documentation
 in a browser window, the command to open the PHP API documentation
 would be::
 
-    firefox "http://www.php.net/%s"
+    firefox "https://www.php.net/%s"
 
 when executing the command, the %s is substituted by the word near
 the cursor position or by the current selection. If the cursor is at
 the word "echo", a browser window will open(assumed your browser is
-called firefox) and it will open the address: http://www.php.net/echo.
+called firefox) and it will open the address: https://www.php.net/echo.
 
 
 Autocompletion
@@ -1730,7 +1730,7 @@ CTags format
 This is the format that ctags generates, and that is used by Vim.
 This format is compatible with the format historically used by Vi.
 
-The format is described at http://ctags.sourceforge.net/FORMAT, but
+The format is described at https://ctags.sourceforge.net/FORMAT, but
 for the full list of existing extensions please refer to ctags.
 However, note that Geany may actually only honor a subset of the
 existing extensions.
@@ -2477,7 +2477,7 @@ Grep
 .. note::
     For Windows users: at the time of writing it is recommended to use
     the grep.exe from the UnxUtils project
-    (http://sourceforge.net/projects/unxutils). The grep.exe from the
+    (https://sourceforge.net/projects/unxutils). The grep.exe from the
     Mingw project for instance might not work with Geany at the moment.
 
 Commands
@@ -4346,7 +4346,7 @@ context_action_cmd
     position or by the current selection.
 
     Hint: for PHP files the following could be quite useful:
-    context_action_cmd=firefox "http://www.php.net/%s"
+    context_action_cmd=firefox "https://www.php.net/%s"
 
     *Example:* ``context_action_cmd=devhelp -s "%s"``
 
@@ -5380,7 +5380,7 @@ inside the *doc* subdirectory. To generate a PDF file, configure with
 PDF file is named geany-|(version)|.pdf and is located inside the *doc*
 subdirectory.
 
-__ http://docutils.sourceforge.net/rst.html
+__ https://docutils.sourceforge.net/rst.html
 
 After you are happy with your changes, create a patch e.g. by using::
 

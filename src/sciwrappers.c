@@ -20,13 +20,13 @@
 
 /** @file sciwrappers.h
  * Wrapper functions for the Scintilla editor widget @c SCI_* messages.
- * You should also check the http://scintilla.org documentation, as it is more detailed.
+ * You should also check the https://scintilla.org documentation, as it is more detailed.
  *
  * To get Scintilla notifications, use the
  * @link pluginsignals.c @c "editor-notify" signal @endlink.
  *
  * @note These functions were originally from the cssed project
- * (http://cssed.sf.net, thanks).
+ * (https://sourceforge.net/projects/cssed/, thanks).
  * @see scintilla_send_message().
  */
 
@@ -1219,7 +1219,7 @@ void sci_set_readonly(ScintillaObject *sci, gboolean readonly)
 /** Sends Scintilla commands without any parameters.
  * @param sci The Scintilla @c GtkWidget.
  * @param cmd @c SCI_COMMAND.
- * @see http://scintilla.org for the documentation.
+ * @see https://scintilla.org for the documentation.
  *
  *  @since 0.16
  */

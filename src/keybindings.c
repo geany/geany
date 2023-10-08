@@ -1016,7 +1016,7 @@ static GtkWidget *create_dialog(void)
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
 	text_renderer = gtk_cell_renderer_text_new();
-	/* we can't use "weight-set", see http://bugzilla.gnome.org/show_bug.cgi?id=355214 */
+	/* we can't use "weight-set", see https://bugzilla.gnome.org/show_bug.cgi?id=355214 */
 	column = gtk_tree_view_column_new_with_attributes(
 		NULL, text_renderer, "text", 0, "weight", 2, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);

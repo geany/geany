@@ -3058,7 +3058,7 @@ gboolean ui_is_keyval_enter_or_return(guint keyval)
 
 
 /** Reads an integer from the GTK default settings registry
- * (see http://library.gnome.org/devel/gtk/stable/GtkSettings.html).
+ * (see https://docs.gtk.org/gtk3/class.Settings.html).
  * @param property_name The property to read.
  * @param default_value The default value in case the value could not be read.
  * @return The value for the property if it exists, otherwise the @a default_value.

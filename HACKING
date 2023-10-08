@@ -98,10 +98,10 @@ See `Committing`_ for more information.
 
 Windows tools
 -------------
-* Git: http://git-scm.com/ and http://msysgit.github.io/
-* diff, grep, etc: http://mingw.org/ or http://unxutils.sourceforge.net/
+* Git: https://git-scm.com/ and https://gitforwindows.org/
+* diff, grep, etc: https://www.msys2.org/ or https://unxutils.sourceforge.net/
 
-See also the 'Building on Windows' document on the website.
+See also the Geany wiki on how to build Geany on Windows at https://wiki.geany.org/howtos/win32/msys2.
 
 File organization
 -----------------
@@ -494,7 +494,7 @@ Libraries
 ---------
 We try to use an unmodified version of Scintilla - any new lexers or
 other changes should be passed on to the maintainers at
-http://scintilla.org. We normally update to a new Scintilla release
+https://scintilla.org. We normally update to a new Scintilla release
 shortly after one is made. See also scintilla/README.
 
 We use an unmodified subset of universal-ctags sources
@@ -536,7 +536,7 @@ first (scintilla or ctags).
 If you want to reuse an existing lexer and/or tag parser, making a
 custom filetype is probably easier - it doesn't require any
 changes to the source code. Follow instructions in the manual:
-http://geany.org/manual/index.html#custom-filetypes. Don't forget to
+https://geany.org/manual/index.html#custom-filetypes. Don't forget to
 update the ``[Groups]`` section in ``filetype_extensions.conf``.
 
 .. warning::

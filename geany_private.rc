@@ -15,7 +15,7 @@ FILETYPE			VFT_APP
 	BLOCK "StringFileInfo"
 	{
 		// U.S. English, Multilingual
-		// (see http://msdn.microsoft.com/en-us/library/aa381049%28VS.85%29.aspx)
+		// (see https://msdn.microsoft.com/en-us/library/aa381049%28VS.85%29.aspx)
 		BLOCK "040904E4"
 		{
 			VALUE "CompanyName", ""

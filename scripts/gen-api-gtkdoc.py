@@ -100,7 +100,7 @@ class DoxygenProcess(object):
     def __init__(self):
         self.at = None
 
-    # http://stackoverflow.com/questions/4624062/get-all-text-inside-a-tag-in-lxml
+    # https://stackoverflow.com/questions/4624062/get-all-text-inside-a-tag-in-lxml
     @staticmethod
     def stringify_children(node):
         from lxml.etree import tostring

@@ -887,7 +887,7 @@ static void tb_editor_write_markup(TBEditorWidget *tbw)
 	/* <ui> must be the first tag, otherwise gtk_ui_manager_add_ui_from_string() will fail. */
 	const gchar *template = "<ui>\n<!--\n\
 This is Geany's toolbar UI definition.\nThe DTD can be found at \n\
-http://library.gnome.org/devel/gtk/stable/GtkUIManager.html#GtkUIManager.description.\n\n\
+https://docs.gtk.org/gtk3/class.UIManager.html.\n\n\
 You can re-order all items and freely add and remove available actions.\n\
 You cannot add new actions which are not listed in the documentation.\n\
 Everything you add or change must be inside the /ui/toolbar/ path.\n\n\

@@ -86,7 +86,7 @@ static int get_path_max(const char *path)
 
 
 #if defined(G_OS_WIN32) && !defined(HAVE_REALPATH)
-/* realpath implementation for Windows found at http://bugzilla.gnome.org/show_bug.cgi?id=342926
+/* realpath implementation for Windows found at https://bugzilla.gnome.org/show_bug.cgi?id=342926
  * this one is better than e.g. liberty's lrealpath because this one uses Win32 API and works
  * with special chars within the filename */
 static char *realpath (const char *pathname, char *resolved_path)
@@ -304,7 +304,7 @@ static gboolean init_tag_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 }
 
 /*
- CTags tag file format (http://ctags.sourceforge.net/FORMAT)
+ CTags tag file format (https://ctags.sourceforge.net/FORMAT)
 */
 static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp, TMParserType lang)
 {

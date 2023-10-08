@@ -43,9 +43,9 @@ Use either one of this methods:
 
 # Using hyperlinks
 
-This is [an example](http://example.com/ "Title") inline link.
+This is [an example](https://example.com/ "Title") inline link.
 
-[This link](http://example.net/) has no title attribute.
+[This link](https://example.net/) has no title attribute.
 
 # References
 

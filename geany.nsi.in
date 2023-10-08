@@ -358,7 +358,7 @@ SectionEnd
 ; helper functions  ;
 ;;;;;;;;;;;;;;;;;;;;;
 
-; (from http://jabref.svn.sourceforge.net/viewvc/jabref/trunk/jabref/src/windows/nsis/setup.nsi)
+; (from https://github.com/JabRef/jabref/blob/c93c9f68746f387d00c34b6c416fcedf7967095a/src/windows/nsis/setup.nsi)
 !macro IsUserAdmin Result UName
 	ClearErrors
 	UserInfo::GetName
@@ -382,7 +382,7 @@ done:
 Function .onInit
 	StrCpy "$StartmenuFolder" "Geany"
 
-	; (from http://jabref.svn.sourceforge.net/viewvc/jabref/trunk/jabref/src/windows/nsis/setup.nsi)
+	; (from https://github.com/JabRef/jabref/blob/c93c9f68746f387d00c34b6c416fcedf7967095a/src/windows/nsis/setup.nsi)
 	; If the user does *not* have administrator privileges, abort
 	StrCpy $Answer ""
 	StrCpy $UserName ""
