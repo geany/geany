@@ -82,6 +82,8 @@
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
 #elif defined(__APPLE__)
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"open -a terminal %c"
+#elif defined(__HAIKU__)
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"Terminal"
 #else
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 #endif
@@ -90,6 +92,11 @@
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
 #define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
+#elif defined(__HAIKU__)
+#define GEANY_DEFAULT_TOOLS_BROWSER		"WebPositive"
+#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Noto Sans Display Regular 10"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Noto Sans Display Regular 10"
+#define GEANY_DEFAULT_FONT_EDITOR		"Noto Sans Display Regular 10"
 #else
 /* Browser chosen by GTK */
 #define GEANY_DEFAULT_TOOLS_BROWSER		""
