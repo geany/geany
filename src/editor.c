@@ -1103,7 +1103,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			/* Visible lines are only laid out accurately just before painting,
 			 * so we need to only call editor_scroll_to_line here, because the document
 			 * may have line wrapping and folding enabled.
-			 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping
+			 * https://scintilla.sourceforge.io/ScintillaDoc.html#LineWrapping
 			 * This is important e.g. when loading a session and switching pages
 			 * and having the cursor scroll in view. */
 			 /* FIXME: Really we want to do this just before painting, not after it

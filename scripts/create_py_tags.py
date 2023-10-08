@@ -3,7 +3,7 @@
 # Author:  Enrico Tröger
 # License: GPL v2 or later
 #
-# (based on the script at http://svn.python.org/view/*checkout*/python/trunk/Tools/scripts/ptags.py)
+# (based on the script at https://github.com/python/cpython/blob/83eb827247dd28b13fd816936c74c162e9f52a2d/Tools/scripts/ptags.py)
 #
 # This script should be run in the top source directory.
 #
