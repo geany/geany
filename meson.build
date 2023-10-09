@@ -13,7 +13,7 @@ prefix = get_option('prefix')
 deps_in = [
 	['glib-2.0',    '2.32'],
 	['gmodule-2.0', '2.32'],
-	['gtk+-3.0',    '3.0']
+	['gtk+-3.0',    '3.24']
 ]
 
 deps = []

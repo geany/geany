@@ -4960,14 +4960,6 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	/* input method editor's candidate window behaviour */
 	SSM(sci, SCI_SETIMEINTERACTION, editor_prefs.ime_interaction, 0);
 
-#ifdef GDK_WINDOWING_QUARTZ
-# if ! GTK_CHECK_VERSION(3,16,0)
-	/* "retina" (HiDPI) display support on OS X - requires disabling buffered draw
-	 * on older GTK versions */
-	SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);
-# endif
-#endif
-
 	/* only connect signals if this is for the document notebook, not split window */
 	if (editor->sci == NULL)
 	{

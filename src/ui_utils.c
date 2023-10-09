@@ -2585,8 +2585,10 @@ static void init_css_styles(void)
 	}
 	css_files[] =
 	{
-		{ 20, G_MAXUINT, "geany-3.20.css" },
-		{ 0, 19, "geany-3.0.css" },
+		/* Unused now but can be used to load css for different GTK versions, such as
+		 * { 20, G_MAXUINT, "geany-3.20.css" },
+		 * { 0, 19, "geany-3.0.css" },
+		 */
 	};
 
 	guint gtk_version = gtk_get_minor_version();

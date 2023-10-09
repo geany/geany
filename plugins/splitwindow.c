@@ -256,32 +256,6 @@ static void on_doc_show_menu(GtkMenuToolButton *button, GtkMenu *menu)
 }
 
 
-/* Blocks the ::show-menu signal if the menu's parent toggle button was inactive in the previous run.
- * This is a hack to workaround https://bugzilla.gnome.org/show_bug.cgi?id=769287
- * and should NOT be used for any other version than 3.15.9 to 3.21.4, although the code tries and
- * not block a legitimate signal in case the GTK version in use has been patched */
-static void show_menu_gtk316_fix(GtkMenuToolButton *button, gpointer data)
-{
-	/* we assume only a single menu can popup at once, so reentrency isn't an issue.
-	 * if it was, we could use custom data on the button, but it shouldn't be required */
-	static gboolean block_next = FALSE;
-
-	if (block_next)
-	{
-		g_signal_stop_emission_by_name(button, "show-menu");
-		block_next = FALSE;
-	}
-	else
-	{
-		GtkWidget *menu = gtk_menu_tool_button_get_menu(button);
-		GtkWidget *parent = gtk_menu_get_attach_widget(GTK_MENU(menu));
-
-		if (parent && GTK_IS_TOGGLE_BUTTON(parent) && ! gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(parent)))
-			block_next = TRUE;
-	}
-}
-
-
 static GtkWidget *create_toolbar(void)
 {
 	GtkWidget *toolbar, *item;
@@ -300,9 +274,6 @@ static GtkWidget *create_toolbar(void)
 
 	item = gtk_menu_new();
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(tool_item), item);
-	/* hack for https://bugzilla.gnome.org/show_bug.cgi?id=769287 */
-	if (! gtk_check_version(3, 15, 9) && gtk_check_version(3, 21, 4+1))
-		g_signal_connect(tool_item, "show-menu", G_CALLBACK(show_menu_gtk316_fix), NULL);
 	g_signal_connect(tool_item, "show-menu", G_CALLBACK(on_doc_show_menu), item);
 
 	tool_item = gtk_tool_item_new();
