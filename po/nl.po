@@ -1,8 +1,8 @@
 # Dutch translations for the Geany IDE.
 # Copyright (C) 2006 The Geany contributors.
-# This file is distributed under the same license as the Geanty package.
+# This file is distributed under the same license as the Geany package.
 #
-# Peter Scholtens <peter.scholtens@freedom.nl>, 2009 - 2012, 2014 - 2017, 2020.
+# Peter Scholtens <peter.scholtens@freedom.nl>, 2009 - 2012, 2014 - 2017, 2020, 2023.
 # Ayke van Laëthem <aykevanlaethem@gmail.com>, 2009, 2010.
 # Kurt De Bree <kdebree@telenet.be>, 2006.
 # Benno Schulenberg <benno@vertaalt.nl>, 2016.
@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2023-10-04 23:48+0200\n"
-"PO-Revision-Date: 2021-07-26 18:27+0200\n"
-"Last-Translator: Robin van der Vliet <info@robinvandervliet.com>\n"
+"PO-Revision-Date: 2023-10-08 12:21+0200\n"
+"Last-Translator: Peter Scholtens <peter.scholtens@freedom.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.1\n"
 
 #: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
@@ -122,7 +122,7 @@ msgstr "Woord zoeken in _document"
 
 #: data/geany.glade:515 data/geany.glade:7439
 msgid "Go to Symbol Defini_tion"
-msgstr "Ga naar symbooldefinitie"
+msgstr "Ga naar symboolde_finitie"
 
 #: data/geany.glade:528
 msgid "Conte_xt Action"
@@ -538,15 +538,15 @@ msgstr "Naar laatst gebruikte document schakelen bij afsluiten van een tabblad"
 
 #: data/geany.glade:2213
 msgid "Set limit on visible characters in tab label."
-msgstr ""
+msgstr "Zet een limiet op het aantal zichtbare tekens."
 
 #: data/geany.glade:2214
 msgid "Tab label length:"
-msgstr ""
+msgstr "Lengte Tablabel:"
 
 #: data/geany.glade:2226
 msgid "Characters to be visible on the tab label of the file."
-msgstr ""
+msgstr "Aantal tekens dat getoond wordt in het tablabel van de bestand."
 
 #: data/geany.glade:2254
 msgid "<b>Editor tabs</b>"
@@ -746,18 +746,16 @@ msgstr ""
 "passen, gebruik <i>Project->Standaard inspringinstellingen</i>."
 
 #: data/geany.glade:3146 data/geany.glade:8951
-#, fuzzy
 msgid "_Width:"
-msgstr "Breedte:"
+msgstr "_Breedte:"
 
 #: data/geany.glade:3160 data/geany.glade:8967
 msgid "The width in chars of a single indent"
 msgstr "De breedte in tekens van een inspringing"
 
 #: data/geany.glade:3179 data/geany.glade:8988
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Automatische inspringingsmodus:"
+msgstr "Automatische inspringings_modus:"
 
 #: data/geany.glade:3214 data/geany.glade:9023
 msgid "Detect type from file"
@@ -817,7 +815,7 @@ msgstr "Type:"
 
 #: data/geany.glade:3332
 msgid "Tab _key indents"
-msgstr "Tab-toets springt in"
+msgstr "Tab-toets springt _in"
 
 #: data/geany.glade:3336
 msgid ""
@@ -827,15 +825,16 @@ msgstr ""
 "voegen"
 
 #: data/geany.glade:3348
-#, fuzzy
 msgid "_Backspace key unindents"
-msgstr "Tab-toets springt in"
+msgstr "Backspace-toets springt _terug"
 
 #: data/geany.glade:3352
 msgid ""
 "With the cursor in the indentation, pressing backspace unindents instead of "
 "deleting one character"
 msgstr ""
+"Met de cursor op de inspringing, maakt het indrukken van de backspace de "
+"inspringing ongedaan in plaats van een teken weg te halen"
 
 #: data/geany.glade:3370
 msgid "<b>Indentation</b>"
@@ -1028,15 +1027,16 @@ msgid "Shows the line ending character"
 msgstr "Toont het regeleindeteken"
 
 #: data/geany.glade:3903
-#, fuzzy
 msgid "Show only non-default line endings"
-msgstr "Regeleinden weergeven"
+msgstr "Geef alleen niet-standaard regeleindes weer"
 
 #: data/geany.glade:3907
 msgid ""
 "Shows line ending characters only when they differ from the file default "
 "line ending character"
 msgstr ""
+"Laat regeleindetekens alleen zien wanneer ze verschillen van de standaard "
+"regeleindetekens"
 
 #: data/geany.glade:3923
 msgid "Show line numbers"
@@ -1172,19 +1172,16 @@ msgid "<b>Virtual spaces</b>"
 msgstr "<b>Virtuele spaties</b>"
 
 #: data/geany.glade:4315
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Markeerrand weergeven"
+msgstr "In markeerrand weergeven"
 
 #: data/geany.glade:4329
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "Toont het regeleindeteken"
+msgstr "Als onderstreping weergeven"
 
 #: data/geany.glade:4349
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>Gewijzigd:</b>"
+msgstr "<b>Wijzigingsgeschiedenis</b>"
 
 #: data/geany.glade:4369
 msgid "Display"
@@ -1338,9 +1335,8 @@ msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Pad (en mogelijke bijkomende argumenten)"
 
 #: data/geany.glade:4974
-#, fuzzy
 msgid "System default"
-msgstr "S_ysteem standaard"
+msgstr "Standaardbrowser"
 
 #: data/geany.glade:5030
 msgid "Grep:"
@@ -1424,35 +1420,32 @@ msgid "Date & time:"
 msgstr "Datum en tijd:"
 
 #: data/geany.glade:5448
-#, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
 "conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format."
 "html."
 msgstr ""
-"Geef hier een aangepast formaat voor de {datetime} wildcard. U kunt gebruik "
-"maken van elke conversie specifieerder die beschikbaar is voor de ANSI C "
-"strftime functie."
+"Geef hier een aangepast formaat voor de {datetime} wildcard. Een lijst van "
+"beschikbare conversie-opties staat op: https://docs.gtk.org/glib/method."
+"DateTime.format.html."
 
 #: data/geany.glade:5464
-#, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Geef hier een aangepast formaat voor de {year} wildcard. U kunt gebruik "
-"maken van elke conversie specifieerder die beschikbaar is voor de ANSI C "
-"strftime functie."
+"Geef hier een aangepast formaat voor de {year} wildcard. Een lijst van "
+"beschikbare conversie-opties staat op: https://docs.gtk.org/glib/method."
+"DateTime.format.html."
 
 #: data/geany.glade:5480
-#, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Geef hier een aangepast formaat voor de {date} wildcard. U kunt gebruik "
-"maken van elke conversie specifieerder die beschikbaar is voor de ANSI C "
-"strftime functie."
+"Geef hier een aangepast formaat voor de {date} wildcard. Een lijst van "
+"beschikbare conversie-opties staat op: https://docs.gtk.org/glib/method."
+"DateTime.format.html."
 
 #: data/geany.glade:5507
 msgid "<b>Template data</b>"
@@ -1532,15 +1525,14 @@ msgid "Date format:"
 msgstr "Datumopmaak:"
 
 #: data/geany.glade:5856 src/printing.c:279
-#, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. For a list of available conversion specifiers see "
 "https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
 "Geef hier een aangepast datum- en tijdsstempel dat wordt toegevoegd aan de "
-"kop van elke pagina. U kunt gebruik maken van elke conversie-specificatie "
-"die beschikbaar is voor de ANSI C strftime()-functie."
+"kop van elke pagina. Een lijst van beschikbare conversie-opties staat op: "
+"https://docs.gtk.org/glib/method.DateTime.format.html."
 
 #: data/geany.glade:5891
 msgid "Use native GTK printing"
@@ -1797,9 +1789,8 @@ msgid "_Send Selection to Terminal"
 msgstr "Selectie naar Terminal _sturen"
 
 #: data/geany.glade:6938 src/keybindings.c:508
-#, fuzzy
 msgid "_Join Lines"
-msgstr "Voeg regels samen"
+msgstr "Schakel regels _aaneen"
 
 #: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
@@ -1903,7 +1894,7 @@ msgstr "_Alles markeren"
 
 #: data/geany.glade:7448
 msgid "Go to Symbol Decl_aration"
-msgstr "Ga naar symbooldecl_aratie"
+msgstr "Ga naar symboolde_claratie"
 
 #: data/geany.glade:7465
 msgid "_View"
@@ -2095,7 +2086,7 @@ msgstr "_Nieuw..."
 
 #: data/geany.glade:8073
 msgid "New from _Folder..."
-msgstr ""
+msgstr "Nieuw van _map..."
 
 #: data/geany.glade:8097
 msgid "_Recent Projects"
@@ -2170,13 +2161,12 @@ msgid "_Donate..."
 msgstr "_Doneer..."
 
 #: data/geany.glade:8369
-#, fuzzy
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"Zeef uw bestanden met de gebruikelijke jokertekens. Scheid meerdere patronen "
-"door een spatie."
+"Zeef uw symbolenlijst met de ingevoerde tekst. Scheid meerdere patronen door "
+"een spatie."
 
 #: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
 msgid "Symbols"
@@ -2215,18 +2205,16 @@ msgid "_Name:"
 msgstr "_Naam:"
 
 #: data/geany.glade:8732
-#, fuzzy
 msgid "_Description:"
-msgstr "Beschrijving:"
+msgstr "_Beschrijving:"
 
 #: data/geany.glade:8749
-#, fuzzy
 msgid "_Base path:"
-msgstr "Basispad:"
+msgstr "Basis_pad:"
 
 #: data/geany.glade:8765 src/search.c:905
 msgid "File _patterns:"
-msgstr "Bestandnaamspatronen:"
+msgstr "Bestandsnaampatr_onen:"
 
 #: data/geany.glade:8826
 msgid ""
@@ -2603,11 +2591,12 @@ msgstr[1] "%d bestanden opgeslagen."
 #: src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
 msgstr ""
+"Veranderingen gedetecteerd, herladen zal wijzigingen en geschiedenis "
+"vernietigen."
 
 #: src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "Weet u zeker dat u '%s' wilt herladen?"
+msgstr "Weet u zeker dat u alle bestanden wilt herladen?"
 
 #: src/callbacks.c:967 src/keybindings.c:569
 msgid "Go to Line"
@@ -2881,7 +2870,7 @@ msgid "File %s reloaded."
 msgstr "Bestand %s herladen."
 
 #: src/document.c:1517
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
 msgstr "Bestand %s geopend (%d%s)."
 
@@ -3397,9 +3386,8 @@ msgid "Reload file"
 msgstr "Bestand herladen"
 
 #: src/keybindings.c:359
-#, fuzzy
 msgid "Reload all files"
-msgstr "Bestand herladen"
+msgstr "Alle bestanden herladen"
 
 #: src/keybindings.c:361
 msgid "Re-open last closed tab"
@@ -3411,7 +3399,7 @@ msgstr "Afsluiten"
 
 #: src/keybindings.c:370
 msgid "New from Folder"
-msgstr ""
+msgstr "Nieuw van map"
 
 #: src/keybindings.c:382
 msgid "Undo"
@@ -4616,10 +4604,12 @@ msgstr "In totaal %u maal vervangen in %u documenten."
 msgid ""
 "This operation will modify all open files which contain the text to replace."
 msgstr ""
+"Deze operatie zal alle open bestanden wijzigen die de te vervangen tekst "
+"bevatten."
 
 #: src/search.c:1465
 msgid "Are you sure to replace in the whole session?"
-msgstr ""
+msgstr "Weet u zeker dat u de hele sessie wilt vervangen?"
 
 #: src/search.c:1630
 msgid "Invalid directory for find in files."
@@ -4759,14 +4749,14 @@ msgid "Could not load tags file '%s'."
 msgstr "Kon labelbestand '%s' niet laden."
 
 #: src/symbols.c:1518
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s:%lu:</b> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<b>%s:%lu:</b> %s"
 
 #: src/symbols.c:1521
-#, fuzzy, c-format
+#, c-format
 msgid "<i>%s:%lu:</i> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<i>%s:%lu:</i> %s"
 
 #: src/symbols.c:1742
 #, c-format
@@ -4788,7 +4778,7 @@ msgstr "Sorteer op _plaats in document"
 
 #: src/symbols.c:2196
 msgid "_Group by Type"
-msgstr ""
+msgstr "Per type _groeperen"
 
 #: src/templates.c:81
 #, c-format
@@ -5054,30 +5044,27 @@ msgid "H_ide Sidebar"
 msgstr "Zijbalk _verbergen"
 
 #: src/sidebar.c:1173
-#, fuzzy
 msgid "D_ocuments Only"
-msgstr "Documenten"
+msgstr "All_een bestanden weergevn"
 
 #: src/sidebar.c:1174
 msgid "Show _Paths"
 msgstr "_Paden weergeven"
 
 #: src/sidebar.c:1175
-#, fuzzy
 msgid "Show _Tree"
-msgstr "_Werkbalk weergeven"
+msgstr "B_oomstructuur weergeven"
 
 #: src/sidebar.c:1228 plugins/filebrowser.c:678
 msgid "_Find in Files..."
 msgstr "_Zoeken in bestanden..."
 
 #: src/ui_utils.c:62
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: "
 "%e      filetype: %f      scope: %S"
 msgstr ""
-"regel: %l / %L\t kol: %c\t sel: %s\t %w      %t      %mmode: %M      "
+"regel: %l / %L\t kol: %c\t sel: %s\t %w      %t      %mEOL: %M      "
 "codering: %e      bestandstype: %f      bereik: %S"
 
 #: src/ui_utils.c:237
@@ -5178,14 +5165,13 @@ msgid "Custom Date Format"
 msgstr "Aangepaste datumopmaak"
 
 #: src/ui_utils.c:729
-#, fuzzy
 msgid ""
 "Enter here a custom date and time format. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Voer hier een aangepaste datum- en tijdsindeling in. U kunt gebruik maken "
-"van elke conversie-specificatie die beschikbaar is voor de ANSI C strftime()-"
-"functie."
+"Voer hier een aangepaste datum- en tijdsindeling in. Een lijst van "
+"beschikbare conversie-opties staat op: https://docs.gtk.org/glib/method."
+"DateTime.format.html."
 
 #: src/ui_utils.c:750
 msgid "Date format string could not be converted (possibly too long)."
@@ -5196,9 +5182,8 @@ msgid "_Set Custom Date Format"
 msgstr "Aangepaste _datumopmaak instellen"
 
 #: src/ui_utils.c:2004
-#, fuzzy
 msgid "Select Project Base Path"
-msgstr "Kies basispad van project"
+msgstr "Kies basismap van project"
 
 #: src/ui_utils.c:2029
 msgid "Select Folder"
@@ -5229,13 +5214,12 @@ msgid "Select Browser"
 msgstr "Selecteer browser"
 
 #: src/utils.c:100
-#, fuzzy
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command "
 "or leave it empty in order to spawn the system default browser."
 msgstr ""
-"Kan geconfigureerde browser niet starten. Corrigeer of geef een ander "
-"commando."
+"Kan geconfigureerde browser niet starten. Geef een geldig commando of laat "
+"het veld leeg om de systeemstandaardbrowser te starten."
 
 #: src/utils.c:388
 msgid "Windows (CRLF)"
@@ -5428,9 +5412,8 @@ msgid "Environment"
 msgstr "Omgeving"
 
 #: src/tagmanager/tm_parser.c:229
-#, fuzzy
 msgid "Part"
-msgstr "Onderdelen"
+msgstr "Gedeelte"
 
 #: src/tagmanager/tm_parser.c:230 src/tagmanager/tm_parser.c:335
 #: src/tagmanager/tm_parser.c:595
@@ -5574,9 +5557,8 @@ msgid "Functions / Procedures"
 msgstr "Functies / Procedures"
 
 #: src/tagmanager/tm_parser.c:485
-#, fuzzy
 msgid "Variables / Signals / Ports"
-msgstr "Variabelen / Signalen"
+msgstr "Variabelen / Signalen / Pinnen"
 
 #: src/tagmanager/tm_parser.c:486
 msgid "Processes / Blocks / Components"
@@ -5624,29 +5606,24 @@ msgid "Structures"
 msgstr "Structuren"
 
 #: src/tagmanager/tm_parser.c:737
-#, fuzzy
 msgid "Chapters"
-msgstr "Hoofdstuk"
+msgstr "Hoofdstukken"
 
 #: src/tagmanager/tm_parser.c:739
-#, fuzzy
 msgid "Subsections"
-msgstr "Subsectie"
+msgstr "Subsecties"
 
 #: src/tagmanager/tm_parser.c:740
-#, fuzzy
 msgid "Subsubsections"
-msgstr "Subsubsectie"
+msgstr "Subsubsecties"
 
 #: src/tagmanager/tm_parser.c:741
-#, fuzzy
 msgid "Level 4 sections"
-msgstr "Opslagacties"
+msgstr "Niveau 4 secties"
 
 #: src/tagmanager/tm_parser.c:742
-#, fuzzy
 msgid "Level 5 sections"
-msgstr "Opslagacties"
+msgstr "Niveau 5 secties"
 
 #: src/tagmanager/tm_parser.c:769
 msgid "Events"
@@ -5697,9 +5674,8 @@ msgid "Section Level 4"
 msgstr "Sectieniveau 4"
 
 #: src/tagmanager/tm_parser.c:846
-#, fuzzy
 msgid "Section Level 5"
-msgstr "Sectieniveau 1"
+msgstr "Sectieniveau 5"
 
 #: src/tagmanager/tm_parser.c:856
 msgid "Parts"
@@ -5718,28 +5694,24 @@ msgid "Implementations"
 msgstr "Implementaties"
 
 #: src/tagmanager/tm_parser.c:955
-#, fuzzy
 msgid "Fields"
-msgstr "Regelveld"
+msgstr "Velden"
 
 #: src/tagmanager/tm_parser.c:959
-#, fuzzy
 msgid "Unknowns"
-msgstr "onbekend"
+msgstr "Onbekenden"
 
 #: src/tagmanager/tm_parser.c:1065
-#, fuzzy
 msgid "Packages"
-msgstr "Pakket"
+msgstr "Pakketten"
 
 #: src/tagmanager/tm_parser.c:1068
 msgid "Tasks"
-msgstr ""
+msgstr "Taken"
 
 #: src/tagmanager/tm_parser.c:1092
-#, fuzzy
 msgid "Regions"
-msgstr "Secties"
+msgstr "Regio's"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -6130,9 +6102,9 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Back-upkopie: bestand kon niet worden opgeslagen (%s)."
 
 #: plugins/saveactions.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Projectbestand kon niet worden aangemaakt (%s)."
+msgstr "Back-upbestand kon niet worden aangemaakt (%s)."
 
 #: plugins/saveactions.c:386
 #, c-format
@@ -6146,9 +6118,8 @@ msgid "Select Directory"
 msgstr "Kies map"
 
 #: plugins/saveactions.c:544
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "Back-upmap bestaat niet of er kan niet in geschreven worden."
+msgstr "Map voor back-up bestaat niet of er kan niet in geschreven worden."
 
 #: plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -6194,14 +6165,14 @@ msgstr "Instant opslaan"
 
 # Should this not be Newly Created files?
 #: plugins/saveactions.c:721
-#, fuzzy
 msgid "Default _filetype to use for new files:"
-msgstr "_Bestandstype voor nieuw geopende bestanden:"
+msgstr "_Standaardbestandstype voor nieuw geopende bestanden:"
 
 #: plugins/saveactions.c:742
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
+"_Map om bestanden in op te slaan (laat leeg om standaard te gebruiken: %s):"
 
 #: plugins/saveactions.c:766
 msgid ""
@@ -6210,6 +6181,10 @@ msgid ""
 "you will need to cleanup instantly saved files manually. The Instant Save "
 "plugin will not delete the created files.</i>"
 msgstr ""
+"<i>Als u een map voor Instant Opslaan kiest die niet automatisch gewist "
+"wordt,\n"
+"zult u zelf deze bestanden handmatig moeten verwijderen. De Instant Save "
+"plug-in zal geen gecreëerde bestanden wissen.</i>"
 
 #: plugins/saveactions.c:784
 msgid "Backup Copy"
@@ -6224,6 +6199,9 @@ msgid ""
 "Date/_Time format for backup files (for a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"
 msgstr ""
+"Aangepaste datum- en tijdsindeling voor backupbestanden. Een lijst van "
+"beschikbare conversie-opties staat op: https://docs.gtk.org/glib/method."
+"DateTime.format.html."
 
 #: plugins/saveactions.c:830
 msgid "Directory _levels to include in the backup destination:"
