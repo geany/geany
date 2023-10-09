@@ -1523,14 +1523,11 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 			sym = g_strdup("");
 
 		if (! first && have_best)
-			/* For translators: it's the filename and the line number of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("<b>%s:%lu</b>"), fname, tmtag->line);
+			text = g_markup_printf_escaped("<b>%s:%lu</b>", fname, tmtag->line);
 		else
-			/* For translators: it's the filename and the line number of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("%s:%lu"), fname, tmtag->line);
+			text = g_markup_printf_escaped("%s:%lu", fname, tmtag->line);
 
-		/* For translators: it's the filename, line number, and signature of a symbol in the goto-symbol popup menu */
-		tooltip = g_markup_printf_escaped(_("%s:%lu\n<small><tt>%s</tt></small>"), fname, tmtag->line, sym);
+		tooltip = g_markup_printf_escaped("%s:%lu\n<small><tt>%s</tt></small>", fname, tmtag->line, sym);
 
 		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
 		box = g_object_new(GTK_TYPE_BOX, "orientation", GTK_ORIENTATION_HORIZONTAL, "spacing", 12, NULL);
