@@ -2,14 +2,14 @@
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the Geany package.
 # Tomáš Havlas <tomas.havlas@raven-systems.eu>, 2014.
-# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2021.
+# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2023-10-04 23:48+0200\n"
-"PO-Revision-Date: 2021-09-26 16:57+0200\n"
+"PO-Revision-Date: 2023-10-06 19:59+0200\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -416,7 +416,7 @@ msgstr "Zobraziť zoznam dokumentov"
 
 #: data/geany.glade:1650
 msgid "Toggle the documents list on and off"
-msgstr "Prepnúť zobrazovanie zoznamu súborov"
+msgstr "Prepnúť zobrazovanie zoznamu dokumentov"
 
 #: data/geany.glade:1666
 msgid "Show sidebar"
@@ -530,15 +530,15 @@ msgstr "Po zatvorení karty prepnúť na naposledy používaný dokument"
 
 #: data/geany.glade:2213
 msgid "Set limit on visible characters in tab label."
-msgstr ""
+msgstr "Nastaviť maximálny počet zobrazených znakov označenia karty."
 
 #: data/geany.glade:2214
 msgid "Tab label length:"
-msgstr ""
+msgstr "Dĺžka označenia karty:"
 
 #: data/geany.glade:2226
 msgid "Characters to be visible on the tab label of the file."
-msgstr ""
+msgstr "Počet znakov zobrazených v označení karty súboru."
 
 #: data/geany.glade:2254
 msgid "<b>Editor tabs</b>"
@@ -809,15 +809,16 @@ msgstr ""
 "tabulátoru"
 
 #: data/geany.glade:3348
-#, fuzzy
 msgid "_Backspace key unindents"
-msgstr "Odsadzovanie pomocou _klávesu Tab"
+msgstr "Kláves _Backspace zmenší odsadenie"
 
 #: data/geany.glade:3352
 msgid ""
 "With the cursor in the indentation, pressing backspace unindents instead of "
 "deleting one character"
 msgstr ""
+"Stlačenie Backspace, keď je kurzor v odsadení, zmenší odsadenie namiesto "
+"vymazania jedného znaku"
 
 #: data/geany.glade:3370
 msgid "<b>Indentation</b>"
@@ -1009,15 +1010,15 @@ msgid "Shows the line ending character"
 msgstr "Zobrazí znak konca riadku"
 
 #: data/geany.glade:3903
-#, fuzzy
 msgid "Show only non-default line endings"
-msgstr "Zobraziť konce riadkov"
+msgstr "Nezobrazovať predvolené znaky konca riadku"
 
 #: data/geany.glade:3907
 msgid ""
 "Shows line ending characters only when they differ from the file default "
 "line ending character"
 msgstr ""
+"Zobrazí znaky konca riadku len keď sú iné ako predvolené znaky konca riadku"
 
 #: data/geany.glade:3923
 msgid "Show line numbers"
@@ -1029,7 +1030,7 @@ msgstr "Zobrazí alebo skryje čísla riadkov"
 
 #: data/geany.glade:3939
 msgid "Show markers margin"
-msgstr "Zobraziť značky"
+msgstr "Zobraziť okraj značiek"
 
 #: data/geany.glade:3943
 msgid ""
@@ -1148,19 +1149,16 @@ msgid "<b>Virtual spaces</b>"
 msgstr "<b>Virtuálne medzery</b>"
 
 #: data/geany.glade:4315
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Zobraziť značky"
+msgstr "Zobraziť na okraji značiek"
 
 #: data/geany.glade:4329
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "Zobrazí znak konca riadku"
+msgstr "Zobraziť ako podčiarknuté indikátory"
 
 #: data/geany.glade:4349
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>Ukladanie súborov</b>"
+msgstr "<b>História zmien</b>"
 
 #: data/geany.glade:4369
 msgid "Display"
@@ -1183,7 +1181,7 @@ msgstr ""
 
 #: data/geany.glade:4464
 msgid "Default end of line characters:"
-msgstr "Predvolený znak konca riadku:"
+msgstr "Predvolené znaky konca riadku:"
 
 #: data/geany.glade:4495
 msgid "<b>New files</b>"
@@ -1312,9 +1310,8 @@ msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Cesta (a prípadne ďalšie parametre) k Vášmu obľúbenému prehliadaču"
 
 #: data/geany.glade:4974
-#, fuzzy
 msgid "System default"
-msgstr "S_ystémové nastavenie"
+msgstr "Systémové nastavenie"
 
 #: data/geany.glade:5030
 msgid "Grep:"
@@ -1399,32 +1396,29 @@ msgid "Date & time:"
 msgstr "Dátum a čas:"
 
 #: data/geany.glade:5448
-#, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
 "conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format."
 "html."
 msgstr ""
-"Určuje formát pre značku {datetime}. Je možné použiť akýkoľvek zápis, ktorý "
-"je možné použiť s funkciou ANSI C strftime."
+"Určuje formát pre značku {datetime}. Pre zoznam dostupných špecifikátorov "
+"formátu viď https://docs.gtk.org/glib/method.DateTime.format.html."
 
 #: data/geany.glade:5464
-#, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Určuje formát pre značku {year}. Je možné použiť akýkoľvek zápis, ktorý je "
-"možné použiť s funkciou ANSI C strftime."
+"Určuje formát pre značku {year}. Pre zoznam dostupných špecifikátorov "
+"formátu viď https://docs.gtk.org/glib/method.DateTime.format.html."
 
 #: data/geany.glade:5480
-#, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Určuje formát pre značku {date}. Je možné použiť akýkoľvek zápis, ktorý je "
-"možné použiť s funkciou ANSI C strftime."
+"Určuje formát pre značku {date}. Pre zoznam dostupných špecifikátorov "
+"formátu viď https://docs.gtk.org/glib/method.DateTime.format.html."
 
 #: data/geany.glade:5507
 msgid "<b>Template data</b>"
@@ -1502,14 +1496,14 @@ msgid "Date format:"
 msgstr "Formát dátumu:"
 
 #: data/geany.glade:5856 src/printing.c:279
-#, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. For a list of available conversion specifiers see "
 "https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Určuje formát dátumu a času pridávaného do hlavičky každej stránky. Je možné "
-"použiť akýkoľvek zápis, ktorý je možné použiť s funkciou ANSI C strftime."
+"Určuje formát dátumu a času pridávaného do hlavičky každej stránky. Pre "
+"zoznam dostupných špecifikátorov formátu viď https://docs.gtk."
+"org/glib/method.DateTime.format.html."
 
 #: data/geany.glade:5891
 msgid "Use native GTK printing"
@@ -1764,9 +1758,8 @@ msgid "_Send Selection to Terminal"
 msgstr "Odoslať výber do _terminálu"
 
 #: data/geany.glade:6938 src/keybindings.c:508
-#, fuzzy
 msgid "_Join Lines"
-msgstr "Spojiť riadky"
+msgstr "_Spojiť riadky"
 
 #: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
@@ -1886,7 +1879,7 @@ msgstr "Zmeniť _farebnú schému…"
 
 #: data/geany.glade:7502
 msgid "Show _Markers Margin"
-msgstr "Zobraziť _značky"
+msgstr "Zobraziť okraj _značiek"
 
 #: data/geany.glade:7512
 msgid "Show _Line Numbers"
@@ -2062,7 +2055,7 @@ msgstr "_Nový…"
 
 #: data/geany.glade:8073
 msgid "New from _Folder..."
-msgstr ""
+msgstr "Nový z _priečinka…"
 
 #: data/geany.glade:8097
 msgid "_Recent Projects"
@@ -2137,12 +2130,11 @@ msgid "_Donate..."
 msgstr "_Darovať…"
 
 #: data/geany.glade:8369
-#, fuzzy
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"Filtrovať súbory s použitím vzorov názvov súborov. Jednotlivé vzory oddeľte "
+"Filtrovať zoznam symbolov pomocou zadaného textu. Jednotlivé filtre oddeľte "
 "medzerou."
 
 #: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
@@ -3367,7 +3359,7 @@ msgstr "Koniec"
 
 #: src/keybindings.c:370
 msgid "New from Folder"
-msgstr ""
+msgstr "Nový z priečinka"
 
 #: src/keybindings.c:382
 msgid "Undo"
@@ -4559,10 +4551,12 @@ msgstr "Nahradených %u zhôd v %u dokumentoch."
 msgid ""
 "This operation will modify all open files which contain the text to replace."
 msgstr ""
+"Táto operácia upraví všetky otvorené súbory obsahujúce text, ktorý sa má "
+"nahradiť."
 
 #: src/search.c:1465
 msgid "Are you sure to replace in the whole session?"
-msgstr ""
+msgstr "Ste si istý, že chcete nahradiť v celej relácii?"
 
 #: src/search.c:1630
 msgid "Invalid directory for find in files."
@@ -4702,14 +4696,14 @@ msgid "Could not load tags file '%s'."
 msgstr "Nie je možné načítať súbor tagov „%s“."
 
 #: src/symbols.c:1518
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s:%lu:</b> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<b>%s:%lu:</b> %s"
 
 #: src/symbols.c:1521
-#, fuzzy, c-format
+#, c-format
 msgid "<i>%s:%lu:</i> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<i>%s:%lu:</i> %s"
 
 #: src/symbols.c:1742
 #, c-format
@@ -4731,7 +4725,7 @@ msgstr "Zoradiť podľa _výskytu"
 
 #: src/symbols.c:2196
 msgid "_Group by Type"
-msgstr ""
+msgstr "Zoskupiť podľa _typu"
 
 #: src/templates.c:81
 #, c-format
@@ -4993,25 +4987,22 @@ msgid "H_ide Sidebar"
 msgstr "Skryť _bočný panel"
 
 #: src/sidebar.c:1173
-#, fuzzy
 msgid "D_ocuments Only"
-msgstr "Dokumenty"
+msgstr "_Len dokumenty"
 
 #: src/sidebar.c:1174
 msgid "Show _Paths"
 msgstr "Zobraziť _cesty"
 
 #: src/sidebar.c:1175
-#, fuzzy
 msgid "Show _Tree"
-msgstr "Zobraziť p_anel nástrojov"
+msgstr "Zobraziť s_trom"
 
 #: src/sidebar.c:1228 plugins/filebrowser.c:678
 msgid "_Find in Files..."
 msgstr "Nájsť v _súboroch…"
 
 #: src/ui_utils.c:62
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: "
 "%e      filetype: %f      scope: %S"
@@ -5114,13 +5105,12 @@ msgid "Custom Date Format"
 msgstr "Vlastný formát dátumu"
 
 #: src/ui_utils.c:729
-#, fuzzy
 msgid ""
 "Enter here a custom date and time format. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Zadajte vlastný formát pre dátum a čas. Je možné použiť akýkoľvek zápis, "
-"ktorý je možné použiť s funkciou ANSI C strftime."
+"Zadajte vlastný formát pre dátum a čas. Pre zoznam dostupných špecifikátorov "
+"formátu viď https://docs.gtk.org/glib/method.DateTime.format.html."
 
 #: src/ui_utils.c:750
 msgid "Date format string could not be converted (possibly too long)."
@@ -5133,7 +5123,6 @@ msgid "_Set Custom Date Format"
 msgstr "_Nastaviť vlastný formát dátumu"
 
 #: src/ui_utils.c:2004
-#, fuzzy
 msgid "Select Project Base Path"
 msgstr "Vyberte základnú cestu projektu"
 
@@ -5166,13 +5155,12 @@ msgid "Select Browser"
 msgstr "Vybrať prehliadač"
 
 #: src/utils.c:100
-#, fuzzy
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command "
 "or leave it empty in order to spawn the system default browser."
 msgstr ""
-"Nepodarilo sa spustiť prehliadač. Opravte nastavenia alebo zadajte iný "
-"prehliadač."
+"Nepodarilo sa spustiť prehliadač. Zadajte platný príkaz, alebo ho nechajte "
+"prázdny, aby sa spustil štandardný systémový prehliadač."
 
 #: src/utils.c:388
 msgid "Windows (CRLF)"
@@ -5365,9 +5353,8 @@ msgid "Environment"
 msgstr "Prostredie"
 
 #: src/tagmanager/tm_parser.c:229
-#, fuzzy
 msgid "Part"
-msgstr "Časti"
+msgstr "Časť"
 
 #: src/tagmanager/tm_parser.c:230 src/tagmanager/tm_parser.c:335
 #: src/tagmanager/tm_parser.c:595
@@ -5389,7 +5376,7 @@ msgstr "Podpodsekcia"
 
 #: src/tagmanager/tm_parser.c:234
 msgid "Bibitem"
-msgstr ""
+msgstr "Položka bibliografie"
 
 #: src/tagmanager/tm_parser.c:257
 msgid "Articles"
@@ -5511,9 +5498,8 @@ msgid "Functions / Procedures"
 msgstr "Funkcie / Procedúry"
 
 #: src/tagmanager/tm_parser.c:485
-#, fuzzy
 msgid "Variables / Signals / Ports"
-msgstr "Premenné / Signály"
+msgstr "Premenné / Signály / Porty"
 
 #: src/tagmanager/tm_parser.c:486
 msgid "Processes / Blocks / Components"
@@ -5561,29 +5547,24 @@ msgid "Structures"
 msgstr "Štruktúry"
 
 #: src/tagmanager/tm_parser.c:737
-#, fuzzy
 msgid "Chapters"
-msgstr "Kapitola"
+msgstr "Kapitoly"
 
 #: src/tagmanager/tm_parser.c:739
-#, fuzzy
 msgid "Subsections"
-msgstr "Podsekcia"
+msgstr "Podsekcie"
 
 #: src/tagmanager/tm_parser.c:740
-#, fuzzy
 msgid "Subsubsections"
-msgstr "Podpodsekcia"
+msgstr "Podpodsekcie"
 
 #: src/tagmanager/tm_parser.c:741
-#, fuzzy
 msgid "Level 4 sections"
-msgstr "Akcie pri uložení"
+msgstr "Sekcie 4. úrovne"
 
 #: src/tagmanager/tm_parser.c:742
-#, fuzzy
 msgid "Level 5 sections"
-msgstr "Akcie pri uložení"
+msgstr "Sekcie 5. úrovne"
 
 #: src/tagmanager/tm_parser.c:769
 msgid "Events"
@@ -5634,9 +5615,8 @@ msgid "Section Level 4"
 msgstr "Sekcia úroveň 4"
 
 #: src/tagmanager/tm_parser.c:846
-#, fuzzy
 msgid "Section Level 5"
-msgstr "Sekcia úroveň 1"
+msgstr "Sekcia úroveň 5"
 
 #: src/tagmanager/tm_parser.c:856
 msgid "Parts"
@@ -5663,18 +5643,16 @@ msgid "Unknowns"
 msgstr "Neznáme"
 
 #: src/tagmanager/tm_parser.c:1065
-#, fuzzy
 msgid "Packages"
-msgstr "Balíček"
+msgstr "Balíčky"
 
 #: src/tagmanager/tm_parser.c:1068
 msgid "Tasks"
-msgstr ""
+msgstr "Úlohy"
 
 #: src/tagmanager/tm_parser.c:1092
-#, fuzzy
 msgid "Regions"
-msgstr "Sekcie"
+msgstr "Oblasti"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -6164,6 +6142,8 @@ msgid ""
 "Date/_Time format for backup files (for a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"
 msgstr ""
+"_Formát dátumu/času pre záložné súbory (pre zoznam dostupných špecifikátorov "
+"formátu viď https://docs.gtk.org/glib/method.DateTime.format.html)"
 
 #: plugins/saveactions.c:830
 msgid "Directory _levels to include in the backup destination:"
@@ -6205,25 +6185,3 @@ msgstr "Vedľa seba"
 #: plugins/splitwindow.c:463
 msgid "Top and Bottom"
 msgstr "Nad sebou"
-
-#~ msgid "Use project-based session files"
-#~ msgstr "Použiť relácie pre projekty"
-
-#~ msgid ""
-#~ "Whether to store a project's session files and open them when re-opening "
-#~ "the project"
-#~ msgstr "Uložiť reláciu projektu a následne ju otvoriť pri otváraní projektu"
-
-#, c-format
-#~ msgid "%s: %lu"
-#~ msgstr "%s: %lu"
-
-#~ msgid "Geany project files"
-#~ msgstr "Súbory projektu Geany"
-
-#~ msgid "Executables"
-#~ msgstr "Spustiteľné súbory"
-
-#~ msgid "Date/_Time format for backup files (\"man strftime\" for details):"
-#~ msgstr ""
-#~ "_Formát dátumu/času pre záložné súbory („man strftime“ pre viac detailov):"
