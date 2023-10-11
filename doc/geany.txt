@@ -223,6 +223,10 @@ The Geany window is shown in the following figure:
 
 .. image:: ./images/main_window.png
 
+.. note::
+    Screenshots in this document are taken with the default GTK Adwaita
+    theme, but Geany will adapt to the desktop GTK theme that is set.
+
 The workspace has the following parts:
 
 * The menu.
