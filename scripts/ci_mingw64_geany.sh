@@ -121,7 +121,11 @@ log_environment() {
 	echo "Geany GIT revision   : ${GEANY_GIT_REVISION}"
 	echo "PATH                 : ${PATH}"
 	echo "HOST                 : ${HOST}"
-	echo "CC                   : ${CC}"
+	echo "GCC                  : $(${HOST}-gcc -dumpfullversion) ($(${HOST}-gcc -dumpversion))"
+	echo "G++                  : $(${HOST}-g++ -dumpfullversion) ($(${HOST}-g++ -dumpversion))"
+	echo "Libstdc++            : $(dpkg-query --showformat='${Version}' --show libstdc++6:i386)"
+	echo "GLib                 : $(pkg-config --modversion glib-2.0)"
+	echo "GTK                  : $(pkg-config --modversion gtk+-3.0)"
 	echo "CFLAGS               : ${CFLAGS}"
 	echo "Configure            : ${CONFIGURE_OPTIONS}"
 }
@@ -208,6 +212,13 @@ create_gtk_bundle() {
 	mkdir ${GTK_BUNDLE_DIR}
 	cd ${GTK_BUNDLE_DIR}
 	bash ${GEANY_BUILD_DIR}/scripts/gtk-bundle-from-msys2.sh -x -3
+
+	# We use the "posix" variant of the mingw64 cross compiler which has support for
+	# C++ features like "std:future". For this to work, we need to use the corresponding
+	# C++ runtime library and copy (and strip) it to the resulting bundle.
+	gcc_version="$(${HOST}-gcc -dumpversion)/libstdc++-6.dll"
+	cp "/usr/lib/gcc/${HOST}/${gcc_version}" "${GTK_BUNDLE_DIR}/bin"
+	${HOST}-strip "${GTK_BUNDLE_DIR}/bin/libstdc++-6.dll"
 }
 
 
