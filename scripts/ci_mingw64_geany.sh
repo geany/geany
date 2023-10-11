@@ -145,11 +145,17 @@ patch_version_information() {
 		MAJOR="${BASH_REMATCH[1]}"
 		MINOR="${BASH_REMATCH[2]}"
 		PATCH="${BASH_REMATCH[4]}"
-		if [ -z "${PATCH}" ] || [ "${PATCH}" = "0" ]; then
-			MINOR="$((MINOR-1))"
-			PATCH="90"
+		if [[ "${MINOR}" = "0" && (-z "${PATCH}" || "${PATCH}" = "0") ]]; then
+			MAJOR="$((MAJOR-1))"
+			MINOR="99"
+			PATCH="99"
 		else
-			PATCH="$((PATCH-1))"
+			if [[ -z "${PATCH}" || "${PATCH}" = "0" ]]; then
+				MINOR="$((MINOR-1))"
+				PATCH="99"
+			else
+				PATCH="$((PATCH-1))"
+			fi
 		fi
 	else
 		echo "Could not extract or parse version tag" >&2
