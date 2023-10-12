@@ -146,8 +146,13 @@ patch_version_information() {
 		MINOR="${BASH_REMATCH[2]}"
 		PATCH="${BASH_REMATCH[4]}"
 		if [ -z "${PATCH}" ] || [ "${PATCH}" = "0" ]; then
-			MINOR="$((MINOR-1))"
-			PATCH="90"
+			if [ "${MINOR}" = "0" ]; then
+				MAJOR="$((MAJOR-1))"
+				MINOR="99"
+			else
+				MINOR="$((MINOR-1))"
+			fi
+			PATCH="99"
 		else
 			PATCH="$((PATCH-1))"
 		fi
