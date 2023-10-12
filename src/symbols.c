@@ -1432,6 +1432,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 	GtkWidget *first = NULL;
 	GtkWidget *menu;
 	GtkSizeGroup *group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+	GdkEvent *event;
 	TMTag *tmtag;
 	guint i;
 	gchar **short_names, **file_names;
@@ -1497,7 +1498,13 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 	if (first) /* always select the first item for better keyboard navigation */
 		g_signal_connect(menu, "realize", G_CALLBACK(gtk_menu_shell_select_item), first);
 
-	show_menu_at_caret(GTK_MENU(menu), doc->editor->sci);
+	event = gtk_get_current_event();
+	if (event && event->type == GDK_BUTTON_PRESS)
+		gtk_menu_popup_at_pointer(GTK_MENU(menu), event);
+	else
+		show_menu_at_caret(GTK_MENU(menu), doc->editor->sci);
+	if (event)
+		gdk_event_free(event);
 
 	g_object_unref(group);
 }
