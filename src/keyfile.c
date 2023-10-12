@@ -275,7 +275,7 @@ static void init_pref_groups(void)
 		"radio_virtualspace_always", GEANY_VIRTUAL_SPACE_ALWAYS,
 		NULL);
 	stash_group_add_toggle_button(group, &editor_prefs.change_history_markers,
-		"change_history_markers", TRUE, "check_change_history_markers");
+		"change_history_markers", FALSE, "check_change_history_markers");
 	stash_group_add_toggle_button(group, &editor_prefs.change_history_indicators,
 		"change_history_indicators", FALSE, "check_change_history_indicators");
 	stash_group_add_toggle_button(group, &editor_prefs.autocomplete_doc_words,
