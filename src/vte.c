@@ -526,7 +526,7 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 	if (event->button == 3)
 	{
 		gtk_widget_grab_focus(vte_config.vte);
-		gtk_menu_popup_at_pointer(GTK_MENU(vte_config.menu), NULL);
+		gtk_menu_popup_at_pointer(GTK_MENU(vte_config.menu), (GdkEvent *) event);
 		return TRUE;
 	}
 	else if (event->button == 2)

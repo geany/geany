@@ -211,7 +211,7 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 }
 
 
-static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget)
+static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget, GdkEventButton *event)
 {
 	static GtkWidget *menu = NULL;
 
@@ -234,13 +234,13 @@ static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget)
 		gtk_menu_attach_to_widget(GTK_MENU(menu), widget, NULL);
 	}
 
-	gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
+	gtk_menu_popup_at_pointer(GTK_MENU(menu), (GdkEvent *) event);
 }
 
 
 static gboolean kb_popup_menu_cb(GtkWidget *widget, KbData *kbdata)
 {
-	kb_show_popup_menu(kbdata, widget);
+	kb_show_popup_menu(kbdata, widget, NULL);
 	return TRUE;
 }
 
@@ -250,7 +250,7 @@ static gboolean kb_tree_view_button_press_event_cb(GtkWidget *widget, GdkEventBu
 {
 	if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
 	{
-		kb_show_popup_menu(kbdata, widget);
+		kb_show_popup_menu(kbdata, widget, event);
 		return TRUE;
 	}
 	else if (event->type == GDK_2BUTTON_PRESS)
