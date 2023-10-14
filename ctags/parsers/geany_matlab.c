@@ -62,7 +62,8 @@ static void findMatlabTags (void)
 		for (i = 0  ;  line [i] != '\0'  &&  ! isspace (line [i])  ;  ++i)
 			;
 
-		if (strncmp ((const char *) line, "function", (size_t) 8) == 0)
+		if (strncmp ((const char *) line, "function", (size_t) 8) == 0
+			&& isspace (line [8]))
 		{
 			const unsigned char *cp = line + i;
 			const unsigned char *ptr = cp;
@@ -71,9 +72,12 @@ static void findMatlabTags (void)
 			while (isspace ((int) *cp))
 				++cp;
 
-			/* search for '=' character in the line */
+			/* search for '=' character in the line (ignoring comments) */
 			while (*ptr != '\0')
 			{
+				if (*ptr == '%')
+					break;
+
 				if (*ptr == '=')
 				{
 					eq=true;
@@ -82,25 +86,24 @@ static void findMatlabTags (void)
 				ptr++;
 			}
 
-			/* '=' was found => get the right most part of the line after '=' and before '%' */
+			/* '=' was found => get the first word of the line after '=' */
 			if (eq)
 			{
 				ptr++;
 				while (isspace ((int) *ptr))
 					++ptr;
 
-				while (*ptr != '\0' && *ptr != '%')
+				while (isalnum ((int) *ptr) || *ptr == '_')
 				{
 					vStringPut (name, (int) *ptr);
 					++ptr;
 				}
 			}
 
-			/* '=' was not found => get the right most part of the line after
-			 * 'function' and before '%' */
+			/* '=' was not found => get the first word of the line after "function" */
 			else
 			{
-				while (*cp != '\0' && *cp != '%')
+				while (isalnum ((int) *cp) || *cp == '_')
 				{
 					vStringPut (name, (int) *cp);
 					++cp;
