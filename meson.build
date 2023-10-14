@@ -166,12 +166,14 @@ python = pymod.find_installation('python3', modules: doxygen.found() and get_opt
 rst2html = find_program('rst2html', required: get_option('html-docs'))
 rst2pdf = find_program('rst2pdf', required: get_option('pdf-docs'))
 git = find_program('git', required: false)
+revision = '-1'
 if git.found()
-	ret = run_command(git, 'rev-parse', '--short', '--revs-only', 'HEAD', check: true)
-	cdata.set_quoted('REVISION', ret.stdout().strip())
-else
-	cdata.set_quoted('REVISION', '-1')
+	ret = run_command(git, 'rev-parse', '--short', '--revs-only', 'HEAD', check: false)
+	if ret.returncode() == 0
+		revision = ret.stdout().strip()
+	endif
 endif
+cdata.set_quoted('REVISION', revision)
 
 python_command = get_option('python-command')
 if python_command == '' or python_command == 'auto'
