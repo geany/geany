@@ -145,7 +145,7 @@ on_default_tag_tree_button_press_event(GtkWidget *widget, GdkEventButton *event,
 {
 	if (event->button == 3)
 	{
-		ui_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, event->button, event->time);
+		gtk_menu_popup_at_pointer(GTK_MENU(tv.popup_taglist), (GdkEvent *) event);
 		return TRUE;
 	}
 	return FALSE;
@@ -1513,13 +1513,11 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 
 			/* update menu item sensitivity */
 			documents_menu_update(selection);
-			ui_menu_popup(GTK_MENU(openfiles_popup_menu), NULL, NULL,
-						  event->button, event->time);
+			gtk_menu_popup_at_pointer(GTK_MENU(openfiles_popup_menu), (GdkEvent *) event);
 		}
 		else
 		{
-			ui_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL,
-						  event->button, event->time);
+			gtk_menu_popup_at_pointer(GTK_MENU(tv.popup_taglist), (GdkEvent *) event);
 		}
 		handled = TRUE;
 	}

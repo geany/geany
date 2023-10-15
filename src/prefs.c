@@ -214,8 +214,6 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget, GdkEventButton *event)
 {
 	static GtkWidget *menu = NULL;
-	guint button;
-	guint32 event_time;
 
 	if (menu == NULL)
 	{
@@ -236,18 +234,7 @@ static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget, GdkEventButton
 		gtk_menu_attach_to_widget(GTK_MENU(menu), widget, NULL);
 	}
 
-	if (event != NULL)
-	{
-		button = event->button;
-		event_time = event->time;
-	}
-	else
-	{
-		button = 0;
-		event_time = gtk_get_current_event_time();
-	}
-
-	ui_menu_popup(GTK_MENU(menu), NULL, NULL, button, event_time);
+	gtk_menu_popup_at_pointer(GTK_MENU(menu), (GdkEvent *) event);
 }
 
 

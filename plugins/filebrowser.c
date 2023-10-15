@@ -743,7 +743,7 @@ static gboolean on_button_press(GtkWidget *widget, GdkEventButton *event, gpoint
 
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(popup_items.show_hidden_files),
 			show_hidden_files);
-		gtk_menu_popup(GTK_MENU(popup_menu), NULL, NULL, NULL, NULL, event->button, event->time);
+		gtk_menu_popup_at_pointer(GTK_MENU(popup_menu), (GdkEvent *) event);
 		/* don't return TRUE here, unless the selection won't be changed */
 	}
 	return FALSE;
