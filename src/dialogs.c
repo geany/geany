@@ -366,6 +366,22 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 }
 
 
+/* create one file filter which has each file pattern of each filetype */
+static void add_proj_file_filter(GtkFileChooser *chooser)
+{
+	if (!app->project || !app->project->file_patterns)
+		return;
+	
+	GtkFileFilter *filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter, _("Project patterns"));
+
+	for (gchar **strv = app->project->file_patterns; strv[0]; strv++)
+	{
+		gtk_file_filter_add_pattern(filter, strv[0]);
+	}
+	gtk_file_chooser_add_filter(chooser, filter);
+}
+
 static GtkWidget *create_open_file_dialog(void)
 {
 	GtkWidget *dialog;
@@ -403,11 +419,22 @@ static GtkWidget *create_open_file_dialog(void)
 	/* now create meta filter "All Source" */
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),
 				filetypes_create_file_filter_all_source());
+	add_proj_file_filter(GTK_FILE_CHOOSER(dialog));
+	// add ungrouped filetypes first
 	foreach_slist(node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
 
-		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
+		if (ft->group != GEANY_FILETYPE_GROUP_NONE ||
+			ft->id == GEANY_FILETYPES_NONE)
+			continue;
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filetypes_create_file_filter(ft));
+	}
+	foreach_slist(node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
+
+		if (ft->group == GEANY_FILETYPE_GROUP_NONE)
 			continue;
 		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filetypes_create_file_filter(ft));
 	}
