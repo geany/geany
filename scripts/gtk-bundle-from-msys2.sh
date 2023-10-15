@@ -266,10 +266,12 @@ download_and_extract_gtk_theme() {
 	echo "Download and unpack GTK theme 'Prof-Gnome'"
 	geany_osx_archive="geany_osx.zip"
 	wget --no-verbose -O ${geany_osx_archive} ${GTK_THEME_URL}
-	unzip ${geany_osx_archive} "geany-osx-master/Prof-Gnome/**"
+	unzip ${geany_osx_archive} "geany-osx-master/Prof-Gnome/**" "geany-osx-master/prof_gnome_windows_changes.patch"
 	mkdir -p share/themes/
 	mv geany-osx-master/Prof-Gnome share/themes/
-	rm ${geany_osx_archive} 
+	patch --dir share/themes/Prof-Gnome -p2 < geany-osx-master/prof_gnome_windows_changes.patch
+	rm ${geany_osx_archive}
+	rm geany-osx-master/prof_gnome_windows_changes.patch
 	rmdir geany-osx-master
 	# create GTK settings to enable the theme
 	if [ -f "etc/gtk-3.0/settings.ini" ]; then
