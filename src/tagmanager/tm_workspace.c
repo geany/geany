@@ -950,7 +950,6 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 	const gchar *current_scope,
 	guint max_num)
 {
-	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags = g_ptr_array_new();
 	GPtrArray *header_candidates;
 	SortInfo sort_info;
