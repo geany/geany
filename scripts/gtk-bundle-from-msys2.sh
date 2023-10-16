@@ -14,6 +14,8 @@ run_pi="y"
 cross="no"
 
 UNX_UTILS_URL="https://download.geany.org/contrib/UnxUpdates.zip"
+# we use the Prof-Gnome GTK theme from the Geany macOS repository
+GTK_THEME_URL="https://github.com/geany/geany-osx/archive/refs/heads/master.zip"
 
 # Wine commands for 32bit and 64bit binaries (we still need 32bit for UnxUtils sort.exe)
 # Used only when "-x" is set
@@ -260,6 +262,25 @@ download_and_extract_sort() {
 	rm ${unxutils_archive}
 }
 
+download_and_extract_gtk_theme() {
+	echo "Download and unpack GTK theme 'Prof-Gnome'"
+	geany_osx_archive="geany_osx.zip"
+	wget --no-verbose -O ${geany_osx_archive} ${GTK_THEME_URL}
+	unzip ${geany_osx_archive} "geany-osx-master/Prof-Gnome/**" "geany-osx-master/prof_gnome_windows_changes.patch"
+	mkdir -p share/themes/
+	mv geany-osx-master/Prof-Gnome share/themes/
+	patch --dir share/themes/Prof-Gnome -p2 < geany-osx-master/prof_gnome_windows_changes.patch
+	rm ${geany_osx_archive}
+	rm geany-osx-master/prof_gnome_windows_changes.patch
+	rmdir geany-osx-master
+	# create GTK settings to enable the theme
+	if [ -f "etc/gtk-3.0/settings.ini" ]; then
+		echo "etc/gtk-3.0/settings.ini already exists. Aborting."
+		exit 1
+	fi
+	echo -e "[Settings]\r\ngtk-theme-name=Prof-Gnome" > etc/gtk-3.0/settings.ini
+}
+
 create_bundle_dependency_info_file() {
 	# sort.exe from UnxUtils is a 32bit binary, so use $EXE_WRAPPER_32
 	sort_version="$(${EXE_WRAPPER_32} bin/sort.exe --version | sed -n 1p)"
@@ -281,6 +302,9 @@ Sort version: ${sort_version}
 grep.exe is taken from a 64bit MSYS2 installation and
 is bundled together with its dependencies.
 Grep version: ${grep_version}
+
+GTK theme "Prof-Gnome" was downloaded from:
+${GTK_THEME_URL}
 
 Other dependencies are provided by the MSYS2 project
 (https://msys2.github.io) and were downloaded from:
@@ -307,5 +331,6 @@ move_extracted_files
 delayed_post_install
 cleanup_unnecessary_files
 download_and_extract_sort
+download_and_extract_gtk_theme
 create_bundle_dependency_info_file
 create_zip_archive
