@@ -1193,19 +1193,16 @@ msgid "<b>Virtual spaces</b>"
 msgstr "<b>Espaces virtuels</b>"
 
 #: data/geany.glade:4315
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Afficher la marge des marqueurs"
+msgstr "Afficher dans la marge des marqueurs"
 
 #: data/geany.glade:4329
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "Affiche le caractère de fin de ligne"
+msgstr "Afficher comme indicateurs en ligne"
 
 #: data/geany.glade:4349
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>Enregistrement des fichiers</b>"
+msgstr "<b>Historique des changements</b>"
 
 #: data/geany.glade:4369
 msgid "Display"
@@ -1362,9 +1359,8 @@ msgstr ""
 "favori"
 
 #: data/geany.glade:4974
-#, fuzzy
 msgid "System default"
-msgstr "Paramètres s_ystème"
+msgstr "Navigateur par défaut du système"
 
 #: data/geany.glade:5030
 msgid "Grep:"
@@ -1822,9 +1818,8 @@ msgid "_Send Selection to Terminal"
 msgstr "Envoyer la _sélection vers le terminal"
 
 #: data/geany.glade:6938 src/keybindings.c:508
-#, fuzzy
 msgid "_Join Lines"
-msgstr "Joindre les lignes"
+msgstr "_Joindre les lignes"
 
 #: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
@@ -4803,14 +4798,14 @@ msgid "Could not load tags file '%s'."
 msgstr "Impossible de charger le fichier de tags « %s »."
 
 #: src/symbols.c:1518
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s:%lu:</b> %s"
-msgstr "<b>%s : %lu</b>"
+msgstr "<b>%s:%lu :</b> %s"
 
 #: src/symbols.c:1521
-#, fuzzy, c-format
+#, c-format
 msgid "<i>%s:%lu:</i> %s"
-msgstr "<b>%s : %lu</b>"
+msgstr "<i>%s:%lu :</i> %s"
 
 # Prochaine déclaration (recherche vers l'avant)
 #: src/symbols.c:1742
@@ -5114,7 +5109,6 @@ msgid "_Find in Files..."
 msgstr "Rechercher dans les f_ichiers…"
 
 #: src/ui_utils.c:62
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: "
 "%e      filetype: %f      scope: %S"
@@ -5273,7 +5267,7 @@ msgid ""
 "or leave it empty in order to spawn the system default browser."
 msgstr ""
 "Impossible d'appeler la commande configurée pour le navigateur. Corrigez-la "
-"ou entrez-en une différente."
+"ou laissez-la vide pour utiliser le navigateur par défaut du système."
 
 #: src/utils.c:388
 msgid "Windows (CRLF)"
@@ -5734,9 +5728,8 @@ msgid "Section Level 4"
 msgstr "Section niveau 4"
 
 #: src/tagmanager/tm_parser.c:846
-#, fuzzy
 msgid "Section Level 5"
-msgstr "Section niveau 1"
+msgstr "Section niveau 5"
 
 # Pas de traduction
 #: src/tagmanager/tm_parser.c:856
