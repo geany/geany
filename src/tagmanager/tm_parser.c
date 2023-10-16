@@ -1535,11 +1535,14 @@ gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gch
 	{
 		case TM_PARSER_GO:
 			ret = g_strconcat(name_full, " ", type, NULL);
+			break;
 		case TM_PARSER_PASCAL:
 		case TM_PARSER_PYTHON:
 			ret = g_strconcat(name_full, ": ", type, NULL);
+			break;
 		default:
 			ret = g_strconcat(type, " ", name_full, NULL);
+			break;
 	}
 
 	g_free(name_full);
