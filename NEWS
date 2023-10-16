@@ -3,6 +3,10 @@ Geany 2.0 (unreleased)
     * The document list in the sidebar has a new tree view. This mode is the
       new default and existing installations automatically use it (PR#1813).
 
+    Internationalization
+    * Updated translations: cz, da, de, fr, es, kk, lv, it, nl, pt, sk, ru, uk
+    * Added translations: si
+
 Geany 1.38 (October 09, 2021)
 
     General
