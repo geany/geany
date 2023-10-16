@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
-"POT-Creation-Date: 2023-10-04 23:48+0200\n"
+"POT-Creation-Date: 2023-10-16 20:23+0200\n"
 "PO-Revision-Date: 2023-08-08 23:24+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -114,11 +114,11 @@ msgstr "_Suchen"
 msgid "Open Selected F_ile"
 msgstr "_Markierte Datei öffnen"
 
-#: data/geany.glade:493 data/geany.glade:7400 src/symbols.c:2205
+#: data/geany.glade:493 data/geany.glade:7400 src/symbols.c:2161
 msgid "Find _Usage"
 msgstr "A_uftreten finden"
 
-#: data/geany.glade:504 data/geany.glade:7409 src/symbols.c:2210
+#: data/geany.glade:504 data/geany.glade:7409 src/symbols.c:2166
 msgid "Find _Document Usage"
 msgstr "_Auftreten im Dokument finden"
 
@@ -395,7 +395,7 @@ msgstr "<b>Projekte</b>"
 msgid "Miscellaneous"
 msgstr "Sonstiges"
 
-#: data/geany.glade:1518 src/prefs.c:1613
+#: data/geany.glade:1518 src/prefs.c:1600
 msgid "General"
 msgstr "Allgemein"
 
@@ -485,7 +485,7 @@ msgstr ""
 "Legt fest, ob die Statuszeile an der unteren Seite des Fensters angezeigt "
 "werden soll oder nicht"
 
-#: data/geany.glade:2022 data/geany.glade:2818 src/prefs.c:1615
+#: data/geany.glade:2022 data/geany.glade:2818 src/prefs.c:1602
 msgid "Interface"
 msgstr "Schnittstelle"
 
@@ -635,7 +635,7 @@ msgstr "<b>Symbolgröße</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>Werkzeugleiste</b>"
 
-#: data/geany.glade:2802 src/prefs.c:1617
+#: data/geany.glade:2802 src/prefs.c:1604
 msgid "Toolbar"
 msgstr "Werkzeugleiste"
 
@@ -1189,26 +1189,23 @@ msgid "<b>Virtual spaces</b>"
 msgstr "<b>Virtuelle Leerzeichen</b>"
 
 #: data/geany.glade:4315
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Markierungsrand anzeigen"
+msgstr "Im Markierungsrand anzeigen"
 
 #: data/geany.glade:4329
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "Macht Zeilenenden mit einem Sonderzeichen sichtbar"
+msgstr "Als unterstrichenen Indikator anzeigen"
 
 #: data/geany.glade:4349
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>Geändert:</b>"
+msgstr "<b>Verlauf</b>"
 
 #: data/geany.glade:4369
 msgid "Display"
 msgstr "Ansicht"
 
 #: data/geany.glade:4385 data/geany.glade:9441 src/keybindings.c:310
-#: src/prefs.c:1619
+#: src/prefs.c:1606
 msgid "Editor"
 msgstr "Editor"
 
@@ -1328,7 +1325,7 @@ msgstr ""
 "Wie oft soll auf Veränderungen geprüft werden? Angabe in Sekunden. 0 "
 "deaktiviert die Funktion."
 
-#: data/geany.glade:4874 data/geany.glade:9557 src/prefs.c:1621
+#: data/geany.glade:4874 data/geany.glade:9557 src/prefs.c:1608
 #: src/tagmanager/tm_parser.c:456 plugins/filebrowser.c:1167
 msgid "Files"
 msgstr "Dateien"
@@ -1352,9 +1349,8 @@ msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Pfad und evtl. Argumente zum Starten eines Browsers"
 
 #: data/geany.glade:4974
-#, fuzzy
 msgid "System default"
-msgstr "S_ystemvorgabe"
+msgstr "Systemvorgabe"
 
 #: data/geany.glade:5030
 msgid "Grep:"
@@ -1381,7 +1377,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Befehle</b>"
 
-#: data/geany.glade:5197 src/keybindings.c:322 src/prefs.c:1623
+#: data/geany.glade:5197 src/keybindings.c:322 src/prefs.c:1610
 msgid "Tools"
 msgstr "Werkzeuge"
 
@@ -1469,7 +1465,7 @@ msgstr ""
 msgid "<b>Template data</b>"
 msgstr "<b>Daten für Vorlagen:</b>"
 
-#: data/geany.glade:5527 src/prefs.c:1625
+#: data/geany.glade:5527 src/prefs.c:1612
 msgid "Templates"
 msgstr "Vorlagen"
 
@@ -1481,7 +1477,7 @@ msgstr "Ä_ndern"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Tastaturkürzel</b>"
 
-#: data/geany.glade:5630 src/plugins.c:1900 src/plugins.c:1937 src/prefs.c:1627
+#: data/geany.glade:5630 src/plugins.c:1899 src/plugins.c:1936 src/prefs.c:1614
 msgid "Keybindings"
 msgstr "Tastenkürzel"
 
@@ -1560,7 +1556,7 @@ msgstr "GTK-Druckunterstützung benutzen"
 msgid "<b>Printing</b>"
 msgstr "<b>Drucken</b>"
 
-#: data/geany.glade:5928 src/prefs.c:1629
+#: data/geany.glade:5928 src/prefs.c:1616
 msgid "Printing"
 msgstr "Drucken"
 
@@ -1702,7 +1698,7 @@ msgstr ""
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminal</b>"
 
-#: data/geany.glade:6301 src/prefs.c:1633 src/vte.c:381
+#: data/geany.glade:6301 src/prefs.c:1620 src/vte.c:381
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1716,7 +1712,7 @@ msgstr ""
 msgid "<b>Various preferences</b>"
 msgstr "<b>Verschiedene Einstellungen</b>"
 
-#: data/geany.glade:6429 src/prefs.c:1631
+#: data/geany.glade:6429 src/prefs.c:1618
 msgid "Various"
 msgstr "Verschiedenes"
 
@@ -1745,7 +1741,7 @@ msgid "Sa_ve All"
 msgstr "A_lle speichern"
 
 #: data/geany.glade:6579 src/callbacks.c:352 src/document.c:1671
-#: src/document.c:3619 src/sidebar.c:1215
+#: src/document.c:3622 src/sidebar.c:1215
 msgid "_Reload"
 msgstr "Neu _laden"
 
@@ -1873,7 +1869,7 @@ msgstr "_Nächstes"
 msgid "Find _Previous"
 msgstr "_Vorheriges"
 
-#: data/geany.glade:7274 src/symbols.c:2215
+#: data/geany.glade:7274 src/symbols.c:2171
 msgid "Find in F_iles..."
 msgstr "In _Dateien suchen…"
 
@@ -2763,7 +2759,7 @@ msgstr "Speichert und benennt die Datei um"
 msgid "Error"
 msgstr "Fehler"
 
-#: src/dialogs.c:683 src/dialogs.c:762 src/dialogs.c:1312 src/win32.c:297
+#: src/dialogs.c:683 src/dialogs.c:762 src/dialogs.c:1298 src/win32.c:297
 msgid "Question"
 msgstr "Frage"
 
@@ -2788,11 +2784,11 @@ msgstr "»%s« wurde nicht gespeichert."
 msgid "Do you want to save it before closing?"
 msgstr "Möchten Sie vor dem Schließen speichern?"
 
-#: src/dialogs.c:866
+#: src/dialogs.c:852
 msgid "Choose font"
 msgstr "Schriftart auswählen"
 
-#: src/dialogs.c:1160
+#: src/dialogs.c:1146
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -2800,22 +2796,22 @@ msgstr ""
 "Es ist ein Fehler aufgetreten oder Datei-Informationen konnten nicht gelesen "
 "werden (z.B. bei einer neuen, noch nicht gespeicherten Datei)."
 
-#: src/dialogs.c:1179 src/dialogs.c:1180 src/dialogs.c:1181 src/dialogs.c:1187
-#: src/dialogs.c:1188 src/dialogs.c:1189 src/symbols.c:1991 src/symbols.c:2007
+#: src/dialogs.c:1165 src/dialogs.c:1166 src/dialogs.c:1167 src/dialogs.c:1173
+#: src/dialogs.c:1174 src/dialogs.c:1175 src/symbols.c:1947 src/symbols.c:1963
 #: src/ui_utils.c:286
 msgid "unknown"
 msgstr "unbekannt"
 
-#: src/dialogs.c:1194
+#: src/dialogs.c:1180
 #, c-format
 msgid "%s Properties"
 msgstr "%s Eigenschaften"
 
-#: src/dialogs.c:1226 src/ui_utils.c:290
+#: src/dialogs.c:1212 src/ui_utils.c:290
 msgid "(with BOM)"
 msgstr "(mit BOM)"
 
-#: src/dialogs.c:1226
+#: src/dialogs.c:1212
 msgid "(without BOM)"
 msgstr "(ohne BOM)"
 
@@ -2973,22 +2969,22 @@ msgstr "Konnte Datei »%s« nicht schreiben: fwrite() fehlgeschlagen: %s"
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Konnte Datei »%s« nicht schließen: fclose() fehlgeschlagen: %s"
 
-#: src/document.c:2066 src/document.c:3620
+#: src/document.c:2066 src/document.c:3623
 msgid "_Overwrite"
 msgstr "Ü_berschreiben?"
 
-#: src/document.c:2068 src/document.c:3623
+#: src/document.c:2068 src/document.c:3626
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr ""
 "Die Datei »%s« auf dem Datenträger ist aktueller als die momentan geöffnete "
 "Version."
 
-#: src/document.c:2076 src/document.c:3672
+#: src/document.c:2076 src/document.c:3675
 msgid "Try to resave the file?"
 msgstr "Versuchen die Datei erneut zu speichern?"
 
-#: src/document.c:2077 src/document.c:3673
+#: src/document.c:2077 src/document.c:3676
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "»%s« wurde nicht auf dem Datenträger gefunden!"
@@ -3041,21 +3037,21 @@ msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 msgstr[1] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 
-#: src/document.c:3622
+#: src/document.c:3625
 msgid "Do you want to reload it?"
 msgstr "Möchten Sie die Datei neu laden?"
 
-#: src/editor.c:4467
+#: src/editor.c:4463
 msgid "Enter Tab Width"
 msgstr "Tabulatorbreite:"
 
-#: src/editor.c:4468
+#: src/editor.c:4464
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Geben Sie die Anzahl der Leerzeichen an, welche durch den Tabulator ersetzt "
 "werden sollen."
 
-#: src/editor.c:4684
+#: src/editor.c:4680
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Achtung: Keine gewöhnliche harte Tabulatorbreite:: %d != 8!"
@@ -3350,7 +3346,7 @@ msgid "Document"
 msgstr "Dokument"
 
 #: src/keybindings.c:321 src/keybindings.c:696 src/project.c:520
-#: src/ui_utils.c:2270
+#: src/ui_utils.c:2263
 msgid "Build"
 msgstr "Erstellen"
 
@@ -4144,23 +4140,23 @@ msgstr ""
 msgid "No plugins available."
 msgstr "Keine Plugins gefunden."
 
-#: src/plugins.c:1761
+#: src/plugins.c:1760
 msgid "Active"
 msgstr "Aktiv"
 
-#: src/plugins.c:1768
+#: src/plugins.c:1767
 msgid "Plugin"
 msgstr "Plugin"
 
-#: src/plugins.c:1885
+#: src/plugins.c:1884
 msgid "Plugins"
 msgstr "Plugins"
 
-#: src/plugins.c:1926
+#: src/plugins.c:1925
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Plugins, die beim Starten geladen werden sollen:"
 
-#: src/plugins.c:2019
+#: src/plugins.c:2018
 #, c-format
 msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
@@ -4182,46 +4178,46 @@ msgstr "Tasten festlegen"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Welche Tastenkombination soll für »%s« genutzt werden?"
 
-#: src/prefs.c:226 src/symbols.c:2164 src/sidebar.c:1244
+#: src/prefs.c:224 src/symbols.c:2120 src/sidebar.c:1244
 msgid "_Expand All"
 msgstr "Alle a_usklappen"
 
-#: src/prefs.c:231 src/symbols.c:2169 src/sidebar.c:1250
+#: src/prefs.c:229 src/symbols.c:2125 src/sidebar.c:1250
 msgid "_Collapse All"
 msgstr "Alle _einklappen"
 
-#: src/prefs.c:291
+#: src/prefs.c:278
 msgid "Action"
 msgstr "Aktion"
 
-#: src/prefs.c:296
+#: src/prefs.c:283
 msgid "Shortcut"
 msgstr "Tastenkürzel"
 
-#: src/prefs.c:1487
+#: src/prefs.c:1474
 msgid "_Allow"
 msgstr "_Zulassen"
 
-#: src/prefs.c:1489
+#: src/prefs.c:1476
 msgid "_Override"
 msgstr "_Ersetzen"
 
-#: src/prefs.c:1490
+#: src/prefs.c:1477
 msgid "Override that keybinding?"
 msgstr "Diese Tastenkombination ersetzen?"
 
-#: src/prefs.c:1491
+#: src/prefs.c:1478
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "Die Tastenkombination '%s' wird bereits für »%s« verwendet."
 
-#: src/prefs.c:1708
+#: src/prefs.c:1695
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Geben Sie hier die Pfade zu den einzelnen Werkzeugen an. Programme die nicht "
 "benötigt werden, können freigelassen werden."
 
-#: src/prefs.c:1713
+#: src/prefs.c:1700
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -4231,7 +4227,7 @@ msgstr ""
 "Konsultieren Sie die Dokumentation, um mehr über die Funktionsweise von "
 "Vorlagen zu erfahren."
 
-#: src/prefs.c:1718
+#: src/prefs.c:1705
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -4242,7 +4238,7 @@ msgstr ""
 "einfach Doppelklicken oder markieren und auf Ändern klicken. Zudem können "
 "Sie die Tastenkombinationen auch direkt eingeben."
 
-#: src/prefs.c:1723
+#: src/prefs.c:1710
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -4743,18 +4739,18 @@ msgstr "Unbekannter Fehler beim Ausführen des Kind-Prozess aufgetreten."
 msgid "Value"
 msgstr "Wert"
 
-#: src/symbols.c:1218
+#: src/symbols.c:1221
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Unbekannte Dateierweiterung für »%s«.\n"
 
-#: src/symbols.c:1244
+#: src/symbols.c:1247
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
 "Die Tag-Datei konnte nicht erstellt werden -- Möglicherweise konnten keine "
 "Symbole gefunden werden.\n"
 
-#: src/symbols.c:1251
+#: src/symbols.c:1254
 #, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -4763,7 +4759,7 @@ msgstr ""
 "Verwendung: %s -g <Tag-Datei> <Datei-Liste>\n"
 "\n"
 
-#: src/symbols.c:1252
+#: src/symbols.c:1255
 #, c-format
 msgid ""
 "Example:\n"
@@ -4774,53 +4770,43 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: src/symbols.c:1266
+#: src/symbols.c:1269
 msgid "Load Tags File"
 msgstr "Tag-Datei laden"
 
-#: src/symbols.c:1273
+#: src/symbols.c:1276
 msgid "Geany tags file (*.*.tags)"
 msgstr "Geany Tag-Datei (*.*.tags)"
 
-#: src/symbols.c:1293
+#: src/symbols.c:1296
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s Tag-Datei »%s« geladen."
 
-#: src/symbols.c:1296
+#: src/symbols.c:1299
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Konnte Tag-Datei »%s« nicht laden."
 
-#: src/symbols.c:1518
-#, c-format
-msgid "<b>%s:%lu:</b> %s"
-msgstr "<b>%s:%lu:</b> %s"
-
-#: src/symbols.c:1521
-#, c-format
-msgid "<i>%s:%lu:</i> %s"
-msgstr "<i>%s:%lu:</i> %s"
-
-#: src/symbols.c:1742
+#: src/symbols.c:1698
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "(Vorwärts-)Deklaration von »%s« nicht gefunden."
 
-#: src/symbols.c:1744
+#: src/symbols.c:1700
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definition von »%s« nicht gefunden."
 
-#: src/symbols.c:2179
+#: src/symbols.c:2135
 msgid "Sort by _Name"
 msgstr "Nach _Namen sortieren"
 
-#: src/symbols.c:2186
+#: src/symbols.c:2142
 msgid "Sort by _Appearance"
 msgstr "Nach _Auftreten sortieren"
 
-#: src/symbols.c:2196
+#: src/symbols.c:2152
 msgid "_Group by Type"
 msgstr "_Gruppieren nach Typ"
 
@@ -5221,9 +5207,8 @@ msgid "_Set Custom Date Format"
 msgstr "_Benutzerdefiniertes Datumsformat einstellen"
 
 #: src/ui_utils.c:2004
-#, fuzzy
 msgid "Select Project Base Path"
-msgstr "Auswahl des Projektbasisverzeichnisses"
+msgstr "Projektbasisverzeichnis auswählen"
 
 #: src/ui_utils.c:2029
 msgid "Select Folder"
@@ -5233,19 +5218,19 @@ msgstr "Ordner wählen"
 msgid "Select File"
 msgstr "Datei wählen"
 
-#: src/ui_utils.c:2231
+#: src/ui_utils.c:2224
 msgid "_Filetype Configuration"
 msgstr "_Dateityp-Einstellungen"
 
-#: src/ui_utils.c:2268
+#: src/ui_utils.c:2261
 msgid "Save All"
 msgstr "Alle speichern"
 
-#: src/ui_utils.c:2269
+#: src/ui_utils.c:2262
 msgid "Close All"
 msgstr "Alle schließen"
 
-#: src/ui_utils.c:2505
+#: src/ui_utils.c:2498
 msgid "Geany cannot start!"
 msgstr "Geany kann nicht starten!"
 
@@ -5254,13 +5239,12 @@ msgid "Select Browser"
 msgstr "Browserauswahl"
 
 #: src/utils.c:100
-#, fuzzy
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command "
 "or leave it empty in order to spawn the system default browser."
 msgstr ""
 "Konnte den konfigurierten Browser nicht öffnen. Bitte prüfen Sie die "
-"Konfiguration und/oder wählen einen anderen Browser."
+"Konfiguration und/oder wählen einen anderen Browser. Ein leerer Eintrag wird den System-Standard-Browser öffnen."
 
 #: src/utils.c:388
 msgid "Windows (CRLF)"
@@ -5291,19 +5275,15 @@ msgstr "LF"
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "Ungültige VTE-Bibliothek \"%s\": Es fehlt das Symbol \"%s\""
 
-#: src/vte.c:755
+#: src/vte.c:754
 msgid "_Set Path From Document"
 msgstr "Pfad des Dokumentes _übernehmen"
 
-#: src/vte.c:760
+#: src/vte.c:759
 msgid "_Restart Terminal"
 msgstr "Terminal _neustarten"
 
-#: src/vte.c:793
-msgid "_Input Methods"
-msgstr "Eingabe_methoden"
-
-#: src/vte.c:888
+#: src/vte.c:864
 msgid ""
 "Directory not changed because the terminal may contain some input (press "
 "Ctrl+C or Enter to clear it)."
@@ -5453,9 +5433,8 @@ msgid "Environment"
 msgstr "Umgebung"
 
 #: src/tagmanager/tm_parser.c:229
-#, fuzzy
 msgid "Part"
-msgstr "Parts"
+msgstr "Teil"
 
 #: src/tagmanager/tm_parser.c:230 src/tagmanager/tm_parser.c:335
 #: src/tagmanager/tm_parser.c:595
@@ -5477,7 +5456,7 @@ msgstr "Unterunterabschnitt"
 
 #: src/tagmanager/tm_parser.c:234
 msgid "Bibitem"
-msgstr ""
+msgstr "Bibitem"
 
 #: src/tagmanager/tm_parser.c:257
 msgid "Articles"
@@ -5599,13 +5578,12 @@ msgid "Functions / Procedures"
 msgstr "Funktionen/Prozeduren"
 
 #: src/tagmanager/tm_parser.c:485
-#, fuzzy
 msgid "Variables / Signals / Ports"
-msgstr "Variablen/Signale"
+msgstr "Variablen / Signale / Ports"
 
 #: src/tagmanager/tm_parser.c:486
 msgid "Processes / Blocks / Components"
-msgstr "Prozesse/Blöcke/Komponenten"
+msgstr "Prozesse / Blöcke / Komponenten"
 
 #: src/tagmanager/tm_parser.c:527
 msgid "Type constructors"
@@ -5649,29 +5627,24 @@ msgid "Structures"
 msgstr "Strukturen"
 
 #: src/tagmanager/tm_parser.c:737
-#, fuzzy
 msgid "Chapters"
 msgstr "Kapitel"
 
 #: src/tagmanager/tm_parser.c:739
-#, fuzzy
 msgid "Subsections"
 msgstr "Unterabschnitt"
 
 #: src/tagmanager/tm_parser.c:740
-#, fuzzy
 msgid "Subsubsections"
-msgstr "Unterunterabschnitt"
+msgstr "Unter-Unterabschnitt"
 
 #: src/tagmanager/tm_parser.c:741
-#, fuzzy
 msgid "Level 4 sections"
-msgstr "Speicheraktionen"
+msgstr "Stufe 4-Abschnitt"
 
 #: src/tagmanager/tm_parser.c:742
-#, fuzzy
 msgid "Level 5 sections"
-msgstr "Speicheraktionen"
+msgstr "Stufe 5-Abschnitt"
 
 #: src/tagmanager/tm_parser.c:769
 msgid "Events"
@@ -5722,9 +5695,8 @@ msgid "Section Level 4"
 msgstr "Überschrift Ebene 4"
 
 #: src/tagmanager/tm_parser.c:846
-#, fuzzy
 msgid "Section Level 5"
-msgstr "Überschrift Ebene 1"
+msgstr "Überschrift Ebene 5"
 
 #: src/tagmanager/tm_parser.c:856
 msgid "Parts"
@@ -5751,18 +5723,16 @@ msgid "Unknowns"
 msgstr "Unbekannte"
 
 #: src/tagmanager/tm_parser.c:1065
-#, fuzzy
 msgid "Packages"
-msgstr "Package"
+msgstr "Pakete"
 
 #: src/tagmanager/tm_parser.c:1068
 msgid "Tasks"
-msgstr ""
+msgstr "Aufgaben"
 
 #: src/tagmanager/tm_parser.c:1092
-#, fuzzy
 msgid "Regions"
-msgstr "Abschnitte"
+msgstr "Regionen"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -6251,6 +6221,9 @@ msgid ""
 "Date/_Time format for backup files (for a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"
 msgstr ""
+"Datums- und Zeitformat für die Backup-Dateien. Eine vollständige "
+"Liste gültiger Platzhalter ist unter https://docs.gtk.org/glib/method."
+"DateTime.format.html verfügbar):"
 
 #: plugins/saveactions.c:830
 msgid "Directory _levels to include in the backup destination:"
@@ -6264,34 +6237,45 @@ msgstr "Fenster teilen"
 msgid "Splits the editor view into two windows."
 msgstr "Teilt das Editorfenster in zwei Teilfenster."
 
-#: plugins/splitwindow.c:297
+#: plugins/splitwindow.c:271
 msgid "Show the current document"
 msgstr "Zeige das aktuelle Dokument"
 
-#: plugins/splitwindow.c:317 plugins/splitwindow.c:450
-#: plugins/splitwindow.c:465
+#: plugins/splitwindow.c:288 plugins/splitwindow.c:421
+#: plugins/splitwindow.c:436
 msgid "_Unsplit"
 msgstr "Teilung _aufheben"
 
-#: plugins/splitwindow.c:432
+#: plugins/splitwindow.c:403
 msgid "_Split Window"
 msgstr "Fenster _teilen"
 
-#: plugins/splitwindow.c:440
+#: plugins/splitwindow.c:411
 msgid "_Side by Side"
 msgstr "_Seite an Seite"
 
-#: plugins/splitwindow.c:445
+#: plugins/splitwindow.c:416
 msgid "_Top and Bottom"
 msgstr "_Oben und Unten"
 
-#: plugins/splitwindow.c:461
+#: plugins/splitwindow.c:432
 msgid "Side by Side"
 msgstr "Seite an Seite"
 
-#: plugins/splitwindow.c:463
+#: plugins/splitwindow.c:434
 msgid "Top and Bottom"
 msgstr "Oben und Unten"
+
+#, c-format
+#~ msgid "<b>%s:%lu:</b> %s"
+#~ msgstr "<b>%s:%lu:</b> %s"
+
+#, c-format
+#~ msgid "<i>%s:%lu:</i> %s"
+#~ msgstr "<i>%s:%lu:</i> %s"
+
+#~ msgid "_Input Methods"
+#~ msgstr "Eingabe_methoden"
 
 #~ msgid "Use project-based session files"
 #~ msgstr "Sitzung im Projekt speichern und wieder öffnen"
