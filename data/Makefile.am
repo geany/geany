@@ -113,7 +113,6 @@ templates = \
 	templates/bsd \
 	templates/changelog \
 	templates/fileheader \
-	templates/fileheader3 \
 	templates/function \
 	templates/gpl \
 	templates/gpl3
