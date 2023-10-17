@@ -234,7 +234,7 @@ sci_cflags += [ '-std=c++17', '-Wno-non-virtual-dtor', '-DNDEBUG', '-DSCI_LEXER'
 
 iregex = include_directories('ctags/gnu_regex')
 ifnmatch = include_directories('ctags/fnmatch')
-ictags = include_directories('ctags/main', 'ctags/parsers', 'ctags/dsl')
+ictags = include_directories('ctags/main', 'ctags/parsers', 'ctags/dsl', 'ctags/libreadtags')
 itagmanager = include_directories('src/tagmanager')
 iscintilla = include_directories('scintilla/include', 'scintilla/lexilla/include')
 igeany = include_directories('src')
@@ -474,6 +474,8 @@ ctags = static_library('ctags',
 	'ctags/dsl/es.h',
 	'ctags/dsl/optscript.c',
 	'ctags/dsl/optscript.h',
+	'ctags/libreadtags/readtags.c',
+	'ctags/libreadtags/readtags.h',
 	'ctags/main/args.c',
 	'ctags/main/args_p.h',
 	'ctags/main/colprint.c',
