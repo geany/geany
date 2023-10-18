@@ -1583,6 +1583,26 @@ ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
 }
 
 
+/* Creates a @c GtkImageMenuItem with a named icon and a custom label.
+ * @param icon_name The icon name.
+ * @param label Menu item label, can include mnemonics.
+ * @return @transfer{floating} The new @c GtkImageMenuItem.
+ */
+GtkWidget *
+ui_image_menu_item_new_with_icon_name(const gchar *icon_name, const gchar *label)
+{
+	return g_object_new(GTK_TYPE_IMAGE_MENU_ITEM,
+			"label", label,
+			"use-underline", TRUE,
+			"image", g_object_new(GTK_TYPE_IMAGE,
+					"icon-name", icon_name,
+					"icon-size", GTK_ICON_SIZE_MENU,
+					"visible", TRUE,
+					NULL),
+			NULL);
+}
+
+
 static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
 										GdkEvent *event, gpointer data)
 {
