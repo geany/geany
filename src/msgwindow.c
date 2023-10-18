@@ -649,7 +649,13 @@ static GtkWidget *create_message_popup_menu(gint type)
 
 	message_popup_menu = gtk_menu_new();
 
-	clear = ui_image_menu_item_new_with_icon_name("edit-clear-symbolic", _("_Clear"));
+	/* this is a hack not to add a new translation and use GtkStock's one */
+	GtkStockItem stock_item;
+	const gchar *clear_label = _("_Clear");
+	if (gtk_stock_lookup(GTK_STOCK_CLEAR, &stock_item))
+		clear_label = stock_item.label;
+
+	clear = ui_image_menu_item_new_with_icon_name("edit-clear-symbolic", clear_label);
 	gtk_widget_show(clear);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), clear);
 	g_signal_connect(clear, "activate",
