@@ -117,6 +117,8 @@ void ui_add_document_sensitive(GtkWidget *widget);
 
 GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
 
+GtkWidget *ui_image_menu_item_new_with_icon_name(const gchar *icon_name, const gchar *label);
+
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
 void ui_progress_bar_start(const gchar *text);
