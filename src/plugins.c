@@ -1872,7 +1872,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	/* filter */
 	pm_widgets.filter_entry = filter_entry = gtk_entry_new();
-	gtk_entry_set_icon_from_stock(GTK_ENTRY(filter_entry), GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_FIND);
+	gtk_entry_set_icon_from_icon_name(GTK_ENTRY(filter_entry), GTK_ENTRY_ICON_PRIMARY, "edit-find-symbolic");
 	ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
 	g_signal_connect(filter_entry, "changed", G_CALLBACK(on_pm_tree_filter_entry_changed_cb), NULL);
 	g_signal_connect(filter_entry, "icon-release",

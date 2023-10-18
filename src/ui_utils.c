@@ -1604,7 +1604,7 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
 GEANY_API_SYMBOL
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
-	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR,
+	g_object_set(entry, "secondary-icon-name", "edit-clear-symbolic",
 		"secondary-icon-activatable", TRUE, NULL);
 	g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
 }
