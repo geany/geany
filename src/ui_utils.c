@@ -1563,6 +1563,24 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 }
 
 
+/* Creates a @c GtkButton with custom text and a named icon similar to
+ * @c gtk_button_new_from_icon_name().
+ * @param icon_name The icon name.
+ * @param text Button label text, can include mnemonics.
+ *
+ * @return @transfer{floating} The new @c GtkButton.
+ */
+GtkWidget *ui_button_new_with_icon_name(const gchar *icon_name, const gchar *text)
+{
+	return g_object_new(GTK_TYPE_BUTTON,
+			"label", text,
+			"use-underline", TRUE,
+			"visible", TRUE,
+			"image", gtk_image_new_from_icon_name(icon_name, GTK_ICON_SIZE_BUTTON),
+			NULL);
+}
+
+
 /** Creates a @c GtkImageMenuItem with a stock image and a custom label.
  * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
  * @param label Menu item label, can include mnemonics.

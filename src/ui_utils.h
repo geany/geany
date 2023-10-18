@@ -113,6 +113,8 @@ GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkE
 
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
 
+GtkWidget *ui_button_new_with_icon_name(const gchar *icon_name, const gchar *text);
+
 void ui_add_document_sensitive(GtkWidget *widget);
 
 GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
