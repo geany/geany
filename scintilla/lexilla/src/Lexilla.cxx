@@ -172,6 +172,7 @@ static void AddGeanyLexers()
 	catalogueLexilla.AddLexerModules({
 		&lmAbaqus,
 		&lmAda,
+		&lmAsciidoc,
 		&lmAsm,
 		&lmAU3,
 		&lmBash,

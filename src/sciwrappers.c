@@ -701,7 +701,14 @@ void sci_set_lexer(ScintillaObject *sci, guint lexer_id)
 	gint old = sci_get_lexer(sci);
 
 	/* TODO, LexerNameFromID() is already deprecated */
-	ILexer5 *lexer = CreateLexer(LexerNameFromID(lexer_id));
+	const char *lexer_name = LexerNameFromID(lexer_id);
+	if (! lexer_name)
+	{
+		g_warning("Failed to find lexer for ID %u", lexer_id);
+		return;
+	}
+
+	ILexer5 *lexer = CreateLexer(lexer_name);
 
 	SSM(sci, SCI_SETILEXER, 0, (uintptr_t) lexer);
 
