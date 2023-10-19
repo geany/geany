@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Geany / PoHelper 1.39\n"
+"X-Generator: Geany / PoHelper 2.0\n"
 
 #: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
