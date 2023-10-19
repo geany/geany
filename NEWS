@@ -1,4 +1,4 @@
-Geany 2.0 (unreleased)
+Geany 2.0 (October 19, 2023)
 
     General
     * Split "session data" into session.conf, preferences are written to

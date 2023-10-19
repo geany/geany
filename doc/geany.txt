@@ -14,7 +14,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2021-10-09
+:Date: 2023-10-19
 :Version: |(version)|
 
 Copyright © 2005 The Geany contributors
