@@ -8,7 +8,7 @@ and summarize the interesting ones.  Use `git log --author='name'`
 to filter commits by a particular developer name.
 
 Ensure version numbers are all updated in:
-	configure.ac geany_private.rc geany.exe.manifest doc/geany.txt
+	configure.ac meson.build geany_private.rc geany.exe.manifest doc/geany.txt
 Ensure release date is updated in (use scripts/set-release-date if not):
 	NEWS doc/geany.txt doc/geany.1.in
 Check GEANY_CODENAME is set in src/geany.h.
@@ -24,7 +24,8 @@ version number (e.g. `/home/geany/publish-release 1.36`).
 Make sure the public part of the GPG key used to sign the archives
 can be found on the download page.
 
-Windows builds (enrico?).
+Windows builds are created mostly by Enrico following the instructions on
+https://wiki.geany.org/howtos/win32/msys2.
 
 Create a signed tag for the release in Git with 'git tag -s <version>'.
 
@@ -39,7 +40,7 @@ Put a news item on SourceForge (https://sourceforge.net/p/geany/news/)
 and a new release on GitHub (https://github.com/geany/geany/releases --
 use scripts/github-news to generate the contents).
 
-Update the topic on the IRC channel (/msg chanserv op #geany).
+Update the topic on the Matrix channel.
 
 For non-master releases, merge NEWS into master and any branch-only
 commits that need to merged.
