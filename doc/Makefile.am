@@ -4,6 +4,7 @@ if INSTALL_HTML_DOCS
 htmldocimagesdir = $(docdir)/html/images
 dist_htmldocimages_DATA = \
 	images/build_menu_commands_dialog.png \
+	images/edit_change_history.png \
 	images/find_dialog.png \
 	images/find_in_files_dialog.png \
 	images/main_window.png \

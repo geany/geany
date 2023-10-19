@@ -223,6 +223,10 @@ The Geany window is shown in the following figure:
 
 .. image:: ./images/main_window.png
 
+.. note::
+    Screenshots in this document are taken with the default GTK Adwaita
+    theme, but Geany will adapt to the desktop GTK theme that is set.
+
 The workspace has the following parts:
 
 * The menu.
@@ -2417,6 +2421,38 @@ Only for rectangular selections
 
 Always
     Always show virtual spaces beyond the end of lines
+
+
+Change History
+``````````````
+
+The *change history* feature enables changed text in a document to be shown in the markers margin or by underlining the text.
+By default, the *change history* feature is disabled.
+
+Newly added, modified and removed lines or words are highlighted to easily track changes to the opened
+document. The changes can be shown as vertical bars in the markers margin and/or as underlines in
+the text directly.
+
+.. note::
+    This feature may use a moderate amount of memory, especially if there are many or big changes in the document.
+    Also, modification information is not kept when re-opening a document - all change markers will be lost.
+
+
+.. image:: ./images/edit_change_history.png
+
+The image shows the default visuals:
+
+* inserted characters appear with coloured underlines
+* points where characters were deleted are shown with small triangles
+* the margin shows a block indicating the overall state of the line, prioritizing the more consequential modified states
+* the states are modified (orange), saved (green), saved then reverted to modified (green-yellow), and
+  saved then reverted to original (cyan).
+
+Show in markers margin
+    Changes are shown in the markers margin as vertical bars
+
+Show as underline indicators
+    Changes are shown as underlines in the text directly
 
 
 Files preferences
