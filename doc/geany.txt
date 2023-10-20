@@ -2766,9 +2766,9 @@ save_config_on_file_change        Automatically save Geany's configuration     t
                                   configuration directory is on a slow drive,
                                   network share or similar and you experience
                                   problems.
-extract_filetype_regex            Regex to extract filetype name from file     See link    immediately
+extract_filetype_regex            Regex to extract filetype name from file     See below.  immediately
                                   via capture group one.
-                                  See `ft_regex`_ for default.
+                                  See `Filetype Regex`_ for details.
 **``search`` group**
 find_selection_type               See `Find selection`_.                       0           immediately
 replace_and_find_by_default       Set ``Replace & Find`` button as default so  true        immediately
@@ -2830,6 +2830,29 @@ Placeholder   Description
   ``%Y``      The Scintilla style number at the caret position. This is
               useful if you're debugging color schemes or related code.
 ============  ===========================================================
+
+
+Filetype Regex
+``````````````
+
+The ``extract_filetype_regex`` setting contains the regex that is used
+to extract the filetype name from the file with the first capture group.
+The default value finds filetypes contained in Emacs-style tags.
+See `keyfile.c`_.
+
+For example, C and C++ header files can be differentiated by the following
+first-line comments::
+
+    /* -*- C -*- */
+    // -*- C++ -*-
+
+Filetypes that Geany recognizes are contained in ``filetype_extensions.conf``,
+which is described at `filetype extensions`_.  In case different options are
+desired for another editor, the Geany filetype can be listed first, or the
+regular expression modified as needed::
+
+    -*- Lisp -*- mode: Lisp; fill-column: 75; comment-column: 50; -*-
+
 
 Terminal (VTE) preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -5682,13 +5705,10 @@ GEANY_TOGGLE_MARK               A string which is used to mark a toggled      "~
                                 comment.
 GEANY_MAX_AUTOCOMPLETE_WORDS    How many autocompletion suggestions should    30
                                 Geany provide.
-GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   See below.
-                                files.
+
+GEANY_DEFAULT_FILETYPE_REGEX    The default regex to extract filetypes from   ``-\*-\s*([^\s]+)\s*-\*-``
+                                files.  See `Filetype Regex`_ for usage.
 ==============================  ============================================  ==================
-
-.. _ft_regex:
-
-The GEANY_DEFAULT_FILETYPE_REGEX default value is  -\\*-\\s*([^\\s]+)\\s*-\\*- which finds Emacs filetypes.
 
 The GEANY_DEFAULT_TOOLS_TERMINAL default value on Windows is::
 
