@@ -264,7 +264,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 
 	w->check_print_basename = gtk_check_button_new_with_mnemonic(_("Use the basename of the printed file"));
 	gtk_box_pack_start(GTK_BOX(vbox30), w->check_print_basename, FALSE, FALSE, 0);
-	gtk_widget_set_tooltip_text(w->check_print_basename, _("Print only the basename(without the path) of the printed file"));
+	gtk_widget_set_tooltip_text(w->check_print_basename, _("Print only the basename (without the path) of the printed file"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_basename), printing_prefs.page_header_basename);
 
 	hbox10 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
