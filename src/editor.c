@@ -1313,13 +1313,14 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 
 	switch (lexer)
 	{
+		case SCLEX_BASH:
 		case SCLEX_CPP:
 		case SCLEX_D:
 		case SCLEX_HTML:	/* for PHP & JS */
-		case SCLEX_PHPSCRIPT:
+		case SCLEX_JSON:
 		case SCLEX_PASCAL:	/* for multiline comments? */
-		case SCLEX_BASH:
 		case SCLEX_PERL:
+		case SCLEX_PHPSCRIPT:
 		case SCLEX_TCL:
 		case SCLEX_R:
 		case SCLEX_RUST:
