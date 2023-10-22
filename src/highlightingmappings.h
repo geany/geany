@@ -1352,16 +1352,13 @@ static const HLStyle highlighting_styles_PROLOG[] =
 	{ SCE_VISUALPROLOG_ANONYMOUS,				"anonymous",				FALSE },
 	{ SCE_VISUALPROLOG_NUMBER,					"number",					FALSE },
 	{ SCE_VISUALPROLOG_OPERATOR,				"operator",					FALSE },
-	{ SCE_VISUALPROLOG_CHARACTER,				"character",				FALSE },
-	{ SCE_VISUALPROLOG_CHARACTER_TOO_MANY,		"character_too_many",		FALSE },
-	{ SCE_VISUALPROLOG_CHARACTER_ESCAPE_ERROR,	"character_escape_error",	FALSE },
 	{ SCE_VISUALPROLOG_STRING,					"string",					FALSE },
+	{ SCE_VISUALPROLOG_STRING_QUOTE,			"string_quote",				FALSE },
 	{ SCE_VISUALPROLOG_STRING_ESCAPE,			"string_escape",			FALSE },
 	{ SCE_VISUALPROLOG_STRING_ESCAPE_ERROR,		"string_escape_error",		FALSE },
-	{ SCE_VISUALPROLOG_STRING_EOL_OPEN,			"string_eol_open",			FALSE },
-	{ SCE_VISUALPROLOG_STRING_VERBATIM,			"string_verbatim",			FALSE },
-	{ SCE_VISUALPROLOG_STRING_VERBATIM_SPECIAL,	"string_verbatim_special",	FALSE },
-	{ SCE_VISUALPROLOG_STRING_VERBATIM_EOL,		"string_verbatim_eol",		FALSE },
+	{ SCE_VISUALPROLOG_STRING_EOL,				"string_eol",				FALSE },
+	{ SCE_VISUALPROLOG_EMBEDDED,				"embedded",					FALSE },
+	{ SCE_VISUALPROLOG_PLACEHOLDER,				"placeholder",				FALSE },
 };
 static const HLKeyword highlighting_keywords_PROLOG[] =
 {
