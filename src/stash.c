@@ -75,6 +75,10 @@
  * should be efficient enough.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "stash.h"
 
 #include "support.h" /* only for _("text") */
