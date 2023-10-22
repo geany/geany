@@ -6272,13 +6272,13 @@ msgid ""
 "Date/_Time format for backup files (for a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"
 msgstr ""
-"Format de date et heure pour les fichiers de sauvegarde (référez-vous à "
+"_Format de date et heure pour les fichiers de sauvegarde (référez-vous à "
 "https://docs.gtk.org/glib/method.DateTime.format.html pour la liste des "
 "spécificateurs de conversion disponibles) :"
 
 #: plugins/saveactions.c:830
 msgid "Directory _levels to include in the backup destination:"
-msgstr "_Niveaux de dossiers à inclure dans la sauvegarde :"
+msgstr "Niveau_x de dossiers à inclure dans la sauvegarde :"
 
 #: plugins/splitwindow.c:33
 msgid "Split Window"
