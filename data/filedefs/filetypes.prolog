@@ -13,16 +13,13 @@ variable=default
 anonymous=default
 number=number_1
 operator=operator
-character=character
-character_too_many=error
-character_escape_error=error
 string=string_1
+string_quote=string_1
 string_escape=string_1
 string_escape_error=error
-string_eol_open=string_1
-string_verbatim=string_1
-string_verbatim_special=string_1
-string_verbatim_eol=string_1
+string_eol=string_1
+embedded=string_1
+placeholder=string_1
 
 [keywords]
 # all items must be in one line
