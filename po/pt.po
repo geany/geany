@@ -4,15 +4,15 @@
 #
 # André Glória <gloria_dot_andre_at_gmail_dot_com>, 2009 - 2014.
 # Pedro Albuquerque <pmra@protonmail.com>, 2015 - 2021.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2022.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-05 02:11+0000\n"
-"PO-Revision-Date: 2023-10-07 06:29+0100\n"
-"Last-Translator: Pedro Albuquerque <pmra@protonmail.com>\n"
+"PO-Revision-Date: 2023-10-23 00:03+0100\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <translation-team-pt@lists.sourceforge.net>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -529,7 +529,7 @@ msgstr "Mudar para o último documento usado após fechar um separador"
 
 #: ../data/geany.glade.h:110
 msgid "Set limit on visible characters in tab label."
-msgstr "Definir limite de caracteres no rótulo do separador"
+msgstr "Definir limite de caracteres no rótulo do separador."
 
 #: ../data/geany.glade.h:111
 msgid "Tab label length:"
