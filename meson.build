@@ -94,8 +94,6 @@ foreach h : check_headers
 	define = 'HAVE_' + h.underscorify().to_upper()
 	if cc.has_header(h)
 		cdata.set(define, 1)
-	else
-		cdata.set(define, false)
 	endif
 endforeach
 
@@ -104,8 +102,6 @@ foreach f : check_functions
 	ccprefix = '\n'.join([gnu_source ? '#define _GNU_SOURCE' : '', f.get(1)])
 	if cc.has_function(f.get(0), prefix: ccprefix, dependencies: deps)
 		cdata.set(define, 1)
-	else
-		cdata.set(define, false)
 	endif
 endforeach
 
@@ -127,10 +123,8 @@ cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
 cdata.set('GETTEXT_PACKAGE', 'PACKAGE')
 cdata.set('VERSION', meson.project_version())
 cdata.set('ENABLE_NLS', 1)
-if (host_machine.system() == 'windows')
-	cdata.set('HAVE_VTE', false)
-else
-	cdata.set('HAVE_VTE', get_option('vte'))
+if (host_machine.system() != 'windows' and get_option('vte'))
+	cdata.set('HAVE_VTE', 1)
 endif
 cdata.set('HAVE_PLUGINS', get_option('plugins'))
 cdata.set('HAVE_SOCKET', get_option('socket'))
@@ -443,7 +437,7 @@ dep_scintilla = declare_dependency(
 	include_directories: include_directories('scintilla/include')
 )
 
-if cdata.get('HAVE_FNMATCH') == 1
+if cdata.get('HAVE_FNMATCH', 0) == 1
 	dep_fnmatch = dependency('', required: false)
 else
 	# use fnmatch bundled with ctags
@@ -456,7 +450,7 @@ else
 	dep_fnmatch = declare_dependency(link_with: [fnmatch], include_directories: [ifnmatch])
 endif
 
-if cdata.get('HAVE_REGCOMP') == 1
+if cdata.get('HAVE_REGCOMP', 0) == 1
 	dep_regex = dependency('', required: false)
 else
 	# use regcomp bundled with ctags
