@@ -99,6 +99,7 @@ index cd4b23617..af4a73db4 100644
 +		&lmLua,
 +		&lmMake,
 +		&lmMarkdown,
++		&lmNim,
 +		&lmNsis,
 +		&lmNull,
 +		&lmOctave,

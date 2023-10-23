@@ -57,7 +57,7 @@ filetypes_dist = \
 	filedefs/filetypes.markdown \
 	filedefs/filetypes.matlab \
 	filedefs/filetypes.Meson.conf \
-	filedefs/filetypes.Nim.conf \
+	filedefs/filetypes.nim \
 	filedefs/filetypes.nsis \
 	filedefs/filetypes.objectivec \
 	filedefs/filetypes.pascal \

@@ -1162,6 +1162,35 @@ static const HLKeyword highlighting_keywords_MATLAB[] =
 #define highlighting_properties_MATLAB	EMPTY_PROPERTIES
 
 
+/* Nim */
+#define highlighting_lexer_NIM			SCLEX_NIM
+static const HLStyle highlighting_styles_NIM[] =
+{
+	{ SCE_NIM_DEFAULT,				"default",				FALSE },
+	{ SCE_NIM_COMMENT,				"comment",				FALSE },
+	{ SCE_NIM_COMMENTDOC,			"commentdoc",			FALSE },
+	{ SCE_NIM_COMMENTLINE,			"commentline",			FALSE },
+	{ SCE_NIM_COMMENTLINEDOC,		"commentlinedoc",		FALSE },
+	{ SCE_NIM_NUMBER,				"number",				FALSE },
+	{ SCE_NIM_STRING,				"string",				FALSE },
+	{ SCE_NIM_CHARACTER,			"character",			FALSE },
+	{ SCE_NIM_WORD,					"word",					FALSE },
+	{ SCE_NIM_TRIPLE,				"triple",				FALSE },
+	{ SCE_NIM_TRIPLEDOUBLE,			"tripledouble",			FALSE },
+	{ SCE_NIM_BACKTICKS,			"backticks",			FALSE },
+	{ SCE_NIM_FUNCNAME,				"funcname",				FALSE },
+	{ SCE_NIM_STRINGEOL,			"stringeol",			FALSE },
+	{ SCE_NIM_NUMERROR,				"numerror",				FALSE },
+	{ SCE_NIM_OPERATOR,				"operator",				FALSE },
+	{ SCE_NIM_IDENTIFIER,			"identifier",			FALSE }
+};
+static const HLKeyword highlighting_keywords_NIM[] =
+{
+	{ 0, "keywords",		FALSE },
+};
+#define highlighting_properties_NIM	EMPTY_PROPERTIES
+
+
 /* NSIS */
 #define highlighting_lexer_NSIS			SCLEX_NSIS
 static const HLStyle highlighting_styles_NSIS[] =
