@@ -609,21 +609,31 @@ void encodings_encoding_store_cell_data_func(GtkCellLayout *cell_layout,
 }
 
 
-/**
- *  Tries to convert @a buffer into UTF-8 encoding from the encoding specified with @a charset.
- *  If @a fast is not set, additional checks to validate the converted string are performed.
- *
- *  @param buffer The input string to convert.
- *  @param size The length of the string, or -1 if the string is nul-terminated.
- *  @param charset The charset to be used for conversion.
- *  @param fast @c TRUE to only convert the input and skip extended checks on the converted string.
- *
- *  @return If the conversion was successful, a newly allocated nul-terminated string,
- *    which must be freed with @c g_free(). Otherwise @c NULL.
- **/
-GEANY_API_SYMBOL
-gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
-											  const gchar *charset, gboolean fast)
+/* g_utf8_validate() but accepts NULs */
+static gboolean utf8_validate_with_nuls(const gchar *data, gssize size, const gchar **end)
+{
+	const gchar *endp;
+
+	while (! g_utf8_validate(data, size, &endp))
+	{
+		if (size <= (endp - data) || *endp != 0)
+		{
+			if (end)
+				*end = endp;
+			return FALSE;
+		}
+
+		endp++;
+		size -= endp - data;
+		data = (gchar *) endp;
+	}
+
+	return TRUE;
+}
+
+
+static gchar *encodings_convert_to_utf8_from_charset_internal(const gchar *buffer, gssize size,
+															  gsize *utf8_size, const gchar *charset, gboolean fast)
 {
 	gchar *utf8_content = NULL;
 	GError *conv_error = NULL;
@@ -641,7 +651,7 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 		utf8_content = converted_contents;
 		if (conv_error != NULL) g_error_free(conv_error);
 	}
-	else if (conv_error != NULL || ! g_utf8_validate(converted_contents, bytes_written, NULL))
+	else if (conv_error != NULL || ! utf8_validate_with_nuls(converted_contents, bytes_written, NULL))
 	{
 		if (conv_error != NULL)
 		{
@@ -661,7 +671,29 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 		utf8_content = converted_contents;
 	}
 
+	if (utf8_content && utf8_size)
+		*utf8_size = bytes_written;
+
 	return utf8_content;
+}
+
+/**
+ *  Tries to convert @a buffer into UTF-8 encoding from the encoding specified with @a charset.
+ *  If @a fast is not set, additional checks to validate the converted string are performed.
+ *
+ *  @param buffer The input string to convert.
+ *  @param size The length of the string, or -1 if the string is nul-terminated.
+ *  @param charset The charset to be used for conversion.
+ *  @param fast @c TRUE to only convert the input and skip extended checks on the converted string.
+ *
+ *  @return If the conversion was successful, a newly allocated nul-terminated string,
+ *    which must be freed with @c g_free(). Otherwise @c NULL.
+ **/
+GEANY_API_SYMBOL
+gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
+											  const gchar *charset, gboolean fast)
+{
+	return encodings_convert_to_utf8_from_charset_internal(buffer, size, NULL, charset, fast);
 }
 
 
@@ -681,7 +713,7 @@ static gchar *encodings_check_regexes(const gchar *buffer, gsize size)
 
 
 static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gssize size,
-		const gchar *suggested_charset, gchar **used_encoding)
+		const gchar *suggested_charset, gsize *utf8_size, gchar **used_encoding)
 {
 	const gchar *locale_charset = NULL;
 	const gchar *charset;
@@ -748,7 +780,7 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gss
 
 		geany_debug("Trying to convert %" G_GSIZE_FORMAT " bytes of data from %s into UTF-8.",
 			size, charset);
-		utf8_content = encodings_convert_to_utf8_from_charset(buffer, size, charset, FALSE);
+		utf8_content = encodings_convert_to_utf8_from_charset_internal(buffer, size, utf8_size, charset, FALSE);
 
 		if (G_LIKELY(utf8_content != NULL))
 		{
@@ -788,7 +820,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gssize size, gchar **used_
 
 	/* first try to read the encoding from the file content */
 	regex_charset = encodings_check_regexes(buffer, size);
-	utf8 = encodings_convert_to_utf8_with_suggestion(buffer, size, regex_charset, used_encoding);
+	utf8 = encodings_convert_to_utf8_with_suggestion(buffer, size, regex_charset, NULL, used_encoding);
 	g_free(regex_charset);
 
 	return utf8;
@@ -870,7 +902,6 @@ typedef struct
 	gsize		 len;	/* string length of data */
 	gchar		*enc;
 	gboolean	 bom;
-	gboolean	 partial;
 } BufferData;
 
 
@@ -882,15 +913,16 @@ handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
 
 	if (utils_str_equal(forced_enc, "UTF-8"))
 	{
-		if (! g_utf8_validate(buffer->data, buffer->len, NULL))
+		if (! utf8_validate_with_nuls(buffer->data, buffer->len, NULL))
 		{
 			return FALSE;
 		}
 	}
 	else
 	{
-		gchar *converted_text = encodings_convert_to_utf8_from_charset(
-										buffer->data, buffer->size, forced_enc, FALSE);
+		gsize converted_text_len;
+		gchar *converted_text = encodings_convert_to_utf8_from_charset_internal(
+										buffer->data, buffer->size, &converted_text_len, forced_enc, FALSE);
 		if (converted_text == NULL)
 		{
 			return FALSE;
@@ -898,7 +930,7 @@ handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
 		else
 		{
 			SETPTR(buffer->data, converted_text);
-			buffer->len = strlen(converted_text);
+			buffer->len = converted_text_len;
 		}
 	}
 	enc_idx = encodings_scan_unicode_bom(buffer->data, buffer->size, NULL);
@@ -931,12 +963,13 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 
 			if (enc_idx != GEANY_ENCODING_UTF_8) /* the BOM indicated something else than UTF-8 */
 			{
-				gchar *converted_text = encodings_convert_to_utf8_from_charset(
-										buffer->data, buffer->size, buffer->enc, FALSE);
+				gsize converted_text_len;
+				gchar *converted_text = encodings_convert_to_utf8_from_charset_internal(
+										buffer->data, buffer->size, &converted_text_len, buffer->enc, FALSE);
 				if (converted_text != NULL)
 				{
 					SETPTR(buffer->data, converted_text);
-					buffer->len = strlen(converted_text);
+					buffer->len = converted_text_len;
 				}
 				else
 				{
@@ -954,15 +987,16 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 
 			/* try UTF-8 first */
 			if (encodings_get_idx_from_charset(regex_charset) == GEANY_ENCODING_UTF_8 &&
-				(buffer->size == buffer->len) && g_utf8_validate(buffer->data, buffer->len, NULL))
+				(buffer->size == buffer->len) && utf8_validate_with_nuls(buffer->data, buffer->len, NULL))
 			{
 				buffer->enc = g_strdup("UTF-8");
 			}
 			else
 			{
 				/* detect the encoding */
+				gsize converted_text_len;
 				gchar *converted_text = encodings_convert_to_utf8_with_suggestion(buffer->data,
-					buffer->size, regex_charset, &buffer->enc);
+					buffer->size, regex_charset, &converted_text_len, &buffer->enc);
 
 				if (converted_text == NULL)
 				{
@@ -970,7 +1004,7 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 					return FALSE;
 				}
 				SETPTR(buffer->data, converted_text);
-				buffer->len = strlen(converted_text);
+				buffer->len = converted_text_len;
 			}
 			g_free(regex_charset);
 		}
@@ -1003,16 +1037,6 @@ static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
 	/* temporarily retrieve the encoding idx based on the BOM to suppress the following warning
 	 * if we have a BOM */
 	tmp_enc_idx = encodings_scan_unicode_bom(buffer->data, buffer->size, NULL);
-
-	/* check whether the size of the loaded data is equal to the size of the file in the
-	 * filesystem file size may be 0 to allow opening files in /proc/ which have typically a
-	 * file size of 0 bytes */
-	if (buffer->len != buffer->size && buffer->size != 0 && (
-		tmp_enc_idx == GEANY_ENCODING_UTF_8 || /* tmp_enc_idx can be UTF-7/8/16/32, UCS and None */
-		tmp_enc_idx == GEANY_ENCODING_UTF_7))  /* filter UTF-7/8 where no NULL bytes are allowed */
-	{
-		buffer->partial = TRUE;
-	}
 
 	/* Determine character encoding and convert to UTF-8 */
 	if (forced_enc != NULL)
@@ -1050,22 +1074,22 @@ static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
  * @param forced_enc forced encoding to use, or @c NULL
  * @param used_encoding return location for the actually used encoding, or @c NULL
  * @param has_bom return location to store whether the data had a BOM, or @c NULL
- * @param partial return location to store whether the conversion may be partial, or @c NULL
+ * @param has_null return location to store whether the converted buffer contains a NUL byte, or @c NULL
  *
  * @return @C TRUE if the conversion succeeded, @c FALSE otherwise.
  */
 gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *forced_enc,
-		gchar **used_encoding, gboolean *has_bom, gboolean *partial)
+		gchar **used_encoding, gboolean *has_bom, gboolean *has_null)
 {
 	BufferData buffer;
 
 	buffer.data = *buf;
 	buffer.size = *size;
-	/* use strlen to check for null chars */
-	buffer.len = strlen(buffer.data);
+	/* Special-case a size of 0 to allow opening files in /proc/ which typically have a
+	 * file size of 0 bytes */
+	buffer.len = (buffer.size == 0) ? strlen(buffer.data) : buffer.size;
 	buffer.enc = NULL;
 	buffer.bom = FALSE;
-	buffer.partial = FALSE;
 
 	if (! handle_buffer(&buffer, forced_enc))
 		return FALSE;
@@ -1077,8 +1101,8 @@ gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *f
 		g_free(buffer.enc);
 	if (has_bom)
 		*has_bom = buffer.bom;
-	if (partial)
-		*partial = buffer.partial;
+	if (has_null)
+		*has_null = memchr(buffer.data, '\0', buffer.len) != NULL;
 
 	*buf = buffer.data;
 	return TRUE;

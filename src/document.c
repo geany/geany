@@ -1017,15 +1017,8 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 
 	if (filedata->readonly)
 	{
-		const gchar *warn_msg = _(
-			"The file \"%s\" could not be opened properly and has been truncated. " \
-			"This can occur if the file contains a NULL byte. " \
-			"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
-
-		if (main_status.main_window_realized)
-			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, display_filename);
-
-		ui_set_statusbar(TRUE, warn_msg, display_filename);
+		msgwin_status_add(_("The file \"%s\" contains a NUL byte, which is not properly " \
+				"supported. Editing this file might lead to unexpected behavior."), display_filename);
 	}
 
 	return TRUE;
@@ -1302,6 +1295,13 @@ void document_show_tab_idle(GeanyDocument *doc)
 }
 
 
+static void on_document_has_nul_byte_response(GtkWidget *bar, gint response, GeanyDocument *doc)
+{
+	doc->priv->info_bars[MSG_TYPE_HAS_NUL] = NULL;
+	gtk_widget_destroy(bar);
+}
+
+
 /* To open a new file, set doc to NULL; filename should be locale encoded.
  * To reload a file, set the doc for the document to be reloaded; filename should be NULL.
  * pos is the cursor position, which can be overridden by --line and --column.
@@ -1404,8 +1404,28 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		/* add the text to the ScintillaObject */
 		sci_set_readonly(doc->editor->sci, FALSE);	/* to allow replacing text */
-		sci_set_text(doc->editor->sci, filedata.data);	/* NULL terminated data */
+		sci_set_text_with_length(doc->editor->sci, filedata.data, filedata.len);
 		queue_colourise(doc);	/* Ensure the document gets colourised. */
+
+		/* the file has embedded NULs, warn the user */
+		if (filedata.readonly && doc->priv->info_bars[MSG_TYPE_HAS_NUL] == NULL)
+		{
+			doc->priv->info_bars[MSG_TYPE_HAS_NUL] = document_show_message(
+					doc, GTK_MESSAGE_WARNING,
+					on_document_has_nul_byte_response,
+					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+					NULL, 0,
+					NULL, 0,
+					_("Geany does not handle such files very well. Be aware that some features "
+					"might not work as expected and can lead to data loss. "
+					"The file has been set to read-only."),
+					_("The file contains a NUL byte."));
+		}
+		else if (! filedata.readonly && doc->priv->info_bars[MSG_TYPE_HAS_NUL] != NULL)
+		{
+			/* dismiss the info bar if reloading a file that don't has embedded NULs anymore */
+			gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_HAS_NUL]), GTK_RESPONSE_CANCEL);
+		}
 
 		/* detect & set line endings */
 		editor_mode = utils_get_line_endings(filedata.data, filedata.len);
@@ -1889,7 +1909,7 @@ static gsize save_convert_to_encoding(GeanyDocument *doc, gchar **data, gsize *l
 	g_return_val_if_fail(len != NULL, FALSE);
 
 	/* try to convert it from UTF-8 to original encoding */
-	conv_file_contents = g_convert(*data, *len - 1, doc->encoding, "UTF-8",
+	conv_file_contents = g_convert(*data, *len, doc->encoding, "UTF-8",
 												&bytes_read, &conv_len, &conv_error);
 
 	if (conv_error != NULL)
@@ -1905,7 +1925,7 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 			gint context_len;
 			gunichar unic;
 			/* don't read over the doc length */
-			gint max_len = MIN((gint)bytes_read + 6, (gint)*len - 1);
+			gint max_len = MIN((gint)bytes_read + 6, (gint)*len);
 			gchar context[7]; /* read 6 bytes from Sci + '\0' */
 			sci_get_text_range(doc->editor->sci, bytes_read, max_len, context);
 
@@ -2161,22 +2181,22 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	/* notify plugins which may wish to modify the document before it's saved */
 	g_signal_emit_by_name(geany_object, "document-before-save", doc);
 
-	len = sci_get_length(doc->editor->sci) + 1;
+	len = sci_get_length(doc->editor->sci);
 	if (doc->has_bom && encodings_is_unicode_charset(doc->encoding))
 	{	/* always write a UTF-8 BOM because in this moment the text itself is still in UTF-8
 		 * encoding, it will be converted to doc->encoding below and this conversion
 		 * also changes the BOM */
-		data = (gchar*) g_malloc(len + 3);	/* 3 chars for BOM */
+		data = (gchar*) g_malloc(len + 3 + 1);	/* 3 chars for BOM */
 		data[0] = (gchar) 0xef;
 		data[1] = (gchar) 0xbb;
 		data[2] = (gchar) 0xbf;
-		sci_get_text(doc->editor->sci, len, data + 3);
+		sci_get_text(doc->editor->sci, len + 1, data + 3);
 		len += 3;
 	}
 	else
 	{
-		data = (gchar*) g_malloc(len);
-		sci_get_text(doc->editor->sci, len, data);
+		data = (gchar*) g_malloc(len + 1);
+		sci_get_text(doc->editor->sci, len + 1, data);
 	}
 
 	/* save in original encoding, skip when it is already UTF-8 or has the encoding "None" */
@@ -2188,10 +2208,6 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 			g_free(data);
 			return FALSE;
 		}
-	}
-	else
-	{
-		len = strlen(data);
 	}
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);

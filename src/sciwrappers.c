@@ -324,6 +324,16 @@ void sci_set_text(ScintillaObject *sci, const gchar *text)
 }
 
 
+/* Sets all text, allowing for embedded NUL bytes */
+void sci_set_text_with_length(ScintillaObject *sci, const gchar *text, gsize len)
+{
+	sci_start_undo_action(sci);
+	sci_clear_all(sci);
+	SSM(sci, SCI_ADDTEXT, len, (sptr_t) text);
+	sci_end_undo_action(sci);
+}
+
+
 gboolean sci_can_undo(ScintillaObject *sci)
 {
 	return SSM(sci, SCI_CANUNDO, 0, 0) != FALSE;
