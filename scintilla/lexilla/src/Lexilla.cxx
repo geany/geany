@@ -199,6 +199,7 @@ static void AddGeanyLexers()
 		&lmLua,
 		&lmMake,
 		&lmMarkdown,
+		&lmNim,
 		&lmNsis,
 		&lmNull,
 		&lmOctave,
