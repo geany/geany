@@ -555,9 +555,9 @@ The remaining notes relate mostly to built-in filetypes.
 
 filetypes.* configuration file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-All languages need a data/filetypes.foo configuration file. See
+All languages need a data/filedefs/filetypes.foo configuration file. See
 the "Filetype definition files" section in the manual and/or
-data/filetypes.c for an example.
+data/filedefs/filetypes.c for an example.
 
 Programming languages should have:
 
@@ -615,8 +615,8 @@ highlightingmappings.h and add the following things:
    a. Add ``init_styleset_case(FOO);`` in ``highlighting_init_styles()``.
    b. Add ``styleset_case(FOO);`` in ``highlighting_set_styles()``.
 
-3. Write data/filetypes.foo configuration file [styling] section. See
-   the manual and see data/filetypes.d for a named style example.
+3. Write data/filedefs/filetypes.foo configuration file [styling] section. See
+   the manual and see data/filedefs/filetypes.d for a named style example.
 
 .. note::
     Please try to make your styles fit in with the other filetypes'
@@ -658,7 +658,8 @@ https://github.com/universal-ctags/ctags
 
 Method
 ``````
-* Add foo.c to SRCS in Makefile.am and meson.build.
+* Add ctags/parsers/foo.c to ``parsers`` in ctags/Makefile.am and to the
+  ``ctags`` library in meson.build.
 * Add Foo to src/tagmanager/tm_parsers.h
 * Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
   exactly the order in src/tagmanager/tm_parsers.h.
