@@ -40,6 +40,7 @@
 #include "main.h"
 #include "navqueue.h"
 #include "prefs.h"
+#include "sciwrappers.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -793,7 +794,7 @@ static gboolean goto_compiler_file_line(const gchar *fname, gint line, gboolean 
 }
 
 
-gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
+gboolean msgwin_goto_compiler_file_line_mode(gboolean focus_editor, gboolean cur_line_mode)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
@@ -817,10 +818,13 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 		gtk_tree_model_get(model, &iter, COMPILER_COL_STRING, &string, -1);
 		if (string != NULL)
 		{
-			gint line;
+			guint line;
 			gchar *filename, *dir;
 			GtkTreePath *path;
 			gboolean ret;
+			ScintillaObject *sci = document_get_current()->editor->sci;
+			gint pos = sci_get_current_position(sci);
+			guint cur_line = sci_get_line_from_position(sci, pos) + 1;
 
 			path = gtk_tree_model_get_path(model, &iter);
 			find_prev_build_dir(path, model, &dir);
@@ -829,12 +833,27 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 			g_free(string);
 			g_free(dir);
 
-			ret = goto_compiler_file_line(filename, line, focus_editor);
+			if (cur_line_mode)
+				ret = line == cur_line;
+			else
+				ret = goto_compiler_file_line(filename, line, focus_editor);
 			g_free(filename);
 			return ret;
 		}
 	}
 	return FALSE;
+}
+
+
+gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
+{
+	return msgwin_goto_compiler_file_line_mode(focus_editor, FALSE);  // cur_line_mode
+}
+
+
+gboolean msgwin_goto_compiler_file_cur_line(gboolean focus_editor)
+{
+	return msgwin_goto_compiler_file_line_mode(focus_editor, TRUE);  // cur_line_mode
 }
 
 
