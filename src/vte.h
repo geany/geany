@@ -44,7 +44,6 @@ typedef struct
 {
 	GtkWidget *vte;
 	GtkWidget *menu;
-	GtkWidget *im_submenu;
 	gboolean scroll_on_key;
 	gboolean scroll_on_out;
 	gboolean ignore_menu_bar_accel;

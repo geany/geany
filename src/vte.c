@@ -124,7 +124,6 @@ struct VteFunctions
 	void (*vte_terminal_set_color_bold) (VteTerminal *terminal, const GdkColor *foreground);
 	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
 	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
-	void (*vte_terminal_im_append_menuitems) (VteTerminal *terminal, GtkMenuShell *menushell);
 	void (*vte_terminal_set_cursor_blink_mode) (VteTerminal *terminal,
 												VteTerminalCursorBlinkMode mode);
 	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
@@ -323,9 +322,6 @@ static void on_vte_realize(void)
 {
 	/* the vte widget has to be realised before color changes take effect */
 	vte_apply_user_settings();
-
-	if (vf->vte_terminal_im_append_menuitems && vte_config.im_submenu)
-		vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vte_config.vte), GTK_MENU_SHELL(vte_config.im_submenu));
 }
 
 
@@ -619,7 +615,6 @@ static gboolean vte_register_symbols(GModule *mod)
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_background);
 	}
 	BIND_REQUIRED_SYMBOL(vte_terminal_feed_child);
-	BIND_SYMBOL(vte_terminal_im_append_menuitems);
 	if (! BIND_SYMBOL(vte_terminal_set_cursor_blink_mode))
 		/* vte_terminal_set_cursor_blink_mode() is only available since 0.17.1, so if we don't find
 		 * this symbol, we are probably on an older version and use the old API instead */
@@ -771,8 +766,6 @@ static GtkWidget *vte_create_popup_menu(void)
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
 
 	msgwin_menu_add_common_items(GTK_MENU(menu));
-
-	vte_config.im_submenu = NULL;
 
 	return menu;
 }
