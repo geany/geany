@@ -1322,6 +1322,7 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 		case SCLEX_PERL:
 		case SCLEX_TCL:
 		case SCLEX_R:
+		case SCLEX_RAKU:
 		case SCLEX_RUST:
 			return TRUE;
 		default:
