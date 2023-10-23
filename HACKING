@@ -658,7 +658,8 @@ https://github.com/universal-ctags/ctags
 
 Method
 ``````
-* Add foo.c to SRCS in ctags/Makefile.am and meson.build.
+* Add ctags/parsers/foo.c to ``parsers`` in ctags/Makefile.am and to the
+  ``ctags`` library in meson.build.
 * Add Foo to src/tagmanager/tm_parsers.h
 * Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
   exactly the order in src/tagmanager/tm_parsers.h.
