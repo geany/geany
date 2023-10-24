@@ -2256,11 +2256,11 @@ static void add_stock_icons(const GtkStockItem *items, gsize count)
 
 void ui_init_stock_items(void)
 {
-	GtkStockItem items[] =
+	const GtkStockItem items[] =
 	{
-		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_CLOSE_ALL, N_("Close All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
+		{ (gchar *) GEANY_STOCK_SAVE_ALL, (gchar *) N_("Save All"), 0, 0, (gchar *) GETTEXT_PACKAGE },
+		{ (gchar *) GEANY_STOCK_CLOSE_ALL, (gchar *) N_("Close All"), 0, 0, (gchar *) GETTEXT_PACKAGE },
+		{ (gchar *) GEANY_STOCK_BUILD, (gchar *) N_("Build"), 0, 0, (gchar *) GETTEXT_PACKAGE }
 	};
 
 	gtk_stock_add(items, G_N_ELEMENTS(items));

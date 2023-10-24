@@ -169,11 +169,11 @@ enum
 
 static const GtkTargetEntry dnd_targets[] =
 {
-  { "UTF8_STRING", 0, TARGET_UTF8_STRING },
-  { "TEXT", 0, TARGET_TEXT },
-  { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
-  { "STRING", 0, TARGET_STRING },
-  { "text/plain", 0, TARGET_TEXT_PLAIN },
+  { (gchar *) "UTF8_STRING", 0, TARGET_UTF8_STRING },
+  { (gchar *) "TEXT", 0, TARGET_TEXT },
+  { (gchar *) "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
+  { (gchar *) "STRING", 0, TARGET_STRING },
+  { (gchar *) "text/plain", 0, TARGET_TEXT_PLAIN },
 };
 
 

@@ -601,7 +601,7 @@ typedef struct
 
 static const GtkTargetEntry tb_editor_dnd_targets[] =
 {
-	{ "GEANY_TB_EDITOR_ROW", 0, 0 }
+	{ (gchar *) "GEANY_TB_EDITOR_ROW", 0, 0 }
 };
 static const gint tb_editor_dnd_targets_len = G_N_ELEMENTS(tb_editor_dnd_targets);
 

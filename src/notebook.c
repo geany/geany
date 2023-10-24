@@ -45,14 +45,14 @@
 
 static const GtkTargetEntry drag_targets[] =
 {
-	{GEANY_DND_NOTEBOOK_TAB_TYPE, GTK_TARGET_SAME_APP | GTK_TARGET_SAME_WIDGET, 0}
+	{ (gchar *) GEANY_DND_NOTEBOOK_TAB_TYPE, GTK_TARGET_SAME_APP | GTK_TARGET_SAME_WIDGET, 0 }
 };
 
-static GtkTargetEntry files_drop_targets[] = {
-	{ "STRING",			0, 0 },
-	{ "UTF8_STRING",	0, 0 },
-	{ "text/plain",		0, 0 },
-	{ "text/uri-list",	0, 0 }
+static const GtkTargetEntry files_drop_targets[] = {
+	{ (gchar *) "STRING",			0, 0 },
+	{ (gchar *) "UTF8_STRING",		0, 0 },
+	{ (gchar *) "text/plain",		0, 0 },
+	{ (gchar *) "text/uri-list",	0, 0 }
 };
 
 static const gsize MAX_MRU_DOCS = 20;
