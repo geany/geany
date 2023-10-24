@@ -1185,7 +1185,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 		{
 			SpawnChannelData *sc = &sw->sc[i];
 			GIOCondition condition;
-			GSourceFunc callback;
+			GIOFunc callback;
 
 			if (pipe[i] == -1)
 				continue;
@@ -1205,7 +1205,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 			{
 				sc->cb.write = stdin_cb;
 				condition = G_IO_OUT | SPAWN_IO_FAILURE;
-				callback = (GSourceFunc) spawn_write_cb;
+				callback = spawn_write_cb;
 			}
 			else
 			{
@@ -1213,7 +1213,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 					((SPAWN_STDOUT_UNBUFFERED >> 1) << i));
 
 				condition = G_IO_IN | G_IO_PRI | SPAWN_IO_FAILURE;
-				callback = (GSourceFunc) spawn_read_cb;
+				callback = spawn_read_cb;
 
 				if (i == 1)
 				{
@@ -1245,7 +1245,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 			else if (i)  /* to avoid new string on each call */
 				sc->buffer = g_string_sized_new(sc->max_length);
 
-			g_source_set_callback(source, callback, sc, spawn_destroy_cb);
+			g_source_set_callback(source, (GSourceFunc) (void(*)(void)) callback, sc, spawn_destroy_cb);
 			g_source_attach(source, sw->main_context);
 			g_source_unref(source);
 		}
@@ -1253,7 +1253,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 		sw->exit_cb = exit_cb;
 		sw->exit_data = exit_data;
 		source = g_child_watch_source_new(pid);
-		g_source_set_callback(source, (GSourceFunc) spawn_watch_cb, sw, NULL);
+		g_source_set_callback(source, (GSourceFunc) (void(*)(void)) (GChildWatchFunc) spawn_watch_cb, sw, NULL);
 		g_source_attach(source, sw->main_context);
 		g_source_unref(source);
 
