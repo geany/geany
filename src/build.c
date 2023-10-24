@@ -771,7 +771,7 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
 	GError *error = NULL;
-	gchar *argv[] = { "/bin/sh", "-c", NULL, NULL };
+	const gchar *argv[] = { "/bin/sh", "-c", NULL, NULL };
 	gchar *working_dir;
 	gchar *utf8_working_dir;
 	gchar *cmd_string;
@@ -813,7 +813,7 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	build_info.file_type_id = (doc == NULL) ? GEANY_FILETYPES_NONE : doc->file_type->id;
 	build_info.message_count = 0;
 
-	if (!spawn_with_callbacks(working_dir, cmd, argv, NULL, 0, NULL, NULL, build_iofunc,
+	if (!spawn_with_callbacks(working_dir, cmd, (gchar **) argv, NULL, 0, NULL, NULL, build_iofunc,
 		GINT_TO_POINTER(0), 0, build_iofunc, GINT_TO_POINTER(1), 0, build_exit_cb, NULL,
 		&build_info.pid, &error))
 	{
