@@ -320,7 +320,7 @@ static void rename_anon_tags(TMSourceFile *source_file)
 				if (!anon_counter_table)
 					anon_counter_table = g_new0(gint, 256);
 
-				anon_counter = ++anon_counter_table[kind];
+				anon_counter = ++anon_counter_table[(guchar) kind];
 
 				sprintf(buf, "anon_%s_%u", kind_name, anon_counter);
 				tag->name = g_strdup(buf);
