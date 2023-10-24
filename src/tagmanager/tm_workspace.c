@@ -906,7 +906,12 @@ static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data
 	 * followed by workspace tags,
 	 * followed by global tags */
 	if (t1->type & tm_tag_local_var_t && t2->type & tm_tag_local_var_t)
-		return info->sort_by_name ? g_strcmp0(t1->name, t2->name) : t2->line - t1->line;
+	{
+		if (info->sort_by_name)
+			return g_strcmp0(t1->name, t2->name);
+		else /* just like (t2->line - t1->line), but doesn't overflow converting to int */
+			return (t2->line > t1->line) ? 1 : ((t2->line < t1->line) ? -1 : 0);
+	}
 	else if (t1->type & tm_tag_local_var_t)
 		return -1;
 	else if (t2->type & tm_tag_local_var_t)
