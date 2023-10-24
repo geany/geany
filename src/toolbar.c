@@ -1118,8 +1118,7 @@ void toolbar_configure(GtkWindow *parent)
 
 	gtk_widget_destroy(tbw->dialog);
 
-	g_slist_foreach(used_items, (GFunc) g_free, NULL);
-	g_slist_free(used_items);
+	g_slist_free_full(used_items, g_free);
 	g_list_free(all_items);
 	tb_editor_free_path(tbw);
 	g_free(tbw);

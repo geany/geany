@@ -163,9 +163,8 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 			{
 				document_open_files(filelist, ro, ft, charset);
 			}
-			g_slist_foreach(filelist, (GFunc) g_free, NULL);	/* free filenames */
+			g_slist_free_full(filelist, g_free);
 		}
-		g_slist_free(filelist);
 	}
 	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
