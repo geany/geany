@@ -25,6 +25,8 @@
 
 G_BEGIN_DECLS
 
+typedef void (*LspSymbolRequestCallback) (gpointer user_data);
+
 typedef struct {
 	gboolean (*autocomplete_available)(GeanyDocument *doc);
 	void (*autocomplete_perform)(GeanyDocument *doc);
@@ -34,6 +36,10 @@ typedef struct {
 
 	gboolean (*goto_available)(GeanyDocument *doc);
 	void (*goto_perform)(GeanyDocument *doc, gboolean definition);
+
+	gboolean (*doc_symbols_available)(GeanyDocument *doc);
+	void (*doc_symbols_request)(GeanyDocument *doc, LspSymbolRequestCallback callback, gpointer user_data);
+	GPtrArray *(*doc_symbols_get_cached)(GeanyDocument *doc);
 
 	gchar _dummy[1024];
 } Lsp;
@@ -45,6 +51,8 @@ void lsp_unregister(Lsp *lsp);
 
 #ifdef GEANY_PRIVATE
 
+guint lsp_get_symbols_icon_id(guint kind);
+
 gboolean lsp_autocomplete_available(GeanyDocument *doc);
 void lsp_autocomplete_perform(GeanyDocument *doc);
 
@@ -53,6 +61,10 @@ void lsp_calltips_show(GeanyDocument *doc);
 
 gboolean lsp_goto_available(GeanyDocument *doc);
 void lsp_goto_perform(GeanyDocument *doc, gboolean definition);
+
+gboolean lsp_doc_symbols_available(GeanyDocument *doc);
+void lsp_doc_symbols_request(GeanyDocument *doc, LspSymbolRequestCallback callback, gpointer user_data);
+GPtrArray *lsp_doc_symbols_get_cached(GeanyDocument *doc);
 
 #endif /* GEANY_PRIVATE */
 
