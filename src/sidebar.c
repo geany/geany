@@ -34,6 +34,7 @@
 #include "filetypesprivate.h"
 #include "geanyobject.h"
 #include "keyfile.h"
+#include "lsp.h"
 #include "navqueue.h"
 #include "stash.h"
 #include "support.h"
@@ -172,11 +173,37 @@ static void create_default_tag_tree(void)
 }
 
 
-/* update = rescan the tags for doc->filename */
-void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
+/* changes the tree view to the given one, trying not to do useless changes */
+static void change_tree(GeanyDocument *doc, GtkWidget *new_child)
 {
 	GtkWidget *child = gtk_bin_get_child(GTK_BIN(tag_window));
 
+	/* only change the tag tree if it's actually not the same (to avoid flickering) and if
+	 * it's the one of the current document (to avoid problems when e.g. reloading
+	 * configuration files */
+	if (child != new_child && doc == document_get_current())
+	{
+		if (child)
+			gtk_container_remove(GTK_CONTAINER(tag_window), child);
+		gtk_container_add(GTK_CONTAINER(tag_window), new_child);
+	}
+}
+
+
+static void lsp_symbol_request_cb(gpointer user_data)
+{
+	GeanyDocument *doc = user_data;
+
+	if (doc == document_get_current())
+		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
+
+	change_tree(doc, doc->has_tags ? doc->priv->tag_tree : tv.default_tag_tree);
+}
+
+
+/* update = rescan the tags for doc->filename */
+void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
+{
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (update && doc != NULL)
@@ -185,56 +212,36 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) != TREEVIEW_SYMBOL)
 		return; /* don't bother updating symbol tree if we don't see it */
 
-	/* changes the tree view to the given one, trying not to do useless changes */
-	#define CHANGE_TREE(new_child) \
-		G_STMT_START { \
-			/* only change the tag tree if it's actually not the same (to avoid flickering) and if \
-			 * it's the one of the current document (to avoid problems when e.g. reloading \
-			 * configuration files */ \
-			if (child != new_child && doc == document_get_current()) \
-			{ \
-				if (child) \
-					gtk_container_remove(GTK_CONTAINER(tag_window), child); \
-				gtk_container_add(GTK_CONTAINER(tag_window), new_child); \
-			} \
-		} G_STMT_END
-
 	if (tv.default_tag_tree == NULL)
 		create_default_tag_tree();
 
 	/* show default empty tag tree if there are no tags */
 	if (doc == NULL || doc->file_type == NULL || ! filetype_has_tags(doc->file_type))
 	{
-		CHANGE_TREE(tv.default_tag_tree);
+		change_tree(doc, tv.default_tag_tree);
 		return;
 	}
 
+	if (doc->priv->tag_tree == NULL)
+	{
+		doc->priv->tag_store = gtk_tree_store_new(
+			SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, TM_TYPE_TAG, G_TYPE_STRING);
+		doc->priv->tag_tree = gtk_tree_view_new();
+		prepare_taglist(doc->priv->tag_tree, doc->priv->tag_store);
+		gtk_widget_show(doc->priv->tag_tree);
+		g_object_ref((gpointer)doc->priv->tag_tree);	/* to hold it after removing */
+	}
+
 	if (doc->priv->tag_tree_dirty)
-	{	/* updating the tag list in the left tag window */
-		if (doc->priv->tag_tree == NULL)
-		{
-			doc->priv->tag_store = gtk_tree_store_new(
-				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, TM_TYPE_TAG, G_TYPE_STRING);
-			doc->priv->tag_tree = gtk_tree_view_new();
-			prepare_taglist(doc->priv->tag_tree, doc->priv->tag_store);
-			gtk_widget_show(doc->priv->tag_tree);
-			g_object_ref((gpointer)doc->priv->tag_tree);	/* to hold it after removing */
-		}
+	{
+		if (lsp_doc_symbols_available(doc))
+			lsp_doc_symbols_request(doc, lsp_symbol_request_cb, doc);
 
 		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
 		doc->priv->tag_tree_dirty = FALSE;
 	}
 
-	if (doc->has_tags)
-	{
-		CHANGE_TREE(doc->priv->tag_tree);
-	}
-	else
-	{
-		CHANGE_TREE(tv.default_tag_tree);
-	}
-
-	#undef CHANGE_TREE
+	change_tree(doc, doc->has_tags ? doc->priv->tag_tree : tv.default_tag_tree);
 }
 
 
