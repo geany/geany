@@ -2576,33 +2576,6 @@ static void init_css_styles(void)
 	load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	g_free(theme_fn);
 
-	// load themes to handle breakage between various GTK+ versions
-	const struct
-	{
-		guint min_version;
-		guint max_version;
-		const gchar *file;
-	}
-	css_files[] =
-	{
-		/* Unused now but can be used to load css for different GTK versions, such as
-		 * { 20, G_MAXUINT, "geany-3.20.css" },
-		 * { 0, 19, "geany-3.0.css" },
-		 */
-	};
-
-	guint gtk_version = gtk_get_minor_version();
-	for (guint i = 0; i < G_N_ELEMENTS(css_files); i++)
-	{
-		if (gtk_version >= css_files[i].min_version &&
-			gtk_version <= css_files[i].max_version)
-		{
-			theme_fn = g_build_filename(app->datadir, css_files[i].file, NULL);
-			load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-			g_free(theme_fn);
-		}
-	}
-
 	// if the user provided a geany.css file in their config dir, try and load that
 	theme_fn = g_build_filename(app->configdir, "geany.css", NULL);
 	if (g_file_test(theme_fn, G_FILE_TEST_EXISTS))
