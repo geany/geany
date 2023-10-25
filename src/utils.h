@@ -281,9 +281,6 @@ gchar *utils_get_current_file_dir_utf8(void);
 
 void utils_beep(void);
 
-gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
-									 gulong display_unit);
-
 gboolean utils_parse_color(const gchar *spec, GdkColor *color);
 
 gint utils_color_to_bgr(const GdkColor *color);

@@ -948,55 +948,6 @@ void utils_beep(void)
 }
 
 
-/* taken from busybox, thanks */
-gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
-									 gulong display_unit)
-{
-	/* The code will adjust for additional (appended) units. */
-	static const gchar zero_and_units[] = { '0', 0, 'K', 'M', 'G', 'T' };
-	static const gchar fmt[] = "%Lu %c%c";
-	static const gchar fmt_tenths[] = "%Lu.%d %c%c";
-
-	guint64 val;
-	gint frac;
-	const gchar *u;
-	const gchar *f;
-
-	u = zero_and_units;
-	f = fmt;
-	frac = 0;
-
-	val = size * block_size;
-	if (val == 0)
-		return g_strdup(u);
-
-	if (display_unit)
-	{
-		val += display_unit/2;	/* Deal with rounding. */
-		val /= display_unit;	/* Don't combine with the line above!!! */
-	}
-	else
-	{
-		++u;
-		while ((val >= 1024) && (u < zero_and_units + sizeof(zero_and_units) - 1))
-		{
-			f = fmt_tenths;
-			++u;
-			frac = ((((gint)(val % 1024)) * 10) + (1024 / 2)) / 1024;
-			val /= 1024;
-		}
-		if (frac >= 10)
-		{		/* We need to round up here. */
-			++val;
-			frac = 0;
-		}
-	}
-
-	/* If f==fmt then 'frac' and 'u' are ignored. */
-	return g_strdup_printf(f, val, frac, *u, 'b');
-}
-
-
 /* converts a color representation using gdk_color_parse(), with additional
  * support of the "0x" prefix as a synonym for "#" */
 gboolean utils_parse_color(const gchar *spec, GdkColor *color)
