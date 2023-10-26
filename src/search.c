@@ -1883,12 +1883,14 @@ static void search_finished(GPid child_pid, gint status, gpointer user_data)
 		{
 			gint count = gtk_tree_model_iter_n_children(
 				GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
-			gchar *text = ngettext(
+			gchar *text = g_strdup_printf(ngettext(
 						"Search completed with %d match.",
-						"Search completed with %d matches.", count);
+						"Search completed with %d matches.", count),
+						count);
 
-			msgwin_msg_add(COLOR_BLUE, -1, NULL, text, count);
-			ui_set_statusbar(FALSE, text, count);
+			msgwin_msg_add_string(COLOR_BLUE, -1, NULL, text);
+			ui_set_statusbar(FALSE, "%s", text);
+			g_free(text);
 			break;
 		}
 		case 1:

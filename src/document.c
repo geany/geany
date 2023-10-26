@@ -1017,15 +1017,18 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 
 	if (filedata->readonly)
 	{
-		const gchar *warn_msg = _(
-			"The file \"%s\" could not be opened properly and has been truncated. " \
-			"This can occur if the file contains a NULL byte. " \
-			"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
+		gchar *warn_msg = g_strdup_printf(_(
+			"The file \"%s\" could not be opened properly and has been truncated. "
+			"This can occur if the file contains a NULL byte. "
+			"Be aware that saving it can cause data loss.\nThe file was set to read-only."),
+			display_filename);
 
 		if (main_status.main_window_realized)
-			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, display_filename);
+			dialogs_show_msgbox(GTK_MESSAGE_WARNING, "%s", warn_msg);
 
-		ui_set_statusbar(TRUE, warn_msg, display_filename);
+		ui_set_statusbar(TRUE, "%s", warn_msg);
+
+		g_free(warn_msg);
 	}
 
 	return TRUE;
