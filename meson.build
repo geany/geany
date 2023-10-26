@@ -185,6 +185,10 @@ if python_command == '' or python_command == 'auto'
 endif
 cdata.set('PYTHON_COMMAND', python_command)
 
+if host_machine.system() == 'windows'
+	cdata.set('WIN32', 1)
+endif
+
 configure_file(
 	output : 'config.h',
 	configuration : cdata
