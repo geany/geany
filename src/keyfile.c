@@ -1140,6 +1140,7 @@ static void load_ui_prefs(GKeyFile *config)
 	scribble_pos = utils_get_setting_integer(config, PACKAGE, "scribble_pos", -1);
 }
 
+
 static void load_ui_session(GKeyFile *config)
 {
 	gint *geo;
@@ -1165,7 +1166,7 @@ static void load_ui_session(GKeyFile *config)
 		ui_prefs.geometry[3] = MAX(-1, geo[3]);
 		ui_prefs.geometry[4] = geo[4] != 0;
 	}
-	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
+	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 230);
 	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
 				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) :
 				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
