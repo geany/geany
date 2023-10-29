@@ -40,6 +40,7 @@
 #include "geanyobject.h"
 #include "geanywraplabel.h"
 #include "highlighting.h"
+#include "lsp.h"
 #include "main.h"
 #include "msgwindow.h"
 #include "navqueue.h"
@@ -95,6 +96,15 @@ typedef struct
 	gpointer *data; 	/* the old value (before the change), in case of a redo action
 						 * it contains the new value */
 } undo_action;
+
+
+/* Data used for LSP highlighting request callback */
+typedef struct
+{
+	GeanyDocument *doc;
+	gint keyword_idx;
+} LspHighlightData;
+
 
 /* Custom document info bar response IDs */
 enum
@@ -2713,6 +2723,40 @@ void document_update_tags(GeanyDocument *doc)
 }
 
 
+static void document_highlight_keywords(GeanyDocument *doc, const gchar *keywords, gint keyword_idx)
+{
+	guint hash = g_str_hash(keywords);
+
+	if (hash != doc->priv->keyword_hash)
+	{
+		sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+		queue_colourise(doc); /* force re-highlighting the entire document */
+		doc->priv->keyword_hash = hash;
+	}
+}
+
+
+static void lsp_highlight_cb(gpointer user_data)
+{
+	LspHighlightData *data = user_data;
+	guint i;
+
+	foreach_document(i)
+	{
+		/* the document could have been closed before the callback fires, check
+		 * if it's still valid */
+		if (documents[i] == data->doc)
+		{
+			const gchar *keywords = lsp_symbol_highlight_get_cached(data->doc);
+			document_highlight_keywords(data->doc, keywords ? keywords : "", data->keyword_idx);
+			break;
+		}
+	}
+
+	g_free(data);
+}
+
+
 /* Re-highlights type keywords without re-parsing the whole document. */
 void document_highlight_tags(GeanyDocument *doc)
 {
@@ -2748,21 +2792,27 @@ void document_highlight_tags(GeanyDocument *doc)
 	if (!app->tm_workspace->tags_array)
 		return;
 
-	/* get any type keywords and tell scintilla about them
-	 * this will cause the type keywords to be colourized in scintilla */
-	keywords_str = symbols_find_typenames_as_string(doc->file_type->lang, FALSE);
-	if (keywords_str)
+	if (lsp_symbol_highlight_available(doc))
 	{
-		gchar *keywords = g_string_free(keywords_str, FALSE);
-		guint hash = g_str_hash(keywords);
+		LspHighlightData *data = g_new0(LspHighlightData, 1);
+		const gchar *keywords = lsp_symbol_highlight_get_cached(doc);
 
-		if (hash != doc->priv->keyword_hash)
+		data->doc = doc;
+		data->keyword_idx = keyword_idx;
+		document_highlight_keywords(doc, keywords ? keywords : "", keyword_idx);
+		lsp_symbol_highlight_request(doc, lsp_highlight_cb, data);
+	}
+	else
+	{
+		/* get any type keywords and tell scintilla about them
+		 * this will cause the type keywords to be colourized in scintilla */
+		keywords_str = symbols_find_typenames_as_string(doc->file_type->lang, FALSE);
+		if (keywords_str)
 		{
-			sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
-			queue_colourise(doc); /* force re-highlighting the entire document */
-			doc->priv->keyword_hash = hash;
+			gchar *keywords = g_string_free(keywords_str, FALSE);
+			document_highlight_keywords(doc, keywords, keyword_idx);
+			g_free(keywords);
 		}
-		g_free(keywords);
 	}
 }
 
