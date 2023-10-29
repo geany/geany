@@ -467,7 +467,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 		menu = gtk_menu_new();
 
 	/* clear the old menu items */
-	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
+	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) (void(*)(void)) gtk_widget_destroy, NULL);
 
 	ui_menu_add_document_items(GTK_MENU(menu), document_get_current(),
 		G_CALLBACK(tab_bar_menu_activate_cb));

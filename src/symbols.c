@@ -1481,7 +1481,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", box, "always-show-image", TRUE,
 					"tooltip-markup", tooltip, NULL);
 		g_signal_connect_data(item, "activate", G_CALLBACK(on_goto_popup_item_activate),
-		                      tm_tag_ref(tmtag), (GClosureNotify) tm_tag_unref, 0);
+		                      tm_tag_ref(tmtag), CLOSURE_NOTIFY(tm_tag_unref), 0);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 		if (! first)

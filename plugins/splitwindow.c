@@ -249,7 +249,7 @@ static void on_doc_menu_item_clicked(gpointer item, GeanyDocument *doc)
 static void on_doc_show_menu(GtkMenuToolButton *button, GtkMenu *menu)
 {
 	/* clear the old menu items */
-	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
+	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) (void(*)(void)) gtk_widget_destroy, NULL);
 
 	ui_menu_add_document_items(menu, edit_window.editor->document,
 		G_CALLBACK(on_doc_menu_item_clicked));
