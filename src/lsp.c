@@ -94,6 +94,12 @@ GPtrArray *func_return_ptrarr(GeanyDocument *doc)
 }
 
 
+const gchar *func_return_str(GeanyDocument *doc)
+{
+	return NULL;
+}
+
+
 void func_args_doc(GeanyDocument *doc)
 {
 }
@@ -121,7 +127,11 @@ static Lsp dummy_lsp = {
 
 	.doc_symbols_available = func_return_false,
 	.doc_symbols_request = func_args_doc_symcallback_ptr,
-	.doc_symbols_get_cached = func_return_ptrarr
+	.doc_symbols_get_cached = func_return_ptrarr,
+
+	.symbol_highlight_available = func_return_false,
+	.symbol_highlight_request = func_args_doc_symcallback_ptr,
+	.symbol_highlight_get_cached = func_return_str
 };
 
 static Lsp *current_lsp = &dummy_lsp;
@@ -206,4 +216,22 @@ void lsp_doc_symbols_request(GeanyDocument *doc, LspSymbolRequestCallback callba
 GPtrArray *lsp_doc_symbols_get_cached(GeanyDocument *doc)
 {
 	return CALL_IF_EXISTS(doc_symbols_get_cached)(doc);
+}
+
+
+gboolean lsp_symbol_highlight_available(GeanyDocument *doc)
+{
+	return CALL_IF_EXISTS(doc_symbols_available)(doc);
+}
+
+
+void lsp_symbol_highlight_request(GeanyDocument *doc, LspSymbolRequestCallback callback, gpointer user_data)
+{
+	CALL_IF_EXISTS(symbol_highlight_request)(doc, callback, user_data);
+}
+
+
+const gchar *lsp_symbol_highlight_get_cached(GeanyDocument *doc)
+{
+	return CALL_IF_EXISTS(symbol_highlight_get_cached)(doc);
 }

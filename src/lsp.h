@@ -41,6 +41,10 @@ typedef struct {
 	void (*doc_symbols_request)(GeanyDocument *doc, LspSymbolRequestCallback callback, gpointer user_data);
 	GPtrArray *(*doc_symbols_get_cached)(GeanyDocument *doc);
 
+	gboolean (*symbol_highlight_available)(GeanyDocument *doc);
+	void (*symbol_highlight_request)(GeanyDocument *doc, LspSymbolRequestCallback callback, gpointer user_data);
+	const gchar *(*symbol_highlight_get_cached)(GeanyDocument *doc);
+
 	gchar _dummy[1024];
 } Lsp;
 
@@ -65,6 +69,10 @@ void lsp_goto_perform(GeanyDocument *doc, gboolean definition);
 gboolean lsp_doc_symbols_available(GeanyDocument *doc);
 void lsp_doc_symbols_request(GeanyDocument *doc, LspSymbolRequestCallback callback, gpointer user_data);
 GPtrArray *lsp_doc_symbols_get_cached(GeanyDocument *doc);
+
+gboolean lsp_symbol_highlight_available(GeanyDocument *doc);
+void lsp_symbol_highlight_request(GeanyDocument *doc, LspSymbolRequestCallback callback, gpointer user_data);
+const gchar *lsp_symbol_highlight_get_cached(GeanyDocument *doc);
 
 #endif /* GEANY_PRIVATE */
 
