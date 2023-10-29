@@ -1195,7 +1195,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_label_set_text(GTK_LABEL(label), doc->file_type->title);
 
 	label = ui_lookup_widget(dialog, "file_size_label");
-	file_size = utils_make_human_readable_str(filesize, 1, 0);
+	file_size = g_format_size(filesize);
 	gtk_label_set_text(GTK_LABEL(label), file_size);
 	g_free(file_size);
 
