@@ -115,9 +115,9 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *btn_1, gint response_1,
+	const gchar *btn_2, gint response_2,
+	const gchar *btn_3, gint response_3,
 	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(11, 12);
 
 
@@ -3452,9 +3452,9 @@ gboolean document_close_all(void)
  * */
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *btn_1, gint response_1,
+	const gchar *btn_2, gint response_2,
+	const gchar *btn_3, gint response_3,
 	const gchar *extra_text, const gchar *format, ...)
 {
 	va_list args;
