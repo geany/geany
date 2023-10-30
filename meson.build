@@ -23,9 +23,6 @@ foreach dep : deps_in
 	deps_for_pc += ' ' + dep[0] + ' >= ' + dep[1]
 endforeach
 
-dep_mac_integration = dependency('gtk-mac-integration', version: '>= 3.0.1',
-	required: get_option('mac-integration'))
-
 glib = deps[0]
 
 # detect libc
@@ -735,6 +732,17 @@ if (host_machine.system() == 'windows')
 	endforeach
 endif
 
+osx_src = []
+osx_deps = []
+if host_machine.system() == 'darwin'
+	dep_mac_integration = dependency('gtk-mac-integration', version: '>= 3.0.1',
+		required: get_option('mac-integration'))
+	if dep_mac_integration.found()
+		osx_src += ['src/osx.c', 'src/osx.h']
+		osx_deps += [dep_mac_integration]
+	endif
+endif
+
 install_headers(
 	'plugins/geanyfunctions.h',
 	'plugins/geanyplugin.h',
@@ -851,12 +859,12 @@ libgeany = shared_library('geany',
 	'src/utils.h',
 	gen_src,
 	win_src,
-	dep_mac_integration.found() ? ['src/osx.c', 'src/osx.h'] : [],
+	osx_src,
 	host_machine.system() == 'windows' ? ['src/win32.c',  'src/win32.h'] : [ 'src/vte.c', 'src/vte.h' ],
 	soversion: '0',
 	c_args: geany_cflags + [ '-DG_LOG_DOMAIN="Geany"' ],
 	include_directories: [iscintilla],
-	dependencies: [dep_tagmanager, dep_ctags, dep_scintilla, dep_mac_integration] + deps + win_deps,
+	dependencies: [dep_tagmanager, dep_ctags, dep_scintilla] + deps + win_deps + osx_deps,
 	install: true
 )
 dep_libgeany = declare_dependency(
