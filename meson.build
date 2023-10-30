@@ -743,6 +743,12 @@ if host_machine.system() == 'darwin'
 	endif
 endif
 
+vte_src = ['src/vte.c', 'src/vte.h']
+if host_machine.system() == 'windows'
+	# No VTE support on Windows
+	vte_src = []
+endif
+
 install_headers(
 	'plugins/geanyfunctions.h',
 	'plugins/geanyplugin.h',
@@ -857,10 +863,10 @@ libgeany = shared_library('geany',
 	'src/ui_utils.h',
 	'src/utils.c',
 	'src/utils.h',
+	vte_src,
 	gen_src,
 	win_src,
 	osx_src,
-	host_machine.system() == 'windows' ? [] : [ 'src/vte.c', 'src/vte.h' ],
 	soversion: '0',
 	c_args: geany_cflags + [ '-DG_LOG_DOMAIN="Geany"' ],
 	include_directories: [iscintilla],
