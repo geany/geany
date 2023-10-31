@@ -696,23 +696,24 @@ gint sci_get_lexer(ScintillaObject *sci)
 }
 
 
-void sci_set_lexer(ScintillaObject *sci, guint lexer_id)
+void sci_set_lexer(ScintillaObject *sci, const gchar *lexer_name)
 {
 	gint old = sci_get_lexer(sci);
 
-	/* TODO, LexerNameFromID() is already deprecated */
-	const char *lexer_name = LexerNameFromID(lexer_id);
-	if (! lexer_name)
+	g_return_if_fail(lexer_name != NULL);
+
+	old = sci_get_lexer(sci);
+
+	ILexer5 *lexer = CreateLexer(lexer_name);
+	if (! lexer)
 	{
-		g_warning("Failed to find lexer for ID %u", lexer_id);
+		g_warning("Failed to find lexer for name %s", lexer_name);
 		return;
 	}
 
-	ILexer5 *lexer = CreateLexer(lexer_name);
-
 	SSM(sci, SCI_SETILEXER, 0, (uintptr_t) lexer);
 
-	if (old != (gint)lexer_id)
+	if (old != sci_get_lexer(sci))
 		SSM(sci, SCI_CLEARDOCUMENTSTYLE, 0, 0);
 }
 
