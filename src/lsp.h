@@ -34,6 +34,8 @@ typedef struct {
 
 	gboolean (*goto_available)(GeanyDocument *doc);
 	void (*goto_perform)(GeanyDocument *doc, gboolean definition);
+
+	gchar _dummy[1024];
 } Lsp;
 
 
