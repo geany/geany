@@ -1917,3 +1917,77 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 	return !(highlighting_is_comment_style(lexer, style) ||
 		highlighting_is_string_style(lexer, style));
 }
+
+#include <Lexilla.h> /* ILexer5 */
+
+
+#define set_lexer(LANG_NAME) \
+	g_warn_if_fail(CreateLexer(LexerNameFromID(highlighting_lexer_##LANG_NAME)) != NULL)
+
+
+void test_lexer_creation_speed(void)
+{
+	GDateTime *now = g_date_time_new_now(g_time_zone_new_local());
+
+	set_lexer(ABAQUS);
+	set_lexer(ADA);
+	set_lexer(ASCIIDOC);
+	set_lexer(ASM);
+	set_lexer(AU3);
+	set_lexer(BASIC);
+	set_lexer(BATCH);
+	set_lexer(C);
+	set_lexer(CAML);
+	set_lexer(CMAKE);
+	set_lexer(COBOL);
+	set_lexer(COFFEESCRIPT);
+	set_lexer(CONF);
+	set_lexer(CSS);
+	set_lexer(D);
+	set_lexer(DIFF);
+	set_lexer(LISP);
+	set_lexer(ERLANG);
+	set_lexer(DOCBOOK);
+	set_lexer(F77);
+	set_lexer(FORTH);
+	set_lexer(FORTRAN);
+	set_lexer(GDSCRIPT);
+	set_lexer(GO);
+	set_lexer(HASKELL);
+	set_lexer(HAXE);
+	set_lexer(AS);
+	set_lexer(HTML);
+	set_lexer(JAVA);
+	set_lexer(JS);
+	set_lexer(JULIA);
+	set_lexer(LATEX);
+	set_lexer(LUA);
+	set_lexer(MAKE);
+	set_lexer(MATLAB);
+	set_lexer(MARKDOWN);
+	set_lexer(NSIS);
+	set_lexer(OBJECTIVEC);
+	set_lexer(PASCAL);
+	set_lexer(PERL);
+	set_lexer(PHP);
+	set_lexer(PO);
+	set_lexer(POWERSHELL);
+	set_lexer(PYTHON);
+	set_lexer(R);
+	set_lexer(RUBY);
+	set_lexer(RUST);
+	set_lexer(SH);
+	set_lexer(SMALLTALK);
+	set_lexer(SQL);
+	set_lexer(TCL);
+	set_lexer(TXT2TAGS);
+	set_lexer(VHDL);
+	set_lexer(VERILOG);
+	set_lexer(XML);
+	set_lexer(YAML);
+	set_lexer(ZEPHIR);
+
+	GDateTime *after = g_date_time_new_now(g_time_zone_new_local());
+
+	fprintf(stdout, "%lu microseconds\n", (unsigned long)g_date_time_difference(after, now));
+}

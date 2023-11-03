@@ -1253,6 +1253,8 @@ gint main_lib(gint argc, gchar **argv)
 	gtkosx_application_ready(gtkosx_application_get());
 #endif
 
+	test_lexer_creation_speed();
+
 	gtk_main();
 	return 0;
 }

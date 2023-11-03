@@ -53,6 +53,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style);
 gboolean highlighting_is_comment_style(gint lexer, gint style);
 gboolean highlighting_is_code_style(gint lexer, gint style);
 
+void test_lexer_creation_speed(void);
 
 #ifdef GEANY_PRIVATE
 
