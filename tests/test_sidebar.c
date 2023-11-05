@@ -137,12 +137,21 @@ void test_sidebar_openfiles_tree(void)
 
 int main(int argc, char **argv)
 {
-	g_test_init(&argc, &argv, NULL);
-	/* Not sure if we can really continue without DISPLAY. Fake X display perhaps?
+	/* In headless environments that do not provide a virtual display,
+	 * GTK initialisation is expected to fail and gtk_init_check()
+	 * will return FALSE. Calling any GTK function or instantiating
+	 * any GTK type afterwards results in undefined behavior.
 	 *
-	 * This test seems to work, at least.
+	 * By returning 77, we can tell test harnesses compatible with
+	 * the GNU standard approach to regard the test as skipped.
 	 */
-	gtk_init_check(&argc, &argv);
+	if (! gtk_init_check(&argc, &argv))
+	{
+		g_test_message("GTK initialization failed; skipping. Running inside a headless environment?");
+		return 77;
+	}
+
+	g_test_init(&argc, &argv, NULL);
 
 	main_init_headless();
 
