@@ -105,7 +105,7 @@ void func_args_doc(GeanyDocument *doc)
 }
 
 
-void func_args_doc_bool(GeanyDocument *doc, gboolean dummy)
+void func_args_doc_int_bool(GeanyDocument *doc, gint dummy1, gboolean dummy2)
 {
 }
 
@@ -123,7 +123,7 @@ static Lsp dummy_lsp = {
 	.calltips_show = func_args_doc,
 
 	.goto_available = func_return_false,
-	.goto_perform = func_args_doc_bool,
+	.goto_perform = func_args_doc_int_bool,
 
 	.doc_symbols_available = func_return_false,
 	.doc_symbols_request = func_args_doc_symcallback_ptr,
@@ -195,9 +195,9 @@ gboolean lsp_goto_available(GeanyDocument *doc)
 }
 
 
-void lsp_goto_perform(GeanyDocument *doc, gboolean definition)
+void lsp_goto_perform(GeanyDocument *doc, gint pos, gboolean definition)
 {
-	CALL_IF_EXISTS(goto_perform)(doc, definition);
+	CALL_IF_EXISTS(goto_perform)(doc, pos, definition);
 }
 
 

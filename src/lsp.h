@@ -35,7 +35,7 @@ typedef struct {
 	void (*calltips_show)(GeanyDocument *doc);
 
 	gboolean (*goto_available)(GeanyDocument *doc);
-	void (*goto_perform)(GeanyDocument *doc, gboolean definition);
+	void (*goto_perform)(GeanyDocument *doc, gint pos, gboolean definition);
 
 	gboolean (*doc_symbols_available)(GeanyDocument *doc);
 	void (*doc_symbols_request)(GeanyDocument *doc, LspSymbolRequestCallback callback, gpointer user_data);
@@ -64,7 +64,7 @@ gboolean lsp_calltips_available(GeanyDocument *doc);
 void lsp_calltips_show(GeanyDocument *doc);
 
 gboolean lsp_goto_available(GeanyDocument *doc);
-void lsp_goto_perform(GeanyDocument *doc, gboolean definition);
+void lsp_goto_perform(GeanyDocument *doc, gint pos, gboolean definition);
 
 gboolean lsp_doc_symbols_available(GeanyDocument *doc);
 void lsp_doc_symbols_request(GeanyDocument *doc, LspSymbolRequestCallback callback, gpointer user_data);

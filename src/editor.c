@@ -320,7 +320,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 			editor_find_current_word(editor, editor_info.click_pos,
 				current_word, sizeof current_word, NULL);
 			if (*current_word)
-				return symbols_goto_tag(current_word, TRUE);
+				return symbols_goto_tag(current_word, editor_info.click_pos, TRUE);
 			else
 				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
 			return TRUE;

@@ -1709,13 +1709,13 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 }
 
 
-gboolean symbols_goto_tag(const gchar *name, gboolean definition)
+gboolean symbols_goto_tag(const gchar *name, gint pos, gboolean definition)
 {
 	GeanyDocument *doc = document_get_current();
 
 	if (lsp_goto_available(doc))
 	{
-		lsp_goto_perform(doc, definition);
+		lsp_goto_perform(doc, pos, definition);
 		return TRUE;
 	}
 
