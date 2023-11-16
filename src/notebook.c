@@ -45,14 +45,14 @@
 
 static const GtkTargetEntry drag_targets[] =
 {
-	{GEANY_DND_NOTEBOOK_TAB_TYPE, GTK_TARGET_SAME_APP | GTK_TARGET_SAME_WIDGET, 0}
+	{ (gchar *) GEANY_DND_NOTEBOOK_TAB_TYPE, GTK_TARGET_SAME_APP | GTK_TARGET_SAME_WIDGET, 0 }
 };
 
-static GtkTargetEntry files_drop_targets[] = {
-	{ "STRING",			0, 0 },
-	{ "UTF8_STRING",	0, 0 },
-	{ "text/plain",		0, 0 },
-	{ "text/uri-list",	0, 0 }
+static const GtkTargetEntry files_drop_targets[] = {
+	{ (gchar *) "STRING",			0, 0 },
+	{ (gchar *) "UTF8_STRING",		0, 0 },
+	{ (gchar *) "text/plain",		0, 0 },
+	{ (gchar *) "text/uri-list",	0, 0 }
 };
 
 static const gsize MAX_MRU_DOCS = 20;
@@ -467,7 +467,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 		menu = gtk_menu_new();
 
 	/* clear the old menu items */
-	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
+	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) (void(*)(void)) gtk_widget_destroy, NULL);
 
 	ui_menu_add_document_items(GTK_MENU(menu), document_get_current(),
 		G_CALLBACK(tab_bar_menu_activate_cb));

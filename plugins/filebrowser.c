@@ -526,8 +526,7 @@ static void on_external_open(GtkMenuItem *menuitem, gpointer user_data)
 		}
 	}
 
-	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
-	g_list_free(list);
+	g_list_free_full(list, (GDestroyNotify) gtk_tree_path_free);
 }
 
 
@@ -551,8 +550,7 @@ static void open_selected_files(GList *list, gboolean do_not_focus)
 	if (doc != NULL && ! do_not_focus)
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 
-	g_slist_foreach(files, (GFunc) g_free, NULL);	/* free filenames */
-	g_slist_free(files);
+	g_slist_free_full(files, g_free);
 }
 
 
@@ -589,8 +587,7 @@ static void on_open_clicked(GtkMenuItem *menuitem, gpointer user_data)
 	else
 		open_selected_files(list, GPOINTER_TO_INT(user_data));
 
-	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
-	g_list_free(list);
+	g_list_free_full(list, (GDestroyNotify) gtk_tree_path_free);
 }
 
 
@@ -620,8 +617,7 @@ static void on_find_in_files(GtkMenuItem *menuitem, gpointer user_data)
 	else
 		dir = g_strdup(current_dir);
 
-	g_list_foreach(list, (GFunc) gtk_tree_path_free, NULL);
-	g_list_free(list);
+	g_list_free_full(list, (GDestroyNotify) gtk_tree_path_free);
 
 	SETPTR(dir, utils_get_utf8_from_locale(dir));
 	search_show_find_in_files_dialog(dir);

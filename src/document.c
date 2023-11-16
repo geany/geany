@@ -115,9 +115,9 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *btn_1, gint response_1,
+	const gchar *btn_2, gint response_2,
+	const gchar *btn_3, gint response_3,
 	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(11, 12);
 
 
@@ -1017,15 +1017,18 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 
 	if (filedata->readonly)
 	{
-		const gchar *warn_msg = _(
-			"The file \"%s\" could not be opened properly and has been truncated. " \
-			"This can occur if the file contains a NULL byte. " \
-			"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
+		gchar *warn_msg = g_strdup_printf(_(
+			"The file \"%s\" could not be opened properly and has been truncated. "
+			"This can occur if the file contains a NULL byte. "
+			"Be aware that saving it can cause data loss.\nThe file was set to read-only."),
+			display_filename);
 
 		if (main_status.main_window_realized)
-			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, display_filename);
+			dialogs_show_msgbox(GTK_MESSAGE_WARNING, "%s", warn_msg);
 
-		ui_set_statusbar(TRUE, warn_msg, display_filename);
+		ui_set_statusbar(TRUE, "%s", warn_msg);
+
+		g_free(warn_msg);
 	}
 
 	return TRUE;
@@ -3449,9 +3452,9 @@ gboolean document_close_all(void)
  * */
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *btn_1, gint response_1,
+	const gchar *btn_2, gint response_2,
+	const gchar *btn_3, gint response_3,
 	const gchar *extra_text, const gchar *format, ...)
 {
 	va_list args;

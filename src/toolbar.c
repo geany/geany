@@ -601,7 +601,7 @@ typedef struct
 
 static const GtkTargetEntry tb_editor_dnd_targets[] =
 {
-	{ "GEANY_TB_EDITOR_ROW", 0, 0 }
+	{ (gchar *) "GEANY_TB_EDITOR_ROW", 0, 0 }
 };
 static const gint tb_editor_dnd_targets_len = G_N_ELEMENTS(tb_editor_dnd_targets);
 
@@ -1118,8 +1118,7 @@ void toolbar_configure(GtkWindow *parent)
 
 	gtk_widget_destroy(tbw->dialog);
 
-	g_slist_foreach(used_items, (GFunc) g_free, NULL);
-	g_slist_free(used_items);
+	g_slist_free_full(used_items, g_free);
 	g_list_free(all_items);
 	tb_editor_free_path(tbw);
 	g_free(tbw);

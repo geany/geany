@@ -219,6 +219,10 @@ gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len);
 
 #ifdef GEANY_PRIVATE
 
+/* Casts a GDestroyNotify to a GClosureNotify without a warning.
+ * This is kinda shady, but likely works with platforms where GTK does. */
+#define CLOSURE_NOTIFY(f) ((GClosureNotify) (void(*)(void)) (GDestroyNotify) (f))
+
 typedef enum
 {
 	RESOURCE_DIR_DATA,

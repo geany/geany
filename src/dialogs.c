@@ -163,9 +163,8 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 			{
 				document_open_files(filelist, ro, ft, charset);
 			}
-			g_slist_foreach(filelist, (GFunc) g_free, NULL);	/* free filenames */
+			g_slist_free_full(filelist, g_free);
 		}
-		g_slist_free(filelist);
 	}
 	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
@@ -983,7 +982,7 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 		g_signal_connect(data->entry, "insert-text", insert_text_cb, insert_text_cb_data);
 	g_signal_connect(data->entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
 	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), data->entry);
-	g_signal_connect_data(dialog, "response", G_CALLBACK(on_input_dialog_response), data, (GClosureNotify)g_free, 0);
+	g_signal_connect_data(dialog, "response", G_CALLBACK(on_input_dialog_response), data, CLOSURE_NOTIFY(g_free), 0);
 
 	if (persistent)
 	{

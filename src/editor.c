@@ -233,7 +233,7 @@ static void add_kb(GKeyFile *keyfile, const gchar *group, gchar **keys)
 
 		gtk_accel_group_connect(snippet_accel_group, key, mods, 0,
 			g_cclosure_new_swap((GCallback)on_snippet_keybinding_activate,
-				g_strdup(keys[i]), (GClosureNotify)g_free));
+				g_strdup(keys[i]), CLOSURE_NOTIFY(g_free)));
 	}
 }
 

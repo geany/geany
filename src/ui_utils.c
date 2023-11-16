@@ -2256,11 +2256,11 @@ static void add_stock_icons(const GtkStockItem *items, gsize count)
 
 void ui_init_stock_items(void)
 {
-	GtkStockItem items[] =
+	const GtkStockItem items[] =
 	{
-		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_CLOSE_ALL, N_("Close All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
+		{ (gchar *) GEANY_STOCK_SAVE_ALL, (gchar *) N_("Save All"), 0, 0, (gchar *) GETTEXT_PACKAGE },
+		{ (gchar *) GEANY_STOCK_CLOSE_ALL, (gchar *) N_("Close All"), 0, 0, (gchar *) GETTEXT_PACKAGE },
+		{ (gchar *) GEANY_STOCK_BUILD, (gchar *) N_("Build"), 0, 0, (gchar *) GETTEXT_PACKAGE }
 	};
 
 	gtk_stock_add(items, G_N_ELEMENTS(items));
@@ -2575,33 +2575,6 @@ static void init_css_styles(void)
 	theme_fn = g_build_filename(app->datadir, "geany.css", NULL);
 	load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	g_free(theme_fn);
-
-	// load themes to handle breakage between various GTK+ versions
-	const struct
-	{
-		guint min_version;
-		guint max_version;
-		const gchar *file;
-	}
-	css_files[] =
-	{
-		/* Unused now but can be used to load css for different GTK versions, such as
-		 * { 20, G_MAXUINT, "geany-3.20.css" },
-		 * { 0, 19, "geany-3.0.css" },
-		 */
-	};
-
-	guint gtk_version = gtk_get_minor_version();
-	for (guint i = 0; i < G_N_ELEMENTS(css_files); i++)
-	{
-		if (gtk_version >= css_files[i].min_version &&
-			gtk_version <= css_files[i].max_version)
-		{
-			theme_fn = g_build_filename(app->datadir, css_files[i].file, NULL);
-			load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-			g_free(theme_fn);
-		}
-	}
 
 	// if the user provided a geany.css file in their config dir, try and load that
 	theme_fn = g_build_filename(app->configdir, "geany.css", NULL);

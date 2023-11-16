@@ -602,9 +602,9 @@ static void print_external(GeanyDocument *doc)
 		/* /bin/sh -c emulates the system() call and makes complex commands possible
 		 * but only on non-win32 systems due to the lack of win32's shell capabilities */
 	#ifdef G_OS_UNIX
-		gchar *argv[] = { "/bin/sh", "-c", cmdline, NULL };
+		const gchar *argv[] = { "/bin/sh", "-c", cmdline, NULL };
 
-		if (!spawn_async(NULL, NULL, argv, NULL, NULL, &error))
+		if (!spawn_async(NULL, NULL, (gchar **) argv, NULL, NULL, &error))
 	#else
 		if (!spawn_async(NULL, cmdline, NULL, NULL, NULL, &error))
 	#endif

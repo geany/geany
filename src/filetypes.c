@@ -844,8 +844,7 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 
 	if (ft->priv->error_regex)
 		g_regex_unref(ft->priv->error_regex);
-	g_slist_foreach(ft->priv->tag_files, (GFunc) g_free, NULL);
-	g_slist_free(ft->priv->tag_files);
+	g_slist_free_full(ft->priv->tag_files, g_free);
 
 	g_free(ft->priv);
 	g_free(ft);

@@ -1108,8 +1108,7 @@ load_plugins_from_path(const gchar *path)
 		g_free(fname);
 	}
 
-	g_slist_foreach(list, (GFunc) g_free, NULL);
-	g_slist_free(list);
+	g_slist_free_full(list, g_free);
 
 	if (count)
 		geany_debug("Added %d plugin(s) in '%s'.", count, path);
@@ -1298,9 +1297,11 @@ void plugins_init(void)
 
 
 /* Same as plugin_free(), except it does nothing for proxies-in-use, to be called on
- * finalize in a loop */
-static void plugin_free_leaf(Plugin *p)
+ * finalize in a loop through g_list_foreach() */
+static void plugin_free_leaf(gpointer data, gpointer user_data G_GNUC_UNUSED)
 {
+	Plugin *p = data;
+
 	if (p->proxied_count == 0)
 		plugin_free(p);
 }
@@ -1311,13 +1312,12 @@ void plugins_finalize(void)
 {
 	if (failed_plugins_list != NULL)
 	{
-		g_list_foreach(failed_plugins_list, (GFunc) g_free,	NULL);
-		g_list_free(failed_plugins_list);
+		g_list_free_full(failed_plugins_list, g_free);
 	}
 	/* Have to loop because proxys cannot be unloaded until after all their
 	 * plugins are unloaded as well (the second loop should should catch all the remaining ones) */
 	while (active_plugin_list != NULL)
-		g_list_foreach(active_plugin_list, (GFunc) plugin_free_leaf, NULL);
+		g_list_foreach(active_plugin_list, plugin_free_leaf, NULL);
 
 	g_strfreev(active_plugins_pref);
 }
