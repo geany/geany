@@ -36,7 +36,11 @@ def format_tag(tagname, kind, signature, parent, return_type=None):
         signature_field = ''
 
     if parent:
-        parent_field = f'\tclass:{parent}'
+        # 'class' below should be a valid kind of the parent tag. But the Geany
+        # parsing code ignores the value when prefixed by 'scope' (corresponds
+        # to sZ ctags field) so this code is usable also for languages without
+        # the 'class' kind
+        parent_field = f'\tscope:class:{parent}'
     else:
         parent_field = ''
 
