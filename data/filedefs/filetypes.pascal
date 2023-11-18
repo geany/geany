@@ -38,7 +38,7 @@ mime_type=text/x-pascal
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comments, like # in this file
-#comment_single=
+comment_single=//
 # multiline comments
 comment_open={
 comment_close=}
@@ -63,4 +63,4 @@ context_action_cmd=
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 compiler=fpc "%f"
-run_cmd="./%e"
+run_cmd=instantfpc "%f"
