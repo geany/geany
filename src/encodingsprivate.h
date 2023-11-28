@@ -57,6 +57,7 @@ const gchar* encodings_get_charset(const GeanyEncoding* enc);
 
 void encodings_select_radio_item(const gchar *charset);
 
+void encodings_init_headless(void);
 void encodings_init(void);
 void encodings_finalize(void);
 
