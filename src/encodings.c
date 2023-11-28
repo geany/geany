@@ -405,6 +405,27 @@ void encodings_finalize(void)
 }
 
 
+/* initialization of non-UI parts */
+void encodings_init_headless(void)
+{
+	static gboolean initialized = FALSE;
+
+	if (initialized)
+		return;
+
+	init_encodings();
+
+	if (! pregs_loaded)
+	{
+		pregs[0] = regex_compile(PATTERN_HTMLMETA);
+		pregs[1] = regex_compile(PATTERN_CODING);
+		pregs_loaded = TRUE;
+	}
+
+	initialized = TRUE;
+}
+
+
 void encodings_init(void)
 {
 	GtkWidget *menu[2];
@@ -421,14 +442,7 @@ void encodings_init(void)
 		[UNICODE]		= N_("_Unicode"),
 	};
 
-	init_encodings();
-
-	if (! pregs_loaded)
-	{
-		pregs[0] = regex_compile(PATTERN_HTMLMETA);
-		pregs[1] = regex_compile(PATTERN_CODING);
-		pregs_loaded = TRUE;
-	}
+	encodings_init_headless();
 
 	/* create encodings submenu in document menu */
 	menu[0] = ui_lookup_widget(main_widgets.window, "set_encoding1_menu");
@@ -1057,6 +1071,7 @@ static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
  *
  * @return @C TRUE if the conversion succeeded, @c FALSE otherwise.
  */
+GEANY_EXPORT_SYMBOL
 gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *forced_enc,
 		gchar **used_encoding, gboolean *has_bom, gboolean *partial)
 {

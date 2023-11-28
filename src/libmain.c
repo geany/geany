@@ -1035,6 +1035,8 @@ void main_init_headless(void)
 	memset(&template_prefs, 0, sizeof(GeanyTemplatePrefs));
 	memset(&ui_prefs, 0, sizeof(UIPrefs));
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
+
+	encodings_init_headless();
 }
 
 
