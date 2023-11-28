@@ -427,7 +427,6 @@ void encodings_init(void)
 {
 	GtkWidget *menu[2];
 	GCallback cb_func[2];
-	gint group_sizes[GEANY_ENCODING_GROUPS_MAX] = { 0 };
 	const gchar *const groups[GEANY_ENCODING_GROUPS_MAX] =
 	{
 		[NONE]			= NULL,
@@ -446,9 +445,6 @@ void encodings_init(void)
 	menu[1] = ui_lookup_widget(main_widgets.window, "menu_reload_as1_menu");
 	cb_func[0] = G_CALLBACK(encodings_radio_item_change_cb);
 	cb_func[1] = G_CALLBACK(encodings_reload_radio_item_change_cb);
-
-	for (guint i = 0; i < G_N_ELEMENTS(encodings); i++)
-		group_sizes[encodings[i].group]++;
 
 	for (guint k = 0; k < 2; k++)
 	{
