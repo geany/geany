@@ -167,6 +167,64 @@ static void test_encodings_convert_utf8_to_utf8_auto(void)
 }
 
 
+static void test_encodings_convert_utf_other_to_utf8_auto(void)
+{
+#define UTF16_LE_BOM "\xff\xfe"
+#define UTF16_BE_BOM "\xfe\xff"
+#define UTF32_LE_BOM "\xff\xfe\x00\x00"
+#define UTF32_BE_BOM "\x00\x00\xfe\xff"
+#define TEST(success, input, output, has_bom, forced_enc) \
+		g_assert(success == assert_convert_to_utf8_auto(input, G_N_ELEMENTS(input) - 1, G_N_ELEMENTS(input) - 1, \
+				forced_enc, output, G_N_ELEMENTS(output) - 1, forced_enc, has_bom, \
+				strlen(output) != G_N_ELEMENTS(output) - 1))
+
+	TEST(TRUE, "N\000o\000 \000B\000O\000M\000", "No BOM", FALSE, NULL);
+	TEST(TRUE, "N\000o\000 \000B\000\330\000M\000", "No BØM", FALSE, NULL);
+	/* doesn't accept the NULs */
+	TEST(FALSE, "N\000o\000 \000B\000O\000M\000\000\000a\000n\000d\000 \000N\000U\000L\000s\000", "No BOM\0and NULs", FALSE, NULL);
+	TEST(FALSE, "N\000o\000 \000B\000\330\000M\000\000\000a\000\361\000d\000 \000N\000\331\000L\000s\000", "No BØM\0añd NÙLs", FALSE, NULL);
+
+	TEST(TRUE, UTF16_LE_BOM"W\000i\000t\000h\000 \000B\000O\000M\000", "With BOM", TRUE, NULL);
+	TEST(TRUE, UTF16_LE_BOM"W\000i\000t\000h\000 \000B\000\330\000M\000", "With BØM", TRUE, NULL);
+	/* doesn't accept the NULs */
+	TEST(FALSE, UTF16_LE_BOM"W\000i\000t\000h\000 \000B\000O\000M\000\000\000a\000n\000d\000 \000N\000U\000L\000s\000", "With BOM\0and NULs", TRUE, NULL);
+	TEST(FALSE, UTF16_LE_BOM"W\000\355\000t\000h\000 \000B\000\330\000M\000\000\000a\000\361\000d\000 \000N\000\331\000L\000s\000", "Wíth BØM\0añd NÙLs", TRUE, NULL);
+
+	/* We should actually be smarter in our selection of encoding introducing
+	 * probability scores, because this loads as UTF-16LE but is "圀椀琀栀 䈀伀䴀"
+	 * which doesn't seem to be real Chinese */
+	TEST(TRUE, "\000N\000o\000 \000B\000O\000M", "No BOM", FALSE, "UTF-16BE");
+	TEST(TRUE, "\000N\000o\000 \000B\000\330\000M", "No BØM", FALSE, NULL);
+	/* doesn't accept the NULs -- and see above for the encoding choice */
+	TEST(FALSE, "\000N\000o\000 \000B\000O\000M\000\000\000a\000n\000d\000 \000N\000U\000L\000s", "No BOM\0and NULs", FALSE, "UTF-16BE");
+	TEST(FALSE, "\000N\000o\000 \000B\000\330\000M\000\000\000a\000\361\000d\000 \000N\000\331\000L\000s", "No BØM\0añd NÙLs", FALSE, NULL);
+
+	TEST(TRUE, UTF16_BE_BOM"\000W\000i\000t\000h\000 \000B\000O\000M", "With BOM", TRUE, NULL);
+	TEST(TRUE, UTF16_BE_BOM"\000W\000i\000t\000h\000 \000B\000\330\000M", "With BØM", TRUE, NULL);
+	/* doesn't accept the NULs */
+	TEST(FALSE, UTF16_BE_BOM"\000W\000i\000t\000h\000 \000B\000O\000M\000\000\000a\000n\000d\000 \000N\000U\000L\000s", "With BOM\0and NULs", TRUE, NULL);
+	TEST(FALSE, UTF16_BE_BOM"\000W\000\355\000t\000h\000 \000B\000\330\000M\000\000\000a\000\361\000d\000 \000N\000\331\000L\000s", "Wíth BØM\0añd NÙLs", TRUE, NULL);
+
+	TEST(TRUE, UTF32_LE_BOM"W\000\000\000i\000\000\000t\000\000\000h\000\000\000 \000\000\000B\000\000\000O\000\000\000M\000\000\000", "With BOM", TRUE, NULL);
+	TEST(TRUE, UTF32_LE_BOM"W\000\000\000i\000\000\000t\000\000\000h\000\000\000 \000\000\000B\000\000\000\330\000\000\000M\000\000\000", "With BØM", TRUE, NULL);
+	/* doesn't accept the NULs */
+	TEST(FALSE, UTF32_LE_BOM"W\000\000\000i\000\000\000t\000\000\000h\000\000\000 \000\000\000B\000\000\000O\000\000\000M\000\000\000\000\000\000\000a\000\000\000n\000\000\000d\000\000\000 \000\000\000N\000\000\000U\000\000\000L\000\000\000s\000\000\000", "With BOM\0and NULs", TRUE, NULL);
+	TEST(FALSE, UTF32_LE_BOM"W\000\000\000\355\000\000\000t\000\000\000h\000\000\000 \000\000\000B\000\000\000\330\000\000\000M\000\000\000\000\000\000\000a\000\000\000\361\000\000\000d\000\000\000 \000\000\000N\000\000\000\331\000\000\000L\000\000\000s\000\000\000", "Wíth BØM\0añd NÙLs", TRUE, NULL);
+
+	TEST(TRUE, UTF32_BE_BOM"\000\000\000W\000\000\000i\000\000\000t\000\000\000h\000\000\000 \000\000\000B\000\000\000O\000\000\000M", "With BOM", TRUE, NULL);
+	TEST(TRUE, UTF32_BE_BOM"\000\000\000W\000\000\000i\000\000\000t\000\000\000h\000\000\000 \000\000\000B\000\000\000\330\000\000\000M", "With BØM", TRUE, NULL);
+	/* doesn't accept the NULs */
+	TEST(FALSE, UTF32_BE_BOM"\000\000\000W\000\000\000i\000\000\000t\000\000\000h\000\000\000 \000\000\000B\000\000\000O\000\000\000M\000\000\000\000\000\000\000a\000\000\000n\000\000\000d\000\000\000 \000\000\000N\000\000\000U\000\000\000L\000\000\000s", "With BOM\0and NULs", TRUE, NULL);
+	TEST(FALSE, UTF32_BE_BOM"\000\000\000W\000\000\000\355\000\000\000t\000\000\000h\000\000\000 \000\000\000B\000\000\000\330\000\000\000M\000\000\000\000\000\000\000a\000\000\000\361\000\000\000d\000\000\000 \000\000\000N\000\000\000\331\000\000\000L\000\000\000s", "Wíth BØM\0añd NÙLs", TRUE, NULL);
+
+#undef TEST
+#undef UTF32_BE_BOM
+#undef UTF32_LE_BOM
+#undef UTF16_BE_BOM
+#undef UTF16_LE_BOM
+}
+
+
 static void test_encodings_convert_iso8859_to_utf8_auto(void)
 {
 #define TEST(success, input, output, forced_enc) \
@@ -210,6 +268,7 @@ int main(int argc, char **argv)
 
 	g_test_add_func("/encodings/ascii/convert_to_utf8_auto", test_encodings_convert_ascii_to_utf8_auto);
 	g_test_add_func("/encodings/utf8/convert_to_utf8_auto", test_encodings_convert_utf8_to_utf8_auto);
+	g_test_add_func("/encodings/utf_other/convert_to_utf_other_auto", test_encodings_convert_utf_other_to_utf8_auto);
 	g_test_add_func("/encodings/iso8859/convert_to_utf8_auto", test_encodings_convert_iso8859_to_utf8_auto);
 
 	return g_test_run();
