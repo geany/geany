@@ -1359,7 +1359,7 @@ void configuration_open_files(GPtrArray *session_files)
 	gboolean failure = FALSE;
 
 	/* necessary to set it to TRUE for project session support */
-	main_status.opening_session_files++;
+	main_opening_session_files(TRUE);
 
 	for (guint i = 0; i < session_files->len; i++)
 	{
@@ -1382,7 +1382,7 @@ void configuration_open_files(GPtrArray *session_files)
 		document_show_tab_idle(session_notebook_page >= 0 ? document_get_from_page(session_notebook_page) : document_get_current());
 
 	session_notebook_page = -1;
-	main_status.opening_session_files--;
+	main_opening_session_files(FALSE);
 }
 
 

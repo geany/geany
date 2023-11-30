@@ -210,6 +210,18 @@ signal void (*project_dialog_close)(GObject *obj, GtkWidget *notebook, gpointer 
  */
 signal void (*geany_startup_complete)(GObject *obj, gpointer user_data);
 
+/** Sent when Geany starts or stops batch-opening session files from the global session
+ *  or the project session.
+ *
+ * @param obj a GeanyObject instance, should be ignored.
+ * @param opening set to @c TRUE when session file opening starts and to @c FALSE when
+ *        it is completed.
+ * @param user_data user data.
+ *
+ * @since TODO
+ */
+signal void (*session_opening)(GObject *obj, gboolean opening, gpointer user_data);
+
 /** Sent before build is started. A plugin could use this signal e.g. to save all unsaved documents
  *  before the build starts.
  *

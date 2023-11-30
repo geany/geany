@@ -1210,9 +1210,9 @@ gint main_lib(gint argc, gchar **argv)
 	tools_create_insert_custom_command_menu_items();
 
 	/* load any command line files or session files */
-	main_status.opening_session_files++;
+	main_opening_session_files(TRUE);
 	load_startup_files(argc, argv);
-	main_status.opening_session_files--;
+	main_opening_session_files(FALSE);
 
 	/* open a new file if no other file was opened */
 	document_new_file_if_non_open();
@@ -1447,4 +1447,16 @@ void main_reload_configuration(void)
 	symbols_reload_config_files();
 
 	ui_set_statusbar(TRUE, _("Configuration files reloaded."));
+}
+
+
+void main_opening_session_files(gboolean opening)
+{
+	if (opening && !main_status.opening_session_files)
+		g_signal_emit_by_name(geany_object, "session-opening", TRUE);
+
+	main_status.opening_session_files += opening ? 1 : -1;
+
+	if (!opening && !main_status.opening_session_files)
+		g_signal_emit_by_name(geany_object, "session-opening", FALSE);
 }
