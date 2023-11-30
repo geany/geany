@@ -2718,9 +2718,6 @@ void document_update_tags(GeanyDocument *doc)
 	buffer_ptr = (guchar *) SSM(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
 	tm_workspace_update_source_file_buffer(doc->tm_file, buffer_ptr, len);
 
-	if (G_UNLIKELY(main_status.opening_session_files || main_status.closing_all))
-		return;
-
 	sidebar_update_tag_list(doc, TRUE);
 	document_highlight_tags(doc);
 }
