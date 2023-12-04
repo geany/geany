@@ -173,10 +173,12 @@ static void test_encodings_convert_utf_other_to_utf8_auto(void)
 #define UTF16_BE_BOM "\xfe\xff"
 #define UTF32_LE_BOM "\xff\xfe\x00\x00"
 #define UTF32_BE_BOM "\x00\x00\xfe\xff"
-#define TEST(success, input, output, has_bom, forced_enc) \
+#define TEST_ENC(success, input, output, has_bom, forced_enc, expected_encoding) \
 		g_assert(success == assert_convert_to_utf8_auto(input, G_N_ELEMENTS(input) - 1, G_N_ELEMENTS(input) - 1, \
-				forced_enc, output, G_N_ELEMENTS(output) - 1, forced_enc, has_bom, \
+				forced_enc, output, G_N_ELEMENTS(output) - 1, expected_encoding, has_bom, \
 				strlen(output) != G_N_ELEMENTS(output) - 1))
+#define TEST(success, input, output, has_bom, forced_enc) \
+		TEST_ENC(success, input, output, has_bom, forced_enc, forced_enc)
 
 	TEST(TRUE, "N\000o\000 \000B\000O\000M\000", "No BOM", FALSE, NULL);
 	TEST(TRUE, "N\000o\000 \000B\000\330\000M\000", "No BØM", FALSE, NULL);
@@ -225,7 +227,16 @@ static void test_encodings_convert_utf_other_to_utf8_auto(void)
 	 * obviously doesn't match expectations */
 	/*TEST(FALSE, "+/v8-With B+ANg-M+AAA-and NULs", "With BØM\0and NULs", TRUE, NULL);*/
 
+	/* empty data with BOMs */
+	TEST_ENC(TRUE, "+/v8-", "", TRUE, NULL, "UTF-7"); /* UTF-7 */
+	/* these two actually lead to reading past the buffer's bounds */
+	/*TEST_ENC(TRUE, UTF16_BE_BOM, "", TRUE, NULL, "UTF-16BE");*/
+	/*TEST_ENC(TRUE, UTF16_LE_BOM, "", TRUE, NULL, "UTF-16LE");*/
+	TEST_ENC(TRUE, UTF32_BE_BOM, "", TRUE, NULL, "UTF-32BE");
+	TEST_ENC(TRUE, UTF32_LE_BOM, "", TRUE, NULL, "UTF-32LE");
+
 #undef TEST
+#undef TEST_ENC
 #undef UTF32_BE_BOM
 #undef UTF32_LE_BOM
 #undef UTF16_BE_BOM
