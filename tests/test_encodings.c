@@ -80,13 +80,9 @@ static gboolean assert_convert_to_utf8_auto_impl(
 	fflush(stdout);
 	if (ret)
 	{
-		/* FIXME: that's probably a bug in encodings_convert_to_utf8_auto() */
-		if (size != expected_size && expected_partial)
-			expected_size = strlen(expected_output);
-
-		g_assert_cmpuint(size, ==, expected_size);
 		assert_cmpmem_eq_with_caller(buf, expected_output, MIN(size, expected_size),
 				domain, file, line, func);
+		g_assert_cmpuint(size, ==, expected_size);
 		if (expected_encoding)
 			g_assert_cmpstr(expected_encoding, ==, used_encoding);
 		g_assert_cmpint(has_bom, ==, expected_has_bom);
@@ -121,9 +117,8 @@ static void test_encodings_convert_ascii_to_utf8_auto(void)
 	TEST_ASCII(TRUE, "This is a very basic ASCII test", "UTF-8");
 	TEST_ASCII(TRUE, "S\till ve\ry \b\asic", NULL);
 	TEST_ASCII(FALSE, "With\0some\0NULs\0", NULL);
-	/* these fails to report partial output! */
-	/*TEST_ASCII(FALSE, "With\0some\0NULs\0", "None");*/
-	/*TEST_ASCII(FALSE, "With\0some\0NULs\0", "UTF-8");*/
+	TEST_ASCII(TRUE, "With\0some\0NULs\0", "None");
+	TEST_ASCII(FALSE, "With\0some\0NULs\0", "UTF-8");
 
 #undef TEST_ASCII
 }
@@ -144,23 +139,24 @@ static void test_encodings_convert_utf8_to_utf8_auto(void)
 	TEST_UTF8(TRUE, "Thĩs îs å véry basìč ÅSÇǏÍ test", "None");
 	TEST_UTF8(TRUE, "Thĩs îs å véry basìč ÅSÇǏÍ test", "UTF-8");
 	TEST_UTF8(FALSE, "Wíťh\0søme\0NÙLs\0", NULL);
-	/* these fails to report partial output! */
-	/*TEST_UTF8(FALSE, "Wíťh\0søme\0NÙLs\0", "UTF-8");*/
-	/*TEST_UTF8(FALSE, "Wíťh\0søme\0NÙLs\0", "None");*/
+	TEST_UTF8(FALSE, "Wíťh\0søme\0NÙLs\0", "UTF-8"); /* the NUL doesn't pass the UTF-8 check */
+	TEST_UTF8(TRUE, "Wíťh\0søme\0NÙLs\0", "None"); /* with None we do no data validation, but report partial output */
 
 	/* with the inline hint */
 	TEST_UTF8(TRUE, "coding:utf-8 bãśïč", NULL);
 	TEST_UTF8(FALSE, "coding:utf-8 Wíťh\0søme\0NÙLs", NULL);
 
 	TEST_UTF8(TRUE, UTF8_BOM"With BOM", NULL);
-	TEST_UTF8(TRUE, UTF8_BOM"With BOM\0and NULs", NULL);
-	TEST_UTF8(TRUE, UTF8_BOM"Wíth BØM\0añd NÙLs", NULL);
+	/* These won't pass the UTF-8 validation despite the BOM, so we fallback to
+	 * testing other options, and it will succeed with UTF-16 so there's no real
+	 * point in verifying this */
+	/*TEST_UTF8(FALSE, UTF8_BOM"With BOM\0and NULs", NULL);*/
+	/*TEST_UTF8(FALSE, UTF8_BOM"Wíth BØM\0añd NÙLs", NULL);*/
 
 	/* non-UTF-8 */
 	TEST_UTF8(FALSE, "Th\xec""s", "UTF-8");
 	TEST_UTF8(FALSE, "Th\xec""s\0", "UTF-8");
-	/* erroneously succeeds and fails to report partial */
-	/*TEST_UTF8(FALSE, "\0Th\xec""s", "UTF-8");*/
+	TEST_UTF8(FALSE, "\0Th\xec""s", "UTF-8");
 
 #undef TEST_UTF8
 #undef UTF8_BOM
@@ -229,9 +225,8 @@ static void test_encodings_convert_utf_other_to_utf8_auto(void)
 
 	/* empty data with BOMs */
 	TEST_ENC(TRUE, "+/v8-", "", TRUE, NULL, "UTF-7"); /* UTF-7 */
-	/* these two actually lead to reading past the buffer's bounds */
-	/*TEST_ENC(TRUE, UTF16_BE_BOM, "", TRUE, NULL, "UTF-16BE");*/
-	/*TEST_ENC(TRUE, UTF16_LE_BOM, "", TRUE, NULL, "UTF-16LE");*/
+	TEST_ENC(TRUE, UTF16_BE_BOM, "", TRUE, NULL, "UTF-16BE");
+	TEST_ENC(TRUE, UTF16_LE_BOM, "", TRUE, NULL, "UTF-16LE");
 	TEST_ENC(TRUE, UTF32_BE_BOM, "", TRUE, NULL, "UTF-32BE");
 	TEST_ENC(TRUE, UTF32_LE_BOM, "", TRUE, NULL, "UTF-32LE");
 
@@ -257,23 +252,17 @@ static void test_encodings_convert_iso8859_to_utf8_auto(void)
 	TEST(TRUE, "\xa4""uro", "¤uro", "ISO-8859-1");
 	TEST(TRUE, "\xa4""uro", "€uro", "ISO-8859-15");
 	TEST(TRUE, "\xd8""ed", "Řed", "ISO-8859-2");
-	/* huh?  the UTF-8 BOM takes over, although \xd3 is NOT valid UTF-8!?
-	 * - file(1) says "iso8859 text", OK
-	 * - kate(1) loads as ISO-8859-15
-	 * - vim(1) loads as "latin1" whatever that means (but looks OK)
-	 * - chardet(1) wrongly reports "UTF-8-SIG with confidence 1.0", which is
-	 *   a tad sad for a tool which only purpose IS detecting encoding...
-	 * - pluma(1) doesn't open it and asks for encoding input
-	 * - gedit(1) opens as broken UTF-8, but warns about it and asks
-	 * - gnome-text-editor(1) is just broken, opens as gedit, but says I don't
-	 *   have permission to open that file :)  looks like a generic error. */
-	/*TEST(TRUE, "\xef\xbb\xbf""not B\xd3M", "ï»¿not BÓM", NULL);*/
+	/* make-believe UTF-8 BOM followed by non-UTF-8 data */
+	TEST(TRUE, "\xef\xbb\xbf""not B\xd3M", "ï»¿not BÓM", NULL);
 	TEST(TRUE, "coding:iso-8859-2 \xd8""ed", "coding:iso-8859-2 Řed", NULL);
 	/* with NULs */
 	TEST(FALSE, "W\xec""th\0z\xe9""r\xf8""s", "Wìth\0zérøs", "ISO-8859-1");
 	TEST(FALSE, "W\xec""th\0z\xe9""r\xf8""s", "Wìth\0zérøs", "ISO-8859-15");
 	/* This parses as UTF-16, but that's not really what we'd expect */
 	/*TEST(FALSE, "W\xec""th\0z\xe9""r\xf8""s", "Wìth\0zérøs", NULL);*/
+
+	/* UTF-8 BOM with non-UTF-8 data, we should fallback */
+	TEST(TRUE, "\xef\xbb\xbfW\xec""th\xf8""ut BOM", "ï»¿Wìthøut BOM", NULL);
 
 #undef TEST
 }

@@ -880,10 +880,9 @@ typedef struct
 {
 	gchar		*data;	/* null-terminated data */
 	gsize		 size;	/* actual data size */
-	gsize		 len;	/* string length of data */
 	gchar		*enc;
 	gboolean	 bom;
-	gboolean	 partial;
+	gboolean	 has_nuls;
 } BufferData;
 
 
@@ -895,7 +894,7 @@ handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
 
 	if (utils_str_equal(forced_enc, "UTF-8"))
 	{
-		if (! g_utf8_validate(buffer->data, buffer->len, NULL))
+		if (! g_utf8_validate(buffer->data, buffer->size, NULL))
 		{
 			return FALSE;
 		}
@@ -911,7 +910,8 @@ handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
 		else
 		{
 			SETPTR(buffer->data, converted_text);
-			buffer->len = strlen(converted_text);
+			/* we can't succeed with NULs, so this is OK */
+			buffer->size = strlen(converted_text);
 		}
 	}
 	enc_idx = encodings_scan_unicode_bom(buffer->data, buffer->size, NULL);
@@ -930,8 +930,7 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 
 	if (buffer->size == 0)
 	{
-		/* we have no data so assume UTF-8, buffer->len can be 0 even we have an empty
-		 * e.g. UTF32 file with a BOM(so size is 4, len is 0) */
+		/* we have no data so assume UTF-8 */
 		buffer->enc = g_strdup("UTF-8");
 	}
 	else
@@ -942,14 +941,24 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 			buffer->enc = g_strdup(encodings[enc_idx].charset);
 			buffer->bom = TRUE;
 
-			if (enc_idx != GEANY_ENCODING_UTF_8) /* the BOM indicated something else than UTF-8 */
+			if (enc_idx == GEANY_ENCODING_UTF_8)
+			{
+				if (! g_utf8_validate(buffer->data, buffer->size, NULL))
+				{
+					/* this is not actually valid UTF-8 */
+					SETPTR(buffer->enc, NULL);
+					buffer->bom = FALSE;
+				}
+			}
+			else /* the BOM indicated something else than UTF-8 */
 			{
 				gchar *converted_text = encodings_convert_to_utf8_from_charset(
 										buffer->data, buffer->size, buffer->enc, FALSE);
 				if (converted_text != NULL)
 				{
 					SETPTR(buffer->data, converted_text);
-					buffer->len = strlen(converted_text);
+					/* we can't succeed with NULs, so this is OK */
+					buffer->size = strlen(converted_text);
 				}
 				else
 				{
@@ -967,7 +976,7 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 
 			/* try UTF-8 first */
 			if (encodings_get_idx_from_charset(regex_charset) == GEANY_ENCODING_UTF_8 &&
-				(buffer->size == buffer->len) && g_utf8_validate(buffer->data, buffer->len, NULL))
+				g_utf8_validate(buffer->data, buffer->size, NULL))
 			{
 				buffer->enc = g_strdup("UTF-8");
 			}
@@ -983,7 +992,8 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 					return FALSE;
 				}
 				SETPTR(buffer->data, converted_text);
-				buffer->len = strlen(converted_text);
+				/* we can't succeed with NULs, so this is OK */
+				buffer->size = strlen(converted_text);
 			}
 			g_free(regex_charset);
 		}
@@ -1000,11 +1010,11 @@ handle_bom(BufferData *buffer)
 	encodings_scan_unicode_bom(buffer->data, buffer->size, &bom_len);
 	g_return_if_fail(bom_len != 0);
 
-	/* use filedata->len here because the contents are already converted into UTF-8 */
-	buffer->len -= bom_len;
+	/* the contents are already converted into UTF-8 here */
+	buffer->size -= bom_len;
 	/* overwrite the BOM with the remainder of the file contents, plus the NULL terminator. */
-	memmove(buffer->data, buffer->data + bom_len, buffer->len + 1);
-	buffer->data = g_realloc(buffer->data, buffer->len + 1);
+	memmove(buffer->data, buffer->data + bom_len, buffer->size + 1);
+	buffer->data = g_realloc(buffer->data, buffer->size + 1);
 }
 
 
@@ -1017,16 +1027,6 @@ static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
 	 * if we have a BOM */
 	tmp_enc_idx = encodings_scan_unicode_bom(buffer->data, buffer->size, NULL);
 
-	/* check whether the size of the loaded data is equal to the size of the file in the
-	 * filesystem file size may be 0 to allow opening files in /proc/ which have typically a
-	 * file size of 0 bytes */
-	if (buffer->len != buffer->size && buffer->size != 0 && (
-		tmp_enc_idx == GEANY_ENCODING_UTF_8 || /* tmp_enc_idx can be UTF-7/8/16/32, UCS and None */
-		tmp_enc_idx == GEANY_ENCODING_UTF_7))  /* filter UTF-7/8 where no NULL bytes are allowed */
-	{
-		buffer->partial = TRUE;
-	}
-
 	/* Determine character encoding and convert to UTF-8 */
 	if (forced_enc != NULL)
 	{
@@ -1035,6 +1035,7 @@ static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
 		{
 			buffer->bom = FALSE;
 			buffer->enc = g_strdup(encodings[GEANY_ENCODING_NONE].charset);
+			buffer->has_nuls = strlen(buffer->data) != buffer->size;
 		}
 		else if (! handle_forced_encoding(buffer, forced_enc))
 		{
@@ -1063,36 +1064,34 @@ static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
  * @param forced_enc forced encoding to use, or @c NULL
  * @param used_encoding return location for the actually used encoding, or @c NULL
  * @param has_bom return location to store whether the data had a BOM, or @c NULL
- * @param partial return location to store whether the conversion may be partial, or @c NULL
+ * @param has_nuls return location to store whether the converted data contains NULs, or @c NULL
  *
  * @return @C TRUE if the conversion succeeded, @c FALSE otherwise.
  */
 GEANY_EXPORT_SYMBOL
 gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *forced_enc,
-		gchar **used_encoding, gboolean *has_bom, gboolean *partial)
+		gchar **used_encoding, gboolean *has_bom, gboolean *has_nuls)
 {
 	BufferData buffer;
 
 	buffer.data = *buf;
 	buffer.size = *size;
-	/* use strlen to check for null chars */
-	buffer.len = strlen(buffer.data);
 	buffer.enc = NULL;
 	buffer.bom = FALSE;
-	buffer.partial = FALSE;
+	buffer.has_nuls = FALSE;
 
 	if (! handle_buffer(&buffer, forced_enc))
 		return FALSE;
 
-	*size = buffer.len;
+	*size = buffer.size;
 	if (used_encoding)
 		*used_encoding = buffer.enc;
 	else
 		g_free(buffer.enc);
 	if (has_bom)
 		*has_bom = buffer.bom;
-	if (partial)
-		*partial = buffer.partial;
+	if (has_nuls)
+		*has_nuls = buffer.has_nuls;
 
 	*buf = buffer.data;
 	return TRUE;
