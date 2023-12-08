@@ -191,8 +191,7 @@ static void test_encodings_convert_iso8859_to_utf8_auto(void)
 	 * - gnome-text-editor(1) is just broken, opens as gedit, but says I don't
 	 *   have permission to open that file :)  looks like a generic error. */
 	/*TEST(TRUE, "\xef\xbb\xbf""not B\xd3M", "ï»¿not BÓM", NULL);*/
-	/* fails to detect the suggested encoding */
-	/*TEST(TRUE, "coding:iso-8859-2 \xd8""ed", "coding:iso-8859-2 Řed", NULL);*/
+	TEST(TRUE, "coding:iso-8859-2 \xd8""ed", "coding:iso-8859-2 Řed", NULL);
 	/* with NULs */
 	TEST(FALSE, "W\xec""th\0z\xe9""r\xf8""s", "Wìth\0zérøs", "ISO-8859-1");
 	TEST(FALSE, "W\xec""th\0z\xe9""r\xf8""s", "Wìth\0zérøs", "ISO-8859-15");
