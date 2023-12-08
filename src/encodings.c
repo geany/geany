@@ -323,7 +323,7 @@ void encodings_select_radio_item(const gchar *charset)
 static GRegex *regex_compile(const gchar *pattern)
 {
 	GError *error = NULL;
-	GRegex *regex = g_regex_new(pattern, G_REGEX_CASELESS, 0, &error);
+	GRegex *regex = g_regex_new(pattern, G_REGEX_CASELESS | G_REGEX_RAW, 0, &error);
 
 	if (!regex)
 	{
