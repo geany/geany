@@ -118,6 +118,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	backspace_unindent;	/* makes backspace char unindent instead of deleting one char */
 	gboolean	smart_home_key;
 	gboolean	newline_strip;
+	gboolean	comment_blank_lines;
 	gboolean	auto_complete_symbols;
 	gboolean	auto_close_xml_tags;
 	gboolean	complete_snippets;
