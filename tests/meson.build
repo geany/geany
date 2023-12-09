@@ -370,3 +370,4 @@ test('ctags/processing-order', runner,
      env: ['top_srcdir='+meson.source_root(), 'top_builddir='+meson.build_root()])
 test('utils', executable('test_utils', 'test_utils.c', dependencies: test_deps))
 test('sidebar', executable('test_sidebar', 'test_sidebar.c', dependencies: test_deps))
+test('encodings', executable('test_encodings', 'test_encodings.c', dependencies: test_deps))
