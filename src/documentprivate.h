@@ -48,8 +48,8 @@ UndoReloadData;
 typedef enum
 {
 	FILE_OK,
-	FILE_CHANGED, /* also valid for deleted files */
-	FILE_IGNORE
+	FILE_CHANGED,
+	FILE_DELETED
 }
 FileDiskStatus;
 
@@ -97,6 +97,8 @@ typedef struct GeanyDocumentPrivate
 	gboolean		 is_remote;
 	/* File status on disk of the document */
 	FileDiskStatus	 file_disk_status;
+	/* Displayed file status on disk of the document, if they differ call GUI */
+	FileDiskStatus	 file_disk_status_displayed;
 	/* Reference to a GFileMonitor object, only used when GIO file monitoring is used. */
 	gpointer		 monitor;
 	/* Time of the last disk check, only used when legacy file monitoring is used. */

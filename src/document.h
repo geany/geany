@@ -103,7 +103,7 @@ typedef struct GeanyDocument
 	TMSourceFile	*tm_file;
 	/** Whether this document is read-only. */
 	gboolean		 readonly;
-	/** Whether this document has been changed since it was last saved. */
+	/** Whether this document buffer has been changed since it was last saved. */
 	gboolean		 changed;
 	/** The link-dereferenced, locale-encoded file name.
 	 * If non-NULL, this indicates the file once existed on disk (not just as an
@@ -145,6 +145,27 @@ GeanyDocument;
 #define foreach_document(i) \
 	for (i = 0; i < GEANY(documents_array)->len; i++)\
 		if (!documents[i]->is_valid)\
+			{}\
+		else /* prevent outside 'else' matching our macro 'if' */
+
+/** Iterates all valid document indexes but skips the referenced one.
+ * Use like a @c for statement.
+ * @param i @c guint index for @ref GeanyData::documents_array.
+ * @param skip @c pointer ot one of GeanyData::documents_array.
+ *
+ * Example:
+ * @code
+ * guint i;
+ * GeanyDocument *skip
+ * foreach_document_skip(i,skip)
+ * {
+ * 	GeanyDocument *doc = documents[i];
+ * 	g_assert(doc->is_valid);
+ * }
+ * @endcode */
+#define foreach_document_skip(i,skip) \
+	for (i = 0; i < GEANY(documents_array)->len; i++)\
+		if (!documents[i]->is_valid || documents[i] == skip )\
 			{}\
 		else /* prevent outside 'else' matching our macro 'if' */
 
@@ -279,6 +300,8 @@ void document_update_tag_list_in_idle(GeanyDocument *doc);
 void document_highlight_tags(GeanyDocument *doc);
 
 gboolean document_check_disk_status(GeanyDocument *doc, gboolean force);
+
+gboolean document_check_disk_status_others(GeanyDocument *doc, gboolean force);
 
 /* own Undo / Redo implementation to be able to undo / redo changes
  * to the encoding or the Unicode BOM (which are Scintilla independent).

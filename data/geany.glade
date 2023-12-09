@@ -6587,6 +6587,17 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkImageMenuItem" id="menu_reload_all1">
+                            <property name="label" translatable="yes">Re_load All</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="image">image4058</property>
+                            <property name="use-stock">False</property>
+                            <signal name="activate" handler="on_reload_all_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkImageMenuItem" id="menu_reload_as1">
                             <property name="label" translatable="yes">R_eload As</property>
                             <property name="visible">True</property>
