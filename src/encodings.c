@@ -785,7 +785,7 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gss
 			else
 				continue;
 		}
-		else if (i >= 0)
+		else if (i >= 0 && encodings[i].supported)
 			charset = encodings[i].charset;
 		else /* in this case we have i == -2, continue to increase i and go ahead */
 			continue;
