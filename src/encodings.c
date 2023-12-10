@@ -59,12 +59,24 @@ static gboolean pregs_loaded = FALSE;
 GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
 
 
+static gboolean conversion_supported(const gchar *to, const gchar *from)
+{
+	GIConv conv = g_iconv_open(to, from);
+	if (conv == (GIConv) -1)
+		return FALSE;
+
+	g_iconv_close(conv);
+	return TRUE;
+}
+
+
 #define fill(Order, Group, Idx, Charset, Name) \
 		encodings[Idx].idx = Idx; \
 		encodings[Idx].order = Order; \
 		encodings[Idx].group = Group; \
 		encodings[Idx].charset = Charset; \
-		encodings[Idx].name = Name;
+		encodings[Idx].name = Name; \
+		encodings[Idx].supported = FALSE;
 
 static void init_encodings(void)
 {
@@ -140,6 +152,19 @@ static void init_encodings(void)
 	fill(14,	EASTASIAN,		GEANY_ENCODING_UHC,				"UHC",				_("Korean"));
 
 	fill(0,		NONE,			GEANY_ENCODING_NONE,			"None",				_("Without encoding"));
+
+	/* fill the flags member */
+	for (guint i = 0; i < G_N_ELEMENTS(encodings); i++)
+	{
+		if (i == GEANY_ENCODING_NONE || conversion_supported("UTF-8", encodings[i].charset))
+			encodings[i].supported = TRUE;
+		else
+		{
+			/* geany_debug() doesn't really work at this point, unless G_MESSAGES_DEBUG
+			 * is set explicitly by the caller, but that's better than nothing */
+			geany_debug("Encoding %s is not supported by the system", encodings[i].charset);
+		}
+	}
 }
 
 
