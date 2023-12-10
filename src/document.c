@@ -3577,10 +3577,13 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 		}
 		case RESPONSE_DOCUMENT_RELOAD_ALL:
 		{
-			geany_debug("TODO: not finished implementation RESPONSE_DOCUMENT_RELOAD_ALL. Only re-loads current file.\n");
-			close = doc->changed ?
-				document_reload_prompt(doc, doc->encoding) :
-				document_reload_force(doc, doc->encoding);
+			guint i;
+			gboolean result;
+			foreach_document(i) {
+				GeanyDocument *iter_doc = documents[i];
+				if (doc->changed) document_reload_prompt(iter_doc,iter_doc->encoding);
+				else document_reload_force(iter_doc,iter_doc->encoding);
+			};
 			break;
 		}
 		case RESPONSE_DOCUMENT_RELOAD_UNMODIFIED:
@@ -3676,13 +3679,41 @@ static void monitor_reload_file(GeanyDocument *doc)
 		gtk_widget_destroy(bar);
 	}
 
-	gchar *message = _("Also modified are:\n\n");
+	gchar *message;
+	gchar *other_files = "";
+	gboolean unmodified_files_present = FALSE;
+	guint count_mod = 0;
+	guint count_del = 0;
 	guint i;
 	foreach_document_skip(i,doc)
 	{
 		GeanyDocument *other_doc = documents[i];
-		if (other_doc->priv->file_disk_status != FILE_OK) {
-			message = g_strconcat(message,document_get_basename_for_display(other_doc, interface_prefs.tab_label_len),"\n",NULL);
+		switch (other_doc->priv->file_disk_status)
+		{
+			case FILE_CHANGED: {
+				other_files = g_strconcat(other_files,document_get_basename_for_display(other_doc, interface_prefs.tab_label_len),"\n",NULL);
+				count_mod += 1;
+				if (! doc->changed) {
+					unmodified_files_present = TRUE;
+				}
+				break;
+			}
+			case FILE_DELETED: {
+				count_del += 1;
+				break;
+			}
+			default: {
+				// Do nothing
+				break;
+			}
+		}
+	}
+
+	if (count_mod > 1) {
+		if (count_del > 1) {
+			message = g_strdup_printf (_("In total %i files are modified (and %i are deleted) on disk too:\n\n"),count_mod,count_del);
+		} else {
+			message = g_strdup_printf (_("In total %i files are modified on disk too:\n\n"),count_mod);
 		}
 	}
 	message = g_strconcat("\n",message,_("Do you want to reload all?"),NULL);
@@ -3691,9 +3722,9 @@ static void monitor_reload_file(GeanyDocument *doc)
 
 	bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
 			_("Reload All"), RESPONSE_DOCUMENT_RELOAD_ALL,
-			_("Only unmodified files"), RESPONSE_DOCUMENT_RELOAD_UNMODIFIED,
+			_("Only unmodified files"), RESPONSE_DOCUMENT_RELOAD_UNMODIFIED, // TODO: Must be made optional!
 			_("Only this file"), RESPONSE_DOCUMENT_RELOAD,
-			_("_Overwrite"), RESPONSE_DOCUMENT_SAVE,
+			_("_Overwrite this file"), RESPONSE_DOCUMENT_SAVE,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			message,
 			// _("Do you want to reload all?"),
@@ -3790,7 +3821,8 @@ void print_status(gboolean modified_since_roundtrip) {
 
 /* Refresh data inside all monitors if the situation was modified since
  * last roundtrip. As callbacks will destroy infobars themselves, no removal
- * of infobars needed here. */
+ * of infobars needed here, but modification of the widget content must
+ * be triggered ("missing file a,b and c"). */
 void monitor_refresh_all()
 {
 	guint i;
