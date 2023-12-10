@@ -501,7 +501,8 @@ void encodings_init(void)
 					}
 					else
 						item = gtk_menu_item_new_with_label(label);
-					gtk_widget_show(item);
+					if (encodings[i].supported)
+						gtk_widget_show(item);
 					gtk_container_add(GTK_CONTAINER(submenus[encodings[i].group]), item);
 					g_signal_connect(item, "activate", cb_func[k],
 							(gpointer) encodings[i].charset);
@@ -572,6 +573,9 @@ GtkTreeStore *encodings_encoding_store_new(gboolean has_detect)
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
 		gchar *encoding_string;
+
+		if (! encodings[i].supported)
+			continue;
 
 		switch (encodings[i].group)
 		{
