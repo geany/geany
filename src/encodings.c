@@ -195,18 +195,13 @@ static gboolean encodings_charset_equals(const gchar *a, const gchar *b)
 
 GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset)
 {
-	gint i;
-
 	if (charset == NULL)
 		return GEANY_ENCODING_UTF_8;
 
-	i = 0;
-	while (i < GEANY_ENCODINGS_MAX)
+	for (gint i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
 		if (encodings_charset_equals(charset, encodings[i].charset))
 			return i;
-
-		++i;
 	}
 	return GEANY_ENCODING_UTF_8;
 }
@@ -214,18 +209,13 @@ GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset)
 
 const GeanyEncoding *encodings_get_from_charset(const gchar *charset)
 {
-	gint i;
-
 	if (charset == NULL)
 		return &encodings[GEANY_ENCODING_UTF_8];
 
-	i = 0;
-	while (i < GEANY_ENCODINGS_MAX)
+	for (gint i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
 		if (encodings_charset_equals(charset, encodings[i].charset))
 			return &encodings[i];
-
-		++i;
 	}
 
 	return NULL;
@@ -300,12 +290,10 @@ void encodings_select_radio_item(const gchar *charset)
 
 	g_return_if_fail(charset != NULL);
 
-	i = 0;
-	while (i < GEANY_ENCODINGS_MAX)
+	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
 		if (utils_str_equal(charset, encodings[i].charset))
 			break;
-		i++;
 	}
 	if (i == GEANY_ENCODINGS_MAX)
 		i = GEANY_ENCODING_UTF_8; /* fallback to UTF-8 */
