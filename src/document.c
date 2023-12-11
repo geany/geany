@@ -96,6 +96,13 @@ typedef struct
 						 * it contains the new value */
 } undo_action;
 
+/* holds a button and response, used as element in e.g. g_array_new(FALSE, FALSE, sizeof(button_response)); */
+typedef struct
+{
+	gchar *button;
+	gint response;
+} button_response;
+
 /* Custom document info bar response IDs */
 enum
 {
@@ -117,12 +124,9 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, gint response_1,
-	const gchar *btn_2, gint response_2,
-	const gchar *btn_3, gint response_3,
-	const gchar *btn_4, gint response_4,
-	const gchar *btn_5, gint response_5,
-	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(15, 16);
+	GArray *buttons_list,
+	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(6, 7);
+
 gboolean document_check_disk_status_single_file(GeanyDocument *doc, gboolean force);
 void monitor_refresh_all();
 
@@ -1643,13 +1647,16 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 
 	if (file_prefs.keep_edit_history_on_reload && file_prefs.show_keep_edit_history_on_reload_msg)
 	{
+		GArray *buttons_list = g_array_new(FALSE, FALSE, sizeof(button_response));
+		button_response b1 = {GTK_STOCK_OK, GTK_RESPONSE_ACCEPT};
+		g_array_append_val(buttons_list,b1);
+		button_response b2 = {_("Discard history"), GTK_RESPONSE_NO};
+		g_array_append_val(buttons_list,b2);
+
 		bar = document_show_message(doc, GTK_MESSAGE_INFO,
 						on_keep_edit_history_on_reload_response,
-						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-						_("Discard history"), GTK_RESPONSE_NO,
-						NULL, GTK_RESPONSE_NONE,
-						NULL, GTK_RESPONSE_NONE,
-						NULL, GTK_RESPONSE_NONE, _("The buffer's previous state is stored in the history and "
+						buttons_list,
+						_("The buffer's previous state is stored in the history and "
 						"undoing restores it. You can disable this by discarding the history upon "
 						"reload. This message will not be displayed again but "
 						"your choice can be changed in the various preferences."),
@@ -3469,11 +3476,7 @@ gboolean document_close_all(void)
  * */
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, gint response_1,
-	const gchar *btn_2, gint response_2,
-	const gchar *btn_3, gint response_3,
-	const gchar *btn_4, gint response_4,
-	const gchar *btn_5, gint response_5,
+	GArray *buttons_list,
 	const gchar *extra_text, const gchar *format, ...)
 {
 	va_list args;
@@ -3495,17 +3498,11 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 	gtk_info_bar_set_message_type(GTK_INFO_BAR(info_widget), msgtype);
 
-	if (btn_1)
-		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_1, response_1);
-	if (btn_2)
-		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_2, response_2);
-	if (btn_3)
-		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_3, response_3);
-	if (btn_4)
-		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_4, response_4);
-	if (btn_5)
-		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_5, response_5);
-
+	gint i;
+	for (i = 0; i < buttons_list->len; i++) {
+		button_response *ptr = &g_array_index(buttons_list,button_response ,i);
+		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), ptr->button, ptr->response);
+	}
 	content_area = gtk_info_bar_get_content_area(GTK_INFO_BAR(info_widget));
 
 	label = geany_wrap_label_new(NULL);
@@ -3682,8 +3679,8 @@ static void monitor_reload_file(GeanyDocument *doc)
 	gchar *message;
 	gchar *other_files = "";
 	gboolean unmodified_files_present = FALSE;
-	guint count_mod = 0;
-	guint count_del = 0;
+	guint count_mod_others = 0;
+	guint count_del_others = 0;
 	guint i;
 	foreach_document_skip(i,doc)
 	{
@@ -3692,14 +3689,14 @@ static void monitor_reload_file(GeanyDocument *doc)
 		{
 			case FILE_CHANGED: {
 				other_files = g_strconcat(other_files,document_get_basename_for_display(other_doc, interface_prefs.tab_label_len),"\n",NULL);
-				count_mod += 1;
+				count_mod_others += 1;
 				if (! doc->changed) {
 					unmodified_files_present = TRUE;
 				}
 				break;
 			}
 			case FILE_DELETED: {
-				count_del += 1;
+				count_del_others += 1;
 				break;
 			}
 			default: {
@@ -3709,25 +3706,44 @@ static void monitor_reload_file(GeanyDocument *doc)
 		}
 	}
 
-	if (count_mod > 1) {
-		if (count_del > 1) {
-			message = g_strdup_printf (_("In total %i files are modified (and %i are deleted) on disk too:\n\n"),count_mod,count_del);
-		} else {
-			message = g_strdup_printf (_("In total %i files are modified on disk too:\n\n"),count_mod);
+	GArray *buttons_list = g_array_new(FALSE, FALSE, sizeof(button_response));
+	if (count_mod_others > 1)
+	{
+		message = g_strdup_printf(_("In total %i files are modified on disk too:\n"),count_mod_others);
+		message = g_strconcat(message,other_files,NULL);
+		if (count_del_others > 1)
+		{
+			message = g_strconcat("\n",message,g_strdup_printf(_("(And %i files are deleted)"),count_del_others),NULL);
 		}
+		message = g_strconcat("\n",message,_("Do you want to reload all?"),NULL);
+		button_response b1 = {_("Reload All"), RESPONSE_DOCUMENT_RELOAD_ALL};
+		g_array_append_val(buttons_list,b1);
+		if (unmodified_files_present) {
+			button_response b2 = {_("Only unmodified files"), RESPONSE_DOCUMENT_RELOAD_UNMODIFIED};
+			g_array_append_val(buttons_list,b2);
+		}
+		button_response b3 = {_("Reload only this file"), RESPONSE_DOCUMENT_RELOAD};
+		g_array_append_val(buttons_list,b3);
+		button_response b4 = {_("_Overwrite only this file"), RESPONSE_DOCUMENT_SAVE};
+		g_array_append_val(buttons_list,b4);
 	}
-	message = g_strconcat("\n",message,_("Do you want to reload all?"),NULL);
+	else
+	{
+		message = _("Do you want to reload it?");
+		button_response b3 = {_("Reload"), RESPONSE_DOCUMENT_RELOAD};
+		g_array_append_val(buttons_list,b3);
+		button_response b4 = {_("_Overwrite"), RESPONSE_DOCUMENT_SAVE};
+		g_array_append_val(buttons_list,b4);
+	}
+
+	button_response b5 = {GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL};
+	g_array_append_val(buttons_list,b5);
 
 	gchar *base_name = g_path_get_basename(doc->file_name);
 
 	bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
-			_("Reload All"), RESPONSE_DOCUMENT_RELOAD_ALL,
-			_("Only unmodified files"), RESPONSE_DOCUMENT_RELOAD_UNMODIFIED, // TODO: Must be made optional!
-			_("Only this file"), RESPONSE_DOCUMENT_RELOAD,
-			_("_Overwrite this file"), RESPONSE_DOCUMENT_SAVE,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			buttons_list,
 			message,
-			// _("Do you want to reload all?"),
 			_("The file '%s' on the disk is more recent than the current buffer."),
 			base_name);
 
@@ -3773,13 +3789,15 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 		if (bar != NULL)
 			gtk_widget_destroy(bar);
 
+		GArray *buttons_list = g_array_new(FALSE, FALSE, sizeof(button_response));
+		button_response b1 = {GTK_STOCK_SAVE, RESPONSE_DOCUMENT_SAVE};
+		g_array_append_val(buttons_list,b1);
+		button_response b2 = {GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL};
+		g_array_append_val(buttons_list,b2);
+
 		bar = document_show_message(doc, GTK_MESSAGE_WARNING,
 				on_monitor_resave_missing_file_response,
-				GTK_STOCK_SAVE, RESPONSE_DOCUMENT_SAVE,
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				NULL, GTK_RESPONSE_NONE,
-				NULL, GTK_RESPONSE_NONE,
-				NULL, GTK_RESPONSE_NONE,
+				buttons_list,
 				_("Try to resave the file?"),
 				_("File \"%s\" was not found on disk!"),
 				doc->file_name);
