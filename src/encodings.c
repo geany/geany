@@ -612,7 +612,7 @@ void encodings_encoding_store_cell_data_func(GtkCellLayout *cell_layout,
 
 static gchar *convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 										   const gchar *charset, gboolean fast,
-										   gsize *utf8_size)
+										   gsize *utf8_size, GError **error)
 {
 	gchar *utf8_content = NULL;
 	GError *conv_error = NULL;
@@ -628,18 +628,22 @@ static gchar *convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 	if (fast)
 	{
 		utf8_content = converted_contents;
-		if (conv_error != NULL) g_error_free(conv_error);
+		if (conv_error != NULL) g_propagate_error(error, conv_error);
 	}
 	else if (conv_error != NULL || ! g_utf8_validate(converted_contents, bytes_written, NULL))
 	{
 		if (conv_error != NULL)
 		{
 			geany_debug("Couldn't convert from %s to UTF-8 (%s).", charset, conv_error->message);
-			g_error_free(conv_error);
+			g_propagate_error(error, conv_error);
 			conv_error = NULL;
 		}
 		else
+		{
 			geany_debug("Couldn't convert from %s to UTF-8.", charset);
+			g_set_error(error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE,
+					_("Data contains NULs"));
+		}
 
 		utf8_content = NULL;
 		g_free(converted_contents);
@@ -675,7 +679,7 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 {
 	/* If fast=FALSE, we can safely ignore the size as the output cannot contain NULs.
 	 * Otherwise, the caller already agrees on partial data anyway. */
-	return convert_to_utf8_from_charset(buffer, size, charset, fast, NULL);
+	return convert_to_utf8_from_charset(buffer, size, charset, fast, NULL, NULL);
 }
 
 
@@ -695,7 +699,7 @@ static gchar *encodings_check_regexes(const gchar *buffer, gsize size)
 
 
 static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gssize size,
-		const gchar *suggested_charset, gchar **used_encoding, gsize *utf8_size)
+		const gchar *suggested_charset, gchar **used_encoding, gsize *utf8_size, GError **error)
 {
 	const gchar *locale_charset = NULL;
 	const gchar *charset;
@@ -762,7 +766,7 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gss
 
 		geany_debug("Trying to convert %" G_GSIZE_FORMAT " bytes of data from %s into UTF-8.",
 			size, charset);
-		utf8_content = convert_to_utf8_from_charset(buffer, size, charset, FALSE, utf8_size);
+		utf8_content = convert_to_utf8_from_charset(buffer, size, charset, FALSE, utf8_size, NULL);
 
 		if (G_LIKELY(utf8_content != NULL))
 		{
@@ -778,6 +782,9 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gss
 			return utf8_content;
 		}
 	}
+
+	g_set_error(error, G_CONVERT_ERROR, G_CONVERT_ERROR_FAILED,
+			_("Data contains NULs or the encoding is not supported"));
 
 	return NULL;
 }
@@ -803,7 +810,7 @@ gchar *encodings_convert_to_utf8(const gchar *buffer, gssize size, gchar **used_
 	/* first try to read the encoding from the file content */
 	regex_charset = encodings_check_regexes(buffer, size);
 	/* we know this cannot succeed if there are NULs in the output, so ignoring the size is OK */
-	utf8 = encodings_convert_to_utf8_with_suggestion(buffer, size, regex_charset, used_encoding, NULL);
+	utf8 = encodings_convert_to_utf8_with_suggestion(buffer, size, regex_charset, used_encoding, NULL, NULL);
 	g_free(regex_charset);
 
 	return utf8;
@@ -889,7 +896,7 @@ typedef struct
 
 /* convert data with the specified encoding */
 static gboolean
-handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
+handle_forced_encoding(BufferData *buffer, const gchar *forced_enc, GError **error)
 {
 	GeanyEncodingIndex enc_idx;
 
@@ -897,13 +904,15 @@ handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
 	{
 		if (! g_utf8_validate(buffer->data, buffer->size, NULL))
 		{
+			g_set_error(error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE,
+					_("Data contains NULs or is not valid UTF-8"));
 			return FALSE;
 		}
 	}
 	else
 	{
 		gchar *converted_text = convert_to_utf8_from_charset(
-										buffer->data, buffer->size, forced_enc, FALSE, &buffer->size);
+										buffer->data, buffer->size, forced_enc, FALSE, &buffer->size, error);
 		if (converted_text == NULL)
 		{
 			return FALSE;
@@ -922,7 +931,7 @@ handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
 
 /* detect encoding and convert to UTF-8 if necessary */
 static gboolean
-handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
+handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx, GError **error)
 {
 	g_return_val_if_fail(buffer->enc == NULL, FALSE);
 	g_return_val_if_fail(buffer->bom == FALSE, FALSE);
@@ -952,7 +961,7 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 			else /* the BOM indicated something else than UTF-8 */
 			{
 				gchar *converted_text = convert_to_utf8_from_charset(
-										buffer->data, buffer->size, buffer->enc, FALSE, &buffer->size);
+										buffer->data, buffer->size, buffer->enc, FALSE, &buffer->size, NULL);
 				if (converted_text != NULL)
 				{
 					SETPTR(buffer->data, converted_text);
@@ -981,7 +990,7 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 			{
 				/* detect the encoding */
 				gchar *converted_text = encodings_convert_to_utf8_with_suggestion(buffer->data,
-					buffer->size, regex_charset, &buffer->enc, &buffer->size);
+					buffer->size, regex_charset, &buffer->enc, &buffer->size, error);
 
 				if (converted_text == NULL)
 				{
@@ -1014,7 +1023,7 @@ handle_bom(BufferData *buffer)
 
 
 /* loads textfile data, verifies and converts to forced_enc or UTF-8. Also handles BOM. */
-static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
+static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc, GError **error)
 {
 	GeanyEncodingIndex tmp_enc_idx;
 
@@ -1031,12 +1040,12 @@ static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
 			buffer->bom = FALSE;
 			buffer->enc = g_strdup(encodings[GEANY_ENCODING_NONE].charset);
 		}
-		else if (! handle_forced_encoding(buffer, forced_enc))
+		else if (! handle_forced_encoding(buffer, forced_enc, error))
 		{
 			return FALSE;
 		}
 	}
-	else if (! handle_encoding(buffer, tmp_enc_idx))
+	else if (! handle_encoding(buffer, tmp_enc_idx, error))
 	{
 		return FALSE;
 	}
@@ -1064,7 +1073,7 @@ static gboolean handle_buffer(BufferData *buffer, const gchar *forced_enc)
  */
 GEANY_EXPORT_SYMBOL
 gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *forced_enc,
-		gchar **used_encoding, gboolean *has_bom, gboolean *has_nuls)
+		gchar **used_encoding, gboolean *has_bom, gboolean *has_nuls, GError **error)
 {
 	BufferData buffer;
 
@@ -1073,7 +1082,7 @@ gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *f
 	buffer.enc = NULL;
 	buffer.bom = FALSE;
 
-	if (! handle_buffer(&buffer, forced_enc))
+	if (! handle_buffer(&buffer, forced_enc, error))
 		return FALSE;
 
 	*size = buffer.size;
