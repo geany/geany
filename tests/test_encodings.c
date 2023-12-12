@@ -74,11 +74,17 @@ static gboolean assert_convert_to_utf8_auto_impl(
 	gboolean has_bom = FALSE;
 	gboolean partial = FALSE;
 	gboolean ret;
+	GError *err = NULL;
 
 	g_log(domain, G_LOG_LEVEL_INFO, "%s:%d:%s: converting %lu bytes", file, line, func, input_size);
-	ret = encodings_convert_to_utf8_auto(&buf, &size, forced_enc, &used_encoding, &has_bom, &partial);
+	ret = encodings_convert_to_utf8_auto(&buf, &size, forced_enc, &used_encoding, &has_bom, &partial, &err);
 	fflush(stdout);
-	if (ret)
+	if (! ret)
+	{
+		g_log(domain, G_LOG_LEVEL_INFO, "%s:%d:%s: conversion failed: %s", file, line, func, err->message);
+		g_error_free(err);
+	}
+	else
 	{
 		assert_cmpmem_eq_with_caller(buf, expected_output, MIN(size, expected_size),
 				domain, file, line, func);

@@ -998,19 +998,15 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 	}
 
 	if (! encodings_convert_to_utf8_auto(&filedata->data, &filedata->len, forced_enc,
-				&filedata->enc, &filedata->bom, &filedata->readonly))
+				&filedata->enc, &filedata->bom, &filedata->readonly, &err))
 	{
 		if (forced_enc)
-		{
-			ui_set_statusbar(TRUE, _("The file \"%s\" is not valid %s."),
-				display_filename, forced_enc);
-		}
+			ui_set_statusbar(TRUE, _("Failed to load file \"%s\" as %s: %s."),
+				display_filename, forced_enc, err->message);
 		else
-		{
-			ui_set_statusbar(TRUE,
-	_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
-			display_filename);
-		}
+			ui_set_statusbar(TRUE, _("Failed to load file \"%s\": %s."),
+				display_filename, err->message);
+		g_error_free(err);
 		g_free(filedata->data);
 		return FALSE;
 	}
