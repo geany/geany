@@ -1364,8 +1364,9 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 		return TRUE;
 
 	doc = document_get_current();
-	if (doc)
+	if (doc) {
 		document_check_disk_status(doc, FALSE);
+	}
 
 	keyval = ev->keyval;
 	state = keybindings_get_modifiers(ev->state);

@@ -31,6 +31,7 @@
 #include "app.h"
 #include "build.h"
 #include "document.h"
+#include "documentprivate.h"
 #include "encodings.h"
 #include "encodingsprivate.h"
 #include "filetypes.h"
@@ -665,6 +666,7 @@ gboolean dialogs_show_save_as(void)
 	g_return_val_if_fail(doc, FALSE);
 
 	result = show_save_as_gtk(doc);
+	if (result) doc->priv->file_disk_status = FILE_OK;
 	return result;
 }
 
