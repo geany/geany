@@ -33,6 +33,7 @@
 #include "app.h"
 #include "build.h"
 #include "dialogs.h"
+#include "document.h"
 #include "documentprivate.h"
 #include "encodings.h"
 #include "filetypes.h"
@@ -168,7 +169,7 @@ void on_close_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_reload_all_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	printf("Pressed on_reload_all_activate() NOT IMPLEMENTED YET\n");
+	on_monitor_reload_file_response(NULL, RESPONSE_DOCUMENT_RELOAD_UNMODIFIED, NULL);
 }
 
 

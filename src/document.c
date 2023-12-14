@@ -103,16 +103,6 @@ typedef struct
 	gint response;
 } button_response;
 
-/* Custom document info bar response IDs */
-enum
-{
-	RESPONSE_DOCUMENT_RELOAD = 1, /* All pre-defined GTK responses are negative */
-	RESPONSE_DOCUMENT_RELOAD_ALL,
-	RESPONSE_DOCUMENT_RELOAD_UNMODIFIED,
-	RESPONSE_DOCUMENT_SAVE,
-};
-
-
 static guint show_tab_idle = 0;
 static guint doc_id_counter = 0;
 
@@ -3554,12 +3544,14 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	return info_widget;
 }
 
-
-static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
+/* Can be called from the info bar buttons of each document with all possible
+ * response types. Or with doc == NULL from the File->Re-load_all pulldown menu
+ * and the only valid response type of RESPONSE_DOCUMENT_RELOAD_UNMODIFIED. */
+void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
 {
 	gboolean close = FALSE;
 
-	unprotect_document(doc);
+	if (doc != NULL) unprotect_document(doc);
 
 	switch (response_id) {
 		case RESPONSE_DOCUMENT_RELOAD:
@@ -3616,8 +3608,8 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 	print_status(FALSE);
 	if (!close)
 	{
-		protect_document(doc);
-		return;
+		if (doc != NULL) protect_document(doc);
+		//return;
 	}
 	monitor_refresh_all();
 }

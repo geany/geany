@@ -6588,7 +6588,7 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="menu_reload_all1">
-                            <property name="label" translatable="yes">Re_load All</property>
+                            <property name="label" translatable="yes">Re_load All (unmodified files only)</property>
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="use-underline">True</property>

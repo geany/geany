@@ -122,6 +122,15 @@ typedef struct GeanyDocument
 }
 GeanyDocument;
 
+/* Custom document info bar response IDs */
+enum
+{
+	RESPONSE_DOCUMENT_RELOAD = 1, /* All pre-defined GTK responses are negative */
+	RESPONSE_DOCUMENT_RELOAD_ALL,
+	RESPONSE_DOCUMENT_RELOAD_UNMODIFIED,
+	RESPONSE_DOCUMENT_SAVE,
+};
+
 /** Wraps @ref GeanyData::documents_array so it can be used with C array syntax.
  * @warning Always check the returned document is valid (@c doc->is_valid).
  *
@@ -236,6 +245,7 @@ gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
 GeanyDocument *document_find_by_id(guint id);
 
+void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc);
 
 #ifdef GEANY_PRIVATE
 
