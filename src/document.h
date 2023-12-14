@@ -301,7 +301,7 @@ void document_highlight_tags(GeanyDocument *doc);
 
 gboolean document_check_disk_status(GeanyDocument *doc, gboolean force);
 
-gboolean document_check_disk_status_others(GeanyDocument *doc, gboolean force);
+gboolean document_check_disk_status_others(GeanyDocument *doc, gboolean force, gboolean modified_since_roundtrip);
 
 /* own Undo / Redo implementation to be able to undo / redo changes
  * to the encoding or the Unicode BOM (which are Scintilla independent).

@@ -49,7 +49,8 @@ typedef enum
 {
 	FILE_OK,
 	FILE_CHANGED,
-	FILE_DELETED
+	FILE_DELETED,
+	FILE_SAVE_CANCELLED /* Needed when the state of FILE_DELETED is cancelled by user */
 }
 FileDiskStatus;
 
@@ -109,7 +110,7 @@ typedef struct GeanyDocumentPrivate
 	guint			 tag_list_update_source;
 	/* Whether it's temporarily protected (read-only and saving needs confirmation). Does
 	 * not imply doc->readonly as writable files can be protected */
-	gint			 protected;
+	gboolean		 protected;
 	/* Save pointer to info bars allowing to cancel them programatically (to avoid multiple ones) */
 	GtkWidget		*info_bars[NUM_MSG_TYPES];
 	/* Keyed Data List to attach arbitrary data to the document */

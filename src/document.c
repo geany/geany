@@ -127,7 +127,8 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	GArray *buttons_list,
 	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(6, 7);
 
-gboolean document_check_disk_status_single_file(GeanyDocument *doc, gboolean force);
+gboolean document_check_disk_status_single_file_and_optionally_reload(GeanyDocument *doc, gboolean force);
+void print_status(gboolean modified_since_roundtrip);
 void monitor_refresh_all();
 
 
@@ -1455,7 +1456,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		doc->readonly = readonly || filedata.readonly;
 		sci_set_readonly(doc->editor->sci, doc->readonly);
-		doc->priv->protected = 0;
+		doc->priv->protected = FALSE;
 
 		/* update line number margin width */
 		doc->priv->line_count = sci_get_line_count(doc->editor->sci);
@@ -1611,7 +1612,7 @@ static void on_keep_edit_history_on_reload_response(GtkWidget *bar, gint respons
 		file_prefs.show_keep_edit_history_on_reload_msg = TRUE;
 	}
 	doc->priv->info_bars[MSG_TYPE_POST_RELOAD] = NULL;
-	gtk_widget_destroy(bar);
+	monitor_refresh_all();
 }
 
 
@@ -1632,14 +1633,6 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 	GtkWidget *bar;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
-
-	/* Cancel resave bar if still open from previous file deletion */
-	if (doc->priv->info_bars[MSG_TYPE_RESAVE] != NULL)
-		gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_RESAVE]), GTK_RESPONSE_CANCEL);
-
-	/* Use cancel because the response handler would call this recursively */
-	if (doc->priv->info_bars[MSG_TYPE_RELOAD] != NULL)
-		gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_RELOAD]), GTK_RESPONSE_CANCEL);
 
 	/* try to set the cursor to the position before reloading */
 	pos = sci_get_current_position(doc->editor->sci);
@@ -1808,8 +1801,11 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 static void protect_document(GeanyDocument *doc)
 {
 	/* do not call queue_colourise because to we want to keep the text-changed indication! */
-	if (!doc->priv->protected++)
+	if (!doc->priv->protected)
+	{
+		doc->priv->protected = TRUE;
 		sci_set_readonly(doc->editor->sci, TRUE);
+	}
 
 	ui_update_tab_status(doc);
 }
@@ -1817,10 +1813,13 @@ static void protect_document(GeanyDocument *doc)
 
 static void unprotect_document(GeanyDocument *doc)
 {
-	g_return_if_fail(doc->priv->protected > 0);
+	g_return_if_fail(doc->priv->protected == TRUE);
 
-	if (!--doc->priv->protected && doc->readonly == FALSE)
+	if (doc->readonly == FALSE)
+	{
+		doc->priv->protected = FALSE;
 		sci_set_readonly(doc->editor->sci, FALSE);
+	}
 
 	ui_update_tab_status(doc);
 }
@@ -1883,7 +1882,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 		// assume user wants to throw away read-only setting
 		sci_set_readonly(doc->editor->sci, FALSE);
 		doc->readonly = FALSE;
-		if (doc->priv->protected > 0)
+		if (doc->priv->protected == TRUE)
 			unprotect_document(doc);
 	}
 
@@ -3390,7 +3389,7 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 		old_doc->editor->indent_width);
 	doc->readonly = old_doc->readonly;
 	doc->has_bom = old_doc->has_bom;
-	doc->priv->protected = 0;
+	doc->priv->protected = FALSE;
 	document_set_encoding(doc, old_doc->encoding);
 	sci_set_lines_wrapped(doc->editor->sci, doc->editor->line_wrapping);
 	sci_set_readonly(doc->editor->sci, doc->readonly);
@@ -3560,9 +3559,7 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 {
 	gboolean close = FALSE;
 
-	// disable info bar so actions complete normally
 	unprotect_document(doc);
-	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 
 	switch (response_id) {
 		case RESPONSE_DOCUMENT_RELOAD:
@@ -3606,6 +3603,7 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 		case GTK_RESPONSE_CANCEL:
 		{
 			document_set_text_changed(doc, TRUE);
+			doc->priv->file_disk_status = FILE_SAVE_CANCELLED;
 			close = TRUE;
 			break;
 		}
@@ -3614,13 +3612,13 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 			geany_debug("Unknown (GTK-) response ID: %i",response_id);
 		}
 	}
+	printf("status after handling  response [close=%i]\n",close);
+	print_status(FALSE);
 	if (!close)
 	{
-		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
 		protect_document(doc);
 		return;
 	}
-	gtk_widget_destroy(bar);
 	monitor_refresh_all();
 }
 
@@ -3664,23 +3662,18 @@ static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
 
 static void monitor_reload_file(GeanyDocument *doc)
 {
-	if (! doc->changed && file_prefs.reload_clean_doc_on_file_change)
-	{
-		document_reload_force(doc, doc->encoding);
-		return;
-	}
-
 	// Optionally remove outdated message
 	GtkWidget *bar = doc->priv->info_bars[MSG_TYPE_RELOAD];
 	if (bar != NULL) {
 		gtk_widget_destroy(bar);
+		bar = NULL;
 	}
 
-	gchar *message;
-	gchar *other_files = "";
-	gboolean unmodified_files_present = FALSE;
-	guint count_mod_others = 0;
-	guint count_del_others = 0;
+	gchar *other_mod_files = "";
+	gboolean unmodified_files_others_exists = FALSE; // If there is AT LEAST ONE other buffer modified
+	gboolean no_modified_buffer_exists = TRUE; // If ALL documents have no buffer modified
+	guint count_disk_modified_others = 0;
+	guint count_disk_deleted_others = 0;
 	guint i;
 	foreach_document_skip(i,doc)
 	{
@@ -3688,15 +3681,20 @@ static void monitor_reload_file(GeanyDocument *doc)
 		switch (other_doc->priv->file_disk_status)
 		{
 			case FILE_CHANGED: {
-				other_files = g_strconcat(other_files,document_get_basename_for_display(other_doc, interface_prefs.tab_label_len),"\n",NULL);
-				count_mod_others += 1;
-				if (! doc->changed) {
-					unmodified_files_present = TRUE;
+				other_mod_files = g_strconcat(other_mod_files,document_get_basename_for_display(other_doc, interface_prefs.tab_label_len),", ",NULL);
+				count_disk_modified_others += 1;
+				if (other_doc->changed)
+				{
+					no_modified_buffer_exists = FALSE;
+				}
+				else
+				{
+					unmodified_files_others_exists = TRUE;
 				}
 				break;
 			}
 			case FILE_DELETED: {
-				count_del_others += 1;
+				count_disk_deleted_others += 1;
 				break;
 			}
 			default: {
@@ -3705,31 +3703,56 @@ static void monitor_reload_file(GeanyDocument *doc)
 			}
 		}
 	}
-
-	GArray *buttons_list = g_array_new(FALSE, FALSE, sizeof(button_response));
-	if (count_mod_others > 1)
+	// Also verify if this buffer is changed.
+	if (doc->changed)
 	{
-		message = g_strdup_printf(_("In total %i files are modified on disk too:\n"),count_mod_others);
-		message = g_strconcat(message,other_files,NULL);
-		if (count_del_others > 1)
+		no_modified_buffer_exists = FALSE;
+	}
+
+	gchar *message;
+	GArray *buttons_list = g_array_new(FALSE, FALSE, sizeof(button_response));
+	if (count_disk_modified_others > 0)
+	{
+		message = g_strdup_printf(_("In total %i other files are modified on disk too: "),count_disk_modified_others);
+		message = g_strconcat(message,other_mod_files,NULL);
+		if (count_disk_deleted_others > 0)
 		{
-			message = g_strconcat("\n",message,g_strdup_printf(_("(And %i files are deleted)"),count_del_others),NULL);
+			message = g_strconcat(message,g_strdup_printf(ngettext(
+				" (and %i file is deleted)",
+				" (and %i files are deleted)",
+				count_disk_deleted_others),count_disk_deleted_others),NULL);
 		}
-		message = g_strconcat("\n",message,_("Do you want to reload all?"),NULL);
-		button_response b1 = {_("Reload All"), RESPONSE_DOCUMENT_RELOAD_ALL};
-		g_array_append_val(buttons_list,b1);
-		if (unmodified_files_present) {
-			button_response b2 = {_("Only unmodified files"), RESPONSE_DOCUMENT_RELOAD_UNMODIFIED};
-			g_array_append_val(buttons_list,b2);
+		message = g_strconcat("\n",message,_("\nDo you want to reload all?"),NULL);
+		if (no_modified_buffer_exists)
+		{
+			button_response b1 = {_("Reload\nAll\n(There no\nmodifications)"), RESPONSE_DOCUMENT_RELOAD_ALL};
+			g_array_append_val(buttons_list,b1);
 		}
-		button_response b3 = {_("Reload only this file"), RESPONSE_DOCUMENT_RELOAD};
+		else
+		{
+			button_response b1 = {_("Reload\nAll\n(Drop\nmodifications)"), RESPONSE_DOCUMENT_RELOAD_ALL};
+			g_array_append_val(buttons_list,b1);
+			if (unmodified_files_others_exists)
+			{
+				button_response b2 = {_("Only\nunmodified\nfiles"), RESPONSE_DOCUMENT_RELOAD_UNMODIFIED};
+				g_array_append_val(buttons_list,b2);
+			}
+		}
+		button_response b3 = {_("Reload\nonly\nthis\nfile"), RESPONSE_DOCUMENT_RELOAD};
 		g_array_append_val(buttons_list,b3);
-		button_response b4 = {_("_Overwrite only this file"), RESPONSE_DOCUMENT_SAVE};
+		button_response b4 = {_("_Overwrite\nonly\nthis\nfile"), RESPONSE_DOCUMENT_SAVE};
 		g_array_append_val(buttons_list,b4);
 	}
 	else
 	{
 		message = _("Do you want to reload it?");
+		if (count_disk_deleted_others > 0)
+		{
+			message = g_strconcat(message,g_strdup_printf(ngettext(
+				" (Also %i file is deleted)",
+				" (Also %i files are deleted)",
+				count_disk_deleted_others),count_disk_deleted_others),NULL);
+		}
 		button_response b3 = {_("Reload"), RESPONSE_DOCUMENT_RELOAD};
 		g_array_append_val(buttons_list,b3);
 		button_response b4 = {_("_Overwrite"), RESPONSE_DOCUMENT_SAVE};
@@ -3755,117 +3778,184 @@ static void monitor_reload_file(GeanyDocument *doc)
 }
 
 
-static void on_monitor_resave_missing_file_response(GtkWidget *bar,
+static void on_monitor_resave_missing_file_response(GtkWidget *_bar,
                                                     gint response_id,
                                                     GeanyDocument *doc)
 {
-	gboolean close = TRUE;
-
 	unprotect_document(doc);
 
-	if (response_id == RESPONSE_DOCUMENT_SAVE)
-		close = dialogs_show_save_as();
-
-	if (close)
+	switch (response_id)
 	{
-		doc->priv->info_bars[MSG_TYPE_RESAVE] = NULL;
-		gtk_widget_destroy(bar);
-		monitor_refresh_all();
-	}
-	else
-	{
-		/* protect back the document if save didn't occur */
-		protect_document(doc);
+		case RESPONSE_DOCUMENT_SAVE: {
+			if (dialogs_show_save_as())
+			{
+				// Will remove this infobar, and decrement count in others:
+				monitor_refresh_all();
+			}
+			else
+			{
+				/* protect back the document if save didn't occur */
+				protect_document(doc);
+			}
+			break;
+		}
+		case GTK_RESPONSE_CANCEL: {
+			doc->priv->file_disk_status = FILE_SAVE_CANCELLED;
+			document_set_text_changed(doc,TRUE);
+			print_status(FALSE);
+			monitor_refresh_all();
+			print_status(FALSE);
+			break;
+		}
+		default: {
+			geany_debug("Unknown (GTK-) response ID: %i",response_id);
+			break;
+		}
 	}
 }
 
 
 static void monitor_resave_missing_file(GeanyDocument *doc)
 {
-	if (doc->priv->info_bars[MSG_TYPE_RESAVE] == NULL)
+	GtkWidget *bar;
+	gchar *other_del_files = "";
+	guint count_disk_modified_others = 0;
+	guint count_disk_deleted_others = 0;
+	guint i;
+	foreach_document_skip(i,doc)
 	{
-		GtkWidget *bar = doc->priv->info_bars[MSG_TYPE_RELOAD];
+		GeanyDocument *other_doc = documents[i];
+		switch (other_doc->priv->file_disk_status)
+		{
+			case FILE_CHANGED: {
+				count_disk_modified_others += 1;
+				break;
+			}
+			case FILE_DELETED: {
+				other_del_files = g_strconcat(other_del_files,document_get_basename_for_display(other_doc, interface_prefs.tab_label_len),", ",NULL);
+				count_disk_deleted_others += 1;
+				break;
+			}
+			default: {
+				// Do nothing
+				break;
+			}
+		}
+	}
 
-		if (bar != NULL)
-			gtk_widget_destroy(bar);
+	GArray *buttons_list = g_array_new(FALSE, FALSE, sizeof(button_response));
+	button_response b1 = {GTK_STOCK_SAVE, RESPONSE_DOCUMENT_SAVE};
+	g_array_append_val(buttons_list,b1);
+	button_response b2 = {GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL};
+	g_array_append_val(buttons_list,b2);
 
-		GArray *buttons_list = g_array_new(FALSE, FALSE, sizeof(button_response));
-		button_response b1 = {GTK_STOCK_SAVE, RESPONSE_DOCUMENT_SAVE};
-		g_array_append_val(buttons_list,b1);
-		button_response b2 = {GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL};
-		g_array_append_val(buttons_list,b2);
-
-		bar = document_show_message(doc, GTK_MESSAGE_WARNING,
-				on_monitor_resave_missing_file_response,
-				buttons_list,
-				_("Try to resave the file?"),
-				_("File \"%s\" was not found on disk!"),
-				doc->file_name);
+	bar = document_show_message(doc, GTK_MESSAGE_WARNING,
+			on_monitor_resave_missing_file_response,
+			buttons_list,
+			_("Try to resave the file?"),
+			_("File \"%s\" was not found on disk! (%d other files deleted and %d modified too)"),
+			doc->file_name,count_disk_deleted_others,count_disk_modified_others);
 
 		protect_document(doc);
-		//document_set_text_changed(doc, TRUE); buffer is not changed: this was misuse of the interpretation
-		/* don't prompt more than once */
-		SETPTR(doc->real_path, NULL);
-		doc->priv->info_bars[MSG_TYPE_RESAVE] = bar;
-		enable_key_intercept(doc, bar);
-	}
+	// document_set_text_changed(doc, TRUE); ?? buffer is not changed: this was misuse of the interpretation ??
+	/* don't prompt more than once */
+	SETPTR(doc->real_path, NULL);
+	doc->priv->info_bars[MSG_TYPE_RESAVE] = bar;
+	enable_key_intercept(doc, bar);
 }
 
 void print_status(gboolean modified_since_roundtrip) {
-	if (TRUE) {
-	//if (modified_since_roundtrip) {
-		printf("buffer disk (display)");
-		if (modified_since_roundtrip) printf(" MODIFIED");
-		printf("\n-------------------------------\n");
-		guint i;
-		GeanyDocument *skip = NULL;
-		foreach_document_skip(i,skip)
-		{
-			GeanyDocument *doc = documents[i];
-			if (doc->changed) printf("buffer ");
-			             else printf("       ");
-			if (doc->priv->file_disk_status == FILE_OK)       printf("        ");
-			if (doc->priv->file_disk_status == FILE_CHANGED)  printf("changed ");
-			if (doc->priv->file_disk_status == FILE_DELETED)  printf("deleted ");
-			if (doc->priv->file_disk_status_displayed == FILE_OK)       printf("        ");
-			if (doc->priv->file_disk_status_displayed == FILE_CHANGED)  printf("changed ");
-			if (doc->priv->file_disk_status_displayed == FILE_DELETED)  printf("deleted ");
-			gchar *basename = document_get_basename_for_display(doc, interface_prefs.tab_label_len);
-			//locale_filename = utils_get_locale_from_utf8(doc->file_name);
-			printf("%2i, %s\n",i,basename);
-		}
+	printf("buffer  disk     display   reload resave post protected");
+	if (modified_since_roundtrip) printf("(MODIFIED_since_roundtrip)");
+	printf("\n--------------------------------------------------------\n");
+	guint i;
+	foreach_document(i)
+	{
+		GeanyDocument *doc = documents[i];
+		if (doc->changed) printf("buffer|");
+		             else printf("      |");
+		if (doc->priv->file_disk_status == FILE_OK)              printf("         |");
+		if (doc->priv->file_disk_status == FILE_CHANGED)         printf("changed  |");
+		if (doc->priv->file_disk_status == FILE_DELETED)         printf("deleted  |");
+		if (doc->priv->file_disk_status == FILE_SAVE_CANCELLED)  printf("cancelled|");
+		if (doc->priv->file_disk_status_displayed == FILE_OK)              printf("         |");
+		if (doc->priv->file_disk_status_displayed == FILE_CHANGED)         printf("changed  |");
+		if (doc->priv->file_disk_status_displayed == FILE_DELETED)         printf("deleted  |");
+		if (doc->priv->file_disk_status_displayed == FILE_SAVE_CANCELLED)  printf("cancelled|");
+			if (doc->priv->info_bars[MSG_TYPE_RELOAD] != NULL) printf("RELOAD|");
+		                                              else printf("      |");
+		if (doc->priv->info_bars[MSG_TYPE_RESAVE] != NULL) printf("RESAVE|");
+		                                              else printf("      |");
+		if (doc->priv->info_bars[MSG_TYPE_POST_RELOAD] != NULL) printf("POST|");
+		                                                   else printf("    |");
+		if (doc->priv->protected == TRUE) printf("true|");
+		                             else printf("    |");
+		gchar *basename = document_get_basename_for_display(doc, interface_prefs.tab_label_len);
+		//locale_filename = utils_get_locale_from_utf8(doc->file_name);
+		printf("%2i, %s\n",i,basename);
 	}
 }
 
-/* Refresh data inside all monitors if the situation was modified since
- * last roundtrip. As callbacks will destroy infobars themselves, no removal
- * of infobars needed here, but modification of the widget content must
- * be triggered ("missing file a,b and c"). */
+
+/* Call this function if the situation was modified since last roundtrip.
+ * It will refresh data inside all monitors as the widget(s) content must
+ * be updated too, regardless if the doc self was modified or deleted, like:
+ * ("file a,b and c are modified and 3 other files deleted"). */
 void monitor_refresh_all()
 {
 	guint i;
 	foreach_document(i) {
 		GeanyDocument *doc = documents[i];
-		FileDiskStatus current = doc->priv->file_disk_status;
-		FileDiskStatus display = doc->priv->file_disk_status_displayed;
-		switch (current)
+		GtkWidget **bar;
+		FileDiskStatus *current = &doc->priv->file_disk_status;
+		FileDiskStatus *displayed = &doc->priv->file_disk_status_displayed;
+
+		// Remove outdated info bars.
+		bar = &doc->priv->info_bars[MSG_TYPE_RELOAD];
+		if (*bar != NULL)
+		{
+			gtk_widget_destroy(*bar);
+			*bar = NULL;
+		}
+		bar = &doc->priv->info_bars[MSG_TYPE_RESAVE];
+		if (*bar != NULL)
+		{
+			gtk_widget_destroy(*bar);
+			*bar = NULL;
+		}
+
+		switch (*current)
 		{
 			case FILE_OK:
 			{
-				doc->priv->file_disk_status_displayed = FILE_OK;
+				if(*displayed != FILE_OK)
+				{
+					*displayed = FILE_OK;
+				};
 				break;
 			}
 			case FILE_CHANGED:
 			{
+				*displayed = FILE_CHANGED;
+				// attach updated reload infobar with new content
 				monitor_reload_file(doc);
-				doc->priv->file_disk_status_displayed = FILE_CHANGED;
 				break;
 			}
 			case FILE_DELETED:
 			{
+				*displayed = FILE_DELETED;
+				// attach updated resave infobar with new content
 				monitor_resave_missing_file(doc);
-				doc->priv->file_disk_status_displayed = FILE_DELETED;
 				break;
+			}
+			case FILE_SAVE_CANCELLED:
+			{
+				*displayed = FILE_SAVE_CANCELLED;
+				break;
+			}
+			default:
+			{
+				geany_debug("Unknown DiskFileStatus: %i",*current);
 			}
 		};
 	}
@@ -3878,42 +3968,50 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 {
 	gboolean modified_since_roundtrip = FALSE;
 	gboolean result;
-	modified_since_roundtrip = document_check_disk_status_single_file(doc, force);
-	// If found a modification or forced, force check others too.
-	if (modified_since_roundtrip || force) {
-		result = document_check_disk_status_others(doc, TRUE);
+	modified_since_roundtrip = document_check_disk_status_single_file_and_optionally_reload(doc, force);
+	// If found a modification or forced, force check others too. Mind that
+	// modified_since_roundtrip has to be passed too, fir he use case of
+	//ONLY this document being changed.
+	if (modified_since_roundtrip || force)
+	{
+		result = document_check_disk_status_others(doc, TRUE, modified_since_roundtrip);
 		modified_since_roundtrip = modified_since_roundtrip || result;
 	}
-	if (modified_since_roundtrip) monitor_refresh_all();
-	if (app->debug_mode) print_status(modified_since_roundtrip);
+	else
+	{
+		if (app->debug_mode) print_status(modified_since_roundtrip);
+	}
 	return modified_since_roundtrip;
 }
 
 /* Check disk status of all other files, report true if modified compared to
  * previous roundtrip check. Set force to really check, otherwise use cached 
  * mtime (if not too long ago). If called with skip = NULL, will check all. */
-gboolean document_check_disk_status_others(GeanyDocument *skip, gboolean force)
+gboolean document_check_disk_status_others(GeanyDocument *skip, gboolean force, gboolean modified_since_roundtrip)
 {
-	gboolean modified_since_roundtrip = FALSE;
 	gboolean result;
 	guint i;
 	foreach_document_skip(i,skip)
 	{
 	 	GeanyDocument *doc = documents[i];
-	 	// Avoid lazy evaluation of OR-function force call.
-		result = document_check_disk_status_single_file(doc, force);
+	 	// Avoid lazy evaluation of OR-function, so force call.
+		result = document_check_disk_status_single_file_and_optionally_reload(doc, force);
 		modified_since_roundtrip = modified_since_roundtrip || result;
 	}
+	if (app->debug_mode)
+	{
+		print_status(modified_since_roundtrip);
+	}
 	if (modified_since_roundtrip) monitor_refresh_all();
-	if (app->debug_mode) print_status(modified_since_roundtrip);
 	return modified_since_roundtrip;
 }
 
-/* Check disk status of a single file, report true if modified compared to
+/* Check disk status of a single file, report true if modified AND NOT
+ * automatically reloaded (if set by user preferences) compared to
  * previous roundtrip check. Set force to really check, otherwise use cached 
  * mtime (if not too long ago). DO NOT USE DIRECTLY: use instead
  * document_check_disk_status() or document_check_disk_status_others() */
-gboolean document_check_disk_status_single_file(GeanyDocument *doc, gboolean force)
+gboolean document_check_disk_status_single_file_and_optionally_reload(GeanyDocument *doc, gboolean force)
 {
 	g_return_val_if_fail(doc != NULL, FALSE);
 
@@ -3943,11 +4041,19 @@ gboolean document_check_disk_status_single_file(GeanyDocument *doc, gboolean for
 	}
 	else if (doc->priv->mtime < mtime)
 	{
-		// Set modified_since_roundtrip to update GUI as modification is not displayed yet.
-		if (doc->priv->file_disk_status != FILE_CHANGED) {
-			doc->priv->file_disk_status = FILE_CHANGED;
-			doc->priv->mtime = mtime;
-			modified_since_roundtrip = TRUE;
+		// Auto-reload unchanged file if preferred by user.
+		if (! doc->changed && file_prefs.reload_clean_doc_on_file_change)
+		{
+			document_reload_force(doc, doc->encoding);
+		}
+		else
+		{
+			// Set modified_since_roundtrip to update GUI as modification is not displayed yet.
+			if (doc->priv->file_disk_status != FILE_CHANGED) {
+				doc->priv->file_disk_status = FILE_CHANGED;
+				doc->priv->mtime = mtime;
+				modified_since_roundtrip = TRUE;
+			}
 		}
 	}
 	g_free(locale_filename);
