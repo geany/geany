@@ -420,30 +420,38 @@ static TMParserMapGroup group_SH[] = {
 };
 
 static TMParserMapEntry map_D[] = {
+	{'a', tm_tag_typedef_t},     // alias
 	{'c', tm_tag_class_t},       // class
-	{'e', tm_tag_enumerator_t},  // enumerator
-	{'f', tm_tag_function_t},    // function
 	{'g', tm_tag_enum_t},        // enum
+	{'e', tm_tag_enumerator_t},  // enumerator
+	{'x', tm_tag_externvar_t},   // externvar
+	{'f', tm_tag_function_t},    // function
 	{'i', tm_tag_interface_t},   // interface
+	{'l', tm_tag_undef_t},       // local
 	{'m', tm_tag_member_t},      // member
+	{'X', tm_tag_other_t},       // mixin
+	{'M', tm_tag_package_t},     // module
 	{'n', tm_tag_namespace_t},   // namespace
 	{'p', tm_tag_prototype_t},   // prototype
 	{'s', tm_tag_struct_t},      // struct
-	{'t', tm_tag_typedef_t},     // typedef
+	{'T', tm_tag_macro_with_arg_t}, // template
 	{'u', tm_tag_union_t},       // union
 	{'v', tm_tag_variable_t},    // variable
-	{'x', tm_tag_externvar_t},   // externvar
+	{'V', tm_tag_undef_t},       // version
 };
 static TMParserMapGroup group_D[] = {
-	{N_("Module"), TM_ICON_NONE, tm_tag_namespace_t},
+	{N_("Module"), TM_ICON_NAMESPACE, tm_tag_package_t | tm_tag_namespace_t},
 	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
 	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_prototype_t},
 	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
 	{N_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t | tm_tag_union_t},
-	{N_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
-	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
+	{N_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_enumerator_t | tm_tag_variable_t},
 	{N_("Extern Variables"), TM_ICON_VAR, tm_tag_externvar_t},
+	{N_("Templates"), TM_ICON_NAMESPACE, tm_tag_macro_with_arg_t},
+	{N_("Aliases"), TM_ICON_OTHER, tm_tag_typedef_t},
+	{N_("Mixins"), TM_ICON_MACRO, tm_tag_other_t},
 };
 
 static TMParserMapEntry map_DIFF[] = {

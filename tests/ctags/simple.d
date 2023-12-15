@@ -43,19 +43,21 @@ class Class : Interface
 	{
 		return v;
 	}
+
+	void imm() immutable;
 }
 
 public
 {
-	int missing; // FIXME - parse protection blocks
-}
-
-template Template(alias a, T...)
-{
-	alias TemplateAlias = a!T;
+	int modulevar;
 }
 
 Object obj;
+
+const(int)* type_con;
+immutable(int)* type_imm;
+inout int* f_inout(inout int* p); // TODO inout(T)
+shared(int)[] type_shar;
 
 private:
 int i;
@@ -64,14 +66,23 @@ int i;
 int error;
  +/
 
-static if (is(typeof(__traits(getMember, a, name)) == function))
-	T conditional;
+@attr(i) int attr_decl = 1;
+@attr(i) attr_decl_infer = 1; // FIXME
+@(obj) T attr_anon;
+void attr_post() @attr(obj); // FIXME
+@attr(i) {
+	int attr_block;
+}
 
 static assert( num < TL.length, "Name '"~name~"' is not found");
 
 __gshared int globalVar;
 
+T out_contract()
+out(r; r > 0) {} do {}
+
 void main(string[] args)
+in(args.length > 0)
 {
 	auto foo = new Class(1337);
 
@@ -79,4 +90,9 @@ void main(string[] args)
 	AliasString baz = "Hello, World!";
 
 	writefln("%s", foo.bar());
+}
+
+extern (C++, name) extern_func();
+extern {
+	int ext;
 }

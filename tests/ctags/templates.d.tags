@@ -1,0 +1,32 @@
+ITÌ32Ö0
+interface:  IT
+ImplementLengthÌ524288Ö0
+other:      ImplementLength
+STÌ2048Ö0
+struct:     ST
+TemplateÌ131072Í(alias a, T...)Ö0
+macro_arg:  Template(alias a, T...)
+TemplateAliasÌ4096ÎTemplateÖ0
+typedef:    Template :: TemplateAlias
+UTÌ8192Ö0
+union:      UT
+VTÌ1024Í(alias a)Ö0
+prototype:  VT(alias a)
+bÌ16384Ö0
+variable:   b
+cÌ16384Ö0
+variable:   c
+childÌ131072Í()ÎeachÖ0
+macro_arg:  each :: child()
+dÌ16384Ö0
+variable:   d
+eachÌ131072Í(alias fun = R)Ö0
+macro_arg:  each(alias fun = R)
+fÌ1024Í(Foo!x)Ö0
+prototype:  f(Foo!x)
+membÌ64ÎTemplateÖ0
+member:     Template :: memb
+sourceÌ524288Ö0
+other:      source
+tmethodÌ16Í()ÎeachÖ0
+function:   each :: tmethod()

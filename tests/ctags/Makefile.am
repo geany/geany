@@ -331,11 +331,13 @@ test_sources = \
 	square_parens.f90				\
 	state_machine.v					\
 	static_array.c					\
+	static_if.d						\
 	stdcall.f						\
 	strings.php						\
 	strings.rb						\
 	structure.f						\
 	tabindent.py					\
+	templates.d						\
 	test.erl						\
 	test.go							\
 	test.py							\

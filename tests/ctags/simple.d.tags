@@ -8,39 +8,59 @@ InterfaceÌ32Ö0
 interface:  Interface
 StructÌ2048Ö0
 struct:     Struct
-TemplateÌ256Ö0
-namespace:  Template
-TemplateAliasÌ4096ÎTemplateÖ0
-typedef:    Template :: TemplateAlias
 UnionÌ8192ÎStructÖ0
 union:      Struct :: Union
-_barÌ64ÎClassÖ0ÏAliasInt
-member:     AliasInt Class :: _bar
+_barÌ64ÎClassÖ0
+member:     Class :: _bar
+attr_anonÌ16384Ö0
+variable:   attr_anon
+attr_blockÌ64Ö0
+member:     attr_block
+attr_declÌ16384Ö0
+variable:   attr_decl
+attr_postÌ1024Í()Ö0
+prototype:  attr_post()
 barÌ4ÎEnumÖ0
 enumerator: Enum :: bar
-barÌ16Í()ÎClassÖ0Ïpublic AliasInt
-function:   public AliasInt Class :: bar()
-barÌ1024Í()ÎInterfaceÖ0Ïpublic AliasInt
-prototype:  public AliasInt Interface :: bar()
-conditionalÌ16384Ö0ÏT
-variable:   T conditional
+barÌ16Í()ÎClassÖ0
+function:   Class :: bar()
+barÌ1024Í()ÎInterfaceÖ0
+prototype:  Interface :: bar()
+extÌ64Ö0
+member:     ext
+extern_funcÌ1024Í()Ö0
+prototype:  extern_func()
+f_inoutÌ1024Í(inout int* p)Ö0
+prototype:  f_inout(inout int* p)
 fooÌ4ÎEnumÖ0
 enumerator: Enum :: foo
-globalVarÌ16384Ö0Ï__gshared int
-variable:   __gshared int globalVar
-iÌ16384Ö0Ïint
-variable:   int i
-mainÌ16Í(string[] args)Ö0Ïvoid
-function:   void main(string[] args)
-objÌ16384Ö0ÏObject
-variable:   Object obj
-qarÌ64ÎStruct.UnionÖ0Ïint
-member:     int Struct.Union :: qar
-quxxÌ64ÎStruct.UnionÖ0Ïbool
-member:     bool Struct.Union :: quxx
-test.simpleÌ256Ö0
-namespace:  test.simple
-tfunÌ16Í(T v)ÎClassÖ0Ïauto
-function:   auto Class :: tfun(T v)
+globalVarÌ16384Ö0
+variable:   globalVar
+iÌ16384Ö0
+variable:   i
+immÌ1024Í() immutableÎClassÖ0
+prototype:  Class :: imm() immutable
+mainÌ16Í(string[] args)Ö0
+function:   main(string[] args)
+modulevarÌ64Ö0
+member:     modulevar
+objÌ16384Ö0
+variable:   obj
+out_contractÌ16Í()Ö0
+function:   out_contract()
+qarÌ64ÎStruct.UnionÖ0
+member:     Struct.Union :: qar
+quxxÌ64ÎStruct.UnionÖ0
+member:     Struct.Union :: quxx
+test.simpleÌ512Ö0
+package:    test.simple
+tfunÌ16Í(T v)ÎClassÖ0
+function:   Class :: tfun(T v)
 thisÌ16Í(AliasInt x)ÎClassÖ0
 function:   Class :: this(AliasInt x)
+type_conÌ16384Ö0
+variable:   type_con
+type_immÌ16384Ö0
+variable:   type_imm
+type_sharÌ16384Ö0
+variable:   type_shar
