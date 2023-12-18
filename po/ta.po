@@ -4686,7 +4686,7 @@ msgstr "மதிப்பு"
 #: src/symbols.c:1218
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr "\"%s\" க்கான அறியப்படாத பைலடைப் நீட்டிப்பு."
+msgstr "\"%s\" க்கான அறியப்படாத பைலடைப் நீட்டிப்பு.\n"
 
 #: src/symbols.c:1244
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
