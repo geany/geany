@@ -31,7 +31,6 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "GTK+ ஐப் பயன்படுத்தி வேகமான மற்றும் இலகுரக IDE"
 
 #: geany.desktop.in:14
-#, fuzzy
 msgid "Text;Editor;"
 msgstr "Editor"
 
@@ -118,7 +117,6 @@ msgid "Find _Document Usage"
 msgstr "_Document பயன்பாட்டைக் கண்டறியவும்"
 
 #: data/geany.glade:515 data/geany.glade:7439
-#, fuzzy
 msgid "Go to Symbol Defini_tion"
 msgstr "Go to Tag Definition"
 
@@ -192,24 +190,20 @@ msgid "<b>Startup</b>"
 msgstr "<b> தொடக்க </b>"
 
 #: data/geany.glade:958
-#, fuzzy
 msgid "Save window size"
-msgstr "Save window position and geometry"
+msgstr ""
 
 #: data/geany.glade:962
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr "Saves the window position and geometry and restores it at the start"
+msgstr ""
 
 #: data/geany.glade:974
-#, fuzzy
 msgid "Save window position"
-msgstr "Save window position and geometry"
+msgstr ""
 
 #: data/geany.glade:978
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr "Saves the window position and geometry and restores it at the start"
+msgstr ""
 
 #: data/geany.glade:990
 msgid "Confirm exit"
@@ -228,12 +222,10 @@ msgid "Startup path:"
 msgstr "தொடக்க பாதை:"
 
 #: data/geany.glade:1059
-#, fuzzy
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
-"Path to start in when opening or saving files. Must be an absolute path. "
-"Leave blank to use the current working directory."
+""
 
 #: data/geany.glade:1094
 msgid "Project files:"
@@ -319,13 +311,11 @@ msgid "Use Windows native dialogs"
 msgstr "விண்டோஸ் சொந்த உரையாடல்களைப் பயன்படுத்தவும்"
 
 #: data/geany.glade:1320
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Defines whether to use the native Windows dialogues or whether to use the "
-"GTK default dialogues"
+
 
 #: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4854
 msgid "<b>Miscellaneous</b>"
@@ -336,21 +326,17 @@ msgid "Always wrap search"
 msgstr "எப்போதும் தேடல்"
 
 #: data/geany.glade:1370
-#, fuzzy
 msgid "Always wrap search around the document"
-msgstr "Always wrap search and hide the Find dialogue"
+msgstr ""
 
 #: data/geany.glade:1382
-#, fuzzy
 msgid "Hide the Find dialog"
-msgstr "Always wrap search and hide the Find dialogue"
+msgstr ""
 
 #: data/geany.glade:1386
-#, fuzzy
 msgid "Hide the Find dialog after clicking Find Next/Previous"
 msgstr ""
-"Always wrap search around the document and hide the Find dialogue after "
-"clicking Find Next/Previous"
+
 
 #: data/geany.glade:1398
 msgid "Use the current word under the cursor for Find dialogs"
@@ -415,18 +401,16 @@ msgid "Default symbol sorting mode"
 msgstr "இயல்புநிலை சின்னம் வரிசையாக்க பயன்முறை"
 
 #: data/geany.glade:1596
-#, fuzzy
 msgid "Default sorting mode:"
-msgstr "Default encoding (new files):"
+msgstr ""
 
 #: data/geany.glade:1606 src/stash.c:1219
 msgid "Name"
 msgstr "பெயர்"
 
 #: data/geany.glade:1621
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Appearance</b>"
+msgstr "தோற்றம்"
 
 #: data/geany.glade:1646
 msgid "Show documents list"
@@ -542,9 +526,8 @@ msgstr ""
 "பார்வையை அழைக்கிறது-> அனைத்து கூடுதல் விட்ஜெட்டுகள் கட்டளையையும் மாற்றவும்"
 
 #: data/geany.glade:2191
-#, fuzzy
 msgid "Switch to last used document after closing a tab"
-msgstr "Switch to last used document after closing a tab"
+msgstr ""
 
 #: data/geany.glade:2213
 msgid "Set limit on visible characters in tab label."
@@ -754,18 +737,16 @@ msgstr ""
 "பயன்படுத்த, <i> திட்டம்-> இயல்புநிலை உள்தள்ளலைப் பயன்படுத்துங்கள் </i>."
 
 #: data/geany.glade:3146 data/geany.glade:8951
-#, fuzzy
 msgid "_Width:"
-msgstr "Width:"
+msgstr ""
 
 #: data/geany.glade:3160 data/geany.glade:8967
 msgid "The width in chars of a single indent"
 msgstr "ஒற்றை உள்தள்ளலின் எழுத்துகளில் அகலம்"
 
 #: data/geany.glade:3179 data/geany.glade:8988
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Auto-indent mode:"
+msgstr ""
 
 #: data/geany.glade:3214 data/geany.glade:9023
 msgid "Detect type from file"
@@ -825,9 +806,8 @@ msgid "Type:"
 msgstr "தட்டச்சு:"
 
 #: data/geany.glade:3332
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Tab key indents"
+msgstr ""
 
 #: data/geany.glade:3336
 msgid ""
@@ -838,9 +818,8 @@ msgstr ""
 "அழுத்துகிறது"
 
 #: data/geany.glade:3348
-#, fuzzy
 msgid "_Backspace key unindents"
-msgstr "Tab key indents"
+msgstr ""
 
 #: data/geany.glade:3352
 msgid ""
@@ -1047,9 +1026,8 @@ msgid "Shows the line ending character"
 msgstr "வரி முடிவடையும் தன்மையைக் காட்டுகிறது"
 
 #: data/geany.glade:3903
-#, fuzzy
 msgid "Show only non-default line endings"
-msgstr "Show line endings"
+msgstr ""
 
 #: data/geany.glade:3907
 msgid ""
@@ -1192,19 +1170,16 @@ msgid "<b>Virtual spaces</b>"
 msgstr "<b> மெய்நிகர் இடங்கள் </b>"
 
 #: data/geany.glade:4315
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Show markers margin"
+msgstr ""
 
 #: data/geany.glade:4329
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "Shows the line ending character"
+msgstr ""
 
 #: data/geany.glade:4349
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>Changed:</b>"
+msgstr ""
 
 #: data/geany.glade:4369
 msgid "Display"
@@ -1220,9 +1195,8 @@ msgid "Open new documents from the command-line"
 msgstr "கட்டளை வரியிலிருந்து புதிய ஆவணங்களைத் திறக்கவும்"
 
 #: data/geany.glade:4424
-#, fuzzy
 msgid "Create a new file for each command-line filename that doesn't exist"
-msgstr "Start a new file for each command-line filename that doesn't exist"
+msgstr ""
 
 #: data/geany.glade:4464
 msgid "Default end of line characters:"
@@ -1296,9 +1270,8 @@ msgid "Strip trailing spaces and tabs"
 msgstr "ஸ்ட்ரிப் பின்தங்கிய இடங்கள் மற்றும் தாவல்கள்"
 
 #: data/geany.glade:4702
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
-msgstr "Removes trailing spaces and tabs at the end of lines"
+msgstr ""
 
 #: data/geany.glade:4714 data/geany.glade:9516 src/keybindings.c:673
 msgid "Replace tabs with space"
@@ -1353,7 +1326,7 @@ msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
 msgstr ""
-"ஒரு டெர்மினல் எமுலேட்டர் கட்டளை (%சி சீனி ரன் ஸ்கிரிப்ட் கோப்பு பெயருடன் "
+"ஒரு டெர்மினல் எமுலேட்டர் கட்டளை (%சி சீனி ரன் உரை கோப்பு பெயருடன் "
 "மாற்றப்படுகிறது)"
 
 #: data/geany.glade:4971
@@ -1361,9 +1334,8 @@ msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "உங்களுக்கு பிடித்த உலாவிக்கு பாதை (மற்றும் கூடுதல் வாதங்கள்)"
 
 #: data/geany.glade:4974
-#, fuzzy
 msgid "System default"
-msgstr "S_ystem default"
+msgstr ""
 
 #: data/geany.glade:5030
 msgid "Grep:"
@@ -1448,32 +1420,23 @@ msgid "Date & time:"
 msgstr "தேதி நேரம்:"
 
 #: data/geany.glade:5448
-#, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
 "conversion specifiers see "
 "https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Specify a format for the {datetime} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
 
 #: data/geany.glade:5464
-#, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion"
 " specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Specify a format for the {year} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
 
 #: data/geany.glade:5480
-#, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion"
 " specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Specify a format for the {date} wildcard. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
 
 #: data/geany.glade:5507
 msgid "<b>Template data</b>"
@@ -1555,15 +1518,11 @@ msgid "Date format:"
 msgstr "தேதி வடிவம்:"
 
 #: data/geany.glade:5856 src/printing.c:279
-#, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. For a list of available conversion specifiers see "
 "https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Specify a format for the date and time stamp which is added to the page "
-"header on each page. You can use any conversion specifiers which can be used"
-" with the ANSI C strftime function."
 
 #: data/geany.glade:5891
 msgid "Use native GTK printing"
@@ -1586,9 +1545,8 @@ msgid "Sets the font for the terminal widget"
 msgstr "முனைய விட்ஜெட்டுக்கான எழுத்துருவை அமைக்கிறது"
 
 #: data/geany.glade:5979
-#, fuzzy
 msgid "Choose Terminal Font"
-msgstr "Choose Terminal Font"
+msgstr ""
 
 #: data/geany.glade:5991
 msgid "Foreground color:"
@@ -1678,19 +1636,16 @@ msgstr ""
 "எடுத்துக்காட்டாக, VTE க்குள் மிட்நைட் கமாண்டர்."
 
 #: data/geany.glade:6229
-#, fuzzy
 msgid "Follow path of the current file"
-msgstr "Follow the path of the current file"
+msgstr ""
 
 #: data/geany.glade:6233
-#, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
-msgstr "Whether to execute \"cd $path\" when you switch between opened files"
+msgstr ""
 
 #: data/geany.glade:6244
-#, fuzzy
 msgid "Execute programs in the VTE"
-msgstr "Execute programs in VTE"
+msgstr ""
 
 #: data/geany.glade:6248
 msgid ""
@@ -1824,9 +1779,8 @@ msgid "_Send Selection to Terminal"
 msgstr "_ முனையத்திற்கு தேர்வு"
 
 #: data/geany.glade:6938 src/keybindings.c:508
-#, fuzzy
 msgid "_Join Lines"
-msgstr "Join lines"
+msgstr ""
 
 #: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
@@ -1929,7 +1883,7 @@ msgid "_Mark All"
 msgstr "_ அனைத்தையும் குறிக்கவும்"
 
 #: data/geany.glade:7448
-#, fuzzy
+
 msgid "Go to Symbol Decl_aration"
 msgstr "Go to Tag Declaration"
 
@@ -2070,7 +2024,7 @@ msgid "Set Line E_ndings"
 msgstr "வரி முடிவுகளை அமைக்கவும்"
 
 #: data/geany.glade:7926
-#, fuzzy
+
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "Convert and Set to _CR/LF (Win)"
 
@@ -2079,7 +2033,7 @@ msgid "Convert and Set to _LF (Unix)"
 msgstr "மாற்றி _LF (UNIX) என அமைக்கவும்"
 
 #: data/geany.glade:7946
-#, fuzzy
+
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Convert and Set to CR (_Mac)"
 
@@ -2169,7 +2123,7 @@ msgid "_Word Count"
 msgstr "சொல் எண்ணிக்கை"
 
 #: data/geany.glade:8216
-#, fuzzy
+
 msgid "Load Ta_gs File..."
 msgstr "Load Ta_gs..."
 
@@ -2202,7 +2156,7 @@ msgid "_Donate..."
 msgstr "_ டோனேட் ..."
 
 #: data/geany.glade:8369
-#, fuzzy
+
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
@@ -2243,22 +2197,22 @@ msgid "Filename:"
 msgstr "கோப்பு பெயர்:"
 
 #: data/geany.glade:8716
-#, fuzzy
+
 msgid "_Name:"
 msgstr "Name:"
 
 #: data/geany.glade:8732
-#, fuzzy
+
 msgid "_Description:"
 msgstr "Description:"
 
 #: data/geany.glade:8749
-#, fuzzy
+
 msgid "_Base path:"
 msgstr "Base path:"
 
 #: data/geany.glade:8765 src/search.c:905
-#, fuzzy
+
 msgid "File _patterns:"
 msgstr "File patterns:"
 
@@ -2380,7 +2334,7 @@ msgstr "( %s இல் அல்லது அதற்குப் பிறக�
 #: src/about.c:253
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr "Gtk+ v%u.%U.%U மற்றும் glib v%u.%U.%U இயக்க நேர நூலகங்கள்"
+msgstr "Gtk+ v%u.%u.%u மற்றும் glib v%u.%u.%u இயக்க நேர நூலகங்கள்"
 
 #: src/about.c:286
 msgid "Info"
@@ -2450,24 +2404,23 @@ msgstr "செயல்முறை தோல்வியுற்றது, வ
 #: src/build.c:796
 #, c-format
 msgid "%s (in directory: %s)"
-msgstr "%கள் (கோப்பகத்தில்: %கள்)"
+msgstr "%s (கோப்பகத்தில்: %s)"
 
 #: src/build.c:821
 #, c-format
 msgid "Process failed (%s)"
-msgstr "செயல்முறை தோல்வியுற்றது (%கள்)"
+msgstr "செயல்முறை தோல்வியுற்றது (%s)"
 
 #: src/build.c:855
-#, fuzzy, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Failed to change the working directory to \"%s\""
+msgstr ""
 
 #: src/build.c:891
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
 msgstr ""
-"\" %கள்\" ஐ இயக்குவதில் தோல்வி (தொடக்க-ஸ்கிரிப்ட் உருவாக்க முடியவில்லை: "
-"%கள்)"
+"\" %s\" ஐ இயக்குவதில் தோல்வி (தொடக்க-உரை உருவாக்க முடியவில்லை: "
+"%s)"
 
 #: src/build.c:933
 msgid ""
@@ -2478,7 +2431,7 @@ msgstr ""
 "(CTRL+C ஐ அழுத்தவும் அல்லது அதை அழிக்க உள்ளிடவும்)."
 
 #: src/build.c:981
-#, fuzzy, c-format
+
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
@@ -2533,7 +2486,7 @@ msgstr "தற்போதைய கோப்பை மேக் மூலம்
 #: src/build.c:1675
 #, c-format
 msgid "Process could not be stopped (%s)."
-msgstr "செயல்முறையை நிறுத்த முடியவில்லை (%கள்)."
+msgstr "செயல்முறையை நிறுத்த முடியவில்லை (%s)."
 
 #: src/build.c:1689 src/build.c:1701
 msgid "No more build errors."
@@ -2566,7 +2519,7 @@ msgstr "மெனு உருப்படி லேபிளை அமைக்
 #: src/build.c:1973 src/build.c:1975
 #, c-format
 msgid "%s commands"
-msgstr "%கள் கட்டளைகள்"
+msgstr "%s கட்டளைகள்"
 
 #: src/build.c:1975
 msgid "No filetype"
@@ -2590,7 +2543,7 @@ msgid "Execute commands"
 msgstr "கட்டளைகளை இயக்கவும்"
 
 #: src/build.c:2065
-#, fuzzy
+
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
@@ -2640,7 +2593,7 @@ msgstr ""
 "வரலாற்றையும் இழக்கும்."
 
 #: src/callbacks.c:354
-#, fuzzy
+
 msgid "Are you sure you want to reload all files?"
 msgstr "Are you sure you want to reload '%s'?"
 
@@ -2673,44 +2626,38 @@ msgid "Check the path setting in Filetype configuration."
 msgstr "பைல்டைப் உள்ளமைவில் பாதை அமைப்பை சரிபார்க்கவும்."
 
 #: src/callbacks.c:1547
-#, fuzzy
 msgid "Check the path setting in Preferences."
-msgstr "Cannot execute grep tool '%s'; check the path setting in Preferences."
+msgstr ""
 
 #: src/callbacks.c:1560
-#, fuzzy, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "Could not execute configured external command '%s' (%s)."
+msgstr ""
 
 #: src/callbacks.c:1569
-#, fuzzy
 msgid "No context action set."
-msgstr "Context action:"
+msgstr ""
 
 #: src/dialogs.c:159 src/document.c:2316 src/document.c:2381
 #: src/document.c:2389
 #, c-format
 msgid "\"%s\" was not found."
-msgstr "\"%கள்\" காணப்படவில்லை."
+msgstr "\"%s\" காணப்படவில்லை."
 
 #: src/dialogs.c:221 src/encodings.c:530
 msgid "Detect from file"
 msgstr "கோப்பிலிருந்து கண்டறியவும்"
 
 #: src/dialogs.c:224
-#, fuzzy
 msgid "Programming Languages"
-msgstr "_Programming Languages"
+msgstr ""
 
 #: src/dialogs.c:226
-#, fuzzy
 msgid "Scripting Languages"
-msgstr "_Scripting Languages"
+msgstr ""
 
 #: src/dialogs.c:228
-#, fuzzy
 msgid "Markup Languages"
-msgstr "_Markup Languages"
+msgstr ""
 
 #: src/dialogs.c:306
 msgid "_More Options"
@@ -2749,7 +2696,7 @@ msgid "Open File"
 msgstr "கோப்பு திறந்த"
 
 #: src/dialogs.c:379
-#, fuzzy
+
 msgctxt "Open dialog action"
 msgid "_View"
 msgstr "_View"
@@ -2806,7 +2753,7 @@ msgstr "_ சேமிக்க வேண்டாம்"
 #: src/dialogs.c:795
 #, c-format
 msgid "The file '%s' is not saved."
-msgstr "'%கள்' கோப்பு சேமிக்கப்படவில்லை."
+msgstr "'%s' கோப்பு சேமிக்கப்படவில்லை."
 
 #: src/dialogs.c:796
 msgid "Do you want to save it before closing?"
@@ -2851,7 +2798,7 @@ msgstr "கோப்பு %s மூடப்பட்டது."
 #: src/document.c:882
 #, c-format
 msgid "New file \"%s\" opened."
-msgstr "புதிய கோப்பு \"%கள்\" திறக்கப்பட்டது."
+msgstr "புதிய கோப்பு \"%s\" திறக்கப்பட்டது."
 
 #: src/document.c:956
 #, c-format
@@ -2861,7 +2808,7 @@ msgstr "கோப்பு %s ( %s) ஐ திறக்க முடியவி
 #: src/document.c:1005
 #, c-format
 msgid "The file \"%s\" is not valid %s."
-msgstr "\" %S\" கோப்பு செல்லுபடியாகும் %s அல்ல."
+msgstr "\" %s\" கோப்பு செல்லுபடியாகும் %s அல்ல."
 
 #: src/document.c:1011
 #, c-format
@@ -2869,7 +2816,7 @@ msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr ""
-"\"%கள்\" கோப்பு உரை கோப்பு போல் தெரியவில்லை அல்லது கோப்பு குறியாக்கம் "
+"\"%s\" கோப்பு உரை கோப்பு போல் தெரியவில்லை அல்லது கோப்பு குறியாக்கம் "
 "ஆதரிக்கப்படவில்லை."
 
 #: src/document.c:1021
@@ -2878,7 +2825,7 @@ msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This can occur if the file contains a NULL byte. Be aware that saving it can cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"\"%கள்\" கோப்பை சரியாக திறக்க முடியவில்லை மற்றும் துண்டிக்கப்பட்டுள்ளது. கோப்பில் ஒரு பூஜ்ய பைட் இருந்தால் இது நிகழலாம். அதைச் சேமிப்பது தரவு இழப்பை ஏற்படுத்தும் என்பதை அறிந்து கொள்ளுங்கள். \n"
+"\"%s\" கோப்பை சரியாக திறக்க முடியவில்லை மற்றும் துண்டிக்கப்பட்டுள்ளது. கோப்பில் ஒரு பூஜ்ய பைட் இருந்தால் இது நிகழலாம். அதைச் சேமிப்பது தரவு இழப்பை ஏற்படுத்தும் என்பதை அறிந்து கொள்ளுங்கள். \n"
 " கோப்பு படிக்க மட்டும் அமைக்கப்பட்டது."
 
 #: src/document.c:1233
@@ -2896,20 +2843,20 @@ msgstr "தாவல்கள் மற்றும் இடங்கள்"
 #: src/document.c:1244
 #, c-format
 msgid "Setting %s indentation mode for %s."
-msgstr "%S க்கான அமைப்புகள் உள்தள்ளல் முறை."
+msgstr "%s அமைப்பு %s உள்தள்ளல் முறைக்கான."
 
 #: src/document.c:1255
 #, c-format
 msgid "Setting indentation width to %d for %s."
-msgstr "உள்தள்ளல் அகலத்தை %d க்கு %d ஆக அமைத்தல்."
+msgstr "உள்தள்ளல் அகலத்தை %d க்கு %s ஆக அமைத்தல்."
 
 #: src/document.c:1509
 #, c-format
 msgid "File %s reloaded."
-msgstr "கோப்பு %கள் மீண்டும் ஏற்றப்பட்டன."
+msgstr "கோப்பு %s மீண்டும் ஏற்றப்பட்டன."
 
 #: src/document.c:1517
-#, fuzzy, c-format
+
 msgid "File %s opened (%d%s)."
 msgstr "File %s opened(%d%s)."
 
@@ -2934,7 +2881,7 @@ msgstr ""
 "பல்வேறு விருப்பங்களில் மாற்றலாம்."
 
 #: src/document.c:1642
-#, fuzzy
+
 msgid "The file has been reloaded."
 msgstr "File %s reloaded."
 
@@ -2943,14 +2890,14 @@ msgid "Any unsaved changes will be lost."
 msgstr "சேமிக்கப்படாத மாற்றங்கள் இழக்கப்படும்."
 
 #: src/document.c:1673
-#, fuzzy
+
 msgid "Undo history will be lost."
 msgstr "Any unsaved changes will be lost."
 
 #: src/document.c:1674
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
-msgstr "'%S' ஐ மீண்டும் ஏற்ற விரும்புகிறீர்களா?"
+msgstr "'%s' ஐ மீண்டும் ஏற்ற விரும்புகிறீர்களா?"
 
 #: src/document.c:1780
 msgid "Error renaming file."
@@ -2962,7 +2909,7 @@ msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr ""
-"\"%S\" இல் UTF-8 இலிருந்து கோப்பை மாற்றும்போது பிழை ஏற்பட்டது. கோப்பு "
+"\"%s\" இல் UTF-8 இலிருந்து கோப்பை மாற்றும்போது பிழை ஏற்பட்டது. கோப்பு "
 "சேமிக்கப்படாமல் உள்ளது."
 
 #: src/document.c:1919
@@ -2971,38 +2918,38 @@ msgid ""
 "Error message: %s\n"
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
-"பிழை செய்தி: %கள் \n"
+"பிழை செய்தி: %s \n"
 " பிழை \" %s\" இல் ஏற்பட்டது (வரி: %d, நெடுவரிசை: %d)."
 
 #: src/document.c:1923
 #, c-format
 msgid "Error message: %s."
-msgstr "பிழை செய்தி: %கள்."
+msgstr "பிழை செய்தி: %s."
 
 #: src/document.c:1983
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
-"எழுதுவதற்கு ' %கள்' கோப்பைத் திறக்கத் தவறிவிட்டது: ஃபோபன் () தோல்வியுற்றது: "
-"%கள்"
+"எழுதுவதற்கு ' %s' கோப்பைத் திறக்கத் தவறிவிட்டது: ஃபோபன் () தோல்வியுற்றது: "
+"%s"
 
 #: src/document.c:2001
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
-msgstr "' %S' என்ற கோப்பை எழுதத் தவறிவிட்டது: fwrite () தோல்வியுற்றது: %s"
+msgstr "' %s' என்ற கோப்பை எழுதத் தவறிவிட்டது: fwrite () தோல்வியுற்றது: %s"
 
 #: src/document.c:2015
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr "' %S' கோப்பை மூடுவதில் தோல்வி: fclose () தோல்வியுற்றது: %s"
+msgstr "' %s' கோப்பை மூடுவதில் தோல்வி: fclose () தோல்வியுற்றது: %s"
 
 #: src/document.c:2066 src/document.c:3620
-#, fuzzy
+
 msgid "_Overwrite"
 msgstr "Overwrite?"
 
 #: src/document.c:2068 src/document.c:3623
-#, fuzzy, c-format
+
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr ""
 "The file '%s' on the disk is more recent than\n"
@@ -3015,17 +2962,17 @@ msgstr "கோப்பை மீட்டெடுக்க முயற்ச�
 #: src/document.c:2077 src/document.c:3673
 #, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr "\"%S\" கோப்பு வட்டில் காணப்படவில்லை!"
+msgstr "\"%s\" கோப்பு வட்டில் காணப்படவில்லை!"
 
 #: src/document.c:2140
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr "படிக்க மட்டும் ஆவணத்தை '%கள்' சேமிக்க முடியாது!"
+msgstr "படிக்க மட்டும் ஆவணத்தை '%s' சேமிக்க முடியாது!"
 
 #: src/document.c:2208
 #, c-format
 msgid "Error saving file (%s)."
-msgstr "கோப்பு சேமிப்பு கோப்பு (%கள்)."
+msgstr "கோப்பு சேமிப்பு கோப்பு (%s)."
 
 #: src/document.c:2213
 #, c-format
@@ -3034,7 +2981,8 @@ msgid ""
 "\n"
 "The file on disk may now be truncated!"
 msgstr ""
-"%இருக்கிறது \n"
+"%s\n"
+"\n"
 " வட்டில் உள்ள கோப்பு இப்போது துண்டிக்கப்படலாம்!"
 
 #: src/document.c:2215
@@ -3054,7 +3002,7 @@ msgstr "தேடலை மடக்கி மீண்டும் கண்ட
 #: src/search.c:2238
 #, c-format
 msgid "No matches found for \"%s\"."
-msgstr "\"%கள்\" க்கு போட்டிகள் எதுவும் கிடைக்கவில்லை."
+msgstr "\"%s\" க்கு போட்டிகள் எதுவும் கிடைக்கவில்லை."
 
 #: src/document.c:2484
 #, c-format
@@ -3235,7 +3183,7 @@ msgstr "மத்திய கிழக்கு"
 #: src/filetypes.c:86
 #, c-format
 msgid "%s source file"
-msgstr "%S மூல கோப்பு"
+msgstr "%s மூல கோப்பு"
 
 #: src/filetypes.c:87
 #, c-format
@@ -3245,7 +3193,7 @@ msgstr "%s கோப்பு"
 #: src/filetypes.c:88
 #, c-format
 msgid "%s script"
-msgstr "%கள் ஸ்கிரிப்ட்"
+msgstr "%s உரை"
 
 #: src/filetypes.c:89
 #, c-format
@@ -3261,7 +3209,7 @@ msgid "Makefile"
 msgstr "மேக்ஃபைல்"
 
 #: src/filetypes.c:159
-#, fuzzy
+
 msgid "Cascading Stylesheet"
 msgstr "Cascading StyleSheet"
 
@@ -3310,14 +3258,14 @@ msgstr "பெயரிடப்படாதது"
 #: src/templates.c:230
 #, c-format
 msgid "Could not find file '%s'."
-msgstr "'%S' கோப்பைக் கண்டுபிடிக்க முடியவில்லை."
+msgstr "'%s' கோப்பைக் கண்டுபிடிக்க முடியவில்லை."
 
 #: src/highlighting.c:1307
 msgid "Default"
 msgstr "இயல்புநிலை"
 
 #: src/highlighting.c:1348
-#, fuzzy
+
 msgid "The current filetype overrides the default style."
 msgstr "The current filetype overrides the default style."
 
@@ -3431,7 +3379,7 @@ msgid "Reload file"
 msgstr "கோப்பை மீண்டும் ஏற்றவும்"
 
 #: src/keybindings.c:359
-#, fuzzy
+
 msgid "Reload all files"
 msgstr "Reload file"
 
@@ -3460,7 +3408,7 @@ msgid "Delete to line end"
 msgstr "வரி முடிவுக்கு நீக்கு"
 
 #: src/keybindings.c:396
-#, fuzzy
+
 msgid "Delete to beginning of line"
 msgstr "Delete to line end"
 
@@ -3585,32 +3533,32 @@ msgid "Send to Custom Command 3"
 msgstr "தனிப்பயன் கட்டளை 3 க்கு அனுப்பவும்"
 
 #: src/keybindings.c:490
-#, fuzzy
+
 msgid "Send to Custom Command 4"
 msgstr "Send to Custom Command 1"
 
 #: src/keybindings.c:492
-#, fuzzy
+
 msgid "Send to Custom Command 5"
 msgstr "Send to Custom Command 1"
 
 #: src/keybindings.c:494
-#, fuzzy
+
 msgid "Send to Custom Command 6"
 msgstr "Send to Custom Command 1"
 
 #: src/keybindings.c:496
-#, fuzzy
+
 msgid "Send to Custom Command 7"
 msgstr "Send to Custom Command 1"
 
 #: src/keybindings.c:498
-#, fuzzy
+
 msgid "Send to Custom Command 8"
 msgstr "Send to Custom Command 1"
 
 #: src/keybindings.c:500
-#, fuzzy
+
 msgid "Send to Custom Command 9"
 msgstr "Send to Custom Command 1"
 
@@ -3679,12 +3627,12 @@ msgid "Toggle marker"
 msgstr "மார்க்கரை மாற்றவும்"
 
 #: src/keybindings.c:584
-#, fuzzy
+
 msgid "Go to Symbol Definition"
 msgstr "Go to Tag Definition"
 
 #: src/keybindings.c:587
-#, fuzzy
+
 msgid "Go to Symbol Declaration"
 msgstr "Go to Tag Declaration"
 
@@ -3903,7 +3851,7 @@ msgid "Failed to load one or more session files."
 msgstr "ஒன்று அல்லது அதற்கு மேற்பட்ட அமர்வு கோப்புகளை ஏற்றுவதில் தோல்வி."
 
 #: src/libmain.c:121
-#, fuzzy
+
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
@@ -3916,7 +3864,7 @@ msgid "COLUMN"
 msgstr "நெடுவரிசை"
 
 #: src/libmain.c:122
-#, fuzzy
+
 msgid "Use alternate configuration directory DIR"
 msgstr "Use an alternate configuration directory"
 
@@ -3933,7 +3881,7 @@ msgid "Generate global tags file (see documentation)"
 msgstr "உலகளாவிய குறிச்சொற்கள் கோப்பை உருவாக்குங்கள் (ஆவணங்களைப் பார்க்கவும்)"
 
 #: src/libmain.c:125
-#, fuzzy
+
 msgid "Don't preprocess C/C++ files when generating tags file"
 msgstr "Don't preprocess C/C++ files when generating tags"
 
@@ -3944,7 +3892,7 @@ msgstr ""
 "கட்டாயப்படுத்துங்கள்"
 
 #: src/libmain.c:128
-#, fuzzy
+
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
 msgstr ""
@@ -3960,7 +3908,7 @@ msgstr ""
 "இயங்கும் சீனி நிகழ்வில் திறந்த ஆவணங்களின் பட்டியலைத் திருப்பி விடுங்கள்"
 
 #: src/libmain.c:131
-#, fuzzy
+
 msgid "Set initial line number to LINE for the first opened file"
 msgstr "Set initial line number for the first opened file"
 
@@ -4015,7 +3963,7 @@ msgid "[FILES...]"
 msgstr "[கோப்புகள் ...]"
 
 #: src/libmain.c:557
-#, fuzzy
+
 msgid "A fast and lightweight IDE."
 msgstr "A fast and lightweight IDE"
 
@@ -4062,22 +4010,22 @@ msgid ""
 "There could be some problems using Geany without a configuration directory.\n"
 "Start Geany anyway?"
 msgstr ""
-"உள்ளமைவு கோப்பகத்தை உருவாக்க முடியவில்லை (%கள்). \n"
+"உள்ளமைவு கோப்பகத்தை உருவாக்க முடியவில்லை (%s). \n"
 " உள்ளமைவு அடைவு இல்லாமல் சீனியைப் பயன்படுத்த சில சிக்கல்கள் இருக்கலாம். \n"
 " எப்படியும் சீனியைத் தொடங்கவா?"
 
 #: src/libmain.c:1174
 #, c-format
 msgid "This is Geany %s."
-msgstr "இது சீனி %கள்."
+msgstr "இது சீனி %s."
 
 #: src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
-msgstr "உள்ளமைவு கோப்பகத்தை உருவாக்க முடியவில்லை (%கள்)."
+msgstr "உள்ளமைவு கோப்பகத்தை உருவாக்க முடியவில்லை (%s)."
 
 #: src/libmain.c:1185
-#, fuzzy
+
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr "Search failed (see Help->Debug Messages for details)."
 
@@ -4117,7 +4065,7 @@ msgstr "_ஹைட் செய்தி சாளரம்"
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
-"'%S' கோப்பைக் கண்டுபிடிக்க முடியவில்லை - தற்போதைய ஆவண பாதையை முயற்சிக்கவும்."
+"'%s' கோப்பைக் கண்டுபிடிக்க முடியவில்லை - தற்போதைய ஆவண பாதையை முயற்சிக்கவும்."
 
 #: src/msgwindow.c:1174
 msgid "The document has been closed."
@@ -4128,12 +4076,12 @@ msgid "Switch to Document"
 msgstr "ஆவணத்திற்கு மாறவும்"
 
 #: src/notebook.c:479
-#, fuzzy
+
 msgid "Open in New _Window"
 msgstr "Open File"
 
 #: src/notebook.c:504
-#, fuzzy
+
 msgid "Close Documents to the _Right"
 msgstr "Move document right"
 
@@ -4143,7 +4091,7 @@ msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
-"\"%கள்\" சொருகி சீனியின் இந்த வெளியீட்டுடன் பைனரி பொருந்தாது - தயவுசெய்து "
+"\"%s\" சொருகி சீனியின் இந்த வெளியீட்டுடன் பைனரி பொருந்தாது - தயவுசெய்து "
 "அதை மீண்டும் தொகுக்கவும்."
 
 #: src/plugins.c:1220
@@ -4155,8 +4103,9 @@ msgid ""
 "\n"
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</i>\n"
 msgstr ""
+"\n"
 "<i> பிற செருகுநிரல்கள் இதைப் பொறுத்தது. செயலிழக்க அனுமதிக்க முதலில் அவற்றை "
-"முடக்கு. </I>"
+"முடக்கு. </i>\n"
 
 #: src/plugins.c:1601
 #, c-format
@@ -4165,9 +4114,9 @@ msgid ""
 "Author(s):\t%s\n"
 "Filename:\t%s"
 msgstr ""
-"பதிப்பு: %கள் \n"
-" ஆசிரியர் (கள்): %கள் \n"
-" கோப்பு பெயர்: %கள்"
+"பதிப்பு:\t%s\n"
+" ஆசிரியர் (கள்):\t %s\n"
+" கோப்பு பெயர்: \t%s"
 
 #: src/plugins.c:1629
 msgid "No plugins available."
@@ -4209,7 +4158,7 @@ msgstr "பிடுங்கு சாவி"
 #: src/prefs.c:186
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
-msgstr "\"%கள்\" க்கு நீங்கள் பயன்படுத்த விரும்பும் விசைகளின் கலவையை அழுத்தவும்."
+msgstr "\"%s\" க்கு நீங்கள் பயன்படுத்த விரும்பும் விசைகளின் கலவையை அழுத்தவும்."
 
 #: src/prefs.c:226 src/symbols.c:2164 src/sidebar.c:1244
 msgid "_Expand All"
@@ -4242,7 +4191,7 @@ msgstr "அந்த விசைப்பலகையை மேலெழுத�
 #: src/prefs.c:1491
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
-msgstr "'%S' கலவையானது ஏற்கனவே \"%s\" க்கு பயன்படுத்தப்படுகிறது."
+msgstr "'%s' கலவையானது ஏற்கனவே \"%s\" க்கு பயன்படுத்தப்படுகிறது."
 
 #: src/prefs.c:1708
 msgid "Enter tool paths below. Tools you do not need can be left blank."
@@ -4307,12 +4256,12 @@ msgstr "அச்சிடும் துணை அமைப்புக்க�
 #: src/printing.c:501
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
-msgstr "ஆவணம் %கள் அச்சிடும் துணை அமைப்புக்கு அனுப்பப்பட்டன."
+msgstr "ஆவணம் %s அச்சிடும் துணை அமைப்புக்கு அனுப்பப்பட்டன."
 
 #: src/printing.c:552
 #, c-format
 msgid "Printing of %s failed (%s)."
-msgstr "%கள் அச்சிடுதல் தோல்வியுற்றது ( %கள்)."
+msgstr "%s அச்சிடுதல் தோல்வியுற்றது ( %s)."
 
 #: src/printing.c:590
 msgid "Please set a print command in the preferences dialog first."
@@ -4325,12 +4274,12 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"\"%S\" கோப்பு பின்வரும் கட்டளையுடன் அச்சிடப்படும்: \n"
+"\"%s\" கோப்பு பின்வரும் கட்டளையுடன் அச்சிடப்படும்: \n"
 "\n"
-" %கள்"
+" %s"
 
 #: src/printing.c:613
-#, fuzzy, c-format
+
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
@@ -4362,7 +4311,7 @@ msgid "Name:"
 msgstr "பெயர்:"
 
 #: src/project.c:199
-#, fuzzy
+
 msgid "Project name"
 msgstr "Project"
 
@@ -4373,7 +4322,7 @@ msgid ""
 "should normally have the \"%s\" extension."
 msgstr ""
 "திட்டத்தை குறிக்கும் மற்றும் அதன் அமைப்புகளை சேமிக்கும் கோப்பின் பாதை. இது "
-"பொதுவாக \"%கள்\" நீட்டிப்பைக் கொண்டிருக்க வேண்டும்."
+"பொதுவாக \"%s\" நீட்டிப்பைக் கொண்டிருக்க வேண்டும்."
 
 #: src/project.c:225
 msgid "Base path:"
@@ -4390,12 +4339,12 @@ msgstr "திட்டக் கோப்பை எழுத முடியவ
 #: src/project.c:282
 #, c-format
 msgid "Project \"%s\" created."
-msgstr "திட்டம் \"%கள்\" உருவாக்கப்பட்டது."
+msgstr "திட்டம் \"%s\" உருவாக்கப்பட்டது."
 
 #: src/project.c:328 src/project.c:1055
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
-msgstr "திட்டக் கோப்பை \"%கள்\" ஏற்ற முடியவில்லை."
+msgstr "திட்டக் கோப்பை \"%s\" ஏற்ற முடியவில்லை."
 
 #: src/project.c:347
 msgid "Open Project"
@@ -4408,12 +4357,12 @@ msgstr "திட்ட கோப்புகள்"
 #: src/project.c:426
 #, c-format
 msgid "Project \"%s\" closed."
-msgstr "திட்டம் \"%கள்\" மூடப்பட்டது."
+msgstr "திட்டம் \"%s\" மூடப்பட்டது."
 
 #: src/project.c:633
 #, c-format
 msgid "Project \"%s\" saved."
-msgstr "திட்டம் \"%கள்\" சேமிக்கப்பட்டது."
+msgstr "திட்டம் \"%s\" சேமிக்கப்பட்டது."
 
 #: src/project.c:667
 msgid "Do you want to close it before proceeding?"
@@ -4422,7 +4371,7 @@ msgstr "தொடர்வதற்கு முன் அதை மூட வ�
 #: src/project.c:668
 #, c-format
 msgid "The '%s' project is open."
-msgstr "'%கள்' திட்டம் திறந்திருக்கும்."
+msgstr "'%s' திட்டம் திறந்திருக்கும்."
 
 #: src/project.c:717
 msgid "The specified project name is too short."
@@ -4432,7 +4381,7 @@ msgstr "குறிப்பிட்ட திட்டத்தின் ப�
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr ""
-"குறிப்பிட்ட திட்டத்தின் பெயர் மிக நீளமானது (அதிகபட்சம். %D எழுத்துக்கள்)."
+"குறிப்பிட்ட திட்டத்தின் பெயர் மிக நீளமானது (அதிகபட்சம். %d எழுத்துக்கள்)."
 
 #: src/project.c:735
 msgid "You have specified an invalid project filename."
@@ -4445,17 +4394,17 @@ msgstr "திட்டத்தின் அடிப்படை பாதை 
 #: src/project.c:759
 #, c-format
 msgid "The path \"%s\" does not exist."
-msgstr "\"%கள்\" பாதை இல்லை."
+msgstr "\"%s\" பாதை இல்லை."
 
 #: src/project.c:768
 #, c-format
 msgid "Project base directory could not be created (%s)."
-msgstr "திட்ட அடிப்படை கோப்பகத்தை உருவாக்க முடியவில்லை (%கள்)."
+msgstr "திட்ட அடிப்படை கோப்பகத்தை உருவாக்க முடியவில்லை (%s)."
 
 #: src/project.c:781
 #, c-format
 msgid "Project file could not be written (%s)."
-msgstr "திட்டக் கோப்பை எழுத முடியவில்லை (%கள்)."
+msgstr "திட்டக் கோப்பை எழுத முடியவில்லை (%s)."
 
 #: src/project.c:787 src/search.c:634
 msgid "_Replace"
@@ -4464,7 +4413,7 @@ msgstr "_ மறுசீரமைப்பு"
 #: src/project.c:789 plugins/export.c:330
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
-msgstr "'%S' கோப்பு ஏற்கனவே உள்ளது. அதை மேலெழுத விரும்புகிறீர்களா?"
+msgstr "'%s' கோப்பு ஏற்கனவே உள்ளது. அதை மேலெழுத விரும்புகிறீர்களா?"
 
 #: src/project.c:935
 msgid "Choose Project Filename"
@@ -4473,14 +4422,14 @@ msgstr "திட்ட கோப்பு பெயரைத் தேர்வ
 #: src/project.c:1045
 #, c-format
 msgid "Project \"%s\" opened."
-msgstr "திட்டம் \"%கள்\" திறக்கப்பட்டது."
+msgstr "திட்டம் \"%s\" திறக்கப்பட்டது."
 
 #: src/search.c:312 src/search.c:970
 msgid "_Use regular expressions"
 msgstr "வழக்கமான வெளிப்பாடுகளைப் பயன்படுத்துங்கள்"
 
 #: src/search.c:315
-#, fuzzy
+
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
@@ -4617,7 +4566,7 @@ msgstr ""
 " தனிப்பயன்: கோப்பு வடிவங்களை கைமுறையாகக் குறிப்பிடவும்"
 
 #: src/search.c:918
-#, fuzzy
+
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
 msgstr ""
 "Space separated list of file patterns used for the find in files dialogue "
@@ -4650,7 +4599,7 @@ msgstr ""
 
 #: src/search.c:1009
 msgid "E_xtra options:"
-msgstr "E_xtra விருப்பங்கள்:"
+msgstr "மேலும் விருப்பங்கள்:"
 
 #: src/search.c:1017
 msgid "Other options to pass to Grep"
@@ -4666,7 +4615,7 @@ msgstr[1] "Found %d matches for \"%s\"."
 #: src/search.c:1433
 #, c-format
 msgid "Replaced %u matches in %u documents."
-msgstr "%U ஆவணங்களில் %U போட்டிகளை மாற்றியது."
+msgstr "%u ஆவணங்களில் %u போட்டிகளை மாற்றியது."
 
 #: src/search.c:1464
 msgid ""
@@ -4697,7 +4646,7 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s - %s (கோப்பகத்தில்: %s)"
 
 #: src/search.c:1733
-#, fuzzy, c-format
+
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr "Cannot execute grep tool '%s'; check the path setting in Preferences."
@@ -4705,7 +4654,7 @@ msgstr "Cannot execute grep tool '%s'; check the path setting in Preferences."
 #: src/search.c:1773
 #, c-format
 msgid "Could not open directory (%s)"
-msgstr "கோப்பகத்தை திறக்க முடியவில்லை (%கள்)"
+msgstr "கோப்பகத்தை திறக்க முடியவில்லை (%s)"
 
 #: src/search.c:1863
 msgid "Search failed."
@@ -4725,7 +4674,7 @@ msgstr "போட்டிகள் எதுவும் கிடைக்க�
 #: src/search.c:1925
 #, c-format
 msgid "Bad regex: %s"
-msgstr "மோசமான ரீஜெக்ஸ்: %கள்"
+msgstr "மோசமான ரீஜெக்ஸ்: %s"
 
 #: src/socket.c:235
 msgid ""
@@ -4750,17 +4699,17 @@ msgstr ""
 "இருக்க வேண்டும்"
 
 #: src/spawn.c:260
-#, fuzzy
+
 msgid "Program not found"
 msgstr "Command not found"
 
 #: src/spawn.c:766
-#, fuzzy
+
 msgid "Failed to change to the working directory"
 msgstr "Process failed, no working directory"
 
 #: src/spawn.c:771
-#, fuzzy
+
 msgid "Unknown error executing child process"
 msgstr "unknown error while trying to spawn a process for %s"
 
@@ -4771,15 +4720,15 @@ msgstr "மதிப்பு"
 #: src/symbols.c:1218
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr "\"%கள்\" க்கான அறியப்படாத பைலடைப் நீட்டிப்பு."
+msgstr "\"%s\" க்கான அறியப்படாத பைலடைப் நீட்டிப்பு."
 
 #: src/symbols.c:1244
-#, fuzzy
+
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr "Failed to create tags file, perhaps because no tags were found.\n"
 
 #: src/symbols.c:1251
-#, fuzzy, c-format
+
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
@@ -4794,15 +4743,14 @@ msgid ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
 msgstr ""
 "உதாரணமாக: \n"
-" Cflags = `pkg-config gtk+-2.0-cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h"
+" CFLAGS = `pkg-config gtk+-2.0-cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
 
 #: src/symbols.c:1266
-#, fuzzy
+
 msgid "Load Tags File"
 msgstr "Load Tags"
 
 #: src/symbols.c:1273
-#, fuzzy
 msgid "Geany tags file (*.*.tags)"
 msgstr "Geany tag files (*.*.tags)"
 
@@ -4814,27 +4762,25 @@ msgstr "ஏற்றப்பட்ட %s குறிச்சொற்கள�
 #: src/symbols.c:1296
 #, c-format
 msgid "Could not load tags file '%s'."
-msgstr "குறிச்சொற்கள் கோப்பை '%கள்' ஏற்ற முடியவில்லை."
+msgstr "குறிச்சொற்கள் கோப்பை '%s' ஏற்ற முடியவில்லை."
 
 #: src/symbols.c:1518
-#, fuzzy, c-format
 msgid "<b>%s:%lu:</b> %s"
 msgstr "<b>Display</b>"
 
 #: src/symbols.c:1521
-#, fuzzy, c-format
 msgid "<i>%s:%lu:</i> %s"
 msgstr "<b>Display</b>"
 
 #: src/symbols.c:1742
 #, c-format
 msgid "Forward declaration \"%s\" not found."
-msgstr "முன்னோக்கி அறிவிப்பு \"%கள்\" காணப்படவில்லை."
+msgstr "முன்னோக்கி அறிவிப்பு \"%s\" காணப்படவில்லை."
 
 #: src/symbols.c:1744
 #, c-format
 msgid "Definition of \"%s\" not found."
-msgstr "\"%கள்\" இன் வரையறை காணப்படவில்லை."
+msgstr "\"%s\" இன் வரையறை காணப்படவில்லை."
 
 #: src/symbols.c:2179
 msgid "Sort by _Name"
@@ -4851,7 +4797,7 @@ msgstr "வகை மூலம் குழு"
 #: src/templates.c:81
 #, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8"
-msgstr "வார்ப்புரு கோப்பை \"%கள்\" யுடிஎஃப் -8 ஆக மாற்றுவதில் தோல்வி"
+msgstr "வார்ப்புரு கோப்பை \"%s\" யுடிஎஃப் -8 ஆக மாற்றுவதில் தோல்வி"
 
 #: src/templates.c:651
 #, c-format
@@ -4860,7 +4806,7 @@ msgid ""
 " are a common cause of errors. Error: %s."
 msgstr ""
 "வார்ப்புரு கட்டளையை \"%s\" ஐ இயக்க முடியாது. குறிப்பு: கட்டளையில் தவறான "
-"பாதைகள் பிழைகளுக்கு பொதுவான காரணம். பிழை: %கள்."
+"பாதைகள் பிழைகளுக்கு பொதுவான காரணம். பிழை: %s."
 
 #: src/toolbar.c:57
 msgid "Save the current file"
@@ -5015,12 +4961,12 @@ msgstr "காட்டப்படும் உருப்படிகள்"
 #: src/tools.c:83
 #, c-format
 msgid "Invalid command: %s"
-msgstr "தவறான கட்டளை: %கள்"
+msgstr "தவறான கட்டளை: %s"
 
 #: src/tools.c:214
 #, c-format
 msgid "Passing data and executing custom command: %s"
-msgstr "தரவை அனுப்புதல் மற்றும் தனிப்பயன் கட்டளையை செயல்படுத்துதல்: %கள்"
+msgstr "தரவை அனுப்புதல் மற்றும் தனிப்பயன் கட்டளையை செயல்படுத்துதல்: %s"
 
 #: src/tools.c:222
 #, c-format
@@ -5029,7 +4975,7 @@ msgid ""
 "changed. Error message: %s"
 msgstr ""
 "செயல்படுத்தப்பட்ட தனிப்பயன் கட்டளை பிழையை அளித்தது. உங்கள் தேர்வு "
-"மாற்றப்படவில்லை. பிழை செய்தி: %கள்"
+"மாற்றப்படவில்லை. பிழை செய்தி: %s"
 
 #: src/tools.c:230
 msgid "The executed custom command exited with an unsuccessful exit code."
@@ -5038,7 +4984,7 @@ msgstr ""
 "கொண்டு வெளியேறியது."
 
 #: src/tools.c:239
-#, fuzzy, c-format
+
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
@@ -5093,7 +5039,7 @@ msgid "Characters:"
 msgstr "எழுத்துக்கள்:"
 
 #: src/sidebar.c:165
-#, fuzzy
+
 msgid "No symbols found"
 msgstr "No tags found"
 
@@ -5110,7 +5056,7 @@ msgid "H_ide Sidebar"
 msgstr "H_ide பக்கப்பட்டி"
 
 #: src/sidebar.c:1173
-#, fuzzy
+
 msgid "D_ocuments Only"
 msgstr "Documents"
 
@@ -5119,7 +5065,7 @@ msgid "Show _Paths"
 msgstr "_ பாதைகளைக் காட்டு"
 
 #: src/sidebar.c:1175
-#, fuzzy
+
 msgid "Show _Tree"
 msgstr "Show _Toolbar"
 
@@ -5128,18 +5074,18 @@ msgid "_Find in Files..."
 msgstr "_ கோப்புகளில் கண்டுபிடி ..."
 
 #: src/ui_utils.c:62
-#, fuzzy
+
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding:"
-" %e      filetype: %f      scope: %S"
+" %e      filetype: %f      scope: %s"
 msgstr ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
-"encoding: %e      filetype: %f      scope: %S"
+"encoding: %e      filetype: %f      scope: %s"
 
 #: src/ui_utils.c:237
 #, c-format
 msgid "%dL"
-msgstr "%டி.எல்"
+msgstr "%dL"
 
 #: src/ui_utils.c:247 src/ui_utils.c:254
 msgid "RO "
@@ -5176,7 +5122,7 @@ msgstr "(புதிய நிகழ்வு)"
 #: src/ui_utils.c:435
 #, c-format
 msgid "Font updated (%s)."
-msgstr "எழுத்துரு புதுப்பிக்கப்பட்டது (%கள்)."
+msgstr "எழுத்துரு புதுப்பிக்கப்பட்டது (%s)."
 
 #: src/ui_utils.c:686
 msgid "C Standard Library"
@@ -5231,7 +5177,7 @@ msgid "Custom Date Format"
 msgstr "தனிப்பயன் தேதி வடிவம்"
 
 #: src/ui_utils.c:729
-#, fuzzy
+
 msgid ""
 "Enter here a custom date and time format. For a list of available conversion"
 " specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
@@ -5248,7 +5194,7 @@ msgid "_Set Custom Date Format"
 msgstr "_ தனிப்பயன் தேதி வடிவத்தை அமைக்கவும்"
 
 #: src/ui_utils.c:2004
-#, fuzzy
+
 msgid "Select Project Base Path"
 msgstr "Choose Project Base Path"
 
@@ -5261,7 +5207,7 @@ msgid "Select File"
 msgstr "கோப்பைத் தேர்ந்தெடுக்கவும்"
 
 #: src/ui_utils.c:2231
-#, fuzzy
+
 msgid "_Filetype Configuration"
 msgstr "_Reload Configuration"
 
@@ -5282,7 +5228,7 @@ msgid "Select Browser"
 msgstr "உலாவியைத் தேர்ந்தெடுக்கவும்"
 
 #: src/utils.c:100
-#, fuzzy
+
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command"
 " or leave it empty in order to spawn the system default browser."
@@ -5291,12 +5237,12 @@ msgstr ""
 "another one."
 
 #: src/utils.c:388
-#, fuzzy
+
 msgid "Windows (CRLF)"
 msgstr "Win (CRLF)"
 
 #: src/utils.c:389
-#, fuzzy
+
 msgid "Classic Mac (CR)"
 msgstr "Mac (CR)"
 
@@ -5425,7 +5371,7 @@ msgid "Variables"
 msgstr "மாறிகள்"
 
 #: src/tagmanager/tm_parser.c:96 src/tagmanager/tm_parser.c:446
-#, fuzzy
+
 msgid "Extern Variables"
 msgstr "Extern Variables"
 
@@ -5514,7 +5460,7 @@ msgid "Articles"
 msgstr "கட்டுரைகள்"
 
 #: src/tagmanager/tm_parser.c:258
-#, fuzzy
+
 msgid "Book Chapters"
 msgstr "Chapter"
 
@@ -5531,7 +5477,7 @@ msgid "Theses"
 msgstr "ஆய்வறிக்கைகள்"
 
 #: src/tagmanager/tm_parser.c:262
-#, fuzzy
+
 msgid "Strings"
 msgstr "Settings"
 
@@ -5631,7 +5577,7 @@ msgid "Functions / Procedures"
 msgstr "செயல்பாடுகள் / நடைமுறைகள்"
 
 #: src/tagmanager/tm_parser.c:485
-#, fuzzy
+
 msgid "Variables / Signals / Ports"
 msgstr "Variables / Signals"
 
@@ -5664,7 +5610,7 @@ msgid "Programs"
 msgstr "திட்டங்கள்"
 
 #: src/tagmanager/tm_parser.c:649
-#, fuzzy
+
 msgid "Functions / Subroutines"
 msgstr "Functions / Procedures"
 
@@ -5682,27 +5628,27 @@ msgid "Structures"
 msgstr "கட்டமைப்புகள்"
 
 #: src/tagmanager/tm_parser.c:737
-#, fuzzy
+
 msgid "Chapters"
 msgstr "Chapter"
 
 #: src/tagmanager/tm_parser.c:739
-#, fuzzy
+
 msgid "Subsections"
 msgstr "Subsection"
 
 #: src/tagmanager/tm_parser.c:740
-#, fuzzy
+
 msgid "Subsubsections"
 msgstr "Subsubsection"
 
 #: src/tagmanager/tm_parser.c:741
-#, fuzzy
+
 msgid "Level 4 sections"
 msgstr "Save Actions"
 
 #: src/tagmanager/tm_parser.c:742
-#, fuzzy
+
 msgid "Level 5 sections"
 msgstr "Save Actions"
 
@@ -5755,7 +5701,7 @@ msgid "Section Level 4"
 msgstr "பிரிவு நிலை 4"
 
 #: src/tagmanager/tm_parser.c:846
-#, fuzzy
+
 msgid "Section Level 5"
 msgstr "Section Level 1"
 
@@ -5780,12 +5726,12 @@ msgid "Fields"
 msgstr "புலங்கள்"
 
 #: src/tagmanager/tm_parser.c:959
-#, fuzzy
+
 msgid "Unknowns"
 msgstr "unknown"
 
 #: src/tagmanager/tm_parser.c:1065
-#, fuzzy
+
 msgid "Packages"
 msgstr "Package"
 
@@ -5794,7 +5740,7 @@ msgid "Tasks"
 msgstr "பணிகள்"
 
 #: src/tagmanager/tm_parser.c:1092
-#, fuzzy
+
 msgid "Regions"
 msgstr "Sections"
 
@@ -6042,12 +5988,12 @@ msgstr "தற்போதைய ஜூம் மட்டத்துடன் 
 #: plugins/export.c:278
 #, c-format
 msgid "Document successfully exported as '%s'."
-msgstr "ஆவணம் வெற்றிகரமாக '%கள்' என ஏற்றுமதி செய்யப்படுகிறது."
+msgstr "ஆவணம் வெற்றிகரமாக '%s' என ஏற்றுமதி செய்யப்படுகிறது."
 
 #: plugins/export.c:280
 #, c-format
 msgid "File '%s' could not be written (%s)."
-msgstr "'%S' ஐ எழுத முடியவில்லை (%கள்)."
+msgstr "'%s' ஐ எழுத முடியவில்லை (%s)."
 
 #: plugins/export.c:746
 msgid "_Export"
@@ -6079,7 +6025,7 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "கட்டமைக்கப்பட்ட வெளிப்புற கட்டளை '%s' (%s) ஐ இயக்க முடியவில்லை."
 
 #: plugins/filebrowser.c:657
-#, fuzzy
+
 msgid "Open in _Geany"
 msgstr "Open File"
 
@@ -6177,20 +6123,20 @@ msgstr ""
 #: plugins/saveactions.c:176
 #, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
-msgstr "காப்பு நகல்: கோப்பகத்தை உருவாக்க முடியவில்லை (%கள்)."
+msgstr "காப்பு நகல்: கோப்பகத்தை உருவாக்க முடியவில்லை (%s)."
 
 #: plugins/saveactions.c:210
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
-msgstr "காப்பு நகல்: கோப்பைப் படிக்க முடியவில்லை (%கள்)."
+msgstr "காப்பு நகல்: கோப்பைப் படிக்க முடியவில்லை (%s)."
 
 #: plugins/saveactions.c:235
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
-msgstr "காப்பு நகல்: கோப்பை சேமிக்க முடியவில்லை (%கள்)."
+msgstr "காப்பு நகல்: கோப்பை சேமிக்க முடியவில்லை (%s)."
 
 #: plugins/saveactions.c:286
-#, fuzzy, c-format
+
 msgid "Instant Save filename could not be generated (%s)."
 msgstr "Project file could not be written (%s)."
 
@@ -6206,7 +6152,7 @@ msgid "Select Directory"
 msgstr "கோப்பகத்தைத் தேர்ந்தெடுக்கவும்"
 
 #: plugins/saveactions.c:544
-#, fuzzy
+
 msgid "Instantsave directory does not exist or is not writable."
 msgstr "Backup directory does not exist or is not writable."
 
@@ -6252,12 +6198,12 @@ msgid "Instant Save"
 msgstr "உடனடி சேமிப்பு"
 
 #: plugins/saveactions.c:721
-#, fuzzy
+
 msgid "Default _filetype to use for new files:"
 msgstr "_Filetype to use for newly opened files:"
 
 #: plugins/saveactions.c:742
-#, fuzzy, c-format
+
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
 "Directory to run Make All from. Leave blank to use the default command."
@@ -6356,15 +6302,15 @@ msgstr "மேலும் கீழும்"
 #~ msgid "Filename of libvte.so"
 #~ msgstr "Filename of libvte.so"
 
-#, fuzzy
+
 #~ msgid "Background image:"
 #~ msgstr "Background image:"
 
-#, fuzzy
+
 #~ msgid "Sets the path to the background image in the terminal widget"
 #~ msgstr "Sets the path to the background image in the terminal widget"
 
-#, fuzzy
+
 #~ msgid ""
 #~ "Cannot execute terminal command \"%s\": %s. Check the path setting in "
 #~ "Preferences."
@@ -6379,7 +6325,7 @@ msgstr "மேலும் கீழும்"
 #~ msgid "Printing of \"%s\" failed (return code: %s)."
 #~ msgstr "Printing of \"%s\" failed (return code: %s)."
 
-#, fuzzy
+
 #~ msgid "TerminateProcess() failed: %s"
 #~ msgstr "Process failed (%s)"
 
@@ -6456,7 +6402,7 @@ msgstr "மேலும் கீழும்"
 #~ msgid "Subroutines"
 #~ msgstr "Subroutines"
 
-#, fuzzy
+
 #~ msgid "style: %d"
 #~ msgstr "Icon style:"
 
@@ -7136,14 +7082,14 @@ msgstr "மேலும் கீழும்"
 #~ msgid "Mixins"
 #~ msgstr "Mixins"
 
-#, fuzzy
+
 #~ msgid "C source file"
 #~ msgstr "C source file"
 
 #~ msgid "C++ source file"
 #~ msgstr "C++ source file"
 
-#, fuzzy
+
 #~ msgid "C# source file"
 #~ msgstr "C source file"
 
@@ -7159,7 +7105,7 @@ msgstr "மேலும் கீழும்"
 #~ msgid "Assembler source file"
 #~ msgstr "Assembler source file"
 
-#, fuzzy
+
 #~ msgid "FreeBasic source file"
 #~ msgstr "Pascal source file"
 
@@ -7205,14 +7151,14 @@ msgstr "மேலும் கீழும்"
 #~ msgid "VHDL source file"
 #~ msgstr "VHDL source file"
 
-#, fuzzy
+
 #~ msgid "Haxe source file"
 #~ msgstr "Haskell source file"
 
 #~ msgid "Open files"
 #~ msgstr "Open files"
 
-#, fuzzy
+
 #~ msgid "Show open files list"
 #~ msgstr "Show open files list"
 
@@ -7232,11 +7178,11 @@ msgstr "மேலும் கீழும்"
 #~ msgid "Automatic completion of often used constructs like if and for"
 #~ msgstr "Automatic completion of often used constructs like if and for"
 
-#, fuzzy
+
 #~ msgid "Symbol autocompletion"
 #~ msgstr "Construct autocompletion"
 
-#, fuzzy
+
 #~ msgid "Print:"
 #~ msgstr "Print"
 
@@ -7246,7 +7192,7 @@ msgstr "மேலும் கீழும்"
 #~ msgid "Go to line"
 #~ msgstr "Go to line"
 
-#, fuzzy
+
 #~ msgid "Complete construct"
 #~ msgstr "Complete construct"
 
@@ -7256,18 +7202,18 @@ msgstr "மேலும் கீழும்"
 #~ msgid "Go to tag declaration"
 #~ msgstr "Go to tag declaration"
 
-#, fuzzy
+
 #~ msgid "Hide"
 #~ msgstr "Hide"
 
 #~ msgid "Reload"
 #~ msgstr "Reload"
 
-#, fuzzy
+
 #~ msgid "Do you realy want to revert '%s'?"
 #~ msgstr "Do you really want to quit?"
 
-#, fuzzy
+
 #~ msgid "Do you want to save all opened files before processing?"
 #~ msgstr "Do you want to save it before closing?"
 
@@ -7286,7 +7232,7 @@ msgstr "மேலும் கீழும்"
 #~ msgid "Advanced"
 #~ msgstr "Advanced"
 
-#, fuzzy
+
 #~ msgid "Editing menu"
 #~ msgstr ""
 #~ "\n"
