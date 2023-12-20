@@ -4578,8 +4578,8 @@ msgstr "உவவெஅவிற்கு அனுப்ப பிற விர
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "\"%s\"க்கு %d பொருத்தம் உள்ளது."
-msgstr[1] "\"%s\"க்கு %d பொருத்தங்கள் உள்ளது."
+msgstr[0] "%d பொருத்தம் \"%s\"க்கு உள்ளது."
+msgstr[1] "%d பொருத்தங்கள் \"%s\"க்கு உள்ளது."
 
 #: src/search.c:1433
 #, c-format
