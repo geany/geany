@@ -4859,7 +4859,7 @@ msgstr "விருப்பத்தேர்வுகள் உரையா�
 
 #: src/toolbar.c:81
 msgid "Quit Geany"
-msgstr "சீனியை விட்டு"
+msgstr "சீனியை விட்டு வெளியேறு"
 
 #: src/toolbar.c:82
 msgid "Print document"
@@ -4895,7 +4895,7 @@ msgstr "தேடல் புலம்"
 
 #: src/toolbar.c:393
 msgid "Goto Field"
-msgstr "கோட்டோ புலம்"
+msgstr "புலத்திற்கு செல்"
 
 #: src/toolbar.c:584
 msgid "Separator"
@@ -4950,7 +4950,7 @@ msgstr ""
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
-msgstr "Cannot execute grep tool '%s'; check the path setting in Preferences."
+msgstr "தனிப்பயன் கட்டளையை செயல்படுத்த முடியாது \"%s\": %s. தனிப்பயன் கட்டளைகளில் பாதை அமைப்பைச் சரிபார்க்கவும்."
 
 #: src/tools.c:354 src/tools.c:623
 msgid "Set Custom Commands"
@@ -4986,7 +4986,7 @@ msgstr "முழு ஆவணம்"
 
 #: src/tools.c:716
 msgid "Range:"
-msgstr "சரகம்:"
+msgstr "எல்லை:"
 
 #: src/tools.c:728
 msgid "Lines:"
@@ -5002,43 +5002,43 @@ msgstr "எழுத்துக்கள்:"
 
 #: src/sidebar.c:165
 msgid "No symbols found"
-msgstr "No tags found"
+msgstr "குறியீட்டுகள் எதுவும் இல்லை"
 
 #: src/sidebar.c:1070
 msgid "Show S_ymbol List"
-msgstr "குறியீட்டு பட்டியலைக் காட்டு"
+msgstr "குறியீட்டு பட்டியலைக் காட்டு (_y)"
 
 #: src/sidebar.c:1077
 msgid "Show _Document List"
-msgstr "_Document பட்டியலைக் காட்டு"
+msgstr "ஆவண பட்டியலைக் காட்டு (_D)"
 
 #: src/sidebar.c:1084 plugins/filebrowser.c:707
 msgid "H_ide Sidebar"
-msgstr "H_ide பக்கப்பட்டி"
+msgstr "பக்கப்பட்டி மறை (_i)"
 
 #: src/sidebar.c:1173
 msgid "D_ocuments Only"
-msgstr "Documents"
+msgstr "ஆவணங்கள் மட்டும் (_o)"
 
 #: src/sidebar.c:1174
 msgid "Show _Paths"
-msgstr "_ பாதைகளைக் காட்டு"
+msgstr "பாதைகளைக் காட்டு (_P)"
 
 #: src/sidebar.c:1175
 msgid "Show _Tree"
-msgstr "Show _Toolbar"
+msgstr "மரத்தை காட்டு (_T)"
 
 #: src/sidebar.c:1228 plugins/filebrowser.c:678
 msgid "_Find in Files..."
-msgstr "_ கோப்புகளில் கண்டுபிடி ..."
+msgstr "கோப்புகளில் கண்டுபிடி.. (_F)."
 
 #: src/ui_utils.c:62
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding:"
 " %e      filetype: %f      scope: %s"
 msgstr ""
-"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
-"encoding: %e      filetype: %f      scope: %s"
+"வரி: %l / %L\t நெடு: %c\t தேர்: %s\t %w      %t      %mmode: %M      "
+"குறியாக்கம்: %e      கோப்புவகை: %f      நோக்கம்: %s"
 
 #: src/ui_utils.c:237
 #, c-format
@@ -5051,11 +5051,11 @@ msgstr "ரோ"
 
 #: src/ui_utils.c:249
 msgid "OVR"
-msgstr "Ovr"
+msgstr "ஒவிஆர்"
 
 #: src/ui_utils.c:249
 msgid "INS"
-msgstr "இன்ஸ்"
+msgstr "சொரு"
 
 #: src/ui_utils.c:263
 msgid "TAB"
@@ -5063,11 +5063,11 @@ msgstr "தாவல்"
 
 #: src/ui_utils.c:266
 msgid "SP"
-msgstr "எஸ்பி"
+msgstr "எச்பி"
 
 #: src/ui_utils.c:269
 msgid "T/S"
-msgstr "T/s"
+msgstr "டி/எச்"
 
 #: src/ui_utils.c:277
 msgid "MOD"
@@ -5100,7 +5100,7 @@ msgstr "சி ++ நிலையான நூலகம்"
 
 #: src/ui_utils.c:690
 msgid "C++ STL"
-msgstr "சி ++ எஸ்.டி.எல்"
+msgstr "சி ++ எச்டிஎல்"
 
 #: src/ui_utils.c:712 src/ui_utils.c:790
 msgid "dd.mm.yyyy"
@@ -5128,7 +5128,7 @@ msgstr "yyyy/mm/dd hh: mm: ss"
 
 #: src/ui_utils.c:724 src/ui_utils.c:812
 msgid "_Use Custom Date Format"
-msgstr "தனிப்பயன் தேதி வடிவமைப்பைப் பயன்படுத்தவும்"
+msgstr "தனிப்பயன் தேதி வடிவமைப்பைப் பயன்படுத்தவும் (_U)"
 
 #: src/ui_utils.c:728
 msgid "Custom Date Format"
@@ -5139,8 +5139,7 @@ msgid ""
 "Enter here a custom date and time format. For a list of available conversion"
 " specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Enter here a custom date and time format. You can use any conversion "
-"specifiers which can be used with the ANSI C strftime function."
+"இங்கே தனிப்பயன் தேதி மற்றும் நேர வடிவமைப்பை உள்ளிடவும். https://docs.gtk.org/glib/method.DateTime.format.html செயல்பாட்டுடன் பயன்படுத்தக்கூடிய எந்த மாற்று குறிப்பான்களையும் நீங்கள் பயன்படுத்தலாம்."
 
 #: src/ui_utils.c:750
 msgid "Date format string could not be converted (possibly too long)."
@@ -5148,11 +5147,11 @@ msgstr "தேதி வடிவமைப்பு சரத்தை மாற
 
 #: src/ui_utils.c:825
 msgid "_Set Custom Date Format"
-msgstr "_ தனிப்பயன் தேதி வடிவத்தை அமைக்கவும்"
+msgstr "தனிப்பயன் தேதி வடிவத்தை அமைக்கவும் (_S)"
 
 #: src/ui_utils.c:2004
 msgid "Select Project Base Path"
-msgstr "Choose Project Base Path"
+msgstr "திட்ட அடிப்படை பாதையைத் தேர்ந்தெடுக்கவும்"
 
 #: src/ui_utils.c:2029
 msgid "Select Folder"
