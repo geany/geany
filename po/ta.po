@@ -2085,23 +2085,23 @@ msgstr "பிழை _indicaters ஐ அகற்று"
 
 #: data/geany.glade:8054
 msgid "_Project"
-msgstr "_ திட்ட"
+msgstr "திட்ட (_P)"
 
 #: data/geany.glade:8062
 msgid "_New..."
-msgstr "_ புதிய ..."
+msgstr "புதிய..."
 
 #: data/geany.glade:8073
 msgid "New from _Folder..."
-msgstr "_ ஃபோல்டரிடமிருந்து புதியது ..."
+msgstr "ஃபோல்டரிடமிருந்து புதியது..." (_)
 
 #: data/geany.glade:8097
 msgid "_Recent Projects"
-msgstr "_ மறுபரிசீலனை திட்டங்கள்"
+msgstr "மறுபரிசீலனை திட்டங்கள் (_R)"
 
 #: data/geany.glade:8103
 msgid "_Close"
-msgstr "_மூடு"
+msgstr "மூடு (_C)"
 
 #: data/geany.glade:8122
 msgid "Apply the default indentation settings to all documents"
@@ -2110,35 +2110,35 @@ msgstr ""
 
 #: data/geany.glade:8123
 msgid "_Apply Default Indentation"
-msgstr "_ இயல்புநிலை உள்தள்ளல்"
+msgstr "இயல்புநிலை உள்தள்ளல் இடு (_A)"
 
 #: data/geany.glade:8152 src/build.c:2446 src/build.c:2717
 msgid "_Build"
-msgstr "_ பில்ட்"
+msgstr "கட்டு (_B)"
 
 #: data/geany.glade:8160
 msgid "_Tools"
-msgstr "_TOOLS"
+msgstr "கருவிகள் (_T)"
 
 #: data/geany.glade:8167
 msgid "_Reload Configuration"
-msgstr "_ மறுசீரமைப்பு உள்ளமைவு"
+msgstr "மறுசீரமைப்பு உள்ளமைவு (_R)"
 
 #: data/geany.glade:8178
 msgid "C_onfiguration Files"
-msgstr "உள்ளமைவு கோப்புகள்"
+msgstr "உள்ளமைவு கோப்புகள் (_o)"
 
 #: data/geany.glade:8194
 msgid "_Color Chooser"
-msgstr "_ வண்ணத் தேர்வாளர்"
+msgstr "வண்ணத் தேர்வாளர் (_C)"
 
 #: data/geany.glade:8207
 msgid "_Word Count"
-msgstr "சொல் எண்ணிக்கை"
+msgstr "சொல் எண்ணிக்கை (_W)"
 
 #: data/geany.glade:8216
 msgid "Load Ta_gs File..."
-msgstr "Load Ta_gs..."
+msgstr "குறிச்சொற்கள் கோப்பை ஏற்றவும்... (_g)"
 
 #: data/geany.glade:8229 data/geany.glade:8236
 msgid "_Help"
@@ -2150,31 +2150,30 @@ msgstr "விசைப்பலகை குறுக்குவழிகள�
 
 #: data/geany.glade:8258
 msgid "Debug _Messages"
-msgstr "பிழைத்திருத்த _மேசேஜ்கள்"
+msgstr "பிழைத்திருத்த செய்திகள்"
 
 #: data/geany.glade:8273
 msgid "_Website"
-msgstr "_இணையதளம்"
+msgstr "இணையதளம் (_W)"
 
 #: data/geany.glade:8282
 msgid "Wi_ki"
-msgstr "Wi_ki"
+msgstr "விக்கி(_k)"
 
 #: data/geany.glade:8291
 msgid "Report a _Bug..."
-msgstr "ஒரு பிழையைப் புகாரளிக்கவும் ..."
+msgstr "ஒரு பிழையைப் புகாரளிக்கவும்... (_B)"
 
 #: data/geany.glade:8300
 msgid "_Donate..."
-msgstr "_ டோனேட் ..."
+msgstr "நன்கொடை... (_D)"
 
 #: data/geany.glade:8369
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"Filter your files with the usual wildcards. Separate multiple patterns with "
-"a space."
+"உள்ளிட்ட உரையைப் பயன்படுத்தி குறியீட்டு பட்டியலை வடிகட்டவும். பல வடிப்பான்களை இடைவெளியுடன் பிரிக்கவும்"
 
 #: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
 msgid "Symbols"
@@ -2198,7 +2197,7 @@ msgstr "செய்திகள்"
 
 #: data/geany.glade:8586
 msgid "Scribble"
-msgstr "எழுத்தாளர்"
+msgstr "எழுது"
 
 #: data/geany.glade:8633
 msgid "Project Properties"
@@ -2214,15 +2213,15 @@ msgstr "பெயர்: (_N)"
 
 #: data/geany.glade:8732
 msgid "_Description:"
-msgstr "Description:"
+msgstr "விளக்கம்: (_D)"
 
 #: data/geany.glade:8749
 msgid "_Base path:"
-msgstr "Base path:"
+msgstr "அடி பாதை: (_B)"
 
 #: data/geany.glade:8765 src/search.c:905
 msgid "File _patterns:"
-msgstr "File patterns:"
+msgstr "கோப்பு வடிவங்கள்: (_p)"
 
 #: data/geany.glade:8826
 msgid ""
@@ -2667,7 +2666,7 @@ msgstr "மேலும் விருப்பங்கள் (_M)"
 
 #: src/dialogs.c:313
 msgid "Show _hidden files"
-msgstr "மறைக்கப்பட்ட கோப்புகளைக் காட்டு"
+msgstr "மறைக்கப்பட்ட கோப்புகளைக் காட்டு (_h)"
 
 #: src/dialogs.c:324
 msgid "Set encoding:"
@@ -3148,7 +3147,7 @@ msgstr "தென்கிழக்கு & தென்மேற்கு ஆ�
 
 #: src/encodings.c:417
 msgid "_Middle Eastern"
-msgstr "மத்திய கிழக்கு"
+msgstr "மத்திய கிழக்கு (_M)"
 
 #: src/encodings.c:418
 msgid "_Unicode"
@@ -3216,7 +3215,7 @@ msgstr "உரைபெறு மொழிபெயர்ப்பு"
 
 #: src/filetypes.c:434
 msgid "_Programming Languages"
-msgstr "கணிப்பொறி செயல்பாடு மொழி"
+msgstr "கணிப்பொறி செயல்பாடு மொழி (_P)"
 
 #: src/filetypes.c:435
 msgid "_Scripting Languages"
