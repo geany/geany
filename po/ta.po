@@ -1604,7 +1604,7 @@ msgstr ""
 
 #: data/geany.glade:6154
 msgid "Scroll on keystroke"
-msgstr "கீஸ்ட்ரோக்கில் உருட்டவும்"
+msgstr "கீசுட்ரோக்கில் உருட்டவும்"
 
 #: data/geany.glade:6158
 msgid "Whether to scroll to the bottom if a key was pressed"
@@ -1716,15 +1716,15 @@ msgstr "புதியது (_TEMPLATE உடன்)"
 
 #: data/geany.glade:6513 data/geany.glade:8084
 msgid "_Open..."
-msgstr "_OPEN ..."
+msgstr "திற... (_O)"
 
 #: data/geany.glade:6535
 msgid "Recent _Files"
-msgstr "சமீபத்திய _ கோப்புகள்"
+msgstr "சமீபத்திய கோப்புகள் (_F)"
 
 #: data/geany.glade:6557
 msgid "Save _As..."
-msgstr "என சேமி (_A) ..."
+msgstr "என சேமி ... (_A)"
 
 #: data/geany.glade:6568
 msgid "Sa_ve All"
@@ -1793,199 +1793,199 @@ msgstr "வரி(களை)  கீழே நகர்த்து (_o)"
 
 #: data/geany.glade:6916 src/keybindings.c:503
 msgid "_Send Selection to Terminal"
-msgstr "முனையத்திற்கு தேர்வு (_S)"
+msgstr "தேர்வு முனையத்திற்கு அனுப்பு (_S)"
 
 #: data/geany.glade:6938 src/keybindings.c:508
 msgid "_Join Lines"
-msgstr "_ ஜெயின் கோடுகள்"
+msgstr "வரிகளை சேர் (_J)"
 
 #: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
-msgstr "_ ரீஃப்ளோ கோடுகள்/தொகுதி"
+msgstr "வரிகள்/தொகுதி மறுஒட்டம் (_R)"
 
 #: data/geany.glade:6956 src/keybindings.c:463
 msgid "T_oggle Case of Selection"
-msgstr "தேர்வு செய்வதற்கான T_OGGLE வழக்கு"
+msgstr "தேர்வு செய்வதற்கான வழக்கு மாற்று (_o)"
 
 #: data/geany.glade:6971
 msgid "_Comment Line(s)"
-msgstr "கருத்து வரி (கள்) (_C)"
+msgstr "கருத்து வரி(கள்) (_C)"
 
 #: data/geany.glade:6980
 msgid "U_ncomment Line(s)"
-msgstr "Uncomment கோடுகள்)"
+msgstr "கருத்துநீக்கு  வரி(கள்) (_n)"
 
 #: data/geany.glade:6989
 msgid "_Toggle Line Commentation"
-msgstr "_ டோகல் லைன் வர்ணனை"
+msgstr "கருத்து வரி மாற்று (_T)"
 
 #: data/geany.glade:7002
 msgid "_Increase Indent"
-msgstr "_ உள்தள்ளல்"
+msgstr "உள்தள்ளலை அதிகரிக்கவும் (_I)"
 
 #: data/geany.glade:7013
 msgid "_Decrease Indent"
-msgstr "_ இன்டெண்ட்டை குறிக்கவும்"
+msgstr "உள்தள்ளல் குறைவு (_D)"
 
 #: data/geany.glade:7026 src/keybindings.c:482
 msgid "S_mart Line Indent"
-msgstr "S_MART LINE INTENT"
+msgstr "அறிவாளி உள்தள்ளல் (_m)"
 
 #: data/geany.glade:7041
 msgid "_Send Selection to"
-msgstr "_ க்கு தேர்வு"
+msgstr "தேர்வுக்கு அனுப்பு (_S)"
 
 #: data/geany.glade:7069
 msgid "I_nsert Comments"
-msgstr "I_nsert கருத்துக்கள்"
+msgstr "கருத்துக்கள் செருகு (_n)"
 
 #: data/geany.glade:7203
 msgid "Preference_s"
-msgstr "முன்னுரிமை_ எஸ்"
+msgstr "முன்னுரிமைகள் (_s)"
 
 #: data/geany.glade:7214 src/keybindings.c:529
 msgid "P_lugin Preferences"
-msgstr "P_LUGIN விருப்பத்தேர்வுகள்"
+msgstr "செருகுநிரல் விருப்பத்தேர்வுகள் (_l)"
 
 #: data/geany.glade:7239
 msgid "_Find..."
-msgstr "_ ஃபைண்ட் ..."
+msgstr "தேடு... (_F)"
 
 #: data/geany.glade:7252
 msgid "Find _Next"
-msgstr "அடுத்ததை தேடு"
+msgstr "அடுத்ததை தேடு (_N)"
 
 #: data/geany.glade:7261
 msgid "Find _Previous"
-msgstr "_ முன்னேற்றத்தைக் கண்டறியவும்"
+msgstr "முந்தையதைக் கண்டறியவும் (_P)"
 
 #: data/geany.glade:7274 src/symbols.c:2215
 msgid "Find in F_iles..."
-msgstr "கோப்புகளில் காண்க ..."
+msgstr "கோப்புகளில் காண்க... (_i)"
 
 #: data/geany.glade:7285
 msgid "_Replace..."
-msgstr "_ மறுசீரமைப்பு ..."
+msgstr "மறுசீரமைப்பு ... (_R)"
 
 #: data/geany.glade:7302
 msgid "Next Me_ssage"
-msgstr "அடுத்த me_ssage"
+msgstr "அடுத்த செய்தி (_s)"
 
 #: data/geany.glade:7313
 msgid "Pr_evious Message"
-msgstr "Pr_evious செய்தி"
+msgstr "முந்தைய செய்தி (_e)"
 
 #: data/geany.glade:7332 src/keybindings.c:578
 msgid "Go to Ne_xt Marker"
-msgstr "அடுத்த மார்க்கருக்குச் செல்லுங்கள்"
+msgstr "அடுத்த குறிப்பானுக்குச் செல்லுங்கள் (_x)"
 
 #: data/geany.glade:7341 src/keybindings.c:581
 msgid "Go to Pre_vious Marker"
-msgstr "PRE_IVER MARKER க்குச் செல்லவும்"
+msgstr "முந்தைய குறிப்பானுக்குச் செல்லவும் (_v)"
 
 #: data/geany.glade:7354
 msgid "_Go to Line..."
-msgstr "_ வரிக்கு செல்லுங்கள் ..."
+msgstr "வரிக்கு செல்லுங்கள்... (_G)"
 
 #: data/geany.glade:7376 src/keybindings.c:541
 msgid "Find Next _Selection"
-msgstr "அடுத்து _ தேர்ந்தெடுக்கப்பட்டதைக் கண்டறியவும்"
+msgstr "அடுத்து தேர்வைக் கண்டறியவும் (_S)"
 
 #: data/geany.glade:7385 src/keybindings.c:543
 msgid "Find Pre_vious Selection"
-msgstr "Pre_ived தேர்வைக் கண்டறியவும்"
+msgstr "முந்தைய தேர்வைக் கண்டறியவும் (_v)"
 
 #: data/geany.glade:7424 src/keybindings.c:560
 msgid "_Mark All"
-msgstr "_ அனைத்தையும் குறிக்கவும்"
+msgstr "அனைத்தையும் குறிக்கவும் (_M)"
 
 #: data/geany.glade:7448
 msgid "Go to Symbol Decl_aration"
-msgstr "Go to Tag Declaration"
+msgstr "குறியீட்டு அறிவிப்பிற்கு செல்க (_a)"
 
 #: data/geany.glade:7465
 msgid "_View"
-msgstr "_வியூ"
+msgstr "காட்சி (_V)"
 
 #: data/geany.glade:7472
 msgid "Change _Font..."
-msgstr "_ஃபாண்ட் மாற்றவும் ..."
+msgstr "எழுத்துரு மாற்றவும் ... (_F)"
 
 #: data/geany.glade:7483
 msgid "Change _Color Scheme..."
-msgstr "வண்ணத் திட்டத்தை மாற்றவும் ..."
+msgstr "வண்ணத் திட்டத்தை மாற்றவும்... (_C)"
 
 #: data/geany.glade:7502
 msgid "Show _Markers Margin"
-msgstr "_ சந்தைகள் விளிம்பைக் காட்டு"
+msgstr "குறிப்பான்கள் விளிம்பைக் காட்டு (_M)"
 
 #: data/geany.glade:7512
 msgid "Show _Line Numbers"
-msgstr "வரி எண்களைக் காட்டு"
+msgstr "வரி எண்களைக் காட்டு (_L)"
 
 #: data/geany.glade:7522
 msgid "Show White S_pace"
-msgstr "வெள்ளை S_PACE ஐக் காட்டு"
+msgstr "வெள்ளை இடைவெளியைக் காட்டு (_p)"
 
 #: data/geany.glade:7531
 msgid "Show Line _Endings"
-msgstr "வரி முடிவுகளைக் காட்டு"
+msgstr "வரி முடிவுகளைக் காட்டு (_E)"
 
 #: data/geany.glade:7540
 msgid "Show Indentation _Guides"
-msgstr "உள்தள்ளல் வழிகாட்டிகளைக் காட்டு"
+msgstr "உள்தள்ளல் வழிகாட்டிகளைக் காட்டு (_G)"
 
 #: data/geany.glade:7555
 msgid "Full_screen"
-msgstr "முழு திரை"
+msgstr "முழு திரை (_s)"
 
 #: data/geany.glade:7564
 msgid "Toggle All _Additional Widgets"
-msgstr "அனைத்து _additional விட்கெட்களையும் மாற்றவும்"
+msgstr "அனைத்து கூடுதல் விட்கெட்களையும் மாற்றவும் (_A)"
 
 #: data/geany.glade:7573
 msgid "Show Message _Window"
-msgstr "செய்தியைக் காட்டு _ விண்டோ"
+msgstr "செய்தி சாளரங் காட்டு  (_W)"
 
 #: data/geany.glade:7583
 msgid "Show _Toolbar"
-msgstr "_Toolbar ஐக் காட்டு"
+msgstr "கருவிப்பட்டியைக் காட்டு (_T)"
 
 #: data/geany.glade:7593
 msgid "Show Side_bar"
-msgstr "பக்க_பார் காட்டு"
+msgstr "பக்கபட்டியைக் காட்டு (_b)"
 
 #: data/geany.glade:7643
 msgid "_Document"
-msgstr "_ஆவணம்"
+msgstr "ஆவணம் (_D)"
 
 #: data/geany.glade:7652
 msgid "_Line Wrapping"
-msgstr "_ லைன் மடக்குதல்"
+msgstr "வரி மடக்குதல் (_L)"
 
 #: data/geany.glade:7662
 msgid "Line _Breaking"
-msgstr "வரி _ பிரேக்கிங்"
+msgstr "வரி உடைக்கும் (_B)"
 
 #: data/geany.glade:7671
 msgid "_Auto-indentation"
-msgstr "_ஆட்டோ-இன்டென்டேஷன்"
+msgstr "தானி உள்தள்ளல் (_A)"
 
 #: data/geany.glade:7681
 msgid "In_dent Type"
-msgstr "In_dent வகை"
+msgstr "உள்தள்ளல் வகை (_d)"
 
 #: data/geany.glade:7690 data/geany.glade:7748
 msgid "_Detect from Content"
-msgstr "_ உள்ளடக்கத்திலிருந்து குறைத்தல்"
+msgstr "உள்தள்ளலிருந்து குறைத்தல் (_D)"
 
 #: data/geany.glade:7725
 msgid "T_abs and Spaces"
-msgstr "T_abs மற்றும் இடைவெளிகள்"
+msgstr "தாவல்கள் மற்றும் இடைவெளிகள் (_a)"
 
 #: data/geany.glade:7739
 msgid "Indent Widt_h"
-msgstr "INTENT WIDT_H"
+msgstr "உள்தள்ளல் அகலம் (_h)"
 
 #: data/geany.glade:7763
 msgid "_1"
@@ -2021,79 +2021,78 @@ msgstr "_8"
 
 #: data/geany.glade:7853
 msgid "Read _Only"
-msgstr "படிக்கவும்"
+msgstr "படிக்க மட்டும் (_O)"
 
 #: data/geany.glade:7862
 msgid "_Write Unicode BOM"
-msgstr "_ ஒருங்குறி போம் எழுதுங்கள்"
+msgstr "ஒருங்குறி பைட்குறி எழுதுங்கள் (_W)"
 
 #: data/geany.glade:7877
 msgid "Set File_type"
-msgstr "File_type ஐ அமைக்கவும்"
+msgstr "கோப்புவகையை அமைக்கவும் (_t)"
 
 #: data/geany.glade:7897
 msgid "Set _Encoding"
-msgstr "_Encoding ஐ அமைக்கவும்"
+msgstr "குறியாக்கத்தை அமைக்கவும் (_E)"
 
 #: data/geany.glade:7917
 msgid "Set Line E_ndings"
-msgstr "வரி முடிவுகளை அமைக்கவும்"
+msgstr "வரி முடிவுகளை அமைக்கவும் (_n)"
 
 #: data/geany.glade:7926
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Convert and Set to _CR/LF (Win)"
+msgstr "சிஆர்எல்எஃப் (சாளரங்கள்) என மாற்றி அமைக்கவும் (_C)"
 
 #: data/geany.glade:7935
 msgid "Convert and Set to _LF (Unix)"
-msgstr "மாற்றி _LF (UNIX) என அமைக்கவும்"
+msgstr "எல்எஃப் (யுனிக்சு) என மாற்றி அமைக்கவும் (_L)"
 
 #: data/geany.glade:7946
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Convert and Set to CR (_Mac)"
+msgstr "சிஆர் (மேக்) என மாற்றி அமைக்கவும் (_M)"
 
 #: data/geany.glade:7966 src/keybindings.c:669
 msgid "_Clone"
-msgstr "_ க்ளோன்"
+msgstr "நகலி (_C)"
 
 #: data/geany.glade:7975 src/keybindings.c:671
 msgid "_Strip Trailing Spaces"
-msgstr "_ தடுமாறும் இடங்கள்"
+msgstr "பின்தங்கிய இடங்களை நீக்கு (_S)"
 
 #: data/geany.glade:7984
 msgid "Replace Tabs with S_paces"
-msgstr "தாவல்களை இடைவெளிகளுடன் மாற்றவும்"
+msgstr "தாவல்களை இடைவெளிகளுடன் மாற்றவும் (_p)"
 
 #: data/geany.glade:7993
 msgid "_Replace Spaces with Tabs..."
-msgstr "_ தாவல்களுடன் இடங்களை மாற்றவும் ..."
-
+msgstr "அனைத்தையும் மடியுங்கள்... (_R)"
 #: data/geany.glade:8008
 msgid "_Fold All"
 msgstr "_ அனைத்தையும் மிச்சப்படுத்துங்கள்"
 
 #: data/geany.glade:8017
 msgid "_Unfold All"
-msgstr "_ அனைத்தையும் முடக்கவும்"
+msgstr "அனைத்தையும் அவிழ்த்து விடுங்கள் (_U)"
 
 #: data/geany.glade:8032
 msgid "Remove _Markers"
-msgstr "_ சந்தைகளை அகற்று"
+msgstr "குறிப்பான்களை அகற்று (_M)"
 
 #: data/geany.glade:8041
 msgid "Remove Error _Indicators"
-msgstr "பிழை _indicaters ஐ அகற்று"
+msgstr "பிழை குறிகாட்டிகளை அகற்று (_I)"
 
 #: data/geany.glade:8054
 msgid "_Project"
-msgstr "திட்ட (_P)"
+msgstr "திட்டம் (_P)"
 
 #: data/geany.glade:8062
 msgid "_New..."
-msgstr "புதிய..."
+msgstr "புதிய... (_N)"
 
 #: data/geany.glade:8073
 msgid "New from _Folder..."
-msgstr "ஃபோல்டரிடமிருந்து புதியது..." (_)
+msgstr "ஃபோல்டரிடமிருந்து புதியது... (_F)"
 
 #: data/geany.glade:8097
 msgid "_Recent Projects"
@@ -2142,15 +2141,15 @@ msgstr "குறிச்சொற்கள் கோப்பை ஏற்ற�
 
 #: data/geany.glade:8229 data/geany.glade:8236
 msgid "_Help"
-msgstr "_உதவி"
+msgstr "உதவி (_H)"
 
 #: data/geany.glade:8249
 msgid "Keyboard _Shortcuts"
-msgstr "விசைப்பலகை குறுக்குவழிகள்"
+msgstr "விசைப்பலகை குறுக்குவழிகள் (_S)"
 
 #: data/geany.glade:8258
 msgid "Debug _Messages"
-msgstr "பிழைத்திருத்த செய்திகள்"
+msgstr "பிழைத்திருத்த செய்திகள் (_M)"
 
 #: data/geany.glade:8273
 msgid "_Website"
@@ -2158,7 +2157,7 @@ msgstr "இணையதளம் (_W)"
 
 #: data/geany.glade:8282
 msgid "Wi_ki"
-msgstr "விக்கி(_k)"
+msgstr "விக்கி (_k)"
 
 #: data/geany.glade:8291
 msgid "Report a _Bug..."
@@ -2699,7 +2698,7 @@ msgstr "கோப்பை திற"
 #: src/dialogs.c:379
 msgctxt "Open dialog action"
 msgid "_View"
-msgstr "காட்சி(_V)"
+msgstr "காட்சி (_V)"
 
 #: src/dialogs.c:381
 msgid ""
@@ -4646,7 +4645,7 @@ msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as another user.\n"
 "This is a fatal error and Geany will now quit."
 msgstr ""
-"மற்றொரு பயனராக இயங்கும் மற்றொரு நிகழ்வின் யுனிக்ஸ் டொமைன் சாக்கெட்டை அணுக சீனி முயற்சித்தார். \n"
+"மற்றொரு பயனராக இயங்கும் மற்றொரு நிகழ்வின் யுனிக்சு டொமைன் சாக்கெட்டை அணுக சீனி முயற்சித்தார். \n"
 " இது ஒரு அபாயகரமான பிழை மற்றும் சீனி இப்போது வெளியேறுவார்."
 
 #: src/spawn.c:96 src/spawn.c:146 src/spawn.c:190
@@ -5084,7 +5083,7 @@ msgstr "சி நிலையான நூலகம்"
 
 #: src/ui_utils.c:687
 msgid "ISO C99"
-msgstr "ஐஎஸ்ஓ சி 99"
+msgstr "ஐஎசுஓ சி 99"
 
 #: src/ui_utils.c:688
 msgid "C++ (C Standard Library)"
@@ -6446,7 +6445,7 @@ msgstr "மேலும் கீழும்"
 #~ msgstr "Find _Selected"
 
 #~ msgid "Find Pre_vious Selected"
-#~ msgstr "Find Pre_vious Selected"
+#~ msgstr "முந்தைய தேர்வைக் கண்டறியவும் (_v)"
 
 #~ msgid "Whether to enable folding the code"
 #~ msgstr "Whether to enable folding the code"
@@ -6562,7 +6561,7 @@ msgstr "மேலும் கீழும்"
 #~ msgstr "Failed to execute the view program"
 
 #~ msgid "_Customize Toolbar"
-#~ msgstr "_Customise Toolbar"
+#~ msgstr "கருவிப்பட்டியைத் தனிப்பயனாக்குங்கள் (_C)"
 
 #~ msgid "Icon size:"
 #~ msgstr "Icon size:"
@@ -6876,10 +6875,10 @@ msgstr "மேலும் கீழும்"
 #~ msgstr "Display the Zoom In and Zoom Out buttons in the toolbar"
 
 #~ msgid "Show Increase and Decrease Indentation buttons"
-#~ msgstr "Show Increase and Decrease Indentation buttons"
+#~ msgstr "Show Increase and உள்தள்ளல் குறைவு buttons"
 
 #~ msgid "Display the Increase and Decrease Indentation buttons in the toolbar"
-#~ msgstr "Display the Increase and Decrease Indentation buttons in the toolbar"
+#~ msgstr "Display the Increase and உள்தள்ளல் குறைவு buttons in the toolbar"
 
 #~ msgid "Show Search field"
 #~ msgstr "Show Search field"
@@ -7087,7 +7086,7 @@ msgstr "மேலும் கீழும்"
 #~ "otherwise Geany will use just spaces."
 
 #~ msgid "Unfold all children of a fold point when unfolding it."
-#~ msgstr "Unfold all children of a fold point when unfolding it."
+#~ msgstr "அனைத்தையும் அவிழ்த்து விடுங்கள் children of a fold point when unfolding it."
 
 #~ msgid "Construct autocompletion"
 #~ msgstr "Construct autocompletion"
