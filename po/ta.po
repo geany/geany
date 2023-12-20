@@ -1341,7 +1341,7 @@ msgstr "கணினி இயல்புநிலை"
 
 #: data/geany.glade:5030
 msgid "Grep:"
-msgstr "கிரெப்:"
+msgstr "உவவெஅ:"
 
 #: data/geany.glade:5093
 msgid "<b>Tool paths</b>"
@@ -3277,7 +3277,7 @@ msgstr "கோப்பு"
 
 #: src/keybindings.c:311
 msgid "Clipboard"
-msgstr "கிளிப்போர்டு"
+msgstr "இடைநிலைப் பலகை"
 
 #: src/keybindings.c:312
 msgid "Select"
@@ -4398,19 +4398,18 @@ msgstr "திட்டம் \"%s\" திறக்கப்பட்டது.
 
 #: src/search.c:312 src/search.c:970
 msgid "_Use regular expressions"
-msgstr "வழக்கமான வெளிப்பாடுகளைப் பயன்படுத்துங்கள்"
+msgstr "வழக்கமான வெளிப்பாடுகளைப் பயன்படுத்துங்கள் (_U)"
 
 #: src/search.c:315
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Use POSIX-like regular expressions. For detailed information about using "
-"regular expressions, please read the documentation."
+"பேர்ல் போன்ற வழக்கமான வெளிப்பாடுகளைப் பயன்படுத்தவும். வழக்கமான வெளிப்பாடுகளைப் பயன்படுத்துவது பற்றிய விரிவான தகவலுக்கு, கையேட்டைப் பார்க்கவும்."
 
 #: src/search.c:320
 msgid "Use _escape sequences"
-msgstr "_Escape காட்சிகளைப் பயன்படுத்தவும்"
+msgstr "தப்பிக்கும் தொடர்களைப் பயன்படுத்தவும் (_e)"
 
 #: src/search.c:324
 msgid ""
@@ -4438,7 +4437,7 @@ msgstr ""
 
 #: src/search.c:345
 msgid "Search _backwards"
-msgstr "_ பேபார்ட்ஸைத் தேடுங்கள்"
+msgstr "_பின்திசையில் தேடுங்கள்"
 
 #: src/search.c:351 src/search.c:979
 msgid "C_ase sensitive"
@@ -4446,11 +4445,11 @@ msgstr "வழக்கு உணர்திறன் (_a)"
 
 #: src/search.c:355 src/search.c:984
 msgid "Match only a _whole word"
-msgstr "ஒரு _வோல் சொல்லை மட்டுமே பொருத்துங்கள்"
+msgstr "ஒரு முழு சொல்லை மட்டுமே பொருத்துங்கள் (_w)"
 
 #: src/search.c:359
 msgid "Match from s_tart of word"
-msgstr "சொல்லின் தொடக்கத்திலிருந்து பொருந்தவும் (_s)"
+msgstr "சொல்லின் தொடக்கத்திலிருந்து பொருந்தவும் (_t)"
 
 #: src/search.c:476
 msgid "_Previous"
@@ -4462,15 +4461,15 @@ msgstr "அடுத்தது (_N)"
 
 #: src/search.c:485 src/search.c:645 src/search.c:886
 msgid "_Search for:"
-msgstr "_ தேடல்:"
+msgstr "இதை தேடு: (_S)"
 
 #: src/search.c:513
 msgid "_Find All"
-msgstr "_ அனைத்தையும் பெறுங்கள்"
+msgstr "அனைத்தையும் தேடு (_F)"
 
 #: src/search.c:520
 msgid "_Mark"
-msgstr "_ மார்க்"
+msgstr "குறி (_M)"
 
 #: src/search.c:522
 msgid "Mark all matches in the current document"
@@ -4478,15 +4477,15 @@ msgstr "தற்போதைய ஆவணத்தில் அனைத்த�
 
 #: src/search.c:527 src/search.c:704
 msgid "In Sessi_on"
-msgstr "அமர்வில்"
+msgstr "அமர்வில் (_o)"
 
 #: src/search.c:532 src/search.c:709
 msgid "_In Document"
-msgstr "ஆவணத்தில்"
+msgstr "ஆவணத்தில் (_I)"
 
 #: src/search.c:538 src/search.c:722
 msgid "Close _dialog"
-msgstr "_Dialog ஐ மூடு"
+msgstr "உரையாடலை மூடு (_d)"
 
 #: src/search.c:542 src/search.c:726
 msgid "Disable this option to keep the dialog open"
@@ -4494,19 +4493,19 @@ msgstr "உரையாடலைத் திறந்து வைக்க இ
 
 #: src/search.c:639
 msgid "Replace & Fi_nd"
-msgstr "மாற்றவும் & fi_nd"
+msgstr "கண்டு & மாற்றவும் (_n)"
 
 #: src/search.c:648
 msgid "Replace wit_h:"
-msgstr "Wit_h ஐ மாற்றவும்:"
+msgstr "இதால் மாற்றவும்: (_h)"
 
 #: src/search.c:697
 msgid "Re_place All"
-msgstr "அனைத்தையும் மாற்று"
+msgstr "அனைத்தையும் மாற்று (_p)"
 
 #: src/search.c:714
 msgid "In Se_lection"
-msgstr "Se_lection இல்"
+msgstr "தேர்வில் (_l)"
 
 #: src/search.c:716
 msgid "Replace all matches found in the currently selected text"
@@ -4524,7 +4523,7 @@ msgstr "திட்டம்"
 
 #: src/search.c:839
 msgid "custom"
-msgstr "வழக்கம்"
+msgstr "தனிபயன்"
 
 #: src/search.c:843
 msgid ""
@@ -4539,28 +4538,28 @@ msgstr ""
 #: src/search.c:918
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
 msgstr ""
-"Space separated list of file patterns used for the find in files dialogue "
+"இடம் பிரிக்கப்பட்ட கோப்பு வடிவங்களின் பட்டியல்"
 "(e.g. *.c *.h)"
 
 #: src/search.c:930
 msgid "_Directory:"
-msgstr "_ அடைவு:"
+msgstr "அடைவு: (_D)"
 
 #: src/search.c:949
 msgid "E_ncoding:"
-msgstr "E_ncoding:"
+msgstr "குறியாக்கம்: (_n)"
 
 #: src/search.c:973
 msgid "See grep's manual page for more information"
-msgstr "மேலும் தகவலுக்கு கிரெப்பின் கையேடு பக்கத்தைப் பார்க்கவும்"
+msgstr "மேலும் தகவலுக்கு உவவெஅவின் கையேடு பக்கத்தைப் பார்க்கவும்"
 
 #: src/search.c:975
 msgid "_Recurse in subfolders"
-msgstr "துணை கோப்புறைகளில் _ ரெக்கர்"
+msgstr "துணை கோப்புறைகளில் மீண்டும் (_R)"
 
 #: src/search.c:988
 msgid "_Invert search results"
-msgstr "தேடல் முடிவுகளை விடுங்கள்"
+msgstr "தேடல் முடிவுகளை தலைகீழ் (_I)"
 
 #: src/search.c:992
 msgid "Invert the sense of matching, to select non-matching lines"
@@ -4569,23 +4568,23 @@ msgstr ""
 
 #: src/search.c:1009
 msgid "E_xtra options:"
-msgstr "மேலும் விருப்பங்கள்:"
+msgstr "மேலும் விருப்பங்கள்: (_x)"
 
 #: src/search.c:1017
 msgid "Other options to pass to Grep"
-msgstr "கிரெப்பிற்கு அனுப்ப பிற விருப்பங்கள்"
+msgstr "உவவெஅவிற்கு அனுப்ப பிற விருப்பங்கள்"
 
 #: src/search.c:1377 src/search.c:2243 src/search.c:2246
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "Found %d match for \"%s\"."
-msgstr[1] "Found %d matches for \"%s\"."
+msgstr[0] "\"%s\"க்கு %d பொருத்தம் உள்ளது."
+msgstr[1] "\"%s\"க்கு %d பொருத்தங்கள் காணப்பட்டன."
 
 #: src/search.c:1433
 #, c-format
 msgid "Replaced %u matches in %u documents."
-msgstr "%u ஆவணங்களில் %u போட்டிகளை மாற்றியது."
+msgstr "%u ஆவணங்களில் %u பொருந்தங்களை மாற்றியது."
 
 #: src/search.c:1464
 msgid ""
@@ -4608,7 +4607,7 @@ msgstr "கண்டுபிடிக்க உரை இல்லை."
 
 #: src/search.c:1723
 msgid "Searching..."
-msgstr "தேடி..."
+msgstr "தேடுகிறது..."
 
 #: src/search.c:1725
 #, c-format
@@ -4618,7 +4617,7 @@ msgstr "%s %s - %s (கோப்பகத்தில்: %s)"
 #: src/search.c:1733
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
-msgstr "Cannot execute grep tool '%s'; check the path setting in Preferences."
+msgstr "உவவெஅ கருவியை \"%s\" செயல்படுத்த முடியாது: %s. விருப்பங்களில் பாதை அமைப்பைச் சரிபார்க்கவும்."
 
 #: src/search.c:1773
 #, c-format
@@ -4633,17 +4632,17 @@ msgstr "தேடல் தோல்வியடைந்தது."
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
-msgstr[0] "Search completed with %d match."
-msgstr[1] "Search completed with %d matches."
+msgstr[0] "%d பொருத்தத்துடன் தேடல் முடிந்தது."
+msgstr[1] "%d பொருத்தங்களுடன் தேடல் முடிந்தது."
 
 #: src/search.c:1895
 msgid "No matches found."
-msgstr "போட்டிகள் எதுவும் கிடைக்கவில்லை."
+msgstr "பொருத்தங்கள் எதுவும் கிடைக்கவில்லை."
 
 #: src/search.c:1925
 #, c-format
 msgid "Bad regex: %s"
-msgstr "மோசமான ரீஜெக்ஸ்: %s"
+msgstr "மோசமான வழக்கவெளி: %s"
 
 #: src/socket.c:235
 msgid ""
@@ -4669,15 +4668,15 @@ msgstr ""
 
 #: src/spawn.c:260
 msgid "Program not found"
-msgstr "Command not found"
+msgstr "நிரல் கிடைக்கவில்லை"
 
 #: src/spawn.c:766
 msgid "Failed to change to the working directory"
-msgstr "Process failed, no working directory"
+msgstr "வேலை செய்யும் கோப்பகத்திற்கு மாற்ற முடியவில்லை"
 
 #: src/spawn.c:771
 msgid "Unknown error executing child process"
-msgstr "unknown error while trying to spawn a process for %s"
+msgstr "குழந்தை செயல்முறையை செயல்படுத்துவதில் தெரியாத பிழை"
 
 #: src/stash.c:1226
 msgid "Value"
@@ -4686,18 +4685,18 @@ msgstr "மதிப்பு"
 #: src/symbols.c:1218
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr "\"%s\" க்கான அறியப்படாத பைலடைப் நீட்டிப்பு.\n"
+msgstr "\"%s\" க்கான அறியப்படாத கோப்புவகை நீட்டிப்பு.\n"
 
 #: src/symbols.c:1244
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
-msgstr "Failed to create tags file, perhaps because no tags were found.\n"
+msgstr "குறிச்சொற்கள் கோப்பை உருவாக்க முடியவில்லை, ஒருவேளை குறியீடுகள் எதுவும் காணப்படவில்லை.\n"
 
 #: src/symbols.c:1251
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
 msgstr ""
-"Usage: %s -g <Tag File> <File list>\n"
+"பயன்பாடு: %s -g <Tag File> <File list>\n"
 "\n"
 
 #: src/symbols.c:1252
@@ -4711,11 +4710,11 @@ msgstr ""
 
 #: src/symbols.c:1266
 msgid "Load Tags File"
-msgstr "Load Tags"
+msgstr "குறியிட்டு கோப்பை ஏற்று"
 
 #: src/symbols.c:1273
 msgid "Geany tags file (*.*.tags)"
-msgstr "Geany tag files (*.*.tags)"
+msgstr "சீனி குறியிட்டு கோப்புகள் (*.*.tags)"
 
 #: src/symbols.c:1293
 #, c-format
@@ -4729,11 +4728,11 @@ msgstr "குறிச்சொற்கள் கோப்பை '%s' ஏற�
 
 #: src/symbols.c:1518
 msgid "<b>%s:%lu:</b> %s"
-msgstr "<b>Display</b>"
+msgstr "<b>%s:%lu:</b> %s"
 
 #: src/symbols.c:1521
 msgid "<i>%s:%lu:</i> %s"
-msgstr "<b>Display</b>"
+msgstr "<i>%s:%lu:</i> %s"
 
 #: src/symbols.c:1742
 #, c-format
@@ -4747,15 +4746,15 @@ msgstr "\"%s\" இன் வரையறை காணப்படவில்ல
 
 #: src/symbols.c:2179
 msgid "Sort by _Name"
-msgstr "_ பெயர் மூலம் வரிசைப்படுத்தவும்"
+msgstr "பெயர் மூலம் வரிசைப்படுத்தவும் (_N)"
 
 #: src/symbols.c:2186
 msgid "Sort by _Appearance"
-msgstr "_Appearance ஆல் வரிசைப்படுத்தவும்"
+msgstr "தோற்றத்தால் வரிசைப்படுத்தவும் (_A)"
 
 #: src/symbols.c:2196
 msgid "_Group by Type"
-msgstr "வகை மூலம் குழு"
+msgstr "வகை மூலம் குழு (_G)"
 
 #: src/templates.c:81
 #, c-format
@@ -4801,7 +4800,7 @@ msgstr "தற்போதைய தேர்வை நகலெடுக்க�
 
 #: src/toolbar.c:65
 msgid "Paste the contents of the clipboard"
-msgstr "கிளிப்போர்டின் உள்ளடக்கங்களை ஒட்டவும்"
+msgstr "இடைநிலைப் பலகையின் உள்ளடக்கங்களை ஒட்டவும்"
 
 #: src/toolbar.c:66
 msgid "Delete the current selection"
