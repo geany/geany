@@ -2998,14 +2998,14 @@ msgstr "தேடலை மடக்கி மீண்டும் கண்ட
 #: src/search.c:2238
 #, c-format
 msgid "No matches found for \"%s\"."
-msgstr "\"%s\" க்கு போட்டிகள் எதுவும் கிடைக்கவில்லை."
+msgstr "\"%s\" க்கு பொருத்தங்கள் எதுவும் கிடைக்கவில்லை."
 
 #: src/document.c:2484
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
-msgstr[0] "%s: replaced %d occurrence of \"%s\" with \"%s\"."
-msgstr[1] "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr[0] "%s: %d நிகழ்வு \"%s\" இதை  \"%s\" இதால் மாற்றியது."
+msgstr[1] "%s: %d நிகழ்வுகள் \"%s\" இதை  \"%s\" இதால் மாற்றியது."
 
 #: src/document.c:3622
 msgid "Do you want to reload it?"
@@ -3061,7 +3061,7 @@ msgstr "சிரிலிக்"
 
 #: src/encodings.c:93
 msgid "Cyrillic/Russian"
-msgstr "சிரிலிக்/ரஷ்ய"
+msgstr "சிரிலிக்/ரசிய"
 
 #: src/encodings.c:94
 msgid "Cyrillic/Ukrainian"
@@ -3134,19 +3134,19 @@ msgstr "குறியாக்கம் இல்லாமல்"
 
 #: src/encodings.c:413
 msgid "_West European"
-msgstr "_வெஸ்ட் ஐரோப்பிய"
+msgstr "மேற்கு ஐரோப்பிய (_W)"
 
 #: src/encodings.c:414
 msgid "_East European"
-msgstr "_ ஈஸ்ட் ஐரோப்பிய"
+msgstr "கிழக்கு ஐரோப்பிய (_E)"
 
 #: src/encodings.c:415
 msgid "East _Asian"
-msgstr "கிழக்கு ஆசிய"
+msgstr "கிழக்கு ஆசிய (_A)"
 
 #: src/encodings.c:416
 msgid "_SE & SW Asian"
-msgstr "_SE & SW ஆசிய"
+msgstr "தென்கிழக்கு & தென்மேற்கு ஆசிய (_S)"
 
 #: src/encodings.c:417
 msgid "_Middle Eastern"
@@ -3154,7 +3154,7 @@ msgstr "மத்திய கிழக்கு"
 
 #: src/encodings.c:418
 msgid "_Unicode"
-msgstr "_Unicode"
+msgstr "ஒருங்குறி (_U)"
 
 #: src/encodings.c:534
 msgid "West European"
@@ -3170,11 +3170,11 @@ msgstr "கிழக்கு ஆசிய"
 
 #: src/encodings.c:540
 msgid "SE & SW Asian"
-msgstr "SE & SW ஆசிய"
+msgstr "தென்கிழக்கு & தென்மேற்கு ஆசிய"
 
 #: src/encodings.c:542
 msgid "Middle Eastern"
-msgstr "மத்திய கிழக்கு"
+msgstr "நடு கிழக்கு"
 
 #: src/filetypes.c:86
 #, c-format
@@ -3198,15 +3198,15 @@ msgstr "%s ஆவணம்"
 
 #: src/filetypes.c:154
 msgid "Shell"
-msgstr "ஷெல்"
+msgstr "ஓடு"
 
 #: src/filetypes.c:155
 msgid "Makefile"
-msgstr "மேக்ஃபைல்"
+msgstr "உருவாக்ககோப்பு"
 
 #: src/filetypes.c:159
 msgid "Cascading Stylesheet"
-msgstr "Cascading StyleSheet"
+msgstr "அடுக்கு நடைதாள்"
 
 #: src/filetypes.c:169
 msgid "Config"
@@ -3214,7 +3214,7 @@ msgstr "கட்டமைப்பு"
 
 #: src/filetypes.c:170
 msgid "Gettext translation"
-msgstr "GetText மொழிபெயர்ப்பு"
+msgstr "உரைபெறு மொழிபெயர்ப்பு"
 
 #: src/filetypes.c:434
 msgid "_Programming Languages"
@@ -3226,11 +3226,11 @@ msgstr "கிறுக்கல் மொழிகள் (_S)"
 
 #: src/filetypes.c:436
 msgid "_Markup Languages"
-msgstr "மார்க்அப் மொழிகள்"
+msgstr "குறியிடுதல் மொழிகள் (_M)"
 
 #: src/filetypes.c:437
 msgid "M_iscellaneous"
-msgstr "மற்றவை"
+msgstr "மற்றவை (_i)"
 
 #: src/filetypes.c:1190
 msgid "All Source"
@@ -3243,7 +3243,7 @@ msgstr "அனைத்து கோப்புகள்"
 #: src/filetypes.c:1264
 #, c-format
 msgid "Bad regex for filetype %s: %s"
-msgstr "பைல்டைப் %s: %s க்கான மோசமான ரெஜெக்ஸ்"
+msgstr "கோப்புவகை %s: %s க்கான மோசமான வழக்கவெளி"
 
 #: src/geany.h:49
 msgid "untitled"
@@ -3261,7 +3261,7 @@ msgstr "இயல்புநிலை"
 
 #: src/highlighting.c:1348
 msgid "The current filetype overrides the default style."
-msgstr "The current filetype overrides the default style."
+msgstr "தற்போதைய கோப்பு வகை இயல்புநிலை பாணியை மீறுகிறது."
 
 #: src/highlighting.c:1349
 msgid "This may cause color schemes to display incorrectly."
@@ -3281,7 +3281,7 @@ msgstr "இடைநிலைப் பலகை"
 
 #: src/keybindings.c:312
 msgid "Select"
-msgstr "தேர்ந்தெடுக்கவும்"
+msgstr "தேர்ந்தெடு"
 
 #: src/keybindings.c:313
 msgid "Format"
@@ -3301,7 +3301,7 @@ msgstr "தேடல்"
 
 #: src/keybindings.c:317
 msgid "Go to"
-msgstr "செல்லுங்கள்"
+msgstr "செல்"
 
 #: src/keybindings.c:318
 msgid "View"
@@ -3330,27 +3330,27 @@ msgstr "புத்தக தாவல்"
 
 #: src/keybindings.c:334 src/keybindings.c:368
 msgid "New"
-msgstr "புதியது"
+msgstr "புதிய"
 
 #: src/keybindings.c:336 src/keybindings.c:372
 msgid "Open"
-msgstr "திறந்த"
+msgstr "திற"
 
 #: src/keybindings.c:339
 msgid "Open selected file"
-msgstr "தேர்ந்தெடுக்கப்பட்ட கோப்பைத் திறக்கவும்"
+msgstr "தேர்ந்தெடுக்கப்பட்ட கோப்பைத் திற"
 
 #: src/keybindings.c:341
 msgid "Save"
-msgstr "சேமிக்கவும்"
+msgstr "சேமி"
 
 #: src/keybindings.c:343 src/toolbar.c:58
 msgid "Save as"
-msgstr "சேமிக்கவும்"
+msgstr "என சேமி"
 
 #: src/keybindings.c:345
 msgid "Save all"
-msgstr "அனைத்தையும் சேமிக்கவும்"
+msgstr "அனைத்தையும் சேமி"
 
 #: src/keybindings.c:348 src/tagmanager/tm_parser.c:704
 msgid "Properties"
@@ -3370,11 +3370,11 @@ msgstr "அனைத்தையும் மூடு"
 
 #: src/keybindings.c:357
 msgid "Reload file"
-msgstr "கோப்பை மீண்டும் ஏற்றவும்"
+msgstr "கோப்பை மீண்டும் ஏற்று"
 
 #: src/keybindings.c:359
 msgid "Reload all files"
-msgstr "Reload file"
+msgstr "அனைத்து கோப்பையும் மீண்டும் ஏற்று"
 
 #: src/keybindings.c:361
 msgid "Re-open last closed tab"
