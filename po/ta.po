@@ -295,7 +295,7 @@ msgstr ""
 
 #: data/geany.glade:1300
 msgid "Auto-focus widgets (focus follows mouse)"
-msgstr "தானாக விட்கெட்கள்மீது குவிமையம் (கவனம் சுட்டியைப் பின்பற்றுகிறது)"
+msgstr "தானாக விட்கெட்கள்மீது குவி (குவி சுட்டியைப் பின்பற்றுகிறது)"
 
 #: data/geany.glade:1304
 msgid ""
@@ -303,7 +303,7 @@ msgid ""
 "the main editor widget, the scribble, the toolbar search and goto line "
 "fields and the VTE."
 msgstr ""
-"சுட்டிக்குக் கீழே உள்ள விட்கெட்களுக்கு தானாகவே கவனம் செலுத்துகிறது. "
+"சுட்டிக்குக் கீழே உள்ள விட்கெட்களுக்கு தானாகவே குவி செலுத்துகிறது. "
 "முக்கிய திருத்தி விட்கெட், அந்த கிறுக்கியில், கருவிப்பட்டி தேடல் மற்றும் வரிகளங்களுக்கு"
 " செல்லவும் மற்றும் மெமுமு."
 
@@ -1269,7 +1269,7 @@ msgstr ""
 
 #: data/geany.glade:4698 data/geany.glade:9501
 msgid "Strip trailing spaces and tabs"
-msgstr "ஸ்ட்ரிப் பின்தங்கிய இடங்கள் மற்றும் தாவல்கள்"
+msgstr "பின்தங்கிய இடங்கள் மற்றும் தாவல்களை நீக்கு"
 
 #: data/geany.glade:4702
 msgid "Removes trailing spaces and tabs at the end of lines"
@@ -1634,7 +1634,7 @@ msgstr "சீனி விசைப்பலகைகளை மீறவும�
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
-"விசைப்பலகை குறுக்குவழிகளைப் பெற VTE ஐ அனுமதிக்கிறது (கவனம் கட்டளைகளைத் தவிர)"
+"விசைப்பலகை குறுக்குவழிகளைப் பெற மெமுமுஐ அனுமதிக்கிறது (குவி கட்டளைகளைத் தவிர)"
 
 #: data/geany.glade:6214
 msgid "Disable menu shortcut key (F10 by default)"
@@ -1648,7 +1648,7 @@ msgid ""
 msgstr ""
 "இந்த விருப்பம் பட்டியல் பட்டியை பாப்அப்பிற்கு திறனை முடக்குகிறது (இயல்புநிலை "
 "F10). நீங்கள் பயன்படுத்தினால் அதை முடக்குவது பயனுள்ளதாக இருக்கும், "
-"எடுத்துக்காட்டாக, VTE க்குள் மிட்நைட் கமாண்டர்."
+"எடுத்துக்காட்டாக, மெமுமு க்குள் மிட்நைட் கமாண்டர்."
 
 #: data/geany.glade:6229
 msgid "Follow path of the current file"
@@ -1662,15 +1662,15 @@ msgstr ""
 
 #: data/geany.glade:6244
 msgid "Execute programs in the VTE"
-msgstr "VTE இல் நிரல்களை இயக்கவும்"
+msgstr "மெமுமு இல் நிரல்களை இயக்கவும்"
 
 #: data/geany.glade:6248
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
 msgstr ""
-"முனைய எமுலேஷன் சாளரத்தைத் திறப்பதற்கு பதிலாக VTE இல் நிரல்களை இயக்கவும். "
-"தயவுசெய்து கவனிக்கவும், VTE இல் செயல்படுத்தப்படும் நிரல்களை நிறுத்த முடியாது"
+"முனைய எமுலேஷன் சாளரத்தைத் திறப்பதற்கு பதிலாக மெமுமு இல் நிரல்களை இயக்கவும். "
+"தயவுசெய்து கவனிக்கவும், மெமுமு இல் செயல்படுத்தப்படும் நிரல்களை நிறுத்த முடியாது"
 
 #: data/geany.glade:6259
 msgid "Don't use run script"
@@ -1724,76 +1724,76 @@ msgstr "சமீபத்திய _ கோப்புகள்"
 
 #: data/geany.glade:6557
 msgid "Save _As..."
-msgstr "சேமி _as ..."
+msgstr "என சேமி (_A) ..."
 
 #: data/geany.glade:6568
 msgid "Sa_ve All"
-msgstr "எல்லாவற்றையும் SA_VE"
+msgstr "எல்லாவற்றையும் சேமி (_v)"
 
 #: data/geany.glade:6579 src/callbacks.c:352 src/document.c:1671
 #: src/document.c:3619 src/sidebar.c:1215
 msgid "_Reload"
-msgstr "_ஏற்றவும்"
+msgstr "மறுஏற்றம் (_R)"
 
 #: data/geany.glade:6590
 msgid "R_eload As"
-msgstr "R_eload as"
+msgstr "என மறுஏற்றம் (_e)"
 
 #: data/geany.glade:6636
 msgid "Page Set_up"
-msgstr "பக்கம் அமைப்பு"
+msgstr "பக்கம் அமைப்பு (_u)"
 
 #: data/geany.glade:6643
 msgid "_Print..."
-msgstr "_Print ..."
+msgstr "அச்சிடு (_P) ..."
 
 #: data/geany.glade:6670 src/notebook.c:498
 msgid "Close Ot_her Documents"
-msgstr "OT_HER ஆவணங்களை மூடு"
+msgstr "மற்ற ஆவணங்களை மூடு (_h)"
 
 #: data/geany.glade:6681 src/notebook.c:510
 msgid "C_lose All"
-msgstr "C_lose அனைத்தும்"
+msgstr "அனைத்தும்  மூடு (_l)"
 
 #: data/geany.glade:6813
 msgid "Co_mmands"
-msgstr "Co_mmands"
+msgstr "கட்டளைகள் (_m)"
 
 #: data/geany.glade:6820 src/keybindings.c:439
 msgid "Cu_t Current Line(s)"
-msgstr "Cu_t தற்போதைய வரி (கள்)"
+msgstr "தற்போதைய வரி (கள்) வெட்டு (_t)"
 
 #: data/geany.glade:6831 src/keybindings.c:436
 msgid "_Copy Current Line(s)"
-msgstr "_ கோபி தற்போதைய வரி (கள்)"
+msgstr "தற்போதைய வரி (கள்) நகல் (_C)"
 
 #: data/geany.glade:6844 src/keybindings.c:389
 msgid "_Delete Current Line(s)"
-msgstr "_ தற்போதைய வரி (கள்)"
+msgstr "தற்போதைய வரி (கள்) நீக்கு (_D)"
 
 #: data/geany.glade:6853 src/keybindings.c:386
 msgid "D_uplicate Line or Selection"
-msgstr "D_uplical வரி அல்லது தேர்வு"
+msgstr "வரி அல்லது தேர்வு நகல்ஒட்டு (_u)"
 
 #: data/geany.glade:6868 src/keybindings.c:449
 msgid "S_elect Current Line(s)"
-msgstr "S_ தேர்ந்தெடுக்கப்பட்ட தற்போதைய வரி (கள்)"
+msgstr "தற்போதைய வரி (கள்) தேர்ந்தெடு (_e)"
 
 #: data/geany.glade:6877 src/keybindings.c:452
 msgid "Se_lect Current Paragraph"
-msgstr "தற்போதைய பத்தியைத் தேர்ந்தெடுக்கவும்"
+msgstr "தற்போதைய பத்தியைத் தேர்ந்தெடு (_l)"
 
 #: data/geany.glade:6892
 msgid "_Move Line(s) Up"
-msgstr "_மோவ் லைன் (கள்) அப்"
+msgstr "வரி (களை) மேலே நகர்த்து (_M)"
 
 #: data/geany.glade:6901
 msgid "M_ove Line(s) Down"
-msgstr "கோடுகளை நகர்த்தவும்) கீழே"
+msgstr "வரி(களை)  கீழே நகர்த்து (_o)"
 
 #: data/geany.glade:6916 src/keybindings.c:503
 msgid "_Send Selection to Terminal"
-msgstr "_ முனையத்திற்கு தேர்வு"
+msgstr "முனையத்திற்கு தேர்வு (_S)"
 
 #: data/geany.glade:6938 src/keybindings.c:508
 msgid "_Join Lines"
@@ -1809,7 +1809,7 @@ msgstr "தேர்வு செய்வதற்கான T_OGGLE வழக�
 
 #: data/geany.glade:6971
 msgid "_Comment Line(s)"
-msgstr "_Comment வரி (கள்)"
+msgstr "கருத்து வரி (கள்) (_C)"
 
 #: data/geany.glade:6980
 msgid "U_ncomment Line(s)"
@@ -2332,7 +2332,7 @@ msgstr "சீனி பற்றி"
 
 #: src/about.c:217
 msgid "A fast and lightweight IDE"
-msgstr "வேகமான மற்றும் இலகுரக ஐடிஇ"
+msgstr "வேகமான மற்றும் சிறிய ஒமேசூ"
 
 #: src/about.c:239
 #, c-format
@@ -3322,7 +3322,7 @@ msgstr "உதவி"
 
 #: src/keybindings.c:324
 msgid "Focus"
-msgstr "கவனம்"
+msgstr "குவி"
 
 #: src/keybindings.c:325
 msgid "Notebook tab"
@@ -3670,7 +3670,7 @@ msgstr "பெரிதாக்கவும்"
 
 #: src/keybindings.c:618
 msgid "Zoom Reset"
-msgstr "ஜூம் மீட்டமைப்பு"
+msgstr "பெரிதாக்கு மீட்டமைப்பு"
 
 #: src/keybindings.c:623
 msgid "Switch to Editor"
@@ -3698,7 +3698,7 @@ msgstr "ஸ்கிரிபிலுக்கு மாறவும்"
 
 #: src/keybindings.c:635
 msgid "Switch to VTE"
-msgstr "VTE க்கு மாறவும்"
+msgstr "மெமுமுக்கு மாறவும்"
 
 #: src/keybindings.c:637
 msgid "Switch to Sidebar"
@@ -3927,7 +3927,7 @@ msgstr "முனைய ஆதரவை ஏற்ற வேண்டாம்"
 
 #: src/libmain.c:142
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr "கோப்பை மாறும்-இணைக்கப்பட்ட VTE நூலகமாகப் பயன்படுத்தவும்"
+msgstr "கோப்பை மாறும்-இணைக்கப்பட்ட மெமுமு நூலகமாகப் பயன்படுத்தவும்"
 
 #: src/libmain.c:144
 msgid "Be verbose"
@@ -3943,7 +3943,7 @@ msgstr "[கோப்புகள் ...]"
 
 #: src/libmain.c:557
 msgid "A fast and lightweight IDE."
-msgstr "A fast and lightweight IDE"
+msgstr "ஒரு வேகமான மற்றும் சிறிய ஒமேசூ"
 
 #: src/libmain.c:558
 msgid "Report bugs to https://github.com/geany/geany/issues."
@@ -4256,7 +4256,7 @@ msgstr ""
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
-msgstr "Cannot execute grep tool '%s'; check the path setting in Preferences."
+msgstr "Cannot execute அச்சு கட்டளை \"%s\"; check the path setting in Preferences."
 
 #: src/printing.c:620
 #, c-format
@@ -5164,7 +5164,7 @@ msgstr "கோப்பைத் தேர்ந்தெடுக்கவு�
 
 #: src/ui_utils.c:2231
 msgid "_Filetype Configuration"
-msgstr "_Reload Configuration"
+msgstr "கோப்பு வகை கட்டமைப்பு (_F)"
 
 #: src/ui_utils.c:2268
 msgid "Save All"
@@ -5187,49 +5187,48 @@ msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command"
 " or leave it empty in order to spawn the system default browser."
 msgstr ""
-"Failed to spawn the configured browser command. Please correct it or enter "
-"another one."
+"உள்ளமைக்கப்பட்ட உலாவி கட்டளையை உருவாக்குவதில் தோல்வி. கணினி இயல்புநிலை உலாவியை உருவாக்க, சரியான கட்டளையை உள்ளிடவும் அல்லது காலியாக விடவும்."
 
 #: src/utils.c:388
 msgid "Windows (CRLF)"
-msgstr "Win (CRLF)"
+msgstr "சாளர (சிஆர்எல்எஃப்)"
 
 #: src/utils.c:389
 msgid "Classic Mac (CR)"
-msgstr "Mac (CR)"
+msgstr "மேக் (சிஆர்)"
 
 #: src/utils.c:390
 msgid "Unix (LF)"
-msgstr "யுனிக்ஸ் (எல்.எஃப்)"
+msgstr "யுனிக்சு (எல்எஃப்)"
 
 #: src/utils.c:399
 msgid "CRLF"
-msgstr "சி.ஆர்.எல்.எஃப்"
+msgstr "சிஆர்எல்எஃப்"
 
 #: src/utils.c:400
 msgid "CR"
-msgstr "Cr"
+msgstr "சிஆர்"
 
 #: src/utils.c:401
 msgid "LF"
-msgstr "எல்.எஃப்"
+msgstr "எல்எஃப்"
 
 #: src/vte.c:574
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr "தவறான VTE நூலகம் \"%s\": காணாமல் போன சின்னம் \"%s\""
+msgstr "தவறான மெமுமு நூலகம் \"%s\": காணாமல் போன சின்னம் \"%s\""
 
 #: src/vte.c:755
 msgid "_Set Path From Document"
-msgstr "_ ஆவணத்திலிருந்து பாதை"
+msgstr "ஆவணத்திலிருந்து பாதை அமை (_S)"
 
 #: src/vte.c:760
 msgid "_Restart Terminal"
-msgstr "_ ரெஸ்டார்ட் முனையம்"
+msgstr "முனையம் மறுதொடக்கம் (_R)"
 
 #: src/vte.c:793
 msgid "_Input Methods"
-msgstr "_ இன்க் முறைகள்"
+msgstr "உள்ளீடு முறைகள் (_I)"
 
 #: src/vte.c:888
 msgid ""
@@ -5242,7 +5241,7 @@ msgstr ""
 #: src/win32.c:363
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr "URI \" %s\" ஐ திறக்கத் தவறிவிட்டது: %s"
+msgstr "முகவரி \" %s\" ஐ திறக்கத் தவறிவிட்டது: %s"
 
 #: src/tagmanager/tm_parser.c:87 src/tagmanager/tm_parser.c:179
 #: src/tagmanager/tm_parser.c:393 src/tagmanager/tm_parser.c:992
@@ -5299,14 +5298,14 @@ msgstr "கட்டமைப்புகள்"
 #: src/tagmanager/tm_parser.c:93 src/tagmanager/tm_parser.c:354
 #: src/tagmanager/tm_parser.c:444 src/tagmanager/tm_parser.c:881
 msgid "Typedefs / Enums"
-msgstr "தட்டச்சுப்பொறிகள் / enums"
+msgstr "வகைவரையறைகள் / எண்ணிகள்"
 
 #: src/tagmanager/tm_parser.c:94 src/tagmanager/tm_parser.c:138
 #: src/tagmanager/tm_parser.c:276 src/tagmanager/tm_parser.c:355
 #: src/tagmanager/tm_parser.c:513 src/tagmanager/tm_parser.c:883
 #: src/tagmanager/tm_parser.c:956 src/tagmanager/tm_parser.c:1005
 msgid "Macros"
-msgstr "மேக்ரோஸ்"
+msgstr "பெரியவைகள்"
 
 #: src/tagmanager/tm_parser.c:95 src/tagmanager/tm_parser.c:184
 #: src/tagmanager/tm_parser.c:205 src/tagmanager/tm_parser.c:323
@@ -5324,7 +5323,7 @@ msgstr "மாறிகள்"
 
 #: src/tagmanager/tm_parser.c:96 src/tagmanager/tm_parser.c:446
 msgid "Extern Variables"
-msgstr "Extern Variables"
+msgstr "வெளிப்புற மாறிகள்"
 
 #: src/tagmanager/tm_parser.c:97 src/tagmanager/tm_parser.c:127
 #: src/tagmanager/tm_parser.c:164 src/tagmanager/tm_parser.c:264
@@ -5349,7 +5348,7 @@ msgstr "முறைகள்"
 #: src/tagmanager/tm_parser.c:126 src/tagmanager/tm_parser.c:654
 #: src/tagmanager/tm_parser.c:984 src/tagmanager/tm_parser.c:1031
 msgid "Enums"
-msgstr "Enums"
+msgstr "எண்ணிகள்"
 
 #: src/tagmanager/tm_parser.c:137
 msgid "Targets"
@@ -5374,7 +5373,7 @@ msgstr "பண்புகள்"
 
 #: src/tagmanager/tm_parser.c:206 src/tagmanager/tm_parser.c:699
 msgid "Imports"
-msgstr "இறக்குமதி"
+msgstr "இறக்குமதிகள்"
 
 #: src/tagmanager/tm_parser.c:228
 msgid "Environment"
@@ -5387,7 +5386,7 @@ msgstr "பகுதி"
 #: src/tagmanager/tm_parser.c:230 src/tagmanager/tm_parser.c:335
 #: src/tagmanager/tm_parser.c:595
 msgid "Chapter"
-msgstr "அத்தியாயம்"
+msgstr "பாடங்கள்"
 
 #: src/tagmanager/tm_parser.c:231 src/tagmanager/tm_parser.c:336
 #: src/tagmanager/tm_parser.c:596
@@ -5400,7 +5399,7 @@ msgstr "உட்பிரிவு"
 
 #: src/tagmanager/tm_parser.c:233 src/tagmanager/tm_parser.c:598
 msgid "Subsubsection"
-msgstr "துணை"
+msgstr "உள்துணைபிரிவு"
 
 #: src/tagmanager/tm_parser.c:234
 msgid "Bibitem"
@@ -5412,7 +5411,7 @@ msgstr "கட்டுரைகள்"
 
 #: src/tagmanager/tm_parser.c:258
 msgid "Book Chapters"
-msgstr "Chapter"
+msgstr "புத்தக பாடங்கள்"
 
 #: src/tagmanager/tm_parser.c:259
 msgid "Books & Conference Proceedings"
@@ -5428,7 +5427,7 @@ msgstr "ஆய்வறிக்கைகள்"
 
 #: src/tagmanager/tm_parser.c:262
 msgid "Strings"
-msgstr "Settings"
+msgstr "சரங்கள்"
 
 #: src/tagmanager/tm_parser.c:263
 msgid "Unpublished"
@@ -5497,7 +5496,7 @@ msgstr "ஐடி தேர்வாளர்கள்"
 
 #: src/tagmanager/tm_parser.c:367
 msgid "Type Selectors"
-msgstr "தேர்வாளர்களைத் தட்டச்சு செய்க"
+msgstr "வகை தேர்வாளர்கள்"
 
 #: src/tagmanager/tm_parser.c:381 src/tagmanager/tm_parser.c:770
 #: src/tagmanager/tm_parser.c:876 src/tagmanager/tm_parser.c:953
@@ -5506,7 +5505,7 @@ msgstr "தொகுதிகள்"
 
 #: src/tagmanager/tm_parser.c:383
 msgid "Singletons"
-msgstr "சிங்கிள்டன்ஸ்"
+msgstr "ஒற்றைக்குழந்தைகள்"
 
 #: src/tagmanager/tm_parser.c:438 src/tagmanager/tm_parser.c:525
 #: src/tagmanager/tm_parser.c:646
@@ -5527,7 +5526,7 @@ msgstr "செயல்பாடுகள் / நடைமுறைகள்"
 
 #: src/tagmanager/tm_parser.c:485
 msgid "Variables / Signals / Ports"
-msgstr "Variables / Signals"
+msgstr "மாறிகள் / சமிக்ஞைகள் / துறைமுகங்கள்"
 
 #: src/tagmanager/tm_parser.c:486
 msgid "Processes / Blocks / Components"
@@ -5535,7 +5534,7 @@ msgstr "செயல்முறைகள் / தொகுதிகள் / க
 
 #: src/tagmanager/tm_parser.c:527
 msgid "Type constructors"
-msgstr "கட்டமைப்பாளர்களைத் தட்டச்சு செய்க"
+msgstr "வகை கட்டமைப்பாளர்கள்"
 
 #: src/tagmanager/tm_parser.c:614
 msgid "Anchors"
@@ -5543,15 +5542,15 @@ msgstr "நங்கூரர்கள்"
 
 #: src/tagmanager/tm_parser.c:615
 msgid "H1 Headings"
-msgstr "எச் 1 தலைப்புகள்"
+msgstr "த1 தலைப்புகள்"
 
 #: src/tagmanager/tm_parser.c:616
 msgid "H2 Headings"
-msgstr "எச் 2 தலைப்புகள்"
+msgstr "த2 தலைப்புகள்"
 
 #: src/tagmanager/tm_parser.c:617
 msgid "H3 Headings"
-msgstr "எச் 3 தலைப்புகள்"
+msgstr "த3 தலைப்புகள்"
 
 #: src/tagmanager/tm_parser.c:647
 msgid "Programs"
@@ -5559,7 +5558,7 @@ msgstr "திட்டங்கள்"
 
 #: src/tagmanager/tm_parser.c:649
 msgid "Functions / Subroutines"
-msgstr "Functions / Procedures"
+msgstr "செயல்பாடுகள் / துணைமுறைகள்"
 
 #: src/tagmanager/tm_parser.c:652
 msgid "Components"
@@ -5576,23 +5575,23 @@ msgstr "கட்டமைப்புகள்"
 
 #: src/tagmanager/tm_parser.c:737
 msgid "Chapters"
-msgstr "Chapter"
+msgstr "பாடங்கள்"
 
 #: src/tagmanager/tm_parser.c:739
 msgid "Subsections"
-msgstr "Subsection"
+msgstr "துணைப்பிரிவுகள்"
 
 #: src/tagmanager/tm_parser.c:740
 msgid "Subsubsections"
-msgstr "Subsubsection"
+msgstr "உள்துணைப்பிரிவுகள்"
 
 #: src/tagmanager/tm_parser.c:741
 msgid "Level 4 sections"
-msgstr "Save Actions"
+msgstr "நிலை 4 பிரிவுகள்"
 
 #: src/tagmanager/tm_parser.c:742
 msgid "Level 5 sections"
-msgstr "Save Actions"
+msgstr "நிலை 5 பிரிவுகள்"
 
 #: src/tagmanager/tm_parser.c:769
 msgid "Events"
@@ -5624,7 +5623,7 @@ msgstr "தகவல்கள்"
 
 #: src/tagmanager/tm_parser.c:810
 msgid "Copies"
-msgstr "பிரதிகள்"
+msgstr "நகல்கள்"
 
 #: src/tagmanager/tm_parser.c:842
 msgid "Section Level 1"
@@ -5644,7 +5643,7 @@ msgstr "பிரிவு நிலை 4"
 
 #: src/tagmanager/tm_parser.c:846
 msgid "Section Level 5"
-msgstr "Section Level 1"
+msgstr "பிரிவு நிலை 5"
 
 #: src/tagmanager/tm_parser.c:856
 msgid "Parts"
@@ -5652,7 +5651,7 @@ msgstr "பாகங்கள்"
 
 #: src/tagmanager/tm_parser.c:857
 msgid "Assembly"
-msgstr "சட்டசபை"
+msgstr "கூட்டி"
 
 #: src/tagmanager/tm_parser.c:858
 msgid "Steps"
@@ -5668,11 +5667,11 @@ msgstr "புலங்கள்"
 
 #: src/tagmanager/tm_parser.c:959
 msgid "Unknowns"
-msgstr "unknown"
+msgstr "தெரியாதவர்கள்"
 
 #: src/tagmanager/tm_parser.c:1065
 msgid "Packages"
-msgstr "Package"
+msgstr "தொகுப்பு"
 
 #: src/tagmanager/tm_parser.c:1068
 msgid "Tasks"
@@ -5680,11 +5679,11 @@ msgstr "பணிகள்"
 
 #: src/tagmanager/tm_parser.c:1092
 msgid "Regions"
-msgstr "Sections"
+msgstr "பகுதிகள்"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
-msgstr "வகுப்பு பில்டர்"
+msgstr "வகுப்பு கட்டுபவர்"
 
 #: plugins/classbuilder.c:34
 msgid "Creates source files for new class types."
@@ -5700,11 +5699,11 @@ msgstr "சி ++ வகுப்பை உருவாக்கவும்"
 
 #: plugins/classbuilder.c:444
 msgid "Create GTK+ Class"
-msgstr "GTK+ வகுப்பை உருவாக்கவும்"
+msgstr "சிடிகே+ வகுப்பை உருவாக்கவும்"
 
 #: plugins/classbuilder.c:447
 msgid "Create PHP Class"
-msgstr "PHP வகுப்பை உருவாக்கவும்"
+msgstr "பிஎச்பி வகுப்பை உருவாக்கவும்"
 
 #: plugins/classbuilder.c:464
 msgid "Namespace"
@@ -5712,7 +5711,7 @@ msgstr "பெயர்வெளி"
 
 #: plugins/classbuilder.c:471 plugins/classbuilder.c:473
 msgid "Class"
-msgstr "வர்க்கம்"
+msgstr "வகுப்பு"
 
 #: plugins/classbuilder.c:480
 msgid "Header file:"
@@ -5744,11 +5743,11 @@ msgstr "உலகளாவிய"
 
 #: plugins/classbuilder.c:526
 msgid "Base GType:"
-msgstr "அடிப்படை GTYPE:"
+msgstr "அடிப்படை சிவகை:"
 
 #: plugins/classbuilder.c:531
 msgid "Implements:"
-msgstr "கருவிகள்:"
+msgstr "செயல்படுத்துகிறது:"
 
 #: plugins/classbuilder.c:533
 msgid "Options"
@@ -5764,11 +5763,11 @@ msgstr "அழிப்பாளரை உருவாக்கு"
 
 #: plugins/classbuilder.c:562
 msgid "Is abstract"
-msgstr "சுருக்கமானது"
+msgstr "சுருக்கமானதா"
 
 #: plugins/classbuilder.c:565
 msgid "Is singleton"
-msgstr "சிங்கிள்டன்"
+msgstr "ஒற்றைக்குழந்தையா"
 
 #: plugins/classbuilder.c:575
 msgid "Constructor type:"
@@ -5776,27 +5775,27 @@ msgstr "கட்டமைப்பாளர் வகை:"
 
 #: plugins/classbuilder.c:1087
 msgid "Create Cla_ss"
-msgstr "CLA_SS ஐ உருவாக்கவும்"
+msgstr "வகுப்பு உருவாக்கு (_s)"
 
 #: plugins/classbuilder.c:1093
 msgid "_C++ Class..."
-msgstr "_C ++ வகுப்பு ..."
+msgstr "சி++ வகுப்பு... (_C)"
 
 #: plugins/classbuilder.c:1096
 msgid "_GTK+ Class..."
-msgstr "_GTK+ வகுப்பு ..."
+msgstr "சிடிகே+ வகுப்பு... (_G)"
 
 #: plugins/classbuilder.c:1099
 msgid "_PHP Class..."
-msgstr "_PHP வகுப்பு ..."
+msgstr "பிஎச்பி வகுப்பு ... (_P)"
 
 #: plugins/htmlchars.c:38
 msgid "HTML Characters"
-msgstr "HTML எழுத்துக்கள்"
+msgstr "எச்டிஎம்எல் எழுத்துக்கள்"
 
 #: plugins/htmlchars.c:38
 msgid "Inserts HTML character entities like '&amp;'."
-msgstr "'& ஆம்ப்;' போன்ற HTML எழுத்து நிறுவனங்களை செருகும்."
+msgstr "'&amp;' போன்ற எச்டிஎம்எல் எழுத்து நிறுவனங்களை செருகும்."
 
 #: plugins/htmlchars.c:39 plugins/export.c:37 plugins/filebrowser.c:50
 #: plugins/saveactions.c:43 plugins/splitwindow.c:34
@@ -5805,11 +5804,11 @@ msgstr "சீனி டெவலப்பர் குழு"
 
 #: plugins/htmlchars.c:73
 msgid "HTML characters"
-msgstr "HTML எழுத்துக்கள்"
+msgstr "எச்டிஎம்எல் எழுத்துக்கள்"
 
 #: plugins/htmlchars.c:79
 msgid "ISO 8859-1 characters"
-msgstr "ஐஎஸ்ஓ 8859-1 எழுத்துக்கள்"
+msgstr "ஐஎச்ஓ 8859-1 எழுத்துக்கள்"
 
 #: plugins/htmlchars.c:177
 msgid "Greek characters"
@@ -5833,7 +5832,7 @@ msgstr "நிறுத்தற்குறி எழுத்துக்க�
 
 #: plugins/htmlchars.c:310
 msgid "Miscellaneous characters"
-msgstr "மற்றவை எழுத்துக்கள்"
+msgstr "மற்ற எழுத்துக்கள்"
 
 #: plugins/htmlchars.c:365 plugins/filebrowser.c:1202
 #: plugins/saveactions.c:569
@@ -5846,7 +5845,7 @@ msgstr "சிறப்பு எழுத்துக்கள்"
 
 #: plugins/htmlchars.c:488
 msgid "_Insert"
-msgstr "_ இன்செர்ட்"
+msgstr "செருகவும் (_I)"
 
 #: plugins/htmlchars.c:497
 msgid ""
@@ -5863,27 +5862,27 @@ msgstr "எழுத்து"
 
 #: plugins/htmlchars.c:517
 msgid "HTML (name)"
-msgstr "HTML (பெயர்)"
+msgstr "எச்டிஎம்எல் (பெயர்)"
 
 #: plugins/htmlchars.c:736
 msgid "_Insert Special HTML Characters..."
-msgstr "_ இன்செர்ட் சிறப்பு HTML எழுத்துக்கள் ..."
+msgstr "சிறப்பு எச்டிஎம்எல் எழுத்துக்கள் செருகவும்... (_I)"
 
 #: plugins/htmlchars.c:751
 msgid "_HTML Replacement"
-msgstr "_Html மாற்று"
+msgstr "எச்டிஎம்எல் மாற்று (_H)"
 
 #: plugins/htmlchars.c:758
 msgid "_Auto-replace Special Characters"
-msgstr "_ஆட்டோ-சிறப்பு எழுத்துக்களை மாற்றவும்"
+msgstr "தானி-சிறப்பு எழுத்துக்களை மாற்றவும் (_A)"
 
 #: plugins/htmlchars.c:767
 msgid "_Replace Characters in Selection"
-msgstr "_ தேர்வில் எழுத்துக்களை மாற்றவும்"
+msgstr "தேர்வில் எழுத்துக்களை மாற்றவும் (_R)"
 
 #: plugins/htmlchars.c:783
 msgid "Insert Special HTML Characters"
-msgstr "சிறப்பு HTML எழுத்துக்களைச் செருகவும்"
+msgstr "சிறப்பு எச்டிஎம்எல் எழுத்துக்களைச் செருகவும்"
 
 #: plugins/htmlchars.c:786
 msgid "Replace special characters"
@@ -5907,7 +5906,7 @@ msgstr "ஏற்றுமதி கோப்பு"
 
 #: plugins/export.c:186
 msgid "_Insert line numbers"
-msgstr "வரி எண்களைச் செருகவும்"
+msgstr "வரி எண்களைச் செருகவும் (_I)"
 
 #: plugins/export.c:188
 msgid "Insert line numbers before each line in the exported document"
@@ -5916,12 +5915,12 @@ msgstr ""
 
 #: plugins/export.c:198
 msgid "_Use current zoom level"
-msgstr "தற்போதைய ஜூம் அளவைப் பயன்படுத்தவும்"
+msgstr "தற்போதைய பெரிதாக்கு அளவைப் பயன்படுத்தவும் (_U)"
 
 #: plugins/export.c:200
 msgid ""
 "Renders the font size of the document together with the current zoom level"
-msgstr "தற்போதைய ஜூம் மட்டத்துடன் ஆவணத்தின் எழுத்துரு அளவை வழங்குகிறது"
+msgstr "தற்போதைய பெரிதாக்கு மட்டத்துடன் ஆவணத்தின் எழுத்துரு அளவை வழங்குகிறது"
 
 #: plugins/export.c:278
 #, c-format
@@ -5935,15 +5934,15 @@ msgstr "'%s' ஐ எழுத முடியவில்லை (%s)."
 
 #: plugins/export.c:746
 msgid "_Export"
-msgstr "_ எக்ஸ்போர்ட்"
+msgstr "ஏற்றுமதி (_E)"
 
 #: plugins/export.c:753
 msgid "As _HTML..."
-msgstr "_Html என ..."
+msgstr "எச்டிஎம்எல் என... (_H)"
 
 #: plugins/export.c:759
 msgid "As _LaTeX..."
-msgstr "_Latex ..."
+msgstr "இலாடக்சு ஆக.. (_L)."
 
 #: plugins/filebrowser.c:49
 msgid "File Browser"
@@ -5964,15 +5963,15 @@ msgstr "கட்டமைக்கப்பட்ட வெளிப்பு�
 
 #: plugins/filebrowser.c:657
 msgid "Open in _Geany"
-msgstr "Open File"
+msgstr "சீனியில் திறக்கவும் (_G)"
 
 #: plugins/filebrowser.c:663
 msgid "Open _Externally"
-msgstr "_Externally ஐத் திறக்கவும்"
+msgstr "வெளிப்புறமாக திறக்கவும் (_E)"
 
 #: plugins/filebrowser.c:688
 msgid "Show _Hidden Files"
-msgstr "மறைக்கப்பட்ட கோப்புகளைக் காட்டு"
+msgstr "மறைக்கப்பட்ட கோப்புகளைக் காட்டு (_H)"
 
 #: plugins/filebrowser.c:918
 msgid "Up"
@@ -5999,16 +5998,16 @@ msgid ""
 "Filter your files with the usual wildcards. Separate multiple patterns with "
 "a space."
 msgstr ""
-"வழக்கமான வைல்டு கார்டுகளுடன் உங்கள் கோப்புகளை வடிகட்டவும். பல வடிவங்களை ஒரு "
+"வழக்கமான காட்டு அட்டைகளுடன் உங்கள் கோப்புகளை வடிகட்டவும். பல வடிவங்களை ஒரு "
 "இடத்துடன் பிரிக்கவும்."
 
 #: plugins/filebrowser.c:1172
 msgid "Focus File List"
-msgstr "கோப்பு பட்டியலில் கவனம் செலுத்துங்கள்"
+msgstr "கோப்பு பட்டியலில் குவி செலுத்துங்கள்"
 
 #: plugins/filebrowser.c:1174
 msgid "Focus Path Entry"
-msgstr "பாதை நுழைவு கவனம் செலுத்துங்கள்"
+msgstr "பாதை நுழைவு குவி செலுத்துங்கள்"
 
 #: plugins/filebrowser.c:1267
 msgid "External open command:"
@@ -6021,8 +6020,8 @@ msgid ""
 "%f will be replaced with the filename including full path\n"
 "%d will be replaced with the path name of the selected file without the filename"
 msgstr ""
-"\"திறந்த\" பயன்படுத்தும் போது செயல்படுத்த வேண்டிய கட்டளை. நீங்கள் %f மற்றும் %d வைல்ட் கார்டுகளைப் பயன்படுத்தலாம். \n"
-" %F முழு பாதை உட்பட கோப்பு பெயருடன் மாற்றப்படும் \n"
+"\"முலம் திற\" பயன்படுத்தும் போது செயல்படுத்த வேண்டிய கட்டளை. நீங்கள் %f மற்றும் %d காட்டு அட்டைகளைப் பயன்படுத்தலாம். \n"
+" %f முழு பாதை உட்பட கோப்பு பெயருடன் மாற்றப்படும் \n"
 " கோப்பு பெயர் இல்லாமல் தேர்ந்தெடுக்கப்பட்ட கோப்பின் பாதை பெயருடன் %d மாற்றப்படும்"
 
 #: plugins/filebrowser.c:1283
@@ -6074,14 +6073,14 @@ msgstr "காப்பு நகல்: கோப்பை சேமிக்�
 
 #: plugins/saveactions.c:286
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "Project file could not be written (%s)."
+msgstr "உடனடி சேமிப்பு கோப்பு பெயரை உருவாக்க முடியவில்லை (%s)."
 
 #: plugins/saveactions.c:386
 #, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
-msgstr[0] "Autosave: Saved %d file automatically."
-msgstr[1] "Autosave: Saved %d files automatically."
+msgstr[0] "தானியங்கு சேமி: %d கோப்பு தானாகவே சேமிக்கப்பட்டது."
+msgstr[1] "தானியங்கு சேமி: %d கோப்புகள் தானாகவே சேமிக்கப்பட்டது."
 
 #: plugins/saveactions.c:454
 msgid "Select Directory"
@@ -6089,7 +6088,7 @@ msgstr "கோப்பகத்தைத் தேர்ந்தெடுக�
 
 #: plugins/saveactions.c:544
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "Backup directory does not exist or is not writable."
+msgstr "உடனடிசேமி அடைவு இல்லை அல்லது எழுத முடியாதது."
 
 #: plugins/saveactions.c:561
 msgid "Backup directory does not exist or is not writable."
@@ -6097,36 +6096,36 @@ msgstr "காப்பு அடைவு இல்லை அல்லது �
 
 #: plugins/saveactions.c:642
 msgid "Auto Save"
-msgstr "ஆட்டோ சேமிப்பு"
+msgstr "தானியங்கு சேமிப்பு"
 
 #: plugins/saveactions.c:644
 msgid "Enable save when losing _focus"
-msgstr "_ ஃபோகஸை இழக்கும்போது சேமிக்க இயக்கவும்"
+msgstr "குவி இழக்கும்போது சேமிக்க இயக்கவும் (_f)"
 
 #: plugins/saveactions.c:650 plugins/saveactions.c:713
 #: plugins/saveactions.c:786
 msgid "_Enable"
-msgstr "_Enable"
+msgstr "இயக்கவும் (_E)"
 
 #: plugins/saveactions.c:658
 msgid "Auto save _interval:"
-msgstr "ஆட்டோ சேமி _ இன்டர்வால்:"
+msgstr "தானியங்கு சேமிப்பு இடைவெளி (_i)"
 
 #: plugins/saveactions.c:666
 msgid "seconds"
-msgstr "விநாடிகள்"
+msgstr "நொடிகள்"
 
 #: plugins/saveactions.c:675
 msgid "_Print status message if files have been automatically saved"
-msgstr "_ கோப்புகள் தானாக சேமிக்கப்பட்டிருந்தால் நிலை செய்தி"
+msgstr "கோப்புகள் தானாக சேமிக்கப்பட்டிருந்தால் நிலை செய்தி (_P)"
 
 #: plugins/saveactions.c:683
 msgid "Save only current open _file"
-msgstr "தற்போதைய திறந்த கோப்பை மட்டும் சேமிக்கவும்"
+msgstr "தற்போதைய திறந்த கோப்பை மட்டும் சேமிக்கவும் (_f)"
 
 #: plugins/saveactions.c:690
 msgid "Sa_ve all open files"
-msgstr "அனைத்து திறந்த கோப்புகளையும் சேமிக்கவும்"
+msgstr "அனைத்து திறந்த கோப்புகளையும் சேமிக்கவும் (_v)"
 
 #: plugins/saveactions.c:711
 msgid "Instant Save"
@@ -6134,12 +6133,12 @@ msgstr "உடனடி சேமிப்பு"
 
 #: plugins/saveactions.c:721
 msgid "Default _filetype to use for new files:"
-msgstr "_Filetype to use for newly opened files:"
+msgstr "புதிய கோப்புகளுக்கு பயன்படுத்த இயல்புநிலை கோப்பு வகை: (_f)"
 
 #: plugins/saveactions.c:742
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
-"Directory to run Make All from. Leave blank to use the default command."
+"கோப்புகளைச் சேமிப்பதற்கான கோப்பகம் (இயல்புநிலையைப் பயன்படுத்த காலியாக விடவும்: %s): (_D)"
 
 #: plugins/saveactions.c:766
 msgid ""
@@ -6155,24 +6154,24 @@ msgstr "காப்பு நகல்"
 
 #: plugins/saveactions.c:794
 msgid "_Directory to save backup files in:"
-msgstr "காப்புப்பிரதி கோப்புகளைச் சேமிக்க _ அடைவு:"
+msgstr "காப்புப்பிரதி கோப்புகளைச் சேமிக்க அடைவு: (_D)"
 
 #: plugins/saveactions.c:817
 msgid ""
 "Date/_Time format for backup files (for a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"
 msgstr ""
-"காப்புப்பிரதிக் கோப்புகளுக்கான தேதி/_ நேர வடிவம் (கிடைக்கக்கூடிய மாற்று "
+"காப்புப்பிரதிக் கோப்புகளுக்கான தேதி/நேர வடிவம் (கிடைக்கக்கூடிய மாற்று "
 "குறிப்பான்களின் பட்டியலுக்கு "
-"https://docs.gtk.org/glib/methodetime.format.html ஐப் பார்க்கவும்):"
+"https://docs.gtk.org/glib/methodetime.format.html ஐப் பார்க்கவும்): (_T)"
 
 #: plugins/saveactions.c:830
 msgid "Directory _levels to include in the backup destination:"
-msgstr "காப்பு இலக்கில் சேர்க்க கோப்பகம் _ லீவல்கள்:"
+msgstr "காப்பு இடத்தில் சேர்க்க கோப்பக நிலைகள் : (_l)"
 
 #: plugins/splitwindow.c:33
 msgid "Split Window"
-msgstr "பிளவு சாளரம்"
+msgstr "சாளரம் பிரி"
 
 #: plugins/splitwindow.c:33
 msgid "Splits the editor view into two windows."
@@ -6185,19 +6184,19 @@ msgstr "தற்போதைய ஆவணத்தைக் காட்டு"
 #: plugins/splitwindow.c:317 plugins/splitwindow.c:450
 #: plugins/splitwindow.c:465
 msgid "_Unsplit"
-msgstr "_Unsplit"
+msgstr "பிரிக்காதே (_U)"
 
 #: plugins/splitwindow.c:432
 msgid "_Split Window"
-msgstr "_Split சாளரம்"
+msgstr "சாளரம் பிரி (_S)"
 
 #: plugins/splitwindow.c:440
 msgid "_Side by Side"
-msgstr "_ பக்கவாட்டில்"
+msgstr "பக்கவாட்டில் (_S)"
 
 #: plugins/splitwindow.c:445
 msgid "_Top and Bottom"
-msgstr "_மேலும் கீழும்"
+msgstr "மேலும் கீழும் (_T)"
 
 #: plugins/splitwindow.c:461
 msgid "Side by Side"
@@ -6265,7 +6264,7 @@ msgstr "மேலும் கீழும்"
 #~ "Could not execute the file in the VTE because it probably contains a "
 #~ "command."
 #~ msgstr ""
-#~ "Could not execute the file in the VTE because it probably contains a "
+#~ "Could not execute the file in the மெமுமு because it probably contains a "
 #~ "command."
 
 #~ msgid ""
@@ -6310,7 +6309,7 @@ msgstr "மேலும் கீழும்"
 #~ "Could not change the directory in the VTE because it probably contains a "
 #~ "command."
 #~ msgstr ""
-#~ "Could not change the directory in the VTE because it probably contains a "
+#~ "Could not change the directory in the மெமுமு because it probably contains a "
 #~ "command."
 
 #~ msgid "<b>Type:</b>"
@@ -6391,7 +6390,7 @@ msgstr "மேலும் கீழும்"
 #~ msgstr "SQL Dump file"
 
 #~ msgid "M_iscellaneous Languages"
-#~ msgstr "M_iscellaneous Languages"
+#~ msgstr "M_iscellaneous மொழிகள்"
 
 #~ msgid "_Custom Filetypes"
 #~ msgstr "_Custom Filetypes"
@@ -6649,7 +6648,7 @@ msgstr "மேலும் கீழும்"
 #~ "the VTE library could be loaded."
 #~ msgstr ""
 #~ "These settings for the மெய்நிகர் முனைய முன்மாதிரி widget (மெமுமு) only apply if "
-#~ "the VTE library could be loaded."
+#~ "the மெமுமு library could be loaded."
 
 #~ msgid "Unsplit"
 #~ msgstr "Unsplit"
@@ -6831,7 +6830,7 @@ msgstr "மேலும் கீழும்"
 #~ "Reload configuration data like snippets, templates and filetype extensions."
 
 #~ msgid "Shows a list of all keyboard shortcuts for Geany."
-#~ msgstr "Shows a list of all keyboard shortcuts for Geany."
+#~ msgstr "Shows a list of all விசைப்பலகை குறுக்குவழிகள்  for Geany."
 
 #~ msgid "Enter a line number and jump to it."
 #~ msgstr "Enter a line number and jump to it."
@@ -6990,16 +6989,16 @@ msgstr "மேலும் கீழும்"
 #~ msgstr "Help menu"
 
 #~ msgid "Focus commands"
-#~ msgstr "Focus commands"
+#~ msgstr "குவி கட்டளைகள்"
 
 #~ msgid "Editing commands"
-#~ msgstr "Editing commands"
+#~ msgstr "Editing கட்டளைகள்"
 
 #~ msgid "Tag commands"
-#~ msgstr "Tag commands"
+#~ msgstr "Tag கட்டளைகள்"
 
 #~ msgid "Other commands"
-#~ msgstr "Other commands"
+#~ msgstr "Other கட்டளைகள்"
 
 #~ msgid "Something went really wrong."
 #~ msgstr "Something went really wrong."
@@ -7123,7 +7122,7 @@ msgstr "மேலும் கீழும்"
 #~ msgstr "Go to tag declaration"
 
 #~ msgid "Hide"
-#~ msgstr "Hide"
+#~ msgstr "மறை"
 
 #~ msgid "Reload"
 #~ msgstr "Reload"
@@ -7161,7 +7160,7 @@ msgstr "மேலும் கீழும்"
 #~ msgstr "<b>Misc.</b>"
 
 #~ msgid "language"
-#~ msgstr "language"
+#~ msgstr "மொழி"
 
 #~ msgid "XML source file"
 #~ msgstr "XML source file"
@@ -7179,17 +7178,17 @@ msgstr "மேலும் கீழும்"
 #~ "previous line. Advanced does the same and indents also curly brackets."
 
 #~ msgid "Print command:"
-#~ msgstr "Print command:"
+#~ msgstr "அச்சு கட்டளை:"
 
 #~ msgid ""
 #~ "\n"
 #~ "<b>Focus commands</b>\n"
 #~ msgstr ""
 #~ "\n"
-#~ "<b>Focus commands</b>\n"
+#~ "<b>குவி கட்டளைகள்</b>\n"
 
 #~ msgid "Keyboard shortcuts"
-#~ msgstr "Keyboard shortcuts"
+#~ msgstr "விசைப்பலகை குறுக்குவழிகள்"
 
 #~ msgid " - A fast and lightweight IDE"
-#~ msgstr " - A fast and lightweight IDE"
+#~ msgstr " - ஒரு வேகமான மற்றும் சிறிய ஒமேசூ"
