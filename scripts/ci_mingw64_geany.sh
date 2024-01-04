@@ -70,18 +70,12 @@ CFLAGS="\
 ARCH="x86_64"
 MINGW_ARCH="mingw64"
 HOST="x86_64-w64-mingw32"
-export CC="/usr/bin/${HOST}-gcc"
-export CPP="/usr/bin/${HOST}-cpp"
-export CXX="/usr/bin/${HOST}-g++"
-export AR="/usr/bin/${HOST}-ar"
-export STRIP="/usr/bin/${HOST}-strip"
-export WINDRES="/usr/bin/${HOST}-windres"
-export CFLAGS="-I/windows/${MINGW_ARCH}/include/ ${CFLAGS}"
 export LDFLAGS="-static-libgcc ${LDFLAGS}"
 export PKG_CONFIG_SYSROOT_DIR="/windows"
 export PKG_CONFIG_PATH="/windows/${MINGW_ARCH}/lib/pkgconfig/"
-export PKG_CONFIG="/usr/bin/pkg-config"
 export NOCONFIGURE=1
+export JOBS=${JOBS:-1}
+export lt_cv_deplibs_check_method='pass_all'
 
 # stop on errors
 set -e
@@ -96,6 +90,7 @@ git_clone_geany_if_necessary() {
 	if [ -d ${GEANY_SOURCE_DIR} ]; then
 		log "Copying Geany source"
 		cp --archive ${GEANY_SOURCE_DIR}/ ${GEANY_BUILD_DIR}/
+		chown --recursive $(id -u):$(id -g) ${GEANY_BUILD_DIR}/
 	else
 		log "Cloning Geany repository from ${GEANY_GIT_REPOSITORY}"
 		git clone --depth 1 ${GEANY_GIT_REPOSITORY} ${GEANY_BUILD_DIR}
@@ -126,7 +121,11 @@ log_environment() {
 	echo "Geany GIT revision   : ${GEANY_GIT_REVISION}"
 	echo "PATH                 : ${PATH}"
 	echo "HOST                 : ${HOST}"
-	echo "CC                   : ${CC}"
+	echo "GCC                  : $(${HOST}-gcc -dumpfullversion) ($(${HOST}-gcc -dumpversion))"
+	echo "G++                  : $(${HOST}-g++ -dumpfullversion) ($(${HOST}-g++ -dumpversion))"
+	echo "Libstdc++            : $(dpkg-query --showformat='${Version}' --show libstdc++6:i386)"
+	echo "GLib                 : $(pkg-config --modversion glib-2.0)"
+	echo "GTK                  : $(pkg-config --modversion gtk+-3.0)"
 	echo "CFLAGS               : ${CFLAGS}"
 	echo "Configure            : ${CONFIGURE_OPTIONS}"
 }
@@ -147,8 +146,13 @@ patch_version_information() {
 		MINOR="${BASH_REMATCH[2]}"
 		PATCH="${BASH_REMATCH[4]}"
 		if [ -z "${PATCH}" ] || [ "${PATCH}" = "0" ]; then
-			MINOR="$((MINOR-1))"
-			PATCH="90"
+			if [ "${MINOR}" = "0" ]; then
+				MAJOR="$((MAJOR-1))"
+				MINOR="99"
+			else
+				MINOR="$((MINOR-1))"
+			fi
+			PATCH="99"
 		else
 			PATCH="$((PATCH-1))"
 		fi
@@ -173,7 +177,7 @@ build_geany() {
 	log "Running configure"
 	./configure ${CONFIGURE_OPTIONS}
 	log "Running make"
-	make
+	make -j ${JOBS}
 	log "Running install-strip"
 	make install-strip
 }
@@ -213,6 +217,13 @@ create_gtk_bundle() {
 	mkdir ${GTK_BUNDLE_DIR}
 	cd ${GTK_BUNDLE_DIR}
 	bash ${GEANY_BUILD_DIR}/scripts/gtk-bundle-from-msys2.sh -x -3
+
+	# We use the "posix" variant of the mingw64 cross compiler which has support for
+	# C++ features like "std:future". For this to work, we need to use the corresponding
+	# C++ runtime library and copy (and strip) it to the resulting bundle.
+	gcc_version="$(${HOST}-gcc -dumpversion)/libstdc++-6.dll"
+	cp "/usr/lib/gcc/${HOST}/${gcc_version}" "${GTK_BUNDLE_DIR}/bin"
+	${HOST}-strip "${GTK_BUNDLE_DIR}/bin/libstdc++-6.dll"
 }
 
 

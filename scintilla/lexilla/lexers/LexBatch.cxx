@@ -5,12 +5,12 @@
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <assert.h>
-#include <ctype.h>
+#include <cstdlib>
+#include <cassert>
+#include <cstring>
+#include <cctype>
+#include <cstdio>
+#include <cstdarg>
 
 #include <string>
 #include <string_view>
@@ -74,15 +74,21 @@ bool textQuoted(const char *lineBuffer, Sci_PositionU endPos) {
 	char strBuffer[1024];
 	strncpy(strBuffer, lineBuffer, endPos);
 	strBuffer[endPos] = '\0';
-	char *pQuote;
-	pQuote = strchr(strBuffer, '"');
 	bool CurrentStatus = false;
-	while (pQuote != NULL)
-	{
-		if (!IsEscaped(strBuffer, pQuote - strBuffer)) {
-			CurrentStatus = !CurrentStatus;
+	const char strQuotes[] = "\"'";
+	const size_t strLength = strlen(strQuotes);
+	for (size_t i = 0; i < strLength; i++) {
+		const char *pQuote = strchr(strBuffer, strQuotes[i]);
+		while (pQuote)
+		{
+			if (!IsEscaped(strBuffer, pQuote - strBuffer)) {
+				CurrentStatus = !CurrentStatus;
+			}
+			pQuote = strchr(pQuote + 1, strQuotes[i]);
 		}
-		pQuote = strchr(pQuote + 1, '"');
+		if (CurrentStatus) {
+			break;
+		}
 	}
 	return CurrentStatus;
 }
@@ -153,7 +159,17 @@ void ColouriseBatchDoc(
 					styler.ColourTo(endPos, SCE_BAT_COMMENT);
 				} else {
 					// Colorize Real Label
-					styler.ColourTo(endPos, SCE_BAT_LABEL);
+					// :[\t ]*[^\t &+:<>|]+
+					const char *startLabelName = lineBuffer + offset + 1;
+					const size_t whitespaceLength = strspn(startLabelName, "\t ");
+					// Set of label-terminating characters determined experimentally
+					const char *endLabel = strpbrk(startLabelName + whitespaceLength, "\t &+:<>|");
+					if (endLabel) {
+						styler.ColourTo(startLine + offset + endLabel - startLabelName, SCE_BAT_LABEL);
+						styler.ColourTo(endPos, SCE_BAT_AFTER_LABEL);	// New style
+					} else {
+						styler.ColourTo(endPos, SCE_BAT_LABEL);
+					}
 				}
 				stopLineProcessing=true;
 			// Check for Drive Change (Drive Change is internal command) - return if found
@@ -194,9 +210,14 @@ void ColouriseBatchDoc(
 				Sci_PositionU wbo = 0;		// Word Buffer Offset - also Special Keyword Buffer Length
 
 				// Check for Comment - return if found
-				if ((CompareCaseInsensitive(wordBuffer, "rem") == 0) && continueProcessing) {
-					styler.ColourTo(endPos, SCE_BAT_COMMENT);
-					break;
+				if (continueProcessing) {
+					if ((CompareCaseInsensitive(wordBuffer, "rem") == 0) || (wordBuffer[0] == ':' && wordBuffer[1] == ':')) {
+						if ((offset == wbl) || !textQuoted(lineBuffer, offset - wbl)) {
+							styler.ColourTo(startLine + offset - wbl - 1, SCE_BAT_DEFAULT);
+							styler.ColourTo(endPos, SCE_BAT_COMMENT);
+							break;
+						}
+					}
 				}
 				// Check for Separator
 				if (IsBSeparator(wordBuffer[0])) {
@@ -619,9 +640,9 @@ void ColouriseBatchDoc(
 const char *const batchWordListDesc[] = {
 	"Internal Commands",
 	"External Commands",
-	0
+	nullptr
 };
 
 }
 
-LexerModule lmBatch(SCLEX_BATCH, ColouriseBatchDoc, "batch", 0, batchWordListDesc);
+LexerModule lmBatch(SCLEX_BATCH, ColouriseBatchDoc, "batch", nullptr, batchWordListDesc);

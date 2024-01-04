@@ -1,0 +1,8 @@
+SPAWNÌ16384Ö0
+variable:   SPAWN
+argloopÌ524288Ö0
+other:      argloop
+argloop_endÌ524288Ö0
+other:      argloop_end
+autocloseÌ16384Ö0
+variable:   autoclose

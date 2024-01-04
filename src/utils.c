@@ -64,8 +64,10 @@
 /**
  *  Tries to open the given URI in a browser.
  *  On Windows, the system's default browser is opened.
- *  On non-Windows systems, the browser command set in the preferences dialog is used. In case
- *  that fails or it is unset, the user is asked to correct or fill it.
+ *  On non-Windows systems, the browser command can be set in the preferences dialog.
+ *    If unset (empty) the system's default browser is used. If set it specifies the
+ *    command to execute. Either way, if it fails the user is prompted to correct the
+ *    pref.
  *
  *  @param uri The URI to open in the web browser.
  *
@@ -78,15 +80,26 @@ void utils_open_browser(const gchar *uri)
 	g_return_if_fail(uri != NULL);
 	win32_open_browser(uri);
 #else
-	gchar *argv[2] = { (gchar *) uri, NULL };
+	gchar *new_cmd, *argv[2] = { (gchar *) uri, NULL };
 
 	g_return_if_fail(uri != NULL);
 
-	while (!spawn_async(NULL, tool_prefs.browser_cmd, argv, NULL, NULL, NULL))
+	while (1)
 	{
-		gchar *new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
-			_("Failed to spawn the configured browser command. "
-			  "Please correct it or enter another one."),
+		/* Uses the user's default browser akin to xdg-open (in flatpak through a portal) */
+		if (EMPTY(tool_prefs.browser_cmd))
+		{
+			if (gtk_show_uri_on_window(GTK_WINDOW(main_widgets.window), uri, GDK_CURRENT_TIME, NULL))
+				break;
+		}
+		else if (spawn_async(NULL, tool_prefs.browser_cmd, argv, NULL, NULL, NULL))
+			break;
+
+		/* Allow the user to correct the pref. new_cmd may become empty. */
+		new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
+			_("Failed to spawn the configured browser command. Please "
+			  "enter a valid command or leave it empty in order "
+			  "to spawn the system default browser."),
 			tool_prefs.browser_cmd);
 
 		if (new_cmd == NULL) /* user canceled */
@@ -932,55 +945,6 @@ void utils_beep(void)
 {
 	if (prefs.beep_on_errors)
 		gdk_beep();
-}
-
-
-/* taken from busybox, thanks */
-gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
-									 gulong display_unit)
-{
-	/* The code will adjust for additional (appended) units. */
-	static const gchar zero_and_units[] = { '0', 0, 'K', 'M', 'G', 'T' };
-	static const gchar fmt[] = "%Lu %c%c";
-	static const gchar fmt_tenths[] = "%Lu.%d %c%c";
-
-	guint64 val;
-	gint frac;
-	const gchar *u;
-	const gchar *f;
-
-	u = zero_and_units;
-	f = fmt;
-	frac = 0;
-
-	val = size * block_size;
-	if (val == 0)
-		return g_strdup(u);
-
-	if (display_unit)
-	{
-		val += display_unit/2;	/* Deal with rounding. */
-		val /= display_unit;	/* Don't combine with the line above!!! */
-	}
-	else
-	{
-		++u;
-		while ((val >= 1024) && (u < zero_and_units + sizeof(zero_and_units) - 1))
-		{
-			f = fmt_tenths;
-			++u;
-			frac = ((((gint)(val % 1024)) * 10) + (1024 / 2)) / 1024;
-			val /= 1024;
-		}
-		if (frac >= 10)
-		{		/* We need to round up here. */
-			++val;
-			frac = 0;
-		}
-	}
-
-	/* If f==fmt then 'frac' and 'u' are ignored. */
-	return g_strdup_printf(f, val, frac, *u, 'b');
 }
 
 

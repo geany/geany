@@ -2,7 +2,7 @@
 <!--
 This is Geany's toolbar UI definition.
 The DTD can be found at
-http://library.gnome.org/devel/gtk/stable/GtkUIManager.html#GtkUIManager.description.
+https://docs.gtk.org/gtk3/class.UIManager.html.
 
 You can re-order all items and freely add and remove available actions.
 You cannot add new actions which are not listed in the documentation.

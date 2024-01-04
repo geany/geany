@@ -13,6 +13,10 @@ string2=string_2
 identifier=identifier
 infix=function
 infixeol=function
+backticks=backticks
+stringraw=string_2
+stringraw=string_2
+escapesequence=string_1
 
 [keywords]
 # all items must be in one line
@@ -23,11 +27,16 @@ primary=attach break detach else for function if in library new next repeat requ
 package=F FALSE Inf NA NA_integer_ NA_real_ NA_character_ NA_complex_ NaN NULL T TRUE
 package_other=
 
+[lexer_properties]
+# https://github.com/ScintillaOrg/lexilla/issues/206
+#lexer.r.escape.sequence=1
+
 [settings]
 # default extension used when saving files
 extension=R
 
-# the following characters are these which a "word" can contains, see documentation
+# these characters define word boundaries when making selections and searching
+# using word matching options
 #wordchars=_.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comments, like # in this file
@@ -38,9 +47,9 @@ comment_single=#
 
 # set to false if a comment character/string should start at column 0 of a line, true uses any
 # indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
-   #command_example();
+# 		#command_example();
 # setting to false would generate this
-#  command_example();
+# #		command_example();
 # This setting works only for single line comments
 comment_use_indent=false
 
@@ -52,3 +61,7 @@ context_action_cmd=
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
 
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+run_cmd=Rscript "%f"

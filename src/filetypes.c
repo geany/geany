@@ -180,7 +180,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( FORTH,      NONE,         "Forth",            NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( ASCIIDOC,   ASCIIDOC,     "Asciidoc",         NULL,                      SOURCE_FILE, MARKUP   );
 	FT_INIT( ABAQUS,     ABAQUS,       "Abaqus",           NULL,                      SOURCE_FILE, SCRIPT   );
-	FT_INIT( BATCH,      NONE,         "Batch",            NULL,                      SCRIPT,      SCRIPT   );
+	FT_INIT( BATCH,      BATCH,        "Batch",            NULL,                      SCRIPT,      SCRIPT   );
 	FT_INIT( POWERSHELL, POWERSHELL,   "PowerShell",       NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( RUST,       RUST,         "Rust",             NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( COFFEESCRIPT, NONE,       "CoffeeScript",     NULL,                      SOURCE_FILE, SCRIPT   );
@@ -188,6 +188,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( ZEPHIR,     ZEPHIR,       "Zephir",           NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( SMALLTALK,  NONE,         "Smalltalk",        NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( JULIA,      JULIA,        "Julia",            NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( AU3,        AUTOIT,       "AutoIt",           NULL,                      SCRIPT,      SCRIPT   );
 }
 
 
@@ -513,7 +514,8 @@ static GeanyFiletype *detect_filetype_conf_file(const gchar *utf8_filename)
 
 
 /* Detect filetype only based on the filename extension.
- * utf8_filename can include the full path. */
+ * utf8_filename can include the full path.
+ * Returns: non-NULL */
 GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 {
 	gchar *base_filename;
@@ -842,8 +844,7 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 
 	if (ft->priv->error_regex)
 		g_regex_unref(ft->priv->error_regex);
-	g_slist_foreach(ft->priv->tag_files, (GFunc) g_free, NULL);
-	g_slist_free(ft->priv->tag_files);
+	g_slist_free_full(ft->priv->tag_files, g_free);
 
 	g_free(ft->priv);
 	g_free(ft);

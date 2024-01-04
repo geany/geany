@@ -45,14 +45,14 @@
 
 static const GtkTargetEntry drag_targets[] =
 {
-	{GEANY_DND_NOTEBOOK_TAB_TYPE, GTK_TARGET_SAME_APP | GTK_TARGET_SAME_WIDGET, 0}
+	{ (gchar *) GEANY_DND_NOTEBOOK_TAB_TYPE, GTK_TARGET_SAME_APP | GTK_TARGET_SAME_WIDGET, 0 }
 };
 
-static GtkTargetEntry files_drop_targets[] = {
-	{ "STRING",			0, 0 },
-	{ "UTF8_STRING",	0, 0 },
-	{ "text/plain",		0, 0 },
-	{ "text/uri-list",	0, 0 }
+static const GtkTargetEntry files_drop_targets[] = {
+	{ (gchar *) "STRING",			0, 0 },
+	{ (gchar *) "UTF8_STRING",		0, 0 },
+	{ (gchar *) "text/plain",		0, 0 },
+	{ (gchar *) "text/uri-list",	0, 0 }
 };
 
 static const gsize MAX_MRU_DOCS = 20;
@@ -218,9 +218,9 @@ static GtkWidget *create_switch_dialog(void)
 static void update_filename_label(void)
 {
 	guint i;
-	gchar *msg = NULL;
 	guint queue_length;
 	GeanyDocument *doc;
+	GString *markup = g_string_new(NULL);
 
 	if (!switch_dialog)
 	{
@@ -234,8 +234,10 @@ static void update_filename_label(void)
 		gchar *basename;
 
 		basename = g_path_get_basename(DOC_FILENAME(doc));
+		SETPTR(basename, g_markup_escape_text(basename, -1));
+
 		if (i == mru_pos)
-			msg = g_markup_printf_escaped ("<b>%s</b>", basename);
+			g_string_printf(markup, "<b>%s</b>", basename);
 		else if (i % queue_length == mru_pos)    /* && i != mru_pos */
 		{
 			/* We have wrapped around and got to the starting document again */
@@ -244,13 +246,15 @@ static void update_filename_label(void)
 		}
 		else
 		{
-			SETPTR(basename, g_markup_printf_escaped ("\n%s", basename));
-			SETPTR(msg, g_strconcat(msg, basename, NULL));
+			g_string_append(markup, "\n");
+			if (doc->changed)
+				SETPTR(basename, g_strconcat("<span color='red'>", basename, "</span>", NULL));
+			g_string_append(markup, basename);
 		}
 		g_free(basename);
 	}
-	gtk_label_set_markup(GTK_LABEL(switch_dialog_label), msg);
-	g_free(msg);
+	gtk_label_set_markup(GTK_LABEL(switch_dialog_label), markup->str);
+	g_string_free(markup, TRUE);
 }
 
 
@@ -463,7 +467,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 		menu = gtk_menu_new();
 
 	/* clear the old menu items */
-	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
+	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) (void(*)(void)) gtk_widget_destroy, NULL);
 
 	ui_menu_add_document_items(GTK_MENU(menu), document_get_current(),
 		G_CALLBACK(tab_bar_menu_activate_cb));
@@ -508,7 +512,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);
 
-	ui_menu_popup(GTK_MENU(menu), NULL, NULL, event->button, event->time);
+	gtk_menu_popup_at_pointer(GTK_MENU(menu), (GdkEvent *) event);
 }
 
 
@@ -712,6 +716,8 @@ gint notebook_new_tab(GeanyDocument *this)
 	page = GTK_WIDGET(this->editor->sci);
 	gtk_box_pack_start(GTK_BOX(vbox), page, TRUE, TRUE, 0);
 
+	gtk_widget_show_all(vbox);
+
 	this->priv->tab_label = gtk_label_new(NULL);
 
 	/* get button press events for the tab label and the space between it and
@@ -758,16 +764,21 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	document_update_tab_label(this);
 
-	if (file_prefs.tab_order_beside)
+	if (main_status.opening_session_files)
+		cur_page = -1; /* last page */
+	else if (file_prefs.tab_order_beside)
+	{
 		cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+		if (file_prefs.tab_order_ltr)
+			cur_page++;
+	}
+	else if (file_prefs.tab_order_ltr)
+		cur_page = -1; /* last page */
 	else
-		cur_page = file_prefs.tab_order_ltr ? -2 /* hack: -2 + 1 = -1, last page */ : 0;
-	if (file_prefs.tab_order_ltr)
-		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), vbox,
-			ebox, NULL, cur_page + 1);
-	else
-		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), vbox,
-			ebox, NULL, cur_page);
+		cur_page = 0;
+
+	tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), vbox,
+		ebox, NULL, cur_page);
 
 	tab_count_changed();
 

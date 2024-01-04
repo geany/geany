@@ -145,7 +145,7 @@ on_default_tag_tree_button_press_event(GtkWidget *widget, GdkEventButton *event,
 {
 	if (event->button == 3)
 	{
-		ui_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL, event->button, event->time);
+		gtk_menu_popup_at_pointer(GTK_MENU(tv.popup_taglist), (GdkEvent *) event);
 		return TRUE;
 	}
 	return FALSE;
@@ -924,7 +924,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 /* Returns true if new_node points to a reparented directory, as a result of merging empty
  * directories.
  */
-void sidebar_openfiles_remove_iter(GtkTreeStore *tree, GtkTreeIter *iter_)
+static void sidebar_openfiles_remove_iter(GtkTreeStore *tree, GtkTreeIter *iter_)
 {
 	GtkTreeIter iter = *iter_;
 	GtkTreeIter parent;
@@ -1313,24 +1313,28 @@ static void document_action(GeanyDocument *doc, gint action)
 }
 
 
-static void on_openfiles_document_action_apply(GtkTreeModel *model, GtkTreeIter iter, gint action)
+/* Collects all documents under a given iter, filling @doc_array */
+static void on_openfiles_document_action_collect(GtkTreeModel *model, GtkTreeIter *iter,
+												 GPtrArray *doc_array)
 {
 	GeanyDocument *doc;
-	gtk_tree_model_get(model, &iter, DOCUMENTS_DOCUMENT, &doc, -1);
+	gtk_tree_model_get(model, iter, DOCUMENTS_DOCUMENT, &doc, -1);
 	if (doc)
 	{
-		document_action(doc, action);
+		g_ptr_array_add(doc_array, doc);
 	}
 	else
 	{
 		/* parent item selected */
 		GtkTreeIter child;
-		gint i = gtk_tree_model_iter_n_children(model, &iter) - 1;
 
-		while (i >= 0 && gtk_tree_model_iter_nth_child(model, &child, &iter, i))
+		if (gtk_tree_model_iter_children(model, &child, iter))
 		{
-			on_openfiles_document_action_apply(model, child, action);
-			i--;
+			do
+			{
+				on_openfiles_document_action_collect(model, &child, doc_array);
+			}
+			while (gtk_tree_model_iter_next(model, &child));
 		}
 	}
 }
@@ -1344,7 +1348,14 @@ static void on_openfiles_document_action(GtkMenuItem *menuitem, gpointer user_da
 	gint action = GPOINTER_TO_INT(user_data);
 
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
-		on_openfiles_document_action_apply(model, iter, action);
+	{
+		GPtrArray *doc_array = g_ptr_array_new();
+
+		on_openfiles_document_action_collect(model, &iter, doc_array);
+		for (guint i = 0; i < doc_array->len; i++)
+			document_action(g_ptr_array_index(doc_array, i), action);
+		g_ptr_array_free(doc_array, TRUE);
+	}
 }
 
 
@@ -1502,13 +1513,11 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 
 			/* update menu item sensitivity */
 			documents_menu_update(selection);
-			ui_menu_popup(GTK_MENU(openfiles_popup_menu), NULL, NULL,
-						  event->button, event->time);
+			gtk_menu_popup_at_pointer(GTK_MENU(openfiles_popup_menu), (GdkEvent *) event);
 		}
 		else
 		{
-			ui_menu_popup(GTK_MENU(tv.popup_taglist), NULL, NULL,
-						  event->button, event->time);
+			gtk_menu_popup_at_pointer(GTK_MENU(tv.popup_taglist), (GdkEvent *) event);
 		}
 		handled = TRUE;
 	}
@@ -1640,7 +1649,7 @@ void sidebar_focus_symbols_tab(void)
 	if (ui_prefs.sidebar_visible && interface_prefs.sidebar_symbol_visible)
 	{
 		GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
-		GtkWidget *symbol_list_scrollwin = gtk_notebook_get_nth_page(notebook, TREEVIEW_SYMBOL);
+		GtkWidget *symbol_list_scrollwin = ui_lookup_widget(main_widgets.window, "scrolledwindow2");
 
 		gtk_notebook_set_current_page(notebook, TREEVIEW_SYMBOL);
 		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(symbol_list_scrollwin)));

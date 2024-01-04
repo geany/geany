@@ -634,7 +634,7 @@ gboolean toolbar_popup_menu(GtkWidget *widget, GdkEventButton *event, gpointer u
 {
 	if (event->button == 3)
 	{
-		ui_menu_popup(GTK_MENU(ui_widgets.toolbar_menu), NULL, NULL, event->button, event->time);
+		gtk_menu_popup_at_pointer(GTK_MENU(ui_widgets.toolbar_menu), (GdkEvent *) event);
 		return TRUE;
 	}
 	return FALSE;
@@ -1899,6 +1899,12 @@ static void on_go_to_next_marker1_activate(GtkMenuItem *menuitem, gpointer user_
 static void on_go_to_previous_marker1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_PREVIOUSMARKER);
+}
+
+
+static void on_join_lines1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	keybindings_send_command(GEANY_KEY_GROUP_FORMAT, GEANY_KEYS_FORMAT_JOINLINES);
 }
 
 

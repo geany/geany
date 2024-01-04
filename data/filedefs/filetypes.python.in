@@ -21,6 +21,7 @@ fstring=string_1
 fcharacter=character
 ftriple=string_2
 ftripledouble=string_2
+attribute=identifier_1
 
 [keywords]
 # all items must be in one line
@@ -34,6 +35,8 @@ identifiers=ArithmeticError AssertionError AttributeError BaseException Blocking
 [lexer_properties]
 fold.quotes.python=1
 lexer.python.keywords2.no.sub.identifiers=1
+lexer.python.identifier.attributes=1
+lexer.python.identifier.decorator=1
 
 [settings]
 # default extension used when saving files
@@ -42,7 +45,8 @@ extension=py
 # MIME type
 mime_type=text/x-python
 
-# the following characters are these which a "word" can contains, see documentation
+# these characters define word boundaries when making selections and searching
+# using word matching options
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comment char, like # in this file
@@ -53,9 +57,9 @@ comment_single=#\s
 
 # set to false if a comment character/string should start at column 0 of a line, true uses any
 # indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
-	#command_example();
+# 		#command_example();
 # setting to false would generate this
-#	command_example();
+# #		command_example();
 # This setting works only for single line comments
 comment_use_indent=true
 
@@ -70,12 +74,11 @@ context_action_cmd=
 [build-menu]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
-# (use only one of it at one time)
 FT_00_LB=_Compile
 FT_00_CM=@PYTHON_COMMAND@ -m py_compile "%f"
 FT_00_WD=
 FT_02_LB=_Lint
-FT_02_CM=pep8 --max-line-length=80 "%f"
+FT_02_CM=pycodestyle --max-line-length=80 "%f"
 FT_02_WD=
 error_regex=(.+):([0-9]+):([0-9]+)
 EX_00_LB=_Execute

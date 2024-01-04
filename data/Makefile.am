@@ -10,6 +10,7 @@ filetypes_dist = \
 	filedefs/filetypes.Arduino.conf \
 	filedefs/filetypes.asciidoc \
 	filedefs/filetypes.asm \
+	filedefs/filetypes.autoit \
 	filedefs/filetypes.batch \
 	filedefs/filetypes.bibtex \
 	filedefs/filetypes.c \
@@ -102,6 +103,7 @@ template_files = \
 	templates/files/main.cxx \
 	templates/files/main.d \
 	templates/files/main.java \
+	templates/files/main.md \
 	templates/files/main.py \
 	templates/files/main.vala \
 	templates/files/module.erl \
@@ -124,8 +126,6 @@ nobase_dist_pkgdata_DATA = \
 	snippets.conf \
 	ui_toolbar.xml \
 	geany.glade \
-	geany-3.0.css \
-	geany-3.20.css \
 	geany.css
 
 nobase_pkgdata_DATA = \

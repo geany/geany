@@ -52,7 +52,7 @@ static gboolean on_editor_notify(GObject *object, GeanyEditor *editor,
 	GeanyData *geany_data = plugin->geany_data;
 
 	/* For detailed documentation about the SCNotification struct, please see
-	 * http://www.scintilla.org/ScintillaDoc.html#Notifications. */
+	 * https://www.scintilla.org/ScintillaDoc.html#Notifications. */
 	switch (nt->nmhdr.code)
 	{
 		case SCN_UPDATEUI:

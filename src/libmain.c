@@ -849,11 +849,9 @@ gboolean main_handle_filename(const gchar *locale_filename)
 
 		doc = document_find_by_filename(utf8_filename);
 		if (doc)
-			document_show_tab(doc);
+			document_show_tab_idle(doc);
 		else
 			doc = document_new_file(utf8_filename, NULL, NULL);
-		if (doc != NULL)
-			ui_add_recent_document(doc);
 		g_free(utf8_filename);
 		g_free(filename);
 		return TRUE;
@@ -884,11 +882,11 @@ static void open_cl_files(gint argc, gchar **argv)
 #endif
 		if (filename && ! main_handle_filename(filename))
 		{
-			const gchar *msg = _("Could not find file '%s'.");
+			gchar *msg = g_strdup_printf(_("Could not find file '%s'."), filename);
 
-			g_printerr(msg, filename);	/* also print to the terminal */
-			g_printerr("\n");
-			ui_set_statusbar(TRUE, msg, filename);
+			g_printerr("%s\n", msg);	/* also print to the terminal */
+			ui_set_statusbar(TRUE, "%s", msg);
+			g_free(msg);
 		}
 		g_free(filename);
 	}
@@ -1176,9 +1174,11 @@ gint main_lib(gint argc, gchar **argv)
 	ui_set_statusbar(TRUE, _("This is Geany %s."), main_get_version_string());
 	if (config_dir_result != 0)
 	{
-		const gchar *message = _("Configuration directory could not be created (%s).");
-		ui_set_statusbar(TRUE, message, g_strerror(config_dir_result));
-		g_warning(message, g_strerror(config_dir_result));
+		gchar *message = g_strdup_printf(_("Configuration directory could not be created (%s)."),
+				g_strerror(config_dir_result));
+		ui_set_statusbar(TRUE, "%s", message);
+		g_warning("%s", message);
+		g_free(message);
 	}
 #ifdef HAVE_SOCKET
 	if (socket_info.lock_socket == -1)

@@ -104,6 +104,7 @@ enum
 };
 
 
+static guint show_tab_idle = 0;
 static guint doc_id_counter = 0;
 
 
@@ -114,9 +115,9 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *btn_1, gint response_1,
+	const gchar *btn_2, gint response_2,
+	const gchar *btn_3, gint response_3,
 	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(11, 12);
 
 
@@ -609,13 +610,6 @@ void document_try_focus(GeanyDocument *doc, GtkWidget *source_widget)
 }
 
 
-static gboolean on_idle_focus(gpointer doc)
-{
-	document_try_focus(doc, NULL);
-	return FALSE;
-}
-
-
 /* Creates a new document and editor, adding a tab in the notebook.
  * @return The created document */
 static GeanyDocument *document_create(const gchar *utf8_filename)
@@ -865,9 +859,6 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 
 	document_set_filetype(doc, ft); /* also re-parses tags */
 
-	/* now the document is fully ready, display it (see notebook_new_tab()) */
-	gtk_widget_show(document_get_notebook_child(doc));
-
 	ui_set_window_title(doc);
 	build_menu_update(doc);
 	document_set_text_changed(doc, FALSE);
@@ -876,7 +867,6 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
 	/* bring it in front, jump to the start and grab the focus */
 	editor_goto_pos(doc->editor, 0, FALSE);
-	document_try_focus(doc, NULL);
 
 #ifdef USE_GIO_FILEMON
 	monitor_file_setup(doc);
@@ -1027,15 +1017,18 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 
 	if (filedata->readonly)
 	{
-		const gchar *warn_msg = _(
-			"The file \"%s\" could not be opened properly and has been truncated. " \
-			"This can occur if the file contains a NULL byte. " \
-			"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
+		gchar *warn_msg = g_strdup_printf(_(
+			"The file \"%s\" could not be opened properly and has been truncated. "
+			"This can occur if the file contains a NULL byte. "
+			"Be aware that saving it can cause data loss.\nThe file was set to read-only."),
+			display_filename);
 
 		if (main_status.main_window_realized)
-			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, display_filename);
+			dialogs_show_msgbox(GTK_MESSAGE_WARNING, "%s", warn_msg);
 
-		ui_set_statusbar(TRUE, warn_msg, display_filename);
+		ui_set_statusbar(TRUE, "%s", warn_msg);
+
+		g_free(warn_msg);
 	}
 
 	return TRUE;
@@ -1275,8 +1268,40 @@ void document_apply_indent_settings(GeanyDocument *doc)
 
 void document_show_tab(GeanyDocument *doc)
 {
+	if (show_tab_idle)
+	{
+		g_source_remove(show_tab_idle);
+		show_tab_idle = 0;
+	}
+
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 		document_get_notebook_page(doc));
+
+	/* finally, let the editor widget grab the focus so you can start coding
+	 * right away */
+	document_try_focus(doc, NULL);
+}
+
+
+static gboolean show_tab_cb(gpointer data)
+{
+	GeanyDocument *doc = (GeanyDocument *) data;
+
+	show_tab_idle = 0;
+	/* doc might not be valid e.g. if user closed a tab whilst Geany is opening files */
+	if (DOC_VALID(doc))
+		document_show_tab(doc);
+
+	return G_SOURCE_REMOVE;
+}
+
+
+void document_show_tab_idle(GeanyDocument *doc)
+{
+	if (show_tab_idle)
+		g_source_remove(show_tab_idle);
+
+	show_tab_idle = g_idle_add(show_tab_cb, doc);
 }
 
 
@@ -1327,8 +1352,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		if (doc != NULL)
 		{
 			ui_add_recent_document(doc);	/* either add or reorder recent item */
-			/* show the doc before reload dialog */
-			document_show_tab(doc);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
 		}
 	}
@@ -1498,9 +1521,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 				display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
 				(readonly) ? _(", read-only") : "");
 		}
-
-		/* now the document is fully ready, display it (see notebook_new_tab()) */
-		gtk_widget_show(document_get_notebook_child(doc));
 	}
 
 	g_free(display_filename);
@@ -1512,9 +1532,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	/* now bring the file in front */
 	editor_goto_pos(doc->editor, pos, FALSE);
 
-	/* finally, let the editor widget grab the focus so you can start coding
-	 * right away */
-	g_idle_add(on_idle_focus, doc);
 	return doc;
 }
 
@@ -1860,9 +1877,6 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	 * to ignore any earlier events */
 	monitor_file_setup(doc);
 	doc->priv->file_disk_status = FILE_IGNORE;
-
-	if (ret)
-		ui_add_recent_document(doc);
 	return ret;
 }
 
@@ -2038,6 +2052,7 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
 		doc->real_path = utils_get_real_path(locale_filename);
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
 		monitor_file_setup(doc);
+		ui_add_recent_document(doc);
 	}
 	return NULL;
 }
@@ -2812,6 +2827,9 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		editor_set_indentation_guides(doc->editor);
 		build_menu_update(doc);
 		queue_colourise(doc);
+		/* forces re-setting SCI_SETKEYWORDS which seems to be needed with
+		 * Scintilla 5 to colorize them properly */
+		doc->priv->keyword_hash = 0;
 		if (type->priv->symbol_list_sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
 			doc->priv->symbol_list_sort_mode = interface_prefs.symbols_sort_mode;
 		else
@@ -3434,9 +3452,9 @@ gboolean document_close_all(void)
  * */
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *btn_1, gint response_1,
+	const gchar *btn_2, gint response_2,
+	const gchar *btn_3, gint response_3,
 	const gchar *extra_text, const gchar *format, ...)
 {
 	va_list args;

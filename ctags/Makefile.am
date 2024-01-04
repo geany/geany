@@ -48,6 +48,7 @@ parsers = \
 	parsers/ada.c \
 	parsers/asciidoc.c \
 	parsers/asm.c \
+	parsers/autoit.c \
 	parsers/basic.c \
 	parsers/bibtex.c \
 	parsers/geany_c.c \
@@ -58,6 +59,7 @@ parsers = \
 	parsers/css.c \
 	parsers/diff.c \
 	parsers/geany_docbook.c \
+	parsers/dosbatch.c \
 	parsers/erlang.c \
 	parsers/flex.c \
 	parsers/fortran.c \
@@ -110,6 +112,8 @@ libctags_la_SOURCES = \
 	dsl/optscript.h \
 	dsl/es.c \
 	dsl/es.h \
+	libreadtags/readtags.c \
+	libreadtags/readtags.h \
 	main/args.c \
 	main/args_p.h \
 	main/colprint.c \

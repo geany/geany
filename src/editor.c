@@ -233,7 +233,7 @@ static void add_kb(GKeyFile *keyfile, const gchar *group, gchar **keys)
 
 		gtk_accel_group_connect(snippet_accel_group, key, mods, 0,
 			g_cclosure_new_swap((GCallback)on_snippet_keybinding_activate,
-				g_strdup(keys[i]), (GClosureNotify)g_free));
+				g_strdup(keys[i]), CLOSURE_NOTIFY(g_free)));
 	}
 }
 
@@ -346,7 +346,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		g_signal_emit_by_name(geany_object, "update-editor-menu",
 			current_word, editor_info.click_pos, doc);
 
-		ui_menu_popup(GTK_MENU(main_widgets.editor_menu), NULL, NULL, event->button, event->time);
+		gtk_menu_popup_at_pointer(GTK_MENU(main_widgets.editor_menu), (GdkEvent *) event);
 		return TRUE;
 	}
 	return FALSE;
@@ -709,7 +709,6 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_current_position(editor->sci);
 	gint line = sci_get_current_line(editor->sci) + 1;
-	gchar typed = sci_get_char_at(sci, pos - 1);
 	gchar brace_char;
 	gchar *name;
 	GeanyFiletype *ft = editor->document->file_type;
@@ -729,9 +728,6 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 		/* allow for a space between word and operator */
 		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 			pos--;
-
-		if (pos > 0)
-			typed = sci_get_char_at(sci, pos - 1);
 	}
 
 	autocomplete_suffix_len = scope_autocomplete_suffix(sci, ft->lang, pos,
@@ -1110,7 +1106,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			/* Visible lines are only laid out accurately just before painting,
 			 * so we need to only call editor_scroll_to_line here, because the document
 			 * may have line wrapping and folding enabled.
-			 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping
+			 * https://scintilla.sourceforge.io/ScintillaDoc.html#LineWrapping
 			 * This is important e.g. when loading a session and switching pages
 			 * and having the cursor scroll in view. */
 			 /* FIXME: Really we want to do this just before painting, not after it
@@ -3542,8 +3538,8 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 	if (sci_get_style_at(sci, indent_pos) == style || indent_pos >= sci_get_length(sci))
 	{
 		gchar *previous_line = sci_get_line(sci, cur_line - 1);
-		/* the type of comment, '*' (C/C++/Java), '+' and the others (D) */
-		const gchar *continuation = "*";
+		/* the type of comment, '*' (C/C++/Java), '+' D comment that nests */
+		const gchar *continuation = (style == SCE_D_COMMENTNESTED) ? "+" : "*";
 		const gchar *whitespace = ""; /* to hold whitespace if needed */
 		gchar *result;
 		gint len = strlen(previous_line);
@@ -3576,10 +3572,13 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 		{ /* we are on the second line of a multi line comment, so we have to insert white space */
 			whitespace = " ";
 		}
-
-		if (style == SCE_D_COMMENTNESTED)
-			continuation = "+"; /* for nested comments in D */
-
+		else if (!(g_str_has_prefix(previous_line + i, continuation) &&
+			(i + 1 == len || isspace(previous_line[i + 1]))))
+		{
+			// previous line isn't formatted so abort
+			g_free(previous_line);
+			return;
+		}
 		result = g_strconcat(whitespace, continuation, " ", NULL);
 		sci_add_text(sci, result);
 		g_free(result);
@@ -4750,8 +4749,12 @@ gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 	sci_goto_pos(editor->sci, pos, TRUE);
 	editor->scroll_percent = 0.25F;
 
-	/* finally switch to the page */
-	document_show_tab(editor->document);
+	/* switch to the page, via idle callback in case of batch-opening */
+	if (main_status.opening_session_files)
+		document_show_tab_idle(editor->document);
+	else
+		document_show_tab(editor->document);
+
 	return TRUE;
 }
 
@@ -4959,14 +4962,6 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	/* input method editor's candidate window behaviour */
 	SSM(sci, SCI_SETIMEINTERACTION, editor_prefs.ime_interaction, 0);
-
-#ifdef GDK_WINDOWING_QUARTZ
-# if ! GTK_CHECK_VERSION(3,16,0)
-	/* "retina" (HiDPI) display support on OS X - requires disabling buffered draw
-	 * on older GTK versions */
-	SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);
-# endif
-#endif
 
 	/* only connect signals if this is for the document notebook, not split window */
 	if (editor->sci == NULL)
@@ -5204,6 +5199,15 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
+
+	/* Change history */
+	guint change_history_mask;
+	change_history_mask = SC_CHANGE_HISTORY_DISABLED;
+	if (editor_prefs.change_history_markers)
+		change_history_mask |= SC_CHANGE_HISTORY_ENABLED|SC_CHANGE_HISTORY_MARKERS;
+	if (editor_prefs.change_history_indicators)
+		change_history_mask |= SC_CHANGE_HISTORY_ENABLED|SC_CHANGE_HISTORY_INDICATORS;
+	SSM(sci, SCI_SETCHANGEHISTORY, change_history_mask, 0);
 
 	/* caret Y policy */
 	caret_y_policy = CARET_EVEN;

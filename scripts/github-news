@@ -6,6 +6,26 @@ sed -n -e '
 n
 :next
 
+# Merge continuation lines (starting with 6+ spaces) into the previous line.
+# Implementation is a bit convoluted, but heres the gist of it:
+# hold the current line...
+h
+# ...read next one (potential continuation)
+n
+# if its a continuation line...
+/^ \{6,\}/{
+  # swap back the non-continuation line
+  x
+  # ...so to append the continuation
+  G
+  # replace the newline + spaces with a single space
+  s/\n */ /
+  # and check next line again
+  b next
+}
+# not a continuation line, restore the current and hold the next
+x
+
 # stop at the second header
 /^[A-Za-z0-9_-]/q
 # strip the leading indentation
@@ -17,6 +37,8 @@ s%PR#\([0-9]\{1,\}\)%[\0](https://github.com/geany/geany/pull/\1)%g
 s%Issue#\([0-9]\{1,\}\)%[\0](https://github.com/geany/geany/issues/\1)%g
 
 p
-n
+
+# restore the non-continuation line we peeked at, and start next cycle
+x
 b next
 ' < NEWS

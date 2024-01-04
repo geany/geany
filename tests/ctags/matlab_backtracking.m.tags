@@ -1,2 +1,2 @@
-backtrack(xc,d,fc,fnc,DDfnc,c,gamma,eps)Ì16Ö0
-function:   backtrack(xc,d,fc,fnc,DDfnc,c,gamma,eps)
+backtrackÌ16Ö0
+function:   backtrack

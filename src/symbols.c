@@ -436,7 +436,7 @@ static void tag_list_add_groups(GtkTreeStore *tree_store, TMParserType lang)
 
 	g_return_if_fail(top_level_iter_names);
 
-	for (i = 0; title = tm_parser_get_sidebar_info(lang, i, &icon_id); i++)
+	for (i = 0; (title = tm_parser_get_sidebar_info(lang, i, &icon_id)) != NULL; i++)
 	{
 		GtkTreeIter *iter = &tv_iters[i];
 		GdkPixbuf *icon = NULL;
@@ -492,7 +492,8 @@ static void hide_empty_rows(GtkTreeStore *store)
 }
 
 
-static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean found_parent)
+static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean include_scope,
+	gboolean include_line)
 {
 	gchar *utf8_name;
 	const gchar *scope = tag->scope;
@@ -523,7 +524,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 		g_string_truncate(buffer, 0);
 
 	/* check first char of scope is a wordchar */
-	if (!found_parent && scope &&
+	if (include_scope && scope &&
 		strpbrk(scope, GEANY_WORDCHARS) == scope)
 	{
 		const gchar *sep = tm_parser_scope_separator_printable(tag->lang);
@@ -536,13 +537,15 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (! doc_is_utf8)
 		g_free(utf8_name);
 
-	g_string_append_printf(buffer, " [%lu]", tag->line);
+	if (include_line)
+		g_string_append_printf(buffer, " [%lu]", tag->line);
 
 	return buffer->str;
 }
 
 
-static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
+// Returns NULL if the tag is not a variable or callable
+static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag, gboolean include_scope)
 {
 	gchar *utf8_name = tm_parser_format_function(tag->lang, tag->name,
 		tag->arglist, tag->var_type, tag->scope);
@@ -550,7 +553,8 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 	if (!utf8_name && tag->var_type &&
 		tag->type & (tm_tag_field_t | tm_tag_member_t | tm_tag_variable_t | tm_tag_externvar_t))
 	{
-		utf8_name = tm_parser_format_variable(tag->lang, tag->name, tag->var_type);
+		gchar *scope = include_scope ? tag->scope : NULL;
+		utf8_name = tm_parser_format_variable(tag->lang, tag->name, tag->var_type, scope);
 	}
 
 	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
@@ -954,8 +958,8 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 					/* only update fields that (can) have changed (name that holds line
 					 * number, tooltip, and the tag itself) */
-					name = get_symbol_name(doc, found, parent_name != NULL);
-					tooltip = get_symbol_tooltip(doc, found);
+					name = get_symbol_name(doc, found, parent_name == NULL, TRUE);
+					tooltip = get_symbol_tooltip(doc, found, FALSE);
 					gtk_tree_store_set(store, &iter,
 							SYMBOLS_COLUMN_NAME, name,
 							SYMBOLS_COLUMN_TOOLTIP, tooltip,
@@ -1011,8 +1015,8 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			expand = ! gtk_tree_model_iter_has_child(model, parent);
 
 			/* insert the new element */
-			name = get_symbol_name(doc, tag, parent_name != NULL);
-			tooltip = get_symbol_tooltip(doc, tag);
+			name = get_symbol_name(doc, tag, parent_name == NULL, TRUE);
+			tooltip = get_symbol_tooltip(doc, tag, FALSE);
 			gtk_tree_store_insert_with_values(store, &iter, parent, 0,
 					SYMBOLS_COLUMN_NAME, name,
 					SYMBOLS_COLUMN_TOOLTIP, tooltip,
@@ -1410,81 +1414,22 @@ static guint get_tag_class(const TMTag *tag)
 }
 
 
-/* positions a popup at the caret from the ScintillaObject in @p data */
-static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer data)
+/* opens menu at caret position */
+static void show_menu_at_caret(GtkMenu* menu, ScintillaObject *sci)
 {
-	gint line_height;
-	GdkScreen *screen = gtk_widget_get_screen(GTK_WIDGET(menu));
-	gint monitor_num;
-	GdkRectangle monitor;
-	GtkRequisition req;
-	GdkEventButton *event_button = g_object_get_data(G_OBJECT(menu), "geany-button-event");
-
-	if (event_button)
-	{
-		/* if we got a mouse click, popup at that position */
-		*x = (gint) event_button->x_root;
-		*y = (gint) event_button->y_root;
-		line_height = 0; /* we don't want to offset below the line or anything */
-	}
-	else /* keyboard positioning */
-	{
-		ScintillaObject *sci = data;
-		GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
-		gint pos = sci_get_current_position(sci);
-		gint line = sci_get_line_from_position(sci, pos);
-		gint pos_x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
-		gint pos_y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos);
-
-		line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
-
-		gdk_window_get_origin(window, x, y);
-		*x += pos_x;
-		*y += pos_y;
-	}
-
-	monitor_num = gdk_screen_get_monitor_at_point(screen, *x, *y);
-
-	gtk_widget_get_preferred_size(GTK_WIDGET(menu), NULL, &req);
-
-#if GTK_CHECK_VERSION(3, 4, 0)
-	gdk_screen_get_monitor_workarea(screen, monitor_num, &monitor);
-#else
-	gdk_screen_get_monitor_geometry(screen, monitor_num, &monitor);
-#endif
-
-	/* put on one size of the X position, but within the monitor */
-	if (gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL)
-	{
-		if (*x - req.width - 1 >= monitor.x)
-			*x -= req.width + 1;
-		else if (*x + req.width > monitor.x + monitor.width)
-			*x = monitor.x;
-		else
-			*x += 1;
-	}
-	else
-	{
-		if (*x + req.width + 1 <= monitor.x + monitor.width)
-			*x = MAX(monitor.x, *x + 1);
-		else if (*x - req.width - 1 >= monitor.x)
-			*x -= req.width + 1;
-		else
-			*x = monitor.x + MAX(0, monitor.width - req.width);
-	}
-
-	/* try to put, in order:
-	 * 1. below the Y position, under the line
-	 * 2. above the Y position
-	 * 3. within the monitor */
-	if (*y + line_height + req.height <= monitor.y + monitor.height)
-		*y = MAX(monitor.y, *y + line_height);
-	else if (*y - req.height >= monitor.y)
-		*y = *y - req.height;
-	else
-		*y = monitor.y + MAX(0, monitor.height - req.height);
-
-	*push_in = FALSE;
+	GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
+	gint pos = sci_get_current_position(sci);
+	gint line = sci_get_line_from_position(sci, pos);
+	gint line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
+	gint x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
+	gint y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos);
+	gint pos_next = sci_get_position_after(sci, pos);
+	gint char_width = 0;
+	/* if next pos is on the same Y (same line and not after wrapping), diff the X */
+	if (pos_next > pos && SSM(sci, SCI_POINTYFROMPOSITION, 0, pos_next) == y)
+		char_width = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos_next) - x;
+	GdkRectangle rect = {x, y, char_width, line_height};
+	gtk_menu_popup_at_rect(GTK_MENU(menu), window, &rect, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, NULL);
 }
 
 
@@ -1492,8 +1437,8 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 {
 	GtkWidget *first = NULL;
 	GtkWidget *menu;
+	GtkSizeGroup *group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	GdkEvent *event;
-	GdkEventButton *button_event = NULL;
 	TMTag *tmtag;
 	guint i;
 	gchar **short_names, **file_names;
@@ -1511,27 +1456,44 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 	{
 		GtkWidget *item;
 		GtkWidget *label;
+		GtkWidget *box;
 		GtkWidget *image;
 		gchar *fname = short_names[i];
 		gchar *text;
+		gchar *tooltip;
+		gchar *sym = get_symbol_tooltip(doc, tmtag, TRUE);
+
+		if (!sym)
+			sym = g_strdup(get_symbol_name(doc, tmtag, TRUE, FALSE));
+		if (!sym)
+			sym = g_strdup("");
 
 		if (! first && have_best)
-			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("<b>%s: %lu</b>"), fname, tmtag->line);
+			text = g_markup_printf_escaped("<b>%s:%lu</b>", fname, tmtag->line);
 		else
-			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
-			text = g_markup_printf_escaped(_("%s: %lu"), fname, tmtag->line);
+			text = g_markup_printf_escaped("%s:%lu", fname, tmtag->line);
+
+		tooltip = g_markup_printf_escaped("%s:%lu\n<small><tt>%s</tt></small>", fname, tmtag->line, sym);
 
 		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
+		box = g_object_new(GTK_TYPE_BOX, "orientation", GTK_ORIENTATION_HORIZONTAL, "spacing", 12, NULL);
 		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0, NULL);
-		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", label, "always-show-image", TRUE, NULL);
+		gtk_size_group_add_widget(group, label);
+		gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
+		g_free(text);
+		text = g_markup_printf_escaped("<small><tt>%s</tt></small>", sym);
+		gtk_box_pack_start(GTK_BOX(box), g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0,
+					"max-width-chars", 80, "ellipsize", PANGO_ELLIPSIZE_END, NULL), FALSE, FALSE, 0);
+		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", box, "always-show-image", TRUE,
+					"tooltip-markup", tooltip, NULL);
 		g_signal_connect_data(item, "activate", G_CALLBACK(on_goto_popup_item_activate),
-		                      tm_tag_ref(tmtag), (GClosureNotify) tm_tag_unref, 0);
+		                      tm_tag_ref(tmtag), CLOSURE_NOTIFY(tm_tag_unref), 0);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
 		if (! first)
 			first = item;
 
+		g_free(sym);
 		g_free(text);
 		g_free(fname);
 	}
@@ -1544,14 +1506,13 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 
 	event = gtk_get_current_event();
 	if (event && event->type == GDK_BUTTON_PRESS)
-		button_event = (GdkEventButton *) event;
+		gtk_menu_popup_at_pointer(GTK_MENU(menu), event);
 	else
+		show_menu_at_caret(GTK_MENU(menu), doc->editor->sci);
+	if (event)
 		gdk_event_free(event);
 
-	g_object_set_data_full(G_OBJECT(menu), "geany-button-event", button_event,
-	                       button_event ? (GDestroyNotify) gdk_event_free : NULL);
-	ui_menu_popup(GTK_MENU(menu), goto_popup_position_func, doc->editor->sci,
-				  button_event ? button_event->button : 0, gtk_get_current_event_time ());
+	g_object_unref(group);
 }
 
 

@@ -57,7 +57,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 246
+#define GEANY_API_VERSION 247
 
 /* hack to have a different ABI when built with different GTK major versions
  * because loading plugins linked to a different one leads to crashes.
@@ -68,7 +68,7 @@ G_BEGIN_DECLS
  * Changing this forces all plugins to be recompiled before Geany can load them. */
 /* This should usually stay the same if fields are only appended, assuming only pointers to
  * structs and not structs themselves are declared by plugins. */
-#define GEANY_ABI_VERSION (72 << GEANY_ABI_SHIFT)
+#define GEANY_ABI_VERSION (73 << GEANY_ABI_SHIFT)
 
 
 /** Defines a function to check the plugin is safe to load.

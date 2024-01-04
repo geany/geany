@@ -137,7 +137,7 @@ typedef enum
 
 static gpointer last_toolbutton_action = GBO_TO_POINTER(GEANY_GBO_BUILD);
 
-static BuildMenuItems menu_items = {NULL, {NULL, NULL, NULL, NULL}};
+static BuildMenuItems build_menu_items = {NULL, {NULL, NULL, NULL, NULL}};
 
 static struct
 {
@@ -179,8 +179,8 @@ void build_finalize(void)
 	g_free(build_info.dir);
 	g_free(build_info.custom_target);
 
-	if (menu_items.menu != NULL && GTK_IS_WIDGET(menu_items.menu))
-		gtk_widget_destroy(menu_items.menu);
+	if (build_menu_items.menu != NULL && GTK_IS_WIDGET(build_menu_items.menu))
+		gtk_widget_destroy(build_menu_items.menu);
 }
 
 
@@ -771,7 +771,7 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
 	GError *error = NULL;
-	gchar *argv[] = { "/bin/sh", "-c", NULL, NULL };
+	const gchar *argv[] = { "/bin/sh", "-c", NULL, NULL };
 	gchar *working_dir;
 	gchar *utf8_working_dir;
 	gchar *cmd_string;
@@ -813,7 +813,7 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	build_info.file_type_id = (doc == NULL) ? GEANY_FILETYPES_NONE : doc->file_type->id;
 	build_info.message_count = 0;
 
-	if (!spawn_with_callbacks(working_dir, cmd, argv, NULL, 0, NULL, NULL, build_iofunc,
+	if (!spawn_with_callbacks(working_dir, cmd, (gchar **) argv, NULL, 0, NULL, NULL, build_iofunc,
 		GINT_TO_POINTER(0), 0, build_iofunc, GINT_TO_POINTER(1), 0, build_exit_cb, NULL,
 		&build_info.pid, &error))
 	{
@@ -1385,11 +1385,11 @@ static void create_build_menu_item(GtkWidget *menu, GeanyKeyGroup *group, GtkAcc
 	{
 		g_signal_connect(item, "activate", G_CALLBACK(bs->cb), GRP_CMD_TO_POINTER(grp,cmd));
 	}
-	menu_items.menu_item[grp][cmd] = item;
+	build_menu_items.menu_item[grp][cmd] = item;
 }
 
 
-static void create_build_menu(BuildMenuItems *build_menu_items)
+static void create_build_menu(BuildMenuItems *menu_items)
 {
 	GtkWidget *menu;
 	GtkAccelGroup *accel_group = gtk_accel_group_new();
@@ -1397,10 +1397,10 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 	guint i, j;
 
 	menu = gtk_menu_new();
-	build_menu_items->menu_item[GEANY_GBG_FT] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_FT]);
-	build_menu_items->menu_item[GEANY_GBG_NON_FT] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_NON_FT]);
-	build_menu_items->menu_item[GEANY_GBG_EXEC] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_EXEC]);
-	build_menu_items->menu_item[GBG_FIXED] = g_new0(GtkWidget*, GBF_COUNT);
+	menu_items->menu_item[GEANY_GBG_FT] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_FT]);
+	menu_items->menu_item[GEANY_GBG_NON_FT] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_NON_FT]);
+	menu_items->menu_item[GEANY_GBG_EXEC] = g_new0(GtkWidget*, build_groups_count[GEANY_GBG_EXEC]);
+	menu_items->menu_item[GBG_FIXED] = g_new0(GtkWidget*, GBF_COUNT);
 
 	for (i = 0; build_menu_specs[i].build_grp != MENU_DONE; ++i)
 	{
@@ -1410,7 +1410,7 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 			GtkWidget *item = gtk_separator_menu_item_new();
 			gtk_widget_show(item);
 			gtk_container_add(GTK_CONTAINER(menu), item);
-			build_menu_items->menu_item[GBG_FIXED][bs->build_cmd] = item;
+			menu_items->menu_item[GBG_FIXED][bs->build_cmd] = item;
 		}
 		else if (bs->fix_label != NULL)
 		{
@@ -1434,7 +1434,7 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 			create_build_menu_item(menu, keygroup, accel_group, bs, lbl, bs->build_grp, bs->build_cmd);
 		}
 	}
-	build_menu_items->menu = menu;
+	menu_items->menu = menu;
 	gtk_widget_show(menu);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_build1")), menu);
 }
@@ -1464,8 +1464,8 @@ void build_menu_update(GeanyDocument *doc)
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
-	if (menu_items.menu == NULL)
-		create_build_menu(&menu_items);
+	if (build_menu_items.menu == NULL)
+		create_build_menu(&build_menu_items);
 	if (doc == NULL)
 		doc = document_get_current();
 	have_path = doc != NULL && doc->file_name != NULL;
@@ -1481,15 +1481,15 @@ void build_menu_update(GeanyDocument *doc)
 			case MENU_SEPARATOR:
 				if (vis == TRUE)
 				{
-					gtk_widget_show_all(menu_items.menu_item[GBG_FIXED][bs->build_cmd]);
+					gtk_widget_show_all(build_menu_items.menu_item[GBG_FIXED][bs->build_cmd]);
 					vis = FALSE;
 				}
 				else
-					gtk_widget_hide(menu_items.menu_item[GBG_FIXED][bs->build_cmd]);
+					gtk_widget_hide(build_menu_items.menu_item[GBG_FIXED][bs->build_cmd]);
 				break;
 			case MENU_NEXT_ERROR:
 			case MENU_PREV_ERROR:
-				gtk_widget_set_sensitive(menu_items.menu_item[GBG_FIXED][bs->build_cmd], have_errors);
+				gtk_widget_set_sensitive(build_menu_items.menu_item[GBG_FIXED][bs->build_cmd], have_errors);
 				vis |= TRUE;
 				break;
 			case MENU_COMMANDS:
@@ -1508,7 +1508,7 @@ void build_menu_update(GeanyDocument *doc)
 				}
 				for (cmd = bs->build_cmd; cmd < cmdcount; ++cmd)
 				{
-					GtkWidget *menu_item = menu_items.menu_item[grp][cmd];
+					GtkWidget *menu_item = build_menu_items.menu_item[grp][cmd];
 					const gchar *label;
 					bc = get_build_cmd(doc, grp, cmd, NULL);
 					if (bc)
@@ -2266,7 +2266,7 @@ BuildMenuItems *build_get_menu_items(gint filetype_idx)
 {
 	BuildMenuItems *items;
 
-	items = &menu_items;
+	items = &build_menu_items;
 	if (items->menu == NULL)
 		create_build_menu(items);
 	return items;

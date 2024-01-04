@@ -79,7 +79,7 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->source_files = g_ptr_array_new();
 	theWorkspace->typename_array = g_ptr_array_new();
 	theWorkspace->global_typename_array = g_ptr_array_new();
-	theWorkspace->source_file_map = g_hash_table_new_full(g_str_hash, g_str_equal, NULL,
+	theWorkspace->source_file_map = g_hash_table_new_full(g_str_hash, g_str_equal, g_free,
 		free_ptr_array);
 
 	tm_ctags_init();
@@ -192,7 +192,7 @@ void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
 	if (!file_arr)
 	{
 		file_arr = g_ptr_array_new();
-		g_hash_table_insert(theWorkspace->source_file_map, source_file->short_name, file_arr);
+		g_hash_table_insert(theWorkspace->source_file_map, g_strdup(source_file->short_name), file_arr);
 	}
 	g_ptr_array_add(file_arr, source_file);
 }
@@ -740,12 +740,12 @@ static gboolean is_workspace_tag(TMTag *tag, CopyInfo *info)
 }
 
 
-static guint copy_tags(GPtrArray *dst, TMTag **src, guint src_len, GHashTable *name_table,
+static void copy_tags(GPtrArray *dst, TMTag **src, guint src_len, GHashTable *name_table,
 	gint num, gboolean (*predicate) (TMTag *, CopyInfo *), CopyInfo *info)
 {
 	guint i;
 
-	g_return_val_if_fail(src && dst, 0);
+	g_return_if_fail(src && dst);
 
 	for (i = 0; i < src_len && num > 0; i++)
 	{
@@ -845,7 +845,7 @@ static GHashTable *get_includes(TMSourceFile *source, GPtrArray **header_candida
 		return includes;
 
 	src_basename = g_strdup(source->short_name);
-	if (ptr = strrchr(src_basename, '.'))
+	if ((ptr = strrchr(src_basename, '.')) != NULL)
 		*ptr = '\0';
 
 	headers = tm_tags_extract(source->tags_array, tm_tag_include_t);
@@ -863,7 +863,7 @@ static GHashTable *get_includes(TMSourceFile *source, GPtrArray **header_candida
 			if (!*header_candidates)
 			{
 				gchar *hdr_basename = g_strdup(hdr_name);
-				if (ptr = strrchr(hdr_basename, '.'))
+				if ((ptr = strrchr(hdr_basename, '.')) != NULL)
 					*ptr = '\0';
 
 				if (g_strcmp0(hdr_basename, src_basename) == 0)
@@ -906,7 +906,12 @@ static gint sort_found_tags(gconstpointer a, gconstpointer b, gpointer user_data
 	 * followed by workspace tags,
 	 * followed by global tags */
 	if (t1->type & tm_tag_local_var_t && t2->type & tm_tag_local_var_t)
-		return info->sort_by_name ? g_strcmp0(t1->name, t2->name) : t2->line - t1->line;
+	{
+		if (info->sort_by_name)
+			return g_strcmp0(t1->name, t2->name);
+		else /* just like (t2->line - t1->line), but doesn't overflow converting to int */
+			return (t2->line > t1->line) ? 1 : ((t2->line < t1->line) ? -1 : 0);
+	}
 	else if (t1->type & tm_tag_local_var_t)
 		return -1;
 	else if (t2->type & tm_tag_local_var_t)
@@ -950,7 +955,6 @@ GPtrArray *tm_workspace_find_prefix(const char *prefix,
 	const gchar *current_scope,
 	guint max_num)
 {
-	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags = g_ptr_array_new();
 	GPtrArray *header_candidates;
 	SortInfo sort_info;
@@ -1103,7 +1107,7 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 
 		g_free(stripped);
 
-		for (i = 0; parent = split_strv[i]; i++)
+		for (i = 0; (parent = split_strv[i]) != NULL; i++)
 		{
 			GPtrArray *parent_tags;
 

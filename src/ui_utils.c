@@ -118,7 +118,6 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static void recent_project_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *progress_bar_create(void);
-static void ui_menu_sort_by_label(GtkMenu *menu);
 
 
 /* simple wrapper for gtk_widget_set_sensitive() to allow widget being NULL */
@@ -2122,6 +2121,33 @@ void ui_table_add_row(GtkTable *table, gint row, ...)
 }
 
 
+/* comment-out all lines that are not already commented out except sections */
+static void comment_conf_files(ScintillaObject *sci)
+{
+	gint line, line_count;
+
+	line_count = sci_get_line_count(sci);
+	for (line = 0; line < line_count; line++)
+	{
+		gint pos_start = sci_get_position_from_line(sci, line);
+		gint pos_end = sci_get_line_end_position(sci, line);
+		gint pos;
+
+		for (pos = pos_start; pos < pos_end; pos++)
+		{
+			gchar c = sci_get_char_at(sci, pos);
+			if (c == '[' || c == '#')
+				break;
+			if (!isspace(c))
+			{
+				sci_insert_text(sci, pos_start, "#");
+				break;
+			}
+		}
+	}
+}
+
+
 static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 {
 	const gchar *file_name = user_data;
@@ -2159,11 +2185,9 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 			g_file_get_contents(global_file, &global_content, NULL, NULL);
 
 		doc = document_new_file(utf8_filename, ft, global_content);
-		if (global_content)
+		if (global_content && doc->file_type->id == GEANY_FILETYPES_CONF)
 		{
-			sci_select_all(doc->editor->sci);
-			keybindings_send_command(GEANY_KEY_GROUP_FORMAT,
-				GEANY_KEYS_FORMAT_COMMENTLINETOGGLE);
+			comment_conf_files(doc->editor->sci);
 			sci_set_current_line(doc->editor->sci, 0);
 			document_set_text_changed(doc, FALSE);
 			sci_empty_undo_buffer(doc->editor->sci);
@@ -2258,11 +2282,11 @@ static void add_stock_icons(const GtkStockItem *items, gsize count)
 
 void ui_init_stock_items(void)
 {
-	GtkStockItem items[] =
+	const GtkStockItem items[] =
 	{
-		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_CLOSE_ALL, N_("Close All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
+		{ (gchar *) GEANY_STOCK_SAVE_ALL, (gchar *) N_("Save All"), 0, 0, (gchar *) GETTEXT_PACKAGE },
+		{ (gchar *) GEANY_STOCK_CLOSE_ALL, (gchar *) N_("Close All"), 0, 0, (gchar *) GETTEXT_PACKAGE },
+		{ (gchar *) GEANY_STOCK_BUILD, (gchar *) N_("Build"), 0, 0, (gchar *) GETTEXT_PACKAGE }
 	};
 
 	gtk_stock_add(items, G_N_ELEMENTS(items));
@@ -2396,7 +2420,7 @@ void ui_init_prefs(void)
 	stash_group_add_boolean(group, &interface_prefs.warn_on_project_close,
 		"warn_on_project_close", TRUE);
 	stash_group_add_spin_button_integer(group, &interface_prefs.tab_label_len,
-		"tab_label_length", 99999, "spin_tab_label_len");
+		"tab_label_length", 1000, "spin_tab_label_len");
 }
 
 
@@ -2577,31 +2601,6 @@ static void init_css_styles(void)
 	theme_fn = g_build_filename(app->datadir, "geany.css", NULL);
 	load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	g_free(theme_fn);
-
-	// load themes to handle breakage between various GTK+ versions
-	const struct
-	{
-		guint min_version;
-		guint max_version;
-		const gchar *file;
-	}
-	css_files[] =
-	{
-		{ 20, G_MAXUINT, "geany-3.20.css" },
-		{ 0, 19, "geany-3.0.css" },
-	};
-
-	guint gtk_version = gtk_get_minor_version();
-	for (guint i = 0; i < G_N_ELEMENTS(css_files); i++)
-	{
-		if (gtk_version >= css_files[i].min_version &&
-			gtk_version <= css_files[i].max_version)
-		{
-			theme_fn = g_build_filename(app->datadir, css_files[i].file, NULL);
-			load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-			g_free(theme_fn);
-		}
-	}
 
 	// if the user provided a geany.css file in their config dir, try and load that
 	theme_fn = g_build_filename(app->configdir, "geany.css", NULL);
@@ -2903,11 +2902,11 @@ static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
 	gchar *sa, *sb;
 	gint result;
 
-	/* put entries with submenus at the end of the menu */
+	/* put entries with submenus at the start of the menu */
 	if (gtk_menu_item_get_submenu(item_a) && !gtk_menu_item_get_submenu(item_b))
-		return 1;
-	else if (!gtk_menu_item_get_submenu(item_a) && gtk_menu_item_get_submenu(item_b))
 		return -1;
+	else if (!gtk_menu_item_get_submenu(item_a) && gtk_menu_item_get_submenu(item_b))
+		return 1;
 
 	sa = ui_menu_item_get_text(item_a);
 	sb = ui_menu_item_get_text(item_b);
@@ -2919,7 +2918,7 @@ static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
 
 
 /* Currently @a menu should contain only GtkMenuItems with labels. */
-static void ui_menu_sort_by_label(GtkMenu *menu)
+void ui_menu_sort_by_label(GtkMenu *menu)
 {
 	GList *list = gtk_container_get_children(GTK_CONTAINER(menu));
 	GList *node;
@@ -3058,7 +3057,7 @@ gboolean ui_is_keyval_enter_or_return(guint keyval)
 
 
 /** Reads an integer from the GTK default settings registry
- * (see http://library.gnome.org/devel/gtk/stable/GtkSettings.html).
+ * (see https://docs.gtk.org/gtk3/class.Settings.html).
  * @param property_name The property to read.
  * @param default_value The default value in case the value could not be read.
  * @return The value for the property if it exists, otherwise the @a default_value.
@@ -3256,16 +3255,4 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 		return TRUE;
 	}
 	return FALSE;
-}
-
-void ui_menu_popup(GtkMenu* menu, GtkMenuPositionFunc func, gpointer data, guint button, guint32 activate_time)
-{
-	/* Use appropriate function for menu popup:
-		- gtk_menu_popup_at_pointer is not available on GTK older than 3.22
-		- gtk_menu_popup is deprecated and causes issues on multimonitor wayland setups */
-#if GTK_CHECK_VERSION(3,22,0)
-	gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
-#else
-	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, func, data, button, activate_time);
-#endif
 }

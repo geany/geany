@@ -106,8 +106,7 @@ G_BEGIN_DECLS
  * @param idx @c guint index into @a ptr_array.
  * @param ptr_array @c GPtrArray to traverse. */
 #define foreach_ptr_array(item, idx, ptr_array) \
-	for (idx = 0, item = ((ptr_array)->len > 0 ? g_ptr_array_index((ptr_array), 0) : NULL); \
-		idx < (ptr_array)->len; ++idx, item = g_ptr_array_index((ptr_array), idx))
+	for (idx = 0; idx < (ptr_array)->len && (item = g_ptr_array_index((ptr_array), idx), TRUE); ++idx)
 
 /** Iterates all the nodes in @a list.
  * @param node should be a (@c GList*).
@@ -220,6 +219,10 @@ gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len);
 
 #ifdef GEANY_PRIVATE
 
+/* Casts a GDestroyNotify to a GClosureNotify without a warning.
+ * This is kinda shady, but likely works with platforms where GTK does. */
+#define CLOSURE_NOTIFY(f) ((GClosureNotify) (void(*)(void)) (GDestroyNotify) (f))
+
 typedef enum
 {
 	RESOURCE_DIR_DATA,
@@ -281,9 +284,6 @@ const gchar *utils_get_default_dir_utf8(void);
 gchar *utils_get_current_file_dir_utf8(void);
 
 void utils_beep(void);
-
-gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
-									 gulong display_unit);
 
 gboolean utils_parse_color(const gchar *spec, GdkColor *color);
 

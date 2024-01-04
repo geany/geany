@@ -373,7 +373,7 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 
 gchar *ui_get_project_directory(const gchar *path);
 
-void ui_menu_popup(GtkMenu* menu, GtkMenuPositionFunc func, gpointer data, guint button, guint32 activate_time);
+void ui_menu_sort_by_label(GtkMenu *menu);
 
 #endif /* GEANY_PRIVATE */
 
