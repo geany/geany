@@ -722,7 +722,7 @@ msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java"
 " when a new line is entered inside such a comment"
 msgstr ""
-"சி, சி ++ மற்றும் சாவா போன்ற மொழிகளில் தானாக பல வரி கருத்துகளைத் தொடரவும், "
+"சி, சி++ மற்றும் சாவா போன்ற மொழிகளில் தானாக பல வரி கருத்துகளைத் தொடரவும், "
 "அத்தகைய கருத்துக்குள் ஒரு புதிய வரி உள்ளிடப்படும்போது"
 
 #: data/geany.glade:3468
@@ -1980,15 +1980,15 @@ msgstr "வரி முடிவுகளை அமை (_n)"
 
 #: data/geany.glade:7926
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "சிஆர்எல்எஃப் (சாளரங்கள்) என மாற்றி அமை (_C)"
+msgstr "வதிவஉ (சாளரங்கள்) என மாற்றி அமை (_C)"
 
 #: data/geany.glade:7935
 msgid "Convert and Set to _LF (Unix)"
-msgstr "எல்எஃப் (யுனிக்சு) என மாற்றி அமை (_L)"
+msgstr "வஉ (யுனிக்சு) என மாற்றி அமை (_L)"
 
 #: data/geany.glade:7946
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "சிஆர் (மேக்) என மாற்றி அமை (_M)"
+msgstr "வதி (மேக்) என மாற்றி அமை (_M)"
 
 #: data/geany.glade:7966 src/keybindings.c:669
 msgid "_Clone"
@@ -2343,7 +2343,7 @@ msgstr "வகுப்பை உருவாக்கு"
 
 #: plugins/classbuilder.c:441
 msgid "Create C++ Class"
-msgstr "சி ++ வகுப்பை உருவாக்கு"
+msgstr "சி++ வகுப்பை உருவாக்கு"
 
 #: plugins/classbuilder.c:444
 msgid "Create GTK+ Class"
@@ -5578,7 +5578,7 @@ msgstr "வகைவரையறைகள் / எண்ணிகள்"
 
 #: src/tagmanager/tm_parser.c:366
 msgid "ID Selectors"
-msgstr "ஐடி தேர்வாளர்கள்"
+msgstr "அடையாளம் தேர்வாளர்கள்"
 
 #: src/tagmanager/tm_parser.c:367
 msgid "Type Selectors"
@@ -5965,7 +5965,7 @@ msgstr ""
 
 #: src/tools.c:376
 msgid "ID"
-msgstr "ஐடி"
+msgstr "அடையாளம்"
 
 #: src/tools.c:594
 msgid "No custom commands defined."
@@ -6092,15 +6092,15 @@ msgstr "ஐஎசுஓ சி 99"
 
 #: src/ui_utils.c:688
 msgid "C++ (C Standard Library)"
-msgstr "சி ++ (சி நிலையான நூலகம்)"
+msgstr "சி++ (சி நிலையான நூலகம்)"
 
 #: src/ui_utils.c:689
 msgid "C++ Standard Library"
-msgstr "சி ++ நிலையான நூலகம்"
+msgstr "சி++ நிலையான நூலகம்"
 
 #: src/ui_utils.c:690
 msgid "C++ STL"
-msgstr "சி ++ எச்டிஎல்"
+msgstr "சி++ எச்டிஎல்"
 
 #: src/ui_utils.c:712 src/ui_utils.c:790
 msgid "dd.mm.yyyy"
@@ -6161,27 +6161,27 @@ msgstr ""
 
 #: src/utils.c:388
 msgid "Windows (CRLF)"
-msgstr "சாளர (சிஆர்எல்எஃப்)"
+msgstr "சாளர (வதிவஉ)"
 
 #: src/utils.c:389
 msgid "Classic Mac (CR)"
-msgstr "உருவாக்கு (சிஆர்)"
+msgstr "உருவாக்கு (வதி)"
 
 #: src/utils.c:390
 msgid "Unix (LF)"
-msgstr "யுனிக்சு (எல்எஃப்)"
+msgstr "யுனிக்சு (வஉ)"
 
 #: src/utils.c:399
 msgid "CRLF"
-msgstr "சிஆர்எல்எஃப்"
+msgstr "வதிவஉ"
 
 #: src/utils.c:400
 msgid "CR"
-msgstr "சிஆர்"
+msgstr "வதி"
 
 #: src/utils.c:401
 msgid "LF"
-msgstr "எல்எஃப்"
+msgstr "வஉ"
 
 #: src/utils.c:99
 msgid "Select Browser"
