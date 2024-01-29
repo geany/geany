@@ -739,7 +739,9 @@ fold points.
     filetypes.common `Folding Settings`_.
 
 If you don't like it or don't need it at all, you can simply disable
-folding support completely in the preferences dialog.
+folding support completely in the preferences dialog. You can also keep
+folding but hide the margin (also in the preferences dialog, or in the
+View menu).
 
 The folding behaviour can be changed with the "Fold/Unfold all children of
 a fold point" option in the preference dialog. If activated, Geany will
@@ -2368,6 +2370,10 @@ Show line numbers
 Show markers margin
     Show or hide the small margin right of the line numbers, which is used
     to mark lines.
+
+Show fold margin
+    Show or hide the small margin right of the line numbers, which is used
+    to fold code.
 
 Stop scrolling at last line
     When enabled Geany stops scrolling when at the last line of the document.
