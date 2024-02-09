@@ -2,7 +2,7 @@ test_deps = declare_dependency(compile_args: geany_cflags + [ '-DG_LOG_DOMAIN="G
                                dependencies: [deps, dep_libgeany],
                                include_directories: '..')
 
-ctags_tests = files([
+ctags_tests = [
 	'ctags/1795612.js.tags',
 	'ctags/1850914.js.tags',
 	'ctags/1878155.js.tags',
@@ -351,12 +351,12 @@ ctags_tests = files([
 	'ctags/vhdl-process.vhd.tags',
 	'ctags/vhdl-type.vhd.tags',
 	'ctags/whitespaces.php.tags'
-])
+]
 
 runner = find_program('ctags/runner.sh')
 foreach t : ctags_tests
-	test('@0@'.format(t), runner,
-	     args: [join_paths(meson.build_root(), 'geany'), t],
+	test(t, runner,
+	     args: [join_paths(meson.build_root(), 'geany'), files(t)],
 	     env: ['top_srcdir='+meson.source_root(), 'top_builddir=' + meson.build_root()])
 endforeach
 
