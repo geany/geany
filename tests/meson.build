@@ -353,9 +353,10 @@ ctags_tests = files([
 	'ctags/whitespaces.php.tags'
 ])
 
+fs = import('fs')
 runner = find_program('ctags/runner.sh')
 foreach t : ctags_tests
-	test('@0@'.format(t), runner,
+	test(join_paths(fs.parent(t), fs.name(t)), runner,
 	     args: [join_paths(meson.build_root(), 'geany'), t],
 	     env: ['top_srcdir='+meson.source_root(), 'top_builddir=' + meson.build_root()])
 endforeach
