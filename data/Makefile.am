@@ -29,6 +29,7 @@ filetypes_dist = \
 	filedefs/filetypes.d \
 	filedefs/filetypes.diff \
 	filedefs/filetypes.docbook \
+	filedefs/filetypes.Dockerfile.conf \
 	filedefs/filetypes.erlang \
 	filedefs/filetypes.f77 \
 	filedefs/filetypes.forth \
