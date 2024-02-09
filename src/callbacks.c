@@ -70,7 +70,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <glib/gstdio.h>
 #include <time.h>
-
+#include "geanyentryactionprivate.h"
 
 /* represents the state at switching a notebook page(in the left treeviews widget), to not emit
  * the selection-changed signal from tv.tree_openfiles */
@@ -417,7 +417,8 @@ void on_toolbar_search_entry_activate(GtkAction *action, const gchar *text, gpoi
 
 
 /* search text */
-void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_search_clicked(GtkAction        *action,
+                                  GeanyEntryAction *entry_action)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean result;
@@ -425,10 +426,16 @@ void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
 
 	if (entry != NULL)
 	{
-		const gchar *text = gtk_entry_get_text(GTK_ENTRY(entry));
+		gchar *search_keyword;
 
-		setup_find(text, FALSE);
+		search_keyword = g_strconcat (gtk_entry_get_text(GTK_ENTRY(entry)),
+									  entry_action->priv->preedit, NULL);
+		setup_find(search_keyword, FALSE);
+
+		g_free(search_keyword);
+
 		result = document_search_bar_find(doc, search_data.text, FALSE, FALSE);
+
 		if (search_data.search_bar)
 			ui_set_search_entry_background(entry, result);
 	}

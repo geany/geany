@@ -75,7 +75,7 @@ libgeany_la_SOURCES = \
 	editor.c editor.h \
 	encodings.c encodings.h \
 	filetypes.c filetypes.h \
-	geanyentryaction.c geanyentryaction.h \
+	geanyentryaction.c geanyentryaction.h geanyentryactionprivate.h \
 	geanymenubuttonaction.c geanymenubuttonaction.h \
 	geanyobject.c geanyobject.h \
 	geanywraplabel.c geanywraplabel.h \
