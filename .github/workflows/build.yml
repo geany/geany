@@ -243,7 +243,7 @@ jobs:
             bash start_build.sh --log-to-stdout --mingw64 --geany --geany-source "${{ github.workspace }}"
 
       - name: Archive Geany Installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: geany-installer-ci-${{ env.SHORT_SHA }}-pr${{ env.GITHUB_PULL_REQUEST_OR_REF }}
           retention-days: 30
