@@ -45,7 +45,7 @@ jobs:
       CXX: ccache g++
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # create and use a timestamp for the cache key: GH Actions will never update a cache
       # only use an existing cache item or create a new one. To use an existing cache *and*
@@ -117,7 +117,7 @@ jobs:
       CXX: ccache g++
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # create and use a timestamp for the cache key: GH Actions will never update a cache
       # only use an existing cache item or create a new one. To use an existing cache *and*
@@ -183,10 +183,10 @@ jobs:
 
     steps:
       - name: Checkout Geany
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Checkout Build Scripts
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: master
           repository: geany/infrastructure
