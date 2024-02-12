@@ -1,0 +1,10 @@
+version: 2
+# Before applying suggested PRs, make sure that the new versions of any
+# updated actions are allowed in
+# https://github.com/organizations/geany/settings/actions
+# Versions are pinned and restricted for security reasons.
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
