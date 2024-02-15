@@ -45,7 +45,7 @@ jobs:
       CXX: ccache g++
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # create and use a timestamp for the cache key: GH Actions will never update a cache
       # only use an existing cache item or create a new one. To use an existing cache *and*
@@ -56,7 +56,7 @@ jobs:
         run: echo "timestamp=$(date +%Y-%m-%d-%H-%M)" >> $GITHUB_OUTPUT
 
       - name: Configure ccache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ${{ runner.os }}-${{ github.job }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
@@ -117,7 +117,7 @@ jobs:
       CXX: ccache g++
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # create and use a timestamp for the cache key: GH Actions will never update a cache
       # only use an existing cache item or create a new one. To use an existing cache *and*
@@ -128,7 +128,7 @@ jobs:
         run: echo "timestamp=$(date +%Y-%m-%d-%H-%M)" >> $GITHUB_OUTPUT
 
       - name: Configure ccache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ${{ runner.os }}-${{ github.job }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
@@ -183,10 +183,10 @@ jobs:
 
     steps:
       - name: Checkout Geany
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Checkout Build Scripts
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: master
           repository: geany/infrastructure
@@ -212,7 +212,7 @@ jobs:
             env | sort
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.DOCKER_REGISTRY }}
           username: ${{ github.actor }}
@@ -243,7 +243,7 @@ jobs:
             bash start_build.sh --log-to-stdout --mingw64 --geany --geany-source "${{ github.workspace }}"
 
       - name: Archive Geany Installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: geany-installer-ci-${{ env.SHORT_SHA }}-pr${{ env.GITHUB_PULL_REQUEST_OR_REF }}
           retention-days: 30
