@@ -376,7 +376,16 @@ GeanyDocument *document_get_current(void)
 	if (cur_page == -1)
 		return NULL;
 	else
-		return document_get_from_page((guint) cur_page);
+	{
+		GeanyDocument *doc = document_get_from_page((guint) cur_page);
+
+		/* If a document is created with 'New' from the file menu, cur_page
+		 * will be 0, but doc->filename will be NULL
+		 */
+		if (doc->file_name != NULL)
+			return doc;
+		return NULL;
+	}
 }
 
 
