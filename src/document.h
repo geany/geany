@@ -67,6 +67,7 @@ typedef struct GeanyFilePrefs
 	gboolean		show_keep_edit_history_on_reload_msg; /* whether to show the message introducing the above feature */
  	gboolean		reload_clean_doc_on_file_change;
  	gboolean		save_config_on_file_change;
+ 	gboolean		remember_last_save_path;
 }
 GeanyFilePrefs;
 

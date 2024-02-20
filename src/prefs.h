@@ -42,6 +42,7 @@ typedef struct GeanyPrefs
 #ifdef G_OS_WIN32
 	gint			socket_remote_cmd_port;
 #endif
+	gchar           *last_save_path; /**< Last path used to save a file. */
 }
 GeanyPrefs;
 
