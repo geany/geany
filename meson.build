@@ -450,16 +450,25 @@ endif
 if cdata.get('HAVE_REGCOMP', 0) == 1
 	dep_regex = dependency('', required: false)
 else
+	regex_cflags = basic_cflags + [ '-D__USE_GNU' ]
+	if host_machine.system() == 'windows'
+		regex_cflags += [ '-DWIN32' ]
+	endif
 	# use regcomp bundled with ctags
 	regex = static_library('regex',
 		'ctags/gnu_regex/regex.c',
 		'ctags/gnu_regex/regex.h',
 		dependencies: [dep_fnmatch],
-		c_args: basic_cflags + [ '-D__USE_GNU' ]
+		c_args: regex_cflags
 	)
 	dep_regex = declare_dependency(link_with: [regex], include_directories: [iregex])
 endif
 
+ctags_cflags = geany_cflags + [ '-DG_LOG_DOMAIN="CTags"',
+	'-DEXTERNAL_PARSER_LIST_FILE="src/tagmanager/tm_parsers.h"' ]
+if host_machine.system() == 'windows'
+	ctags_cflags += [ '-DWIN32' ]
+endif
 ctags = static_library('ctags',
 	'ctags/dsl/es.c',
 	'ctags/dsl/es.h',
@@ -681,8 +690,7 @@ ctags = static_library('ctags',
 	'ctags/parsers/typescript.c',
 	'ctags/parsers/verilog.c',
 	'ctags/parsers/vhdl.c',
-	c_args: geany_cflags + [ '-DG_LOG_DOMAIN="CTags"',
-	                         '-DEXTERNAL_PARSER_LIST_FILE="src/tagmanager/tm_parsers.h"' ],
+	c_args: ctags_cflags,
 	dependencies: deps + [dep_fnmatch, dep_regex],
 	include_directories: [ictags]
 )
