@@ -211,8 +211,8 @@ cleanup_unnecessary_files() {
 	echo "Cleanup unnecessary files"
 	# cleanup temporary files
 	rm -rf var/cache/fontconfig
-	rmdir var/cache
-	rmdir var
+	test -d var/cache && rmdir var/cache
+	test -d var && rmdir var
 	# cleanup development and other unnecessary files
 	rm -rf include
 	rm -rf lib/cmake
