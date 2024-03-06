@@ -1,0 +1,6 @@
+__atomic_wide_counterÌ2048Ö0
+struct:     __atomic_wide_counter
+__value32Ì64Î__atomic_wide_counterÖ0Ï__atomic_wide_counter::anon_struct_1
+member:     __atomic_wide_counter::anon_struct_1 __atomic_wide_counter :: __value32
+anon_struct_1Ì2048Î__atomic_wide_counterÖ1
+struct:     __atomic_wide_counter :: anon_struct_1    flags: 1
