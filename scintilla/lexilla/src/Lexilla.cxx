@@ -218,6 +218,7 @@ static void AddGeanyLexers()
 		&lmTxt2tags,
 		&lmVerilog,
 		&lmVHDL,
+		&lmVisualProlog,
 		&lmXML,
 		&lmYAML,
 	});
