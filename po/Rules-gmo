@@ -1,0 +1,12 @@
+# Make sure the gmo files are regenerated when the po files are updated,
+# without the need for manually calling `make update-gmo` or `make ll.gmo`.
+# See e.g. https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=400453#24, I
+# couldn't find any canonical info on this.
+
+DISTFILES.common += Rules-gmo
+
+# Make sure changing this files updates the generated Makefile
+Makefile: Rules-gmo
+
+# Just make the gmo files a default dependency, the rest is done automatically.
+all-yes: $(GMOFILES)
