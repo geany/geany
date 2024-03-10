@@ -35,6 +35,7 @@ lexilla/lexers/LexGDScript.cxx         \
 lexilla/lexers/LexHTML.cxx             \
 lexilla/lexers/LexHaskell.cxx          \
 lexilla/lexers/LexJulia.cxx            \
+lexilla/lexers/LexJSON.cxx             \
 lexilla/lexers/LexLaTeX.cxx            \
 lexilla/lexers/LexLisp.cxx             \
 lexilla/lexers/LexLua.cxx              \

@@ -194,6 +194,7 @@ static void AddGeanyLexers()
 		&lmHaskell,
 		&lmHTML,
 		&lmJulia,
+		&lmJSON,
 		&lmLatex,
 		&lmLISP,
 		&lmLua,
