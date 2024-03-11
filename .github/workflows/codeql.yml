@@ -27,7 +27,7 @@ on:
 
 
 concurrency:
-  group: ci-${{ github.head_ref }} || concat(${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 jobs:
