@@ -80,7 +80,9 @@ filetypes_dist = \
 	filedefs/filetypes.vhdl \
 	filedefs/filetypes.xml \
 	filedefs/filetypes.yaml \
-	filedefs/filetypes.zephir
+	filedefs/filetypes.zephir \
+	filedefs/filetypes.SCSS.conf \
+	filedefs/filetypes.LESS.conf
 
 # generated filetypes
 filetypes_nodist = \
