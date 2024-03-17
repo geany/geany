@@ -1311,22 +1311,6 @@
                                     <property name="position">3</property>
                                   </packing>
                                 </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="check_native_windows_dialogs">
-                                    <property name="label" translatable="yes">Use Windows native dialogs</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="receives-default">False</property>
-                                    <property name="tooltip-text" translatable="yes">Defines whether to use the Windows native dialogs or whether to use the GTK default dialogs</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="draw-indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">4</property>
-                                  </packing>
-                                </child>
                               </object>
                             </child>
                           </object>
