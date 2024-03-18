@@ -46,9 +46,10 @@ G_BEGIN_DECLS
 
 typedef struct
 {
-	guint		 style;		/* SCI style */
-	const gchar	*name;		/* style name in the filetypes.* file */
-	gboolean	 fill_eol;	/* whether to set EOLFILLED flag to this style */
+	guint		 style;			/* SCI style */
+	const gchar	*name;			/* style name in the filetypes.* file */
+	gboolean	 fill_eol;		/* whether to set EOLFILLED flag to this style */
+	gboolean	 sub_stylable;	/* Whether substyles can be allocated for this style */
 } HLStyle;
 
 typedef struct
@@ -84,14 +85,14 @@ typedef struct
 #define highlighting_lexer_ABAQUS			SCLEX_ABAQUS
 static const HLStyle highlighting_styles_ABAQUS[] =
 {
-	{ SCE_ABAQUS_DEFAULT,		"default",		FALSE },
-	{ SCE_ABAQUS_COMMENT,		"comment",		FALSE },
-	{ SCE_ABAQUS_NUMBER,		"number",		FALSE },
-	{ SCE_ABAQUS_STRING,		"string",		FALSE },
-	{ SCE_ABAQUS_OPERATOR,		"operator",		FALSE },
-	{ SCE_ABAQUS_PROCESSOR,		"processor",		FALSE },
-	{ SCE_ABAQUS_STARCOMMAND,	"starcommand",		FALSE },
-	{ SCE_ABAQUS_ARGUMENT,		"argument",		FALSE }
+	{ SCE_ABAQUS_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_ABAQUS_COMMENT,		"comment",		FALSE,	FALSE },
+	{ SCE_ABAQUS_NUMBER,		"number",		FALSE,	FALSE },
+	{ SCE_ABAQUS_STRING,		"string",		FALSE,	FALSE },
+	{ SCE_ABAQUS_OPERATOR,		"operator",		FALSE,	FALSE },
+	{ SCE_ABAQUS_PROCESSOR,		"processor",	FALSE,	FALSE },
+	{ SCE_ABAQUS_STARCOMMAND,	"starcommand",	FALSE,	FALSE },
+	{ SCE_ABAQUS_ARGUMENT,		"argument",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_ABAQUS[] =
 {
@@ -109,18 +110,18 @@ static const HLKeyword highlighting_keywords_ABAQUS[] =
 #define highlighting_lexer_ADA			SCLEX_ADA
 static const HLStyle highlighting_styles_ADA[] =
 {
-	{ SCE_ADA_DEFAULT,		"default",		FALSE },
-	{ SCE_ADA_WORD,			"word",			FALSE },
-	{ SCE_ADA_IDENTIFIER,	"identifier",	FALSE },
-	{ SCE_ADA_NUMBER,		"number",		FALSE },
-	{ SCE_ADA_DELIMITER,	"delimiter",	FALSE },
-	{ SCE_ADA_CHARACTER,	"character",	FALSE },
-	{ SCE_ADA_CHARACTEREOL,	"charactereol",	FALSE },
-	{ SCE_ADA_STRING,		"string",		FALSE },
-	{ SCE_ADA_STRINGEOL,	"stringeol",	FALSE },
-	{ SCE_ADA_LABEL,		"label",		FALSE },
-	{ SCE_ADA_COMMENTLINE,	"commentline",	FALSE },
-	{ SCE_ADA_ILLEGAL,		"illegal",		FALSE }
+	{ SCE_ADA_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_ADA_WORD,			"word",			FALSE,	FALSE },
+	{ SCE_ADA_IDENTIFIER,	"identifier",	FALSE,	FALSE },
+	{ SCE_ADA_NUMBER,		"number",		FALSE,	FALSE },
+	{ SCE_ADA_DELIMITER,	"delimiter",	FALSE,	FALSE },
+	{ SCE_ADA_CHARACTER,	"character",	FALSE,	FALSE },
+	{ SCE_ADA_CHARACTEREOL,	"charactereol",	FALSE,	FALSE },
+	{ SCE_ADA_STRING,		"string",		FALSE,	FALSE },
+	{ SCE_ADA_STRINGEOL,	"stringeol",	FALSE,	FALSE },
+	{ SCE_ADA_LABEL,		"label",		FALSE,	FALSE },
+	{ SCE_ADA_COMMENTLINE,	"commentline",	FALSE,	FALSE },
+	{ SCE_ADA_ILLEGAL,		"illegal",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_ADA[] =
 {
@@ -145,30 +146,30 @@ static const HLKeyword highlighting_keywords_AS[] =
 #define highlighting_lexer_ASCIIDOC			SCLEX_ASCIIDOC
 static const HLStyle highlighting_styles_ASCIIDOC[] =
 {
-	{ SCE_ASCIIDOC_DEFAULT,		"default",		FALSE },
-	{ SCE_ASCIIDOC_STRONG1,		"strong",		FALSE },
-	{ SCE_ASCIIDOC_STRONG2,		"strong",		FALSE },
-	{ SCE_ASCIIDOC_EM1,			"emphasis",		FALSE },
-	{ SCE_ASCIIDOC_EM2,			"emphasis",		FALSE },
-	{ SCE_ASCIIDOC_HEADER1,		"header1",		FALSE },
-	{ SCE_ASCIIDOC_HEADER2,		"header2",		FALSE },
-	{ SCE_ASCIIDOC_HEADER3,		"header3",		FALSE },
-	{ SCE_ASCIIDOC_HEADER4,		"header4",		FALSE },
-	{ SCE_ASCIIDOC_HEADER5,		"header5",		FALSE },
-	{ SCE_ASCIIDOC_HEADER6,		"header6",		FALSE },
-	{ SCE_ASCIIDOC_ULIST_ITEM,	"ulist_item",	FALSE },
-	{ SCE_ASCIIDOC_OLIST_ITEM,	"olist_item",	FALSE },
-	{ SCE_ASCIIDOC_BLOCKQUOTE,	"blockquote",	FALSE },
-	{ SCE_ASCIIDOC_LINK,		"link",			FALSE },
-	{ SCE_ASCIIDOC_CODEBK,		"code",			FALSE },
-	{ SCE_ASCIIDOC_PASSBK,		"passthrough",	FALSE },
-	{ SCE_ASCIIDOC_COMMENT,		"comment",		FALSE },
-	{ SCE_ASCIIDOC_COMMENTBK,	"comment",		FALSE },
-	{ SCE_ASCIIDOC_LITERAL,		"literal",		FALSE },
-	{ SCE_ASCIIDOC_LITERALBK,	"literal",		FALSE },
-	{ SCE_ASCIIDOC_ATTRIB,		"attrib",		FALSE },
-	{ SCE_ASCIIDOC_ATTRIBVAL,	"attribval",	FALSE },
-	{ SCE_ASCIIDOC_MACRO,		"macro",		FALSE }
+	{ SCE_ASCIIDOC_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_STRONG1,		"strong",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_STRONG2,		"strong",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_EM1,			"emphasis",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_EM2,			"emphasis",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_HEADER1,		"header1",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_HEADER2,		"header2",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_HEADER3,		"header3",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_HEADER4,		"header4",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_HEADER5,		"header5",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_HEADER6,		"header6",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_ULIST_ITEM,	"ulist_item",	FALSE,	FALSE },
+	{ SCE_ASCIIDOC_OLIST_ITEM,	"olist_item",	FALSE,	FALSE },
+	{ SCE_ASCIIDOC_BLOCKQUOTE,	"blockquote",	FALSE,	FALSE },
+	{ SCE_ASCIIDOC_LINK,		"link",			FALSE,	FALSE },
+	{ SCE_ASCIIDOC_CODEBK,		"code",			FALSE,	FALSE },
+	{ SCE_ASCIIDOC_PASSBK,		"passthrough",	FALSE,	FALSE },
+	{ SCE_ASCIIDOC_COMMENT,		"comment",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_COMMENTBK,	"comment",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_LITERAL,		"literal",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_LITERALBK,	"literal",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_ATTRIB,		"attrib",		FALSE,	FALSE },
+	{ SCE_ASCIIDOC_ATTRIBVAL,	"attribval",	FALSE,	FALSE },
+	{ SCE_ASCIIDOC_MACRO,		"macro",		FALSE,	FALSE }
 };
 #define highlighting_keywords_ASCIIDOC		EMPTY_KEYWORDS
 #define highlighting_properties_ASCIIDOC	EMPTY_PROPERTIES
@@ -178,22 +179,22 @@ static const HLStyle highlighting_styles_ASCIIDOC[] =
 #define highlighting_lexer_ASM			SCLEX_ASM
 static const HLStyle highlighting_styles_ASM[] =
 {
-	{ SCE_ASM_DEFAULT,			"default",				FALSE },
-	{ SCE_ASM_COMMENT,			"comment",				FALSE },
-	{ SCE_ASM_NUMBER,			"number",				FALSE },
-	{ SCE_ASM_STRING,			"string",				FALSE },
-	{ SCE_ASM_OPERATOR,			"operator",				FALSE },
-	{ SCE_ASM_IDENTIFIER,		"identifier",			FALSE },
-	{ SCE_ASM_CPUINSTRUCTION,	"cpuinstruction",		FALSE },
-	{ SCE_ASM_MATHINSTRUCTION,	"mathinstruction",		FALSE },
-	{ SCE_ASM_REGISTER,			"register",				FALSE },
-	{ SCE_ASM_DIRECTIVE,		"directive",			FALSE },
-	{ SCE_ASM_DIRECTIVEOPERAND,	"directiveoperand",		FALSE },
-	{ SCE_ASM_COMMENTBLOCK,		"commentblock",			FALSE },
-	{ SCE_ASM_CHARACTER,		"character",			FALSE },
-	{ SCE_ASM_STRINGEOL,		"stringeol",			FALSE },
-	{ SCE_ASM_EXTINSTRUCTION,	"extinstruction",		FALSE },
-	{ SCE_ASM_COMMENTDIRECTIVE,	"commentdirective",		FALSE }
+	{ SCE_ASM_DEFAULT,			"default",				FALSE,	FALSE },
+	{ SCE_ASM_COMMENT,			"comment",				FALSE,	FALSE },
+	{ SCE_ASM_NUMBER,			"number",				FALSE,	FALSE },
+	{ SCE_ASM_STRING,			"string",				FALSE,	FALSE },
+	{ SCE_ASM_OPERATOR,			"operator",				FALSE,	FALSE },
+	{ SCE_ASM_IDENTIFIER,		"identifier",			FALSE,	FALSE },
+	{ SCE_ASM_CPUINSTRUCTION,	"cpuinstruction",		FALSE,	FALSE },
+	{ SCE_ASM_MATHINSTRUCTION,	"mathinstruction",		FALSE,	FALSE },
+	{ SCE_ASM_REGISTER,			"register",				FALSE,	FALSE },
+	{ SCE_ASM_DIRECTIVE,		"directive",			FALSE,	FALSE },
+	{ SCE_ASM_DIRECTIVEOPERAND,	"directiveoperand",		FALSE,	FALSE },
+	{ SCE_ASM_COMMENTBLOCK,		"commentblock",			FALSE,	FALSE },
+	{ SCE_ASM_CHARACTER,		"character",			FALSE,	FALSE },
+	{ SCE_ASM_STRINGEOL,		"stringeol",			FALSE,	FALSE },
+	{ SCE_ASM_EXTINSTRUCTION,	"extinstruction",		FALSE,	FALSE },
+	{ SCE_ASM_COMMENTDIRECTIVE,	"commentdirective",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_ASM[] =
 {
@@ -210,29 +211,29 @@ static const HLKeyword highlighting_keywords_ASM[] =
 #define highlighting_lexer_BASIC		SCLEX_FREEBASIC
 static const HLStyle highlighting_styles_BASIC[] =
 {
-	{ SCE_B_DEFAULT,		"default",			FALSE },
-	{ SCE_B_COMMENT,		"comment",			FALSE },
-	{ SCE_B_COMMENTBLOCK,	"commentblock",		FALSE },
-	{ SCE_B_DOCLINE,		"docline",			FALSE },
-	{ SCE_B_DOCBLOCK,		"docblock",			FALSE },
-	{ SCE_B_DOCKEYWORD,		"dockeyword",		FALSE },
-	{ SCE_B_NUMBER,			"number",			FALSE },
-	{ SCE_B_KEYWORD,		"word",				FALSE },
-	{ SCE_B_STRING,			"string",			FALSE },
-	{ SCE_B_PREPROCESSOR,	"preprocessor",		FALSE },
-	{ SCE_B_OPERATOR,		"operator",			FALSE },
-	{ SCE_B_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_B_DATE,			"date",				FALSE },
-	{ SCE_B_STRINGEOL,		"stringeol",		FALSE },
-	{ SCE_B_KEYWORD2,		"word2",			FALSE },
-	{ SCE_B_KEYWORD3,		"word3",			FALSE },
-	{ SCE_B_KEYWORD4,		"word4",			FALSE },
-	{ SCE_B_CONSTANT,		"constant",			FALSE },
-	{ SCE_B_ASM,			"asm",				FALSE },
-	{ SCE_B_LABEL,			"label",			FALSE },
-	{ SCE_B_ERROR,			"error",			FALSE },
-	{ SCE_B_HEXNUMBER,		"hexnumber",		FALSE },
-	{ SCE_B_BINNUMBER,		"binnumber",		FALSE }
+	{ SCE_B_DEFAULT,		"default",			FALSE,	FALSE },
+	{ SCE_B_COMMENT,		"comment",			FALSE,	FALSE },
+	{ SCE_B_COMMENTBLOCK,	"commentblock",		FALSE,	FALSE },
+	{ SCE_B_DOCLINE,		"docline",			FALSE,	FALSE },
+	{ SCE_B_DOCBLOCK,		"docblock",			FALSE,	FALSE },
+	{ SCE_B_DOCKEYWORD,		"dockeyword",		FALSE,	FALSE },
+	{ SCE_B_NUMBER,			"number",			FALSE,	FALSE },
+	{ SCE_B_KEYWORD,		"word",				FALSE,	FALSE },
+	{ SCE_B_STRING,			"string",			FALSE,	FALSE },
+	{ SCE_B_PREPROCESSOR,	"preprocessor",		FALSE,	FALSE },
+	{ SCE_B_OPERATOR,		"operator",			FALSE,	FALSE },
+	{ SCE_B_IDENTIFIER,		"identifier",		FALSE,	FALSE },
+	{ SCE_B_DATE,			"date",				FALSE,	FALSE },
+	{ SCE_B_STRINGEOL,		"stringeol",		FALSE,	FALSE },
+	{ SCE_B_KEYWORD2,		"word2",			FALSE,	FALSE },
+	{ SCE_B_KEYWORD3,		"word3",			FALSE,	FALSE },
+	{ SCE_B_KEYWORD4,		"word4",			FALSE,	FALSE },
+	{ SCE_B_CONSTANT,		"constant",			FALSE,	FALSE },
+	{ SCE_B_ASM,			"asm",				FALSE,	FALSE },
+	{ SCE_B_LABEL,			"label",			FALSE,	FALSE },
+	{ SCE_B_ERROR,			"error",			FALSE,	FALSE },
+	{ SCE_B_HEXNUMBER,		"hexnumber",		FALSE,	FALSE },
+	{ SCE_B_BINNUMBER,		"binnumber",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_BASIC[] =
 {
@@ -248,14 +249,14 @@ static const HLKeyword highlighting_keywords_BASIC[] =
 #define highlighting_lexer_BATCH		SCLEX_BATCH
 static const HLStyle highlighting_styles_BATCH[] =
 {
-	{ SCE_BAT_DEFAULT,		"default",		FALSE },
-	{ SCE_BAT_COMMENT,		"comment",		FALSE },
-	{ SCE_BAT_LABEL,		"label",		FALSE },
-	{ SCE_BAT_WORD,			"word",			FALSE },
-	{ SCE_BAT_HIDE,			"hide",			FALSE },
-	{ SCE_BAT_COMMAND,		"command",		FALSE },
-	{ SCE_BAT_IDENTIFIER,	"identifier",	FALSE },
-	{ SCE_BAT_OPERATOR,		"operator",		FALSE }
+	{ SCE_BAT_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_BAT_COMMENT,		"comment",		FALSE,	FALSE },
+	{ SCE_BAT_LABEL,		"label",		FALSE,	FALSE },
+	{ SCE_BAT_WORD,			"word",			FALSE,	FALSE },
+	{ SCE_BAT_HIDE,			"hide",			FALSE,	FALSE },
+	{ SCE_BAT_COMMAND,		"command",		FALSE,	FALSE },
+	{ SCE_BAT_IDENTIFIER,	"identifier",	FALSE,	FALSE },
+	{ SCE_BAT_OPERATOR,		"operator",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_BATCH[] =
 {
@@ -270,36 +271,36 @@ static const HLKeyword highlighting_keywords_BATCH[] =
 #define highlighting_lexer_C		SCLEX_CPP
 static const HLStyle highlighting_styles_C[] =
 {
-	{ SCE_C_DEFAULT,				"default",					FALSE },
-	{ SCE_C_COMMENT,				"comment",					FALSE },
-	{ SCE_C_COMMENTLINE,			"commentline",				FALSE },
-	{ SCE_C_COMMENTDOC,				"commentdoc",				FALSE },
-	{ SCE_C_PREPROCESSORCOMMENT,	"preprocessorcomment",		FALSE },
-	{ SCE_C_PREPROCESSORCOMMENTDOC,	"preprocessorcommentdoc",	FALSE },
-	{ SCE_C_NUMBER,					"number",					FALSE },
-	{ SCE_C_WORD,					"word",						FALSE },
-	{ SCE_C_WORD2,					"word2",					FALSE },
-	{ SCE_C_STRING,					"string",					FALSE },
-	{ SCE_C_STRINGRAW,				"stringraw",				FALSE },
-	{ SCE_C_CHARACTER,				"character",				FALSE },
-	{ SCE_C_USERLITERAL,			"userliteral",				FALSE },
-	{ SCE_C_UUID,					"uuid",						FALSE },
-	{ SCE_C_PREPROCESSOR,			"preprocessor",				FALSE },
-	{ SCE_C_OPERATOR,				"operator",					FALSE },
-	{ SCE_C_IDENTIFIER,				"identifier",				FALSE },
-	{ SCE_C_STRINGEOL,				"stringeol",				FALSE },
-	{ SCE_C_VERBATIM,				"verbatim",					FALSE },
+	{ SCE_C_DEFAULT,				"default",					FALSE,	FALSE },
+	{ SCE_C_COMMENT,				"comment",					FALSE,	FALSE },
+	{ SCE_C_COMMENTLINE,			"commentline",				FALSE,	FALSE },
+	{ SCE_C_COMMENTDOC,				"commentdoc",				FALSE,	FALSE },
+	{ SCE_C_PREPROCESSORCOMMENT,	"preprocessorcomment",		FALSE,	FALSE },
+	{ SCE_C_PREPROCESSORCOMMENTDOC,	"preprocessorcommentdoc",	FALSE,	FALSE },
+	{ SCE_C_NUMBER,					"number",					FALSE,	FALSE },
+	{ SCE_C_WORD,					"word",						FALSE,	FALSE },
+	{ SCE_C_WORD2,					"word2",					FALSE,	FALSE },
+	{ SCE_C_STRING,					"string",					FALSE,	FALSE },
+	{ SCE_C_STRINGRAW,				"stringraw",				FALSE,	FALSE },
+	{ SCE_C_CHARACTER,				"character",				FALSE,	FALSE },
+	{ SCE_C_USERLITERAL,			"userliteral",				FALSE,	FALSE },
+	{ SCE_C_UUID,					"uuid",						FALSE,	FALSE },
+	{ SCE_C_PREPROCESSOR,			"preprocessor",				FALSE,	FALSE },
+	{ SCE_C_OPERATOR,				"operator",					FALSE,	FALSE },
+	{ SCE_C_IDENTIFIER,				"identifier",				FALSE,	TRUE },
+	{ SCE_C_STRINGEOL,				"stringeol",				FALSE,	FALSE },
+	{ SCE_C_VERBATIM,				"verbatim",					FALSE,	FALSE },
 	/* triple verbatims use the same style */
-	{ SCE_C_TRIPLEVERBATIM,			"verbatim",					FALSE },
-	{ SCE_C_REGEX,					"regex",					FALSE },
-	{ SCE_C_HASHQUOTEDSTRING,		"hashquotedstring",			FALSE },
-	{ SCE_C_COMMENTLINEDOC,			"commentlinedoc",			FALSE },
-	{ SCE_C_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
-	{ SCE_C_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE },
+	{ SCE_C_TRIPLEVERBATIM,			"verbatim",					FALSE,	FALSE },
+	{ SCE_C_REGEX,					"regex",					FALSE,	FALSE },
+	{ SCE_C_HASHQUOTEDSTRING,		"hashquotedstring",			FALSE,	FALSE },
+	{ SCE_C_COMMENTLINEDOC,			"commentlinedoc",			FALSE,	FALSE },
+	{ SCE_C_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE,	TRUE },
+	{ SCE_C_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE,	FALSE },
 	/* used for local structs and typedefs */
-	{ SCE_C_GLOBALCLASS,			"globalclass",				FALSE },
-	{ SCE_C_TASKMARKER,				"taskmarker",				FALSE },
-	{ SCE_C_ESCAPESEQUENCE,			"escapesequence",			FALSE }
+	{ SCE_C_GLOBALCLASS,			"globalclass",				FALSE,	FALSE },
+	{ SCE_C_TASKMARKER,				"taskmarker",				FALSE,	FALSE },
+	{ SCE_C_ESCAPESEQUENCE,			"escapesequence",			FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_C[] =
 {
@@ -319,22 +320,22 @@ static const HLProperty highlighting_properties_C[] =
 #define highlighting_lexer_CAML			SCLEX_CAML
 static const HLStyle highlighting_styles_CAML[] =
 {
-	{ SCE_CAML_DEFAULT,		"default",		FALSE },
-	{ SCE_CAML_COMMENT,		"comment",		FALSE },
-	{ SCE_CAML_COMMENT1,	"comment1",		FALSE },
-	{ SCE_CAML_COMMENT2,	"comment2",		FALSE },
-	{ SCE_CAML_COMMENT3,	"comment3",		FALSE },
-	{ SCE_CAML_NUMBER,		"number",		FALSE },
-	{ SCE_CAML_KEYWORD,		"keyword",		FALSE },
-	{ SCE_CAML_KEYWORD2,	"keyword2",		FALSE },
-	{ SCE_CAML_KEYWORD3,	"keyword3",		FALSE },
-	{ SCE_CAML_STRING,		"string",		FALSE },
-	{ SCE_CAML_CHAR,		"char",			FALSE },
-	{ SCE_CAML_OPERATOR,	"operator",		FALSE },
-	{ SCE_CAML_IDENTIFIER,	"identifier",	FALSE },
-	{ SCE_CAML_TAGNAME,		"tagname",		FALSE },
-	{ SCE_CAML_LINENUM,		"linenum",		FALSE },
-	{ SCE_CAML_WHITE,		"white",		FALSE }
+	{ SCE_CAML_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_CAML_COMMENT,		"comment",		FALSE,	FALSE },
+	{ SCE_CAML_COMMENT1,	"comment1",		FALSE,	FALSE },
+	{ SCE_CAML_COMMENT2,	"comment2",		FALSE,	FALSE },
+	{ SCE_CAML_COMMENT3,	"comment3",		FALSE,	FALSE },
+	{ SCE_CAML_NUMBER,		"number",		FALSE,	FALSE },
+	{ SCE_CAML_KEYWORD,		"keyword",		FALSE,	FALSE },
+	{ SCE_CAML_KEYWORD2,	"keyword2",		FALSE,	FALSE },
+	{ SCE_CAML_KEYWORD3,	"keyword3",		FALSE,	FALSE },
+	{ SCE_CAML_STRING,		"string",		FALSE,	FALSE },
+	{ SCE_CAML_CHAR,		"char",			FALSE,	FALSE },
+	{ SCE_CAML_OPERATOR,	"operator",		FALSE,	FALSE },
+	{ SCE_CAML_IDENTIFIER,	"identifier",	FALSE,	FALSE },
+	{ SCE_CAML_TAGNAME,		"tagname",		FALSE,	FALSE },
+	{ SCE_CAML_LINENUM,		"linenum",		FALSE,	FALSE },
+	{ SCE_CAML_WHITE,		"white",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_CAML[] =
 {
@@ -348,21 +349,21 @@ static const HLKeyword highlighting_keywords_CAML[] =
 #define highlighting_lexer_CMAKE		SCLEX_CMAKE
 static const HLStyle highlighting_styles_CMAKE[] =
 {
-	{ SCE_CMAKE_DEFAULT,		"default",		FALSE },
-	{ SCE_CMAKE_COMMENT,		"comment",		FALSE },
-	{ SCE_CMAKE_STRINGDQ,		"stringdq",		FALSE },
-	{ SCE_CMAKE_STRINGLQ,		"stringlq",		FALSE },
-	{ SCE_CMAKE_STRINGRQ,		"stringrq",		FALSE },
-	{ SCE_CMAKE_COMMANDS,		"command",		FALSE },
-	{ SCE_CMAKE_PARAMETERS,		"parameters",	FALSE },
-	{ SCE_CMAKE_VARIABLE,		"variable",		FALSE },
-	{ SCE_CMAKE_USERDEFINED,	"userdefined",	FALSE },
-	{ SCE_CMAKE_WHILEDEF,		"whiledef",		FALSE },
-	{ SCE_CMAKE_FOREACHDEF,		"foreachdef",	FALSE },
-	{ SCE_CMAKE_IFDEFINEDEF,	"ifdefinedef",	FALSE },
-	{ SCE_CMAKE_MACRODEF,		"macrodef",		FALSE },
-	{ SCE_CMAKE_STRINGVAR,		"stringvar",	FALSE },
-	{ SCE_CMAKE_NUMBER,			"number",		FALSE }
+	{ SCE_CMAKE_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_CMAKE_COMMENT,		"comment",		FALSE,	FALSE },
+	{ SCE_CMAKE_STRINGDQ,		"stringdq",		FALSE,	FALSE },
+	{ SCE_CMAKE_STRINGLQ,		"stringlq",		FALSE,	FALSE },
+	{ SCE_CMAKE_STRINGRQ,		"stringrq",		FALSE,	FALSE },
+	{ SCE_CMAKE_COMMANDS,		"command",		FALSE,	FALSE },
+	{ SCE_CMAKE_PARAMETERS,		"parameters",	FALSE,	FALSE },
+	{ SCE_CMAKE_VARIABLE,		"variable",		FALSE,	FALSE },
+	{ SCE_CMAKE_USERDEFINED,	"userdefined",	FALSE,	FALSE },
+	{ SCE_CMAKE_WHILEDEF,		"whiledef",		FALSE,	FALSE },
+	{ SCE_CMAKE_FOREACHDEF,		"foreachdef",	FALSE,	FALSE },
+	{ SCE_CMAKE_IFDEFINEDEF,	"ifdefinedef",	FALSE,	FALSE },
+	{ SCE_CMAKE_MACRODEF,		"macrodef",		FALSE,	FALSE },
+	{ SCE_CMAKE_STRINGVAR,		"stringvar",	FALSE,	FALSE },
+	{ SCE_CMAKE_NUMBER,			"number",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_CMAKE[] =
 {
@@ -376,22 +377,22 @@ static const HLKeyword highlighting_keywords_CMAKE[] =
 #define highlighting_lexer_COFFEESCRIPT		SCLEX_COFFEESCRIPT
 static const HLStyle highlighting_styles_COFFEESCRIPT[] =
 {
-	{ SCE_COFFEESCRIPT_DEFAULT,					"default",				FALSE },
-	{ SCE_COFFEESCRIPT_COMMENTLINE,				"commentline",			FALSE },
-	{ SCE_COFFEESCRIPT_NUMBER,					"number",				FALSE },
-	{ SCE_COFFEESCRIPT_WORD,					"word",					FALSE },
-	{ SCE_COFFEESCRIPT_STRING,					"string",				FALSE },
-	{ SCE_COFFEESCRIPT_CHARACTER,				"character",			FALSE },
-	{ SCE_COFFEESCRIPT_OPERATOR,				"operator",				FALSE },
-	{ SCE_COFFEESCRIPT_IDENTIFIER,				"identifier",			FALSE },
-	{ SCE_COFFEESCRIPT_STRINGEOL,				"stringeol",			FALSE },
-	{ SCE_COFFEESCRIPT_REGEX,					"regex",				FALSE },
-	{ SCE_COFFEESCRIPT_WORD2,					"word2",				FALSE },
-	{ SCE_COFFEESCRIPT_GLOBALCLASS,				"globalclass",			FALSE },
-	{ SCE_COFFEESCRIPT_COMMENTBLOCK,			"commentblock",			FALSE },
-	{ SCE_COFFEESCRIPT_VERBOSE_REGEX,			"verbose_regex",		FALSE },
-	{ SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT,	"verbose_regex_comment",FALSE },
-	{ SCE_COFFEESCRIPT_INSTANCEPROPERTY,		"instanceproperty",		FALSE }
+	{ SCE_COFFEESCRIPT_DEFAULT,					"default",				FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_COMMENTLINE,				"commentline",			FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_NUMBER,					"number",				FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_WORD,					"word",					FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_STRING,					"string",				FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_CHARACTER,				"character",			FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_OPERATOR,				"operator",				FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_IDENTIFIER,				"identifier",			FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_STRINGEOL,				"stringeol",			FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_REGEX,					"regex",				FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_WORD2,					"word2",				FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_GLOBALCLASS,				"globalclass",			FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_COMMENTBLOCK,			"commentblock",			FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_VERBOSE_REGEX,			"verbose_regex",		FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT,	"verbose_regex_comment",FALSE,	FALSE },
+	{ SCE_COFFEESCRIPT_INSTANCEPROPERTY,		"instanceproperty",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_COFFEESCRIPT[] =
 {
@@ -406,30 +407,30 @@ static const HLKeyword highlighting_keywords_COFFEESCRIPT[] =
 #define highlighting_lexer_CSS			SCLEX_CSS
 static const HLStyle highlighting_styles_CSS[] =
 {
-	{ SCE_CSS_DEFAULT,					"default",					FALSE },
-	{ SCE_CSS_COMMENT,					"comment",					FALSE },
-	{ SCE_CSS_TAG,						"tag",						FALSE },
-	{ SCE_CSS_CLASS,					"class",					FALSE },
-	{ SCE_CSS_PSEUDOCLASS,				"pseudoclass",				FALSE },
-	{ SCE_CSS_UNKNOWN_PSEUDOCLASS,		"unknown_pseudoclass",		FALSE },
-	{ SCE_CSS_UNKNOWN_IDENTIFIER,		"unknown_identifier",		FALSE },
-	{ SCE_CSS_OPERATOR,					"operator",					FALSE },
-	{ SCE_CSS_IDENTIFIER,				"identifier",				FALSE },
-	{ SCE_CSS_DOUBLESTRING,				"doublestring",				FALSE },
-	{ SCE_CSS_SINGLESTRING,				"singlestring",				FALSE },
-	{ SCE_CSS_ATTRIBUTE,				"attribute",				FALSE },
-	{ SCE_CSS_VALUE,					"value",					FALSE },
-	{ SCE_CSS_ID,						"id",						FALSE },
-	{ SCE_CSS_IDENTIFIER2,				"identifier2",				FALSE },
-	{ SCE_CSS_VARIABLE,					"variable",					FALSE },
-	{ SCE_CSS_IMPORTANT,				"important",				FALSE },
-	{ SCE_CSS_DIRECTIVE,				"directive",				FALSE },
-	{ SCE_CSS_IDENTIFIER3,				"identifier3",				FALSE },
-	{ SCE_CSS_PSEUDOELEMENT,			"pseudoelement",			FALSE },
-	{ SCE_CSS_EXTENDED_IDENTIFIER,		"extended_identifier",		FALSE },
-	{ SCE_CSS_EXTENDED_PSEUDOCLASS,		"extended_pseudoclass",		FALSE },
-	{ SCE_CSS_EXTENDED_PSEUDOELEMENT,	"extended_pseudoelement",	FALSE },
-	{ SCE_CSS_GROUP_RULE,				"group_rule",				FALSE }
+	{ SCE_CSS_DEFAULT,					"default",					FALSE,	FALSE },
+	{ SCE_CSS_COMMENT,					"comment",					FALSE,	FALSE },
+	{ SCE_CSS_TAG,						"tag",						FALSE,	FALSE },
+	{ SCE_CSS_CLASS,					"class",					FALSE,	FALSE },
+	{ SCE_CSS_PSEUDOCLASS,				"pseudoclass",				FALSE,	FALSE },
+	{ SCE_CSS_UNKNOWN_PSEUDOCLASS,		"unknown_pseudoclass",		FALSE,	FALSE },
+	{ SCE_CSS_UNKNOWN_IDENTIFIER,		"unknown_identifier",		FALSE,	FALSE },
+	{ SCE_CSS_OPERATOR,					"operator",					FALSE,	FALSE },
+	{ SCE_CSS_IDENTIFIER,				"identifier",				FALSE,	FALSE },
+	{ SCE_CSS_DOUBLESTRING,				"doublestring",				FALSE,	FALSE },
+	{ SCE_CSS_SINGLESTRING,				"singlestring",				FALSE,	FALSE },
+	{ SCE_CSS_ATTRIBUTE,				"attribute",				FALSE,	FALSE },
+	{ SCE_CSS_VALUE,					"value",					FALSE,	FALSE },
+	{ SCE_CSS_ID,						"id",						FALSE,	FALSE },
+	{ SCE_CSS_IDENTIFIER2,				"identifier2",				FALSE,	FALSE },
+	{ SCE_CSS_VARIABLE,					"variable",					FALSE,	FALSE },
+	{ SCE_CSS_IMPORTANT,				"important",				FALSE,	FALSE },
+	{ SCE_CSS_DIRECTIVE,				"directive",				FALSE,	FALSE },
+	{ SCE_CSS_IDENTIFIER3,				"identifier3",				FALSE,	FALSE },
+	{ SCE_CSS_PSEUDOELEMENT,			"pseudoelement",			FALSE,	FALSE },
+	{ SCE_CSS_EXTENDED_IDENTIFIER,		"extended_identifier",		FALSE,	FALSE },
+	{ SCE_CSS_EXTENDED_PSEUDOCLASS,		"extended_pseudoclass",		FALSE,	FALSE },
+	{ SCE_CSS_EXTENDED_PSEUDOELEMENT,	"extended_pseudoelement",	FALSE,	FALSE },
+	{ SCE_CSS_GROUP_RULE,				"group_rule",				FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_CSS[] =
 {
@@ -461,12 +462,12 @@ static const HLKeyword highlighting_keywords_COBOL[] =
 #define highlighting_lexer_CONF			SCLEX_PROPERTIES
 static const HLStyle highlighting_styles_CONF[] =
 {
-	{ SCE_PROPS_DEFAULT,	"default",		FALSE },
-	{ SCE_PROPS_COMMENT,	"comment",		FALSE },
-	{ SCE_PROPS_SECTION,	"section",		FALSE },
-	{ SCE_PROPS_KEY,		"key",			FALSE },
-	{ SCE_PROPS_ASSIGNMENT,	"assignment",	FALSE },
-	{ SCE_PROPS_DEFVAL,		"defval",		FALSE }
+	{ SCE_PROPS_DEFAULT,	"default",		FALSE,	FALSE },
+	{ SCE_PROPS_COMMENT,	"comment",		FALSE,	FALSE },
+	{ SCE_PROPS_SECTION,	"section",		FALSE,	FALSE },
+	{ SCE_PROPS_KEY,		"key",			FALSE,	FALSE },
+	{ SCE_PROPS_ASSIGNMENT,	"assignment",	FALSE,	FALSE },
+	{ SCE_PROPS_DEFVAL,		"defval",		FALSE,	FALSE }
 };
 #define highlighting_keywords_CONF		EMPTY_KEYWORDS
 #define highlighting_properties_CONF	EMPTY_PROPERTIES
@@ -476,30 +477,30 @@ static const HLStyle highlighting_styles_CONF[] =
 #define highlighting_lexer_D		SCLEX_D
 static const HLStyle highlighting_styles_D[] =
 {
-	{ SCE_D_DEFAULT,				"default",					FALSE },
-	{ SCE_D_COMMENT,				"comment",					FALSE },
-	{ SCE_D_COMMENTLINE,			"commentline",				FALSE },
-	{ SCE_D_COMMENTDOC,				"commentdoc",				FALSE },
-	{ SCE_D_COMMENTNESTED,			"commentnested",			FALSE },
-	{ SCE_D_NUMBER,					"number",					FALSE },
-	{ SCE_D_WORD,					"word",						FALSE },
-	{ SCE_D_WORD2,					"word2",					FALSE },
-	{ SCE_D_WORD3,					"word3",					FALSE },
-	{ SCE_D_TYPEDEF,				"typedef",					FALSE }, /* FIXME: don't remap here */
-	{ SCE_D_WORD5,					"typedef",					FALSE },
-	{ SCE_D_STRING,					"string",					FALSE },
-	{ SCE_D_STRINGB,				"string",					FALSE },
-	{ SCE_D_STRINGR,				"string",					FALSE },
-	{ SCE_D_STRINGEOL,				"stringeol",				FALSE },
-	{ SCE_D_CHARACTER,				"character",				FALSE },
-	{ SCE_D_OPERATOR,				"operator",					FALSE },
-	{ SCE_D_IDENTIFIER,				"identifier",				FALSE },
-	{ SCE_D_COMMENTLINEDOC,			"commentlinedoc",			FALSE },
-	{ SCE_D_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
-	{ SCE_D_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE }
+	{ SCE_D_DEFAULT,				"default",					FALSE,	FALSE },
+	{ SCE_D_COMMENT,				"comment",					FALSE,	FALSE },
+	{ SCE_D_COMMENTLINE,			"commentline",				FALSE,	FALSE },
+	{ SCE_D_COMMENTDOC,				"commentdoc",				FALSE,	FALSE },
+	{ SCE_D_COMMENTNESTED,			"commentnested",			FALSE,	FALSE },
+	{ SCE_D_NUMBER,					"number",					FALSE,	FALSE },
+	{ SCE_D_WORD,					"word",						FALSE,	FALSE },
+	{ SCE_D_WORD2,					"word2",					FALSE,	FALSE },
+	{ SCE_D_WORD3,					"word3",					FALSE,	FALSE },
+	{ SCE_D_TYPEDEF,				"typedef",					FALSE,	FALSE }, /* FIXME: don't remap here */
+	{ SCE_D_WORD5,					"typedef",					FALSE,	FALSE },
+	{ SCE_D_STRING,					"string",					FALSE,	FALSE },
+	{ SCE_D_STRINGB,				"string",					FALSE,	FALSE },
+	{ SCE_D_STRINGR,				"string",					FALSE,	FALSE },
+	{ SCE_D_STRINGEOL,				"stringeol",				FALSE,	FALSE },
+	{ SCE_D_CHARACTER,				"character",				FALSE,	FALSE },
+	{ SCE_D_OPERATOR,				"operator",					FALSE,	FALSE },
+	{ SCE_D_IDENTIFIER,				"identifier",				FALSE,	FALSE },
+	{ SCE_D_COMMENTLINEDOC,			"commentlinedoc",			FALSE,	FALSE },
+	{ SCE_D_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE,	FALSE },
+	{ SCE_D_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE,	FALSE }
 	/* these are for user-defined keywords we don't set yet */
-	/*{ SCE_D_WORD6,					"word6",					FALSE },
-	{ SCE_D_WORD7,					"word7",					FALSE }*/
+	/*{ SCE_D_WORD6,					"word6",					FALSE,	FALSE },
+	{ SCE_D_WORD7,					"word7",					FALSE,	FALSE }*/
 };
 static const HLKeyword highlighting_keywords_D[] =
 {
@@ -517,18 +518,18 @@ static const HLKeyword highlighting_keywords_D[] =
 #define highlighting_lexer_DIFF			SCLEX_DIFF
 static const HLStyle highlighting_styles_DIFF[] =
 {
-	{ SCE_DIFF_DEFAULT,					"default",				FALSE },
-	{ SCE_DIFF_COMMENT,					"comment",				FALSE },
-	{ SCE_DIFF_COMMAND,					"command",				FALSE },
-	{ SCE_DIFF_HEADER,					"header",				FALSE },
-	{ SCE_DIFF_POSITION,				"position",				FALSE },
-	{ SCE_DIFF_DELETED,					"deleted",				FALSE },
-	{ SCE_DIFF_ADDED,					"added",				FALSE },
-	{ SCE_DIFF_CHANGED,					"changed",				FALSE },
-	{ SCE_DIFF_PATCH_ADD,				"patch_add",			FALSE },
-	{ SCE_DIFF_PATCH_DELETE,			"patch_delete",			FALSE },
-	{ SCE_DIFF_REMOVED_PATCH_ADD,		"removed_patch_add",	FALSE },
-	{ SCE_DIFF_REMOVED_PATCH_DELETE,	"removed_patch_delete",	FALSE }
+	{ SCE_DIFF_DEFAULT,					"default",				FALSE,	FALSE },
+	{ SCE_DIFF_COMMENT,					"comment",				FALSE,	FALSE },
+	{ SCE_DIFF_COMMAND,					"command",				FALSE,	FALSE },
+	{ SCE_DIFF_HEADER,					"header",				FALSE,	FALSE },
+	{ SCE_DIFF_POSITION,				"position",				FALSE,	FALSE },
+	{ SCE_DIFF_DELETED,					"deleted",				FALSE,	FALSE },
+	{ SCE_DIFF_ADDED,					"added",				FALSE,	FALSE },
+	{ SCE_DIFF_CHANGED,					"changed",				FALSE,	FALSE },
+	{ SCE_DIFF_PATCH_ADD,				"patch_add",			FALSE,	FALSE },
+	{ SCE_DIFF_PATCH_DELETE,			"patch_delete",			FALSE,	FALSE },
+	{ SCE_DIFF_REMOVED_PATCH_ADD,		"removed_patch_add",	FALSE,	FALSE },
+	{ SCE_DIFF_REMOVED_PATCH_DELETE,	"removed_patch_delete",	FALSE,	FALSE }
 };
 #define highlighting_keywords_DIFF		EMPTY_KEYWORDS
 #define highlighting_properties_DIFF	EMPTY_PROPERTIES
@@ -537,35 +538,35 @@ static const HLStyle highlighting_styles_DIFF[] =
 #define highlighting_lexer_DOCBOOK			SCLEX_XML
 static const HLStyle highlighting_styles_DOCBOOK[] =
 {
-	{ SCE_H_DEFAULT,				"default",					FALSE	 },
-	{ SCE_H_TAG,					"tag",						FALSE	 },
-	{ SCE_H_TAGUNKNOWN,				"tagunknown",				FALSE	 },
-	{ SCE_H_ATTRIBUTE,				"attribute",				FALSE	 },
-	{ SCE_H_ATTRIBUTEUNKNOWN,		"attributeunknown",			FALSE	 },
-	{ SCE_H_NUMBER,					"number",					FALSE	 },
-	{ SCE_H_DOUBLESTRING,			"doublestring",				FALSE	 },
-	{ SCE_H_SINGLESTRING,			"singlestring",				FALSE	 },
-	{ SCE_H_OTHER,					"other",					FALSE	 },
-	{ SCE_H_COMMENT,				"comment",					FALSE	 },
-	{ SCE_H_ENTITY,					"entity",					FALSE	 },
-	{ SCE_H_TAGEND,					"tagend",					FALSE	 },
-	{ SCE_H_XMLSTART,				"xmlstart",					TRUE	 },
-	{ SCE_H_XMLEND,					"xmlend",					FALSE	 },
-	{ SCE_H_CDATA,					"cdata",					FALSE	 },
-	{ SCE_H_QUESTION,				"question",					FALSE	 },
-	{ SCE_H_VALUE,					"value",					FALSE	 },
-	{ SCE_H_XCCOMMENT,				"xccomment",				FALSE	 },
-	{ SCE_H_SGML_DEFAULT,			"sgml_default",				FALSE	 },
-	{ SCE_H_SGML_COMMENT,			"sgml_comment",				FALSE	 },
-	{ SCE_H_SGML_SPECIAL,			"sgml_special",				FALSE	 },
-	{ SCE_H_SGML_COMMAND,			"sgml_command",				FALSE	 },
-	{ SCE_H_SGML_DOUBLESTRING,		"sgml_doublestring",		FALSE	 },
-	{ SCE_H_SGML_SIMPLESTRING,		"sgml_simplestring",		FALSE	 },
-	{ SCE_H_SGML_1ST_PARAM,			"sgml_1st_param",			FALSE	 },
-	{ SCE_H_SGML_ENTITY,			"sgml_entity",				FALSE	 },
-	{ SCE_H_SGML_BLOCK_DEFAULT,		"sgml_block_default",		FALSE	 },
-	{ SCE_H_SGML_1ST_PARAM_COMMENT,	"sgml_1st_param_comment",	FALSE	 },
-	{ SCE_H_SGML_ERROR,				"sgml_error",				FALSE	 }
+	{ SCE_H_DEFAULT,				"default",					FALSE,	FALSE },
+	{ SCE_H_TAG,					"tag",						FALSE,	FALSE },
+	{ SCE_H_TAGUNKNOWN,				"tagunknown",				FALSE,	FALSE },
+	{ SCE_H_ATTRIBUTE,				"attribute",				FALSE,	FALSE },
+	{ SCE_H_ATTRIBUTEUNKNOWN,		"attributeunknown",			FALSE,	FALSE },
+	{ SCE_H_NUMBER,					"number",					FALSE,	FALSE },
+	{ SCE_H_DOUBLESTRING,			"doublestring",				FALSE,	FALSE },
+	{ SCE_H_SINGLESTRING,			"singlestring",				FALSE,	FALSE },
+	{ SCE_H_OTHER,					"other",					FALSE,	FALSE },
+	{ SCE_H_COMMENT,				"comment",					FALSE,	FALSE },
+	{ SCE_H_ENTITY,					"entity",					FALSE,	FALSE },
+	{ SCE_H_TAGEND,					"tagend",					FALSE,	FALSE },
+	{ SCE_H_XMLSTART,				"xmlstart",					TRUE,	FALSE },
+	{ SCE_H_XMLEND,					"xmlend",					FALSE,	FALSE },
+	{ SCE_H_CDATA,					"cdata",					FALSE,	FALSE },
+	{ SCE_H_QUESTION,				"question",					FALSE,	FALSE },
+	{ SCE_H_VALUE,					"value",					FALSE,	FALSE },
+	{ SCE_H_XCCOMMENT,				"xccomment",				FALSE,	FALSE },
+	{ SCE_H_SGML_DEFAULT,			"sgml_default",				FALSE,	FALSE },
+	{ SCE_H_SGML_COMMENT,			"sgml_comment",				FALSE,	FALSE },
+	{ SCE_H_SGML_SPECIAL,			"sgml_special",				FALSE,	FALSE },
+	{ SCE_H_SGML_COMMAND,			"sgml_command",				FALSE,	FALSE },
+	{ SCE_H_SGML_DOUBLESTRING,		"sgml_doublestring",		FALSE,	FALSE },
+	{ SCE_H_SGML_SIMPLESTRING,		"sgml_simplestring",		FALSE,	FALSE },
+	{ SCE_H_SGML_1ST_PARAM,			"sgml_1st_param",			FALSE,	FALSE },
+	{ SCE_H_SGML_ENTITY,			"sgml_entity",				FALSE,	FALSE },
+	{ SCE_H_SGML_BLOCK_DEFAULT,		"sgml_block_default",		FALSE,	FALSE },
+	{ SCE_H_SGML_1ST_PARAM_COMMENT,	"sgml_1st_param_comment",	FALSE,	FALSE },
+	{ SCE_H_SGML_ERROR,				"sgml_error",				FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_DOCBOOK[] =
 {
@@ -579,32 +580,32 @@ static const HLKeyword highlighting_keywords_DOCBOOK[] =
 #define highlighting_lexer_ERLANG		SCLEX_ERLANG
 static const HLStyle highlighting_styles_ERLANG[] =
 {
-	{ SCE_ERLANG_DEFAULT,			"default",				FALSE },
-	{ SCE_ERLANG_COMMENT,			"comment",				FALSE },
-	{ SCE_ERLANG_VARIABLE,			"variable",				FALSE },
-	{ SCE_ERLANG_NUMBER,			"number",				FALSE },
-	{ SCE_ERLANG_KEYWORD,			"keyword",				FALSE },
-	{ SCE_ERLANG_STRING,			"string",				FALSE },
-	{ SCE_ERLANG_OPERATOR,			"operator",				FALSE },
-	{ SCE_ERLANG_ATOM,				"atom",					FALSE },
-	{ SCE_ERLANG_FUNCTION_NAME,		"function_name",		FALSE },
-	{ SCE_ERLANG_CHARACTER,			"character",			FALSE },
-	{ SCE_ERLANG_MACRO,				"macro",				FALSE },
-	{ SCE_ERLANG_RECORD,			"record",				FALSE },
-	{ SCE_ERLANG_PREPROC,			"preproc",				FALSE },
-	{ SCE_ERLANG_NODE_NAME,			"node_name",			FALSE },
-	{ SCE_ERLANG_COMMENT_FUNCTION,	"comment_function",		FALSE },
-	{ SCE_ERLANG_COMMENT_MODULE,	"comment_module",		FALSE },
-	{ SCE_ERLANG_COMMENT_DOC,		"comment_doc",			FALSE },
-	{ SCE_ERLANG_COMMENT_DOC_MACRO,	"comment_doc_macro",	FALSE },
-	{ SCE_ERLANG_ATOM_QUOTED,		"atom_quoted",			FALSE },
-	{ SCE_ERLANG_MACRO_QUOTED,		"macro_quoted",			FALSE },
-	{ SCE_ERLANG_RECORD_QUOTED,		"record_quoted",		FALSE },
-	{ SCE_ERLANG_NODE_NAME_QUOTED,	"node_name_quoted",		FALSE },
-	{ SCE_ERLANG_BIFS,				"bifs",					FALSE },
-	{ SCE_ERLANG_MODULES,			"modules",				FALSE },
-	{ SCE_ERLANG_MODULES_ATT,		"modules_att",			FALSE },
-	{ SCE_ERLANG_UNKNOWN,			"unknown",				FALSE }
+	{ SCE_ERLANG_DEFAULT,			"default",				FALSE,	FALSE },
+	{ SCE_ERLANG_COMMENT,			"comment",				FALSE,	FALSE },
+	{ SCE_ERLANG_VARIABLE,			"variable",				FALSE,	FALSE },
+	{ SCE_ERLANG_NUMBER,			"number",				FALSE,	FALSE },
+	{ SCE_ERLANG_KEYWORD,			"keyword",				FALSE,	FALSE },
+	{ SCE_ERLANG_STRING,			"string",				FALSE,	FALSE },
+	{ SCE_ERLANG_OPERATOR,			"operator",				FALSE,	FALSE },
+	{ SCE_ERLANG_ATOM,				"atom",					FALSE,	FALSE },
+	{ SCE_ERLANG_FUNCTION_NAME,		"function_name",		FALSE,	FALSE },
+	{ SCE_ERLANG_CHARACTER,			"character",			FALSE,	FALSE },
+	{ SCE_ERLANG_MACRO,				"macro",				FALSE,	FALSE },
+	{ SCE_ERLANG_RECORD,			"record",				FALSE,	FALSE },
+	{ SCE_ERLANG_PREPROC,			"preproc",				FALSE,	FALSE },
+	{ SCE_ERLANG_NODE_NAME,			"node_name",			FALSE,	FALSE },
+	{ SCE_ERLANG_COMMENT_FUNCTION,	"comment_function",		FALSE,	FALSE },
+	{ SCE_ERLANG_COMMENT_MODULE,	"comment_module",		FALSE,	FALSE },
+	{ SCE_ERLANG_COMMENT_DOC,		"comment_doc",			FALSE,	FALSE },
+	{ SCE_ERLANG_COMMENT_DOC_MACRO,	"comment_doc_macro",	FALSE,	FALSE },
+	{ SCE_ERLANG_ATOM_QUOTED,		"atom_quoted",			FALSE,	FALSE },
+	{ SCE_ERLANG_MACRO_QUOTED,		"macro_quoted",			FALSE,	FALSE },
+	{ SCE_ERLANG_RECORD_QUOTED,		"record_quoted",		FALSE,	FALSE },
+	{ SCE_ERLANG_NODE_NAME_QUOTED,	"node_name_quoted",		FALSE,	FALSE },
+	{ SCE_ERLANG_BIFS,				"bifs",					FALSE,	FALSE },
+	{ SCE_ERLANG_MODULES,			"modules",				FALSE,	FALSE },
+	{ SCE_ERLANG_MODULES_ATT,		"modules_att",			FALSE,	FALSE },
+	{ SCE_ERLANG_UNKNOWN,			"unknown",				FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_ERLANG[] =
 {
@@ -622,21 +623,21 @@ static const HLKeyword highlighting_keywords_ERLANG[] =
 #define highlighting_lexer_F77			SCLEX_F77
 static const HLStyle highlighting_styles_F77[] =
 {
-	{ SCE_F_DEFAULT,		"default",			FALSE },
-	{ SCE_F_COMMENT,		"comment",			FALSE },
-	{ SCE_F_NUMBER,			"number",			FALSE },
-	{ SCE_F_STRING1,		"string",			FALSE },
-	{ SCE_F_OPERATOR,		"operator",			FALSE },
-	{ SCE_F_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_F_STRING2,		"string2",			FALSE },
-	{ SCE_F_WORD,			"word",				FALSE },
-	{ SCE_F_WORD2,			"word2",			FALSE },
-	{ SCE_F_WORD3,			"word3",			FALSE },
-	{ SCE_F_PREPROCESSOR,	"preprocessor",		FALSE },
-	{ SCE_F_OPERATOR2,		"operator2",		FALSE },
-	{ SCE_F_CONTINUATION,	"continuation",		FALSE },
-	{ SCE_F_STRINGEOL,		"stringeol",		FALSE },
-	{ SCE_F_LABEL,			"label",			FALSE }
+	{ SCE_F_DEFAULT,		"default",			FALSE,	FALSE },
+	{ SCE_F_COMMENT,		"comment",			FALSE,	FALSE },
+	{ SCE_F_NUMBER,			"number",			FALSE,	FALSE },
+	{ SCE_F_STRING1,		"string",			FALSE,	FALSE },
+	{ SCE_F_OPERATOR,		"operator",			FALSE,	FALSE },
+	{ SCE_F_IDENTIFIER,		"identifier",		FALSE,	FALSE },
+	{ SCE_F_STRING2,		"string2",			FALSE,	FALSE },
+	{ SCE_F_WORD,			"word",				FALSE,	FALSE },
+	{ SCE_F_WORD2,			"word2",			FALSE,	FALSE },
+	{ SCE_F_WORD3,			"word3",			FALSE,	FALSE },
+	{ SCE_F_PREPROCESSOR,	"preprocessor",		FALSE,	FALSE },
+	{ SCE_F_OPERATOR2,		"operator2",		FALSE,	FALSE },
+	{ SCE_F_CONTINUATION,	"continuation",		FALSE,	FALSE },
+	{ SCE_F_STRINGEOL,		"stringeol",		FALSE,	FALSE },
+	{ SCE_F_LABEL,			"label",			FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_F77[] =
 {
@@ -651,18 +652,18 @@ static const HLKeyword highlighting_keywords_F77[] =
 #define highlighting_lexer_FORTH		SCLEX_FORTH
 static const HLStyle highlighting_styles_FORTH[] =
 {
-	{ SCE_FORTH_DEFAULT,	"default",		FALSE },
-	{ SCE_FORTH_COMMENT,	"comment",		FALSE },
-	{ SCE_FORTH_COMMENT_ML,	"commentml",	FALSE },
-	{ SCE_FORTH_IDENTIFIER,	"identifier",	FALSE },
-	{ SCE_FORTH_CONTROL,	"control",		FALSE },
-	{ SCE_FORTH_KEYWORD,	"keyword",		FALSE },
-	{ SCE_FORTH_DEFWORD,	"defword",		FALSE },
-	{ SCE_FORTH_PREWORD1,	"preword1",		FALSE },
-	{ SCE_FORTH_PREWORD2,	"preword2",		FALSE },
-	{ SCE_FORTH_NUMBER,		"number",		FALSE },
-	{ SCE_FORTH_STRING,		"string",		FALSE },
-	{ SCE_FORTH_LOCALE,		"locale",		FALSE }
+	{ SCE_FORTH_DEFAULT,	"default",		FALSE,	FALSE },
+	{ SCE_FORTH_COMMENT,	"comment",		FALSE,	FALSE },
+	{ SCE_FORTH_COMMENT_ML,	"commentml",	FALSE,	FALSE },
+	{ SCE_FORTH_IDENTIFIER,	"identifier",	FALSE,	FALSE },
+	{ SCE_FORTH_CONTROL,	"control",		FALSE,	FALSE },
+	{ SCE_FORTH_KEYWORD,	"keyword",		FALSE,	FALSE },
+	{ SCE_FORTH_DEFWORD,	"defword",		FALSE,	FALSE },
+	{ SCE_FORTH_PREWORD1,	"preword1",		FALSE,	FALSE },
+	{ SCE_FORTH_PREWORD2,	"preword2",		FALSE,	FALSE },
+	{ SCE_FORTH_NUMBER,		"number",		FALSE,	FALSE },
+	{ SCE_FORTH_STRING,		"string",		FALSE,	FALSE },
+	{ SCE_FORTH_LOCALE,		"locale",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_FORTH[] =
 {
@@ -688,23 +689,23 @@ static const HLKeyword highlighting_keywords_FORTH[] =
 #define highlighting_lexer_GDSCRIPT		SCLEX_GDSCRIPT
 static const HLStyle highlighting_styles_GDSCRIPT[] =
 {
-	{ SCE_GD_DEFAULT,		"default",			FALSE },
-	{ SCE_GD_COMMENTLINE,	"commentline",		FALSE },
-	{ SCE_GD_NUMBER,		"number",			FALSE },
-	{ SCE_GD_STRING,		"string",			FALSE },
-	{ SCE_GD_CHARACTER,		"character",		FALSE },
-	{ SCE_GD_WORD,			"word",				FALSE },
-	{ SCE_GD_TRIPLE,		"triple",			FALSE },
-	{ SCE_GD_TRIPLEDOUBLE,	"tripledouble",		FALSE },
-	{ SCE_GD_CLASSNAME,		"classname",		FALSE },
-	{ SCE_GD_FUNCNAME,		"funcname",			FALSE },
-	{ SCE_GD_OPERATOR,		"operator",			FALSE },
-	{ SCE_GD_IDENTIFIER,	"identifier",		FALSE },
-	{ SCE_GD_COMMENTBLOCK,	"commentblock",		FALSE },
-	{ SCE_GD_STRINGEOL,		"stringeol",		FALSE },
-	{ SCE_GD_WORD2,			"word2",			FALSE },
-	{ SCE_GD_ANNOTATION,	"annotation",		FALSE },
-	{ SCE_GD_NODEPATH,		"notepath",			FALSE }
+	{ SCE_GD_DEFAULT,		"default",			FALSE,	FALSE },
+	{ SCE_GD_COMMENTLINE,	"commentline",		FALSE,	FALSE },
+	{ SCE_GD_NUMBER,		"number",			FALSE,	FALSE },
+	{ SCE_GD_STRING,		"string",			FALSE,	FALSE },
+	{ SCE_GD_CHARACTER,		"character",		FALSE,	FALSE },
+	{ SCE_GD_WORD,			"word",				FALSE,	FALSE },
+	{ SCE_GD_TRIPLE,		"triple",			FALSE,	FALSE },
+	{ SCE_GD_TRIPLEDOUBLE,	"tripledouble",		FALSE,	FALSE },
+	{ SCE_GD_CLASSNAME,		"classname",		FALSE,	FALSE },
+	{ SCE_GD_FUNCNAME,		"funcname",			FALSE,	FALSE },
+	{ SCE_GD_OPERATOR,		"operator",			FALSE,	FALSE },
+	{ SCE_GD_IDENTIFIER,	"identifier",		FALSE,	TRUE },
+	{ SCE_GD_COMMENTBLOCK,	"commentblock",		FALSE,	FALSE },
+	{ SCE_GD_STRINGEOL,		"stringeol",		FALSE,	FALSE },
+	{ SCE_GD_WORD2,			"word2",			FALSE,	FALSE },
+	{ SCE_GD_ANNOTATION,	"annotation",		FALSE,	FALSE },
+	{ SCE_GD_NODEPATH,		"notepath",			FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_GDSCRIPT[] =
 {
@@ -725,29 +726,29 @@ static const HLKeyword highlighting_keywords_GDSCRIPT[] =
 #define highlighting_lexer_HASKELL			SCLEX_HASKELL
 static const HLStyle highlighting_styles_HASKELL[] =
 {
-	{ SCE_HA_DEFAULT,				"default",				FALSE },
-	{ SCE_HA_COMMENTLINE,			"commentline",			FALSE },
-	{ SCE_HA_COMMENTBLOCK,			"commentblock",			FALSE },
-	{ SCE_HA_COMMENTBLOCK2,			"commentblock2",		FALSE },
-	{ SCE_HA_COMMENTBLOCK3,			"commentblock3",		FALSE },
-	{ SCE_HA_NUMBER,				"number",				FALSE },
-	{ SCE_HA_KEYWORD,				"keyword",				FALSE },
-	{ SCE_HA_IMPORT,				"import",				FALSE },
-	{ SCE_HA_STRING,				"string",				FALSE },
-	{ SCE_HA_CHARACTER,				"character",			FALSE },
-	{ SCE_HA_CLASS,					"class",				FALSE },
-	{ SCE_HA_OPERATOR,				"operator",				FALSE },
-	{ SCE_HA_IDENTIFIER,			"identifier",			FALSE },
-	{ SCE_HA_INSTANCE,				"instance",				FALSE },
-	{ SCE_HA_CAPITAL,				"capital",				FALSE },
-	{ SCE_HA_MODULE,				"module",				FALSE },
-	{ SCE_HA_DATA,					"data",					FALSE },
-	{ SCE_HA_PRAGMA,				"pragma",				FALSE },
-	{ SCE_HA_PREPROCESSOR,			"preprocessor",			FALSE },
-	{ SCE_HA_STRINGEOL,				"stringeol",			FALSE },
-	{ SCE_HA_RESERVED_OPERATOR,		"reserved_operator",	FALSE },
-	{ SCE_HA_LITERATE_COMMENT,		"literate_comment",		FALSE },
-	{ SCE_HA_LITERATE_CODEDELIM,	"literate_codedelim",	FALSE }
+	{ SCE_HA_DEFAULT,				"default",				FALSE,	FALSE },
+	{ SCE_HA_COMMENTLINE,			"commentline",			FALSE,	FALSE },
+	{ SCE_HA_COMMENTBLOCK,			"commentblock",			FALSE,	FALSE },
+	{ SCE_HA_COMMENTBLOCK2,			"commentblock2",		FALSE,	FALSE },
+	{ SCE_HA_COMMENTBLOCK3,			"commentblock3",		FALSE,	FALSE },
+	{ SCE_HA_NUMBER,				"number",				FALSE,	FALSE },
+	{ SCE_HA_KEYWORD,				"keyword",				FALSE,	FALSE },
+	{ SCE_HA_IMPORT,				"import",				FALSE,	FALSE },
+	{ SCE_HA_STRING,				"string",				FALSE,	FALSE },
+	{ SCE_HA_CHARACTER,				"character",			FALSE,	FALSE },
+	{ SCE_HA_CLASS,					"class",				FALSE,	FALSE },
+	{ SCE_HA_OPERATOR,				"operator",				FALSE,	FALSE },
+	{ SCE_HA_IDENTIFIER,			"identifier",			FALSE,	FALSE },
+	{ SCE_HA_INSTANCE,				"instance",				FALSE,	FALSE },
+	{ SCE_HA_CAPITAL,				"capital",				FALSE,	FALSE },
+	{ SCE_HA_MODULE,				"module",				FALSE,	FALSE },
+	{ SCE_HA_DATA,					"data",					FALSE,	FALSE },
+	{ SCE_HA_PRAGMA,				"pragma",				FALSE,	FALSE },
+	{ SCE_HA_PREPROCESSOR,			"preprocessor",			FALSE,	FALSE },
+	{ SCE_HA_STRINGEOL,				"stringeol",			FALSE,	FALSE },
+	{ SCE_HA_RESERVED_OPERATOR,		"reserved_operator",	FALSE,	FALSE },
+	{ SCE_HA_LITERATE_COMMENT,		"literate_comment",		FALSE,	FALSE },
+	{ SCE_HA_LITERATE_CODEDELIM,	"literate_codedelim",	FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_HASKELL[] =
 {
@@ -774,132 +775,132 @@ static const HLKeyword highlighting_keywords_HAXE[] =
 #define highlighting_lexer_HTML		SCLEX_HTML
 static const HLStyle highlighting_styles_HTML[] =
 {
-	{ SCE_H_DEFAULT,				"html_default",				FALSE	 },
-	{ SCE_H_TAG,					"html_tag",					FALSE	 },
-	{ SCE_H_TAGUNKNOWN,				"html_tagunknown",			FALSE	 },
-	{ SCE_H_ATTRIBUTE,				"html_attribute",			FALSE	 },
-	{ SCE_H_ATTRIBUTEUNKNOWN,		"html_attributeunknown",	FALSE	 },
-	{ SCE_H_NUMBER,					"html_number",				FALSE	 },
-	{ SCE_H_DOUBLESTRING,			"html_doublestring",		FALSE	 },
-	{ SCE_H_SINGLESTRING,			"html_singlestring",		FALSE	 },
-	{ SCE_H_OTHER,					"html_other",				FALSE	 },
-	{ SCE_H_COMMENT,				"html_comment",				FALSE	 },
-	{ SCE_H_ENTITY,					"html_entity",				FALSE	 },
-	{ SCE_H_TAGEND,					"html_tagend",				FALSE	 },
-	{ SCE_H_XMLSTART,				"html_xmlstart", 			TRUE	 },
-	{ SCE_H_XMLEND,					"html_xmlend",				FALSE	 },
-	{ SCE_H_SCRIPT,					"html_script",				FALSE	 },
-	{ SCE_H_ASP,					"html_asp",					TRUE	 },
-	{ SCE_H_ASPAT,					"html_aspat",				TRUE	 },
-	{ SCE_H_CDATA,					"html_cdata",				FALSE	 },
-	{ SCE_H_QUESTION,				"html_question",			FALSE	 },
-	{ SCE_H_VALUE,					"html_value",				FALSE	 },
-	{ SCE_H_XCCOMMENT,				"html_xccomment",			FALSE	 },
+	{ SCE_H_DEFAULT,				"html_default",				FALSE,	FALSE },
+	{ SCE_H_TAG,					"html_tag",					FALSE,	FALSE },
+	{ SCE_H_TAGUNKNOWN,				"html_tagunknown",			FALSE,	FALSE },
+	{ SCE_H_ATTRIBUTE,				"html_attribute",			FALSE,	FALSE },
+	{ SCE_H_ATTRIBUTEUNKNOWN,		"html_attributeunknown",	FALSE,	FALSE },
+	{ SCE_H_NUMBER,					"html_number",				FALSE,	FALSE },
+	{ SCE_H_DOUBLESTRING,			"html_doublestring",		FALSE,	FALSE },
+	{ SCE_H_SINGLESTRING,			"html_singlestring",		FALSE,	FALSE },
+	{ SCE_H_OTHER,					"html_other",				FALSE,	FALSE },
+	{ SCE_H_COMMENT,				"html_comment",				FALSE,	FALSE },
+	{ SCE_H_ENTITY,					"html_entity",				FALSE,	FALSE },
+	{ SCE_H_TAGEND,					"html_tagend",				FALSE,	FALSE },
+	{ SCE_H_XMLSTART,				"html_xmlstart", 			TRUE,	FALSE },
+	{ SCE_H_XMLEND,					"html_xmlend",				FALSE,	FALSE },
+	{ SCE_H_SCRIPT,					"html_script",				FALSE,	FALSE },
+	{ SCE_H_ASP,					"html_asp",					TRUE,	FALSE },
+	{ SCE_H_ASPAT,					"html_aspat",				TRUE,	FALSE },
+	{ SCE_H_CDATA,					"html_cdata",				FALSE,	FALSE },
+	{ SCE_H_QUESTION,				"html_question",			FALSE,	FALSE },
+	{ SCE_H_VALUE,					"html_value",				FALSE,	FALSE },
+	{ SCE_H_XCCOMMENT,				"html_xccomment",			FALSE,	FALSE },
 
-	{ SCE_H_SGML_DEFAULT,			"sgml_default",				FALSE	 },
-	{ SCE_H_SGML_COMMENT,			"sgml_comment",				FALSE	 },
-	{ SCE_H_SGML_SPECIAL,			"sgml_special",				FALSE	 },
-	{ SCE_H_SGML_COMMAND,			"sgml_command",				FALSE	 },
-	{ SCE_H_SGML_DOUBLESTRING,		"sgml_doublestring",		FALSE	 },
-	{ SCE_H_SGML_SIMPLESTRING,		"sgml_simplestring",		FALSE	 },
-	{ SCE_H_SGML_1ST_PARAM,			"sgml_1st_param",			FALSE	 },
-	{ SCE_H_SGML_ENTITY,			"sgml_entity",				FALSE	 },
-	{ SCE_H_SGML_BLOCK_DEFAULT,		"sgml_block_default",		FALSE	 },
-	{ SCE_H_SGML_1ST_PARAM_COMMENT,	"sgml_1st_param_comment",	FALSE	 },
-	{ SCE_H_SGML_ERROR,				"sgml_error",				FALSE	 },
+	{ SCE_H_SGML_DEFAULT,			"sgml_default",				FALSE,	FALSE },
+	{ SCE_H_SGML_COMMENT,			"sgml_comment",				FALSE,	FALSE },
+	{ SCE_H_SGML_SPECIAL,			"sgml_special",				FALSE,	FALSE },
+	{ SCE_H_SGML_COMMAND,			"sgml_command",				FALSE,	FALSE },
+	{ SCE_H_SGML_DOUBLESTRING,		"sgml_doublestring",		FALSE,	FALSE },
+	{ SCE_H_SGML_SIMPLESTRING,		"sgml_simplestring",		FALSE,	FALSE },
+	{ SCE_H_SGML_1ST_PARAM,			"sgml_1st_param",			FALSE,	FALSE },
+	{ SCE_H_SGML_ENTITY,			"sgml_entity",				FALSE,	FALSE },
+	{ SCE_H_SGML_BLOCK_DEFAULT,		"sgml_block_default",		FALSE,	FALSE },
+	{ SCE_H_SGML_1ST_PARAM_COMMENT,	"sgml_1st_param_comment",	FALSE,	FALSE },
+	{ SCE_H_SGML_ERROR,				"sgml_error",				FALSE,	FALSE },
 
 	/* embedded JavaScript */
-	{ SCE_HJ_START,					"jscript_start",			FALSE	 },
-	{ SCE_HJ_DEFAULT,				"jscript_default",			FALSE	 },
-	{ SCE_HJ_COMMENT,				"jscript_comment",			FALSE	 },
-	{ SCE_HJ_COMMENTLINE,			"jscript_commentline",		FALSE	 },
-	{ SCE_HJ_COMMENTDOC,			"jscript_commentdoc",		FALSE	 },
-	{ SCE_HJ_NUMBER,				"jscript_number",			FALSE	 },
-	{ SCE_HJ_WORD,					"jscript_word",				FALSE	 },
-	{ SCE_HJ_KEYWORD,				"jscript_keyword",			FALSE	 },
-	{ SCE_HJ_DOUBLESTRING,			"jscript_doublestring",		FALSE	 },
-	{ SCE_HJ_SINGLESTRING,			"jscript_singlestring",		FALSE	 },
-	{ SCE_HJ_SYMBOLS,				"jscript_symbols",			FALSE	 },
-	{ SCE_HJ_STRINGEOL,				"jscript_stringeol",		FALSE	 },
-	{ SCE_HJ_REGEX,					"jscript_regex",			FALSE	 },
+	{ SCE_HJ_START,					"jscript_start",			FALSE,	FALSE },
+	{ SCE_HJ_DEFAULT,				"jscript_default",			FALSE,	FALSE },
+	{ SCE_HJ_COMMENT,				"jscript_comment",			FALSE,	FALSE },
+	{ SCE_HJ_COMMENTLINE,			"jscript_commentline",		FALSE,	FALSE },
+	{ SCE_HJ_COMMENTDOC,			"jscript_commentdoc",		FALSE,	FALSE },
+	{ SCE_HJ_NUMBER,				"jscript_number",			FALSE,	FALSE },
+	{ SCE_HJ_WORD,					"jscript_word",				FALSE,	FALSE },
+	{ SCE_HJ_KEYWORD,				"jscript_keyword",			FALSE,	FALSE },
+	{ SCE_HJ_DOUBLESTRING,			"jscript_doublestring",		FALSE,	FALSE },
+	{ SCE_HJ_SINGLESTRING,			"jscript_singlestring",		FALSE,	FALSE },
+	{ SCE_HJ_SYMBOLS,				"jscript_symbols",			FALSE,	FALSE },
+	{ SCE_HJ_STRINGEOL,				"jscript_stringeol",		FALSE,	FALSE },
+	{ SCE_HJ_REGEX,					"jscript_regex",			FALSE,	FALSE },
 
 	/* for HB, VBScript?, use the same styles as for JavaScript */
-	{ SCE_HB_START,					"jscript_start",			FALSE	 },
-	{ SCE_HB_DEFAULT,				"jscript_default",			FALSE	 },
-	{ SCE_HB_COMMENTLINE,			"jscript_commentline",		FALSE	 },
-	{ SCE_HB_NUMBER,				"jscript_number",			FALSE	 },
-	{ SCE_HB_WORD,					"jscript_keyword",			FALSE	 }, /* keywords */
-	{ SCE_HB_STRING,				"jscript_doublestring",		FALSE	 },
-	{ SCE_HB_IDENTIFIER,			"jscript_symbols",			FALSE	 },
-	{ SCE_HB_STRINGEOL,				"jscript_stringeol",		FALSE	 },
+	{ SCE_HB_START,					"jscript_start",			FALSE,	FALSE },
+	{ SCE_HB_DEFAULT,				"jscript_default",			FALSE,	FALSE },
+	{ SCE_HB_COMMENTLINE,			"jscript_commentline",		FALSE,	FALSE },
+	{ SCE_HB_NUMBER,				"jscript_number",			FALSE,	FALSE },
+	{ SCE_HB_WORD,					"jscript_keyword",			FALSE,	FALSE }, /* keywords */
+	{ SCE_HB_STRING,				"jscript_doublestring",		FALSE,	FALSE },
+	{ SCE_HB_IDENTIFIER,			"jscript_symbols",			FALSE,	FALSE },
+	{ SCE_HB_STRINGEOL,				"jscript_stringeol",		FALSE,	FALSE },
 
 	/* for HBA, VBScript?, use the same styles as for JavaScript */
-	{ SCE_HBA_START,				"jscript_start",			FALSE	 },
-	{ SCE_HBA_DEFAULT,				"jscript_default",			FALSE	 },
-	{ SCE_HBA_COMMENTLINE,			"jscript_commentline",		FALSE	 },
-	{ SCE_HBA_NUMBER,				"jscript_number",			FALSE	 },
-	{ SCE_HBA_WORD,					"jscript_keyword",			FALSE	 }, /* keywords */
-	{ SCE_HBA_STRING,				"jscript_doublestring",		FALSE	 },
-	{ SCE_HBA_IDENTIFIER,			"jscript_symbols",			FALSE	 },
-	{ SCE_HBA_STRINGEOL,			"jscript_stringeol",		FALSE	 },
+	{ SCE_HBA_START,				"jscript_start",			FALSE,	FALSE },
+	{ SCE_HBA_DEFAULT,				"jscript_default",			FALSE,	FALSE },
+	{ SCE_HBA_COMMENTLINE,			"jscript_commentline",		FALSE,	FALSE },
+	{ SCE_HBA_NUMBER,				"jscript_number",			FALSE,	FALSE },
+	{ SCE_HBA_WORD,					"jscript_keyword",			FALSE,	FALSE }, /* keywords */
+	{ SCE_HBA_STRING,				"jscript_doublestring",		FALSE,	FALSE },
+	{ SCE_HBA_IDENTIFIER,			"jscript_symbols",			FALSE,	FALSE },
+	{ SCE_HBA_STRINGEOL,			"jscript_stringeol",		FALSE,	FALSE },
 
 	/* for HJA, ASP Javascript, use the same styles as for JavaScript */
-	{ SCE_HJA_START,				"jscript_start",			FALSE	 },
-	{ SCE_HJA_DEFAULT,				"jscript_default",			FALSE	 },
-	{ SCE_HJA_COMMENT,				"jscript_comment",			FALSE	 },
-	{ SCE_HJA_COMMENTLINE,			"jscript_commentline",		FALSE	 },
-	{ SCE_HJA_COMMENTDOC,			"jscript_commentdoc",		FALSE	 },
-	{ SCE_HJA_NUMBER,				"jscript_number",			FALSE	 },
-	{ SCE_HJA_WORD,					"jscript_word",				FALSE	 },
-	{ SCE_HJA_KEYWORD,				"jscript_keyword",			FALSE	 },
-	{ SCE_HJA_DOUBLESTRING,			"jscript_doublestring",		FALSE	 },
-	{ SCE_HJA_SINGLESTRING,			"jscript_singlestring",		FALSE	 },
-	{ SCE_HJA_SYMBOLS,				"jscript_symbols",			FALSE	 },
-	{ SCE_HJA_STRINGEOL,			"jscript_stringeol",		FALSE	 },
-	{ SCE_HJA_REGEX,				"jscript_regex",			FALSE	 },
+	{ SCE_HJA_START,				"jscript_start",			FALSE,	FALSE },
+	{ SCE_HJA_DEFAULT,				"jscript_default",			FALSE,	FALSE },
+	{ SCE_HJA_COMMENT,				"jscript_comment",			FALSE,	FALSE },
+	{ SCE_HJA_COMMENTLINE,			"jscript_commentline",		FALSE,	FALSE },
+	{ SCE_HJA_COMMENTDOC,			"jscript_commentdoc",		FALSE,	FALSE },
+	{ SCE_HJA_NUMBER,				"jscript_number",			FALSE,	FALSE },
+	{ SCE_HJA_WORD,					"jscript_word",				FALSE,	FALSE },
+	{ SCE_HJA_KEYWORD,				"jscript_keyword",			FALSE,	FALSE },
+	{ SCE_HJA_DOUBLESTRING,			"jscript_doublestring",		FALSE,	FALSE },
+	{ SCE_HJA_SINGLESTRING,			"jscript_singlestring",		FALSE,	FALSE },
+	{ SCE_HJA_SYMBOLS,				"jscript_symbols",			FALSE,	FALSE },
+	{ SCE_HJA_STRINGEOL,			"jscript_stringeol",		FALSE,	FALSE },
+	{ SCE_HJA_REGEX,				"jscript_regex",			FALSE,	FALSE },
 
 	/* embedded Python */
-	{ SCE_HP_START,					"jscript_start",			FALSE	 },
-	{ SCE_HP_DEFAULT,				"python_default",			FALSE	 },
-	{ SCE_HP_COMMENTLINE,			"python_commentline",		FALSE	 },
-	{ SCE_HP_NUMBER,				"python_number",			FALSE	 },
-	{ SCE_HP_STRING,				"python_string",			FALSE	 },
-	{ SCE_HP_CHARACTER,				"python_character",			FALSE	 },
-	{ SCE_HP_WORD,					"python_word",				FALSE	 },
-	{ SCE_HP_TRIPLE,				"python_triple",			FALSE	 },
-	{ SCE_HP_TRIPLEDOUBLE,			"python_tripledouble",		FALSE	 },
-	{ SCE_HP_CLASSNAME,				"python_classname",			FALSE	 },
-	{ SCE_HP_DEFNAME,				"python_defname",			FALSE	 },
-	{ SCE_HP_OPERATOR,				"python_operator",			FALSE	 },
-	{ SCE_HP_IDENTIFIER,			"python_identifier",		FALSE	 },
+	{ SCE_HP_START,					"jscript_start",			FALSE,	FALSE },
+	{ SCE_HP_DEFAULT,				"python_default",			FALSE,	FALSE },
+	{ SCE_HP_COMMENTLINE,			"python_commentline",		FALSE,	FALSE },
+	{ SCE_HP_NUMBER,				"python_number",			FALSE,	FALSE },
+	{ SCE_HP_STRING,				"python_string",			FALSE,	FALSE },
+	{ SCE_HP_CHARACTER,				"python_character",			FALSE,	FALSE },
+	{ SCE_HP_WORD,					"python_word",				FALSE,	FALSE },
+	{ SCE_HP_TRIPLE,				"python_triple",			FALSE,	FALSE },
+	{ SCE_HP_TRIPLEDOUBLE,			"python_tripledouble",		FALSE,	FALSE },
+	{ SCE_HP_CLASSNAME,				"python_classname",			FALSE,	FALSE },
+	{ SCE_HP_DEFNAME,				"python_defname",			FALSE,	FALSE },
+	{ SCE_HP_OPERATOR,				"python_operator",			FALSE,	FALSE },
+	{ SCE_HP_IDENTIFIER,			"python_identifier",		FALSE,	FALSE },
 
 	/* for embedded HPA (what is this?) we use the Python styles */
-	{ SCE_HPA_START,				"jscript_start",			FALSE	 },
-	{ SCE_HPA_DEFAULT,				"python_default",			FALSE	 },
-	{ SCE_HPA_COMMENTLINE,			"python_commentline",		FALSE	 },
-	{ SCE_HPA_NUMBER,				"python_number",			FALSE	 },
-	{ SCE_HPA_STRING,				"python_string",			FALSE	 },
-	{ SCE_HPA_CHARACTER,			"python_character",			FALSE	 },
-	{ SCE_HPA_WORD,					"python_word",				FALSE	 },
-	{ SCE_HPA_TRIPLE,				"python_triple",			FALSE	 },
-	{ SCE_HPA_TRIPLEDOUBLE,			"python_tripledouble",		FALSE	 },
-	{ SCE_HPA_CLASSNAME,			"python_classname",			FALSE	 },
-	{ SCE_HPA_DEFNAME,				"python_defname",			FALSE	 },
-	{ SCE_HPA_OPERATOR,				"python_operator",			FALSE	 },
-	{ SCE_HPA_IDENTIFIER,			"python_identifier",		FALSE	 },
+	{ SCE_HPA_START,				"jscript_start",			FALSE,	FALSE },
+	{ SCE_HPA_DEFAULT,				"python_default",			FALSE,	FALSE },
+	{ SCE_HPA_COMMENTLINE,			"python_commentline",		FALSE,	FALSE },
+	{ SCE_HPA_NUMBER,				"python_number",			FALSE,	FALSE },
+	{ SCE_HPA_STRING,				"python_string",			FALSE,	FALSE },
+	{ SCE_HPA_CHARACTER,			"python_character",			FALSE,	FALSE },
+	{ SCE_HPA_WORD,					"python_word",				FALSE,	FALSE },
+	{ SCE_HPA_TRIPLE,				"python_triple",			FALSE,	FALSE },
+	{ SCE_HPA_TRIPLEDOUBLE,			"python_tripledouble",		FALSE,	FALSE },
+	{ SCE_HPA_CLASSNAME,			"python_classname",			FALSE,	FALSE },
+	{ SCE_HPA_DEFNAME,				"python_defname",			FALSE,	FALSE },
+	{ SCE_HPA_OPERATOR,				"python_operator",			FALSE,	FALSE },
+	{ SCE_HPA_IDENTIFIER,			"python_identifier",		FALSE,	FALSE },
 
 	/* PHP */
-	{ SCE_HPHP_DEFAULT,				"php_default",				FALSE	 },
-	{ SCE_HPHP_SIMPLESTRING,		"php_simplestring",			FALSE	 },
-	{ SCE_HPHP_HSTRING,				"php_hstring",				FALSE	 },
-	{ SCE_HPHP_NUMBER,				"php_number",				FALSE	 },
-	{ SCE_HPHP_WORD,				"php_word",					FALSE	 },
-	{ SCE_HPHP_VARIABLE,			"php_variable",				FALSE	 },
-	{ SCE_HPHP_COMMENT,				"php_comment",				FALSE	 },
-	{ SCE_HPHP_COMMENTLINE,			"php_commentline",			FALSE	 },
-	{ SCE_HPHP_OPERATOR,			"php_operator",				FALSE	 },
-	{ SCE_HPHP_HSTRING_VARIABLE,	"php_hstring_variable",		FALSE	 },
-	{ SCE_HPHP_COMPLEX_VARIABLE,	"php_complex_variable",		FALSE	 }
+	{ SCE_HPHP_DEFAULT,				"php_default",				FALSE,	FALSE },
+	{ SCE_HPHP_SIMPLESTRING,		"php_simplestring",			FALSE,	FALSE },
+	{ SCE_HPHP_HSTRING,				"php_hstring",				FALSE,	FALSE },
+	{ SCE_HPHP_NUMBER,				"php_number",				FALSE,	FALSE },
+	{ SCE_HPHP_WORD,				"php_word",					FALSE,	FALSE },
+	{ SCE_HPHP_VARIABLE,			"php_variable",				FALSE,	FALSE },
+	{ SCE_HPHP_COMMENT,				"php_comment",				FALSE,	FALSE },
+	{ SCE_HPHP_COMMENTLINE,			"php_commentline",			FALSE,	FALSE },
+	{ SCE_HPHP_OPERATOR,			"php_operator",				FALSE,	FALSE },
+	{ SCE_HPHP_HSTRING_VARIABLE,	"php_hstring_variable",		FALSE,	FALSE },
+	{ SCE_HPHP_COMPLEX_VARIABLE,	"php_complex_variable",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_HTML[] =
 {
@@ -946,28 +947,28 @@ static const HLKeyword highlighting_keywords_JS[] =
 #define highlighting_lexer_JULIA		SCLEX_JULIA
 static const HLStyle highlighting_styles_JULIA[] =
 {
-	{ SCE_JULIA_DEFAULT,			"default",				FALSE },
-	{ SCE_JULIA_COMMENT,			"comment",				FALSE },
-	{ SCE_JULIA_NUMBER,				"number",				FALSE },
-	{ SCE_JULIA_KEYWORD1,			"keyword1",				FALSE },
-	{ SCE_JULIA_KEYWORD2,			"keyword2",				FALSE },
-	{ SCE_JULIA_KEYWORD3,			"keyword3",				FALSE },
-	{ SCE_JULIA_CHAR,				"char",					FALSE },
-	{ SCE_JULIA_OPERATOR,			"operator",				FALSE },
-	{ SCE_JULIA_BRACKET,			"bracket",				FALSE },
-	{ SCE_JULIA_IDENTIFIER,			"identifier",			FALSE },
-	{ SCE_JULIA_STRING,				"string",				FALSE },
-	{ SCE_JULIA_SYMBOL,				"symbol",				FALSE },
-	{ SCE_JULIA_MACRO,				"macro",				FALSE },
-	{ SCE_JULIA_STRINGINTERP,		"stringinterp",			FALSE },
-	{ SCE_JULIA_DOCSTRING,			"docstring",			FALSE },
-	{ SCE_JULIA_STRINGLITERAL,		"stringliteral",		FALSE },
-	{ SCE_JULIA_COMMAND,			"command",				FALSE },
-	{ SCE_JULIA_COMMANDLITERAL,		"commandliteral",		FALSE },
-	{ SCE_JULIA_TYPEANNOT,			"typeannotation",		FALSE },
-	{ SCE_JULIA_LEXERROR,			"lexerror",				FALSE },
-	{ SCE_JULIA_KEYWORD4,			"keyword4",				FALSE },
-	{ SCE_JULIA_TYPEOPERATOR,		"typeoperator",			FALSE },
+	{ SCE_JULIA_DEFAULT,			"default",				FALSE,	FALSE },
+	{ SCE_JULIA_COMMENT,			"comment",				FALSE,	FALSE },
+	{ SCE_JULIA_NUMBER,				"number",				FALSE,	FALSE },
+	{ SCE_JULIA_KEYWORD1,			"keyword1",				FALSE,	FALSE },
+	{ SCE_JULIA_KEYWORD2,			"keyword2",				FALSE,	FALSE },
+	{ SCE_JULIA_KEYWORD3,			"keyword3",				FALSE,	FALSE },
+	{ SCE_JULIA_CHAR,				"char",					FALSE,	FALSE },
+	{ SCE_JULIA_OPERATOR,			"operator",				FALSE,	FALSE },
+	{ SCE_JULIA_BRACKET,			"bracket",				FALSE,	FALSE },
+	{ SCE_JULIA_IDENTIFIER,			"identifier",			FALSE,	FALSE },
+	{ SCE_JULIA_STRING,				"string",				FALSE,	FALSE },
+	{ SCE_JULIA_SYMBOL,				"symbol",				FALSE,	FALSE },
+	{ SCE_JULIA_MACRO,				"macro",				FALSE,	FALSE },
+	{ SCE_JULIA_STRINGINTERP,		"stringinterp",			FALSE,	FALSE },
+	{ SCE_JULIA_DOCSTRING,			"docstring",			FALSE,	FALSE },
+	{ SCE_JULIA_STRINGLITERAL,		"stringliteral",		FALSE,	FALSE },
+	{ SCE_JULIA_COMMAND,			"command",				FALSE,	FALSE },
+	{ SCE_JULIA_COMMANDLITERAL,		"commandliteral",		FALSE,	FALSE },
+	{ SCE_JULIA_TYPEANNOT,			"typeannotation",		FALSE,	FALSE },
+	{ SCE_JULIA_LEXERROR,			"lexerror",				FALSE,	FALSE },
+	{ SCE_JULIA_KEYWORD4,			"keyword4",				FALSE,	FALSE },
+	{ SCE_JULIA_TYPEOPERATOR,		"typeoperator",			FALSE,	FALSE },
 };
 static const HLKeyword highlighting_keywords_JULIA[] =
 {
@@ -983,19 +984,19 @@ static const HLKeyword highlighting_keywords_JULIA[] =
 #define highlighting_lexer_LATEX		SCLEX_LATEX
 static const HLStyle highlighting_styles_LATEX[] =
 {
-	{ SCE_L_DEFAULT,	"default",		FALSE },
-	{ SCE_L_COMMAND,	"command",		FALSE },
-	{ SCE_L_TAG,		"tag",			FALSE },
-	{ SCE_L_MATH,		"math",			FALSE },
-	{ SCE_L_COMMENT,	"comment",		FALSE },
-	{ SCE_L_TAG2,		"tag2",			FALSE },
-	{ SCE_L_MATH2,		"math2",		FALSE },
-	{ SCE_L_COMMENT2,	"comment2",		FALSE },
-	{ SCE_L_VERBATIM,	"verbatim",		FALSE },
-	{ SCE_L_SHORTCMD,	"shortcmd",		FALSE },
-	{ SCE_L_SPECIAL,	"special",		FALSE },
-	{ SCE_L_CMDOPT,		"cmdopt",		FALSE },
-	{ SCE_L_ERROR,		"error",		FALSE }
+	{ SCE_L_DEFAULT,	"default",		FALSE,	FALSE },
+	{ SCE_L_COMMAND,	"command",		FALSE,	FALSE },
+	{ SCE_L_TAG,		"tag",			FALSE,	FALSE },
+	{ SCE_L_MATH,		"math",			FALSE,	FALSE },
+	{ SCE_L_COMMENT,	"comment",		FALSE,	FALSE },
+	{ SCE_L_TAG2,		"tag2",			FALSE,	FALSE },
+	{ SCE_L_MATH2,		"math2",		FALSE,	FALSE },
+	{ SCE_L_COMMENT2,	"comment2",		FALSE,	FALSE },
+	{ SCE_L_VERBATIM,	"verbatim",		FALSE,	FALSE },
+	{ SCE_L_SHORTCMD,	"shortcmd",		FALSE,	FALSE },
+	{ SCE_L_SPECIAL,	"special",		FALSE,	FALSE },
+	{ SCE_L_CMDOPT,		"cmdopt",		FALSE,	FALSE },
+	{ SCE_L_ERROR,		"error",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_LATEX[] =
 {
@@ -1008,18 +1009,18 @@ static const HLKeyword highlighting_keywords_LATEX[] =
 #define highlighting_lexer_LISP			SCLEX_LISP
 static const HLStyle highlighting_styles_LISP[] =
 {
-	{ SCE_LISP_DEFAULT,			"default",			FALSE },
-	{ SCE_LISP_COMMENT,			"comment",			FALSE },
-	{ SCE_LISP_MULTI_COMMENT,	"multicomment",		FALSE },
-	{ SCE_LISP_NUMBER,			"number",			FALSE },
-	{ SCE_LISP_KEYWORD,			"keyword",			FALSE },
-	{ SCE_LISP_SYMBOL,			"symbol",			FALSE },
-	{ SCE_LISP_STRING,			"string",			FALSE },
-	{ SCE_LISP_STRINGEOL,		"stringeol",		FALSE },
-	{ SCE_LISP_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_LISP_OPERATOR,		"operator",			FALSE },
-	{ SCE_LISP_SPECIAL,			"special",			FALSE },
-	{ SCE_LISP_KEYWORD_KW,		"keywordkw",		FALSE }
+	{ SCE_LISP_DEFAULT,			"default",			FALSE,	FALSE },
+	{ SCE_LISP_COMMENT,			"comment",			FALSE,	FALSE },
+	{ SCE_LISP_MULTI_COMMENT,	"multicomment",		FALSE,	FALSE },
+	{ SCE_LISP_NUMBER,			"number",			FALSE,	FALSE },
+	{ SCE_LISP_KEYWORD,			"keyword",			FALSE,	FALSE },
+	{ SCE_LISP_SYMBOL,			"symbol",			FALSE,	FALSE },
+	{ SCE_LISP_STRING,			"string",			FALSE,	FALSE },
+	{ SCE_LISP_STRINGEOL,		"stringeol",		FALSE,	FALSE },
+	{ SCE_LISP_IDENTIFIER,		"identifier",		FALSE,	FALSE },
+	{ SCE_LISP_OPERATOR,		"operator",			FALSE,	FALSE },
+	{ SCE_LISP_SPECIAL,			"special",			FALSE,	FALSE },
+	{ SCE_LISP_KEYWORD_KW,		"keywordkw",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_LISP[] =
 {
@@ -1033,27 +1034,27 @@ static const HLKeyword highlighting_keywords_LISP[] =
 #define highlighting_lexer_LUA			SCLEX_LUA
 static const HLStyle highlighting_styles_LUA[] =
 {
-	{ SCE_LUA_DEFAULT,			"default",			FALSE },
-	{ SCE_LUA_COMMENT,			"comment",			FALSE },
-	{ SCE_LUA_COMMENTLINE,		"commentline",		FALSE },
-	{ SCE_LUA_COMMENTDOC,		"commentdoc",		FALSE },
-	{ SCE_LUA_NUMBER,			"number",			FALSE },
-	{ SCE_LUA_WORD,				"word",				FALSE },
-	{ SCE_LUA_STRING,			"string",			FALSE },
-	{ SCE_LUA_CHARACTER,		"character",		FALSE },
-	{ SCE_LUA_LITERALSTRING,	"literalstring",	FALSE },
-	{ SCE_LUA_PREPROCESSOR,		"preprocessor",		FALSE },
-	{ SCE_LUA_OPERATOR,			"operator",			FALSE },
-	{ SCE_LUA_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_LUA_STRINGEOL,		"stringeol",		FALSE },
-	{ SCE_LUA_WORD2,			"function_basic",	FALSE },
-	{ SCE_LUA_WORD3,			"function_other",	FALSE },
-	{ SCE_LUA_WORD4,			"coroutines",		FALSE },
-	{ SCE_LUA_WORD5,			"word5",			FALSE },
-	{ SCE_LUA_WORD6,			"word6",			FALSE },
-	{ SCE_LUA_WORD7,			"word7",			FALSE },
-	{ SCE_LUA_WORD8,			"word8",			FALSE },
-	{ SCE_LUA_LABEL,			"label",			FALSE }
+	{ SCE_LUA_DEFAULT,			"default",			FALSE,	FALSE },
+	{ SCE_LUA_COMMENT,			"comment",			FALSE,	FALSE },
+	{ SCE_LUA_COMMENTLINE,		"commentline",		FALSE,	FALSE },
+	{ SCE_LUA_COMMENTDOC,		"commentdoc",		FALSE,	FALSE },
+	{ SCE_LUA_NUMBER,			"number",			FALSE,	FALSE },
+	{ SCE_LUA_WORD,				"word",				FALSE,	FALSE },
+	{ SCE_LUA_STRING,			"string",			FALSE,	FALSE },
+	{ SCE_LUA_CHARACTER,		"character",		FALSE,	FALSE },
+	{ SCE_LUA_LITERALSTRING,	"literalstring",	FALSE,	FALSE },
+	{ SCE_LUA_PREPROCESSOR,		"preprocessor",		FALSE,	FALSE },
+	{ SCE_LUA_OPERATOR,			"operator",			FALSE,	FALSE },
+	{ SCE_LUA_IDENTIFIER,		"identifier",		FALSE,	FALSE },
+	{ SCE_LUA_STRINGEOL,		"stringeol",		FALSE,	FALSE },
+	{ SCE_LUA_WORD2,			"function_basic",	FALSE,	FALSE },
+	{ SCE_LUA_WORD3,			"function_other",	FALSE,	FALSE },
+	{ SCE_LUA_WORD4,			"coroutines",		FALSE,	FALSE },
+	{ SCE_LUA_WORD5,			"word5",			FALSE,	FALSE },
+	{ SCE_LUA_WORD6,			"word6",			FALSE,	FALSE },
+	{ SCE_LUA_WORD7,			"word7",			FALSE,	FALSE },
+	{ SCE_LUA_WORD8,			"word8",			FALSE,	FALSE },
+	{ SCE_LUA_LABEL,			"label",			FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_LUA[] =
 {
@@ -1073,13 +1074,13 @@ static const HLKeyword highlighting_keywords_LUA[] =
 #define highlighting_lexer_MAKE			SCLEX_MAKEFILE
 static const HLStyle highlighting_styles_MAKE[] =
 {
-	{ SCE_MAKE_DEFAULT,			"default",		FALSE },
-	{ SCE_MAKE_COMMENT,			"comment",		FALSE },
-	{ SCE_MAKE_PREPROCESSOR,	"preprocessor",	FALSE },
-	{ SCE_MAKE_IDENTIFIER,		"identifier",	FALSE },
-	{ SCE_MAKE_OPERATOR,		"operator",		FALSE },
-	{ SCE_MAKE_TARGET,			"target",		FALSE },
-	{ SCE_MAKE_IDEOL,			"ideol",		FALSE }
+	{ SCE_MAKE_DEFAULT,			"default",		FALSE,	FALSE },
+	{ SCE_MAKE_COMMENT,			"comment",		FALSE,	FALSE },
+	{ SCE_MAKE_PREPROCESSOR,	"preprocessor",	FALSE,	FALSE },
+	{ SCE_MAKE_IDENTIFIER,		"identifier",	FALSE,	FALSE },
+	{ SCE_MAKE_OPERATOR,		"operator",		FALSE,	FALSE },
+	{ SCE_MAKE_TARGET,			"target",		FALSE,	FALSE },
+	{ SCE_MAKE_IDEOL,			"ideol",		FALSE,	FALSE }
 };
 #define highlighting_keywords_MAKE		EMPTY_KEYWORDS
 #define highlighting_properties_MAKE	EMPTY_PROPERTIES
@@ -1089,28 +1090,28 @@ static const HLStyle highlighting_styles_MAKE[] =
 #define highlighting_lexer_MARKDOWN			SCLEX_MARKDOWN
 static const HLStyle highlighting_styles_MARKDOWN[] =
 {
-	{ SCE_MARKDOWN_DEFAULT,		"default",		FALSE },
-	{ SCE_MARKDOWN_LINE_BEGIN,	"default",		FALSE }, /* FIXME: avoid in-code re-mappings */
-	{ SCE_MARKDOWN_PRECHAR,		"default",		FALSE },
-	{ SCE_MARKDOWN_STRONG1,		"strong",		FALSE },
-	{ SCE_MARKDOWN_STRONG2,		"strong",		FALSE },
-	{ SCE_MARKDOWN_EM1,			"emphasis",		FALSE },
-	{ SCE_MARKDOWN_EM2,			"emphasis",		FALSE },
-	{ SCE_MARKDOWN_HEADER1,		"header1",		FALSE },
-	{ SCE_MARKDOWN_HEADER2,		"header2",		FALSE },
-	{ SCE_MARKDOWN_HEADER3,		"header3",		FALSE },
-	{ SCE_MARKDOWN_HEADER4,		"header4",		FALSE },
-	{ SCE_MARKDOWN_HEADER5,		"header5",		FALSE },
-	{ SCE_MARKDOWN_HEADER6,		"header6",		FALSE },
-	{ SCE_MARKDOWN_ULIST_ITEM,	"ulist_item",	FALSE },
-	{ SCE_MARKDOWN_OLIST_ITEM,	"olist_item",	FALSE },
-	{ SCE_MARKDOWN_BLOCKQUOTE,	"blockquote",	FALSE },
-	{ SCE_MARKDOWN_STRIKEOUT,	"strikeout",	FALSE },
-	{ SCE_MARKDOWN_HRULE,		"hrule",		FALSE },
-	{ SCE_MARKDOWN_LINK,		"link",			FALSE },
-	{ SCE_MARKDOWN_CODE,		"code",			FALSE },
-	{ SCE_MARKDOWN_CODE2,		"code",			FALSE },
-	{ SCE_MARKDOWN_CODEBK,		"codebk",		FALSE }
+	{ SCE_MARKDOWN_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_LINE_BEGIN,	"default",		FALSE,	FALSE }, /* FIXME: avoid in-code re-mappings */
+	{ SCE_MARKDOWN_PRECHAR,		"default",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_STRONG1,		"strong",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_STRONG2,		"strong",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_EM1,			"emphasis",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_EM2,			"emphasis",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_HEADER1,		"header1",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_HEADER2,		"header2",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_HEADER3,		"header3",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_HEADER4,		"header4",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_HEADER5,		"header5",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_HEADER6,		"header6",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_ULIST_ITEM,	"ulist_item",	FALSE,	FALSE },
+	{ SCE_MARKDOWN_OLIST_ITEM,	"olist_item",	FALSE,	FALSE },
+	{ SCE_MARKDOWN_BLOCKQUOTE,	"blockquote",	FALSE,	FALSE },
+	{ SCE_MARKDOWN_STRIKEOUT,	"strikeout",	FALSE,	FALSE },
+	{ SCE_MARKDOWN_HRULE,		"hrule",		FALSE,	FALSE },
+	{ SCE_MARKDOWN_LINK,		"link",			FALSE,	FALSE },
+	{ SCE_MARKDOWN_CODE,		"code",			FALSE,	FALSE },
+	{ SCE_MARKDOWN_CODE2,		"code",			FALSE,	FALSE },
+	{ SCE_MARKDOWN_CODEBK,		"codebk",		FALSE,	FALSE }
 };
 #define highlighting_keywords_MARKDOWN		EMPTY_KEYWORDS
 #define highlighting_properties_MARKDOWN	EMPTY_PROPERTIES
@@ -1120,15 +1121,15 @@ static const HLStyle highlighting_styles_MARKDOWN[] =
 #define highlighting_lexer_MATLAB		SCLEX_OCTAVE /* not MATLAB to support Octave's # comments */
 static const HLStyle highlighting_styles_MATLAB[] =
 {
-	{ SCE_MATLAB_DEFAULT,			"default",				FALSE },
-	{ SCE_MATLAB_COMMENT,			"comment",				FALSE },
-	{ SCE_MATLAB_COMMAND,			"command",				FALSE },
-	{ SCE_MATLAB_NUMBER,			"number",				FALSE },
-	{ SCE_MATLAB_KEYWORD,			"keyword",				FALSE },
-	{ SCE_MATLAB_STRING,			"string",				FALSE },
-	{ SCE_MATLAB_OPERATOR,			"operator",				FALSE },
-	{ SCE_MATLAB_IDENTIFIER,		"identifier",			FALSE },
-	{ SCE_MATLAB_DOUBLEQUOTESTRING,	"doublequotedstring",	FALSE }
+	{ SCE_MATLAB_DEFAULT,			"default",				FALSE,	FALSE },
+	{ SCE_MATLAB_COMMENT,			"comment",				FALSE,	FALSE },
+	{ SCE_MATLAB_COMMAND,			"command",				FALSE,	FALSE },
+	{ SCE_MATLAB_NUMBER,			"number",				FALSE,	FALSE },
+	{ SCE_MATLAB_KEYWORD,			"keyword",				FALSE,	FALSE },
+	{ SCE_MATLAB_STRING,			"string",				FALSE,	FALSE },
+	{ SCE_MATLAB_OPERATOR,			"operator",				FALSE,	FALSE },
+	{ SCE_MATLAB_IDENTIFIER,		"identifier",			FALSE,	FALSE },
+	{ SCE_MATLAB_DOUBLEQUOTESTRING,	"doublequotedstring",	FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_MATLAB[] =
 {
@@ -1141,25 +1142,25 @@ static const HLKeyword highlighting_keywords_MATLAB[] =
 #define highlighting_lexer_NSIS			SCLEX_NSIS
 static const HLStyle highlighting_styles_NSIS[] =
 {
-	{ SCE_NSIS_DEFAULT,			"default",			FALSE },
-	{ SCE_NSIS_COMMENT,			"comment",			FALSE },
-	{ SCE_NSIS_STRINGDQ,		"stringdq",			FALSE },
-	{ SCE_NSIS_STRINGLQ,		"stringlq",			FALSE },
-	{ SCE_NSIS_STRINGRQ,		"stringrq",			FALSE },
-	{ SCE_NSIS_FUNCTION,		"function",			FALSE },
-	{ SCE_NSIS_VARIABLE,		"variable",			FALSE },
-	{ SCE_NSIS_LABEL,			"label",			FALSE },
-	{ SCE_NSIS_USERDEFINED,		"userdefined",		FALSE },
-	{ SCE_NSIS_SECTIONDEF,		"sectiondef",		FALSE },
-	{ SCE_NSIS_SUBSECTIONDEF,	"subsectiondef",	FALSE },
-	{ SCE_NSIS_IFDEFINEDEF,		"ifdefinedef",		FALSE },
-	{ SCE_NSIS_MACRODEF,		"macrodef",			FALSE },
-	{ SCE_NSIS_STRINGVAR,		"stringvar",		FALSE },
-	{ SCE_NSIS_NUMBER,			"number",			FALSE },
-	{ SCE_NSIS_SECTIONGROUP,	"sectiongroup",		FALSE },
-	{ SCE_NSIS_PAGEEX,			"pageex",			FALSE },
-	{ SCE_NSIS_FUNCTIONDEF,		"functiondef",		FALSE },
-	{ SCE_NSIS_COMMENTBOX,		"commentbox",		FALSE }
+	{ SCE_NSIS_DEFAULT,			"default",			FALSE,	FALSE },
+	{ SCE_NSIS_COMMENT,			"comment",			FALSE,	FALSE },
+	{ SCE_NSIS_STRINGDQ,		"stringdq",			FALSE,	FALSE },
+	{ SCE_NSIS_STRINGLQ,		"stringlq",			FALSE,	FALSE },
+	{ SCE_NSIS_STRINGRQ,		"stringrq",			FALSE,	FALSE },
+	{ SCE_NSIS_FUNCTION,		"function",			FALSE,	FALSE },
+	{ SCE_NSIS_VARIABLE,		"variable",			FALSE,	FALSE },
+	{ SCE_NSIS_LABEL,			"label",			FALSE,	FALSE },
+	{ SCE_NSIS_USERDEFINED,		"userdefined",		FALSE,	FALSE },
+	{ SCE_NSIS_SECTIONDEF,		"sectiondef",		FALSE,	FALSE },
+	{ SCE_NSIS_SUBSECTIONDEF,	"subsectiondef",	FALSE,	FALSE },
+	{ SCE_NSIS_IFDEFINEDEF,		"ifdefinedef",		FALSE,	FALSE },
+	{ SCE_NSIS_MACRODEF,		"macrodef",			FALSE,	FALSE },
+	{ SCE_NSIS_STRINGVAR,		"stringvar",		FALSE,	FALSE },
+	{ SCE_NSIS_NUMBER,			"number",			FALSE,	FALSE },
+	{ SCE_NSIS_SECTIONGROUP,	"sectiongroup",		FALSE,	FALSE },
+	{ SCE_NSIS_PAGEEX,			"pageex",			FALSE,	FALSE },
+	{ SCE_NSIS_FUNCTIONDEF,		"functiondef",		FALSE,	FALSE },
+	{ SCE_NSIS_COMMENTBOX,		"commentbox",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_NSIS[] =
 {
@@ -1189,21 +1190,21 @@ static const HLKeyword highlighting_keywords_OBJECTIVEC[] =
 #define highlighting_lexer_PASCAL		SCLEX_PASCAL
 static const HLStyle highlighting_styles_PASCAL[] =
 {
-	{ SCE_PAS_DEFAULT,			"default",			FALSE },
-	{ SCE_PAS_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_PAS_COMMENT,			"comment",			FALSE },
-	{ SCE_PAS_COMMENT2,			"comment2",			FALSE },
-	{ SCE_PAS_COMMENTLINE,		"commentline",		FALSE },
-	{ SCE_PAS_PREPROCESSOR,		"preprocessor",		FALSE },
-	{ SCE_PAS_PREPROCESSOR2,	"preprocessor2",	FALSE },
-	{ SCE_PAS_NUMBER,			"number",			FALSE },
-	{ SCE_PAS_HEXNUMBER,		"hexnumber",		FALSE },
-	{ SCE_PAS_WORD,				"word",				FALSE },
-	{ SCE_PAS_STRING,			"string",			FALSE },
-	{ SCE_PAS_STRINGEOL,		"stringeol",		FALSE },
-	{ SCE_PAS_CHARACTER,		"character",		FALSE },
-	{ SCE_PAS_OPERATOR,			"operator",			FALSE },
-	{ SCE_PAS_ASM,				"asm",				FALSE }
+	{ SCE_PAS_DEFAULT,			"default",			FALSE,	FALSE },
+	{ SCE_PAS_IDENTIFIER,		"identifier",		FALSE,	FALSE },
+	{ SCE_PAS_COMMENT,			"comment",			FALSE,	FALSE },
+	{ SCE_PAS_COMMENT2,			"comment2",			FALSE,	FALSE },
+	{ SCE_PAS_COMMENTLINE,		"commentline",		FALSE,	FALSE },
+	{ SCE_PAS_PREPROCESSOR,		"preprocessor",		FALSE,	FALSE },
+	{ SCE_PAS_PREPROCESSOR2,	"preprocessor2",	FALSE,	FALSE },
+	{ SCE_PAS_NUMBER,			"number",			FALSE,	FALSE },
+	{ SCE_PAS_HEXNUMBER,		"hexnumber",		FALSE,	FALSE },
+	{ SCE_PAS_WORD,				"word",				FALSE,	FALSE },
+	{ SCE_PAS_STRING,			"string",			FALSE,	FALSE },
+	{ SCE_PAS_STRINGEOL,		"stringeol",		FALSE,	FALSE },
+	{ SCE_PAS_CHARACTER,		"character",		FALSE,	FALSE },
+	{ SCE_PAS_OPERATOR,			"operator",			FALSE,	FALSE },
+	{ SCE_PAS_ASM,				"asm",				FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_PASCAL[] =
 {
@@ -1216,51 +1217,51 @@ static const HLKeyword highlighting_keywords_PASCAL[] =
 #define highlighting_lexer_PERL			SCLEX_PERL
 static const HLStyle highlighting_styles_PERL[] =
 {
-	{ SCE_PL_DEFAULT,			"default",				FALSE },
-	{ SCE_PL_ERROR,				"error",				FALSE },
-	{ SCE_PL_COMMENTLINE,		"commentline",			FALSE },
-	{ SCE_PL_NUMBER,			"number",				FALSE },
-	{ SCE_PL_WORD,				"word",					FALSE },
-	{ SCE_PL_STRING,			"string",				FALSE },
-	{ SCE_PL_CHARACTER,			"character",			FALSE },
-	{ SCE_PL_PREPROCESSOR,		"preprocessor",			FALSE },
-	{ SCE_PL_OPERATOR,			"operator",				FALSE },
-	{ SCE_PL_IDENTIFIER,		"identifier",			FALSE },
-	{ SCE_PL_SCALAR,			"scalar",				FALSE },
-	{ SCE_PL_POD,				"pod",					FALSE },
-	{ SCE_PL_REGEX,				"regex",				FALSE },
-	{ SCE_PL_ARRAY,				"array",				FALSE },
-	{ SCE_PL_HASH,				"hash",					FALSE },
-	{ SCE_PL_SYMBOLTABLE,		"symboltable",			FALSE },
-	{ SCE_PL_BACKTICKS,			"backticks",			FALSE },
-	{ SCE_PL_POD_VERB,			"pod_verbatim",			FALSE },
-	{ SCE_PL_REGSUBST,			"reg_subst",			FALSE },
-	{ SCE_PL_DATASECTION,		"datasection",			FALSE },
-	{ SCE_PL_HERE_DELIM,		"here_delim",			FALSE },
-	{ SCE_PL_HERE_Q,			"here_q",				FALSE },
-	{ SCE_PL_HERE_QQ,			"here_qq",				FALSE },
-	{ SCE_PL_HERE_QX,			"here_qx",				FALSE },
-	{ SCE_PL_STRING_Q,			"string_q",				FALSE },
-	{ SCE_PL_STRING_QQ,			"string_qq",			FALSE },
-	{ SCE_PL_STRING_QX,			"string_qx",			FALSE },
-	{ SCE_PL_STRING_QR,			"string_qr",			FALSE },
-	{ SCE_PL_STRING_QW,			"string_qw",			FALSE },
-	{ SCE_PL_VARIABLE_INDEXER,	"variable_indexer",		FALSE },
-	{ SCE_PL_PUNCTUATION,		"punctuation",			FALSE },
-	{ SCE_PL_LONGQUOTE,			"longquote",			FALSE },
-	{ SCE_PL_SUB_PROTOTYPE,		"sub_prototype",		FALSE },
-	{ SCE_PL_FORMAT_IDENT,		"format_ident",			FALSE },
-	{ SCE_PL_FORMAT,			"format",				FALSE },
-	{ SCE_PL_STRING_VAR,		"string_var",			FALSE },
-	{ SCE_PL_XLAT,				"xlat",					FALSE },
-	{ SCE_PL_REGEX_VAR,			"regex_var",			FALSE },
-	{ SCE_PL_REGSUBST_VAR,		"regsubst_var",			FALSE },
-	{ SCE_PL_BACKTICKS_VAR,		"backticks_var",		FALSE },
-	{ SCE_PL_HERE_QQ_VAR,		"here_qq_var",			FALSE },
-	{ SCE_PL_HERE_QX_VAR,		"here_qx_var",			FALSE },
-	{ SCE_PL_STRING_QQ_VAR,		"string_qq_var",		FALSE },
-	{ SCE_PL_STRING_QX_VAR,		"string_qx_var",		FALSE },
-	{ SCE_PL_STRING_QR_VAR,		"string_qr_var",		FALSE }
+	{ SCE_PL_DEFAULT,			"default",				FALSE,	FALSE },
+	{ SCE_PL_ERROR,				"error",				FALSE,	FALSE },
+	{ SCE_PL_COMMENTLINE,		"commentline",			FALSE,	FALSE },
+	{ SCE_PL_NUMBER,			"number",				FALSE,	FALSE },
+	{ SCE_PL_WORD,				"word",					FALSE,	FALSE },
+	{ SCE_PL_STRING,			"string",				FALSE,	FALSE },
+	{ SCE_PL_CHARACTER,			"character",			FALSE,	FALSE },
+	{ SCE_PL_PREPROCESSOR,		"preprocessor",			FALSE,	FALSE },
+	{ SCE_PL_OPERATOR,			"operator",				FALSE,	FALSE },
+	{ SCE_PL_IDENTIFIER,		"identifier",			FALSE,	FALSE },
+	{ SCE_PL_SCALAR,			"scalar",				FALSE,	FALSE },
+	{ SCE_PL_POD,				"pod",					FALSE,	FALSE },
+	{ SCE_PL_REGEX,				"regex",				FALSE,	FALSE },
+	{ SCE_PL_ARRAY,				"array",				FALSE,	FALSE },
+	{ SCE_PL_HASH,				"hash",					FALSE,	FALSE },
+	{ SCE_PL_SYMBOLTABLE,		"symboltable",			FALSE,	FALSE },
+	{ SCE_PL_BACKTICKS,			"backticks",			FALSE,	FALSE },
+	{ SCE_PL_POD_VERB,			"pod_verbatim",			FALSE,	FALSE },
+	{ SCE_PL_REGSUBST,			"reg_subst",			FALSE,	FALSE },
+	{ SCE_PL_DATASECTION,		"datasection",			FALSE,	FALSE },
+	{ SCE_PL_HERE_DELIM,		"here_delim",			FALSE,	FALSE },
+	{ SCE_PL_HERE_Q,			"here_q",				FALSE,	FALSE },
+	{ SCE_PL_HERE_QQ,			"here_qq",				FALSE,	FALSE },
+	{ SCE_PL_HERE_QX,			"here_qx",				FALSE,	FALSE },
+	{ SCE_PL_STRING_Q,			"string_q",				FALSE,	FALSE },
+	{ SCE_PL_STRING_QQ,			"string_qq",			FALSE,	FALSE },
+	{ SCE_PL_STRING_QX,			"string_qx",			FALSE,	FALSE },
+	{ SCE_PL_STRING_QR,			"string_qr",			FALSE,	FALSE },
+	{ SCE_PL_STRING_QW,			"string_qw",			FALSE,	FALSE },
+	{ SCE_PL_VARIABLE_INDEXER,	"variable_indexer",		FALSE,	FALSE },
+	{ SCE_PL_PUNCTUATION,		"punctuation",			FALSE,	FALSE },
+	{ SCE_PL_LONGQUOTE,			"longquote",			FALSE,	FALSE },
+	{ SCE_PL_SUB_PROTOTYPE,		"sub_prototype",		FALSE,	FALSE },
+	{ SCE_PL_FORMAT_IDENT,		"format_ident",			FALSE,	FALSE },
+	{ SCE_PL_FORMAT,			"format",				FALSE,	FALSE },
+	{ SCE_PL_STRING_VAR,		"string_var",			FALSE,	FALSE },
+	{ SCE_PL_XLAT,				"xlat",					FALSE,	FALSE },
+	{ SCE_PL_REGEX_VAR,			"regex_var",			FALSE,	FALSE },
+	{ SCE_PL_REGSUBST_VAR,		"regsubst_var",			FALSE,	FALSE },
+	{ SCE_PL_BACKTICKS_VAR,		"backticks_var",		FALSE,	FALSE },
+	{ SCE_PL_HERE_QQ_VAR,		"here_qq_var",			FALSE,	FALSE },
+	{ SCE_PL_HERE_QX_VAR,		"here_qx_var",			FALSE,	FALSE },
+	{ SCE_PL_STRING_QQ_VAR,		"string_qq_var",		FALSE,	FALSE },
+	{ SCE_PL_STRING_QX_VAR,		"string_qx_var",		FALSE,	FALSE },
+	{ SCE_PL_STRING_QR_VAR,		"string_qr_var",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_PERL[] =
 {
@@ -1280,22 +1281,22 @@ static const HLKeyword highlighting_keywords_PERL[] =
 #define highlighting_lexer_PO		SCLEX_PO
 static const HLStyle highlighting_styles_PO[] =
 {
-	{ SCE_PO_DEFAULT,				"default",				FALSE },
-	{ SCE_PO_COMMENT,				"comment",				FALSE },
-	{ SCE_PO_PROGRAMMER_COMMENT,	"programmer_comment",	FALSE },
-	{ SCE_PO_REFERENCE,				"reference",			FALSE },
-	{ SCE_PO_FLAGS,					"flags",				FALSE },
-	{ SCE_PO_FUZZY,					"fuzzy",				FALSE },
-	{ SCE_PO_MSGID,					"msgid",				FALSE },
-	{ SCE_PO_MSGID_TEXT,			"msgid_text",			FALSE },
-	{ SCE_PO_MSGID_TEXT_EOL,		"msgid_text_eol",		FALSE },
-	{ SCE_PO_MSGSTR,				"msgstr",				FALSE },
-	{ SCE_PO_MSGSTR_TEXT,			"msgstr_text",			FALSE },
-	{ SCE_PO_MSGSTR_TEXT_EOL,		"msgstr_text_eol",		FALSE },
-	{ SCE_PO_MSGCTXT,				"msgctxt",				FALSE },
-	{ SCE_PO_MSGCTXT_TEXT,			"msgctxt_text",			FALSE },
-	{ SCE_PO_MSGCTXT_TEXT_EOL,		"msgctxt_text_eol",		FALSE },
-	{ SCE_PO_ERROR,					"error",				FALSE }
+	{ SCE_PO_DEFAULT,				"default",				FALSE,	FALSE },
+	{ SCE_PO_COMMENT,				"comment",				FALSE,	FALSE },
+	{ SCE_PO_PROGRAMMER_COMMENT,	"programmer_comment",	FALSE,	FALSE },
+	{ SCE_PO_REFERENCE,				"reference",			FALSE,	FALSE },
+	{ SCE_PO_FLAGS,					"flags",				FALSE,	FALSE },
+	{ SCE_PO_FUZZY,					"fuzzy",				FALSE,	FALSE },
+	{ SCE_PO_MSGID,					"msgid",				FALSE,	FALSE },
+	{ SCE_PO_MSGID_TEXT,			"msgid_text",			FALSE,	FALSE },
+	{ SCE_PO_MSGID_TEXT_EOL,		"msgid_text_eol",		FALSE,	FALSE },
+	{ SCE_PO_MSGSTR,				"msgstr",				FALSE,	FALSE },
+	{ SCE_PO_MSGSTR_TEXT,			"msgstr_text",			FALSE,	FALSE },
+	{ SCE_PO_MSGSTR_TEXT_EOL,		"msgstr_text_eol",		FALSE,	FALSE },
+	{ SCE_PO_MSGCTXT,				"msgctxt",				FALSE,	FALSE },
+	{ SCE_PO_MSGCTXT_TEXT,			"msgctxt_text",			FALSE,	FALSE },
+	{ SCE_PO_MSGCTXT_TEXT_EOL,		"msgctxt_text_eol",		FALSE,	FALSE },
+	{ SCE_PO_ERROR,					"error",				FALSE,	FALSE }
 };
 #define highlighting_keywords_PO	EMPTY_KEYWORDS
 #define highlighting_properties_PO	EMPTY_PROPERTIES
@@ -1305,23 +1306,23 @@ static const HLStyle highlighting_styles_PO[] =
 #define highlighting_lexer_POWERSHELL		SCLEX_POWERSHELL
 static const HLStyle highlighting_styles_POWERSHELL[] =
 {
-	{ SCE_POWERSHELL_DEFAULT,			"default",				FALSE },
-	{ SCE_POWERSHELL_COMMENT,			"comment",				FALSE },
-	{ SCE_POWERSHELL_STRING,			"string",				FALSE },
-	{ SCE_POWERSHELL_CHARACTER,			"character",			FALSE },
-	{ SCE_POWERSHELL_NUMBER,			"number",				FALSE },
-	{ SCE_POWERSHELL_VARIABLE,			"variable",				FALSE },
-	{ SCE_POWERSHELL_OPERATOR,			"operator",				FALSE },
-	{ SCE_POWERSHELL_IDENTIFIER,		"identifier",			FALSE },
-	{ SCE_POWERSHELL_KEYWORD,			"keyword",				FALSE },
-	{ SCE_POWERSHELL_CMDLET,			"cmdlet",				FALSE },
-	{ SCE_POWERSHELL_ALIAS,				"alias",				FALSE },
-	{ SCE_POWERSHELL_FUNCTION,			"function",				FALSE },
-	{ SCE_POWERSHELL_USER1,				"user1",				FALSE },
-	{ SCE_POWERSHELL_COMMENTSTREAM,		"commentstream",		FALSE },
-	{ SCE_POWERSHELL_HERE_STRING,		"here_string",			FALSE },
-	{ SCE_POWERSHELL_HERE_CHARACTER,	"here_character",		FALSE },
-	{ SCE_POWERSHELL_COMMENTDOCKEYWORD,	"commentdockeyword",	FALSE },
+	{ SCE_POWERSHELL_DEFAULT,			"default",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_COMMENT,			"comment",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_STRING,			"string",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_CHARACTER,			"character",			FALSE,	FALSE },
+	{ SCE_POWERSHELL_NUMBER,			"number",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_VARIABLE,			"variable",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_OPERATOR,			"operator",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_IDENTIFIER,		"identifier",			FALSE,	FALSE },
+	{ SCE_POWERSHELL_KEYWORD,			"keyword",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_CMDLET,			"cmdlet",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_ALIAS,				"alias",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_FUNCTION,			"function",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_USER1,				"user1",				FALSE,	FALSE },
+	{ SCE_POWERSHELL_COMMENTSTREAM,		"commentstream",		FALSE,	FALSE },
+	{ SCE_POWERSHELL_HERE_STRING,		"here_string",			FALSE,	FALSE },
+	{ SCE_POWERSHELL_HERE_CHARACTER,	"here_character",		FALSE,	FALSE },
+	{ SCE_POWERSHELL_COMMENTDOCKEYWORD,	"commentdockeyword",	FALSE,	FALSE },
 };
 static const HLKeyword highlighting_keywords_POWERSHELL[] =
 {
@@ -1339,27 +1340,27 @@ static const HLKeyword highlighting_keywords_POWERSHELL[] =
 #define highlighting_lexer_PYTHON		SCLEX_PYTHON
 static const HLStyle highlighting_styles_PYTHON[] =
 {
-	{ SCE_P_DEFAULT,		"default",			FALSE },
-	{ SCE_P_COMMENTLINE,	"commentline",		FALSE },
-	{ SCE_P_NUMBER,			"number",			FALSE },
-	{ SCE_P_STRING,			"string",			FALSE },
-	{ SCE_P_CHARACTER,		"character",		FALSE },
-	{ SCE_P_WORD,			"word",				FALSE },
-	{ SCE_P_TRIPLE,			"triple",			FALSE },
-	{ SCE_P_TRIPLEDOUBLE,	"tripledouble",		FALSE },
-	{ SCE_P_CLASSNAME,		"classname",		FALSE },
-	{ SCE_P_DEFNAME,		"defname",			FALSE },
-	{ SCE_P_OPERATOR,		"operator",			FALSE },
-	{ SCE_P_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_P_COMMENTBLOCK,	"commentblock",		FALSE },
-	{ SCE_P_STRINGEOL,		"stringeol",		FALSE },
-	{ SCE_P_WORD2,			"word2",			FALSE },
-	{ SCE_P_FSTRING,		"fstring",			FALSE },
-	{ SCE_P_FCHARACTER,		"fcharacter",		FALSE },
-	{ SCE_P_FTRIPLE,		"ftriple",			FALSE },
-	{ SCE_P_FTRIPLEDOUBLE,	"ftripledouble",	FALSE },
-	{ SCE_P_DECORATOR,		"decorator",		FALSE },
-	{ SCE_P_ATTRIBUTE,		"attribute",		FALSE }
+	{ SCE_P_DEFAULT,		"default",			FALSE,	FALSE },
+	{ SCE_P_COMMENTLINE,	"commentline",		FALSE,	FALSE },
+	{ SCE_P_NUMBER,			"number",			FALSE,	FALSE },
+	{ SCE_P_STRING,			"string",			FALSE,	FALSE },
+	{ SCE_P_CHARACTER,		"character",		FALSE,	FALSE },
+	{ SCE_P_WORD,			"word",				FALSE,	FALSE },
+	{ SCE_P_TRIPLE,			"triple",			FALSE,	FALSE },
+	{ SCE_P_TRIPLEDOUBLE,	"tripledouble",		FALSE,	FALSE },
+	{ SCE_P_CLASSNAME,		"classname",		FALSE,	FALSE },
+	{ SCE_P_DEFNAME,		"defname",			FALSE,	FALSE },
+	{ SCE_P_OPERATOR,		"operator",			FALSE,	FALSE },
+	{ SCE_P_IDENTIFIER,		"identifier",		FALSE,	TRUE },
+	{ SCE_P_COMMENTBLOCK,	"commentblock",		FALSE,	FALSE },
+	{ SCE_P_STRINGEOL,		"stringeol",		FALSE,	FALSE },
+	{ SCE_P_WORD2,			"word2",			FALSE,	FALSE },
+	{ SCE_P_FSTRING,		"fstring",			FALSE,	FALSE },
+	{ SCE_P_FCHARACTER,		"fcharacter",		FALSE,	FALSE },
+	{ SCE_P_FTRIPLE,		"ftriple",			FALSE,	FALSE },
+	{ SCE_P_FTRIPLEDOUBLE,	"ftripledouble",	FALSE,	FALSE },
+	{ SCE_P_DECORATOR,		"decorator",		FALSE,	FALSE },
+	{ SCE_P_ATTRIBUTE,		"attribute",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_PYTHON[] =
 {
@@ -1373,22 +1374,22 @@ static const HLKeyword highlighting_keywords_PYTHON[] =
 #define highlighting_lexer_R		SCLEX_R
 static const HLStyle highlighting_styles_R[] =
 {
-	{ SCE_R_DEFAULT,		"default",			FALSE },
-	{ SCE_R_COMMENT,		"comment",			FALSE },
-	{ SCE_R_KWORD,			"kword",			FALSE },
-	{ SCE_R_OPERATOR,		"operator",			FALSE },
-	{ SCE_R_BASEKWORD,		"basekword",		FALSE },
-	{ SCE_R_OTHERKWORD,		"otherkword",		FALSE },
-	{ SCE_R_NUMBER,			"number",			FALSE },
-	{ SCE_R_STRING,			"string",			FALSE },
-	{ SCE_R_STRING2,		"string2",			FALSE },
-	{ SCE_R_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_R_INFIX,			"infix",			FALSE },
-	{ SCE_R_INFIXEOL,		"infixeol",			FALSE },
-	{ SCE_R_BACKTICKS,		"backticks",		FALSE },
-	{ SCE_R_RAWSTRING,		"stringraw",		FALSE },
-	{ SCE_R_RAWSTRING2,		"stringraw",		FALSE },
-	{ SCE_R_ESCAPESEQUENCE,	"escapesequence",	FALSE }
+	{ SCE_R_DEFAULT,		"default",			FALSE,	FALSE },
+	{ SCE_R_COMMENT,		"comment",			FALSE,	FALSE },
+	{ SCE_R_KWORD,			"kword",			FALSE,	FALSE },
+	{ SCE_R_OPERATOR,		"operator",			FALSE,	FALSE },
+	{ SCE_R_BASEKWORD,		"basekword",		FALSE,	FALSE },
+	{ SCE_R_OTHERKWORD,		"otherkword",		FALSE,	FALSE },
+	{ SCE_R_NUMBER,			"number",			FALSE,	FALSE },
+	{ SCE_R_STRING,			"string",			FALSE,	FALSE },
+	{ SCE_R_STRING2,		"string2",			FALSE,	FALSE },
+	{ SCE_R_IDENTIFIER,		"identifier",		FALSE,	FALSE },
+	{ SCE_R_INFIX,			"infix",			FALSE,	FALSE },
+	{ SCE_R_INFIXEOL,		"infixeol",			FALSE,	FALSE },
+	{ SCE_R_BACKTICKS,		"backticks",		FALSE,	FALSE },
+	{ SCE_R_RAWSTRING,		"stringraw",		FALSE,	FALSE },
+	{ SCE_R_RAWSTRING2,		"stringraw",		FALSE,	FALSE },
+	{ SCE_R_ESCAPESEQUENCE,	"escapesequence",	FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_R[] =
 {
@@ -1403,44 +1404,44 @@ static const HLKeyword highlighting_keywords_R[] =
 #define highlighting_lexer_RUBY			SCLEX_RUBY
 static const HLStyle highlighting_styles_RUBY[] =
 {
-	{ SCE_RB_DEFAULT,		"default",			FALSE },
-	{ SCE_RB_COMMENTLINE,	"commentline",		FALSE },
-	{ SCE_RB_NUMBER,		"number",			FALSE },
-	{ SCE_RB_STRING,		"string",			FALSE },
-	{ SCE_RB_CHARACTER,		"character",		FALSE },
-	{ SCE_RB_WORD,			"word",				FALSE },
-	{ SCE_RB_GLOBAL,		"global",			FALSE },
-	{ SCE_RB_SYMBOL,		"symbol",			FALSE },
-	{ SCE_RB_CLASSNAME,		"classname",		FALSE },
-	{ SCE_RB_DEFNAME,		"defname",			FALSE },
-	{ SCE_RB_OPERATOR,		"operator",			FALSE },
-	{ SCE_RB_IDENTIFIER,	"identifier",		FALSE },
-	{ SCE_RB_MODULE_NAME,	"modulename",		FALSE },
-	{ SCE_RB_BACKTICKS,		"backticks",		FALSE },
-	{ SCE_RB_INSTANCE_VAR,	"instancevar",		FALSE },
-	{ SCE_RB_CLASS_VAR,		"classvar",			FALSE },
-	{ SCE_RB_DATASECTION,	"datasection",		FALSE },
-	{ SCE_RB_HERE_DELIM,	"heredelim",		FALSE },
-	{ SCE_RB_WORD_DEMOTED,	"worddemoted",		FALSE },
-	{ SCE_RB_STDIN,			"stdin",			FALSE },
-	{ SCE_RB_STDOUT,		"stdout",			FALSE },
-	{ SCE_RB_STDERR,		"stderr",			FALSE },
-	{ SCE_RB_REGEX,			"regex",			FALSE },
-	{ SCE_RB_HERE_Q,		"here_q",			FALSE },
-	{ SCE_RB_HERE_QQ,		"here_qq",			FALSE },
-	{ SCE_RB_HERE_QX,		"here_qx",			FALSE },
-	{ SCE_RB_STRING_Q,		"string_q",			FALSE },
-	{ SCE_RB_STRING_QQ,		"string_qq",		FALSE },
-	{ SCE_RB_STRING_QX,		"string_qx",		FALSE },
-	{ SCE_RB_STRING_QR,		"string_qr",		FALSE },
-	{ SCE_RB_STRING_QW,		"string_qw",		FALSE },
-	{ SCE_RB_STRING_W,		"string_qw",		FALSE },
-	{ SCE_RB_STRING_QI,		"symbol",			FALSE },
-	{ SCE_RB_STRING_QS,		"symbol",			FALSE },
-	{ SCE_RB_STRING_I,		"symbol",			FALSE },
-	{ SCE_RB_UPPER_BOUND,	"upper_bound",		FALSE },
-	{ SCE_RB_ERROR,			"error",			FALSE },
-	{ SCE_RB_POD,			"pod",				FALSE }
+	{ SCE_RB_DEFAULT,		"default",			FALSE,	FALSE },
+	{ SCE_RB_COMMENTLINE,	"commentline",		FALSE,	FALSE },
+	{ SCE_RB_NUMBER,		"number",			FALSE,	FALSE },
+	{ SCE_RB_STRING,		"string",			FALSE,	FALSE },
+	{ SCE_RB_CHARACTER,		"character",		FALSE,	FALSE },
+	{ SCE_RB_WORD,			"word",				FALSE,	FALSE },
+	{ SCE_RB_GLOBAL,		"global",			FALSE,	FALSE },
+	{ SCE_RB_SYMBOL,		"symbol",			FALSE,	FALSE },
+	{ SCE_RB_CLASSNAME,		"classname",		FALSE,	FALSE },
+	{ SCE_RB_DEFNAME,		"defname",			FALSE,	FALSE },
+	{ SCE_RB_OPERATOR,		"operator",			FALSE,	FALSE },
+	{ SCE_RB_IDENTIFIER,	"identifier",		FALSE,	FALSE },
+	{ SCE_RB_MODULE_NAME,	"modulename",		FALSE,	FALSE },
+	{ SCE_RB_BACKTICKS,		"backticks",		FALSE,	FALSE },
+	{ SCE_RB_INSTANCE_VAR,	"instancevar",		FALSE,	FALSE },
+	{ SCE_RB_CLASS_VAR,		"classvar",			FALSE,	FALSE },
+	{ SCE_RB_DATASECTION,	"datasection",		FALSE,	FALSE },
+	{ SCE_RB_HERE_DELIM,	"heredelim",		FALSE,	FALSE },
+	{ SCE_RB_WORD_DEMOTED,	"worddemoted",		FALSE,	FALSE },
+	{ SCE_RB_STDIN,			"stdin",			FALSE,	FALSE },
+	{ SCE_RB_STDOUT,		"stdout",			FALSE,	FALSE },
+	{ SCE_RB_STDERR,		"stderr",			FALSE,	FALSE },
+	{ SCE_RB_REGEX,			"regex",			FALSE,	FALSE },
+	{ SCE_RB_HERE_Q,		"here_q",			FALSE,	FALSE },
+	{ SCE_RB_HERE_QQ,		"here_qq",			FALSE,	FALSE },
+	{ SCE_RB_HERE_QX,		"here_qx",			FALSE,	FALSE },
+	{ SCE_RB_STRING_Q,		"string_q",			FALSE,	FALSE },
+	{ SCE_RB_STRING_QQ,		"string_qq",		FALSE,	FALSE },
+	{ SCE_RB_STRING_QX,		"string_qx",		FALSE,	FALSE },
+	{ SCE_RB_STRING_QR,		"string_qr",		FALSE,	FALSE },
+	{ SCE_RB_STRING_QW,		"string_qw",		FALSE,	FALSE },
+	{ SCE_RB_STRING_W,		"string_qw",		FALSE,	FALSE },
+	{ SCE_RB_STRING_QI,		"symbol",			FALSE,	FALSE },
+	{ SCE_RB_STRING_QS,		"symbol",			FALSE,	FALSE },
+	{ SCE_RB_STRING_I,		"symbol",			FALSE,	FALSE },
+	{ SCE_RB_UPPER_BOUND,	"upper_bound",		FALSE,	FALSE },
+	{ SCE_RB_ERROR,			"error",			FALSE,	FALSE },
+	{ SCE_RB_POD,			"pod",				FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_RUBY[] =
 {
@@ -1452,30 +1453,30 @@ static const HLKeyword highlighting_keywords_RUBY[] =
 #define highlighting_lexer_RUST		SCLEX_RUST
 static const HLStyle highlighting_styles_RUST[] =
 {
-	{ SCE_RUST_DEFAULT,				"default",					FALSE },
-	{ SCE_RUST_COMMENTBLOCK,		"commentblock",				FALSE },
-	{ SCE_RUST_COMMENTLINE,			"commentline",				FALSE },
-	{ SCE_RUST_COMMENTBLOCKDOC,		"commentblockdoc",			FALSE },
-	{ SCE_RUST_COMMENTLINEDOC,		"commentlinedoc",			FALSE },
-	{ SCE_RUST_NUMBER,				"number",					FALSE },
-	{ SCE_RUST_WORD,				"word",						FALSE },
-	{ SCE_RUST_WORD2,				"word2",					FALSE },
-	{ SCE_RUST_WORD3,				"word3",					FALSE },
-	{ SCE_RUST_WORD4,				"word4",					FALSE },
-	{ SCE_RUST_WORD5,				"word5",					FALSE },
-	{ SCE_RUST_WORD6,				"word6",					FALSE },
-	{ SCE_RUST_WORD7,				"word7",					FALSE },
-	{ SCE_RUST_STRING,				"string",					FALSE },
-	{ SCE_RUST_STRINGR,				"stringraw",				FALSE },
-	{ SCE_RUST_CHARACTER,			"character",				FALSE },
-	{ SCE_RUST_OPERATOR,			"operator",					FALSE },
-	{ SCE_RUST_IDENTIFIER,			"identifier",				FALSE },
-	{ SCE_RUST_LIFETIME,			"lifetime",					FALSE },
-	{ SCE_RUST_MACRO,				"macro",					FALSE },
-	{ SCE_RUST_LEXERROR,			"lexerror",					FALSE },
-	{ SCE_RUST_BYTESTRING,			"bytestring",				FALSE },
-	{ SCE_RUST_BYTESTRINGR,			"bytestringr",				FALSE },
-	{ SCE_RUST_BYTECHARACTER,		"bytecharacter",			FALSE }
+	{ SCE_RUST_DEFAULT,				"default",					FALSE,	FALSE },
+	{ SCE_RUST_COMMENTBLOCK,		"commentblock",				FALSE,	FALSE },
+	{ SCE_RUST_COMMENTLINE,			"commentline",				FALSE,	FALSE },
+	{ SCE_RUST_COMMENTBLOCKDOC,		"commentblockdoc",			FALSE,	FALSE },
+	{ SCE_RUST_COMMENTLINEDOC,		"commentlinedoc",			FALSE,	FALSE },
+	{ SCE_RUST_NUMBER,				"number",					FALSE,	FALSE },
+	{ SCE_RUST_WORD,				"word",						FALSE,	FALSE },
+	{ SCE_RUST_WORD2,				"word2",					FALSE,	FALSE },
+	{ SCE_RUST_WORD3,				"word3",					FALSE,	FALSE },
+	{ SCE_RUST_WORD4,				"word4",					FALSE,	FALSE },
+	{ SCE_RUST_WORD5,				"word5",					FALSE,	FALSE },
+	{ SCE_RUST_WORD6,				"word6",					FALSE,	FALSE },
+	{ SCE_RUST_WORD7,				"word7",					FALSE,	FALSE },
+	{ SCE_RUST_STRING,				"string",					FALSE,	FALSE },
+	{ SCE_RUST_STRINGR,				"stringraw",				FALSE,	FALSE },
+	{ SCE_RUST_CHARACTER,			"character",				FALSE,	FALSE },
+	{ SCE_RUST_OPERATOR,			"operator",					FALSE,	FALSE },
+	{ SCE_RUST_IDENTIFIER,			"identifier",				FALSE,	FALSE },
+	{ SCE_RUST_LIFETIME,			"lifetime",					FALSE,	FALSE },
+	{ SCE_RUST_MACRO,				"macro",					FALSE,	FALSE },
+	{ SCE_RUST_LEXERROR,			"lexerror",					FALSE,	FALSE },
+	{ SCE_RUST_BYTESTRING,			"bytestring",				FALSE,	FALSE },
+	{ SCE_RUST_BYTESTRINGR,			"bytestringr",				FALSE,	FALSE },
+	{ SCE_RUST_BYTECHARACTER,		"bytecharacter",			FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_RUST[] =
 {
@@ -1491,20 +1492,20 @@ static const HLKeyword highlighting_keywords_RUST[] =
 #define highlighting_lexer_SH		SCLEX_BASH
 static const HLStyle highlighting_styles_SH[] =
 {
-	{ SCE_SH_DEFAULT,		"default",		FALSE },
-	{ SCE_SH_COMMENTLINE,	"commentline",	FALSE },
-	{ SCE_SH_NUMBER,		"number",		FALSE },
-	{ SCE_SH_WORD,			"word",			FALSE },
-	{ SCE_SH_STRING,		"string",		FALSE },
-	{ SCE_SH_CHARACTER,		"character",	FALSE },
-	{ SCE_SH_OPERATOR,		"operator",		FALSE },
-	{ SCE_SH_IDENTIFIER,	"identifier",	FALSE },
-	{ SCE_SH_BACKTICKS,		"backticks",	FALSE },
-	{ SCE_SH_PARAM,			"param",		FALSE },
-	{ SCE_SH_SCALAR,		"scalar",		FALSE },
-	{ SCE_SH_ERROR,			"error",		FALSE },
-	{ SCE_SH_HERE_DELIM,	"here_delim",	FALSE },
-	{ SCE_SH_HERE_Q,		"here_q",		FALSE }
+	{ SCE_SH_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_SH_COMMENTLINE,	"commentline",	FALSE,	FALSE },
+	{ SCE_SH_NUMBER,		"number",		FALSE,	FALSE },
+	{ SCE_SH_WORD,			"word",			FALSE,	FALSE },
+	{ SCE_SH_STRING,		"string",		FALSE,	FALSE },
+	{ SCE_SH_CHARACTER,		"character",	FALSE,	FALSE },
+	{ SCE_SH_OPERATOR,		"operator",		FALSE,	FALSE },
+	{ SCE_SH_IDENTIFIER,	"identifier",	FALSE,	TRUE },
+	{ SCE_SH_BACKTICKS,		"backticks",	FALSE,	FALSE },
+	{ SCE_SH_PARAM,			"param",		FALSE,	FALSE },
+	{ SCE_SH_SCALAR,		"scalar",		FALSE,	TRUE },
+	{ SCE_SH_ERROR,			"error",		FALSE,	FALSE },
+	{ SCE_SH_HERE_DELIM,	"here_delim",	FALSE,	FALSE },
+	{ SCE_SH_HERE_Q,		"here_q",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_SH[] =
 {
@@ -1517,23 +1518,23 @@ static const HLKeyword highlighting_keywords_SH[] =
 #define highlighting_lexer_SMALLTALK SCLEX_SMALLTALK
 static const HLStyle highlighting_styles_SMALLTALK[] =
 {
-	{ SCE_ST_DEFAULT,		"default",				FALSE },
-	{ SCE_ST_SPECIAL,		"special",				FALSE },
-	{ SCE_ST_SYMBOL,		"symbol",				FALSE },
-	{ SCE_ST_ASSIGN,		"assignment",			FALSE },
-	{ SCE_ST_RETURN,		"return",				FALSE },
-	{ SCE_ST_NUMBER,		"number",				FALSE },
-	{ SCE_ST_BINARY,		"binary",				FALSE },
-	{ SCE_ST_SPEC_SEL,		"special_selector",		FALSE },
-	{ SCE_ST_KWSEND,		"keyword_send",			FALSE },
-	{ SCE_ST_GLOBAL,		"global",				FALSE },
-	{ SCE_ST_SELF,			"self",					FALSE },
-	{ SCE_ST_SUPER,			"super",				FALSE },
-	{ SCE_ST_NIL,			"nil",					FALSE },
-	{ SCE_ST_BOOL,			"bool",					FALSE },
-	{ SCE_ST_COMMENT,		"comment",				FALSE },
-	{ SCE_ST_STRING,		"string",				FALSE },
-	{ SCE_ST_CHARACTER,		"character",			FALSE }
+	{ SCE_ST_DEFAULT,		"default",				FALSE,	FALSE },
+	{ SCE_ST_SPECIAL,		"special",				FALSE,	FALSE },
+	{ SCE_ST_SYMBOL,		"symbol",				FALSE,	FALSE },
+	{ SCE_ST_ASSIGN,		"assignment",			FALSE,	FALSE },
+	{ SCE_ST_RETURN,		"return",				FALSE,	FALSE },
+	{ SCE_ST_NUMBER,		"number",				FALSE,	FALSE },
+	{ SCE_ST_BINARY,		"binary",				FALSE,	FALSE },
+	{ SCE_ST_SPEC_SEL,		"special_selector",		FALSE,	FALSE },
+	{ SCE_ST_KWSEND,		"keyword_send",			FALSE,	FALSE },
+	{ SCE_ST_GLOBAL,		"global",				FALSE,	FALSE },
+	{ SCE_ST_SELF,			"self",					FALSE,	FALSE },
+	{ SCE_ST_SUPER,			"super",				FALSE,	FALSE },
+	{ SCE_ST_NIL,			"nil",					FALSE,	FALSE },
+	{ SCE_ST_BOOL,			"bool",					FALSE,	FALSE },
+	{ SCE_ST_COMMENT,		"comment",				FALSE,	FALSE },
+	{ SCE_ST_STRING,		"string",				FALSE,	FALSE },
+	{ SCE_ST_CHARACTER,		"character",			FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_SMALLTALK[] =
 {
@@ -1546,30 +1547,30 @@ static const HLKeyword highlighting_keywords_SMALLTALK[] =
 #define highlighting_lexer_SQL			SCLEX_SQL
 static const HLStyle highlighting_styles_SQL[] =
 {
-	{ SCE_SQL_DEFAULT,					"default",					FALSE },
-	{ SCE_SQL_COMMENT,					"comment",					FALSE },
-	{ SCE_SQL_COMMENTLINE,				"commentline",				FALSE },
-	{ SCE_SQL_COMMENTDOC,				"commentdoc",				FALSE },
-	{ SCE_SQL_COMMENTLINEDOC,			"commentlinedoc",			FALSE },
-	{ SCE_SQL_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
-	{ SCE_SQL_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE },
-	{ SCE_SQL_NUMBER,					"number",					FALSE },
-	{ SCE_SQL_WORD,						"word",						FALSE },
-	{ SCE_SQL_WORD2,					"word2",					FALSE },
-	{ SCE_SQL_STRING,					"string",					FALSE },
-	{ SCE_SQL_CHARACTER,				"character",				FALSE },
-	{ SCE_SQL_OPERATOR,					"operator",					FALSE },
-	{ SCE_SQL_IDENTIFIER,				"identifier",				FALSE },
-	{ SCE_SQL_SQLPLUS,					"sqlplus",					FALSE },
-	{ SCE_SQL_SQLPLUS_PROMPT,			"sqlplus_prompt",			FALSE },
-	{ SCE_SQL_SQLPLUS_COMMENT,			"sqlplus_comment",			FALSE },
-	{ SCE_SQL_QUOTEDIDENTIFIER,			"quotedidentifier",			FALSE },
-	{ SCE_SQL_QOPERATOR,				"qoperator",				FALSE }
+	{ SCE_SQL_DEFAULT,					"default",					FALSE,	FALSE },
+	{ SCE_SQL_COMMENT,					"comment",					FALSE,	FALSE },
+	{ SCE_SQL_COMMENTLINE,				"commentline",				FALSE,	FALSE },
+	{ SCE_SQL_COMMENTDOC,				"commentdoc",				FALSE,	FALSE },
+	{ SCE_SQL_COMMENTLINEDOC,			"commentlinedoc",			FALSE,	FALSE },
+	{ SCE_SQL_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE,	FALSE },
+	{ SCE_SQL_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE,	FALSE },
+	{ SCE_SQL_NUMBER,					"number",					FALSE,	FALSE },
+	{ SCE_SQL_WORD,						"word",						FALSE,	FALSE },
+	{ SCE_SQL_WORD2,					"word2",					FALSE,	FALSE },
+	{ SCE_SQL_STRING,					"string",					FALSE,	FALSE },
+	{ SCE_SQL_CHARACTER,				"character",				FALSE,	FALSE },
+	{ SCE_SQL_OPERATOR,					"operator",					FALSE,	FALSE },
+	{ SCE_SQL_IDENTIFIER,				"identifier",				FALSE,	FALSE },
+	{ SCE_SQL_SQLPLUS,					"sqlplus",					FALSE,	FALSE },
+	{ SCE_SQL_SQLPLUS_PROMPT,			"sqlplus_prompt",			FALSE,	FALSE },
+	{ SCE_SQL_SQLPLUS_COMMENT,			"sqlplus_comment",			FALSE,	FALSE },
+	{ SCE_SQL_QUOTEDIDENTIFIER,			"quotedidentifier",			FALSE,	FALSE },
+	{ SCE_SQL_QOPERATOR,				"qoperator",				FALSE,	FALSE }
 	/* these are for user-defined keywords we don't set yet */
-	/*{ SCE_SQL_USER1,					"user1",					FALSE },
-	{ SCE_SQL_USER2,					"user2",					FALSE },
-	{ SCE_SQL_USER3,					"user3",					FALSE },
-	{ SCE_SQL_USER4,					"user4",					FALSE }*/
+	/*{ SCE_SQL_USER1,					"user1",					FALSE,	FALSE },
+	{ SCE_SQL_USER2,					"user2",					FALSE,	FALSE },
+	{ SCE_SQL_USER3,					"user3",					FALSE,	FALSE },
+	{ SCE_SQL_USER4,					"user4",					FALSE,	FALSE }*/
 };
 static const HLKeyword highlighting_keywords_SQL[] =
 {
@@ -1582,29 +1583,29 @@ static const HLKeyword highlighting_keywords_SQL[] =
 #define highlighting_lexer_TCL			SCLEX_TCL
 static const HLStyle highlighting_styles_TCL[] =
 {
-	{ SCE_TCL_DEFAULT,			"default",			FALSE },
-	{ SCE_TCL_COMMENT,			"comment",			FALSE },
-	{ SCE_TCL_COMMENTLINE,		"commentline",		FALSE },
-	{ SCE_TCL_NUMBER,			"number",			FALSE },
-	{ SCE_TCL_OPERATOR,			"operator",			FALSE },
-	{ SCE_TCL_IDENTIFIER,		"identifier",		FALSE },
-	{ SCE_TCL_WORD_IN_QUOTE,	"wordinquote",		FALSE },
-	{ SCE_TCL_IN_QUOTE,			"inquote",			FALSE },
-	{ SCE_TCL_SUBSTITUTION,		"substitution",		FALSE },
-	{ SCE_TCL_MODIFIER,			"modifier",			FALSE },
-	{ SCE_TCL_EXPAND,			"expand",			FALSE },
-	{ SCE_TCL_WORD,				"wordtcl",			FALSE },
-	{ SCE_TCL_WORD2,			"wordtk",			FALSE },
-	{ SCE_TCL_WORD3,			"worditcl",			FALSE },
-	{ SCE_TCL_WORD4,			"wordtkcmds",		FALSE },
-	{ SCE_TCL_WORD5,			"wordexpand",		FALSE },
-	{ SCE_TCL_COMMENT_BOX,		"commentbox",		FALSE },
-	{ SCE_TCL_BLOCK_COMMENT,	"blockcomment",		FALSE },
-	{ SCE_TCL_SUB_BRACE,		"subbrace",			FALSE }
+	{ SCE_TCL_DEFAULT,			"default",			FALSE,	FALSE },
+	{ SCE_TCL_COMMENT,			"comment",			FALSE,	FALSE },
+	{ SCE_TCL_COMMENTLINE,		"commentline",		FALSE,	FALSE },
+	{ SCE_TCL_NUMBER,			"number",			FALSE,	FALSE },
+	{ SCE_TCL_OPERATOR,			"operator",			FALSE,	FALSE },
+	{ SCE_TCL_IDENTIFIER,		"identifier",		FALSE,	FALSE },
+	{ SCE_TCL_WORD_IN_QUOTE,	"wordinquote",		FALSE,	FALSE },
+	{ SCE_TCL_IN_QUOTE,			"inquote",			FALSE,	FALSE },
+	{ SCE_TCL_SUBSTITUTION,		"substitution",		FALSE,	FALSE },
+	{ SCE_TCL_MODIFIER,			"modifier",			FALSE,	FALSE },
+	{ SCE_TCL_EXPAND,			"expand",			FALSE,	FALSE },
+	{ SCE_TCL_WORD,				"wordtcl",			FALSE,	FALSE },
+	{ SCE_TCL_WORD2,			"wordtk",			FALSE,	FALSE },
+	{ SCE_TCL_WORD3,			"worditcl",			FALSE,	FALSE },
+	{ SCE_TCL_WORD4,			"wordtkcmds",		FALSE,	FALSE },
+	{ SCE_TCL_WORD5,			"wordexpand",		FALSE,	FALSE },
+	{ SCE_TCL_COMMENT_BOX,		"commentbox",		FALSE,	FALSE },
+	{ SCE_TCL_BLOCK_COMMENT,	"blockcomment",		FALSE,	FALSE },
+	{ SCE_TCL_SUB_BRACE,		"subbrace",			FALSE,	FALSE }
 	/* these are for user-defined keywords we don't set yet */
-	/*{ SCE_TCL_WORD6,			"user2",			FALSE },
-	{ SCE_TCL_WORD7,			"user3",			FALSE },
-	{ SCE_TCL_WORD8,			"user4",			FALSE }*/
+	/*{ SCE_TCL_WORD6,			"user2",			FALSE,	FALSE },
+	{ SCE_TCL_WORD7,			"user3",			FALSE,	FALSE },
+	{ SCE_TCL_WORD8,			"user4",			FALSE,	FALSE }*/
 };
 static const HLKeyword highlighting_keywords_TCL[] =
 {
@@ -1621,32 +1622,32 @@ static const HLKeyword highlighting_keywords_TCL[] =
 #define highlighting_lexer_TXT2TAGS			SCLEX_TXT2TAGS
 static const HLStyle highlighting_styles_TXT2TAGS[] =
 {
-	{ SCE_TXT2TAGS_DEFAULT,		"default",		FALSE },
-	{ SCE_TXT2TAGS_LINE_BEGIN,	"default",		FALSE }, /* XIFME: remappings should be avoided */
-	{ SCE_TXT2TAGS_PRECHAR,		"default",		FALSE },
-	{ SCE_TXT2TAGS_STRONG1,		"strong",		FALSE },
-	{ SCE_TXT2TAGS_STRONG2,		"strong",		FALSE },
-	{ SCE_TXT2TAGS_EM1,			"emphasis",		FALSE },
-	{ SCE_TXT2TAGS_EM2,			"underlined",	FALSE }, /* WTF? */
-	{ SCE_TXT2TAGS_HEADER1,		"header1",		FALSE },
-	{ SCE_TXT2TAGS_HEADER2,		"header2",		FALSE },
-	{ SCE_TXT2TAGS_HEADER3,		"header3",		FALSE },
-	{ SCE_TXT2TAGS_HEADER4,		"header4",		FALSE },
-	{ SCE_TXT2TAGS_HEADER5,		"header5",		FALSE },
-	{ SCE_TXT2TAGS_HEADER6,		"header6",		FALSE },
-	{ SCE_TXT2TAGS_ULIST_ITEM,	"ulist_item",	FALSE },
-	{ SCE_TXT2TAGS_OLIST_ITEM,	"olist_item",	FALSE },
-	{ SCE_TXT2TAGS_BLOCKQUOTE,	"blockquote",	FALSE },
-	{ SCE_TXT2TAGS_STRIKEOUT,	"strikeout",	FALSE },
-	{ SCE_TXT2TAGS_HRULE,		"hrule",		FALSE },
-	{ SCE_TXT2TAGS_LINK,		"link",			FALSE },
-	{ SCE_TXT2TAGS_CODE,		"code",			FALSE },
-	{ SCE_TXT2TAGS_CODE2,		"code",			FALSE },
-	{ SCE_TXT2TAGS_CODEBK,		"codebk",		FALSE },
-	{ SCE_TXT2TAGS_COMMENT,		"comment",		FALSE },
-	{ SCE_TXT2TAGS_OPTION,		"option",		FALSE },
-	{ SCE_TXT2TAGS_PREPROC,		"preproc",		FALSE },
-	{ SCE_TXT2TAGS_POSTPROC,	"postproc",		FALSE }
+	{ SCE_TXT2TAGS_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_LINE_BEGIN,	"default",		FALSE,	FALSE }, /* XIFME: remappings should be avoided */
+	{ SCE_TXT2TAGS_PRECHAR,		"default",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_STRONG1,		"strong",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_STRONG2,		"strong",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_EM1,			"emphasis",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_EM2,			"underlined",	FALSE,	FALSE }, /* WTF? */
+	{ SCE_TXT2TAGS_HEADER1,		"header1",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_HEADER2,		"header2",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_HEADER3,		"header3",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_HEADER4,		"header4",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_HEADER5,		"header5",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_HEADER6,		"header6",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_ULIST_ITEM,	"ulist_item",	FALSE,	FALSE },
+	{ SCE_TXT2TAGS_OLIST_ITEM,	"olist_item",	FALSE,	FALSE },
+	{ SCE_TXT2TAGS_BLOCKQUOTE,	"blockquote",	FALSE,	FALSE },
+	{ SCE_TXT2TAGS_STRIKEOUT,	"strikeout",	FALSE,	FALSE },
+	{ SCE_TXT2TAGS_HRULE,		"hrule",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_LINK,		"link",			FALSE,	FALSE },
+	{ SCE_TXT2TAGS_CODE,		"code",			FALSE,	FALSE },
+	{ SCE_TXT2TAGS_CODE2,		"code",			FALSE,	FALSE },
+	{ SCE_TXT2TAGS_CODEBK,		"codebk",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_COMMENT,		"comment",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_OPTION,		"option",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_PREPROC,		"preproc",		FALSE,	FALSE },
+	{ SCE_TXT2TAGS_POSTPROC,	"postproc",		FALSE,	FALSE }
 };
 #define highlighting_keywords_TXT2TAGS		EMPTY_KEYWORDS
 #define highlighting_properties_TXT2TAGS	EMPTY_PROPERTIES
@@ -1656,22 +1657,22 @@ static const HLStyle highlighting_styles_TXT2TAGS[] =
 #define highlighting_lexer_VHDL			SCLEX_VHDL
 static const HLStyle highlighting_styles_VHDL[] =
 {
-	{ SCE_VHDL_DEFAULT,			"default",				FALSE },
-	{ SCE_VHDL_COMMENT,			"comment",				FALSE },
-	{ SCE_VHDL_COMMENTLINEBANG,	"comment_line_bang",	FALSE },
-	{ SCE_VHDL_BLOCK_COMMENT,	"block_comment",		FALSE },
-	{ SCE_VHDL_NUMBER,			"number",				FALSE },
-	{ SCE_VHDL_STRING,			"string",				FALSE },
-	{ SCE_VHDL_OPERATOR,		"operator",				FALSE },
-	{ SCE_VHDL_IDENTIFIER,		"identifier",			FALSE },
-	{ SCE_VHDL_STRINGEOL,		"stringeol",			FALSE },
-	{ SCE_VHDL_KEYWORD,			"keyword",				FALSE },
-	{ SCE_VHDL_STDOPERATOR,		"stdoperator",			FALSE },
-	{ SCE_VHDL_ATTRIBUTE,		"attribute",			FALSE },
-	{ SCE_VHDL_STDFUNCTION,		"stdfunction",			FALSE },
-	{ SCE_VHDL_STDPACKAGE,		"stdpackage",			FALSE },
-	{ SCE_VHDL_STDTYPE,			"stdtype",				FALSE },
-	{ SCE_VHDL_USERWORD,		"userword",				FALSE }
+	{ SCE_VHDL_DEFAULT,			"default",				FALSE,	FALSE },
+	{ SCE_VHDL_COMMENT,			"comment",				FALSE,	FALSE },
+	{ SCE_VHDL_COMMENTLINEBANG,	"comment_line_bang",	FALSE,	FALSE },
+	{ SCE_VHDL_BLOCK_COMMENT,	"block_comment",		FALSE,	FALSE },
+	{ SCE_VHDL_NUMBER,			"number",				FALSE,	FALSE },
+	{ SCE_VHDL_STRING,			"string",				FALSE,	FALSE },
+	{ SCE_VHDL_OPERATOR,		"operator",				FALSE,	FALSE },
+	{ SCE_VHDL_IDENTIFIER,		"identifier",			FALSE,	FALSE },
+	{ SCE_VHDL_STRINGEOL,		"stringeol",			FALSE,	FALSE },
+	{ SCE_VHDL_KEYWORD,			"keyword",				FALSE,	FALSE },
+	{ SCE_VHDL_STDOPERATOR,		"stdoperator",			FALSE,	FALSE },
+	{ SCE_VHDL_ATTRIBUTE,		"attribute",			FALSE,	FALSE },
+	{ SCE_VHDL_STDFUNCTION,		"stdfunction",			FALSE,	FALSE },
+	{ SCE_VHDL_STDPACKAGE,		"stdpackage",			FALSE,	FALSE },
+	{ SCE_VHDL_STDTYPE,			"stdtype",				FALSE,	FALSE },
+	{ SCE_VHDL_USERWORD,		"userword",				FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_VHDL[] =
 {
@@ -1690,25 +1691,25 @@ static const HLKeyword highlighting_keywords_VHDL[] =
 #define highlighting_lexer_VERILOG			SCLEX_VERILOG
 static const HLStyle highlighting_styles_VERILOG[] =
 {
-	{ SCE_V_DEFAULT,			"default",				FALSE },
-	{ SCE_V_COMMENT,			"comment",				FALSE },
-	{ SCE_V_COMMENTLINE,		"comment_line",			FALSE },
-	{ SCE_V_COMMENTLINEBANG,	"comment_line_bang",	FALSE },
-	{ SCE_V_NUMBER,				"number",				FALSE },
-	{ SCE_V_WORD,				"word",					FALSE },
-	{ SCE_V_STRING,				"string",				FALSE },
-	{ SCE_V_WORD2,				"word2",				FALSE },
-	{ SCE_V_WORD3,				"word3",				FALSE },
-	{ SCE_V_PREPROCESSOR,		"preprocessor",			FALSE },
-	{ SCE_V_OPERATOR,			"operator",				FALSE },
-	{ SCE_V_IDENTIFIER,			"identifier",			FALSE },
-	{ SCE_V_STRINGEOL,			"stringeol",			FALSE },
-	{ SCE_V_USER,				"userword",				FALSE },
-	{ SCE_V_COMMENT_WORD,		"comment_word",			FALSE },
-	{ SCE_V_INPUT,				"input",				FALSE },
-	{ SCE_V_OUTPUT,				"output",				FALSE },
-	{ SCE_V_INOUT,				"inout",				FALSE },
-	{ SCE_V_PORT_CONNECT,		"port_connect",			FALSE }
+	{ SCE_V_DEFAULT,			"default",				FALSE,	FALSE },
+	{ SCE_V_COMMENT,			"comment",				FALSE,	FALSE },
+	{ SCE_V_COMMENTLINE,		"comment_line",			FALSE,	FALSE },
+	{ SCE_V_COMMENTLINEBANG,	"comment_line_bang",	FALSE,	FALSE },
+	{ SCE_V_NUMBER,				"number",				FALSE,	FALSE },
+	{ SCE_V_WORD,				"word",					FALSE,	FALSE },
+	{ SCE_V_STRING,				"string",				FALSE,	FALSE },
+	{ SCE_V_WORD2,				"word2",				FALSE,	FALSE },
+	{ SCE_V_WORD3,				"word3",				FALSE,	FALSE },
+	{ SCE_V_PREPROCESSOR,		"preprocessor",			FALSE,	FALSE },
+	{ SCE_V_OPERATOR,			"operator",				FALSE,	FALSE },
+	{ SCE_V_IDENTIFIER,			"identifier",			FALSE,	FALSE },
+	{ SCE_V_STRINGEOL,			"stringeol",			FALSE,	FALSE },
+	{ SCE_V_USER,				"userword",				FALSE,	FALSE },
+	{ SCE_V_COMMENT_WORD,		"comment_word",			FALSE,	FALSE },
+	{ SCE_V_INPUT,				"input",				FALSE,	FALSE },
+	{ SCE_V_OUTPUT,				"output",				FALSE,	FALSE },
+	{ SCE_V_INOUT,				"inout",				FALSE,	FALSE },
+	{ SCE_V_PORT_CONNECT,		"port_connect",			FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_VERILOG[] =
 {
@@ -1734,16 +1735,16 @@ static const HLKeyword highlighting_keywords_XML[] =
 #define highlighting_lexer_YAML			SCLEX_YAML
 static const HLStyle highlighting_styles_YAML[] =
 {
-	{ SCE_YAML_DEFAULT,		"default",		FALSE },
-	{ SCE_YAML_COMMENT,		"comment",		FALSE },
-	{ SCE_YAML_IDENTIFIER,	"identifier",	FALSE },
-	{ SCE_YAML_KEYWORD,		"keyword",		FALSE },
-	{ SCE_YAML_NUMBER,		"number",		FALSE },
-	{ SCE_YAML_REFERENCE,	"reference",	FALSE },
-	{ SCE_YAML_DOCUMENT,	"document",		FALSE },
-	{ SCE_YAML_TEXT,		"text",			FALSE },
-	{ SCE_YAML_ERROR,		"error",		FALSE },
-	{ SCE_YAML_OPERATOR,	"operator",		FALSE }
+	{ SCE_YAML_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_YAML_COMMENT,		"comment",		FALSE,	FALSE },
+	{ SCE_YAML_IDENTIFIER,	"identifier",	FALSE,	FALSE },
+	{ SCE_YAML_KEYWORD,		"keyword",		FALSE,	FALSE },
+	{ SCE_YAML_NUMBER,		"number",		FALSE,	FALSE },
+	{ SCE_YAML_REFERENCE,	"reference",	FALSE,	FALSE },
+	{ SCE_YAML_DOCUMENT,	"document",		FALSE,	FALSE },
+	{ SCE_YAML_TEXT,		"text",			FALSE,	FALSE },
+	{ SCE_YAML_ERROR,		"error",		FALSE,	FALSE },
+	{ SCE_YAML_OPERATOR,	"operator",		FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_YAML[] =
 {
@@ -1763,22 +1764,22 @@ static const HLKeyword highlighting_keywords_YAML[] =
 #define highlighting_lexer_AU3			SCLEX_AU3
 static const HLStyle highlighting_styles_AU3[] =
 {
-	{ SCE_AU3_DEFAULT,		"default",		FALSE},
-	{ SCE_AU3_COMMENT,		"comment",		FALSE},
-	{ SCE_AU3_COMMENTBLOCK,		"commentblock",		FALSE},
-	{ SCE_AU3_NUMBER,		"number",		FALSE},
-	{ SCE_AU3_FUNCTION,		"function",		FALSE},
-	{ SCE_AU3_KEYWORD,		"keyword",		FALSE},
-	{ SCE_AU3_MACRO,		"macro",		FALSE},
-	{ SCE_AU3_STRING,		"string",		FALSE},
-	{ SCE_AU3_OPERATOR,		"operator",		FALSE},
-	{ SCE_AU3_VARIABLE,		"variable",		FALSE},
-	{ SCE_AU3_SENT,			"sent",			FALSE},
-	{ SCE_AU3_PREPROCESSOR,		"preprocessor",		FALSE},
-	{ SCE_AU3_SPECIAL,		"special",		FALSE},
-	{ SCE_AU3_EXPAND,		"expand",		FALSE},
-	{ SCE_AU3_COMOBJ,		"comobj",		FALSE},
-	{ SCE_AU3_UDF,			"udf",			FALSE}
+	{ SCE_AU3_DEFAULT,		"default",		FALSE,	FALSE },
+	{ SCE_AU3_COMMENT,		"comment",		FALSE,	FALSE },
+	{ SCE_AU3_COMMENTBLOCK,	"commentblock",	FALSE,	FALSE },
+	{ SCE_AU3_NUMBER,		"number",		FALSE,	FALSE },
+	{ SCE_AU3_FUNCTION,		"function",		FALSE,	FALSE },
+	{ SCE_AU3_KEYWORD,		"keyword",		FALSE,	FALSE },
+	{ SCE_AU3_MACRO,		"macro",		FALSE,	FALSE },
+	{ SCE_AU3_STRING,		"string",		FALSE,	FALSE },
+	{ SCE_AU3_OPERATOR,		"operator",		FALSE,	FALSE },
+	{ SCE_AU3_VARIABLE,		"variable",		FALSE,	FALSE },
+	{ SCE_AU3_SENT,			"sent",			FALSE,	FALSE },
+	{ SCE_AU3_PREPROCESSOR,	"preprocessor",	FALSE,	FALSE },
+	{ SCE_AU3_SPECIAL,		"special",		FALSE,	FALSE },
+	{ SCE_AU3_EXPAND,		"expand",		FALSE,	FALSE },
+	{ SCE_AU3_COMOBJ,		"comobj",		FALSE,	FALSE },
+	{ SCE_AU3_UDF,			"udf",			FALSE,	FALSE }
 };
 static const HLKeyword highlighting_keywords_AU3[] =
 {

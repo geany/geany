@@ -61,12 +61,23 @@ static gchar *whitespace_chars = NULL;
 
 typedef struct
 {
-	gsize			count;		/* number of styles */
-	GeanyLexerStyle	*styling;		/* array of styles, NULL if not used or uninitialised */
-	gchar			**keywords;
-	gchar			*wordchars;	/* NULL used for style sets with no styles */
-	gchar			**property_keys;
-	gchar			**property_values;
+	GeanyLexerStyle styling;
+	struct {
+		gsize count;
+		GeanyLexerStyle *styling;
+		gchar **keywords;
+	} sub;
+} LexerStyle;
+
+
+typedef struct
+{
+	gsize		count;		/* number of styles */
+	LexerStyle	*styles;	/* array of styles, NULL if not used or uninitialised */
+	gchar		**keywords;
+	gchar		*wordchars;	/* NULL used for style sets with no styles */
+	gchar		**property_keys;
+	gchar		**property_values;
 } StyleSet;
 
 /* each filetype has a styleset but GEANY_FILETYPES_NONE uses common_style_set for styling */
@@ -135,7 +146,7 @@ static void new_styleset(guint file_type_id, gsize styling_count)
 	StyleSet *set = &style_sets[file_type_id];
 
 	set->count = styling_count;
-	set->styling = g_new0(GeanyLexerStyle, styling_count);
+	set->styles = g_malloc0_n(set->count, sizeof *set->styles);
 }
 
 
@@ -144,9 +155,14 @@ static void free_styleset(guint file_type_id)
 	StyleSet *style_ptr;
 	style_ptr = &style_sets[file_type_id];
 
+	for (guint i = 0; i < style_ptr->count; i++)
+	{
+		g_free(style_ptr->styles[i].sub.styling);
+		g_strfreev(style_ptr->styles[i].sub.keywords);
+	}
 	style_ptr->count = 0;
-	g_free(style_ptr->styling);
-	style_ptr->styling = NULL;
+	g_free(style_ptr->styles);
+	style_ptr->styles = NULL;
 	g_strfreev(style_ptr->keywords);
 	style_ptr->keywords = NULL;
 	g_free(style_ptr->wordchars);
@@ -388,6 +404,7 @@ static guint invert(guint icolour)
 }
 
 
+/* gets styling for a *base* style (no substyle support) */
 static GeanyLexerStyle *get_style(guint ft_id, guint styling_index)
 {
 	g_assert(ft_id < filetypes_array->len);
@@ -402,19 +419,23 @@ static GeanyLexerStyle *get_style(guint ft_id, guint styling_index)
 		StyleSet *set = &style_sets[ft_id];
 
 		g_assert(styling_index < set->count);
-		return &set->styling[styling_index];
+		return &set->styles[styling_index].styling;
 	}
+}
+
+
+static void set_sci_style_from_lexer_style(ScintillaObject *sci, guint style, const GeanyLexerStyle *style_ptr)
+{
+	SSM(sci, SCI_STYLESETFORE, style,	invert(style_ptr->foreground));
+	SSM(sci, SCI_STYLESETBACK, style,	invert(style_ptr->background));
+	SSM(sci, SCI_STYLESETBOLD, style,	style_ptr->bold);
+	SSM(sci, SCI_STYLESETITALIC, style,	style_ptr->italic);
 }
 
 
 static void set_sci_style(ScintillaObject *sci, guint style, guint ft_id, guint styling_index)
 {
-	GeanyLexerStyle *style_ptr = get_style(ft_id, styling_index);
-
-	SSM(sci, SCI_STYLESETFORE, style,	invert(style_ptr->foreground));
-	SSM(sci, SCI_STYLESETBACK, style,	invert(style_ptr->background));
-	SSM(sci, SCI_STYLESETBOLD, style,	style_ptr->bold);
-	SSM(sci, SCI_STYLESETITALIC, style,	style_ptr->italic);
+	set_sci_style_from_lexer_style(sci, style, get_style(ft_id, styling_index));
 }
 
 
@@ -835,9 +856,50 @@ static void styleset_init_from_mapping(guint ft_id, GKeyFile *config, GKeyFile *
 	new_styleset(ft_id, n_styles);
 	foreach_range(i, n_styles)
 	{
-		GeanyLexerStyle *style = &style_sets[ft_id].styling[i];
+		LexerStyle *style = &style_sets[ft_id].styles[i];
 
-		get_keyfile_style(config, config_home, styles[i].name, style);
+		get_keyfile_style(config, config_home, styles[i].name, &style->styling);
+
+		/* load sub-styles, if any */
+		if (styles[i].sub_stylable)
+		{
+			for (guint sub = 1; sub <= 0xff /* styles are 8 bits max */; sub++)
+			{
+				gchar *sub_name = g_strdup_printf("%s.%u", styles[i].name, sub);
+				gboolean has_style = (g_key_file_has_key(config, "styling", sub_name, NULL) ||
+				                      g_key_file_has_key(config_home, "styling", sub_name, NULL));
+				gboolean has_keywords = (g_key_file_has_key(config, "keywords", sub_name, NULL) ||
+				                         g_key_file_has_key(config_home, "keywords", sub_name, NULL));
+
+				if (has_style && has_keywords)
+				{
+					g_debug("loading sub-style \"%s\"", sub_name);
+
+					style->sub.count++;
+					/* style */
+					style->sub.styling =
+						g_realloc_n(style->sub.styling, style->sub.count, sizeof *style->sub.styling);
+					get_keyfile_style(config, config_home, sub_name, &style->sub.styling[style->sub.count - 1]);
+					/* identifiers */
+					style->sub.keywords =
+						g_realloc_n(style->sub.keywords, style->sub.count + 1, sizeof *style->sub.keywords);
+					style->sub.keywords[style->sub.count] = NULL;
+					style->sub.keywords[style->sub.count - 1] =
+						utils_get_setting(string, config_home, config, "keywords", sub_name, "");
+				}
+				else if (has_style)
+					g_warning("sub-style \"%s\" is defined, but it has no corresponding keywords", sub_name);
+				else if (has_keywords)
+					g_warning("sub-style keywords \"%s\" are defined, but have no corresponding sub-style", sub_name);
+				else
+				{
+					g_free(sub_name);
+					break;
+				}
+
+				g_free(sub_name);
+			}
+		}
 	}
 
 	/* keywords */
@@ -877,6 +939,39 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 			if (styles[i].fill_eol)
 				SSM(sci, SCI_STYLESETEOLFILLED, styles[i].style, TRUE);
 			set_sci_style(sci, styles[i].style, ft_id, i);
+			if (styles[i].sub_stylable)
+			{
+				LexerStyle *style = &style_sets[ft_id].styles[i];
+
+				if (style->sub.count)
+				{
+					gint sub_first = 0;
+					gsize allocated_count;
+
+					/* try allocating the substyles, but if allocating them all fails, try allocating
+					 * fewer ones ignoring the rest. */
+					for (allocated_count = style->sub.count; allocated_count > 0; allocated_count--)
+					{
+						sub_first = SSM(sci, SCI_ALLOCATESUBSTYLES, styles[i].style, allocated_count);
+						if (sub_first >= 0)
+							break;
+					}
+					if (allocated_count != style->sub.count)
+					{
+						g_warning("Requested %lu substyles for style \"%s\" of filetype \"%s\", "
+								  "but could only allocate %lu.  Higher substyles will not be "
+								  "available.  This is likely due to allocating more substyles "
+								  "in total than the filetype's lexer supports.",
+								  style->sub.count, styles[i].name, filetypes[ft_id]->name,
+								  allocated_count);
+					}
+					for (guint sub = 0; sub < allocated_count; sub++)
+					{
+						set_sci_style_from_lexer_style(sci, sub_first + sub, &style->sub.styling[sub]);
+						SSM(sci, SCI_SETIDENTIFIERS, sub_first + sub, (sptr_t) style->sub.keywords[sub]);
+					}
+				}
+			}
 		}
 	}
 
@@ -1672,6 +1767,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_C_PREPROCESSORCOMMENT ||
 				style == SCE_C_PREPROCESSORCOMMENTDOC ||
 				style == SCE_C_COMMENTLINEDOC ||
+				/* FIXME: this is sub-stylable, but we can't figure out the base
+				 * style without the Scintilla instance -- and we can't simply
+				 * assume that if the style ID is larger than the max possible
+				 * one it's this, because SCE_C_IDENTIFIER is also sub-stylable... */
 				style == SCE_C_COMMENTDOCKEYWORD ||
 				style == SCE_C_COMMENTDOCKEYWORDERROR ||
 				style == SCE_C_TASKMARKER);
