@@ -605,6 +605,7 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			{ "sh",		GEANY_FILETYPES_SH },
 			{ "bash",	GEANY_FILETYPES_SH },
 			{ "dash",	GEANY_FILETYPES_SH },
+			{ "raku",	GEANY_FILETYPES_RAKU },
 			{ "perl6",	GEANY_FILETYPES_RAKU },
 			{ "perl",	GEANY_FILETYPES_PERL },
 			{ "python",	GEANY_FILETYPES_PYTHON },
