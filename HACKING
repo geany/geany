@@ -649,6 +649,11 @@ indentation after ':' is done from on_new_line_added().
 If the Scintilla lexer supports user type keyword highlighting (e.g.
 SCLEX_CPP), update document_highlight_tags() in document.c.
 
+If the filetype is a scripting language and the interpreter can be started
+using a shebang, update find_shebang() in filetypes.c.
+
+Update editor_set_indentation_guides() in editor.c if needed.
+
 Adding a CTags parser
 ^^^^^^^^^^^^^^^^^^^^^
 This assumes the filetype for Geany already exists.
