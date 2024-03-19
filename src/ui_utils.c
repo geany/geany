@@ -298,10 +298,20 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				g_string_append(stats_str, cur_tag);
 				break;
 			case 'Y':
+			{
+				gint style = sci_get_style_at(doc->editor->sci, pos);
+				gint base_style = scintilla_send_message(doc->editor->sci, SCI_GETSTYLEFROMSUBSTYLE, style, 0);
+
 				g_string_append_c(stats_str, ' ');
-				g_string_append_printf(stats_str, "%d",
-					sci_get_style_at(doc->editor->sci, pos));
+				g_string_append_printf(stats_str, "%d", base_style);
+				if (base_style != style)
+				{
+					gint sub_start = scintilla_send_message(doc->editor->sci, SCI_GETSUBSTYLESSTART, base_style, 0);
+
+					g_string_append_printf(stats_str, ".%d", style + 1 - sub_start);
+				}
 				break;
+			}
 			default:
 				g_string_append_len(stats_str, expos, 1);
 		}
