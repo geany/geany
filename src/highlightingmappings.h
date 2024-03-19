@@ -1399,6 +1399,53 @@ static const HLKeyword highlighting_keywords_R[] =
 #define highlighting_properties_R	EMPTY_PROPERTIES
 
 
+/* Raku */
+#define highlighting_lexer_RAKU			SCLEX_RAKU
+static const HLStyle highlighting_styles_RAKU[] =
+{
+	{ SCE_RAKU_DEFAULT,			"default",				FALSE },
+	{ SCE_RAKU_ERROR,			"error",				FALSE },
+	{ SCE_RAKU_COMMENTLINE,		"commentline",			FALSE },
+	{ SCE_RAKU_COMMENTEMBED,	"commentembed",			FALSE },
+	{ SCE_RAKU_POD,				"pod",					FALSE },
+	{ SCE_RAKU_CHARACTER,		"character",			FALSE },
+	{ SCE_RAKU_HEREDOC_Q,		"heredoc_q",			FALSE },
+	{ SCE_RAKU_HEREDOC_QQ,		"heredoc_qq",			FALSE },
+	{ SCE_RAKU_STRING,			"string",				FALSE },
+	{ SCE_RAKU_STRING_Q,		"string_q",				FALSE },
+	{ SCE_RAKU_STRING_QQ,		"string_qq",			FALSE },
+	{ SCE_RAKU_STRING_Q_LANG,	"string_q_lang",		FALSE },
+	{ SCE_RAKU_STRING_VAR,		"string_var",			FALSE },
+	{ SCE_RAKU_REGEX,			"regex",				FALSE },
+	{ SCE_RAKU_REGEX_VAR,		"regex_var",			FALSE },
+	{ SCE_RAKU_ADVERB,			"adverb",				FALSE },
+	{ SCE_RAKU_NUMBER,			"number",				FALSE },
+	{ SCE_RAKU_PREPROCESSOR,	"preprocessor",			FALSE },
+	{ SCE_RAKU_OPERATOR,		"operator",				FALSE },
+	{ SCE_RAKU_WORD,			"word",					FALSE },
+	{ SCE_RAKU_FUNCTION,		"function",				FALSE },
+	{ SCE_RAKU_IDENTIFIER,		"identifier",			FALSE },
+	{ SCE_RAKU_TYPEDEF,			"typedef",				FALSE },
+	{ SCE_RAKU_MU,				"mu",					FALSE },
+	{ SCE_RAKU_POSITIONAL,		"positional",			FALSE },
+	{ SCE_RAKU_ASSOCIATIVE,		"associative",			FALSE },
+	{ SCE_RAKU_CALLABLE,		"callable",				FALSE },
+	{ SCE_RAKU_GRAMMAR,			"grammar",				FALSE },
+	{ SCE_RAKU_CLASS,			"class",				FALSE }
+};
+static const HLKeyword highlighting_keywords_RAKU[] =
+{
+	{ 0, "keywords",			FALSE },
+	{ 1, "functions",			FALSE },
+	{ 2, "types_basic",			FALSE },
+	{ 3, "types_composite",		FALSE },
+	{ 4, "types_domain",		FALSE },
+	{ 5, "types_exceptions",	FALSE },
+	{ 6, "adverbs",				FALSE },
+};
+#define highlighting_properties_RAKU	EMPTY_PROPERTIES
+
+
 /* Ruby */
 #define highlighting_lexer_RUBY			SCLEX_RUBY
 static const HLStyle highlighting_styles_RUBY[] =
