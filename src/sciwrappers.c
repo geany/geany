@@ -1104,7 +1104,7 @@ void sci_marker_delete_all(ScintillaObject *sci, gint marker)
 GEANY_API_SYMBOL
 gint sci_get_style_at(ScintillaObject *sci, gint position)
 {
-	return (gint) SSM(sci, SCI_GETSTYLEAT, (uptr_t) position, 0);
+	return (gint) SSM(sci, SCI_GETSTYLEINDEXAT, (uptr_t) position, 0);
 }
 
 
