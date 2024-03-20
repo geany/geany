@@ -313,6 +313,7 @@ test_sources = \
 	simple.lua						\
 	simple.mak						\
 	simple.md						\
+	simple.ml						\
 	simple.php						\
 	simple.pl						\
 	simple.ps1						\

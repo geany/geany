@@ -1114,6 +1114,26 @@ static TMParserMapGroup group_RAKU[] = {
 	{N_("Rules / Tokens"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
+static TMParserMapEntry map_OCAML[] = {
+	{'c', tm_tag_class_t},     // class
+	{'m', tm_tag_method_t},    // method
+	{'M', tm_tag_package_t},   // module
+	{'v', tm_tag_variable_t},  // var
+	{'p', tm_tag_undef_t},     // val
+	{'t', tm_tag_typedef_t},   // type
+	{'f', tm_tag_function_t},  // function
+	{'C', tm_tag_undef_t},     // Constructor
+	{'r', tm_tag_undef_t},     // RecordField
+	{'e', tm_tag_undef_t},     // Exception
+};
+static TMParserMapGroup group_OCAML[] = {
+	{N_("Modules"), TM_ICON_NAMESPACE, tm_tag_package_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Types"), TM_ICON_STRUCT, tm_tag_typedef_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_method_t | tm_tag_function_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1187,6 +1207,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(BATCH),
 	MAP_ENTRY(AUTOIT),
 	MAP_ENTRY(RAKU),
+	MAP_ENTRY(OCAML),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -1728,6 +1749,7 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_ERLANG:
 		case TM_PARSER_FORTRAN:
 		case TM_PARSER_OBJC:
+		case TM_PARSER_OCAML:
 		case TM_PARSER_REST:
 		/* Other parsers don't use scope at all (or should be somewhere above) */
 		default:

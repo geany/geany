@@ -1,0 +1,20 @@
++-Ì16Ö0
+function:   +-
+ModuleFooÌ512Ö0
+package:    ModuleFoo
+SimpleÌ512Ö0
+package:    Simple
+fooClassÌ1Ö0
+class:      fooClass
+fooMethodÌ128ÎfooClassÖ0
+method:     fooClass :: fooMethod
+foo_functionÌ16Ö0
+function:   foo_function
+foobarÌ4096ÎModuleFooÖ0
+typedef:    ModuleFoo :: foobar
+foorecordÌ4096Ö0
+typedef:    foorecord
+shall_appearÌ16Ö0
+function:   shall_appear
+yÌ16384Ö0
+variable:   y
