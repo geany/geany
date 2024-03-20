@@ -46,6 +46,7 @@ typedef struct GeanyEncoding
 	GeanyEncodingGroup      group; /* Internally used member for grouping */
 	const gchar            *charset; /* String representation of the encoding, e.g. "ISO-8859-3" */
 	const gchar            *name; /* Translatable and descriptive name of the encoding, e.g. "South European" */
+	gboolean                supported; /* Whether this encoding is supported on the system */
 }
 GeanyEncoding;
 
