@@ -1,0 +1,6218 @@
+# தமிழ் translation of geany.
+# Copyright (C) 2006 The Geany contributors.
+# This file is distributed under the same license as the geany package.
+# Jeff Bailes <thepizzaking@gmail.com>, 2007-2011.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Geany 2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
+"POT-Creation-Date: 2023-10-04 23:48+0200\n"
+"PO-Revision-Date: 2014-05-05 05:31+0200\n"
+"Last-Translator: தமிழ்நேரம்<https://TamilNeram.github.io>\n"
+"Language-Team: தமிழ்நேரம்<https://TamilNeram.github.io>\n"
+"Language: ta_IN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: data/geany.glade:10010
+msgid "Group:"
+msgstr "குழு:"
+
+#: data/geany.glade:10022
+msgid "Other:"
+msgstr "மற்றவை:"
+
+#: data/geany.glade:1012
+msgid "<b>Shutdown</b>"
+msgstr "<b> பணிநிறுத்தம் </b>"
+
+#: data/geany.glade:1046
+msgid "Startup path:"
+msgstr "தொடக்க பாதை:"
+
+#: data/geany.glade:1059
+msgid ""
+"Path to start in when opening or saving files. Must be an absolute path."
+msgstr ""
+"கோப்புகளைத் திறக்கும்போது அல்லது சேமிக்கும்போது தொடங்குவதற்கான பாதை. ஒரு "
+"முழுமையான பாதையாக இருக்க வேண்டும்."
+
+#: data/geany.glade:1094
+msgid "Project files:"
+msgstr "திட்ட கோப்புகள்:"
+
+#: data/geany.glade:1109
+msgid "Path to start in when opening project files"
+msgstr "திட்டக் கோப்புகளைத் திறக்கும்போது தொடங்குவதற்கான பாதை"
+
+#: data/geany.glade:1148
+msgid "Extra plugin path:"
+msgstr "கூடுதல் சொருகி பாதை:"
+
+#: data/geany.glade:1163
+msgid ""
+"Geany looks by default in the global installation path and in the "
+"configuration directory. The path entered here will be searched additionally"
+" for plugins. Leave blank to disable."
+msgstr ""
+"சீனி இயல்புநிலையாக உலகளாவிய நிறுவல் பாதையிலும் உள்ளமைவு கோப்பகத்திலும் "
+"தேடுகிறது. இங்கே உள்ளிடப்பட்ட பாதை செருகுநிரல்களுக்கு கூடுதலாக தேடப்படும். "
+"முடக்க காலியாக விடவும்."
+
+#: data/geany.glade:1206
+msgid "<b>Paths</b>"
+msgstr "<b> பாதைகள் </b>"
+
+#: data/geany.glade:1223
+msgid "Startup"
+msgstr "தொடங்கு"
+
+#: data/geany.glade:1252
+msgid "Beep on errors or when compilation has finished"
+msgstr "பிழைகள் அல்லது தொகுப்பு முடிந்ததும் சத்தமிடு"
+
+#: data/geany.glade:1256
+msgid ""
+"Whether to beep if an error occurred or when the compilation process has "
+"finished"
+msgstr ""
+"பிழை ஏற்பட்டால் அல்லது தொகுப்பு செயல்முறை முடிந்ததும் சத்தமிட வேண்டுமா"
+
+#: data/geany.glade:1268
+msgid "Switch to status message list at new message"
+msgstr "புதிய செய்தியில் நிலை செய்தி பட்டியலுக்கு மாறவும்"
+
+#: data/geany.glade:1272
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a"
+" new status message arrives"
+msgstr ""
+"புதிய நிலை செய்தி வந்தால் நிலை செய்தி தாவலுக்கு (கீழே உள்ள புத்தக "
+"சாளரத்தில்) மாறவும்"
+
+#: data/geany.glade:1284
+msgid "Suppress status messages in the status bar"
+msgstr "நிலை பட்டியில் நிலை செய்திகளை அடக்கு"
+
+#: data/geany.glade:1288
+msgid ""
+"Removes all messages from the status bar. The messages are still displayed "
+"in the status messages window."
+msgstr ""
+"அனைத்து செய்திகளையும் நிலை பட்டியில் இருந்து நீக்குகிறது. நிலை செய்திகள் "
+"சாளரத்தில் செய்திகள் இன்னும் காட்டப்படும்."
+
+#: data/geany.glade:130
+msgid "_Toolbar Preferences"
+msgstr "கருவிப்பட்டி விருப்பத்தேர்வுகள் (_T)"
+
+#: data/geany.glade:1300
+msgid "Auto-focus widgets (focus follows mouse)"
+msgstr "தானாக விட்கெட்கள்மீது குவி (குவி சுட்டியைப் பின்பற்றுகிறது)"
+
+#: data/geany.glade:1304
+msgid ""
+"Gives the focus automatically to widgets below the mouse cursor. Works for "
+"the main editor widget, the scribble, the toolbar search and goto line "
+"fields and the VTE."
+msgstr ""
+"சுட்டிக்குக் கீழே உள்ள விட்கெட்களுக்கு தானாகவே குவி செலுத்துகிறது. முக்கிய "
+"திருத்தி விட்கெட், அந்த கிறுக்கியில், கருவிப்பட்டி தேடல் மற்றும் "
+"வரிகளங்களுக்கு செல்லவும் மற்றும் மெமுமு."
+
+#: data/geany.glade:1316
+msgid "Use Windows native dialogs"
+msgstr "சாளரங்கள் சொந்த உரையாடல்களைப் பயன்படுத்தவும்"
+
+#: data/geany.glade:1320
+msgid ""
+"Defines whether to use the Windows native dialogs or whether to use the GTK "
+"default dialogs"
+msgstr ""
+"சாளரங்கள் சொந்த உரையாடல்களைப் பயன்படுத்தலாமா அல்லது சி.டி.கே இயல்புநிலை "
+"உரையாடல்களைப் பயன்படுத்தலாமா என்பதை வரையறுக்கிறது"
+
+#: data/geany.glade:1338 data/geany.glade:2005 data/geany.glade:4854
+msgid "<b>Miscellaneous</b>"
+msgstr "<b> மற்றவை </b>"
+
+#: data/geany.glade:1366
+msgid "Always wrap search"
+msgstr "எப்போதும் மடக்கி தேடு"
+
+#: data/geany.glade:1370
+msgid "Always wrap search around the document"
+msgstr "எப்போதும் ஆவணத்தை சுற்றி தேடுங்கள்"
+
+#: data/geany.glade:1382
+msgid "Hide the Find dialog"
+msgstr "கண்டுபிடி உரையாடலை மறை"
+
+#: data/geany.glade:1386
+msgid "Hide the Find dialog after clicking Find Next/Previous"
+msgstr ""
+"அடுத்த/முந்தையதைக் சொடுக்கம் செய்த பிறகு கண்டுபிடி உரையாடலை மறை"
+
+#: data/geany.glade:1398
+msgid "Use the current word under the cursor for Find dialogs"
+msgstr ""
+"கண்டுபிடி உரையாடல்களுக்கு சுட்டியின் கீழ் தற்போதைய சொல்லைப் பயன்படுத்தவும்"
+
+#: data/geany.glade:1402
+msgid ""
+"Use current word under the cursor when opening the Find, Find in Files or "
+"Replace dialog and there is no selection"
+msgstr ""
+"கண்டுபிடிப்பு, கோப்புகளில் கண்டுபிடி அல்லது உரையாடலை மாற்றும்போது சுட்டின் "
+"கீழ் தற்போதைய சொல்லைப் பயன்படுத்தவும், தேர்வு இல்லை"
+
+#: data/geany.glade:1414
+msgid "Use the current file's directory for Find in Files"
+msgstr ""
+"கோப்புகளில் கண்டுபிடிக்க தற்போதைய கோப்பின் கோப்பகத்தைப் பயன்படுத்தவும்"
+
+#: data/geany.glade:1435
+msgid "<b>Search</b>"
+msgstr "<b> தேடல் </b>"
+
+#: data/geany.glade:1463
+msgid "Store project file inside the project base directory"
+msgstr "திட்டக் கோப்பை திட்ட அடிப்படை கோப்பகத்திற்குள் சேமி"
+
+#: data/geany.glade:1467
+msgid ""
+"When enabled, a project file is stored by default inside the project base "
+"directory when creating new projects instead of one directory above the base"
+" directory. You can still change the path of the project file in the New "
+"Project dialog."
+msgstr ""
+"இயக்கப்பட்டால், அடிப்படை கோப்பகத்திற்கு மேலே ஒரு கோப்பகத்திற்கு பதிலாக புதிய"
+" திட்டங்களை உருவாக்கும்போது திட்ட அடிப்படை கோப்பகத்திற்குள் ஒரு திட்ட கோப்பு"
+" இயல்புநிலையாக சேமிக்கப்படுகிறது. மேலும் புதிய திட்ட உரையாடலில் திட்டக் "
+"கோப்பின் பாதையை நீங்கள் மாற்றலாம்."
+
+#: data/geany.glade:147
+msgid "_Hide Toolbar"
+msgstr "கருவிப்பட்டி மறை (_H)"
+
+#: data/geany.glade:1485
+msgid "<b>Projects</b>"
+msgstr "<b> திட்டங்கள் </b>"
+
+#: data/geany.glade:1505 src/dialogs.c:230
+msgid "Miscellaneous"
+msgstr "மற்றவை"
+
+#: data/geany.glade:1518 src/prefs.c:1613
+msgid "General"
+msgstr "பொது"
+
+#: data/geany.glade:1566
+msgid "Show symbol list"
+msgstr "குறியீட்டு பட்டியலைக் காட்டு"
+
+#: data/geany.glade:1570
+msgid "Toggle the symbol list on and off"
+msgstr "குறியீட்டு பட்டியலை இயக்கு முடக்கு"
+
+#: data/geany.glade:1590
+msgid "Default symbol sorting mode"
+msgstr "இயல்புநிலை குறியீடு வரிசையாக்க பயன்முறை"
+
+#: data/geany.glade:1596
+msgid "Default sorting mode:"
+msgstr "இயல்புநிலை வரிசையாக்க பயன்முறை:"
+
+#: data/geany.glade:1606 src/stash.c:1219
+msgid "Name"
+msgstr "பெயர்"
+
+#: data/geany.glade:1621
+msgid "Appearance"
+msgstr "தோற்றம்"
+
+#: data/geany.glade:1646
+msgid "Show documents list"
+msgstr "ஆவணங்கள் பட்டியலைக் காட்டு"
+
+#: data/geany.glade:1650
+msgid "Toggle the documents list on and off"
+msgstr "ஆவணங்கள் பட்டியலை இயக்கு முடக்கு"
+
+#: data/geany.glade:1666
+msgid "Show sidebar"
+msgstr "பக்கப்பட்டியைக் காட்டு"
+
+#: data/geany.glade:1690 data/geany.glade:1776
+msgid "Position:"
+msgstr "நிலை:"
+
+#: data/geany.glade:747 data/geany.glade:1700 data/geany.glade:2108
+msgid "Left"
+msgstr "இடது"
+
+#: data/geany.glade:750 data/geany.glade:1716 data/geany.glade:1801
+#: data/geany.glade:2125
+msgid "Right"
+msgstr "வலது"
+
+#: data/geany.glade:1745
+msgid "<b>Sidebar</b>"
+msgstr "<b> பக்கப்பட்டி </b>"
+
+#: data/geany.glade:756 data/geany.glade:1786
+msgid "Bottom"
+msgstr "கீழே"
+
+#: data/geany.glade:1823
+msgid "<b>Message window</b>"
+msgstr "<b> செய்தி சாளரம் </b>"
+
+#: data/geany.glade:1858
+msgid "Symbol list:"
+msgstr "சின்னம் பட்டியல்:"
+
+#: data/geany.glade:1873 data/geany.glade:2288
+msgid "Message window:"
+msgstr "செய்தி சாளரம்:"
+
+#: data/geany.glade:1888 data/geany.glade:2360
+msgid "Editor:"
+msgstr "ஆசிரியர்:"
+
+#: data/geany.glade:1902
+msgid "Sets the font for the message window"
+msgstr "செய்தி சாளரத்திற்கான எழுத்துருவை அமைக்கிறது"
+
+#: data/geany.glade:1920
+msgid "Sets the font for the symbol list"
+msgstr "குறியீட்டு பட்டியலுக்கான எழுத்துருவை அமைக்கிறது"
+
+#: data/geany.glade:1937
+msgid "Sets the editor font"
+msgstr "திருத்தி எழுத்துருவை அமைக்கிறது"
+
+#: data/geany.glade:1955
+msgid "<b>Fonts</b>"
+msgstr "<b> எழுத்துருக்கள் </b>"
+
+#: data/geany.glade:1983
+msgid "Show status bar"
+msgstr "நிலை பட்டியைக் காட்டு"
+
+#: data/geany.glade:1987
+msgid "Whether to show the status bar at the bottom of the main window"
+msgstr "முக்கிய சாளரத்தின் அடிப்பகுதியில் நிலை பட்டியைக் காட்டலாமா?"
+
+#: data/geany.glade:2022 data/geany.glade:2818 src/prefs.c:1615
+msgid "Interface"
+msgstr "இடைமுகம்"
+
+#: data/geany.glade:2051
+msgid "Show editor tabs"
+msgstr "ஆசிரியர் தாவல்களைக் காட்டு"
+
+#: data/geany.glade:2066
+msgid "Show close buttons"
+msgstr "மூடு பொத்தான்களைக் காட்டு"
+
+#: data/geany.glade:2070
+msgid ""
+"Shows a small cross button in the file tabs to easily close files when "
+"clicking on it (requires restart of Geany)"
+msgstr ""
+"கோப்புகளை சொடுக்கு போது எளிதாக மூடுவதற்கு கோப்பு தாவல்களில் ஒரு சிறிய "
+"குறுக்கு பொத்தானைக் காட்டுகிறது (சீனியின் மறுதொடக்கம் தேவை)"
+
+#: data/geany.glade:2093
+msgid "Placement of new file tabs:"
+msgstr "புதிய கோப்பு தாவல்களின் இடம்:"
+
+#: data/geany.glade:2112
+msgid "File tabs will be placed on the left of the notebook"
+msgstr "கோப்பு தாவல்கள் புத்தகத்தின் இடதுபுறத்தில் வைக்கப்படும்"
+
+#: data/geany.glade:2129
+msgid "File tabs will be placed on the right of the notebook"
+msgstr "கோப்பு தாவல்கள் புத்தகத்தின் வலதுபுறத்தில் வைக்கப்படும்"
+
+#: data/geany.glade:2149
+msgid "Next to current"
+msgstr "மின்னோட்டத்திற்கு அடுத்து"
+
+#: data/geany.glade:2153
+msgid ""
+"Whether to place file tabs next to the current tab rather than at the edges "
+"of the notebook"
+msgstr ""
+"புத்தகத்தின் விளிம்புகளைக் காட்டிலும் தற்போதைய தாவலுக்கு அடுத்ததாக கோப்பு "
+"தாவல்களை வைக்க வேண்டுமா?"
+
+#: data/geany.glade:2175
+msgid "Double-clicking hides all additional widgets"
+msgstr "இரட்டை சொடுக்கம் அனைத்து கூடுதல் விட்கெட்களையும் மறைக்கிறது"
+
+#: data/geany.glade:2179
+msgid "Calls the View->Toggle All Additional Widgets command"
+msgstr ""
+"பார்வையை அழைக்கிறது-> அனைத்து கூடுதல் விட்கெட்டுகள் கட்டளையையும் மாற்றவும்"
+
+#: data/geany.glade:2191
+msgid "Switch to last used document after closing a tab"
+msgstr "தாவலை மூடிய பிறகு கடைசியாக பயன்படுத்தப்பட்ட ஆவணத்திற்கு மாறவும்"
+
+#: data/geany.glade:2213
+msgid "Set limit on visible characters in tab label."
+msgstr "தாவல் சிட்டையில் புலப்படும் எழுத்துக்களில் வரம்பை அமை."
+
+#: data/geany.glade:2214
+msgid "Tab label length:"
+msgstr "தாவல் சிட்டை நீளம்:"
+
+#: data/geany.glade:2226
+msgid "Characters to be visible on the tab label of the file."
+msgstr "கோப்பின் தாவல் சிட்டையில் காணப்பட வேண்டிய எழுத்துக்கள்."
+
+#: data/geany.glade:2254
+msgid "<b>Editor tabs</b>"
+msgstr "<b> திருத்தி தாவல்கள் </b>"
+
+#: data/geany.glade:2324
+msgid "Sidebar:"
+msgstr "பக்கப்பட்டி:"
+
+#: data/geany.glade:2396
+msgid "<b>Tab positions</b>"
+msgstr "<b> தாவல் நிலைகள் </b>"
+
+#: data/geany.glade:2416
+msgid "Notebook tabs"
+msgstr "புத்தக தாவல்கள்"
+
+#: data/geany.glade:2456
+msgid "Show t_oolbar"
+msgstr "கருவிப்பட்டியைக் காட்டு (_o)"
+
+#: data/geany.glade:2471
+msgid "_Append toolbar to the menu"
+msgstr "பட்டியலுக்கு கருவிப்பட்டியை சேர் (_A)"
+
+#: data/geany.glade:2475
+msgid "Pack the toolbar to the main menu to save vertical space"
+msgstr "செங்குத்து இடத்தை சேமிக்க கருவிப்பட்டியை முக்கிய பட்டியலில் கட்டவும்"
+
+#: data/geany.glade:2529 src/toolbar.c:941
+msgid "Customize Toolbar"
+msgstr "கருவிப்பட்டியைத் தனிப்பயனாக்குங்கள்"
+
+#: data/geany.glade:2584
+msgid "System _default"
+msgstr "கணினி இயல்புநிலை(_d)"
+
+#: data/geany.glade:2598
+msgid "Images _and text"
+msgstr "படங்கள் மற்றும் உரை (_a)"
+
+#: data/geany.glade:2615
+msgid "_Images only"
+msgstr "காட்சிகள் மட்டுமே (_I)"
+
+#: data/geany.glade:2632
+msgid "_Text only"
+msgstr "உரை மட்டுமே (_T)"
+
+#: data/geany.glade:2657
+msgid "<b>Icon style</b>"
+msgstr "<b> படவுரு பாணி </b>"
+
+#: data/geany.glade:2690
+msgid "S_ystem default"
+msgstr "கணினி இயல்புநிலை (_y)"
+
+#: data/geany.glade:2704
+msgid "_Small icons"
+msgstr "சிறிய படவுருகள் (_S)"
+
+#: data/geany.glade:2721
+msgid "_Very small icons"
+msgstr "மிகச் சிறிய படவுருகள் (_V)"
+
+#: data/geany.glade:2738
+msgid "_Large icons"
+msgstr "பெரிய படவுருகள் (_L)"
+
+#: data/geany.glade:2763
+msgid "<b>Icon size</b>"
+msgstr "<b> படவுரு அளவு </b>"
+
+#: data/geany.glade:2782
+msgid "<b>Toolbar</b>"
+msgstr "<b> கருவிப்பட்டி </b>"
+
+#: data/geany.glade:2802 src/prefs.c:1617
+msgid "Toolbar"
+msgstr "கருவிப்பட்டி"
+
+#: data/geany.glade:2852 data/geany.glade:9171
+msgid "Line wrapping"
+msgstr "வரி மடக்குதல்"
+
+#: data/geany.glade:2856 data/geany.glade:9175
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+msgstr ""
+"சாளர எல்லையில் வரியை மடி, அடுத்த வரியில் தொடரவும். குறிப்பு: வரி "
+"மடக்குதல் பெரிய ஆவணங்களுக்கு அதிக செயல்திறன் செலவைக் கொண்டுள்ளது, எனவே "
+"மெதுவான இயந்திரங்களில் முடக்கப்பட வேண்டும்."
+
+#: data/geany.glade:2868
+msgid "\"Smart\" home key"
+msgstr "\"அறிவாளி\" வீட்டு விசை"
+
+#: data/geany.glade:2872
+msgid ""
+"When \"smart\" home is enabled, the HOME key will move the caret to the "
+"first non-blank character of the line, unless it is already there, it moves "
+"to the very beginning of the line. When this feature is disabled, the HOME "
+"key always moves the caret to the start of the current line, regardless of "
+"its current position."
+msgstr ""
+"\"அறிவாளி\" வீடு இயக்கப்பட்டிருக்கும் போது, வீட்டு விசை கீட்டேட்டை வரியின் "
+"முதல் வெற்று அல்லாத தன்மைக்கு நகர்த்தும், அது ஏற்கனவே இல்லாவிட்டால், அது "
+"வரியின் தொடக்கத்திற்கு நகரும். இந்த நற்பொருத்தம் முடக்கப்படும்போது, வீட்டு "
+"விசை எப்போதும் அதன் தற்போதைய நிலையைப் பொருட்படுத்தாமல், தற்போதைய வரியின் "
+"தொடக்கத்திற்கு நகர்த்துகிறது."
+
+#: data/geany.glade:2884
+msgid "Disable Drag and Drop"
+msgstr "இழுத்து விடுவது முடக்கு"
+
+#: data/geany.glade:2888
+msgid ""
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window"
+msgstr ""
+"திருத்தி சாளரத்தில் இழுத்து விடுவது முழுவதுமாக கைவிடவும், எனவே திருத்தி "
+"சாளரத்திற்குள் அல்லது வெளியே எந்த தேர்வுகளையும் இழுத்து விட முடியாது"
+
+#: data/geany.glade:2900
+msgid "Code folding"
+msgstr "குறியீடு மடிப்பு"
+
+#: data/geany.glade:2915
+msgid "Fold/unfold all children of a fold point"
+msgstr ""
+"ஒரு மடங்கு புள்ளியின் அனைத்து குழந்தைகளையும் மடியுங்கள்/விரிவாக்குங்கள்"
+
+#: data/geany.glade:2919
+msgid ""
+"Fold or unfold all children of a fold point. By pressing the Shift key while"
+" clicking on a fold symbol the contrary behavior is used."
+msgstr ""
+"ஒரு மடங்கு புள்ளியின் அனைத்து குழந்தைகளையும் மடி அல்லது "
+"விரிவாக்கு. ஒரு மடங்கு குறியை சொடுக்கும் போது மாற்று விசையை அழுத்துவதன் "
+"மூலம் மாறாக நடத்தை பயன்படுத்தப்படுகிறது."
+
+#: data/geany.glade:2931
+msgid "Use indicators to show compile errors"
+msgstr "தொகுத்தல் பிழைகளைக் காட்ட குறிகாட்டிகளைப் பயன்படுத்தவும்"
+
+#: data/geany.glade:2935
+msgid ""
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error"
+msgstr ""
+"தொகுப்பி ஒரு எச்சரிக்கை அல்லது பிழையைக் கண்டறிந்த வரிகளை முன்னிலைப்படுத்த "
+"குறிகாட்டிகளை (ஒரு மோசமான அடிக்கோடிட்டு) பயன்படுத்தலாமா என்பது"
+
+#: data/geany.glade:2947
+msgid "Newline strips trailing spaces"
+msgstr "புதியவரி மீதமுள்ள இடங்களை நீக்குகிறது"
+
+#: data/geany.glade:2951
+msgid "Enable newline to strip the trailing spaces on the previous line"
+msgstr "முந்தைய வரியில் பின்தங்கிய இடங்களை அகற்ற புதிய வரியை இயக்கு"
+
+#: data/geany.glade:2970 data/geany.glade:9194
+msgid "Line breaking column:"
+msgstr "வரி உடைக்கும் நெடுவரிசை:"
+
+#: data/geany.glade:3011
+msgid "Comment toggle marker:"
+msgstr "கருத்துரை மாற்றவும்:"
+
+#: data/geany.glade:3024
+msgid ""
+"A string which is added when toggling a line comment in a source file, it is"
+" used to mark the comment as toggled."
+msgstr ""
+"ஒரு மூல கோப்பில் ஒரு வரி கருத்தை மாற்றும்போது சேர்க்கப்படும் ஒரு சரம், "
+"கருத்தை மாற்றியமைத்ததாகக் குறிக்க இது பயன்படுத்தப்படுகிறது."
+
+#: data/geany.glade:3049 data/geany.glade:9237
+msgid "<b>Features</b>"
+msgstr "<b> நற்பொருத்தங்கள் </b>"
+
+#: data/geany.glade:305 data/geany.glade:6714
+msgid "_Edit"
+msgstr "தொகு (_E)"
+
+#: data/geany.glade:3066
+msgid "Features"
+msgstr "நற்பொருத்தங்கள்"
+
+#: data/geany.glade:3096 data/geany.glade:8935
+msgid ""
+"Note: To apply these settings to all currently open documents, use "
+"<i>Project->Apply Default Indentation</i>."
+msgstr ""
+"குறிப்பு: தற்போது திறந்த அனைத்து ஆவணங்களுக்கும் இந்த அமைப்புகளைப் "
+"பயன்படுத்த, <i> திட்டம்-> இயல்புநிலை உள்தள்ளலைப் பயன்படுத்துங்கள் </i>."
+
+#: data/geany.glade:313 data/geany.glade:6929
+msgid "_Format"
+msgstr "வடிவம் (_F)"
+
+#: data/geany.glade:3146 data/geany.glade:8951
+msgid "_Width:"
+msgstr "அகலம்:(_W)"
+
+#: data/geany.glade:3160 data/geany.glade:8967
+msgid "The width in chars of a single indent"
+msgstr "ஒற்றை உள்தள்ளலின் எழுத்துகளில் அகலம்"
+
+#: data/geany.glade:3179 data/geany.glade:8988
+msgid "Auto-indent _mode:"
+msgstr "தானி-உள்தள்ளல் முறை: (_m)"
+
+#: data/geany.glade:319
+msgid "I_nsert"
+msgstr "செருகவும் (_n)"
+
+#: data/geany.glade:3214 data/geany.glade:9023
+msgid "Detect type from file"
+msgstr "கோப்பிலிருந்து வகையைக் கண்டறியவும்"
+
+#: data/geany.glade:3218 data/geany.glade:9027
+msgid ""
+"Whether to detect the indentation type from file contents when a file is "
+"opened"
+msgstr ""
+"ஒரு கோப்பு திறக்கப்படும்போது கோப்பு உள்ளடக்கங்களிலிருந்து உள்தள்ளல் வகையை "
+"கண்டறிய வேண்டுமா?"
+
+#: data/geany.glade:3233 data/geany.glade:9042
+msgid "T_abs and spaces"
+msgstr "தாவல்கள் மற்றும் இடைவெளிகள் (_a)"
+
+#: data/geany.glade:3237 data/geany.glade:9046
+msgid ""
+"Use spaces if the total indent is less than the tab width, otherwise use "
+"both"
+msgstr ""
+"மொத்த உள்தள்ளல் தாவல் அகலத்தை விட குறைவாக இருந்தால் இடங்களைப் "
+"பயன்படுத்தவும், இல்லையெனில் இரண்டையும் பயன்படுத்தவும்"
+
+#: data/geany.glade:3252 data/geany.glade:7715 data/geany.glade:9061
+msgid "_Spaces"
+msgstr "இடைவெளிகள் (_S)"
+
+#: data/geany.glade:3256 data/geany.glade:9065
+msgid "Use spaces when inserting indentation"
+msgstr "உள்தள்ளலைச் செருகும்போது இடைவெளிகளைப் பயன்படுத்துங்கள்"
+
+#: data/geany.glade:3272 data/geany.glade:7705 data/geany.glade:9081
+msgid "_Tabs"
+msgstr "தாவல்கள் (_T)"
+
+#: data/geany.glade:3276 data/geany.glade:9085
+msgid "Use one tab per indent"
+msgstr "ஒரு உள்தள்ளலுக்கு ஒரு தாவலைப் பயன்படுத்தவும்"
+
+#: data/geany.glade:3292 data/geany.glade:9115
+msgid "Detect width from file"
+msgstr "கோப்பிலிருந்து அகலத்தைக் கண்டறியவும்"
+
+#: data/geany.glade:3296 data/geany.glade:9119
+msgid ""
+"Whether to detect the indentation width from file contents when a file is "
+"opened"
+msgstr ""
+"ஒரு கோப்பு திறக்கப்படும்போது கோப்பு உள்ளடக்கங்களிலிருந்து உள்தள்ளல் "
+"அகலத்தைக் கண்டறிய வேண்டுமா?"
+
+#: data/geany.glade:3313 data/geany.glade:4082 data/geany.glade:9103
+#: data/geany.glade:9678
+msgid "Type:"
+msgstr "தட்டச்சு:"
+
+#: data/geany.glade:332 data/geany.glade:7082
+msgid "Insert _ChangeLog Entry"
+msgstr "மாற்றபதிவில் நுழைவைச் செருகவும் (_C)"
+
+#: data/geany.glade:3332
+msgid "Tab _key indents"
+msgstr "தாவல் முக்கிய உள்தள்ளல்கள் (_k)"
+
+#: data/geany.glade:3336
+msgid ""
+"Pressing tab/shift-tab indents/unindents instead of inserting a tab "
+"character"
+msgstr ""
+"தாவல் எழுத்தை செருகுவதற்கு பதிலாக தாவல்/மாற்று-தாவல் உள்தள்ளல்/வெளிதள்ளலை "
+"செய்கிறது"
+
+#: data/geany.glade:3348
+msgid "_Backspace key unindents"
+msgstr "பின்வெளி விசை உள்தள்ளல் (_B)"
+
+#: data/geany.glade:3352
+msgid ""
+"With the cursor in the indentation, pressing backspace unindents instead of "
+"deleting one character"
+msgstr ""
+"உள்தள்ளலில் சுட்டியுடன், ஒரு எழுத்தை நீக்குவதற்கு பதிலாக பின்வெளி "
+"வெளித்தள்ளுகிறது"
+
+#: data/geany.glade:3370
+msgid "<b>Indentation</b>"
+msgstr "<b> உள்தள்ளல் </b>"
+
+#: data/geany.glade:3390 data/geany.glade:9141
+msgid "Indentation"
+msgstr "உள்தள்ளல்"
+
+#: data/geany.glade:341 data/geany.glade:7091
+msgid "Insert _Function Description"
+msgstr "செயல்பாட்டு விளக்கத்தை செருகவும் (_F)"
+
+#: data/geany.glade:3420
+msgid "Snippet completion"
+msgstr "துணுக்கை நிறைவு"
+
+#: data/geany.glade:3424
+msgid ""
+"Type a defined short character sequence and complete it to a more complex "
+"string using a single keypress"
+msgstr ""
+"வரையறுக்கப்பட்ட குறுகிய எழுத்து வரிசையைத் தட்டச்சு செய்து, ஒற்றை "
+"விசையைப் பயன்படுத்தி மிகவும் சிக்கலான சரத்திற்கு முடி"
+
+#: data/geany.glade:3436
+msgid "XML/HTML tag auto-closing"
+msgstr "எஃசுஎம்எல்/உஉகுமொ குறி தானி மூடு"
+
+#: data/geany.glade:3440
+msgid "Insert matching closing tag for XML/HTML"
+msgstr ""
+"எஃசுஎம்எல்/உஉகுமொ உடன் பொருந்தக்கூடிய நிறைவு குறிச்சொல்லைச் செருகவும்"
+
+#: data/geany.glade:3452 data/geany.glade:9261
+msgid "Automatic continuation of multi-line comments"
+msgstr "பல வரி கருத்துகளின் தானியங்கி தொடர்ச்சி"
+
+#: data/geany.glade:3456 data/geany.glade:9265
+msgid ""
+"Continue automatically multi-line comments in languages like C, C++ and Java"
+" when a new line is entered inside such a comment"
+msgstr ""
+"சி, சி++ மற்றும் சாவா போன்ற மொழிகளில் தானாக பல வரி கருத்துகளைத் தொடரவும், "
+"அத்தகைய கருத்துக்குள் ஒரு புதிய வரி உள்ளிடப்படும்போது"
+
+#: data/geany.glade:3468
+msgid "Autocomplete symbols"
+msgstr "தன்னியக்கவியல் குறியிடுகள்"
+
+#: data/geany.glade:3472
+msgid ""
+"Automatic completion of known symbols in open files (function names, global "
+"variables, ...)"
+msgstr ""
+"திறந்த கோப்புகளில் அறியப்பட்ட குறிகளை தானாக நிறைவு செய்தல் (செயல்பாட்டு "
+"பெயர்கள், உலகளாவிய மாறிகள், ...)"
+
+#: data/geany.glade:3484
+msgid "Autocomplete all words in document"
+msgstr "ஆவணத்தில் உள்ள அனைத்து சொற்களையும் தன்னியக்கமாக்குங்கள்"
+
+#: data/geany.glade:3499
+msgid "Drop rest of word on completion"
+msgstr "முடிந்ததும் மீதமுள்ள சொல்லை விடுங்கள்"
+
+#: data/geany.glade:350 data/geany.glade:7100
+msgid "Insert Mu_ltiline Comment"
+msgstr "பலவரி கருத்தை செருகவும் (_l)"
+
+#: data/geany.glade:3524
+msgid "Max. symbol name suggestions:"
+msgstr "அதிகபட்சம். குறியீட்டு பெயர் பரிந்துரைகள்:"
+
+#: data/geany.glade:3539
+msgid "Completion list height:"
+msgstr "நிறைவு பட்டியல் உயரம்:"
+
+#: data/geany.glade:3554
+msgid "Characters to type for autocompletion:"
+msgstr "தன்னியக்கவியல் தட்டச்சு செய்ய வேண்டிய எழுத்துக்கள்:"
+
+#: data/geany.glade:3567
+msgid ""
+"The amount of characters which are necessary to show the symbol "
+"autocompletion list"
+msgstr ""
+"குறியீட்டு தன்னியக்கவியல் பட்டியலைக் காட்ட தேவையான எழுத்துக்களின் அளவு"
+
+#: data/geany.glade:357 data/geany.glade:7367
+msgid "_More"
+msgstr "மேலும் (_M)"
+
+#: data/geany.glade:3584
+msgid "Display height in rows for the autocompletion list"
+msgstr "தன்னியக்கவியல் பட்டியலுக்கான வரிசைகளில் உயரத்தைக் காண்பி"
+
+#: data/geany.glade:3603
+msgid "Maximum number of entries to display in the autocompletion list"
+msgstr "தன்னியக்கவியல் பட்டியலில் காண்பிக்க அதிகபட்ச உள்ளீடுகளின் எண்ணிக்கை"
+
+#: data/geany.glade:3622
+msgid "Symbol list update frequency:"
+msgstr "குறியீட்டு பட்டியல் புதுப்பிப்பு அதிர்வெண்:"
+
+#: data/geany.glade:3637
+msgid ""
+"Minimal delay (in milliseconds) between two automatic updates of the symbol "
+"list. Note that a too short delay may have performance impact, especially "
+"with large files. A delay of 0 disables real-time updates."
+msgstr ""
+"குறியீட்டு பட்டியலின் இரண்டு தானியங்கி புதுப்பிப்புகளுக்கு இடையில் "
+"குறைந்தபட்ச தாமதம் (மில்லி விநாடிகளில்). மிகக் குறுகிய தாமதம் செயல்திறன் "
+"தாக்கத்தை ஏற்படுத்தக்கூடும் என்பதை நினைவில் கொள்க, குறிப்பாக பெரிய "
+"கோப்புகளுடன். 0 இன் தாமதம் நிகழ்நேர புதுப்பிப்புகளை முடக்குகிறது."
+
+#: data/geany.glade:3667 data/geany.glade:9276
+msgid "<b>Completions</b>"
+msgstr "<b> நிறைவுகள் </b>"
+
+#: data/geany.glade:3695
+msgid "Parenthesis ( )"
+msgstr "அடைப்புக்குறி ())"
+
+#: data/geany.glade:3699
+msgid "Auto-close parenthesis when typing an opening one"
+msgstr "தொடக்க ஒன்றை தட்டச்சு செய்யும் போது தானாக மூடு அடைப்புக்குறிப்பு"
+
+#: data/geany.glade:370 data/geany.glade:7115
+msgid "Insert File _Header"
+msgstr "கோப்பு தலைப்பைச் செருகவும் (_H)"
+
+#: data/geany.glade:3711
+msgid "Curly brackets { }"
+msgstr "சுருள் அடைப்புக்குறிகள் {}"
+
+#: data/geany.glade:3715
+msgid "Auto-close curly bracket when typing an opening one"
+msgstr "தொடக்க ஒன்றை தட்டச்சு செய்யும் போது தானாக மூடு சுருள் அடைப்புக்குறி"
+
+#: data/geany.glade:3727
+msgid "Square brackets [ ]"
+msgstr "சதுர அடைப்புக்குறிப்புகள் []"
+
+#: data/geany.glade:3731
+msgid "Auto-close square-bracket when typing an opening one"
+msgstr "தொடக்க ஒன்றை தட்டச்சு செய்யும் போது தானாக மூடு சதுர-அடைப்புக்குறிப்பு"
+
+#: data/geany.glade:3743
+msgid "Single quotes ' '"
+msgstr "ஒற்றை மேற்கோள்கள் ' '"
+
+#: data/geany.glade:3747
+msgid "Auto-close single quote when typing an opening one"
+msgstr ""
+"தொடக்க ஒன்றை தட்டச்சு செய்யும் போது ஒற்றை மேற்கோளை தானாக மூடு"
+
+#: data/geany.glade:3759
+msgid "Double quotes \" \""
+msgstr "இரட்டை மேற்கோள்கள் \" \""
+
+#: data/geany.glade:3763
+msgid "Auto-close double quote when typing an opening one"
+msgstr "தொடக்க ஒன்றை தட்டச்சு செய்யும் போது தானாக மூடு இரட்டை மேற்கோள்"
+
+#: data/geany.glade:3781
+msgid "<b>Auto-close quotes and brackets</b>"
+msgstr "<b> தானாக மூடு மேற்கோள்கள் மற்றும் அடைப்புக்குறிகள் </b>"
+
+#: data/geany.glade:379 data/geany.glade:7124
+msgid "Insert _GPL Notice"
+msgstr "சிபிஎல் அறிவிப்பை செருகவும் (_G)"
+
+#: data/geany.glade:3801
+msgid "Completions"
+msgstr "நிறைவு"
+
+#: data/geany.glade:3833
+msgid "Invert syntax highlighting colors"
+msgstr "தலைகீழ் தொடரியல் வண்ணங்களை சிறப்பிக்கும்"
+
+#: data/geany.glade:3837
+msgid "Invert all colors, by default using white text on a black background"
+msgstr ""
+"கருப்பு பின்னணியில் வெள்ளை உரையைப் பயன்படுத்தி இயல்பாகவே எல்லா வண்ணங்களையும்"
+" தலைகீழாக மாற்றவும்"
+
+#: data/geany.glade:3849
+msgid "Show indentation guides"
+msgstr "உள்தள்ளல் வழிகாட்டிகளைக் காட்டு"
+
+#: data/geany.glade:3853
+msgid "Shows small dotted lines to help you to use the right indentation"
+msgstr ""
+"சரியான உள்தள்ளலைப் பயன்படுத்த உங்களுக்கு உதவ சிறிய புள்ளியிடப்பட்ட வரிகளைக் "
+"காட்டுகிறது"
+
+#: data/geany.glade:3865
+msgid "Show white space"
+msgstr "வெள்ளை இடத்தைக் காட்டு"
+
+#: data/geany.glade:3869
+msgid "Marks spaces with dots and tabs with arrows"
+msgstr "அம்புகளுடன் புள்ளிகள் மற்றும் தாவல்களுடன் இடங்களைக் குறிக்கிறது"
+
+#: data/geany.glade:388 data/geany.glade:7133
+msgid "Insert _BSD License Notice"
+msgstr "பிஎச்டி உரிம அறிவிப்பை செருகவும் (_B)"
+
+#: data/geany.glade:3887
+msgid "Show line endings"
+msgstr "வரி முடிவுகளைக் காட்டு"
+
+#: data/geany.glade:3891
+msgid "Shows the line ending character"
+msgstr "வரி முடிவடையும் தன்மையைக் காட்டுகிறது"
+
+#: data/geany.glade:3903
+msgid "Show only non-default line endings"
+msgstr "வீழ்ச்சி அல்லாத வரி முடிவுகளை மட்டுமே காட்டு"
+
+#: data/geany.glade:3907
+msgid ""
+"Shows line ending characters only when they differ from the file default "
+"line ending character"
+msgstr ""
+"கோப்பு இயல்புநிலை வரி முடிவு எழுத்திலிருந்து வேறுபடும்போது மட்டுமே வரி "
+"முடிவடையும் எழுத்துக்கள் காட்டுகின்றன"
+
+#: data/geany.glade:3923
+msgid "Show line numbers"
+msgstr "வரி எண்களைக் காட்டு"
+
+#: data/geany.glade:3927
+msgid "Shows or hides the Line Number margin"
+msgstr "வரி எண் விளிம்பைக் காட்டுகிறது அல்லது மறைக்கிறது"
+
+#: data/geany.glade:3939
+msgid "Show markers margin"
+msgstr "குறிப்பான்கள் விளிம்பைக் காட்டு"
+
+#: data/geany.glade:3943
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines"
+msgstr ""
+"வரி எண்களின் சிறிய விளிம்பு வலதுபுறத்தைக் காட்டுகிறது அல்லது மறைக்கிறது, இது"
+" கோடுகளைக் குறிக்கப் பயன்படுகிறது"
+
+#: data/geany.glade:3955
+msgid "Stop scrolling at last line"
+msgstr "கடைசி வரியில் உருட்டுதலை நிறுத்துங்கள்"
+
+#: data/geany.glade:3959
+msgid "Whether to stop scrolling one page past the last line of a document"
+msgstr ""
+"ஒரு ஆவணத்தின் கடைசி வரியைக் கடந்த ஒரு பக்கத்தை உருட்டுதலை நிறுத்த வேண்டுமா?"
+
+#: data/geany.glade:3979
+msgid "Lines visible _around the cursor:"
+msgstr "சுட்டியை சுற்றி கோடுகள் தெரியும்: (_a)"
+
+#: data/geany.glade:4018
+msgid "<b>Display</b>"
+msgstr "<b> காட்சி </b>"
+
+#: data/geany.glade:405 data/geany.glade:7144
+msgid "Insert Dat_e"
+msgstr "தேதியைச் செருகவும் (_e)"
+
+#: data/geany.glade:4052 data/geany.glade:9328
+msgid "Column:"
+msgstr "நெடுவரிசை:"
+
+#: data/geany.glade:4067
+msgid "Color:"
+msgstr "வண்ணம்:"
+
+#: data/geany.glade:4098
+msgid "Sets the color of the long line marker"
+msgstr "நீண்ட வரி மார்க்கரின் வண்ணத்தை அமைக்கிறது"
+
+#: data/geany.glade:4099 data/geany.glade:6053 data/geany.glade:6070
+#: src/toolbar.c:73 src/tools.c:835
+msgid "Color Chooser"
+msgstr "வண்ண தேர்வாளர்"
+
+#: data/geany.glade:4114
+msgid ""
+"The long line marker is a thin vertical line in the editor, it helps to mark"
+" long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+msgstr ""
+"நீண்ட வரி குறிப்பான் திருத்தியில் ஒரு மெல்லிய செங்குத்து கோடு, இது நீண்ட "
+"வரிகளைக் குறிக்க உதவுகிறது அல்லது வரியை உடைக்க ஒரு குறிப்பாக உதவுகிறது. "
+"இந்த மதிப்பை 0 ஐ விட அதிகமான மதிப்புக்கு அமை."
+
+#: data/geany.glade:4138
+msgid "Line"
+msgstr "வரி"
+
+#: data/geany.glade:4142
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)"
+msgstr ""
+"கொடுக்கப்பட்ட கர்சர் நிலையில் திருத்தி சாளரத்தில் செங்குத்து கோட்டை "
+"அச்சிடுகிறது (கீழே காண்க)"
+
+#: data/geany.glade:4154
+msgid "Background"
+msgstr "பின்னணி"
+
+#: data/geany.glade:4158
+msgid ""
+"The background color of characters after the given cursor position (see "
+"below) changed to the color set below, (this is recommended if you use "
+"proportional fonts)"
+msgstr ""
+"கொடுக்கப்பட்ட கர்சர் நிலைக்குப் பிறகு எழுத்துகளின் பின்னணி நிறம் (கீழே "
+"காண்க) கீழே உள்ள வண்ணத்திற்கு மாற்றப்பட்டது, (நீங்கள் விகிதாசார "
+"எழுத்துருக்களைப் பயன்படுத்தினால் இது பரிந்துரைக்கப்படுகிறது)"
+
+#: data/geany.glade:417 data/geany.glade:439 data/geany.glade:6602
+#: data/geany.glade:7049 data/geany.glade:7156 data/geany.glade:7178
+#: data/geany.glade:7885 data/geany.glade:7905
+msgid "invisible"
+msgstr "கண்ணுக்கு தெரியாத"
+
+#: data/geany.glade:4181
+msgid "Enabled"
+msgstr "இயக்கப்பட்டது"
+
+#: data/geany.glade:4202 data/geany.glade:9421
+msgid "<b>Long line marker</b>"
+msgstr "<b> நீண்ட வரி குறிப்பான் </b>"
+
+#: data/geany.glade:4230 data/geany.glade:9341
+msgid "Disabled"
+msgstr "முடக்கப்பட்டது"
+
+#: data/geany.glade:4234
+msgid "Do not show virtual spaces"
+msgstr "மெய்நிகர் இடங்களைக் காட்ட வேண்டாம்"
+
+#: data/geany.glade:4246
+msgid "Only for rectangular selections"
+msgstr "செவ்வக தேர்வுகளுக்கு மட்டுமே"
+
+#: data/geany.glade:4250
+msgid ""
+"Only show virtual spaces beyond the end of lines when drawing a rectangular "
+"selection"
+msgstr ""
+"செவ்வக தேர்வை வரையும்போது வரிகளின் முடிவிற்கு அப்பால் மெய்நிகர் இடைவெளிகளைக்"
+" காண்பி"
+
+#: data/geany.glade:4263
+msgid "Always"
+msgstr "எப்போதும்"
+
+#: data/geany.glade:4267
+msgid "Always show virtual spaces beyond the end of lines"
+msgstr ""
+"வரிகளின் முடிவிற்கு அப்பால் எப்போதும் மெய்நிகர் இடைவெளிகளைக் காட்டுங்கள்"
+
+#: data/geany.glade:427 data/geany.glade:7166
+msgid "_Insert \"include <...>\""
+msgstr "\"include <...>\" செருகவும் (_I)"
+
+#: data/geany.glade:4286
+msgid "<b>Virtual spaces</b>"
+msgstr "<b> மெய்நிகர் இடங்கள் </b>"
+
+#: data/geany.glade:4315
+msgid "Show in markers margin"
+msgstr "குறிப்பான்கள் விளிம்பில் காட்டு"
+
+#: data/geany.glade:4329
+msgid "Show as underline indicators"
+msgstr "அடிக்கோடிட்ட குறிகாட்டிகளாகக் காட்டவும்"
+
+#: data/geany.glade:4349
+msgid "<b>Change History</b>"
+msgstr "<b> வரலாற்றை மாற்றவும் </b>"
+
+#: data/geany.glade:4369
+msgid "Display"
+msgstr "காட்சி"
+
+#: data/geany.glade:4385 data/geany.glade:9441 src/keybindings.c:310
+#: src/prefs.c:1619
+msgid "Editor"
+msgstr "திருத்தி"
+
+#: data/geany.glade:4420
+msgid "Open new documents from the command-line"
+msgstr "கட்டளை வரியிலிருந்து புதிய ஆவணங்களைத் திற"
+
+#: data/geany.glade:4424
+msgid "Create a new file for each command-line filename that doesn't exist"
+msgstr ""
+"இல்லாத ஒவ்வொரு கட்டளை-வரி கோப்பு பெயருக்கும் ஒரு புதிய கோப்பை உருவாக்கு"
+
+#: data/geany.glade:4464
+msgid "Default end of line characters:"
+msgstr "வரி எழுத்துகளின் இயல்புநிலை முடிவு:"
+
+#: data/geany.glade:4495
+msgid "<b>New files</b>"
+msgstr "<b> புதிய கோப்புகள் </b>"
+
+#: data/geany.glade:4530
+msgid "Default encoding (new files):"
+msgstr "இயல்புநிலை குறியாக்கம் (புதிய கோப்புகள்):"
+
+#: data/geany.glade:4544
+msgid "Sets the default encoding for newly created files"
+msgstr ""
+"புதிதாக உருவாக்கப்பட்ட கோப்புகளுக்கான இயல்புநிலை குறியாக்கத்தை அமைக்கிறது"
+
+#: data/geany.glade:457 data/geany.glade:7190 src/keybindings.c:516
+msgid "Insert Alternative _White Space"
+msgstr "மாற்று இடைவெளியைச் செருகவும் (_w)"
+
+#: data/geany.glade:4570
+msgid "Use fixed encoding when opening non-Unicode files"
+msgstr ""
+"ஒருங்குறி அல்லாத கோப்புகளைத் திறக்கும்போது நிலையான குறியாக்கத்தைப் "
+"பயன்படுத்தவும்"
+
+#: data/geany.glade:4574
+msgid ""
+"This option disables the automatic detection of the file encoding when "
+"opening non-Unicode files and opens the file with the specified encoding "
+"(usually not needed)"
+msgstr ""
+"இந்த விருப்பம் ஒருங்குறி அல்லாத கோப்புகளைத் திறக்கும்போது கோப்பு "
+"குறியாக்கத்தின் தானியங்கி கண்டறிதலை முடக்குகிறது மற்றும் குறிப்பிட்ட "
+"குறியாக்கத்துடன் கோப்பைத் திறக்கிறது (பொதுவாக தேவையில்லை)"
+
+#: data/geany.glade:4592
+msgid "Default encoding (existing non-Unicode files):"
+msgstr "இயல்புநிலை குறியாக்கம் (ஏற்கனவே உள்ள ஒருங்குறி அல்லாத கோப்புகள்):"
+
+#: data/geany.glade:4606
+msgid "Sets the default encoding for opening existing non-Unicode files"
+msgstr ""
+"தற்போதுள்ள ஒருங்குறி அல்லாத கோப்புகளைத் திறப்பதற்கான இயல்புநிலை "
+"குறியாக்கத்தை அமைக்கிறது"
+
+#: data/geany.glade:4638
+msgid "<b>Encodings</b>"
+msgstr "<b> குறியாக்கங்கள் </b>"
+
+#: data/geany.glade:4666 data/geany.glade:9471
+msgid "Ensure new line at file end"
+msgstr "கோப்பு முடிவில் புதிய வரியை உறுதிசெய்க"
+
+#: data/geany.glade:4670
+msgid "Ensures that at the end of the file is a new line"
+msgstr "கோப்பின் முடிவில் ஒரு புதிய வரி இருப்பதை உறுதி செய்கிறது"
+
+#: data/geany.glade:4682 data/geany.glade:9486
+msgid "Ensure consistent line endings"
+msgstr "நிலையான வரி முடிவுகளை உறுதிசெய்க"
+
+#: data/geany.glade:4686
+msgid ""
+"Ensures that newline characters always get converted before saving, avoiding"
+" mixed line endings in the same file"
+msgstr ""
+"ஒரே கோப்பில் கலப்பு வரி முடிவுகளைத் தவிர்த்து, சேமிப்பதற்கு முன்பு புதிய "
+"எழுத்துக்கள் எப்போதும் மாற்றப்படுவதை உறுதி செய்கிறது"
+
+#: data/geany.glade:4698 data/geany.glade:9501
+msgid "Strip trailing spaces and tabs"
+msgstr "பின்தங்கிய இடங்கள் மற்றும் தாவல்களை நீக்கு"
+
+#: data/geany.glade:470 data/geany.glade:7231
+msgid "_Search"
+msgstr "தேடல் (_S)"
+
+#: data/geany.glade:4702
+msgid "Removes trailing spaces and tabs at the end of lines"
+msgstr "கோடுகளின் முடிவில் பின்தங்கிய இடங்கள் மற்றும் தாவல்களை நீக்குகிறது"
+
+#: data/geany.glade:4714 data/geany.glade:9516 src/keybindings.c:673
+msgid "Replace tabs with space"
+msgstr "தாவல்களை இடத்துடன் மாற்றவும்"
+
+#: data/geany.glade:4718
+msgid "Replaces all tabs in document with spaces"
+msgstr "ஆவணத்தில் உள்ள அனைத்து தாவல்களையும் இடைவெளிகளுடன் மாற்றுகிறது"
+
+#: data/geany.glade:4736 data/geany.glade:9537
+msgid "<b>Saving files</b>"
+msgstr "<b> கோப்புகளைச் சேமித்தல் </b>"
+
+#: data/geany.glade:4775
+msgid "Recent files list length:"
+msgstr "சமீபத்திய கோப்புகள் பட்டியல் நீளம்:"
+
+#: data/geany.glade:4788
+msgid ""
+"Specifies the number of files which are stored in the Recent files list"
+msgstr ""
+"சமீபத்திய கோப்புகள் பட்டியலில் சேமிக்கப்பட்டுள்ள கோப்புகளின் எண்ணிக்கையைக் "
+"குறிப்பிடுகிறது"
+
+#: data/geany.glade:4807
+msgid "Disk check timeout:"
+msgstr "வட்டு சோதனை நேரம் முடிந்தது:"
+
+#: data/geany.glade:482 data/geany.glade:6526
+msgid "Open Selected F_ile"
+msgstr "தேர்ந்தெடுக்கப்பட்ட கோப்பைத் திற (_i)"
+
+#: data/geany.glade:4822
+msgid ""
+"How often to check for changes to document files on disk, in seconds. Zero "
+"disables checking."
+msgstr ""
+"வட்டில் ஆவணக் கோப்புகளில் மாற்றங்களை எவ்வளவு அடிக்கடி சரிபார்க்க வேண்டும். "
+"சுழியம் சரிபார்ப்பை முடக்குகிறது."
+
+#: data/geany.glade:4874 data/geany.glade:9557 src/prefs.c:1621
+#: src/tagmanager/tm_parser.c:456 plugins/filebrowser.c:1167
+msgid "Files"
+msgstr "கோப்புகள்"
+
+#: data/geany.glade:4929
+msgid "Terminal:"
+msgstr "முனையத்தில்:"
+
+#: data/geany.glade:493 data/geany.glade:7400 src/symbols.c:2205
+msgid "Find _Usage"
+msgstr "பயன்பாட்டைக் கண்டறியவும் (_U)"
+
+#: data/geany.glade:4942
+msgid "Browser:"
+msgstr "உலாவி:"
+
+#: data/geany.glade:4957
+msgid ""
+"A terminal emulator command (%c is substituted with the Geany run script "
+"filename)"
+msgstr ""
+"ஒரு முனையம் எமுலேட்டர் கட்டளை (%சி சீனி ஓடு உரை கோப்பு பெயருடன் "
+"மாற்றப்படுகிறது)"
+
+#: data/geany.glade:4971
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr "உங்களுக்கு பிடித்த உலாவிக்கு பாதை (மற்றும் கூடுதல் வாதங்கள்)"
+
+#: data/geany.glade:4974
+msgid "System default"
+msgstr "கணினி இயல்புநிலை"
+
+#: data/geany.glade:5030
+msgid "Grep:"
+msgstr "உவவெஅ:"
+
+#: data/geany.glade:504 data/geany.glade:7409 src/symbols.c:2210
+msgid "Find _Document Usage"
+msgstr "ஆவண பயன்பாட்டைக் கண்டறியவும் (_D)"
+
+#: data/geany.glade:5093
+msgid "<b>Tool paths</b>"
+msgstr "<b> கருவி பாதைகள் </b>"
+
+#: data/geany.glade:5126
+msgid "Context action:"
+msgstr "சூழல் செயல்:"
+
+#: data/geany.glade:5138
+msgid ""
+"Context action command. The currently selected word can be used with %s. It "
+"can appear anywhere in the given command and will be replaced before "
+"execution."
+msgstr ""
+"சூழல் செயல் கட்டளை. தற்போது தேர்ந்தெடுக்கப்பட்ட சொல்லை %s உடன் "
+"பயன்படுத்தலாம். இது கொடுக்கப்பட்ட கட்டளையில் எங்கும் தோன்றும் மற்றும் "
+"மரணதண்டனைக்கு முன் மாற்றப்படும்."
+
+#: data/geany.glade:515 data/geany.glade:7439
+msgid "Go to Symbol Defini_tion"
+msgstr "குறியீட்டு வரையறைக்குச் செல்லவும் (_t)"
+
+#: data/geany.glade:5177
+msgid "<b>Commands</b>"
+msgstr "<b> கட்டளைகள் </b>"
+
+#: data/geany.glade:5197 src/keybindings.c:322 src/prefs.c:1623
+msgid "Tools"
+msgstr "கருவிகள்"
+
+#: data/geany.glade:5252
+msgid "Email address of the developer"
+msgstr "உருவாக்குநரின் மின்னஞ்சல் முகவரி"
+
+#: data/geany.glade:5268
+msgid "Initials of the developer name"
+msgstr "உருவாக்குநர் பெயரின் முதலெழுத்துகள்"
+
+#: data/geany.glade:528
+msgid "Conte_xt Action"
+msgstr "சூழல் செயல் (_x)"
+
+#: data/geany.glade:5284
+msgid "Initial version:"
+msgstr "தொடக்க பதிப்பு:"
+
+#: data/geany.glade:5299
+msgid "Version number, which a new file initially has"
+msgstr "பதிப்பு எண், ஆரம்பத்தில் ஒரு புதிய கோப்பு உள்ளது"
+
+#: data/geany.glade:5315
+msgid "Company name"
+msgstr "நிறுவனத்தின் பெயர்"
+
+#: data/geany.glade:5331
+msgid "Developer:"
+msgstr "உருவாக்குநர்:"
+
+#: data/geany.glade:5344
+msgid "Company:"
+msgstr "நிறுவனம்:"
+
+#: data/geany.glade:5359
+msgid "Mail address:"
+msgstr "அஞ்சல் முகவரி:"
+
+#: data/geany.glade:5374
+msgid "Initials:"
+msgstr "முதலெழுத்துகள்:"
+
+#: data/geany.glade:5389
+msgid "The name of the developer"
+msgstr "உருவாக்குநரின் பெயர்"
+
+#: data/geany.glade:5403
+msgid "Year:"
+msgstr "ஆண்டு:"
+
+#: data/geany.glade:5418
+msgid "Date:"
+msgstr "தேதி:"
+
+#: data/geany.glade:5433
+msgid "Date & time:"
+msgstr "தேதி & நேரம்:"
+
+#: data/geany.glade:5448
+msgid ""
+"Specify a format for the {datetime} wildcard. For a list of available "
+"conversion specifiers see "
+"https://docs.gtk.org/glib/method.DateTime.format.html."
+msgstr ""
+"{datetime} காட்டு அட்டைக்கான வடிவமைப்பைக் குறிப்பிடவும். கிடைக்கக்கூடிய "
+"மாற்று குறிப்பான்களின் பட்டியலுக்கு "
+"https://docs.gtk.org/glib/method.datetime.format.html ஐப் பார்."
+
+#: data/geany.glade:5464
+msgid ""
+"Specify a format for the {year} wildcard. For a list of available conversion"
+" specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
+msgstr ""
+"{year} காட்டு அட்டைக்கான வடிவமைப்பைக் குறிப்பிடவும். கிடைக்கக்கூடிய மாற்று "
+"குறிப்பான்களின் பட்டியலுக்கு "
+"https://docs.gtk.org/glib/method.datetime.format.html ஐப் பார்."
+
+#: data/geany.glade:5480
+msgid ""
+"Specify a format for the {date} wildcard. For a list of available conversion"
+" specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
+msgstr ""
+"{date} காட்டு அட்டைக்கான வடிவமைப்பைக் குறிப்பிடவும். கிடைக்கக்கூடிய மாற்று "
+"குறிப்பான்களின் பட்டியலுக்கு "
+"https://docs.gtk.org/glib/method.datetime.format.html ஐப் பார்."
+
+#: data/geany.glade:5507
+msgid "<b>Template data</b>"
+msgstr "<b> வார்ப்புரு தரவு </b>"
+
+#: data/geany.glade:5527 src/prefs.c:1625
+msgid "Templates"
+msgstr "வார்ப்புருக்கள்"
+
+#: data/geany.glade:5595
+msgid "C_hange"
+msgstr "மாற்று (_h)"
+
+#: data/geany.glade:5617
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "<b> விசைப்பலகை குறுக்குவழிகள் </b>"
+
+#: data/geany.glade:5630 src/plugins.c:1900 src/plugins.c:1937
+#: src/prefs.c:1627
+msgid "Keybindings"
+msgstr "விசைப்பலகைகள்"
+
+#: data/geany.glade:5674
+msgid "Command:"
+msgstr "கட்டளை:"
+
+#: data/geany.glade:5687
+msgid "Path to the command for printing files (use %f for the filename)"
+msgstr ""
+"கோப்புகளை அச்சிடுவதற்கான கட்டளைக்கான பாதை (கோப்பு பெயருக்கு %f ஐப் "
+"பயன்படுத்தவும்)"
+
+#: data/geany.glade:5722
+msgid "Use an external command for printing"
+msgstr "அச்சிட வெளிப்புற கட்டளையைப் பயன்படுத்தவும்"
+
+#: data/geany.glade:5754 src/printing.c:237
+msgid "Print line numbers"
+msgstr "வரி எண்களை அச்சிடுக"
+
+#: data/geany.glade:5758 src/printing.c:239
+msgid "Add line numbers to the printed page"
+msgstr "அச்சிடப்பட்ட பக்கத்தில் வரி எண்களைச் சேர்"
+
+#: data/geany.glade:5770 src/printing.c:242
+msgid "Print page numbers"
+msgstr "பக்க எண்களை அச்சிடுக"
+
+#: data/geany.glade:5774 src/printing.c:244
+msgid ""
+"Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr ""
+"ஒவ்வொரு பக்கத்தின் கீழும் பக்க எண்களைச் சேர். இது பக்கத்தின் 2 வரிகளை"
+" எடுக்கும்."
+
+#: data/geany.glade:5786 src/printing.c:247
+msgid "Print page header"
+msgstr "பக்க தலைப்பு அச்சிடுக"
+
+#: data/geany.glade:5790 src/printing.c:249
+msgid ""
+"Add a little header to every page containing the page number, the filename "
+"and the current date (see below). It takes 3 lines of the page."
+msgstr ""
+"பக்க எண், கோப்பு பெயர் மற்றும் தற்போதைய தேதி ஆகியவற்றைக் கொண்ட ஒவ்வொரு "
+"பக்கத்திலும் சிறிது தலைப்பைச் சேர் (கீழே காண்க). இது பக்கத்தின் 3 "
+"வரிகளை எடுக்கும்."
+
+#: data/geany.glade:5820 src/printing.c:265
+msgid "Use the basename of the printed file"
+msgstr "அச்சிடப்பட்ட கோப்பின் அடிப்படை பெயரைப் பயன்படுத்தவும்"
+
+#: data/geany.glade:5824
+msgid "Print only the basename (without the path) of the printed file"
+msgstr "அச்சிடப்பட்ட கோப்பின் அடிப்படை பெயரை (பாதை இல்லாமல்) மட்டும் அச்சிடுக"
+
+#: data/geany.glade:5843 src/printing.c:273
+msgid "Date format:"
+msgstr "தேதி வடிவம்:"
+
+#: data/geany.glade:5856 src/printing.c:279
+msgid ""
+"Specify a format for the date and time stamp which is added to the page "
+"header on each page. For a list of available conversion specifiers see "
+"https://docs.gtk.org/glib/method.DateTime.format.html."
+msgstr ""
+"ஒவ்வொரு பக்கத்திலும் உள்ள பக்க தலைப்பில் சேர்க்கப்படும் தேதி மற்றும் நேர "
+"முத்திரைக்கான வடிவமைப்பைக் குறிப்பிடவும். கிடைக்கக்கூடிய மாற்று "
+"குறிப்பான்களின் பட்டியலுக்கு "
+"https://docs.gtk.org/glib/method.datetime.format.html ஐப் பார்."
+
+#: data/geany.glade:5891
+msgid "Use native GTK printing"
+msgstr "சொந்த சிடிகே அச்சிடலைப் பயன்படுத்தவும்"
+
+#: data/geany.glade:5915
+msgid "<b>Printing</b>"
+msgstr "<b> அச்சிடுதல் </b>"
+
+#: data/geany.glade:5928 src/prefs.c:1629
+msgid "Printing"
+msgstr "அச்சிடுதல்"
+
+#: data/geany.glade:5963
+msgid "Font:"
+msgstr "எழுத்துரு:"
+
+#: data/geany.glade:5977
+msgid "Sets the font for the terminal widget"
+msgstr "முனைய விட்கெட்டுக்கான எழுத்துருவை அமைக்கிறது"
+
+#: data/geany.glade:5979
+msgid "Choose Terminal Font"
+msgstr "முனைய எழுத்துருவைத் தேர்வுசெய்க"
+
+#: data/geany.glade:5991
+msgid "Foreground color:"
+msgstr "முன்புற நிறம்:"
+
+#: data/geany.glade:6006
+msgid "Background color:"
+msgstr "பின்னணி நிறம்:"
+
+#: data/geany.glade:6021
+msgid "Scrollback lines:"
+msgstr "உருள் கோடுகள்:"
+
+#: data/geany.glade:6036
+msgid "Shell:"
+msgstr "ஓடு:"
+
+#: data/geany.glade:6052
+msgid "Sets the foreground color of the text in the terminal widget"
+msgstr "முனைய விட்கெட்டில் உரையின் முன்புற நிறத்தை அமைக்கிறது"
+
+#: data/geany.glade:6069
+msgid "Sets the background color of the text in the terminal widget"
+msgstr "முனைய விட்கெட்டில் உரையின் பின்னணி நிறத்தை அமைக்கிறது"
+
+#: data/geany.glade:6085
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget"
+msgstr ""
+"வரலாற்றை வரிகளில் குறிப்பிடுகிறது, அதை நீங்கள் முனைய விட்கெட்டில் மீண்டும் "
+"உருட்டலாம்"
+
+#: data/geany.glade:6105
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation"
+msgstr ""
+"முனையம் முன்மாதிரிக்குள் தொடங்கப்பட வேண்டிய ஓட்டிற்கு பாதையை அமைக்கிறது"
+
+#: data/geany.glade:6154
+msgid "Scroll on keystroke"
+msgstr "விசை அழுத்தப்பட்டால்  உருட்டவும்"
+
+#: data/geany.glade:6158
+msgid "Whether to scroll to the bottom if a key was pressed"
+msgstr "ஒரு விசை அழுத்தப்பட்டால் கீழே உருட்ட வேண்டுமா?"
+
+#: data/geany.glade:6169
+msgid "Scroll on output"
+msgstr "வெளியீட்டில் உருட்டவும்"
+
+#: data/geany.glade:6173
+msgid "Whether to scroll to the bottom when output is generated"
+msgstr "வெளியீடு உருவாக்கப்படும்போது கீழே உருட்ட வேண்டுமா"
+
+#: data/geany.glade:6184
+msgid "Cursor blinks"
+msgstr "கர்சர் ஒளிரும்"
+
+#: data/geany.glade:6188
+msgid "Whether to blink the cursor"
+msgstr "கர்சரை சிமிட்டுவதா"
+
+#: data/geany.glade:6199
+msgid "Override Geany keybindings"
+msgstr "சீனி விசைப்பிணைப்புகளை மீறவும்"
+
+#: data/geany.glade:6203
+msgid ""
+"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
+msgstr ""
+"விசைப்பலகை குறுக்குவழிகளைப் பெற மெமுமுஐ அனுமதிக்கிறது (குவி கட்டளைகளைத் "
+"தவிர)"
+
+#: data/geany.glade:6214
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr "பட்டியல் குறுக்குவழி விசையை முடக்கு (இயல்பாக F10)"
+
+#: data/geany.glade:6218
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+"இந்த விருப்பம் பட்டியல் விசைப்பிணைப்பை மேல்தோன்றலுக்கு திறனை முடக்குகிறது "
+"(இயல்புநிலை F10). நீங்கள் பயன்படுத்தினால் அதை முடக்குவது பயனுள்ளதாக "
+"இருக்கும், எடுத்துக்காட்டாக, மெமுமுக்குள் நள்ளிரவு ஆணையாளர்."
+
+#: data/geany.glade:6229
+msgid "Follow path of the current file"
+msgstr "தற்போதைய கோப்பின் பாதையைப் பின்பற்றவும்"
+
+#: data/geany.glade:6233
+msgid "Whether to execute \"cd $path\" when you switch between opened files"
+msgstr "திறந்த கோப்புகளுக்கு இடையில் மாறும்போது \"cd $பாதை\" ஐ இயக்க வேண்டுமா?"
+
+#: data/geany.glade:6244
+msgid "Execute programs in the VTE"
+msgstr "மெமுமு இல் நிரல்களை இயக்கு"
+
+#: data/geany.glade:6248
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped"
+msgstr ""
+"முனைய முன்மாதிரி சாளரத்தைத் திறப்பதற்கு பதிலாக மெமுமு இல் நிரல்களை "
+"இயக்கு. தயவுசெய்து கவனி, மெமுமு இல் செயல்படுத்தப்படும் நிரல்களை "
+"நிறுத்த முடியாது"
+
+#: data/geany.glade:6259
+msgid "Don't use run script"
+msgstr "ஓடு கிறுக்கலைப் பயன்படுத்த வேண்டாம்"
+
+#: data/geany.glade:6264
+msgid ""
+"Don't use the simple run script which is usually used to display the exit "
+"status of the executed program"
+msgstr ""
+"செயல்படுத்தப்பட்ட நிரலின் வெளியேறும் நிலையைக் காண்பிக்க பொதுவாகப் "
+"பயன்படுத்தப்படும் எளிய ஓடு கிறுக்கலைப் பயன்படுத்த வேண்டாம்"
+
+#: data/geany.glade:6288
+msgid "<b>Terminal</b>"
+msgstr "<b> முனையம் </b>"
+
+#: data/geany.glade:6301 src/prefs.c:1633 src/vte.c:381
+msgid "Terminal"
+msgstr "முனையத்தில்"
+
+#: data/geany.glade:6390
+msgid "<i>Warning: read the manual before changing these preferences.</i>"
+msgstr ""
+"<i> எச்சரிக்கை: இந்த விருப்பங்களை மாற்றுவதற்கு முன் கையேட்டைப் படியுங்கள். "
+"</i>"
+
+#: data/geany.glade:6416
+msgid "<b>Various preferences</b>"
+msgstr "<b> பல்வேறு விருப்பத்தேர்வுகள் </b>"
+
+#: data/geany.glade:6429 src/prefs.c:1631
+msgid "Various"
+msgstr "பல்வேறு"
+
+#: geany.desktop.in:5 data/geany.glade:6456
+msgid "Geany"
+msgstr "சீனி"
+
+#: data/geany.glade:6479
+msgid "_File"
+msgstr "கோப்பு (_F)"
+
+#: data/geany.glade:6497
+msgid "New (with _Template)"
+msgstr "புதிய (வார்ப்புரு உடன்) (_T)"
+
+#: data/geany.glade:6513 data/geany.glade:8084
+msgid "_Open..."
+msgstr "திற... (_O)"
+
+#: data/geany.glade:6535
+msgid "Recent _Files"
+msgstr "சமீபத்திய கோப்புகள் (_F)"
+
+#: data/geany.glade:6557
+msgid "Save _As..."
+msgstr "என சேமி ... (_A)"
+
+#: data/geany.glade:6568
+msgid "Sa_ve All"
+msgstr "எல்லாவற்றையும் சேமி (_v)"
+
+#: data/geany.glade:6579 src/callbacks.c:352 src/document.c:1671
+#: src/document.c:3619 src/sidebar.c:1215
+msgid "_Reload"
+msgstr "மறுஏற்றம் (_R)"
+
+#: data/geany.glade:6590
+msgid "R_eload As"
+msgstr "என மறுஏற்றம் (_e)"
+
+#: data/geany.glade:6636
+msgid "Page Set_up"
+msgstr "பக்கம் அமைப்பு (_u)"
+
+#: data/geany.glade:6643
+msgid "_Print..."
+msgstr "அச்சிடு... (_P)"
+
+#: data/geany.glade:6670 src/notebook.c:498
+msgid "Close Ot_her Documents"
+msgstr "மற்ற ஆவணங்களை மூடு (_h)"
+
+#: data/geany.glade:6681 src/notebook.c:510
+msgid "C_lose All"
+msgstr "அனைத்தும்  மூடு (_l)"
+
+#: data/geany.glade:6813
+msgid "Co_mmands"
+msgstr "கட்டளைகள் (_m)"
+
+#: data/geany.glade:6820 src/keybindings.c:439
+msgid "Cu_t Current Line(s)"
+msgstr "தற்போதைய வரி (கள்) வெட்டு (_t)"
+
+#: data/geany.glade:6831 src/keybindings.c:436
+msgid "_Copy Current Line(s)"
+msgstr "தற்போதைய வரி (கள்) நகல் (_C)"
+
+#: data/geany.glade:6844 src/keybindings.c:389
+msgid "_Delete Current Line(s)"
+msgstr "தற்போதைய வரி (கள்) நீக்கு (_D)"
+
+#: data/geany.glade:6853 src/keybindings.c:386
+msgid "D_uplicate Line or Selection"
+msgstr "வரி அல்லது தேர்வு நகல்ஒட்டு (_u)"
+
+#: data/geany.glade:6868 src/keybindings.c:449
+msgid "S_elect Current Line(s)"
+msgstr "தற்போதைய வரி (கள்) தேர்ந்தெடு (_e)"
+
+#: data/geany.glade:6877 src/keybindings.c:452
+msgid "Se_lect Current Paragraph"
+msgstr "தற்போதைய பத்தியைத் தேர்ந்தெடு (_l)"
+
+#: data/geany.glade:6892
+msgid "_Move Line(s) Up"
+msgstr "வரி (களை) மேலே நகர்த்து (_M)"
+
+#: data/geany.glade:6901
+msgid "M_ove Line(s) Down"
+msgstr "வரி(களை)  கீழே நகர்த்து (_o)"
+
+#: data/geany.glade:6916 src/keybindings.c:503
+msgid "_Send Selection to Terminal"
+msgstr "தேர்வு முனையத்திற்கு அனுப்பு (_S)"
+
+#: data/geany.glade:6938 src/keybindings.c:508
+msgid "_Join Lines"
+msgstr "வரிகளை சேர் (_J)"
+
+#: data/geany.glade:6947 src/keybindings.c:505
+msgid "_Reflow Lines/Block"
+msgstr "வரிகள்/தொகுதி மறுஒட்டம் (_R)"
+
+#: data/geany.glade:6956 src/keybindings.c:463
+msgid "T_oggle Case of Selection"
+msgstr "தேர்வு செய்வதற்கான வழக்கு மாற்று (_o)"
+
+#: data/geany.glade:6971
+msgid "_Comment Line(s)"
+msgstr "கருத்து வரி(கள்) (_C)"
+
+#: data/geany.glade:6980
+msgid "U_ncomment Line(s)"
+msgstr "கருத்துநீக்கு  வரி(கள்) (_n)"
+
+#: data/geany.glade:6989
+msgid "_Toggle Line Commentation"
+msgstr "கருத்து வரி மாற்று (_T)"
+
+#: data/geany.glade:7002
+msgid "_Increase Indent"
+msgstr "உள்தள்ளலை அதிகரி (_I)"
+
+#: data/geany.glade:7013
+msgid "_Decrease Indent"
+msgstr "உள்தள்ளல் குறைவு (_D)"
+
+#: data/geany.glade:7026 src/keybindings.c:482
+msgid "S_mart Line Indent"
+msgstr "அறிவாளி உள்தள்ளல் (_m)"
+
+#: data/geany.glade:7041
+msgid "_Send Selection to"
+msgstr "தேர்வுக்கு அனுப்பு (_S)"
+
+#: data/geany.glade:7069
+msgid "I_nsert Comments"
+msgstr "கருத்துக்கள் செருகு (_n)"
+
+#: data/geany.glade:7203
+msgid "Preference_s"
+msgstr "முன்னுரிமைகள் (_s)"
+
+#: data/geany.glade:7214 src/keybindings.c:529
+msgid "P_lugin Preferences"
+msgstr "செருகுநிரல் விருப்பத்தேர்வுகள் (_l)"
+
+#: data/geany.glade:7239
+msgid "_Find..."
+msgstr "தேடு... (_F)"
+
+#: data/geany.glade:7252
+msgid "Find _Next"
+msgstr "அடுத்ததை தேடு (_N)"
+
+#: data/geany.glade:7261
+msgid "Find _Previous"
+msgstr "முந்தையதைக் கண்டறியவும் (_P)"
+
+#: data/geany.glade:727 src/filetypes.c:127 src/filetypes.c:1531
+msgid "None"
+msgstr "எதுவுமில்லை"
+
+#: data/geany.glade:7274 src/symbols.c:2215
+msgid "Find in F_iles..."
+msgstr "கோப்புகளில் காண்க... (_i)"
+
+#: data/geany.glade:7285
+msgid "_Replace..."
+msgstr "மறுசீரமைப்பு ... (_R)"
+
+#: data/geany.glade:730
+msgid "Basic"
+msgstr "அடிப்படை"
+
+#: data/geany.glade:7302
+msgid "Next Me_ssage"
+msgstr "அடுத்த செய்தி (_s)"
+
+#: data/geany.glade:7313
+msgid "Pr_evious Message"
+msgstr "முந்தைய செய்தி (_e)"
+
+#: data/geany.glade:733
+msgid "Current chars"
+msgstr "தற்போதைய எழுத்துக்கள்"
+
+#: data/geany.glade:7332 src/keybindings.c:578
+msgid "Go to Ne_xt Marker"
+msgstr "அடுத்த குறிப்பானுக்குச் செல்லுங்கள் (_x)"
+
+#: data/geany.glade:7341 src/keybindings.c:581
+msgid "Go to Pre_vious Marker"
+msgstr "முந்தைய குறிப்பானுக்குச் செல்லவும் (_v)"
+
+#: data/geany.glade:7354
+msgid "_Go to Line..."
+msgstr "வரிக்கு செல்லுங்கள்... (_G)"
+
+#: data/geany.glade:736
+msgid "Match braces"
+msgstr "இணை அடைப்புக்குறிப்புகள்"
+
+#: data/geany.glade:7376 src/keybindings.c:541
+msgid "Find Next _Selection"
+msgstr "அடுத்து தேர்வைக் கண்டறியவும் (_S)"
+
+#: data/geany.glade:7385 src/keybindings.c:543
+msgid "Find Pre_vious Selection"
+msgstr "முந்தைய தேர்வைக் கண்டறியவும் (_v)"
+
+#: data/geany.glade:7424 src/keybindings.c:560
+msgid "_Mark All"
+msgstr "அனைத்தையும் குறி (_M)"
+
+#: data/geany.glade:7448
+msgid "Go to Symbol Decl_aration"
+msgstr "குறியீட்டு அறிவிப்பிற்கு செல்க (_a)"
+
+#: data/geany.glade:7465
+msgid "_View"
+msgstr "காட்சி (_V)"
+
+#: data/geany.glade:7472
+msgid "Change _Font..."
+msgstr "எழுத்துரு மாற்றவும் ... (_F)"
+
+#: data/geany.glade:7483
+msgid "Change _Color Scheme..."
+msgstr "வண்ணத் திட்டத்தை மாற்றவும்... (_C)"
+
+#: data/geany.glade:7502
+msgid "Show _Markers Margin"
+msgstr "குறிப்பான்கள் விளிம்பைக் காட்டு (_M)"
+
+#: data/geany.glade:7512
+msgid "Show _Line Numbers"
+msgstr "வரி எண்களைக் காட்டு (_L)"
+
+#: data/geany.glade:7522
+msgid "Show White S_pace"
+msgstr "வெள்ளை இடைவெளியைக் காட்டு (_p)"
+
+#: data/geany.glade:753
+msgid "Top"
+msgstr "மேலே"
+
+#: data/geany.glade:7531
+msgid "Show Line _Endings"
+msgstr "வரி முடிவுகளைக் காட்டு (_E)"
+
+#: data/geany.glade:7540
+msgid "Show Indentation _Guides"
+msgstr "உள்தள்ளல் வழிகாட்டிகளைக் காட்டு (_G)"
+
+#: data/geany.glade:7555
+msgid "Full_screen"
+msgstr "முழு திரை (_s)"
+
+#: data/geany.glade:7564
+msgid "Toggle All _Additional Widgets"
+msgstr "அனைத்து கூடுதல் விட்கெட்களையும் மாற்றவும் (_A)"
+
+#: data/geany.glade:7573
+msgid "Show Message _Window"
+msgstr "செய்தி சாளரங் காட்டு  (_W)"
+
+#: data/geany.glade:7583
+msgid "Show _Toolbar"
+msgstr "கருவிப்பட்டியைக் காட்டு (_T)"
+
+#: data/geany.glade:7593
+msgid "Show Side_bar"
+msgstr "பக்கபட்டியைக் காட்டு (_b)"
+
+#: data/geany.glade:762 src/keybindings.c:526
+msgid "Preferences"
+msgstr "விருப்பத்தேர்வுகள்"
+
+#: data/geany.glade:7643
+msgid "_Document"
+msgstr "ஆவணம் (_D)"
+
+#: data/geany.glade:7652
+msgid "_Line Wrapping"
+msgstr "வரி மடக்குதல் (_L)"
+
+#: data/geany.glade:7662
+msgid "Line _Breaking"
+msgstr "வரி உடைக்கும் (_B)"
+
+#: data/geany.glade:7671
+msgid "_Auto-indentation"
+msgstr "தானி உள்தள்ளல் (_A)"
+
+#: data/geany.glade:7681
+msgid "In_dent Type"
+msgstr "உள்தள்ளல் வகை (_d)"
+
+#: data/geany.glade:7690 data/geany.glade:7748
+msgid "_Detect from Content"
+msgstr "உள்தள்ளலிருந்து குறைத்தல் (_D)"
+
+#: data/geany.glade:7725
+msgid "T_abs and Spaces"
+msgstr "தாவல்கள் மற்றும் இடைவெளிகள் (_a)"
+
+#: data/geany.glade:7739
+msgid "Indent Widt_h"
+msgstr "உள்தள்ளல் அகலம் (_h)"
+
+#: data/geany.glade:7763
+msgid "_1"
+msgstr "_1"
+
+#: data/geany.glade:7772
+msgid "_2"
+msgstr "_2"
+
+#: data/geany.glade:7782
+msgid "_3"
+msgstr "_3"
+
+#: data/geany.glade:7792
+msgid "_4"
+msgstr "_4"
+
+#: data/geany.glade:7803
+msgid "_5"
+msgstr "_5"
+
+#: data/geany.glade:7813
+msgid "_6"
+msgstr "_6"
+
+#: data/geany.glade:7823
+msgid "_7"
+msgstr "_7"
+
+#: data/geany.glade:7833
+msgid "_8"
+msgstr "_8"
+
+#: data/geany.glade:7853
+msgid "Read _Only"
+msgstr "படிக்க மட்டும் (_O)"
+
+#: data/geany.glade:7862
+msgid "_Write Unicode BOM"
+msgstr "ஒருங்குறி பைட்குறி எழுதுங்கள் (_W)"
+
+#: data/geany.glade:7877
+msgid "Set File_type"
+msgstr "கோப்புவகையை அமை (_t)"
+
+#: data/geany.glade:7897
+msgid "Set _Encoding"
+msgstr "குறியாக்கத்தை அமை (_E)"
+
+#: data/geany.glade:7917
+msgid "Set Line E_ndings"
+msgstr "வரி முடிவுகளை அமை (_n)"
+
+#: data/geany.glade:7926
+msgid "Convert and Set to _CR/LF (Windows)"
+msgstr "வதிவஉ (சாளரங்கள்) என மாற்றி அமை (_C)"
+
+#: data/geany.glade:7935
+msgid "Convert and Set to _LF (Unix)"
+msgstr "வஉ (யுனிக்சு) என மாற்றி அமை (_L)"
+
+#: data/geany.glade:7946
+msgid "Convert and Set to CR (Classic _Mac)"
+msgstr "வதி (மேக்) என மாற்றி அமை (_M)"
+
+#: data/geany.glade:7966 src/keybindings.c:669
+msgid "_Clone"
+msgstr "நகலி (_C)"
+
+#: data/geany.glade:7975 src/keybindings.c:671
+msgid "_Strip Trailing Spaces"
+msgstr "பின்தங்கிய இடங்களை நீக்கு (_S)"
+
+#: data/geany.glade:7984
+msgid "Replace Tabs with S_paces"
+msgstr "தாவல்களை இடைவெளிகளுடன் மாற்றவும் (_p)"
+
+#: data/geany.glade:7993
+msgid "_Replace Spaces with Tabs..."
+msgstr "அனைத்தையும் மடியுங்கள்... (_R)"
+
+#: data/geany.glade:8008
+msgid "_Fold All"
+msgstr "_ அனைத்தையும் மிச்சப்படுத்துங்கள்"
+
+#: data/geany.glade:8017
+msgid "_Unfold All"
+msgstr "அனைத்தையும் அவிழ்த்து விடுங்கள் (_U)"
+
+#: data/geany.glade:8032
+msgid "Remove _Markers"
+msgstr "குறிப்பான்களை அகற்று (_M)"
+
+#: data/geany.glade:8041
+msgid "Remove Error _Indicators"
+msgstr "பிழை குறிகாட்டிகளை அகற்று (_I)"
+
+#: data/geany.glade:8054
+msgid "_Project"
+msgstr "திட்டம் (_P)"
+
+#: data/geany.glade:8062
+msgid "_New..."
+msgstr "புதிய... (_N)"
+
+#: data/geany.glade:8073
+msgid "New from _Folder..."
+msgstr "ஃபோல்டரிடமிருந்து புதியது... (_F)"
+
+#: data/geany.glade:8097
+msgid "_Recent Projects"
+msgstr "மறுபரிசீலனை திட்டங்கள் (_R)"
+
+#: data/geany.glade:8103
+msgid "_Close"
+msgstr "மூடு (_C)"
+
+#: data/geany.glade:8122
+msgid "Apply the default indentation settings to all documents"
+msgstr ""
+"எல்லா ஆவணங்களுக்கும் இயல்புநிலை உள்தள்ளல் அமைப்புகளைப் பயன்படுத்துங்கள்"
+
+#: data/geany.glade:8123
+msgid "_Apply Default Indentation"
+msgstr "இயல்புநிலை உள்தள்ளல் இடு (_A)"
+
+#: data/geany.glade:8152 src/build.c:2446 src/build.c:2717
+msgid "_Build"
+msgstr "கட்டு (_B)"
+
+#: data/geany.glade:8160
+msgid "_Tools"
+msgstr "கருவிகள் (_T)"
+
+#: data/geany.glade:8167
+msgid "_Reload Configuration"
+msgstr "மறுசீரமைப்பு உள்ளமைவு (_R)"
+
+#: data/geany.glade:8178
+msgid "C_onfiguration Files"
+msgstr "உள்ளமைவு கோப்புகள் (_o)"
+
+#: data/geany.glade:8194
+msgid "_Color Chooser"
+msgstr "வண்ணத் தேர்வாளர் (_C)"
+
+#: data/geany.glade:8207
+msgid "_Word Count"
+msgstr "சொல் எண்ணிக்கை (_W)"
+
+#: data/geany.glade:8216
+msgid "Load Ta_gs File..."
+msgstr "குறிச்சொற்கள் கோப்பை ஏற்றவும்... (_g)"
+
+#: data/geany.glade:8229 data/geany.glade:8236
+msgid "_Help"
+msgstr "உதவி (_H)"
+
+#: data/geany.glade:8249
+msgid "Keyboard _Shortcuts"
+msgstr "விசைப்பலகை குறுக்குவழிகள் (_S)"
+
+#: data/geany.glade:8258
+msgid "Debug _Messages"
+msgstr "பிழைத்திருத்த செய்திகள் (_M)"
+
+#: data/geany.glade:8273
+msgid "_Website"
+msgstr "இணையதளம் (_W)"
+
+#: data/geany.glade:8282
+msgid "Wi_ki"
+msgstr "விக்கி (_k)"
+
+#: data/geany.glade:8291
+msgid "Report a _Bug..."
+msgstr "ஒரு பிழையைப் புகாரளி... (_B)"
+
+#: data/geany.glade:8300
+msgid "_Donate..."
+msgstr "நன்கொடை... (_D)"
+
+#: data/geany.glade:8369
+msgid ""
+"Filter the symbol list using the entered text. Separate multiple filters "
+"with a space."
+msgstr ""
+"உள்ளிட்ட உரையைப் பயன்படுத்தி குறியீட்டு பட்டியலை வடிகட்டவும். பல "
+"வடிப்பான்களை இடைவெளியுடன் பிரி"
+
+#: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
+msgid "Symbols"
+msgstr "குறியிடுகள்"
+
+#: data/geany.glade:8439
+msgid "Documents"
+msgstr "ஆவணங்கள்"
+
+#: data/geany.glade:8498
+msgid "Status"
+msgstr "நிலை"
+
+#: data/geany.glade:8527
+msgid "Compiler"
+msgstr "தொகுப்பி"
+
+#: data/geany.glade:8558
+msgid "Messages"
+msgstr "செய்திகள்"
+
+#: data/geany.glade:8586
+msgid "Scribble"
+msgstr "எழுது"
+
+#: data/geany.glade:8633
+msgid "Project Properties"
+msgstr "திட்ட பண்புகள்"
+
+#: data/geany.glade:8703 src/project.c:203
+msgid "Filename:"
+msgstr "கோப்பு பெயர்:"
+
+#: data/geany.glade:8716
+msgid "_Name:"
+msgstr "பெயர்: (_N)"
+
+#: data/geany.glade:8732
+msgid "_Description:"
+msgstr "விளக்கம்: (_D)"
+
+#: data/geany.glade:8749
+msgid "_Base path:"
+msgstr "அடி பாதை: (_B)"
+
+#: data/geany.glade:8765 src/search.c:905
+msgid "File _patterns:"
+msgstr "கோப்பு வடிவங்கள்: (_p)"
+
+#: data/geany.glade:878
+msgid "Load files from the last session"
+msgstr "கடைசி அமர்விலிருந்து கோப்புகளை ஏற்றவும்"
+
+#: data/geany.glade:882
+msgid "Opens at startup the files from the last session"
+msgstr "கடைசி அமர்விலிருந்து கோப்புகளைத் தொடங்குகிறது"
+
+#: data/geany.glade:8826
+msgid ""
+"Space separated list of file patterns used for the find in files dialog "
+"(e.g. *.c *.h)"
+msgstr ""
+"கோப்புகள் உரையாடலில் (எ.கா. *.சி *.h) கண்டுபிடிக்க பயன்படுத்தப்படும் கோப்பு "
+"வடிவங்களின் விண்வெளி பிரிக்கப்பட்ட பட்டியல்"
+
+#: data/geany.glade:8860 src/project.c:232
+msgid ""
+"Base directory of all files that make up the project. This can be a new "
+"path, or an existing directory tree. You can use paths relative to the "
+"project filename."
+msgstr ""
+"திட்டத்தை உருவாக்கும் அனைத்து கோப்புகளின் அடிப்படை அடைவு. இது ஒரு புதிய "
+"பாதையாக இருக்கலாம் அல்லது ஏற்கனவே உள்ள அடைவு மரமாக இருக்கலாம். திட்ட கோப்பு "
+"பெயருடன் தொடர்புடைய பாதைகளைப் பயன்படுத்தலாம்."
+
+#: data/geany.glade:8904 src/keybindings.c:320
+msgid "Project"
+msgstr "திட்டம்"
+
+#: data/geany.glade:894
+msgid "Load virtual terminal support"
+msgstr "மெய்நிகர் முனைய ஆதரவை ஏற்றவும்"
+
+#: data/geany.glade:897
+msgid ""
+"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
+"disable it if you do not need it"
+msgstr ""
+"மெய்நிகர் முனைய முன்மாதிரி (மெமுமு) தொடக்கத்தில் ஏற்றப்பட வேண்டுமா, "
+"உங்களுக்குத் தேவையில்லை என்றால் அதை முடக்கு"
+
+#: data/geany.glade:909
+msgid "Enable plugin support"
+msgstr "சொருகி ஆதரவை இயக்கு"
+
+#: data/geany.glade:930
+msgid "<b>Startup</b>"
+msgstr "<b> தொடங்கு </b>"
+
+#: data/geany.glade:9316
+msgid "Display:"
+msgstr "காட்சி:"
+
+#: data/geany.glade:9357
+msgid "Custom"
+msgstr "தனிப்பயன்"
+
+#: data/geany.glade:9376
+msgid "Use global settings"
+msgstr "உலகளாவிய அமைப்புகளைப் பயன்படுத்துங்கள்"
+
+#: data/geany.glade:958
+msgid "Save window size"
+msgstr "சாளர அளவை சேமி"
+
+#: data/geany.glade:962
+msgid "Saves the window size and restores it at the start"
+msgstr "சாளர அளவைச் சேமித்து தொடக்கத்தில் மீட்டெடுக்கிறது"
+
+#: data/geany.glade:9703
+msgid "Size:"
+msgstr "அளவு:"
+
+#: data/geany.glade:9719
+msgid "Location:"
+msgstr "இடம்:"
+
+#: data/geany.glade:9735
+msgid "Read-only:"
+msgstr "படிக்க மட்டும்:"
+
+#: data/geany.glade:974
+msgid "Save window position"
+msgstr "சாளர நிலையை சேமி"
+
+#: data/geany.glade:9751
+msgid "Encoding:"
+msgstr "குறியாக்கம்:"
+
+#: data/geany.glade:9767
+msgid "Modified:"
+msgstr "மாற்றியமைக்கப்பட்ட:"
+
+#: data/geany.glade:978
+msgid "Saves the window position and restores it at the start"
+msgstr "சாளர நிலையை சேமித்து தொடக்கத்தில் அதை மீட்டெடுக்கிறது"
+
+#: data/geany.glade:9783
+msgid "Changed:"
+msgstr "மாற்றப்பட்டது:"
+
+#: data/geany.glade:9799
+msgid "Accessed:"
+msgstr "அணுகப்பட்டது:"
+
+#: data/geany.glade:9843
+msgid "(only inside Geany)"
+msgstr "(சீனிக்குள் மட்டுமே)"
+
+#: data/geany.glade:990
+msgid "Confirm exit"
+msgstr "வெளியேறுவதை உறுதிப்படுத்தவும்"
+
+#: data/geany.glade:994
+msgid "Shows a confirmation dialog on exit"
+msgstr "வெளியேறும்போது உறுதிப்படுத்தல் உரையாடலைக் காட்டுகிறது"
+
+#: data/geany.glade:9942
+msgid "Permissions:"
+msgstr "அனுமதிகள்:"
+
+#: data/geany.glade:9956
+msgid "Read:"
+msgstr "படி:"
+
+#: data/geany.glade:9970
+msgid "Write:"
+msgstr "எழுது:"
+
+#: data/geany.glade:9984
+msgid "Execute:"
+msgstr "செயல்படுத்த:"
+
+#: data/geany.glade:9998
+msgid "Owner:"
+msgstr "உரிமையாளர்:"
+
+#: geany.desktop.in:14
+msgid "Text;Editor;"
+msgstr "உரை;திருத்தி;"
+
+#: geany.desktop.in:6
+msgid "Integrated Development Environment"
+msgstr "ஒருங்கிணைந்த மேம்பாட்டு சூழல்"
+
+#: geany.desktop.in:7
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "சிடிகே+ ஐப் பயன்படுத்தி வேகமான மற்றும் சிறிய ஒமேசூ"
+
+#: plugins/classbuilder.c:1087
+msgid "Create Cla_ss"
+msgstr "வகுப்பு உருவாக்கு (_s)"
+
+#: plugins/classbuilder.c:1093
+msgid "_C++ Class..."
+msgstr "சி++ வகுப்பு... (_C)"
+
+#: plugins/classbuilder.c:1096
+msgid "_GTK+ Class..."
+msgstr "சிடிகே+ வகுப்பு... (_G)"
+
+#: plugins/classbuilder.c:1099
+msgid "_PHP Class..."
+msgstr "பிஎச்பி வகுப்பு ... (_P)"
+
+#: plugins/classbuilder.c:34
+msgid "Class Builder"
+msgstr "வகுப்பு கட்டுபவர்"
+
+#: plugins/classbuilder.c:34
+msgid "Creates source files for new class types."
+msgstr "புதிய வகுப்பு வகைகளுக்கான மூல கோப்புகளை உருவாக்குகிறது."
+
+#: plugins/classbuilder.c:431
+msgid "Create Class"
+msgstr "வகுப்பை உருவாக்கு"
+
+#: plugins/classbuilder.c:441
+msgid "Create C++ Class"
+msgstr "சி++ வகுப்பை உருவாக்கு"
+
+#: plugins/classbuilder.c:444
+msgid "Create GTK+ Class"
+msgstr "சிடிகே+ வகுப்பை உருவாக்கு"
+
+#: plugins/classbuilder.c:447
+msgid "Create PHP Class"
+msgstr "பிஎச்பி வகுப்பை உருவாக்கு"
+
+#: plugins/classbuilder.c:464
+msgid "Namespace"
+msgstr "பெயர்வெளி"
+
+#: src/project.c:192 plugins/classbuilder.c:465 plugins/classbuilder.c:475
+msgid "Name:"
+msgstr "பெயர்:"
+
+#: plugins/classbuilder.c:471 plugins/classbuilder.c:473
+msgid "Class"
+msgstr "வகுப்பு"
+
+#: plugins/classbuilder.c:480
+msgid "Header file:"
+msgstr "தலைப்பு கோப்பு:"
+
+#: plugins/classbuilder.c:482
+msgid "Source file:"
+msgstr "மூல கோப்பு:"
+
+#: plugins/classbuilder.c:484
+msgid "Inheritance"
+msgstr "பரம்பரை"
+
+#: plugins/classbuilder.c:486
+msgid "Base class:"
+msgstr "அடிப்படை வகுப்பு:"
+
+#: plugins/classbuilder.c:494
+msgid "Base source:"
+msgstr "அடிப்படை ஆதாரம்:"
+
+#: plugins/classbuilder.c:499
+msgid "Base header:"
+msgstr "தள தலைப்பு:"
+
+#: plugins/classbuilder.c:507
+msgid "Global"
+msgstr "உலகளாவிய"
+
+#: plugins/classbuilder.c:526
+msgid "Base GType:"
+msgstr "அடிப்படை சிவகை:"
+
+#: plugins/classbuilder.c:531
+msgid "Implements:"
+msgstr "செயல்படுத்துகிறது:"
+
+#: plugins/classbuilder.c:533
+msgid "Options"
+msgstr "விருப்பங்கள்"
+
+#: plugins/classbuilder.c:550
+msgid "Create constructor"
+msgstr "கட்டமைப்பாளரை உருவாக்கு"
+
+#: plugins/classbuilder.c:555
+msgid "Create destructor"
+msgstr "அழிப்பாளரை உருவாக்கு"
+
+#: plugins/classbuilder.c:562
+msgid "Is abstract"
+msgstr "சுருக்கமானதா"
+
+#: plugins/classbuilder.c:565
+msgid "Is singleton"
+msgstr "ஒற்றைக்குழந்தையா"
+
+#: plugins/classbuilder.c:575
+msgid "Constructor type:"
+msgstr "கட்டமைப்பாளர் வகை:"
+
+#: plugins/export.c:168
+msgid "Export File"
+msgstr "ஏற்றுமதி கோப்பு"
+
+#: plugins/export.c:186
+msgid "_Insert line numbers"
+msgstr "வரி எண்களைச் செருகவும் (_I)"
+
+#: plugins/export.c:188
+msgid "Insert line numbers before each line in the exported document"
+msgstr ""
+"ஏற்றுமதி செய்யப்பட்ட ஆவணத்தில் ஒவ்வொரு வரிக்கும் முன் வரி எண்களைச் செருகவும்"
+
+#: plugins/export.c:198
+msgid "_Use current zoom level"
+msgstr "தற்போதைய பெரிதாக்கு அளவைப் பயன்படுத்தவும் (_U)"
+
+#: plugins/export.c:200
+msgid ""
+"Renders the font size of the document together with the current zoom level"
+msgstr "தற்போதைய பெரிதாக்கு மட்டத்துடன் ஆவணத்தின் எழுத்துரு அளவை வழங்குகிறது"
+
+#: plugins/export.c:278
+#, c-format
+msgid "Document successfully exported as '%s'."
+msgstr "ஆவணம் வெற்றிகரமாக '%s' என ஏற்றுமதி செய்யப்படுகிறது."
+
+#: plugins/export.c:280
+#, c-format
+msgid "File '%s' could not be written (%s)."
+msgstr "'%s' ஐ எழுத முடியவில்லை (%s)."
+
+#: src/project.c:789 plugins/export.c:330
+#, c-format
+msgid "The file '%s' already exists. Do you want to overwrite it?"
+msgstr "'%s' கோப்பு ஏற்கனவே உள்ளது. அதை மேலெழுத விரும்புகிறீர்களா?"
+
+#: plugins/export.c:36
+msgid "Export"
+msgstr "ஏற்றுமதி"
+
+#: plugins/export.c:36
+msgid "Exports the current file into different formats."
+msgstr "தற்போதைய கோப்பை வெவ்வேறு வடிவங்களில் ஏற்றுமதி செய்கிறது."
+
+#: plugins/htmlchars.c:39 plugins/export.c:37 plugins/filebrowser.c:50
+#: plugins/saveactions.c:43 plugins/splitwindow.c:34
+msgid "The Geany developer team"
+msgstr "சீனி உருவாக்குநர் குழு"
+
+#: plugins/export.c:746
+msgid "_Export"
+msgstr "ஏற்றுமதி (_E)"
+
+#: plugins/export.c:753
+msgid "As _HTML..."
+msgstr "உஉகுமொ என... (_H)"
+
+#: plugins/export.c:759
+msgid "As _LaTeX..."
+msgstr "இலாடக்சு ஆக.. (_L)."
+
+#: plugins/filebrowser.c:1172
+msgid "Focus File List"
+msgstr "கோப்பு பட்டியலில் குவி செலுத்துங்கள்"
+
+#: plugins/filebrowser.c:1174
+msgid "Focus Path Entry"
+msgstr "பாதை நுழைவு குவி செலுத்துங்கள்"
+
+#: plugins/htmlchars.c:365 plugins/filebrowser.c:1202
+#: plugins/saveactions.c:569
+msgid "Plugin configuration directory could not be created."
+msgstr "சொருகி உள்ளமைவு கோப்பகத்தை உருவாக்க முடியவில்லை."
+
+#: plugins/filebrowser.c:1267
+msgid "External open command:"
+msgstr "வெளிப்புற திறந்த கட்டளை:"
+
+#: plugins/filebrowser.c:1275
+#, c-format
+msgid ""
+"The command to execute when using \"Open with\". You can use %f and %d wildcards.\n"
+"%f will be replaced with the filename including full path\n"
+"%d will be replaced with the path name of the selected file without the filename"
+msgstr ""
+"\"முலம் திற\" பயன்படுத்தும் போது செயல்படுத்த வேண்டிய கட்டளை. நீங்கள் %f மற்றும் %d காட்டு அட்டைகளைப் பயன்படுத்தலாம். \n"
+" %f முழு பாதை உட்பட கோப்பு பெயருடன் மாற்றப்படும் \n"
+" கோப்பு பெயர் இல்லாமல் தேர்ந்தெடுக்கப்பட்ட கோப்பின் பாதை பெயருடன் %d மாற்றப்படும்"
+
+#: plugins/filebrowser.c:1283
+msgid "Show hidden files"
+msgstr "மறைக்கப்பட்ட கோப்புகளைக் காட்டு"
+
+#: plugins/filebrowser.c:1291
+msgid "Hide file extensions:"
+msgstr "கோப்பு நீட்டிப்புகளை மறைக்க:"
+
+#: plugins/filebrowser.c:1310
+msgid "Follow the path of the current file"
+msgstr "தற்போதைய கோப்பின் பாதையைப் பின்பற்றவும்"
+
+#: plugins/filebrowser.c:1316
+msgid "Use the project's base directory"
+msgstr "திட்டத்தின் அடிப்படை கோப்பகத்தைப் பயன்படுத்தவும்"
+
+#: plugins/filebrowser.c:1320
+msgid ""
+"Change the directory to the base directory of the currently opened project"
+msgstr ""
+"தற்போது திறக்கப்பட்ட திட்டத்தின் அடிப்படை கோப்பகத்திற்கு கோப்பகத்தை "
+"மாற்றவும்"
+
+#: plugins/filebrowser.c:423
+msgid "Too many items selected!"
+msgstr "பல உருப்படிகள் தேர்ந்தெடுக்கப்பட்டன!"
+
+#: plugins/filebrowser.c:49
+msgid "Adds a file browser tab to the sidebar."
+msgstr "பக்கப்பட்டியில் கோப்பு உலாவி தாவலைச் சேர்க்கிறது."
+
+#: plugins/filebrowser.c:49
+msgid "File Browser"
+msgstr "கோப்பு உலாவி"
+
+#: plugins/filebrowser.c:493
+#, c-format
+msgid "Could not execute configured external command '%s' (%s)."
+msgstr "கட்டமைக்கப்பட்ட வெளிப்புற கட்டளை '%s' (%s) ஐ இயக்க முடியவில்லை."
+
+#: plugins/filebrowser.c:657
+msgid "Open in _Geany"
+msgstr "சீனியில் திற (_G)"
+
+#: plugins/filebrowser.c:663
+msgid "Open _Externally"
+msgstr "வெளிப்புறமாக திற (_E)"
+
+#: src/sidebar.c:1228 plugins/filebrowser.c:678
+msgid "_Find in Files..."
+msgstr "கோப்புகளில் கண்டுபிடி.. (_F)."
+
+#: plugins/filebrowser.c:688
+msgid "Show _Hidden Files"
+msgstr "மறைக்கப்பட்ட கோப்புகளைக் காட்டு (_H)"
+
+#: src/sidebar.c:1084 plugins/filebrowser.c:707
+msgid "H_ide Sidebar"
+msgstr "பக்கப்பட்டி மறை (_i)"
+
+#: plugins/filebrowser.c:918
+msgid "Up"
+msgstr "மேலே"
+
+#: plugins/filebrowser.c:923
+msgid "Refresh"
+msgstr "புதுப்பிப்பு"
+
+#: plugins/filebrowser.c:928
+msgid "Home"
+msgstr "வீடு"
+
+#: plugins/filebrowser.c:933
+msgid "Set path from document"
+msgstr "ஆவணத்திலிருந்து பாதையை அமை"
+
+#: plugins/filebrowser.c:947
+msgid "Filter:"
+msgstr "வடிகட்டி:"
+
+#: plugins/filebrowser.c:956
+msgid ""
+"Filter your files with the usual wildcards. Separate multiple patterns with "
+"a space."
+msgstr ""
+"வழக்கமான காட்டு அட்டைகளுடன் உங்கள் கோப்புகளை வடிகட்டவும். பல வடிவங்களை ஒரு "
+"இடத்துடன் பிரி."
+
+#: plugins/htmlchars.c:177
+msgid "Greek characters"
+msgstr "கிரேக்க எழுத்துக்கள்"
+
+#: plugins/htmlchars.c:232
+msgid "Mathematical characters"
+msgstr "கணித எழுத்துக்கள்"
+
+#: plugins/htmlchars.c:273
+msgid "Technical characters"
+msgstr "தொழில்நுட்ப எழுத்துக்கள்"
+
+#: plugins/htmlchars.c:281
+msgid "Arrow characters"
+msgstr "அம்பு எழுத்துக்கள்"
+
+#: plugins/htmlchars.c:294
+msgid "Punctuation characters"
+msgstr "நிறுத்தற்குறி எழுத்துக்கள்"
+
+#: plugins/htmlchars.c:310
+msgid "Miscellaneous characters"
+msgstr "மற்ற எழுத்துக்கள்"
+
+#: plugins/htmlchars.c:38
+msgid "HTML Characters"
+msgstr "உஉகுமொ எழுத்துக்கள்"
+
+#: plugins/htmlchars.c:38
+msgid "Inserts HTML character entities like '&amp;'."
+msgstr "'&amp;' போன்ற உஉகுமொ எழுத்து நிறுவனங்களை செருகும்."
+
+#: plugins/htmlchars.c:486
+msgid "Special Characters"
+msgstr "சிறப்பு எழுத்துக்கள்"
+
+#: plugins/htmlchars.c:488
+msgid "_Insert"
+msgstr "செருகவும் (_I)"
+
+#: plugins/htmlchars.c:497
+msgid ""
+"Choose a special character from the list below and double click on it or use"
+" the button to insert it at the current cursor position."
+msgstr ""
+"கீழேயுள்ள பட்டியலிலிருந்து ஒரு சிறப்பு எழுத்தைத் தேர்ந்தெடுத்து, அதை இருமுறை"
+" சொடுக்கு அல்லது தற்போதைய கர்சர் நிலையில் செருக பொத்தானைப் "
+"பயன்படுத்தவும்."
+
+#: plugins/htmlchars.c:511
+msgid "Character"
+msgstr "எழுத்து"
+
+#: plugins/htmlchars.c:517
+msgid "HTML (name)"
+msgstr "உஉகுமொ (பெயர்)"
+
+#: plugins/htmlchars.c:73
+msgid "HTML characters"
+msgstr "உஉகுமொ எழுத்துக்கள்"
+
+#: plugins/htmlchars.c:736
+msgid "_Insert Special HTML Characters..."
+msgstr "சிறப்பு உஉகுமொ எழுத்துக்கள் செருகவும்... (_I)"
+
+#: plugins/htmlchars.c:751
+msgid "_HTML Replacement"
+msgstr "உஉகுமொ மாற்று (_H)"
+
+#: plugins/htmlchars.c:758
+msgid "_Auto-replace Special Characters"
+msgstr "தானி-சிறப்பு எழுத்துக்களை மாற்றவும் (_A)"
+
+#: plugins/htmlchars.c:767
+msgid "_Replace Characters in Selection"
+msgstr "தேர்வில் எழுத்துக்களை மாற்றவும் (_R)"
+
+#: plugins/htmlchars.c:783
+msgid "Insert Special HTML Characters"
+msgstr "சிறப்பு உஉகுமொ எழுத்துக்களைச் செருகவும்"
+
+#: plugins/htmlchars.c:786
+msgid "Replace special characters"
+msgstr "சிறப்பு எழுத்துக்களை மாற்றவும்"
+
+#: plugins/htmlchars.c:789
+msgid "Toggle plugin status"
+msgstr "சொருகி நிலையை மாற்றவும்"
+
+#: plugins/htmlchars.c:79
+msgid "ISO 8859-1 characters"
+msgstr "ஐஎச்ஓ 8859-1 எழுத்துக்கள்"
+
+#: plugins/saveactions.c:176
+#, c-format
+msgid "Backup Copy: Directory could not be created (%s)."
+msgstr "காப்பு நகல்: கோப்பகத்தை உருவாக்க முடியவில்லை (%s)."
+
+#: plugins/saveactions.c:210
+#, c-format
+msgid "Backup Copy: File could not be read (%s)."
+msgstr "காப்பு நகல்: கோப்பைப் படிக்க முடியவில்லை (%s)."
+
+#: plugins/saveactions.c:235
+#, c-format
+msgid "Backup Copy: File could not be saved (%s)."
+msgstr "காப்பு நகல்: கோப்பை சேமிக்க முடியவில்லை (%s)."
+
+#: plugins/saveactions.c:286
+msgid "Instant Save filename could not be generated (%s)."
+msgstr "உடனடி சேமிப்பு கோப்பு பெயரை உருவாக்க முடியவில்லை (%s)."
+
+#: plugins/saveactions.c:386
+#, c-format
+msgid "Autosave: Saved %d file automatically."
+msgid_plural "Autosave: Saved %d files automatically."
+msgstr[0] "தானியங்கு சேமி: %d கோப்பு தானாகவே சேமிக்கப்பட்டது."
+msgstr[1] "தானியங்கு சேமி: %d கோப்புகள் தானாகவே சேமிக்கப்பட்டது."
+
+#: plugins/saveactions.c:42
+msgid "Save Actions"
+msgstr "செயல்களைச் சேமி"
+
+#: plugins/saveactions.c:42
+msgid "This plugin provides different actions related to saving of files."
+msgstr ""
+"இந்த சொருகி கோப்புகளைச் சேமிப்பது தொடர்பான வெவ்வேறு செயல்களை வழங்குகிறது."
+
+#: plugins/saveactions.c:454
+msgid "Select Directory"
+msgstr "கோப்பகத்தைத் தேர்ந்தெடு"
+
+#: plugins/saveactions.c:544
+msgid "Instantsave directory does not exist or is not writable."
+msgstr "உடனடிசேமி அடைவு இல்லை அல்லது எழுத முடியாதது."
+
+#: plugins/saveactions.c:561
+msgid "Backup directory does not exist or is not writable."
+msgstr "காப்பு அடைவு இல்லை அல்லது எழுத முடியாதது."
+
+#: plugins/saveactions.c:642
+msgid "Auto Save"
+msgstr "தானியங்கு சேமிப்பு"
+
+#: plugins/saveactions.c:644
+msgid "Enable save when losing _focus"
+msgstr "குவி இழக்கும்போது சேமிக்க இயக்கு (_f)"
+
+#: plugins/saveactions.c:650 plugins/saveactions.c:713
+#: plugins/saveactions.c:786
+msgid "_Enable"
+msgstr "இயக்கு (_E)"
+
+#: plugins/saveactions.c:658
+msgid "Auto save _interval:"
+msgstr "தானியங்கு சேமிப்பு இடைவெளி (_i)"
+
+#: plugins/saveactions.c:666
+msgid "seconds"
+msgstr "நொடிகள்"
+
+#: plugins/saveactions.c:675
+msgid "_Print status message if files have been automatically saved"
+msgstr "கோப்புகள் தானாக சேமிக்கப்பட்டிருந்தால் நிலை செய்தி (_P)"
+
+#: plugins/saveactions.c:683
+msgid "Save only current open _file"
+msgstr "தற்போதைய திறந்த கோப்பை மட்டும் சேமி (_f)"
+
+#: plugins/saveactions.c:690
+msgid "Sa_ve all open files"
+msgstr "அனைத்து திறந்த கோப்புகளையும் சேமி (_v)"
+
+#: plugins/saveactions.c:711
+msgid "Instant Save"
+msgstr "உடனடி சேமிப்பு"
+
+#: plugins/saveactions.c:721
+msgid "Default _filetype to use for new files:"
+msgstr "புதிய கோப்புகளுக்கு பயன்படுத்த இயல்புநிலை கோப்பு வகை: (_f)"
+
+#: plugins/saveactions.c:742
+msgid "_Directory to save files in (leave empty to use the default: %s):"
+msgstr ""
+"கோப்புகளைச் சேமிப்பதற்கான கோப்பகம் (இயல்புநிலையைப் பயன்படுத்த காலியாக "
+"விடவும்: %s): (_D)"
+
+#: plugins/saveactions.c:766
+msgid ""
+"<i>If you set the Instant Save directory to a directory which is not automatically cleared,\n"
+"you will need to cleanup instantly saved files manually. The Instant Save plugin will not delete the created files.</i>"
+msgstr ""
+"<i> உடனடி சேமிப்பு கோப்பகத்தை தானாக அழிக்காத ஒரு கோப்பகத்திற்கு நீங்கள் அமைத்தால், \n"
+" நீங்கள் உடனடியாக கோப்புகளை கைமுறையாக சேமிக்க வேண்டும். உடனடி சேமிப்பு சொருகி உருவாக்கப்பட்ட கோப்புகளை நீக்காது. </I>"
+
+#: plugins/saveactions.c:784
+msgid "Backup Copy"
+msgstr "காப்பு நகல்"
+
+#: plugins/saveactions.c:794
+msgid "_Directory to save backup files in:"
+msgstr "காப்புப்பிரதி கோப்புகளைச் சேமிக்க அடைவு: (_D)"
+
+#: plugins/saveactions.c:817
+msgid ""
+"Date/_Time format for backup files (for a list of available conversion "
+"specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"
+msgstr ""
+"காப்புப்பிரதிக் கோப்புகளுக்கான தேதி/நேர வடிவம் (கிடைக்கக்கூடிய மாற்று "
+"குறிப்பான்களின் பட்டியலுக்கு "
+"https://docs.gtk.org/glib/methodetime.format.html ஐப் பார்): (_T)"
+
+#: plugins/saveactions.c:830
+msgid "Directory _levels to include in the backup destination:"
+msgstr "காப்பு இடத்தில் சேர்க்க கோப்பக நிலைகள் : (_l)"
+
+#: plugins/splitwindow.c:297
+msgid "Show the current document"
+msgstr "தற்போதைய ஆவணத்தைக் காட்டு"
+
+#: plugins/splitwindow.c:317 plugins/splitwindow.c:450
+#: plugins/splitwindow.c:465
+msgid "_Unsplit"
+msgstr "பிரிக்காதே (_U)"
+
+#: plugins/splitwindow.c:33
+msgid "Split Window"
+msgstr "சாளரம் பிரி"
+
+#: plugins/splitwindow.c:33
+msgid "Splits the editor view into two windows."
+msgstr "திருத்தி பார்வையை இரண்டு சாளரங்களாக பிரிக்கிறது."
+
+#: plugins/splitwindow.c:432
+msgid "_Split Window"
+msgstr "சாளரம் பிரி (_S)"
+
+#: plugins/splitwindow.c:440
+msgid "_Side by Side"
+msgstr "பக்கவாட்டில் (_S)"
+
+#: plugins/splitwindow.c:445
+msgid "_Top and Bottom"
+msgstr "மேலும் கீழும் (_T)"
+
+#: plugins/splitwindow.c:461
+msgid "Side by Side"
+msgstr "அருகருகே"
+
+#: plugins/splitwindow.c:463
+msgid "Top and Bottom"
+msgstr "மேலும் கீழும்"
+
+#: src/about.c:173
+msgid "About Geany"
+msgstr "சீனி பற்றி"
+
+#: src/about.c:217
+msgid "A fast and lightweight IDE"
+msgstr "வேகமான மற்றும் சிறிய ஒமேசூ"
+
+#: src/about.c:239
+#, c-format
+msgid "(built on or after %s)"
+msgstr "( %s இல் அல்லது அதற்குப் பிறகு கட்டப்பட்டது)"
+
+#: src/about.c:253
+#, c-format
+msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
+msgstr "சிடிகே+ v%u.%u.%u மற்றும் சிலிப் v%u.%u.%u இயக்க நேர நூலகங்கள்"
+
+#: src/about.c:286
+msgid "Info"
+msgstr "தகவல்"
+
+#: src/about.c:302
+msgid "Developers"
+msgstr "உருவாக்குநர்கள்"
+
+#: src/about.c:309
+msgid "maintainer"
+msgstr "பராமரிப்பாளர்"
+
+#: src/about.c:317 src/about.c:325 src/about.c:333
+msgid "developer"
+msgstr "உருவாக்குநர்"
+
+#: src/about.c:341
+msgid "translation maintainer"
+msgstr "மொழிபெயர்ப்பு பராமரிப்பாளர்"
+
+#: src/about.c:350
+msgid "Translators"
+msgstr "மொழிபெயர்ப்பாளர்கள்"
+
+#: src/about.c:370
+msgid "Previous Translators"
+msgstr "முந்தைய மொழிபெயர்ப்பாளர்கள்"
+
+#: src/about.c:391
+msgid "Contributors"
+msgstr "பங்களிப்பாளர்கள்"
+
+#: src/about.c:401
+#, c-format
+msgid ""
+"Some of the many contributors (for a more detailed list, see the file %s):"
+msgstr ""
+"பல பங்களிப்பாளர்களில் சிலர் (இன்னும் விரிவான பட்டியலுக்கு, %s கோப்பைப் "
+"பார்):"
+
+#: src/about.c:427
+msgid "Credits"
+msgstr "வரவு"
+
+#: src/about.c:444
+msgid "License"
+msgstr "உரிமம்"
+
+#: src/about.c:453
+msgid ""
+"License text could not be found, please visit "
+"http://www.gnu.org/licenses/gpl-2.0.txt to view it online."
+msgstr ""
+"உரிம உரையைக் கண்டுபிடிக்க முடியவில்லை, தயவுசெய்து ஆன்லைனில் காண "
+"http://www.gnu.org/licenses/gpl-2.0.txt ஐப் பார்வையிடவும்."
+
+#: src/about.c:47
+msgid ""
+"Copyright (c) 2005\n"
+"The Geany contributors"
+msgstr ""
+"பதிப்புரிமை (இ) 2005 \n"
+" சீனி பங்களிப்பாளர்கள்"
+
+#: src/build.c:1098
+msgid "Compilation failed."
+msgstr "தொகுப்பு தோல்வியடைந்தது."
+
+#: src/build.c:1112
+msgid "Compilation finished successfully."
+msgstr "தொகுப்பு வெற்றிகரமாக முடிந்தது."
+
+#: src/build.c:1272
+msgid "Custom Text"
+msgstr "தனிப்பயன் உரை"
+
+#: src/build.c:1273
+msgid "Enter custom text here, all entered text is appended to the command."
+msgstr ""
+"தனிப்பயன் உரையை இங்கே உள்ளிடவும், உள்ளிட்ட அனைத்து உரையும் கட்டளையில் "
+"சேர்க்கப்பட்டுள்ளன."
+
+#: src/build.c:1352
+msgid "_Next Error"
+msgstr "அடுத்த பிழை (_N)"
+
+#: src/build.c:1354
+msgid "_Previous Error"
+msgstr "பரவலான பிழை (_P)"
+
+#: src/build.c:1364 src/build.c:2757
+msgid "_Set Build Commands"
+msgstr "கட்டளைகளை உருவாக்கு (_S)"
+
+#: src/build.c:1641 src/toolbar.c:375
+msgid "Build the current file"
+msgstr "தற்போதைய கோப்பை உருவாக்குங்கள்"
+
+#: src/build.c:1652
+msgid "Build the current file with Make and the default target"
+msgstr "உருவாக்கு மற்றும் இயல்புநிலை இலக்குடன் தற்போதைய கோப்பை உருவாக்குங்கள்"
+
+#: src/build.c:1654
+msgid "Build the current file with Make and the specified target"
+msgstr ""
+"தற்போதைய கோப்பை உருவாக்கு மற்றும் குறிப்பிட்ட இலக்குடன் உருவாக்குங்கள்"
+
+#: src/build.c:1656
+msgid "Compile the current file with Make"
+msgstr "தற்போதைய கோப்பை உருவாக்கு மூலம் தொகு"
+
+#: src/build.c:1675
+#, c-format
+msgid "Process could not be stopped (%s)."
+msgstr "செயல்முறையை நிறுத்த முடியவில்லை (%s)."
+
+#: src/build.c:1689 src/build.c:1701
+msgid "No more build errors."
+msgstr "இனி உருவாக்க பிழைகள் இல்லை."
+
+#: src/build.c:1806 src/build.c:1808
+msgid "Set menu item label"
+msgstr "பட்டியல் உருப்படி சிட்டையை அமை"
+
+#: src/build.c:1833 src/tools.c:394 src/tagmanager/tm_parser.c:235
+msgid "Label"
+msgstr "சிட்டை"
+
+#: src/build.c:1834 src/tools.c:379 src/tagmanager/tm_parser.c:227
+msgid "Command"
+msgstr "கட்டளை"
+
+#: src/build.c:1835
+msgid "Working directory"
+msgstr "வேலை அடைவு"
+
+#: src/build.c:1836
+msgid "Reset"
+msgstr "மீட்டமை"
+
+#: src/build.c:1889
+msgid "Click to set menu item label"
+msgstr "பட்டியல் உருப்படி சிட்டையை அமைக்க சொடுக்கு"
+
+#: src/build.c:1973 src/build.c:1975
+#, c-format
+msgid "%s commands"
+msgstr "%s கட்டளைகள்"
+
+#: src/build.c:1975
+msgid "No filetype"
+msgstr "கோப்புவகை இல்லை"
+
+#: src/build.c:1984 src/build.c:2019
+msgid "Error regular expression:"
+msgstr "பிழை வழக்கமான வெளிப்பாடு:"
+
+#: src/build.c:2012
+msgid "Independent commands"
+msgstr "விடுதலை கட்டளைகள்"
+
+#: src/build.c:2044
+msgid "Note: Item 2 opens a dialog and appends the response to the command."
+msgstr ""
+"குறிப்பு: பொருள் 2 ஒரு உரையாடலைத் திறந்து கட்டளைக்கான பதிலைச் சேர்க்கிறது."
+
+#: src/build.c:2053
+msgid "Execute commands"
+msgstr "கட்டளைகளை இயக்கு"
+
+#: src/build.c:2065
+msgid ""
+"%d, %e, %f, %p, %l are substituted in command and directory fields, see "
+"manual for details."
+msgstr ""
+"%d, %e, %f, %p %s, %l கட்டளை மற்றும் அடைவுப் புலங்களில் மாற்றப்பட்டுள்ளன, "
+"விவரங்களுக்கு கையேட்டைப் பார்."
+
+#: src/build.c:2223
+msgid "Set Build Commands"
+msgstr "உருவாக்க கட்டளைகளை அமை"
+
+#: src/build.c:2439
+msgid "_Compile"
+msgstr "தொகுப்பி (_C)"
+
+#: src/build.c:2453 src/build.c:2483 src/build.c:2685
+msgid "_Execute"
+msgstr "செயல்படுத்த (_E)"
+
+#: src/build.c:2498 src/build.c:2683 src/build.c:2737
+msgid "Make Custom _Target..."
+msgstr "தனிப்பயன் இலக்கு செய்யுங்கள்... (_T)"
+
+#: src/build.c:2500 src/build.c:2684 src/build.c:2745
+msgid "Make _Object"
+msgstr "பொருளை செய்யுங்கள் (_O)"
+
+#: src/build.c:2502 src/build.c:2682
+msgid "_Make"
+msgstr "செய்ய (_M)"
+
+#: src/build.c:2729
+msgid "_Make All"
+msgstr "அனைத்தையும் உருவாக்குங்கள் (_M)"
+
+#: src/build.c:756
+#, c-format
+msgid "failed to substitute %%p, no project active"
+msgstr "%%p ஐ மாற்றுவதில் தோல்வி, எந்த திட்டமும் செயலில் இல்லை"
+
+#: src/build.c:784
+msgid "Process failed, no working directory"
+msgstr "செயல்முறை தோல்வியுற்றது, வேலை அடைவு இல்லை"
+
+#: src/build.c:796
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (கோப்பகத்தில்: %s)"
+
+#: src/build.c:821
+#, c-format
+msgid "Process failed (%s)"
+msgstr "செயல்முறை தோல்வியுற்றது (%s)"
+
+#: src/build.c:855
+msgid "Invalid working directory \"%s\""
+msgstr "தவறான பணி அடைவு \"%s\""
+
+#: src/build.c:891
+#, c-format
+msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
+msgstr "\" %s\" ஐ இயக்குவதில் தோல்வி (தொடக்க-உரை உருவாக்க முடியவில்லை: %s)"
+
+#: src/build.c:933
+msgid ""
+"File not executed because the terminal may contain some input (press Ctrl+C "
+"or Enter to clear it)."
+msgstr ""
+"கோப்பு செயல்படுத்தப்படவில்லை, ஏனெனில் முனையத்தில் சில உள்ளீடு இருக்கலாம் "
+"(CTRL+C ஐ அழுத்தவும் அல்லது அதை அழிக்க உள்ளிடவும்)."
+
+#: src/build.c:981
+msgid ""
+"Cannot execute build command \"%s\": %s. Check the Terminal setting in "
+"Preferences"
+msgstr ""
+"\"%s\" கட்ட கட்டளையை இயக்க முடியாது: %s. முன்னுரிமைகளில் முனைய அமைப்பைச் "
+"சரிபார்"
+
+#: src/callbacks.c:1060 src/callbacks.c:1086
+msgid ""
+"Please set the filetype for the current file before using this function."
+msgstr ""
+"இந்த செயல்பாட்டைப் பயன்படுத்துவதற்கு முன்பு தற்போதைய கோப்பிற்கான கோப்பு "
+"வகையை அமை."
+
+#: src/callbacks.c:1376 src/callbacks.c:1384
+msgid "No more message items."
+msgstr "மேலும் செய்தி உருப்படிகள் இல்லை."
+
+#: src/callbacks.c:145
+#, c-format
+msgid "%d file saved."
+msgid_plural "%d files saved."
+msgstr[0] "%d கோப்பு சேமிக்கப்பட்டன."
+msgstr[1] "%d கோப்புகள் சேமிக்கப்பட்டன."
+
+#: src/callbacks.c:1493
+#, c-format
+msgid "Could not open file %s (File not found)"
+msgstr "கோப்பு %s ஐ திறக்க முடியவில்லை (கோப்பு கிடைக்கவில்லை)"
+
+#: src/callbacks.c:1542
+msgid "Check the path setting in Filetype configuration."
+msgstr "கோப்புவகை உள்ளமைவில் பாதை அமைப்பை சரிபார்."
+
+#: src/callbacks.c:1547
+msgid "Check the path setting in Preferences."
+msgstr "முன்னுரிமைகளில் பாதை அமைப்பை சரிபார்."
+
+#: src/callbacks.c:1560
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "சூழல் செயல் கட்டளை \" %s\" ஐ இயக்க முடியாது: %s. %s"
+
+#: src/callbacks.c:1569
+msgid "No context action set."
+msgstr "சூழல் நடவடிக்கை இல்லை."
+
+#: src/callbacks.c:353
+msgid "Changes detected, reloading all will lose any changes and history."
+msgstr ""
+"கண்டறியப்பட்ட மாற்றங்கள், அனைத்தையும் மீண்டும் ஏற்றுவது எந்த மாற்றங்களையும் "
+"வரலாற்றையும் இழக்கும்."
+
+#: src/callbacks.c:354
+msgid "Are you sure you want to reload all files?"
+msgstr "எல்லா கோப்புகளையும் நிச்சயமாக மீண்டும் ஏற்ற விரும்புகிறீர்களா?"
+
+#: src/callbacks.c:967 src/keybindings.c:569
+msgid "Go to Line"
+msgstr "வரிக்குச் செல்லுங்கள்"
+
+#: src/callbacks.c:968
+msgid "Enter the line you want to go to:"
+msgstr "நீங்கள் செல்ல விரும்பும் வரியை உள்ளிடவும்:"
+
+#: src/dialogs.c:1160
+msgid ""
+"An error occurred or file information could not be retrieved (e.g. from a "
+"new file)."
+msgstr ""
+"பிழை ஏற்பட்டது அல்லது கோப்பு தகவல்களை மீட்டெடுக்க முடியவில்லை (எ.கா. புதிய "
+"கோப்பிலிருந்து)."
+
+#: src/dialogs.c:1179 src/dialogs.c:1180 src/dialogs.c:1181 src/dialogs.c:1187
+#: src/dialogs.c:1188 src/dialogs.c:1189 src/symbols.c:1991 src/symbols.c:2007
+#: src/ui_utils.c:286
+msgid "unknown"
+msgstr "தெரியவில்லை"
+
+#: src/dialogs.c:1194
+#, c-format
+msgid "%s Properties"
+msgstr "%s பண்புகள்"
+
+#: src/dialogs.c:1226
+msgid "(without BOM)"
+msgstr "(பைட்குறி இல்லாமல்)"
+
+#: src/dialogs.c:1226 src/ui_utils.c:290
+msgid "(with BOM)"
+msgstr "(பைட்குறி உடன்)"
+
+#: src/dialogs.c:683 src/dialogs.c:762 src/dialogs.c:1312 src/win32.c:297
+msgid "Question"
+msgstr "கேள்வி"
+
+#: src/dialogs.c:159 src/document.c:2316 src/document.c:2381
+#: src/document.c:2389
+#, c-format
+msgid "\"%s\" was not found."
+msgstr "\"%s\" காணப்படவில்லை."
+
+#: src/dialogs.c:221 src/encodings.c:530
+msgid "Detect from file"
+msgstr "கோப்பிலிருந்து கண்டறியவும்"
+
+#: src/dialogs.c:224
+msgid "Programming Languages"
+msgstr "கணிப்பொறி செயல்பாடு மொழி"
+
+#: src/dialogs.c:226
+msgid "Scripting Languages"
+msgstr "கிறுக்கல்மொழிகள்"
+
+#: src/dialogs.c:228
+msgid "Markup Languages"
+msgstr "குறியிடுதல் மொழிகள்"
+
+#: src/dialogs.c:306
+msgid "_More Options"
+msgstr "மேலும் விருப்பங்கள் (_M)"
+
+#: src/dialogs.c:313
+msgid "Show _hidden files"
+msgstr "மறைக்கப்பட்ட கோப்புகளைக் காட்டு (_h)"
+
+#: src/dialogs.c:324
+msgid "Set encoding:"
+msgstr "குறியாக்கத்தை அமை:"
+
+#: src/dialogs.c:333
+msgid ""
+"Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen encoding."
+msgstr ""
+"கோப்பிற்கான குறியாக்கத்தை கண்டறியவில்லை என்றால், அது கண்டறியப்படாவிட்டால் வெளிப்படையாக வரையறுக்கிறது. ஒரு கோப்பின் குறியாக்கத்தை சீனியால் சரியாக கண்டறிய முடியாது என்பதை நீங்கள் அறிந்தால் இது பயனுள்ளதாக இருக்கும். \n"
+" குறிப்பு நீங்கள் பல கோப்புகளைத் தேர்வுசெய்தால், அவை அனைத்தும் தேர்ந்தெடுக்கப்பட்ட குறியாக்கத்துடன் திறக்கப்படும்."
+
+#: src/dialogs.c:340
+msgid "Set filetype:"
+msgstr "கோப்புவகையை அமை:"
+
+#: src/dialogs.c:349
+msgid ""
+"Explicitly defines a filetype for the file, if it would not be detected by filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen filetype."
+msgstr ""
+"கோப்பிற்கான ஒரு கோப்புவகையை வெளிப்படையாக வரையறுக்கிறது, இது கோப்பு பெயர் நீட்டிப்பு மூலம் கண்டறியப்படாவிட்டால். \n"
+" குறிப்பு நீங்கள் பல கோப்புகளைத் தேர்வுசெய்தால், அவை அனைத்தும் தேர்ந்தெடுக்கப்பட்ட கோப்புவகை மூலம் திறக்கப்படும்."
+
+#: src/dialogs.c:375
+msgid "Open File"
+msgstr "கோப்பை திற"
+
+#: src/dialogs.c:379
+msgctxt "Open dialog action"
+msgid "_View"
+msgstr "காட்சி (_V)"
+
+#: src/dialogs.c:381
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"கோப்பை படிக்க மட்டும் பயன்முறையில் திறக்கிறது. திறக்க ஒன்றுக்கு மேற்பட்ட "
+"கோப்புகளை நீங்கள் தேர்வுசெய்தால், எல்லா கோப்புகளும் படிக்க மட்டும் "
+"திறக்கப்படும்."
+
+#: src/dialogs.c:528 src/document.c:2067
+msgid "Overwrite?"
+msgstr "மேலெழுதவா?"
+
+#: src/dialogs.c:529
+msgid "Filename already exists!"
+msgstr "கோப்பு பெயர் ஏற்கனவே உள்ளது!"
+
+#: src/dialogs.c:558
+msgid "Save File"
+msgstr "கோப்பை சேமி"
+
+#: src/dialogs.c:567
+msgid "R_ename"
+msgstr "மறுபெயரிடு (_e)"
+
+#: src/dialogs.c:568
+msgid "Save the file and rename it"
+msgstr "கோப்பைச் சேமித்து மறுபெயரிடுங்கள்"
+
+#: src/dialogs.c:680 src/win32.c:291
+msgid "Error"
+msgstr "பிழை"
+
+#: src/dialogs.c:686 src/win32.c:303
+msgid "Warning"
+msgstr "எச்சரிக்கை"
+
+#: src/dialogs.c:689 src/win32.c:309
+msgid "Information"
+msgstr "தகவல்"
+
+#: src/dialogs.c:766
+msgid "_Don't save"
+msgstr "சேமிக்க வேண்டாம் (_D)"
+
+#: src/dialogs.c:795
+#, c-format
+msgid "The file '%s' is not saved."
+msgstr "'%s' கோப்பு சேமிக்கப்படவில்லை."
+
+#: src/dialogs.c:796
+msgid "Do you want to save it before closing?"
+msgstr "மூடுவதற்கு முன் அதை சேமிக்க விரும்புகிறீர்களா?"
+
+#: src/dialogs.c:866
+msgid "Choose font"
+msgstr "எழுத்துருவைத் தேர்வுசெய்க"
+
+#: src/document.c:1005
+#, c-format
+msgid "The file \"%s\" is not valid %s."
+msgstr "\" %s\" கோப்பு செல்லுபடியாகும் %s அல்ல."
+
+#: src/document.c:1011
+#, c-format
+msgid ""
+"The file \"%s\" does not look like a text file or the file encoding is not "
+"supported."
+msgstr ""
+"\"%s\" கோப்பு உரை கோப்பு போல் தெரியவில்லை அல்லது கோப்பு குறியாக்கம் "
+"ஆதரிக்கப்படவில்லை."
+
+#: src/document.c:1021
+#, c-format
+msgid ""
+"The file \"%s\" could not be opened properly and has been truncated. This can occur if the file contains a NULL byte. Be aware that saving it can cause data loss.\n"
+"The file was set to read-only."
+msgstr ""
+"\"%s\" கோப்பை சரியாக திறக்க முடியவில்லை மற்றும் துண்டிக்கப்பட்டுள்ளது. கோப்பில் ஒரு சுழிய பைட் இருந்தால் இது நிகழலாம். அதைச் சேமிப்பது தரவு இழப்பை ஏற்படுத்தும் என்பதை அறிந்து கொள்ளுங்கள். \n"
+" கோப்பு படிக்க மட்டும் அமைக்கப்பட்டது."
+
+#: src/document.c:1233
+msgid "Spaces"
+msgstr "இடங்கள்"
+
+#: src/document.c:1236
+msgid "Tabs"
+msgstr "தாவல்கள்"
+
+#: src/document.c:1239
+msgid "Tabs and Spaces"
+msgstr "தாவல்கள் மற்றும் இடங்கள்"
+
+#: src/document.c:1244
+#, c-format
+msgid "Setting %s indentation mode for %s."
+msgstr "%s அமைப்பு %s உள்தள்ளல் முறைக்கான."
+
+#: src/document.c:1255
+#, c-format
+msgid "Setting indentation width to %d for %s."
+msgstr "உள்தள்ளல் அகலத்தை %d க்கு %s ஆக அமைத்தல்."
+
+#: src/document.c:1509
+#, c-format
+msgid "File %s reloaded."
+msgstr "கோப்பு %s மீண்டும் ஏற்றப்பட்டன."
+
+#: src/document.c:1517
+msgid "File %s opened (%d%s)."
+msgstr "கோப்பு %s திறந்தது (%d%s)."
+
+#: src/document.c:1519
+msgid ", read-only"
+msgstr ", படிக்க மட்டும்"
+
+#: src/document.c:1637
+msgid "Discard history"
+msgstr "வரலாற்றை நிராகரி"
+
+#: src/document.c:1638
+msgid ""
+"The buffer's previous state is stored in the history and undoing restores "
+"it. You can disable this by discarding the history upon reload. This message"
+" will not be displayed again but your choice can be changed in the various "
+"preferences."
+msgstr ""
+"இடையகங்களின் முந்தைய நிலை வரலாற்றில் சேமிக்கப்பட்டு, செயல்தவிர்க்காதது அதை "
+"மீட்டெடுக்கிறது. மீண்டும் ஏற்றப்பட்டவுடன் வரலாற்றை நிராகரிப்பதன் மூலம் இதை "
+"முடக்கலாம். இந்த செய்தி மீண்டும் காண்பிக்கப்படாது, ஆனால் உங்கள் விருப்பத்தை "
+"பல்வேறு விருப்பங்களில் மாற்றலாம்."
+
+#: src/document.c:1642
+msgid "The file has been reloaded."
+msgstr "கோப்பு மீண்டும் ஏற்றப்பட்டது."
+
+#: src/document.c:1672
+msgid "Any unsaved changes will be lost."
+msgstr "சேமிக்கப்படாத மாற்றங்கள் இழக்கப்படும்."
+
+#: src/document.c:1673
+msgid "Undo history will be lost."
+msgstr "செயல்தவிர் வரலாறு இழக்கப்படும்."
+
+#: src/document.c:1674
+#, c-format
+msgid "Are you sure you want to reload '%s'?"
+msgstr "'%s' ஐ மீண்டும் ஏற்ற விரும்புகிறீர்களா?"
+
+#: src/document.c:1780
+msgid "Error renaming file."
+msgstr "கோப்பு மறுபெயரிடுதல்."
+
+#: src/document.c:1898
+#, c-format
+msgid ""
+"An error occurred while converting the file from UTF-8 in \"%s\". The file "
+"remains unsaved."
+msgstr ""
+"\"%s\" இல் UTF-8 இலிருந்து கோப்பை மாற்றும்போது பிழை ஏற்பட்டது. கோப்பு "
+"சேமிக்கப்படாமல் உள்ளது."
+
+#: src/document.c:1919
+#, c-format
+msgid ""
+"Error message: %s\n"
+"The error occurred at \"%s\" (line: %d, column: %d)."
+msgstr ""
+"பிழை செய்தி: %s \n"
+" பிழை \" %s\" இல் ஏற்பட்டது (வரி: %d, நெடுவரிசை: %d)."
+
+#: src/document.c:1923
+#, c-format
+msgid "Error message: %s."
+msgstr "பிழை செய்தி: %s."
+
+#: src/document.c:1983
+#, c-format
+msgid "Failed to open file '%s' for writing: fopen() failed: %s"
+msgstr ""
+"எழுதுவதற்கு ' %s' கோப்பைத் திறக்கத் தவறிவிட்டது: ஃபோபன் () தோல்வியுற்றது: %s"
+
+#: src/document.c:2001
+#, c-format
+msgid "Failed to write file '%s': fwrite() failed: %s"
+msgstr "' %s' என்ற கோப்பை எழுதத் தவறிவிட்டது: fwrite () தோல்வியுற்றது: %s"
+
+#: src/document.c:2015
+#, c-format
+msgid "Failed to close file '%s': fclose() failed: %s"
+msgstr "' %s' கோப்பை மூடுவதில் தோல்வி: fclose () தோல்வியுற்றது: %s"
+
+#: src/document.c:2066 src/document.c:3620
+msgid "_Overwrite"
+msgstr "மேலெழுது (_O)"
+
+#: src/document.c:2068 src/document.c:3623
+msgid "The file '%s' on the disk is more recent than the current buffer."
+msgstr "வட்டில் உள்ள '%s' கோப்பு தற்போதைய இடையகத்தை விட சமீபத்தியது."
+
+#: src/document.c:2076 src/document.c:3672
+msgid "Try to resave the file?"
+msgstr "கோப்பை மீட்டெடுக்க முயற்சிக்கிறீர்களா?"
+
+#: src/document.c:2077 src/document.c:3673
+#, c-format
+msgid "File \"%s\" was not found on disk!"
+msgstr "\"%s\" கோப்பு வட்டில் காணப்படவில்லை!"
+
+#: src/document.c:2140
+#, c-format
+msgid "Cannot save read-only document '%s'!"
+msgstr "படிக்க மட்டும் ஆவணத்தை '%s' சேமிக்க முடியாது!"
+
+#: src/document.c:2208
+#, c-format
+msgid "Error saving file (%s)."
+msgstr "கோப்பு சேமிப்பு பிழை (%s)."
+
+#: src/document.c:2213
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"The file on disk may now be truncated!"
+msgstr ""
+"%s\n"
+"\n"
+" வட்டில் உள்ள கோப்பு இப்போது துண்டிக்கப்படலாம்!"
+
+#: src/document.c:2215
+msgid "Error saving file."
+msgstr "கோப்பைச் சேமிப்பதில் பிழை."
+
+#: src/document.c:2239
+#, c-format
+msgid "File %s saved."
+msgstr "கோப்பு %s சேமிக்கப்பட்டது."
+
+#: src/document.c:2389
+msgid "Wrap search and find again?"
+msgstr "தேடலை மடக்கி மீண்டும் கண்டுபிடிக்கவா?"
+
+#: src/document.c:2478 src/search.c:1374 src/search.c:1427 src/search.c:2237
+#: src/search.c:2238
+#, c-format
+msgid "No matches found for \"%s\"."
+msgstr "\"%s\" க்கு பொருத்தங்கள் எதுவும் கிடைக்கவில்லை."
+
+#: src/document.c:2484
+#, c-format
+msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
+msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr[0] "%s: %d நிகழ்வு \"%s\" இதை  \"%s\" இதால் மாற்றியது."
+msgstr[1] "%s: %d நிகழ்வுகள் \"%s\" இதை  \"%s\" இதால் மாற்றியது."
+
+#: src/document.c:3622
+msgid "Do you want to reload it?"
+msgstr "அதை மீண்டும் ஏற்ற விரும்புகிறீர்களா?"
+
+#: src/document.c:729
+#, c-format
+msgid "File %s closed."
+msgstr "கோப்பு %s மூடப்பட்டது."
+
+#: src/document.c:882
+#, c-format
+msgid "New file \"%s\" opened."
+msgstr "புதிய கோப்பு \"%s\" திறக்கப்பட்டது."
+
+#: src/document.c:956
+#, c-format
+msgid "Could not open file %s (%s)"
+msgstr "கோப்பு %s ( %s) ஐ திறக்க முடியவில்லை"
+
+#: src/editor.c:4467
+msgid "Enter Tab Width"
+msgstr "தாவல் அகலத்தை உள்ளிடவும்"
+
+#: src/editor.c:4468
+msgid ""
+"Enter the amount of spaces which should be replaced by a tab character."
+msgstr ""
+"தாவல் எழுத்துப்பிழை மூலம் மாற்றப்பட வேண்டிய இடைவெளிகளின் அளவை உள்ளிடவும்."
+
+#: src/editor.c:4684
+#, c-format
+msgid "Warning: non-standard hard tab width: %d != 8!"
+msgstr "எச்சரிக்கை: தரமற்ற கடின தாவல் அகலம்: %d! = 8!"
+
+#: src/encodings.c:100 src/encodings.c:102 src/encodings.c:103
+msgid "Hebrew"
+msgstr "எபிரேய"
+
+#: src/encodings.c:104
+msgid "Hebrew Visual"
+msgstr "எபிரேய காட்சி"
+
+#: src/encodings.c:106
+msgid "Armenian"
+msgstr "ஆர்மீனியன்"
+
+#: src/encodings.c:107
+msgid "Georgian"
+msgstr "சார்சியன்"
+
+#: src/encodings.c:108
+msgid "Thai"
+msgstr "தாய்"
+
+#: src/encodings.c:109 src/encodings.c:110 src/encodings.c:111
+msgid "Turkish"
+msgstr "துருக்கிய"
+
+#: src/encodings.c:112 src/encodings.c:113 src/encodings.c:114
+msgid "Vietnamese"
+msgstr "வியட்நாமிய"
+
+#: src/encodings.c:116 src/encodings.c:117 src/encodings.c:118
+#: src/encodings.c:119 src/encodings.c:120 src/encodings.c:121
+#: src/encodings.c:122 src/encodings.c:123 src/encodings.c:544
+msgid "Unicode"
+msgstr "ஒருங்குறி"
+
+#: src/encodings.c:125 src/encodings.c:126 src/encodings.c:127
+#: src/encodings.c:129
+msgid "Chinese Simplified"
+msgstr "சீன எளிமைப்படுத்தப்பட்டது"
+
+#: src/encodings.c:130 src/encodings.c:131 src/encodings.c:132
+msgid "Chinese Traditional"
+msgstr "சீன பாரம்பரிய"
+
+#: src/encodings.c:133 src/encodings.c:134 src/encodings.c:135
+#: src/encodings.c:136
+msgid "Japanese"
+msgstr "சப்பானியர்கள்"
+
+#: src/encodings.c:137 src/encodings.c:138 src/encodings.c:139
+#: src/encodings.c:140
+msgid "Korean"
+msgstr "கொரிய"
+
+#: src/encodings.c:142
+msgid "Without encoding"
+msgstr "குறியாக்கம் இல்லாமல்"
+
+#: src/encodings.c:413
+msgid "_West European"
+msgstr "மேற்கு ஐரோப்பிய (_W)"
+
+#: src/encodings.c:414
+msgid "_East European"
+msgstr "கிழக்கு ஐரோப்பிய (_E)"
+
+#: src/encodings.c:415
+msgid "East _Asian"
+msgstr "கிழக்கு ஆசிய (_A)"
+
+#: src/encodings.c:416
+msgid "_SE & SW Asian"
+msgstr "தென்கிழக்கு & தென்மேற்கு ஆசிய (_S)"
+
+#: src/encodings.c:417
+msgid "_Middle Eastern"
+msgstr "மத்திய கிழக்கு (_M)"
+
+#: src/encodings.c:418
+msgid "_Unicode"
+msgstr "ஒருங்குறி (_U)"
+
+#: src/encodings.c:534
+msgid "West European"
+msgstr "மேற்கு ஐரோப்பிய"
+
+#: src/encodings.c:536
+msgid "East European"
+msgstr "கிழக்கு ஐரோப்பிய"
+
+#: src/encodings.c:538
+msgid "East Asian"
+msgstr "கிழக்கு ஆசிய"
+
+#: src/encodings.c:540
+msgid "SE & SW Asian"
+msgstr "தென்கிழக்கு & தென்மேற்கு ஆசிய"
+
+#: src/encodings.c:542
+msgid "Middle Eastern"
+msgstr "நடு கிழக்கு"
+
+#: src/encodings.c:71
+msgid "Celtic"
+msgstr "செல்டிக்"
+
+#: src/encodings.c:72 src/encodings.c:73
+msgid "Greek"
+msgstr "கிரேக்கம்"
+
+#: src/encodings.c:74
+msgid "Nordic"
+msgstr "நோர்டிக்"
+
+#: src/encodings.c:75
+msgid "South European"
+msgstr "தெற்கு ஐரோப்பிய"
+
+#: src/encodings.c:76 src/encodings.c:77 src/encodings.c:78 src/encodings.c:79
+msgid "Western"
+msgstr "மேற்கு"
+
+#: src/encodings.c:81 src/encodings.c:82 src/encodings.c:83
+msgid "Baltic"
+msgstr "பால்டிக்"
+
+#: src/encodings.c:84 src/encodings.c:85 src/encodings.c:86
+msgid "Central European"
+msgstr "மத்திய ஐரோப்பிய"
+
+#: src/encodings.c:87 src/encodings.c:88 src/encodings.c:90 src/encodings.c:91
+#: src/encodings.c:92
+msgid "Cyrillic"
+msgstr "சிரிலிக்"
+
+#: src/encodings.c:93
+msgid "Cyrillic/Russian"
+msgstr "சிரிலிக்/ரசிய"
+
+#: src/encodings.c:94
+msgid "Cyrillic/Ukrainian"
+msgstr "சிரிலிக்/உக்ரேனிய"
+
+#: src/encodings.c:95
+msgid "Romanian"
+msgstr "ருமேனிய"
+
+#: src/encodings.c:97 src/encodings.c:98 src/encodings.c:99
+msgid "Arabic"
+msgstr "அரபு"
+
+#: src/filetypes.c:1190
+msgid "All Source"
+msgstr "அனைத்து மூலங்களும்"
+
+#: src/filetypes.c:1215 src/project.c:363
+msgid "All files"
+msgstr "அனைத்து கோப்புகள்"
+
+#: src/filetypes.c:1264
+#, c-format
+msgid "Bad regex for filetype %s: %s"
+msgstr "கோப்புவகை %s: %s க்கான மோசமான வழக்கவெளி"
+
+#: src/filetypes.c:154
+msgid "Shell"
+msgstr "ஓடு"
+
+#: src/filetypes.c:155
+msgid "Makefile"
+msgstr "உருவாக்ககோப்பு"
+
+#: src/filetypes.c:159
+msgid "Cascading Stylesheet"
+msgstr "அடுக்கு நடைதாள்"
+
+#: src/filetypes.c:169
+msgid "Config"
+msgstr "கட்டமைப்பு"
+
+#: src/filetypes.c:170
+msgid "Gettext translation"
+msgstr "உரைபெறு மொழிபெயர்ப்பு"
+
+#: src/filetypes.c:434
+msgid "_Programming Languages"
+msgstr "கணிப்பொறி செயல்பாடு மொழி (_P)"
+
+#: src/filetypes.c:435
+msgid "_Scripting Languages"
+msgstr "கிறுக்கல் மொழிகள் (_S)"
+
+#: src/filetypes.c:436
+msgid "_Markup Languages"
+msgstr "குறியிடுதல் மொழிகள் (_M)"
+
+#: src/filetypes.c:437
+msgid "M_iscellaneous"
+msgstr "மற்றவை (_i)"
+
+#: src/filetypes.c:86
+#, c-format
+msgid "%s source file"
+msgstr "%s மூல கோப்பு"
+
+#: src/filetypes.c:87
+#, c-format
+msgid "%s file"
+msgstr "%s கோப்பு"
+
+#: src/filetypes.c:88
+#, c-format
+msgid "%s script"
+msgstr "%s உரை"
+
+#: src/filetypes.c:89
+#, c-format
+msgid "%s document"
+msgstr "%s ஆவணம்"
+
+#: src/geany.h:49
+msgid "untitled"
+msgstr "தலைப்பிடப்படாத"
+
+#: src/highlighting.c:1237 src/libmain.c:885 src/socket.c:169
+#: src/templates.c:230
+#, c-format
+msgid "Could not find file '%s'."
+msgstr "'%s' கோப்பைக் கண்டுபிடிக்க முடியவில்லை."
+
+#: src/highlighting.c:1307
+msgid "Default"
+msgstr "இயல்புநிலை"
+
+#: src/highlighting.c:1348
+msgid "The current filetype overrides the default style."
+msgstr "தற்போதைய கோப்பு வகை இயல்புநிலை பாணியை மீறுகிறது."
+
+#: src/highlighting.c:1349
+msgid "This may cause color schemes to display incorrectly."
+msgstr "இது வண்ணத் திட்டங்கள் தவறாக காண்பிக்கப்படலாம்."
+
+#: src/highlighting.c:1374
+msgid "Color Schemes"
+msgstr "வண்ண திட்டங்கள்"
+
+#: src/keybindings.c:1011
+msgid "The following keyboard shortcuts are configurable:"
+msgstr "பின்வரும் விசைப்பலகை குறுக்குவழிகள் கட்டமைக்கக்கூடியவை:"
+
+#: src/keybindings.c:309 src/tagmanager/tm_parser.c:804
+msgid "File"
+msgstr "கோப்பு"
+
+#: src/keybindings.c:311
+msgid "Clipboard"
+msgstr "இடைநிலைப் பலகை"
+
+#: src/keybindings.c:312
+msgid "Select"
+msgstr "தேர்ந்தெடு"
+
+#: src/keybindings.c:313
+msgid "Format"
+msgstr "வடிவம்"
+
+#: src/keybindings.c:314
+msgid "Insert"
+msgstr "செருகவும்"
+
+#: src/keybindings.c:315
+msgid "Settings"
+msgstr "அமைப்புகள்"
+
+#: src/keybindings.c:316
+msgid "Search"
+msgstr "தேடல்"
+
+#: src/keybindings.c:317
+msgid "Go to"
+msgstr "செல்"
+
+#: src/keybindings.c:318
+msgid "View"
+msgstr "பார்வை"
+
+#: src/keybindings.c:319 src/tagmanager/tm_parser.c:841
+msgid "Document"
+msgstr "ஆவணம்"
+
+#: src/keybindings.c:321 src/keybindings.c:696 src/project.c:520
+#: src/ui_utils.c:2270
+msgid "Build"
+msgstr "உருவாக்கு"
+
+#: src/keybindings.c:323 src/keybindings.c:721
+msgid "Help"
+msgstr "உதவி"
+
+#: src/keybindings.c:324
+msgid "Focus"
+msgstr "குவி"
+
+#: src/keybindings.c:325
+msgid "Notebook tab"
+msgstr "புத்தக தாவல்"
+
+#: src/keybindings.c:334 src/keybindings.c:368
+msgid "New"
+msgstr "புதிய"
+
+#: src/keybindings.c:336 src/keybindings.c:372
+msgid "Open"
+msgstr "திற"
+
+#: src/keybindings.c:339
+msgid "Open selected file"
+msgstr "தேர்ந்தெடுக்கப்பட்ட கோப்பைத் திற"
+
+#: src/keybindings.c:341
+msgid "Save"
+msgstr "சேமி"
+
+#: src/keybindings.c:343 src/toolbar.c:58
+msgid "Save as"
+msgstr "என சேமி"
+
+#: src/keybindings.c:345
+msgid "Save all"
+msgstr "அனைத்தையும் சேமி"
+
+#: src/keybindings.c:348 src/tagmanager/tm_parser.c:704
+msgid "Properties"
+msgstr "பண்புகள்"
+
+#: src/keybindings.c:350
+msgid "Print"
+msgstr "அச்சிடுக"
+
+#: src/keybindings.c:352 src/keybindings.c:377
+msgid "Close"
+msgstr "மூடு"
+
+#: src/keybindings.c:354
+msgid "Close all"
+msgstr "அனைத்தையும் மூடு"
+
+#: src/keybindings.c:357
+msgid "Reload file"
+msgstr "கோப்பை மீண்டும் ஏற்று"
+
+#: src/keybindings.c:359
+msgid "Reload all files"
+msgstr "அனைத்து கோப்பையும் மீண்டும் ஏற்று"
+
+#: src/keybindings.c:361
+msgid "Re-open last closed tab"
+msgstr "கடைசி மூடிய தாவலை மீண்டும் திற"
+
+#: src/keybindings.c:363
+msgid "Quit"
+msgstr "வெளியேறு"
+
+#: src/keybindings.c:370
+msgid "New from Folder"
+msgstr "கோப்புறையிலிருந்து புதியது"
+
+#: src/keybindings.c:382
+msgid "Undo"
+msgstr "செயல்தவிர்"
+
+#: src/keybindings.c:384
+msgid "Redo"
+msgstr "மீண்டும்செய்"
+
+#: src/keybindings.c:393
+msgid "Delete to line end"
+msgstr "வரி முடிவுக்கு நீக்கு"
+
+#: src/keybindings.c:396
+msgid "Delete to beginning of line"
+msgstr "வரி முதல் வரை நீக்கு"
+
+#: src/keybindings.c:399
+msgid "_Transpose Current Line"
+msgstr "தற்போதைய வரியை மாற்றவும் (_T)"
+
+#: src/keybindings.c:401
+msgid "Scroll to current line"
+msgstr "தற்போதைய வரிக்கு உருட்டவும்"
+
+#: src/keybindings.c:403
+msgid "Scroll up the view by one line"
+msgstr "பார்வையை ஒரு வரி மூலம் மேலே உருட்டவும்"
+
+#: src/keybindings.c:405
+msgid "Scroll down the view by one line"
+msgstr "பார்வையை ஒரு வரி மூலம் கீழே உருட்டவும்"
+
+#: src/keybindings.c:407
+msgid "Complete snippet"
+msgstr "முழுமையான துணுக்கை"
+
+#: src/keybindings.c:409
+msgid "Move cursor in snippet"
+msgstr "துணுக்கில் கர்சரை நகர்த்தவும்"
+
+#: src/keybindings.c:411
+msgid "Suppress snippet completion"
+msgstr "துணுக்கை நிறைவு அடக்கு"
+
+#: src/keybindings.c:413
+msgid "Context Action"
+msgstr "சூழல் செயல்"
+
+#: src/keybindings.c:415
+msgid "Complete word"
+msgstr "முழுமையான சொல்"
+
+#: src/keybindings.c:417
+msgid "Show calltip"
+msgstr "அழைகுறிப்பைக் காட்டு"
+
+#: src/keybindings.c:419
+msgid "Word part completion"
+msgstr "சொல் பகுதி நிறைவு"
+
+#: src/keybindings.c:422
+msgid "Move line(s) up"
+msgstr "வரி (களை) மேலே நகர்த்தவும்"
+
+#: src/keybindings.c:425
+msgid "Move line(s) down"
+msgstr "வரி (களை) கீழே நகர்த்தவும்"
+
+#: src/keybindings.c:430
+msgid "Cut"
+msgstr "வெட்டு"
+
+#: src/keybindings.c:432
+msgid "Copy"
+msgstr "நகலெடு"
+
+#: src/keybindings.c:434
+msgid "Paste"
+msgstr "ஒட்டு"
+
+#: src/keybindings.c:445
+msgid "Select All"
+msgstr "அனைத்தையும் தெரிவுசெய்"
+
+#: src/keybindings.c:447
+msgid "Select current word"
+msgstr "தற்போதைய சொல்லைத் தேர்ந்தெடு"
+
+#: src/keybindings.c:455
+msgid "Select to previous word part"
+msgstr "முந்தைய சொல் பகுதிக்கு தேர்ந்தெடு"
+
+#: src/keybindings.c:457
+msgid "Select to next word part"
+msgstr "அடுத்த சொல் பகுதிக்கு தேர்ந்தெடு"
+
+#: src/keybindings.c:465
+msgid "Toggle line commentation"
+msgstr "வரி கருத்தை மாற்றவும்"
+
+#: src/keybindings.c:468
+msgid "Comment line(s)"
+msgstr "கருத்து வரி (கள்)"
+
+#: src/keybindings.c:470
+msgid "Uncomment line(s)"
+msgstr "கருத்துநீக்கு வரி (கள்)"
+
+#: src/keybindings.c:472
+msgid "Increase indent"
+msgstr "உள்தள்ளலை அதிகரி"
+
+#: src/keybindings.c:475
+msgid "Decrease indent"
+msgstr "உள்தள்ளல் குறைவு"
+
+#: src/keybindings.c:478
+msgid "Increase indent by one space"
+msgstr "ஒரு இடத்தால் உள்தள்ளலை அதிகரி"
+
+#: src/keybindings.c:480
+msgid "Decrease indent by one space"
+msgstr "ஒரு இடத்தால் உள்தள்ளலை குறை"
+
+#: src/keybindings.c:484
+msgid "Send to Custom Command 1"
+msgstr "தனிப்பயன் கட்டளை 1 க்கு அனுப்பவும்"
+
+#: src/keybindings.c:486
+msgid "Send to Custom Command 2"
+msgstr "தனிப்பயன் கட்டளை 2 க்கு அனுப்பவும்"
+
+#: src/keybindings.c:488
+msgid "Send to Custom Command 3"
+msgstr "தனிப்பயன் கட்டளை 3 க்கு அனுப்பவும்"
+
+#: src/keybindings.c:490
+msgid "Send to Custom Command 4"
+msgstr "தனிப்பயன் கட்டளை 4 க்கு அனுப்பவும்"
+
+#: src/keybindings.c:492
+msgid "Send to Custom Command 5"
+msgstr "தனிப்பயன் கட்டளை 5 க்கு அனுப்பவும்"
+
+#: src/keybindings.c:494
+msgid "Send to Custom Command 6"
+msgstr "தனிப்பயன் கட்டளை 6 க்கு அனுப்பவும்"
+
+#: src/keybindings.c:496
+msgid "Send to Custom Command 7"
+msgstr "தனிப்பயன் கட்டளை 7 க்கு அனுப்பவும்"
+
+#: src/keybindings.c:498
+msgid "Send to Custom Command 8"
+msgstr "தனிப்பயன் கட்டளை 8 க்கு அனுப்பவும்"
+
+#: src/keybindings.c:500
+msgid "Send to Custom Command 9"
+msgstr "தனிப்பயன் கட்டளை 9 க்கு அனுப்பவும்"
+
+#: src/keybindings.c:513
+msgid "Insert date"
+msgstr "தேதியைச் செருகவும்"
+
+#: src/keybindings.c:519
+msgid "Insert New Line Before Current"
+msgstr "இதற்கு முன் புதிய வரியைச் செருகவும்"
+
+#: src/keybindings.c:521
+msgid "Insert New Line After Current"
+msgstr "இதற்குப் பிறகு புதிய வரியைச் செருகவும்"
+
+#: src/keybindings.c:534 src/search.c:469
+msgid "Find"
+msgstr "கண்டுபிடி"
+
+#: src/keybindings.c:536
+msgid "Find Next"
+msgstr "அடுத்ததை தேடு"
+
+#: src/keybindings.c:538
+msgid "Find Previous"
+msgstr "முந்தையதைக் கண்டறியவும்"
+
+#: src/keybindings.c:545 src/search.c:624
+msgid "Replace"
+msgstr "மாற்றவும்"
+
+#: src/keybindings.c:547 src/search.c:876
+msgid "Find in Files"
+msgstr "கோப்புகளில் காணலாம்"
+
+#: src/keybindings.c:550
+msgid "Next Message"
+msgstr "அடுத்த செய்தி"
+
+#: src/keybindings.c:552
+msgid "Previous Message"
+msgstr "முந்தைய செய்தி"
+
+#: src/keybindings.c:555
+msgid "Find Usage"
+msgstr "பயன்பாட்டைக் கண்டறியவும்"
+
+#: src/keybindings.c:558
+msgid "Find Document Usage"
+msgstr "ஆவண பயன்பாட்டைக் கண்டறியவும்"
+
+#: src/keybindings.c:565 src/toolbar.c:69
+msgid "Navigate back a location"
+msgstr "ஒரு இடத்தை மீண்டும் வழிநடத்துங்கள்"
+
+#: src/keybindings.c:567 src/toolbar.c:70
+msgid "Navigate forward a location"
+msgstr "ஒரு இடத்தை முன்னோக்கி செல்லவும்"
+
+#: src/keybindings.c:572
+msgid "Go to matching brace"
+msgstr "பொருந்தும் அடைப்புகுறிக்குச் செல்லுங்கள்"
+
+#: src/keybindings.c:575
+msgid "Toggle marker"
+msgstr "குறிப்பானை மாற்றவும்"
+
+#: src/keybindings.c:584
+msgid "Go to Symbol Definition"
+msgstr "குறியீட்டு வரைமுறைக்கு செல்க"
+
+#: src/keybindings.c:587
+msgid "Go to Symbol Declaration"
+msgstr "குறியீட்டு அறிவிப்பிற்கு செல்க"
+
+#: src/keybindings.c:589
+msgid "Go to Start of Line"
+msgstr "வரியின் தொடக்கத்திற்குச் செல்லுங்கள்"
+
+#: src/keybindings.c:591
+msgid "Go to End of Line"
+msgstr "வரியின் முடிவுக்குச் செல்லுங்கள்"
+
+#: src/keybindings.c:593
+msgid "Go to Start of Display Line"
+msgstr "காட்சி வரியின் தொடக்கத்திற்குச் செல்லவும்"
+
+#: src/keybindings.c:595
+msgid "Go to End of Display Line"
+msgstr "காட்சி வரியின் முடிவுக்குச் செல்லுங்கள்"
+
+#: src/keybindings.c:597
+msgid "Go to Previous Word Part"
+msgstr "முந்தைய சொல் பகுதிக்குச் செல்லுங்கள்"
+
+#: src/keybindings.c:599
+msgid "Go to Next Word Part"
+msgstr "அடுத்த சொல் பகுதிக்குச் செல்லுங்கள்"
+
+#: src/keybindings.c:604
+msgid "Toggle All Additional Widgets"
+msgstr "அனைத்து கூடுதல் விட்கெட்களையும் மாற்றவும்"
+
+#: src/keybindings.c:607
+msgid "Fullscreen"
+msgstr "முழு திரை"
+
+#: src/keybindings.c:609
+msgid "Toggle Messages Window"
+msgstr "செய்திகளை மாற்றவும்"
+
+#: src/keybindings.c:612
+msgid "Toggle Sidebar"
+msgstr "பக்கப்பட்டியை மாற்றவும்"
+
+#: src/keybindings.c:614
+msgid "Zoom In"
+msgstr "பெரிதாக்கு"
+
+#: src/keybindings.c:616
+msgid "Zoom Out"
+msgstr "சிறிதாக்கு"
+
+#: src/keybindings.c:618
+msgid "Zoom Reset"
+msgstr "பெரிதாக்கு மீட்டமைப்பு"
+
+#: src/keybindings.c:623
+msgid "Switch to Editor"
+msgstr "திருத்திக்கு மாறவும்"
+
+#: src/keybindings.c:625
+msgid "Switch to Search Bar"
+msgstr "தேடல் பட்டியில் மாறவும்"
+
+#: src/keybindings.c:627
+msgid "Switch to Message Window"
+msgstr "செய்தி சாளரத்திற்கு மாறவும்"
+
+#: src/keybindings.c:629
+msgid "Switch to Compiler"
+msgstr "தொகுப்பிக்கு மாறவும்"
+
+#: src/keybindings.c:631
+msgid "Switch to Messages"
+msgstr "செய்திகளுக்கு மாறவும்"
+
+#: src/keybindings.c:633
+msgid "Switch to Scribble"
+msgstr "கிறுக்கலுக்கு மாறவும்"
+
+#: src/keybindings.c:635
+msgid "Switch to VTE"
+msgstr "மெமுமுக்கு மாறவும்"
+
+#: src/keybindings.c:637
+msgid "Switch to Sidebar"
+msgstr "பக்கப்பட்டிக்கு மாறவும்"
+
+#: src/keybindings.c:639
+msgid "Switch to Sidebar Symbol List"
+msgstr "பக்கப்பட்டி குறியீட்டு பட்டியலுக்கு மாறவும்"
+
+#: src/keybindings.c:641
+msgid "Switch to Sidebar Document List"
+msgstr "பக்கப்பட்டி ஆவண பட்டியலுக்கு மாறவும்"
+
+#: src/keybindings.c:646
+msgid "Switch to left document"
+msgstr "இடது ஆவணத்திற்கு மாறவும்"
+
+#: src/keybindings.c:648
+msgid "Switch to right document"
+msgstr "வலப்பக்க ஆவணத்திற்கு மாறவும்"
+
+#: src/keybindings.c:650
+msgid "Switch to last used document"
+msgstr "கடைசியாக பயன்படுத்தப்பட்ட ஆவணத்திற்கு மாறவும்"
+
+#: src/keybindings.c:653
+msgid "Move document left"
+msgstr "ஆவணத்தை இடப்பக்கமாக நகர்த்தவும்"
+
+#: src/keybindings.c:656
+msgid "Move document right"
+msgstr "ஆவணத்தை வலப்பக்கமாக நகர்த்தவும்"
+
+#: src/keybindings.c:658
+msgid "Move document first"
+msgstr "முதலில் ஆவணத்தை நகர்த்தவும்"
+
+#: src/keybindings.c:660
+msgid "Move document last"
+msgstr "ஆவணத்தை கடைசியாக நகர்த்தவும்"
+
+#: src/keybindings.c:665
+msgid "Toggle Line wrapping"
+msgstr "வரி மடக்குதல் மாற்றவும்"
+
+#: src/keybindings.c:667
+msgid "Toggle Line breaking"
+msgstr "வரி உடைப்பதை மாற்றவும்"
+
+#: src/keybindings.c:675
+msgid "Replace spaces with tabs"
+msgstr "தாவல்களுடன் இடைவெளிகளை மாற்றவும்"
+
+#: src/keybindings.c:677
+msgid "Toggle current fold"
+msgstr "தற்போதைய மடிப்பை மாற்றவும்"
+
+#: src/keybindings.c:679
+msgid "Fold all"
+msgstr "அனைத்தையும் மடியுங்கள்"
+
+#: src/keybindings.c:681
+msgid "Unfold all"
+msgstr "அனைத்தையும் அவிழ்த்து விடுங்கள்"
+
+#: src/keybindings.c:683
+msgid "Reload symbol list"
+msgstr "குறியீட்டு பட்டியலை மீண்டும் ஏற்றவும்"
+
+#: src/keybindings.c:685
+msgid "Remove Markers"
+msgstr "குறிப்பான்களை அகற்று"
+
+#: src/keybindings.c:687
+msgid "Remove Error Indicators"
+msgstr "பிழை குறிகாட்டிகளை அகற்று"
+
+#: src/keybindings.c:689
+msgid "Remove Markers and Error Indicators"
+msgstr "குறிப்பான்கள் மற்றும் பிழை குறிகாட்டிகளை அகற்று"
+
+#: src/keybindings.c:694 src/toolbar.c:71
+msgid "Compile"
+msgstr "தொகு"
+
+#: src/keybindings.c:698
+msgid "Make all"
+msgstr "அனைத்தையும் செய்யுங்கள்"
+
+#: src/keybindings.c:701
+msgid "Make custom target"
+msgstr "தனிப்பயன் இலக்கை உருவாக்குங்கள்"
+
+#: src/keybindings.c:703
+msgid "Make object"
+msgstr "பொருளை உருவாக்குங்கள்"
+
+#: src/keybindings.c:705
+msgid "Next error"
+msgstr "அடுத்த பிழை"
+
+#: src/keybindings.c:707
+msgid "Previous error"
+msgstr "முந்தைய பிழை"
+
+#: src/keybindings.c:709
+msgid "Run"
+msgstr "ஓடு"
+
+#: src/keybindings.c:711
+msgid "Build options"
+msgstr "விருப்பங்களை உருவாக்குங்கள்"
+
+#: src/keybindings.c:716
+msgid "Show Color Chooser"
+msgstr "வண்ணத் தேர்வாளரைக் காட்டு"
+
+#: src/keybindings.c:999
+msgid "Keyboard Shortcuts"
+msgstr "விசைப்பலகை குறுக்குவழிகள்"
+
+#: src/keyfile.c:1139
+msgid "Type here what you want, use it as a notice/scratch board"
+msgstr ""
+"நீங்கள் விரும்புவதை இங்கே தட்டச்சு செய்க, அறிவிப்பு/கீறல் பலகையாகப் "
+"பயன்படுத்தவும்"
+
+#: src/keyfile.c:1395
+msgid "Failed to load one or more session files."
+msgstr "ஒன்று அல்லது அதற்கு மேற்பட்ட அமர்வு கோப்புகளை ஏற்றுவதில் தோல்வி."
+
+#: src/libmain.c:1174
+#, c-format
+msgid "This is Geany %s."
+msgstr "இது சீனி %s."
+
+#: src/libmain.c:1177
+#, c-format
+msgid "Configuration directory could not be created (%s)."
+msgstr "உள்ளமைவு கோப்பகத்தை உருவாக்க முடியவில்லை (%s)."
+
+#: src/libmain.c:1185
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr ""
+"இணைய குதைகுழி உருவாக்க முடியவில்லை, விவரங்களுக்கு உதவி-> பிழைத்திருத்த "
+"செய்திகளைப் பார்."
+
+#: src/libmain.c:121
+msgid "COLUMN"
+msgstr "நெடுவரிசை"
+
+#: src/libmain.c:121
+msgid ""
+"Set initial column number to COLUMN for the first opened file (useful in "
+"conjunction with --line)"
+msgstr ""
+"முதலில் திறக்கப்பட்ட கோப்பிற்கான ஆரம்ப நெடுவரிசை எண்ணைCOLUMN ஆக அமை "
+"(--line உடன் இணைந்து பயனுள்ளதாக இருக்கும்)"
+
+#: src/libmain.c:122
+msgid "DIR"
+msgstr "அடைவு"
+
+#: src/libmain.c:122
+msgid "Use alternate configuration directory DIR"
+msgstr "மாற்று உள்ளமைவு அடைவு  கோப்புறையைப் பயன்படுத்தவும்"
+
+#: src/libmain.c:123
+msgid "Print internal filetype names"
+msgstr "உள் கோப்புவகை பெயர்களை அச்சிடுக"
+
+#: src/libmain.c:124
+msgid "Generate global tags file (see documentation)"
+msgstr "உலகளாவிய குறிச்சொற்கள் கோப்பை உருவாக்குங்கள் (ஆவணங்களைப் பார்)"
+
+#: src/libmain.c:125
+msgid "Don't preprocess C/C++ files when generating tags file"
+msgstr ""
+"குறிச்சொற்கள் கோப்பை உருவாக்கும் போது சி/சி++ கோப்புகளைமுன்கூட்டியே செயலாக்க"
+" வேண்டாம்"
+
+#: src/libmain.c:127
+msgid "Don't open files in a running instance, force opening a new instance"
+msgstr ""
+"இயங்கும் நிகழ்வில் கோப்புகளைத் திறக்க வேண்டாம், ஒரு புதிய நிகழ்வைத் திறக்க "
+"கட்டாயப்படுத்துங்கள்"
+
+#: src/libmain.c:128
+msgid ""
+"Use socket filename FILE for communication with a running Geany instance"
+msgstr ""
+"இயங்கும் சீனி நிகழ்வுடன் தொடர்பு கொள்ள குதைகுழி கோப்புப் பெயரைப் "
+"பயன்படுத்தவும்"
+
+#: src/libmain.c:128 src/libmain.c:142
+msgid "FILE"
+msgstr "கோப்பு"
+
+#: src/libmain.c:129
+msgid "Return a list of open documents in a running Geany instance"
+msgstr ""
+"இயங்கும் சீனி நிகழ்வில் திறந்த ஆவணங்களின் பட்டியலைத் திருப்பி விடுங்கள்"
+
+#: src/libmain.c:131
+msgid "LINE"
+msgstr "வரி"
+
+#: src/libmain.c:131
+msgid "Set initial line number to LINE for the first opened file"
+msgstr "முதலில் திறக்கப்பட்ட கோப்பிற்கான ஆரம்ப வரி எண்ணை வரியாக அமை"
+
+#: src/libmain.c:132
+msgid "Don't show message window at startup"
+msgstr "தொடக்கத்தில் செய்தி சாளரத்தைக் காட்ட வேண்டாம்"
+
+#: src/libmain.c:133
+msgid "Don't load auto completion data (see documentation)"
+msgstr "தானி நிறைவு தரவை ஏற்ற வேண்டாம் (ஆவணங்களைப் பார்)"
+
+#: src/libmain.c:135
+msgid "Don't load plugins"
+msgstr "செருகுநிரல்களை ஏற்ற வேண்டாம்"
+
+#: src/libmain.c:137
+msgid "Print Geany's installation prefix"
+msgstr "சீனியின் நிறுவல் முன்னொட்டை அச்சிடுக"
+
+#: src/libmain.c:138
+msgid "Open all FILES in read-only mode (see documentation)"
+msgstr ""
+"எல்லா கோப்புகளையும் படிக்க மட்டும் பயன்முறையில் திற (ஆவணங்களைப் "
+"பார்)"
+
+#: src/libmain.c:139
+msgid "Don't load the previous session's files"
+msgstr "முந்தைய அமர்வின் கோப்புகளை ஏற்ற வேண்டாம்"
+
+#: src/libmain.c:141
+msgid "Don't load terminal support"
+msgstr "முனைய ஆதரவை ஏற்ற வேண்டாம்"
+
+#: src/libmain.c:1411
+msgid "Do you really want to quit?"
+msgstr "நீங்கள் உண்மையில் வெளியேற விரும்புகிறீர்களா?"
+
+#: src/libmain.c:142
+msgid "Use FILE as the dynamically-linked VTE library"
+msgstr "கோப்பை மாறும்-இணைக்கப்பட்ட மெமுமு நூலகமாகப் பயன்படுத்தவும்"
+
+#: src/libmain.c:144
+msgid "Be verbose"
+msgstr "வாய்மொழியாக இருங்கள்"
+
+#: src/libmain.c:1449
+msgid "Configuration files reloaded."
+msgstr "உள்ளமைவு கோப்புகள் மீண்டும் ஏற்றப்பட்டன."
+
+#: src/libmain.c:145
+msgid "Show version and exit"
+msgstr "பதிப்பைக் காட்டு மற்றும் வெளியேறவும்"
+
+#: src/libmain.c:555
+msgid "[FILES...]"
+msgstr "[கோப்புகள் ...]"
+
+#: src/libmain.c:557
+msgid "A fast and lightweight IDE."
+msgstr "ஒரு வேகமான மற்றும் சிறிய ஒமேசூ"
+
+#: src/libmain.c:558
+msgid "Report bugs to https://github.com/geany/geany/issues."
+msgstr "பிழைகளை https://github.com/geany/geany/issues க்கு புகாரளி."
+
+#: src/libmain.c:591
+#, c-format
+msgid "built on %s with "
+msgstr "உடன் %s இல் கட்டப்பட்டது"
+
+#: src/libmain.c:684
+msgid "Move it now?"
+msgstr "இப்போது அதை நகர்த்தவா?"
+
+#: src/libmain.c:686
+msgid "Geany needs to move your old configuration directory before starting."
+msgstr ""
+"தொடங்குவதற்கு முன் சீனி உங்கள் பழைய உள்ளமைவு கோப்பகத்தை நகர்த்த வேண்டும்."
+
+#: src/libmain.c:695
+#, c-format
+msgid ""
+"Your configuration directory has been successfully moved from \"%s\" to "
+"\"%s\"."
+msgstr ""
+"உங்கள் உள்ளமைவு அடைவு வெற்றிகரமாக \"%s\" இலிருந்து \"%s\" க்கு "
+"நகர்த்தப்பட்டுள்ளது."
+
+#: src/libmain.c:705
+#, c-format
+msgid ""
+"Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
+"Please move manually the directory to the new location."
+msgstr ""
+"உங்கள் பழைய உள்ளமைவு அடைவு \"%s\" ஐ \"%s\" (%s) க்கு நகர்த்த முடியவில்லை. "
+"தயவுசெய்து கோப்பகத்தை புதிய இடத்திற்கு கைமுறையாக நகர்த்தவும்."
+
+#: src/libmain.c:787
+#, c-format
+msgid ""
+"Configuration directory could not be created (%s).\n"
+"There could be some problems using Geany without a configuration directory.\n"
+"Start Geany anyway?"
+msgstr ""
+"உள்ளமைவு கோப்பகத்தை உருவாக்க முடியவில்லை (%s). \n"
+" உள்ளமைவு அடைவு இல்லாமல் சீனியைப் பயன்படுத்த சில சிக்கல்கள் இருக்கலாம். \n"
+" எப்படியும் சீனியைத் தொடங்கவா?"
+
+#: src/log.c:185
+msgid "Debug Messages"
+msgstr "செய்திகளை பிழைத்திருத்த"
+
+#: src/log.c:187
+msgid "Cl_ear"
+msgstr "அழி (_e)"
+
+#: src/msgwindow.c:1174
+msgid "The document has been closed."
+msgstr "ஆவணம் மூடப்பட்டுள்ளது."
+
+#: src/msgwindow.c:208
+msgid "Status messages"
+msgstr "நிலை செய்திகள்"
+
+#: src/msgwindow.c:658
+msgid "C_opy"
+msgstr "நகல் (_o)"
+
+#: src/msgwindow.c:667
+msgid "Copy _All"
+msgstr "நகல் அனைத்தும் (_A)l"
+
+#: src/msgwindow.c:697
+msgid "_Hide Message Window"
+msgstr "செய்தி சாளரம் மறை (_H)"
+
+#: src/msgwindow.c:758
+#, c-format
+msgid "Could not find file '%s' - trying the current document path."
+msgstr ""
+"'%s' கோப்பைக் கண்டுபிடிக்க முடியவில்லை - தற்போதைய ஆவண பாதையை முயற்சி."
+
+#: src/notebook.c:197
+msgid "Switch to Document"
+msgstr "ஆவணத்திற்கு மாறவும்"
+
+#: src/notebook.c:479
+msgid "Open in New _Window"
+msgstr "புதிய சாளரத்தில் திற (_W)"
+
+#: src/notebook.c:504
+msgid "Close Documents to the _Right"
+msgstr "வலதுபுறத்தில் ஆவணங்களை மூடு (_R)"
+
+#: src/plugins.c:1220
+msgid "_Plugin Manager"
+msgstr "செருகுநிரல் மேலாளர் (_P)"
+
+#: src/plugins.c:1599
+msgid ""
+"\n"
+"<i>Other plugins depend on this. Disable them first to allow deactivation.</i>\n"
+msgstr ""
+"\n"
+"<i> பிற செருகுநிரல்கள் இதைப் பொறுத்தது. செயலிழக்க அனுமதிக்க முதலில் அவற்றை முடக்கு. </i>\n"
+
+#: src/plugins.c:1601
+#, c-format
+msgid ""
+"Version:\t%s\n"
+"Author(s):\t%s\n"
+"Filename:\t%s"
+msgstr ""
+"பதிப்பு:\t%s\n"
+" ஆசிரியர் (கள்):\t %s\n"
+" கோப்பு பெயர்: \t%s"
+
+#: src/plugins.c:1629
+msgid "No plugins available."
+msgstr "செருகுநிரல்கள் எதுவும் கிடைக்கவில்லை."
+
+#: src/plugins.c:1761
+msgid "Active"
+msgstr "செயலில்"
+
+#: src/plugins.c:1768
+msgid "Plugin"
+msgstr "சொருகு"
+
+#: src/plugins.c:1885
+msgid "Plugins"
+msgstr "செருகுநிரல்கள்"
+
+#: src/plugins.c:1926
+msgid "Choose which plugins should be loaded at startup:"
+msgstr "தொடக்கத்தில் எந்த செருகுநிரல்களை ஏற்ற வேண்டும் என்பதைத் தேர்வுசெய்க:"
+
+#: src/plugins.c:2019
+#, c-format
+msgid ""
+"Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
+"plugin."
+msgstr ""
+"பதிலாள் சொருகி '%s' நீட்டிப்பு '%s' ஒரு புள்ளியுடன் தொடங்குகிறது. உங்கள் "
+"பதிலாள் சொருகி சரிசெய்யவும்."
+
+#: src/plugins.c:231
+#, c-format
+msgid ""
+"The plugin \"%s\" is not binary compatible with this release of Geany - "
+"please recompile it."
+msgstr ""
+"\"%s\" சொருகி சீனியின் இந்த வெளியீட்டுடன் பைனரி பொருந்தாது - தயவுசெய்து அதை "
+"மீண்டும் தொகு."
+
+#: src/pluginutils.c:426
+msgid "Configure Plugins"
+msgstr "செருகுநிரல்களை உள்ளமை"
+
+#: src/prefs.c:1487
+msgid "_Allow"
+msgstr "இசைவு (_A)"
+
+#: src/prefs.c:1489
+msgid "_Override"
+msgstr "மேலெழுது (_O)"
+
+#: src/prefs.c:1490
+msgid "Override that keybinding?"
+msgstr "அந்த விசைப்பிணைப்பை மேலெழுதவா?"
+
+#: src/prefs.c:1491
+#, c-format
+msgid "The combination '%s' is already used for \"%s\"."
+msgstr "'%s' கலவையானது ஏற்கனவே \"%s\" க்கு பயன்படுத்தப்படுகிறது."
+
+#: src/prefs.c:1708
+msgid "Enter tool paths below. Tools you do not need can be left blank."
+msgstr ""
+"கருவி பாதைகளை கீழே உள்ளிடவும். உங்களுக்குத் தேவையில்லாத கருவிகளை காலியாக "
+"விடலாம்."
+
+#: src/prefs.c:1713
+msgid ""
+"Set the information to be used in templates. See the documentation for "
+"details."
+msgstr ""
+"வார்ப்புருக்களில் பயன்படுத்தப்பட வேண்டிய தகவல்களை அமை. விவரங்களுக்கு "
+"ஆவணங்களைப் பார்."
+
+#: src/prefs.c:1718
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
+msgstr ""
+"இங்கே நீங்கள் பல்வேறு செயல்களுக்கான விசைப்பலகை குறுக்குவழிகளை மாற்றலாம். "
+"புதிய குறுக்குவழியை உள்ளிட ஒன்றைத் தேர்ந்தெடுத்து மாற்ற பொத்தானை அழுத்தவும் "
+"அல்லது குறுக்குவழியின் சர உருவமைப்பை நேரடியாக திருத்த ஒரு செயலில் இருமுறை "
+"சொடுக்கு."
+
+#: src/prefs.c:1723
+msgid ""
+"<i>Warning: these settings are overridden by the current project. See "
+"<b>Project->Properties</b>.</i>"
+msgstr ""
+"<i> எச்சரிக்கை: இந்த அமைப்புகள் தற்போதைய திட்டத்தால் மீறப்படுகின்றன. <b> "
+"திட்டம்-> பண்புகள் </b> ஐப் பார். </I>"
+
+#: src/prefs.c:180
+msgid "Grab Key"
+msgstr "திறவுகோல் எடு"
+
+#: src/prefs.c:186
+#, c-format
+msgid "Press the combination of the keys you want to use for \"%s\"."
+msgstr "\"%s\" க்கு நீங்கள் பயன்படுத்த விரும்பும் விசைகளின் கலவையை அழுத்தவும்."
+
+#: src/prefs.c:226 src/symbols.c:2164 src/sidebar.c:1244
+msgid "_Expand All"
+msgstr "எல்லாவற்றையும் விரிவாக்கு (_E)"
+
+#: src/prefs.c:231 src/symbols.c:2169 src/sidebar.c:1250
+msgid "_Collapse All"
+msgstr "எல்லாவற்றையும் சுருக்கு (_C)"
+
+#: src/prefs.c:291
+msgid "Action"
+msgstr "செயல்"
+
+#: src/prefs.c:296
+msgid "Shortcut"
+msgstr "குறுக்குவழி"
+
+#: src/printing.c:162
+#, c-format
+msgid "<b>Page %d of %d</b>"
+msgstr "<b>பக்கம் %d கீழ் %d </b>"
+
+#: src/printing.c:232
+msgid "Document Setup"
+msgstr "ஆவண அமைப்பு"
+
+#: src/printing.c:267
+msgid "Print only the basename(without the path) of the printed file"
+msgstr "அச்சிடப்பட்ட கோப்பின் அடிப்படை பெயரை (பாதை இல்லாமல்) மட்டும் அச்சிடுக"
+
+#: src/printing.c:419
+msgid "Paginating"
+msgstr "பக்கமிடல்"
+
+#: src/printing.c:443
+#, c-format
+msgid "Page %d of %d"
+msgstr "பக்கம் %d கீழ் %d"
+
+#: src/printing.c:499
+#, c-format
+msgid "Did not send document %s to the printing subsystem."
+msgstr "அச்சிடும் துணை அமைப்புக்கு %s ஆவணம் அனுப்பவில்லை."
+
+#: src/printing.c:501
+#, c-format
+msgid "Document %s was sent to the printing subsystem."
+msgstr "ஆவணம் %s அச்சிடும் துணை அமைப்புக்கு அனுப்பப்பட்டன."
+
+#: src/printing.c:552
+#, c-format
+msgid "Printing of %s failed (%s)."
+msgstr "%s அச்சிடுதல் தோல்வியுற்றது ( %s)."
+
+#: src/printing.c:590
+msgid "Please set a print command in the preferences dialog first."
+msgstr "முதலில் விருப்பத்தேர்வுகள் உரையாடலில் அச்சு கட்டளையை அமை."
+
+#: src/printing.c:598
+#, c-format
+msgid ""
+"The file \"%s\" will be printed with the following command:\n"
+"\n"
+"%s"
+msgstr ""
+"\"%s\" கோப்பு பின்வரும் கட்டளையுடன் அச்சிடப்படும்: \n"
+"\n"
+" %s"
+
+#: src/printing.c:613
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"அச்சு கட்டளையை செயல்படுத்த முடியாது \"%s\": %s. விருப்பத்தேர்வுகளில் பாதை "
+"அமைப்பைச் சரிபார்."
+
+#: src/printing.c:620
+#, c-format
+msgid "File %s printed."
+msgstr "கோப்பு %s அச்சிடப்பட்டது."
+
+#: src/project.c:101
+msgid "projects"
+msgstr "திட்டங்கள்"
+
+#: src/project.c:1045
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr "திட்டம் \"%s\" திறக்கப்பட்டது."
+
+#: src/project.c:328 src/project.c:1055
+#, c-format
+msgid "Project file \"%s\" could not be loaded."
+msgstr "திட்டக் கோப்பை \"%s\" ஏற்ற முடியவில்லை."
+
+#: src/project.c:277 src/project.c:630 src/project.c:1187
+msgid "Project file could not be written"
+msgstr "திட்டக் கோப்பை எழுத முடியவில்லை"
+
+#: src/project.c:124
+msgid "Move the current documents into the new project's session?"
+msgstr "தற்போதைய ஆவணங்களை புதிய திட்ட அமர்வில் நகர்த்தவா?"
+
+#: src/project.c:176
+msgid "New Project"
+msgstr "புதிய திட்டம்"
+
+#: src/project.c:181
+msgid "C_reate"
+msgstr "உருவாக்கு (_r)"
+
+#: src/project.c:199
+msgid "Project name"
+msgstr "திட்ட பெயர்"
+
+#: src/project.c:211
+#, c-format
+msgid ""
+"Path of the file representing the project and storing its settings. It "
+"should normally have the \"%s\" extension."
+msgstr ""
+"திட்டத்தை குறிக்கும் மற்றும் அதன் அமைப்புகளை சேமிக்கும் கோப்பின் பாதை. இது "
+"பொதுவாக \"%s\" நீட்டிப்பைக் கொண்டிருக்க வேண்டும்."
+
+#: src/project.c:225
+msgid "Base path:"
+msgstr "அடிப் பாதை:"
+
+#: src/project.c:235 src/project.c:493
+msgid "Choose Project Base Path"
+msgstr "திட்ட அடிப்படை பாதையைத் தேர்வுசெய்க"
+
+#: src/project.c:282
+#, c-format
+msgid "Project \"%s\" created."
+msgstr "திட்டம் \"%s\" உருவாக்கப்பட்டது."
+
+#: src/project.c:347
+msgid "Open Project"
+msgstr "திறந்த திட்டம்"
+
+#: src/project.c:367
+msgid "Project files"
+msgstr "திட்ட கோப்புகள்"
+
+#: src/project.c:426
+#, c-format
+msgid "Project \"%s\" closed."
+msgstr "திட்டம் \"%s\" மூடப்பட்டது."
+
+#: src/project.c:633
+#, c-format
+msgid "Project \"%s\" saved."
+msgstr "திட்டம் \"%s\" சேமிக்கப்பட்டது."
+
+#: src/project.c:667
+msgid "Do you want to close it before proceeding?"
+msgstr "தொடர்வதற்கு முன் அதை மூட விரும்புகிறீர்களா?"
+
+#: src/project.c:668
+#, c-format
+msgid "The '%s' project is open."
+msgstr "'%s' திட்டம் திறந்திருக்கும்."
+
+#: src/project.c:717
+msgid "The specified project name is too short."
+msgstr "குறிப்பிட்ட திட்டத்தின் பெயர் மிகக் குறைவு."
+
+#: src/project.c:723
+#, c-format
+msgid "The specified project name is too long (max. %d characters)."
+msgstr ""
+"குறிப்பிட்ட திட்டத்தின் பெயர் மிக நீளமானது (அதிகபட்சம். %d எழுத்துக்கள்)."
+
+#: src/project.c:735
+msgid "You have specified an invalid project filename."
+msgstr "தவறான திட்ட கோப்பு பெயரை நீங்கள் குறிப்பிட்டுள்ளீர்கள்."
+
+#: src/project.c:758
+msgid "Create the project's base path directory?"
+msgstr "திட்டத்தின் அடிப்படை பாதை கோப்பகத்தை உருவாக்கவா?"
+
+#: src/project.c:759
+#, c-format
+msgid "The path \"%s\" does not exist."
+msgstr "\"%s\" பாதை இல்லை."
+
+#: src/project.c:768
+#, c-format
+msgid "Project base directory could not be created (%s)."
+msgstr "திட்ட அடிப்படை கோப்பகத்தை உருவாக்க முடியவில்லை (%s)."
+
+#: src/project.c:781
+#, c-format
+msgid "Project file could not be written (%s)."
+msgstr "திட்டக் கோப்பை எழுத முடியவில்லை (%s)."
+
+#: src/project.c:787 src/search.c:634
+msgid "_Replace"
+msgstr "மறுசீரமைப்பு (_R)"
+
+#: src/project.c:935
+msgid "Choose Project Filename"
+msgstr "திட்ட கோப்பு பெயரைத் தேர்வுசெய்க"
+
+#: src/search.c:1009
+msgid "E_xtra options:"
+msgstr "மேலும் விருப்பங்கள்: (_x)"
+
+#: src/search.c:1017
+msgid "Other options to pass to Grep"
+msgstr "உவவெஅவிற்கு அனுப்ப பிற விருப்பங்கள்"
+
+#: src/search.c:1377 src/search.c:2243 src/search.c:2246
+#, c-format
+msgid "Found %d match for \"%s\"."
+msgid_plural "Found %d matches for \"%s\"."
+msgstr[0] "%d பொருத்தம் \"%s\"க்கு உள்ளது."
+msgstr[1] "%d பொருத்தங்கள் \"%s\"க்கு உள்ளது."
+
+#: src/search.c:1433
+#, c-format
+msgid "Replaced %u matches in %u documents."
+msgstr "%u ஆவணங்களில் %u பொருந்தங்களை மாற்றியது."
+
+#: src/search.c:1464
+msgid ""
+"This operation will modify all open files which contain the text to replace."
+msgstr ""
+"இந்த செயல்பாடு மாற்றுவதற்கு உரையைக் கொண்டிருக்கும் அனைத்து திறந்த "
+"கோப்புகளையும் மாற்றியமைக்கும்."
+
+#: src/search.c:1465
+msgid "Are you sure to replace in the whole session?"
+msgstr "முழு அமர்விலும் மாற்றுவது உறுதி?"
+
+#: src/search.c:1630
+msgid "Invalid directory for find in files."
+msgstr "கோப்புகளில் கண்டுபிடிப்பதற்கான தவறான அடைவு."
+
+#: src/search.c:1647
+msgid "No text to find."
+msgstr "கண்டுபிடிக்க உரை இல்லை."
+
+#: src/search.c:1723
+msgid "Searching..."
+msgstr "தேடுகிறது..."
+
+#: src/search.c:1725
+#, c-format
+msgid "%s %s -- %s (in directory: %s)"
+msgstr "%s %s - %s (கோப்பகத்தில்: %s)"
+
+#: src/search.c:1733
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"உவவெஅ கருவியை \"%s\" செயல்படுத்த முடியாது: %s. விருப்பங்களில் பாதை அமைப்பைச்"
+" சரிபார்."
+
+#: src/search.c:1773
+#, c-format
+msgid "Could not open directory (%s)"
+msgstr "கோப்பகத்தை திறக்க முடியவில்லை (%s)"
+
+#: src/search.c:1863
+msgid "Search failed."
+msgstr "தேடல் தோல்வியடைந்தது."
+
+#: src/search.c:1887
+#, c-format
+msgid "Search completed with %d match."
+msgid_plural "Search completed with %d matches."
+msgstr[0] "%d பொருத்தத்துடன் தேடல் முடிந்தது."
+msgstr[1] "%d பொருத்தங்களுடன் தேடல் முடிந்தது."
+
+#: src/search.c:1895
+msgid "No matches found."
+msgstr "பொருத்தங்கள் எதுவும் கிடைக்கவில்லை."
+
+#: src/search.c:1925
+#, c-format
+msgid "Bad regex: %s"
+msgstr "மோசமான வழக்கவெளி: %s"
+
+#: src/search.c:312 src/search.c:970
+msgid "_Use regular expressions"
+msgstr "வழக்கமான வெளிப்பாடுகளைப் பயன்படுத்துங்கள் (_U)"
+
+#: src/search.c:315
+msgid ""
+"Use Perl-like regular expressions. For detailed information about using "
+"regular expressions, please refer to the manual."
+msgstr ""
+"பேர்ல் போன்ற வழக்கமான வெளிப்பாடுகளைப் பயன்படுத்தவும். வழக்கமான "
+"வெளிப்பாடுகளைப் பயன்படுத்துவது பற்றிய விரிவான தகவலுக்கு, கையேட்டைப் "
+"பார்."
+
+#: src/search.c:320
+msgid "Use _escape sequences"
+msgstr "தப்பிக்கும் தொடர்களைப் பயன்படுத்தவும் (_e)"
+
+#: src/search.c:324
+msgid ""
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
+"corresponding control characters"
+msgstr ""
+"தொடர்புடைய கட்டுப்பாட்டு எழுத்துக்களுடன் \\\\, \\ t, \\ n, \\ r மற்றும் \\ "
+"uxxxx (ஒருங்குறி எழுத்துக்கள்) ஐ மாற்றவும்"
+
+#: src/search.c:327
+msgid "Use multi-line matchin_g"
+msgstr "பலவரி பொருத்தம் பயன்படுத்தவும் (_g)"
+
+#: src/search.c:332
+msgid ""
+"Perform regular expression matching on the whole buffer at once rather than "
+"line by line, allowing matches to span multiple lines. In this mode, newline"
+" characters are part of the input and can be captured as normal characters "
+"by the pattern."
+msgstr ""
+"முழு இடையகத்திலும் வழக்கமான வெளிப்பாடு பொருத்தத்தை ஒரே நேரத்தில் வரி மூலம் "
+"வரிக்கு பதிலாக செய்யுங்கள், போட்டிகளை பல வரிகளை பரப்ப அனுமதிக்கிறது. இந்த "
+"பயன்முறையில், நியூலைன் எழுத்துக்கள் உள்ளீட்டின் ஒரு பகுதியாகும், மேலும் அவை "
+"வடிவத்தால் சாதாரண எழுத்துக்களாக கைப்பற்றப்படலாம்."
+
+#: src/search.c:345
+msgid "Search _backwards"
+msgstr "_பின்திசையில் தேடுங்கள்"
+
+#: src/search.c:351 src/search.c:979
+msgid "C_ase sensitive"
+msgstr "வழக்கு உணர்திறன் (_a)"
+
+#: src/search.c:355 src/search.c:984
+msgid "Match only a _whole word"
+msgstr "ஒரு முழு சொல்லை மட்டுமே பொருத்துங்கள் (_w)"
+
+#: src/search.c:359
+msgid "Match from s_tart of word"
+msgstr "சொல்லின் தொடக்கத்திலிருந்து பொருந்தவும் (_t)"
+
+#: src/search.c:476
+msgid "_Previous"
+msgstr "முன்தைய (_P)"
+
+#: src/search.c:481
+msgid "_Next"
+msgstr "அடுத்தது (_N)"
+
+#: src/search.c:485 src/search.c:645 src/search.c:886
+msgid "_Search for:"
+msgstr "இதை தேடு: (_S)"
+
+#: src/search.c:513
+msgid "_Find All"
+msgstr "அனைத்தையும் தேடு (_F)"
+
+#: src/search.c:520
+msgid "_Mark"
+msgstr "குறி (_M)"
+
+#: src/search.c:522
+msgid "Mark all matches in the current document"
+msgstr "தற்போதைய ஆவணத்தில் அனைத்து போட்டிகளையும் குறி"
+
+#: src/search.c:527 src/search.c:704
+msgid "In Sessi_on"
+msgstr "அமர்வில் (_o)"
+
+#: src/search.c:532 src/search.c:709
+msgid "_In Document"
+msgstr "ஆவணத்தில் (_I)"
+
+#: src/search.c:538 src/search.c:722
+msgid "Close _dialog"
+msgstr "உரையாடலை மூடு (_d)"
+
+#: src/search.c:542 src/search.c:726
+msgid "Disable this option to keep the dialog open"
+msgstr "உரையாடலைத் திறந்து வைக்க இந்த விருப்பத்தை முடக்கு"
+
+#: src/search.c:639
+msgid "Replace & Fi_nd"
+msgstr "கண்டு & மாற்றவும் (_n)"
+
+#: src/search.c:648
+msgid "Replace wit_h:"
+msgstr "இதால் மாற்றவும்: (_h)"
+
+#: src/search.c:697
+msgid "Re_place All"
+msgstr "அனைத்தையும் மாற்று (_p)"
+
+#: src/search.c:714
+msgid "In Se_lection"
+msgstr "தேர்வில் (_l)"
+
+#: src/search.c:716
+msgid "Replace all matches found in the currently selected text"
+msgstr ""
+"தற்போது தேர்ந்தெடுக்கப்பட்ட உரையில் காணப்படும் அனைத்து போட்டிகளையும் "
+"மாற்றவும்"
+
+#: src/search.c:835
+msgid "all"
+msgstr "அனைத்தும்"
+
+#: src/search.c:837
+msgid "project"
+msgstr "திட்டம்"
+
+#: src/search.c:839
+msgid "custom"
+msgstr "தனிப்பயன்"
+
+#: src/search.c:843
+msgid ""
+"All: search all files in the directory\n"
+"Project: use file patterns defined in the project settings\n"
+"Custom: specify file patterns manually"
+msgstr ""
+"அனைத்தும்: எல்லா கோப்புகளையும் கோப்பகத்தில் தேடுங்கள் \n"
+" திட்டம்: திட்ட அமைப்புகளில் வரையறுக்கப்பட்ட கோப்பு வடிவங்களைப் பயன்படுத்தவும் \n"
+" தனிப்பயன்: கோப்பு வடிவங்களை கைமுறையாகக் குறிப்பிடவும்"
+
+#: src/search.c:918
+msgid "Space separated list of file patterns (e.g. *.c *.h)"
+msgstr "இடம் பிரிக்கப்பட்ட கோப்பு வடிவங்களின் பட்டியல்(e.g. *.c *.h)"
+
+#: src/search.c:930
+msgid "_Directory:"
+msgstr "அடைவு: (_D)"
+
+#: src/search.c:949
+msgid "E_ncoding:"
+msgstr "குறியாக்கம்: (_n)"
+
+#: src/search.c:973
+msgid "See grep's manual page for more information"
+msgstr "மேலும் தகவலுக்கு உவவெஅவின் கையேடு பக்கத்தைப் பார்"
+
+#: src/search.c:975
+msgid "_Recurse in subfolders"
+msgstr "துணை கோப்புறைகளில் மீண்டும் (_R)"
+
+#: src/search.c:988
+msgid "_Invert search results"
+msgstr "தேடல் முடிவுகளை தலைகீழ் (_I)"
+
+#: src/search.c:992
+msgid "Invert the sense of matching, to select non-matching lines"
+msgstr ""
+"பொருந்தாத வரிகளைத் தேர்ந்தெடுக்க, பொருந்தும் உணர்வைத் தலைகீழாக மாற்றவும்"
+
+#: src/sidebar.c:1070
+msgid "Show S_ymbol List"
+msgstr "குறியீட்டு பட்டியலைக் காட்டு (_y)"
+
+#: src/sidebar.c:1077
+msgid "Show _Document List"
+msgstr "ஆவண பட்டியலைக் காட்டு (_D)"
+
+#: src/sidebar.c:1173
+msgid "D_ocuments Only"
+msgstr "ஆவணங்கள் மட்டும் (_o)"
+
+#: src/sidebar.c:1174
+msgid "Show _Paths"
+msgstr "பாதைகளைக் காட்டு (_P)"
+
+#: src/sidebar.c:1175
+msgid "Show _Tree"
+msgstr "மரத்தை காட்டு (_T)"
+
+#: src/sidebar.c:165
+msgid "No symbols found"
+msgstr "குறியீட்டுகள் எதுவும் இல்லை"
+
+#: src/socket.c:235
+msgid ""
+"Geany tried to access the Unix Domain socket of another instance running as another user.\n"
+"This is a fatal error and Geany will now quit."
+msgstr ""
+"மற்றொரு பயனராக இயங்கும் மற்றொரு நிகழ்வின் யுனிக்சு டொமைன் சாக்கெட்டை அணுக சீனி முயற்சித்தார். \n"
+" இது ஒரு அபாயகரமான பிழை மற்றும் சீனி இப்போது வெளியேறுவார்."
+
+#: src/spawn.c:132
+msgid "Text was empty (or contained only whitespace)"
+msgstr "உரை காலியாக இருந்தது (அல்லது இடைவெளி மட்டுமே உள்ளது)"
+
+#: src/spawn.c:96 src/spawn.c:146 src/spawn.c:190
+msgid "Text ended before matching quote was found"
+msgstr "பொருந்தக்கூடிய மேற்கோள் கண்டறியப்படுவதற்கு முன்பு உரை முடிந்தது"
+
+#: src/spawn.c:153 src/spawn.c:167
+msgid "A quoted Windows program name must be entirely inside the quotes"
+msgstr ""
+"மேற்கோள் காட்டப்பட்ட சாளரங்கள் நிரல் பெயர் முற்றிலும் மேற்கோள்களுக்குள் "
+"இருக்க வேண்டும்"
+
+#: src/spawn.c:260
+msgid "Program not found"
+msgstr "நிரல் கிடைக்கவில்லை"
+
+#: src/spawn.c:766
+msgid "Failed to change to the working directory"
+msgstr "வேலை செய்யும் கோப்பகத்திற்கு மாற்ற முடியவில்லை"
+
+#: src/spawn.c:771
+msgid "Unknown error executing child process"
+msgstr "குழந்தை செயல்முறையை செயல்படுத்துவதில் தெரியாத பிழை"
+
+#: src/stash.c:1226
+msgid "Value"
+msgstr "மதிப்பு"
+
+#: src/symbols.c:1218
+#, c-format
+msgid "Unknown filetype extension for \"%s\".\n"
+msgstr "\"%s\" க்கான அறியப்படாத கோப்புவகை நீட்டிப்பு.\n"
+
+#: src/symbols.c:1244
+msgid "Failed to create tags file, perhaps because no symbols were found.\n"
+msgstr ""
+"குறிச்சொற்கள் கோப்பை உருவாக்க முடியவில்லை, ஒருவேளை குறியீடுகள் எதுவும் "
+"காணப்படவில்லை.\n"
+
+#: src/symbols.c:1251
+msgid ""
+"Usage: %s -g <Tags File> <File list>\n"
+"\n"
+msgstr ""
+"பயன்பாடு: %s -g <Tag File> <File list>\n"
+"\n"
+
+#: src/symbols.c:1252
+#, c-format
+msgid ""
+"Example:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
+msgstr ""
+"உதாரணமாக: \n"
+" CFLAGS = `pkg-config gtk+-2.0-cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/gtk/gtk.h\n"
+
+#: src/symbols.c:1266
+msgid "Load Tags File"
+msgstr "குறியிட்டு கோப்பை ஏற்று"
+
+#: src/symbols.c:1273
+msgid "Geany tags file (*.*.tags)"
+msgstr "சீனி குறியிட்டு கோப்புகள் (*.*.tags)"
+
+#: src/symbols.c:1293
+#, c-format
+msgid "Loaded %s tags file '%s'."
+msgstr "ஏற்றப்பட்ட %s குறிச்சொற்கள் கோப்பு ' %s'."
+
+#: src/symbols.c:1296
+#, c-format
+msgid "Could not load tags file '%s'."
+msgstr "குறிச்சொற்கள் கோப்பை '%s' ஏற்ற முடியவில்லை."
+
+#: src/symbols.c:1518
+msgid "<b>%s:%lu:</b> %s"
+msgstr "<b>%s:%lu:</b> %s"
+
+#: src/symbols.c:1521
+msgid "<i>%s:%lu:</i> %s"
+msgstr "<i>%s:%lu:</i> %s"
+
+#: src/symbols.c:1742
+#, c-format
+msgid "Forward declaration \"%s\" not found."
+msgstr "முன்னோக்கி அறிவிப்பு \"%s\" காணப்படவில்லை."
+
+#: src/symbols.c:1744
+#, c-format
+msgid "Definition of \"%s\" not found."
+msgstr "\"%s\" இன் வரையறை காணப்படவில்லை."
+
+#: src/symbols.c:2179
+msgid "Sort by _Name"
+msgstr "பெயர் மூலம் வரிசைப்படுத்தவும் (_N)"
+
+#: src/symbols.c:2186
+msgid "Sort by _Appearance"
+msgstr "தோற்றத்தால் வரிசைப்படுத்தவும் (_A)"
+
+#: src/symbols.c:2196
+msgid "_Group by Type"
+msgstr "வகை மூலம் குழு (_G)"
+
+#: src/tagmanager/tm_parser.c:90 src/tagmanager/tm_parser.c:146
+#: src/tagmanager/tm_parser.c:161 src/tagmanager/tm_parser.c:182
+#: src/tagmanager/tm_parser.c:204 src/tagmanager/tm_parser.c:317
+#: src/tagmanager/tm_parser.c:352 src/tagmanager/tm_parser.c:419
+#: src/tagmanager/tm_parser.c:441 src/tagmanager/tm_parser.c:494
+#: src/tagmanager/tm_parser.c:511 src/tagmanager/tm_parser.c:528
+#: src/tagmanager/tm_parser.c:561 src/tagmanager/tm_parser.c:613
+#: src/tagmanager/tm_parser.c:662 src/tagmanager/tm_parser.c:703
+#: src/tagmanager/tm_parser.c:723 src/tagmanager/tm_parser.c:788
+#: src/tagmanager/tm_parser.c:880 src/tagmanager/tm_parser.c:905
+#: src/tagmanager/tm_parser.c:935 src/tagmanager/tm_parser.c:954
+#: src/tagmanager/tm_parser.c:993 src/tagmanager/tm_parser.c:1004
+#: src/tagmanager/tm_parser.c:1030 src/tagmanager/tm_parser.c:1067
+#: src/tagmanager/tm_parser.c:1091
+msgid "Functions"
+msgstr "செயல்பாடுகள்"
+
+#: src/tagmanager/tm_parser.c:94 src/tagmanager/tm_parser.c:138
+#: src/tagmanager/tm_parser.c:276 src/tagmanager/tm_parser.c:355
+#: src/tagmanager/tm_parser.c:513 src/tagmanager/tm_parser.c:883
+#: src/tagmanager/tm_parser.c:956 src/tagmanager/tm_parser.c:1005
+msgid "Macros"
+msgstr "பெரியவைகள்"
+
+#: src/tagmanager/tm_parser.c:95 src/tagmanager/tm_parser.c:184
+#: src/tagmanager/tm_parser.c:205 src/tagmanager/tm_parser.c:323
+#: src/tagmanager/tm_parser.c:445 src/tagmanager/tm_parser.c:514
+#: src/tagmanager/tm_parser.c:562 src/tagmanager/tm_parser.c:582
+#: src/tagmanager/tm_parser.c:650 src/tagmanager/tm_parser.c:705
+#: src/tagmanager/tm_parser.c:724 src/tagmanager/tm_parser.c:772
+#: src/tagmanager/tm_parser.c:882 src/tagmanager/tm_parser.c:910
+#: src/tagmanager/tm_parser.c:936 src/tagmanager/tm_parser.c:983
+#: src/tagmanager/tm_parser.c:1006 src/tagmanager/tm_parser.c:1032
+#: src/tagmanager/tm_parser.c:1069 src/tagmanager/tm_parser.c:1080
+#: src/tagmanager/tm_parser.c:1093
+msgid "Variables"
+msgstr "மாறிகள்"
+
+#: src/tagmanager/tm_parser.c:163 src/tagmanager/tm_parser.c:183
+#: src/tagmanager/tm_parser.c:563 src/tagmanager/tm_parser.c:706
+#: src/tagmanager/tm_parser.c:909 src/tagmanager/tm_parser.c:952
+#: src/tagmanager/tm_parser.c:1007 src/tagmanager/tm_parser.c:1033
+#: src/tagmanager/tm_parser.c:1070
+msgid "Constants"
+msgstr "மாறிலிகள்"
+
+#: src/tagmanager/tm_parser.c:87 src/tagmanager/tm_parser.c:179
+#: src/tagmanager/tm_parser.c:393 src/tagmanager/tm_parser.c:992
+#: src/tagmanager/tm_parser.c:1027
+msgid "Namespaces"
+msgstr "பெயர்வெளிகள்"
+
+#: src/tagmanager/tm_parser.c:88 src/tagmanager/tm_parser.c:123
+#: src/tagmanager/tm_parser.c:181 src/tagmanager/tm_parser.c:202
+#: src/tagmanager/tm_parser.c:365 src/tagmanager/tm_parser.c:382
+#: src/tagmanager/tm_parser.c:394 src/tagmanager/tm_parser.c:439
+#: src/tagmanager/tm_parser.c:510 src/tagmanager/tm_parser.c:579
+#: src/tagmanager/tm_parser.c:702 src/tagmanager/tm_parser.c:981
+#: src/tagmanager/tm_parser.c:1028
+msgid "Classes"
+msgstr "வகுப்புகள்"
+
+#: src/tagmanager/tm_parser.c:89 src/tagmanager/tm_parser.c:122
+#: src/tagmanager/tm_parser.c:180 src/tagmanager/tm_parser.c:440
+#: src/tagmanager/tm_parser.c:578 src/tagmanager/tm_parser.c:648
+#: src/tagmanager/tm_parser.c:701 src/tagmanager/tm_parser.c:906
+#: src/tagmanager/tm_parser.c:1029
+msgid "Interfaces"
+msgstr "இடைமுகங்கள்"
+
+#: src/tagmanager/tm_parser.c:126 src/tagmanager/tm_parser.c:654
+#: src/tagmanager/tm_parser.c:984 src/tagmanager/tm_parser.c:1031
+msgid "Enums"
+msgstr "எண்ணிகள்"
+
+#: src/tagmanager/tm_parser.c:97 src/tagmanager/tm_parser.c:127
+#: src/tagmanager/tm_parser.c:164 src/tagmanager/tm_parser.c:264
+#: src/tagmanager/tm_parser.c:707 src/tagmanager/tm_parser.c:789
+#: src/tagmanager/tm_parser.c:1034 src/tagmanager/tm_parser.c:1071
+msgid "Other"
+msgstr "மற்றொன்று"
+
+#: src/tagmanager/tm_parser.c:1065
+msgid "Packages"
+msgstr "தொகுப்பு"
+
+#: src/tagmanager/tm_parser.c:278 src/tagmanager/tm_parser.c:483
+#: src/tagmanager/tm_parser.c:526 src/tagmanager/tm_parser.c:564
+#: src/tagmanager/tm_parser.c:581 src/tagmanager/tm_parser.c:651
+#: src/tagmanager/tm_parser.c:908 src/tagmanager/tm_parser.c:958
+#: src/tagmanager/tm_parser.c:1066
+msgid "Types"
+msgstr "வகைகள்"
+
+#: src/tagmanager/tm_parser.c:1068
+msgid "Tasks"
+msgstr "பணிகள்"
+
+#: src/tagmanager/tm_parser.c:162 src/tagmanager/tm_parser.c:275
+#: src/tagmanager/tm_parser.c:565 src/tagmanager/tm_parser.c:1079
+msgid "Labels"
+msgstr "சிட்டைகள்"
+
+#: src/tagmanager/tm_parser.c:1092
+msgid "Regions"
+msgstr "பகுதிகள்"
+
+#: src/tagmanager/tm_parser.c:121 src/tagmanager/tm_parser.c:160
+#: src/tagmanager/tm_parser.c:480 src/tagmanager/tm_parser.c:700
+#: src/tagmanager/tm_parser.c:904
+msgid "Package"
+msgstr "தொகுப்பு"
+
+#: src/tagmanager/tm_parser.c:124 src/tagmanager/tm_parser.c:203
+#: src/tagmanager/tm_parser.c:384 src/tagmanager/tm_parser.c:395
+#: src/tagmanager/tm_parser.c:580 src/tagmanager/tm_parser.c:884
+#: src/tagmanager/tm_parser.c:982
+msgid "Methods"
+msgstr "முறைகள்"
+
+#: src/tagmanager/tm_parser.c:91 src/tagmanager/tm_parser.c:125
+#: src/tagmanager/tm_parser.c:442 src/tagmanager/tm_parser.c:512
+#: src/tagmanager/tm_parser.c:911 src/tagmanager/tm_parser.c:923
+msgid "Members"
+msgstr "உறுப்பினர்கள்"
+
+#: src/tagmanager/tm_parser.c:137
+msgid "Targets"
+msgstr "இலக்குகள்"
+
+#: src/tagmanager/tm_parser.c:185 src/tagmanager/tm_parser.c:878
+msgid "Traits"
+msgstr "பண்புகள்"
+
+#: src/tagmanager/tm_parser.c:206 src/tagmanager/tm_parser.c:699
+msgid "Imports"
+msgstr "இறக்குமதிகள்"
+
+#: src/tagmanager/tm_parser.c:228
+msgid "Environment"
+msgstr "சூழல்"
+
+#: src/tagmanager/tm_parser.c:229
+msgid "Part"
+msgstr "பகுதி"
+
+#: src/tagmanager/tm_parser.c:230 src/tagmanager/tm_parser.c:335
+#: src/tagmanager/tm_parser.c:595
+msgid "Chapter"
+msgstr "பாடங்கள்"
+
+#: src/tagmanager/tm_parser.c:231 src/tagmanager/tm_parser.c:336
+#: src/tagmanager/tm_parser.c:596
+msgid "Section"
+msgstr "பிரிவு"
+
+#: src/tagmanager/tm_parser.c:232 src/tagmanager/tm_parser.c:597
+msgid "Subsection"
+msgstr "உட்பிரிவு"
+
+#: src/tagmanager/tm_parser.c:233 src/tagmanager/tm_parser.c:598
+msgid "Subsubsection"
+msgstr "உள்துணைபிரிவு"
+
+#: src/tagmanager/tm_parser.c:234
+msgid "Bibitem"
+msgstr "பிபிடெம்"
+
+#: src/tagmanager/tm_parser.c:257
+msgid "Articles"
+msgstr "கட்டுரைகள்"
+
+#: src/tagmanager/tm_parser.c:258
+msgid "Book Chapters"
+msgstr "புத்தக பாடங்கள்"
+
+#: src/tagmanager/tm_parser.c:259
+msgid "Books & Conference Proceedings"
+msgstr "புத்தகங்கள் மற்றும் மாநாட்டு நடவடிக்கைகள்"
+
+#: src/tagmanager/tm_parser.c:260
+msgid "Conference Papers"
+msgstr "மாநாட்டு ஆவணங்கள்"
+
+#: src/tagmanager/tm_parser.c:261
+msgid "Theses"
+msgstr "ஆய்வறிக்கைகள்"
+
+#: src/tagmanager/tm_parser.c:262
+msgid "Strings"
+msgstr "சரங்கள்"
+
+#: src/tagmanager/tm_parser.c:263
+msgid "Unpublished"
+msgstr "வெளியிடப்படாதது"
+
+#: src/tagmanager/tm_parser.c:277
+msgid "Defines"
+msgstr "வரையறுக்கிறது"
+
+#: src/tagmanager/tm_parser.c:286 src/tagmanager/tm_parser.c:722
+#: src/tagmanager/tm_parser.c:738 src/tagmanager/tm_parser.c:806
+msgid "Sections"
+msgstr "பிரிவுகள்"
+
+#: src/tagmanager/tm_parser.c:287
+msgid "Keys"
+msgstr "விசைகள்"
+
+#: src/tagmanager/tm_parser.c:318 src/tagmanager/tm_parser.c:396
+msgid "Procedures"
+msgstr "நடைமுறைகள்"
+
+#: src/tagmanager/tm_parser.c:319
+msgid "Indexes"
+msgstr "குறியீடுகள்"
+
+#: src/tagmanager/tm_parser.c:320
+msgid "Tables"
+msgstr "அட்டவணைகள்"
+
+#: src/tagmanager/tm_parser.c:321
+msgid "Triggers"
+msgstr "தூண்டுதல்கள்"
+
+#: src/tagmanager/tm_parser.c:322
+msgid "Views"
+msgstr "காட்சிகள்"
+
+#: src/tagmanager/tm_parser.c:337
+msgid "Sect1"
+msgstr "பிரிவு 1"
+
+#: src/tagmanager/tm_parser.c:338
+msgid "Sect2"
+msgstr "பிரிவு 2"
+
+#: src/tagmanager/tm_parser.c:339
+msgid "Sect3"
+msgstr "பிரிவு 3"
+
+#: src/tagmanager/tm_parser.c:340
+msgid "Appendix"
+msgstr "பின் இணைப்பு"
+
+#: src/tagmanager/tm_parser.c:92 src/tagmanager/tm_parser.c:353
+#: src/tagmanager/tm_parser.c:443 src/tagmanager/tm_parser.c:907
+msgid "Structs"
+msgstr "கட்டமைப்புகள்"
+
+#: src/tagmanager/tm_parser.c:93 src/tagmanager/tm_parser.c:354
+#: src/tagmanager/tm_parser.c:444 src/tagmanager/tm_parser.c:881
+msgid "Typedefs / Enums"
+msgstr "வகைவரையறைகள் / எண்ணிகள்"
+
+#: src/tagmanager/tm_parser.c:366
+msgid "ID Selectors"
+msgstr "அடையாளம் தேர்வாளர்கள்"
+
+#: src/tagmanager/tm_parser.c:367
+msgid "Type Selectors"
+msgstr "வகை தேர்வாளர்கள்"
+
+#: src/tagmanager/tm_parser.c:381 src/tagmanager/tm_parser.c:770
+#: src/tagmanager/tm_parser.c:876 src/tagmanager/tm_parser.c:953
+msgid "Modules"
+msgstr "தொகுதிகள்"
+
+#: src/tagmanager/tm_parser.c:383
+msgid "Singletons"
+msgstr "ஒற்றைக்குழந்தைகள்"
+
+#: src/tagmanager/tm_parser.c:438 src/tagmanager/tm_parser.c:525
+#: src/tagmanager/tm_parser.c:646
+msgid "Module"
+msgstr "தொகுதி"
+
+#: src/tagmanager/tm_parser.c:96 src/tagmanager/tm_parser.c:446
+msgid "Extern Variables"
+msgstr "வெளிப்புற மாறிகள்"
+
+#: src/tagmanager/tm_parser.c:481
+msgid "Entities"
+msgstr "நிறுவனங்கள்"
+
+#: src/tagmanager/tm_parser.c:482
+msgid "Architectures"
+msgstr "கட்டமைப்புகள்"
+
+#: src/tagmanager/tm_parser.c:484
+msgid "Functions / Procedures"
+msgstr "செயல்பாடுகள் / நடைமுறைகள்"
+
+#: src/tagmanager/tm_parser.c:485
+msgid "Variables / Signals / Ports"
+msgstr "மாறிகள் / சமிக்ஞைகள் / துறைமுகங்கள்"
+
+#: src/tagmanager/tm_parser.c:486
+msgid "Processes / Blocks / Components"
+msgstr "செயல்முறைகள் / தொகுதிகள் / கூறுகள்"
+
+#: src/tagmanager/tm_parser.c:527
+msgid "Type constructors"
+msgstr "வகை கட்டமைப்பாளர்கள்"
+
+#: src/tagmanager/tm_parser.c:614
+msgid "Anchors"
+msgstr "நங்கூரர்கள்"
+
+#: src/tagmanager/tm_parser.c:615
+msgid "H1 Headings"
+msgstr "த1 தலைப்புகள்"
+
+#: src/tagmanager/tm_parser.c:616
+msgid "H2 Headings"
+msgstr "த2 தலைப்புகள்"
+
+#: src/tagmanager/tm_parser.c:617
+msgid "H3 Headings"
+msgstr "த3 தலைப்புகள்"
+
+#: src/tagmanager/tm_parser.c:647
+msgid "Programs"
+msgstr "திட்டங்கள்"
+
+#: src/tagmanager/tm_parser.c:649
+msgid "Functions / Subroutines"
+msgstr "செயல்பாடுகள் / துணைமுறைகள்"
+
+#: src/tagmanager/tm_parser.c:652
+msgid "Components"
+msgstr "கூறுகள்"
+
+#: src/tagmanager/tm_parser.c:653
+msgid "Blocks"
+msgstr "தொகுதிகள்"
+
+#: src/tagmanager/tm_parser.c:663 src/tagmanager/tm_parser.c:877
+#: src/tagmanager/tm_parser.c:957
+msgid "Structures"
+msgstr "கட்டமைப்புகள்"
+
+#: src/tagmanager/tm_parser.c:737
+msgid "Chapters"
+msgstr "பாடங்கள்"
+
+#: src/tagmanager/tm_parser.c:739
+msgid "Subsections"
+msgstr "துணைப்பிரிவுகள்"
+
+#: src/tagmanager/tm_parser.c:740
+msgid "Subsubsections"
+msgstr "உள்துணைப்பிரிவுகள்"
+
+#: src/tagmanager/tm_parser.c:741
+msgid "Level 4 sections"
+msgstr "நிலை 4 பிரிவுகள்"
+
+#: src/tagmanager/tm_parser.c:742
+msgid "Level 5 sections"
+msgstr "நிலை 5 பிரிவுகள்"
+
+#: src/tagmanager/tm_parser.c:769
+msgid "Events"
+msgstr "நிகழ்வுகள்"
+
+#: src/tagmanager/tm_parser.c:771
+msgid "Functions / Tasks"
+msgstr "செயல்பாடுகள் / பணிகள்"
+
+#: src/tagmanager/tm_parser.c:803
+msgid "Program"
+msgstr "திட்டம்"
+
+#: src/tagmanager/tm_parser.c:805
+msgid "Divisions"
+msgstr "பிரிவுகள்"
+
+#: src/tagmanager/tm_parser.c:807
+msgid "Paragraph"
+msgstr "பத்தி"
+
+#: src/tagmanager/tm_parser.c:808
+msgid "Group"
+msgstr "குழு"
+
+#: src/tagmanager/tm_parser.c:809
+msgid "Data"
+msgstr "தகவல்கள்"
+
+#: src/tagmanager/tm_parser.c:810
+msgid "Copies"
+msgstr "நகல்கள்"
+
+#: src/tagmanager/tm_parser.c:842
+msgid "Section Level 1"
+msgstr "பிரிவு நிலை 1"
+
+#: src/tagmanager/tm_parser.c:843
+msgid "Section Level 2"
+msgstr "பிரிவு நிலை 2"
+
+#: src/tagmanager/tm_parser.c:844
+msgid "Section Level 3"
+msgstr "பிரிவு நிலை 3"
+
+#: src/tagmanager/tm_parser.c:845
+msgid "Section Level 4"
+msgstr "பிரிவு நிலை 4"
+
+#: src/tagmanager/tm_parser.c:846
+msgid "Section Level 5"
+msgstr "பிரிவு நிலை 5"
+
+#: src/tagmanager/tm_parser.c:856
+msgid "Parts"
+msgstr "பாகங்கள்"
+
+#: src/tagmanager/tm_parser.c:857
+msgid "Assembly"
+msgstr "கூட்டி"
+
+#: src/tagmanager/tm_parser.c:858
+msgid "Steps"
+msgstr "படிகள்"
+
+#: src/tagmanager/tm_parser.c:879
+msgid "Implementations"
+msgstr "செயல்படுத்தல்கள்"
+
+#: src/tagmanager/tm_parser.c:955
+msgid "Fields"
+msgstr "புலங்கள்"
+
+#: src/tagmanager/tm_parser.c:959
+msgid "Unknowns"
+msgstr "தெரியாதவர்கள்"
+
+#: src/templates.c:651
+#, c-format
+msgid ""
+"Cannot execute template command \"%s\". Hint: incorrect paths in the command"
+" are a common cause of errors. Error: %s."
+msgstr ""
+"வார்ப்புரு கட்டளையை \"%s\" ஐ இயக்க முடியாது. குறிப்பு: கட்டளையில் தவறான "
+"பாதைகள் பிழைகளுக்கு பொதுவான காரணம். பிழை: %s."
+
+#: src/templates.c:81
+#, c-format
+msgid "Failed to convert template file \"%s\" to UTF-8"
+msgstr "வார்ப்புரு கோப்பை \"%s\" யுடிஎஃப் -8 ஆக மாற்றுவதில் தோல்வி"
+
+#: src/toolbar.c:359
+msgid "Create a new file"
+msgstr "புதிய கோப்பை உருவாக்கு"
+
+#: src/toolbar.c:360
+msgid "Create a new file from a template"
+msgstr "ஒரு வார்ப்புருவில் இருந்து புதிய கோப்பை உருவாக்கு"
+
+#: src/toolbar.c:367
+msgid "Open an existing file"
+msgstr "ஏற்கனவே உள்ள கோப்பைத் திற"
+
+#: src/toolbar.c:368
+msgid "Open a recent file"
+msgstr "சமீபத்திய கோப்பைத் திற"
+
+#: src/toolbar.c:376
+msgid "Choose more build actions"
+msgstr "மேலும் உருவாக்க செயல்களைத் தேர்வுசெய்க"
+
+#: src/toolbar.c:383
+msgid "Search Field"
+msgstr "தேடல் புலம்"
+
+#: src/toolbar.c:78 src/toolbar.c:383
+msgid "Find the entered text in the current file"
+msgstr "தற்போதைய கோப்பில் உள்ளிடப்பட்ட உரையைக் கண்டறியவும்"
+
+#: src/toolbar.c:393
+msgid "Goto Field"
+msgstr "புலத்திற்கு செல்"
+
+#: src/toolbar.c:79 src/toolbar.c:393
+msgid "Jump to the entered line number"
+msgstr "உள்ளிட்ட வரி எண்ணுக்கு செல்லவும்"
+
+#: src/toolbar.c:57
+msgid "Save the current file"
+msgstr "தற்போதைய கோப்பை சேமி"
+
+#: src/toolbar.c:584
+msgid "Separator"
+msgstr "பிரிப்பான்"
+
+#: src/toolbar.c:585
+msgid "--- Separator ---"
+msgstr "--- பிரிப்பான் ---"
+
+#: src/toolbar.c:59
+msgid "Save all open files"
+msgstr "அனைத்து திறந்த கோப்புகளையும் சேமி"
+
+#: src/toolbar.c:60
+msgid "Reload the current file from disk"
+msgstr "தற்போதைய கோப்பை வட்டில் இருந்து மீண்டும் ஏற்றவும்"
+
+#: src/toolbar.c:61
+msgid "Close the current file"
+msgstr "தற்போதைய கோப்பை மூடு"
+
+#: src/toolbar.c:62
+msgid "Close all open files"
+msgstr "அனைத்து திறந்த கோப்புகளையும் மூடு"
+
+#: src/toolbar.c:63
+msgid "Cut the current selection"
+msgstr "தற்போதைய தேர்வை வெட்டுங்கள்"
+
+#: src/toolbar.c:64
+msgid "Copy the current selection"
+msgstr "தற்போதைய தேர்வை நகலெடு"
+
+#: src/toolbar.c:65
+msgid "Paste the contents of the clipboard"
+msgstr "இடைநிலைப் பலகையின் உள்ளடக்கங்களை ஒட்டவும்"
+
+#: src/toolbar.c:66
+msgid "Delete the current selection"
+msgstr "தற்போதைய தேர்வை நீக்கு"
+
+#: src/toolbar.c:67
+msgid "Undo the last modification"
+msgstr "கடைசி மாற்றத்தை செயல்தவிர்"
+
+#: src/toolbar.c:68
+msgid "Redo the last modification"
+msgstr "கடைசி மாற்றத்தை மீண்டும் செய்யுங்கள்"
+
+#: src/toolbar.c:71
+msgid "Compile the current file"
+msgstr "தற்போதைய கோப்பை தொகு"
+
+#: src/toolbar.c:72
+msgid "Run or view the current file"
+msgstr "தற்போதைய கோப்பை இயக்கு அல்லது பார்"
+
+#: src/toolbar.c:73
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette"
+msgstr ""
+"ஒரு தட்டில் இருந்து ஊடாடும் வகையில் வண்ணத் தேர்வாளர் உரையாடலைத் திற"
+
+#: src/toolbar.c:74
+msgid "Zoom in the text"
+msgstr "உரையில் பெரிதாக்கு"
+
+#: src/toolbar.c:75
+msgid "Zoom out the text"
+msgstr "உரையை பெரிதாக்கு"
+
+#: src/toolbar.c:76
+msgid "Decrease indentation"
+msgstr "உள்தள்ளல் குறைவு"
+
+#: src/toolbar.c:77
+msgid "Increase indentation"
+msgstr "உள்தள்ளலை அதிகரி"
+
+#: src/toolbar.c:80
+msgid "Show the preferences dialog"
+msgstr "விருப்பத்தேர்வுகள் உரையாடலைக் காட்டு"
+
+#: src/toolbar.c:81
+msgid "Quit Geany"
+msgstr "சீனியை விட்டு வெளியேறு"
+
+#: src/toolbar.c:82
+msgid "Print document"
+msgstr "அச்சு ஆவணம்"
+
+#: src/toolbar.c:83
+msgid "Replace text in the current document"
+msgstr "தற்போதைய ஆவணத்தில் உரையை மாற்றவும்"
+
+#: src/toolbar.c:957
+msgid ""
+"Select items to be displayed on the toolbar. Items can be reordered by drag "
+"and drop."
+msgstr ""
+"கருவிப்பட்டியில் காட்டப்பட வேண்டிய உருப்படிகளைத் தேர்ந்தெடு. இழுவை "
+"மற்றும் கைவிடுவதன் மூலம் உருப்படிகளை மறுவரிசைப்படுத்தலாம்."
+
+#: src/toolbar.c:973
+msgid "Available Items"
+msgstr "கிடைக்கும் உருப்படிகள்"
+
+#: src/toolbar.c:994
+msgid "Displayed Items"
+msgstr "காட்டப்படும் உருப்படிகள்"
+
+#: src/tools.c:214
+#, c-format
+msgid "Passing data and executing custom command: %s"
+msgstr "தரவை அனுப்புதல் மற்றும் தனிப்பயன் கட்டளையை செயல்படுத்துதல்: %s"
+
+#: src/tools.c:222
+#, c-format
+msgid ""
+"The executed custom command returned an error. Your selection was not "
+"changed. Error message: %s"
+msgstr ""
+"செயல்படுத்தப்பட்ட தனிப்பயன் கட்டளை பிழையை அளித்தது. உங்கள் தேர்வு "
+"மாற்றப்படவில்லை. பிழை செய்தி: %s"
+
+#: src/tools.c:230
+msgid "The executed custom command exited with an unsuccessful exit code."
+msgstr ""
+"செயல்படுத்தப்பட்ட தனிப்பயன் கட்டளை தோல்வியுற்ற வெளியேறும் குறியீட்டைக் "
+"கொண்டு வெளியேறியது."
+
+#: src/tools.c:239
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"தனிப்பயன் கட்டளையை செயல்படுத்த முடியாது \"%s\": %s. தனிப்பயன் கட்டளைகளில் "
+"பாதை அமைப்பைச் சரிபார்."
+
+#: src/tools.c:354 src/tools.c:623
+msgid "Set Custom Commands"
+msgstr "தனிப்பயன் கட்டளைகளை அமை"
+
+#: src/tools.c:362
+msgid ""
+"You can send the current selection to any of these commands and the output "
+"of the command replaces the current selection."
+msgstr ""
+"இந்த கட்டளைகளில் ஏதேனும் தற்போதைய தேர்வை நீங்கள் அனுப்பலாம் மற்றும் "
+"கட்டளையின் வெளியீடு தற்போதைய தேர்வை மாற்றுகிறது."
+
+#: src/tools.c:376
+msgid "ID"
+msgstr "அடையாளம்"
+
+#: src/tools.c:594
+msgid "No custom commands defined."
+msgstr "தனிப்பயன் கட்டளைகள் வரையறுக்கப்படவில்லை."
+
+#: src/tools.c:693
+msgid "Word Count"
+msgstr "சொல் எண்ணிக்கை"
+
+#: src/tools.c:702
+msgid "selection"
+msgstr "தேர்வு"
+
+#: src/tools.c:707
+msgid "whole document"
+msgstr "முழு ஆவணம்"
+
+#: src/tools.c:716
+msgid "Range:"
+msgstr "எல்லை:"
+
+#: src/tools.c:728
+msgid "Lines:"
+msgstr "கோடுகள்:"
+
+#: src/tools.c:742
+msgid "Words:"
+msgstr "சொற்கள்:"
+
+#: src/tools.c:756
+msgid "Characters:"
+msgstr "எழுத்துக்கள்:"
+
+#: src/tools.c:83
+#, c-format
+msgid "Invalid command: %s"
+msgstr "தவறான கட்டளை: %s"
+
+#: src/ui_utils.c:2004
+msgid "Select Project Base Path"
+msgstr "திட்ட அடிப்படை பாதையைத் தேர்ந்தெடு"
+
+#: src/ui_utils.c:2029
+msgid "Select File"
+msgstr "கோப்பைத் தேர்ந்தெடு"
+
+#: src/ui_utils.c:2029
+msgid "Select Folder"
+msgstr "கோப்புறையைத் தேர்ந்தெடு"
+
+#: src/ui_utils.c:2231
+msgid "_Filetype Configuration"
+msgstr "கோப்பு வகை கட்டமைப்பு (_F)"
+
+#: src/ui_utils.c:2268
+msgid "Save All"
+msgstr "அனைத்தையும் சேமி"
+
+#: src/ui_utils.c:2269
+msgid "Close All"
+msgstr "அனைத்தையும் மூடு"
+
+#: src/ui_utils.c:237
+#, c-format
+msgid "%dL"
+msgstr "%dL"
+
+#: src/ui_utils.c:247 src/ui_utils.c:254
+msgid "RO "
+msgstr "ரோ"
+
+#: src/ui_utils.c:249
+msgid "INS"
+msgstr "சொரு"
+
+#: src/ui_utils.c:249
+msgid "OVR"
+msgstr "ஒவிஆர்"
+
+#: src/ui_utils.c:2505
+msgid "Geany cannot start!"
+msgstr "சீனி தொடங்க முடியாது!"
+
+#: src/ui_utils.c:263
+msgid "TAB"
+msgstr "தாவல்"
+
+#: src/ui_utils.c:266
+msgid "SP"
+msgstr "எச்பி"
+
+#: src/ui_utils.c:269
+msgid "T/S"
+msgstr "டி/எச்"
+
+#: src/ui_utils.c:277
+msgid "MOD"
+msgstr "மோட்"
+
+#: src/ui_utils.c:405
+msgid " (new instance)"
+msgstr "(புதிய நிகழ்வு)"
+
+#: src/ui_utils.c:435
+#, c-format
+msgid "Font updated (%s)."
+msgstr "எழுத்துரு புதுப்பிக்கப்பட்டது (%s)."
+
+#: src/ui_utils.c:62
+msgid ""
+"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding:"
+" %e      filetype: %f      scope: %s"
+msgstr ""
+"வரி: %l / %L\t நெடு: %c\t தேர்: %s\t %w      %t      %mmode: %M      "
+"குறியாக்கம்: %e      கோப்புவகை: %f      நோக்கம்: %s"
+
+#: src/ui_utils.c:686
+msgid "C Standard Library"
+msgstr "சி நிலையான நூலகம்"
+
+#: src/ui_utils.c:687
+msgid "ISO C99"
+msgstr "ஐஎசுஓ சி 99"
+
+#: src/ui_utils.c:688
+msgid "C++ (C Standard Library)"
+msgstr "சி++ (சி நிலையான நூலகம்)"
+
+#: src/ui_utils.c:689
+msgid "C++ Standard Library"
+msgstr "சி++ நிலையான நூலகம்"
+
+#: src/ui_utils.c:690
+msgid "C++ STL"
+msgstr "சி++ எச்டிஎல்"
+
+#: src/ui_utils.c:712 src/ui_utils.c:790
+msgid "dd.mm.yyyy"
+msgstr "dd.mm.yyyy"
+
+#: src/ui_utils.c:714 src/ui_utils.c:791
+msgid "mm.dd.yyyy"
+msgstr "mm.dd.yyyy"
+
+#: src/ui_utils.c:716 src/ui_utils.c:792
+msgid "yyyy/mm/dd"
+msgstr "yyyy/mm/dd"
+
+#: src/ui_utils.c:718 src/ui_utils.c:801
+msgid "dd.mm.yyyy hh:mm:ss"
+msgstr "dd.mm.yyyy hh: mm: ss"
+
+#: src/ui_utils.c:720 src/ui_utils.c:802
+msgid "mm.dd.yyyy hh:mm:ss"
+msgstr "mm.dd.yyyy hh: mm: ss"
+
+#: src/ui_utils.c:722 src/ui_utils.c:803
+msgid "yyyy/mm/dd hh:mm:ss"
+msgstr "yyyy/mm/dd hh: mm: ss"
+
+#: src/ui_utils.c:724 src/ui_utils.c:812
+msgid "_Use Custom Date Format"
+msgstr "தனிப்பயன் தேதி வடிவமைப்பைப் பயன்படுத்தவும் (_U)"
+
+#: src/ui_utils.c:728
+msgid "Custom Date Format"
+msgstr "தனிப்பயன் தேதி வடிவம்"
+
+#: src/ui_utils.c:729
+msgid ""
+"Enter here a custom date and time format. For a list of available conversion"
+" specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
+msgstr ""
+"இங்கே தனிப்பயன் தேதி மற்றும் நேர வடிவமைப்பை உள்ளிடவும். "
+"https://docs.gtk.org/glib/method.DateTime.format.html செயல்பாட்டுடன் "
+"பயன்படுத்தக்கூடிய எந்த மாற்று குறிப்பான்களையும் நீங்கள் பயன்படுத்தலாம்."
+
+#: src/ui_utils.c:750
+msgid "Date format string could not be converted (possibly too long)."
+msgstr "தேதி வடிவமைப்பு சரத்தை மாற்ற முடியவில்லை (ஒருவேளை மிக நீண்டது)."
+
+#: src/ui_utils.c:825
+msgid "_Set Custom Date Format"
+msgstr "தனிப்பயன் தேதி வடிவத்தை அமை (_S)"
+
+#: src/utils.c:100
+msgid ""
+"Failed to spawn the configured browser command. Please enter a valid command"
+" or leave it empty in order to spawn the system default browser."
+msgstr ""
+"உள்ளமைக்கப்பட்ட உலாவி கட்டளையை உருவாக்குவதில் தோல்வி. கணினி இயல்புநிலை "
+"உலாவியை உருவாக்க, சரியான கட்டளையை உள்ளிடவும் அல்லது காலியாக விடவும்."
+
+#: src/utils.c:388
+msgid "Windows (CRLF)"
+msgstr "சாளர (வதிவஉ)"
+
+#: src/utils.c:389
+msgid "Classic Mac (CR)"
+msgstr "உருவாக்கு (வதி)"
+
+#: src/utils.c:390
+msgid "Unix (LF)"
+msgstr "யுனிக்சு (வஉ)"
+
+#: src/utils.c:399
+msgid "CRLF"
+msgstr "வதிவஉ"
+
+#: src/utils.c:400
+msgid "CR"
+msgstr "வதி"
+
+#: src/utils.c:401
+msgid "LF"
+msgstr "வஉ"
+
+#: src/utils.c:99
+msgid "Select Browser"
+msgstr "உலாவியைத் தேர்ந்தெடு"
+
+#: src/vte.c:574
+#, c-format
+msgid "invalid VTE library \"%s\": missing symbol \"%s\""
+msgstr "தவறான மெமுமு நூலகம் \"%s\": காணாமல் போன சின்னம் \"%s\""
+
+#: src/vte.c:755
+msgid "_Set Path From Document"
+msgstr "ஆவணத்திலிருந்து பாதை அமை (_S)"
+
+#: src/vte.c:760
+msgid "_Restart Terminal"
+msgstr "முனையம் மறுதொடக்கம் (_R)"
+
+#: src/vte.c:793
+msgid "_Input Methods"
+msgstr "உள்ளீடு முறைகள் (_I)"
+
+#: src/vte.c:888
+msgid ""
+"Directory not changed because the terminal may contain some input (press "
+"Ctrl+C or Enter to clear it)."
+msgstr ""
+"அடைவு மாற்றப்படவில்லை, ஏனெனில் முனையத்தில் சில உள்ளீடு இருக்கலாம் (Ctrl+C ஐ "
+"அழுத்தவும் அல்லது அதை அழிக்க நுழையவும்)."
+
+#: src/win32.c:363
+#, c-format
+msgid "Failed to open URI \"%s\": %s"
+msgstr "முகவரி \" %s\" ஐ திறக்கத் தவறிவிட்டது: %s"
