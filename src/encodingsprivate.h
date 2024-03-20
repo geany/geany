@@ -57,6 +57,7 @@ const gchar* encodings_get_charset(const GeanyEncoding* enc);
 
 void encodings_select_radio_item(const gchar *charset);
 
+void encodings_init_headless(void);
 void encodings_init(void);
 void encodings_finalize(void);
 
@@ -72,7 +73,8 @@ void encodings_encoding_store_cell_data_func(GtkCellLayout *cell_layout, GtkCell
 gboolean encodings_is_unicode_charset(const gchar *string);
 
 gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *forced_enc,
-                                        gchar **used_encoding, gboolean *has_bom, gboolean *partial);
+                                        gchar **used_encoding, gboolean *has_bom, gboolean *has_nuls,
+                                        GError **error);
 
 GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, guint *bom_len);
 

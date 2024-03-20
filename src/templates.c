@@ -70,15 +70,18 @@ static gchar *read_file(const gchar *locale_fname)
 	gchar *contents;
 	gsize length;
 	GString *str;
+	GError *err = NULL;
 
 	if (! g_file_get_contents(locale_fname, &contents, &length, NULL))
 		return NULL;
 
-	if (! encodings_convert_to_utf8_auto(&contents, &length, NULL, NULL, NULL, NULL))
+	if (! encodings_convert_to_utf8_auto(&contents, &length, NULL, NULL, NULL, NULL, &err))
 	{
 		gchar *utf8_fname = utils_get_utf8_from_locale(locale_fname);
 
-		ui_set_statusbar(TRUE, _("Failed to convert template file \"%s\" to UTF-8"), utf8_fname);
+		ui_set_statusbar(TRUE, _("Failed to convert template file \"%s\" to UTF-8: %s"),
+				utf8_fname, err->message);
+		g_error_free(err);
 		g_free(utf8_fname);
 		g_free(contents);
 		return NULL;
