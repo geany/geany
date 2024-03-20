@@ -39,6 +39,7 @@
 #include "filetypes.h"
 #include "geanyobject.h"
 #include "keybindingsprivate.h"
+#include "lsp.h"
 #include "main.h"
 #include "msgwindow.h"
 #include "navqueue.h"
@@ -1974,7 +1975,7 @@ static void goto_tag(GeanyDocument *doc, gboolean definition)
 	gchar *text = get_current_word_or_sel(doc, FALSE);
 
 	if (text)
-		symbols_goto_tag(text, definition);
+		symbols_goto_tag(text, sci_get_current_position(doc->editor->sci), definition);
 	else
 		utils_beep();
 
@@ -2151,10 +2152,16 @@ static gboolean cb_func_editor_action(guint key_id)
 			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);
 			break;
 		case GEANY_KEYS_EDITOR_AUTOCOMPLETE:
-			editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
+			if (lsp_autocomplete_available(doc))
+				lsp_autocomplete_perform(doc);
+			else
+				editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
 			break;
 		case GEANY_KEYS_EDITOR_CALLTIP:
-			editor_show_calltip(doc->editor, -1);
+			if (lsp_calltips_available(doc))
+				lsp_calltips_show(doc);
+			else
+				editor_show_calltip(doc->editor, -1);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word(doc, FALSE))

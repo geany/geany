@@ -782,6 +782,7 @@ install_headers(
 	'src/toolbar.h',
 	'src/ui_utils.h',
 	'src/utils.h',
+	'src/lsp.h',
 	subdir: 'geany'
 )
 
@@ -821,6 +822,8 @@ libgeany = shared_library('geany',
 	'src/keyfile.h',
 	'src/log.c',
 	'src/log.h',
+	'src/lsp.c',
+	'src/lsp.h',
 	'src/libmain.c',
 	'src/main.h',
 	'src/geany.h',

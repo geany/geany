@@ -47,6 +47,7 @@ geany_include_HEADERS = \
 	gtkcompat.h \
 	highlighting.h \
 	keybindings.h \
+	lsp.h \
 	main.h \
 	msgwindow.h \
 	navqueue.h \
@@ -86,6 +87,7 @@ libgeany_la_SOURCES = \
 	keyfile.c keyfile.h \
 	log.c log.h \
 	libmain.c main.h geany.h \
+	lsp.c lsp.h \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
