@@ -33,6 +33,7 @@
 #include "app.h"
 #include "build.h"
 #include "dialogs.h"
+#include "document.h"
 #include "documentprivate.h"
 #include "encodings.h"
 #include "filetypes.h"
@@ -127,22 +128,32 @@ void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	guint i, max = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *cur_doc = document_get_current();
 	guint count = 0;
+	guint recovered = 0;
 
 	/* iterate over documents in tabs order */
 	for (i = 0; i < max; i++)
 	{
 		GeanyDocument *doc = document_get_from_page(i);
+		FileDiskStatus disk_status = doc->priv->file_disk_status;
 
-		if (! doc->changed)
+		/* save if no conflict, possible re-save deleted file silently */
+		if ((! doc->changed && disk_status == FILE_OK)
+			|| (disk_status == FILE_CHANGED))
 			continue;
 
-		if (document_save_file(doc, FALSE))
-			count++;
+		if (document_save_file(doc, FALSE)) {
+				count++;
+				if (disk_status == FILE_DELETED) recovered++;
+			}
 	}
 	if (!count)
 		return;
 
-	ui_set_statusbar(FALSE, ngettext("%d file saved.", "%d files saved.", count), count);
+	gchar *message = ngettext("%d file saved", "%d files saved", count);
+	if (recovered > 0) {
+		message = g_strconcat(message,ngettext(" (of which %d was recovered)", " (of which %d were recovered)", recovered),NULL);
+	}
+	ui_set_statusbar(FALSE, g_strconcat(message,".",NULL), count);
 	/* saving may have changed window title, sidebar for another doc, so update */
 	document_show_tab(cur_doc);
 	sidebar_update_tag_list(cur_doc, TRUE);
@@ -153,6 +164,12 @@ void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_close_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	document_close_all();
+}
+
+
+void on_reload_all_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	on_monitor_reload_file_response(NULL, RESPONSE_DOCUMENT_RELOAD_UNMODIFIED, NULL);
 }
 
 
@@ -334,44 +351,6 @@ void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 
 	document_reload_prompt(doc, NULL);
 }
-
-/* reload all files */
-void on_reload_all(GtkAction *action, gpointer user_data)
-{
-	guint i;
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-
-	if (!file_prefs.keep_edit_history_on_reload)
-	{
-		GeanyDocument *doc;
-		foreach_document(i)
-		{
-			doc = documents[i];
-			if (doc->changed || document_can_undo(doc) || document_can_redo(doc))
-			{
-				if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
-					_("Changes detected, reloading all will lose any changes and history."),
-					_("Are you sure you want to reload all files?")))
-				{
-					break; // break the loop and continue with reloading below
-				}
-				else
-				{
-					return; // cancel reloading
-				}
-			}
-		}
-	}
-
-	foreach_document(i)
-	{
-		if (! (documents[i]->file_name == NULL))
-			document_reload_force(documents[i], documents[i]->encoding);
-	}
-
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
-}
-
 
 static void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {

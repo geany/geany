@@ -46,6 +46,8 @@ void on_close1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_close_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
+void on_reload_all_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_replace_tabs_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data);

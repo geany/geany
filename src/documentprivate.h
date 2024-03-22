@@ -48,8 +48,9 @@ UndoReloadData;
 typedef enum
 {
 	FILE_OK,
-	FILE_CHANGED, /* also valid for deleted files */
-	FILE_IGNORE
+	FILE_CHANGED,
+	FILE_DELETED,
+	FILE_SAVE_CANCELLED /* Needed when the state of FILE_DELETED is cancelled by user */
 }
 FileDiskStatus;
 
@@ -97,6 +98,8 @@ typedef struct GeanyDocumentPrivate
 	gboolean		 is_remote;
 	/* File status on disk of the document */
 	FileDiskStatus	 file_disk_status;
+	/* Displayed file status on disk of the document, if they differ call GUI */
+	FileDiskStatus	 file_disk_status_displayed;
 	/* Reference to a GFileMonitor object, only used when GIO file monitoring is used. */
 	gpointer		 monitor;
 	/* Time of the last disk check, only used when legacy file monitoring is used. */
@@ -107,7 +110,7 @@ typedef struct GeanyDocumentPrivate
 	guint			 tag_list_update_source;
 	/* Whether it's temporarily protected (read-only and saving needs confirmation). Does
 	 * not imply doc->readonly as writable files can be protected */
-	gint			 protected;
+	gboolean		 protected;
 	/* Save pointer to info bars allowing to cancel them programatically (to avoid multiple ones) */
 	GtkWidget		*info_bars[NUM_MSG_TYPES];
 	/* Keyed Data List to attach arbitrary data to the document */
