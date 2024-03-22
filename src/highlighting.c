@@ -1043,6 +1043,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(POWERSHELL);
 		init_styleset_case(PYTHON);
 		init_styleset_case(R);
+		init_styleset_case(RAKU);
 		init_styleset_case(RUBY);
 		init_styleset_case(RUST);
 		init_styleset_case(SH);
@@ -1135,6 +1136,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(POWERSHELL);
 		styleset_case(PYTHON);
 		styleset_case(R);
+		styleset_case(RAKU);
 		styleset_case(RUBY);
 		styleset_case(RUST);
 		styleset_case(SH);
@@ -1483,6 +1485,16 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_R:
 			return (style == SCE_R_STRING);
 
+		case SCLEX_RAKU:
+			return (style == SCE_RAKU_CHARACTER ||
+				style == SCE_RAKU_HEREDOC_Q ||
+				style == SCE_RAKU_HEREDOC_QQ ||
+				style == SCE_RAKU_STRING ||
+				style == SCE_RAKU_STRING_Q ||
+				style == SCE_RAKU_STRING_QQ ||
+				style == SCE_RAKU_STRING_Q_LANG ||
+				style == SCE_RAKU_REGEX);
+
 		case SCLEX_RUBY:
 			return (style == SCE_RB_CHARACTER ||
 				style == SCE_RB_STRING ||
@@ -1700,6 +1712,11 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 
 		case SCLEX_PERL:
 			return (style == SCE_PL_COMMENTLINE);
+
+		case SCLEX_RAKU:
+			return (style == SCE_RAKU_COMMENTLINE ||
+				style == SCE_RAKU_COMMENTEMBED ||
+				style == SCE_RAKU_POD);
 
 		case SCLEX_PROPERTIES:
 			return (style == SCE_PROPS_COMMENT);

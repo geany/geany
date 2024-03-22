@@ -1093,6 +1093,27 @@ static TMParserMapGroup group_AUTOIT[] = {
 	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
+static TMParserMapEntry map_RAKU[] = {
+	{'c', tm_tag_class_t},      // class
+	{'g', tm_tag_struct_t},     // grammar
+	{'m', tm_tag_method_t},     // method
+	{'o', tm_tag_namespace_t},  // module
+	{'p', tm_tag_package_t},    // package
+	{'r', tm_tag_class_t},      // role
+	{'u', tm_tag_variable_t},   // rule
+	{'b', tm_tag_method_t},     // submethod
+	{'s', tm_tag_function_t},   // subroutine
+	{'t', tm_tag_variable_t},   // token
+};
+static TMParserMapGroup group_RAKU[] = {
+	{N_("Packages / Modules"), TM_ICON_NAMESPACE, tm_tag_package_t | tm_tag_namespace_t},
+	{N_("Classes / Roles"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Grammars"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Methods"), TM_ICON_METHOD, tm_tag_method_t},
+	{N_("Subroutines"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Rules / Tokens"), TM_ICON_VAR, tm_tag_variable_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1165,6 +1186,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(TYPESCRIPT),
 	MAP_ENTRY(BATCH),
 	MAP_ENTRY(AUTOIT),
+	MAP_ENTRY(RAKU),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);

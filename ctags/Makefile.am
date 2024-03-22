@@ -85,6 +85,7 @@ parsers = \
 	parsers/pascal.c \
 	parsers/perl.c \
 	parsers/perl.h \
+	parsers/perl6.c \
 	parsers/php.c \
 	parsers/powershell.c \
 	parsers/python.c \

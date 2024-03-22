@@ -189,6 +189,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( SMALLTALK,  NONE,         "Smalltalk",        NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( JULIA,      JULIA,        "Julia",            NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( AU3,        AUTOIT,       "AutoIt",           NULL,                      SCRIPT,      SCRIPT   );
+	FT_INIT( RAKU,       RAKU,         "Raku",             NULL,                      SOURCE_FILE, SCRIPT   );
 }
 
 
@@ -604,6 +605,8 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			{ "sh",		GEANY_FILETYPES_SH },
 			{ "bash",	GEANY_FILETYPES_SH },
 			{ "dash",	GEANY_FILETYPES_SH },
+			{ "raku",	GEANY_FILETYPES_RAKU },
+			{ "perl6",	GEANY_FILETYPES_RAKU },
 			{ "perl",	GEANY_FILETYPES_PERL },
 			{ "python",	GEANY_FILETYPES_PYTHON },
 			{ "php",	GEANY_FILETYPES_PHP },

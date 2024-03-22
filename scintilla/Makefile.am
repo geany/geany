@@ -50,6 +50,7 @@ lexilla/lexers/LexProps.cxx            \
 lexilla/lexers/LexPython.cxx           \
 lexilla/lexers/LexPO.cxx               \
 lexilla/lexers/LexR.cxx                \
+lexilla/lexers/LexRaku.cxx             \
 lexilla/lexers/LexRuby.cxx             \
 lexilla/lexers/LexRust.cxx             \
 lexilla/lexers/LexSmalltalk.cxx        \

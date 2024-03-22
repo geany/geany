@@ -317,6 +317,7 @@ test_sources = \
 	simple.pl						\
 	simple.ps1						\
 	simple.py						\
+	simple.raku						\
 	simple.rb						\
 	simple.rst						\
 	simple.sh						\

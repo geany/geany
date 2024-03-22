@@ -64,6 +64,7 @@ filetypes_dist = \
 	filedefs/filetypes.po \
 	filedefs/filetypes.powershell \
 	filedefs/filetypes.r \
+	filedefs/filetypes.raku \
 	filedefs/filetypes.restructuredtext \
 	filedefs/filetypes.ruby \
 	filedefs/filetypes.rust \

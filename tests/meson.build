@@ -314,6 +314,7 @@ ctags_tests = files([
 	'ctags/simple.pl.tags',
 	'ctags/simple.ps1.tags',
 	'ctags/simple.py.tags',
+	'ctags/simple.raku.tags',
 	'ctags/simple.rb.tags',
 	'ctags/simple.rst.tags',
 	'ctags/simple.sh.tags',
