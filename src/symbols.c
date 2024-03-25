@@ -1820,8 +1820,9 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 
 
 /* gets the fold header after or on @line, but skipping folds created because of parentheses */
-static gint get_fold_header_after(ScintillaObject *sci, gint line)
+static gint get_fold_header_after(GeanyEditor *editor, gint line)
 {
+	ScintillaObject *const sci = editor->sci;
 	const gint line_count = sci_get_line_count(sci);
 
 	for (; line < line_count; line++)
@@ -1830,14 +1831,13 @@ static gint get_fold_header_after(ScintillaObject *sci, gint line)
 		{
 			const gint last_child = SSM(sci, SCI_GETLASTCHILD, line, -1);
 			const gint line_end = sci_get_line_end_position(sci, line);
-			const gint lexer = sci_get_lexer(sci);
 			gint parenthesis_match_line = -1;
 
 			/* now find any unbalanced open parenthesis on the line and see where the matching
 			 * brace would be, mimicking what folding on () does */
 			for (gint pos = sci_get_position_from_line(sci, line); pos < line_end; pos++)
 			{
-				if (highlighting_is_code_style(lexer, sci_get_style_at(sci, pos)) &&
+				if (editor_is_code_at(editor, pos) &&
 				    sci_get_char_at(sci, pos) == '(')
 				{
 					const gint matching = sci_find_matching_brace(sci, pos);
@@ -1895,7 +1895,7 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, TMTagType 
 			 * by folding on () in case the parameter list spans multiple lines */
 			if (abs(tag_line - parent) > 1)
 			{
-				const gint tag_fold = get_fold_header_after(doc->editor->sci, tag_line);
+				const gint tag_fold = get_fold_header_after(doc->editor, tag_line);
 				if (tag_fold >= 0)
 					last_child = SSM(doc->editor->sci, SCI_GETLASTCHILD, tag_fold, -1);
 			}

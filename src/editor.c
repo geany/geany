@@ -1357,19 +1357,18 @@ static void read_indent(GeanyEditor *editor, gint pos)
 }
 
 
-static gint get_brace_indent(ScintillaObject *sci, gint line)
+static gint get_brace_indent(GeanyEditor *editor, gint line)
 {
-	gint start = sci_get_position_from_line(sci, line);
-	gint end = sci_get_line_end_position(sci, line) - 1;
-	gint lexer = sci_get_lexer(sci);
+	gint start = sci_get_position_from_line(editor->sci, line);
+	gint end = sci_get_line_end_position(editor->sci, line) - 1;
 	gint count = 0;
 	gint pos;
 
 	for (pos = end; pos >= start && count < 1; pos--)
 	{
-		if (highlighting_is_code_style(lexer, sci_get_style_at(sci, pos)))
+		if (editor_is_code_at(editor, pos))
 		{
-			gchar c = sci_get_char_at(sci, pos);
+			gchar c = sci_get_char_at(editor->sci, pos);
 
 			if (c == '{')
 				count ++;
@@ -1384,17 +1383,14 @@ static gint get_brace_indent(ScintillaObject *sci, gint line)
 
 /* gets the last code position on a line
  * warning: if there is no code position on the line, returns the start position */
-static gint get_sci_line_code_end_position(ScintillaObject *sci, gint line)
+static gint get_sci_line_code_end_position(GeanyEditor *editor, gint line)
 {
-	gint start = sci_get_position_from_line(sci, line);
-	gint lexer = sci_get_lexer(sci);
+	gint start = sci_get_position_from_line(editor->sci, line);
 	gint pos;
 
-	for (pos = sci_get_line_end_position(sci, line) - 1; pos > start; pos--)
+	for (pos = sci_get_line_end_position(editor->sci, line) - 1; pos > start; pos--)
 	{
-		gint style = sci_get_style_at(sci, pos);
-
-		if (highlighting_is_code_style(lexer, style) && ! isspace(sci_get_char_at(sci, pos)))
+		if (editor_is_code_at(editor, pos) && ! isspace(sci_get_char_at(editor->sci, pos)))
 			break;
 	}
 
@@ -1402,13 +1398,13 @@ static gint get_sci_line_code_end_position(ScintillaObject *sci, gint line)
 }
 
 
-static gint get_python_indent(ScintillaObject *sci, gint line)
+static gint get_python_indent(GeanyEditor *editor, gint line)
 {
-	gint last_char = get_sci_line_code_end_position(sci, line);
+	gint last_char = get_sci_line_code_end_position(editor, line);
 
 	/* add extra indentation for Python after colon */
-	if (sci_get_char_at(sci, last_char) == ':' &&
-		sci_get_style_at(sci, last_char) == SCE_P_OPERATOR)
+	if (sci_get_char_at(editor->sci, last_char) == ':' &&
+		sci_get_style_at(editor->sci, last_char) == SCE_P_OPERATOR)
 	{
 		return 1;
 	}
@@ -1416,10 +1412,11 @@ static gint get_python_indent(ScintillaObject *sci, gint line)
 }
 
 
-static gint get_xml_indent(ScintillaObject *sci, gint line)
+static gint get_xml_indent(GeanyEditor *editor, gint line)
 {
+	ScintillaObject *const sci = editor->sci;
 	gboolean need_close = FALSE;
-	gint end = get_sci_line_code_end_position(sci, line);
+	gint end = get_sci_line_code_end_position(editor, line);
 	gint pos;
 
 	/* don't indent if there's a closing tag to the right of the cursor */
@@ -1469,9 +1466,9 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 		gint additional_indent = 0;
 
 		if (lexer_has_braces(sci))
-			additional_indent = iprefs->width * get_brace_indent(sci, line);
+			additional_indent = iprefs->width * get_brace_indent(editor, line);
 		else if (sci_get_lexer(sci) == SCLEX_PYTHON) /* Python/Cython */
-			additional_indent = iprefs->width * get_python_indent(sci, line);
+			additional_indent = iprefs->width * get_python_indent(editor, line);
 
 		/* HTML lexer "has braces" because of PHP and JavaScript.  If get_brace_indent() did not
 		 * recommend us to insert additional indent, we are probably not in PHP/JavaScript chunk and
@@ -1481,7 +1478,7 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 			sci_get_lexer(sci) == SCLEX_XML) &&
 			editor->document->file_type->priv->xml_indent_tags)
 		{
-			size += iprefs->width * get_xml_indent(sci, line);
+			size += iprefs->width * get_xml_indent(editor, line);
 		}
 
 		size += additional_indent;
@@ -1993,8 +1990,6 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 {
 	gint orig_pos = pos; /* the position for the calltip */
-	gint lexer;
-	gint style;
 	gchar word[GEANY_MAX_WORD_LENGTH];
 	gchar *str;
 	ScintillaObject *sci;
@@ -2004,23 +1999,20 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 
 	sci = editor->sci;
 
-	lexer = sci_get_lexer(sci);
-
 	if (pos == -1)
 	{
 		/* position of '(' is unknown, so go backwards from current position to find it */
 		pos = sci_get_current_position(sci);
 		pos--;
 		orig_pos = pos;
-		pos = (lexer == SCLEX_LATEX) ? find_previous_brace(sci, pos) :
+		pos = (sci_get_lexer(sci) == SCLEX_LATEX) ? find_previous_brace(sci, pos) :
 			find_start_bracket(sci, pos);
 		if (pos == -1)
 			return FALSE;
 	}
 
 	/* the style 1 before the brace (which may be highlighted) */
-	style = sci_get_style_at(sci, pos - 1);
-	if (! highlighting_is_code_style(lexer, style))
+	if (! editor_is_code_at(editor, pos - 1))
 		return FALSE;
 
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
@@ -2212,7 +2204,7 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force)
 {
-	gint rootlen, lexer, style;
+	gint rootlen, style;
 	gchar *root;
 	gchar cword[GEANY_MAX_WORD_LENGTH];
 	ScintillaObject *sci;
@@ -2233,12 +2225,11 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	sci = editor->sci;
 	ft = editor->document->file_type;
 
-	lexer = sci_get_lexer(sci);
-	style = sci_get_style_at(sci, pos - 2);
-
 	/* don't autocomplete in comments and strings */
-	if (!force && !highlighting_is_code_style(lexer, style))
+	if (!force && !editor_is_code_at(editor, pos - 2))
 		return FALSE;
+
+	style = sci_get_style_at(sci, pos - 2);
 
 	ret = autocomplete_check_html(editor, style, pos);
 
@@ -2726,7 +2717,7 @@ static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 
 	/* return if we are inside any embedded script */
 	style = sci_get_style_at(sci, pos);
-	if (style > SCE_H_XCCOMMENT && ! highlighting_is_string_style(lexer, style))
+	if (style > SCE_H_XCCOMMENT && ! editor_is_string_at(editor, pos))
 		return FALSE;
 
 	/* if ch is /, check for </, else quit */
