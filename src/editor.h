@@ -199,6 +199,9 @@ const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name)
 
 void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet);
 
+gboolean editor_is_string_at(GeanyEditor *editor, gint pos);
+gboolean editor_is_comment_at(GeanyEditor *editor, gint pos);
+gboolean editor_is_code_at(GeanyEditor *editor, gint pos);
 
 #ifdef GEANY_PRIVATE
 

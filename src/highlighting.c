@@ -1492,6 +1492,8 @@ void highlighting_show_color_scheme_dialog(void)
  * @param style Scintilla style (@c SCE_*).
  *
  * @return @c TRUE if the style is a string, @c FALSE otherwise.
+ *
+ * @deprecated 2.1  Use editor_is_string_at()
  */
 GEANY_API_SYMBOL
 gboolean highlighting_is_string_style(gint lexer, gint style)
@@ -1753,6 +1755,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
  * @param style Scintilla style (@c SCE_*).
  *
  * @return @c TRUE if the style is a comment, @c FALSE otherwise.
+ *
+ * @deprecated 2.1  Use editor_is_comment_at()
  */
 GEANY_API_SYMBOL
 gboolean highlighting_is_comment_style(gint lexer, gint style)
@@ -1767,10 +1771,10 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_C_PREPROCESSORCOMMENT ||
 				style == SCE_C_PREPROCESSORCOMMENTDOC ||
 				style == SCE_C_COMMENTLINEDOC ||
-				/* FIXME: this is sub-stylable, but we can't figure out the base
-				 * style without the Scintilla instance -- and we can't simply
-				 * assume that if the style ID is larger than the max possible
-				 * one it's this, because SCE_C_IDENTIFIER is also sub-stylable... */
+				/* SCE_C_COMMENTDOCKEYWORD is sub-stylable, but we can't figure
+				 * out the base style if given a sub-style without the
+				 * Scintilla instance.  This is a good example as to why this
+				 * is deprecated. */
 				style == SCE_C_COMMENTDOCKEYWORD ||
 				style == SCE_C_COMMENTDOCKEYWORDERROR ||
 				style == SCE_C_TASKMARKER);
@@ -1987,6 +1991,8 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
  * @param style Scintilla style (@c SCE_*).
  *
  * @return @c TRUE if the style is code, @c FALSE otherwise.
+ *
+ * @deprecated 2.1  Use editor_is_code_at()
  */
 GEANY_API_SYMBOL
 gboolean highlighting_is_code_style(gint lexer, gint style)

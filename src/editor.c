@@ -5351,6 +5351,52 @@ void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet)
 	g_string_free(pattern, TRUE);
 }
 
+
+/** Checks whether the given position is inside a string.
+ *
+ * @param editor A GeanyEditor instance.
+ * @param pos Position in the document to check.
+ *
+ * @return @c TRUE if the position is inside a string, @c FALSE otherwise.
+ */
+GEANY_API_SYMBOL
+gboolean editor_is_string_at(GeanyEditor *editor, gint pos)
+{
+	return highlighting_is_string_style(sci_get_lexer(editor->sci),
+		sci_get_base_style_at(editor->sci, pos));
+}
+
+
+/** Checks whether the given position is inside a comment.
+ *
+ * @param editor A GeanyEditor instance.
+ * @param pos Position in the document to check.
+ *
+ * @return @c TRUE if the position is inside a comment, @c FALSE otherwise.
+ */
+GEANY_API_SYMBOL
+gboolean editor_is_comment_at(GeanyEditor *editor, gint pos)
+{
+	return highlighting_is_comment_style(sci_get_lexer(editor->sci),
+		sci_get_base_style_at(editor->sci, pos));
+}
+
+
+/** Checks whether the given position is normal code (not string, comment, preprocessor, etc).
+ *
+ * @param editor A GeanyEditor instance.
+ * @param pos Position in the document to check.
+ *
+ * @return @c TRUE if the position holds code, @c FALSE otherwise.
+ */
+GEANY_API_SYMBOL
+gboolean editor_is_code_at(GeanyEditor *editor, gint pos)
+{
+	return highlighting_is_code_style(sci_get_lexer(editor->sci),
+		sci_get_base_style_at(editor->sci, pos));
+}
+
+
 static void        *copy_(void *src) { return src; }
 static void         free_(void *doc) { }
 
