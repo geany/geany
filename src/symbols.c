@@ -1766,11 +1766,11 @@ static gchar *parse_function_at_line(ScintillaObject *sci, gint tag_line)
 	}
 	start = sci_get_position_from_line(sci, tag_line - 2);
 	max_pos = sci_get_position_from_line(sci, tag_line + 1);
-	while (start < max_pos && sci_get_style_at(sci, start) != fn_style)
+	while (start < max_pos && sci_get_base_style_at(sci, start) != fn_style)
 		start++;
 
 	end = start;
-	while (end < max_pos && sci_get_style_at(sci, end) == fn_style)
+	while (end < max_pos && sci_get_base_style_at(sci, end) == fn_style)
 		end++;
 
 	if (start == end)
@@ -1807,7 +1807,7 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 
 	start = end;
 	/* Use tmp to find SCE_C_IDENTIFIER or SCE_C_GLOBALCLASS chars */
-	while (start >= 0 && ((tmp = sci_get_style_at(sci, start)) == SCE_C_IDENTIFIER
+	while (start >= 0 && ((tmp = sci_get_base_style_at(sci, start)) == SCE_C_IDENTIFIER
 		 ||  tmp == SCE_C_GLOBALCLASS
 		 || (c = sci_get_char_at(sci, start)) == '~'
 		 ||  c == ':'))

@@ -1404,7 +1404,7 @@ static gint get_python_indent(GeanyEditor *editor, gint line)
 
 	/* add extra indentation for Python after colon */
 	if (sci_get_char_at(editor->sci, last_char) == ':' &&
-		sci_get_style_at(editor->sci, last_char) == SCE_P_OPERATOR)
+		sci_get_base_style_at(editor->sci, last_char) == SCE_P_OPERATOR)
 	{
 		return 1;
 	}
@@ -1428,7 +1428,7 @@ static gint get_xml_indent(GeanyEditor *editor, gint line)
 	if (sci_get_char_at(sci, end) == '>' &&
 		sci_get_char_at(sci, end - 1) != '/')
 	{
-		gint style = sci_get_style_at(sci, end);
+		gint style = sci_get_base_style_at(sci, end);
 
 		if (style == SCE_H_TAG || style == SCE_H_TAGUNKNOWN)
 		{
@@ -2229,7 +2229,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	if (!force && !editor_is_code_at(editor, pos - 2))
 		return FALSE;
 
-	style = sci_get_style_at(sci, pos - 2);
+	style = sci_get_base_style_at(sci, pos - 2);
 
 	ret = autocomplete_check_html(editor, style, pos);
 
@@ -2716,7 +2716,7 @@ static gboolean handle_xml(GeanyEditor *editor, gint pos, gchar ch)
 		return FALSE;
 
 	/* return if we are inside any embedded script */
-	style = sci_get_style_at(sci, pos);
+	style = sci_get_base_style_at(sci, pos);
 	if (style > SCE_H_XCCOMMENT && ! editor_is_string_at(editor, pos))
 		return FALSE;
 
@@ -2796,7 +2796,7 @@ static GeanyFiletype *editor_get_filetype_at_line(GeanyEditor *editor, gint line
 
 	current_ft = editor->document->file_type;
 	line_start = sci_get_position_from_line(editor->sci, line);
-	style = sci_get_style_at(editor->sci, line_start);
+	style = sci_get_base_style_at(editor->sci, line_start);
 
 	/* Handle PHP filetype with embedded HTML */
 	if (current_ft->id == GEANY_FILETYPES_PHP && ! is_style_php(style))
@@ -2943,7 +2943,7 @@ static gint get_multiline_comment_style(GeanyEditor *editor, gint line_start)
 		case SCLEX_HTML:
 		case SCLEX_PHPSCRIPT:
 		{
-			if (is_style_php(sci_get_style_at(editor->sci, line_start)))
+			if (is_style_php(sci_get_base_style_at(editor->sci, line_start)))
 				style_comment = SCE_HPHP_COMMENT;
 			else
 				style_comment = SCE_H_COMMENT;
@@ -3061,7 +3061,7 @@ gint editor_do_uncomment(GeanyEditor *editor, gint line, gboolean toggle)
 
 				/* skip lines which are already comments */
 				style_comment = get_multiline_comment_style(editor, line_start);
-				if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
+				if (sci_get_base_style_at(editor->sci, line_start + x) == style_comment)
 				{
 					if (real_uncomment_multiline(editor))
 						count = 1;
@@ -3183,7 +3183,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 			/* skip lines which are already comments */
 			style_comment = get_multiline_comment_style(editor, line_start);
-			if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
+			if (sci_get_base_style_at(editor->sci, line_start + x) == style_comment)
 			{
 				if (real_uncomment_multiline(editor))
 					count_uncommented++;
@@ -3351,7 +3351,7 @@ gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 				/* skip lines which are already comments */
 				style_comment = get_multiline_comment_style(editor, line_start);
-				if (sci_get_style_at(editor->sci, line_start + x) == style_comment)
+				if (sci_get_base_style_at(editor->sci, line_start + x) == style_comment)
 					continue;
 
 				real_comment_multiline(editor, line_start, last_line);
@@ -3514,7 +3514,7 @@ static void auto_multiline(GeanyEditor *editor, gint cur_line)
 	/* Use the start of the line enter was pressed on, to avoid any doc keyword styles */
 	indent_pos = sci_get_line_indent_position(sci, cur_line - 1);
 	style = sci_get_style_at(sci, indent_pos);
-	if (!in_block_comment(lexer, style))
+	if (!in_block_comment(lexer, sci_get_style_from_substyle(sci, style)))
 		return;
 
 	/* Check whether the comment block continues on this line */
