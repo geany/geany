@@ -1497,3 +1497,14 @@ gint sci_word_end_position(ScintillaObject *sci, gint position, gboolean onlyWor
 {
 	return SSM(sci, SCI_WORDENDPOSITION, position, onlyWordCharacters);
 }
+
+gint sci_get_style_from_substyle(ScintillaObject *sci, gint style)
+{
+	return SSM(sci, SCI_GETSTYLEFROMSUBSTYLE, style, 0);
+}
+
+/* Same as sci_get_style_at() but returns the base style in case of substyles */
+gint sci_get_base_style_at(ScintillaObject *sci, gint position)
+{
+	return sci_get_style_from_substyle(sci, sci_get_style_at(sci, position));
+}
