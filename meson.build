@@ -887,7 +887,8 @@ executable('geany',
 	dependencies: deps,
 	build_rpath: meson.build_root(),
 	install_rpath: '$ORIGIN/../' + get_option('libdir'),
-	install: true
+	install: true,
+	win_subsystem: 'windows',
 )
 
 i18n = import('i18n')
