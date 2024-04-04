@@ -47,14 +47,6 @@ translated text.
 user-configurable and users may have become accustomed to using the existing
 mnemonic key.
 
-You can also use intl_stats.sh, e.g. by running the following command in the top
-source directory of Geany:
-
-$ po/intl_stats.sh -a it
-
-This will print some information about the Italian translation and checks for
-menu accelerators.
-
 When you have finished your work - which doesn't mean you finished the
 translation, you will not have to work alone - send the file to the translation
 mailing list [3] or directly to Frank Lanitz [4] and he will add the translation
