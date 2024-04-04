@@ -1432,6 +1432,80 @@ static void on_menu_project1_activate(GtkMenuItem *menuitem, gpointer user_data)
 						g_queue_get_length(ui_prefs.recent_projects_queue) > 0);
 }
 
+void on_menu_open_terminal_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	gchar *doc_dir;
+	gchar *cmd_locale;
+	GError *error = NULL;
+
+	cmd_locale = utils_get_locale_from_utf8(tool_prefs.term_cmd);
+	utils_str_replace_all(&cmd_locale, "%c", "");
+
+	doc_dir = utils_get_current_file_dir_utf8();
+
+	/* If the current document is untitled, launch in the home directory */
+	if (!doc_dir)
+	{
+		doc_dir = utils_get_utf8_from_locale(g_get_home_dir());
+
+		if (EMPTY(doc_dir))
+		{
+			doc_dir = NULL;
+		}
+	}
+
+	if (!spawn_async(doc_dir, cmd_locale, NULL, NULL, NULL, &error))
+	{
+		gchar *cmd_utf8 = utils_get_utf8_from_locale(cmd_locale);
+
+		ui_set_statusbar(TRUE, _("Cannot launch terminal (%s: %s). Check the"
+		"Terminal setting in Tool Preferences"), cmd_utf8, error->message);
+
+		g_free(cmd_utf8);
+		g_error_free(error);
+	}
+
+	g_free(cmd_locale);
+	g_free(doc_dir);
+}
+
+void on_menu_open_directory_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	gchar *doc_dir, *doc_dir_locale;
+	gchar *cmd_locale;
+	GError *error = NULL;
+
+	cmd_locale = utils_get_locale_from_utf8(tool_prefs.file_manager_cmd);
+
+	doc_dir = utils_get_current_file_dir_utf8();
+	doc_dir_locale = (doc_dir ? utils_get_locale_from_utf8(doc_dir)
+		: g_strdup(g_get_home_dir()));
+
+	if (doc_dir_locale)
+	{
+		utils_str_replace_all(&cmd_locale, "%d", "\"%d\"");
+		utils_str_replace_all(&cmd_locale, "%d", doc_dir_locale);
+	}
+	else
+	{
+		utils_str_replace_all(&cmd_locale, "%d", "");
+	}
+
+	if (!spawn_async(NULL, cmd_locale, NULL, NULL, NULL, &error))
+	{
+		gchar *cmd_utf8 = utils_get_utf8_from_locale(cmd_locale);
+
+		ui_set_statusbar(TRUE, _("Cannot launch file manager (%s: %s). Check the"
+		"File Manager setting in Tool Preferences"), cmd_utf8, error->message);
+
+		g_free(cmd_utf8);
+		g_error_free(error);
+	}
+
+	g_free(doc_dir_locale);
+	g_free(doc_dir);
+	g_free(cmd_locale);
+}
 
 void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {

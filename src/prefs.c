@@ -661,6 +661,9 @@ static void prefs_init_dialog(void)
 	if (tool_prefs.term_cmd)
 		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")), tool_prefs.term_cmd);
 
+	if (tool_prefs.file_manager_cmd)
+		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_file_manager")), tool_prefs.file_manager_cmd);
+
 	if (tool_prefs.browser_cmd)
 		gtk_entry_set_text(GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser")), tool_prefs.browser_cmd);
 
@@ -1136,6 +1139,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term");
 		g_free(tool_prefs.term_cmd);
 		tool_prefs.term_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_file_manager");
+		g_free(tool_prefs.file_manager_cmd);
+		tool_prefs.file_manager_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser");
 		g_free(tool_prefs.browser_cmd);
@@ -1723,6 +1730,7 @@ void prefs_show_dialog(void)
 				"entry_toggle_mark",
 			/*	"entry_com_make", */
 				"entry_com_term",
+				"entry_file_manager",
 				"entry_browser",
 				"entry_grep",
 				"entry_contextaction",
@@ -1774,6 +1782,10 @@ void prefs_show_dialog(void)
 			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_com_term")));
+		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_file_manager"),
+			NULL,
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_file_manager")));
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_browser"),
 			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,

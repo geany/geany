@@ -2536,9 +2536,13 @@ Tool paths
 ``````````
 
 Terminal
-    The command to execute a script in a terminal.  Occurrences of %c
+    The command to execute a script in a terminal. Occurrences of %c
     in the command are substituted with the run script name, see
     `Terminal emulators`_.
+
+File Manager
+	The command to use to open a file manager. Occurences of %d
+	are substituted with a directory in which to open it.
 
 Browser
     The location of your web browser executable.

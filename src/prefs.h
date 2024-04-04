@@ -48,8 +48,9 @@ GeanyPrefs;
 /** Tools preferences */
 typedef struct GeanyToolPrefs
 {
-	gchar			*browser_cmd;			/**< web browser command */
 	gchar			*term_cmd;				/**< terminal emulator command */
+	gchar			*file_manager_cmd;		/**< file manager command */
+	gchar			*browser_cmd;			/**< web browser command */
 	gchar			*grep_cmd;				/**< grep command */
 	gchar			*context_action_cmd;	/**< context action command */
 }

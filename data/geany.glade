@@ -208,6 +208,204 @@
     <property name="stock">gtk-add</property>
     <property name="icon_size">1</property>
   </object>
+  <object class="GtkImage" id="image4056">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-new</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4057">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">geany-save-all</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4058">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-revert-to-saved</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4059">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-revert-to-saved</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4060">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-close</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4061">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">geany-close-all</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4062">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-cut</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4063">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-copy</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4064">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-indent</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4065">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-unindent</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4066">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-add</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4067">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-add</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4068">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-add</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4069">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-preferences</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4070">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-preferences</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4071">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-find</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4072">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-find-and-replace</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4073">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-go-down</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4074">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-go-up</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4075">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-jump-to</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4076">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-select-font</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4077">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-new</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4078">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-open</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4079">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-close</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4080">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-refresh</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4081">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-file</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4082">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-select-color</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image4083">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-help</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-print</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image6">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-find</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-new</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image8">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-directory</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image9">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">utilities-terminal</property>
+    <property name="icon_size">1</property>
+  </object>
   <object class="GtkMenu" id="edit_menu1">
     <property name="can-focus">False</property>
     <child>
@@ -478,6 +676,28 @@
       </object>
     </child>
     <child>
+      <object class="GtkImageMenuItem" id="menu_open_terminal">
+        <property name="label" translatable="yes">Open Ter_minal</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="use-underline">True</property>
+        <property name="image">image9</property>
+        <property name="use-stock">False</property>
+        <signal name="activate" handler="on_menu_open_terminal_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="menu_open_directory">
+        <property name="label" translatable="yes">Open Di_rectory</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="use-underline">True</property>
+        <property name="image">image8</property>
+        <property name="use-stock">False</property>
+        <signal name="activate" handler="on_menu_open_directory_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkImageMenuItem" id="menu_open_selected_file2">
         <property name="label" translatable="yes">Open Selected F_ile</property>
         <property name="visible">True</property>
@@ -530,192 +750,6 @@
         <signal name="activate" handler="on_context_action1_activate" swapped="no"/>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="image4056">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-new</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4057">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">geany-save-all</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4058">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-revert-to-saved</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4059">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-revert-to-saved</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4060">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-close</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4061">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">geany-close-all</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4062">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-cut</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4063">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-copy</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4064">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-indent</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4065">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-unindent</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4066">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-add</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4067">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-add</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4068">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-add</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4069">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-preferences</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4070">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-preferences</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4071">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-find</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4072">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-find-and-replace</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4073">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-go-down</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4074">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-go-up</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4075">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-jump-to</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4076">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-select-font</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4077">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-new</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4078">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-open</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4079">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-close</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4080">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-refresh</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4081">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-file</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4082">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-select-color</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image4083">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-help</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-print</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image6">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-find</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image7">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-new</property>
-    <property name="icon-size">1</property>
   </object>
   <object class="GtkListStore" id="indent_mode_list">
     <columns>
@@ -3951,17 +3985,6 @@
                                     <property name="can-focus">False</property>
                                     <property name="label-xalign">0</property>
                                     <property name="shadow-type">none</property>
-                                    <child type="label">
-                                      <object class="GtkCheckButton" id="check_line_end">
-                                        <property name="label" translatable="yes">Show line endings</property>
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">True</property>
-                                        <property name="receives-default">False</property>
-                                        <property name="tooltip-text" translatable="yes">Shows the line ending character</property>
-                                        <property name="use-underline">True</property>
-                                        <property name="draw-indicator">True</property>
-                                      </object>
-                                    </child>
                                     <child>
                                       <object class="GtkAlignment">
                                         <property name="visible">True</property>
@@ -3978,6 +4001,17 @@
                                             <property name="draw-indicator">True</property>
                                           </object>
                                         </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkCheckButton" id="check_line_end">
+                                        <property name="label" translatable="yes">Show line endings</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="tooltip-text" translatable="yes">Shows the line ending character</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="draw-indicator">True</property>
                                       </object>
                                     </child>
                                   </object>
@@ -4903,7 +4937,7 @@
                               <object class="GtkTable" id="table1">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="n-rows">3</property>
+                                <property name="n-rows">4</property>
                                 <property name="n-columns">3</property>
                                 <property name="column-spacing">6</property>
                                 <property name="row-spacing">3</property>
@@ -4929,8 +4963,8 @@
                                     <property name="xalign">0</property>
                                   </object>
                                   <packing>
-                                    <property name="top-attach">1</property>
-                                    <property name="bottom-attach">2</property>
+                                    <property name="top-attach">2</property>
+                                    <property name="bottom-attach">3</property>
                                     <property name="x-options">GTK_FILL</property>
                                     <property name="y-options"/>
                                   </packing>
@@ -4961,8 +4995,8 @@
                                   <packing>
                                     <property name="left-attach">1</property>
                                     <property name="right-attach">2</property>
-                                    <property name="top-attach">1</property>
-                                    <property name="bottom-attach">2</property>
+                                    <property name="top-attach">2</property>
+                                    <property name="bottom-attach">3</property>
                                     <property name="y-options"/>
                                   </packing>
                                 </child>
@@ -5002,8 +5036,8 @@
                                   <packing>
                                     <property name="left-attach">2</property>
                                     <property name="right-attach">3</property>
-                                    <property name="top-attach">1</property>
-                                    <property name="bottom-attach">2</property>
+                                    <property name="top-attach">2</property>
+                                    <property name="bottom-attach">3</property>
                                     <property name="x-options">GTK_FILL</property>
                                     <property name="y-options"/>
                                   </packing>
@@ -5017,8 +5051,8 @@
                                     <property name="xalign">0</property>
                                   </object>
                                   <packing>
-                                    <property name="top-attach">2</property>
-                                    <property name="bottom-attach">3</property>
+                                    <property name="top-attach">3</property>
+                                    <property name="bottom-attach">4</property>
                                     <property name="x-options">GTK_FILL</property>
                                     <property name="y-options"/>
                                   </packing>
@@ -5033,8 +5067,8 @@
                                   <packing>
                                     <property name="left-attach">1</property>
                                     <property name="right-attach">2</property>
-                                    <property name="top-attach">2</property>
-                                    <property name="bottom-attach">3</property>
+                                    <property name="top-attach">3</property>
+                                    <property name="bottom-attach">4</property>
                                     <property name="y-options"/>
                                   </packing>
                                 </child>
@@ -5054,8 +5088,61 @@
                                   <packing>
                                     <property name="left-attach">2</property>
                                     <property name="right-attach">3</property>
-                                    <property name="top-attach">2</property>
-                                    <property name="bottom-attach">3</property>
+                                    <property name="top-attach">3</property>
+                                    <property name="bottom-attach">4</property>
+                                    <property name="x-options">GTK_FILL</property>
+                                    <property name="y-options"/>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label27">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">File Manager:</property>
+                                    <property name="mnemonic-widget">entry_file_manager</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top-attach">1</property>
+                                    <property name="bottom-attach">2</property>
+                                    <property name="x-options">GTK_FILL</property>
+                                    <property name="y-options"/>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkEntry" id="entry_file_manager">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="tooltip-text" translatable="yes">Path to your file manager of choice (%d is substituted with the directory to open)</property>
+                                    <property name="primary-icon-activatable">False</property>
+                                    <property name="secondary-icon-activatable">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="right-attach">2</property>
+                                    <property name="top-attach">1</property>
+                                    <property name="bottom-attach">2</property>
+                                    <property name="y-options"/>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="button_file_manager">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <child>
+                                      <object class="GtkImage" id="image10">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="stock">gtk-open</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">2</property>
+                                    <property name="right-attach">3</property>
+                                    <property name="top-attach">1</property>
+                                    <property name="bottom-attach">2</property>
                                     <property name="x-options">GTK_FILL</property>
                                     <property name="y-options"/>
                                   </packing>
@@ -8057,10 +8144,10 @@
                           <object class="GtkImageMenuItem" id="project_new_from_folder1">
                             <property name="label" translatable="yes">New from _Folder...</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="use_underline">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="use-underline">True</property>
                             <property name="image">image7</property>
-                            <property name="use_stock">False</property>
+                            <property name="use-stock">False</property>
                             <signal name="activate" handler="on_project_new_from_folder1_activate" swapped="no"/>
                           </object>
                         </child>

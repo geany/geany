@@ -152,6 +152,10 @@ void on_project_close1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_project_properties1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
+void on_menu_open_terminal_activate(GtkMenuItem *menuitem, gpointer user_data);
+
+void on_menu_open_directory_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_remove_markers1_activate(GtkMenuItem *menuitem, gpointer user_data);

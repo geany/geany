@@ -73,37 +73,40 @@
 
 /* some default settings which are used at the very first start of Geany to fill
  * the configuration file */
-#define GEANY_MAX_SYMBOLLIST_HEIGHT		10
-#define GEANY_MIN_SYMBOLLIST_CHARS		4
-#define GEANY_MSGWIN_HEIGHT				208
-#define GEANY_DISK_CHECK_TIMEOUT		30
-#define GEANY_DEFAULT_TOOLS_MAKE		"make"
+#define GEANY_MAX_SYMBOLLIST_HEIGHT			10
+#define GEANY_MIN_SYMBOLLIST_CHARS			4
+#define GEANY_MSGWIN_HEIGHT					208
+#define GEANY_DISK_CHECK_TIMEOUT			30
+#define GEANY_DEFAULT_TOOLS_MAKE			"make"
 #ifdef G_OS_WIN32
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
+#define GEANY_DEFAULT_TOOLS_TERMINAL		"cmd.exe /Q /C %c"
+#define GEANY_DEFAULT_TOOLS_FILE_MANAGER	"explorer.exe %d"
 #elif defined(__APPLE__)
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"open -a terminal %c"
+#define GEANY_DEFAULT_TOOLS_TERMINAL		"open -a terminal %c"
+#define GEANY_DEFAULT_TOOLS_FILE_MANAGER	"open %d"
 #else
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
+#define GEANY_DEFAULT_TOOLS_TERMINAL		"xterm -e \"/bin/sh %c\""
+#define GEANY_DEFAULT_TOOLS_FILE_MANAGER	"xdg-open %d"
 #endif
 #ifdef __APPLE__
-#define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
-#define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
+#define GEANY_DEFAULT_TOOLS_BROWSER			"open -a safari"
+#define GEANY_DEFAULT_FONT_SYMBOL_LIST		"Helvetica Medium 12"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW		"Menlo Medium 12"
+#define GEANY_DEFAULT_FONT_EDITOR			"Menlo Medium 12"
 #else
 /* Browser chosen by GTK */
-#define GEANY_DEFAULT_TOOLS_BROWSER		""
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
-#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
+#define GEANY_DEFAULT_TOOLS_BROWSER			""
+#define GEANY_DEFAULT_FONT_SYMBOL_LIST		"Sans 9"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW		"Monospace 9"
+#define GEANY_DEFAULT_FONT_EDITOR			"Monospace 10"
 #endif
-#define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
-#define GEANY_DEFAULT_TOOLS_GREP		"grep"
-#define GEANY_DEFAULT_MRU_LENGTH		10
-#define GEANY_TOGGLE_MARK				"~ "
-#define GEANY_MAX_AUTOCOMPLETE_WORDS	30
-#define GEANY_MAX_SYMBOLS_UPDATE_FREQ	250
-#define GEANY_DEFAULT_FILETYPE_REGEX    "-\\*-\\s*([^\\s]+)\\s*-\\*-"
+#define GEANY_DEFAULT_TOOLS_PRINTCMD		"lpr"
+#define GEANY_DEFAULT_TOOLS_GREP			"grep"
+#define GEANY_DEFAULT_MRU_LENGTH			10
+#define GEANY_TOGGLE_MARK					"~ "
+#define GEANY_MAX_AUTOCOMPLETE_WORDS		30
+#define GEANY_MAX_SYMBOLS_UPDATE_FREQ		250
+#define GEANY_DEFAULT_FILETYPE_REGEX    	"-\\*-\\s*([^\\s]+)\\s*-\\*-"
 
 
 static gchar *scribble_text = NULL;
@@ -609,6 +612,7 @@ static void save_dialog_prefs(GKeyFile *config)
 
 	/* tools settings */
 	g_key_file_set_string(config, "tools", "terminal_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
+	g_key_file_set_string(config, "tools", "file_manager_cmd", tool_prefs.file_manager_cmd ? tool_prefs.file_manager_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", tool_prefs.browser_cmd ? tool_prefs.browser_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", tool_prefs.grep_cmd ? tool_prefs.grep_cmd : "");
 	g_key_file_set_string(config, PACKAGE, "context_action_cmd", tool_prefs.context_action_cmd);
@@ -1055,6 +1059,7 @@ static void load_dialog_prefs(GKeyFile *config)
 			SETPTR(cmd, g_strdup(GEANY_DEFAULT_TOOLS_TERMINAL));
 	}
 	tool_prefs.term_cmd = cmd;
+	tool_prefs.file_manager_cmd = utils_get_setting_string(config, "tools", "file_manager_cmd", GEANY_DEFAULT_TOOLS_FILE_MANAGER);
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
 
