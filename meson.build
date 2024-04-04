@@ -727,7 +727,10 @@ gen_src = custom_target('gen-signallist',
 
 win_src = []
 win_deps = []
+win_resc = []
 if (host_machine.system() == 'windows')
+	windows = import('windows')
+	win_resc = windows.compile_resources('geany_private.rc')
 	win_src += [ 'src/win32.c', 'src/win32.h' ]
 	foreach lib : ['ole32', 'wsock32', 'comdlg32']
 		win_deps += cc.find_library(lib)
@@ -881,6 +884,7 @@ dep_libgeany = declare_dependency(
 )
 
 executable('geany',
+	win_resc,
 	'src/main.c',
 	link_with: libgeany,
 	c_args: geany_cflags + [ '-DG_LOG_DOMAIN="Geany"' ],
