@@ -37,7 +37,7 @@
 #elif defined(__APPLE__)
 # define OPEN_CMD "open \"%d\""
 #else
-# define OPEN_CMD "nautilus \"%d\""
+# define OPEN_CMD "xdg-open \"%d\""
 #endif
 
 GeanyPlugin *geany_plugin;
