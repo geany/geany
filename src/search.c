@@ -1623,11 +1623,12 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		GtkWidget *dir_combo = fif_dlg.dir_combo;
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
+		gchar *locale_dir = utils_get_locale_from_utf8(utf8_dir);
 		GeanyEncodingIndex enc_idx =
 			ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(fif_dlg.encoding_combo));
 
-		if (G_UNLIKELY(EMPTY(utf8_dir)))
-			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
+		if (!g_file_test(locale_dir, G_FILE_TEST_IS_DIR))
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Invalid directory for find in files."));
 		else if (!EMPTY(search_text))
 		{
 			GString *opts = get_grep_options();
@@ -1644,7 +1645,9 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			g_string_free(opts, TRUE);
 		}
 		else
-			ui_set_statusbar(FALSE, _("No text to find."));
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("No text to find."));
+
+		g_free(locale_dir);
 	}
 	else
 		gtk_widget_hide(fif_dlg.dialog);
@@ -1924,7 +1927,7 @@ static GRegex *compile_regex(const gchar *str, GeanyFindFlags sflags)
 	regex = g_regex_new(str, rflags, 0, &error);
 	if (!regex)
 	{
-		ui_set_statusbar(FALSE, _("Bad regex: %s"), error->message);
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Bad regex: %s"), error->message);
 		g_error_free(error);
 	}
 	return regex;
