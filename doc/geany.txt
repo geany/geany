@@ -5560,10 +5560,14 @@ Editor
 * Ctrl-click on a word in a document to perform *Go to Symbol Definition*.
 * Ctrl-click on a bracket/brace to perform *Go to Matching Brace*.
 
-Interface
----------
+Sidebar
+-------
 
-* Double-click on a symbol-list group to expand or compact it.
+* Symbol list - double-click on a symbol category to expand or compact it (or click the arrow).
+* Document list
+    * Middle-click to close a document or all documents in a folder.
+    * When the tree has keyboard focus, typing will match the start of a filename. Press
+      up or down to cycle through matches.
 
 GTK-related
 -----------
