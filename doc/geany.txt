@@ -1272,13 +1272,15 @@ several options:
 
 * In Document
 * In Session
-* Mark
+* In Selection
 
-Find All In Document will show a list of matching lines in the
+*Find All In Document* will show a list of matching lines in the
 current document in the Messages tab of the Message Window. *Find All
-In Session* does the same for all open documents.
+In Session* does the same for all open documents. *Find All In Selection* will
+find all matching text in the current selection of the current document.
 
-Mark will highlight all matches in the current document with a
+There is also a Mark All button.
+This will highlight all matches in the current document with a
 colored box. These markers can be removed by selecting the
 Remove Markers command from the Document menu.
 

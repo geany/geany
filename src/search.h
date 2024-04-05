@@ -108,6 +108,23 @@ extern GeanySearchData search_data;
 extern GeanySearchPrefs search_prefs;
 
 
+typedef enum
+{
+	GEANY_RESPONSE_FIND = 1,
+	GEANY_RESPONSE_FIND_PREVIOUS,
+	GEANY_RESPONSE_FIND_IN_FILE,
+	GEANY_RESPONSE_FIND_IN_SESSION,
+	GEANY_RESPONSE_FIND_IN_SEL,
+	GEANY_RESPONSE_MARK,
+	GEANY_RESPONSE_REPLACE,
+	GEANY_RESPONSE_REPLACE_AND_FIND,
+	GEANY_RESPONSE_REPLACE_IN_SESSION,
+	GEANY_RESPONSE_REPLACE_IN_FILE,
+	GEANY_RESPONSE_REPLACE_IN_SEL
+}
+GeanySearchResponse;
+
+
 void search_init(void);
 
 void search_finalize(void);
@@ -128,7 +145,8 @@ gint search_find_text(struct _ScintillaObject *sci, GeanyFindFlags flags, struct
 
 void search_find_again(gboolean change_direction);
 
-void search_find_usage(const gchar *search_text, const gchar *original_search_text, GeanyFindFlags flags, gboolean in_session);
+void search_find_usage(const gchar *search_text, const gchar *original_search_text,
+	GeanyFindFlags flags, GeanySearchResponse scope);
 
 void search_find_selection(struct GeanyDocument *doc, gboolean search_backwards);
 

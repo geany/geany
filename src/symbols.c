@@ -2104,7 +2104,8 @@ static void on_find_usage(GtkWidget *widget, G_GNUC_UNUSED gpointer unused)
 			search_show_find_in_files_dialog_full(tag->name, NULL);
 		else
 			search_find_usage(tag->name, tag->name, GEANY_FIND_WHOLEWORD | GEANY_FIND_MATCHCASE,
-				widget == symbol_menu.find_usage);
+				widget == symbol_menu.find_usage ?
+					GEANY_RESPONSE_FIND_IN_SESSION : GEANY_RESPONSE_FIND_IN_FILE);
 
 		tm_tag_unref(tag);
 	}
