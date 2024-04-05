@@ -1468,6 +1468,9 @@ Go to line
 
 Go to a particular line number in the current file.
 
+If the given value starts with a plus or minus, the value will be
+interpreted as an offset from the current line.
+
 
 Regular expressions
 ^^^^^^^^^^^^^^^^^^^
@@ -4775,7 +4778,7 @@ translucency
     *Example:* ``translucency=256;256;false;false``
 
 marker_line
-    The style for a highlighted line (e.g when using Goto line or goto symbol).
+    The style for a highlighted line (e.g when using *Go to line* or *Go to symbol*).
     The foreground color (first argument) is only used when the Markers margin
     is enabled (see View menu).
 
