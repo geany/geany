@@ -1628,7 +1628,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(fif_dlg.encoding_combo));
 
 		if (!g_file_test(locale_dir, G_FILE_TEST_IS_DIR))
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Invalid directory for find in files."));
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Invalid directory for Find in Files."));
 		else if (!EMPTY(search_text))
 		{
 			GString *opts = get_grep_options();
