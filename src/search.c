@@ -1628,8 +1628,10 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(fif_dlg.encoding_combo));
 
 		if (!g_file_test(locale_dir, G_FILE_TEST_IS_DIR))
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Invalid directory for Find in Files."));
-		else if (!EMPTY(search_text))
+			ui_set_statusbar(FALSE, _("Invalid directory for Find in Files."));
+		else if (EMPTY(search_text))
+			ui_set_statusbar(FALSE, _("No text to find."));
+		else
 		{
 			GString *opts = get_grep_options();
 			const gchar *enc = (enc_idx == GEANY_ENCODING_UTF_8) ? NULL :
@@ -1644,9 +1646,6 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			}
 			g_string_free(opts, TRUE);
 		}
-		else
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("No text to find."));
-
 		g_free(locale_dir);
 	}
 	else
@@ -1927,7 +1926,7 @@ static GRegex *compile_regex(const gchar *str, GeanyFindFlags sflags)
 	regex = g_regex_new(str, rflags, 0, &error);
 	if (!regex)
 	{
-		dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Bad regex: %s"), error->message);
+		ui_set_statusbar(FALSE, _("Bad regex: %s"), error->message);
 		g_error_free(error);
 	}
 	return regex;
