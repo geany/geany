@@ -1079,6 +1079,7 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	label = gtk_label_new(label_text);
+	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 	spin = gtk_spin_button_new_with_range(min, max, step);
