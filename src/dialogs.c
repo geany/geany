@@ -924,14 +924,15 @@ on_input_dialog_response(GtkDialog *dialog, gint response, InputDialogData *data
 
 
 /* Create and display an input dialog, after setting up the entry widget.
- * input_widget: either a combo or an entry.
+ * pack_widget: either same as entry, or a widget which holds an entry.
+ * entry: a GtkEntry to set up.
  * Returns: the dialog widget. */
 static GtkWidget *
 create_input_dialog(const gchar *title, GtkWindow *parent,
-						const gchar *label_text, const gchar *default_text,
-						GtkWidget *input_widget)
+						const gchar *label_text, GtkWidget *pack_widget,
+						GtkWidget *entry, const gchar *default_text)
 {
-	GtkWidget *dialog, *vbox, *entry;
+	GtkWidget *dialog, *vbox;
 
 	dialog = gtk_dialog_new_with_buttons(title, parent,
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -947,9 +948,7 @@ create_input_dialog(const gchar *title, GtkWindow *parent,
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_container_add(GTK_CONTAINER(vbox), label);
 	}
-	gtk_container_add(GTK_CONTAINER(vbox), input_widget);
-	entry = GTK_IS_COMBO_BOX(input_widget) ? gtk_bin_get_child(GTK_BIN(input_widget)) :
-		input_widget;
+	gtk_container_add(GTK_CONTAINER(vbox), pack_widget);
 
 	if (default_text != NULL)
 	{
@@ -980,7 +979,8 @@ dialogs_show_input_persistent(const gchar *title, GtkWindow *parent,
 	/* remember previous entry text in a combo box */
 	GtkWidget *combo = gtk_combo_box_text_new_with_entry();
 	GtkWidget *entry = gtk_bin_get_child(GTK_BIN(combo));
-	GtkWidget *dialog = create_input_dialog(title, parent, label_text, default_text, combo);
+	GtkWidget *dialog = create_input_dialog(title, parent, label_text,
+		combo, entry, default_text);
 
 	/* override default handler */
 	g_signal_connect(dialog, "delete-event", G_CALLBACK(gtk_widget_hide_on_delete), NULL);
@@ -1007,7 +1007,8 @@ gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *la
 {
 	gchar *dialog_input = NULL;
 	GtkWidget *entry = gtk_entry_new();
-	GtkWidget *dialog = create_input_dialog(title, parent, label_text, default_text, entry);
+	GtkWidget *dialog = create_input_dialog(title, parent, label_text,
+		entry, entry, default_text);
 	gint resp;
 
 	resp = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -1027,7 +1028,8 @@ gchar *dialogs_show_input_goto_line(const gchar *title, GtkWindow *parent, const
 {
 	gchar *dialog_input = NULL;
 	GtkWidget *entry = gtk_entry_new();
-	GtkWidget *dialog = create_input_dialog(title, parent, label_text, default_text, entry);
+	GtkWidget *dialog = create_input_dialog(title, parent, label_text,
+		entry, entry, default_text);
 	gint resp;
 	
 	g_signal_connect(entry, "insert-text", G_CALLBACK(ui_editable_insert_text_callback), NULL);
