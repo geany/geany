@@ -1212,7 +1212,7 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, guint cmd, gc
 	if (cmd_cat != NULL)
 	{
 		if (cmdstr != NULL)
-			full_command = g_strconcat(cmdstr, cmd_cat, NULL);
+			full_command = g_strconcat(cmdstr, " ", cmd_cat, NULL);
 		else
 			full_command = g_strdup(cmd_cat);
 	}
@@ -2496,9 +2496,9 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 				if (non_ft_pref == NULL)
 					non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
 				assign_cmd(non_ft_pref, GEANY_GBO_CUSTOM, _("Make Custom _Target..."),
-						g_strdup_printf("%s ", value));
+					g_strdup(value));
 				assign_cmd(non_ft_pref, GEANY_GBO_MAKE_OBJECT, _("Make _Object"),
-						g_strdup_printf("%s %%e.o",value));
+					g_strdup_printf("%s %%e.o", value));
 				assign_cmd(non_ft_pref, GEANY_GBO_MAKE_ALL, _("_Make"), value);
 			}
 			break;
@@ -2680,7 +2680,7 @@ static struct
 	gint index;
 } default_cmds[] = {
 	{ N_("_Make"), "make", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_MAKE_ALL)},
-	{ N_("Make Custom _Target..."), "make ", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_CUSTOM)},
+	{ N_("Make Custom _Target..."), "make", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_CUSTOM)},
 	{ N_("Make _Object"), "make %e.o", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)},
 	{ N_("_Execute"), "./%e", NULL, &exec_def, GBO_TO_CMD(GEANY_GBO_EXEC)},
 	{ NULL, NULL, NULL, NULL, 0 }
