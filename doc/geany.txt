@@ -5563,7 +5563,6 @@ Editor
 Sidebar
 -------
 
-* Symbol list - double-click on a symbol category to expand or compact it (or click the arrow).
 * Document list
     * Middle-click to close a document or all documents in a folder.
     * When the tree has keyboard focus, typing will match the start of a filename. Press
@@ -5572,8 +5571,9 @@ Sidebar
 GTK-related
 -----------
 
-* Scrolling the mouse wheel over a notebook tab bar will switch
-  notebook pages.
+* Notebook tabs - Scrolling the mouse wheel over the tab bar will switch
+  notebook pages. (This was GTK2 default behaviour and still works for the document notebook).
+* Tree views - Double-click on a parent item's text to expand or collapse its children.
 
 The following are derived from X-Windows features (but GTK still supports
 them on Windows):
