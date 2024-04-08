@@ -1621,7 +1621,7 @@ translations, e.g.::
 
 Toggle all additional widgets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Hide and show all additional widgets like the notebook tabs, the toolbar,
+Show/Hide all additional widgets such as the notebook tabs, the toolbar,
 the messages window and the status bar.
 
 
@@ -2073,6 +2073,10 @@ Placement of new file tabs
 Next to current
     Whether to place file tabs next to the current tab
     rather than at the edges of the notebook.
+
+Double-clicking hides all additional widgets
+    Whether to call the `Toggle All Additional Widgets`_ command
+    when double-clicking on a notebook tab.
 
 Tab label length
     If filenames are long, set the number of characters that should be
@@ -5552,7 +5556,7 @@ Document notebook
   document.
 * Double-click on a document's notebook tab to `toggle all additional
   widgets`_ (to show them again use the View menu or the keyboard
-  shortcut). The interface pref must be enabled for this to work.
+  shortcut). The `interface pref <#editor-tabs>`_ must be enabled for this to work.
 
 Editor
 ------
