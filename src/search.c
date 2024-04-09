@@ -583,8 +583,6 @@ void search_show_find_dialog(void)
 		{
 			/* update the search text from current selection */
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
-			/* reset the entry widget's background colour */
-			ui_set_search_entry_background(find_dlg.entry, TRUE);
 		}
 		gtk_widget_grab_focus(find_dlg.entry);
 		set_dialog_position(find_dlg.dialog, find_dlg.position);
@@ -761,8 +759,6 @@ void search_show_replace_dialog(void)
 		{
 			/* update the search text from current selection */
 			gtk_entry_set_text(GTK_ENTRY(replace_dlg.find_entry), sel);
-			/* reset the entry widget's background colour */
-			ui_set_search_entry_background(replace_dlg.find_entry, TRUE);
 		}
 		gtk_widget_grab_focus(replace_dlg.find_entry);
 		set_dialog_position(replace_dlg.dialog, replace_dlg.position);
@@ -1301,6 +1297,9 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	GtkWidget *combo = GTK_WIDGET(user_data);
 
+	/* reset the entry widget's background colour */
+	ui_set_search_entry_background(find_dlg.entry, TRUE);
+
 	gtk_window_get_position(GTK_WINDOW(find_dlg.dialog),
 		&find_dlg.position[0], &find_dlg.position[1]);
 
@@ -1451,6 +1450,10 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	GeanyFindFlags search_flags_re;
 	gboolean search_backwards_re, search_replace_escape_re;
 	gchar *find, *replace, *original_find = NULL, *original_replace = NULL;
+
+	/* reset the entry widgets' background colour */
+	ui_set_search_entry_background(replace_dlg.find_entry, TRUE);
+	ui_set_search_entry_background(replace_dlg.replace_entry, TRUE);
 
 	gtk_window_get_position(GTK_WINDOW(replace_dlg.dialog),
 		&replace_dlg.position[0], &replace_dlg.position[1]);
