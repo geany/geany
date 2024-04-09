@@ -1482,8 +1482,13 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & GEANY_FIND_MATCHCASE)
 		&& (strcmp(find, replace) == 0))
-		goto fail;
-
+	{
+	fail:
+		utils_beep();
+		gtk_widget_grab_focus(replace_dlg.find_entry);
+		ui_set_search_entry_background(replace_dlg.find_entry, FALSE);
+		goto done;
+	}
 	original_find = g_strdup(find);
 	original_replace = g_strdup(replace);
 
@@ -1492,15 +1497,23 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		GRegex *regex = compile_regex(find, search_flags_re);
 		if (regex)
 			g_regex_unref(regex);
-		/* find escapes will be handled by GRegex */
-		if (!regex || !utils_str_replace_escape(replace, TRUE))
+		else
 			goto fail;
+		/* Note: find escapes will be handled by GRegex */
+		if (!utils_str_replace_escape(replace, TRUE))
+		{
+		fail_rep:
+			gtk_widget_grab_focus(replace_dlg.replace_entry);
+			ui_set_search_entry_background(replace_dlg.replace_entry, FALSE);
+			goto done;
+		}
 	}
 	else if (search_replace_escape_re)
 	{
-		if (! utils_str_replace_escape(find, FALSE) ||
-			! utils_str_replace_escape(replace, FALSE))
+		if (! utils_str_replace_escape(find, FALSE))
 			goto fail;
+		if (! utils_str_replace_escape(replace, FALSE))
+			goto fail_rep;
 	}
 
 	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(replace_dlg.find_combobox), original_find, 0);
@@ -1550,19 +1563,12 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (settings.replace_close_dialog)
 				gtk_widget_hide(replace_dlg.dialog);
 	}
+done:
 	g_free(find);
 	g_free(replace);
 	g_free(original_find);
 	g_free(original_replace);
 	return;
-
-fail:
-	utils_beep();
-	gtk_widget_grab_focus(replace_dlg.find_entry);
-	g_free(find);
-	g_free(replace);
-	g_free(original_find);
-	g_free(original_replace);
 }
 
 
