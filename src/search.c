@@ -1299,6 +1299,8 @@ static GeanyFindFlags int_search_flags(gint match_case, gint whole_word, gint re
 static void
 on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
+	GtkWidget *combo = GTK_WIDGET(user_data);
+
 	gtk_window_get_position(GTK_WINDOW(find_dlg.dialog),
 		&find_dlg.position[0], &find_dlg.position[1]);
 
@@ -1319,7 +1321,8 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		g_free(search_data.text);
 		g_free(search_data.original_text);
-		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
+		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(
+			gtk_bin_get_child(GTK_BIN(combo)))));
 		search_data.original_text = g_strdup(search_data.text);
 		search_data.flags = int_search_flags(settings.find_case_sensitive,
 			settings.find_match_whole_word, settings.find_regexp, settings.find_regexp_multiline,
@@ -1330,6 +1333,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			fail:
 			utils_beep();
 			gtk_widget_grab_focus(find_dlg.entry);
+			ui_set_search_entry_background(combo, FALSE);
 			return;
 		}
 		if (search_data.flags & GEANY_FIND_REGEXP)
@@ -1345,7 +1349,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			if (! utils_str_replace_escape(search_data.text, FALSE))
 				goto fail;
 		}
-		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(user_data), search_data.original_text, 0);
+		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo), search_data.original_text, 0);
 
 		switch (response)
 		{
