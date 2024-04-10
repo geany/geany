@@ -1329,7 +1329,8 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		if (EMPTY(search_data.text))
 		{
-			fail:
+			ui_set_statusbar(FALSE, _("No text to find."));
+		fail:
 			utils_beep();
 			gtk_widget_grab_focus(find_dlg.entry);
 			ui_set_search_entry_background(combo, FALSE);
@@ -1478,19 +1479,25 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	search_replace_escape_re = settings.replace_escape_sequences;
 	find = g_strdup(gtk_entry_get_text(GTK_ENTRY(replace_dlg.find_entry)));
 	replace = g_strdup(gtk_entry_get_text(GTK_ENTRY(replace_dlg.replace_entry)));
-
-	search_flags_re = int_search_flags(settings.replace_case_sensitive,
-		settings.replace_match_whole_word, settings.replace_regexp,
-		settings.replace_regexp_multiline, settings.replace_match_word_start);
-
-	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & GEANY_FIND_MATCHCASE)
-		&& (strcmp(find, replace) == 0))
+	if (EMPTY(find))
 	{
+		ui_set_statusbar(FALSE, _("No text to find."));
 	fail:
 		utils_beep();
 		gtk_widget_grab_focus(replace_dlg.find_entry);
 		ui_set_search_entry_background(replace_dlg.find_entry, FALSE);
 		goto done;
+	}
+	search_flags_re = int_search_flags(settings.replace_case_sensitive,
+		settings.replace_match_whole_word, settings.replace_regexp,
+		settings.replace_regexp_multiline, settings.replace_match_word_start);
+
+	if ((response != GEANY_RESPONSE_FIND) &&
+		(search_flags_re & GEANY_FIND_MATCHCASE & ~GEANY_FIND_REGEXP) &&
+		(strcmp(find, replace) == 0))
+	{
+		ui_set_search_entry_background(replace_dlg.replace_entry, FALSE);
+		goto fail;
 	}
 	original_find = g_strdup(find);
 	original_replace = g_strdup(replace);
