@@ -475,6 +475,17 @@ void on_entry_tagfilter_activate(GtkEntry *entry, gpointer user_data)
 }
 
 
+gboolean on_entry_tagfilter_focus_out_event(GtkWidget *entry, GdkEventFocus *event, gpointer user_data)
+{
+	GtkWidget *combo = ui_lookup_widget(main_widgets.window, "combo_tagfilter");
+	const gchar *text = gtk_entry_get_text(GTK_ENTRY(entry));
+
+	if (!EMPTY(text))
+		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo), text, 0);
+	return FALSE;
+}
+
+
 /* hides toolbar from toolbar popup menu */
 static void on_hide_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
