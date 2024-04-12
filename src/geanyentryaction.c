@@ -28,6 +28,7 @@
 
 #include "geanyentryaction.h"
 
+#include "utils.h"
 #include "ui_utils.h"
 
 #include <ctype.h>
@@ -40,7 +41,8 @@ typedef struct _GeanyEntryActionPrivate		GeanyEntryActionPrivate;
 
 struct _GeanyEntryActionPrivate
 {
-	GtkWidget	*entry;
+	GtkWidget	*combo; // if not numeric e.g. for search field
+	GtkWidget	*entry; // always valid
 	gboolean	 numeric;
 	gboolean	 connected;
 };
@@ -61,21 +63,25 @@ G_DEFINE_TYPE(GeanyEntryAction, geany_entry_action, GTK_TYPE_ACTION)
 
 static GtkWidget *geany_entry_action_create_tool_item(GtkAction *action)
 {
-	GtkWidget *toolitem;
+	GtkWidget *wid, *toolitem;
 	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
 
-	priv->entry = gtk_entry_new();
 	if (priv->numeric)
+	{
+		wid = priv->entry = gtk_entry_new();
 		gtk_entry_set_width_chars(GTK_ENTRY(priv->entry), 9);
-
+	}
+	else
+	{
+		wid = priv->combo = gtk_combo_box_text_new_with_entry();
+		priv->entry = gtk_bin_get_child(GTK_BIN(priv->combo));
+	}
 	ui_entry_add_clear_icon(GTK_ENTRY(priv->entry));
 	ui_entry_add_activate_backward_signal(GTK_ENTRY(priv->entry));
 
-	gtk_widget_show(priv->entry);
-
+	gtk_widget_show(wid);
 	toolitem = g_object_new(GTK_TYPE_TOOL_ITEM, NULL);
-	gtk_container_add(GTK_CONTAINER(toolitem), priv->entry);
-
+	gtk_container_add(GTK_CONTAINER(toolitem), wid);
 	return toolitem;
 }
 
@@ -107,6 +113,16 @@ static void delegate_entry_changed_cb(GtkEditable *editable, GeanyEntryAction *a
 }
 
 
+static gboolean on_entry_focus_out_event(GtkWidget *entry, GdkEventFocus *event, gpointer combo)
+{
+	const gchar *text = gtk_entry_get_text(GTK_ENTRY(entry));
+
+	if (!EMPTY(text))
+		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo), text, 0);
+	return FALSE;
+}
+
+
 static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widget)
 {
 	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
@@ -117,6 +133,10 @@ static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widge
 		if (priv->numeric)
 			g_signal_connect(priv->entry, "insert-text",
 				G_CALLBACK(ui_editable_insert_text_callback), NULL);
+		else
+			g_signal_connect(priv->entry, "focus-out-event",
+				G_CALLBACK(on_entry_focus_out_event), priv->combo);
+
 		g_signal_connect(priv->entry, "changed", G_CALLBACK(delegate_entry_changed_cb), action);
 		g_signal_connect(priv->entry, "activate", G_CALLBACK(delegate_entry_activate_cb), action);
 		g_signal_connect(priv->entry, "activate-backward",
