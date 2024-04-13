@@ -42,7 +42,6 @@ struct _GeanyEntryActionPrivate
 {
 	GtkWidget	*entry;
 	gboolean	 numeric;
-	gboolean	 connected;
 };
 
 enum
@@ -112,7 +111,7 @@ static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widge
 	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
 
 	/* make sure not to connect handlers twice */
-	if (! priv->connected)
+	if (! g_object_get_data(G_OBJECT(widget), "gea-connected"))
 	{
 		if (priv->numeric)
 			g_signal_connect(priv->entry, "insert-text",
@@ -122,7 +121,7 @@ static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widge
 		g_signal_connect(priv->entry, "activate-backward",
 			G_CALLBACK(delegate_entry_activate_backward_cb), action);
 
-		priv->connected = TRUE;
+		g_object_set_data(G_OBJECT(widget), "gea-connected", action /* anything non-NULL */);
 	}
 
 	GTK_ACTION_CLASS(geany_entry_action_parent_class)->connect_proxy(action, widget);
@@ -176,7 +175,6 @@ static void geany_entry_action_init(GeanyEntryAction *action)
 	priv = action->priv;
 	priv->entry = NULL;
 	priv->numeric = FALSE;
-	priv->connected = FALSE;
 }
 
 
