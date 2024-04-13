@@ -1562,6 +1562,15 @@ fail:
 }
 
 
+static void reset_msgwin(void)
+{
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
+	gtk_list_store_clear(msgwindow.store_msg);
+	// reset width after any long messages
+	gtk_tree_view_columns_autosize(GTK_TREE_VIEW(msgwindow.tree_msg));
+}
+
+
 static GString *get_grep_options(void)
 {
 	GString *gstr = g_string_new("-nHI");	/* line numbers, filenames, ignore binaries */
@@ -1708,9 +1717,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *utf8_dir, const
 			return FALSE;
 		}
 	}
-
-	gtk_list_store_clear(msgwindow.store_msg);
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
+	reset_msgwin();
 
 	/* we can pass 'enc' without strdup'ing it here because it's a global const string and
 	 * always exits longer than the lifetime of this function */
@@ -2214,9 +2221,7 @@ void search_find_usage(const gchar *search_text, const gchar *original_search_te
 		utils_beep();
 		return;
 	}
-
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
-	gtk_list_store_clear(msgwindow.store_msg);
+	reset_msgwin();
 
 	if (! in_session)
 	{	/* use current document */
