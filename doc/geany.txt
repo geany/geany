@@ -2681,6 +2681,7 @@ indent_hard_tab_width             The size of a tab character. Don't change    8
 editor_ime_interaction            Input method editor (IME)'s candidate        0           to new
                                   window behaviour. May be 0 (windowed) or                 documents
                                   1 (inline)
+scrollwheel_lines                 Number of lines the scrollwheel scrolls      3           immediately
 scrollwheel_zoom_disable          Disable zooming the editor view with         false       immediately
                                   the scroll wheel.
 **``interface`` group**

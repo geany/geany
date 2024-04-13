@@ -4779,7 +4779,8 @@ on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_d
 	else if (!event->state || (editor_prefs.scrollwheel_zoom_disable && (event->state & GDK_CONTROL_MASK)))
 	{
 		/* scroll normally */
-		gint amount = (event->direction == GDK_SCROLL_DOWN) ? 3 : -3;
+		gint lines = editor_prefs.scrollwheel_lines;
+		gint amount = (event->direction == GDK_SCROLL_DOWN) ? lines : (-1 * lines);
 		sci_scroll_lines(editor->sci, amount);
 		return TRUE;
 	}

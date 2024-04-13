@@ -315,6 +315,8 @@ static void init_pref_groups(void)
 		"indent_hard_tab_width", 8);
 	stash_group_add_integer(group, &editor_prefs.ime_interaction,
 		"editor_ime_interaction", SC_IME_WINDOWED);
+	stash_group_add_integer(group, &editor_prefs.scrollwheel_lines,
+		"scrollwheel_lines", 3);
 	stash_group_add_boolean(group, &editor_prefs.scrollwheel_zoom_disable,
 		"scrollwheel_zoom_disable", FALSE);
 
