@@ -4758,22 +4758,29 @@ on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_d
 {
 	GeanyEditor *editor = user_data;
 
-	/* we only handle up and down, leave the rest to Scintilla */
+	/* Scintilla handles direct left/right scrolling */
 	if (event->direction != GDK_SCROLL_UP && event->direction != GDK_SCROLL_DOWN)
 		return FALSE;
 
-	/* Handle scroll events if Alt is pressed and scroll whole pages instead of a
-	 * few lines only, maybe this could/should be done in Scintilla directly */
 	if (event->state & GDK_MOD1_MASK)
 	{
-		sci_send_command(editor->sci, (event->direction == GDK_SCROLL_DOWN) ? SCI_PAGEDOWN : SCI_PAGEUP);
+		/* scroll whole pages when Alt is pressed */
+		gint amount = (event->direction == GDK_SCROLL_DOWN) ? SCI_PAGEDOWN : SCI_PAGEUP;
+		sci_send_command(editor->sci, amount);
 		return TRUE;
 	}
 	else if (event->state & GDK_SHIFT_MASK)
 	{
+		/* translate scrolling to left/right when Shift is pressed */
 		gint amount = (event->direction == GDK_SCROLL_DOWN) ? 8 : -8;
-
 		sci_scroll_columns(editor->sci, amount);
+		return TRUE;
+	}
+	else if (!event->state || (editor_prefs.scrollwheel_zoom_disable && (event->state & GDK_CONTROL_MASK)))
+	{
+		/* scroll normally */
+		gint amount = (event->direction == GDK_SCROLL_DOWN) ? 3 : -3;
+		sci_scroll_lines(editor->sci, amount);
 		return TRUE;
 	}
 
