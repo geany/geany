@@ -38,7 +38,7 @@ freetype
 fribidi
 gcc-libs
 gdk-pixbuf2
-gettext
+gettext-runtime
 glib2
 graphite2
 grep
