@@ -143,7 +143,9 @@ typedef struct GeanyEditorPrefs
 	gboolean	change_history_markers;
 	gboolean	change_history_indicators;
 	gint		scrollwheel_lines;
-	gboolean	scrollwheel_zoom_disable;
+	gint		scrollwheel_alt_factor;
+	gint		scrollwheel_ctrl_lines;
+	gboolean	scrollwheel_ctrl_zoom;
 }
 GeanyEditorPrefs;
 

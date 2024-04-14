@@ -2681,9 +2681,13 @@ indent_hard_tab_width             The size of a tab character. Don't change    8
 editor_ime_interaction            Input method editor (IME)'s candidate        0           to new
                                   window behaviour. May be 0 (windowed) or                 documents
                                   1 (inline)
-scrollwheel_lines                 Number of lines the scrollwheel scrolls      3           immediately
-scrollwheel_zoom_disable          Disable zooming the editor view with         false       immediately
-                                  the scroll wheel.
+scrollwheel_lines                 Number of lines the scrollwheel scrolls      4           immediately
+scrollwheel_alt_factor            The fator that the scrollwheel scrolls       6           immediately
+                                  is multiplied by when alt is pressed
+scrollwheel_ctrl_lines            Number of lines the scrollwheel scrolls      4           immediately
+                                  when control is pressed and zoom is off
+scrollwheel_ctrl_zoom             Whether scrollwheel zooms when the           true        immediately
+                                  control key is pressed.
 **``interface`` group**
 show_symbol_list_expanders        Whether to show or hide the small            true        to new
                                   expander icons on the symbol list                        documents
