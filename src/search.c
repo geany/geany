@@ -1123,6 +1123,8 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 		g_free(cur_dir);
 	}
 
+	ui_set_search_entry_background(fif_dlg.search_combo, TRUE);
+	ui_set_search_entry_background(fif_dlg.dir_combo, TRUE);
 	update_fif_file_mode_combo();
 	update_file_patterns(fif_dlg.files_mode_combo, fif_dlg.files_combo);
 
@@ -1632,12 +1634,21 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		GtkWidget *dir_combo = fif_dlg.dir_combo;
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
+		gchar *locale_dir = utils_get_locale_from_utf8(utf8_dir);
 		GeanyEncodingIndex enc_idx =
 			ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(fif_dlg.encoding_combo));
 
-		if (G_UNLIKELY(EMPTY(utf8_dir)))
-			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
-		else if (!EMPTY(search_text))
+		if (!g_file_test(locale_dir, G_FILE_TEST_IS_DIR))
+		{
+			ui_set_statusbar(FALSE, _("Invalid directory for Find in Files."));
+			ui_set_search_entry_background(dir_combo, FALSE);
+		}
+		else if (EMPTY(search_text))
+		{
+			ui_set_statusbar(FALSE, _("No text to find."));
+			ui_set_search_entry_background(search_combo, FALSE);
+		}
+		else
 		{
 			GString *opts = get_grep_options();
 			const gchar *enc = (enc_idx == GEANY_ENCODING_UTF_8) ? NULL :
@@ -1652,8 +1663,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			}
 			g_string_free(opts, TRUE);
 		}
-		else
-			ui_set_statusbar(FALSE, _("No text to find."));
+		g_free(locale_dir);
 	}
 	else
 		gtk_widget_hide(fif_dlg.dialog);
