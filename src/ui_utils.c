@@ -1101,8 +1101,13 @@ void ui_document_show_hide(GeanyDocument *doc)
 }
 
 
+/* success = FALSE indicates an error for widget */
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 {
+	// set the entry, not just the button
+	if (GTK_IS_COMBO_BOX(widget))
+		widget = gtk_bin_get_child(GTK_BIN(widget));
+
 	gtk_widget_set_name(widget, success ? NULL : "geany-search-entry-no-match");
 }
 

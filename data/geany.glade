@@ -8808,7 +8808,7 @@
                   <object class="GtkEntry" id="entry_project_dialog_file_patterns">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="tooltip-text" translatable="yes">Space separated list of file patterns used for the find in files dialog (e.g. *.c *.h)</property>
+                    <property name="tooltip-text" translatable="yes">Space separated list of file patterns used for the Find in Files dialog (e.g. *.c *.h)</property>
                     <property name="invisible-char">•</property>
                     <property name="primary-icon-activatable">False</property>
                   </object>
