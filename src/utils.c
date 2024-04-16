@@ -768,17 +768,13 @@ gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 
 gchar *utils_get_initials(const gchar *name)
 {
-	gint i = 1, j = 1;
 	gchar *initials = g_malloc0(5);
+	gsize name_len = strlen(name);
 
-	initials[0] = name[0];
-	while (name[i] != '\0' && j < 4)
+	for(gsize i = 0, j = 0; i < name_len && j < 4; i++)
 	{
-		if (name[i] == ' ' && name[i + 1] != ' ')
-		{
-			initials[j++] = name[i + 1];
-		}
-		i++;
+		if ((i == 0 || name[i - 1] == ' ') && name[i] != ' ')
+			initials[j++] = name[i];
 	}
 	return initials;
 }
