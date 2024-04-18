@@ -344,7 +344,7 @@ static TMParserMapGroup group_DOCBOOK[] = {
 static TMParserMapEntry map_ERLANG[] = {
 	{'d', tm_tag_macro_t},     // macro
 	{'f', tm_tag_function_t},  // function
-	{'m', tm_tag_undef_t},     // module
+	{'m', tm_tag_namespace_t}, // module
 	{'r', tm_tag_struct_t},    // record
 	{'t', tm_tag_typedef_t},   // type
 };
@@ -353,6 +353,7 @@ static TMParserMapGroup group_ERLANG[] = {
 	{N_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t},
 	{N_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t},
 	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Module"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
 };
 
 // no scope information
