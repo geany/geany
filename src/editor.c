@@ -4757,27 +4757,46 @@ static gboolean
 on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
 {
 	GeanyEditor *editor = user_data;
+	GdkModifierType modifiers = keybindings_get_modifiers(event->state);
 
-	/* we only handle up and down, leave the rest to Scintilla */
-	if (event->direction != GDK_SCROLL_UP && event->direction != GDK_SCROLL_DOWN)
+	/* Scintilla handles zooming */
+	if (editor_prefs.scrollwheel_ctrl_zoom && (modifiers & GDK_CONTROL_MASK))
 		return FALSE;
 
-	/* Handle scroll events if Alt is pressed and scroll whole pages instead of a
-	 * few lines only, maybe this could/should be done in Scintilla directly */
-	if (event->state & GDK_MOD1_MASK)
+	/* Scintilla handles direct horizontal scrolling */
+	if (event->direction != GDK_SCROLL_UP && event->direction != GDK_SCROLL_DOWN)
 	{
-		sci_send_command(editor->sci, (event->direction == GDK_SCROLL_DOWN) ? SCI_PAGEDOWN : SCI_PAGEUP);
-		return TRUE;
-	}
-	else if (event->state & GDK_SHIFT_MASK)
-	{
-		gint amount = (event->direction == GDK_SCROLL_DOWN) ? 8 : -8;
+		/* But if user doesn't want zooming... */
+		if (!editor_prefs.scrollwheel_ctrl_zoom)
+			event->state &= ~GDK_CONTROL_MASK;
 
+		return FALSE;
+	}
+
+	gint amount = editor_prefs.scrollwheel_lines;
+
+	/* control key */
+	if (modifiers & GDK_CONTROL_MASK)
+		amount = editor_prefs.scrollwheel_ctrl_lines;
+
+	/* alt key */
+	if (modifiers & GDK_MOD1_MASK)
+		amount *= editor_prefs.scrollwheel_alt_factor;
+
+	/* shift key - horizontal scroll */
+	if (modifiers & GDK_SHIFT_MASK)
+	{
+		amount = (event->direction == GDK_SCROLL_DOWN) ? 2 * amount : -2 * amount;
 		sci_scroll_columns(editor->sci, amount);
+
 		return TRUE;
 	}
 
-	return FALSE; /* let Scintilla handle all other cases */
+	/* vertical scroll */
+	amount = (event->direction == GDK_SCROLL_DOWN) ? amount : -amount;
+	sci_scroll_lines(editor->sci, amount);
+
+	return TRUE;
 }
 
 

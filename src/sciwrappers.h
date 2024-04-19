@@ -173,6 +173,7 @@ void				sci_goto_pos				(ScintillaObject *sci, gint pos, gboolean unfold);
 void				sci_set_search_anchor		(ScintillaObject *sci);
 void				sci_set_anchor				(ScintillaObject *sci, gint pos);
 void				sci_scroll_columns			(ScintillaObject *sci, gint columns);
+void				sci_scroll_lines				(ScintillaObject *sci, gint lines);
 gint				sci_search_next				(ScintillaObject *sci, gint flags, const gchar *text);
 gint				sci_search_prev				(ScintillaObject *sci, gint flags, const gchar *text);
 void				sci_marker_delete_all		(ScintillaObject *sci, gint marker);

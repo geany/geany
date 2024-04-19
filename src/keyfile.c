@@ -315,6 +315,14 @@ static void init_pref_groups(void)
 		"indent_hard_tab_width", 8);
 	stash_group_add_integer(group, &editor_prefs.ime_interaction,
 		"editor_ime_interaction", SC_IME_WINDOWED);
+	stash_group_add_integer(group, &editor_prefs.scrollwheel_lines,
+		"scrollwheel_lines", 4);
+	stash_group_add_integer(group, &editor_prefs.scrollwheel_alt_factor,
+		"scrollwheel_alt_factor", 6);
+	stash_group_add_integer(group, &editor_prefs.scrollwheel_ctrl_lines,
+		"scrollwheel_ctrl_lines", 4);
+	stash_group_add_boolean(group, &editor_prefs.scrollwheel_ctrl_zoom,
+		"scrollwheel_ctrl_zoom", TRUE);
 
 	group = stash_group_new(PACKAGE);
 	configuration_add_various_pref_group(group, "files");

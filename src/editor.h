@@ -142,6 +142,10 @@ typedef struct GeanyEditorPrefs
 	gboolean	show_line_endings_only_when_differ;
 	gboolean	change_history_markers;
 	gboolean	change_history_indicators;
+	gint		scrollwheel_lines;
+	gint		scrollwheel_alt_factor;
+	gint		scrollwheel_ctrl_lines;
+	gboolean	scrollwheel_ctrl_zoom;
 }
 GeanyEditorPrefs;
 

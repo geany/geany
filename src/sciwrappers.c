@@ -1018,6 +1018,12 @@ void sci_scroll_columns(ScintillaObject *sci, gint columns)
 }
 
 
+void sci_scroll_lines(ScintillaObject *sci, gint lines)
+{
+	SSM(sci, SCI_LINESCROLL, 0, (uptr_t) lines);
+}
+
+
 gint sci_search_next(ScintillaObject *sci, gint flags, const gchar *text)
 {
 	/* FIXME: SCI_SEACHNEXT() actually returns long */
