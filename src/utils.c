@@ -766,21 +766,37 @@ gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 }
 
 
+/* Extracts initials from @p name, with basic Unicode support */
+GEANY_EXPORT_SYMBOL
 gchar *utils_get_initials(const gchar *name)
 {
-	gint i = 1, j = 1;
-	gchar *initials = g_malloc0(5);
+	GString *initials;
+	gchar *composed;
+	gboolean at_bound = TRUE;
 
-	initials[0] = name[0];
-	while (name[i] != '\0' && j < 4)
+	g_return_val_if_fail(name != NULL, NULL);
+
+	composed = g_utf8_normalize(name, -1, G_NORMALIZE_ALL_COMPOSE);
+	g_return_val_if_fail(composed != NULL, NULL);
+
+	initials = g_string_new(NULL);
+	for (const gchar *p = composed; *p; p = g_utf8_next_char(p))
 	{
-		if (name[i] == ' ' && name[i + 1] != ' ')
+		gunichar ch = g_utf8_get_char(p);
+
+		if (g_unichar_isspace(ch))
+			at_bound = TRUE;
+		else if (at_bound)
 		{
-			initials[j++] = name[i + 1];
+			const gchar *end = g_utf8_next_char(p);
+			g_string_append_len(initials, p, end - p);
+			at_bound = FALSE;
 		}
-		i++;
 	}
-	return initials;
+
+	g_free(composed);
+
+	return g_string_free(initials, FALSE);
 }
 
 
