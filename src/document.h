@@ -317,6 +317,8 @@ void document_set_data(GeanyDocument *doc, const gchar *key, gpointer data);
 void document_set_data_full(GeanyDocument *doc, const gchar *key,
 	gpointer data, GDestroyNotify free_func);
 
+gboolean document_has_tags(GeanyDocument *doc);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

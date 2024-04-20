@@ -2654,6 +2654,17 @@ gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gcha
 }
 
 
+/* Indicates whether there is a tag parser for the document's filetype or not.
+ * Only works for custom filetypes if the filetype settings have been loaded. */
+gboolean document_has_tags(GeanyDocument *doc)
+{
+	if (plugin_extension_doc_symbols_provided(doc))
+		return TRUE;
+
+	return doc != NULL && doc->file_type != NULL && doc->file_type->lang != TM_PARSER_NONE;
+}
+
+
 /*
  * Parses or re-parses the document's buffer and updates the type
  * keywords and symbol list.
@@ -2669,7 +2680,7 @@ void document_update_tags(GeanyDocument *doc)
 	g_return_if_fail(app->tm_workspace != NULL);
 
 	/* early out if it's a new file or doesn't support tags */
-	if (! doc->file_name || ! doc->file_type || !filetype_has_tags(doc->file_type))
+	if (!doc->file_name || !document_has_tags(doc))
 	{
 		/* We must call sidebar_update_tag_list() before returning,
 		 * to ensure that the symbol list is always updated properly (e.g.
@@ -2790,7 +2801,7 @@ static gboolean on_document_update_tag_list_idle(gpointer data)
 
 void document_update_tag_list_in_idle(GeanyDocument *doc)
 {
-	if (editor_prefs.autocompletion_update_freq <= 0 || ! filetype_has_tags(doc->file_type))
+	if (editor_prefs.autocompletion_update_freq <= 0 || !document_has_tags(doc))
 		return;
 
 	/* prevent "stacking up" callback handlers, we only need one to run soon */

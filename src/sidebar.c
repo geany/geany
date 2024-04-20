@@ -203,7 +203,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		create_default_tag_tree();
 
 	/* show default empty tag tree if there are no tags */
-	if (doc == NULL || doc->file_type == NULL || ! filetype_has_tags(doc->file_type))
+	if (!document_has_tags(doc))
 	{
 		CHANGE_TREE(tv.default_tag_tree);
 		return;
