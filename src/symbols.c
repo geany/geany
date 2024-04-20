@@ -1191,6 +1191,20 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 }
 
 
+/** Forces symbol reload in the sidebar.
+ *
+ * @since 2.1
+ */
+GEANY_API_SYMBOL
+void symbols_reload_tag_list(void)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (doc)
+		sidebar_update_tag_list(doc, TRUE);
+}
+
+
 /* Detects a global tags filetype from the *.lang.* language extension.
  * Returns NULL if there was no matching TM language. */
 static GeanyFiletype *detect_global_tags_filetype(const gchar *utf8_filename)

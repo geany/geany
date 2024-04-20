@@ -32,6 +32,8 @@ const gchar *symbols_get_context_separator(gint ft_id);
 
 GdkPixbuf *symbols_get_icon_pixbuf(TMIcon icon);
 
+void symbols_reload_tag_list(void);
+
 #ifdef GEANY_PRIVATE
 
 enum
