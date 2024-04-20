@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 
 const gchar *symbols_get_context_separator(gint ft_id);
 
+GdkPixbuf *symbols_get_icon_pixbuf(TMIcon icon);
 
 #ifdef GEANY_PRIVATE
 
