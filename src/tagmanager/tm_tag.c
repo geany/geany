@@ -125,6 +125,8 @@ static void tm_tag_destroy(TMTag *tag)
 	g_free(tag->scope);
 	g_free(tag->inheritance);
 	g_free(tag->var_type);
+	g_free(tag->tooltip);
+	g_free(tag->file_name);
 }
 
 
@@ -232,10 +234,13 @@ gboolean tm_tags_equal(const TMTag *a, const TMTag *b)
 			a->access == b->access &&
 			a->impl == b->impl &&
 			a->lang == b->lang &&
+			a->plugin_extension == b->plugin_extension &&
 			strcmp(FALLBACK(a->scope, ""), FALLBACK(b->scope, "")) == 0 &&
 			strcmp(FALLBACK(a->arglist, ""), FALLBACK(b->arglist, "")) == 0 &&
 			strcmp(FALLBACK(a->inheritance, ""), FALLBACK(b->inheritance, "")) == 0 &&
-			strcmp(FALLBACK(a->var_type, ""), FALLBACK(b->var_type, "")) == 0);
+			strcmp(FALLBACK(a->var_type, ""), FALLBACK(b->var_type, "")) == 0 &&
+			strcmp(FALLBACK(a->tooltip, ""), FALLBACK(b->tooltip, "")) == 0 &&
+			strcmp(FALLBACK(a->file_name, ""), FALLBACK(b->file_name, "")) == 0);
 }
 
 /*
