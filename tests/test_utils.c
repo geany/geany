@@ -107,7 +107,7 @@ static void test_utils_strv_find_common_prefix(void)
 }
 
 #define DIR_SEP "\\/"
-void test_utils_strv_find_lcs(void)
+static void test_utils_strv_find_lcs(void)
 {
 	gchar **data, *s;
 
@@ -291,7 +291,7 @@ static gboolean strv_eq(gchar **strv1, gchar **strv2)
 	}
 }
 
-void test_utils_strv_shorten_file_list(void)
+static void test_utils_strv_shorten_file_list(void)
 {
 	gchar **data, **expected, **result;
 	gchar *empty[] = { NULL };
