@@ -99,10 +99,12 @@ GType tm_tag_get_type(void)
 	return gtype;
 }
 
-/*
+/**
  Creates a new tag structure and returns a pointer to it.
- @return the new TMTag structure. This should be free()-ed using tm_tag_free()
+ @return the new TMTag structure. This should be free()-ed using tm_tag_unref()
+ @since 2.1
 */
+GEANY_API_SYMBOL
 TMTag *tm_tag_new(void)
 {
 	TMTag *tag;
@@ -116,7 +118,7 @@ TMTag *tm_tag_new(void)
 /*
  Destroys a TMTag structure, i.e. frees all elements except the tag itself.
  @param tag The TMTag structure to destroy
- @see tm_tag_free()
+ @see tm_tag_unref()
 */
 static void tm_tag_destroy(TMTag *tag)
 {
@@ -130,11 +132,13 @@ static void tm_tag_destroy(TMTag *tag)
 }
 
 
-/*
+/**
  Drops a reference from a TMTag. If the reference count reaches 0, this function
  destroys all data in the tag and frees the tag structure as well.
  @param tag Pointer to a TMTag structure
+ @since 2.1
 */
+GEANY_API_SYMBOL
 void tm_tag_unref(TMTag *tag)
 {
 	/* be NULL-proof because tm_tag_free() was NULL-proof and we indent to be a
@@ -146,11 +150,13 @@ void tm_tag_unref(TMTag *tag)
 	}
 }
 
-/*
+/**
  Adds a reference to a TMTag.
  @param tag Pointer to a TMTag structure
  @return the passed-in TMTag
+ @since 2.1
 */
+GEANY_API_SYMBOL
 TMTag *tm_tag_ref(TMTag *tag)
 {
 	g_atomic_int_inc(&tag->refcount);
