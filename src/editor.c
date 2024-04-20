@@ -822,13 +822,15 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case '(':
 		{
 			auto_close_chars(sci, pos, nt->ch);
-			/* show calltips */
-			editor_show_calltip(editor, --pos);
+			if (!plugin_extension_calltips_provided(editor->document, NULL))
+				/* show calltips */
+				editor_show_calltip(editor, --pos);
 			break;
 		}
 		case ')':
 		{	/* hide calltips */
-			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0))
+			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0) &&
+				!plugin_extension_calltips_provided(editor->document, NULL))
 			{
 				SSM(sci, SCI_CALLTIPCANCEL, 0, 0);
 			}
@@ -862,6 +864,7 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 	}
 
 	plugin_extension_autocomplete_perform(editor->document, FALSE);
+	plugin_extension_calltips_show(editor->document, FALSE);
 
 	check_line_breaking(editor, pos);
 }
@@ -1156,7 +1159,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
 			autocomplete_scope_shown = FALSE;
-			request_reshowing_calltip(nt);
+			if (!plugin_extension_calltips_provided(doc, NULL))
+				request_reshowing_calltip(nt);
 			break;
 		case SCN_NEEDSHOWN:
 			ensure_range_visible(sci, nt->position, nt->position + nt->length, FALSE);
@@ -1170,7 +1174,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
 		case SCN_CALLTIPCLICK:
-			if (nt->position > 0)
+			if (!plugin_extension_calltips_provided(doc, NULL) && nt->position > 0)
 			{
 				switch (nt->position)
 				{
