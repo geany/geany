@@ -52,7 +52,7 @@ static gboolean tree_strings_cb(GtkTreeModel *model, GtkTreePath *path,
 	return FALSE;
 }
 
-void do_test_sidebar_openfiles(const gchar **test_data, const gchar **expected)
+static void do_test_sidebar_openfiles(const gchar **test_data, const gchar **expected)
 {
 #ifdef HAVE_G_STRV_EQUAL
 	int count = 0;
@@ -72,7 +72,7 @@ void do_test_sidebar_openfiles(const gchar **test_data, const gchar **expected)
 #endif
 }
 
-void test_sidebar_openfiles_none(void)
+static void test_sidebar_openfiles_none(void)
 {
 	const gchar *files[] = {
 		"/tmp/x",
@@ -92,7 +92,7 @@ void test_sidebar_openfiles_none(void)
 }
 
 
-void test_sidebar_openfiles_path(void)
+static void test_sidebar_openfiles_path(void)
 {
 	const gchar *files[] = {
 		"/tmp/x",
@@ -114,7 +114,7 @@ void test_sidebar_openfiles_path(void)
 }
 
 
-void test_sidebar_openfiles_tree(void)
+static void test_sidebar_openfiles_tree(void)
 {
 	const gchar *files[] = {
 		"/tmp/x",
