@@ -47,6 +47,7 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "plugindata.h"
+#include "pluginextension.h"
 #include "pluginutils.h"
 #include "prefs.h"
 #include "project.h"
