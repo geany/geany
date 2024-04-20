@@ -2158,7 +2158,10 @@ static gboolean cb_func_editor_action(guint key_id)
 				editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
 			break;
 		case GEANY_KEYS_EDITOR_CALLTIP:
-			editor_show_calltip(doc->editor, -1);
+			if (plugin_extension_calltips_provided(doc))
+				plugin_extension_calltips_show(doc, TRUE);
+			else
+				editor_show_calltip(doc->editor, -1);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word(doc, FALSE))
