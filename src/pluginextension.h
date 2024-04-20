@@ -27,6 +27,11 @@
  * Geany with plugin extension support or not */
 #define HAVE_GEANY_PLUGIN_EXTENSION 1
 
+/* Temporary define so the plugin can check whether it's compiled against
+ * Geany with plugin extension which supports sidebar document symbol
+ * injection */
+#define HAVE_GEANY_PLUGIN_EXTENSION_DOC_SYMBOLS 1
+
 G_BEGIN_DECLS
 
 

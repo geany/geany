@@ -323,24 +323,22 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 }
 
 
-static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
+static GList *get_tag_list(GPtrArray *tags_array, gchar *tag_filter, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
 	guint i;
 	gchar **tf_strv;
 
-	g_return_val_if_fail(doc, NULL);
-
-	if (! doc->tm_file || ! doc->tm_file->tags_array)
+	if (!tags_array)
 		return NULL;
 
-	tf_strv = g_strsplit_set(doc->priv->tag_filter, " ", -1);
+	tf_strv = g_strsplit_set(tag_filter, " ", -1);
 
-	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
+	for (i = 0; i < tags_array->len; ++i)
 	{
-		TMTag *tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
+		TMTag *tag = TM_TAG(tags_array->pdata[i]);
 
-		if (tag->type & tag_types)
+		if (tag->type & tag_types || tag->plugin_extension)
 		{
 			gboolean filtered = FALSE;
 			gchar **val;
@@ -504,18 +502,19 @@ static void hide_empty_rows(GtkTreeStore *store)
 }
 
 
-static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean include_scope,
+static gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean include_scope,
 	gboolean include_line)
 {
 	gchar *utf8_name;
 	const gchar *scope = tag->scope;
-	static GString *buffer = NULL;	/* buffer will be small so we can keep it for reuse */
+	GString *buffer = NULL;
 	gboolean doc_is_utf8 = FALSE;
 
 	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
 	 * for None at this point completely */
 	if (utils_str_equal(doc->encoding, "UTF-8") ||
-		utils_str_equal(doc->encoding, "None"))
+		utils_str_equal(doc->encoding, "None") ||
+		tag->plugin_extension)
 		doc_is_utf8 = TRUE;
 	else /* normally the tags will always be in UTF-8 since we parse from our buffer, but a
 		  * plugin might have called tm_source_file_update(), so check to be sure */
@@ -530,10 +529,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (utf8_name == NULL)
 		return NULL;
 
-	if (! buffer)
-		buffer = g_string_new(NULL);
-	else
-		g_string_truncate(buffer, 0);
+	buffer = g_string_new(NULL);
 
 	/* check first char of scope is a wordchar */
 	if (include_scope && scope &&
@@ -552,14 +548,19 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (include_line)
 		g_string_append_printf(buffer, " [%lu]", tag->line);
 
-	return buffer->str;
+	return g_string_free(buffer, FALSE);
 }
 
 
 // Returns NULL if the tag is not a variable or callable
 static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag, gboolean include_scope)
 {
-	gchar *utf8_name = tm_parser_format_function(tag->lang, tag->name,
+	gchar *utf8_name;
+
+	if (tag->tooltip)
+		return g_strdup(tag->tooltip);
+
+	utf8_name = tm_parser_format_function(tag->lang, tag->name,
 		tag->arglist, tag->var_type, tag->scope);
 
 	if (!utf8_name && tag->var_type &&
@@ -589,12 +590,17 @@ static const gchar *get_parent_name(const TMTag *tag)
 }
 
 
-static GtkTreeIter *get_tag_type_iter(TMParserType lang, TMTagType tag_type)
+static GtkTreeIter *get_tag_type_iter(TMTag *tag)
 {
+	gint group;
+
+	if (tag->plugin_extension)
+		return NULL;
+
 	/* TODO: tm_parser_get_sidebar_group() goes through groups one by one.
 	 * If this happens to be slow for tree construction, create a lookup
 	 * table for them. */
-	gint group = tm_parser_get_sidebar_group(lang, tag_type);
+	group = tm_parser_get_sidebar_group(tag->lang, tag->type);
 
 	if (group < 0)
 		return NULL;
@@ -965,8 +971,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 				if (!tm_tags_equal(tag, found))
 				{
-					const gchar *name;
-					gchar *tooltip;
+					gchar *name, *tooltip;
 
 					/* only update fields that (can) have changed (name that holds line
 					 * number, tooltip, and the tag itself) */
@@ -977,6 +982,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 							SYMBOLS_COLUMN_TOOLTIP, tooltip,
 							SYMBOLS_COLUMN_TAG, found,
 							-1);
+					g_free(name);
 					g_free(tooltip);
 				}
 
@@ -1000,16 +1006,20 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		TMTag *tag = item->data;
 		GtkTreeIter *parent, *parent_group;
 
-		parent_group = get_tag_type_iter(tag->lang, tag->type);
+		parent_group = get_tag_type_iter(tag);
 		/* tv_iters[0] is reserved for the "Symbols" group */
-		parent = ui_prefs.symbols_group_by_type ? parent_group : &tv_iters[0];
-		if (parent_group)
+		parent = (ui_prefs.symbols_group_by_type && !tag->plugin_extension) ? parent_group : &tv_iters[0];
+		if (tag->plugin_extension || parent_group)
 		{
 			gboolean expand;
-			const gchar *name;
+			gchar *name, *tooltip;
 			const gchar *parent_name;
-			gchar *tooltip;
-			GdkPixbuf *icon = get_child_icon(store, parent_group);
+			GdkPixbuf *icon;
+
+			if (tag->plugin_extension)
+				icon = g_object_ref(symbols_get_icon_pixbuf(tag->icon));
+			else
+				icon = get_child_icon(store, parent_group);
 
 			parent_name = get_parent_name(tag);
 			if (parent_name)
@@ -1035,6 +1045,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 					SYMBOLS_COLUMN_ICON, icon,
 					SYMBOLS_COLUMN_TAG, tag,
 					-1);
+			g_free(name);
 			g_free(tooltip);
 			if (G_LIKELY(icon))
 				g_object_unref(icon);
@@ -1154,18 +1165,28 @@ static void sort_tree(GtkTreeStore *store, gboolean sort_by_name)
 
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
-	GList *tags;
+	gboolean use_plugin_extension;
+	GList *tags = NULL;
 
 	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 
-	tags = get_tag_list(doc, ~(tm_tag_local_var_t | tm_tag_include_t));
+	use_plugin_extension = plugin_extension_doc_symbols_provided(doc);
+
+	if (use_plugin_extension)
+		tags = get_tag_list(plugin_extension_doc_symbols_get(doc), doc->priv->tag_filter, tm_tag_max_t);
+	else
+	{
+		if (doc->tm_file && doc->tm_file->tags_array)
+			tags = get_tag_list(doc->tm_file->tags_array, doc->priv->tag_filter,
+				~(tm_tag_local_var_t | tm_tag_include_t));
+	}
 	if (tags == NULL)
 		return FALSE;
 
-	if (doc->priv->symbols_group_by_type != ui_prefs.symbols_group_by_type)
+	if (doc->priv->symbols_group_by_type != (ui_prefs.symbols_group_by_type && !use_plugin_extension))
 		gtk_tree_store_clear(doc->priv->tag_store);
 
-	doc->priv->symbols_group_by_type = ui_prefs.symbols_group_by_type;
+	doc->priv->symbols_group_by_type = ui_prefs.symbols_group_by_type && !use_plugin_extension;
 
 	/* FIXME: Not sure why we detached the model here? */
 
@@ -1490,7 +1511,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 		gchar *sym = get_symbol_tooltip(doc, tmtag, TRUE);
 
 		if (!sym)
-			sym = g_strdup(get_symbol_name(doc, tmtag, TRUE, FALSE));
+			sym = get_symbol_name(doc, tmtag, TRUE, FALSE);
 		if (!sym)
 			sym = g_strdup("");
 
