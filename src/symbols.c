@@ -46,6 +46,7 @@
 #include "highlighting.h"
 #include "main.h"
 #include "navqueue.h"
+#include "pluginextension.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
 #include "support.h"
@@ -1686,8 +1687,16 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 }
 
 
-gboolean symbols_goto_tag(const gchar *name, gboolean definition)
+gboolean symbols_goto_tag(const gchar *name, gint pos, gboolean definition)
 {
+	GeanyDocument *doc = document_get_current();
+
+	if (plugin_extension_goto_provided(doc))
+	{
+		plugin_extension_goto_perform(doc, pos, definition);
+		return TRUE;
+	}
+
 	if (goto_tag(name, definition))
 		return TRUE;
 

@@ -1975,7 +1975,7 @@ static void goto_tag(GeanyDocument *doc, gboolean definition)
 	gchar *text = get_current_word_or_sel(doc, FALSE);
 
 	if (text)
-		symbols_goto_tag(text, definition);
+		symbols_goto_tag(text, sci_get_current_position(doc->editor->sci), definition);
 	else
 		utils_beep();
 
