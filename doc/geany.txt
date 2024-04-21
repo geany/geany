@@ -2778,6 +2778,10 @@ replace_and_find_by_default       Set ``Replace & Find`` button as default so  t
                                   it will be activated when the Enter key is
                                   pressed while one of the text fields has
                                   focus.
+skip_confirmation_for_replace_in_session If set, do *not* show the             false       immediately
+                                  confirmation dialog before replacing text
+                                  in the whole session, i.e. in all open
+                                  files.
 **``build`` group**
 number_ft_menu_items              The maximum number of menu items in the      2           on restart
                                   filetype build section of the Build menu.
