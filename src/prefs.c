@@ -89,7 +89,6 @@ static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointe
 static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_check_line_end_toggled(GtkToggleButton *togglebutton, gpointer user_data);
-static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_sidebar_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -533,18 +532,11 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 	ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), file_prefs.default_new_encoding);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-			(file_prefs.default_open_encoding >= 0) ? TRUE : FALSE);
-	on_open_encoding_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
-
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
 	if (file_prefs.default_open_encoding >= 0)
-	{
 		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), file_prefs.default_open_encoding);
-	}
 	else
-		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
+		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), GEANY_ENCODINGS_MAX);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
 	if (file_prefs.default_eol_character >= 0 && file_prefs.default_eol_character < 3)
@@ -1006,13 +998,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
 		file_prefs.default_new_encoding = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(widget));
 
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
-		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-		{
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
-			file_prefs.default_open_encoding = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(widget));
-		}
-		else
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
+		file_prefs.default_open_encoding = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(widget));
+		if (file_prefs.default_open_encoding >= GEANY_ENCODINGS_MAX)
 			file_prefs.default_open_encoding = -1;
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
@@ -1547,15 +1535,6 @@ static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer us
 }
 
 
-static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	gboolean sens = gtk_toggle_button_get_active(togglebutton);
-
-	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "eventbox3"), sens);
-	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "label_open_encoding"), sens);
-}
-
-
 static void on_sidebar_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
@@ -1664,23 +1643,24 @@ void prefs_show_dialog(void)
 		{
 			struct {
 				const gchar *combo, *renderer;
+				gboolean has_detect;
 			} names[] = {
-				{ "combo_new_encoding", "combo_new_encoding_renderer" },
-				{ "combo_open_encoding", "combo_open_encoding_renderer" }
+				{ "combo_new_encoding", "combo_new_encoding_renderer", FALSE },
+				{ "combo_open_encoding", "combo_open_encoding_renderer", TRUE }
 			};
 			guint i;
-			GtkTreeStore *encoding_list = encodings_encoding_store_new(FALSE);
 
 			for (i = 0; i < G_N_ELEMENTS(names); i++)
 			{
+				GtkTreeStore *encoding_list = encodings_encoding_store_new(names[i].has_detect);
 				GtkWidget *combo = ui_lookup_widget(ui_widgets.prefs_dialog, names[i].combo);
 
 				gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(combo),
 						ui_builder_get_object(names[i].renderer),
 						encodings_encoding_store_cell_data_func, NULL, NULL);
 				gtk_combo_box_set_model(GTK_COMBO_BOX(combo), GTK_TREE_MODEL(encoding_list));
+				g_object_unref(encoding_list);
 			}
-			g_object_unref(encoding_list);
 		}
 
 		/* init the eol character combo box */
@@ -1810,8 +1790,6 @@ void prefs_show_dialog(void)
 				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_end"),
 				"toggled", G_CALLBACK(on_check_line_end_toggled), NULL);
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),
-				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible"),
 				"toggled", G_CALLBACK(on_sidebar_visible_toggled), NULL);
 

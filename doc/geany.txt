@@ -2473,12 +2473,12 @@ Open new documents from the command-line
 Default encoding (new files)
     The type of file encoding you wish to use when creating files.
 
-Used fixed encoding when opening files
-    Assume all files you are opening are using the type of encoding specified below.
-
 Default encoding (existing files)
-    Opens all files with the specified encoding instead of auto-detecting it.
-    Use this option when it's not possible for Geany to detect the exact encoding.
+    Selects the encoding used when opening existing files. If set to something
+    other than *Detect from file*, all files will be opened with the specified
+    encoding instead of auto-detecting it.
+    Use a specific encoding when it's not possible for Geany to detect the
+    correct one.
 
 Default end of line characters
     The end of line characters to which should be used for new files.
