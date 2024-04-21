@@ -1462,7 +1462,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 
 	if (response == GEANY_RESPONSE_REPLACE_IN_SESSION) {
-		if (! dialogs_show_question_full(replace_dlg.dialog, NULL, NULL,
+		if (!search_prefs.skip_confirmation_for_replace_in_session &&
+			! dialogs_show_question_full(replace_dlg.dialog, NULL, NULL,
 			_("This operation will modify all open files which contain the text to replace."),
 			_("Are you sure to replace in the whole session?"))) {
 			return;
