@@ -2754,6 +2754,9 @@ gio_unsafe_save_backup            Make a backup when using GIO unsafe file     f
 keep_edit_history_on_reload       Whether to maintain the edit history when    true        immediately
                                   reloading a file, and allow the operation
                                   to be reverted.
+show_keep_edit_history_on_reload_msg Whether to show a confirmation dialog to  true        immediately
+                                  drop the edit history on reloading a file,
+                                  see also `keep_edit_history_on_reload` above.
 reload_clean_doc_on_file_change   Whether to automatically reload documents    false       immediately
                                   that have no changes but which have changed
                                   on disk.
