@@ -168,7 +168,7 @@ cdata.set_quoted('REVISION', revision)
 
 python_command = get_option('python-command')
 if python_command == '' or python_command == 'auto'
-	if target_machine.system() == 'windows'
+	if host_machine.system() == 'windows'
 		python_command = 'py'
 	else
 		python_command = 'python'
@@ -213,7 +213,7 @@ endforeach
 geany_cflags = def_cflags
 have_gcc4_visibility = cc.has_argument('-fvisibility=hidden')
 geany_cflags += '-DGEANY_PRIVATE'
-if target_machine.system() == 'windows'
+if host_machine.system() == 'windows'
 	geany_cflags += '-DGEANY_EXPORT_SYMBOL=__declspec(dllexport)'
 elif have_gcc4_visibility
 	geany_cflags += '-fvisibility=hidden'
