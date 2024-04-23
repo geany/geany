@@ -249,6 +249,7 @@ ctags_tests = files([
 	'ctags/namespace.cpp.tags',
 	'ctags/namespaces2.php.tags',
 	'ctags/namespaces.php.tags',
+	'ctags/nested_anon.c.tags',
 	'ctags/no_terminator.js.tags',
 	'ctags/non-ascii-ident1.php.tags',
 	'ctags/numlib.f90.tags',
