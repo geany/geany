@@ -74,16 +74,17 @@ static hashEntry *getHashTableEntry (unsigned long hashedValue)
 static unsigned int hashValue (const char *const string, langType language,
 	unsigned int maxLen, bool *maxLenReached)
 {
-	const signed char *p;
+	const char *p;
 	unsigned int h = 5381;
 
 	Assert (string != NULL);
 
 	/* "djb" hash as used in g_str_hash() in glib */
-	for (p = (const signed char *)string; *p != '\0'; p++)
+	for (p = string; *p != '\0'; p++)
 	{
-		h = (h << 5) + h + tolower (*p);
-		if (p - (const signed char *)string > maxLen)
+		h = (h << 5) + h + (signed char) tolower ((unsigned char) *p);
+
+		if (p > string + maxLen)
 		{
 			*maxLenReached = true;
 			return 0;
@@ -293,5 +294,34 @@ extern void addKeywordGroup (const struct keywordGroup *const groupdef,
 			Assert (lookupKeyword (groupdef->keywords[i],
 								   language) == KEYWORD_NONE);
 		addKeyword (groupdef->keywords[i], language, groupdef->value);
+	}
+}
+
+extern void addDialectalKeywords (const struct dialectalKeyword *const dkeywords,
+								  size_t nDkeyword,
+								  langType language,
+								  const char **dialectMap,
+								  size_t nMap)
+{
+	int dialect = -1;
+	const char *name = getLanguageName (language);
+
+	Assert(name);
+
+	for (size_t i = 0; i < nMap; i++)
+	{
+		if (strcmp(dialectMap[i], name) == 0)
+		{
+			dialect = i;
+			break;
+		}
+	}
+	Assert (dialect != -1);
+
+	for (size_t i = 0; i < nDkeyword; i++)
+	{
+		const struct dialectalKeyword *p = dkeywords + i;
+		if (p->isValid[dialect])
+			addKeyword (p->keyword, language, p->value);
 	}
 }

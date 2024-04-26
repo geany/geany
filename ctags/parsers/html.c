@@ -19,6 +19,7 @@
 #include "routines.h"
 #include "keyword.h"
 #include "promise.h"
+#include "trace.h"
 
 /* The max. number of nested elements - prevents further recursion if the limit
  * is exceeded and avoids stack overflow for invalid input containing too many
@@ -29,6 +30,7 @@
 typedef enum {
 	K_ANCHOR,
 	K_CLASS,
+	K_TITLE,
 	K_HEADING1,
 	K_HEADING2,
 	K_HEADING3,
@@ -66,6 +68,7 @@ static kindDefinition HtmlKinds [] = {
 	{ true, 'a', "anchor",		"named anchors" },
 	{ true, 'c', "class",		"classes",
 	  .referenceOnly = true, ATTACH_ROLES (ClassRoles)},
+	{ true, 't', "title",		"titles" },
 	{ true, 'h', "heading1",	"H1 headings" },
 	{ true, 'i', "heading2",	"H2 headings" },
 	{ true, 'j', "heading3",	"H3 headings" },
@@ -77,9 +80,16 @@ static kindDefinition HtmlKinds [] = {
 };
 
 typedef enum {
+	/* The order starting from "title" to "h3" should
+	 * not be changed.
+	 *
+	 */
+	KEYWORD_heading_start,
+	KEYWORD_title = KEYWORD_heading_start,
 	KEYWORD_h1,
 	KEYWORD_h2,
 	KEYWORD_h3,
+	KEYWORD_heading_end = KEYWORD_h3,
 	KEYWORD_a,
 	KEYWORD_script,
 	KEYWORD_style,
@@ -110,6 +120,7 @@ typedef enum {
 } keywordId;
 
 static const keywordTable HtmlKeywordTable[] = {
+	{"title", KEYWORD_title},
 	{"h1", KEYWORD_h1},
 	{"h2", KEYWORD_h2},
 	{"h3", KEYWORD_h3},
@@ -147,8 +158,8 @@ typedef enum {
 	TOKEN_NAME,			/* tag and attribute names */
 	TOKEN_STRING,		/* single- or double-quoted attribute value */
 	TOKEN_TEXT,
-	TOKEN_TAG_START,	/* <  */
-	TOKEN_TAG_START2,	/* </ */
+	TOKEN_OPEN_TAG_START,	/* <  */
+	TOKEN_CLOSE_TAG_START,	/* </ */
 	TOKEN_TAG_END,		/* >  */
 	TOKEN_TAG_END2,		/* /> */
 	TOKEN_EQUAL,
@@ -157,14 +168,14 @@ typedef enum {
 } tokenType;
 
 #ifdef DEBUG
-const char *tokenTypes[] = {
+static const char *tokenTypes[] = {
 #define E(X) [TOKEN_##X] = #X
 	E(EOF),
 	E(NAME),
 	E(STRING),
 	E(TEXT),
-	E(TAG_START),
-	E(TAG_START2),
+	E(OPEN_TAG_START),
+	E(CLOSE_TAG_START),
 	E(TAG_END),
 	E(TAG_END2),
 	E(EQUAL),
@@ -185,16 +196,7 @@ static int Lang_html;
 
 static void readTag (tokenInfo *token, vString *text, int depth);
 
-#ifdef DEBUG
-#if 0
-static void dumpToken (tokenInfo *token, const char *context, const char* extra_context)
-{
-	fprintf (stderr, "[%7s] %-20s@%s.%s\n",
-			 tokenTypes[token->type], vStringValue(token->string),
-			 context, extra_context? extra_context: "_");
-}
-#endif
-#endif
+static void skipOtherScriptContent (const int delimiter);
 
 static void readTokenText (tokenInfo *const token, bool collectText)
 {
@@ -234,6 +236,58 @@ getNextChar:
 	}
 }
 
+static void readTokenInScript (tokenInfo *const token)
+{
+	int c;
+
+	vStringClear (token->string);
+
+	c = getcFromInputFile ();
+	while (isspace (c))
+		c = getcFromInputFile ();
+
+	switch (c)
+	{
+		case EOF:
+			token->type = TOKEN_EOF;
+			break;
+
+		case '<':
+		{
+			int d = getcFromInputFile ();
+			if (d == '/')
+				token->type = TOKEN_CLOSE_TAG_START;
+			else
+			{
+				ungetcToInputFile (d);
+				token->type = TOKEN_OTHER;
+			}
+			break;
+		}
+		default:
+		{
+			while (!isspace (c) && c != '<' && c != '>' && c != '/' &&
+				   c != '=' && c != '\'' && c != '"' && c != EOF)
+			{
+				vStringPut (token->string, tolower (c));
+				c = getcFromInputFile ();
+			}
+
+			if (vStringLength (token->string) == 0)
+				token->type = TOKEN_OTHER;
+			else
+			{
+				token->type = TOKEN_NAME;
+				if (c != EOF)
+					ungetcToInputFile (c);
+			}
+			break;
+		}
+	}
+
+	TRACE_PRINT("token (in script): %s (%s)", tokenTypes[token->type], vStringValue (token->string));
+}
+
 static void readToken (tokenInfo *const token, bool skipComments)
 {
 	int c;
@@ -255,7 +309,6 @@ getNextChar:
 		case '<':
 		{
 			int d = getcFromInputFile ();
-
 			if (d == '!')
 			{
 				d = getcFromInputFile ();
@@ -286,14 +339,17 @@ getNextChar:
 				ungetcToInputFile (d);
 				token->type = TOKEN_OTHER;
 			}
-			else if (d == '?')
-				token->type = TOKEN_OTHER;
+			else if (d == '?' || d == '%')
+			{
+				skipOtherScriptContent(d);
+				goto getNextChar;
+			}
 			else if (d == '/')
-				token->type = TOKEN_TAG_START2;
+				token->type = TOKEN_CLOSE_TAG_START;
 			else
 			{
 				ungetcToInputFile (d);
-				token->type = TOKEN_TAG_START;
+				token->type = TOKEN_OPEN_TAG_START;
 			}
 			break;
 		}
@@ -346,6 +402,8 @@ getNextChar:
 			break;
 		}
 	}
+
+	TRACE_PRINT("token: %s (%s)", tokenTypes[token->type], vStringValue (token->string));
 }
 
 static void appendText (vString *text, vString *appendedText)
@@ -363,6 +421,8 @@ static void appendText (vString *text, vString *appendedText)
 
 static bool readTagContent (tokenInfo *token, vString *text, long *line, long *lineOffset, int depth)
 {
+	TRACE_ENTER();
+
 	tokenType type;
 
 	readTokenText (token, text != NULL);
@@ -374,21 +434,25 @@ static bool readTagContent (tokenInfo *token, vString *text, long *line, long *l
 		*lineOffset = getInputLineOffset ();
 		readToken (token, false);
 		type = token->type;
-		if (type == TOKEN_TAG_START)
+		if (type == TOKEN_OPEN_TAG_START)
 			readTag (token, text, depth + 1);
-		if (type == TOKEN_COMMENT || type == TOKEN_TAG_START)
+		if (type == TOKEN_COMMENT || type == TOKEN_OPEN_TAG_START)
 		{
 			readTokenText (token, text != NULL);
 			appendText (text, token->string);
 		}
 	}
-	while (type == TOKEN_COMMENT || type == TOKEN_TAG_START);
+	while (type == TOKEN_COMMENT || type == TOKEN_OPEN_TAG_START);
 
-	return type == TOKEN_TAG_START2;
+	TRACE_LEAVE_TEXT("is_close_tag? %d", type == TOKEN_CLOSE_TAG_START);
+
+	return type == TOKEN_CLOSE_TAG_START;
 }
 
 static bool skipScriptContent (tokenInfo *token, long *line, long *lineOffset)
 {
+	TRACE_ENTER();
+
 	bool found_start = false;
 	bool found_script = false;
 
@@ -402,10 +466,10 @@ static bool skipScriptContent (tokenInfo *token, long *line, long *lineOffset)
 		line_tmp[0] = getInputLineNumber ();
 		lineOffset_tmp[0] = getInputLineOffset ();
 
-		readToken (token, false);
+		readTokenInScript (token);
 		type = token->type;
 
-		if (type == TOKEN_TAG_START2)
+		if (type == TOKEN_CLOSE_TAG_START)
 		{
 			found_start = true;
 			line_tmp[1] = line_tmp[0];
@@ -424,7 +488,56 @@ static bool skipScriptContent (tokenInfo *token, long *line, long *lineOffset)
 	}
 	while ((type != TOKEN_EOF) && (!found_script));
 
+	TRACE_LEAVE_TEXT("found_script? %d", found_script);
+
 	return found_script;
+}
+
+static void skipOtherScriptContent (const int delimiter)
+{
+	TRACE_ENTER();
+
+	const long startSourceLineNumber = getSourceLineNumber ();
+	const long startLineNumber = getInputLineNumber ();
+	const long startLineOffset = getInputLineOffset () - 2;
+
+	vString *script_name = vStringNew ();
+	bool reading_script_name = true;
+	while (1)
+	{
+		int c = getcFromInputFile ();
+		if (c == EOF)
+		{
+			break;
+		}
+		else if (reading_script_name && !isspace(c))
+		{
+			vStringPut (script_name, c);
+		}
+		else if (reading_script_name)
+		{
+			reading_script_name = false;
+		}
+		else if (c == delimiter)
+		{
+			c = getcFromInputFile ();
+			if (c == '>')
+			{
+				break;
+			}
+			ungetcToInputFile (c);
+		}
+	}
+
+	if (strcasecmp ("php", vStringValue (script_name)) == 0
+		|| strcmp ("=", vStringValue (script_name)) == 0)
+		makePromise ("PHP", startLineNumber, startLineOffset,
+					 getInputLineNumber (), getInputLineOffset (),
+					 startSourceLineNumber);
+
+	vStringDelete (script_name);
+
+	TRACE_LEAVE();
 }
 
 static void makeClassRefTags (const char *classes)
@@ -433,7 +546,7 @@ static void makeClassRefTags (const char *classes)
 
 	do
 	{
-		if (*classes && !isspace (*classes))
+		if (*classes && !isspace ((unsigned char) *classes))
 			vStringPut (klass, *classes);
 		else if (!vStringIsEmpty (klass))
 		{
@@ -453,6 +566,8 @@ static void makeClassRefTags (const char *classes)
 
 static void readTag (tokenInfo *token, vString *text, int depth)
 {
+	TRACE_ENTER();
+
 	bool textCreated = false;
 
 	readToken (token, true);
@@ -465,7 +580,7 @@ static void readTag (tokenInfo *token, vString *text, int depth)
 		bool stylesheet_expectation = false;
 
 		startTag = lookupKeyword (vStringValue (token->string), Lang_html);
-		isHeading = (startTag == KEYWORD_h1 || startTag == KEYWORD_h2 || startTag == KEYWORD_h3);
+		isHeading = (KEYWORD_heading_start <= startTag && startTag <= KEYWORD_heading_end);
 		isVoid = (startTag >= KEYWORD_area && startTag <= KEYWORD_wbr);
 		if (text == NULL && isHeading)
 		{
@@ -600,6 +715,8 @@ static void readTag (tokenInfo *token, vString *text, int depth)
 					{
 						htmlKind headingKind;
 
+						if (startTag == KEYWORD_title)
+							headingKind = K_TITLE;
 						if (startTag == KEYWORD_h1)
 							headingKind = K_HEADING1;
 						else if (startTag == KEYWORD_h2)
@@ -628,10 +745,14 @@ static void readTag (tokenInfo *token, vString *text, int depth)
  out:
 	if (textCreated)
 		vStringDelete (text);
+
+	TRACE_LEAVE();
 }
 
 static void findHtmlTags (void)
 {
+	TRACE_ENTER();
+
 	tokenInfo token;
 
 	token.string = vStringNew ();
@@ -639,12 +760,14 @@ static void findHtmlTags (void)
 	do
 	{
 		readToken (&token, true);
-		if (token.type == TOKEN_TAG_START)
+		if (token.type == TOKEN_OPEN_TAG_START)
 			readTag (&token, NULL, 0);
 	}
 	while (token.type != TOKEN_EOF);
 
 	vStringDelete (token.string);
+
+	TRACE_LEAVE();
 }
 
 static void initialize (const langType language)

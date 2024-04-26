@@ -22,6 +22,7 @@
 #define CXX_COMMON_MACRO_ROLES(__langPrefix) \
 	static roleDefinition __langPrefix##MacroRoles [] = { \
 		RoleTemplateUndef, \
+		RoleTemplateCondition, \
 	}
 
 CXX_COMMON_MACRO_ROLES(C);
@@ -35,16 +36,48 @@ CXX_COMMON_MACRO_ROLES(CUDA);
 	}
 
 CXX_COMMON_HEADER_ROLES(C);
-CXX_COMMON_HEADER_ROLES(CXX);
+static roleDefinition CXXHeaderRoles [] = {
+		RoleTemplateSystem,
+		RoleTemplateLocal,
+		{ true, "imported", "imported with \"imported ...\"" },
+		{ true, "exported", "exported with \"exported imported ...\"" },
+};
 CXX_COMMON_HEADER_ROLES(CUDA);
 
+/* Currently V parser wants these items. */
+#define RoleTemplateForeignDecl { true, "foreigndecl", "declared in foreign languages" }
 
-#define CXX_COMMON_KINDS(_langPrefix, _szMemberDescription, _syncWith)	\
+#define CXX_COMMON_FUNCTION_ROLES(__langPrefix) \
+	static roleDefinition __langPrefix##FunctionRoles [] = { \
+		RoleTemplateForeignDecl, \
+	}
+
+CXX_COMMON_FUNCTION_ROLES(C);
+
+#define CXX_COMMON_STRUCT_ROLES(__langPrefix) \
+	static roleDefinition __langPrefix##StructRoles [] = { \
+		RoleTemplateForeignDecl, \
+	}
+
+CXX_COMMON_STRUCT_ROLES(C);
+
+static roleDefinition CXXModuleRoles [] = {
+
+	{ true, "partOwner", "used for specifying a partition" },
+	{ true, "imported", "imported with \"imported ...\"" },
+};
+
+static roleDefinition CXXPartitionRoles [] = {
+	{ true, "imported", "imported with \"imported ...\"" },
+};
+
+#define CXX_COMMON_KINDS(_langPrefix, _szMemberDescription, _syncWith, FUNC_ROLES, STRUCT_ROLES) \
 	{ true,  'd', "macro",      "macro definitions", \
 			.referenceOnly = false, ATTACH_ROLES(_langPrefix##MacroRoles), .syncWith = _syncWith \
 	}, \
 	{ true,  'e', "enumerator", "enumerators (values inside an enumeration)", .syncWith = _syncWith }, \
-	{ true,  'f', "function",   "function definitions", .syncWith = _syncWith },		\
+	{ true,  'f', "function",   "function definitions", \
+			.referenceOnly = false, FUNC_ROLES, .syncWith = _syncWith }, \
 	{ true,  'g', "enum",       "enumeration names", .syncWith = _syncWith },		\
 	{ true, 'h', "header",     "included header files", \
 			.referenceOnly = true,  ATTACH_ROLES(_langPrefix##HeaderRoles), .syncWith = _syncWith \
@@ -52,7 +85,8 @@ CXX_COMMON_HEADER_ROLES(CUDA);
 	{ false, 'l', "local",      "local variables", .syncWith = _syncWith },   \
 	{ true,  'm', "member",     _szMemberDescription, .syncWith = _syncWith },	\
 	{ false, 'p', "prototype",  "function prototypes", .syncWith = _syncWith },		\
-	{ true,  's', "struct",     "structure names", .syncWith = _syncWith },		\
+	{ true,  's', "struct",     "structure names", \
+			.referenceOnly = false, STRUCT_ROLES, .syncWith = _syncWith }, \
 	{ true,  't', "typedef",    "typedefs", .syncWith = _syncWith },			\
 	{ true,  'u', "union",      "union names", .syncWith = _syncWith },			\
 	{ true,  'v', "variable",   "variable definitions", .syncWith = _syncWith },		\
@@ -65,21 +99,25 @@ static kindDefinition g_aCXXCKinds [] = {
 	/* All other than LANG_AUTO are ignored.
 	   LANG_IGNORE is specified as a just placeholder for the macro,
 	   and is not needed. */
-	CXX_COMMON_KINDS(C,"struct, and union members", LANG_IGNORE)
+	CXX_COMMON_KINDS(C,"struct, and union members", LANG_IGNORE, ATTACH_ROLES(CFunctionRoles), ATTACH_ROLES(CStructRoles))
 };
 
 static kindDefinition g_aCXXCPPKinds [] = {
-	CXX_COMMON_KINDS(CXX,"class, struct, and union members", LANG_AUTO),
+	CXX_COMMON_KINDS(CXX,"class, struct, and union members", LANG_AUTO, .nRoles = 0, .nRoles = 0),
 	{ true,  'c', "class",      "classes" },
 	{ true,  'n', "namespace",  "namespaces" },
 	{ false, 'A', "alias",      "namespace aliases" },
 	{ false, 'N', "name",       "names imported via using scope::symbol" },
 	{ false, 'U', "using",      "using namespace statements" },
 	{ false, 'Z', "tparam",     "template parameters" },
+	{ true,  'M', "module",     "modules",
+			.referenceOnly = false, ATTACH_ROLES(CXXModuleRoles) },
+	{ true,  'P', "partition",  "partitions",
+			.referenceOnly = false, ATTACH_ROLES(CXXPartitionRoles) },
 };
 
 static kindDefinition g_aCXXCUDAKinds [] = {
-	CXX_COMMON_KINDS(CUDA,"struct, and union members", LANG_IGNORE)
+	CXX_COMMON_KINDS(CUDA,"struct, and union members", LANG_IGNORE, .nRoles = 0, .nRoles = 0)
 };
 
 static const char * g_aCXXAccessStrings [] = {
@@ -92,12 +130,20 @@ static const char * g_aCXXAccessStrings [] = {
 #define CXX_COMMON_FIELDS \
 	{ \
 		.name = "properties", \
-		.description = "properties (static, inline, mutable,...)", \
+		.description = "properties (static, inline, mutable, export,...)", \
 		.enabled = false \
 	}, { \
 		.name = "macrodef", \
 		.description = "macro definition", \
 			.enabled = false \
+	}, { \
+		.name = "section", \
+		.description = "the place where the object is placed", \
+		.enabled = false \
+	}, { \
+		.name = "alias", \
+		.description = "the name of the alias target specified in __attribute__((alias(...)))", \
+		.enabled = false \
 	}
 
 static fieldDefinition g_aCXXCFields [] = {
@@ -201,6 +247,21 @@ bool cxxTagKindEnabled(unsigned int uKind)
 	return g_cxx.pKindDefinitions[uKind].enabled;
 }
 
+bool cxxTagRoleEnabled(unsigned int uKind, int iRole)
+{
+	if(!cxxTagKindEnabled(uKind))
+		return true;
+	if(iRole == ROLE_DEFINITION_INDEX)
+		return true;
+
+	CXX_DEBUG_ASSERT(
+		(ROLE_DEFINITION_INDEX < iRole
+		 && iRole < g_cxx.pKindDefinitions[uKind].nRoles),
+		"The role must be associated to the kind (%u)", uKind
+		);
+	return g_cxx.pKindDefinitions[uKind].roles[iRole].enabled;
+}
+
 fieldDefinition * cxxTagGetCPPFieldDefinitionifiers(void)
 {
 	return g_aCXXCPPFields;
@@ -243,8 +304,47 @@ bool cxxTagFieldEnabled(unsigned int uField)
 
 static tagEntryInfo g_oCXXTag;
 
+void cxxTagUseTokenAsPartOfDefTag(int iCorkIndex, CXXToken * pToken)
+{
+	Assert (pToken->iCorkIndex == CORK_NIL);
+	pToken->iCorkIndex = iCorkIndex;
+}
 
-tagEntryInfo * cxxTagBegin(unsigned int uKind,CXXToken * pToken)
+void cxxTagUseTokensInRangeAsPartOfDefTags(int iCorkIndex, CXXToken * pFrom, CXXToken * pTo)
+{
+	cxxTagUseTokenAsPartOfDefTag(iCorkIndex, pFrom);
+	while (pFrom != pTo)
+	{
+		pFrom = pFrom->pNext;
+		cxxTagUseTokenAsPartOfDefTag(iCorkIndex, pFrom);
+	}
+}
+
+static short cxxTagLookBackLastNth(langType iLangType, int iScopeIndex, unsigned int uKind)
+{
+	for (size_t uCount = countEntryInCorkQueue (); uCount > (CORK_NIL + 1); uCount--)
+	{
+		int iCorkIndex = (int)(uCount - 1);
+		tagEntryInfo *pTag = getEntryInCorkQueue(iCorkIndex);
+		if (iCorkIndex == iScopeIndex)
+			return 0;
+		else if (pTag->extensionFields.scopeIndex == iScopeIndex
+				 && pTag->langType == iLangType
+				 && pTag->kindIndex == uKind)
+		{
+			return pTag->extensionFields.nth + (
+				/* Over-wrapped; if the value is too large for sizeof(nth),
+				 * Don't increment more. */
+				((short)(pTag->extensionFields.nth + 1) > 0)
+				? 1
+				: 0
+				);
+		}
+	}
+	return NO_NTH_FIELD;
+}
+
+tagEntryInfo * cxxRefTagBegin(unsigned int uKind, int iRole, CXXToken * pToken)
 {
 	kindDefinition * pKindDefinitions = g_cxx.pKindDefinitions;
 
@@ -254,26 +354,43 @@ tagEntryInfo * cxxTagBegin(unsigned int uKind,CXXToken * pToken)
 		return NULL;
 	}
 
-	initTagEntry(
+	initRefTagEntry(
 			&g_oCXXTag,
 			vStringValue(pToken->pszWord),
-			uKind
+			uKind,
+			iRole
 		);
 
-	g_oCXXTag.lineNumber = pToken->iLineNumber;
-	g_oCXXTag.filePosition = pToken->oFilePosition;
+	updateTagLine (&g_oCXXTag, pToken->iLineNumber, pToken->oFilePosition);
 	g_oCXXTag.isFileScope = false;
 
 	if(!cxxScopeIsGlobal())
 	{
+		// scopeKindIndex and scopeName are used for printing the scope field
+		// in a tags file.
 		g_oCXXTag.extensionFields.scopeKindIndex = cxxScopeGetKind();
 		g_oCXXTag.extensionFields.scopeName = cxxScopeGetFullName();
+		// scopeIndex is used in the parser internally.
+		g_oCXXTag.extensionFields.scopeIndex = cxxScopeGetDefTag();
+		if (isFieldEnabled(FIELD_NTH) && g_oCXXTag.extensionFields.scopeIndex != CORK_NIL)
+		{
+			if (uKind == CXXTagKindMEMBER || uKind == CXXTagKindENUMERATOR
+				|| uKind == CXXTagKindPARAMETER || uKind == CXXTagCPPKindTEMPLATEPARAM)
+				g_oCXXTag.extensionFields.nth = cxxTagLookBackLastNth(g_oCXXTag.langType,
+																	  g_oCXXTag.extensionFields.scopeIndex,
+																	  uKind);
+		}
 	}
 
 	// FIXME: meaning of "is file scope" is quite debatable...
 	g_oCXXTag.extensionFields.access = g_aCXXAccessStrings[cxxScopeGetAccess()];
 
 	return &g_oCXXTag;
+}
+
+tagEntryInfo * cxxTagBegin(unsigned int uKind,CXXToken * pToken)
+{
+	return cxxRefTagBegin(uKind, ROLE_DEFINITION_INDEX, pToken);
 }
 
 vString * cxxTagSetProperties(unsigned int uProperties)
@@ -333,6 +450,16 @@ vString * cxxTagSetProperties(unsigned int uProperties)
 		ADD_PROPERTY("scopedenum");
 	if(uProperties & CXXTagPropertyFunctionTryBlock)
 		ADD_PROPERTY("fntryblock");
+	if (uProperties & CXXTagPropertyConstexpr)
+		ADD_PROPERTY("constexpr");
+	if (uProperties & CXXTagPropertyConsteval)
+		ADD_PROPERTY("consteval");
+	if (uProperties & CXXTagPropertyConstinit)
+		ADD_PROPERTY("constinit");
+	if (uProperties & CXXTagPropertyThreadLocal)
+		ADD_PROPERTY("thread_local");
+	if (uProperties & CXXTagPropertyExport)
+		ADD_PROPERTY("export");
 
 	cxxTagSetField(CXXTagFieldProperties,vStringValue(pszProperties),false);
 
@@ -530,7 +657,7 @@ void cxxTagSetField(unsigned int uField,const char * szValue,bool bCopyValue)
 	/* If we make a copy for the value, the copy must be freed after
 	 * calling cxxTagCommit() for g_oCXXTag. The parser trash box
 	 * allows us to delay freeing the copy. */
-	attachParserField(&g_oCXXTag,false,g_cxx.pFieldOptions[uField].ftype,
+	attachParserField(&g_oCXXTag,g_cxx.pFieldOptions[uField].ftype,
 					  bCopyValue?parserTrashBoxPut(eStrdup(szValue),eFree):szValue);
 }
 
@@ -632,6 +759,8 @@ int cxxTagCommit(int *piCorkQueueIndexFQ)
 #endif
 
 	int iCorkQueueIndex = makeTagEntry(&g_oCXXTag);
+	if (iCorkQueueIndex != CORK_NIL)
+		registerEntry(iCorkQueueIndex);
 
 	// Handle --extra=+q
 	if(!isXtagEnabled(XTAG_QUALIFIED_TAGS))
@@ -671,7 +800,7 @@ int cxxTagCommit(int *piCorkQueueIndexFQ)
 		x = vStringNewInit(g_oCXXTag.extensionFields.scopeName);
 	}
 
-	vStringCatS(x,"::");
+	vStringCatS(x, (eScopeType == CXXScopeTypeModule)? ":": "::");
 	vStringCatS(x,g_oCXXTag.name);
 
 	g_oCXXTag.name = vStringValue(x);

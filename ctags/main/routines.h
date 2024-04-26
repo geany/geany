@@ -57,9 +57,6 @@ extern void eFreeIndirect(void **ptr);
 /* String manipulation functions */
 extern int struppercmp (const char *s1, const char *s2);
 extern int strnuppercmp (const char *s1, const char *s2, size_t n);
-#ifndef HAVE_STRSTR
-extern char* strstr (const char *str, const char *substr);
-#endif
 extern char* strrstr (const char *str, const char *substr);
 extern char* eStrdup (const char* str);
 extern char* eStrndup (const char* str, size_t len);
@@ -75,5 +72,7 @@ extern bool strToLong(const char *const string, int base, long *value);
 /* File system functions */
 extern const char *baseFilename (const char *const filePath);
 extern const char *fileExtension (const char *const fileName);
+
+extern FILE *tempFileFP (const char *const mode, char **const pName);
 
 #endif  /* CTAGS_MAIN_ROUTINES_H */
