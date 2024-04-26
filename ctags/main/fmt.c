@@ -65,7 +65,7 @@ static int printTagField (fmtSpec* fspec, MIO* fp, const tagEntryInfo * tag)
 	else
 	{
 		unsigned int findex;
-		const tagField *f;
+		const tagField *f = NULL;
 
 		for (findex = 0; findex < tag->usedParserFields; findex++)
 		{
@@ -74,8 +74,11 @@ static int printTagField (fmtSpec* fspec, MIO* fp, const tagEntryInfo * tag)
 				break;
 		}
 
-		if (findex == tag->usedParserFields)
+		if (f == NULL || findex == tag->usedParserFields)
+		{
+			/* The condtion is redundant for suppressing the warning. */
 			str = "";
+		}
 		else if (isFieldEnabled (f->ftype))
 		{
 			unsigned int dt = getFieldDataType (f->ftype);
@@ -84,8 +87,7 @@ static int printTagField (fmtSpec* fspec, MIO* fp, const tagEntryInfo * tag)
 				str = renderField (f->ftype, tag, findex);
 				if ((dt & FIELDTYPE_BOOL) && str[0] == '\0')
 				{
-					/* TODO: FIELD_NULL_LETTER_STRING */
-					str = "-";
+					str = FIELD_NULL_LETTER_STRING;
 				}
 			}
 			else if (dt & FIELDTYPE_BOOL)
@@ -198,7 +200,7 @@ static fmtElement** queueTagField (fmtElement **last, long width, bool truncatio
 	else
 	{
 		language = LANG_IGNORE;
-		ftype = getFieldTypeForOption (field_letter);
+		ftype = getFieldTypeForLetter (field_letter);
 	}
 
 	if (ftype == FIELD_UNKNOWN)

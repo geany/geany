@@ -337,11 +337,11 @@ static void readIdentifier (lexingState * st)
 
 	/* first char is a simple letter */
 	if (isAlpha (*st->cp) || *st->cp == '_')
-		vStringPut (st->name, (int) *st->cp);
+		vStringPut (st->name, *st->cp);
 
 	/* Go till you get identifier chars */
 	for (p = st->cp + 1; isIdent (*p); p++)
-		vStringPut (st->name, (int) *p);
+		vStringPut (st->name, *p);
 
 	st->cp = p;
 }
@@ -898,8 +898,7 @@ static void prepareTag (tagEntryInfo * tag, vString const *name, int kind)
 	/* Ripped out of read.h initTagEntry, because of line number
 	 * shenanigans.
 	 * Ugh. Lookahead is harder than I expected. */
-	tag->lineNumber = ocaLineNumber;
-	tag->filePosition = ocaFilePosition;
+	updateTagLine(tag, ocaLineNumber, ocaFilePosition);
 
 	parentIndex = getLastNamedIndex ();
 	if (parentIndex >= 0)
@@ -1338,12 +1337,6 @@ static void localLet (vString * const ident, ocaToken what, ocaToken whatNext)
  * because their syntax is similar.  */
 static void matchPattern (vString * const ident, ocaToken what, ocaToken whatNext)
 {
-	/* keep track of [], as it
-	 * can be used in patterns and can
-	 * mean the end of match expression in
-	 * revised syntax */
-	static int braceCount = 0;
-
 	switch (what)
 	{
 	case Tok_To:
@@ -1351,12 +1344,9 @@ static void matchPattern (vString * const ident, ocaToken what, ocaToken whatNex
 		toDoNext = &mayRedeclare;
 		break;
 
-	case Tok_BRL:
-	braceCount++;
-	break;
-
 	case OcaKEYWORD_value:
 		popLastNamed ();
+		// fall through
 	case OcaKEYWORD_and:
 	case OcaKEYWORD_end:
 		// why was this global? matches only make sense in local scope

@@ -15,6 +15,7 @@
 #include "cxx_token_chain.h"
 #include "cxx_scope.h"
 #include "cxx_tag.h"
+#include "cxx_side_chain.h"
 
 #include "parse.h"
 #include "vstring.h"
@@ -27,12 +28,14 @@
 
 #include <string.h>
 
+static bool cxxParserParseBlockFull(bool bExpectClosingBracket, bool bExported);
+
 bool cxxParserParseBlockHandleOpeningBracket(void)
 {
 	CXX_DEBUG_ENTER();
 
 	CXX_DEBUG_ASSERT(
-			g_cxx.pToken->eType == CXXTokenTypeOpeningBracket,
+			cxxTokenTypeIs(g_cxx.pToken, CXXTokenTypeOpeningBracket),
 			"This must be called when pointing at an opening bracket!"
 		);
 
@@ -144,6 +147,7 @@ bool cxxParserParseBlockHandleOpeningBracket(void)
 	int iCorkQueueIndexFQ = CORK_NIL;
 
 	CXXFunctionSignatureInfo oInfo;
+	bool bExported = false;
 
 	if(eScopeType != CXXScopeTypeFunction)
 	{
@@ -153,6 +157,7 @@ bool cxxParserParseBlockHandleOpeningBracket(void)
 
 		// FIXME: Handle syntax (5) of list initialization:
 		//        Class::Class() : member { arg1, arg2, ... } {...
+		bExported = (g_cxx.uKeywordState & CXXParserKeywordStateSeenExport);
 	} else {
 		// some kind of other block:
 		// - anonymous block
@@ -162,9 +167,9 @@ bool cxxParserParseBlockHandleOpeningBracket(void)
 		iScopes = 0;
 	}
 
-	cxxParserNewStatement();
+	cxxParserNewStatementFull(bExported);
 
-	if(!cxxParserParseBlock(true))
+	if(!cxxParserParseBlockFull(true, bExported))
 	{
 		CXX_DEBUG_LEAVE_TEXT("Failed to parse nested block");
 		return false;
@@ -253,14 +258,14 @@ bool cxxParserParseBlockHandleOpeningBracket(void)
 	return true;
 }
 
-static bool cxxParserParseBlockInternal(bool bExpectClosingBracket)
+static bool cxxParserParseBlockInternal(bool bExpectClosingBracket, bool bExported)
 {
 	CXX_DEBUG_ENTER();
 
 	//char * szScopeName = cxxScopeGetFullName();
 	//CXX_DEBUG_PRINT("Scope name is '%s'",szScopeName ? szScopeName : "");
 
-	cxxParserNewStatement();
+	cxxParserNewStatementFull(bExported);
 
 	if(bExpectClosingBracket)
 	{
@@ -269,11 +274,14 @@ static bool cxxParserParseBlockInternal(bool bExpectClosingBracket)
 		cppBeginStatement();
 	}
 
+	CXXTokenChain *pSideChain = NULL;
 	for(;;)
 	{
 		if(!cxxParserParseNextToken())
 		{
 found_eof:
+			cxxTokenChainDestroy(pSideChain);
+			pSideChain = NULL;
 
 			if(bExpectClosingBracket)
 			{
@@ -287,6 +295,8 @@ found_eof:
 			CXX_DEBUG_LEAVE_TEXT("EOF in main block");
 			return true; // EOF
 		}
+		cxxSideChainAppendChain(pSideChain,g_cxx.pToken);
+		pSideChain = NULL;
 
 process_token:
 
@@ -300,9 +310,13 @@ process_token:
 			&& cxxScopeGetType() == CXXScopeTypeClass
 			&& cxxSubparserNewIdentifierAsHeadOfMemberNotify(g_cxx.pToken))
 		{
+			pSideChain = cxxSideChainEject(g_cxx.pToken);
 			cxxTokenChainDestroyLast(g_cxx.pTokenChain);
 			continue;
 		}
+
+		if (bExported)
+			g_cxx.uKeywordState |= CXXParserKeywordStateSeenExport;
 
 		switch(g_cxx.pToken->eType)
 		{
@@ -440,6 +454,7 @@ process_token:
 							}
 						}
 					break;
+					break;
 					case CXXKeywordPUBLIC:
 					case CXXKeywordPROTECTED:
 					case CXXKeywordPRIVATE:
@@ -561,10 +576,14 @@ process_token:
 					case CXXKeywordEXTERN:
 						g_cxx.uKeywordState |= CXXParserKeywordStateSeenExtern;
 
+						pSideChain = cxxSideChainEject(g_cxx.pToken);
 						cxxTokenChainDestroyLast(g_cxx.pTokenChain);
 
 						if(!cxxParserParseNextToken())
 							goto found_eof;
+
+						cxxSideChainAppendChain(pSideChain,g_cxx.pToken);
+						pSideChain = NULL;
 
 						if(cxxTokenTypeIs(g_cxx.pToken,CXXTokenTypeStringConstant))
 						{
@@ -600,6 +619,7 @@ process_token:
 					break;
 					case CXXKeywordSTATIC:
 						g_cxx.uKeywordState |= CXXParserKeywordStateSeenStatic;
+						pSideChain = cxxSideChainEject(g_cxx.pToken);
 						cxxTokenChainDestroyLast(g_cxx.pTokenChain);
 					break;
 					case CXXKeywordINLINE:
@@ -608,10 +628,12 @@ process_token:
 					case CXXKeyword__FORCEINLINE:
 					case CXXKeyword__FORCEINLINE__:
 						g_cxx.uKeywordState |= CXXParserKeywordStateSeenInline;
+						pSideChain = cxxSideChainEject(g_cxx.pToken);
 						cxxTokenChainDestroyLast(g_cxx.pTokenChain);
 					break;
 					case CXXKeywordEXPLICIT:
 						g_cxx.uKeywordState |= CXXParserKeywordStateSeenExplicit;
+						pSideChain = cxxSideChainEject(g_cxx.pToken);
 						cxxTokenChainDestroyLast(g_cxx.pTokenChain);
 					break;
 					case CXXKeywordOPERATOR:
@@ -619,10 +641,12 @@ process_token:
 					break;
 					case CXXKeywordVIRTUAL:
 						g_cxx.uKeywordState |= CXXParserKeywordStateSeenVirtual;
+						pSideChain = cxxSideChainEject(g_cxx.pToken);
 						cxxTokenChainDestroyLast(g_cxx.pTokenChain);
 					break;
 					case CXXKeywordMUTABLE:
 						g_cxx.uKeywordState |= CXXParserKeywordStateSeenMutable;
+						pSideChain = cxxSideChainEject(g_cxx.pToken);
 						cxxTokenChainDestroyLast(g_cxx.pTokenChain);
 					break;
 					case CXXKeywordFRIEND:
@@ -637,6 +661,24 @@ process_token:
 					case CXXKeywordCONST:
 						g_cxx.uKeywordState |= CXXParserKeywordStateSeenConst;
 					break;
+					case CXXKeywordCONSTEXPR:
+						g_cxx.uKeywordState |= CXXParserKeywordStateSeenConstexpr;
+					break;
+					case CXXKeywordCONSTEVAL:
+						g_cxx.uKeywordState |= CXXParserKeywordStateSeenConsteval;
+					break;
+					case CXXKeywordCONSTINIT:
+						g_cxx.uKeywordState |= CXXParserKeywordStateSeenConstinit;
+					break;
+					case CXXKeywordTHREAD_LOCAL:
+					case CXXKeyword__THREAD:
+					case CXXKeyword_THREAD_LOCAL:
+						g_cxx.uKeywordState |= CXXParserKeywordStateSeenThreadLocal;
+					break;
+					case CXXKeywordEXPORT:
+						g_cxx.uKeywordState |= CXXParserKeywordStateSeenExport;
+					break;
+
 					default:
 						if(g_cxx.uKeywordState & CXXParserKeywordStateSeenTypedef)
 						{
@@ -759,7 +801,44 @@ process_token:
 				}
 			break;
 			case CXXTokenTypeIdentifier:
-				if(g_cxx.uKeywordState & CXXParserKeywordStateSeenTypedef)
+				if(
+					/* Accept only "export" as a  preceding token. */
+					(! (g_cxx.uKeywordState & ~CXXParserKeywordStateSeenExport))
+					&& (g_cxx.pToken->pPrev == NULL || cxxTokenIsKeyword(g_cxx.pToken->pPrev, CXXKeywordEXPORT))
+					/* C++ */
+					&& cxxParserCurrentLanguageIsCPP()
+					/* At the toplevel */
+					&& cxxScopeIsGlobal()
+					/* Handle this token as a keyword, not an identifier.  */
+					&& (strcmp(vStringValue(g_cxx.pToken->pszWord), "module") == 0)
+					)
+				{
+					/* "module" introduced in C++20, can be a keyworkd in limited contexts.
+					 * If the parsing is not in the context, the parser should handle it
+					 * as an identifier. */
+					if(!cxxParserParseModule())
+					{
+						CXX_DEBUG_LEAVE_TEXT("Failed to parse module");
+						return false;
+					}
+					break;
+				}
+				else if(
+					(! (g_cxx.uKeywordState & ~CXXParserKeywordStateSeenExport))
+					&& (g_cxx.pToken->pPrev == NULL || cxxTokenIsKeyword(g_cxx.pToken->pPrev, CXXKeywordEXPORT))
+					&& cxxParserCurrentLanguageIsCPP()
+					&& cxxScopeIsGlobal()
+					&& (strcmp(vStringValue(g_cxx.pToken->pszWord), "import") == 0)
+					)
+				{
+					if(!cxxParserParseImport())
+					{
+						CXX_DEBUG_LEAVE_TEXT("Failed to parse import");
+						return false;
+					}
+					break;
+				}
+				else if(g_cxx.uKeywordState & CXXParserKeywordStateSeenTypedef)
 				{
 					g_cxx.uKeywordState &= ~CXXParserKeywordStateSeenTypedef;
 					if(!cxxParserParseGenericTypedef())
@@ -790,15 +869,20 @@ process_token:
 // When the statement ends without finding any characteristic token the chain
 // is passed to an analysis routine which does a second scan pass.
 //
-bool cxxParserParseBlock(bool bExpectClosingBracket)
+static bool cxxParserParseBlockFull(bool bExpectClosingBracket, bool bExported)
 {
 	cxxSubparserNotifyEnterBlock ();
 
 	cppPushExternalParserBlock();
-	bool bRet = cxxParserParseBlockInternal(bExpectClosingBracket);
+	bool bRet = cxxParserParseBlockInternal(bExpectClosingBracket, bExported);
 	cppPopExternalParserBlock();
 
 	cxxSubparserNotifyLeaveBlock ();
 
 	return bRet;
+}
+
+bool cxxParserParseBlock(bool bExpectClosingBracket)
+{
+	return cxxParserParseBlockFull(bExpectClosingBracket, false);
 }

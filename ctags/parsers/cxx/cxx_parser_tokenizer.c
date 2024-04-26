@@ -857,7 +857,7 @@ static CXXCharTypeData g_aCharTable[128] =
 		0 ,
 		0
 	},
-	// 127 (0x7f) ''
+	// 127 (0x7f)
 	{ 0, 0, 0 }
 };
 
@@ -898,7 +898,11 @@ static void cxxParserAnalyzeAttributeChain(CXXTokenChain * pChain)
 //
 // The __attribute__((...)) sequence complicates parsing quite a lot.
 // For this reason we attempt to "hide" it from the rest of the parser
-// at tokenizer level.
+// at tokenizer level. However, we will not kill it. For extracting interesting
+// information from the sequence in upper layers, attach the token chain
+// built from the sequence to the token AROUND the sequence.
+// In this function, we call the token "attributes owner" token.
+// CXXToken::pSideChain is the member for attaching.
 //
 // Returns false if it finds an EOF. This is an important invariant required by
 // cxxParserParseNextToken(), the only caller.
@@ -912,23 +916,25 @@ static bool cxxParserParseNextTokenCondenseAttribute(void)
 	CXX_DEBUG_ENTER();
 
 	CXX_DEBUG_ASSERT(
-			cxxTokenIsKeyword(g_cxx.pToken,CXXKeyword__ATTRIBUTE__),
-			"This function should be called only after we have parsed __attribute__"
+			cxxTokenTypeIs(g_cxx.pToken,CXXTokenTypeKeyword) &&
+			(cxxKeywordMayDropInTokenizer(g_cxx.pToken->eKeyword)),
+			"This function should be called only after we have parsed __attribute__ or __declspec"
 		);
 
-	// Kill it
-	cxxTokenChainDestroyLast(g_cxx.pTokenChain);
+	CXXToken * pAttrHead = cxxTokenChainTakeLast(g_cxx.pTokenChain);
 
 	// And go ahead.
 
 	if(!cxxParserParseNextToken())
 	{
+		cxxTokenDestroy(pAttrHead);
 		CXX_DEBUG_LEAVE_TEXT("No next token after __attribute__");
 		return false;
 	}
 
 	if(!cxxTokenTypeIs(g_cxx.pToken,CXXTokenTypeOpeningParenthesis))
 	{
+		cxxTokenDestroy(pAttrHead);
 		CXX_DEBUG_LEAVE_TEXT("Something that is not an opening parenthesis");
 		return true;
 	}
@@ -946,6 +952,8 @@ static bool cxxParserParseNextTokenCondenseAttribute(void)
 		// input (mismatched parenthesis/bracket, early EOF).
 
 		CXX_DEBUG_LEAVE_TEXT("Failed to parse subchains. The input is broken...");
+
+		cxxTokenDestroy(pAttrHead);
 
 		// However our invariant (see comment at the beginning of the function)
 		// forbids us to return false if we didn't find an EOF. So we attempt
@@ -973,11 +981,46 @@ static bool cxxParserParseNextTokenCondenseAttribute(void)
 			cxxParserAnalyzeAttributeChain(pInner->pNext->pChain);
 	}
 
-	// Now just kill the chain.
-	cxxTokenChainDestroyLast(g_cxx.pTokenChain);
+	CXXToken * pAttrArgs = cxxTokenChainTakeLast(g_cxx.pTokenChain);
+	CXXToken * pAttrOwner = cxxTokenChainLast(g_cxx.pTokenChain);
 
 	// And finally extract yet another token.
 	bool bRet = cxxParserParseNextToken();
+
+	if(pAttrOwner == NULL
+	   || cxxTokenTypeIs(pAttrOwner, CXXTokenTypeComma)) {
+		// If __attribute__ was at the beginning of the chain,
+		// we cannot attach the __attribute__ side chain to
+		// the previous token.
+		// In that case, we attach the side chain to the
+		// next token.
+		pAttrOwner = g_cxx.pToken;
+	} else {
+		// Look up a previous identifier token.
+		CXXToken * p = cxxTokenChainPreviousTokenOfType(pAttrOwner,
+														CXXTokenTypeIdentifier);
+		if(p)
+			pAttrOwner = p;
+	}
+
+	if(pAttrOwner)
+	{
+		if(!pAttrOwner->pSideChain)
+			pAttrOwner->pSideChain = cxxTokenChainCreate();
+		cxxTokenChainAppend(pAttrOwner->pSideChain, pAttrHead);
+		cxxTokenChainAppend(pAttrOwner->pSideChain, pAttrArgs);
+#if 0
+		fprintf(stderr, "pAttrOwner(%s#%d): ",
+				pAttrOwner == g_cxx.pToken? "next": "prev",
+				pAttrOwner->iLineNumber);
+		CXX_DEBUG_TOKEN(pAttrOwner);
+		fprintf(stderr, "Side chain: ");
+		if(pAttrOwner->pSideChain)
+			CXX_DEBUG_CHAIN(pAttrOwner->pSideChain);
+		else
+			CXX_DEBUG_PRINT("NULL\n");
+#endif
+	}
 
 	CXX_DEBUG_LEAVE();
 	return bRet;
@@ -1326,9 +1369,10 @@ bool cxxParserParseNextToken(void)
 				t->eType = CXXTokenTypeKeyword;
 				t->eKeyword = (CXXKeyword)iCXXKeyword;
 
-				if(iCXXKeyword == CXXKeyword__ATTRIBUTE__)
+
+				if(cxxKeywordMayDropInTokenizer(iCXXKeyword))
 				{
-					// special handling for __attribute__
+					// special handling for __attribute__ and __declspec
 					return cxxParserParseNextTokenCondenseAttribute();
 				}
 			}
@@ -1341,16 +1385,16 @@ bool cxxParserParseNextToken(void)
 			{
 				/* If the macro is overly used, report it here. */
 				CXX_DEBUG_PRINT("Overly uesd macro %s <%p> useCount: %d (> %d)",
-								vStringValue(t->pszWord),
-								pMacro, pMacro? pMacro->useCount: -1,
+								pMacro->name,
+								pMacro, pMacro->useCount,
 								CXX_PARSER_MAXIMUM_MACRO_USE_COUNT);
 			}
 #endif
 
 			if(pMacro && (pMacro->useCount < CXX_PARSER_MAXIMUM_MACRO_USE_COUNT))
 			{
-				CXX_DEBUG_PRINT("Macro %s <%p> useCount: %d", vStringValue(t->pszWord),
-								pMacro, pMacro? pMacro->useCount: -1);
+				CXX_DEBUG_PRINT("Macro %s <%p> useCount: %d", pMacro->name,
+								pMacro, pMacro->useCount);
 
 				cxxTokenChainDestroyLast(g_cxx.pTokenChain);
 
@@ -1486,12 +1530,10 @@ bool cxxParserParseNextToken(void)
 		return true;
 	}
 #else
-	if(g_cxx.iChar == STRING_SYMBOL)
+	if(g_cxx.iChar == CPP_STRING_SYMBOL)
 	{
 		t->eType = CXXTokenTypeStringConstant;
-		vStringPut(t->pszWord,'"');
-		vStringCat(t->pszWord,cppGetLastCharOrStringContents());
-		vStringPut(t->pszWord,'"');
+		cppVStringPut(t->pszWord,g_cxx.iChar);
 		g_cxx.iChar = cppGetc();
 		t->bFollowedBySpace = cppIsspace(g_cxx.iChar);
 		return true;
@@ -1534,12 +1576,10 @@ bool cxxParserParseNextToken(void)
 		return true;
 	}
 #else
-	if(g_cxx.iChar == CHAR_SYMBOL)
+	if(g_cxx.iChar == CPP_CHAR_SYMBOL)
 	{
 		t->eType = CXXTokenTypeCharacterConstant;
-		vStringPut(t->pszWord,'\'');
-		vStringCat(t->pszWord,cppGetLastCharOrStringContents());
-		vStringPut(t->pszWord,'\'');
+		cppVStringPut(t->pszWord,g_cxx.iChar);
 		g_cxx.iChar = cppGetc();
 		t->bFollowedBySpace = cppIsspace(g_cxx.iChar);
 		return true;
@@ -1681,7 +1721,7 @@ bool cxxParserParseNextToken(void)
 	}
 
 	t->eType = CXXTokenTypeUnknown;
-	vStringPut(t->pszWord,g_cxx.iChar);
+	cppVStringPut(t->pszWord,g_cxx.iChar);
 	g_cxx.iChar = cppGetc();
 	t->bFollowedBySpace = cppIsspace(g_cxx.iChar);
 

@@ -24,6 +24,7 @@
 #include "xtag.h"
 #include "objpool.h"
 #include "ptrarray.h"
+#include "trace.h"
 
 #define isIdentifierChar(c) \
 	(isalnum (c) || (c) == '_' || (c) >= 0x80)
@@ -44,6 +45,7 @@ enum {
 	KEYWORD_lambda,
 	KEYWORD_pass,
 	KEYWORD_return,
+	KEYWORD_REST
 };
 typedef int keywordId; /* to allow KEYWORD_NONE */
 
@@ -140,7 +142,7 @@ static kindDefinition PythonKinds[COUNT_KIND] = {
 	{true, 'I', "namespace", "name referring a module defined in other file"},
 	{true, 'i', "module",    "modules",
 	 .referenceOnly = true,  ATTACH_ROLES(PythonModuleRoles)},
-	{true, 'x', "unknown",   "name referring a class/variable/function/module defined in other module",
+	{true, 'Y', "unknown",   "name referring a class/variable/function/module defined in other module",
 	 .referenceOnly = false, ATTACH_ROLES(PythonUnknownRoles)},
 	{false, 'z', "parameter", "function parameters" },
 	{false, 'l', "local",    "local variables" },
@@ -162,6 +164,22 @@ static const keywordTable PythonKeywordTable[] = {
 	{ "lambda",			KEYWORD_lambda			},
 	{ "pass",			KEYWORD_pass			},
 	{ "return",			KEYWORD_return			},
+};
+
+/* Taken from https://docs.python.org/3/reference/lexical_analysis.html#keywords */
+static const struct keywordGroup PythonRestKeywords = {
+	.value = KEYWORD_REST,
+	.addingUnlessExisting = true,
+	.keywords = {
+		"False",      "await",      "else",       "import",     "pass",
+		"None",       "break",      "except",     "in",         "raise",
+		"True",       "class",      "finally",    "is",         "return",
+		"and",        "continue",   "for",        "lambda",     "try",
+		"as",         "def",        "from",       "nonlocal",   "while",
+		"assert",     "del",        "global",     "not",        "with",
+		"async",      "elif",       "if",         "or",         "yield",
+		NULL
+	},
 };
 
 typedef enum eTokenType {
@@ -236,8 +254,7 @@ static void initPythonEntry (tagEntryInfo *const e, const tokenInfo *const token
 
 	initTagEntry (e, vStringValue (token->string), kind);
 
-	e->lineNumber	= token->lineNumber;
-	e->filePosition	= token->filePosition;
+	updateTagLine (e, token->lineNumber, token->filePosition);
 
 	nl = nestingLevelsGetCurrent (PythonNestingLevels);
 	if (nl)
@@ -280,7 +297,7 @@ static int makeClassTag (const tokenInfo *const token,
 		e.extensionFields.inheritance = inheritance ? vStringValue (inheritance) : "";
 		if (decorators && vStringLength (decorators) > 0)
 		{
-			attachParserField (&e, false, PythonFields[F_DECORATORS].ftype,
+			attachParserField (&e, PythonFields[F_DECORATORS].ftype,
 			                   vStringValue (decorators));
 		}
 
@@ -304,7 +321,7 @@ static int makeFunctionTag (const tokenInfo *const token,
 			e.extensionFields.signature = vStringValue (arglist);
 		if (decorators && vStringLength (decorators) > 0)
 		{
-			attachParserField (&e, false, PythonFields[F_DECORATORS].ftype,
+			attachParserField (&e, PythonFields[F_DECORATORS].ftype,
 			                   vStringValue (decorators));
 		}
 
@@ -340,8 +357,7 @@ static int makeSimplePythonRefTag (const tokenInfo *const token,
 		initRefTagEntry (&e, vStringValue (altName ? altName : token->string),
 		                 kind, roleIndex);
 
-		e.lineNumber	= token->lineNumber;
-		e.filePosition	= token->filePosition;
+		updateTagLine (&e, token->lineNumber, token->filePosition);
 
 		if (xtag != XTAG_UNKNOWN)
 			markTagExtraBit (&e, xtag);
@@ -448,7 +464,7 @@ static void readIdentifier (vString *const string, const int firstChar)
 	int c = firstChar;
 	do
 	{
-		vStringPut (string, (char) c);
+		vStringPut (string, c);
 		c = getcFromInputFile ();
 	}
 	while (isIdentifierChar (c));
@@ -855,10 +871,12 @@ static bool readCDefName (tokenInfo *const token, pythonKind *kind)
 static vString *parseParamTypeAnnotation (tokenInfo *const token,
 										  vString *arglist)
 {
+	TRACE_ENTER();
 	readToken (token);
 	if (token->type != ':')
 	{
 		ungetToken (token);
+		TRACE_LEAVE_TEXT("type != :");
 		return NULL;
 	}
 
@@ -890,12 +908,14 @@ static vString *parseParamTypeAnnotation (tokenInfo *const token,
 							   || token->type == ',')))
 		{
 			ungetToken (token);
+			TRACE_LEAVE_TEXT("= or ,");
 			return t;
 		}
 		reprCat (arglist, token);
 		reprCat (t, token);
 	}
 	vStringDelete (t);
+	TRACE_LEAVE_TEXT("return NULL");
 	return NULL;
 }
 
@@ -969,6 +989,7 @@ static void deleteTypedParam (struct typedParam *p)
 static void parseArglist (tokenInfo *const token, const int kind,
 						  vString *const arglist, ptrArray *const parameters)
 {
+	TRACE_ENTER();
 	int prevTokenType = token->type;
 	int depth = 1;
 
@@ -1015,11 +1036,13 @@ static void parseArglist (tokenInfo *const token, const int kind,
 		}
 	}
 	while (token->type != TOKEN_EOF && depth > 0);
+	TRACE_LEAVE();
 }
 
 static void parseCArglist (tokenInfo *const token, const int kind,
 						  vString *const arglist, ptrArray *const parameters)
 {
+	TRACE_ENTER();
 	int depth = 1;
 	tokenInfo *pname = newToken ();
 	vString *ptype = vStringNew ();
@@ -1125,12 +1148,14 @@ static void parseCArglist (tokenInfo *const token, const int kind,
 
 	vStringDelete (ptype);
 	deleteToken (pname);
+	TRACE_LEAVE();
 }
 
 static bool parseClassOrDef (tokenInfo *const token,
                                 const vString *const decorators,
                                 pythonKind kind, bool isCDef)
 {
+	TRACE_ENTER();
 	vString *arglist = NULL;
 	tokenInfo *name = NULL;
 	ptrArray *parameters = NULL;
@@ -1140,13 +1165,19 @@ static bool parseClassOrDef (tokenInfo *const token,
 	if (isCDef)
 	{
 		if (! readCDefName (token, &kind))
+		{
+			TRACE_LEAVE_TEXT("!readCDefName");
 			return false;
+		}
 	}
 	else
 	{
 		readToken (token);
 		if (token->type != TOKEN_IDENTIFIER)
+		{
+			TRACE_LEAVE_TEXT("token->type != TOKEN_IDENTIFIER");
 			return false;
+		}
 	}
 
 	name = newToken ();
@@ -1205,11 +1236,13 @@ static bool parseClassOrDef (tokenInfo *const token,
 		e->extensionFields.typeRef [1] = vStringDeleteUnwrap (t);
 	}
 
+	TRACE_LEAVE_TEXT("return true");
 	return true;
 }
 
 static bool parseImport (tokenInfo *const token)
 {
+	TRACE_ENTER();
 	tokenInfo *fromModule = NULL;
 
 	if (token->keyword == KEYWORD_from)
@@ -1360,6 +1393,7 @@ static bool parseImport (tokenInfo *const token)
 	if (fromModule)
 		deleteToken (fromModule);
 
+	TRACE_LEAVE();
 	return false;
 }
 
@@ -1409,8 +1443,100 @@ static bool skipVariableTypeAnnotation (tokenInfo *const token, vString *const r
 	return false;
 }
 
+static bool isAtSimpleNamespace (tokenInfo *const token)
+{
+	if (token->type == TOKEN_IDENTIFIER
+		&& vStringEqC (token->string, "SimpleNamespace"))
+	{
+		tokenInfo *backup = newToken();
+
+		copyToken (backup, token);
+		readToken (token);
+		if (token->type != '(')
+		{
+			ungetToken (token);
+			copyToken (token, backup);
+			deleteToken (backup);
+			return false;
+		}
+		deleteToken (backup);
+		return true;
+	}
+
+	if (token->type == TOKEN_IDENTIFIER
+		&& vStringEqC (token->string, "types"))
+	{
+		readQualifiedName(token);
+		if (token->type == TOKEN_IDENTIFIER
+			&& vStringEqC (token->string, ".SimpleNamespace"))
+		{
+			tokenInfo *backup = newToken();
+
+			copyToken (backup, token);
+			readToken (token);
+
+			if (token->type != '(')
+			{
+				ungetToken (token);
+				copyToken (token, backup);
+				deleteToken (backup);
+				return false;
+			}
+			deleteToken (backup);
+			return true;
+		}
+	}
+	return false;
+}
+
+static void parseSimpleNamespace (tokenInfo *const token, int namespaceIndex)
+{
+	TRACE_ENTER();
+
+	nestingLevelsPush (PythonNestingLevels, namespaceIndex);
+	int prevTokenType = token->type;
+	int depth = 1;
+	int lastIndex = CORK_NIL;
+
+	do
+	{
+		if (token->type != TOKEN_WHITESPACE)
+			prevTokenType = token->type;
+
+		readTokenFull (token, true);
+
+		if (token->type == '(' ||
+			token->type == '[' ||
+			token->type == '{')
+			depth ++;
+		else if (token->type == ')' ||
+				 token->type == ']' ||
+				 token->type == '}')
+			depth --;
+		else if (depth == 1 &&
+				 token->type == TOKEN_IDENTIFIER &&
+				 (prevTokenType == '(' || prevTokenType == ','))
+			lastIndex = makeSimplePythonTag (token, K_UNKNOWN);
+		else if (depth == 1 &&
+				 token->keyword == KEYWORD_lambda &&
+				 prevTokenType == '=' &&
+				 lastIndex != CORK_NIL)
+		{
+			tagEntryInfo *e = getEntryInCorkQueue (lastIndex);
+			if (e)
+				e->kindIndex = K_FUNCTION; /* K_METHOD? */
+			lastIndex = CORK_NIL;
+		}
+	}
+	while (token->type != TOKEN_EOF && depth > 0);
+	nestingLevelsPop (PythonNestingLevels);
+
+	TRACE_LEAVE();
+}
+
 static bool parseVariable (tokenInfo *const token, const pythonKind kind)
 {
+	TRACE_ENTER();
 	/* In order to support proper tag type for lambdas in multiple
 	 * assignations, we first collect all the names, and then try and map
 	 * an assignation to it */
@@ -1469,6 +1595,7 @@ static bool parseVariable (tokenInfo *const token, const pythonKind kind)
 	 * we catch lambdas and alike */
 	if (token->type == '=')
 	{
+		TRACE_PRINT("operator: =");
 		unsigned int i = 0;
 
 		do
@@ -1480,19 +1607,9 @@ static bool parseVariable (tokenInfo *const token, const pythonKind kind)
 
 			if (! nameToken)
 				/* nothing */;
-			else if (token->keyword != KEYWORD_lambda)
+			else if (token->keyword == KEYWORD_lambda)
 			{
-				int index = makeSimplePythonTag (nameToken, kind);
-				tagEntryInfo *e = getEntryInCorkQueue (index);
-				if (e && *type)
-				{
-					e->extensionFields.typeRef [0] = eStrdup ("typename");
-					e->extensionFields.typeRef [1] = vStringDeleteUnwrap (*type);
-					*type = NULL;
-				}
-			}
-			else
-			{
+				TRACE_PRINT("keyword: lambda");
 				tokenInfo *anon  = NULL;
 				vString *arglist = vStringNew ();
 				if (*type)
@@ -1562,7 +1679,7 @@ static bool parseVariable (tokenInfo *const token, const pythonKind kind)
 						vString *nameref = vStringNewInit (PythonKinds [K_FUNCTION].name);
 						vStringPut (nameref, ':');
 						vStringCat (nameref, anon->string);
-						attachParserField (ve, true, PythonFields[F_NAMEREF].ftype,
+						attachParserField (ve, PythonFields[F_NAMEREF].ftype,
 										   vStringValue (nameref));
 						vStringDelete (nameref);
 					}
@@ -1572,6 +1689,24 @@ static bool parseVariable (tokenInfo *const token, const pythonKind kind)
 				else
 					makeFunctionTag (nameToken, arglist, NULL);
 				vStringDelete (arglist);
+			}
+			else
+			{
+				TRACE_PRINT("name: %s", vStringValue(nameToken->string));
+				bool isAtSN = isAtSimpleNamespace(token);
+				int index = makeSimplePythonTag (nameToken,
+												 ((kind != K_LOCAL_VARIABLE) && isAtSN)
+												 ? K_NAMESPACE
+												 : kind);
+				if (isAtSN)
+					parseSimpleNamespace(token, index);
+				tagEntryInfo *e = getEntryInCorkQueue (index);
+				if (e && *type)
+				{
+					e->extensionFields.typeRef [0] = eStrdup ("typename");
+					e->extensionFields.typeRef [1] = vStringDeleteUnwrap (*type);
+					*type = NULL;
+				}
 			}
 
 			/* skip until next initializer */
@@ -1601,6 +1736,7 @@ static bool parseVariable (tokenInfo *const token, const pythonKind kind)
 		vStringDelete (nameTypes[nameCount]); /* NULL is acceptable. */
 	}
 
+	TRACE_LEAVE_TEXT("return false");
 	return false;
 }
 
@@ -1611,9 +1747,7 @@ static void setIndent (tokenInfo *const token)
 
 	while (lv && PY_NL (lv)->indentation >= token->indent)
 	{
-		tagEntryInfo *e = getEntryInCorkQueue (lv->corkIndex);
-		if (e)
-			e->extensionFields.endLine = token->lineNumber;
+		setTagEndLineToCorkEntry (lv->corkIndex, token->lineNumber);
 
 		nestingLevelsPop (PythonNestingLevels);
 		lv = nestingLevelsGetCurrent (PythonNestingLevels);
@@ -1622,6 +1756,8 @@ static void setIndent (tokenInfo *const token)
 
 static void findPythonTags (void)
 {
+	TRACE_ENTER();
+
 	tokenInfo *const token = newToken ();
 	vString *decorators = vStringNew ();
 	bool atStatementStart = true;
@@ -1683,9 +1819,7 @@ static void findPythonTags (void)
 				readNext = false;
 			else
 			{
-				if (vStringLength (decorators) > 0)
-					vStringPut (decorators, ',');
-				vStringCat (decorators, token->string);
+				vStringJoin(decorators, ',', token->string);
 				readToken (token);
 				readNext = skipOverPair (token, '(', ')', decorators, true);
 			}
@@ -1711,6 +1845,7 @@ static void findPythonTags (void)
 	vStringDelete (decorators);
 	deleteToken (token);
 	Assert (NextToken == NULL);
+	TRACE_LEAVE();
 }
 
 static void initialize (const langType language)
@@ -1718,6 +1853,7 @@ static void initialize (const langType language)
 	Lang_python = language;
 
 	TokenPool = objPoolNew (16, newPoolToken, deletePoolToken, clearPoolToken, NULL);
+	addKeywordGroup (&PythonRestKeywords, Lang_python);
 }
 
 static void finalize (langType language CTAGS_ATTR_UNUSED, bool initialized)

@@ -32,6 +32,7 @@ enum CXXScopeType
 	CXXScopeTypeVariable, // template variables, mainly
 	CXXScopeTypePrototype,
 	CXXScopeTypeTypedef,  // template variables used in "using A = B<T>"
+	CXXScopeTypeModule,	  // Just for filling the scope field of partitions
 	CXXScopeTypeLAST
 };
 
@@ -47,6 +48,10 @@ const char * cxxScopeGetFullName(void);
 // scope currently. This name does not include namespaces so
 // it is always a single identifier.
 const char * cxxScopeGetName(void);
+
+// Return the corkIndex of the token representing currently scope.
+// This can be CORK_NIL.
+int cxxScopeGetDefTag(void);
 
 // Return the number of components of the scope name.
 int cxxScopeGetSize(void);

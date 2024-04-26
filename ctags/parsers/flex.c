@@ -327,8 +327,7 @@ static void makeConstTag (tokenInfo *const token, const flexKind kind)
 
 		initRefTagEntry (&e, name, kind, role);
 
-		e.lineNumber   = token->lineNumber;
-		e.filePosition = token->filePosition;
+		updateTagLine (&e, token->lineNumber, token->filePosition);
 
 		if ( vStringLength(token->scope) > 0 )
 		{
@@ -464,7 +463,6 @@ static void parseIdentifier (vString *const string, const int firstChar)
 static void readTokenFull (tokenInfo *const token, bool include_newlines)
 {
 	int c;
-	int i;
 	bool newline_encountered = false;
 
 	/* if we've got a token held back, emit it */
@@ -481,13 +479,11 @@ static void readTokenFull (tokenInfo *const token, bool include_newlines)
 	vStringClear (token->string);
 
 getNextChar:
-	i = 0;
 	do
 	{
 		c = getcFromInputFile ();
 		if (include_newlines && (c == '\r' || c == '\n'))
 			newline_encountered = true;
-		i++;
 	}
 	while (c == '\t' || c == ' ' || c == '\r' || c == '\n');
 
@@ -927,20 +923,12 @@ static void skipArrayList (tokenInfo *const token, bool include_newlines)
 
 static void addContext (tokenInfo* const parent, const tokenInfo* const child)
 {
-	if (vStringLength (parent->string) > 0)
-	{
-		vStringPut (parent->string, '.');
-	}
-	vStringCat (parent->string, child->string);
+	vStringJoin (parent->string, '.', child->string);
 }
 
 static void addToScope (tokenInfo* const token, const vString* const extra)
 {
-	if (vStringLength (token->scope) > 0)
-	{
-		vStringPut (token->scope, '.');
-	}
-	vStringCat (token->scope, extra);
+	vStringJoin (token->scope, '.', extra);
 }
 
 /*

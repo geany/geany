@@ -164,7 +164,7 @@ bool cxxParserHandleLambda(CXXToken * pParenthesis)
 
 	CXX_DEBUG_ASSERT(cxxParserCurrentLanguageIsCPP(),"C++ only");
 
-	CXXToken * pIdentifier = cxxTokenCreateAnonymousIdentifier(CXXTagKindFUNCTION);
+	CXXToken * pIdentifier = cxxTokenCreateAnonymousIdentifier(CXXTagKindFUNCTION, NULL);
 
 	CXXTokenChain * pSave = g_cxx.pTokenChain;
 	CXXTokenChain * pNew = cxxTokenChainCreate();
@@ -268,6 +268,7 @@ bool cxxParserHandleLambda(CXXToken * pParenthesis)
 			tag->extensionFields.signature = vStringValue(pszSignature);
 
 		iCorkQueueIndex = cxxTagCommit(&iCorkQueueIndexFQ);
+		cxxTagUseTokenAsPartOfDefTag(iCorkQueueIndex, pIdentifier);
 
 		if(pTypeName)
 			cxxTokenDestroy(pTypeName);

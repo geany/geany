@@ -92,7 +92,7 @@ static kindDefinition JuliaKinds [] = {
       ATTACH_ROLES(JuliaModuleRoles) },
     { true, 's', "struct",   "Structures"   },
     { true, 't', "type",     "Types"        },
-    { true, 'x', "unknown", "name defined in other modules",
+    { true, 'Y', "unknown", "name defined in other modules",
       .referenceOnly = true, ATTACH_ROLES(JuliaUnknownRoles) },
 };
 
@@ -205,11 +205,7 @@ static void resetScope (vString *scope, size_t old_len)
 /* Adds a name to the end of the scope string */
 static void addToScope (vString *scope, vString *name)
 {
-    if (vStringLength(scope) > 0)
-    {
-        vStringPut(scope, '.');
-    }
-    vStringCat(scope, name);
+	vStringJoin(scope, '.', name);
 }
 
 /* Reads a character from the file */
@@ -235,7 +231,7 @@ static void advanceAndStoreChar (lexerState *lexer)
 {
     if (vStringLength(lexer->token_str) < MAX_STRING_LENGTH)
     {
-        vStringPut(lexer->token_str, (char) lexer->cur_c);
+        vStringPut(lexer->token_str, lexer->cur_c);
     }
     advanceChar(lexer);
 }
@@ -874,8 +870,7 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
     tagEntryInfo tag;
     initTagEntry(&tag, vStringValue(ident), kind);
 
-    tag.lineNumber = line;
-    tag.filePosition = pos;
+    updateTagLine(&tag, line, pos);
     tag.sourceFileName = getInputFileName();
 
     tag.extensionFields.signature = arg_list;
@@ -896,8 +891,7 @@ static void addReferenceTag (vString* ident, int kind, int role, unsigned long l
     }
     tagEntryInfo tag;
     initRefTagEntry(&tag, vStringValue(ident), kind, role);
-    tag.lineNumber = line;
-    tag.filePosition = pos;
+    updateTagLine(&tag, line, pos);
     if (parent_kind != K_NONE)
     {
         tag.extensionFields.scopeKindIndex = parent_kind;

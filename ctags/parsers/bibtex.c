@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include "debug.h"
+#include "bibtex.h"
 #include "entry.h"
 #include "keyword.h"
 #include "parse.h"
@@ -33,7 +34,7 @@
 #define isType(token,t)		(bool) ((token)->type == (t))
 #define isKeyword(token,k)	(bool) ((token)->keyword == (k))
 #define isIdentChar(c) \
-	(isalpha (c) || isdigit (c) || (c) == '_' || (c) == '-' || (c) == '+' || (c) == ':')
+	(isalpha (c) || isdigit (c) || (c) == '_' || (c) == '-' || (c) == '+' || (c) == ':' || (c) == '.' || (c) == '/')
 
 /*
  *	 DATA DECLARATIONS
@@ -169,17 +170,13 @@ static void deleteToken (tokenInfo *const token)
  */
 static void makeBibTag (tokenInfo *const token, bibKind kind)
 {
-	if (BibKinds [kind].enabled)
-	{
-		const char *const name = vStringValue (token->string);
-		tagEntryInfo e;
-		initTagEntry (&e, name, kind);
+	const char *const name = vStringValue (token->string);
+	tagEntryInfo e;
+	initTagEntry (&e, name, kind);
 
-		e.lineNumber   = token->lineNumber;
-		e.filePosition = token->filePosition;
+	updateTagLine (&e, token->lineNumber, token->filePosition);
 
-		makeTagEntry (&e);
-	}
+	makeTagEntry (&e);
 }
 
 /*
@@ -275,7 +272,7 @@ static void copyToken (tokenInfo *const dest, tokenInfo *const src)
  *	 Scanning functions
  */
 
-static bool parseTag (tokenInfo *const token, bibKind kind)
+static bool parseTag (tokenInfo *const token, bool foreignKeyword, int kind)
 {
 	tokenInfo *	const name = newToken ();
 	vString *		currentid;
@@ -291,7 +288,7 @@ static bool parseTag (tokenInfo *const token, bibKind kind)
 	 * a comma brace for the tag name.
 	 *
 	 */
-	if (isType (token, TOKEN_KEYWORD))
+	if (isType (token, TOKEN_KEYWORD) || foreignKeyword)
 	{
 		copyToken (name, token);
 		if (!readToken (token))
@@ -330,6 +327,34 @@ static bool parseTag (tokenInfo *const token, bibKind kind)
 	return eof;
 }
 
+static bool mayParseTokenInSubparser (tokenInfo *const token)
+{
+	bool eof = false;
+	subparser *sub;
+
+	if (*vStringValue (token->string) != '@')
+		return eof;
+
+	foreachSubparser (sub, true)
+	{
+		bibTexSubparser *bibsub = (bibTexSubparser *)sub;
+		if (bibsub->isKeywordForTagging)
+		{
+			int kind;
+			enterSubparser (sub);
+			kind = bibsub->isKeywordForTagging (bibsub,
+												vStringValue (token->string) + 1);
+			if (kind != KIND_GHOST_INDEX)
+				eof = parseTag (token, true, kind);
+			leaveSubparser ();
+			if (kind != KIND_GHOST_INDEX)
+				break;
+		}
+	}
+
+	return eof;
+}
+
 static void parseBibFile (tokenInfo *const token)
 {
 	bool eof = false;
@@ -339,62 +364,66 @@ static void parseBibFile (tokenInfo *const token)
 		if (!readToken (token))
 			break;
 
+		bibKind kind = KIND_GHOST_INDEX;;
+
 		if (isType (token, TOKEN_KEYWORD))
 		{
 			switch (token->keyword)
 			{
 				case KEYWORD_article:
-					eof = parseTag (token, BIBTAG_ARTICLE);
+					kind = BIBTAG_ARTICLE;
 					break;
 				case KEYWORD_book:
-					eof = parseTag (token, BIBTAG_BOOK);
+					kind = BIBTAG_BOOK;
 					break;
 				case KEYWORD_booklet:
-					eof = parseTag (token, BIBTAG_BOOKLET);
+					kind = BIBTAG_BOOKLET;
 					break;
 				case KEYWORD_conference:
-					eof = parseTag (token, BIBTAG_CONFERENCE);
+					kind = BIBTAG_CONFERENCE;
 					break;
 				case KEYWORD_inbook:
-					eof = parseTag (token, BIBTAG_INBOOK);
+					kind = BIBTAG_INBOOK;
 					break;
 				case KEYWORD_incollection:
-					eof = parseTag (token, BIBTAG_INCOLLECTION);
+					kind = BIBTAG_INCOLLECTION;
 					break;
 				case KEYWORD_inproceedings:
-					eof = parseTag (token, BIBTAG_INPROCEEDINGS);
+					kind = BIBTAG_INPROCEEDINGS;
 					break;
 				case KEYWORD_manual:
-					eof = parseTag (token, BIBTAG_MANUAL);
+					kind = BIBTAG_MANUAL;
 					break;
 				case KEYWORD_mastersthesis:
-					eof = parseTag (token, BIBTAG_MASTERSTHESIS);
+					kind = BIBTAG_MASTERSTHESIS;
 					break;
 				case KEYWORD_misc:
-					eof = parseTag (token, BIBTAG_MISC);
+					kind = BIBTAG_MISC;
 					break;
 				case KEYWORD_phdthesis:
-					eof = parseTag (token, BIBTAG_PHDTHESIS);
+					kind = BIBTAG_PHDTHESIS;
 					break;
 				case KEYWORD_proceedings:
-					eof = parseTag (token, BIBTAG_PROCEEDINGS);
+					kind = BIBTAG_PROCEEDINGS;
 					break;
 				case KEYWORD_string:
-					eof = parseTag (token, BIBTAG_STRING);
+					kind = BIBTAG_STRING;
 					break;
 				case KEYWORD_techreport:
-					eof = parseTag (token, BIBTAG_TECHREPORT);
+					kind = BIBTAG_TECHREPORT;
 					break;
 				case KEYWORD_unpublished:
-					eof = parseTag (token, BIBTAG_UNPUBLISHED);
-					break;
-				default:
+					kind = BIBTAG_UNPUBLISHED;
 					break;
 			}
 		}
-		if (eof)
-			break;
-	} while (true);
+
+		if (kind != KIND_GHOST_INDEX)
+			eof = parseTag (token, false, kind);
+		else
+			eof = mayParseTokenInSubparser(token);
+
+	} while (!eof);
 }
 
 static void initialize (const langType language)

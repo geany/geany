@@ -96,7 +96,7 @@ typedef struct sOptionValues {
 	char* filterTerminator; /* --filter-terminator  string to output */
 	tagRelative tagRelative;    /* --tag-relative file paths relative to tag file */
 	int  printTotals;    /* --totals  print cumulative statistics */
-	bool lineDirectives; /* --linedirectives  process #line directives */
+	bool lineDirectives; /* --line-directives  process #line directives */
 	bool printLanguage;  /* --print-language */
 	bool guessLanguageEagerly; /* --guess-language-eagerly|-G */
 	bool quiet;		      /* --quiet */
@@ -108,7 +108,7 @@ typedef struct sOptionValues {
 	enum interactiveMode { INTERACTIVE_NONE = 0,
 						   INTERACTIVE_DEFAULT,
 						   INTERACTIVE_SANDBOX, } interactive; /* --interactive */
-#ifdef WIN32
+#ifdef _WIN32
 	enum filenameSepOp { FILENAME_SEP_NO_REPLACE = false,
 						 FILENAME_SEP_USE_SLASH  = true,
 						 FILENAME_SEP_UNSET,
@@ -162,6 +162,7 @@ extern langType getLanguageComponentInOptionFull (const char *const option,
 
 extern void processLanguageDefineOption (const char *const option, const char *const parameter);
 extern bool processMapOption (const char *const option, const char *const parameter);
+extern bool processParamdefOption (const char *const option, const char *const value);
 extern bool processParamOption (const char *const option, const char *const value);
 extern bool processKinddefOption (const char *const option, const char *const parameter);
 extern bool processKindsOption (const char *const option, const char *const parameter);

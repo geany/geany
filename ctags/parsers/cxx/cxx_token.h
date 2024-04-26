@@ -10,6 +10,7 @@
 */
 
 #include "general.h"
+#include "mio.h"
 #include "vstring.h"
 
 #include "cxx_keyword.h"
@@ -72,7 +73,7 @@ typedef struct _CXXToken
 	vString * pszWord;
 	CXXKeyword eKeyword;
 	CXXTokenChain * pChain; // this is NOT the parent chain!
-	bool bFollowedBySpace;
+	unsigned int bFollowedBySpace: 1;
 
 	int iLineNumber;
 	MIOPos oFilePosition;
@@ -86,6 +87,11 @@ typedef struct _CXXToken
 	// uninitialized and must be treated as undefined.
 	unsigned char uInternalScopeType;
 	unsigned char uInternalScopeAccess;
+
+	int iCorkIndex;
+
+	// The member keeps tokens started from __attribute__ and __declspec.
+	CXXTokenChain * pSideChain;
 } CXXToken;
 
 CXXToken * cxxTokenCreate(void);
@@ -97,7 +103,8 @@ CXXToken * cxxTokenCopy(CXXToken *pToken);
 // A shortcut for quickly creating keyword tokens.
 CXXToken * cxxTokenCreateKeyword(int iLineNumber,MIOPos oFilePosition,CXXKeyword eKeyword);
 
-CXXToken * cxxTokenCreateAnonymousIdentifier(unsigned int uTagKind);
+CXXToken * cxxTokenCreateAnonymousIdentifier(unsigned int uTagKind,
+											 const char *szPrefix);
 
 #define cxxTokenTypeIsOneOf(_pToken,_uTypes) (_pToken->eType & (_uTypes))
 #define cxxTokenTypeIs(_pToken,_eType) (_pToken->eType == _eType)

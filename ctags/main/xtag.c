@@ -282,7 +282,7 @@ extern bool isCommonXtag (xtagType type)
 	return (type < XTAG_COUNT)? true: false;
 }
 
-extern langType getXtagOwner (xtagType type)
+extern langType getXtagLanguage (xtagType type)
 {
 	return getXtagObject (type)->language;
 }
@@ -324,7 +324,7 @@ extern void initXtagObjects (void)
 	}
 }
 
-extern int countXtags (void)
+extern unsigned int countXtags (void)
 {
 	return xtagObjectUsed;
 }
@@ -355,7 +355,7 @@ extern int defineXtag (xtagDefinition *def, langType language)
 	Assert (def->name);
 	for (i = 0; i < strlen (def->name); i++)
 	{
-		Assert ( isalnum (def->name [i]) );
+		Assert ( isalnum ((unsigned char) def->name [i]) );
 	}
 	def->letter = NUL_XTAG_LETTER;
 
