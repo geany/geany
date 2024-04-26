@@ -86,12 +86,12 @@ parsers = \
 	parsers/pascal.c \
 	parsers/perl.c \
 	parsers/perl.h \
-	parsers/perl6.c \
 	parsers/php.c \
 	parsers/powershell.c \
 	parsers/python.c \
 	parsers/r.c \
 	parsers/r.h \
+	parsers/raku.c \
 	parsers/rst.c \
 	parsers/ruby.c \
 	parsers/rust.c \
