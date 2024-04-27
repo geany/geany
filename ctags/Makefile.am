@@ -78,6 +78,7 @@ parsers = \
 	parsers/julia.c \
 	parsers/geany_lcpp.c \
 	parsers/geany_lcpp.h \
+	parsers/ldscript.c \
 	parsers/lisp.c \
 	parsers/lua.c \
 	parsers/make.c \
