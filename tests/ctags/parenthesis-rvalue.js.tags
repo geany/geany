@@ -26,10 +26,10 @@ c1Ì16384Ö0
 variable:   c1
 c2Ì16384Ö0
 variable:   c2
-d1Ì1Ö0
-class:      d1
-d2Ì1Ö0
-class:      d2
+d1Ì16384Ö0
+variable:   d1
+d2Ì16384Ö0
+variable:   d2
 e1Ì16Í()Ö0
 function:   e1()
 e1subÌ16Í()Îe1Ö0

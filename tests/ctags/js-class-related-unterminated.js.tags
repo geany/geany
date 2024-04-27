@@ -4,8 +4,8 @@ BÌ1Í(a, b)ÎClsÖ0
 class:      Cls :: B(a, b)
 CÌ1Í()ÎClsÖ0
 class:      Cls :: C()
-ClsÌ1Ö0
-class:      Cls
+ClsÌ16384Ö0
+variable:   Cls
 SubÌ1Ö0
 class:      Sub
 SubÌ1Í()ÎCls.BÖ0

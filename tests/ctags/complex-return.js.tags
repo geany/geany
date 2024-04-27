@@ -12,14 +12,14 @@ c3m1Ì128Í()Îclass3Ö0
 method:     class3 :: c3m1()
 c3m2Ì128Í()Îclass3Ö0
 method:     class3 :: c3m2()
-class1Ì1Í()Ö0
-class:      class1()
-class2Ì1Í()Ö0
-class:      class2()
-class3Ì1Í()Ö0
-class:      class3()
-class4Ì1Í()Ö0
-class:      class4()
+class1Ì16Í()Ö0
+function:   class1()
+class2Ì16Í()Ö0
+function:   class2()
+class3Ì16Í()Ö0
+function:   class3()
+class4Ì16Í()Ö0
+function:   class4()
 func1Ì16Í()Ö0
 function:   func1()
 func2Ì16Í()Ö0

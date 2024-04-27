@@ -12,13 +12,13 @@ negÌ64ÎrootÖ0
 member:     root :: neg
 parenthesesÌ64ÎrootÖ0
 member:     root :: parentheses
-rootÌ1Ö0
-class:      root
+rootÌ16384Ö0
+variable:   root
 stringÌ64ÎrootÖ0
 member:     root :: string
 subFunctionÌ128Í()Îroot.subObjectÖ0
 method:     root.subObject :: subFunction()
-subObjectÌ1ÎrootÖ0
-class:      root :: subObject
+subObjectÌ64ÎrootÖ0
+member:     root :: subObject
 subPropertyÌ64Îroot.subObjectÖ0
 member:     root.subObject :: subProperty
