@@ -1,5 +1,5 @@
-RPCÃ1ŒTest÷0
-class:      Test :: RPC
+Test.RPCÃ64÷0
+member:     Test.RPC
 asyncMethodÃ128Õ(  uri,  method,  params,  callback)ŒTest.RPC÷0
 method:     Test.RPC :: asyncMethod(  uri,  method,  params,  callback)
 asyncRequestÃ128Õ(  uri,  data,  callback)ŒTest.RPC÷0

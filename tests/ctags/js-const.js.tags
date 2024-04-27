@@ -2,8 +2,8 @@ AÃ65536÷0
 macro:      A
 BÃ65536÷0
 macro:      B
-GroupÃ1÷0
-class:      Group
+GroupÃ16384÷0
+variable:   Group
 XÃ64ŒGroup÷0
 member:     Group :: X
 YÃ64ŒGroup÷0

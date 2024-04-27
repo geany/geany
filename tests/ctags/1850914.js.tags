@@ -2,5 +2,5 @@ objLiteralMethodÌ128Í()ÎobjectLiteralÖ0
 method:     objectLiteral :: objLiteralMethod()
 objLiteralPropertyÌ64ÎobjectLiteralÖ0
 member:     objectLiteral :: objLiteralProperty
-objectLiteralÌ1Ö0
-class:      objectLiteral
+objectLiteralÌ16384Ö0
+variable:   objectLiteral
