@@ -590,8 +590,8 @@ static TMParserMapGroup group_HAXE[] = {
 };
 
 static TMParserMapEntry map_REST[] = {
-	{'H', tm_tag_undef_t},      // title
-	{'h', tm_tag_undef_t},      // subtitle
+	{'H', tm_tag_enumerator_t}, // title
+	{'h', tm_tag_field_t},      // subtitle
 	{'c', tm_tag_namespace_t},  // chapter
 	{'s', tm_tag_member_t},     // section
 	{'S', tm_tag_macro_t},      // subsection
@@ -601,6 +601,8 @@ static TMParserMapEntry map_REST[] = {
 	{'d', tm_tag_undef_t},      // substdef
 };
 static TMParserMapGroup group_REST[] = {
+	{N_("Title"), TM_ICON_NONE, tm_tag_enumerator_t},
+	{N_("Subtitle"), TM_ICON_NONE, tm_tag_field_t},
 	{N_("Chapter"), TM_ICON_NONE, tm_tag_namespace_t},
 	{N_("Section"), TM_ICON_NONE, tm_tag_member_t},
 	{N_("Subsection"), TM_ICON_NONE, tm_tag_macro_t},

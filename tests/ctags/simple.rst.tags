@@ -1,7 +1,7 @@
-Chapter 1Ã256÷0
-namespace:  Chapter 1
-Chapter 2Ã256÷0
-namespace:  Chapter 2
+Chapter 1Ã256ŒSubtitle÷0
+namespace:  Subtitle :: Chapter 1
+Chapter 2Ã256ŒSubtitle÷0
+namespace:  Subtitle :: Chapter 2
 Section 1.1Ã64ŒChapter 1÷0
 member:     Chapter 1 :: Section 1.1
 Section 1.2Ã64ŒChapter 1÷0
@@ -14,3 +14,7 @@ Subsection 1.1.1Ã65536ŒSection 1.1÷0
 macro:      Section 1.1 :: Subsection 1.1.1
 Subsubsection 1.1.1.1Ã16384ŒSubsection 1.1.1÷0
 variable:   Subsection 1.1.1 :: Subsubsection 1.1.1.1
+SubtitleÃ8ŒTitle÷0
+field:      Title :: Subtitle
+TitleÃ4÷0
+enumerator: Title
