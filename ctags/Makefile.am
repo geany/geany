@@ -85,7 +85,7 @@ parsers = \
 	parsers/make.h \
 	parsers/markdown.c \
 	parsers/markdown.h \
-	parsers/geany_matlab.c \
+	parsers/matlab.c \
 	parsers/nsis.c \
 	parsers/objc.c \
 	parsers/ocaml.c \

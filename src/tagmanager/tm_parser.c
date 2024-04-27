@@ -668,11 +668,13 @@ static TMParserMapGroup group_FORTRAN[] = {
 
 static TMParserMapEntry map_MATLAB[] = {
 	{'f', tm_tag_function_t},  // function
-	{'s', tm_tag_struct_t},    // struct
+	{'v', tm_tag_variable_t},  // variable
+	{'c', tm_tag_class_t},     // class
 };
 static TMParserMapGroup group_MATLAB[] = {
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{N_("Structures"), TM_ICON_STRUCT, tm_tag_struct_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 #define map_CUDA map_C
