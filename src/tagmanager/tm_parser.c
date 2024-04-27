@@ -768,7 +768,7 @@ static TMParserMapEntry map_ABC[] = {
 
 static TMParserMapEntry map_VERILOG[] = {
 	{'c', tm_tag_variable_t},  // constant
-	{'d', tm_tag_undef_t},     // define
+	{'d', tm_tag_variable_t},  // define
 	{'e', tm_tag_typedef_t},   // event
 	{'f', tm_tag_function_t},  // function
 	{'m', tm_tag_class_t},     // module
