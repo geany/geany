@@ -16,7 +16,7 @@ myequÌ65536Ö0
 macro:      myequ
 myequalÌ65536Ö0
 macro:      myequal
-mymacroÌ16Ö0
-function:   mymacro
+mymacroÌ16ÍargsÖ0
+function:   mymacroargs
 mystructÌ2048Ö0
 struct:     mystruct
