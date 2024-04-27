@@ -1135,6 +1135,17 @@ static TMParserMapGroup group_OCAML[] = {
 	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
+/* unused by Geany but used by the cxx parser as an external parser so it has to
+ * be defined */
+static TMParserMapEntry map_LDSCRIPT[] = {
+	{'S', tm_tag_undef_t},  // section
+	{'s', tm_tag_undef_t},  // symbol
+	{'v', tm_tag_undef_t},  // version
+	{'i', tm_tag_undef_t},  // inputSection
+};
+static TMParserMapGroup group_LDSCRIPT[] = {
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1209,6 +1220,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(AUTOIT),
 	MAP_ENTRY(RAKU),
 	MAP_ENTRY(OCAML),
+	MAP_ENTRY(LDSCRIPT),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
