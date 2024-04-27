@@ -1557,13 +1557,16 @@ gboolean tm_parser_enable_role(TMParserType lang, gchar kind)
 {
 	switch (lang)
 	{
+		case TM_PARSER_C:
+		case TM_PARSER_CPP:
+			return kind != 'd';
 		case TM_PARSER_GDSCRIPT:
-			return kind == 'c' ? FALSE : TRUE;
+			return kind != 'c';
 		case TM_PARSER_GO:
 			/* 'p' is used both for package definition tags and imported package
 			 * tags and we can't tell which is which just by kind. By disabling
 			 * roles for this kind, we only get package definition tags. */
-			return kind == 'p' ? FALSE : TRUE;
+			return kind != 'p';
 	}
 	return TRUE;
 }
