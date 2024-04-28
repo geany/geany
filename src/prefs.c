@@ -424,6 +424,10 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 	gtk_entry_set_text(GTK_ENTRY(widget), tool_prefs.context_action_cmd);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_native_dialogs");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		interface_prefs.use_native_windows_dialogs);
+
 	project_setup_prefs();	/* project files path */
 
 
@@ -899,6 +903,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 		g_free(tool_prefs.context_action_cmd);
 		tool_prefs.context_action_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_native_dialogs");
+		interface_prefs.use_native_windows_dialogs =
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		project_apply_prefs();	/* project file path */
 

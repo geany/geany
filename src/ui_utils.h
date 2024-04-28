@@ -63,7 +63,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		msgwin_compiler_visible;	/**< whether message window's compiler tab is visible */
 	gboolean		msgwin_messages_visible;	/**< whether message window's messages tab is visible */
 	gboolean		msgwin_scribble_visible;	/**< whether message window's scribble tab is visible */
-	/** whether to use native Windows' dialogs - ignored and not used anymore */
+	/** whether to use platform-native file dialogs */
 	gboolean		use_native_windows_dialogs;
 	/** whether compiler messages window is automatically scrolled to show new messages */
 	gboolean		compiler_tab_autoscroll;
