@@ -444,6 +444,9 @@ void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 {
 	g_return_if_fail(buffer != NULL || file_name != NULL);
 
+	if (language == TM_PARSER_NONE)
+		return;
+
 	parseRawBuffer(file_name, buffer, buffer_size, language, source_file);
 
 	rename_anon_tags(source_file);
@@ -452,6 +455,9 @@ void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 
 const gchar *tm_ctags_get_lang_name(TMParserType lang)
 {
+	if (lang == TM_PARSER_NONE)
+		return "unknown";
+
 	return getLanguageName(lang);
 }
 
@@ -464,9 +470,14 @@ TMParserType tm_ctags_get_named_lang(const gchar *name)
 
 const gchar *tm_ctags_get_lang_kinds(TMParserType lang)
 {
-	guint kind_num = countLanguageKinds(lang);
 	static gchar kinds[257];
+	guint kind_num;
 	guint i;
+
+	if (lang == TM_PARSER_NONE)
+		return "";
+
+	kind_num = countLanguageKinds(lang);
 
 	for (i = 0; i < kind_num; i++)
 		kinds[i] = getLanguageKind(lang, i)->letter;
@@ -478,14 +489,22 @@ const gchar *tm_ctags_get_lang_kinds(TMParserType lang)
 
 const gchar *tm_ctags_get_kind_name(gchar kind, TMParserType lang)
 {
-	kindDefinition *def = getLanguageKindForLetter(lang, kind);
+	kindDefinition *def = NULL;
+
+	if (lang != TM_PARSER_NONE)
+		def = getLanguageKindForLetter(lang, kind);
+
 	return def ? def->name : "unknown";
 }
 
 
 gchar tm_ctags_get_kind_from_name(const gchar *name, TMParserType lang)
 {
-	kindDefinition *def = getLanguageKindForName(lang, name);
+	kindDefinition *def = NULL;
+
+	if (lang != TM_PARSER_NONE)
+		def = getLanguageKindForName(lang, name);
+
 	return def ? def->letter : '-';
 }
 
