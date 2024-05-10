@@ -1,0 +1,12 @@
+firstÌ512Ö0
+package:    first
+first_funcÌ16Ö0
+function:   first_func
+first_funcÌ16ÎfirstÖ0
+function:   first :: first_func
+first_funcÌ16Îfirst.secondÖ0
+function:   first.second :: first_func
+secondÌ512ÎfirstÖ0
+package:    first :: second
+second_funcÌ16Îfirst.secondÖ0
+function:   first.second :: second_func

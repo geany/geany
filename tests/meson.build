@@ -246,6 +246,7 @@ ctags_tests = files([
 	'ctags/mode.php.tags',
 	'ctags/moniker.x68.asm.tags',
 	'ctags/namelist.f.tags',
+	'ctags/namespace.bas.tags',
 	'ctags/namespace.cpp.tags',
 	'ctags/namespaces2.php.tags',
 	'ctags/namespaces.php.tags',

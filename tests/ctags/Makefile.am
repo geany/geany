@@ -249,6 +249,7 @@ test_sources = \
 	mode.php						\
 	moniker.x68.asm					\
 	namelist.f						\
+	namespace.bas					\
 	namespace.cpp					\
 	namespaces2.php					\
 	namespaces.php					\
