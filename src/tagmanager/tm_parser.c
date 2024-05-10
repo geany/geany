@@ -1163,6 +1163,7 @@ static TMParserMapEntry map_LDSCRIPT[] = {
 	{'i', tm_tag_undef_t},  // inputSection
 };
 static TMParserMapGroup group_LDSCRIPT[] = {
+	{"unused", TM_ICON_NONE, tm_tag_undef_t},
 };
 
 typedef struct
