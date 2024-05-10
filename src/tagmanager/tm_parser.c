@@ -562,13 +562,14 @@ static TMParserMapEntry map_FREEBASIC[] = {
 	{'t', tm_tag_struct_t},     // type
 	{'v', tm_tag_variable_t},   // variable
 	{'g', tm_tag_externvar_t},  // enum
-	{'n', tm_tag_undef_t},      // namespace
+	{'n', tm_tag_package_t},    // namespace
 };
 static TMParserMapGroup group_FREEBASIC[] = {
+	{N_("Namespaces"), TM_ICON_NAMESPACE, tm_tag_package_t},
 	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_externvar_t},
 	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
-	{N_("Types"), TM_ICON_NAMESPACE, tm_tag_struct_t},
+	{N_("Types"), TM_ICON_STRUCT, tm_tag_struct_t},
 	{N_("Labels"), TM_ICON_MEMBER, tm_tag_namespace_t},
 };
 
