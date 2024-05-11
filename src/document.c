@@ -1286,7 +1286,23 @@ static gboolean show_tab_cb(gpointer data)
 	show_tab_idle = 0;
 	/* doc might not be valid e.g. if user closed a tab whilst Geany is opening files */
 	if (DOC_VALID(doc))
+	{
+		gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+		gint new_page;
+
 		document_show_tab(doc);
+
+		new_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+		if (cur_page == new_page)
+		{
+			/* make sure to emit the "switch-page" signal also when the correct tab
+			 * is already selected - various UI updates and "document-activate"
+			 * emission depend on it in on_notebook1_switch_page_after() */
+			g_signal_emit_by_name(GTK_NOTEBOOK(main_widgets.notebook), "switch-page",
+			                      gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page),
+			                      cur_page);
+		}
+	}
 
 	return G_SOURCE_REMOVE;
 }
