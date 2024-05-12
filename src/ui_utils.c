@@ -1979,7 +1979,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(title,
 			GTK_WINDOW(main_widgets.window), action,
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL));
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL));
 		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialog");
 	}
 
@@ -1996,7 +1996,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	}
 	g_free(locale_path);
 
-	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_OK)
+	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *dir_locale;
 
