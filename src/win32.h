@@ -30,14 +30,10 @@
 
 G_BEGIN_DECLS
 
-gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar *initial_dir);
-
 gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gchar *msg);
 
 void win32_open_browser(const gchar *uri);
 
-
-gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir);
 
 gint win32_check_write_permission(const gchar *dir);
 
