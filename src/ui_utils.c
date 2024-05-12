@@ -1967,36 +1967,44 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 		const gchar *utf8_path)
 {
-	GtkWidget *dialog = gtk_file_chooser_dialog_new(title,
-		GTK_WINDOW(main_widgets.window), action,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+	GtkFileChooser *dialog;
 	gchar *locale_path;
 	gchar *ret_path = NULL;
 
-	gtk_widget_set_name(dialog, "GeanyDialog");
+	if (interface_prefs.use_native_windows_dialogs)
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(title,
+			GTK_WINDOW(main_widgets.window), action, "_Open", "_Cancel"));
+	else
+	{
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(title,
+			GTK_WINDOW(main_widgets.window), action,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL));
+		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialog");
+	}
+
 	locale_path = utils_get_locale_from_utf8(utf8_path);
 	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
 		if (g_path_is_absolute(locale_path) && g_file_test(locale_path, G_FILE_TEST_IS_DIR))
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
+			gtk_file_chooser_set_current_folder(dialog, locale_path);
 	}
 	else if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
 		if (g_path_is_absolute(locale_path))
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_path);
+			gtk_file_chooser_set_filename(dialog, locale_path);
 	}
 	g_free(locale_path);
 
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_OK)
 	{
 		gchar *dir_locale;
 
-		dir_locale = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		dir_locale = gtk_file_chooser_get_filename(dialog);
 		ret_path = utils_get_utf8_from_locale(dir_locale);
 		g_free(dir_locale);
 	}
-	gtk_widget_destroy(dialog);
+	dialogs_file_chooser_destroy(dialog);
 	return ret_path;
 }
 
