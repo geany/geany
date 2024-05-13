@@ -948,12 +948,14 @@ static TMParserMapGroup group_JSON[] = {
 static TMParserMapEntry map_POWERSHELL[] = {
 	{'f', tm_tag_function_t},  // function
 	{'v', tm_tag_variable_t},  // variable
-	{'c', tm_tag_undef_t},     // class
+	{'c', tm_tag_class_t},     // class
 	{'i', tm_tag_function_t},  // filter
-	{'g', tm_tag_undef_t},     // enum
+	{'g', tm_tag_enum_t},      // enum
 };
 static TMParserMapGroup group_POWERSHELL[] = {
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
 	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
