@@ -10,6 +10,8 @@ coreÌ16384ÎtestlibÖ0
 variable:   testlib :: core
 executeQueryStringÌ128ÎDatabaseÖ0
 method:     Database :: executeQueryString
+extraÌ16384Ö0
+variable:   extra
 extrasÌ1ÎtestlibÖ0
 class:      testlib :: extras
 getHalfOfÌ16Í(num1, num2, num3)Ö0
@@ -22,6 +24,8 @@ invalidInnerFunctionÌ16Í(a,b)Ö0
 function:   invalidInnerFunction(a,b)
 my_global_var1Ì16384Ö0
 variable:   my_global_var1
+my_global_var2Ì16384Ö0
+variable:   my_global_var2
 my_global_var3Ì16384Ö0
 variable:   my_global_var3
 my_global_var4Ì16384Ö0
@@ -34,6 +38,8 @@ testlibÌ16384Ö0
 variable:   testlib
 validFunctionFiveÌ16Í(a,b)ÎtestlibÖ0
 function:   testlib :: validFunctionFive(a,b)
+validFunctionFourÌ16Í(a,b)ÎextraÖ0
+function:   extra :: validFunctionFour(a,b)
 validFunctionOneÌ16Í(a,b)Ö0
 function:   validFunctionOne(a,b)
 validFunctionSixÌ16Í(a,b)Îtestlib.coreÖ0
