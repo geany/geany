@@ -1,0 +1,12 @@
+DerivedÌ1Ö0
+class:      Derived
+Derived2Ì1Ö0
+class:      Derived2
+FooÌ1Ö0
+class:      Foo
+GetBarÌ16Ö0
+function:   GetBar
+GetBazÌ16Í()Ö0
+function:   GetBaz()
+MyExceptionÌ1Ö0
+class:      MyException
