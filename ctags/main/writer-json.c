@@ -25,6 +25,19 @@
 #ifdef HAVE_JANSSON
 #include <jansson.h>
 
+/* The concept of CURRENT and AGE is taken from libtool.
+ * However, we delete REVISION.
+ * We will update more CURRENT frequently than the assumption
+ * in libtool.
+ *
+ * If KEYS have been added, removed or changed since last release,
+ * increment CURRENT.
+ * If they have been added since last release, increment AGE.
+ * If they have been removed since last release, set AGE to 0
+ */
+#define JSON_WRITER_CURRENT 1
+#define JSON_WRITER_AGE 0
+
 #ifndef json_boolean /* compat with jansson < 2.4 */
 #define json_boolean(val)      ((val) ? json_true() : json_false())
 #endif
@@ -238,8 +251,23 @@ static int writeJsonPtagEntry (tagWriter *writer CTAGS_ATTR_UNUSED,
 {
 #define OPT(X) ((X)?(X):"")
 	json_t *response;
+	char *parserName0 = NULL;
 
-	if (parserName)
+	const char *rest = ((JSON_WRITER_CURRENT > 0) && parserName && desc->jsonObjectKey)
+		? strchr(parserName, '!')
+		: NULL;
+	if (rest)
+	{
+		parserName0 = eStrndup(parserName, rest - parserName);
+		response = json_pack ("{ss ss ss ss ss ss}",
+				      "_type", "ptag",
+				      "name", desc->name,
+				      "parserName", parserName0,
+				      desc->jsonObjectKey, rest + 1,
+				      "path", OPT(fileName),
+				      "pattern", OPT(pattern));
+	}
+	else if (parserName)
 	{
 		response = json_pack ("{ss ss ss ss ss}",
 				      "_type", "ptag",
@@ -261,6 +289,8 @@ static int writeJsonPtagEntry (tagWriter *writer CTAGS_ATTR_UNUSED,
 	int length = mio_printf (mio, "%s\n", buf);
 	free (buf);
 	json_decref (response);
+	if (parserName0)
+		eFree(parserName0);
 
 	return length;
 #undef OPT
@@ -270,7 +300,7 @@ extern bool ptagMakeJsonOutputVersion (ptagDesc *desc, langType language CTAGS_A
 									   const void *data CTAGS_ATTR_UNUSED)
 {
 	return writePseudoTag (desc,
-			       "0.0",
+			       STRINGIFY(JSON_WRITER_CURRENT) "." STRINGIFY(JSON_WRITER_AGE),
 			       "in development",
 			       NULL);
 }

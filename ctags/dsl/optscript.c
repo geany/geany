@@ -153,6 +153,7 @@ static EsObject* OPT_KEY_dstack;
  */
 
 static EsObject* array_new (unsigned int attr);
+static EsObject* array_shared_new (EsObject* original, unsigned int attr);
 
 static EsObject*    array_es_init_fat (void *fat, void *ptr, void *extra);
 static void         array_es_free  (void *ptr, void *fat);
@@ -374,7 +375,9 @@ declop(execstack);
  * tested in typeattrconv.ps */
 declop(type);
 declop(cvn);
-/* cvlit, cvx, xcheck, executeonly, noacess, readonly,
+declop(cvs);
+declop(cvx);
+/* cvlit, xcheck, executeonly, noacess, readonly,
    rcheck, wcheck, cvi, cvr, cvrs, cvs,... */
 
 /* Operators for Virtual Memory Operators  */
@@ -473,8 +476,8 @@ opt_init (void)
 
 	defOP (opt_system_dict, op_mark,           "<<",  0,  "- << mark");
 	defOP (opt_system_dict, op_mark,           "[",   0,  "- [ mark");
-	defOP (opt_system_dict, op__make_array,    "]",   1,  "[ any1 ... anyn ] array");
-	defOP (opt_system_dict, op__make_dict ,    ">>",  1, "<< key1 value1 ... keyn valuen >> dict");
+	defOP (opt_system_dict, op__make_array,    "]",   0,  "[ any1 ... anyn ] array");
+	defOP (opt_system_dict, op__make_dict ,    ">>",  0, "<< key1 value1 ... keyn valuen >> dict");
 
 	defop (opt_system_dict, _help,  0, "- _HELP -");
 	defop (opt_system_dict, pstack, 0, "|- any1 ... anyn PSTACK |- any1 ... anyn");
@@ -567,6 +570,8 @@ opt_init (void)
 
 	defop (opt_system_dict, type,   1, "any TYPE name");
 	defop (opt_system_dict, cvn,    1, "string CVN name");
+	defop (opt_system_dict, cvs,    2, "any string CVS string");
+	defop (opt_system_dict, cvx,    1, "any CVX any");
 
 	defop (opt_system_dict, null,   0, "- NULL null");
 	defop (opt_system_dict, bind,   1, "proc BIND proc");
@@ -642,12 +647,13 @@ opt_vm_new (MIO *in, MIO *out, MIO *err)
 }
 
 void
-opt_vm_clear (OptVM *vm)
+opt_vm_clear (OptVM *vm, bool clear_app_data)
 {
 	ptrArrayClear  (vm->estack);
 	ptrArrayClear  (vm->ostack);
 	vm_dstack_clear (vm);
-	vm->app_data = NULL;
+	if (clear_app_data)
+		vm->app_data = NULL;
 	dict_op_clear (vm->error);
 }
 
@@ -1155,7 +1161,7 @@ name_or_number_new (const char* s, void *data)
 	const char *t = s;
 	while (*t)
 	{
-		if (!isdigit ((int)*t))
+		if (!isdigit ((unsigned char) *t))
 		{
 			number = false;
 			break;
@@ -1971,6 +1977,14 @@ array_new (unsigned int attr)
 }
 
 static EsObject*
+array_shared_new (EsObject* original, unsigned int attr)
+{
+	ptrArray *a = es_pointer_get (original);
+	ptrArrayRef (a);
+	return es_fatptr_new (OPT_TYPE_ARRAY, a, &attr);
+}
+
+static EsObject*
 array_es_init_fat (void *fat, void *ptr, void *extra)
 {
 	ArrayFat *a = fat;
@@ -1988,9 +2002,6 @@ array_es_free (void *ptr, void *fat)
 static int
 array_es_equal (const void *a, const void *afat, const void *b, const void *bfat)
 {
-	if (((ArrayFat *)afat)->attr != ((ArrayFat *)bfat)->attr)
-		return 0;
-
 	if (ptrArrayIsEmpty ((ptrArray *)a) && ptrArrayIsEmpty ((ptrArray*)b))
 		return 1;
 	else if (a == b)
@@ -2126,7 +2137,11 @@ dict_op_def (EsObject* dict, EsObject *key, EsObject *val)
 	key = es_object_ref (key);
 	val = es_object_ref (val);
 
-	hashTableUpdateItem (t, key, val);
+	if (hashTableUpdateOrPutItem (t, key, val))
+	{
+		/* A key in the hashtable is reused. */
+		es_object_unref (key);
+	}
 }
 
 static bool
@@ -2423,13 +2438,16 @@ GEN_PRINTER(op__print,             vm_print_full (vm, elt, true,  0))
 static EsObject*
 op__make_array (OptVM *vm, EsObject *name)
 {
-	int n = vm_ostack_counttomark (vm);
-	if (n < 0)
+	int n0 = vm_ostack_counttomark (vm);
+	if (n0 < 0)
 		return OPT_ERR_UNMATCHEDMARK;
+	unsigned int n = (unsigned int)n0;
 
 	unsigned int count = vm_ostack_count (vm);
+	Assert(count > n);
+
 	EsObject *a = array_new (ATTR_READABLE | ATTR_WRITABLE);
-	for (int i = (int)(count - n); i < count; i++)
+	for (unsigned int i = count - n; i < count; i++)
 	{
 		EsObject *elt = ptrArrayItem (vm->ostack, i);
 		array_op_add (a, elt);
@@ -2461,7 +2479,14 @@ op__make_dict (OptVM *vm, EsObject *name)
 			return OPT_ERR_TYPECHECK;
 	}
 
-	EsObject *d = dict_new (n % 2 + 1, ATTR_READABLE|ATTR_WRITABLE); /* FIXME: + 1 */
+	/* A hashtable grows automatically when its filling rate is
+	 * grater than 80%. If we put elements between `<<' and `>>' to a dictionary
+	 * initialized with the size equal to the number of elements, the dictionary
+	 * grows once during putting them. Making a 1/0.8 times larger dictionary can
+	 * avoid the predictable growing. */
+	int size = (10 * (n > 0? (n / 2): 1)) / 8;
+
+	EsObject *d = dict_new (size, ATTR_READABLE|ATTR_WRITABLE);
 	for (int i = 0; i < (n / 2); i++)
 	{
 		EsObject *val = ptrArrayLast (vm->ostack);
@@ -2692,18 +2717,19 @@ op_copy (OptVM *vm, EsObject *name)
 		if (!es_integer_p (nobj))
 			return op__copy_compound (vm, name, c, nobj);
 
-		int n = es_integer_get (nobj);
-		if (n < 0)
+		int n0 = es_integer_get (nobj);
+		if (n0 < 0)
 			return OPT_ERR_RANGECHECK;
+		unsigned int n = (unsigned int)n0;
 
 		c--;
 
-		if (((int)c) - n < 0)
+		if (c < n)
 			return OPT_ERR_UNDERFLOW;
 
 		ptrArrayDeleteLast(vm->ostack);
 
-		for (int i = c - n; i < c; i++)
+		for (unsigned int i = c - n; i < c; i++)
 		{
 			EsObject * elt = ptrArrayItem (vm->ostack, i);
 			vm_ostack_push (vm, elt);
@@ -2751,6 +2777,8 @@ op_roll (OptVM *vm, EsObject *name)
 	if (!es_integer_p (nobj))
 		return OPT_ERR_TYPECHECK;
 	int n = es_integer_get (nobj);
+	if (n < 0)
+		return OPT_ERR_RANGECHECK;
 
 	if ((((int)c) - 2) < n)
 		return OPT_ERR_UNDERFLOW;
@@ -3026,8 +3054,10 @@ op_dict (OptVM *vm, EsObject *name)
 		return OPT_ERR_TYPECHECK;
 
 	int n = es_integer_get (nobj);
-	if (n < 1)
+	if (n < 0)
 		return OPT_ERR_RANGECHECK;
+	else if (n == 0)
+		n = 1;
 
 	ptrArrayDeleteLast (vm->ostack);
 
@@ -3728,7 +3758,7 @@ op_repeat (OptVM *vm, EsObject *name)
 	ptrArrayDeleteLast (vm->ostack);
 	ptrArrayDeleteLast (vm->ostack);
 
-	EsObject *e = es_false;;
+	EsObject *e = es_false;
 	for (int i = 0; i < n; i++)
 	{
 		e = vm_call_proc (vm, proc);
@@ -3812,10 +3842,9 @@ op_for (OptVM *vm, EsObject *name)
 /*
  * Operators for type, attribute and their conversion
  */
-static EsObject*
-op_type (OptVM *vm, EsObject *name)
+static const char*
+get_type_name (EsObject *o)
 {
-	EsObject *o = ptrArrayRemoveLast (vm->ostack);
 	const char *n;
 
 	if (o == es_nil)
@@ -3829,6 +3858,17 @@ op_type (OptVM *vm, EsObject *name)
 		int t = es_object_get_type (o);
 		n = es_type_get_name (t);
 	}
+
+	return n;
+}
+
+static EsObject*
+op_type (OptVM *vm, EsObject *name)
+{
+	EsObject *o = ptrArrayRemoveLast (vm->ostack);
+	const char *n;
+
+	n = get_type_name (o);
 
 	EsObject *p = name_newS (n, ATTR_EXECUTABLE|ATTR_READABLE);
 	vm_ostack_push (vm, p);
@@ -3851,6 +3891,85 @@ op_cvn (OptVM *vm, EsObject *name)
 	ptrArrayDeleteLast (vm->ostack);
 	vm_ostack_push (vm, n);
 	es_object_unref (n);
+	return es_false;
+}
+
+static EsObject *
+op_cvs (OptVM *vm, EsObject *name)
+{
+	EsObject *o = ptrArrayLast (vm->ostack);
+	if (es_object_get_type (o) != OPT_TYPE_STRING)
+		return OPT_ERR_TYPECHECK;
+
+	EsObject *any = ptrArrayItemFromLast (vm->ostack, 1);
+	vString *vstr = es_pointer_get (o);
+	int t = es_object_get_type (any);
+
+	if (t == OPT_TYPE_STRING)
+	{
+		vString *vany = es_pointer_get (any);
+		vStringCopy (vstr, vany);
+	}
+	else if (t == OPT_TYPE_NAME || t == ES_TYPE_SYMBOL)
+	{
+		if (t == OPT_TYPE_NAME)
+			any = es_pointer_get (any);
+
+		const char *cany = es_symbol_get (any);
+		vStringCopyS (vstr, cany);
+	}
+	else if (t == ES_TYPE_INTEGER)
+	{
+		int iany = es_integer_get (any);
+#define buf_len 13
+		char buf[buf_len];
+		if (!(snprintf (buf, buf_len, "%d", iany) > 0))
+			buf [0] = '\0';
+		vStringCopyS (vstr, buf);
+	}
+	else if (t == ES_TYPE_BOOLEAN)
+		vStringCopyS (vstr, any == es_true? "true": "false");
+	else
+	{
+		const char *type_name = get_type_name (any);
+		vStringCopyS (vstr, "--");
+		vStringCatS (vstr, type_name);
+		vStringCatS (vstr, "--");
+	}
+
+	es_object_ref (o);
+	ptrArrayDeleteLastInBatch (vm->ostack, 2);
+	vm_ostack_push (vm, o);
+	es_object_unref (o);
+
+	return es_false;
+}
+
+static EsObject*
+op_cvx (OptVM *vm, EsObject *name)
+{
+	EsObject *o = ptrArrayLast (vm->ostack);
+
+	if (es_object_get_type (o) == OPT_TYPE_ARRAY
+		&& (! (((ArrayFat *)es_fatptr_get (o))->attr & ATTR_EXECUTABLE)))
+	{
+		EsObject *xarray = array_shared_new (o,
+											 ((ArrayFat *)es_fatptr_get (o))->attr | ATTR_EXECUTABLE);
+		ptrArrayDeleteLast (vm->ostack);
+		vm_ostack_push (vm, xarray);
+		es_object_unref(xarray);
+
+	}
+	else if (es_object_get_type (o) == OPT_TYPE_NAME
+			 && (! (((NameFat *)es_fatptr_get (o))->attr & ATTR_EXECUTABLE)))
+	{
+		EsObject *symbol = es_pointer_get (o);
+		EsObject *xname = name_new (symbol, ((NameFat *)es_fatptr_get (o))->attr | ATTR_EXECUTABLE);
+		ptrArrayDeleteLast (vm->ostack);
+		vm_ostack_push (vm, xname);
+		es_object_unref(xname);
+	}
+
 	return es_false;
 }
 
@@ -4066,7 +4185,7 @@ op__put_str (OptVM *vm, EsObject *name,
 		for (size_t i = 0; i < d; i++)
 			vStringPut (vstr, ' ');
 		if (c != 0)
-			vStringPut (vstr, (char)c);
+			vStringPut (vstr, c);
 	}
 
 	ptrArrayDeleteLastInBatch (vm->ostack, 3);
@@ -4097,11 +4216,9 @@ op__forall_array (OptVM *vm, EsObject *name,
 {
 	ptrArray *a = es_pointer_get (obj);
 	unsigned int c = ptrArrayCount (a);
-	if (((int)c) < 0)
-		return OPT_ERR_INTERNALERROR; /* TODO: integer overflow */
 
 	EsObject *e = es_false;
-	for (int i = 0; i < c; i++)
+	for (unsigned int i = 0; i < c; i++)
 	{
 		EsObject *o = ptrArrayItem (a, i);
 		es_object_ref (o);
@@ -4154,7 +4271,7 @@ static EsObject*
 op__forall_dict (OptVM *vm, EsObject *name,
 				 EsObject *proc, EsObject *obj)
 {
-	EsObject *r = es_false;;
+	EsObject *r = es_false;
 	hashTable *ht = es_pointer_get (obj);
 	struct dictForallData data = {
 		.vm   = vm,
@@ -4173,11 +4290,9 @@ op__forall_string (OptVM *vm, EsObject *name,
 {
 	vString *s = es_pointer_get (obj);
 	unsigned int c = vStringLength (s);
-	if (((int)c) < 0)
-		return OPT_ERR_INTERNALERROR; /* TODO: integer overflow */
 
 	EsObject *e = es_false;
-	for (int i = 0; i < c; i++)
+	for (unsigned int i = 0; i < c; i++)
 	{
 		unsigned char chr = vStringChar (s, i);
 		EsObject *o = es_integer_new (chr);
@@ -4229,23 +4344,24 @@ op_forall (OptVM *vm, EsObject *name)
 
 static EsObject*
 op__putinterval_array (OptVM *vm, EsObject *name,
-					   ptrArray *srca, int index, ptrArray *dsta)
+					   ptrArray *srca, unsigned int index, ptrArray *dsta)
 {
 	unsigned int dlen = ptrArrayCount (dsta);
 	unsigned int slen = ptrArrayCount (srca);
 	if (dlen > index)
 	{
-		if ((dlen - index) <= slen)
+		unsigned d = dlen - index;
+		if (d <= slen)
 		{
-			ptrArrayDeleteLastInBatch (dsta, dlen - index);
+			ptrArrayDeleteLastInBatch (dsta, d);
 			for (unsigned int i = 0; i < slen; i++)
 				ptrArrayAdd (dsta, es_object_ref (ptrArrayItem (srca, i)));
 			return es_false;
 		}
 		else
 		{
-			for (size_t i = 0; i < slen; i++)
-				ptrArrayUpdate (dsta, ((size_t)index) + i,
+			for (unsigned int i = 0; i < slen; i++)
+				ptrArrayUpdate (dsta, index + i,
 								es_object_ref (ptrArrayItem (srca, i)),
 								es_nil);
 			return es_false;
@@ -4263,21 +4379,22 @@ op__putinterval_array (OptVM *vm, EsObject *name,
 
 static EsObject*
 op__putinterval_string (OptVM *vm, EsObject *name,
-						vString *srcv, int index, vString *dstv)
+						vString *srcv, unsigned int index, vString *dstv)
 {
-	size_t dlen = vStringLength (dstv);
+	unsigned int dlen = vStringLength (dstv);
 	if (dlen > index)
 	{
-		size_t slen = vStringLength (srcv);
-		if ((dlen - index) <= slen)
+		unsigned int d = dlen - index;
+		unsigned int slen = vStringLength (srcv);
+		if (d <= slen)
 		{
-			vStringTruncate (dstv, (size_t)index);
+			vStringTruncate (dstv, index);
 			vStringCat (dstv, srcv);
 			return es_false;
 		}
 		else
 		{
-			for (size_t i = 0; i < slen; i++)
+			for (unsigned int i = 0; i < slen; i++)
 				vStringChar (dstv, index + i) = vStringChar (srcv, i);
 			return es_false;
 		}
@@ -4309,9 +4426,10 @@ op_putinterval (OptVM *vm, EsObject *name)
 	else
 		return OPT_ERR_TYPECHECK;
 
-	int index = es_integer_get (indexobj);
-	if (index < 0)
+	int index0 = es_integer_get (indexobj);
+	if (index0 < 0)
 		return OPT_ERR_RANGECHECK;
+	unsigned int index = (size_t)index0;
 
 	EsObject *r;
 	if (t == OPT_TYPE_ARRAY)
@@ -4334,19 +4452,19 @@ op_putinterval (OptVM *vm, EsObject *name)
 static EsObject*
 op__copyinterval_array (OptVM *vm, EsObject *name,
 						ptrArray *dsta,
-						int count,
-						int index,
+						unsigned int count,
+						unsigned int index,
 						ptrArray *srca)
 {
-	unsigned long srcl = ptrArrayCount (srca);
+	unsigned int srcl = ptrArrayCount (srca);
 
-	if ((unsigned long)index > srcl)
+	if (index > srcl)
 		return OPT_ERR_RANGECHECK;
 
-	if ((unsigned long)(index + count) > srcl)
+	if ((index + count) > srcl)
 		return OPT_ERR_RANGECHECK;
 
-	for (unsigned int i = (unsigned int)index; i < index + count; i++)
+	for (unsigned int i = index; i < index + count; i++)
 		ptrArrayAdd (dsta, es_object_ref (ptrArrayItem (srca, i)));
 	return es_false;
 }
@@ -4354,19 +4472,19 @@ op__copyinterval_array (OptVM *vm, EsObject *name,
 static EsObject*
 op__copyinterval_string (OptVM *vm, EsObject *name,
 						 vString *dsts,
-						 int count,
-						 int index,
+						 unsigned int count,
+						 unsigned int index,
 						 vString *srcs)
 {
-	size_t srcl = vStringLength (srcs);
+	unsigned int srcl = vStringLength (srcs);
 
-	if ((size_t)index > srcl)
+	if (index > srcl)
 		return OPT_ERR_RANGECHECK;
 
-	if ((size_t)(index + count) > srcl)
+	if ((index + count) > srcl)
 		return OPT_ERR_RANGECHECK;
 
-	vStringNCatSUnsafe (dsts, vStringValue (srcs) + index, (size_t)count);
+	vStringNCatSUnsafe (dsts, vStringValue (srcs) + index, count);
 	return es_false;
 }
 
@@ -4389,13 +4507,15 @@ op__copyinterval (OptVM *vm, EsObject *name)
 	if (!es_integer_p (indexobj))
 		return OPT_ERR_TYPECHECK;
 
-	int count = es_integer_get (countobj);
-	if (count < 0)
+	int count0 = es_integer_get (countobj);
+	if (count0 < 0)
 		return OPT_ERR_RANGECHECK;
+	unsigned int count = (unsigned int)count0;
 
-	int index = es_integer_get (indexobj);
-	if (index < 0)
+	int index0 = es_integer_get (indexobj);
+	if (index0 < 0)
 		return OPT_ERR_RANGECHECK;
+	unsigned int index = (size_t)index0;
 
 	EsObject* r;
 	if (t == OPT_TYPE_ARRAY)

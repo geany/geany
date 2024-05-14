@@ -74,10 +74,12 @@ enum eKeywordId {
 	KEYWORD_call,
 	KEYWORD_case,
 	KEYWORD_check,
+	KEYWORD_commit,
 	KEYWORD_comment,
 	KEYWORD_constraint,
 	KEYWORD_create,
 	KEYWORD_cursor,
+	KEYWORD_database,
 	KEYWORD_datatype,
 	KEYWORD_declare,
 	KEYWORD_do,
@@ -85,6 +87,7 @@ enum eKeywordId {
 	KEYWORD_drop,
 	KEYWORD_else,
 	KEYWORD_elseif,
+	KEYWORD_elsif,
 	KEYWORD_end,
 	KEYWORD_endif,
 	KEYWORD_event,
@@ -130,6 +133,7 @@ enum eKeywordId {
 	KEYWORD_result,
 	KEYWORD_return,
 	KEYWORD_returns,
+	KEYWORD_schema,
 	KEYWORD_select,
 	KEYWORD_service,
 	KEYWORD_subtype,
@@ -174,7 +178,12 @@ typedef enum eTokenType {
 	TOKEN_CLOSE_SQUARE,
 	TOKEN_TILDE,
 	TOKEN_FORWARD_SLASH,
-	TOKEN_EQUAL
+	TOKEN_EQUAL,
+	TOKEN_PREPROC_IF,
+	TOKEN_PREPROC_ELSIF,
+	TOKEN_PREPROC_ELSE,
+	TOKEN_PREPROC_THEN,
+	TOKEN_PREPROC_END,
 } tokenType;
 
 typedef struct sTokenInfoSQL {
@@ -211,58 +220,62 @@ typedef struct sTokenInfoSQL {
 static langType Lang_sql;
 
 typedef enum {
-	SQLTAG_CURSOR,
-	SQLTAG_PROTOTYPE,
-	SQLTAG_FUNCTION,
+	SQLTAG_PLSQL_CCFLAGS,
+	SQLTAG_DOMAIN,
 	SQLTAG_FIELD,
-	SQLTAG_LOCAL_VARIABLE,
 	SQLTAG_BLOCK_LABEL,
 	SQLTAG_PACKAGE,
+	SQLTAG_SERVICE,
+	SQLTAG_SCHEMA,
+	SQLTAG_TRIGGER,
+	SQLTAG_PUBLICATION,
+	SQLTAG_VIEW,
+	SQLTAG_DATABASE,
+	SQLTAG_CURSOR,
+	SQLTAG_PROTOTYPE,
+	SQLTAG_EVENT,
+	SQLTAG_FUNCTION,
+	SQLTAG_INDEX,
+	SQLTAG_LOCAL_VARIABLE,
+	SQLTAG_SYNONYM,
 	SQLTAG_PROCEDURE,
 	SQLTAG_RECORD,
 	SQLTAG_SUBTYPE,
 	SQLTAG_TABLE,
-	SQLTAG_TRIGGER,
 	SQLTAG_VARIABLE,
-	SQLTAG_INDEX,
-	SQLTAG_EVENT,
-	SQLTAG_PUBLICATION,
-	SQLTAG_SERVICE,
-	SQLTAG_DOMAIN,
-	SQLTAG_VIEW,
-	SQLTAG_SYNONYM,
 	SQLTAG_MLTABLE,
 	SQLTAG_MLCONN,
 	SQLTAG_MLPROP,
-	SQLTAG_PLSQL_CCFLAGS,
 	SQLTAG_COUNT
 } sqlKind;
 
 static kindDefinition SqlKinds [] = {
-	{ true,  'c', "cursor",		  "cursors"				   },
-	{ false, 'd', "prototype",	  "prototypes"			   },
-	{ true,  'f', "function",	  "functions"			   },
+	{ true,  'C', "ccflag",		  "PLSQL_CCFLAGS"          },
+	{ true,  'D', "domain",		  "domains"				   },
 	{ true,  'E', "field",		  "record fields"		   },
-	{ false, 'l', "local",		  "local variables"		   },
 	{ true,  'L', "label",		  "block label"			   },
 	{ true,  'P', "package",	  "packages"			   },
+	{ true,  'R', "service",	  "services"			   },
+	{ true,  'S', "schema",		  "schemas"			  	   },
+	{ true,  'T', "trigger",	  "triggers"			   },
+	{ true,  'U', "publication",  "publications"		   },
+	{ true,  'V', "view",		  "views"				   },
+	{ true,  'b', "database",	  "database"			   },
+	{ true,  'c', "cursor",		  "cursors"				   },
+	{ false, 'd', "prototype",	  "prototypes"			   },
+	{ true,  'e', "event",		  "events"				   },
+	{ true,  'f', "function",	  "functions"			   },
+	{ true,  'i', "index",		  "indexes"				   },
+	{ false, 'l', "local",		  "local variables"		   },
+	{ true,  'n', "synonym",	  "synonyms"			   },
 	{ true,  'p', "procedure",	  "procedures"			   },
 	{ false, 'r', "record",		  "records"				   },
 	{ true,  's', "subtype",	  "subtypes"			   },
 	{ true,  't', "table",		  "tables"				   },
-	{ true,  'T', "trigger",	  "triggers"			   },
 	{ true,  'v', "variable",	  "variables"			   },
-	{ true,  'i', "index",		  "indexes"				   },
-	{ true,  'e', "event",		  "events"				   },
-	{ true,  'U', "publication",  "publications"		   },
-	{ true,  'R', "service",	  "services"			   },
-	{ true,  'D', "domain",		  "domains"				   },
-	{ true,  'V', "view",		  "views"				   },
-	{ true,  'n', "synonym",	  "synonyms"			   },
 	{ true,  'x', "mltable",	  "MobiLink Table Scripts" },
 	{ true,  'y', "mlconn",		  "MobiLink Conn Scripts"  },
 	{ true,  'z', "mlprop",		  "MobiLink Properties"    },
-	{ true,  'C', "ccflag",		  "PLSQL_CCFLAGS"          },
 };
 
 static const keywordTable SqlKeywordTable [] = {
@@ -274,10 +287,12 @@ static const keywordTable SqlKeywordTable [] = {
 	{ "call",							KEYWORD_call			      },
 	{ "case",							KEYWORD_case			      },
 	{ "check",							KEYWORD_check			      },
+	{ "commit",							KEYWORD_commit				  },
 	{ "comment",						KEYWORD_comment			      },
 	{ "constraint",						KEYWORD_constraint		      },
 	{ "create",							KEYWORD_create				  },
 	{ "cursor",							KEYWORD_cursor			      },
+	{ "database",						KEYWORD_database		      },
 	{ "datatype",						KEYWORD_datatype		      },
 	{ "declare",						KEYWORD_declare			      },
 	{ "do",								KEYWORD_do				      },
@@ -285,6 +300,7 @@ static const keywordTable SqlKeywordTable [] = {
 	{ "drop",							KEYWORD_drop			      },
 	{ "else",							KEYWORD_else			      },
 	{ "elseif",							KEYWORD_elseif			      },
+	{ "elsif",							KEYWORD_elsif			      },
 	{ "end",							KEYWORD_end				      },
 	{ "endif",							KEYWORD_endif			      },
 	{ "event",							KEYWORD_event			      },
@@ -329,6 +345,7 @@ static const keywordTable SqlKeywordTable [] = {
 	{ "result",							KEYWORD_result			      },
 	{ "return",							KEYWORD_return			      },
 	{ "returns",						KEYWORD_returns			      },
+	{ "schema",							KEYWORD_schema			      },
 	{ "select",							KEYWORD_select			      },
 	{ "service",						KEYWORD_service			      },
 	{ "subtype",						KEYWORD_subtype			      },
@@ -348,7 +365,7 @@ static const keywordTable SqlKeywordTable [] = {
 	{ "without",						KEYWORD_without			      },
 };
 
-const static struct keywordGroup predefinedInquiryDirective = {
+static const struct keywordGroup predefinedInquiryDirective = {
 	.value = KEYWORD_inquiry_directive,
 	.addingUnlessExisting = false,
 	.keywords = {
@@ -393,12 +410,14 @@ struct SqlReservedWord {
  * ORACLE11g, PLSQL
  * => https://docs.oracle.com/cd/B28359_01/appdev.111/b31231/appb.htm#CJHIIICD
  * SQLANYWERE
- * => http://dcx.sap.com/1200/en/dbreference/alhakeywords.html
+ * => http://dcx.sap.com/1200/en/dbreference/alhakeywords.html <the page is gone>
  */
 static bool SqlReservedWordPredicatorForIsOrAs (tokenInfo *const token);
 static struct SqlReservedWord SqlReservedWord [SQLKEYWORD_COUNT] = {
 	/*
 	 * RESERVED_BIT: MYSQL & POSTGRESQL&SQL2016&SQL2011&SQL92 & ORACLE11g&PLSQL & SQLANYWERE
+	 *
+	 * {  0  } means we have not inspect whether the keyword is reserved or not.
 	 */
 	[KEYWORD_at]            = {0 & 0&1&1&1 & 0&1 & 0},
 	[KEYWORD_begin]         = {0 & 0&1&1&1 & 0&1 & 1},
@@ -406,10 +425,12 @@ static struct SqlReservedWord SqlReservedWord [SQLKEYWORD_COUNT] = {
 	[KEYWORD_call]          = {1 & 0&1&1&0 & 0&0 & 1},
 	[KEYWORD_case]          = {1 & 1&1&1&1 & 0&1 & 1},
 	[KEYWORD_check]         = {1 & 1&1&1&1 & 1&1 & 1},
+	[KEYWORD_commit]        = {0 & 0&1&1&1 & 0&0 & 0}, /* SQLANYWERE:??? */
 	[KEYWORD_comment]       = {0 & 0&0&0&0 & 1&1 & 1},
 	[KEYWORD_constraint]    = {1 & 1&1&1&1 & 0&1 & 1},
 	[KEYWORD_create]        = {1 & 1&1&1&1 & 1&1 & 1},
 	[KEYWORD_cursor]        = {1 & 0&1&1&1 & 0&1 & 1},
+	[KEYWORD_database]      = {         0           },
 	[KEYWORD_datatype]      = {0 & 0&0&0&0 & 0&0 & 0},
 	[KEYWORD_declare]       = {1 & 0&1&1&1 & 0&1 & 1},
 	[KEYWORD_do]            = {0 & 1&0&0&0 & 0&1 & 1},
@@ -417,6 +438,7 @@ static struct SqlReservedWord SqlReservedWord [SQLKEYWORD_COUNT] = {
 	[KEYWORD_drop]          = {1 & 0&1&1&1 & 1&1 & 1},
 	[KEYWORD_else]          = {1 & 1&1&1&1 & 1&1 & 1},
 	[KEYWORD_elseif]        = {1 & 0&0&0&0 & 0&0 & 1},
+	[KEYWORD_elsif]         = {0 & 0&0&0&0 & 0&1 & 0},
 	[KEYWORD_end]           = {0 & 1&1&1&1 & 0&1 & 1},
 	[KEYWORD_endif]         = {0 & 0&0&0&0 & 0&0 & 1},
 	[KEYWORD_event]         = {0 & 0&0&0&0 & 0&0 & 0},
@@ -462,6 +484,7 @@ static struct SqlReservedWord SqlReservedWord [SQLKEYWORD_COUNT] = {
 	[KEYWORD_result]        = {0 & 0&1&1&0 & 0&0 & 0},
 	[KEYWORD_return]        = {1 & 0&1&1&0 & 0&1 & 1},
 	[KEYWORD_returns]       = {0 & 0&0&0&0 & 0&0 & 0},
+	[KEYWORD_schema]        = {0 & 0&0&0&0 & 0&0 & 0},
 	[KEYWORD_select]        = {1 & 1&1&1&1 & 1&1 & 1},
 	[KEYWORD_service]       = {0 & 0&0&0&0 & 0&0 & 0},
 	[KEYWORD_subtype]       = {0 & 0&0&0&0 & 0&1 & 0},
@@ -489,7 +512,7 @@ static struct SqlReservedWord SqlReservedWord [SQLKEYWORD_COUNT] = {
 static void parseBlock (tokenInfo *const token, const bool local);
 static void parseBlockFull (tokenInfo *const token, const bool local, langType lang);
 static void parseDeclare (tokenInfo *const token, const bool local);
-static void parseKeywords (tokenInfo *const token);
+static void parseKeywords (tokenInfo *const token, enum eKeywordId precedingKeyword);
 static tokenType parseSqlFile (tokenInfo *const token);
 
 /*
@@ -599,8 +622,7 @@ static void makeSqlTag (tokenInfo *const token, const sqlKind kind)
 		tagEntryInfo e;
 		initTagEntry (&e, name, kind);
 
-		e.lineNumber   = token->lineNumber;
-		e.filePosition = token->filePosition;
+		updateTagLine (&e, token->lineNumber, token->filePosition);
 
 		if (vStringLength (token->scope) > 0)
 		{
@@ -701,7 +723,7 @@ static void parseIdentifier (vString *const string, const int firstChar)
 
 static bool isCCFlag(const char *str)
 {
-	return (anyKindEntryInScope(CORK_NIL, str, SQLTAG_PLSQL_CCFLAGS) != 0);
+	return (anyKindEntryInScope(CORK_NIL, str, SQLTAG_PLSQL_CCFLAGS, false) != 0);
 }
 
 /* Parse a PostgreSQL: dollar-quoted string
@@ -710,6 +732,10 @@ static bool isCCFlag(const char *str)
  * The syntax for dollar-quoted string ca collide with PL/SQL inquiry directive ($$name).
  * https://docs.oracle.com/en/database/oracle/oracle-database/18/lnpls/plsql-language-fundamentals.html#GUID-E918087C-D5A8-4CEE-841B-5333DE6D4C15
  * https://github.com/universal-ctags/ctags/issues/3006
+
+ * In addition, it can also collide with variable checks in PL/SQL selection directives such as:
+ * $IF $$my_var > 1 $THEN ... $END
+ * https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/plsql-language-fundamentals.html#GUID-78F2074C-C799-4CF9-9290-EB8473D0C8FB
  */
 static tokenType parseDollarQuote (vString *const string, const int delimiter, int *promise)
 {
@@ -737,8 +763,20 @@ static tokenType parseDollarQuote (vString *const string, const int delimiter, i
 
 	if (c != delimiter)
 	{
-		/* damn that's not valid, what can we do? */
+		/* not a dollar quote */
+		keywordId kw = lookupCaseKeyword (tag+1, Lang_sql);
 		ungetcToInputFile (c);
+
+		if (kw == KEYWORD_if)
+			return TOKEN_PREPROC_IF;
+		else if (kw == KEYWORD_elsif)
+			return TOKEN_PREPROC_ELSIF;
+		else if (kw == KEYWORD_else)
+			return TOKEN_PREPROC_ELSE;
+		else if (kw == KEYWORD_then)
+			return TOKEN_PREPROC_THEN;
+		else if (kw == KEYWORD_end)
+			return TOKEN_PREPROC_END;
 		return TOKEN_UNDEFINED;
 	}
 
@@ -813,7 +851,7 @@ static tokenType parseDollarQuote (vString *const string, const int delimiter, i
 	return TOKEN_STRING;
 }
 
-static void readToken (tokenInfo *const token)
+static void readTokenFull (tokenInfo *const token, bool skippingPreproc)
 {
 	int c;
 
@@ -937,10 +975,39 @@ getNextChar:
 				  }
 
 		case '$':
-				  token->type = parseDollarQuote (token->string, c, &token->promise);
-				  token->lineNumber = getInputLineNumber ();
-				  token->filePosition = getInputFilePosition ();
-				  break;
+				  {
+					  tokenType t;
+					  if (skippingPreproc)
+					  {
+						  int d = getcFromInputFile ();
+						  if (d != '$')
+							  ungetcToInputFile (d);
+					  }
+					  t = parseDollarQuote (token->string, c, &token->promise);
+					  if (t == TOKEN_PREPROC_IF)
+					  {
+						  /* skip until $THEN and keep the content of this branch */
+						  readTokenFull (token, true);
+						  while (!isType (token, TOKEN_PREPROC_THEN) && !isType (token, TOKEN_EOF))
+							  readTokenFull (token, true);
+						  readTokenFull (token, false);
+					  }
+					  else if (!skippingPreproc && (t == TOKEN_PREPROC_ELSIF || t == TOKEN_PREPROC_ELSE))
+					  {
+						  /* skip until $END and drop $ELSIF and $ELSE branches */
+						  readTokenFull (token, true);
+						  while (!isType (token, TOKEN_PREPROC_END) && !isType (token, TOKEN_EOF))
+							  readTokenFull (token, true);
+						  readTokenFull (token, false);
+					  }
+					  else
+					  {
+						  token->type = t;
+						  token->lineNumber = getInputLineNumber ();
+						  token->filePosition = getInputFilePosition ();
+					  }
+					  break;
+				  }
 
 		default:
 				  if (! isIdentChar1 (c))
@@ -964,6 +1031,11 @@ getNextChar:
 				  }
 				  break;
 	}
+}
+
+static void readToken (tokenInfo *const token)
+{
+	readTokenFull (token, false);
 }
 
 /*
@@ -1003,11 +1075,7 @@ static void readIdentifier (tokenInfo *const token)
 
 static void addToScope (tokenInfo* const token, vString* const extra, sqlKind kind)
 {
-	if (vStringLength (token->scope) > 0)
-	{
-		vStringPut (token->scope, '.');
-	}
-	vStringCat (token->scope, extra);
+	vStringJoin (token->scope, '.', extra);
 	token->scopeKind = kind;
 }
 
@@ -1530,14 +1598,7 @@ static void parseDeclare (tokenInfo *const token, const bool local)
 			default:
 				if (isType (token, TOKEN_IDENTIFIER))
 				{
-					if (local)
-					{
-						makeSqlTag (token, SQLTAG_LOCAL_VARIABLE);
-					}
-					else
-					{
-						makeSqlTag (token, SQLTAG_VARIABLE);
-					}
+					makeSqlTag (token, local? SQLTAG_LOCAL_VARIABLE: SQLTAG_VARIABLE);
 				}
 				break;
 		}
@@ -1590,10 +1651,7 @@ static void parseDeclareANSI (tokenInfo *const token, const bool local)
 		else if (isType (token, TOKEN_IDENTIFIER) ||
 				 isType (token, TOKEN_STRING))
 		{
-			if (local)
-				makeSqlTag (token, SQLTAG_LOCAL_VARIABLE);
-			else
-				makeSqlTag (token, SQLTAG_VARIABLE);
+			makeSqlTag (token, local? SQLTAG_LOCAL_VARIABLE: SQLTAG_VARIABLE);
 		}
 		findToken (token, TOKEN_SEMICOLON);
 		readToken (token);
@@ -1851,7 +1909,7 @@ static void parseStatements (tokenInfo *const token, const bool exit_on_endif )
 
 				case KEYWORD_create:
 					readToken (token);
-					parseKeywords(token);
+					parseKeywords(token, KEYWORD_create);
 					break;
 
 				case KEYWORD_declare:
@@ -2005,15 +2063,51 @@ static void parseBlockFull (tokenInfo *const token, const bool local, langType l
 	}
 	if (isKeyword (token, KEYWORD_begin))
 	{
+		bool is_transaction = false;
+
 		readToken (token);
-		/*
-		 * Check for ANSI declarations which always follow
-		 * a BEGIN statement.  This routine will not advance
-		 * the token if none are found.
+
+		/* BEGIN of Postgresql initiates a transaction.
+		 *
+		 *   BEGIN [ WORK | TRANSACTION ] [ transaction_mode [, ...] ]
+		 *
+		 * BEGIN of MySQL does the same.
+		 *
+		 *   BEGIN [WORK]
+		 *
+		 * BEGIN of SQLite does the same.
+		 *
+		 *   BEGIN [[DEFERRED | IMMEDIATE | EXCLUSIVE] TRANSACTION]
+		 *
 		 */
-		parseDeclareANSI (token, local);
+		if (isCmdTerm(token))
+		{
+			is_transaction = true;
+			readToken (token);
+		}
+		else if (isType (token, TOKEN_IDENTIFIER)
+				 && (strcasecmp (vStringValue(token->string), "work") == 0
+					 || strcasecmp (vStringValue(token->string), "transaction") == 0
+					 || (
+						 strcasecmp (vStringValue(token->string), "deferred") == 0
+						 || strcasecmp (vStringValue(token->string), "immediate") == 0
+						 || strcasecmp (vStringValue(token->string), "exclusive") == 0
+						 )
+					 ))
+			is_transaction = true;
+		else
+		{
+			/*
+			 * Check for ANSI declarations which always follow
+			 * a BEGIN statement.  This routine will not advance
+			 * the token if none are found.
+			 */
+			parseDeclareANSI (token, local);
+		}
+
 		token->begin_end_nest_lvl++;
 		while (! isKeyword (token, KEYWORD_end) &&
+			   ! (is_transaction && isKeyword(token, KEYWORD_commit)) &&
 			   ! isType (token, TOKEN_EOF))
 		{
 			parseStatements (token, false);
@@ -2056,7 +2150,7 @@ static void parsePackage (tokenInfo *const token)
 	 * or by specifying a package body
 	 *	   CREATE OR REPLACE PACKAGE BODY pkg_name AS
 	 *	   CREATE OR REPLACE PACKAGE BODY owner.pkg_name AS
- */
+	 */
 	tokenInfo *const name = newToken ();
 	readIdentifier (name);
 	if (isKeyword (name, KEYWORD_body))
@@ -2179,6 +2273,44 @@ static void parseColumnsAndAliases (tokenInfo *const token)
 	deleteToken (lastId);
 }
 
+/* Skip "IF NOT EXISTS"
+ * https://dev.mysql.com/doc/refman/8.0/en/create-table.html
+ * https://www.postgresql.org/docs/current/sql-createtable.html
+ * https://sqlite.org/lang_createtable.html
+ */
+static bool parseIdAfterIfNotExists(tokenInfo *const name,
+									tokenInfo *const token,
+									bool authorization_following)
+{
+	if (isKeyword (name, KEYWORD_if)
+		&& (isType (token, TOKEN_IDENTIFIER)
+			&& vStringLength (token->string) == 3
+			&& strcasecmp ("not", vStringValue (token->string)) == 0))
+	{
+		readToken (token);
+		if (isType (token, TOKEN_IDENTIFIER)
+			&& vStringLength (token->string) == 6
+			&& strcasecmp ("exists", vStringValue (token->string)) == 0)
+		{
+			readIdentifier (name);
+			if (authorization_following
+				&& isType (name, TOKEN_IDENTIFIER)
+				&& vStringLength (name->string) == 13
+				&& strcasecmp("authorization", vStringValue(name->string)) == 0)
+			{
+				/*
+				 * PostgreSQL:
+				 * - CREATE SCHEMA IF NOT EXISTS AUTHORIZATION role_specification
+				 */
+				readIdentifier (name);
+			}
+			readToken (token);
+			return true;
+		}
+	}
+	return false;
+}
+
 static void parseTable (tokenInfo *const token)
 {
 	tokenInfo *const name = newToken ();
@@ -2217,25 +2349,7 @@ static void parseTable (tokenInfo *const token)
 	readIdentifier (name);
 	readToken (token);
 
-	/* Skip "IF NOT EXISTS"
-	 * https://dev.mysql.com/doc/refman/8.0/en/create-table.html
-	 * https://www.postgresql.org/docs/current/sql-createtable.html
-	 * https://sqlite.org/lang_createtable.html
-	 */
-	if (isKeyword (name, KEYWORD_if)
-		&& (isType (token, TOKEN_IDENTIFIER)
-			&& vStringLength (token->string) == 3
-			&& strcasecmp ("not", vStringValue (token->string)) == 0))
-	{
-		readToken (token);
-		if (isType (token, TOKEN_IDENTIFIER)
-			&& vStringLength (token->string) == 6
-			&& strcasecmp ("exists", vStringValue (token->string)) == 0)
-		{
-			readIdentifier (name);
-			readToken (token);
-		}
-	}
+	parseIdAfterIfNotExists(name, token, false);
 
 	if (isType (token, TOKEN_PERIOD))
 	{
@@ -2633,10 +2747,15 @@ static void parseView (tokenInfo *const token)
 	 *     create view VIEW;
 	 *     create view VIEW as ...;
 	 *     create view VIEW (...) as ...;
+	 *     create view if not exists VIEW as ...;
+	 *       -- [SQLITE] https://www.sqlite.org/lang_createview.html
 	 */
 
 	readIdentifier (name);
 	readToken (token);
+
+	parseIdAfterIfNotExists(name, token, false);
+
 	if (isType (token, TOKEN_PERIOD))
 	{
 		readIdentifier (name);
@@ -2891,7 +3010,7 @@ static void parseCCFLAGS (tokenInfo *const token)
 	/* http://web.deu.edu.tr/doc/oracle/B19306_01/server.102/b14237/initparams158.htm#REFRN10261 */
 	while (*s)
 	{
-		if (in_var && isIdentChar1((int)*s))
+		if (in_var && isIdentChar1((unsigned char) *s))
 			vStringPut(ccflag, *s);
 		else if (*s == ':' && !vStringIsEmpty(ccflag))
 		{
@@ -2912,7 +3031,71 @@ static void parseCCFLAGS (tokenInfo *const token)
 
 }
 
-static void parseKeywords (tokenInfo *const token)
+static void parseDatabase (tokenInfo *const token, enum eKeywordId keyword)
+{
+	tokenInfo * name;
+
+	/*
+	 * In MySQL and HPL/SQL, "CREATE DATABASE" and "CREATE SCHEMA"
+	 * are the same. However, In PostgreSQL, they are different.
+	 * Too support PostgreSQL, we prepare different kinds for them.
+	 *
+	 * MySQL
+	 * A. CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name ...;
+	 *
+	 * PostgreSQL
+	 *
+	 * B. CREATE DATABASE name ...;
+	 *
+	 * C. CREATE SCHEMA schema_name [ AUTHORIZATION role_specification ] [ schema_element [ ... ] ]
+	 * D. CREATE SCHEMA AUTHORIZATION role_specification [ schema_element [ ... ] ]
+	 * E. CREATE SCHEMA IF NOT EXISTS schema_name [ AUTHORIZATION role_specification ]
+	 * F. CREATE SCHEMA IF NOT EXISTS AUTHORIZATION role_specification
+	 *
+	 * HPL/SQL
+	 * G. CREATE DATABASE | SCHEMA [IF NOT EXISTS] dbname_expr...;
+	 */
+	readIdentifier (token);
+	if (keyword == KEYWORD_schema
+		&& isType (token, TOKEN_IDENTIFIER)
+		&& vStringLength (token->string) == 13
+		&& strcasecmp("authorization", vStringValue(token->string)) == 0)
+	{
+		/* D. */
+		readIdentifier (token);
+		makeSqlTag (token, SQLTAG_SCHEMA);
+		findCmdTerm (token, false);
+		return;
+	}
+
+	name = newToken ();
+	copyToken (name, token);
+	readIdentifier (token);
+	parseIdAfterIfNotExists (name, token, true);
+
+	makeSqlTag (name,
+				keyword == KEYWORD_database
+				? SQLTAG_DATABASE: SQLTAG_SCHEMA);
+	deleteToken (name);
+
+	/* TODO:
+	 *
+	 * In PostgreSQL, CREATE FOO can follow to CREATE SCHEMA like:
+	 *
+	 * -- https://www.postgresql.org/docs/current/sql-createschema.html
+	 *
+	 *     CREATE SCHEMA hollywood
+	 *         CREATE TABLE films (title text, release date, awards text[])
+	 *         CREATE VIEW winners AS
+	 *             SELECT title, release FROM films WHERE awards IS NOT NULL;
+	 *
+	 * In above example, "hollywood.films" and "hollywood.winners" should be
+	 * tagged.
+	 */
+	findCmdTerm (token, true);
+}
+
+static void parseKeywords (tokenInfo *const token, enum eKeywordId precedingKeyword)
 {
 		switch (token->keyword)
 		{
@@ -2923,6 +3106,10 @@ static void parseKeywords (tokenInfo *const token)
 				break;
 			case KEYWORD_comment:		parseComment (token); break;
 			case KEYWORD_cursor:		parseSimple (token, SQLTAG_CURSOR); break;
+			case KEYWORD_database:
+				if (precedingKeyword == KEYWORD_create)
+					parseDatabase (token, KEYWORD_database);
+				break;
 			case KEYWORD_datatype:		parseDomain (token); break;
 			case KEYWORD_declare:		parseBlock (token, false); break;
 			case KEYWORD_domain:		parseDomain (token); break;
@@ -2946,6 +3133,10 @@ static void parseKeywords (tokenInfo *const token)
 			case KEYWORD_package:		parsePackage (token); break;
 			case KEYWORD_procedure:		parseSubProgram (token); break;
 			case KEYWORD_publication:	parsePublication (token); break;
+			case KEYWORD_schema:
+				if (precedingKeyword == KEYWORD_create)
+					parseDatabase (token, KEYWORD_schema);
+				break;
 			case KEYWORD_service:		parseService (token); break;
 			case KEYWORD_subtype:		parseSimple (token, SQLTAG_SUBTYPE); break;
 			case KEYWORD_synonym:		parseSynonym (token); break;
@@ -2964,12 +3155,13 @@ static tokenType parseSqlFile (tokenInfo *const token)
 {
 	do
 	{
+		enum eKeywordId k = token->keyword;
 		readToken (token);
 
 		if (isType (token, TOKEN_BLOCK_LABEL_BEGIN))
 			parseLabel (token);
 		else
-			parseKeywords (token);
+			parseKeywords (token, k);
 	} while (! isKeyword (token, KEYWORD_end) &&
 			 ! isType (token, TOKEN_EOF));
 

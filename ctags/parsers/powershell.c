@@ -39,12 +39,18 @@ static const char *const accessTypes[] = {
 typedef enum {
 	K_FUNCTION,
 	K_VARIABLE,
+	K_CLASS,
+	K_FILTER,
+	K_ENUM,
 	COUNT_KIND
 } powerShellKind;
 
 static kindDefinition PowerShellKinds[COUNT_KIND] = {
 	{ true, 'f', "function",	"functions" },
-	{ true, 'v', "variable",	"variables" }
+	{ true, 'v', "variable",	"variables" },
+	{ true, 'c', "class",		"classes" },
+	{ true, 'i', "filter",		"filter" },
+	{ true, 'g', "enum",		"enum names" },
 };
 
 
@@ -69,13 +75,31 @@ typedef enum eTokenType {
 	TOKEN_VARIABLE
 } tokenType;
 
+enum {
+	KEYWORD_function,
+	KEYWORD_filter,
+	KEYWORD_class,
+	KEYWORD_enum,
+};
+
+/* We need an integer that is not an unsigned to allow KEYWORD_NONE. */
+typedef int keywordId;
+
+static const keywordTable PowerShellKeywordTable[] = {
+	{ "function",	KEYWORD_function },
+	{ "filter",		KEYWORD_filter },
+	{ "class",		KEYWORD_class },
+	{ "enum",		KEYWORD_enum },
+};
+
 typedef struct {
 	tokenType		type;
+	keywordId		keyword;
 	vString *		string;
 	vString *		scope;
 	unsigned long	lineNumber;
 	MIOPos			filePosition;
-	int 			parentKind; /* KIND_GHOST_INDEX if none */
+	int				parentKind; /* KIND_GHOST_INDEX if none */
 } tokenInfo;
 
 
@@ -100,8 +124,7 @@ static void initPowerShellEntry (tagEntryInfo *const e, const tokenInfo *const t
 {
 	initTagEntry (e, vStringValue (token->string), kind);
 
-	e->lineNumber	= token->lineNumber;
-	e->filePosition	= token->filePosition;
+	updateTagLine (e, token->lineNumber, token->filePosition);
 
 	if (access != NULL)
 		e->extensionFields.access = access;
@@ -128,16 +151,40 @@ static void makeSimplePowerShellTag (const tokenInfo *const token, const powerSh
 }
 
 static void makeFunctionTag (const tokenInfo *const token, const vString *const arglist,
-							 const char *const access)
+							 const char *const access, int kind)
 {
-	if (PowerShellKinds[K_FUNCTION].enabled)
+	if (PowerShellKinds[kind].enabled)
 	{
 		tagEntryInfo e;
 
-		initPowerShellEntry (&e, token, K_FUNCTION, access);
+		initPowerShellEntry (&e, token, kind, access);
 
 		if (arglist)
 			e.extensionFields.signature = vStringValue (arglist);
+
+		makeTagEntry (&e);
+	}
+}
+
+static void makeClassTag (const tokenInfo *const token)
+{
+	if (PowerShellKinds[K_CLASS].enabled)
+	{
+		tagEntryInfo e;
+
+		initPowerShellEntry (&e, token, K_CLASS, NULL);
+
+		makeTagEntry (&e);
+	}
+}
+
+static void makeEnumTag (const tokenInfo *const token)
+{
+	if (PowerShellKinds[K_ENUM].enabled)
+	{
+		tagEntryInfo e;
+
+		initPowerShellEntry (&e, token, K_ENUM, NULL);
 
 		makeTagEntry (&e);
 	}
@@ -148,6 +195,7 @@ static tokenInfo *newToken (void)
 	tokenInfo *const token = xMalloc (1, tokenInfo);
 
 	token->type			= TOKEN_UNDEFINED;
+	token->keyword		= KEYWORD_NONE;
 	token->string		= vStringNew ();
 	token->scope		= vStringNew ();
 	token->lineNumber   = getInputLineNumber ();
@@ -185,7 +233,12 @@ static void addToScope (tokenInfo *const token, const vString *const extra)
 
 static bool isIdentChar (const int c)
 {
-	return (isalnum (c) || c == ':' || c == '_' || c == '-' || c >= 0x80);
+	return (isalnum (c) || c == '_' || c == '-' || c >= 0x80);
+}
+
+static bool isScopeIdentifierChar (const int c)
+{
+	return (isIdentChar (c) || c == ':');
 }
 
 static void parseString (vString *const string, const int delimiter)
@@ -194,30 +247,44 @@ static void parseString (vString *const string, const int delimiter)
 	{
 		int c = getcFromInputFile ();
 
-		if (c == '\\' && (c = getcFromInputFile ()) != EOF)
-			vStringPut (string, (char) c);
+		if (delimiter == '"' && c == '`' && (c = getcFromInputFile ()) != EOF)
+			vStringPut (string, c);
 		else if (c == EOF || c == delimiter)
 			break;
 		else
-			vStringPut (string, (char) c);
+			vStringPut (string, c);
 	}
 }
 
+/* parse a identifier that may contain scopes, such as function names and
+ * variable names.
+ *
+ * 	VariableName
+ * 	FunctionName
+ * 	local:VariableName
+ * 	private:FunctionName
+ */
+static void parseScopeIdentifier (vString *const string, const int firstChar)
+{
+	int c = firstChar;
+	do
+	{
+		vStringPut (string, c);
+		c = getcFromInputFile ();
+	} while (isScopeIdentifierChar (c));
+	ungetcToInputFile (c);
+}
+
+/* parse a identifier that do not contain scope, such as class names. */
 static void parseIdentifier (vString *const string, const int firstChar)
 {
 	int c = firstChar;
 	do
 	{
-		vStringPut (string, (char) c);
+		vStringPut (string, c);
 		c = getcFromInputFile ();
 	} while (isIdentChar (c));
 	ungetcToInputFile (c);
-}
-
-static bool isTokenFunction (vString *const name)
-{
-	return (strcasecmp (vStringValue (name), "function") == 0 ||
-			strcasecmp (vStringValue (name), "filter") == 0);
 }
 
 static bool isSpace (int c)
@@ -251,7 +318,7 @@ static int skipSingleComment (void)
 	return c;
 }
 
-static void readToken (tokenInfo *const token)
+static void readTokenFull (tokenInfo *const token, bool includingScope)
 {
 	int c;
 
@@ -338,14 +405,14 @@ getNextChar:
 		case '$': /* variable start */
 		{
 			int d = getcFromInputFile ();
-			if (! isIdentChar (d))
+			if (! isScopeIdentifierChar (d))
 			{
 				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			else
 			{
-				parseIdentifier (token->string, d);
+				parseScopeIdentifier (token->string, d);
 				token->type = TOKEN_VARIABLE;
 			}
 			break;
@@ -356,14 +423,24 @@ getNextChar:
 				token->type = TOKEN_UNDEFINED;
 			else
 			{
-				parseIdentifier (token->string, c);
-				if (isTokenFunction (token->string))
-					token->type = TOKEN_KEYWORD;
+				if (includingScope)
+					parseScopeIdentifier (token->string, c);
 				else
+					parseIdentifier (token->string, c);
+				token->keyword = lookupCaseKeyword (
+						vStringValue (token->string), getInputLanguage ());
+				if (token->keyword == KEYWORD_NONE)
 					token->type = TOKEN_IDENTIFIER;
+				else
+					token->type = TOKEN_KEYWORD;
 			}
 			break;
 	}
+}
+
+static void readToken (tokenInfo *const token)
+{
+	readTokenFull (token, false);
 }
 
 static void enterScope (tokenInfo *const parentToken,
@@ -406,13 +483,13 @@ static const char *parsePowerShellScope (tokenInfo *const token)
  *
  * 	function myfunc($foo, $bar) {}
  */
-static bool parseFunction (tokenInfo *const token)
+static bool parseFunction (tokenInfo *const token, int kind)
 {
 	bool readNext = true;
 	tokenInfo *nameFree = NULL;
 	const char *access;
 
-	readToken (token);
+	readTokenFull (token, true);
 
 	if (token->type != TOKEN_IDENTIFIER)
 		return false;
@@ -456,7 +533,6 @@ static bool parseFunction (tokenInfo *const token)
 				case TOKEN_STRING:			vStringCatS (arglist, "'...'");	break;
 
 				case TOKEN_IDENTIFIER:
-				case TOKEN_KEYWORD:
 				case TOKEN_VARIABLE:
 				{
 					switch (vStringLast (arglist))
@@ -485,23 +561,89 @@ static bool parseFunction (tokenInfo *const token)
 		}
 		while (token->type != TOKEN_EOF && depth > 0);
 
-		makeFunctionTag (nameFree, arglist, access);
+		makeFunctionTag (nameFree, arglist, access, kind);
 		vStringDelete (arglist);
 
 		readToken (token);
 	}
 	else if (token->type == TOKEN_OPEN_CURLY)
 	{	/* filters doesn't need to have an arglist */
-		makeFunctionTag (nameFree, NULL, access);
+		makeFunctionTag (nameFree, NULL, access, kind);
 	}
 
 	if (token->type == TOKEN_OPEN_CURLY)
-		enterScope (token, nameFree->string, K_FUNCTION);
+		enterScope (token, nameFree->string, kind);
 	else
 		readNext = false;
 
-	if (nameFree)
-		deleteToken (nameFree);
+	deleteToken (nameFree);
+
+	return readNext;
+}
+
+/* parse a class
+ *
+ * 	class MyClass {}
+ * 	class Derived : Base {}
+ */
+static bool parseClass (tokenInfo *const token)
+{
+	bool readNext = true;
+	vString *nameFree = NULL;
+
+	readToken (token);
+
+	if (token->type != TOKEN_IDENTIFIER)
+		return false;
+
+	makeClassTag (token);
+	nameFree = vStringNewCopy (token->string);
+	readToken (token);
+
+	while (token->type != TOKEN_OPEN_CURLY && token->type != TOKEN_EOF)
+	{
+		readToken (token);
+	}
+
+	if (token->type == TOKEN_OPEN_CURLY)
+		enterScope (token, nameFree, K_CLASS);
+	else
+		readNext = false;
+
+	vStringDelete (nameFree);
+
+	return readNext;
+}
+
+/* parse a enum
+ *
+ * 	enum EnumName {}
+ */
+static bool parseEnum (tokenInfo *const token)
+{
+	bool readNext = true;
+	vString *nameFree = NULL;
+
+	readToken (token);
+
+	if (token->type != TOKEN_IDENTIFIER)
+		return false;
+
+	makeEnumTag (token);
+	nameFree = vStringNewCopy (token->string);
+	readToken (token);
+
+	while (token->type != TOKEN_OPEN_CURLY && token->type != TOKEN_EOF)
+	{
+		readToken (token);
+	}
+
+	if (token->type == TOKEN_OPEN_CURLY)
+		enterScope (token, nameFree, K_ENUM);
+	else
+		readNext = false;
+
+	vStringDelete (nameFree);
 
 	return readNext;
 }
@@ -521,8 +663,11 @@ static bool parseVariable (tokenInfo *const token)
 	readToken (token);
 	if (token->type == TOKEN_EQUAL_SIGN)
 	{
-		if (token->parentKind != K_FUNCTION)
-		{	/* ignore local variables (i.e. within a function) */
+		if (token->parentKind != K_FUNCTION &&
+				token->parentKind != K_FILTER &&
+				token->parentKind != K_CLASS)
+		{   /* ignore local variables (i.e. within a function)
+			 * TODO: Parses class properties to make tags. */
 			access = parsePowerShellScope (name);
 			makeSimplePowerShellTag (name, K_VARIABLE, access);
 			readNext = true;
@@ -564,7 +709,26 @@ static void enterScope (tokenInfo *const parentToken,
 				break;
 
 			case TOKEN_KEYWORD:
-				readNext = parseFunction (token);
+				switch (token->keyword)
+				{
+					case KEYWORD_function:
+						readNext = parseFunction (token, K_FUNCTION);
+						break;
+
+					case KEYWORD_filter:
+						readNext = parseFunction (token, K_FILTER);
+						break;
+
+					case KEYWORD_class:
+						readNext = parseClass (token);
+						break;
+
+					case KEYWORD_enum:
+						readNext = parseEnum (token);
+						break;
+
+					default: break;
+				}
 				break;
 
 			case TOKEN_VARIABLE:
@@ -604,5 +768,7 @@ extern parserDefinition* PowerShellParser (void)
 	def->kindCount  = ARRAY_SIZE (PowerShellKinds);
 	def->extensions = extensions;
 	def->parser     = findPowerShellTags;
+	def->keywordTable = PowerShellKeywordTable;
+	def->keywordCount = ARRAY_SIZE (PowerShellKeywordTable);
 	return def;
 }

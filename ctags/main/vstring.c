@@ -124,9 +124,8 @@ extern void vStringNCat (
 extern void vStringNCatS (
 		vString *const string, const char *const s, const size_t length)
 {
-	size_t len = strlen (s);
+	size_t len = strnlen (s, length);
 
-	len = len < length ? len : length;
 	stringCat (string, s, len);
 }
 
@@ -175,8 +174,16 @@ extern void vStringStripLeading (vString *const string)
 {
 	size_t n = 0;
 
-	while (n < string->length && isspace ((int) string->buffer [n]))
+	while (n < string->length && isspace ((unsigned char) string->buffer [n]))
 		n++;
+	vStringTruncateLeading (string, n);
+}
+
+extern void vStringTruncateLeading (vString *const string, const size_t length)
+{
+	size_t n = vStringLength (string);
+	if (n > length)
+		n = length;
 	if (n > 0)
 	{
 		memmove (string->buffer, string->buffer + n, string->length - n);
@@ -189,7 +196,7 @@ extern void vStringStripLeading (vString *const string)
 extern void vStringStripTrailing (vString *const string)
 {
 	while (string->length > 0 &&
-		   isspace ((int) string->buffer [string->length - 1]))
+	       isspace ((unsigned char) string->buffer [string->length - 1]))
 	{
 		string->length--;
 		string->buffer [string->length] = '\0';
@@ -233,6 +240,13 @@ extern void vStringNCopyS (
 	vStringNCatS (string, s, length);
 }
 
+extern void vStringNCopySUnsafe (
+		vString *const string, const char *const s, const size_t length)
+{
+	vStringClear (string);
+	vStringNCatSUnsafe (string, s, length);
+}
+
 extern void vStringCopyToLower (vString *const dest, const vString *const src)
 {
 	const size_t length = src->length;
@@ -244,11 +258,7 @@ extern void vStringCopyToLower (vString *const dest, const vString *const src)
 		vStringResize (dest, src->size);
 	d = dest->buffer;
 	for (i = 0  ;  i < length  ;  ++i)
-	{
-		int c = s [i];
-
-		d [i] = tolower (c);
-	}
+		d [i] = (char) tolower ((unsigned char) s [i]);
 	d [i] = '\0';
 }
 
@@ -294,7 +304,7 @@ extern char    *vStringStrdup (const vString *const string)
 	return str;
 }
 
-static char valueToXDigit (int v)
+static int valueToXDigit (int v)
 {
 	Assert (v >= 0 && v <= 0xF);
 
@@ -308,7 +318,7 @@ extern void vStringCatSWithEscaping (vString* b, const char *s)
 {
 	for(; *s; s++)
 	{
-		int c = *s;
+		unsigned char c = (unsigned char) *s;
 
 		/* escape control characters (incl. \t) */
 		if ((c > 0x00 && c <= 0x1F) || c == 0x7F || c == '\\')

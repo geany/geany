@@ -6,8 +6,14 @@ ValidClassTwoÌ1Í()Ö0
 class:      ValidClassTwo()
 calculateÌ16Í(number)ÎgetHalfOfÖ0
 function:   getHalfOf :: calculate(number)
+coreÌ16384ÎtestlibÖ0
+variable:   testlib :: core
 executeQueryStringÌ128ÎDatabaseÖ0
 method:     Database :: executeQueryString
+extraÌ16384Ö0
+variable:   extra
+extrasÌ1ÎtestlibÖ0
+class:      testlib :: extras
 getHalfOfÌ16Í(num1, num2, num3)Ö0
 function:   getHalfOf(num1, num2, num3)
 getTodaysDateÌ128ÎDatabaseÖ0
@@ -28,6 +34,8 @@ onchangeÌ16Í()Îmy_global_var4Ö0
 function:   my_global_var4 :: onchange()
 originalvalueÌ16384Ö0
 variable:   originalvalue
+testlibÌ16384Ö0
+variable:   testlib
 validFunctionFiveÌ16Í(a,b)ÎtestlibÖ0
 function:   testlib :: validFunctionFive(a,b)
 validFunctionFourÌ16Í(a,b)ÎextraÖ0

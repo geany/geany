@@ -18,107 +18,112 @@
 #include "options.h"
 #include "selectors.h"
 #include "vstring.h"
+#include "mio.h"
 
 static const char *TR_UNKNOWN = NULL;
-static const char *TR_PERL5   = "Perl";
-static const char *TR_PERL6   = "Perl6";
+static const char *TR_PERL5	  = "Perl";
+static const char *TR_PERL6	  = "Perl6";
 
-static const char *TR_OBJC    = "ObjectiveC";
+static const char *TR_OBJC	  = "ObjectiveC";
 static const char *TR_MATLAB  = "MatLab";
 
-static const char *TR_CPP     = "C++";
+static const char *TR_R		  = "R";
+static const char *TR_ASM	  = "Asm";
 
-static const char *TR_R       = "R";
-static const char *TR_ASM     = "Asm";
-
-static const char *TR_REXX     = "REXX";
+static const char *TR_REXX	   = "REXX";
 static const char *TR_DOSBATCH = "DosBatch";
 
-static const char *TR_LISP     = "Lisp";
-static const char *TR_LEX      = "LEX";
+static const char *TR_LISP	   = "Lisp";
+static const char *TR_LEX	   = "LEX";
 
-#define startsWith(line,prefix) \
-  (strncmp(line, prefix, strlen(prefix)) == 0? true: false)
+static const char *TR_FORTH	   = "Forth";
+static const char *TR_FORTRAN  = "Fortran";
+
+static const char *TR_V = "V";
+static const char *TR_VERILOG = "Verilog";
+
+#define startsWith(line,prefix)									\
+	(strncmp(line, prefix, strlen(prefix)) == 0? true: false)
 
 static const char *selectByLines (MIO *input,
-				  const char* (* lineTaster) (const char *, void *),
-				  const char* defaultLang,
-				  void *userData)
+								  const char* (* lineTaster) (const char *, void *),
+								  const char* defaultLang,
+								  void *userData)
 {
-    char line[0x800];
-    while (mio_gets(input, line, sizeof(line))) {
-	const char *lang = lineTaster (line, userData);
-	if (lang)
-	    return lang;
-    }
-    return defaultLang;
+	char line[0x800];
+	while (mio_gets(input, line, sizeof(line))) {
+		const char *lang = lineTaster (line, userData);
+		if (lang)
+			return lang;
+	}
+	return defaultLang;
 }
 
 /* Returns "Perl" or "Perl6" or NULL if it does not taste like anything */
 static const char *
 tastePerlLine (const char *line, void *data CTAGS_ATTR_UNUSED)
 {
-    while (isspace(*line))
-        ++line;
+	while (isspace((unsigned char) *line))
+		++line;
 #define STRLEN(s) (sizeof(s) - 1)
 /* Assume the first character has been checked: */
-#define CHECK_PART(line, s) (    \
-    0 == strncmp((line) + 1, (s) + 1, STRLEN(s) - 1) && \
-    !isalnum((line)[STRLEN(s)]))
-    switch (line[0]) {
-        case '#':       /* TODO: taste modeline */
-        case '\0':
-            return TR_UNKNOWN;
-        case '=':
-            if (CHECK_PART(line, "=head1"))
-                return TR_PERL5;
-            if (CHECK_PART(line, "=head2"))
-                return TR_PERL5;
-            break;
-        case 'c':
-            if (CHECK_PART(line, "class"))
-                return TR_PERL6;
-            break;
-        case 'g':
-            if (CHECK_PART(line, "grammar"))
-                return TR_PERL6;
-            break;
-        case 'm':
-            /* TODO: my may be many things: class, role, etc. */
-            if (CHECK_PART(line, "my class"))
-                return TR_PERL6;
-            if (CHECK_PART(line, "method"))
-                return TR_PERL6;
-            if (CHECK_PART(line, "multi"))
-                return TR_PERL6;
-            break;
-        case 'n':
-            if (CHECK_PART(line, "need"))
-                return TR_PERL6;
-            break;
-        case 'p':
-            if (CHECK_PART(line, "package"))
-                return TR_PERL5;
-            break;
-        case 'r':
-            if (CHECK_PART(line, "role"))
-                return TR_PERL6;
-            if (CHECK_PART(line, "require 5"))
-                return TR_PERL5;
-            break;
-        case 'u':
-            if (CHECK_PART(line, "unit"))
-                return TR_PERL6;
-            if (CHECK_PART(line, "use v6"))
-                return TR_PERL6;
-            if (CHECK_PART(line, "use nqp"))
-                return TR_PERL5;
-            if (CHECK_PART(line, "use warnings"))
-                return TR_PERL5;
-            break;
-    }
+#define CHECK_PART(line, s) (								\
+		0 == strncmp((line) + 1, (s) + 1, STRLEN(s) - 1) && \
+		!isalnum((unsigned char) (line)[STRLEN(s)]))
+	switch (line[0]) {
+	case '#':		/* TODO: taste modeline */
+	case '\0':
+		return TR_UNKNOWN;
+	case '=':
+		if (CHECK_PART(line, "=head1"))
+			return TR_PERL5;
+		if (CHECK_PART(line, "=head2"))
+			return TR_PERL5;
+		break;
+	case 'c':
+		if (CHECK_PART(line, "class"))
+			return TR_PERL6;
+		break;
+	case 'g':
+		if (CHECK_PART(line, "grammar"))
+			return TR_PERL6;
+		break;
+	case 'm':
+		/* TODO: my may be many things: class, role, etc. */
+		if (CHECK_PART(line, "my class"))
+			return TR_PERL6;
+		if (CHECK_PART(line, "method"))
+			return TR_PERL6;
+		if (CHECK_PART(line, "multi"))
+			return TR_PERL6;
+		break;
+	case 'n':
+		if (CHECK_PART(line, "need"))
+			return TR_PERL6;
+		break;
+	case 'p':
+		if (CHECK_PART(line, "package"))
+			return TR_PERL5;
+		break;
+	case 'r':
+		if (CHECK_PART(line, "role"))
+			return TR_PERL6;
+		if (CHECK_PART(line, "require 5"))
+			return TR_PERL5;
+		break;
+	case 'u':
+		if (CHECK_PART(line, "unit"))
+			return TR_PERL6;
+		if (CHECK_PART(line, "use v6"))
+			return TR_PERL6;
+		if (CHECK_PART(line, "use nqp"))
+			return TR_PERL5;
+		if (CHECK_PART(line, "use warnings"))
+			return TR_PERL5;
+		break;
+	}
 #undef CHECK_PART
-    return TR_UNKNOWN;
+	return TR_UNKNOWN;
 }
 
 const char *
@@ -126,42 +131,42 @@ selectByPickingPerlVersion (MIO *input,
 							langType *candidates CTAGS_ATTR_UNUSED,
 							unsigned int nCandidates CTAGS_ATTR_UNUSED)
 {
-    /* Default to Perl 5 */
-    return selectByLines (input, tastePerlLine, TR_PERL5, NULL);
+	/* Default to Perl 5 */
+	return selectByLines (input, tastePerlLine, TR_PERL5, NULL);
 }
 
 static const char *
 tasteObjectiveCOrMatLabLines (const char *line, void *data CTAGS_ATTR_UNUSED)
 {
-    if (startsWith (line, "% ")
-	|| startsWith (line, "%{"))
-	return TR_MATLAB;
-    else if (startsWith (line, "// ")
-	     || startsWith (line, "/* "))
-	return TR_OBJC;
-    else if (startsWith (line, "#include")
-	     || startsWith (line, "#import")
-	     || startsWith (line, "#define ")
-	     || startsWith (line, "#ifdef "))
-	return TR_OBJC;
-    else if (startsWith (line, "@interface ")
-	     || startsWith (line, "@implementation ")
-	     || startsWith (line, "@protocol "))
-	return TR_OBJC;
-    else if (startsWith (line, "struct ")
-	     || startsWith (line, "union ")
-	     || startsWith (line, "typedef "))
-	return TR_OBJC;
-    else {
-	if (startsWith (line, "function ")) {
-	    const char *p = line + strlen ("function ");
-	    while (isspace(*p))
-		p++;
-	    if (*p != '\0' && *p != '(')
+	if (startsWith (line, "% ")
+		|| startsWith (line, "%{"))
 		return TR_MATLAB;
+	else if (startsWith (line, "// ")
+			 || startsWith (line, "/* "))
+		return TR_OBJC;
+	else if (startsWith (line, "#include")
+			 || startsWith (line, "#import")
+			 || startsWith (line, "#define ")
+			 || startsWith (line, "#ifdef "))
+		return TR_OBJC;
+	else if (startsWith (line, "@interface ")
+			 || startsWith (line, "@implementation ")
+			 || startsWith (line, "@protocol "))
+		return TR_OBJC;
+	else if (startsWith (line, "struct ")
+			 || startsWith (line, "union ")
+			 || startsWith (line, "typedef "))
+		return TR_OBJC;
+	else {
+		if (startsWith (line, "function ")) {
+			const char *p = line + strlen ("function ");
+			while (isspace((unsigned char) *p))
+				p++;
+			if (*p != '\0' && *p != '(')
+				return TR_MATLAB;
+		}
 	}
-    }
-    return NULL;
+	return NULL;
 }
 
 const char *
@@ -169,48 +174,64 @@ selectByObjectiveCAndMatLabKeywords (MIO * input,
 									 langType *candidates CTAGS_ATTR_UNUSED,
 									 unsigned int nCandidates CTAGS_ATTR_UNUSED)
 {
-    return selectByLines (input, tasteObjectiveCOrMatLabLines,
-			  NULL, NULL);
+	return selectByLines (input, tasteObjectiveCOrMatLabLines,
+						  NULL, NULL);
 }
 
 static const char *
 tasteObjectiveC (const char *line, void *data CTAGS_ATTR_UNUSED)
 {
-    if (startsWith (line, "#import")
-	|| startsWith (line, "@interface ")
-	|| startsWith (line, "@implementation ")
-	|| startsWith (line, "@protocol "))
-	return TR_OBJC;
-    return NULL;
+	if (startsWith (line, "#import")
+		|| startsWith (line, "@interface ")
+		|| startsWith (line, "@implementation ")
+		|| startsWith (line, "@protocol "))
+		return TR_OBJC;
+	return NULL;
 }
 
 const char *
 selectByObjectiveCKeywords (MIO * input,
-							langType *candidates CTAGS_ATTR_UNUSED,
-							unsigned int nCandidates CTAGS_ATTR_UNUSED)
+							langType *candidates,
+							unsigned int nCandidates)
 {
-    /* TODO: Ideally opening input should be delayed til
-       enable/disable based selection is done. */
+	/* TODO: Ideally opening input should be delayed til
+	   enable/disable based selection is done. */
 
-    static langType objc = LANG_IGNORE;
-    static langType cpp = LANG_IGNORE;
+	static langType objc = LANG_IGNORE;
+	if (objc == LANG_IGNORE)
+		objc = getNamedLanguage (TR_OBJC, 0);
 
-    if (objc == LANG_IGNORE)
-	objc = getNamedLanguage (TR_OBJC, 0);
+	bool objcInCandidate = false;
+	const char *altCandidateName = NULL;
+	for (unsigned int i = 0; i < nCandidates; i++)
+	{
+		if (candidates[i] == objc)
+		{
+			objcInCandidate = true;
+			break;
+		}
+		else if (altCandidateName == NULL)
+		{
+			if (isLanguageEnabled (candidates[i]))
+			{
+				altCandidateName = getLanguageName (candidates[i]);
+				Assert (altCandidateName);
+			}
+		}
+	}
 
-    if (cpp == LANG_IGNORE)
-	cpp = getNamedLanguage (TR_CPP, 0);
+	if (!objcInCandidate)
+		return altCandidateName;
+	if (altCandidateName == NULL)
+	{
+		if (isLanguageEnabled (objc))
+			return TR_OBJC;
+		return NULL;
+	}
 
-    Assert (0 <= objc);
-    Assert (0 <= cpp);
-
-    if (! isLanguageEnabled (objc))
-	return TR_CPP;
-    else if (! isLanguageEnabled (cpp))
-	return TR_OBJC;
-
-    return selectByLines (input, tasteObjectiveC, TR_CPP,
-			  NULL);
+	Assert (altCandidateName);
+	return selectByLines (input, tasteObjectiveC, altCandidateName,
+						  NULL);
 }
 
 static const char *
@@ -231,28 +252,28 @@ selectByArrowOfR (MIO *input,
 				  langType *candidates CTAGS_ATTR_UNUSED,
 				  unsigned int nCandidates CTAGS_ATTR_UNUSED)
 {
-    /* TODO: Ideally opening input should be delayed till
-       enable/disable based selection is done. */
+	/* TODO: Ideally opening input should be delayed till
+	   enable/disable based selection is done. */
 
-    static langType R   = LANG_IGNORE;
-    static langType Asm = LANG_IGNORE;
+	static langType R	= LANG_IGNORE;
+	static langType Asm = LANG_IGNORE;
 
-    if (R == LANG_IGNORE)
-	    R = getNamedLanguage (TR_R, 0);
+	if (R == LANG_IGNORE)
+		R = getNamedLanguage (TR_R, 0);
 
-    if (Asm == LANG_IGNORE)
-	    Asm = getNamedLanguage (TR_ASM, 0);
+	if (Asm == LANG_IGNORE)
+		Asm = getNamedLanguage (TR_ASM, 0);
 
-    Assert (0 <= R);
-    Assert (0 <= Asm);
+	Assert (0 <= R);
+	Assert (0 <= Asm);
 
-    if (! isLanguageEnabled (R))
-	    return TR_ASM;
-    else if (! isLanguageEnabled (Asm))
-	    return TR_R;
+	if (! isLanguageEnabled (R))
+		return TR_ASM;
+	else if (! isLanguageEnabled (Asm))
+		return TR_R;
 
-    return selectByLines (input, tasteR, NULL,
-			  NULL);
+	return selectByLines (input, tasteR, NULL,
+						  NULL);
 }
 
 static const char *
@@ -263,7 +284,7 @@ tasteREXXOrDosBatch (const char *line, void *data)
 	if (startsWith (line, ":"))
 		return TR_DOSBATCH;
 	else if (*in_rexx_comment
-		 && strstr (line, "*/"))
+			 && strstr (line, "*/"))
 		return TR_REXX;
 	else if (strstr (line, "/*"))
 	{
@@ -279,29 +300,29 @@ selectByRexxCommentAndDosbatchLabelPrefix (MIO *input,
 										   langType *candidates CTAGS_ATTR_UNUSED,
 										   unsigned int nCandidates CTAGS_ATTR_UNUSED)
 {
-    /* TODO: Ideally opening input should be delayed till
-       enable/disable based selection is done. */
+	/* TODO: Ideally opening input should be delayed till
+	   enable/disable based selection is done. */
 
-    static langType rexx     = LANG_IGNORE;
-    static langType dosbatch = LANG_IGNORE;
-    bool in_rexx_comment = false;
+	static langType rexx	 = LANG_IGNORE;
+	static langType dosbatch = LANG_IGNORE;
+	bool in_rexx_comment = false;
 
-    if (rexx == LANG_IGNORE)
-	    rexx = getNamedLanguage (TR_R, 0);
+	if (rexx == LANG_IGNORE)
+		rexx = getNamedLanguage (TR_R, 0);
 
-    if (dosbatch == LANG_IGNORE)
-	    dosbatch = getNamedLanguage (TR_DOSBATCH, 0);
+	if (dosbatch == LANG_IGNORE)
+		dosbatch = getNamedLanguage (TR_DOSBATCH, 0);
 
-    Assert (0 <= rexx);
-    Assert (0 <= dosbatch);
+	Assert (0 <= rexx);
+	Assert (0 <= dosbatch);
 
-    if (! isLanguageEnabled (rexx))
-	    return TR_DOSBATCH;
-    else if (! isLanguageEnabled (dosbatch))
-	    return TR_REXX;
+	if (! isLanguageEnabled (rexx))
+		return TR_DOSBATCH;
+	else if (! isLanguageEnabled (dosbatch))
+		return TR_REXX;
 
-    return selectByLines (input, tasteREXXOrDosBatch,
-			  NULL, &in_rexx_comment);
+	return selectByLines (input, tasteREXXOrDosBatch,
+						  NULL, &in_rexx_comment);
 }
 
 static const char *
@@ -322,8 +343,84 @@ selectLispOrLEXByLEXMarker (MIO *input,
 	return selectByLines (input, tasteLispOrLEXLines, TR_LISP, NULL);
 }
 
-#ifdef HAVE_LIBXML
+static const char *
+tasteFortranOrForthLines (const char *line, void *data CTAGS_ATTR_UNUSED)
+{
+	if (line[0] && ((line[0] == ':' && line[1] && isspace((unsigned char)line[1]))
+					|| line[0] == '\\'))
+		return TR_FORTH;
+	return TR_UNKNOWN;
+}
 
+const char *
+selectFortranOrForthByForthMarker (MIO *input,
+								   langType *candidates CTAGS_ATTR_UNUSED,
+								   unsigned int nCandidates CTAGS_ATTR_UNUSED)
+{
+	return selectByLines (input, tasteFortranOrForthLines, TR_FORTRAN, NULL);
+}
+
+struct VOrVerilogScore {
+	int v;
+	int verilog;
+};
+
+static const char *
+tasteVOrVerilogLines (const char *line, void *data)
+{
+	struct VOrVerilogScore *score = (struct VOrVerilogScore *)data;
+
+	while ((*line == ' ')
+		   || (*line == '\t'))
+		line++;
+
+	/* top 10 line-starting words most commonly present in first 150 lines of
+	 * all files in V v0.4 project source code (at time of writing) */
+	if (strncmp(line, "fn", 2) == 0 ||      /* present in 82.8% files */
+		strncmp(line, "return", 6) == 0 ||  /* present in 46.2% files */
+		strncmp(line, "mut", 3) == 0 ||     /* present in 43.7% files */
+		strncmp(line, "println", 7) == 0 || /* present in 38.9% files */
+		strncmp(line, "assert", 6) == 0 ||  /* present in 38.8% files */
+		strncmp(line, "struct", 6) == 0 ||  /* present in 34.5% files */
+		/* "module" is present in 29.6% files, but also ued in verilog */
+		strncmp(line, "import", 6) == 0 ||  /* present in 27.6% files */
+		strncmp(line, "if", 2) == 0 ||      /* present in 24.9% files */
+		strncmp(line, "pub", 3) == 0)       /* present in 24.1% files */
+		score->v++;
+	/* `define, end, begin, and reg  imply Verilog */
+	else if (strncmp(line, "end", 3) == 0
+			 || strncmp(line, "begin", 5) == 0
+			 || strncmp(line, "reg", 3) == 0
+			 || strncmp(line, "wire", 4) == 0
+			 || strncmp(line, "parameter", 9) == 0
+			 || strncmp(line, "`define", 5) == 0)
+		score->verilog++;
+
+	return TR_UNKNOWN;
+}
+
+const char *
+selectVOrVerilogByKeywords (MIO *input,
+							langType *candidates CTAGS_ATTR_UNUSED,
+							unsigned int nCandidates CTAGS_ATTR_UNUSED)
+{
+	struct VOrVerilogScore score = {
+		.v = 0,
+		.verilog = 0,
+	};
+	selectByLines (input, tasteVOrVerilogLines, TR_UNKNOWN, &score);
+
+	int d = score.v - score.verilog;
+	if (d > 0)
+		return TR_V;
+	else if (d < 0)
+		return TR_VERILOG;
+	else
+		return TR_UNKNOWN;
+}
+
+#ifdef HAVE_LIBXML
+#include <libxml/parser.h>
 #include <libxml/xpath.h>
 #include <libxml/tree.h>
 
@@ -459,7 +556,7 @@ selectParserForXmlDoc (xmlDocPtr doc,
 {
 
 	unsigned int lang_index;
-	bool xml_parser_is_in_candidate = false;;
+	bool xml_parser_is_in_candidate = false;
 
 	verbose ("		Xml[rootElementName]: %s\n",
 			 (doc->children && doc->children->name)
@@ -527,7 +624,7 @@ selectByXpathFileSpec (MIO *input,
 		xmlFreeDoc (doc);
 	else
 		mio_attach_user_data (input,
-				      doc,(MIODestroyNotify)xmlFreeDoc);
+							  doc,(MIODestroyNotify)xmlFreeDoc);
 
 	return r;
 }

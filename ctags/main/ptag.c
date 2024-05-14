@@ -128,6 +128,26 @@ static bool ptagMakeProcCwd (ptagDesc *desc, langType language,
 	return writePseudoTag (desc, CurrentDirectory, "", NULL);
 }
 
+static bool ptagMakeParserVersion(ptagDesc *desc, langType language,
+								  const void *data CTAGS_ATTR_UNUSED)
+{
+	char buf[32];			/* 2^32 '.' 2^32 '\0' */
+	snprintf (buf, sizeof(buf), "%u.%u",
+			  getLanguageVersionCurrent(language),
+			  getLanguageVersionAge(language));
+	const char *name = getLanguageName(language);
+	return writePseudoTag (desc, buf, "current.age", name);
+}
+
+static bool ptagMakeOutputVersion (ptagDesc *desc, langType language,
+								   const void *data CTAGS_ATTR_UNUSED)
+{
+	char buf[32];			/* 2^32 '.' 2^32 '\0' */
+	snprintf (buf, sizeof(buf), "%u.%u",
+			  OUTPUT_VERSION_CURRENT, OUTPUT_VERSION_AGE);
+	return writePseudoTag (desc, buf, "current.age", NULL);
+}
+
 static ptagDesc ptagDescs [] = {
 	{
 	  /* The prefix is not "TAG_".
@@ -170,22 +190,23 @@ static ptagDesc ptagDescs [] = {
 	  "the separators used in kinds",
 	  ptagMakeKindSeparators,
 	  PTAGF_PARSER },
-	{ false, "TAG_KIND_DESCRIPTION",
+	{ true, "TAG_KIND_DESCRIPTION",
 	  "the letters, names and descriptions of enabled kinds in the language",
 	  ptagMakeKindDescriptions,
 	  PTAGF_PARSER },
-	{ false, "TAG_FIELD_DESCRIPTION",
+	{ true, "TAG_FIELD_DESCRIPTION",
 	  "the names and descriptions of enabled fields",
 	  ptagMakeFieldDescriptions,
 	  PTAGF_COMMON|PTAGF_PARSER },
-	{ false, "TAG_EXTRA_DESCRIPTION",
+	{ true, "TAG_EXTRA_DESCRIPTION",
 	  "the names and descriptions of enabled extras",
 	  ptagMakeExtraDescriptions,
 	  PTAGF_COMMON|PTAGF_PARSER },
-	{ false, "TAG_ROLE_DESCRIPTION",
+	{ true, "TAG_ROLE_DESCRIPTION",
 	  "the names and descriptions of enabled roles",
 	  ptagMakeRoleDescriptions,
-	  PTAGF_PARSER },
+	  PTAGF_PARSER,
+	  .jsonObjectKey = "kindName" },
 	{ true, "TAG_OUTPUT_MODE",
 	  "the output mode: u-ctags or e-ctags",
 	  ptagMakeCtagsOutputMode,
@@ -205,6 +226,14 @@ static ptagDesc ptagDescs [] = {
 	{ true, "TAG_OUTPUT_EXCMD",
 	  "the excmd: number, pattern, mixed, or combine",
 	  ptagMakeCtagsOutputExcmd,
+	  PTAGF_COMMON },
+	{ true, "TAG_PARSER_VERSION",
+	  "the version of the parser (current.age)",
+	  ptagMakeParserVersion,
+	  PTAGF_PARSER },
+	{ true, "TAG_OUTPUT_VERSION",
+	  "the version of the output interface (current.age)",
+	  ptagMakeOutputVersion,
 	  PTAGF_COMMON },
 };
 

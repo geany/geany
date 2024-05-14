@@ -116,6 +116,12 @@ static void cxxDebugDumpToken0 (CXXToken *pToken,
 	debugDec();
 
 	debugIndent ();
+	fprintf (stderr, "  sideChain: ");
+	debugInc();
+	cxxDebugDumpChain0 (pToken->pChain, pTokenChecker, pTokenChecker, false);
+	debugDec();
+
+	debugIndent ();
 	fprintf (stderr, ">\n");
 }
 
@@ -123,11 +129,11 @@ typedef void (* cxxDebugDumpCommonFunc)(void *,
 										struct circularRefChecker *,
 										struct circularRefChecker *,
 										bool);
-void cxxDebugDumpCommon (void *data,
-						 void (* func)(void *,
-									   struct circularRefChecker *,
-									   struct circularRefChecker *,
-									   bool))
+static void cxxDebugDumpCommon (void *data,
+								void (* func)(void *,
+											  struct circularRefChecker *,
+											  struct circularRefChecker *,
+											  bool))
 {
 	static struct circularRefChecker *pTokenChecker;
 	static struct circularRefChecker *pChainChecker;
@@ -172,6 +178,7 @@ const char* cxxDebugScopeDecode(enum CXXScopeType scope)
 		[CXXScopeTypeVariable] = "variable",
 		[CXXScopeTypePrototype]  = "prototype",
 		[CXXScopeTypeTypedef] = "typedef",
+		[CXXScopeTypeModule] = "module",
 	};
 	if (CXXScopeTypeLAST > scope)
 		return table[scope];

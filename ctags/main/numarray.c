@@ -48,11 +48,14 @@
 		return current->count++;										\
 	}																	\
 																		\
-	extern void prefix##ArrayRemoveLast (prefix##Array *const current)	\
+	extern type prefix##ArrayRemoveLast (prefix##Array *const current)	\
 	{																	\
 		Assert (current != NULL);										\
 		Assert (current->count > 0);									\
+																		\
+		type last = prefix##ArrayLast (current);						\
 		--current->count;												\
+		return last;													\
 	}																	\
 																		\
 	extern void prefix##ArrayCombine (prefix##Array *const current, prefix##Array *const from) \
@@ -70,6 +73,11 @@
 	{																	\
 		Assert (current != NULL);										\
 		return current->count;											\
+	}																	\
+																		\
+	extern bool prefix##ArrayIsEmpty (const prefix##Array *const current)	\
+	{																	\
+		return (prefix##ArrayCount(current) == 0);						\
 	}																	\
 																		\
 	extern type prefix##ArrayItem (const prefix##Array *const current, const unsigned int indx)	\
@@ -141,7 +149,7 @@
 	extern void prefix##ArrayDeleteItem (prefix##Array* const current, unsigned int indx) \
 	{																	\
 		memmove (current->array + indx, current->array + indx + 1,		\
-				 (current->count - indx) * sizeof (*current->array));	\
+				 (current->count - indx - 1) * sizeof (*current->array)); \
 		--current->count;												\
 	}																	\
 	static int prefix##GreaterThan(const void *a, const void *b)		\

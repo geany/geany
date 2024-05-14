@@ -121,7 +121,7 @@
 
 /*  Hack for ridiculous practice of Microsoft Visual C++.
  */
-#if defined (WIN32)
+#if defined (_WIN32)
 # if defined (_MSC_VER) || defined (__MINGW32__)
 #  ifndef stat
 #   define stat    _stat
@@ -163,7 +163,7 @@ extern int stat (const char *, struct stat *);
 #ifdef NEED_PROTO_LSTAT
 extern int lstat (const char *, struct stat *);
 #endif
-#if defined (WIN32)
+#if defined (_WIN32)
 # define lstat(fn,buf) stat(fn,buf)
 #endif
 
@@ -204,7 +204,7 @@ extern const char *getExecutablePath (void)
  */
 static bool fnmChEq (int c1, int c2)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	return tolower( c1 ) == tolower( c2 );  /* case-insensitive */
 #else
 	return          c1   ==          c2  ;  /* case-  sensitive */
@@ -285,7 +285,7 @@ extern int struppercmp (const char *s1, const char *s2)
 	int result;
 	do
 	{
-		result = toupper ((int) *s1) - toupper ((int) *s2);
+		result = toupper ((unsigned char) *s1) - toupper ((unsigned char) *s2);
 	} while (result == 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
 	return result;
 }
@@ -295,23 +295,10 @@ extern int strnuppercmp (const char *s1, const char *s2, size_t n)
 	int result;
 	do
 	{
-		result = toupper ((int) *s1) - toupper ((int) *s2);
+		result = toupper ((unsigned char) *s1) - toupper ((unsigned char) *s2);
 	} while (result == 0  &&  --n > 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
 	return result;
 }
-
-#ifndef HAVE_STRSTR
-extern char* strstr (const char *str, const char *substr)
-{
-	const size_t length = strlen (substr);
-	const char *p;
-
-	for (p = str  ;  *p != '\0'  ;  ++p)
-		if (strncmp (p, substr, length) == 0)
-			return (char*) p;
-	return NULL;
-}
-#endif
 
 extern char* strrstr (const char *str, const char *substr)
 {
@@ -343,7 +330,7 @@ extern void toLowerString (char* str)
 {
 	while (*str != '\0')
 	{
-		*str = tolower ((int) *str);
+		*str = (char) tolower ((unsigned char) *str);
 		++str;
 	}
 }
@@ -352,7 +339,7 @@ extern void toUpperString (char* str)
 {
 	while (*str != '\0')
 	{
-		*str = toupper ((int) *str);
+		*str = (char) toupper ((unsigned char) *str);
 		++str;
 	}
 }
@@ -364,7 +351,7 @@ extern char* newLowerString (const char* str)
 	char* const result = xMalloc (strlen (str) + 1, char);
 	int i = 0;
 	do
-		result [i] = tolower ((int) str [i]);
+		result [i] = (char) tolower ((unsigned char) str [i]);
 	while (str [i++] != '\0');
 	return result;
 }
@@ -376,7 +363,7 @@ extern char* newUpperString (const char* str)
 	char* const result = xMalloc (strlen (str) + 1, char);
 	int i = 0;
 	do
-		result [i] = toupper ((int) str [i]);
+		result [i] = (char) toupper ((unsigned char) str [i]);
 	while (str [i++] != '\0');
 	return result;
 }
@@ -688,7 +675,7 @@ extern bool isAbsolutePath (const char *const path)
 #if defined (MSDOS_STYLE_PATH)
 	if (isPathSeparator (path [0]))
 		result = true;
-	else if (isalpha (path [0])  &&  path [1] == ':')
+	else if (isalpha ((unsigned char) path [0])  &&  path [1] == ':')
 	{
 		if (isPathSeparator (path [2]))
 			result = true;
@@ -819,8 +806,8 @@ extern char* absoluteFilename (const char *file)
 	{
 #ifdef MSDOS_STYLE_PATH
 		/* Canonicalize drive letter case. */
-		if (res [1] == ':'  &&  islower (res [0]))
-			res [0] = toupper (res [0]);
+		if (res [1] == ':'  &&  islower ((unsigned char) res [0]))
+			res [0] = toupper ((unsigned char) res [0]);
 #endif
 	}
 	canonicalizePath (res);
@@ -862,7 +849,7 @@ extern char* relativeFilename (const char *file, const char *dir)
 	absdir = absoluteFilename (file);
 	fp = absdir;
 	dp = dir;
-	while (fnmChEq (*fp++, *dp++))
+	while (fnmChEq ((unsigned char) *fp++, (unsigned char) *dp++))
 		continue;
 	fp--;
 	dp--;  /* back to the first differing char */
@@ -894,17 +881,16 @@ extern char* relativeFilename (const char *file, const char *dir)
 	return res;
 }
 
-extern MIO *tempFile (const char *const mode, char **const pName)
+extern FILE *tempFileFP (const char *const mode, char **const pName)
 {
 	char *name;
 	FILE *fp;
-	MIO *mio;
 	int fd;
 #if defined(HAVE_MKSTEMP)
 	const char *const pattern = "tags.XXXXXX";
 	const char *tmpdir = NULL;
 	fileStatus *file = eStat (ExecutableProgram);
-# ifdef WIN32
+# ifdef _WIN32
 	tmpdir = getenv ("TMP");
 # else
 	if (! file->isSetuid)
@@ -915,7 +901,7 @@ extern MIO *tempFile (const char *const mode, char **const pName)
 	name = xMalloc (strlen (tmpdir) + 1 + strlen (pattern) + 1, char);
 	sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, pattern);
 	fd = mkstemp (name);
-# ifdef WIN32
+# ifdef _WIN32
 	if (fd == -1)
 	{
 		/* mkstemp() sometimes fails with unknown reasons.
@@ -931,7 +917,7 @@ extern MIO *tempFile (const char *const mode, char **const pName)
 	eStatFree (file);
 #elif defined(HAVE_TEMPNAM)
 	const char *tmpdir = NULL;
-# ifdef WIN32
+# ifdef _WIN32
 	tmpdir = getenv ("TMP");
 # endif
 	if (tmpdir == NULL)
@@ -951,10 +937,13 @@ extern MIO *tempFile (const char *const mode, char **const pName)
 	fp = fdopen (fd, mode);
 	if (fp == NULL)
 		error (FATAL | PERROR, "cannot open temporary file");
-	mio = mio_new_fp (fp, fclose);
-	DebugStatement (
-		debugPrintf (DEBUG_STATUS, "opened temporary file %s\n", name); )
 	Assert (*pName == NULL);
 	*pName = name;
-	return mio;
+	return fp;
+}
+
+extern MIO *tempFile (const char *const mode, char **const pName)
+{
+	FILE *fp = tempFileFP (mode, pName);
+	return mio_new_fp (fp, fclose);
 }

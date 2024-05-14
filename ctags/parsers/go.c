@@ -146,7 +146,7 @@ static kindDefinition GoKinds[] = {
 	{true, 'm', "member", "struct members"},
 	{true, 'M', "anonMember", "struct anonymous members"},
 	{true, 'n', "methodSpec", "interface method specification"},
-	{true, 'u', "unknown", "unknown",
+	{true, 'Y', "unknown", "unknown",
 	 .referenceOnly = true, ATTACH_ROLES (GoUnknownRoles)},
 	{true, 'P', "packageName", "name for specifying imported package"},
 	{true, 'a', "talias", "type aliases"},
@@ -693,8 +693,7 @@ static int makeTagFull (tokenInfo *const token, const goKind kind,
 
 	initRefTagEntry (&e, name, kind, role);
 
-	e.lineNumber = token->lineNumber;
-	e.filePosition = token->filePosition;
+	updateTagLine (&e, token->lineNumber, token->filePosition);
 	if (argList)
 		e.extensionFields.signature = argList;
 	if (typeref)
@@ -814,7 +813,7 @@ static void parseFunctionOrMethod (tokenInfo *const token, const int scope)
 		collectorTruncate (&collector, false);
 		if (receiver_type_token)
 		{
-			func_scope = anyEntryInScope (scope, vStringValue (receiver_type_token->string));
+			func_scope = anyEntryInScope (scope, vStringValue (receiver_type_token->string), false);
 			if (func_scope == CORK_NIL)
 				func_scope = makeTagFull(receiver_type_token, GOTAG_UNKNOWN,
 										 scope, NULL, NULL,
@@ -862,7 +861,7 @@ static void parseFunctionOrMethod (tokenInfo *const token, const int scope)
 		{
 			skipToMatched (token, NULL);
 			if (e)
-				e->extensionFields.endLine = getInputLineNumber ();
+				setTagEndLine (e, getInputLineNumber());
 		}
 	}
 
@@ -872,7 +871,7 @@ static void parseFunctionOrMethod (tokenInfo *const token, const int scope)
 
 static void attachTypeRefField (int scope, intArray *corks, const char *const type)
 {
-	int type_cork = anyEntryInScope (scope, type);
+	int type_cork = anyEntryInScope (scope, type, false);
 	tagEntryInfo *type_e = getEntryInCorkQueue (type_cork);
 
 	for (unsigned int i = 0; i < intArrayCount (corks); i++)
@@ -1256,7 +1255,7 @@ static void parseConstTypeVar (tokenInfo *const token, goKind kind, const int sc
 		{
 			tagEntryInfo *e = getEntryInCorkQueue (member_scope);
 			if (e)
-				e->extensionFields.endLine = getInputLineNumber ();
+				setTagEndLine(e, getInputLineNumber ());
 		}
 
 		if (usesParens && !isType (token, TOKEN_CLOSE_PAREN))

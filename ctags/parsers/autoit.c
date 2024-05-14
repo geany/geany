@@ -124,15 +124,15 @@ static int makeSimpleAutoItTag (const NestingLevels *const nls,
 static void setEndLine (const NestingLevels *const nls)
 {
 	NestingLevel *nl = nestingLevelsGetCurrent (nls);
-	tagEntryInfo *entry;
 
-	if (nl && (entry = getEntryInCorkQueue (nl->corkIndex)) != NULL)
-		entry->extensionFields.endLine = getInputLineNumber ();
+	if (nl)
+		setTagEndLineToCorkEntry (nl->corkIndex,
+								  getInputLineNumber ());
 }
 
 static void skipSpaces (const unsigned char **p)
 {
-	while (isspace ((int) **p))
+	while (isspace (**p))
 		++(*p);
 }
 
@@ -143,9 +143,9 @@ static int parseFunc (const unsigned char *p, NestingLevels *nls)
 	vString *name = vStringNew ();
 
 	skipSpaces (&p);
-	while (isIdentChar ((int) *p))
+	while (isIdentChar (*p))
 	{
-		vStringPut (name, (int) *p);
+		vStringPut (name, *p);
 		++p;
 	}
 	skipSpaces (&p);
@@ -154,7 +154,7 @@ static int parseFunc (const unsigned char *p, NestingLevels *nls)
 		vString *signature = vStringNew ();
 
 		do
-			vStringPut (signature, (int) *p);
+			vStringPut (signature, *p);
 		while (*p != ')' && *p++);
 
 		k = makeAutoItTag (nls, name, K_FUNCTION, signature);
@@ -190,15 +190,13 @@ static void findAutoItTags (void)
 			else if (match (p, "region", &p))
 			{
 				skipSpaces (&p);
-				while (*p != '\0')
-				{
-					vStringPut (name, (int) *p);
-					++p;
-				}
 
-				if (vStringLength(name) > 0)
+				if (*p != '\0')
 				{
-					int k = makeSimpleAutoItTag (nls, name, K_REGION);
+					int k;
+
+					vStringCatS (name, (const char *) p);
+					k = makeSimpleAutoItTag (nls, name, K_REGION);
 					nestingLevelsPush (nls, k);
 					vStringClear (name);
 				}
@@ -220,7 +218,7 @@ static void findAutoItTags (void)
 					++p;
 					while (*p != '\0' && *p != '>' && *p != '"')
 					{
-						vStringPut (name, (int) *p);
+						vStringPut (name, *p);
 						++p;
 					}
 					if (vStringLength(name) > 0)
@@ -284,9 +282,9 @@ static void findAutoItTags (void)
 				if (*p == '$')
 				{
 					p++;
-					while (isIdentChar ((int) *p))
+					while (isIdentChar (*p))
 					{
-						vStringPut (name, (int) *p);
+						vStringPut (name, *p);
 						++p;
 					}
 					if (vStringLength(name) > 0)
@@ -315,5 +313,7 @@ parserDefinition *AutoItParser (void)
 	def->extensions = extensions;
 	def->parser     = findAutoItTags;
 	def->useCork    = CORK_QUEUE;
+	def->versionCurrent = 1;
+	def->versionAge = 0;
 	return def;
 }

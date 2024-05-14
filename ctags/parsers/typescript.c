@@ -278,8 +278,7 @@ static int emitTag(const tokenInfo *const token, const tsKind kind)
 	tagEntryInfo e;
 
 	initTagEntry (&e, name, kind);
-	e.lineNumber   = token->lineNumber;
-	e.filePosition = token->filePosition;
+	updateTagLine (&e, token->lineNumber, token->filePosition);
 	e.extensionFields.scopeIndex = token->scope;
 
 	switch (token->accessKeyword)
@@ -1664,11 +1663,7 @@ static void parseClassBody (const int scope, tokenInfo *const token)
 		if (token->type == TOKEN_KEYWORD
 			&& (token->keyword == KEYWORD_extends || token->keyword == KEYWORD_implements)
 			&& inheritance == NULL) inheritance = vStringNew ();
-		else if (inheritance && token->type == TOKEN_IDENTIFIER)
-		{
-			if (!vStringIsEmpty (inheritance)) vStringPut(inheritance, ',');
-			vStringCat(inheritance, token->string);
-		}
+		else if (inheritance && token->type == TOKEN_IDENTIFIER) vStringJoin (inheritance, ',', token->string);
 	} while (parsed && token->type != TOKEN_OPEN_CURLY);
 
 	if (! parsed)
@@ -1820,8 +1815,11 @@ static void parseClassBody (const int scope, tokenInfo *const token)
 					parsingValue = false;
 					break;
 				case TOKEN_OPEN_PAREN:
-					if (! member) break;
 					uwiUngetC ('(');
+					if (! member) {
+						parsed = tryParser (parseParens, token, false);
+						break;
+					}
 
 					const int nscope = emitTag (member, isGenerator ? TSTAG_GENERATOR : TSTAG_METHOD);
 
