@@ -951,6 +951,7 @@ static TMParserMapEntry map_POWERSHELL[] = {
 	{'c', tm_tag_class_t},     // class
 	{'i', tm_tag_function_t},  // filter
 	{'g', tm_tag_enum_t},      // enum
+	{'e', tm_tag_undef_t},     // enumlabel
 };
 static TMParserMapGroup group_POWERSHELL[] = {
 	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
