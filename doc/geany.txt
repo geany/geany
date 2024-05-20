@@ -2657,141 +2657,149 @@ Rarely used preferences, explained in the table below. A few of them require
 restart to take effect, and a few other will only affect newly opened or created
 documents before restart.
 
-================================  ===========================================  ==========  ===========
-Key                               Description                                  Default     Applies
-================================  ===========================================  ==========  ===========
+======================================== ============================================ ============ ===========
+Key                                      Description                                  Default      Applies
+======================================== ============================================ ============ ===========
 **``editor`` group**
-use_gtk_word_boundaries           Whether to look for the end of a word        true        to new
-                                  when using word-boundary related                         documents
-                                  Scintilla commands (see `Scintilla
-                                  keyboard commands`_).
-brace_match_ltgt                  Whether to highlight <, > angle brackets.    false       immediately
-complete_snippets_whilst_editing  Whether to allow completion of snippets      false       immediately
-                                  when editing an existing line (i.e. there
-                                  is some text after the current cursor
-                                  position on the line). Only used when the
-                                  keybinding `Complete snippet` is set to
-                                  ``Space``.
-show_editor_scrollbars            Whether to display scrollbars. If set to     true        immediately
-                                  false, the horizontal and vertical
-                                  scrollbars are hidden completely.
-indent_hard_tab_width             The size of a tab character. Don't change    8           immediately
-                                  it unless you really need to; use the
-                                  indentation settings instead.
-editor_ime_interaction            Input method editor (IME)'s candidate        0           to new
-                                  window behaviour. May be 0 (windowed) or                 documents
-                                  1 (inline)
+use_gtk_word_boundaries                  Whether to look for the end of a word        true         to new
+                                         when using word-boundary related                          documents
+                                         Scintilla commands (see `Scintilla
+                                         keyboard commands`_).
+brace_match_ltgt                         Whether to highlight <, > angle brackets.    false        immediately
+complete_snippets_whilst_editing         Whether to allow completion of snippets      false        immediately
+                                         when editing an existing line (i.e. there
+                                         is some text after the current cursor
+                                         position on the line). Only used when the
+                                         keybinding `Complete snippet` is set to
+                                         ``Space``.
+show_editor_scrollbars                   Whether to display scrollbars. If set to     true         immediately
+                                         false, the horizontal and vertical
+                                         scrollbars are hidden completely.
+indent_hard_tab_width                    The size of a tab character. Don't change    8            immediately
+                                         it unless you really need to; use the
+                                         indentation settings instead.
+editor_ime_interaction                   Input method editor (IME)'s candidate        0            to new
+                                         window behaviour. May be 0 (windowed) or                  documents
+                                         1 (inline)
 **``interface`` group**
-show_symbol_list_expanders        Whether to show or hide the small            true        to new
-                                  expander icons on the symbol list                        documents
-                                  treeview.
-compiler_tab_autoscroll           Whether to automatically scroll to the       true        immediately
-                                  last line of the output in the Compiler
-                                  tab.
-statusbar_template                The status bar statistics line format.       See below.  immediately
-                                  (See `Statusbar Templates`_ for details).
-new_document_after_close          Whether to open a new document after all     false       immediately
-                                  documents have been closed.
-msgwin_status_visible             Whether to show the Status tab in the        true        immediately
-                                  Messages Window
-msgwin_compiler_visible           Whether to show the Compiler tab in the      true        immediately
-                                  Messages Window
-msgwin_messages_visible           Whether to show the Messages tab in the      true        immediately
-                                  Messages Window
-msgwin_scribble_visible           Whether to show the Scribble tab in the      true        immediately
-                                  Messages Window
-warn_on_project_close             Whether to show a warning when opening       true        immediately
-                                  a project while one is already open.
+show_symbol_list_expanders               Whether to show or hide the small            true         to new
+                                         expander icons on the symbol list                         documents
+                                         treeview.
+compiler_tab_autoscroll                  Whether to automatically scroll to the       true         immediately
+                                         last line of the output in the Compiler
+                                         tab.
+statusbar_template                       The status bar statistics line format.       See below.   immediately
+                                         (See `Statusbar Templates`_ for details).
+new_document_after_close                 Whether to open a new document after all     false        immediately
+                                         documents have been closed.
+msgwin_status_visible                    Whether to show the Status tab in the        true         immediately
+                                         Messages Window
+msgwin_compiler_visible                  Whether to show the Compiler tab in the      true         immediately
+                                         Messages Window
+msgwin_messages_visible                  Whether to show the Messages tab in the      true         immediately
+                                         Messages Window
+msgwin_scribble_visible                  Whether to show the Scribble tab in the      true         immediately
+                                         Messages Window
+warn_on_project_close                    Whether to show a warning when opening       true         immediately
+                                         a project while one is already open.
 **``terminal`` group**
-send_selection_unsafe             By default, Geany strips any trailing        false       immediately
-                                  newline characters from the current
-                                  selection before sending it to the terminal
-                                  to not execute arbitrary code. This is
-                                  mainly a security feature.
-                                  If, for whatever reasons, you really want
-                                  it to be executed directly, set this option
-                                  to true.
-send_cmd_prefix                   String with which prefix the commands sent   Empty       immediately
-                                  to the shell.  This may be used to tell
-                                  some shells (BASH with ``HISTCONTROL`` set
-                                  to ``ignorespace``, ZSH with
-                                  ``HIST_IGNORE_SPACE`` enabled, etc.) from
-                                  putting these commands in their history by
-                                  setting this to a space.  Note that leading
-                                  spaces must be escaped using `\s` in the
-                                  configuration file.
+send_selection_unsafe                    By default, Geany strips any trailing        false        immediately
+                                         newline characters from the current
+                                         selection before sending it to the terminal
+                                         to not execute arbitrary code. This is
+                                         mainly a security feature.
+                                         If, for whatever reasons, you really want
+                                         it to be executed directly, set this option
+                                         to true.
+send_cmd_prefix                          String with which prefix the commands sent   Empty        immediately
+                                         to the shell.  This may be used to tell
+                                         some shells (BASH with ``HISTCONTROL`` set
+                                         to ``ignorespace``, ZSH with
+                                         ``HIST_IGNORE_SPACE`` enabled, etc.) from
+                                         putting these commands in their history by
+                                         setting this to a space.  Note that leading
+                                         spaces must be escaped using `\s` in the
+                                         configuration file.
 **``files`` group**
-allow_always_save                 Whether files can be saved always, even      false       immediately
-                                  if they don't have any changes.
-                                  By default, the Save button and menu
-                                  item are disabled when a file is
-                                  unchanged. When setting this option to
-                                  true, the Save button and menu item are
-                                  always active and files can be saved.
-use_atomic_file_saving            Defines the mode how Geany saves files to    false       immediately
-                                  disk. If disabled, Geany directly writes
-                                  the content of the document to disk. This
-                                  might cause loss of data when there is
-                                  no more free space on disk to save the
-                                  file. When set to true, Geany first saves
-                                  the contents into a temporary file and if
-                                  this succeeded, the temporary file is
-                                  moved to the real file to save.
-                                  This gives better error checking in case of
-                                  no more free disk space. But it also
-                                  destroys hard links of the original file
-                                  and its permissions (e.g. executable flags
-                                  are reset). Use this with care as it can
-                                  break things seriously.
-                                  The better approach would be to ensure your
-                                  disk won't run out of free space.
-use_gio_unsafe_file_saving        Whether to use GIO as the unsafe file        true        immediately
-                                  saving backend. It is better on most
-                                  situations but is known not to work
-                                  correctly on some complex setups.
-gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false       immediately
-                                  saving. Backup is named `filename~`.
-keep_edit_history_on_reload       Whether to maintain the edit history when    true        immediately
-                                  reloading a file, and allow the operation
-                                  to be reverted.
-reload_clean_doc_on_file_change   Whether to automatically reload documents    false       immediately
-                                  that have no changes but which have changed
-                                  on disk.
-                                  If unsaved changes exist then the user is
-                                  prompted to reload manually.
-save_config_on_file_change        Automatically save Geany's configuration     true        immediately
-                                  to disk once the document list changes
-                                  (i.e. new documents are opened, saved or
-                                  closed). This helps to prevent accidentally
-                                  losing the session file list or other
-                                  changed settings when Geany is not shut
-                                  down cleanly. Disable this option if your
-                                  configuration directory is on a slow drive,
-                                  network share or similar and you experience
-                                  problems.
-extract_filetype_regex            Regex to extract filetype name from file     See link    immediately
-                                  via capture group one.
-                                  See `ft_regex`_ for default.
+allow_always_save                        Whether files can be saved always, even      false        immediately
+                                         if they don't have any changes.
+                                         By default, the Save button and menu
+                                         item are disabled when a file is
+                                         unchanged. When setting this option to
+                                         true, the Save button and menu item are
+                                         always active and files can be saved.
+use_atomic_file_saving                   Defines the mode how Geany saves files to    false        immediately
+                                         disk. If disabled, Geany directly writes
+                                         the content of the document to disk. This
+                                         might cause loss of data when there is
+                                         no more free space on disk to save the
+                                         file. When set to true, Geany first saves
+                                         the contents into a temporary file and if
+                                         this succeeded, the temporary file is
+                                         moved to the real file to save.
+                                         This gives better error checking in case of
+                                         no more free disk space. But it also
+                                         destroys hard links of the original file
+                                         and its permissions (e.g. executable flags
+                                         are reset). Use this with care as it can
+                                         break things seriously.
+                                         The better approach would be to ensure your
+                                         disk won't run out of free space.
+use_gio_unsafe_file_saving               Whether to use GIO as the unsafe file        true         immediately
+                                         saving backend. It is better on most
+                                         situations but is known not to work
+                                         correctly on some complex setups.
+gio_unsafe_save_backup                   Make a backup when using GIO unsafe file     false        immediately
+                                         saving. Backup is named `filename~`.
+keep_edit_history_on_reload              Whether to maintain the edit history when    true         immediately
+                                         reloading a file, and allow the operation
+                                         to be reverted.
+show_keep_edit_history_on_reload_msg     Whether to show a confirmation dialog to     true         immediately
+                                         drop the edit history on reloading a file,
+                                         see also `keep_edit_history_on_reload`
+                                         above.
+reload_clean_doc_on_file_change          Whether to automatically reload documents    false        immediately
+                                         that have no changes but which have changed
+                                         on disk.
+                                         If unsaved changes exist then the user is
+                                         prompted to reload manually.
+save_config_on_file_change               Automatically save Geany's configuration     true         immediately
+                                         to disk once the document list changes
+                                         (i.e. new documents are opened, saved or
+                                         closed). This helps to prevent accidentally
+                                         losing the session file list or other
+                                         changed settings when Geany is not shut
+                                         down cleanly. Disable this option if your
+                                         configuration directory is on a slow drive,
+                                         network share or similar and you experience
+                                         problems.
+extract_filetype_regex                   Regex to extract filetype name from file     See link     immediately
+                                         via capture group one.
+                                         See `ft_regex`_ for default.
 **``search`` group**
-find_selection_type               See `Find selection`_.                       0           immediately
-replace_and_find_by_default       Set ``Replace & Find`` button as default so  true        immediately
-                                  it will be activated when the Enter key is
-                                  pressed while one of the text fields has
-                                  focus.
+find_selection_type                      See `Find selection`_.                       0            immediately
+replace_and_find_by_default              Set ``Replace & Find`` button as default so  true         immediately
+                                         it will be activated when the Enter key is
+                                         pressed while one of the text fields has
+                                         focus.
+skip_confirmation_for_replace_in_session If set, do *not* show the                    false        immediately
+                                         confirmation dialog before replacing text
+                                         in the whole session, i.e. in all open
+                                         files.
 **``build`` group**
-number_ft_menu_items              The maximum number of menu items in the      2           on restart
-                                  filetype build section of the Build menu.
-number_non_ft_menu_items          The maximum number of menu items in the      3           on restart
-                                  independent build section.
-number_exec_menu_items            The maximum number of menu items in the      2           on restart
-                                  execute section of the Build menu.
+number_ft_menu_items                     The maximum number of menu items in the      2            on restart
+                                         filetype build section of the Build menu.
+number_non_ft_menu_items                 The maximum number of menu items in the      3            on restart
+                                         independent build section.
+number_exec_menu_items                   The maximum number of menu items in the      2            on restart
+                                         execute section of the Build menu.
 **``socket`` group**
-socket_remote_cmd_port            TCP port number to be used for inter         2           on restart
-                                  process communication (i.e. with other
-                                  Geany instances, e.g. "Open with Geany").
-                                  Only available on Windows, valid port
-                                  range: 1024 to 65535.
-================================  ===========================================  ==========  ===========
+socket_remote_cmd_port                   TCP port number to be used for inter         2            on restart
+                                         process communication (i.e. with other
+                                         Geany instances, e.g. "Open with Geany").
+                                         Only available on Windows, valid port
+                                         range: 1024 to 65535.
+======================================== ============================================ ============ ===========
 
 Statusbar Templates
 ```````````````````

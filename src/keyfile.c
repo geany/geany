@@ -345,6 +345,8 @@ static void init_pref_groups(void)
 		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
 	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
 		"replace_and_find_by_default", TRUE);
+	stash_group_add_boolean(group, &search_prefs.skip_confirmation_for_replace_in_session,
+		"skip_confirmation_for_replace_in_session", FALSE);
 
 	group = stash_group_new(PACKAGE);
 	configuration_add_various_pref_group(group, "socket");
