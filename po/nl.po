@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2023-10-04 23:48+0200\n"
-"PO-Revision-Date: 2023-10-08 12:21+0200\n"
+"PO-Revision-Date: 2024-05-23 08:47+0200\n"
 "Last-Translator: Peter Scholtens <peter.scholtens@freedom.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "Language: nl\n"
@@ -5045,7 +5045,7 @@ msgstr "Zijbalk _verbergen"
 
 #: src/sidebar.c:1173
 msgid "D_ocuments Only"
-msgstr "All_een bestanden weergevn"
+msgstr "All_een bestanden weergeven"
 
 #: src/sidebar.c:1174
 msgid "Show _Paths"
@@ -6199,9 +6199,9 @@ msgid ""
 "Date/_Time format for backup files (for a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"
 msgstr ""
-"Aangepaste datum- en tijdsindeling voor backupbestanden. Een lijst van "
+"Aangepaste datum- en tijdsindeling voor back-upbestanden. Een lijst van "
 "beschikbare conversie-opties staat op: https://docs.gtk.org/glib/method."
-"DateTime.format.html."
+"DateTime.format.html:"
 
 #: plugins/saveactions.c:830
 msgid "Directory _levels to include in the backup destination:"
