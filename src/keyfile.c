@@ -1353,8 +1353,8 @@ static gboolean open_session_file(gchar **tmp, guint len)
 
 
 /* Open session files
- * Note: notebook page switch handler and adding to recent files list is always disabled
- * for all files opened within this function */
+ * Note: notebook page switch handler is delayed, and adding to recent files list is
+ * always disabled for all files opened within this function */
 void configuration_open_files(GPtrArray *session_files)
 {
 	gboolean failure = FALSE;
@@ -1380,7 +1380,7 @@ void configuration_open_files(GPtrArray *session_files)
 	if (failure)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
 	else
-		document_show_tab_idle(session_notebook_page >= 0 ? document_get_from_page(session_notebook_page) : document_get_current());
+		document_show_tab(session_notebook_page >= 0 ? document_get_from_page(session_notebook_page) : document_get_current());
 
 	session_notebook_page = -1;
 	main_status.opening_session_files--;
