@@ -134,7 +134,7 @@ static gboolean open_file_dialog_handle_response(GtkFileChooser *dialog, gint re
 		const gchar *charset = NULL;
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
-		if (GTK_IS_WIDGET(dialog))
+		if (!GTK_IS_NATIVE_DIALOG(dialog))
 		{
 			GtkWidget *expander = ui_lookup_widget(GTK_WIDGET(dialog), "more_options_expander");
 			GtkWidget *filetype_combo = ui_lookup_widget(GTK_WIDGET(dialog), "filetype_combo");
@@ -458,19 +458,19 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 
 gint dialogs_file_chooser_run(GtkFileChooser *dialog)
 {
-	if (GTK_IS_WIDGET(dialog))
+	if (GTK_IS_NATIVE_DIALOG(dialog))
+		return gtk_native_dialog_run(GTK_NATIVE_DIALOG(dialog));
+	else
 		return gtk_dialog_run(GTK_DIALOG(dialog));
-
-	return gtk_native_dialog_run(GTK_NATIVE_DIALOG(dialog));
 }
 
 
 void dialogs_file_chooser_destroy(GtkFileChooser *dialog)
 {
-	if (GTK_IS_WIDGET(dialog))
-		gtk_widget_destroy(GTK_WIDGET(dialog));
-	else
+	if (GTK_IS_NATIVE_DIALOG(dialog))
 		g_object_unref(dialog);
+	else
+		gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 
@@ -491,7 +491,7 @@ void dialogs_show_open_file(void)
 	SETPTR(initdir, utils_get_locale_from_utf8(initdir));
 
 	dialog = create_open_file_dialog();
-	if (GTK_IS_WIDGET(dialog))
+	if (!GTK_IS_NATIVE_DIALOG(dialog))
 		open_file_dialog_apply_settings(GTK_WIDGET(dialog));
 
 	if (initdir != NULL && g_path_is_absolute(initdir))
