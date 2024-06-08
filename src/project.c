@@ -347,7 +347,7 @@ void project_open(void)
 
 	if (interface_prefs.use_native_windows_dialogs)
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Open Project"),
-			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_OPEN, _("_Open"), _("_Cancel")));
+			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL));
 	else
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Open Project"), GTK_WINDOW(main_widgets.window),
@@ -500,7 +500,7 @@ static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 
 	if (interface_prefs.use_native_windows_dialogs)
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Choose Project Base Path"),
-			NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, _("_Open"), _("_Cancel")));
+			NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL, NULL));
 	else
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Choose Project Base Path"),
 			NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
@@ -946,7 +946,7 @@ static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElement
 	/* initialise the dialog */
 	if (interface_prefs.use_native_windows_dialogs)
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Choose Project Filename"),
-			NULL, GTK_FILE_CHOOSER_ACTION_SAVE, _("_Save"), _("_Cancel")));
+			NULL, GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL));
 	else
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Choose Project Filename"), NULL,

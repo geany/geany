@@ -472,7 +472,7 @@ static void target_directory_button_clicked_cb(GtkButton *button, gpointer item)
 	if (geany_data->interface_prefs->use_native_windows_dialogs)
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Select Directory"),
 			GTK_WINDOW(geany_data->main_widgets->window),
-			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, _("_Open"), _("_Cancel")));
+			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL, NULL));
 	else
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Select Directory"),
 						NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,

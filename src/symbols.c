@@ -1269,7 +1269,7 @@ void symbols_show_load_tags_dialog(void)
 
 	if (interface_prefs.use_native_windows_dialogs)
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Load Tags File"),
-			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_OPEN, _("_Open"), _("_Cancel")));
+			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL));
 	else
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Load Tags File"), GTK_WINDOW(main_widgets.window),
