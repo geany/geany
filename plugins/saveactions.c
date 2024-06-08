@@ -447,19 +447,19 @@ void plugin_init(GeanyData *data)
 
 static gint file_chooser_run(GtkFileChooser *dialog)
 {
-	if (GTK_IS_WIDGET(dialog))
+	if (GTK_IS_NATIVE_DIALOG(dialog))
+		return gtk_native_dialog_run(GTK_NATIVE_DIALOG(dialog));
+	else
 		return gtk_dialog_run(GTK_DIALOG(dialog));
-
-	return gtk_native_dialog_run(GTK_NATIVE_DIALOG(dialog));
 }
 
 
 static void file_chooser_destroy(GtkFileChooser *dialog)
 {
-	if (GTK_IS_WIDGET(dialog))
-		gtk_widget_destroy(GTK_WIDGET(dialog));
-	else
+	if (GTK_IS_NATIVE_DIALOG(dialog))
 		g_object_unref(dialog);
+	else
+		gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 
