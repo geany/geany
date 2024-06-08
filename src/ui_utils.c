@@ -1973,7 +1973,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 
 	if (interface_prefs.use_native_windows_dialogs)
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(title,
-			GTK_WINDOW(main_widgets.window), action, "_Open", "_Cancel"));
+			GTK_WINDOW(main_widgets.window), action, _("_Open"), _("_Cancel")));
 	else
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(title,

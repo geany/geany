@@ -378,7 +378,7 @@ static GtkFileChooser *create_open_file_dialog(void)
 
 	if (interface_prefs.use_native_windows_dialogs)
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Open File"),
-			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_OPEN, "_Open", "_Cancel"));
+			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_OPEN, _("_Open"), _("_Cancel")));
 	else
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(main_widgets.window),
@@ -588,7 +588,7 @@ static GtkFileChooser *create_save_file_dialog(GeanyDocument *doc)
 
 	if (interface_prefs.use_native_windows_dialogs)
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Save File"),
-			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_SAVE, "_Save", "_Cancel"));
+			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_SAVE, _("_Save"), _("_Cancel")));
 	else
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
