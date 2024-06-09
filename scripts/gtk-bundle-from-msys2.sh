@@ -247,8 +247,8 @@ cleanup_unnecessary_files() {
 	rm -rf share/vala
 	rm -rf share/xml
 	rm -rf usr/share/libalpm
-	# cleanup binaries and libs (delete anything except *.dll and GSpawn helper binaries)
-	find bin ! -name '*.dll' ! -name 'grep.exe' ! -name 'gspawn-win32-helper*.exe' -type f -delete
+	# cleanup binaries and libs (delete anything except *.dll, glib-compile-schemas and GSpawn helper binaries)
+	find bin ! -name '*.dll' ! -name 'grep.exe' ! -name 'gspawn-win32-helper*.exe' ! -name 'glib-compile-schemas.exe' -type f -delete
 	# cleanup empty directories
 	find . -type d -empty -delete
 }
