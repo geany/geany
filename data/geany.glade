@@ -1317,7 +1317,7 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">True</property>
                                     <property name="receives-default">False</property>
-                                    <property name="tooltip-text" translatable="yes">Defines whether to use the platform-native file dialogs or whether to use the GTK default dialogs</property>
+                                    <property name="tooltip-text" translatable="yes">Defines whether to use the platform-native file dialogs or the GTK default dialogs</property>
                                     <property name="use-underline">True</property>
                                     <property name="draw-indicator">True</property>
                                   </object>
