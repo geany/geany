@@ -50,6 +50,11 @@ caret=caret
 # width in pixels, use 0 to make it invisible, maximum width is 3
 caret_width=1
 
+# period of the caret blinking
+# the time in milliseconds that the caret is visible or invisible before changing state
+# set to 0 to disable blinking, comment-out to use system default value
+#caret_period=500
+
 # set foreground and background colour of indentation guides
 indent_guide=indent_guide
 

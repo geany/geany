@@ -566,6 +566,8 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 		2, 0, &common_style_set.fold_draw_line, NULL);
 	get_keyfile_ints(config, config_home, "styling", "caret_width",
 		1, 0, &common_style_set.styling[GCS_CARET].background, NULL); /* caret.foreground used earlier */
+	get_keyfile_ints(config, config_home, "styling", "caret_period",
+		10000, 0, &common_style_set.styling[GCS_CARET].italic, NULL); /* hack: storing caret period to 'italic' */
 	get_keyfile_int(config, config_home, "styling", "line_wrap_visuals",
 		3, 0, &common_style_set.styling[GCS_LINE_WRAP_VISUALS]);
 	get_keyfile_int(config, config_home, "styling", "line_wrap_indent",
@@ -617,13 +619,16 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 
 	set_character_classes(sci, ft_id);
 
-	/* caret colour, style and width */
+	/* caret colour, style, width and period */
 	SSM(sci, SCI_SETCARETFORE, invert(common_style_set.styling[GCS_CARET].foreground), 0);
 	SSM(sci, SCI_SETCARETWIDTH, common_style_set.styling[GCS_CARET].background, 0);
 	if (common_style_set.styling[GCS_CARET].bold)
 		SSM(sci, SCI_SETCARETSTYLE, CARETSTYLE_BLOCK, 0);
 	else
 		SSM(sci, SCI_SETCARETSTYLE, CARETSTYLE_LINE, 0);
+	/* default value 10000 - when used, don't set SCI_SETCARETPERIOD and use system defaults */
+	if (common_style_set.styling[GCS_CARET].italic < 10000)
+		SSM(sci, SCI_SETCARETPERIOD, common_style_set.styling[GCS_CARET].italic, 0);
 
 	/* line height */
 	SSM(sci, SCI_SETEXTRAASCENT, common_style_set.styling[GCS_LINE_HEIGHT].foreground, 0);
