@@ -324,6 +324,11 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
 			return TRUE;
 		}
+		if (event->type == GDK_BUTTON_PRESS && event->state == GDK_MOD1_MASK)
+		{
+			SSM(doc->editor->sci, SCI_ADDSELECTION, editor_info.click_pos, editor_info.click_pos);
+			return TRUE;
+		}
 		return document_check_disk_status(doc, FALSE);
 	}
 
