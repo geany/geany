@@ -288,6 +288,21 @@ void editor_snippets_init(void)
 }
 
 
+gboolean motion_notify_event(GtkWidget* widget, GdkEventMotion event, gpointer data)
+{
+	GeanyEditor *editor = data;
+
+	if (event.state & GDK_BUTTON1_MASK && event.state & GDK_MOD1_MASK)
+	{
+		gint pos = sci_get_position_from_xy(editor->sci,
+			(gint)event.x, (gint)event.y, FALSE);
+		gint main_selection = SSM(editor->sci, SCI_GETMAINSELECTION, 0, 0);
+		SSM(editor->sci, SCI_SETSELECTIONNCARET, main_selection, pos);
+	}
+	return FALSE;
+}
+
+
 static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *event,
 											 gpointer data)
 {
@@ -327,6 +342,13 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		if (event->type == GDK_BUTTON_PRESS && event->state == GDK_MOD1_MASK)
 		{
 			SSM(doc->editor->sci, SCI_ADDSELECTION, editor_info.click_pos, editor_info.click_pos);
+			return TRUE;
+		}
+		if (event->type == GDK_2BUTTON_PRESS && event->state == GDK_MOD1_MASK)
+		{
+			gint start = sci_word_start_position(editor->sci, editor_info.click_pos, TRUE);
+			gint end = sci_word_end_position(editor->sci, editor_info.click_pos, TRUE);
+			SSM(doc->editor->sci, SCI_ADDSELECTION, start, end);
 			return TRUE;
 		}
 		return document_check_disk_status(doc, FALSE);
@@ -4968,6 +4990,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 		g_signal_connect(sci, "button-press-event", G_CALLBACK(on_editor_button_press_event), editor);
 		g_signal_connect(sci, "scroll-event", G_CALLBACK(on_editor_scroll_event), editor);
 		g_signal_connect(sci, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
+		g_signal_connect(sci, "motion-notify-event", G_CALLBACK(motion_notify_event), editor);
 		g_signal_connect(sci, "focus-in-event", G_CALLBACK(on_editor_focus_in), editor);
 		g_signal_connect(sci, "draw", G_CALLBACK(on_editor_draw), editor);
 	}
