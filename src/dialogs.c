@@ -141,10 +141,10 @@ static gboolean open_file_dialog_handle_response(GtkFileChooser *dialog, gint re
 			GtkWidget *encoding_combo = ui_lookup_widget(GTK_WIDGET(dialog), "encoding_combo");
 
 			filesel_state.open.more_options_visible = gtk_expander_get_expanded(GTK_EXPANDER(expander));
-			filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
 			filesel_state.open.filetype_idx = filetype_combo_box_get_active_filetype(GTK_COMBO_BOX(filetype_combo));
 			filesel_state.open.encoding_idx = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(encoding_combo));
 		}
+		filesel_state.open.filter_idx = file_chooser_get_filter_idx(dialog);
 
 		/* ignore detect from file item */
 		if (filesel_state.open.filetype_idx >= 0)
@@ -430,29 +430,34 @@ static GtkFileChooser *create_open_file_dialog(void)
 }
 
 
-static void open_file_dialog_apply_settings(GtkWidget *dialog)
+static void open_file_dialog_apply_settings(GtkFileChooser *dialog)
 {
 	static gboolean initialized = FALSE;
-	GtkWidget *check_hidden = ui_lookup_widget(dialog, "check_hidden");
-	GtkWidget *filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
-	GtkWidget *encoding_combo = ui_lookup_widget(dialog, "encoding_combo");
-	GtkWidget *expander = ui_lookup_widget(dialog, "more_options_expander");
 
 	/* we can't know the initial position of combo boxes, so retrieve it the first time */
 	if (! initialized)
 	{
-		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
+		filesel_state.open.filter_idx = file_chooser_get_filter_idx(dialog);
 
 		initialized = TRUE;
 	}
 	else
 	{
-		file_chooser_set_filter_idx(GTK_FILE_CHOOSER(dialog), filesel_state.open.filter_idx);
+		file_chooser_set_filter_idx(dialog, filesel_state.open.filter_idx);
 	}
-	gtk_expander_set_expanded(GTK_EXPANDER(expander), filesel_state.open.more_options_visible);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_hidden), filesel_state.open.show_hidden);
-	ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(encoding_combo), filesel_state.open.encoding_idx);
-	filetype_combo_box_set_active_filetype(GTK_COMBO_BOX(filetype_combo), filesel_state.open.filetype_idx);
+
+	if (!GTK_IS_NATIVE_DIALOG(dialog))
+	{
+		GtkWidget *check_hidden = ui_lookup_widget(GTK_WIDGET(dialog), "check_hidden");
+		GtkWidget *filetype_combo = ui_lookup_widget(GTK_WIDGET(dialog), "filetype_combo");
+		GtkWidget *encoding_combo = ui_lookup_widget(GTK_WIDGET(dialog), "encoding_combo");
+		GtkWidget *expander = ui_lookup_widget(GTK_WIDGET(dialog), "more_options_expander");
+
+		gtk_expander_set_expanded(GTK_EXPANDER(expander), filesel_state.open.more_options_visible);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_hidden), filesel_state.open.show_hidden);
+		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(encoding_combo), filesel_state.open.encoding_idx);
+		filetype_combo_box_set_active_filetype(GTK_COMBO_BOX(filetype_combo), filesel_state.open.filetype_idx);
+	}
 }
 
 
@@ -491,8 +496,7 @@ void dialogs_show_open_file(void)
 	SETPTR(initdir, utils_get_locale_from_utf8(initdir));
 
 	dialog = create_open_file_dialog();
-	if (!GTK_IS_NATIVE_DIALOG(dialog))
-		open_file_dialog_apply_settings(GTK_WIDGET(dialog));
+	open_file_dialog_apply_settings(dialog);
 
 	if (initdir != NULL && g_path_is_absolute(initdir))
 			gtk_file_chooser_set_current_folder(dialog, initdir);
