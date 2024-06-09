@@ -954,6 +954,7 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 		GtkWidget *label = gtk_label_new(label_text);
 		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		ui_hookup_widget(dialog, label, "label");
 		gtk_container_add(GTK_CONTAINER(vbox), label);
 	}
 
