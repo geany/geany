@@ -2871,6 +2871,10 @@ void ui_progress_bar_stop(void)
 		g_source_remove(progress_bar_timer_id);
 		progress_bar_timer_id = 0;
 	}
+
+	/* hack to remove tick callback which is created for "activity mode" progress
+	 * bars - without this it is called forever and causes elevated CPU usage */
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(main_widgets.progressbar), 0.0);
 }
 
 

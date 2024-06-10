@@ -292,6 +292,8 @@ static void end_print(GtkPrintOperation *operation, GtkPrintContext *context, gp
 	if (dinfo == NULL)
 		return;
 
+	/* see ui_progress_bar_stop() for more details on why this is called */
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(main_widgets.progressbar), 0.0);
 	gtk_widget_hide(main_widgets.progressbar);
 	g_object_unref(dinfo->sci);
 	g_object_unref(dinfo->layout);
