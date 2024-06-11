@@ -372,6 +372,7 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 static GtkFileChooser *create_open_file_dialog(void)
 {
 	GtkFileChooser *dialog;
+	GtkFileFilter *filter;
 	GtkWidget *viewbtn;
 	GSList *node;
 
@@ -408,18 +409,19 @@ static GtkFileChooser *create_open_file_dialog(void)
 	}
 
 	/* add FileFilters(start with "All Files") */
-	gtk_file_chooser_add_filter(dialog,
-				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE]));
+	if ((filter = filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE])))
+		gtk_file_chooser_add_filter(dialog, filter);
 	/* now create meta filter "All Source" */
-	gtk_file_chooser_add_filter(dialog,
-				filetypes_create_file_filter_all_source());
+	if ((filter = filetypes_create_file_filter_all_source()))
+		gtk_file_chooser_add_filter(dialog, filter);
 	foreach_slist(node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
 
 		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
 			continue;
-		gtk_file_chooser_add_filter(dialog, filetypes_create_file_filter(ft));
+		if ((filter = filetypes_create_file_filter(ft)))
+			gtk_file_chooser_add_filter(dialog, filter);
 	}
 
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);

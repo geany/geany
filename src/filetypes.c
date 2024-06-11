@@ -1187,6 +1187,7 @@ GtkFileFilter *filetypes_create_file_filter_all_source(void)
 {
 	GtkFileFilter *new_filter;
 	guint i, j;
+	guint n_patterns = 0;
 
 	new_filter = gtk_file_filter_new();
 	gtk_file_filter_set_name(new_filter, _("All Source"));
@@ -1200,7 +1201,16 @@ GtkFileFilter *filetypes_create_file_filter_all_source(void)
 		{
 			gtk_file_filter_add_pattern(new_filter, filetypes[i]->pattern[j]);
 		}
+		n_patterns += j;
 	}
+
+	/* very unlikely case where there is *no* patterns at all */
+	if (n_patterns == 0)
+	{
+		g_object_unref(new_filter);
+		new_filter = NULL;
+	}
+
 	return new_filter;
 }
 
@@ -1212,6 +1222,13 @@ GtkFileFilter *filetypes_create_file_filter(const GeanyFiletype *ft)
 	const gchar *title;
 
 	g_return_val_if_fail(ft != NULL, NULL);
+
+	/* unlikely case where the ft has no patterns */
+	if (! ft->pattern[0])
+	{
+		g_debug("Not creating filter for filetype %s that has no pattern", ft->name);
+		return NULL;
+	}
 
 	new_filter = gtk_file_filter_new();
 	title = ft->id == GEANY_FILETYPES_NONE ? _("All files") : ft->title;
