@@ -445,27 +445,50 @@ void plugin_init(GeanyData *data)
 }
 
 
+static gint file_chooser_run(GtkFileChooser *dialog)
+{
+	if (GTK_IS_NATIVE_DIALOG(dialog))
+		return gtk_native_dialog_run(GTK_NATIVE_DIALOG(dialog));
+	else
+		return gtk_dialog_run(GTK_DIALOG(dialog));
+}
+
+
+static void file_chooser_destroy(GtkFileChooser *dialog)
+{
+	if (GTK_IS_NATIVE_DIALOG(dialog))
+		g_object_unref(dialog);
+	else
+		gtk_widget_destroy(GTK_WIDGET(dialog));
+}
+
+
 static void target_directory_button_clicked_cb(GtkButton *button, gpointer item)
 {
-	GtkWidget *dialog;
+	GtkFileChooser *dialog;
 	gchar *text;
 
 	/* initialize the dialog */
-	dialog = gtk_file_chooser_dialog_new(_("Select Directory"), NULL,
-					GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	if (geany_data->interface_prefs->use_native_windows_dialogs)
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Select Directory"),
+			GTK_WINDOW(geany_data->main_widgets->window),
+			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL, NULL));
+	else
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Select Directory"),
+						NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL));
 
 	text = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(item)));
 	if (!EMPTY(text))
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), text);
+		gtk_file_chooser_set_current_folder(dialog, text);
 
 	/* run it */
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	if (file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *utf8_filename, *tmp;
 
-		tmp = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		tmp = gtk_file_chooser_get_filename(dialog);
 		utf8_filename = utils_get_utf8_from_locale(tmp);
 
 		gtk_entry_set_text(GTK_ENTRY(item), utf8_filename);
@@ -474,7 +497,7 @@ static void target_directory_button_clicked_cb(GtkButton *button, gpointer item)
 		g_free(tmp);
 	}
 
-	gtk_widget_destroy(dialog);
+	file_chooser_destroy(dialog);
 }
 
 
