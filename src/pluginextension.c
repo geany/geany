@@ -43,6 +43,49 @@ static gint sort_extension_entries(gconstpointer a, gconstpointer b)
 }
 
 
+/**
+ * Registers the provided extension in Geany. There can be multiple extensions
+ * registered in Geany - these are sorted by the priority
+ * parameter. When executing functions assigned to the @c PluginExtension
+ * members ending with @c _perform, Geany goes
+ * through the registered extensions and executes the @c _perform() function of
+ * the first extension for which the function assigned to the corresponding
+ * @c _provided member returns @c TRUE.
+ * 
+ * This function is typically called in the plugin's @c init() function.
+ * 
+ * Plugins wishing to re-register themselves, e.g. with a different priority,
+ * should first unregister themselves using @c plugin_extension_unregister()
+ * and call @c plugin_extension_register() afterwards.
+ * 
+ * @param extension A pointer to the @c PluginExtension structure to register.
+ * This pointer and the @c PluginExtension it points to have to remain valid
+ * until the extension is unregistered. All fields of the @c PluginExtension
+ * structure have to be fully initialized either to the @c NULL pointer or to a
+ * proper implementation. Usually, this structure is statically allocated which
+ * automatically zero-initializes uninitialized members as appropriate.
+ * @param ext_name Human-readable name of the extension that can appear in
+ * the user interface. The string should be reasonably unique so extensions can
+ * be distinguished from each other.
+ * @param priority Extension priority. The recommended values are:
+ *  - if the extension is the only thing the plugin provides, and if it targets
+ *    a single filetype, use 400 <= priority < 500.
+ *  - if the extension is the only thing the plugin provides, but it targets
+ *    several filetypes, use  300 <= priority < 400.
+ *  - if the plugin provides other features than the extension, but it only
+ *    targets a single filetype, use  200 <= priority < 300.
+ *  - if the plugin provides other features than the extension, and targets
+ *    several filetypes, use 100 <= priority < 200.
+ *  - a priority of 0 or less is reserved, and using it has unspecified behavior.
+ * @param data User data passed to the functions from the @c PluginExtension
+ * struct.
+ * @warning Plugins are responsible for calling @c plugin_extension_unregister()
+ * when they no longer provide the extension and when the plugin is unloaded.
+ *
+ * @see @c plugin_extension_unregister().
+ *
+ * @since 2.1
+ **/
 GEANY_API_SYMBOL
 void plugin_extension_register(PluginExtension *extension, const gchar *ext_name,
 	gint priority, gpointer data)
@@ -60,6 +103,17 @@ void plugin_extension_register(PluginExtension *extension, const gchar *ext_name
 }
 
 
+/**
+ * Plugins are responsible for calling this function when they no longer
+ * provide the extension, at the latest in the plugin's @c cleanup() function.
+ * 
+ * @param extension The @c PluginExtension structure pointer to unregister, as
+ * previously registered with @c plugin_extension_register().
+ *
+ * @see @c plugin_extension_register().
+ *
+ * @since 2.1
+ **/
 GEANY_API_SYMBOL
 void plugin_extension_unregister(PluginExtension *extension)
 {
@@ -129,6 +183,31 @@ void plugin_extension_unregister(PluginExtension *extension)
 	} G_STMT_END
 
 
+/*
+ * Geany itself can also pass NULL as the extension parameter to determine
+ * whether there is any extension implementing autocompletion. Plugins should
+ * not use this and rely on Geany's extension list and the priorities so
+ * this feature is not documented in the plugin API.
+ */
+/**
+ * Plugins can call this function to check whether, based on the extensions
+ * registered and the provided extension priorities, the extension passed in
+ * the @c ext parameter is used for autocompletion.
+ * 
+ * Plugins will typically call this function with their own @c PluginExtension
+ * to check, if they get (or got) executed for autocompletion of the
+ * provided document. This is useful for various auxiliary functions such as
+ * cleanups after the function assigned to @c autocomplete_perform is completed
+ * so plugins know they executed this function and do not have to store this
+ * information by some other means.
+ * 
+ * @param doc Document for which the check is performed.
+ * @param ext The extension for which the check is performed.
+ * @return Returns @c TRUE if autocompletion provided by the passed extension
+ * is used, @c FALSE otherwise.
+ *
+ * @since 2.1
+ **/
 GEANY_API_SYMBOL
 gboolean plugin_extension_autocomplete_provided(GeanyDocument *doc, PluginExtension *ext)
 {
@@ -142,6 +221,13 @@ void plugin_extension_autocomplete_perform(GeanyDocument *doc, gboolean force)
 }
 
 
+/**
+ * Checks whether the provided extension is used for showing calltips.
+ * 
+ * @see @c plugin_extension_autocomplete_provided()
+ *
+ * @since 2.1
+ **/
 GEANY_API_SYMBOL
 gboolean plugin_extension_calltips_provided(GeanyDocument *doc, PluginExtension *ext)
 {
@@ -155,6 +241,14 @@ void plugin_extension_calltips_show(GeanyDocument *doc, gboolean force)
 }
 
 
+/**
+ * Checks whether the provided extension is used for going to symbol
+ * definition/declaration.
+ * 
+ * @see @c plugin_extension_autocomplete_provided()
+ *
+ * @since 2.1
+ **/
 GEANY_API_SYMBOL
 gboolean plugin_extension_goto_provided(GeanyDocument *doc, PluginExtension *ext)
 {
@@ -168,6 +262,14 @@ gboolean plugin_extension_goto_perform(GeanyDocument *doc, gint pos, gboolean de
 }
 
 
+/**
+ * Checks whether the provided extension is used for highlighting symbols in
+ * the document.
+ * 
+ * @see @c plugin_extension_autocomplete_provided()
+ *
+ * @since 2.1
+ **/
 GEANY_API_SYMBOL
 gboolean plugin_extension_symbol_highlight_provided(GeanyDocument *doc, PluginExtension *ext)
 {
