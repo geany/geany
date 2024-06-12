@@ -454,7 +454,7 @@ static void show_unsaved_dialog_for_persistent_temp_files_tab_closing(GeanyDocum
 
 				if (! g_str_equal(old_file_path, new_file_path))
 				{
-				    //remove temp file if it was saved as some other file
+				 	//remove temp file if it was saved as some other file
 					g_remove(locale_file_path);
 				}
 			}
@@ -573,7 +573,7 @@ static void persistent_temp_files_document_save_cb(GObject *obj, GeanyDocument *
 
 			if (is_temp_saved_file(old_file_name) && ! g_str_equal(old_file_path, new_file_path))
 			{
-			    //remove temp file if it was saved as some other file
+				//remove temp file if it was saved as some other file
 				gchar *locale_old_file_path = utils_get_locale_from_utf8(old_file_path);
 				g_remove(locale_old_file_path);
 
