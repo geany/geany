@@ -166,26 +166,40 @@ static gboolean is_modifier_key(guint keyval)
 }
 
 
+static void stop_switch(void)
+{
+	GeanyDocument *doc;
+
+	switch_in_progress = FALSE;
+
+	if (switch_dialog)
+	{
+		gtk_widget_destroy(switch_dialog);
+		switch_dialog = NULL;
+	}
+
+	doc = document_get_current();
+	update_mru_docs_head(doc);
+	mru_pos = 0;
+	document_check_disk_status(doc, TRUE);
+}
+
+
 static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
 	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
 	if (switch_in_progress && is_modifier_key(ev->keyval))
-	{
-		GeanyDocument *doc;
+		stop_switch();
 
-		switch_in_progress = FALSE;
+	return FALSE;
+}
 
-		if (switch_dialog)
-		{
-			gtk_widget_destroy(switch_dialog);
-			switch_dialog = NULL;
-		}
 
-		doc = document_get_current();
-		update_mru_docs_head(doc);
-		mru_pos = 0;
-		document_check_disk_status(doc, TRUE);
-	}
+static gboolean on_focus_out_event(GtkWidget* widget, GdkEventFocus event, gpointer user_data)
+{
+	if (switch_in_progress)
+		stop_switch();
+
 	return FALSE;
 }
 
@@ -211,6 +225,7 @@ static GtkWidget *create_switch_dialog(void)
 	switch_dialog_label = widget;
 
 	g_signal_connect(dialog, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+	g_signal_connect(main_widgets.window, "focus-out-event", G_CALLBACK(on_focus_out_event), NULL);
 	return dialog;
 }
 
@@ -265,7 +280,11 @@ static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 		return FALSE;
 	}
 
-	update_filename_label();
+	if (gtk_widget_has_focus(main_widgets.window))
+		update_filename_label();
+	else
+		stop_switch();
+
 	return FALSE;
 }
 
