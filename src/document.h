@@ -103,7 +103,7 @@ typedef struct GeanyDocument
 	TMSourceFile	*tm_file;
 	/** Whether this document is read-only. */
 	gboolean		 readonly;
-	/** Whether this document has been changed since it was last saved. */
+	/** Whether this document buffer has been changed since it was last saved. */
 	gboolean		 changed;
 	/** The link-dereferenced, locale-encoded file name.
 	 * If non-NULL, this indicates the file once existed on disk (not just as an
@@ -121,6 +121,15 @@ typedef struct GeanyDocument
 	struct GeanyDocumentPrivate *priv;	/* should be last, append fields before this item */
 }
 GeanyDocument;
+
+/* Custom document info bar response IDs */
+enum
+{
+	RESPONSE_DOCUMENT_RELOAD = 1, /* All pre-defined GTK responses are negative */
+	RESPONSE_DOCUMENT_RELOAD_ALL,
+	RESPONSE_DOCUMENT_RELOAD_UNMODIFIED,
+	RESPONSE_DOCUMENT_SAVE,
+};
 
 /** Wraps @ref GeanyData::documents_array so it can be used with C array syntax.
  * @warning Always check the returned document is valid (@c doc->is_valid).
@@ -145,6 +154,27 @@ GeanyDocument;
 #define foreach_document(i) \
 	for (i = 0; i < GEANY(documents_array)->len; i++)\
 		if (!documents[i]->is_valid)\
+			{}\
+		else /* prevent outside 'else' matching our macro 'if' */
+
+/** Iterates all valid document indexes but skips the referenced one.
+ * Use like a @c for statement.
+ * @param i @c guint index for @ref GeanyData::documents_array.
+ * @param skip @c pointer ot one of GeanyData::documents_array.
+ *
+ * Example:
+ * @code
+ * guint i;
+ * GeanyDocument *skip
+ * foreach_document_skip(i,skip)
+ * {
+ * 	GeanyDocument *doc = documents[i];
+ * 	g_assert(doc->is_valid);
+ * }
+ * @endcode */
+#define foreach_document_skip(i,skip) \
+	for (i = 0; i < GEANY(documents_array)->len; i++)\
+		if (!documents[i]->is_valid || documents[i] == skip )\
 			{}\
 		else /* prevent outside 'else' matching our macro 'if' */
 
@@ -215,6 +245,7 @@ gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
 GeanyDocument *document_find_by_id(guint id);
 
+void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc);
 
 #ifdef GEANY_PRIVATE
 
@@ -279,6 +310,8 @@ void document_update_tag_list_in_idle(GeanyDocument *doc);
 void document_highlight_tags(GeanyDocument *doc);
 
 gboolean document_check_disk_status(GeanyDocument *doc, gboolean force);
+
+gboolean document_check_disk_status_others(GeanyDocument *doc, gboolean force, gboolean modified_since_roundtrip);
 
 /* own Undo / Redo implementation to be able to undo / redo changes
  * to the encoding or the Unicode BOM (which are Scintilla independent).
