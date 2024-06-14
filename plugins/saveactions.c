@@ -381,7 +381,8 @@ static gboolean document_is_empty(GeanyDocument *doc)
 {
 	/* if total text length is 1 while line count is 2 - then the only character of whole text is a linebreak,
 	which is how completely empty document saved by Geany to disk looks like */
-	return sci_get_length(doc->editor->sci) == 1 && sci_get_line_count(doc->editor->sci) == 2;
+	return sci_get_length(doc->editor->sci) == 0 
+		|| (sci_get_length(doc->editor->sci) == 1 && sci_get_line_count(doc->editor->sci) == 2);
 }
 
 
