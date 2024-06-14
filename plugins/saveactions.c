@@ -377,6 +377,39 @@ static gboolean is_temp_saved_file_doc(GeanyDocument *doc)
 }
 
 
+static void load_all_temp_files_into_editor(const gchar *path)
+{
+	GDir *dir;
+	GError *error = NULL;
+	gchar *utf8_filename, *locale_file_path;
+	const gchar *filename;
+
+	dir = g_dir_open(path, 0, &error);
+	if (dir == NULL)
+	{
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+						_("Persistent temp files directory not found"));
+		return;
+	}
+
+	foreach_dir(filename, dir)
+	{
+		utf8_filename = utils_get_utf8_from_locale(filename);
+		locale_file_path = g_build_path(G_DIR_SEPARATOR_S, path, filename, NULL);
+
+		if (is_temp_saved_file(utf8_filename))
+		{
+			document_open_file(locale_file_path, FALSE, NULL, NULL);
+		}
+
+		g_free(utf8_filename);
+		g_free(locale_file_path);
+	}
+
+	g_dir_close(dir);
+}
+
+
 static gboolean document_is_empty(GeanyDocument *doc)
 {
 	/* if total text length is 1 while line count is 2 - then the only character of whole text is a linebreak,
@@ -591,6 +624,15 @@ static void persistent_temp_files_document_save_cb(GObject *obj, GeanyDocument *
 }
 
 
+static void on_startup_complete(G_GNUC_UNUSED GObject *dummy)
+{
+	if (enable_persistent_temp_files)
+	{
+		load_all_temp_files_into_editor(persistent_temp_files_target_dir);
+	}
+}
+
+
 /* Save when focus out
  *
  * @param pointer ref to the current doc (struct GeanyDocument *)
@@ -646,6 +688,7 @@ PluginCallback plugin_callbacks[] =
 	{ "document-save", (GCallback) &persistent_temp_files_document_save_cb, FALSE, NULL },
 	{ "document-save", (GCallback) &backupcopy_document_save_cb, FALSE, NULL },
 	{ "editor-notify", (GCallback) &on_document_focus_out, FALSE, NULL },
+	{ "geany-startup-complete", (GCallback) &on_startup_complete, FALSE, NULL }, 
 	{ NULL, NULL, FALSE, NULL }
 };
 
