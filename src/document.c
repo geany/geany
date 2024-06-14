@@ -3602,19 +3602,23 @@ static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
 }
 
 
-static void monitor_reload_file(GeanyDocument *doc)
+static gboolean monitor_reload_file_idle(gpointer data)
 {
+	GeanyDocument *doc = data;
+
+	if (doc != document_get_current())
+		return G_SOURCE_REMOVE;
+
 	if (! doc->changed && file_prefs.reload_clean_doc_on_file_change)
 	{
 		document_reload_force(doc, doc->encoding);
-		return;
+		return G_SOURCE_REMOVE;
 	}
-
-	gchar *base_name = g_path_get_basename(doc->file_name);
 
 	/* show this message only once */
 	if (doc->priv->info_bars[MSG_TYPE_RELOAD] == NULL)
 	{
+		gchar *base_name = g_path_get_basename(doc->file_name);
 		GtkWidget *bar;
 
 		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
@@ -3628,8 +3632,10 @@ static void monitor_reload_file(GeanyDocument *doc)
 		protect_document(doc);
 		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
 		enable_key_intercept(doc, bar);
+		g_free(base_name);
 	}
-	g_free(base_name);
+
+	return G_SOURCE_REMOVE;
 }
 
 
@@ -3657,8 +3663,13 @@ static void on_monitor_resave_missing_file_response(GtkWidget *bar,
 }
 
 
-static void monitor_resave_missing_file(GeanyDocument *doc)
+static gboolean monitor_resave_missing_file_idle(gpointer data)
 {
+	GeanyDocument *doc = data;
+
+	if (doc != document_get_current())
+		return G_SOURCE_REMOVE;
+
 	if (doc->priv->info_bars[MSG_TYPE_RESAVE] == NULL)
 	{
 		GtkWidget *bar = doc->priv->info_bars[MSG_TYPE_RELOAD];
@@ -3682,6 +3693,8 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 		doc->priv->info_bars[MSG_TYPE_RESAVE] = bar;
 		enable_key_intercept(doc, bar);
 	}
+
+	return G_SOURCE_REMOVE;
 }
 
 
@@ -3723,7 +3736,11 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	if (!get_mtime(locale_filename, &mtime))
 	{
-		monitor_resave_missing_file(doc);
+		/* document_check_disk_status() call may be a result of a mouse click
+		 * inside Scintilla by which Geany gains focus and showing the info bar
+		 * during the mouse click leads to text selection as Scintilla scrolls
+		 * because the infobar makes the Scintilla widget smaller. */
+		g_idle_add(monitor_resave_missing_file_idle, doc);
 		/* doc may be closed now */
 		ret = TRUE;
 	}
@@ -3731,7 +3748,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	{
 		/* make sure the user is not prompted again after he cancelled the "reload file?" message */
 		doc->priv->mtime = mtime;
-		monitor_reload_file(doc);
+		/* see above for the idle call explanation */
+		g_idle_add(monitor_reload_file_idle, doc);
 		/* doc may be closed now */
 		ret = TRUE;
 	}
