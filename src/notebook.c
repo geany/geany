@@ -716,8 +716,6 @@ gint notebook_new_tab(GeanyDocument *this)
 	page = GTK_WIDGET(this->editor->sci);
 	gtk_box_pack_start(GTK_BOX(vbox), page, TRUE, TRUE, 0);
 
-	gtk_widget_show_all(vbox);
-
 	this->priv->tab_label = gtk_label_new(NULL);
 
 	/* get button press events for the tab label and the space between it and

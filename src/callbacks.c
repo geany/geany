@@ -515,18 +515,8 @@ void on_normal_size1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-/* Changes window-title after switching tabs and lots of other things.
- * note: using 'after' makes Scintilla redraw before the UI, appearing more responsive */
-static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
-		guint page_num, gpointer user_data)
+static void handle_switch_page(GeanyDocument *doc)
 {
-	GeanyDocument *doc;
-
-	if (G_UNLIKELY(main_status.opening_session_files || main_status.closing_all))
-		return;
-
-	doc = document_get_from_notebook_child(page);
-
 	if (doc != NULL)
 	{
 		GtkEntry *filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
@@ -556,6 +546,53 @@ static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
 
 		g_signal_emit_by_name(geany_object, "document-activate", doc);
 	}
+}
+
+
+static gboolean delay_handle_switch_page(gpointer data)
+{
+	gulong *handler_id = data;
+
+	if (main_status.opening_session_files)
+		return G_SOURCE_CONTINUE;
+	/* guard against the unlikely case where we didn't run yet but are already
+	 * closing all documents */
+	else if (! main_status.closing_all)
+		handle_switch_page(document_get_current());
+
+	*handler_id = 0;
+	return G_SOURCE_REMOVE;
+}
+
+
+/* Changes window-title after switching tabs and lots of other things.
+ * note: using 'after' makes Scintilla redraw before the UI, appearing more responsive
+ *
+ * When page switch happens while opening session files, we delay handling of the
+ * event to when session opening is complete.  This is mostly to avoid repeatedly update
+ * the UI unnecessarily, which isn't entirely cheap */
+static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
+		guint page_num, gpointer user_data)
+{
+	static gulong handler_id = 0;
+
+	if (main_status.opening_session_files)
+	{
+		/* if opening session files, delay the handling to after session is fully open */
+		if (handler_id == 0)
+			handler_id = g_idle_add(delay_handle_switch_page, &handler_id);
+		return;
+	}
+	else if (main_status.closing_all)
+		return;
+
+	if (handler_id != 0)
+	{
+		g_source_remove(handler_id);
+		handler_id = 0;
+	}
+
+	handle_switch_page(document_get_from_notebook_child(page));
 }
 
 
