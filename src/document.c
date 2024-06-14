@@ -104,7 +104,6 @@ enum
 };
 
 
-static guint show_tab_idle = 0;
 static guint doc_id_counter = 0;
 
 
@@ -859,6 +858,9 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 
 	document_set_filetype(doc, ft); /* also re-parses tags */
 
+	/* now the document is fully ready, display it (see notebook_new_tab()) */
+	gtk_widget_show(document_get_notebook_child(doc));
+
 	ui_set_window_title(doc);
 	build_menu_update(doc);
 	document_set_text_changed(doc, FALSE);
@@ -1264,40 +1266,14 @@ void document_apply_indent_settings(GeanyDocument *doc)
 
 void document_show_tab(GeanyDocument *doc)
 {
-	if (show_tab_idle)
-	{
-		g_source_remove(show_tab_idle);
-		show_tab_idle = 0;
-	}
-
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 		document_get_notebook_page(doc));
 
 	/* finally, let the editor widget grab the focus so you can start coding
 	 * right away */
-	document_try_focus(doc, NULL);
-}
-
-
-static gboolean show_tab_cb(gpointer data)
-{
-	GeanyDocument *doc = (GeanyDocument *) data;
-
-	show_tab_idle = 0;
-	/* doc might not be valid e.g. if user closed a tab whilst Geany is opening files */
-	if (DOC_VALID(doc))
-		document_show_tab(doc);
-
-	return G_SOURCE_REMOVE;
-}
-
-
-void document_show_tab_idle(GeanyDocument *doc)
-{
-	if (show_tab_idle)
-		g_source_remove(show_tab_idle);
-
-	show_tab_idle = g_idle_add(show_tab_cb, doc);
+	/* FIXME: is that actually useful??  I don't see any difference disabling this code... */
+	if (!main_status.opening_session_files)
+		document_try_focus(doc, NULL);
 }
 
 
@@ -1517,6 +1493,9 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 				display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
 				(readonly) ? _(", read-only") : "");
 		}
+
+		/* now the document is fully ready, display it (see notebook_new_tab()) */
+		gtk_widget_show(document_get_notebook_child(doc));
 	}
 
 	g_free(display_filename);
@@ -1834,6 +1813,8 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	gboolean new_file;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
+
+	g_signal_emit_by_name(geany_object, "document-before-save-as", doc);
 
 	new_file = document_need_save_as(doc) || (utf8_fname != NULL && strcmp(doc->file_name, utf8_fname) != 0);
 	if (utf8_fname != NULL)
