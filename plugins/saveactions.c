@@ -99,7 +99,7 @@ static gchar *backupcopy_time_fmt;
 static gint backupcopy_dir_levels;
 
 static gint persistent_temp_files_interval_ms;
-static guint persistent_temp_files_saver_src_id = 0;
+static guint persistent_temp_files_updater_src_id = 0;
 static gchar *persistent_temp_files_target_dir;
 
 static gchar *config_file;
@@ -410,6 +410,32 @@ static void load_all_temp_files_into_editor(const gchar *path)
 }
 
 
+static gboolean file_exists(gchar *utf8_file_path)
+{
+	gchar *locale_file_path = utils_get_locale_from_utf8(utf8_file_path);
+
+	gboolean exists = g_file_test(locale_file_path, G_FILE_TEST_EXISTS);
+
+	g_free(locale_file_path);
+
+	return exists;
+}
+
+
+static void get_current_tab_label(GtkWidget **tab_label_ptr)
+{
+	GtkWidget *current_page;
+	GtkNotebook *notebook;
+	gint current_page_num;
+
+	notebook = GTK_NOTEBOOK(geany->main_widgets->notebook);
+	current_page_num = gtk_notebook_get_current_page(notebook);
+
+	current_page = gtk_notebook_get_nth_page(notebook, current_page_num);
+	*tab_label_ptr = gtk_notebook_get_tab_label(notebook, current_page);
+}
+
+
 static gboolean document_is_empty(GeanyDocument *doc)
 {
 	/* if total text length is 1 while line count is 2 - then the only character of whole text is a linebreak,
@@ -522,7 +548,7 @@ static void persistent_temp_files_document_close_cb(GObject *obj, GeanyDocument 
 
 	if (enable_persistent_temp_files && file_path != NULL && ! geany_is_quitting())
 	{
-		if (is_temp_saved_file_doc(doc))
+		if (is_temp_saved_file_doc(doc) && file_exists(doc->file_name))
 		{
 			short_filename = document_get_basename_for_display(doc, -1);
 			locale_file_path = utils_get_locale_from_utf8(file_path);
@@ -555,15 +581,9 @@ static void persistent_temp_files_document_before_save_cb(GObject *obj, GeanyDoc
 	if (enable_persistent_temp_files)
 	{
 		gchar *old_file_path, *new_file_path, *old_file_name;
-		GtkWidget *current_page, *page_label;
-		GtkNotebook *notebook;
-		gint current_page_num;
+				GtkWidget *page_label = NULL;
 
-		notebook = GTK_NOTEBOOK(geany->main_widgets->notebook);
-		current_page_num = gtk_notebook_get_current_page(notebook);
-
-		current_page = gtk_notebook_get_nth_page(notebook, current_page_num);
-		page_label = gtk_notebook_get_tab_label(notebook, current_page);
+		get_current_tab_label(&page_label);
 
 		old_file_path = gtk_widget_get_tooltip_text(page_label);
 		new_file_path = DOC_FILENAME(doc);
@@ -571,7 +591,7 @@ static void persistent_temp_files_document_before_save_cb(GObject *obj, GeanyDoc
 		if (old_file_path == NULL)
 		{
 			ui_set_statusbar(TRUE, _("plugin error: failed to delete initial temp file "
-				"('failed to get notebook tab label')"));
+				"('failed to get notebook tab label text')"));
 
 			return;
 		}
@@ -669,7 +689,9 @@ static gboolean on_document_focus_out(GObject *object, GeanyEditor *editor,
 	if (nt->nmhdr.code == SCN_FOCUSOUT
 		&& doc->file_name != NULL)
 	{
-		if (enable_autosave_losing_focus || (enable_persistent_temp_files && is_temp_saved_file_doc(doc)))
+		if (enable_autosave_losing_focus || (enable_persistent_temp_files 
+											&& is_temp_saved_file_doc(doc) 
+											&& file_exists(doc->file_name)))
 		{
 			plugin_idle_add(geany_plugin, save_on_focus_out_idle, doc);
 		}
@@ -743,7 +765,7 @@ static void autosave_set_timeout(void)
 }
 
 
-static gboolean persistent_temp_files_save(gpointer data)
+static gboolean persistent_temp_files_update(gpointer data)
 {
 	GeanyDocument *doc;
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook));
@@ -752,7 +774,7 @@ static gboolean persistent_temp_files_save(gpointer data)
 	{
 		doc = document_get_from_page(i);
 
-		if (is_temp_saved_file_doc(doc))
+		if (is_temp_saved_file_doc(doc) && file_exists(doc->file_name))
 		{
 			document_save_file(doc, FALSE);
 		}
@@ -761,17 +783,17 @@ static gboolean persistent_temp_files_save(gpointer data)
 	return TRUE;
 }
 
-static void persistent_temp_files_saver_set_timeout(void)
+static void persistent_temp_files_updater_set_timeout(void)
 {
-	if (persistent_temp_files_saver_src_id != 0)
-		g_source_remove(persistent_temp_files_saver_src_id);
+	if (persistent_temp_files_updater_src_id != 0)
+		g_source_remove(persistent_temp_files_updater_src_id);
 
 	if (! enable_persistent_temp_files)
 		return;
 
-	persistent_temp_files_saver_src_id = g_timeout_add(
+	persistent_temp_files_updater_src_id = g_timeout_add(
 		persistent_temp_files_interval_ms,
-		(GSourceFunc) persistent_temp_files_save,
+		(GSourceFunc) persistent_temp_files_update,
 		NULL
 	);
 }
@@ -825,10 +847,10 @@ void plugin_init(GeanyData *data)
 	store_target_directory(tmp, &persistent_temp_files_target_dir);
 	g_free(tmp);
 
-	persistent_temp_files_saver_src_id = 0; /* mark as invalid */
+	persistent_temp_files_updater_src_id = 0; /* mark as invalid */
 	persistent_temp_files_interval_ms = utils_get_setting_integer(config, "persistent_temp_files", "interval_ms", 1000);
 
-	persistent_temp_files_saver_set_timeout();
+	persistent_temp_files_updater_set_timeout();
 
 	persistent_temp_new_old_file_relation_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
 
@@ -998,7 +1020,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 			}
 		}
 
-		persistent_temp_files_saver_set_timeout();
+		persistent_temp_files_updater_set_timeout();
 
 
 		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
@@ -1373,8 +1395,8 @@ void plugin_cleanup(void)
 	g_free(backupcopy_backup_dir);
 	g_free(backupcopy_time_fmt);
 
-	if (persistent_temp_files_saver_src_id != 0)
-		g_source_remove(persistent_temp_files_saver_src_id);
+	if (persistent_temp_files_updater_src_id != 0)
+		g_source_remove(persistent_temp_files_updater_src_id);
 
 	g_free(persistent_temp_files_target_dir);
 
