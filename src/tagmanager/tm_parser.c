@@ -669,13 +669,12 @@ static TMParserMapGroup group_FORTRAN[] = {
 
 static TMParserMapEntry map_MATLAB[] = {
 	{'f', tm_tag_function_t},  // function
-	{'v', tm_tag_variable_t},  // variable
+	{'v', tm_tag_undef_t},     // variable
 	{'c', tm_tag_class_t},     // class
 };
 static TMParserMapGroup group_MATLAB[] = {
 	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
-	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
 #define map_CUDA map_C
@@ -946,17 +945,18 @@ static TMParserMapGroup group_JSON[] = {
 #define group_ZEPHIR group_PHP
 
 static TMParserMapEntry map_POWERSHELL[] = {
-	{'f', tm_tag_function_t},  // function
-	{'v', tm_tag_variable_t},  // variable
-	{'c', tm_tag_class_t},     // class
-	{'i', tm_tag_function_t},  // filter
-	{'g', tm_tag_enum_t},      // enum
+	{'f', tm_tag_function_t},    // function
+	{'v', tm_tag_variable_t},    // variable
+	{'c', tm_tag_class_t},       // class
+	{'i', tm_tag_function_t},    // filter
+	{'g', tm_tag_enum_t},        // enum
+	{'e', tm_tag_enumerator_t},  // enumlabel
 };
 static TMParserMapGroup group_POWERSHELL[] = {
 	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
 	{N_("Enums"), TM_ICON_STRUCT, tm_tag_enum_t},
-	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_enumerator_t},
 };
 
 static TMParserMapEntry map_JULIA[] = {

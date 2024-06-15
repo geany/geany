@@ -32,20 +32,31 @@ typedef struct {
 	char *buffer;
 } vstring;
 
+/* Define readtags' own off_t. */
+#ifdef _WIN32
+typedef long long rt_off_t;
+#else
+typedef off_t rt_off_t;
+#endif
+
 /* Information about current tag file */
 struct sTagFile {
 		/* has the file been opened and this structure initialized? */
-	short initialized;
+	unsigned char initialized;
 		/* format of tag file */
-	short format;
+	unsigned char format;
+		/* 1 "u-ctags" is set to !_TAG_OUTPUT_MODE pseudo tag
+		 * and "slash" is set to !_TAG_OUTPUT_FILESEP
+		 * pseudo tag in the tags file. */
+	unsigned char inputUCtagsMode;
 		/* how is the tag file sorted? */
 	tagSortType sortMethod;
 		/* pointer to file structure */
 	FILE* fp;
 		/* file position of first character of `line' */
-	off_t pos;
+	rt_off_t pos;
 		/* size of tag file in seekable positions */
-	off_t size;
+	rt_off_t size;
 		/* last line read */
 	vstring line;
 		/* name of tag in last line read */
@@ -53,7 +64,7 @@ struct sTagFile {
 		/* defines tag search state */
 	struct {
 				/* file position of last match for tag */
-			off_t pos;
+			rt_off_t pos;
 				/* name of tag last searched for */
 			char *name;
 				/* length of name for partial matches */
@@ -97,8 +108,34 @@ static const size_t PseudoTagPrefixLength = 2;
 *   FUNCTION DEFINITIONS
 */
 
+static rt_off_t readtags_ftell(FILE *fp)
+{
+	rt_off_t pos;
+
+#ifdef _WIN32
+	pos = _ftelli64(fp);
+#else
+	pos = ftell(fp);
+#endif
+
+	return pos;
+}
+
+static int readtags_fseek(FILE *fp, rt_off_t pos, int whence)
+{
+	int ret;
+
+#ifdef _WIN32
+	ret = _fseeki64(fp, pos, whence);
+#else
+	ret = fseek(fp, pos, whence);
+#endif
+
+	return ret;
+}
+
 /* Converts a hexadecimal digit to its value */
-static int xdigitValue (char digit)
+static int xdigitValue (unsigned char digit)
 {
 	if (digit >= '0' && digit <= '9')
 		return digit - '0';
@@ -114,38 +151,41 @@ static int xdigitValue (char digit)
  * Reads the first character from the string, possibly un-escaping it, and
  * advances *s to the start of the next character.
  */
-static int readTagCharacter (const char **s)
+static int readTagCharacter (const char **const s)
 {
-	int c = **(const unsigned char **)s;
+	const unsigned char *p = (const unsigned char *) *s;
+	int c = *p;
 
-	(*s)++;
+	p++;
 
 	if (c == '\\')
 	{
-		switch (**s)
+		switch (*p)
 		{
-			case 't': c = '\t'; (*s)++; break;
-			case 'r': c = '\r'; (*s)++; break;
-			case 'n': c = '\n'; (*s)++; break;
-			case '\\': c = '\\'; (*s)++; break;
+			case 't': c = '\t'; p++; break;
+			case 'r': c = '\r'; p++; break;
+			case 'n': c = '\n'; p++; break;
+			case '\\': c = '\\'; p++; break;
 			/* Universal-CTags extensions */
-			case 'a': c = '\a'; (*s)++; break;
-			case 'b': c = '\b'; (*s)++; break;
-			case 'v': c = '\v'; (*s)++; break;
-			case 'f': c = '\f'; (*s)++; break;
+			case 'a': c = '\a'; p++; break;
+			case 'b': c = '\b'; p++; break;
+			case 'v': c = '\v'; p++; break;
+			case 'f': c = '\f'; p++; break;
 			case 'x':
-				if (isxdigit ((*s)[1]) && isxdigit ((*s)[2]))
+				if (isxdigit (p[1]) && isxdigit (p[2]))
 				{
-					int val = (xdigitValue ((*s)[1]) << 4) | xdigitValue ((*s)[2]);
+					int val = (xdigitValue (p[1]) << 4) | xdigitValue (p[2]);
 					if (val < 0x80)
 					{
-						(*s) += 3;
+						p += 3;
 						c = val;
 					}
 				}
 				break;
 		}
 	}
+
+	*s = (const char *) p;
 
 	return c;
 }
@@ -285,7 +325,7 @@ static int readTagLineRaw (tagFile *const file, int *err)
 		char *const pLastChar = file->line.buffer + file->line.size - 2;
 		char *line;
 
-		file->pos = ftell (file->fp);
+		file->pos = readtags_ftell (file->fp);
 		if (file->pos < 0)
 		{
 			*err = errno;
@@ -312,7 +352,8 @@ static int readTagLineRaw (tagFile *const file, int *err)
 				*err = ENOMEM;
 				result = 0;
 			}
-			if (fseek (file->fp, file->pos, SEEK_SET) < 0)
+
+			if (readtags_fseek (file->fp, file->pos, SEEK_SET) < 0)
 			{
 				*err = errno;
 				result = 0;
@@ -485,6 +526,36 @@ static unsigned int countContinuousBackslashesBackward(const char *from,
 	return counter;
 }
 
+/* When unescaping, the input string becomes shorter.
+ * e.g. \t occupies two bytes on the tag file.
+ * It is converted to 0x9 and occupies one byte.
+ * memmove called here for shortening the line
+ * buffer. */
+static char *unescapeInPlace (char *q, char **tab, size_t *p_len)
+{
+	char *p = q;
+
+	while (*p != '\0')
+	{
+		const char *next = p;
+		int ch = readTagCharacter (&next);
+		size_t skip = next - p;
+
+		*p = (char) ch;
+		p++;
+		*p_len -= skip;
+		if (skip > 1)
+		{
+			/* + 1 is for moving the area including the last '\0'. */
+			memmove (p, next, *p_len + 1);
+			if (*tab)
+				*tab -= skip - 1;
+		}
+	}
+
+	return p;
+}
+
 static tagResult parseTagLine (tagFile *file, tagEntry *const entry, int *err)
 {
 	int i;
@@ -500,34 +571,22 @@ static tagResult parseTagLine (tagFile *file, tagEntry *const entry, int *err)
 		*tab = '\0';
 	}
 
-	/* When unescaping, the input string becomes shorter.
-	 * e.g. \t occupies two bytes on the tag file.
-	 * It is converted to 0x9 and occupies one byte.
-	 * memmove called here for shortening the line
-	 * buffer. */
-	while (*p != '\0')
-	{
-		const char *next = p;
-		int ch = readTagCharacter (&next);
-		size_t skip = next - p;
-
-		*p = (char) ch;
-		p++;
-		p_len -= skip;
-		if (skip > 1)
-		{
-			/* + 1 is for moving the area including the last '\0'. */
-			memmove (p, next, p_len + 1);
-			if (tab)
-				tab -= skip - 1;
-		}
-	}
+	p = unescapeInPlace (p, &tab, &p_len);
 
 	if (tab != NULL)
 	{
 		p = tab + 1;
 		entry->file = p;
 		tab = strchr (p, TAB);
+		if (file->inputUCtagsMode)
+		{
+			if (tab != NULL)
+			{
+				*tab = '\0';
+			}
+			p = unescapeInPlace (p, &tab, &p_len);
+		}
+
 		if (tab != NULL)
 		{
 			int fieldsPresent;
@@ -554,12 +613,12 @@ static tagResult parseTagLine (tagFile *file, tagEntry *const entry, int *err)
 				else
 					++p;
 			}
-			else if (isdigit ((int) *(unsigned char*) p))
+			else if (isdigit (*(unsigned char*) p))
 			{
 				/* parse line number */
 				entry->address.pattern = p;
 				entry->address.lineNumber = atol (p);
-				while (isdigit ((int) *(unsigned char*) p))
+				while (isdigit (*(unsigned char*) p))
 					++p;
 				if (p)
 				{
@@ -636,6 +695,8 @@ static tagResult readPseudoTags (tagFile *const file, tagFileInfo *const info)
 	int err = 0;
 	tagResult result = TagSuccess;
 	const size_t prefixLength = strlen (PseudoTagPrefix);
+	int tag_output_mode_u_ctags = 0;
+	int tag_output_filesep_slash = 0;
 
 	info->file.format     = 1;
 	info->file.sort       = TAG_UNSORTED;
@@ -683,7 +744,7 @@ static tagResult readPseudoTags (tagFile *const file, tagFileInfo *const info)
 					err = TagErrnoUnexpectedFormat;
 					break;
 				}
-				file->format = (short) m;
+				file->format = (unsigned char) m;
 			}
 			else if (strcmp (key, "TAG_PROGRAM_AUTHOR") == 0)
 			{
@@ -721,6 +782,16 @@ static tagResult readPseudoTags (tagFile *const file, tagFileInfo *const info)
 					break;
 				}
 			}
+			else if (strcmp (key, "TAG_OUTPUT_MODE") == 0)
+			{
+				if (strcmp (value, "u-ctags") == 0)
+					tag_output_mode_u_ctags = 1;
+			}
+			else if (strcmp (key, "TAG_OUTPUT_FILESEP") == 0)
+			{
+				if (strcmp (value, "slash") == 0)
+					tag_output_filesep_slash = 1;
+			}
 
 			info->file.format     = file->format;
 			info->file.sort       = file->sortMethod;
@@ -730,6 +801,10 @@ static tagResult readPseudoTags (tagFile *const file, tagFileInfo *const info)
 			info->program.version = file->program.version;
 		}
 	}
+
+	if (tag_output_mode_u_ctags && tag_output_filesep_slash)
+		file->inputUCtagsMode = 1;
+
 	if (fsetpos (file->fp, &startOfLine) < 0)
 		err = errno;
 
@@ -748,7 +823,7 @@ static tagResult gotoFirstLogicalTag (tagFile *const file)
 {
 	fpos_t startOfLine;
 
-	if (fseek(file->fp, 0L, SEEK_SET) == -1)
+	if (readtags_fseek(file->fp, 0, SEEK_SET) == -1)
 	{
 		file->err = errno;
 		return TagFailure;
@@ -798,37 +873,55 @@ static tagFile *initialize (const char *const filePath, tagFileInfo *const info)
 		result->fields.max, sizeof (tagExtensionField));
 	if (result->fields.list == NULL)
 		goto mem_error;
-	result->fp = fopen (filePath, "rb");
+
+#if defined(__GLIBC__) && (__GLIBC__ >= 2) \
+	&& defined(__GLIBC_MINOR__) && (__GLIBC_MINOR__ >= 3)
+	result->fp = fopen (filePath, "rbm");
+#endif
+	if (result->fp == NULL)
+	{
+		errno = 0;
+		result->fp = fopen (filePath, "rb");
+	}
 	if (result->fp == NULL)
 	{
 		info->status.error_number = errno;
 		goto file_error;
 	}
-	else
+
+	/* Record the size of the tags file to `size` field of result. */
+	if (readtags_fseek (result->fp, 0, SEEK_END) == -1)
 	{
-		if (fseek (result->fp, 0, SEEK_END) == -1)
-		{
-			info->status.error_number = errno;
-			goto file_error;
-		}
-		result->size = ftell (result->fp);
-		if (result->size == -1)
-		{
-			info->status.error_number = errno;
-			goto file_error;
-		}
-		if (fseek(result->fp, 0L, SEEK_SET) == -1)
-		{
-			info->status.error_number = errno;
-			goto file_error;
-		}
-
-		if (readPseudoTags (result, info) == TagFailure)
-			goto file_error;
-
-		info->status.opened = 1;
-		result->initialized = 1;
+		info->status.error_number = errno;
+		goto file_error;
 	}
+	result->size = readtags_ftell (result->fp);
+	if (result->size == -1)
+	{
+		/* fseek() retruns an int value.
+		 * We observed following behavior on Windows;
+		 * if sizeof(int) of the platform is too small for
+		 * representing the size of the tags file, fseek()
+		 * returns -1 and it doesn't set errno.
+		 */
+		info->status.error_number = errno;
+		if (info->status.error_number == 0)
+			info->status.error_number = TagErrnoFileMaybeTooBig;
+
+		goto file_error;
+	}
+	if (readtags_fseek(result->fp, 0, SEEK_SET) == -1)
+	{
+		info->status.error_number = errno;
+		goto file_error;
+	}
+
+	if (readPseudoTags (result, info) == TagFailure)
+		goto file_error;
+
+	info->status.opened = 1;
+	result->initialized = 1;
+
 	return result;
  mem_error:
 	info->status.error_number = ENOMEM;
@@ -905,9 +998,9 @@ static const char *readFieldValue (
 	return result;
 }
 
-static int readTagLineSeek (tagFile *const file, const off_t pos)
+static int readTagLineSeek (tagFile *const file, const rt_off_t pos)
 {
-	if (fseek (file->fp, pos, SEEK_SET) < 0)
+	if (readtags_fseek (file->fp, pos, SEEK_SET) < 0)
 	{
 		file->err = errno;
 		return 0;
@@ -951,11 +1044,11 @@ static tagResult findFirstNonMatchBefore (tagFile *const file)
 #define JUMP_BACK 512
 	int more_lines;
 	int comp;
-	off_t start = file->pos;
-	off_t pos = start;
+	rt_off_t start = file->pos;
+	rt_off_t pos = start;
 	do
 	{
-		if (pos < (off_t) JUMP_BACK)
+		if (pos < (rt_off_t) JUMP_BACK)
 			pos = 0;
 		else
 			pos = pos - JUMP_BACK;
@@ -971,7 +1064,7 @@ static tagResult findFirstMatchBefore (tagFile *const file)
 {
 	tagResult result = TagFailure;
 	int more_lines;
-	off_t start = file->pos;
+	rt_off_t start = file->pos;
 	if (findFirstNonMatchBefore (file) != TagSuccess)
 		return TagFailure;
 	do
@@ -988,10 +1081,10 @@ static tagResult findFirstMatchBefore (tagFile *const file)
 static tagResult findBinary (tagFile *const file)
 {
 	tagResult result = TagFailure;
-	off_t lower_limit = 0;
-	off_t upper_limit = file->size;
-	off_t last_pos = 0;
-	off_t pos = upper_limit / 2;
+	rt_off_t lower_limit = 0;
+	rt_off_t upper_limit = file->size;
+	rt_off_t last_pos = 0;
+	rt_off_t pos = upper_limit / 2;
 	while (result != TagSuccess)
 	{
 		if (! readTagLineSeek (file, pos))
@@ -1083,18 +1176,18 @@ static tagResult find (tagFile *const file, tagEntry *const entry,
 	file->search.nameLength = strlen (name);
 	file->search.partial = (options & TAG_PARTIALMATCH) != 0;
 	file->search.ignorecase = (options & TAG_IGNORECASE) != 0;
-	if (fseek (file->fp, 0, SEEK_END) < 0)
+	if (readtags_fseek (file->fp, 0, SEEK_END) < 0)
 	{
 		file->err = errno;
 		return TagFailure;
 	}
-	file->size = ftell (file->fp);
+	file->size = readtags_ftell (file->fp);
 	if (file->size == -1)
 	{
 		file->err = errno;
 		return TagFailure;
 	}
-	if (fseek(file->fp, 0L, SEEK_SET) == -1)
+	if (readtags_fseek(file->fp, 0, SEEK_SET) == -1)
 	{
 		file->err = errno;
 		return TagFailure;
@@ -1167,7 +1260,7 @@ static tagResult findPseudoTag (tagFile *const file, int rewindBeforeFinding, ta
 
 	if (rewindBeforeFinding)
 	{
-		if (fseek(file->fp, 0L, SEEK_SET) == -1)
+		if (readtags_fseek(file->fp, 0, SEEK_SET) == -1)
 		{
 			file->err = errno;
 			return TagFailure;
@@ -1289,6 +1382,39 @@ extern tagResult tagsFirstPseudoTag (tagFile *const file, tagEntry *const entry)
 extern tagResult tagsNextPseudoTag (tagFile *const file, tagEntry *const entry)
 {
 	return findPseudoTag (file, 0, entry);
+}
+
+extern tagResult tagsFindPseudoTag (tagFile *const file, tagEntry *const entry,
+									const char *const name, const int match)
+{
+	size_t len;
+	tagEntry entry0;
+	tagEntry *entryp = entry? entry: &entry0;
+
+	tagResult r = tagsFirstPseudoTag (file, entryp);
+	if (r != TagSuccess)
+		return r;
+
+	if (match & TAG_PARTIALMATCH)
+		len = strlen (name);
+
+	do
+	{
+		if (match & TAG_PARTIALMATCH)
+		{
+			if (strncmp (entryp->name, name, len) == 0)
+				return TagSuccess;
+		}
+		else
+		{
+			if (strcmp (entryp->name, name) == 0)
+				return TagSuccess;
+		}
+		r = tagsNextPseudoTag (file, entryp);
+	}
+	while (r == TagSuccess);
+
+	return r;
 }
 
 extern tagResult tagsClose (tagFile *const file)

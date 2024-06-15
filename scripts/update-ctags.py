@@ -33,6 +33,10 @@ print('Copying dsl files...')
 for f in ['dsl/es.c', 'dsl/es.h', 'dsl/optscript.c', 'dsl/optscript.h']:
 	shutil.copy(srcdir + '/' + f, dstdir + '/' + f)
 
+print('Copying libreadtags files...')
+for f in ['libreadtags/readtags.c', 'libreadtags/readtags.h']:
+	shutil.copy(srcdir + '/' + f, dstdir + '/' + f)
+
 os.chdir(srcdir)
 main_src_files = glob.glob('main/*.c') + glob.glob('main/*.h')
 os.chdir(dstdir)

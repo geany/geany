@@ -6,3 +6,19 @@ EnumName3Ì2Ö0
 enum:       EnumName3
 EnumName4Ì2Ö0
 enum:       EnumName4
+Label11Ì4ÎEnumName1Ö0
+enumerator: EnumName1 :: Label11
+Label12Ì4ÎEnumName1Ö0
+enumerator: EnumName1 :: Label12
+Label21Ì4ÎEnumName2Ö0
+enumerator: EnumName2 :: Label21
+Label22Ì4ÎEnumName2Ö0
+enumerator: EnumName2 :: Label22
+Label31Ì4ÎEnumName3Ö0
+enumerator: EnumName3 :: Label31
+Label32Ì4ÎEnumName3Ö0
+enumerator: EnumName3 :: Label32
+Label41Ì4ÎEnumName4Ö0
+enumerator: EnumName4 :: Label41
+Label42Ì4ÎEnumName4Ö0
+enumerator: EnumName4 :: Label42
