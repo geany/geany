@@ -463,6 +463,18 @@ gboolean main_is_realized(void)
 
 
 /**
+ *  Checks whether Geany is quitting completely right now.
+ *
+ *  @return @c TRUE if the Geany is exiting right now or @c FALSE otherwise.
+ **/
+GEANY_API_SYMBOL
+gboolean geany_is_quitting(void)
+{
+	return main_status.quitting;
+}
+
+
+/**
  *  Initialises the gettext translation system.
  *  This is a convenience function to set up gettext for internationalisation support
  *  in external plugins. You should call this function early in @ref plugin_init().
