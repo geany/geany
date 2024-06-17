@@ -100,6 +100,7 @@ libgeany_la_SOURCES = \
 	spawn.c spawn.h \
 	stash.c stash.h \
 	support.h \
+	symbol.c symbol.h \
 	symbols.c symbols.h \
 	templates.c templates.h \
 	toolbar.c toolbar.h \
