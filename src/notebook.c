@@ -203,7 +203,8 @@ static gboolean on_switch_dialog_key_press_event(GtkWidget *widget, GdkEventKey 
 static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
 	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
-	if (switch_in_progress && is_modifier_key(ev->keyval))
+	if (switch_in_progress && (is_modifier_key(ev->keyval) ||
+				(keybindings_get_modifiers(ev->state) == 0 && ev->keyval == GDK_KEY_Escape)))
 		stop_switch();
 
 	return FALSE;
