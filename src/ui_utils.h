@@ -74,6 +74,9 @@ typedef struct GeanyInterfacePrefs
 	gint			openfiles_path_mode;
 	/** number of characters of a filename to be visible on the tab label */
 	gint			tab_label_len;
+	gint			goto_definition_modifier;	/**< click modifier used for goto definition */
+	gint			multi_caret_modifier;		/**< click modifier used for multiple carets */
+	gint			rect_selection_modifier;	/**< click modifier used for rectangular selection */
 }
 GeanyInterfacePrefs;
 

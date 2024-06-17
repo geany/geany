@@ -292,7 +292,7 @@ gboolean motion_notify_event(GtkWidget* widget, GdkEventMotion event, gpointer d
 {
 	GeanyEditor *editor = data;
 
-	if (event.state & GDK_BUTTON1_MASK && event.state & GDK_MOD1_MASK)
+	if (event.state == (GDK_BUTTON1_MASK | interface_prefs.multi_caret_modifier))
 	{
 		gint pos = sci_get_position_from_xy(editor->sci,
 			(gint)event.x, (gint)event.y, FALSE);
@@ -339,12 +339,12 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
 			return TRUE;
 		}
-		if (event->type == GDK_BUTTON_PRESS && event->state == GDK_MOD1_MASK)
+		if (event->type == GDK_BUTTON_PRESS && event->state == interface_prefs.multi_caret_modifier)
 		{
 			SSM(doc->editor->sci, SCI_ADDSELECTION, editor_info.click_pos, editor_info.click_pos);
 			return TRUE;
 		}
-		if (event->type == GDK_2BUTTON_PRESS && event->state == GDK_MOD1_MASK)
+		if (event->type == GDK_2BUTTON_PRESS && event->state == interface_prefs.multi_caret_modifier)
 		{
 			gint start = sci_word_start_position(editor->sci, editor_info.click_pos, TRUE);
 			gint end = sci_word_end_position(editor->sci, editor_info.click_pos, TRUE);
@@ -4969,13 +4969,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
 	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
 
-	/* rectangular selection modifier for creating rectangular selections with the mouse.
-	 * We use the historical Scintilla values by default. */
-#ifdef G_OS_WIN32
-	rectangular_selection_modifier = SCMOD_ALT;
-#else
 	rectangular_selection_modifier = SCMOD_CTRL;
-#endif
+	if (interface_prefs.rect_selection_modifier & GDK_MOD1_MASK)
+		rectangular_selection_modifier = SCMOD_ALT;
+	else if (interface_prefs.rect_selection_modifier & GDK_SUPER_MASK)
+		rectangular_selection_modifier = SCMOD_SUPER;
 	SSM(sci, SCI_SETRECTANGULARSELECTIONMODIFIER, rectangular_selection_modifier, 0);
 
 	/* virtual space */

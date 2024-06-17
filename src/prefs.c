@@ -379,6 +379,94 @@ static void kb_init(KbData *kbdata)
 }
 
 
+static gint click_modifier_to_combo_index(gint modifier)
+{
+	/* Combo items: Ctrl, Alt, Super, Ctrl+Shift, Alt+Shift, Super+Shift, Ctrl+Alt, Ctrl+Super */
+	switch (modifier)
+	{
+		case GDK_CONTROL_MASK:
+			return 0;
+		case GDK_MOD1_MASK:
+			return 1;
+		case GDK_SUPER_MASK:
+			return 2;
+		case GDK_CONTROL_MASK | GDK_SHIFT_MASK:
+			return 3;
+		case GDK_MOD1_MASK | GDK_SHIFT_MASK:
+			return 4;
+		case GDK_SUPER_MASK | GDK_SHIFT_MASK:
+			return 5;
+		case GDK_CONTROL_MASK | GDK_MOD1_MASK:
+			return 6;
+		case GDK_CONTROL_MASK | GDK_SUPER_MASK:
+			return 7;
+	}
+
+	return 0;
+}
+
+
+static gint combo_index_to_click_modifier(gint index)
+{
+	/* Combo items: Ctrl, Alt, Super, Ctrl+Shift, Alt+Shift, Super+Shift, Ctrl+Alt, Ctrl+Super */
+	switch (index)
+	{
+		case 0:
+			return GDK_CONTROL_MASK;
+		case 1:
+			return GDK_MOD1_MASK;
+		case 2:
+			return GDK_SUPER_MASK;
+		case 3:
+			return GDK_CONTROL_MASK | GDK_SHIFT_MASK;
+		case 4:
+			return GDK_MOD1_MASK | GDK_SHIFT_MASK;
+		case 5:
+			return GDK_SUPER_MASK | GDK_SHIFT_MASK;
+		case 6:
+			return GDK_CONTROL_MASK | GDK_MOD1_MASK;
+		case 7:
+			return GDK_CONTROL_MASK | GDK_SUPER_MASK;
+	}
+
+	return GDK_CONTROL_MASK;
+}
+
+
+static gint click_modifier_to_combo_index_rect(gint modifier)
+{
+	/* Combo items: Ctrl+Shift, Alt+Shift, Super+Shift */
+	switch (modifier)
+	{
+		case GDK_CONTROL_MASK | GDK_SHIFT_MASK:
+			return 0;
+		case GDK_MOD1_MASK | GDK_SHIFT_MASK:
+			return 1;
+		case GDK_SUPER_MASK | GDK_SHIFT_MASK:
+			return 2;
+	}
+
+	return 0;
+}
+
+
+static gint combo_index_to_click_modifier_rect(gint index)
+{
+	/* Combo items: Ctrl+Shift, Alt+Shift, Super+Shift */
+	switch (index)
+	{
+		case 0:
+			return GDK_CONTROL_MASK | GDK_SHIFT_MASK;
+		case 1:
+			return GDK_MOD1_MASK | GDK_SHIFT_MASK;
+		case 2:
+			return GDK_SUPER_MASK | GDK_SHIFT_MASK;
+	}
+
+	return GDK_CONTROL_MASK | GDK_SHIFT_MASK;
+}
+
+
 /* note: new 'simple' prefs should use Stash code in keyfile.c */
 static void prefs_init_dialog(void)
 {
@@ -485,6 +573,14 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.statusbar_visible);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_goto_definition");
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), click_modifier_to_combo_index(interface_prefs.goto_definition_modifier));
+
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_multi_carets");
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), click_modifier_to_combo_index(interface_prefs.multi_caret_modifier));
+
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_rect_selection");
+	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), click_modifier_to_combo_index_rect(interface_prefs.rect_selection_modifier));
 
 	/* Toolbar settings */
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
@@ -946,6 +1042,15 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_tab_label_len");
 		interface_prefs.tab_label_len = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_goto_definition");
+		interface_prefs.goto_definition_modifier = combo_index_to_click_modifier(gtk_combo_box_get_active(GTK_COMBO_BOX(widget)));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_multi_carets");
+		interface_prefs.multi_caret_modifier = combo_index_to_click_modifier(gtk_combo_box_get_active(GTK_COMBO_BOX(widget)));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_rect_selection");
+		interface_prefs.rect_selection_modifier = combo_index_to_click_modifier_rect(gtk_combo_box_get_active(GTK_COMBO_BOX(widget)));
 
 		/* Toolbar settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
