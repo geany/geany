@@ -755,12 +755,11 @@ static gboolean auto_save(gpointer data)
 
 static void autosave_set_timeout(void)
 {
-	if (autosave_src_id != 0)
-		g_source_remove(autosave_src_id);
-
 	if (! enable_autosave)
 		return;
 
+	if (autosave_src_id != 0)
+		g_source_remove(autosave_src_id);
 	autosave_src_id = g_timeout_add(autosave_interval * 1000, (GSourceFunc) auto_save, NULL);
 }
 
