@@ -185,6 +185,21 @@ static void stop_switch(void)
 }
 
 
+static gboolean on_switch_dialog_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
+{
+	GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK,
+			GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED);
+
+	if (keybindings_check_event(ev, kb))
+	{
+		notebook_switch_tablastused();
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
 static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
 	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
@@ -195,12 +210,10 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 }
 
 
-static gboolean on_focus_out_event(GtkWidget* widget, GdkEventFocus event, gpointer user_data)
+static void on_is_active_notify(GObject *object, GParamSpec *pspec, gpointer data)
 {
-	if (switch_in_progress)
+	if (switch_in_progress && ! gtk_window_is_active(GTK_WINDOW(object)))
 		stop_switch();
-
-	return FALSE;
 }
 
 
@@ -225,7 +238,8 @@ static GtkWidget *create_switch_dialog(void)
 	switch_dialog_label = widget;
 
 	g_signal_connect(dialog, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
-	g_signal_connect(main_widgets.window, "focus-out-event", G_CALLBACK(on_focus_out_event), NULL);
+	g_signal_connect(dialog, "key-press-event", G_CALLBACK(on_switch_dialog_key_press_event), NULL);
+	g_signal_connect(main_widgets.window, "notify::is-active", G_CALLBACK(on_is_active_notify), NULL);
 	return dialog;
 }
 
@@ -241,6 +255,7 @@ static void update_filename_label(void)
 	{
 		switch_dialog = create_switch_dialog();
 		gtk_widget_show_all(switch_dialog);
+		gtk_grab_add(switch_dialog);
 	}
 
 	queue_length = g_queue_get_length(mru_docs);
@@ -280,7 +295,7 @@ static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 		return FALSE;
 	}
 
-	if (gtk_widget_has_focus(main_widgets.window))
+	if (gtk_window_is_active(GTK_WINDOW(main_widgets.window)))
 		update_filename_label();
 	else
 		stop_switch();
