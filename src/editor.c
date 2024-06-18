@@ -288,16 +288,55 @@ void editor_snippets_init(void)
 }
 
 
+static void drop_selections_in_range(ScintillaObject *sci, gint start, gint end)
+{
+	gboolean retry = TRUE;
+
+	while (retry)
+	{
+		gint main_sel = SSM(sci, SCI_GETMAINSELECTION, 0, 0);
+		gint sels = SSM(sci, SCI_GETSELECTIONS, 0, 0);
+		gint i;
+
+		retry = FALSE;
+
+		for (i = 0; i < sels; i++)
+		{
+			gint caret = SSM(sci, SCI_GETSELECTIONNCARET, i, 0);
+			gint anchor = SSM(sci, SCI_GETSELECTIONNANCHOR, i, 0);
+			gint lower = MIN(caret, anchor);
+			gint upper = MAX(caret, anchor);
+
+			if (i == main_sel)
+				continue;
+
+			if (lower <= end && start <= upper)
+			{
+				SSM(sci, SCI_DROPSELECTIONN, i, 0);
+				/* SCI_DROPSELECTIONN may change indexes of individual selections,
+				 * including the main selection. Repeat the whole thing again
+				 * with updated main selection index until there is no
+				 * SCI_DROPSELECTIONN performed. */
+				retry = TRUE;
+				break;
+			}
+		}
+	}
+}
+
+
 gboolean motion_notify_event(GtkWidget* widget, GdkEventMotion event, gpointer data)
 {
 	GeanyEditor *editor = data;
 
 	if (event.state == (GDK_BUTTON1_MASK | interface_prefs.multi_caret_modifier))
 	{
+		gint anchor = SSM(editor->sci, SCI_GETANCHOR, 0, 0);
 		gint pos = sci_get_position_from_xy(editor->sci,
 			(gint)event.x, (gint)event.y, FALSE);
-		gint main_selection = SSM(editor->sci, SCI_GETMAINSELECTION, 0, 0);
-		SSM(editor->sci, SCI_SETSELECTIONNCARET, main_selection, pos);
+
+		SSM(editor->sci, SCI_SETCURRENTPOS, pos, 0);
+		drop_selections_in_range(editor->sci, MIN(anchor, pos), MAX(anchor, pos));
 	}
 	return FALSE;
 }
@@ -342,6 +381,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		if (event->type == GDK_BUTTON_PRESS && event->state == interface_prefs.multi_caret_modifier)
 		{
 			SSM(doc->editor->sci, SCI_ADDSELECTION, editor_info.click_pos, editor_info.click_pos);
+			drop_selections_in_range(doc->editor->sci, editor_info.click_pos, editor_info.click_pos);
 			return TRUE;
 		}
 		if (event->type == GDK_2BUTTON_PRESS && event->state == interface_prefs.multi_caret_modifier)
@@ -349,6 +389,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 			gint start = sci_word_start_position(editor->sci, editor_info.click_pos, TRUE);
 			gint end = sci_word_end_position(editor->sci, editor_info.click_pos, TRUE);
 			SSM(doc->editor->sci, SCI_ADDSELECTION, start, end);
+			drop_selections_in_range(doc->editor->sci, start, end);
 			return TRUE;
 		}
 		return document_check_disk_status(doc, FALSE);
