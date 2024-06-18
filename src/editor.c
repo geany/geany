@@ -378,13 +378,13 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
 			return TRUE;
 		}
-		if (event->type == GDK_BUTTON_PRESS && event->state == interface_prefs.multi_caret_modifier)
+		if (event->type == GDK_BUTTON_PRESS && state == interface_prefs.multi_caret_modifier)
 		{
 			SSM(doc->editor->sci, SCI_ADDSELECTION, editor_info.click_pos, editor_info.click_pos);
 			drop_selections_in_range(doc->editor->sci, editor_info.click_pos, editor_info.click_pos);
 			return TRUE;
 		}
-		if (event->type == GDK_2BUTTON_PRESS && event->state == interface_prefs.multi_caret_modifier)
+		if (event->type == GDK_2BUTTON_PRESS && state == interface_prefs.multi_caret_modifier)
 		{
 			gint start = sci_word_start_position(editor->sci, editor_info.click_pos, TRUE);
 			gint end = sci_word_end_position(editor->sci, editor_info.click_pos, TRUE);
