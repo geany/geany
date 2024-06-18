@@ -38,6 +38,7 @@
 
 #include "app.h"
 #include "callbacks.h" /* FIXME: for ignore_callback */
+#include "dialogs.h"
 #include "documentprivate.h"
 #include "editor.h"
 #include "encodings.h"
@@ -1263,23 +1264,29 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 
 void symbols_show_load_tags_dialog(void)
 {
-	GtkWidget *dialog;
+	GtkFileChooser *dialog;
 	GtkFileFilter *filter;
 
-	dialog = gtk_file_chooser_dialog_new(_("Load Tags File"), GTK_WINDOW(main_widgets.window),
-		GTK_FILE_CHOOSER_ACTION_OPEN,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OPEN, GTK_RESPONSE_OK,
-		NULL);
-	gtk_widget_set_name(dialog, "GeanyDialog");
+	if (interface_prefs.use_native_windows_dialogs)
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Load Tags File"),
+			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL));
+	else
+	{
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Load Tags File"), GTK_WINDOW(main_widgets.window),
+			GTK_FILE_CHOOSER_ACTION_OPEN,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+			NULL));
+		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialog");
+	}
 	filter = gtk_file_filter_new();
 	gtk_file_filter_set_name(filter, _("Geany tags file (*.*.tags)"));
 	gtk_file_filter_add_pattern(filter, "*.*.tags");
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+	gtk_file_chooser_add_filter(dialog, filter);
 
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
-		GSList *flist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
+		GSList *flist = gtk_file_chooser_get_filenames(dialog);
 		GSList *item;
 
 		for (item = flist; item != NULL; item = g_slist_next(item))
@@ -1303,7 +1310,7 @@ void symbols_show_load_tags_dialog(void)
 		}
 		g_slist_free(flist);
 	}
-	gtk_widget_destroy(dialog);
+	dialogs_file_chooser_destroy(dialog);
 }
 
 

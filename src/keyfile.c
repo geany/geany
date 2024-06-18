@@ -79,11 +79,14 @@
 #define GEANY_DISK_CHECK_TIMEOUT		30
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
 #ifdef G_OS_WIN32
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
+# define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
+# define GEANY_DEFAULT_USE_NATIVE_DLGS	TRUE
 #elif defined(__APPLE__)
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"open -a terminal %c"
+# define GEANY_DEFAULT_TOOLS_TERMINAL	"open -a terminal %c"
+# define GEANY_DEFAULT_USE_NATIVE_DLGS	TRUE
 #else
-#define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
+# define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
+# define GEANY_DEFAULT_USE_NATIVE_DLGS	FALSE
 #endif
 #ifdef __APPLE__
 #define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
@@ -555,7 +558,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", interface_prefs.tab_pos_editor);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
 	g_key_file_set_integer(config, PACKAGE, "tab_label_length", interface_prefs.tab_label_len);
-	g_key_file_set_integer(config, PACKAGE, "modifier_goto_definition", interface_prefs.goto_definition_modifier);
+	g_key_file_set_boolean(config, PACKAGE, "use_native_dialogs", interface_prefs.use_native_windows_dialogs);
+  g_key_file_set_integer(config, PACKAGE, "modifier_goto_definition", interface_prefs.goto_definition_modifier);
 	g_key_file_set_integer(config, PACKAGE, "modifier_multi_caret", interface_prefs.multi_caret_modifier);
 	g_key_file_set_integer(config, PACKAGE, "modifier_rect_selection", interface_prefs.rect_selection_modifier);
 
@@ -908,6 +912,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
+	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_dialogs", GEANY_DEFAULT_USE_NATIVE_DLGS);
 	interface_prefs.goto_definition_modifier = utils_get_setting_integer(config, PACKAGE, "modifier_goto_definition", GDK_CONTROL_MASK);
 	interface_prefs.multi_caret_modifier = utils_get_setting_integer(config, PACKAGE, "modifier_multi_caret", GEANY_DEFAULT_MULTI_CARET_MODIF);
 	interface_prefs.rect_selection_modifier = utils_get_setting_integer(config, PACKAGE, "modifier_rect_selection", GEANY_DEFAULT_RECT_SELECTION_MODIF);
@@ -1369,8 +1374,8 @@ static gboolean open_session_file(gchar **tmp, guint len)
 
 
 /* Open session files
- * Note: notebook page switch handler and adding to recent files list is always disabled
- * for all files opened within this function */
+ * Note: notebook page switch handler is delayed, and adding to recent files list is
+ * always disabled for all files opened within this function */
 void configuration_open_files(GPtrArray *session_files)
 {
 	gboolean failure = FALSE;
@@ -1396,7 +1401,7 @@ void configuration_open_files(GPtrArray *session_files)
 	if (failure)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
 	else
-		document_show_tab_idle(session_notebook_page >= 0 ? document_get_from_page(session_notebook_page) : document_get_current());
+		document_show_tab(session_notebook_page >= 0 ? document_get_from_page(session_notebook_page) : document_get_current());
 
 	session_notebook_page = -1;
 	main_status.opening_session_files--;

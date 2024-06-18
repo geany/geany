@@ -1964,43 +1964,49 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 }
 
 
-#ifndef G_OS_WIN32
 static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 		const gchar *utf8_path)
 {
-	GtkWidget *dialog = gtk_file_chooser_dialog_new(title,
-		GTK_WINDOW(main_widgets.window), action,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+	GtkFileChooser *dialog;
 	gchar *locale_path;
 	gchar *ret_path = NULL;
 
-	gtk_widget_set_name(dialog, "GeanyDialog");
+	if (interface_prefs.use_native_windows_dialogs)
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(title,
+			GTK_WINDOW(main_widgets.window), action, NULL, NULL));
+	else
+	{
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(title,
+			GTK_WINDOW(main_widgets.window), action,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL));
+		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialog");
+	}
+
 	locale_path = utils_get_locale_from_utf8(utf8_path);
 	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
 		if (g_path_is_absolute(locale_path) && g_file_test(locale_path, G_FILE_TEST_IS_DIR))
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
+			gtk_file_chooser_set_current_folder(dialog, locale_path);
 	}
 	else if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
 		if (g_path_is_absolute(locale_path))
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_path);
+			gtk_file_chooser_set_filename(dialog, locale_path);
 	}
 	g_free(locale_path);
 
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *dir_locale;
 
-		dir_locale = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		dir_locale = gtk_file_chooser_get_filename(dialog);
 		ret_path = utils_get_utf8_from_locale(dir_locale);
 		g_free(dir_locale);
 	}
-	gtk_widget_destroy(dialog);
+	dialogs_file_chooser_destroy(dialog);
 	return ret_path;
 }
-#endif
 
 
 gchar *ui_get_project_directory(const gchar *path)
@@ -2008,11 +2014,7 @@ gchar *ui_get_project_directory(const gchar *path)
 	gchar *utf8_path;
 	const gchar *title = _("Select Project Base Path");
 
-#ifdef G_OS_WIN32
-	utf8_path = win32_show_folder_dialog(ui_widgets.prefs_dialog, title, path);
-#else
 	utf8_path = run_file_chooser(title, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, path);
-#endif
 
 	return utf8_path;
 }
@@ -2035,22 +2037,12 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 
 	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
-#ifdef G_OS_WIN32
-		utf8_path = win32_show_file_dialog(GTK_WINDOW(ui_widgets.prefs_dialog), title,
-						gtk_entry_get_text(GTK_ENTRY(entry)));
-#else
 		utf8_path = run_file_chooser(title, action, gtk_entry_get_text(GTK_ENTRY(entry)));
-#endif
 	}
 	else if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
 		gchar *path = g_path_get_dirname(gtk_entry_get_text(GTK_ENTRY(entry)));
-#ifdef G_OS_WIN32
-		utf8_path = win32_show_folder_dialog(ui_widgets.prefs_dialog, title,
-						gtk_entry_get_text(GTK_ENTRY(entry)));
-#else
 		utf8_path = run_file_chooser(title, action, path);
-#endif
 		g_free(path);
 	}
 
@@ -2871,6 +2863,10 @@ void ui_progress_bar_stop(void)
 		g_source_remove(progress_bar_timer_id);
 		progress_bar_timer_id = 0;
 	}
+
+	/* hack to remove tick callback which is created for "activity mode" progress
+	 * bars - without this it is called forever and causes elevated CPU usage */
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(main_widgets.progressbar), 0.0);
 }
 
 

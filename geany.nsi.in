@@ -274,6 +274,8 @@ Section -AdditionalIcons
 SectionEnd
 
 Section -Post
+	Exec '"$INSTDIR\bin\glib-compile-schemas.exe" "$INSTDIR\share\glib-2.0\schemas"'
+
 	WriteUninstaller "$INSTDIR\uninst.exe"
 	WriteRegStr SHCTX "${PRODUCT_DIR_REGKEY}" Path "$INSTDIR"
 	WriteRegStr SHCTX "${PRODUCT_UNINST_KEY}" "StartMenu" "$SMPROGRAMS\$StartmenuFolder"

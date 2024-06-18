@@ -135,6 +135,7 @@ typedef struct sTokenInfo {
 	MIOPos			filePosition;
 	int				nestLevel;
 	bool			dynamicProp;
+	int				c;
 } tokenInfo;
 
 /*
@@ -367,6 +368,7 @@ static void copyToken (tokenInfo *const dest, const tokenInfo *const src,
 	dest->type = src->type;
 	dest->keyword = src->keyword;
 	dest->dynamicProp = src->dynamicProp;
+	dest->c = src->c;
 	vStringCopy(dest->string, src->string);
 	if (include_non_read_info)
 	{
@@ -464,7 +466,7 @@ static int makeJsRefTagsForNameChain (char *name_chain, const tokenInfo *token, 
 		e.extensionFields.scopeIndex = scope;
 
 		index = makeTagEntry (&e);
-		/* We shold remove This condition. We should fix the callers passing
+		/* We should remove this condition. We should fix the callers passing
 		 * an empty name instead. makeTagEntry() returns CORK_NIL if the tag
 		 * name is empty. */
 		if (index != CORK_NIL)
@@ -996,6 +998,32 @@ static void parseTemplateString (vString *const string)
 	while (c != EOF);
 }
 
+static void reprToken (const tokenInfo *const token, vString *const repr)
+{
+	switch (token->type)
+	{
+		case TOKEN_DOTS:
+			vStringCatS (repr, "...");
+			break;
+
+		case TOKEN_STRING:
+		case TOKEN_TEMPLATE_STRING:
+			vStringPut (repr, token->c);
+			vStringCat (repr, token->string);
+			vStringPut (repr, token->c);
+			break;
+
+		case TOKEN_IDENTIFIER:
+		case TOKEN_KEYWORD:
+			vStringCat (repr, token->string);
+			break;
+
+		default:
+			vStringPut (repr, token->c);
+			break;
+	}
+}
+
 static void readTokenFullRaw (tokenInfo *const token, bool include_newlines, vString *const repr)
 {
 	int c;
@@ -1005,9 +1033,12 @@ static void readTokenFullRaw (tokenInfo *const token, bool include_newlines, vSt
 	/* if we've got a token held back, emit it */
 	if (NextToken)
 	{
+		TRACE_PRINT("Emitting held token");
 		copyToken (token, NextToken, false);
 		deleteToken (NextToken);
 		NextToken = NULL;
+		if (repr)
+			reprToken (token, repr);
 		return;
 	}
 
@@ -1029,12 +1060,11 @@ getNextChar:
 	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
-	if (repr && c != EOF)
-	{
-		if (i > 1)
-			vStringPut (repr, ' ');
-		vStringPut (repr, c);
-	}
+	/* special case to insert a separator */
+	if (repr && c != EOF && i > 1)
+		vStringPut (repr, ' ');
+
+	token->c = c;
 
 	switch (c)
 	{
@@ -1063,14 +1093,6 @@ getNextChar:
 			}
 
 			token->type = TOKEN_DOTS;
-			if (repr)
-			{
-				/* Adding two dots is enough here.
-				 * The first one is already added with
-				 * vStringPut (repr, c).
-				 */
-				vStringCatS (repr, "..");
-			}
 			break;
 		}
 		case ':': token->type = TOKEN_COLON;		break;
@@ -1125,11 +1147,6 @@ getNextChar:
 			parseString (token->string, c);
 			token->lineNumber = getInputLineNumber ();
 			token->filePosition = getInputFilePosition ();
-			if (repr)
-			{
-				vStringCat (repr, token->string);
-				vStringPut (repr, c);
-			}
 			break;
 
 		case '`':
@@ -1137,11 +1154,6 @@ getNextChar:
 			parseTemplateString (token->string);
 			token->lineNumber = getInputLineNumber ();
 			token->filePosition = getInputFilePosition ();
-			if (repr)
-			{
-				vStringCat (repr, token->string);
-				vStringPut (repr, c);
-			}
 			break;
 
 		case '/':
@@ -1173,8 +1185,6 @@ getNextChar:
 			}
 			else
 			{
-				if (repr) /* remove the / we added */
-					vStringChop(repr);
 				if (d == '*')
 				{
 					skipToCharacterInInputFile2('*', '/');
@@ -1228,8 +1238,6 @@ getNextChar:
 					token->type = TOKEN_IDENTIFIER;
 				else
 					token->type = TOKEN_KEYWORD;
-				if (repr && vStringLength (token->string) > 1)
-					vStringCatS (repr, vStringValue (token->string) + 1);
 			}
 			break;
 	}
@@ -1278,8 +1286,7 @@ getNextChar:
 			token->type = TOKEN_SEMICOLON;
 			token->keyword = KEYWORD_NONE;
 			vStringClear (token->string);
-			if (repr)
-				vStringPut (token->string, '\n');
+			token->c = '\n';
 		}
 
 		#undef IS_STMT_SEPARATOR
@@ -1287,6 +1294,50 @@ getNextChar:
 	}
 
 	LastTokenType = token->type;
+
+	if (repr)
+		reprToken (token, repr);
+}
+
+/* whether something we consider a keyword (either because it sometimes is or
+ * because of the parser's perks) is actually valid as a function name
+ * See https://tc39.es/ecma262/multipage/ecmascript-language-lexical-grammar.html#sec-keywords-and-reserved-words */
+static bool canBeFunctionName (const tokenInfo *const token, bool strict_mode)
+{
+	switch (token->keyword)
+	{
+		/* non-keywords specific to this parser */
+		case KEYWORD_capital_function:
+		case KEYWORD_capital_object:
+		case KEYWORD_prototype:
+		case KEYWORD_sap:
+		/* syntactic, but not keyword:
+		 *     as async from get meta of set target
+		 * "await" is OK as well */
+		case KEYWORD_async:
+		case KEYWORD_get:
+		case KEYWORD_set:
+			return true;
+
+		/* strict-mode keywords
+		 *     let static implements interface package private protected public
+		 * we need to also include those which are OK as function names
+		 *     yield
+		 */
+		case KEYWORD_let:
+		case KEYWORD_static:
+			return ! strict_mode;
+
+		default:
+			return isType (token, TOKEN_IDENTIFIER);
+	}
+}
+
+static bool canBePropertyName (const tokenInfo *const token)
+{
+	/* property names are pretty relaxed, any non reserved word is OK, even
+	 * strict-mode ones in strict-mode */
+	return canBeFunctionName (token, false);
 }
 
 /* See https://babeljs.io/blog/2018/09/17/decorators */
@@ -1760,9 +1811,11 @@ static bool parseFunction (tokenInfo *const token, tokenInfo *const lhs_name, co
 	copyToken (name, token, true);
 	readToken (name);
 	if (isType (name, TOKEN_KEYWORD) &&
-		(isKeyword (name, KEYWORD_get) || isKeyword (name, KEYWORD_set)))
+		canBeFunctionName (name, false /* true if we're in strict mode */))
 	{
-		name->type = TOKEN_IDENTIFIER;	// treat as function name
+		// treat as function name
+		name->type = TOKEN_IDENTIFIER;
+		name->keyword = KEYWORD_NONE;
 	}
 
 	if (isType (name, TOKEN_STAR))
@@ -1981,27 +2034,24 @@ static bool parseMethods (tokenInfo *const token, int class_index,
 	{
 		bool is_setter = false;
 		bool is_getter = false;
-		bool is_static = false;	/* For recognizing static {...} block. */
 
 		if (!dont_read)
 			readToken (token);
 		dont_read = false;
 
+start:
 		if (isType (token, TOKEN_CLOSE_CURLY))
 		{
 			goto cleanUp;
 		}
 
-		if (isKeyword (token, KEYWORD_async))
-			readToken (token);
-		else if (isKeyword (token, KEYWORD_static))
-			is_static = true;
-		else if (isType (token, TOKEN_KEYWORD) &&
-				 (isKeyword (token, KEYWORD_get) || isKeyword (token, KEYWORD_set)))
+		if (isType (token, TOKEN_KEYWORD) && canBePropertyName (token))
 		{
 			tokenInfo *saved_token = newToken ();
 			copyToken (saved_token, token, true);
 			readToken (token);
+
+			/* it wasn't actually a keyword after all, make it an identifier */
 			if (isType(token, TOKEN_OPEN_PAREN) || isType(token, TOKEN_COLON))
 			{
 				Assert (NextToken == NULL);
@@ -2011,10 +2061,25 @@ static bool parseMethods (tokenInfo *const token, int class_index,
 				token->type = TOKEN_IDENTIFIER;			/* process as identifier */
 				token->keyword = KEYWORD_NONE;
 			}
+			else if (isKeyword (saved_token, KEYWORD_static) &&
+					 isType (token, TOKEN_OPEN_CURLY))
+			{
+				/* static initialization block */
+				deleteToken (saved_token);
+				parseBlock (token, class_index);
+				continue;
+			}
 			else if (isKeyword (saved_token, KEYWORD_get))
 				is_getter = true;
-			else
+			else if (isKeyword (saved_token, KEYWORD_set))
 				is_setter = true;
+			else if (isKeyword (saved_token, KEYWORD_async) ||
+					 isKeyword (saved_token, KEYWORD_static))
+			{
+				/* can be a qualifier for another "keyword", so start over */
+				deleteToken (saved_token);
+				goto start;
+			}
 
 			deleteToken (saved_token);
 		}
@@ -2025,9 +2090,8 @@ static bool parseMethods (tokenInfo *const token, int class_index,
 			continue;
 		}
 
-		if ((! isType (token, TOKEN_KEYWORD) &&
+		if (! isType (token, TOKEN_KEYWORD) &&
 			 ! isType (token, TOKEN_SEMICOLON))
-			|| is_static)
 		{
 			bool is_generator = false;
 			bool is_shorthand = false; /* ES6 shorthand syntax */
@@ -2201,15 +2265,6 @@ function:
 				}
 
 				vStringDelete (signature);
-			}
-			else if (is_static)
-			{
-				if (isType (token, TOKEN_OPEN_CURLY))
-					/* static initialization block */
-					parseBlock (token, class_index);
-				else
-					dont_read = true;
-				continue;
 			}
 			else
 			{
@@ -2409,10 +2464,11 @@ static bool parsePrototype (tokenInfo *const name, tokenInfo *const token, state
 		 * Handle CASE 1
 		 */
 		readToken (token);
-		if (isType (token, TOKEN_KEYWORD) &&
-			(isKeyword (token, KEYWORD_get) || isKeyword (token, KEYWORD_set)))
+		if (isType (token, TOKEN_KEYWORD) && canBePropertyName (token))
 		{
-			token->type = TOKEN_IDENTIFIER;	// treat as function name
+			// treat as function name
+			token->type = TOKEN_IDENTIFIER;
+			token->keyword = KEYWORD_NONE;
 		}
 
 		if (! isType(token, TOKEN_KEYWORD))
