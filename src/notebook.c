@@ -62,6 +62,7 @@ static guint mru_pos = 0;
 static gboolean switch_in_progress = FALSE;
 static GtkWidget *switch_dialog = NULL;
 static GtkWidget *switch_dialog_label = NULL;
+static guint switch_timeout_id = 0;
 
 
 static void
@@ -178,6 +179,12 @@ static void stop_switch(void)
 		switch_dialog = NULL;
 	}
 
+	if (switch_timeout_id != 0)
+	{
+		g_source_remove(switch_timeout_id);
+		switch_timeout_id = 0;
+	}
+
 	doc = document_get_current();
 	update_mru_docs_head(doc);
 	mru_pos = 0;
@@ -290,6 +297,8 @@ static void update_filename_label(void)
 
 static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 {
+	switch_timeout_id = 0;
+
 	if (!switch_in_progress || switch_dialog)
 	{
 		return FALSE;
@@ -327,7 +336,11 @@ void notebook_switch_tablastused(void)
 	/* if there's a modifier key, we can switch back in MRU order each time unless
 	 * the key is released */
 	if (switch_start)
-		g_timeout_add(600, on_switch_timeout, NULL);
+	{
+		if (switch_timeout_id != 0)
+			g_source_remove(switch_timeout_id);
+		switch_timeout_id = g_timeout_add(600, on_switch_timeout, NULL);
+	}
 	else
 		update_filename_label();
 }
