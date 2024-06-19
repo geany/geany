@@ -240,7 +240,6 @@ static GtkWidget *create_switch_dialog(void)
 
 	g_signal_connect(dialog, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
 	g_signal_connect(dialog, "key-press-event", G_CALLBACK(on_switch_dialog_key_press_event), NULL);
-	g_signal_connect(main_widgets.window, "notify::is-active", G_CALLBACK(on_is_active_notify), NULL);
 	return dialog;
 }
 
@@ -629,6 +628,7 @@ void notebook_init(void)
 
 	/* in case the switch dialog misses an event while drawing the dialog */
 	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+	g_signal_connect(main_widgets.window, "notify::is-active", G_CALLBACK(on_is_active_notify), NULL);
 
 	setup_tab_dnd();
 }
