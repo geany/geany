@@ -40,7 +40,6 @@
 #include "encodings.h"
 #include "filetypes.h"
 #include "geany.h"
-#include "geanyfunctions.h"
 #include "highlighting.h"
 #include "keybindings.h"
 #include "main.h"
