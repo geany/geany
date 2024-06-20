@@ -1,0 +1,22 @@
+AbstractWorkerÃ32Œcom.example.helloworld÷0
+interface:  com.example.helloworld :: AbstractWorker
+GlobalÃ1Œcom.example.helloworld÷0
+class:      com.example.helloworld :: Global
+StringWorkerÃ4096Œcom.example.helloworld÷0
+typedef:    com.example.helloworld :: StringWorker
+WorkerÃ1Œcom.example.helloworld÷0
+class:      com.example.helloworld :: Worker
+com.example.helloworldÃ256÷0
+namespace:  com.example.helloworld
+greetingÃ16384Œcom.example.helloworld.Global÷0
+variable:   com.example.helloworld.Global :: greeting
+mainÃ16Œcom.example.helloworld÷0
+function:   com.example.helloworld :: main
+nameÃ16384Œcom.example.helloworld.Worker÷0
+variable:   com.example.helloworld.Worker :: name
+processÃ16Œcom.example.helloworld.AbstractWorker÷0
+function:   com.example.helloworld.AbstractWorker :: process
+processÃ16Œcom.example.helloworld.Worker÷0
+function:   com.example.helloworld.Worker :: process
+resultÃ16384Œcom.example.helloworld.main÷0
+variable:   com.example.helloworld.main :: result
