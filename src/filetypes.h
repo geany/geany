@@ -153,6 +153,7 @@ typedef struct GeanyFiletype
 	gchar			 *extension;		/**< Default file extension for new files, or @c NULL. */
 	gchar			**pattern;			/**< Array of filename-matching wildcard strings. */
 	gchar			 *context_action_cmd;
+	GPtrArray		 *context_action_patterns; /**< Array of GeanyCtxtActionPattern. */
 	gchar			 *comment_open;
 	gchar			 *comment_close;
 	gboolean		  comment_use_indent;
@@ -229,6 +230,8 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 
 gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
 		const gchar **co, const gchar **cc);
+
+gchar *filetypes_get_action_cmd(const GeanyFiletype *ft, gchar *word);
 
 #endif /* GEANY_PRIVATE */
 
