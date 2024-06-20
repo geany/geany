@@ -566,6 +566,9 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.replace_tabs);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_remember_last_save_dir");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.remember_last_save_path);
+
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indent");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_indent_guide);
 
@@ -1026,6 +1029,8 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 		file_prefs.replace_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_remember_last_save_dir");
+		file_prefs.remember_last_save_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		/* Editor settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
