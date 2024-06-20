@@ -90,7 +90,9 @@ gboolean	ignore_callback;	/* hack workaround for GTK+ toggle button callback pro
 GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
 
+static gint config_dir_result;
 static gchar *original_cwd = NULL;
+static GtkApplication *gtkapp;
 
 static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u";
 
@@ -146,6 +148,8 @@ static GOptionEntry entries[] =
 	{ "dummy", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &dummy, NULL, NULL }, /* for +NNN line number arguments */
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
+
+static void main_activate(GtkApplication *gtkapp, gchar **argv);
 
 
 static void setup_window_position(void)
@@ -648,17 +652,6 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	vte_info.lib_vte = lib_vte;
 #endif
 	cl_options.ignore_global_tags = ignore_global_tags;
-
-	if (! gtk_init_check(NULL, NULL))
-	{	/* check whether we have a valid X display and exit if not */
-		g_printerr("Geany: cannot open display\n");
-		exit(1);
-	}
-
-#ifdef MAC_INTEGRATION
-	/* Create GtkosxApplication singleton - should be created shortly after gtk_init() */
-	gtkosx_application_get();
-#endif
 }
 
 
@@ -944,8 +937,9 @@ void main_load_project_from_command_line(const gchar *locale_filename, gboolean 
 }
 
 
-static void load_startup_files(gint argc, gchar **argv)
+static void load_startup_files(gchar **argv)
 {
+	gint argc = g_strv_length(argv);
 	gboolean load_session = FALSE;
 
 	if (argc > 1 && g_str_has_suffix(argv[1], ".geany"))
@@ -1041,16 +1035,8 @@ void main_init_headless(void)
 GEANY_EXPORT_SYMBOL
 gint main_lib(gint argc, gchar **argv)
 {
-	GeanyDocument *doc;
-	gint config_dir_result;
-	const gchar *locale;
-	gchar *utf8_configdir;
-	gchar *os_info;
-
 	main_init_headless();
-
 	log_handlers_init();
-
 	setup_paths();
 
 #ifdef ENABLE_NLS
@@ -1059,6 +1045,16 @@ gint main_lib(gint argc, gchar **argv)
 	/* initialize TM before parsing command-line - needed for tag file generation */
 	app->tm_workspace = tm_get_workspace();
 	parse_command_line_options(&argc, &argv);
+
+	if (! gtk_init_check(NULL, NULL))
+	{	/* check whether we have a valid X display and exit if not */
+		g_printerr("Geany: cannot open display\n");
+		exit(1);
+	}
+#ifdef MAC_INTEGRATION
+	/* Create GtkosxApplication singleton - should be created shortly after gtk_init() */
+	gtkosx_application_get();
+#endif
 
 #if ! GLIB_CHECK_VERSION(2, 32, 0)
 	/* Initialize GLib's thread system in case any plugins want to use it or their
@@ -1108,6 +1104,21 @@ gint main_lib(gint argc, gchar **argv)
 		}
 	}
 #endif
+
+	gtkapp = gtk_application_new(NULL, G_APPLICATION_NON_UNIQUE);
+	g_signal_connect(gtkapp, "activate", G_CALLBACK(main_activate), argv);
+	gint status = g_application_run(G_APPLICATION(gtkapp), argc, argv);
+	g_object_unref(gtkapp);
+	return status;
+}
+
+
+static void main_activate(GtkApplication *gtkapp, gchar **argv)
+{
+	GeanyDocument *doc;
+	const gchar *locale;
+	gchar *utf8_configdir;
+	gchar *os_info;
 
 #ifdef G_OS_WIN32
 	/* after we initialized the socket code and handled command line args,
@@ -1215,7 +1226,7 @@ gint main_lib(gint argc, gchar **argv)
 
 	/* load any command line files or session files */
 	main_status.opening_session_files++;
-	load_startup_files(argc, argv);
+	load_startup_files(argv);
 	main_status.opening_session_files--;
 
 	/* open a new file if no other file was opened */
@@ -1233,6 +1244,7 @@ gint main_lib(gint argc, gchar **argv)
 
 	/* finally show the window */
 	document_grab_focus(doc);
+	gtk_window_set_application(GTK_WINDOW(main_widgets.window), gtkapp);
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 
@@ -1256,9 +1268,6 @@ gint main_lib(gint argc, gchar **argv)
 	/* OS X application ready - has to be called before entering main loop */
 	gtkosx_application_ready(gtkosx_application_get());
 #endif
-
-	gtk_main();
-	return 0;
 }
 
 
@@ -1377,9 +1386,7 @@ static gboolean do_main_quit(void)
 	g_free(app);
 
 	ui_finalize_builder();
-
-	gtk_main_quit();
-
+	g_application_quit(G_APPLICATION(gtkapp));
 	return TRUE;
 }
 
