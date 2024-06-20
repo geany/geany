@@ -3,6 +3,7 @@ plugin_inc += iscintilla
 
 plugins = [
 	'Demoplugin',
+	'Demopluginext',
 	'Demoproxy',
 	'Classbuilder',
 	'HTMLChars',
