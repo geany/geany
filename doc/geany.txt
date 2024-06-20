@@ -4802,6 +4802,14 @@ marker_search
 
     *Example:* ``marker_search=0x000000;0xb8f4b8;false;false``
 
+marker_search_translucency
+    Translucency for the search marker's outline (first argument) and
+    background (second argument). Values between 0 and 255 are accepted.
+
+    Only the first and second arguments are interpreted.
+
+    *Example:* ``marker_search_translucency=127;64``
+
 marker_mark
     The style for a marked line (e.g when using the "Toggle Marker" keybinding
     (Ctrl-M)). The foreground color (first argument) is only used
