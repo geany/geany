@@ -193,8 +193,6 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error);
 
-gchar *utils_utf8_strdown(const gchar *str);
-
 gint utils_str_casecmp(const gchar *s1, const gchar *s2);
 
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use);
@@ -337,6 +335,8 @@ const gchar *utils_resource_dir(GeanyResourceDirType type);
 void utils_start_new_geany_instance(const gchar *doc_path);
 
 gchar *utils_get_os_info_string(void);
+
+gchar *utils_utf8_strdown(const gchar *str);
 
 #endif /* GEANY_PRIVATE */
 
