@@ -907,7 +907,8 @@ Sending text through custom commands
 
 You can define several custom commands in Geany and send the current
 selection to one of these commands using the *Edit->Format->Send
-Selection to* menu or keybindings. The output of the command will be
+Selection to* menu or `keybindings <#send-to-custom-command-keybindings>`_.
+The output of the command will be
 used to replace the current selection. This makes it possible to use
 text formatting tools with Geany in a general way.
 
@@ -922,7 +923,7 @@ If there is no selection, the whole current line is used instead.
 
 To add a custom command, use the *Send Selection to->Set Custom
 Commands* menu item. Click on *Add* to get a new item and type the
-command. You can also specify some command line options. Empty
+command. You can also include command line options. Empty
 commands are not saved.
 
 Normal shell quoting is supported, so you can do things like:
@@ -3713,12 +3714,6 @@ Decrease indent by one space                              Deindents the current 
 Smart line indent                                         Indents the current line or all selected lines
                                                           with the same indentation as the previous line.
 
-Send to Custom Command 1 (2,3)  Ctrl-1 (2,3)              Passes the current selection to a configured
-                                                          external command (available for the first
-                                                          9 configured commands, see
-                                                          `Sending text through custom commands`_ for
-                                                          details).
-
 Send Selection to Terminal                                Sends the current selection or the current
                                                           line (if there is no selection) to the
                                                           embedded Terminal (VTE).
@@ -3733,6 +3728,20 @@ Join Lines                                                Replace line endings a
                                                           with a single space throughout the selection
                                                           or current (indented) text block.
 =============================== ========================= ==================================================
+
+
+Send to Custom Command keybindings
+``````````````````````````````````
+=============================== ========================= ==================================================
+Action                          Default shortcut          Description
+=============================== ========================= ==================================================
+Send to Custom Command 1 (2,3)  Ctrl-1 (2,3)              Passes the current selection to a configured external command.
+
+Send to Custom Command 4 - 9                              As above, but these commands are only shown once
+                                                          they have been configured and Geany has been restarted.
+=============================== ========================= ==================================================
+
+See `Sending text through custom commands`_ for details.
 
 
 Settings keybindings
