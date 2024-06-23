@@ -463,14 +463,14 @@ gboolean main_is_realized(void)
 
 
 /**
- *  Checks whether Geany is quitting completely right now.
+ *  Checks whether Geany is 'closing all' tabs right now.
  *
- *  @return @c TRUE if the Geany is exiting right now or @c FALSE otherwise.
+ *  @return @c TRUE if the Geany is 'closing all' tabs right now or @c FALSE otherwise.
  **/
 GEANY_API_SYMBOL
-gboolean geany_is_quitting(void)
+gboolean geany_is_closing_all_tabs(void)
 {
-	return main_status.quitting;
+	return main_status.closing_all;
 }
 
 
