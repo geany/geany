@@ -463,12 +463,12 @@ gboolean main_is_realized(void)
 
 
 /**
- *  Checks whether Geany is 'closing all' tabs right now.
+ *  Checks whether Geany is 'closing all' documents right now.
  *
- *  @return @c TRUE if the Geany is 'closing all' tabs right now or @c FALSE otherwise.
+ *  @return @c TRUE if the Geany is 'closing all' documents right now or @c FALSE otherwise.
  **/
 GEANY_API_SYMBOL
-gboolean geany_is_closing_all_tabs(void)
+gboolean geany_is_closing_all_documents(void)
 {
 	return main_status.closing_all;
 }

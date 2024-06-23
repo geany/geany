@@ -32,7 +32,7 @@ void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
 
 gboolean main_is_realized(void);
 
-gboolean geany_is_closing_all_tabs(void);
+gboolean geany_is_closing_all_documents(void);
 
 
 #ifdef GEANY_PRIVATE

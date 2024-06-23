@@ -314,9 +314,26 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 }
 
 
-static gboolean is_temp_saved_file(const gchar *filename)
+static gboolean is_temp_saved_file(const gchar *file_path_utf8)
 {
-	return g_str_has_prefix(filename, PERSISTENT_TEMP_FILE_NAME_PREFIX);
+	if (file_path_utf8 == NULL)
+		return FALSE;
+
+	if (g_str_has_prefix(file_path_utf8, PERSISTENT_TEMP_FILE_NAME_PREFIX))
+	{
+		return TRUE;
+	} else {
+		gchar *filename;
+		gboolean matched;
+
+		filename = g_path_get_basename(file_path_utf8);
+
+		matched = g_str_has_prefix(filename, PERSISTENT_TEMP_FILE_NAME_PREFIX);
+
+		g_free(filename);
+
+		return matched;
+	}
 }
 
 
@@ -324,9 +341,9 @@ static gchar* create_new_temp_file_name(void)
 {
 	GDir *dir;
 	GError *error = NULL;
-	gchar *utf8_filename, *temp_file_number_str;
-	gint temp_file_number, max_temp_file_number;
+	gint max_temp_file_number;
 	const gchar *filename;
+	static glong temp_file_name_prefix_len;
 
 	dir = g_dir_open(persistent_temp_files_target_dir, 0, &error);
 	if (dir == NULL)
@@ -335,42 +352,38 @@ static gchar* create_new_temp_file_name(void)
 		return NULL;
 	}
 
-	static glong temp_file_name_prefix_len = strlen(PERSISTENT_TEMP_FILE_NAME_PREFIX);
+	temp_file_name_prefix_len = strlen(PERSISTENT_TEMP_FILE_NAME_PREFIX);
 
 	max_temp_file_number = 0;
 
 	foreach_dir(filename, dir)
 	{
-		utf8_filename = utils_get_utf8_from_locale(filename);
-
-		if (is_temp_saved_file(utf8_filename))
+		if (is_temp_saved_file(filename))
 		{
-			temp_file_number_str = g_utf8_substring(utf8_filename, temp_file_name_prefix_len, -1);
+			gchar *temp_file_number_str;
+			gint temp_file_number;
+
+			temp_file_number_str = g_utf8_substring(filename, temp_file_name_prefix_len, -1);
 			temp_file_number = atoi(temp_file_number_str);
 
-			if (temp_file_number > max_temp_file_number)
-			{
-				max_temp_file_number = temp_file_number;
-			}
+			max_temp_file_number = MAX(max_temp_file_number, temp_file_number);
 
 			g_free(temp_file_number_str);
 		}
-
-		g_free(utf8_filename);
 	}
 
 	g_dir_close(dir);
 
-	return g_strdup_printf(_("%s%d"), PERSISTENT_TEMP_FILE_NAME_PREFIX, max_temp_file_number + 1);
+	return g_strdup_printf("%s%d", PERSISTENT_TEMP_FILE_NAME_PREFIX, max_temp_file_number + 1);
 }
 
 
 static void persistent_temp_files_document_new_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
-	gchar *temp_files_dir_utf8, *new_temp_file_name_utf8, *new_temp_file_path_utf8;
-
 	if (doc->file_name == NULL)
 	{
+		gchar *temp_files_dir_utf8, *new_temp_file_name_utf8, *new_temp_file_path_utf8;
+
 		if (EMPTY(persistent_temp_files_target_dir))
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
@@ -396,41 +409,6 @@ static void persistent_temp_files_document_new_cb(GObject *obj, GeanyDocument *d
 		g_free(temp_files_dir_utf8);
 		g_free(new_temp_file_path_utf8);
 	}
-}
-
-
-static gboolean is_temp_saved_file_doc(GeanyDocument *doc)
-{
-	gchar *file_path_uft8, *filename;
-	gboolean matched;
-
-	file_path_uft8 = doc->file_name;
-
-	if (file_path_uft8 == NULL)
-	{
-		return FALSE;
-	}
-
-	filename = g_path_get_basename(file_path_uft8);
-	matched = is_temp_saved_file(filename);
-
-	g_free(filename);
-
-	return matched;
-}
-
-
-static void get_current_tab_label(GtkWidget **tab_label_ptr)
-{
-	GtkWidget *current_page;
-	GtkNotebook *notebook;
-	gint current_page_num;
-
-	notebook = GTK_NOTEBOOK(geany->main_widgets->notebook);
-	current_page_num = gtk_notebook_get_current_page(notebook);
-
-	current_page = gtk_notebook_get_nth_page(notebook, current_page_num);
-	*tab_label_ptr = gtk_notebook_get_tab_label(notebook, current_page);
 }
 
 
@@ -491,7 +469,7 @@ static gint run_unsaved_dialog_for_persistent_temp_files_tab_closing(const gchar
 static void show_unsaved_dialog_for_persistent_temp_files_tab_closing(
 	GeanyDocument *doc, const gchar *short_filename)
 {
-	gchar *msg, *old_file_path, *new_file_path, *locale_file_path;
+	gchar *msg, *old_file_path, *locale_file_path;
 	const gchar *msg2;
 	gint response;
 
@@ -510,9 +488,7 @@ static void show_unsaved_dialog_for_persistent_temp_files_tab_closing(
 
 			if (dialogs_show_save_as())
 			{
-				new_file_path = doc->file_name;
-
-				if (! g_str_equal(old_file_path, new_file_path))
+				if (! g_str_equal(old_file_path, doc->file_name))
 				{
 				 	/* remove temp file if it was saved as some other file */
 					g_remove(locale_file_path);
@@ -544,12 +520,10 @@ static void show_unsaved_dialog_for_persistent_temp_files_tab_closing(
 
 static void persistent_temp_files_document_close_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
-	gchar *short_filename;
-
 	if (enable_persistent_temp_files && doc->real_path != NULL
-		&& is_temp_saved_file_doc(doc) && ! geany_is_closing_all_tabs())
+		&& is_temp_saved_file(doc->file_name) && ! geany_is_closing_all_documents())
 	{
-		short_filename = document_get_basename_for_display(doc, -1);
+		gchar *short_filename = document_get_basename_for_display(doc, -1);
 
 		if (! document_is_empty(doc))
 		{
@@ -570,63 +544,40 @@ static void persistent_temp_files_document_close_cb(GObject *obj, GeanyDocument 
 }
 
 
-static void persistent_temp_files_document_before_save_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
+static void persistent_temp_files_document_before_save_as_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
 	if (enable_persistent_temp_files)
 	{
-		gchar *old_file_path, *new_file_path, *old_file_name;
-				GtkWidget *page_label = NULL;
+		gchar *old_file_path_utf8 = DOC_FILENAME(doc);
 
-		get_current_tab_label(&page_label);
-
-		old_file_path = gtk_widget_get_tooltip_text(page_label);
-		new_file_path = DOC_FILENAME(doc);
-
-		if (old_file_path == NULL)
+		if (is_temp_saved_file(old_file_path_utf8))
 		{
-			ui_set_statusbar(TRUE, _("plugin error: failed to delete initial temp file "
-				"('failed to get notebook tab label text')"));
-
-			return;
-		}
-
-		old_file_name = g_path_get_basename(old_file_path);
-
-		if (is_temp_saved_file(old_file_name) && ! g_str_equal(old_file_path, new_file_path))
-		{
-			/* we have to store old/new filename pair inside document data to be able to somehow
+			/* we have to store old filename inside document data to be able to somehow
 			pass it to document-save callback that is called directly after this one */
-			plugin_set_document_data_full(geany_plugin, doc, new_file_path, g_strdup(old_file_path), g_free);
+			plugin_set_document_data_full(geany_plugin, doc, "file-name-before-save-as", 
+				g_strdup(old_file_path_utf8), g_free);
 		}
-
-		g_free(old_file_name);
 	}
 }
 
 
 static void persistent_temp_files_document_save_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
-	gchar *new_file_path, *old_file_path;
+	gchar *new_file_path_utf8, *old_file_path_utf8;
 
-	new_file_path = DOC_FILENAME(doc);
-	old_file_path = plugin_get_document_data(geany_plugin, doc, new_file_path);
+	new_file_path_utf8 = DOC_FILENAME(doc);
+	old_file_path_utf8 = plugin_get_document_data(geany_plugin, doc, "file-name-before-save-as");
 
-	if (old_file_path != NULL)
+	if (old_file_path_utf8 != NULL && is_temp_saved_file(old_file_path_utf8) 
+		&& ! g_str_equal(old_file_path_utf8, new_file_path_utf8))
 	{
-		gchar *old_file_name = g_path_get_basename(old_file_path);
+		/* remove temp file if it was saved as some other file */
+		gchar *locale_old_file_path = utils_get_locale_from_utf8(old_file_path_utf8);
+		g_remove(locale_old_file_path);
 
-		if (is_temp_saved_file(old_file_name) && ! g_str_equal(old_file_path, new_file_path))
-		{
-			/* remove temp file if it was saved as some other file */
-			gchar *locale_old_file_path = utils_get_locale_from_utf8(old_file_path);
-			g_remove(locale_old_file_path);
+		g_free(locale_old_file_path);
 
-			g_free(locale_old_file_path);
-
-			ui_set_statusbar(TRUE, _("Temp file %s was deleted"), old_file_path);
-		}
-
-		g_free(old_file_name);
+		ui_set_statusbar(TRUE, _("Temp file %s was deleted"), old_file_path_utf8);
 	}
 }
 
@@ -660,16 +611,14 @@ static gboolean save_on_focus_out_idle(gpointer p_cur_doc)
 static gboolean on_document_focus_out(GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, gpointer data)
 {
-	GeanyDocument *doc;
-
-	doc = editor->document;
+	GeanyDocument *doc = editor->document;
 
 	if (nt->nmhdr.code == SCN_FOCUSOUT
 		&& doc->file_name != NULL)
 	{
 		if (enable_autosave_losing_focus || (enable_persistent_temp_files
 											&& doc->real_path != NULL
-											&& is_temp_saved_file_doc(doc)))
+											&& is_temp_saved_file(doc->file_name)))
 		{
 			plugin_idle_add(geany_plugin, save_on_focus_out_idle, doc);
 		}
@@ -703,7 +652,7 @@ PluginCallback plugin_callbacks[] =
 {
 	{ "document-new", (GCallback) &on_document_new, FALSE, NULL },
 	{ "document-close", (GCallback) &persistent_temp_files_document_close_cb, FALSE, NULL },
-	{ "document-before-save", (GCallback) &persistent_temp_files_document_before_save_cb, FALSE, NULL },
+	{ "document-before-save-as", (GCallback) &persistent_temp_files_document_before_save_as_cb, FALSE, NULL },
 	{ "document-save", (GCallback) &on_document_save, FALSE, NULL },
 	{ "editor-notify", (GCallback) &on_document_focus_out, FALSE, NULL },
 	{ NULL, NULL, FALSE, NULL }
@@ -761,14 +710,13 @@ static void autosave_set_timeout(void)
 
 static gboolean persistent_temp_files_update(gpointer data)
 {
-	GeanyDocument *doc;
 	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook));
 
 	for (i = 0; i < max; i++)
 	{
-		doc = document_get_from_page(i);
+		GeanyDocument *doc = document_get_from_page(i);
 
-		if (doc->real_path != NULL && is_temp_saved_file_doc(doc))
+		if (doc->real_path != NULL && is_temp_saved_file(doc->file_name))
 		{
 			document_save_file(doc, FALSE);
 		}
