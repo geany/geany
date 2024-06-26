@@ -482,7 +482,7 @@ static gint run_unsaved_dialog_for_persistent_temp_files_tab_closing(const gchar
 static void show_unsaved_dialog_for_persistent_temp_files_tab_closing(
 	GeanyDocument *doc, const gchar *short_filename)
 {
-	gchar *msg;
+	gchar *msg, *old_file_path_locale;
 	const gchar *msg2;
 	gint response;
 
@@ -495,7 +495,7 @@ static void show_unsaved_dialog_for_persistent_temp_files_tab_closing(
 	switch (response)
 	{
 		case GTK_RESPONSE_YES:
-			gchar *old_file_path_locale = g_strdup(doc->real_path);
+			old_file_path_locale = g_strdup(doc->real_path);
 
 			if (dialogs_show_save_as())
 			{
