@@ -314,26 +314,39 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 }
 
 
-static gboolean is_temp_saved_file(const gchar *file_path_utf8)
+static gboolean is_temp_saved_file_name(const gchar *filename)
 {
-	if (file_path_utf8 == NULL)
+	if (filename == NULL)
 		return FALSE;
 
-	if (g_str_has_prefix(file_path_utf8, PERSISTENT_TEMP_FILE_NAME_PREFIX))
-	{
-		return TRUE;
-	} else {
-		gchar *filename;
-		gboolean matched;
+	return g_str_has_prefix(filename, PERSISTENT_TEMP_FILE_NAME_PREFIX);
+}
 
-		filename = g_path_get_basename(file_path_utf8);
 
-		matched = g_str_has_prefix(filename, PERSISTENT_TEMP_FILE_NAME_PREFIX);
+static gboolean is_temp_saved_file(const gchar *file_path_utf8)
+{
+	gchar *filename, *dirname, *file_path_locale;
+	gboolean matched;
 
-		g_free(filename);
+	if (file_path_utf8 == NULL)
+		return FALSE; 
 
-		return matched;
-	}
+	file_path_locale = utils_get_locale_from_utf8(file_path_utf8);
+	dirname = g_path_get_dirname(file_path_locale);
+	matched = g_str_equal(dirname, persistent_temp_files_target_dir);
+
+	g_free(file_path_locale);
+	g_free(dirname);
+
+	if (!matched)
+		return FALSE;
+
+	filename = g_path_get_basename(file_path_utf8);
+	matched = is_temp_saved_file_name(filename);
+
+	g_free(filename);
+
+	return matched;
 }
 
 
@@ -358,7 +371,7 @@ static gchar* create_new_temp_file_name(void)
 
 	foreach_dir(filename, dir)
 	{
-		if (is_temp_saved_file(filename))
+		if (is_temp_saved_file_name(filename))
 		{
 			gchar *temp_file_number_str;
 			gint temp_file_number;
@@ -469,7 +482,7 @@ static gint run_unsaved_dialog_for_persistent_temp_files_tab_closing(const gchar
 static void show_unsaved_dialog_for_persistent_temp_files_tab_closing(
 	GeanyDocument *doc, const gchar *short_filename)
 {
-	gchar *msg, *old_file_path, *locale_file_path;
+	gchar *msg;
 	const gchar *msg2;
 	gint response;
 
@@ -479,42 +492,38 @@ static void show_unsaved_dialog_for_persistent_temp_files_tab_closing(
 	response = run_unsaved_dialog_for_persistent_temp_files_tab_closing(msg, msg2);
 	g_free(msg);
 
-	locale_file_path = g_strdup(doc->real_path);
-
 	switch (response)
 	{
 		case GTK_RESPONSE_YES:
-			old_file_path = g_strdup(doc->file_name);
+			gchar *old_file_path_locale = g_strdup(doc->real_path);
 
 			if (dialogs_show_save_as())
 			{
-				if (! g_str_equal(old_file_path, doc->file_name))
+				if (! g_str_equal(old_file_path_locale, doc->real_path))
 				{
 				 	/* remove temp file if it was saved as some other file */
-					g_remove(locale_file_path);
+					g_remove(old_file_path_locale);
 				}
 			}
 			else
 			{
-				plugin_idle_add(geany_plugin, open_document_once_idle, g_strdup(locale_file_path));
+				plugin_idle_add(geany_plugin, open_document_once_idle, g_strdup(old_file_path_locale));
 			}
 
-			g_free(old_file_path);
+			g_free(old_file_path_locale);
 			break;
 
 		case GTK_RESPONSE_NO:
-			g_remove(locale_file_path);
+			g_remove(doc->real_path);
 
 			ui_set_statusbar(TRUE, _("Temp file %s was deleted"), short_filename);
 			break;
 
 		case GTK_RESPONSE_CANCEL:
 		default:
-			plugin_idle_add(geany_plugin, open_document_once_idle, g_strdup(locale_file_path));
+			plugin_idle_add(geany_plugin, open_document_once_idle, g_strdup(doc->real_path));
 			break;
 	}
-
-	g_free(locale_file_path);
 }
 
 
@@ -568,16 +577,21 @@ static void persistent_temp_files_document_save_cb(GObject *obj, GeanyDocument *
 	new_file_path_utf8 = DOC_FILENAME(doc);
 	old_file_path_utf8 = plugin_get_document_data(geany_plugin, doc, "file-name-before-save-as");
 
-	if (old_file_path_utf8 != NULL && is_temp_saved_file(old_file_path_utf8) 
-		&& ! g_str_equal(old_file_path_utf8, new_file_path_utf8))
+	if (old_file_path_utf8 != NULL)
 	{
-		/* remove temp file if it was saved as some other file */
-		gchar *locale_old_file_path = utils_get_locale_from_utf8(old_file_path_utf8);
-		g_remove(locale_old_file_path);
+		if (is_temp_saved_file(old_file_path_utf8) 
+			&& ! g_str_equal(old_file_path_utf8, new_file_path_utf8))
+		{
+			/* remove temp file if it was saved as some other file */
+			gchar *locale_old_file_path = utils_get_locale_from_utf8(old_file_path_utf8);
+			g_remove(locale_old_file_path);
 
-		g_free(locale_old_file_path);
+			g_free(locale_old_file_path);
 
-		ui_set_statusbar(TRUE, _("Temp file %s was deleted"), old_file_path_utf8);
+			ui_set_statusbar(TRUE, _("Temp file %s was deleted"), old_file_path_utf8);
+		}
+
+		plugin_set_document_data(geany_plugin, doc, "file-name-before-save-as", NULL); /* clear value */
 	}
 }
 
