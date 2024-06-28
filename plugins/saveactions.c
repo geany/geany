@@ -758,7 +758,7 @@ static void persistent_temp_files_updater_set_timeout(void)
 void plugin_init(GeanyData *data)
 {
 	GKeyFile *config = g_key_file_new();
-	gchar *tmp, *default_persistent_temp_files_dir_utf8, *configdir_utf8;
+	gchar *tmp;
 
 	config_file = g_strconcat(geany->app->configdir, G_DIR_SEPARATOR_S, "plugins",
 		G_DIR_SEPARATOR_S, "saveactions", G_DIR_SEPARATOR_S, "saveactions.conf", NULL);
@@ -796,13 +796,19 @@ void plugin_init(GeanyData *data)
 	store_target_directory(tmp, &backupcopy_backup_dir);
 	g_free(tmp);
 
-	configdir_utf8 = utils_get_utf8_from_locale(geany->app->configdir);
-	default_persistent_temp_files_dir_utf8 = g_strconcat(configdir_utf8, G_DIR_SEPARATOR_S, "plugins",
-		G_DIR_SEPARATOR_S, "saveactions", G_DIR_SEPARATOR_S, "persistent_temp_files", NULL);
-	tmp = utils_get_setting_string(config, "persistent_temp_files", "target_dir",
-		default_persistent_temp_files_dir_utf8);
-	g_free(configdir_utf8);
-	g_free(default_persistent_temp_files_dir_utf8);
+	if (utils_get_setting_string(config, "persistent_temp_files", "target_dir", NULL) == NULL)
+	{
+		gchar *configdir_utf8, *default_persistent_temp_files_dir_utf8;
+
+		configdir_utf8 = utils_get_utf8_from_locale(geany->app->configdir);
+		default_persistent_temp_files_dir_utf8 = g_strconcat(configdir_utf8, G_DIR_SEPARATOR_S, "plugins",
+			G_DIR_SEPARATOR_S, "saveactions", G_DIR_SEPARATOR_S, "persistent_temp_files", NULL);
+		g_key_file_set_string(config, "persistent_temp_files", "target_dir", 
+			default_persistent_temp_files_dir_utf8);
+		g_free(configdir_utf8);
+		g_free(default_persistent_temp_files_dir_utf8);
+	}
+	tmp = utils_get_setting_string(config, "persistent_temp_files", "target_dir", NULL);
 	store_target_directory(tmp, &persistent_temp_files_target_dir);
 	g_free(tmp);
 
