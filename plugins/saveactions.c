@@ -105,6 +105,16 @@ static gchar *persistent_temp_files_target_dir;
 static gchar *config_file;
 
 
+static gboolean is_directory_accessible(const gchar *dirpath_locale)
+{
+	return dirpath_locale != NULL &&
+		g_path_is_absolute(dirpath_locale) &&
+		g_file_test(dirpath_locale, G_FILE_TEST_EXISTS) &&
+		g_file_test(dirpath_locale, G_FILE_TEST_IS_DIR) &&
+		utils_is_file_writable(dirpath_locale) == 0;
+}
+
+
 /* Ensures utf8_dir exists and is writable and
  * set target to the locale encoded form of utf8_dir */
 static gboolean store_target_directory(const gchar *utf8_dir, gchar **target)
@@ -116,14 +126,11 @@ static gboolean store_target_directory(const gchar *utf8_dir, gchar **target)
 
 	tmp = utils_get_locale_from_utf8(utf8_dir);
 
-	if (! g_path_is_absolute(tmp) ||
-		! g_file_test(tmp, G_FILE_TEST_EXISTS) ||
-		! g_file_test(tmp, G_FILE_TEST_IS_DIR))
+	if (! is_directory_accessible(tmp))
 	{
 		g_free(tmp);
 		return FALSE;
 	}
-	/** TODO add utils_is_file_writeable() to the plugin API and make use of it **/
 
 	SETPTR(*target, tmp);
 
@@ -755,6 +762,28 @@ static void persistent_temp_files_updater_set_timeout(void)
 }
 
 
+static void write_config_file_updates(GKeyFile *config)
+{
+	gchar *str, *config_dir;
+
+	config_dir = g_path_get_dirname(config_file);
+
+	if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
+	{
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+			_("Plugin configuration directory could not be created."));
+	}
+	else
+	{
+		str = g_key_file_to_data(config, NULL, NULL);
+		utils_write_file(config_file, str);
+		g_free(str);
+	}
+	
+	g_free(config_dir);
+}
+
+
 void plugin_init(GeanyData *data)
 {
 	GKeyFile *config = g_key_file_new();
@@ -796,20 +825,41 @@ void plugin_init(GeanyData *data)
 	store_target_directory(tmp, &backupcopy_backup_dir);
 	g_free(tmp);
 
+	/* START Persistent temp files */
 	if (utils_get_setting_string(config, "persistent_temp_files", "target_dir", NULL) == NULL)
 	{
+		/* Set default target dir */
 		gchar *configdir_utf8, *default_persistent_temp_files_dir_utf8;
 
 		configdir_utf8 = utils_get_utf8_from_locale(geany->app->configdir);
 		default_persistent_temp_files_dir_utf8 = g_strconcat(configdir_utf8, G_DIR_SEPARATOR_S, "plugins",
 			G_DIR_SEPARATOR_S, "saveactions", G_DIR_SEPARATOR_S, "persistent_temp_files", NULL);
+		g_free(configdir_utf8);
+
 		g_key_file_set_string(config, "persistent_temp_files", "target_dir", 
 			default_persistent_temp_files_dir_utf8);
-		g_free(configdir_utf8);
+
+		tmp = utils_get_locale_from_utf8(default_persistent_temp_files_dir_utf8);
 		g_free(default_persistent_temp_files_dir_utf8);
+
+		utils_mkdir(tmp, TRUE);
+		g_free(tmp);
 	}
+
 	tmp = utils_get_setting_string(config, "persistent_temp_files", "target_dir", NULL);
-	store_target_directory(tmp, &persistent_temp_files_target_dir);
+	tmp = utils_get_locale_from_utf8(tmp);
+	/* Set target dir variable with value from config, regardless if dir is valid or not */
+	SETPTR(persistent_temp_files_target_dir, g_strdup(tmp));
+
+	if (enable_persistent_temp_files && ! is_directory_accessible(tmp))
+	{
+		/* switch functionality off, so invalid target directory cannot be actually used */
+		enable_persistent_temp_files = FALSE;
+		g_key_file_set_boolean(config, "saveactions", "enable_persistent_temp_files", FALSE);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_persistent_temp_files), FALSE);
+
+		ui_set_statusbar(TRUE, "ERROR: persistent temp files disabled - bad target directory '%s'", tmp);
+	}
 	g_free(tmp);
 
 	persistent_temp_files_updater_src_id = 0; /* mark as invalid */
@@ -817,6 +867,10 @@ void plugin_init(GeanyData *data)
 		"persistent_temp_files", "interval_ms", 1000);
 
 	persistent_temp_files_updater_set_timeout();
+	/* END Persistent temp files */
+
+
+	write_config_file_updates(config);
 
 	g_key_file_free(config);
 }
@@ -883,9 +937,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
 		GKeyFile *config = g_key_file_new();
-		gchar *str;
 		const gchar *backupcopy_text_dir, *instantsave_text_dir, *persistent_temp_files_text_dir, *text_time;
-		gchar *config_dir = g_path_get_dirname(config_file);
 
 		enable_autosave = gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_autosave));
@@ -895,8 +947,6 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_instantsave));
 		enable_backupcopy = gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_backupcopy));
-		enable_persistent_temp_files = gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_persistent_temp_files));
 
 		autosave_interval = gtk_spin_button_get_value_as_int(
 			GTK_SPIN_BUTTON(pref_widgets.autosave_interval_spin));
@@ -926,7 +976,6 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		g_key_file_set_boolean(config, "saveactions", "enable_autosave_losing_focus", enable_autosave_losing_focus);
 		g_key_file_set_boolean(config, "saveactions", "enable_instantsave", enable_instantsave);
 		g_key_file_set_boolean(config, "saveactions", "enable_backupcopy", enable_backupcopy);
-		g_key_file_set_boolean(config, "saveactions", "enable_persistent_temp_files", enable_persistent_temp_files);
 
 		g_key_file_set_boolean(config, "autosave", "print_messages", autosave_print_msg);
 		g_key_file_set_boolean(config, "autosave", "save_all", autosave_save_all);
@@ -970,40 +1019,50 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		}
 
 		g_key_file_set_integer(config, "persistent_temp_files", "interval_ms", persistent_temp_files_interval_ms);
-		if (enable_persistent_temp_files)
+		/* If toggle button (not boolean variable, which is not updated yet) is active - we check for target dir validity */
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pref_widgets.checkbox_enable_persistent_temp_files)))
 		{
-			if (!EMPTY(persistent_temp_files_text_dir) && store_target_directory(
+			if (!EMPTY(persistent_temp_files_text_dir) 
+					&& g_str_has_suffix(persistent_temp_files_text_dir, G_DIR_SEPARATOR_S))
+			{
+				/* If target dir path ends with dir separator - we consider it invalid */
+				g_signal_stop_emission_by_name(dialog, "response");
+
+				dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+						_("Please remove path separator (%s) from persistent temp files directory path"), 
+							G_DIR_SEPARATOR_S);
+			}
+			else if (!EMPTY(persistent_temp_files_text_dir) && store_target_directory(
 					persistent_temp_files_text_dir, &persistent_temp_files_target_dir))
 			{
+				/* If target dir is valid - we save both itself and "enabled" feature toggle into config file */
 				g_key_file_set_string(config, "persistent_temp_files", "target_dir", persistent_temp_files_text_dir);
+				
+				enable_persistent_temp_files = TRUE;
+				g_key_file_set_boolean(config, "saveactions", "enable_persistent_temp_files", TRUE);
 			}
 			else
 			{
+				/* If target dir is not valid - we prevent dialog closing and avoid saving both "target dir" 
+				and "enabled" settings into config file */
+				g_signal_stop_emission_by_name(dialog, "response");
+
 				dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 						_("Persistent temp files directory does not exist or is not writable."));
 			}
+		} else {
+			enable_persistent_temp_files = FALSE;
+			g_key_file_set_boolean(config, "saveactions", "enable_persistent_temp_files", FALSE);
 		}
 
 		persistent_temp_files_updater_set_timeout();
 
-
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
-		{
-			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-				_("Plugin configuration directory could not be created."));
-		}
-		else
-		{
-			/* write config to file */
-			str = g_key_file_to_data(config, NULL, NULL);
-			utils_write_file(config_file, str);
-			g_free(str);
-		}
-
 		if (enable_autosave)
 			autosave_set_timeout(); /* apply the changes */
 
-		g_free(config_dir);
+
+		write_config_file_updates(config);
+
 		g_key_file_free(config);
 	}
 }
