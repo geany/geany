@@ -43,6 +43,7 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
+#include "pluginextension.h"
 #include "prefs.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
@@ -2151,7 +2152,10 @@ static gboolean cb_func_editor_action(guint key_id)
 			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);
 			break;
 		case GEANY_KEYS_EDITOR_AUTOCOMPLETE:
-			editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
+			if (plugin_extension_autocomplete_provided(doc, NULL))
+				plugin_extension_autocomplete_perform(doc, TRUE);
+			else
+				editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
 			break;
 		case GEANY_KEYS_EDITOR_CALLTIP:
 			editor_show_calltip(doc->editor, -1);

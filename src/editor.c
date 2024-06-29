@@ -46,6 +46,7 @@
 #include "highlighting.h"
 #include "keybindings.h"
 #include "main.h"
+#include "pluginextension.h"
 #include "prefs.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"
@@ -857,13 +858,11 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case ':':	/* C/C++ class:: syntax */
 		/* tag autocompletion */
 		default:
-#if 0
-			if (! editor_start_auto_complete(editor, pos, FALSE))
-				request_reshowing_calltip(nt);
-#else
 			editor_start_auto_complete(editor, pos, FALSE);
-#endif
 	}
+
+	plugin_extension_autocomplete_perform(editor->document, FALSE);
+
 	check_line_breaking(editor, pos);
 }
 
@@ -2221,6 +2220,9 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	GeanyFiletype *ft;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
+
+	if (plugin_extension_autocomplete_provided(editor->document, NULL))
+		return FALSE;
 
 	if (! editor_prefs.auto_complete_symbols && ! force)
 		return FALSE;
