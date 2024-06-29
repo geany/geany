@@ -665,8 +665,15 @@ gchar utils_brace_opposite(gchar ch)
 }
 
 
-/* Checks whether the given file can be written. locale_filename is expected in locale encoding.
- * Returns 0 if it can be written, otherwise it returns errno */
+/**
+ *  Checks whether the given @a locale_filename can be written. Works for both files and directories.
+ *  If non-directory file name is passed and file does not yet exist - its parent directory is checked to be writable. 
+ *
+ *  @param locale_filename File or directory name to check in locale encoding
+ *
+ *  @return Returns 0 if file can be written, otherwise returns errno
+ **/
+GEANY_API_SYMBOL
 gint utils_is_file_writable(const gchar *locale_filename)
 {
 	gchar *file;
