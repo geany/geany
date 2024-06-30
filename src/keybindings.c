@@ -1972,14 +1972,8 @@ static gboolean cb_func_clipboard_action(guint key_id)
 
 static void goto_tag(GeanyDocument *doc, gboolean definition)
 {
-	gchar *text = get_current_word_or_sel(doc, FALSE);
-
-	if (text)
-		symbols_goto_tag(text, definition);
-	else
+	if (!symbols_goto_tag(doc, sci_get_current_position(doc->editor->sci), definition))
 		utils_beep();
-
-	g_free(text);
 }
 
 

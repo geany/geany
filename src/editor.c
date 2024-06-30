@@ -317,11 +317,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		{
 			sci_set_current_position(editor->sci, editor_info.click_pos, FALSE);
 
-			editor_find_current_word(editor, editor_info.click_pos,
-				current_word, sizeof current_word, NULL);
-			if (*current_word)
-				return symbols_goto_tag(current_word, TRUE);
-			else
+			if (!symbols_goto_tag(doc, editor_info.click_pos, TRUE))
 				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
 			return TRUE;
 		}
