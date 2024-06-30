@@ -415,12 +415,21 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 }
 
 
+static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
+{
+	const Plugin *pa = a;
+	const Plugin *pb = b;
+
+	return strcmp(pa->info.name, pb->info.name);
+}
+
+
 /* multiple plugin configure dialog
  * current_plugin can be NULL */
 static void configure_plugins(Plugin *current_plugin)
 {
 	GtkWidget *dialog, *vbox, *nb;
-	GList *node;
+	GList *node, *sorted_copy;
 	gint cur_page = -1;
 
 	dialog = gtk_dialog_new_with_buttons(_("Configure Plugins"),
@@ -435,7 +444,10 @@ static void configure_plugins(Plugin *current_plugin)
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(nb), TRUE);
 	gtk_box_pack_start(GTK_BOX(vbox), nb, TRUE, TRUE, 0);
 
-	foreach_list(node, active_plugin_list)
+	sorted_copy = g_list_copy(active_plugin_list);
+	sorted_copy = g_list_sort(sorted_copy, cmp_plugin_names);
+
+	foreach_list(node, sorted_copy)
 	{
 		Plugin *p = node->data;
 		GtkWidget *page = create_pref_page(p, dialog);
@@ -461,6 +473,7 @@ static void configure_plugins(Plugin *current_plugin)
 	else
 		utils_beep();
 
+	g_list_free(sorted_copy);
 	gtk_widget_destroy(dialog);
 }
 
