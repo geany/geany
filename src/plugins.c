@@ -530,7 +530,8 @@ plugin_load(Plugin *plugin)
 		add_callbacks(plugin, plugin->cbs.callbacks);
 
 	/* remember which plugins are active.
-	 * preserve the order that plugins are added and appear in the sidebar. */
+	 * preserve the order that plugins are loaded, which affects the order
+	 * of GUI elements, e.g. tabs they add to the sidebar */
 	active_plugin_list = g_list_append(active_plugin_list, plugin);
 	proxied_count_inc(plugin->proxy);
 
