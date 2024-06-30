@@ -51,6 +51,7 @@ geany_include_HEADERS = \
 	msgwindow.h \
 	navqueue.h \
 	plugindata.h \
+	pluginextension.h \
 	pluginutils.h \
 	prefs.h \
 	project.h \
@@ -89,6 +90,7 @@ libgeany_la_SOURCES = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
+	pluginextension.c pluginextension.h \
 	plugins.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefs.c prefs.h \

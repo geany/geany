@@ -46,6 +46,7 @@
 #include "highlighting.h"
 #include "keybindings.h"
 #include "main.h"
+#include "pluginextension.h"
 #include "prefs.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"
@@ -316,11 +317,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		{
 			sci_set_current_position(editor->sci, editor_info.click_pos, FALSE);
 
-			editor_find_current_word(editor, editor_info.click_pos,
-				current_word, sizeof current_word, NULL);
-			if (*current_word)
-				return symbols_goto_tag(current_word, TRUE);
-			else
+			if (!symbols_goto_tag(doc, editor_info.click_pos, TRUE))
 				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
 			return TRUE;
 		}
@@ -821,13 +818,15 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case '(':
 		{
 			auto_close_chars(sci, pos, nt->ch);
-			/* show calltips */
-			editor_show_calltip(editor, --pos);
+			if (!plugin_extension_calltips_provided(editor->document, NULL))
+				/* show calltips */
+				editor_show_calltip(editor, --pos);
 			break;
 		}
 		case ')':
 		{	/* hide calltips */
-			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0))
+			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0) &&
+				!plugin_extension_calltips_provided(editor->document, NULL))
 			{
 				SSM(sci, SCI_CALLTIPCANCEL, 0, 0);
 			}
@@ -857,13 +856,12 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case ':':	/* C/C++ class:: syntax */
 		/* tag autocompletion */
 		default:
-#if 0
-			if (! editor_start_auto_complete(editor, pos, FALSE))
-				request_reshowing_calltip(nt);
-#else
 			editor_start_auto_complete(editor, pos, FALSE);
-#endif
 	}
+
+	plugin_extension_autocomplete_perform(editor->document, FALSE);
+	plugin_extension_calltips_show(editor->document, FALSE);
+
 	check_line_breaking(editor, pos);
 }
 
@@ -1157,7 +1155,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
 			autocomplete_scope_shown = FALSE;
-			request_reshowing_calltip(nt);
+			if (!plugin_extension_calltips_provided(doc, NULL))
+				request_reshowing_calltip(nt);
 			break;
 		case SCN_NEEDSHOWN:
 			ensure_range_visible(sci, nt->position, nt->position + nt->length, FALSE);
@@ -1171,7 +1170,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
 		case SCN_CALLTIPCLICK:
-			if (nt->position > 0)
+			if (!plugin_extension_calltips_provided(doc, NULL) && nt->position > 0)
 			{
 				switch (nt->position)
 				{
@@ -2222,6 +2221,9 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	GeanyFiletype *ft;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
+
+	if (plugin_extension_autocomplete_provided(editor->document, NULL))
+		return FALSE;
 
 	if (! editor_prefs.auto_complete_symbols && ! force)
 		return FALSE;
