@@ -358,6 +358,9 @@ GeanyDocument *document_get_from_page(guint page_num)
 
 	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
 
+	if (!parent)
+		return NULL;
+
 	return document_get_from_notebook_child(parent);
 }
 
@@ -1266,6 +1269,9 @@ void document_apply_indent_settings(GeanyDocument *doc)
 
 void document_show_tab(GeanyDocument *doc)
 {
+	if (!doc)
+		return;
+
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 		document_get_notebook_page(doc));
 
