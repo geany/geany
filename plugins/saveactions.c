@@ -641,12 +641,18 @@ static void load_all_temp_files_into_editor()
 	}
 
 	g_dir_close(dir);
+
+	/* create new empty file/tab if this is a "fresh" session start without any opened files */
+	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook)) == 0)
+		document_new_file(NULL, NULL, NULL);
 }
 
 
 static gboolean load_all_temp_files_idle(gpointer p_cur_doc)
 {
 	load_all_temp_files_into_editor();
+
+	return FALSE;
 }
 
 
