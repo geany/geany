@@ -104,6 +104,10 @@ static gchar *persistent_temp_files_target_dir;
 
 static gchar *config_file;
 
+/* all persistent temp files should be loaded into session when session is changed
+(so after geany launch or when project session is started/closed) */
+static gboolean session_is_changing = FALSE;
+
 
 static gboolean is_directory_accessible(const gchar *dirpath_locale)
 {
@@ -603,6 +607,49 @@ static void persistent_temp_files_document_save_cb(GObject *obj, GeanyDocument *
 }
 
 
+static void load_all_temp_files_into_editor()
+{
+	GDir *dir;
+	GError *error = NULL;
+	gchar *utf8_filename, *locale_file_path;
+	const gchar *filename;
+
+	dir = g_dir_open(persistent_temp_files_target_dir, 0, &error);
+	if (dir == NULL)
+	{
+		dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("Persistent temp files directory not found"));
+		return;
+	}
+
+	foreach_dir(filename, dir)
+	{
+		locale_file_path = g_build_path(G_DIR_SEPARATOR_S, persistent_temp_files_target_dir, filename, NULL);
+
+		if (is_temp_saved_file_name(filename))
+		{
+			GeanyDocument *doc = document_open_file(locale_file_path, FALSE, NULL, NULL);
+
+			/* we are closing (and thus deleting) empty documents here - mainly in order to avoid accumulation of 
+			empty temp files, that happens when new tab with empty document is created at new (empty) session start. 
+			Note: we cannot 'close' newly-created empty document from 'document-activate' callback, 
+			without first re-opening it from disc so this is a perfect place for it */
+			if (doc != NULL && document_is_empty(doc))
+				document_close(doc);
+		}
+
+		g_free(locale_file_path);
+	}
+
+	g_dir_close(dir);
+}
+
+
+static gboolean load_all_temp_files_idle(gpointer p_cur_doc)
+{
+	load_all_temp_files_into_editor();
+}
+
+
 /* Save when focus out
  *
  * @param pointer ref to the current doc (struct GeanyDocument *)
@@ -669,13 +716,42 @@ static void on_document_new(GObject *obj, GeanyDocument *doc, gpointer user_data
 }
 
 
+static void on_project_open(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile *config,
+							G_GNUC_UNUSED gpointer data)
+{
+	session_is_changing = TRUE;
+}
+
+
+static void on_project_before_close(void)
+{	
+	session_is_changing = TRUE;
+}
+
+
+static void on_document_activate(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
+								 G_GNUC_UNUSED gpointer data)
+{
+	if (session_is_changing)
+	{
+		session_is_changing = FALSE;
+
+		if (enable_persistent_temp_files)
+			plugin_idle_add(geany_plugin, load_all_temp_files_idle, NULL);
+	}
+}
+
+
 PluginCallback plugin_callbacks[] =
 {
 	{ "document-new", (GCallback) &on_document_new, FALSE, NULL },
 	{ "document-close", (GCallback) &persistent_temp_files_document_close_cb, FALSE, NULL },
 	{ "document-before-save-as", (GCallback) &persistent_temp_files_document_before_save_as_cb, FALSE, NULL },
 	{ "document-save", (GCallback) &on_document_save, FALSE, NULL },
+	{ "document-activate", (GCallback) &on_document_activate, FALSE, NULL },
 	{ "editor-notify", (GCallback) &on_document_focus_out, FALSE, NULL },
+	{ "project-open", (GCallback) &on_project_open, FALSE, NULL },
+	{ "project-before-close", (GCallback) &on_project_before_close, FALSE, NULL },
 	{ NULL, NULL, FALSE, NULL }
 };
 
@@ -869,6 +945,8 @@ void plugin_init(GeanyData *data)
 	persistent_temp_files_updater_set_timeout();
 	/* END Persistent temp files */
 
+
+	session_is_changing = TRUE;
 
 	write_config_file_updates(config);
 
