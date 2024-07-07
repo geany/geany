@@ -1,5 +1,5 @@
 project('geany', 'c', 'cpp',
-        meson_version: '>= 0.53',
+        meson_version: '>= 0.56',
         version: '2.1',
         default_options : ['c_std=c11', 'cpp_std=c++17'])
 
