@@ -365,7 +365,8 @@ static gchar* create_new_temp_file_name(void)
 {
 	GDir *dir;
 	GError *error = NULL;
-	gint max_temp_file_number;
+	gint i, new_temp_file_number = 1;
+	GHashTable *temp_file_numbers = NULL;
 	const gchar *filename;
 	static glong temp_file_name_prefix_len;
 
@@ -378,27 +379,35 @@ static gchar* create_new_temp_file_name(void)
 
 	temp_file_name_prefix_len = strlen(PERSISTENT_TEMP_FILE_NAME_PREFIX);
 
-	max_temp_file_number = 0;
+	temp_file_numbers = g_hash_table_new(g_str_hash, g_str_equal);
 
 	foreach_dir(filename, dir)
 	{
 		if (is_temp_saved_file_name(filename))
 		{
-			gchar *temp_file_number_str;
-			gint temp_file_number;
+			gchar *temp_file_number_str = g_utf8_substring(filename, temp_file_name_prefix_len, -1);
 
-			temp_file_number_str = g_utf8_substring(filename, temp_file_name_prefix_len, -1);
-			temp_file_number = atoi(temp_file_number_str);
-
-			max_temp_file_number = MAX(max_temp_file_number, temp_file_number);
-
-			g_free(temp_file_number_str);
+			g_hash_table_insert(temp_file_numbers, temp_file_number_str, temp_file_number_str);
 		}
 	}
 
 	g_dir_close(dir);
 
-	return g_strdup_printf("%s%d", PERSISTENT_TEMP_FILE_NAME_PREFIX, max_temp_file_number + 1);
+	for (i = 1; i < 9999; i++)
+	{
+		gchar next_num_str[5] = {0};
+		sprintf(next_num_str, "%d", i);
+
+		if (! g_hash_table_lookup(temp_file_numbers, next_num_str)) {
+			new_temp_file_number = i;
+
+			break;
+		}
+	}
+
+	g_hash_table_destroy(temp_file_numbers);
+
+	return g_strdup_printf("%s%d", PERSISTENT_TEMP_FILE_NAME_PREFIX, new_temp_file_number);
 }
 
 
