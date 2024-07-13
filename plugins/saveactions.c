@@ -114,8 +114,7 @@ static gboolean is_directory_accessible(const gchar *dirpath_locale)
 	return dirpath_locale != NULL &&
 		g_path_is_absolute(dirpath_locale) &&
 		g_file_test(dirpath_locale, G_FILE_TEST_EXISTS) &&
-		g_file_test(dirpath_locale, G_FILE_TEST_IS_DIR) &&
-		utils_is_file_writable(dirpath_locale) == 0;
+		g_file_test(dirpath_locale, G_FILE_TEST_IS_DIR);
 }
 
 
@@ -135,6 +134,7 @@ static gboolean store_target_directory(const gchar *utf8_dir, gchar **target)
 		g_free(tmp);
 		return FALSE;
 	}
+	/** TODO add utils_is_file_writeable() to the plugin API and make use of it **/
 
 	SETPTR(*target, tmp);
 
@@ -650,7 +650,12 @@ static void load_all_temp_files_into_editor()
 
 static gboolean load_all_temp_files_idle(gpointer p_cur_doc)
 {
+	//remember and re-open document from originaly focused tab 
+	//(after we mess selected tab with re-loaded temp files)
+	GeanyDocument *current_doc = document_get_current();
+
 	load_all_temp_files_into_editor();
+	document_open_file(current_doc->real_path, FALSE, NULL, NULL);
 
 	return FALSE;
 }

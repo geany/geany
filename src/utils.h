@@ -217,8 +217,6 @@ gchar *utils_get_real_path(const gchar *file_name);
 
 gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len);
 
-gint utils_is_file_writable(const gchar *locale_filename);
-
 #ifdef GEANY_PRIVATE
 
 /* Casts a GDestroyNotify to a GClosureNotify without a warning.
