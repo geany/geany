@@ -190,6 +190,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( JULIA,      JULIA,        "Julia",            NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( AU3,        AUTOIT,       "AutoIt",           NULL,                      SCRIPT,      SCRIPT   );
 	FT_INIT( RAKU,       RAKU,         "Raku",             NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( KOTLIN,     KOTLIN,       "Kotlin",           NULL,                      SOURCE_FILE, COMPILED );
 }
 
 
@@ -476,7 +477,7 @@ static guint match_basename(const GeanyFiletype *ft, const gchar *base_filename)
 	for (guint j = 0; ft->pattern[j] != NULL; j++)
 	{
 		gchar *pat = ft->pattern[j];
-		
+
 		if (g_pattern_match_simple(pat, base_filename))
 		{
 			return strlen(pat);
@@ -537,7 +538,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	for (guint i = 0; i < filetypes_array->len; i++)
 	{
 		guint mlen = match_basename(filetypes[i], base_filename);
-		
+
 		if (mlen > plen)
 		{	// longest pattern match wins
 			plen = mlen;
