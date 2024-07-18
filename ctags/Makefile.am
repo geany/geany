@@ -66,6 +66,7 @@ parsers = \
 	parsers/dosbatch.c \
 	parsers/erlang.c \
 	parsers/flex.c \
+	parsers/forth.c \
 	parsers/fortran.c \
 	parsers/gdscript.c \
 	parsers/go.c \
