@@ -627,10 +627,10 @@ static void load_all_temp_files_into_editor()
 }
 
 
-static gboolean load_all_temp_files_idle(gpointer p_cur_doc)
+static gboolean load_all_temp_files_idle(gpointer data)
 {
-	//remember and re-open document from originaly focused tab 
-	//(after we mess selected tab with re-loaded temp files)
+	/* remember and re-open document from originaly focused tab 
+	(after we mess selected tab with re-loaded temp files) */
 	GeanyDocument *current_doc = document_get_current();
 
 	load_all_temp_files_into_editor();
@@ -812,6 +812,7 @@ static gboolean persistent_temp_files_update(gpointer data)
 	return TRUE;
 }
 
+
 static void persistent_temp_files_updater_set_timeout(void)
 {
 	if (persistent_temp_files_updater_src_id != 0)
@@ -913,7 +914,7 @@ void plugin_init(GeanyData *data)
 	}
 
 	tmp = utils_get_setting_string(config, "persistent_temp_files", "target_dir", NULL);
-	tmp = utils_get_locale_from_utf8(tmp);
+	SETPTR(tmp, utils_get_locale_from_utf8(tmp));
 	/* Set target dir variable with value from config, regardless if dir is valid or not */
 	SETPTR(persistent_temp_files_target_dir, g_strdup(tmp));
 
