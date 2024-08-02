@@ -15,6 +15,7 @@ filetypes_dist = \
 	filedefs/filetypes.bibtex \
 	filedefs/filetypes.c \
 	filedefs/filetypes.caml \
+	filedefs/filetypes.cil \
 	filedefs/filetypes.Clojure.conf \
 	filedefs/filetypes.cmake \
 	filedefs/filetypes.cobol \

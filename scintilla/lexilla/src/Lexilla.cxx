@@ -178,6 +178,7 @@ static void AddGeanyLexers()
 		&lmBash,
 		&lmBatch,
 		&lmCaml,
+		&lmCIL,
 		&lmCmake,
 		&lmCOBOL,
 		&lmCoffeeScript,

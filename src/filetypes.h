@@ -110,6 +110,7 @@ typedef enum
 	GEANY_FILETYPES_JULIA,
 	GEANY_FILETYPES_AU3,
 	GEANY_FILETYPES_RAKU,
+	GEANY_FILETYPES_CIL,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }
