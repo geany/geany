@@ -44,6 +44,7 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
+#include "pluginextension.h"
 #include "project.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
@@ -2702,6 +2703,9 @@ void document_highlight_tags(GeanyDocument *doc)
 {
 	GString *keywords_str;
 	gint keyword_idx;
+
+	if (plugin_extension_symbol_highlight_provided(doc, NULL))
+		return;
 
 	/* some filetypes support type keywords (such as struct names), but not
 	 * necessarily all filetypes for a particular scintilla lexer.  this
