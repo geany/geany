@@ -590,7 +590,6 @@ static void load_all_temp_files_into_editor()
 {
 	GDir *dir;
 	GError *error = NULL;
-	gchar *utf8_filename, *locale_file_path;
 	const gchar *filename;
 
 	dir = g_dir_open(persistent_temp_files_target_dir, 0, &error);
@@ -602,21 +601,29 @@ static void load_all_temp_files_into_editor()
 
 	foreach_dir(filename, dir)
 	{
-		locale_file_path = g_build_path(G_DIR_SEPARATOR_S, persistent_temp_files_target_dir, filename, NULL);
-
 		if (is_temp_saved_file_name(filename))
 		{
-			GeanyDocument *doc = document_open_file(locale_file_path, FALSE, NULL, NULL);
+			gchar *locale_file_path, *file_path_utf8;
+
+			locale_file_path = g_build_path(G_DIR_SEPARATOR_S, persistent_temp_files_target_dir, filename, NULL);
+			file_path_utf8 = utils_get_utf8_from_locale(locale_file_path);
+			GeanyDocument *doc = document_find_by_filename(file_path_utf8);
+
+			g_free(file_path_utf8);
+
+			if (doc == NULL) {
+				doc = document_open_file(locale_file_path, FALSE, NULL, NULL);
+			}
+
+			g_free(locale_file_path);
 
 			/* we are closing (and thus deleting) empty documents here - mainly in order to avoid accumulation of 
 			empty temp files, that happens when new tab with empty document is created at new (empty) session start. 
 			Note: we cannot 'close' newly-created empty document from 'document-activate' callback, 
-			without first re-opening it from disc so this is a perfect place for it */
+			so this is a perfect place for it */
 			if (doc != NULL && document_is_empty(doc))
 				document_close(doc);
 		}
-
-		g_free(locale_file_path);
 	}
 
 	g_dir_close(dir);
