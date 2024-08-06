@@ -236,7 +236,7 @@ static void prepare_msg_tree_view(void)
 		"foreground-gdk", MSG_COL_COLOR, "text", MSG_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
 
-	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
+	gtk_tree_view_set_search_column(GTK_TREE_VIEW(msgwindow.tree_msg), MSG_COL_STRING);
 
 	ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 
@@ -273,7 +273,7 @@ static void prepare_compiler_tree_view(void)
 		"foreground-gdk", COMPILER_COL_COLOR, "text", COMPILER_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_compiler), column);
 
-	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
+	gtk_tree_view_set_search_column(GTK_TREE_VIEW(msgwindow.tree_compiler), COMPILER_COL_STRING);
 
 	ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
 

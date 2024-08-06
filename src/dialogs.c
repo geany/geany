@@ -38,7 +38,6 @@
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
-#include "win32.h"
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -712,7 +711,6 @@ gboolean dialogs_show_save_as(void)
 }
 
 
-#ifndef G_OS_WIN32
 static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow *parent)
 {
 	const gchar *title;
@@ -738,13 +736,10 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 }
-#endif
 
 
 /**
  *  Shows a message box of the type @a type with @a text.
- *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
- *  message dialog box is shown.
  *
  *  @param type A @c GtkMessageType, e.g. @c GTK_MESSAGE_INFO, @c GTK_MESSAGE_WARNING,
  *              @c GTK_MESSAGE_QUESTION, @c GTK_MESSAGE_ERROR.
@@ -754,9 +749,7 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
 GEANY_API_SYMBOL
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 {
-#ifndef G_OS_WIN32
 	GtkWidget *dialog;
-#endif
 	gchar *string;
 	va_list args;
 	GtkWindow *parent = (main_status.main_window_realized) ? GTK_WINDOW(main_widgets.window) : NULL;
@@ -765,13 +758,9 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 	string = g_strdup_vprintf(text, args);
 	va_end(args);
 
-#ifdef G_OS_WIN32
-	win32_message_dialog(GTK_WIDGET(parent), type, string);
-#else
 	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
 			type, GTK_BUTTONS_OK, "%s", string);
 	show_msgbox_dialog(dialog, type, parent);
-#endif
 	g_free(string);
 }
 
@@ -779,18 +768,12 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary)
 {
 	GtkWindow *parent = (main_status.main_window_realized) ? GTK_WINDOW(main_widgets.window) : NULL;
-#ifdef G_OS_WIN32
-	/* put the two strings together because Windows message boxes don't support secondary texts */
-	gchar *string = g_strconcat(text, "\n", secondary, NULL);
-	win32_message_dialog(GTK_WIDGET(parent), type, string);
-	g_free(string);
-#else
 	GtkWidget *dialog;
+
 	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
 			type, GTK_BUTTONS_OK, "%s", text);
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", secondary);
 	show_msgbox_dialog(dialog, type, parent);
-#endif
 }
 
 
@@ -1317,20 +1300,6 @@ static gint show_prompt(GtkWidget *parent,
 		response_3 = GTK_RESPONSE_YES;
 	}
 
-#ifdef G_OS_WIN32
-	/* our native dialog code doesn't support custom buttons */
-	if (utils_str_equal(btn_3, GTK_STOCK_YES) &&
-		utils_str_equal(btn_2, GTK_STOCK_NO) && btn_1 == NULL)
-	{
-		gchar *string = (extra_text == NULL) ? g_strdup(question_text) :
-			g_strconcat(question_text, "\n\n", extra_text, NULL);
-
-		ret = win32_message_dialog(parent, GTK_MESSAGE_QUESTION, string);
-		ret = ret ? response_3 : response_2;
-		g_free(string);
-		return ret;
-	}
-#endif
 	if (parent == NULL && main_status.main_window_realized)
 		parent = main_widgets.window;
 
@@ -1363,8 +1332,6 @@ static gint show_prompt(GtkWidget *parent,
 
 /**
  *  Shows a question message box with @a text and Yes/No buttons.
- *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
- *  message dialog box is shown.
  *
  *  @param text Printf()-style format string.
  *  @param ... Arguments for the @a text format string.

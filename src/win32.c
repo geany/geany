@@ -60,67 +60,6 @@
 #include <gdk/gdkwin32.h>
 
 
-/* Creates a native Windows message box of the given type and returns always TRUE
- * or FALSE representing th pressed Yes or No button.
- * If type is not GTK_MESSAGE_QUESTION, it returns always TRUE. */
-gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gchar *msg)
-{
-	gboolean ret = TRUE;
-	gint rc;
-	guint t;
-	const gchar *title;
-	HWND parent_hwnd = NULL;
-	static wchar_t w_msg[512];
-	static wchar_t w_title[512];
-
-	switch (type)
-	{
-		case GTK_MESSAGE_ERROR:
-		{
-			t = MB_OK | MB_ICONERROR;
-			title = _("Error");
-			break;
-		}
-		case GTK_MESSAGE_QUESTION:
-		{
-			t = MB_YESNO | MB_ICONQUESTION;
-			title = _("Question");
-			break;
-		}
-		case GTK_MESSAGE_WARNING:
-		{
-			t = MB_OK | MB_ICONWARNING;
-			title = _("Warning");
-			break;
-		}
-		default:
-		{
-			t = MB_OK | MB_ICONINFORMATION;
-			title = _("Information");
-			break;
-		}
-	}
-
-	/* convert the Unicode chars to wide chars */
-	/** TODO test if LANG == C then possibly skip conversion => g_win32_getlocale() */
-	MultiByteToWideChar(CP_UTF8, 0, msg, -1, w_msg, G_N_ELEMENTS(w_msg));
-	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
-
-	if (parent != NULL)
-		parent_hwnd = GDK_WINDOW_HWND(gtk_widget_get_window(parent));
-	else if (main_widgets.window != NULL)
-		parent_hwnd = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
-
-	/* display the message box */
-	rc = MessageBoxW(parent_hwnd, w_msg, w_title, t);
-
-	if (type == GTK_MESSAGE_QUESTION && rc != IDYES)
-		ret = FALSE;
-
-	return ret;
-}
-
-
 /* Little wrapper for _waccess(), returns errno or 0 if there was no error */
 gint win32_check_write_permission(const gchar *dir)
 {

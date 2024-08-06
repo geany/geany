@@ -40,6 +40,7 @@ GeanyFuncs::cleanup functions).
 @section pluginsupport Plugin Support
 - @link howto Plugin HowTo @endlink - get started
 - @ref proxy
+- @ref plugin_extension
 - @ref legacy
 - @link plugindata.h Plugin Datatypes and Macros @endlink
 - @link pluginsignals.c Plugin Signals @endlink
@@ -54,6 +55,7 @@ GeanyFuncs::cleanup functions).
 - @link filetypes.h @endlink
 - @link keybindings.h @endlink
 - @link msgwindow.h @endlink
+- @link pluginextension.h @endlink
 - @link project.h @endlink
 - @link sciwrappers.h Scintilla Wrapper Functions @endlink
 - @link spawn.h Spawning programs @endlink
@@ -1115,5 +1117,146 @@ static void proxy_cleanup(GeanyPlugin *plugin, gpointer pdata)
 }
 @endcode
 
+
+@page plugin_extension Plugin Extension HowTo
+
+@section plugin_extension_intro Introduction
+
+Originally the Geany plugin API only allowed plugins to add to Geany
+functionality, plugins could not modify Geany built-in functionality, but since
+Geany 2.1 the PluginExtension API allows plugins to take over some of
+the core Geany functionality: autocopletion, calltip display, symbol goto, and
+typename highlighting inside document.
+
+@section plugin_extension_init Initialization and cleanup
+
+Plugins using the @c PluginExtension API are just normal plugins and behave as
+described in @link howto Plugin HowTo@endlink.
+
+First, any plugin interested in using this interface has to register its
+@c PluginExtension structure pointer using @c plugin_extension_register(). This
+typically happens in the @c init() function of the plugin. Registered
+@c PluginExtension pointers have to be unregistered before the plugin is
+unloaded using @c plugin_extension_unregister(), typically inside the
+@c cleanup() function of the plugin.
+
+@section plugin_extension_impl Implementing extensions
+
+Inside the @c PluginExtension struct, the plugin fills-in the pointers of the
+functions it wishes to implement. Typically, these functions
+come in pairs:
+ - functions assigned to members ending with @c _provided are used by Geany to
+   query the plugin whether it implements the particular feature for the passed
+   document
+ - functions assigned to members ending with @c _perform are used by Geany to
+   pass control to the plugin to perform the feature instead of performing the
+   Geany built-in functionality.
+
+When the plugin returns @c TRUE from the function assigned to the @c _provided
+member of @c PluginExtension, it indicates
+it wants to take control of the particular feature and disable Geany's
+implementation. However, returning @c TRUE does not automatically guarantee that
+the plugin's implementation is executed - if there are multiple plugins competing
+for implementing a feature, the extension with the highest priority
+passed into the @c plugin_extension_register() function gets executed.
+
+A plugin can perform a check if it gets executed for the
+particular feature; e.g. for autocompletion the plugin can use
+@c plugin_extension_autocomplete_provided() which returns @c TRUE if the
+passed extension is executed, taking into account all registered extension
+priorities and the return values of all functions assigned to
+@c autocomplete_provided members of the registered extensions.
+This can be used if the plugin needs to perform auxiliary actions outside the
+function assigned to @c autocomplete_perform to verify it is actually active
+for this feature.
+
+@section plugin_extension_ex Example
+
+Below you will find an example of a plugin implementing autocompletion for
+Python. The full version of this code can be found under
+plugins/demopluginext.c inside the Geany repository.
+
+
+@code
+/* License blob */
+
+#include <geanyplugin.h>
+
+static gboolean autocomplete_provided(GeanyDocument *doc, gpointer data)
+{
+    /* Check whether the plugin provides the feature for the passed document */
+    return doc->file_type->id == GEANY_FILETYPES_PYTHON;
+}
+
+
+static void autocomplete_perform(GeanyDocument *doc, gboolean force, gpointer data)
+{
+    /* The autocompletion logic comes here, including the autocompletion UI
+     * display (either using some custom widget or using Scintilla's
+     * SCI_AUTOCSHOW) */
+}
+
+
+/* The PluginExtension struct - we only implement autocompletion here. */
+static PluginExtension extension = {
+    .autocomplete_provided = autocomplete_provided,
+    .autocomplete_perform = autocomplete_perform
+};
+
+
+static gboolean on_editor_notify(G_GNUC_UNUSED GObject *obj, GeanyEditor *editor, SCNotification *nt,
+    G_GNUC_UNUSED gpointer user_data)
+{
+    if (nt->nmhdr.code == SCN_AUTOCSELECTION)
+    {
+        if (plugin_extension_autocomplete_provided(editor->document, &extension))
+        {
+            /* This is an example of using plugin_extension_autocomplete_provided()
+             * to detect whether this plugin extension was used to perform
+             * autocompletion. */
+            msgwin_status_add("PluginExtensionDemo autocompleted '%s'", nt->text);
+        }
+    }
+
+    return FALSE;
+}
+
+
+static PluginCallback plugin_callbacks[] = {
+    {"editor-notify", (GCallback) &on_editor_notify, FALSE, NULL},
+    {NULL, NULL, FALSE, NULL}
+};
+
+
+static gboolean init_func(GeanyPlugin *plugin, gpointer pdata)
+{
+    /* Extension registration */
+    plugin_extension_register(&extension, "Python keyword autocompletion", 450, NULL);
+    return TRUE;
+}
+
+
+static void cleanup_func(GeanyPlugin *plugin, gpointer pdata)
+{
+    /* Extension unregistration */
+    plugin_extension_unregister(&extension);
+}
+
+
+G_MODULE_EXPORT
+void geany_load_module(GeanyPlugin *plugin)
+{
+    plugin->info->name = "PluginExtensionDemo";
+    plugin->info->description = "Demo performing simple Python keyword autocompletion";
+    plugin->info->version = "1.0";
+    plugin->info->author = "John Doe <john.doe@example.org>";
+
+    plugin->funcs->init = init_func;
+    plugin->funcs->cleanup = cleanup_func;
+    plugin->funcs->callbacks = plugin_callbacks;
+
+    GEANY_PLUGIN_REGISTER(plugin, 248);
+}
+@endcode
 
 */

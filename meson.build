@@ -1,5 +1,5 @@
 project('geany', 'c', 'cpp',
-        meson_version: '>= 0.53',
+        meson_version: '>= 0.56',
         version: '2.1',
         default_options : ['c_std=c11', 'cpp_std=c++17'])
 
@@ -785,6 +785,7 @@ install_headers(
 	'src/msgwindow.h',
 	'src/navqueue.h',
 	'src/plugindata.h',
+	'src/pluginextension.h',
 	'src/pluginutils.h',
 	'src/prefs.h',
 	'src/project.h',
@@ -846,6 +847,8 @@ libgeany = shared_library('geany',
 	'src/navqueue.h',
 	'src/notebook.c',
 	'src/notebook.h',
+	'src/pluginextension.c',
+	'src/pluginextension.h',
 	'src/plugins.c',
 	'src/plugins.h',
 	'src/pluginutils.c',
@@ -904,7 +907,8 @@ executable('geany',
 	dependencies: deps,
 	build_rpath: meson.build_root(),
 	install_rpath: '$ORIGIN/../' + get_option('libdir'),
-	install: true
+	install: true,
+	win_subsystem: 'windows',
 )
 
 i18n = import('i18n')

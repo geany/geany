@@ -30,8 +30,6 @@
 
 G_BEGIN_DECLS
 
-gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gchar *msg);
-
 void win32_open_browser(const gchar *uri);
 
 

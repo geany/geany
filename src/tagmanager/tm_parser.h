@@ -53,6 +53,26 @@ typedef enum
 typedef gint TMParserType;
 
 
+/* keep in sync with icon names in symbols.c */
+/**
+ * Identifiers of icons used by Geany in the symbol tree, in the autocompletion popup,
+ * and in the goto popup.
+ */
+typedef enum
+{
+	TM_ICON_CLASS,
+	TM_ICON_MACRO,
+	TM_ICON_MEMBER,
+	TM_ICON_METHOD,
+	TM_ICON_NAMESPACE,
+	TM_ICON_OTHER,
+	TM_ICON_STRUCT,
+	TM_ICON_VAR,
+	TM_ICON_NONE,
+	TM_N_ICONS = TM_ICON_NONE
+} TMIcon;
+
+
 #ifdef GEANY_PRIVATE
 
 /* keep in sync with tm_parsers.h and parser_map in tm_parser.c */
@@ -125,20 +145,6 @@ enum
 	TM_PARSER_COUNT
 };
 
-/* keep in sync with icon names in symbols.c */
-enum
-{
-	TM_ICON_CLASS,
-	TM_ICON_MACRO,
-	TM_ICON_MEMBER,
-	TM_ICON_METHOD,
-	TM_ICON_NAMESPACE,
-	TM_ICON_OTHER,
-	TM_ICON_STRUCT,
-	TM_ICON_VAR,
-	TM_ICON_NONE,
-	TM_N_ICONS = TM_ICON_NONE
-};
 
 void tm_parser_verify_type_mappings(void);
 
