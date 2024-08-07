@@ -22,6 +22,8 @@
 #ifndef GEANY_HIGHLIGHTING_H
 #define GEANY_HIGHLIGHTING_H 1
 
+#include "geany.h" /* for GEANY_DEPRECATED */
+
 #include "filetypes.h"
 
 #include "gtkcompat.h" /* Needed by ScintillaWidget.h */
@@ -49,9 +51,14 @@ const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id);
 
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
 
-gboolean highlighting_is_string_style(gint lexer, gint style);
-gboolean highlighting_is_comment_style(gint lexer, gint style);
-gboolean highlighting_is_code_style(gint lexer, gint style);
+#ifndef GEANY_DISABLE_DEPRECATED
+gboolean highlighting_is_string_style(gint lexer, gint style)
+	GEANY_DEPRECATED_FOR(editor_is_string_at);
+gboolean highlighting_is_comment_style(gint lexer, gint style)
+	GEANY_DEPRECATED_FOR(editor_is_comment_at);
+gboolean highlighting_is_code_style(gint lexer, gint style)
+	GEANY_DEPRECATED_FOR(editor_is_code_at);
+#endif /* GEANY_DISABLE_DEPRECATED */
 
 
 #ifdef GEANY_PRIVATE
