@@ -109,7 +109,7 @@ static gchar *config_file;
 static gboolean session_is_changing = FALSE;
 
 
-int count_opened_notebook_tabs()
+static gint count_opened_notebook_tabs(void)
 {
 	return gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook));
 }
@@ -566,7 +566,7 @@ static void persistent_temp_files_document_save_cb(GObject *obj, GeanyDocument *
 }
 
 
-static void load_all_temp_files_into_editor()
+static void load_all_temp_files_into_editor(void)
 {
 	GDir *dir;
 	GError *error = NULL;
@@ -621,7 +621,9 @@ static gboolean load_all_temp_files_idle(gpointer data)
 	GeanyDocument *current_doc = document_get_current();
 
 	load_all_temp_files_into_editor();
-	document_open_file(current_doc->real_path, FALSE, NULL, NULL);
+
+	if (current_doc != NULL && current_doc->real_path != NULL)
+		document_open_file(current_doc->real_path, FALSE, NULL, NULL);
 
 	return FALSE;
 }
