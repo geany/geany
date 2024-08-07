@@ -109,6 +109,12 @@ static gchar *config_file;
 static gboolean session_is_changing = FALSE;
 
 
+int count_opened_notebook_tabs()
+{
+	return gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook));
+}
+
+
 static gboolean is_directory_accessible(const gchar *dirpath_locale)
 {
 	return dirpath_locale != NULL &&
@@ -517,32 +523,6 @@ static void show_unsaved_dialog_for_persistent_temp_files_tab_closing(
 }
 
 
-static void persistent_temp_files_document_close_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
-{
-	if (enable_persistent_temp_files && doc->real_path != NULL
-		&& is_temp_saved_file(doc->file_name) && ! geany_is_closing_all_documents())
-	{
-		gchar *short_filename = document_get_basename_for_display(doc, -1);
-
-		if (! document_is_empty(doc))
-		{
-			show_unsaved_dialog_for_persistent_temp_files_tab_closing(
-				doc,
-				short_filename
-			);
-		}
-		else
-		{
-			g_remove(doc->real_path);
-
-			ui_set_statusbar(TRUE, _("Empty temp file %s was deleted"), short_filename);
-		}
-
-		g_free(short_filename);
-	}
-}
-
-
 static void persistent_temp_files_document_before_save_as_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
 	if (enable_persistent_temp_files)
@@ -604,16 +584,16 @@ static void load_all_temp_files_into_editor()
 		if (is_temp_saved_file_name(filename))
 		{
 			gchar *locale_file_path, *file_path_utf8;
+			GeanyDocument *doc;
 
 			locale_file_path = g_build_path(G_DIR_SEPARATOR_S, persistent_temp_files_target_dir, filename, NULL);
 			file_path_utf8 = utils_get_utf8_from_locale(locale_file_path);
-			GeanyDocument *doc = document_find_by_filename(file_path_utf8);
+			doc = document_find_by_filename(file_path_utf8);
 
 			g_free(file_path_utf8);
 
-			if (doc == NULL) {
+			if (doc == NULL)
 				doc = document_open_file(locale_file_path, FALSE, NULL, NULL);
-			}
 
 			g_free(locale_file_path);
 
@@ -629,7 +609,7 @@ static void load_all_temp_files_into_editor()
 	g_dir_close(dir);
 
 	/* create new empty file/tab if this is a "fresh" session start without any opened files */
-	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook)) == 0)
+	if (count_opened_notebook_tabs() == 0)
 		document_new_file(NULL, NULL, NULL);
 }
 
@@ -739,6 +719,50 @@ static void on_document_activate(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 }
 
 
+static gboolean persistent_temp_files_document_close_idle(gpointer data)
+{
+	load_all_temp_files_into_editor();
+
+	return FALSE;
+}
+
+
+static void persistent_temp_files_document_close_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
+{
+	if (! enable_persistent_temp_files)
+	{
+		return;
+	}
+
+	if (! geany_is_closing_all_documents() && doc->real_path != NULL && is_temp_saved_file(doc->file_name))
+	{
+		gchar *short_filename = document_get_basename_for_display(doc, -1);
+
+		if (! document_is_empty(doc))
+		{
+			show_unsaved_dialog_for_persistent_temp_files_tab_closing(
+				doc,
+				short_filename
+			);
+		}
+		else
+		{
+			g_remove(doc->real_path);
+
+			ui_set_statusbar(TRUE, _("Empty temp file %s was deleted"), short_filename);
+		}
+
+		g_free(short_filename);
+
+	}
+	else if (geany_is_closing_all_documents() && count_opened_notebook_tabs() == 1)
+	{
+		/* if this is a last file being closed during 'close all' - reopen all temp files to keep them in editor */
+		plugin_idle_add(geany_plugin, persistent_temp_files_document_close_idle, NULL);
+	}
+}
+
+
 PluginCallback plugin_callbacks[] =
 {
 	{ "document-new", (GCallback) &on_document_new, FALSE, NULL },
@@ -757,7 +781,7 @@ static gboolean auto_save(gpointer data)
 {
 	GeanyDocument *doc;
 	GeanyDocument *cur_doc = document_get_current();
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook));
+	gint i, max = count_opened_notebook_tabs();
 	gint saved_files = 0;
 
 	if (cur_doc == NULL)
@@ -804,7 +828,7 @@ static void autosave_set_timeout(void)
 
 static gboolean persistent_temp_files_update(gpointer data)
 {
-	gint i, max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(geany->main_widgets->notebook));
+	gint i, max = count_opened_notebook_tabs();
 
 	for (i = 0; i < max; i++)
 	{
