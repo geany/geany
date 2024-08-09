@@ -1312,6 +1312,7 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 
 	switch (lexer)
 	{
+		case SCLEX_CIL:
 		case SCLEX_CPP:
 		case SCLEX_D:
 		case SCLEX_HTML:	/* for PHP & JS */
