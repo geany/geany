@@ -148,6 +148,7 @@ extern LexerModule lmTACL;
 extern LexerModule lmTADS3;
 extern LexerModule lmTAL;
 extern LexerModule lmTCL;
+extern LexerModule lmTOML;
 extern LexerModule lmTCMD;
 extern LexerModule lmTEHex;
 extern LexerModule lmTeX;
@@ -218,6 +219,7 @@ static void AddGeanyLexers()
 		&lmSmalltalk,
 		&lmSQL,
 		&lmTCL,
+		&lmTOML,
 		&lmTxt2tags,
 		&lmVerilog,
 		&lmVHDL,
