@@ -62,7 +62,7 @@ diff --git scintilla/lexilla/src/Lexilla.cxx scintilla/lexilla/src/Lexilla.cxx
 index cd4b23617..af4a73db4 100644
 --- scintilla/lexilla/src/Lexilla.cxx
 +++ scintilla/lexilla/src/Lexilla.cxx
-@@ -167,8 +167,75 @@
+@@ -167,8 +167,76 @@
  
  CatalogueModules catalogueLexilla;
  
@@ -119,6 +119,7 @@ index cd4b23617..af4a73db4 100644
 +		&lmSmalltalk,
 +		&lmSQL,
 +		&lmTCL,
++		&lmTOML,
 +		&lmTxt2tags,
 +		&lmVerilog,
 +		&lmVHDL,
