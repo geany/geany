@@ -225,6 +225,7 @@ static void AddGeanyLexers()
 		&lmSmalltalk,
 		&lmSQL,
 		&lmTCL,
+		&lmTOML,
 		&lmTxt2tags,
 		&lmVerilog,
 		&lmVHDL,

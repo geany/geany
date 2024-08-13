@@ -81,6 +81,7 @@ filetypes_dist = \
 	filedefs/filetypes.SystemVerilog.conf \
 	filedefs/filetypes.TypeScript.conf \
 	filedefs/filetypes.tcl \
+	filedefs/filetypes.toml \
 	filedefs/filetypes.txt2tags \
 	filedefs/filetypes.vala \
 	filedefs/filetypes.verilog \
