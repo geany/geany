@@ -1233,6 +1233,37 @@ static const HLKeyword highlighting_keywords_NIM[] =
 #define highlighting_properties_NIM	EMPTY_PROPERTIES
 
 
+/* NIX */
+#define highlighting_lexer_NIX		SCLEX_NIX
+static const HLStyle highlighting_styles_NIX[] =
+{
+	{ SCE_NIX_DEFAULT,				"default",				FALSE },
+	{ SCE_NIX_COMMENTLINE,			"commentline",			FALSE },
+	{ SCE_NIX_COMMENTBLOCK,			"commentblock",			FALSE },
+	{ SCE_NIX_STRING,				"string",				FALSE },
+	{ SCE_NIX_STRING_MULTILINE,		"stringmultiline",		FALSE },
+	{ SCE_NIX_ESCAPECHAR,			"escapechar",			FALSE },
+	{ SCE_NIX_IDENTIFIER,			"identifier",			FALSE },
+	{ SCE_NIX_OPERATOR,				"operator",				FALSE },
+	{ SCE_NIX_OPERATOR_STRING,		"operatorstring",		FALSE },
+	{ SCE_NIX_NUMBER,				"number",				FALSE },
+	{ SCE_NIX_KEY,					"key",					FALSE },
+	{ SCE_NIX_PATH,					"path",					FALSE },
+	{ SCE_NIX_KEYWORD1,				"keyword1",				FALSE },
+	{ SCE_NIX_KEYWORD2,				"keyword2",				FALSE },
+	{ SCE_NIX_KEYWORD3,				"keyword3",				FALSE },
+	{ SCE_NIX_KEYWORD4,				"keyword4",				FALSE },
+};
+static const HLKeyword highlighting_keywords_NIX[] =
+{
+	{ 0, "keywords1",		FALSE },
+	{ 1, "keywords2",		FALSE },
+	{ 2, "keywords3",		FALSE },
+	{ 3, "keywords4",		FALSE },
+};
+#define highlighting_properties_NIX		EMPTY_PROPERTIES
+
+
 /* NSIS */
 #define highlighting_lexer_NSIS			SCLEX_NSIS
 static const HLStyle highlighting_styles_NSIS[] =

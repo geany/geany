@@ -44,6 +44,7 @@ lexilla/lexers/LexMake.cxx             \
 lexilla/lexers/LexMarkdown.cxx         \
 lexilla/lexers/LexMatlab.cxx           \
 lexilla/lexers/LexNim.cxx              \
+lexilla/lexers/LexNix.cxx              \
 lexilla/lexers/LexNsis.cxx             \
 lexilla/lexers/LexNull.cxx             \
 lexilla/lexers/LexPascal.cxx           \

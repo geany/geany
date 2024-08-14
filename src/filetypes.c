@@ -214,6 +214,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( NIM,          NONE,         "Nim",              NULL                      );
 	FT_INIT( ZIG,          NONE,         "Zig",              NULL                      );
 	FT_INIT( DART,         NONE,         "Dart",             NULL                      );
+	FT_INIT( NIX,          NONE,         "Nix",              NULL                      );
 }
 
 

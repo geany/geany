@@ -108,6 +108,7 @@ extern LexerModule lmMSSQL;
 extern LexerModule lmMySQL;
 extern LexerModule lmNim;
 extern LexerModule lmNimrod;
+extern LexerModule lmNix;
 extern LexerModule lmNncrontab;
 extern LexerModule lmNsis;
 extern LexerModule lmNull;
@@ -204,6 +205,7 @@ static void AddGeanyLexers()
 		&lmMake,
 		&lmMarkdown,
 		&lmNim,
+		&lmNix,
 		&lmNsis,
 		&lmNull,
 		&lmOctave,
@@ -324,6 +326,7 @@ void AddEachLexer() {
 		&lmMySQL,
 		&lmNim,
 		&lmNimrod,
+		&lmNix,
 		&lmNncrontab,
 		&lmNsis,
 		&lmNull,
