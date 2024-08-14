@@ -1321,6 +1321,7 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 		case SCLEX_CIL:
 		case SCLEX_CPP:
 		case SCLEX_D:
+		case SCLEX_DART:
 		case SCLEX_HTML:	/* for PHP & JS */
 		case SCLEX_PHPSCRIPT:
 		case SCLEX_PASCAL:	/* for multiline comments? */
@@ -5148,6 +5149,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_OCTAVE:
 		case SCLEX_RUST:
 		case SCLEX_ZIG:
+		case SCLEX_DART:
 			mode = SC_IV_LOOKBOTH;
 			break;
 

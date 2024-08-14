@@ -28,6 +28,7 @@ lexilla/lexers/LexCaml.cxx             \
 lexilla/lexers/LexCmake.cxx            \
 lexilla/lexers/LexCoffeeScript.cxx     \
 lexilla/lexers/LexD.cxx                \
+lexilla/lexers/LexDart.cxx             \
 lexilla/lexers/LexDiff.cxx             \
 lexilla/lexers/LexErlang.cxx           \
 lexilla/lexers/LexForth.cxx            \
