@@ -60,6 +60,7 @@ lexilla/lexers/LexTCL.cxx              \
 lexilla/lexers/LexTxt2tags.cxx         \
 lexilla/lexers/LexVHDL.cxx             \
 lexilla/lexers/LexVerilog.cxx          \
+lexilla/lexers/LexVisualProlog.cxx     \
 lexilla/lexers/LexYAML.cxx
 
 LEXLIB_SRCS =                          \

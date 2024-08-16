@@ -65,6 +65,7 @@ filetypes_dist = \
 	filedefs/filetypes.php \
 	filedefs/filetypes.po \
 	filedefs/filetypes.powershell \
+	filedefs/filetypes.prolog \
 	filedefs/filetypes.r \
 	filedefs/filetypes.raku \
 	filedefs/filetypes.restructuredtext \
