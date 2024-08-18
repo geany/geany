@@ -1035,6 +1035,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(MAKE);
 		init_styleset_case(MATLAB);
 		init_styleset_case(MARKDOWN);
+		init_styleset_case(NIM);
 		init_styleset_case(NSIS);
 		init_styleset_case(OBJECTIVEC);
 		init_styleset_case(PASCAL);
@@ -1130,6 +1131,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(MAKE);
 		styleset_case(MARKDOWN);
 		styleset_case(MATLAB);
+		styleset_case(NIM);
 		styleset_case(NSIS);
 		styleset_case(OBJECTIVEC);
 		styleset_case(PASCAL);
@@ -1676,6 +1678,13 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_AU3:
 			return (style == SCE_AU3_STRING);
+
+		case SCLEX_NIM:
+			return (style == SCE_NIM_STRING ||
+				style == SCE_NIM_CHARACTER ||
+				style == SCE_NIM_TRIPLE ||
+				style == SCE_NIM_TRIPLEDOUBLE ||
+				style == SCE_NIM_STRINGEOL);
 	}
 	return FALSE;
 }
@@ -1922,6 +1931,12 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_VISUALPROLOG_COMMENT_LINE ||
 				style == SCE_VISUALPROLOG_COMMENT_KEY ||
 				style == SCE_VISUALPROLOG_COMMENT_KEY_ERROR);
+
+		case SCLEX_NIM:
+			return (style == SCE_NIM_COMMENT ||
+				style == SCE_NIM_COMMENTDOC ||
+				style == SCE_NIM_COMMENTLINE ||
+				style == SCE_NIM_COMMENTLINEDOC);
 	}
 	return FALSE;
 }
