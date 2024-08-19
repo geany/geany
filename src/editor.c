@@ -847,6 +847,7 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case '[':
 		case '"':
 		case '\'':
+		case '`':
 		{
 			auto_close_chars(sci, pos, nt->ch);
 			break;
@@ -1554,6 +1555,10 @@ static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 		case '"':
 			if (editor_prefs.autoclose_chars & GEANY_AC_DQUOTE)
 				closing_char = "\"";
+			break;
+		case '`':
+			if (editor_prefs.autoclose_chars & GEANY_AC_BTICK)
+				closing_char = "`";
 			break;
 	}
 

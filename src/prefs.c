@@ -652,6 +652,10 @@ static void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
 		(editor_prefs.autoclose_chars & GEANY_AC_DQUOTE));
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_btick");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		(editor_prefs.autoclose_chars & GEANY_AC_BTICK));
+
 	/* Tools Settings */
 
 	if (tool_prefs.term_cmd)
@@ -1120,12 +1124,16 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_dquote");
 		autoclose_brackets[4] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_btick");
+		autoclose_brackets[5] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 		editor_prefs.autoclose_chars =
 		  (autoclose_brackets[0] ? GEANY_AC_PARENTHESIS : 0u)
 		| (autoclose_brackets[1] ? GEANY_AC_CBRACKET : 0u)
 		| (autoclose_brackets[2] ? GEANY_AC_SBRACKET : 0u)
 		| (autoclose_brackets[3] ? GEANY_AC_SQUOTE : 0u)
-		| (autoclose_brackets[4] ? GEANY_AC_DQUOTE : 0u);
+		| (autoclose_brackets[4] ? GEANY_AC_DQUOTE : 0u)
+		| (autoclose_brackets[5] ? GEANY_AC_BTICK : 0u);
 
 		/* Tools Settings */
 
