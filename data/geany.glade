@@ -8348,17 +8348,25 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
-                          <object class="GtkEntry" id="entry_tagfilter">
+                          <object class="GtkComboBoxText" id="combo_tagfilter">
                             <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="tooltip-text" translatable="yes">Filter the symbol list using the entered text. Separate multiple filters with a space.</property>
-                            <property name="invisible-char">•</property>
-                            <property name="primary-icon-stock">gtk-find</property>
-                            <property name="secondary-icon-stock">gtk-clear</property>
-                            <property name="primary-icon-activatable">False</property>
-                            <signal name="activate" handler="on_entry_tagfilter_activate" swapped="no"/>
-                            <signal name="changed" handler="on_entry_tagfilter_changed" swapped="no"/>
-                            <signal name="icon-press" handler="on_entry_tagfilter_icon_press" swapped="no"/>
+                            <property name="can-focus">False</property>
+                            <property name="has-entry">True</property>
+                            <child internal-child="entry">
+                              <object class="GtkEntry" id="entry_tagfilter">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="tooltip-text" translatable="yes">Filter the symbol list using the entered text. Separate multiple filters with a space.</property>
+                                <property name="invisible-char">•</property>
+                                <property name="primary-icon-stock">gtk-find</property>
+                                <property name="secondary-icon-stock">gtk-clear</property>
+                                <property name="primary-icon-activatable">False</property>
+                                <signal name="activate" handler="on_entry_tagfilter_activate" swapped="no"/>
+                                <signal name="changed" handler="on_entry_tagfilter_changed" swapped="no"/>
+                                <signal name="icon-press" handler="on_entry_tagfilter_icon_press" swapped="no"/>
+                                <signal name="focus-out-event" handler="on_entry_tagfilter_focus_out_event" swapped="no"/>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
