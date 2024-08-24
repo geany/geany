@@ -47,6 +47,7 @@
 #include "highlighting.h"
 #include "main.h"
 #include "navqueue.h"
+#include "pluginextension.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
 #include "support.h"
@@ -259,6 +260,23 @@ const gchar *symbols_get_context_separator(gint ft_id)
 }
 
 
+/** Gets the icon data corresponding to the provided TMIcon.
+ * @param icon TMIcon.
+ *
+ * Returns the GdkPixbuf corresponding to the provided TMIcon.
+ *
+ * @since 2.1
+ */
+GEANY_API_SYMBOL
+GdkPixbuf *symbols_get_icon_pixbuf(TMIcon icon)
+{
+	if (icon < TM_N_ICONS)
+		return symbols_icons[icon].pixbuf;
+
+	return NULL;
+}
+
+
 /* sort by name, then line */
 static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 {
@@ -437,7 +455,7 @@ static void tag_list_add_groups(GtkTreeStore *tree_store, TMParserType lang)
 		GdkPixbuf *icon = NULL;
 
 		if (icon_id < TM_N_ICONS)
-			icon = symbols_icons[icon_id].pixbuf;
+			icon = symbols_get_icon_pixbuf(icon_id);
 
 		g_assert(title != NULL);
 		g_ptr_array_add(top_level_iter_names, (gchar *)title);
@@ -1476,7 +1494,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 
 		tooltip = g_markup_printf_escaped("%s:%lu\n<small><tt>%s</tt></small>", fname, tmtag->line, sym);
 
-		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
+		image = gtk_image_new_from_pixbuf(symbols_get_icon_pixbuf(get_tag_class(tmtag)));
 		box = g_object_new(GTK_TYPE_BOX, "orientation", GTK_ORIENTATION_HORIZONTAL, "spacing", 12, NULL);
 		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0, NULL);
 		gtk_size_group_add_widget(group, label);
@@ -1693,19 +1711,41 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 }
 
 
-gboolean symbols_goto_tag(const gchar *name, gboolean definition)
+gboolean symbols_goto_tag(GeanyDocument *doc, gint pos, gboolean definition)
 {
-	if (goto_tag(name, definition))
-		return TRUE;
+	gchar *name;
+	gboolean success;
 
-	/* if we are here, there was no match and we are beeping ;-) */
-	utils_beep();
+	if (plugin_extension_goto_provided(doc, NULL))
+		return plugin_extension_goto_perform(doc, pos, definition);
 
-	if (!definition)
-		ui_set_statusbar(FALSE, _("Forward declaration \"%s\" not found."), name);
+	/* get the current selection if any, or current word */
+	if (sci_has_selection(doc->editor->sci))
+		name = sci_get_selection_contents(doc->editor->sci);
 	else
-		ui_set_statusbar(FALSE, _("Definition of \"%s\" not found."), name);
-	return FALSE;
+	{
+		editor_find_current_word(doc->editor, pos,
+			editor_info.current_word, GEANY_MAX_WORD_LENGTH, NULL);
+		name = *editor_info.current_word ? g_strdup(editor_info.current_word) : NULL;
+	}
+
+	if (!name)
+		return FALSE;
+
+	if (! (success = goto_tag(name, definition)))
+	{
+		/* if we are here, there was no match and we are beeping ;-) */
+		utils_beep();
+
+		if (!definition)
+			ui_set_statusbar(FALSE, _("Forward declaration \"%s\" not found."), name);
+		else
+			ui_set_statusbar(FALSE, _("Definition of \"%s\" not found."), name);
+	}
+
+	g_free(name);
+
+	return success;
 }
 
 

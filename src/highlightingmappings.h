@@ -344,6 +344,31 @@ static const HLKeyword highlighting_keywords_CAML[] =
 #define highlighting_properties_CAML	EMPTY_PROPERTIES
 
 
+/* CIL */
+#define highlighting_lexer_CIL		SCLEX_CIL
+static const HLStyle highlighting_styles_CIL[] =
+{
+	{ SCE_CIL_DEFAULT,		"default",			FALSE },
+	{ SCE_CIL_COMMENT,		"comment",			FALSE },
+	{ SCE_CIL_COMMENTLINE,	"commentline",		FALSE },
+	{ SCE_CIL_WORD,			"keyword",			FALSE },
+	{ SCE_CIL_WORD2,		"keyword2",			FALSE },
+	{ SCE_CIL_WORD3,		"keyword3",			FALSE },
+	{ SCE_CIL_STRING,		"string",			FALSE },
+	{ SCE_CIL_LABEL,		"label",			FALSE },
+	{ SCE_CIL_OPERATOR,		"operator",			FALSE },
+	{ SCE_CIL_STRINGEOL,	"stringeol",		FALSE },
+	{ SCE_CIL_IDENTIFIER,	"identifier",		FALSE }
+};
+static const HLKeyword highlighting_keywords_CIL[] =
+{
+	{ 0, "keywords",	FALSE },
+	{ 1, "metadata",	FALSE },
+	{ 2, "opcode",		FALSE }
+};
+#define highlighting_properties_CIL	EMPTY_PROPERTIES
+
+
 /* CMake */
 #define highlighting_lexer_CMAKE		SCLEX_CMAKE
 static const HLStyle highlighting_styles_CMAKE[] =
@@ -1137,6 +1162,35 @@ static const HLKeyword highlighting_keywords_MATLAB[] =
 #define highlighting_properties_MATLAB	EMPTY_PROPERTIES
 
 
+/* Nim */
+#define highlighting_lexer_NIM			SCLEX_NIM
+static const HLStyle highlighting_styles_NIM[] =
+{
+	{ SCE_NIM_DEFAULT,				"default",				FALSE },
+	{ SCE_NIM_COMMENT,				"comment",				FALSE },
+	{ SCE_NIM_COMMENTDOC,			"commentdoc",			FALSE },
+	{ SCE_NIM_COMMENTLINE,			"commentline",			FALSE },
+	{ SCE_NIM_COMMENTLINEDOC,		"commentlinedoc",		FALSE },
+	{ SCE_NIM_NUMBER,				"number",				FALSE },
+	{ SCE_NIM_STRING,				"string",				FALSE },
+	{ SCE_NIM_CHARACTER,			"character",			FALSE },
+	{ SCE_NIM_WORD,					"word",					FALSE },
+	{ SCE_NIM_TRIPLE,				"triple",				FALSE },
+	{ SCE_NIM_TRIPLEDOUBLE,			"tripledouble",			FALSE },
+	{ SCE_NIM_BACKTICKS,			"backticks",			FALSE },
+	{ SCE_NIM_FUNCNAME,				"funcname",				FALSE },
+	{ SCE_NIM_STRINGEOL,			"stringeol",			FALSE },
+	{ SCE_NIM_NUMERROR,				"numerror",				FALSE },
+	{ SCE_NIM_OPERATOR,				"operator",				FALSE },
+	{ SCE_NIM_IDENTIFIER,			"identifier",			FALSE }
+};
+static const HLKeyword highlighting_keywords_NIM[] =
+{
+	{ 0, "keywords",		FALSE },
+};
+#define highlighting_properties_NIM	EMPTY_PROPERTIES
+
+
 /* NSIS */
 #define highlighting_lexer_NSIS			SCLEX_NSIS
 static const HLStyle highlighting_styles_NSIS[] =
@@ -1333,6 +1387,39 @@ static const HLKeyword highlighting_keywords_POWERSHELL[] =
 	{ 5, "docComment",	FALSE },
 };
 #define highlighting_properties_POWERSHELL	EMPTY_PROPERTIES
+
+
+/* Prolog */
+#define highlighting_lexer_PROLOG			SCLEX_VISUALPROLOG
+static const HLStyle highlighting_styles_PROLOG[] =
+{
+	{ SCE_VISUALPROLOG_DEFAULT,					"default",					FALSE },
+	{ SCE_VISUALPROLOG_KEY_MAJOR,				"key_major",				FALSE },
+	{ SCE_VISUALPROLOG_KEY_MINOR,				"key_minor",				FALSE },
+	{ SCE_VISUALPROLOG_KEY_DIRECTIVE,			"key_directive",			FALSE },
+	{ SCE_VISUALPROLOG_COMMENT_BLOCK,			"comment_block",			FALSE },
+	{ SCE_VISUALPROLOG_COMMENT_LINE,			"comment_line",				FALSE },
+	{ SCE_VISUALPROLOG_COMMENT_KEY,				"comment_key",				FALSE },
+	{ SCE_VISUALPROLOG_COMMENT_KEY_ERROR,		"comment_key_error",		FALSE },
+	{ SCE_VISUALPROLOG_IDENTIFIER,				"identifier",				FALSE },
+	{ SCE_VISUALPROLOG_VARIABLE,				"variable",					FALSE },
+	{ SCE_VISUALPROLOG_ANONYMOUS,				"anonymous",				FALSE },
+	{ SCE_VISUALPROLOG_NUMBER,					"number",					FALSE },
+	{ SCE_VISUALPROLOG_OPERATOR,				"operator",					FALSE },
+	{ SCE_VISUALPROLOG_STRING,					"string",					FALSE },
+	{ SCE_VISUALPROLOG_STRING_QUOTE,			"string_quote",				FALSE },
+	{ SCE_VISUALPROLOG_STRING_ESCAPE,			"string_escape",			FALSE },
+	{ SCE_VISUALPROLOG_STRING_ESCAPE_ERROR,		"string_escape_error",		FALSE },
+	{ SCE_VISUALPROLOG_STRING_EOL,				"string_eol",				FALSE },
+	{ SCE_VISUALPROLOG_EMBEDDED,				"embedded",					FALSE },
+	{ SCE_VISUALPROLOG_PLACEHOLDER,				"placeholder",				FALSE },
+};
+static const HLKeyword highlighting_keywords_PROLOG[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "secondary",	FALSE },
+};
+#define highlighting_properties_PROLOG	EMPTY_PROPERTIES
 
 
 /* Python */

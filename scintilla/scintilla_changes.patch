@@ -77,6 +77,7 @@ index cd4b23617..af4a73db4 100644
 +		&lmBash,
 +		&lmBatch,
 +		&lmCaml,
++		&lmCIL,
 +		&lmCmake,
 +		&lmCOBOL,
 +		&lmCoffeeScript,
@@ -98,6 +99,7 @@ index cd4b23617..af4a73db4 100644
 +		&lmLua,
 +		&lmMake,
 +		&lmMarkdown,
++		&lmNim,
 +		&lmNsis,
 +		&lmNull,
 +		&lmOctave,
@@ -118,6 +120,7 @@ index cd4b23617..af4a73db4 100644
 +		&lmTxt2tags,
 +		&lmVerilog,
 +		&lmVHDL,
++		&lmVisualProlog,
 +		&lmXML,
 +		&lmYAML,
 +	});

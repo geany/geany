@@ -178,6 +178,7 @@ static void AddGeanyLexers()
 		&lmBash,
 		&lmBatch,
 		&lmCaml,
+		&lmCIL,
 		&lmCmake,
 		&lmCOBOL,
 		&lmCoffeeScript,
@@ -199,6 +200,7 @@ static void AddGeanyLexers()
 		&lmLua,
 		&lmMake,
 		&lmMarkdown,
+		&lmNim,
 		&lmNsis,
 		&lmNull,
 		&lmOctave,
@@ -219,6 +221,7 @@ static void AddGeanyLexers()
 		&lmTxt2tags,
 		&lmVerilog,
 		&lmVHDL,
+		&lmVisualProlog,
 		&lmXML,
 		&lmYAML,
 	});

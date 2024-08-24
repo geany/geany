@@ -8,22 +8,23 @@
 # Pavel Roschin <rpg89(at)post(dot)ru>, 2014-2019.
 # Dmitry Unruh <dmitryunruh@googlemail.com>, 2020.
 # Olesya Gerasimenko <translation-team@basealt.ru>, 2023.
+# SPDX-FileCopyrightText: 2024 Alevtina <karashokovaaa@basealt.ru>
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2023-10-04 23:48+0200\n"
-"PO-Revision-Date: 2023-05-17 11:12+0300\n"
-"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"PO-Revision-Date: 2024-06-28 12:15+0300\n"
+"Last-Translator: Alevtina <karashokovaaa@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
+"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
@@ -538,15 +539,15 @@ msgstr ""
 
 #: data/geany.glade:2213
 msgid "Set limit on visible characters in tab label."
-msgstr ""
+msgstr "Установить ограничение на количество видимых символов подписи вкладки."
 
 #: data/geany.glade:2214
 msgid "Tab label length:"
-msgstr ""
+msgstr "Длина подписи вкладки:"
 
 #: data/geany.glade:2226
 msgid "Characters to be visible on the tab label of the file."
-msgstr ""
+msgstr "Символы, которые должны быть видны на подписи вкладки файла."
 
 #: data/geany.glade:2254
 msgid "<b>Editor tabs</b>"
@@ -819,15 +820,16 @@ msgstr ""
 "вставить символ табуляции"
 
 #: data/geany.glade:3348
-#, fuzzy
 msgid "_Backspace key unindents"
-msgstr "Отступ при помощи _клавиши Tab"
+msgstr "Клавиша _Backspace уменьшает отступ"
 
 #: data/geany.glade:3352
 msgid ""
 "With the cursor in the indentation, pressing backspace unindents instead of "
 "deleting one character"
 msgstr ""
+"Когда курсор находится на отступе, нажатие backspace уменьшает отступ, а не "
+"удаляет один символ"
 
 #: data/geany.glade:3370
 msgid "<b>Indentation</b>"
@@ -1018,15 +1020,16 @@ msgid "Shows the line ending character"
 msgstr "Отображать символ окончания строки"
 
 #: data/geany.glade:3903
-#, fuzzy
 msgid "Show only non-default line endings"
-msgstr "Показывать окончания строк"
+msgstr "Показывать только окончания строк не по умолчанию"
 
 #: data/geany.glade:3907
 msgid ""
 "Shows line ending characters only when they differ from the file default "
 "line ending character"
 msgstr ""
+"Показывает символы окончания строки, только если они отличаются от "
+"символа окончания строки файла по умолчанию"
 
 #: data/geany.glade:3923
 msgid "Show line numbers"
@@ -1159,19 +1162,16 @@ msgid "<b>Virtual spaces</b>"
 msgstr "<b>Виртуальные пробелы</b>"
 
 #: data/geany.glade:4315
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Отступ для _маркера строк"
+msgstr "Отступ для маркера строк"
 
 #: data/geany.glade:4329
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "Отображать символ окончания строки"
+msgstr "Отображать в виде индикаторов подчёркивания"
 
 #: data/geany.glade:4349
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>Сохранение файлов</b>"
+msgstr "<b>Изменить историю</b>"
 
 #: data/geany.glade:4369
 msgid "Display"
@@ -1324,9 +1324,8 @@ msgstr ""
 "Путь (и, возможно, дополнительные аргументы) к вашему любимому браузеру"
 
 #: data/geany.glade:4974
-#, fuzzy
 msgid "System default"
-msgstr "Системные _настройки"
+msgstr "Системные по умолчанию"
 
 #: data/geany.glade:5030
 msgid "Grep:"
@@ -1411,32 +1410,33 @@ msgid "Date & time:"
 msgstr "Дата и время:"
 
 #: data/geany.glade:5448
-#, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
 "conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format."
 "html."
 msgstr ""
-"Укажите формат для группового символа {datetime}. Можно использовать любые "
-"параметры, которые годятся для функции strftime ANSI C."
+"Укажите формат для группового символа {datetime}. Список доступных "
+"спецификаторов преобразования см. на сайте"
+" https://docs.gtk.org/glib/method.DateTime.format."
+"html."
 
 #: data/geany.glade:5464
-#, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Укажите формат для группового символа {year}. Можно использовать любые "
-"параметры, которые годятся для функции strftime ANSI C."
+"Укажите формат для группового символа {year}. Список доступных спецификаторов"
+" преобразования см. "
+"на сайте https://docs.gtk.org/glib/method.DateTime.format.html."
 
 #: data/geany.glade:5480
-#, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Укажите формат для группового символа {date}. Можно использовать любые "
-"параметры, которые годятся для функции strftime ANSI C."
+"Укажите формат для группового символа {date}. Список доступных спецификаторов"
+" преобразования см. "
+"на сайте https://docs.gtk.org/glib/method.DateTime.format.html."
 
 #: data/geany.glade:5507
 msgid "<b>Template data</b>"
@@ -1513,15 +1513,14 @@ msgid "Date format:"
 msgstr "Формат даты:"
 
 #: data/geany.glade:5856 src/printing.c:279
-#, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. For a list of available conversion specifiers see "
 "https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
 "Укажите формат для отображения даты и времени для добавления на печатаемые "
-"страницы. Можно использовать любые параметры, которые годятся для функции "
-"strftime ANSI C."
+"страницы. Список доступных спецификаторов преобразования см. "
+"на сайте https://docs.gtk.org/glib/method.DateTime.format.html."
 
 #: data/geany.glade:5891
 msgid "Use native GTK printing"
@@ -1778,9 +1777,8 @@ msgid "_Send Selection to Terminal"
 msgstr "_Отправить выделенное в терминал"
 
 #: data/geany.glade:6938 src/keybindings.c:508
-#, fuzzy
 msgid "_Join Lines"
-msgstr "Объединить строки"
+msgstr "_Объединить строки"
 
 #: data/geany.glade:6947 src/keybindings.c:505
 msgid "_Reflow Lines/Block"
@@ -2076,7 +2074,7 @@ msgstr "_Новый..."
 
 #: data/geany.glade:8073
 msgid "New from _Folder..."
-msgstr ""
+msgstr "Новый из _папки…"
 
 #: data/geany.glade:8097
 msgid "_Recent Projects"
@@ -2151,13 +2149,12 @@ msgid "_Donate..."
 msgstr "Сделать _пожертвование..."
 
 #: data/geany.glade:8369
-#, fuzzy
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"Фильтровать файлы по указанному шаблону (обычный wildcard). Шаблоны "
-"разделяются пробелами."
+"Фильтровать список символов по введённому тексту. Фильтры "
+"должны быть разделены пробелом."
 
 #: data/geany.glade:8411 src/sidebar.c:114 src/tagmanager/tm_parser.c:1234
 msgid "Symbols"
@@ -3383,7 +3380,7 @@ msgstr "Выход"
 
 #: src/keybindings.c:370
 msgid "New from Folder"
-msgstr ""
+msgstr "Новый из папки"
 
 #: src/keybindings.c:382
 msgid "Undo"
@@ -4585,11 +4582,11 @@ msgstr "Произведено %u замен(ы) в %u документе(ах).
 #: src/search.c:1464
 msgid ""
 "This operation will modify all open files which contain the text to replace."
-msgstr ""
+msgstr "Эта операция изменит все открытые файлы, содержащие заменяемый текст."
 
 #: src/search.c:1465
 msgid "Are you sure to replace in the whole session?"
-msgstr ""
+msgstr "Заменить во всей сессии?"
 
 #: src/search.c:1630
 msgid "Invalid directory for find in files."
@@ -4730,14 +4727,14 @@ msgid "Could not load tags file '%s'."
 msgstr "Не удалось загрузить файл тегов '%s'."
 
 #: src/symbols.c:1518
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s:%lu:</b> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<b>%s:%lu:</b> %s"
 
 #: src/symbols.c:1521
-#, fuzzy, c-format
+#, c-format
 msgid "<i>%s:%lu:</i> %s"
-msgstr "<b>%s: %lu</b>"
+msgstr "<i>%s:%lu:</i> %s"
 
 #: src/symbols.c:1742
 #, c-format
@@ -4759,7 +4756,7 @@ msgstr "Сортировать по _появлению"
 
 #: src/symbols.c:2196
 msgid "_Group by Type"
-msgstr ""
+msgstr "_Группировать по типу"
 
 #: src/templates.c:81
 #, c-format
@@ -5021,31 +5018,29 @@ msgid "H_ide Sidebar"
 msgstr "_Скрыть боковую панель"
 
 #: src/sidebar.c:1173
-#, fuzzy
 msgid "D_ocuments Only"
-msgstr "Документы"
+msgstr "Только д_окументы"
 
 #: src/sidebar.c:1174
 msgid "Show _Paths"
 msgstr "Показать _пути"
 
 #: src/sidebar.c:1175
-#, fuzzy
 msgid "Show _Tree"
-msgstr "Показывать панель _инструментов"
+msgstr "Показать _дерево"
 
 #: src/sidebar.c:1228 plugins/filebrowser.c:678
 msgid "_Find in Files..."
 msgstr "_Найти в файлах..."
 
 #: src/ui_utils.c:62
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: "
 "%e      filetype: %f      scope: %S"
 msgstr ""
-"строка: %l / %L\t столбец: %c\t выделено: %s\t %w      %t      %mрежим: "
-"%M      кодировка: %e      тип файла: %f      область действия: %S"
+"строка: %l / %L\t столбец: %c\t выделено: %s\t %w      %t      %mEOL: %M     "
+" кодировка: "
+"%e      тип файла: %f      область действия: %S"
 
 #: src/ui_utils.c:237
 #, c-format
@@ -5142,13 +5137,13 @@ msgid "Custom Date Format"
 msgstr "Свой формат даты"
 
 #: src/ui_utils.c:729
-#, fuzzy
 msgid ""
 "Enter here a custom date and time format. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"Введите свой формат даты и времени. Вы можете использовать любые "
-"подстановки, применимые к функции strftime ANSI C."
+"Введите свой формат даты и времени. Список доступных спецификаторов"
+" преобразования см. "
+"на сайте https://docs.gtk.org/glib/method.DateTime.format.html."
 
 #: src/ui_utils.c:750
 msgid "Date format string could not be converted (possibly too long)."
@@ -5161,9 +5156,8 @@ msgid "_Set Custom Date Format"
 msgstr "_Установить формат даты"
 
 #: src/ui_utils.c:2004
-#, fuzzy
 msgid "Select Project Base Path"
-msgstr "Выберите путь к каталогу проекта:"
+msgstr "Выберите путь к каталогу проекта"
 
 #: src/ui_utils.c:2029
 msgid "Select Folder"
@@ -5194,13 +5188,13 @@ msgid "Select Browser"
 msgstr "Выберите браузер"
 
 #: src/utils.c:100
-#, fuzzy
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command "
 "or leave it empty in order to spawn the system default browser."
 msgstr ""
 "Не удалось выполнить заданную в конфигурации команду вызова браузера. "
-"Пожалуйста, исправьте её или замените другой."
+"Введите правильную команду или оставьте пустым, чтобы вызвать системный"
+" браузер по умолчанию."
 
 #: src/utils.c:388
 msgid "Windows (CRLF)"
@@ -5393,9 +5387,8 @@ msgid "Environment"
 msgstr "Окружение"
 
 #: src/tagmanager/tm_parser.c:229
-#, fuzzy
 msgid "Part"
-msgstr "Части"
+msgstr "Часть"
 
 #: src/tagmanager/tm_parser.c:230 src/tagmanager/tm_parser.c:335
 #: src/tagmanager/tm_parser.c:595
@@ -5417,7 +5410,7 @@ msgstr "Субподраздел"
 
 #: src/tagmanager/tm_parser.c:234
 msgid "Bibitem"
-msgstr ""
+msgstr "Bibitem"
 
 #: src/tagmanager/tm_parser.c:257
 msgid "Articles"
@@ -5539,9 +5532,8 @@ msgid "Functions / Procedures"
 msgstr "Функции / Процедуры"
 
 #: src/tagmanager/tm_parser.c:485
-#, fuzzy
 msgid "Variables / Signals / Ports"
-msgstr "Переменные / Сигналы"
+msgstr "Переменные / Сигналы / Порты"
 
 #: src/tagmanager/tm_parser.c:486
 msgid "Processes / Blocks / Components"
@@ -5589,29 +5581,24 @@ msgid "Structures"
 msgstr "Структуры"
 
 #: src/tagmanager/tm_parser.c:737
-#, fuzzy
 msgid "Chapters"
-msgstr "Глава"
+msgstr "Главы"
 
 #: src/tagmanager/tm_parser.c:739
-#, fuzzy
 msgid "Subsections"
-msgstr "Подраздел"
+msgstr "Подразделы"
 
 #: src/tagmanager/tm_parser.c:740
-#, fuzzy
 msgid "Subsubsections"
-msgstr "Субподраздел"
+msgstr "Подподразделы"
 
 #: src/tagmanager/tm_parser.c:741
-#, fuzzy
 msgid "Level 4 sections"
-msgstr "Действия по сохранению"
+msgstr "Разделы 4 уровня"
 
 #: src/tagmanager/tm_parser.c:742
-#, fuzzy
 msgid "Level 5 sections"
-msgstr "Действия по сохранению"
+msgstr "Разделы 5 уровня"
 
 #: src/tagmanager/tm_parser.c:769
 msgid "Events"
@@ -5662,9 +5649,8 @@ msgid "Section Level 4"
 msgstr "Раздел уровень 4"
 
 #: src/tagmanager/tm_parser.c:846
-#, fuzzy
 msgid "Section Level 5"
-msgstr "Раздел уровень 1"
+msgstr "Раздел уровень 5"
 
 #: src/tagmanager/tm_parser.c:856
 msgid "Parts"
@@ -5691,18 +5677,16 @@ msgid "Unknowns"
 msgstr "Неизвестные"
 
 #: src/tagmanager/tm_parser.c:1065
-#, fuzzy
 msgid "Packages"
-msgstr "Пакет"
+msgstr "Пакеты"
 
 #: src/tagmanager/tm_parser.c:1068
 msgid "Tasks"
-msgstr ""
+msgstr "Задачи"
 
 #: src/tagmanager/tm_parser.c:1092
-#, fuzzy
 msgid "Regions"
-msgstr "Разделы"
+msgstr "Области"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -6194,6 +6178,9 @@ msgid ""
 "Date/_Time format for backup files (for a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"
 msgstr ""
+"Формат даты/_времени для файлов резервных копий (список доступных"
+" спецификаторов преобразования см. "
+"на сайте https://docs.gtk.org/glib/method.DateTime.format.html):"
 
 #: plugins/saveactions.c:830
 msgid "Directory _levels to include in the backup destination:"
@@ -6266,3 +6253,4 @@ msgstr "По горизонтали"
 
 #~ msgid "File patterns, e.g. *.c *.h"
 #~ msgstr "Шаблоны файлов (например, *.c *.h)"
+

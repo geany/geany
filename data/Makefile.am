@@ -15,6 +15,7 @@ filetypes_dist = \
 	filedefs/filetypes.bibtex \
 	filedefs/filetypes.c \
 	filedefs/filetypes.caml \
+	filedefs/filetypes.cil \
 	filedefs/filetypes.Clojure.conf \
 	filedefs/filetypes.cmake \
 	filedefs/filetypes.cobol \
@@ -56,7 +57,7 @@ filetypes_dist = \
 	filedefs/filetypes.markdown \
 	filedefs/filetypes.matlab \
 	filedefs/filetypes.Meson.conf \
-	filedefs/filetypes.Nim.conf \
+	filedefs/filetypes.nim \
 	filedefs/filetypes.nsis \
 	filedefs/filetypes.objectivec \
 	filedefs/filetypes.pascal \
@@ -64,6 +65,7 @@ filetypes_dist = \
 	filedefs/filetypes.php \
 	filedefs/filetypes.po \
 	filedefs/filetypes.powershell \
+	filedefs/filetypes.prolog \
 	filedefs/filetypes.r \
 	filedefs/filetypes.raku \
 	filedefs/filetypes.restructuredtext \

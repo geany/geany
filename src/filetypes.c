@@ -190,6 +190,9 @@ static void init_builtin_filetypes(void)
 	FT_INIT( JULIA,      JULIA,        "Julia",            NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( AU3,        AUTOIT,       "AutoIt",           NULL,                      SCRIPT,      SCRIPT   );
 	FT_INIT( RAKU,       RAKU,         "Raku",             NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( CIL,        NONE,         "CIL",              NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( PROLOG,     NONE,         "Prolog",           NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( NIM,        NONE,         "Nim",              NULL,                      SOURCE_FILE, COMPILED );
 }
 
 
