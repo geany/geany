@@ -144,7 +144,8 @@ void plugin_extension_unregister(PluginExtension *extension)
  */
 #define CALL_PROVIDED(f, doc, ext)												\
 	G_STMT_START {																\
-		if (main_status.quitting || main_status.closing_all)					\
+		if (main_status.quitting || main_status.closing_all ||					\
+			main_status.opening_session_files)									\
 			return FALSE;														\
 		for (GList *node = all_extensions; node; node = node->next)				\
 		{																		\
@@ -170,7 +171,8 @@ void plugin_extension_unregister(PluginExtension *extension)
  */
 #define CALL_PERFORM(f_provided, doc, f_perform, args, defret)					\
 	G_STMT_START {																\
-		if (main_status.quitting || main_status.closing_all)					\
+		if (main_status.quitting || main_status.closing_all ||					\
+			main_status.opening_session_files)									\
 			return defret;														\
 		for (GList *node = all_extensions; node; node = node->next)				\
 		{																		\
