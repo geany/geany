@@ -21,6 +21,7 @@
 #include "pluginextension.h"
 
 #include "editor.h"
+#include "main.h"
 
 
 typedef struct
@@ -143,6 +144,8 @@ void plugin_extension_unregister(PluginExtension *extension)
  */
 #define CALL_PROVIDED(f, doc, ext)												\
 	G_STMT_START {																\
+		if (main_status.quitting || main_status.closing_all)					\
+			return FALSE;														\
 		for (GList *node = all_extensions; node; node = node->next)				\
 		{																		\
 			PluginExtensionEntry *entry = node->data;							\
@@ -167,6 +170,8 @@ void plugin_extension_unregister(PluginExtension *extension)
  */
 #define CALL_PERFORM(f_provided, doc, f_perform, args, defret)					\
 	G_STMT_START {																\
+		if (main_status.quitting || main_status.closing_all)					\
+			return defret;														\
 		for (GList *node = all_extensions; node; node = node->next)				\
 		{																		\
 			PluginExtensionEntry *entry = node->data;							\
