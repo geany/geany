@@ -208,9 +208,11 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
  * If the file doesn't exist, it will be created.
  * If it already exists, it will be overwritten.
  *
- * @warning You should use @c g_file_set_contents() instead if you don't need
- * file permissions and other metadata to be preserved, as that always handles
- * disk exhaustion safely.
+ * @warning For saving, this function uses the method configured in Geany
+ * using either GIO (default), g_file_set_contents(), or fwrite(), each with its
+ * advantages and disadvantages. If the exact method of file saving is
+ * important to you, you should not rely on this function and implement file
+ * saving by yourself.
  *
  * @param filename The filename of the file to write, in locale encoding.
  * @param text The text to write into the file.
@@ -228,6 +230,22 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 	{
 		GError *error = NULL;
 		if (! g_file_set_contents(filename, text, -1, &error))
+		{
+			geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
+			g_error_free(error);
+			return EIO;
+		}
+	}
+	else if (file_prefs.use_gio_unsafe_file_saving)
+	{
+		GError *error = NULL;
+		GFile *fp = g_file_new_for_path(filename);
+
+		g_file_replace_contents(fp, text, strlen(text), NULL, file_prefs.gio_unsafe_save_backup,
+			G_FILE_CREATE_NONE, NULL, NULL, &error);
+
+		g_object_unref(fp);
+		if (error)
 		{
 			geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
 			g_error_free(error);
