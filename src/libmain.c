@@ -1409,8 +1409,7 @@ gboolean main_quit(void)
 		if (do_main_quit())
 			return TRUE;
 	}
-	else
-	if (! prefs.confirm_exit ||
+	else if (! prefs.confirm_exit ||
 		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 			_("Do you really want to quit?")))
 	{
