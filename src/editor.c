@@ -3516,8 +3516,7 @@ static gboolean is_comment_char(gchar c, gint lexer)
 {
 	if ((c == '*' || c == '+') && lexer == SCLEX_D)
 		return TRUE;
-	else
-	if (c == '*')
+	else if (c == '*')
 		return TRUE;
 
 	return FALSE;

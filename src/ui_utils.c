@@ -528,11 +528,9 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 
 	if (IS_SCINTILLA(focusw))
 		enable = (doc == NULL) ? FALSE : sci_has_selection(doc->editor->sci);
-	else
-	if (GTK_IS_EDITABLE(focusw))
+	else if (GTK_IS_EDITABLE(focusw))
 		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);
-	else
-	if (GTK_IS_TEXT_VIEW(focusw))
+	else if (GTK_IS_TEXT_VIEW(focusw))
 	{
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
 			GTK_TEXT_VIEW(focusw));
