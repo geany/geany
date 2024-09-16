@@ -463,6 +463,18 @@ gboolean main_is_realized(void)
 
 
 /**
+ *  Checks whether Geany is 'closing all' documents right now.
+ *
+ *  @return @c TRUE if the Geany is 'closing all' documents right now or @c FALSE otherwise.
+ **/
+GEANY_API_SYMBOL
+gboolean geany_is_closing_all_documents(void)
+{
+	return main_status.closing_all;
+}
+
+
+/**
  *  Initialises the gettext translation system.
  *  This is a convenience function to set up gettext for internationalisation support
  *  in external plugins. You should call this function early in @ref plugin_init().
