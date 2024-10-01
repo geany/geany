@@ -1,5 +1,7 @@
 
 colorschemes = \
+	colorschemes/light.conf \
+	colorschemes/dark.conf \
 	colorschemes/alt.conf
 
 filetypes_dist = \
