@@ -59,7 +59,7 @@ typedef enum
 	tm_tag_attr_inheritance_t = 64, /**< Parent classes */
 	tm_tag_attr_arglist_t = 128, /**< Argument list */
 	tm_tag_attr_local_t = 256, /**< If it has local scope */
-	tm_tag_attr_time_t = 512, /**< Modification time (File tag only) */
+	tm_tag_attr_mtime_t = 512, /**< Modification time (File tag only) */
 	tm_tag_attr_vartype_t = 1024, /**< Variable Type */
 	tm_tag_attr_access_t = 2048, /**< Access type (public/protected/private) */
 	tm_tag_attr_impl_t = 4096, /**< Implementation (e.g. virtual) */
