@@ -2722,6 +2722,7 @@ void document_highlight_tags(GeanyDocument *doc)
 		case GEANY_FILETYPES_VALA:
 		case GEANY_FILETYPES_RUST:
 		case GEANY_FILETYPES_GO:
+		case GEANY_FILETYPES_ZIG:
 		{
 
 			/* index of the keyword set in the Scintilla lexer, for
