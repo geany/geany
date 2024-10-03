@@ -1886,6 +1886,39 @@ static const HLKeyword highlighting_keywords_YAML[] =
 #define highlighting_properties_YAML	EMPTY_PROPERTIES
 
 
+/* ZIG */
+#define highlighting_lexer_ZIG			SCLEX_ZIG
+static const HLStyle highlighting_styles_ZIG[] =
+{
+	{ SCE_ZIG_DEFAULT,				"default",				FALSE },
+	{ SCE_ZIG_COMMENTLINE,			"comment_line",			FALSE },
+	{ SCE_ZIG_COMMENTLINEDOC,		"comment_line_doc",		FALSE },
+	{ SCE_ZIG_COMMENTLINETOP,		"comment_line_top",		FALSE },
+	{ SCE_ZIG_NUMBER,				"number",				FALSE },
+	{ SCE_ZIG_OPERATOR,				"operator",				FALSE },
+	{ SCE_ZIG_CHARACTER,			"character",			FALSE },
+	{ SCE_ZIG_STRING,				"string",				FALSE },
+	{ SCE_ZIG_MULTISTRING,			"multistring",			FALSE },
+	{ SCE_ZIG_ESCAPECHAR,			"escapechar",			FALSE },
+	{ SCE_ZIG_IDENTIFIER,			"identifier",			FALSE },
+	{ SCE_ZIG_FUNCTION,				"function",				FALSE },
+	{ SCE_ZIG_BUILTIN_FUNCTION,		"builtin_function",		FALSE },
+	{ SCE_ZIG_KW_PRIMARY,			"kw_primary",			FALSE },
+	{ SCE_ZIG_KW_SECONDARY,			"kw_secondary",			FALSE },
+	{ SCE_ZIG_KW_TERTIARY,			"kw_tertiary",			FALSE },
+	{ SCE_ZIG_KW_TYPE,				"kw_type",				FALSE },
+	{ SCE_ZIG_IDENTIFIER_STRING,	"identifer_string",		FALSE }
+};
+static const HLKeyword highlighting_keywords_ZIG[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "secondary",	FALSE },
+	{ 2, "tertiary",	FALSE },
+	{ 3, "types",		FALSE }
+};
+#define highlighting_properties_ZIG	EMPTY_PROPERTIES
+
+
 /* Zephir */
 #define highlighting_lexer_ZEPHIR		SCLEX_PHPSCRIPT
 #define highlighting_styles_ZEPHIR		highlighting_styles_PHP
