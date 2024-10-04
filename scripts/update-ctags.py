@@ -24,6 +24,15 @@ print('Copying parsers... ({} files)'.format(len(parser_dst_files)))
 for f in parser_dst_files:
     shutil.copy(f, dstdir + '/parsers')
 
+os.chdir(dstdir + '/peg')
+peg_dst_files = glob.glob('*.c') + glob.glob('*.h')
+peg_dst_files = list(filter(lambda x: not x.startswith('geany_'), peg_dst_files))
+os.chdir(srcdir + '/peg')
+os.system('make -C {} peg/{}'.format(srcdir, ' peg/'.join(peg_dst_files)))
+print('Copying peg parsers... ({} files)'.format(len(peg_dst_files)))
+for f in peg_dst_files:
+    shutil.copy(f, dstdir + '/peg')
+
 cxx_parser_src_files = glob.glob('cxx/*.c') + glob.glob('cxx/*.h')
 print('Copying cxx parser files... ({} files)'.format(len(cxx_parser_src_files)))
 for f in cxx_parser_src_files:
