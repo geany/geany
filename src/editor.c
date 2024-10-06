@@ -1330,6 +1330,7 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 		case SCLEX_R:
 		case SCLEX_RAKU:
 		case SCLEX_RUST:
+		case SCLEX_ZIG:
 			return TRUE;
 		default:
 			return FALSE;
@@ -5146,6 +5147,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_D:
 		case SCLEX_OCTAVE:
 		case SCLEX_RUST:
+		case SCLEX_ZIG:
 			mode = SC_IV_LOOKBOTH;
 			break;
 

@@ -62,7 +62,8 @@ lexilla/lexers/LexTxt2tags.cxx         \
 lexilla/lexers/LexVHDL.cxx             \
 lexilla/lexers/LexVerilog.cxx          \
 lexilla/lexers/LexVisualProlog.cxx     \
-lexilla/lexers/LexYAML.cxx
+lexilla/lexers/LexYAML.cxx             \
+lexilla/lexers/LexZig.cxx
 
 LEXLIB_SRCS =                          \
 lexilla/include/Lexilla.h              \

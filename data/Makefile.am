@@ -84,7 +84,8 @@ filetypes_dist = \
 	filedefs/filetypes.vhdl \
 	filedefs/filetypes.xml \
 	filedefs/filetypes.yaml \
-	filedefs/filetypes.zephir
+	filedefs/filetypes.zephir \
+	filedefs/filetypes.zig
 
 # generated filetypes
 filetypes_nodist = \
