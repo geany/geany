@@ -193,6 +193,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( CIL,        NONE,         "CIL",              NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( PROLOG,     NONE,         "Prolog",           NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( NIM,        NONE,         "Nim",              NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( DART,       NONE,         "Dart",             NULL,                      SOURCE_FILE, COMPILED );
 }
 
 
@@ -625,7 +626,8 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 			{ "dmd",	GEANY_FILETYPES_D },
 			{ "wish",	GEANY_FILETYPES_TCL },
 			{ "node",	GEANY_FILETYPES_JS },
-			{ "rust",	GEANY_FILETYPES_RUST }
+			{ "rust",	GEANY_FILETYPES_RUST },
+			{ "dart",	GEANY_FILETYPES_DART }
 		};
 		gchar *tmp = g_path_get_basename(line + 2);
 		gchar *basename_interpreter = tmp;

@@ -538,6 +538,48 @@ static const HLKeyword highlighting_keywords_D[] =
 #define highlighting_properties_D		EMPTY_PROPERTIES
 
 
+/* DART */
+#define highlighting_lexer_DART		SCLEX_DART
+static const HLStyle highlighting_styles_DART[] =
+{
+	{ SCE_DART_DEFAULT,				"default",				FALSE },
+	{ SCE_DART_COMMENTLINE,			"commentline",			FALSE },
+	{ SCE_DART_COMMENTLINEDOC,		"commentlinedoc",		FALSE },
+	{ SCE_DART_COMMENTBLOCK,		"commentblock",			FALSE },
+	{ SCE_DART_COMMENTBLOCKDOC,		"commentblockdoc",		FALSE },
+	{ SCE_DART_STRING_SQ,			"stringsq",				FALSE },
+	{ SCE_DART_STRING_DQ,			"stringdq",				FALSE },
+	{ SCE_DART_TRIPLE_STRING_SQ,	"triplestringsq",		FALSE },
+	{ SCE_DART_TRIPLE_STRING_DQ,	"triplestringdq",		FALSE },
+	{ SCE_DART_RAWSTRING_SQ,		"rawstringsq",			FALSE },
+	{ SCE_DART_RAWSTRING_DQ,		"rawstringdq",			FALSE },
+	{ SCE_DART_TRIPLE_RAWSTRING_SQ,	"triplerawstringsq",	FALSE },
+	{ SCE_DART_TRIPLE_RAWSTRING_DQ,	"triplerawstringdq",	FALSE },
+	{ SCE_DART_ESCAPECHAR,			"escapechar",			FALSE },
+	{ SCE_DART_IDENTIFIER,			"identifier",			FALSE },
+	{ SCE_DART_IDENTIFIER_STRING,	"identifierstring",		FALSE },
+	{ SCE_DART_OPERATOR,			"operator",				FALSE },
+	{ SCE_DART_OPERATOR_STRING,		"operatorstring",		FALSE },
+	{ SCE_DART_SYMBOL_IDENTIFIER,	"symbolidentifier",		FALSE },
+	{ SCE_DART_SYMBOL_OPERATOR,		"symboloperator",		FALSE },
+	{ SCE_DART_NUMBER,				"number",				FALSE },
+	{ SCE_DART_KEY,					"key",					FALSE },
+	{ SCE_DART_METADATA,			"metadata",				FALSE },
+	{ SCE_DART_KW_PRIMARY,			"kwprimary",			FALSE },
+	{ SCE_DART_KW_SECONDARY,		"kwsecondary",			FALSE },
+	{ SCE_DART_KW_TERTIARY,			"kwtertiary",			FALSE },
+	{ SCE_DART_KW_TYPE,				"kwtype",				FALSE },
+};
+static const HLKeyword highlighting_keywords_DART[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "secondary",	FALSE },
+	{ 2, "tertiary",	FALSE },
+	{ 3, "types",		FALSE },
+};
+#define highlighting_properties_DART		EMPTY_PROPERTIES
+
+
 /* Diff */
 #define highlighting_lexer_DIFF			SCLEX_DIFF
 static const HLStyle highlighting_styles_DIFF[] =
