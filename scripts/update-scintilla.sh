@@ -44,7 +44,7 @@ copy_to()
 	dest="$1"
 	shift
 
-	if ! [ -d "$dest" ]; then
+	if ! [ -e "$dest" ]; then
 		echo "$dest does not exist." >&2;
 		exit 1
 	fi
@@ -74,7 +74,7 @@ copy_to scintilla/lexilla/lexlib  "$LEX_SRC"/lexlib/*.h
 copy_to scintilla/lexilla/        "$LEX_SRC"/License.txt
 copy_to scintilla/lexilla/        "$LEX_SRC"/version.txt
 # now copy the lexers we use
-git -C scintilla/lexilla/lexers/ ls-files *.cxx | while read f; do
+git -C scintilla/lexilla/lexers/ ls-files '*.cxx' | while read f; do
   copy_to "scintilla/lexilla/lexers" "$LEX_SRC/lexers/$f"
 done
 
