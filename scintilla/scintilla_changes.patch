@@ -117,6 +117,7 @@ index cd4b23617..af4a73db4 100644
 +		&lmSmalltalk,
 +		&lmSQL,
 +		&lmTCL,
++		&lmTOML,
 +		&lmTxt2tags,
 +		&lmVerilog,
 +		&lmVHDL,
