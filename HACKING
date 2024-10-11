@@ -585,8 +585,9 @@ LexFoo.cxx. Try the official Scintilla project first.
 When adding a lexer:
 
 * add LexFoo.cxx to scintilla/lexilla/lexers
-* add `&lmFoo` to scintilla/lexilla/src/Lexilla.cxx and
-  scintilla/scintilla_changes.patch
+* add ``&lmFoo`` to scintilla/lexilla/src/Lexilla.cxx
+* update scintilla/scintilla_changes.patch to contain ``+ &lmFoo,`` and
+  increment ``s`` in the hunk header ``@@ -R,r +S,s @@`` above the added line
 * update scintilla/Makefile.am and meson.build
 
 For syntax highlighting, you will need to edit highlighting.c and
