@@ -78,6 +78,7 @@ filetypes_dist = \
 	filedefs/filetypes.Swift.conf \
 	filedefs/filetypes.TypeScript.conf \
 	filedefs/filetypes.tcl \
+	filedefs/filetypes.toml \
 	filedefs/filetypes.txt2tags \
 	filedefs/filetypes.vala \
 	filedefs/filetypes.verilog \
