@@ -768,6 +768,11 @@ static TMParserMapEntry map_ABC[] = {
 };
 #define group_ABC group_REST
 
+static TMParserMapEntry map_FORTH[] = {
+	{'s', tm_tag_member_t},  // section
+};
+#define group_FORTH group_REST
+
 static TMParserMapEntry map_VERILOG[] = {
 	{'c', tm_tag_variable_t},  // constant
 	{'d', tm_tag_variable_t},  // define
@@ -1202,6 +1207,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(SH),
 	MAP_ENTRY(D),
 	MAP_ENTRY(FORTRAN),
+	MAP_ENTRY(FORTH),
 	MAP_ENTRY(GDSCRIPT),
 	MAP_ENTRY(DIFF),
 	MAP_ENTRY(VHDL),
