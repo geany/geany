@@ -220,6 +220,9 @@ void				sci_move_selected_lines_up      (ScintillaObject *sci);
 
 void				sci_set_font_fractional		(ScintillaObject *sci, gint style, const gchar *font, gdouble size);
 
+gint				sci_get_style_from_substyle	(ScintillaObject *sci, gint style);
+gint				sci_get_base_style_at		(ScintillaObject *sci, gint position);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS
