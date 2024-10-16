@@ -9,6 +9,7 @@ doccomment=author deprecated exception param return see serial serialData serial
 typedefs=
 
 [lexer_properties=C]
+lexer.cpp.triplequoted.strings=1
 
 [settings]
 # default extension used when saving files
