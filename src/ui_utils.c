@@ -1015,6 +1015,19 @@ void ui_sidebar_show_hide(void)
 	}
 
 	ui_widget_show_hide(main_widgets.sidebar_notebook, ui_prefs.sidebar_visible);
+	if (ui_prefs.sidebar_visible)
+	{
+		GtkPaned *hpaned = GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"));
+		GtkAllocation allocation;
+
+		gtk_widget_get_allocation(GTK_WIDGET(hpaned), &allocation);
+
+		if (interface_prefs.sidebar_pos == GTK_POS_LEFT && gtk_paned_get_position(hpaned) < 10)
+			gtk_paned_set_position(hpaned, 300);
+		else if (interface_prefs.sidebar_pos == GTK_POS_RIGHT &&
+				allocation.width - gtk_paned_get_position(hpaned) < 10)
+			gtk_paned_set_position(hpaned, allocation.width - 300);
+	}
 
 	ui_widget_show_hide(gtk_notebook_get_nth_page(
 		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0), interface_prefs.sidebar_symbol_visible);
