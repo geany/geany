@@ -1118,7 +1118,13 @@ static gboolean load_config(const gchar *filename)
 	/* save current (non-project) session (it could have been changed since program startup) */
 	if (!main_status.opening_session_files)
 	{
-		configuration_save_default_session();
+		/* Opening another project while some project is already opene causes
+		 * that upon closing the first project, empty session is saved here.
+		 * The check below prevents that but has a side-effect that when
+		 * save_config_on_file_change=FALSE, the session with all closed files
+		 * isn't saved when opening a project. */
+		if (have_session_docs())
+			configuration_save_default_session();
 		/* now close all open files */
 		document_close_all();
 	}
