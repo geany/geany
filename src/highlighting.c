@@ -1014,6 +1014,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(CONF);
 		init_styleset_case(CSS);
 		init_styleset_case(D);
+		init_styleset_case(DART);
 		init_styleset_case(DIFF);
 		init_styleset_case(LISP);
 		init_styleset_case(ERLANG);
@@ -1110,6 +1111,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(CONF);
 		styleset_case(CSS);
 		styleset_case(D);
+		styleset_case(DART);
 		styleset_case(DIFF);
 		styleset_case(LISP);
 		styleset_case(ERLANG);
@@ -1685,6 +1687,16 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_NIM_TRIPLE ||
 				style == SCE_NIM_TRIPLEDOUBLE ||
 				style == SCE_NIM_STRINGEOL);
+
+		case SCLEX_DART:
+			return (style == SCE_DART_STRING_SQ ||
+				style == SCE_DART_STRING_DQ ||
+				style == SCE_DART_TRIPLE_STRING_SQ ||
+				style == SCE_DART_TRIPLE_STRING_DQ ||
+				style == SCE_DART_RAWSTRING_SQ ||
+				style == SCE_DART_RAWSTRING_DQ ||
+				style == SCE_DART_TRIPLE_RAWSTRING_SQ ||
+				style == SCE_DART_TRIPLE_RAWSTRING_DQ);
 	}
 	return FALSE;
 }
@@ -1937,6 +1949,12 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_NIM_COMMENTDOC ||
 				style == SCE_NIM_COMMENTLINE ||
 				style == SCE_NIM_COMMENTLINEDOC);
+
+		case SCLEX_DART:
+			return (style == SCE_DART_COMMENTLINE ||
+				style == SCE_DART_COMMENTLINEDOC ||
+				style == SCE_DART_COMMENTBLOCK ||
+				style == SCE_DART_COMMENTBLOCKDOC);
 	}
 	return FALSE;
 }
