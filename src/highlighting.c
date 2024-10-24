@@ -1053,6 +1053,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(SMALLTALK);
 		init_styleset_case(SQL);
 		init_styleset_case(TCL);
+		init_styleset_case(TOML);
 		init_styleset_case(TXT2TAGS);
 		init_styleset_case(VHDL);
 		init_styleset_case(VERILOG);
@@ -1149,6 +1150,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(SMALLTALK);
 		styleset_case(SQL);
 		styleset_case(TCL);
+		styleset_case(TOML);
 		styleset_case(TXT2TAGS);
 		styleset_case(VHDL);
 		styleset_case(VERILOG);
@@ -1665,6 +1667,12 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_VISUALPROLOG_EMBEDDED ||
 				style == SCE_VISUALPROLOG_PLACEHOLDER);
 
+		case SCLEX_TOML:
+			return (style == SCE_TOML_STRING_SQ ||
+				style == SCE_TOML_STRING_DQ ||
+				style == SCE_TOML_TRIPLE_STRING_SQ ||
+				style == SCE_TOML_TRIPLE_STRING_DQ);
+
 		case SCLEX_BATCH:
 		case SCLEX_DIFF:
 		case SCLEX_LATEX:
@@ -1937,6 +1945,9 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_NIM_COMMENTDOC ||
 				style == SCE_NIM_COMMENTLINE ||
 				style == SCE_NIM_COMMENTLINEDOC);
+
+		case SCLEX_TOML:
+			return (style == SCE_TOML_COMMENT);
 	}
 	return FALSE;
 }
