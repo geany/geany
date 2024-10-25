@@ -2,7 +2,7 @@
 [styling=C]
 
 [keywords]
-primary=abstract assert break case catch class const continue default do else enum extends final finally for goto if implements import instanceof interface native new package private protected public return static strictfp super switch synchronized this throw throws transient try volatile while true false null
+primary=abstract assert break case catch class const continue default do else enum exports extends final finally for goto if implements import instanceof interface module native new non-sealed open opens package permits private protected provides public record requires return sealed static strictfp super switch synchronized this throw throws to transient transitive try uses var volatile when while with yield true false null
 secondary=boolean byte char double float int long short void
 # documentation keywords for javadoc
 doccomment=author deprecated exception param return see serial serialData serialField since throws todo version
