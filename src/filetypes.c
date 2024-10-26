@@ -635,6 +635,10 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 		{	/* skip "env" and read the following interpreter */
 			basename_interpreter += 4;
 		}
+		else if (g_str_has_prefix(tmp, "busybox "))
+		{
+			basename_interpreter += 8;
+		}
 
 		for (i = 0; ! ft && i < G_N_ELEMENTS(intepreter_map); i++)
 		{
