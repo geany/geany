@@ -1599,7 +1599,8 @@ static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean defi
 	GPtrArray *filtered_tags = g_ptr_array_new();
 	guint i;
 
-	symbols_get_current_function(doc, &current_scope);
+	if (symbols_get_current_function(doc, &current_scope) == -1)
+		current_scope = NULL;  /* current_scope == "unknown" when not found */
 
 	foreach_ptr_array(tmtag, i, tags)
 	{
