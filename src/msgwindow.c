@@ -387,7 +387,7 @@ void msgwin_show_hide(gboolean show)
 
 		if (interface_prefs.msgwin_orientation == GTK_ORIENTATION_VERTICAL &&
 				allocation.height - gtk_paned_get_position(vpaned) < 10)
-			gtk_paned_set_position(vpaned, allocation.height - 200);
+			gtk_paned_set_position(vpaned, allocation.height - 160);
 		else if (interface_prefs.msgwin_orientation == GTK_ORIENTATION_HORIZONTAL &&
 				allocation.width - gtk_paned_get_position(vpaned) < 10)
 			gtk_paned_set_position(vpaned, allocation.width - 300);
