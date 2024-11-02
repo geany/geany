@@ -2066,6 +2066,7 @@ static void builder_connect_func(GtkBuilder *builder, GObject *object,
 }
 
 
+/* When resized so it's less than 10px from the edge, hide the sidebar/message window */
 static void on_hpaned1_position_notify(GObject *object, GParamSpec *pspec, gpointer data)
 {
 	GtkPaned *hpaned = GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"));

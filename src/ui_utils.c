@@ -1017,6 +1017,9 @@ void ui_sidebar_show_hide(void)
 	ui_widget_show_hide(main_widgets.sidebar_notebook, ui_prefs.sidebar_visible);
 	if (ui_prefs.sidebar_visible)
 	{
+		/* When sidebar has the size <10px, re-show it with rougly the default
+		 * size. This prevents the situation when the separator is too close
+		 * to the window edge and hard to grab/notice. */
 		GtkPaned *hpaned = GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"));
 		GtkAllocation allocation;
 
