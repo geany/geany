@@ -76,6 +76,8 @@
 	AutoItParser, \
 	Perl6Parser, \
 	OcamlParser, \
-	LdScriptParser
+	LdScriptParser, \
+	ForthParser, \
+	MesonParser
 
 #endif

@@ -1169,6 +1169,40 @@ static TMParserMapGroup group_LDSCRIPT[] = {
 	{"unused", TM_ICON_NONE, tm_tag_undef_t},
 };
 
+static TMParserMapEntry map_FORTH[] = {
+	{'w', tm_tag_function_t},  // word
+	{'v', tm_tag_variable_t},  // variable
+	{'c', tm_tag_macro_t},     // constant
+};
+static TMParserMapGroup group_FORTH[] = {
+	{N_("Words"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
+};
+
+static TMParserMapEntry map_MESON[] = {
+	{'P', tm_tag_namespace_t},   // project
+	{'V', tm_tag_local_var_t},   // variable
+	{'S', tm_tag_macro_t},       // subdir
+	{'B', tm_tag_other_t},       // build
+	{'c', tm_tag_enumerator_t},  // custom
+	{'t', tm_tag_field_t},       // test
+	{'b', tm_tag_function_t},    // benchmark
+	{'r', tm_tag_member_t},      // run
+	{'m', tm_tag_package_t},     // module
+};
+static TMParserMapGroup group_MESON[] = {
+	{N_("Projects"), TM_ICON_CLASS, tm_tag_namespace_t},
+	{N_("Modules"), TM_ICON_NAMESPACE, tm_tag_package_t},
+	{N_("Variables"), TM_ICON_NONE, tm_tag_local_var_t},
+	{N_("Subdirs"), TM_ICON_OTHER, tm_tag_macro_t},
+	{N_("Build Targets"), TM_ICON_METHOD, tm_tag_other_t},
+	{N_("Custom Targets"), TM_ICON_METHOD, tm_tag_enumerator_t},
+	{N_("Benchmark Targets"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Run Targets"), TM_ICON_METHOD, tm_tag_member_t},
+	{N_("Tests"), TM_ICON_NONE, tm_tag_field_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1244,6 +1278,8 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(RAKU),
 	MAP_ENTRY(OCAML),
 	MAP_ENTRY(LDSCRIPT),
+	MAP_ENTRY(FORTH),
+	MAP_ENTRY(MESON),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);

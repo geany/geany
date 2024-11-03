@@ -29,6 +29,13 @@ print('Copying cxx parser files... ({} files)'.format(len(cxx_parser_src_files))
 for f in cxx_parser_src_files:
     shutil.copy(f, dstdir + '/parsers/cxx')
 
+os.chdir(dstdir + '/optlib')
+optlib_parser_dst_files = glob.glob('*.c')
+os.chdir(srcdir + '/optlib')
+print('Copying optlib parsers... ({} files)'.format(len(optlib_parser_dst_files)))
+for f in optlib_parser_dst_files:
+    shutil.copy(f, dstdir + '/optlib')
+
 print('Copying dsl files...')
 for f in ['dsl/es.c', 'dsl/es.h', 'dsl/optscript.c', 'dsl/optscript.h']:
 	shutil.copy(srcdir + '/' + f, dstdir + '/' + f)

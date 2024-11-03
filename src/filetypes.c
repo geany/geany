@@ -177,7 +177,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( CMAKE,      NONE,         "CMake",            NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( NSIS,       NSIS,         "NSIS",             NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( ADA,        ADA,          "Ada",              NULL,                      SOURCE_FILE, COMPILED );
-	FT_INIT( FORTH,      NONE,         "Forth",            NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( FORTH,      FORTH,        "Forth",            NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( ASCIIDOC,   ASCIIDOC,     "Asciidoc",         NULL,                      SOURCE_FILE, MARKUP   );
 	FT_INIT( ABAQUS,     ABAQUS,       "Abaqus",           NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( BATCH,      BATCH,        "Batch",            NULL,                      SCRIPT,      SCRIPT   );
