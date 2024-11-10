@@ -59,6 +59,7 @@ extern LexerModule lmCPPNoCase;
 extern LexerModule lmCsound;
 extern LexerModule lmCss;
 extern LexerModule lmD;
+extern LexerModule lmDart;
 extern LexerModule lmDataflex;
 extern LexerModule lmDiff;
 extern LexerModule lmDMAP;
@@ -186,6 +187,7 @@ static void AddGeanyLexers()
 		&lmCPP,
 		&lmCss,
 		&lmD,
+		&lmDart,
 		&lmDiff,
 		&lmErlang,
 		&lmF77,
@@ -273,6 +275,7 @@ void AddEachLexer() {
 		&lmCsound,
 		&lmCss,
 		&lmD,
+		&lmDart,
 		&lmDataflex,
 		&lmDiff,
 		&lmDMAP,

@@ -28,6 +28,7 @@ filetypes_dist = \
 	filedefs/filetypes.CUDA.conf \
 	filedefs/filetypes.Cython.conf \
 	filedefs/filetypes.d \
+	filedefs/filetypes.dart \
 	filedefs/filetypes.diff \
 	filedefs/filetypes.docbook \
 	filedefs/filetypes.Dockerfile.conf \
