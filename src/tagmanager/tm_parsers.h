@@ -78,6 +78,7 @@
 	OcamlParser, \
 	LdScriptParser, \
 	ForthParser, \
-	MesonParser
+	MesonParser, \
+	SystemVerilogParser
 
 #endif
