@@ -2307,6 +2307,42 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolea
 }
 
 
+/* like dialogs_show_question_full() but makes the non-cancel button default */
+static gboolean show_wrap_search_dialog(GtkWidget *parent, const gchar *search_text)
+{
+	gboolean ret;
+	GtkWidget *dialog;
+	GtkWidget *btn;
+	gchar *question_text;
+
+	if (parent == NULL && main_status.main_window_realized)
+		parent = main_widgets.window;
+
+	question_text = g_strdup_printf(_("\"%s\" was not found."), search_text);
+
+	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
+		GTK_BUTTONS_NONE, "%s", question_text);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
+
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+		"%s", _("Wrap search and find again?"));
+
+	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_NO);
+	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_FIND, GTK_RESPONSE_YES);
+	gtk_widget_grab_default(btn);
+
+	ret = gtk_dialog_run(GTK_DIALOG(dialog));
+
+	gtk_widget_destroy(dialog);
+	g_free(question_text);
+
+	return ret == GTK_RESPONSE_YES;
+}
+
+
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text.
  * Will skip past any selection, ignoring it.
@@ -2370,8 +2406,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
 
 		/* we searched only part of the document, so ask whether to wraparound. */
 		if (search_prefs.always_wrap ||
-			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL,
-				_("Wrap search and find again?"), _("\"%s\" was not found."), original_text))
+			show_wrap_search_dialog(parent, original_text))
 		{
 			gint ret;
 
