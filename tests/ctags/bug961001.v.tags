@@ -1,16 +1,16 @@
-GUESTAÌ16384Ö0
-variable:   GUESTA
-GUESTBÌ16384Ö0
-variable:   GUESTB
-GUESTCÌ16384Ö0
-variable:   GUESTC
-GUESTDÌ16384Ö0
-variable:   GUESTD
-HOSTAÌ16384Ö0
-variable:   HOSTA
-HOSTBÌ16384Ö0
-variable:   HOSTB
-HOSTCÌ16384Ö0
-variable:   HOSTC
-HOSTDÌ16384Ö0
-variable:   HOSTD
+GUESTAÌ65536Ö0
+macro:      GUESTA
+GUESTBÌ65536Ö0
+macro:      GUESTB
+GUESTCÌ65536Ö0
+macro:      GUESTC
+GUESTDÌ65536Ö0
+macro:      GUESTD
+HOSTAÌ65536Ö0
+macro:      HOSTA
+HOSTBÌ65536Ö0
+macro:      HOSTB
+HOSTCÌ65536Ö0
+macro:      HOSTC
+HOSTDÌ65536Ö0
+macro:      HOSTD

@@ -1,26 +1,34 @@
+InitÌ256ÎtrafficÖ0
+namespace:  traffic :: Init
 amberÌ16384ÎtrafficÖ0
 variable:   traffic :: amber
-amber_ticsÌ16384ÎtrafficÖ0
-variable:   traffic :: amber_tics
+amber_ticsÌ8ÎtrafficÖ0
+field:      traffic :: amber_tics
 clockÌ16384ÎtrafficÖ0
 variable:   traffic :: clock
-colorÌ16384Îtraffic.lightÖ0
-variable:   traffic.light :: color
+clock_waveÌ256ÎtrafficÖ0
+namespace:  traffic :: clock_wave
+colorÌ32768Îtraffic.lightÖ0
+externvar:  traffic.light :: color
 greenÌ16384ÎtrafficÖ0
 variable:   traffic :: green
-green_ticsÌ16384ÎtrafficÖ0
-variable:   traffic :: green_tics
+green_ticsÌ8ÎtrafficÖ0
+field:      traffic :: green_tics
 lightÌ16ÎtrafficÖ0
 function:   traffic :: light
-offÌ16384ÎtrafficÖ0
-variable:   traffic :: off
-onÌ16384ÎtrafficÖ0
-variable:   traffic :: on
+main_processÌ256ÎtrafficÖ0
+namespace:  traffic :: main_process
+offÌ8ÎtrafficÖ0
+field:      traffic :: off
+onÌ8ÎtrafficÖ0
+field:      traffic :: on
 redÌ16384ÎtrafficÖ0
 variable:   traffic :: red
-red_ticsÌ16384ÎtrafficÖ0
-variable:   traffic :: red_tics
-ticsÌ16384Îtraffic.lightÖ0
-variable:   traffic.light :: tics
-trafficÌ1Ö0
-class:      traffic
+red_ticsÌ8ÎtrafficÖ0
+field:      traffic :: red_tics
+stop_atÌ256ÎtrafficÖ0
+namespace:  traffic :: stop_at
+ticsÌ32768Îtraffic.lightÖ0
+externvar:  traffic.light :: tics
+trafficÌ1024Ö0
+prototype:  traffic
