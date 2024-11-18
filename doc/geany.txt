@@ -4219,7 +4219,6 @@ support for the following has been implemented:
 
 * Recognizing and setting the filetype (after the user has manually updated
   the `filetype extensions`_ file).
-* `Filetype group membership`_.
 * Reading filetype settings in the ``[settings]`` section, including:
     * Using an existing syntax highlighting lexer (`lexer_filetype`_ key).
     * Using an existing tags parser (`tag_parser`_ key).
@@ -4891,34 +4890,6 @@ should look like::
 
     [Extensions]
     Make=Makefile*;*.mk;Buildfile;
-
-Filetype group membership
-^^^^^^^^^^^^^^^^^^^^^^^^^
-Filetype groups are used in the `Document->Set Filetype` menu.
-
-Group membership is also stored in ``filetype_extensions.conf``. This
-file is used to store information Geany needs at startup, whereas the
-separate filetype definition files hold information only needed when
-a document with their filetype is used.
-
-The format looks like::
-
-    [Groups]
-    Programming=C;C++;
-    Script=Perl;Python;
-    Markup=HTML;XML;
-    Misc=Diff;Conf;
-    None=None;
-
-The key names cannot be configured.
-
-.. note::
-    Group membership is only read at startup.
-
-.. tip::
-    You can make commonly used filetypes appear in the top-level of the
-    filetype menu by adding them to the `None` group, e.g.
-    `None=C;Python`.
 
 Preferences file format
 -----------------------
