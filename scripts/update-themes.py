@@ -40,9 +40,6 @@ themes = [
     'ubuntu.conf',
     'vibrant-ink.conf',
 
-    # GPL 3 or later
-    'epsilon.conf',
-
     # LGPL 2 or later
     'abc-dark.conf',
     'abc-light.conf',
@@ -60,6 +57,9 @@ themes = [
 ]
 
 ignored = [
+    # GPL 3 or later
+    'epsilon.conf',
+
     # no explicit license
     'fluffy.conf',
     'kary-pro-colors-dark.conf',

@@ -1,6 +1,5 @@
 
 colorschemes = \
-	colorschemes/gpl-3.0.txt \
 	colorschemes/lgpl-2.0.txt \
 	colorschemes/lgpl-2.1.txt \
 	colorschemes/abc-dark.conf \
@@ -15,7 +14,6 @@ colorschemes = \
 	colorschemes/delt-dark.conf \
 	colorschemes/dark-fruit-salad.conf \
 	colorschemes/earthsong.conf \
-	colorschemes/epsilon.conf \
 	colorschemes/evg-ega-dark.conf \
 	colorschemes/gedit.conf \
 	colorschemes/github.conf \
