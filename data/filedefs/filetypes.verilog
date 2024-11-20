@@ -23,9 +23,9 @@ port_connect=keyword_4
 
 [keywords]
 # all items must be in one line
-word=always and assign attribute begin buf bufif0 bufif1 case casex casez cmos deassign default defparam disable edge else end endattribute endcase endfunction endmodule endprimitive endspecify endtable endtask event for force forever fork function highz0 highz1 if ifnone initial join medium module large macromodule nand negedge nmos nor not notif0 notif1 or parameter pmos posedge primitive pull0 pull1 pulldown pullup rcmos realtime release repeat rnmos rpmos rtran rtranif0 rtranif1 scalared signed small specify specparam strength strong0 strong1 supply0 supply1 table task tran tranif0 tranif1 tri tri0 tri1 triand trior trireg unsigned vectored wait wand weak0 weak1 while wor xnor xor @
-word2=$display $write $fdisplay $fwrite $strobe $fstrobe $monitor $fmonitor $time $realtime $finish $stop $setup $hold $width $setuphold $readmemb $readmemh $sreadmemb $sreadmemh $getpattern $history $save $restart $incsave $shm_open $shm_probe $shm_close $scale $showscopes $showvars
-word3=real integer time reg wire input output inout
+word=always and assign automatic begin buf bufif0 bufif1 case casex casez cell cmos config deassign default defparam design disable edge else end endcase endconfig endfunction endgenerate endmodule endprimitive endspecify endtable endtask for force forever fork function generate if ifnone incdir include initial instance join liblist library macromodule module nand negedge nmos nor noshowcancelled not notif0 notif1 or pmos posedge primitive pulldown pullup pulsestyle_ondetect pulsestyle_onevent rcmos release repeat rnmos rpmos rtran rtranif0 rtranif1 showcancelled specify table task tran tranif0 tranif1 use wait while xnor xor
+word2=$acos $acosh $asin $asinh $async$and$array $async$and$plane $async$nand$array $async$nand$plane $async$nor$array $async$nor$plane $async$or$array $async$or$plane $atan $atan2 $atanh $bitstoreal $ceil $clog2 $cos $cosh $display $displayb $displayh $displayo $dist_chi_square $dist_erlang $dist_exponential $dist_normal $dist_poisson $dist_t $dist_uniform $exp $fclose $fdisplay $fdisplayb $fdisplayh $fdisplayo $feof $ferror $fflush $fgetc $fgets $finish $floor $fmonitor $fmonitorb $fmonitorh $fmonitoro $fopen $fread $fscanf $fseek $fstrobe $fstrobeb $fstrobeh $fstrobeo $ftell $fwrite $fwriteb $fwriteh $fwriteo $hypot $itor $ln $log10 $monitor $monitorb $monitorh $monitoro $monitoroff $monitoron $pow $printtimescale $q_add $q_exam $q_full $q_initialize $q_remove $random $readmemb $readmemh $realtime $realtobits $rewind $rtoi $sdf_annotate $sformat $signed $sin $sinh $sqrt $sscanf $stime $stop $strobe $strobeb $strobeh $strobeo $swrite $swriteb $swriteh $swriteo $sync$and$array $sync$and$plane $sync$nand$array $sync$nand$plane $sync$nor$array $sync$nor$plane $sync$or$array $sync$or$plane $tan $tanh $test$plusargs $time $timeformat $ungetc $unsigned $value$plusargs $write $writeb $writeh $writeo
+word3=event genvar highz0 highz1 inout input integer large localparam medium output parameter pull0 pull1 real realtime reg scalared signed small specparam strong0 strong1 supply0 supply1 time tri tri0 tri1 triand trior trireg unsigned uwire vectored wand weak0 weak1 wire wor
 docComment=
 
 [settings]
@@ -37,7 +37,7 @@ mime_type=text/x-verilog
 
 # these characters define word boundaries when making selections and searching
 # using word matching options
-#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+#wordchars=_$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comments, like # in this file
 comment_single=//
