@@ -77,6 +77,7 @@ filetypes_dist = \
 	filedefs/filetypes.smalltalk \
 	filedefs/filetypes.sql \
 	filedefs/filetypes.Swift.conf \
+	filedefs/filetypes.SystemVerilog.conf \
 	filedefs/filetypes.TypeScript.conf \
 	filedefs/filetypes.tcl \
 	filedefs/filetypes.txt2tags \

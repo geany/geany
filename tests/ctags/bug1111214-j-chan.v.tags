@@ -1,6 +1,6 @@
-insigÌ16384ÎtopÖ0
-variable:   top :: insig
-outsigÌ16384ÎtopÖ0
-variable:   top :: outsig
-topÌ1Ö0
-class:      top
+insigÌ32768ÎtopÖ0
+externvar:  top :: insig
+outsigÌ32768ÎtopÖ0
+externvar:  top :: outsig
+topÌ1024Ö0
+prototype:  top
