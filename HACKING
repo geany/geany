@@ -536,8 +536,7 @@ first (scintilla or ctags).
 If you want to reuse an existing lexer and/or tag parser, making a
 custom filetype is probably easier - it doesn't require any
 changes to the source code. Follow instructions in the manual:
-https://geany.org/manual/index.html#custom-filetypes. Don't forget to
-update the ``[Groups]`` section in ``filetype_extensions.conf``.
+https://geany.org/manual/index.html#custom-filetypes.
 
 .. warning::
   You should use the newer `[build-menu]` section for default build

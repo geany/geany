@@ -211,7 +211,8 @@ static void filetype_combo_cell_data_func(GtkCellLayout *cell_layout, GtkCellRen
 static GtkWidget *create_filetype_combo_box(void)
 {
 	GtkTreeStore *store;
-	GtkTreeIter iter_compiled, iter_script, iter_markup, iter_misc, iter_detect;
+	GtkTreeIter iter_a_b, iter_c, iter_d_e_f, iter_g_h_i, iter_j_k_l, iter_m_n_o,
+		iter_p_q, iter_r_s, iter_t_u_v_w, iter_x_y_z, iter_other, iter_detect;
 	GtkTreeIter *iter_parent;
 	GtkWidget *combo;
 	GtkCellRenderer *renderer;
@@ -219,17 +220,41 @@ static GtkWidget *create_filetype_combo_box(void)
 
 	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
 
-	gtk_tree_store_insert_with_values(store, &iter_detect, NULL, -1,
+	gtk_tree_store_insert_with_values(store, &iter_detect,  NULL, -1,
 			0, -1 /* auto-detect */, 1, _("Detect from file"), -1);
 
-	gtk_tree_store_insert_with_values(store, &iter_compiled, NULL, -1,
-			0, -1, 1, _("Programming Languages"), -1);
-	gtk_tree_store_insert_with_values(store, &iter_script, NULL, -1,
-			0, -1, 1, _("Scripting Languages"), -1);
-	gtk_tree_store_insert_with_values(store, &iter_markup, NULL, -1,
-			0, -1, 1, _("Markup Languages"), -1);
-	gtk_tree_store_insert_with_values(store, &iter_misc, NULL, -1,
-			0, -1, 1, _("Miscellaneous"), -1);
+	gtk_tree_store_insert_with_values(store, &iter_a_b,     NULL, -1,
+			0, -1, 1, "A-B", -1);
+	gtk_tree_store_insert_with_values(store, &iter_c,       NULL, -1,
+			0, -1, 1, "C", -1);
+	gtk_tree_store_insert_with_values(store, &iter_d_e_f,   NULL, -1,
+			0, -1, 1, "D-E-F", -1);
+	gtk_tree_store_insert_with_values(store, &iter_g_h_i,   NULL, -1,
+			0, -1, 1, "G-H-I", -1);
+	gtk_tree_store_insert_with_values(store, &iter_j_k_l,   NULL, -1,
+			0, -1, 1, "J-K-L", -1);
+	gtk_tree_store_insert_with_values(store, &iter_m_n_o,   NULL, -1,
+			0, -1, 1, "M-N-O", -1);
+	gtk_tree_store_insert_with_values(store, &iter_p_q,     NULL, -1,
+			0, -1, 1, "P-Q", -1);
+	gtk_tree_store_insert_with_values(store, &iter_r_s,     NULL, -1,
+			0, -1, 1, "R-S", -1);
+	gtk_tree_store_insert_with_values(store, &iter_t_u_v_w, NULL, -1,
+			0, -1, 1, "T-U-V-W", -1);
+	gtk_tree_store_insert_with_values(store, &iter_x_y_z,   NULL, -1,
+			0, -1, 1, "X-Y-Z", -1);
+
+	foreach_slist (node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
+
+		if (ft->group == GEANY_FILETYPE_GROUP_OTHER)
+		{
+			gtk_tree_store_insert_with_values(store, &iter_other,   NULL, -1,
+					0, -1, 1, _("Other"), -1);
+			break;
+		}
+	}
 
 	foreach_slist (node, filetypes_by_title)
 	{
@@ -237,10 +262,17 @@ static GtkWidget *create_filetype_combo_box(void)
 
 		switch (ft->group)
 		{
-			case GEANY_FILETYPE_GROUP_COMPILED: iter_parent = &iter_compiled; break;
-			case GEANY_FILETYPE_GROUP_SCRIPT: iter_parent = &iter_script; break;
-			case GEANY_FILETYPE_GROUP_MARKUP: iter_parent = &iter_markup; break;
-			case GEANY_FILETYPE_GROUP_MISC: iter_parent = &iter_misc; break;
+			case GEANY_FILETYPE_GROUP_A_B:     iter_parent = &iter_a_b;     break;
+			case GEANY_FILETYPE_GROUP_C:       iter_parent = &iter_c;       break;
+			case GEANY_FILETYPE_GROUP_D_E_F:   iter_parent = &iter_d_e_f;   break;
+			case GEANY_FILETYPE_GROUP_G_H_I:   iter_parent = &iter_g_h_i;   break;
+			case GEANY_FILETYPE_GROUP_J_K_L:   iter_parent = &iter_j_k_l;   break;
+			case GEANY_FILETYPE_GROUP_M_N_O:   iter_parent = &iter_m_n_o;   break;
+			case GEANY_FILETYPE_GROUP_P_Q:     iter_parent = &iter_p_q;     break;
+			case GEANY_FILETYPE_GROUP_R_S:     iter_parent = &iter_r_s;     break;
+			case GEANY_FILETYPE_GROUP_T_U_V_W: iter_parent = &iter_t_u_v_w; break;
+			case GEANY_FILETYPE_GROUP_X_Y_Z:   iter_parent = &iter_x_y_z;   break;
+			case GEANY_FILETYPE_GROUP_OTHER:   iter_parent = &iter_other;   break;
 			case GEANY_FILETYPE_GROUP_NONE:
 			default: iter_parent = NULL;
 		}
