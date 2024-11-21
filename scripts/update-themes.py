@@ -104,4 +104,12 @@ for theme in source_themes:
     shutil.copy(theme, dstdir)
 
 if new_theme:
-    print("Don't forget to add the newly added themes to data/Makefile.am !!!")
+    print("\nDon't forget to add the newly added themes to data/Makefile.am !!!")
+
+os.chdir(dstdir)
+dst_themes = glob.glob('*.conf')
+
+extra_dst_themes = set(dst_themes) - set(source_themes)
+if extra_dst_themes:
+    print((f'\nWarning: themes {extra_dst_themes} found in Geany themes directory but not in geany-themes. '
+           f'Should these be added to geany-themes?'))
