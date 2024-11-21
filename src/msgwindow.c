@@ -70,7 +70,7 @@ enum
 	MSG_COL_LINE = 0,
 	MSG_COL_DOC_ID,
 	MSG_COL_COLOR,
-	MSG_COL_STRING,
+	MSG_COL_MARKUP,
 	MSG_COL_COUNT
 };
 
@@ -233,7 +233,7 @@ static void prepare_msg_tree_view(void)
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
-		"foreground-gdk", MSG_COL_COLOR, "text", MSG_COL_STRING, NULL);
+		"foreground-gdk", MSG_COL_COLOR, "markup", MSG_COL_MARKUP, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
 
 	gtk_tree_view_set_search_column(GTK_TREE_VIEW(msgwindow.tree_msg), MSG_COL_STRING);
@@ -426,11 +426,33 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
  * @param string    Message to be added.
  *
  * @see msgwin_msg_add()
- *
  * @since 1.34 (API 236)
  **/
 GEANY_API_SYMBOL
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
+{
+	gchar *tmp = g_markup_escape_text(string, -1);
+	
+	msgwin_msg_add_markup(msg_color, line, doc, tmp);
+	g_free(tmp);
+}
+
+
+/* *
+ * Adds a new message in the messages tab treeview in the messages window.
+ *
+ * If @a line and @a doc are set, clicking on this line jumps into the
+ * file which is specified by @a doc into the line specified with @a line.
+ *
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param line      The document's line where the message belongs to. Set to @c -1 to ignore.
+ * @param doc       @nullable The document. Set to @c NULL to ignore.
+ * @param markup    Marked up text to be added.
+ *
+ * @see msgwin_msg_add_string()
+ * @since ???
+ **/
+void msgwin_msg_add_markup(gint msg_color, gint line, GeanyDocument *doc, const gchar *markup)
 {
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
@@ -444,12 +466,12 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
 	 * cut the string to a maximum of 1024 bytes and discard the rest */
 	/* TODO: find the real cause for the display problem / if it is GtkTreeView file a bug report */
-	len = strlen(string);
+	len = strlen(markup);
 	if (len > 1024)
-		tmp = g_strndup(string, 1024);
+		tmp = g_strndup(markup, 1024);
 	else
-		tmp = g_strdup(string);
-
+		tmp = g_strdup(markup);
+	
 	if (! g_utf8_validate(tmp, -1, NULL))
 		utf8_msg = utils_get_utf8_from_locale(tmp);
 	else
@@ -458,7 +480,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter,
 		MSG_COL_LINE, line, MSG_COL_DOC_ID, doc ? doc->id : 0, MSG_COL_COLOR,
-		color, MSG_COL_STRING, utf8_msg, -1);
+		color, MSG_COL_MARKUP, utf8_msg, -1);
 
 	g_free(tmp);
 	if (utf8_msg != tmp)
@@ -562,7 +584,7 @@ on_compiler_treeview_copy_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 		case MSG_MESSAGE:
 		tv = msgwindow.tree_msg;
-		str_idx = MSG_COL_STRING;
+		str_idx = MSG_COL_MARKUP;
 		break;
 	}
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
@@ -572,6 +594,12 @@ on_compiler_treeview_copy_activate(GtkMenuItem *menuitem, gpointer user_data)
 		gchar *string;
 
 		gtk_tree_model_get(model, &iter, str_idx, &string, -1);
+		if (str_idx == MSG_COL_MARKUP)
+		{
+			gchar *text = NULL;
+			pango_parse_markup(string, -1, 0, NULL, &text, NULL, NULL);
+			SETPTR(string, text);
+		}
 		if (!EMPTY(string))
 		{
 			gtk_clipboard_set_text(gtk_clipboard_get(gdk_atom_intern("CLIPBOARD", FALSE)),
@@ -603,7 +631,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 
 		case MSG_MESSAGE:
 		store = msgwindow.store_msg;
-		str_idx = MSG_COL_STRING;
+		str_idx = MSG_COL_MARKUP;
 		break;
 	}
 
@@ -614,6 +642,12 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 		gchar *line;
 
 		gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, str_idx, &line, -1);
+		if (str_idx == MSG_COL_MARKUP)
+		{
+			gchar *text = NULL;
+			pango_parse_markup(line, -1, 0, NULL, &text, NULL, NULL);
+			SETPTR(line, text);
+		}
 		if (!EMPTY(line))
 		{
 			g_string_append(str, line);
@@ -1164,7 +1198,7 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 		GeanyDocument *old_doc = document_get_current();
 
 		gtk_tree_model_get(model, &iter,
-			MSG_COL_LINE, &line, MSG_COL_DOC_ID, &id, MSG_COL_STRING, &string, -1);
+			MSG_COL_LINE, &line, MSG_COL_DOC_ID, &id, MSG_COL_MARKUP, &string, -1);
 		if (line >= 0 && id > 0)
 		{
 			/* check doc is still open */
@@ -1184,6 +1218,10 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 		else if (line < 0 && string != NULL)
 		{
 			gchar *filename;
+			gchar *text = NULL;
+
+			pango_parse_markup(string, -1, 0, NULL, &text, NULL, NULL);
+			SETPTR(string, text);
 
 			/* try with a file:line parsing */
 			msgwin_parse_generic_line(string, &filename, &line);
