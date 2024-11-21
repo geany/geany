@@ -786,6 +786,40 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		}
 		g_free(locale_path);
 	}
+
+	gchar *project_file_dirname = g_path_get_dirname(locale_filename);
+
+	/* if the project file's directory doesn't exist, offer the user to create it */
+	if (! g_file_test(project_file_dirname, G_FILE_TEST_EXISTS))
+	{
+		gboolean create_dir = dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
+			_("Create the project's Filename directory?"),
+			_("The path \"%s\" does not exist."),
+			project_file_dirname);
+
+		/* if the project file's directory doesn't exist and the user wants to try and create it */
+		if (create_dir)
+		{
+			/* try and create the project file's directory recursively */
+			err_code = utils_mkdir(project_file_dirname, TRUE);
+			if (err_code != 0)
+			{
+				SHOW_ERR1(_("Filename path could not be created (%s)."), g_strerror(err_code));
+				gtk_widget_grab_focus(e->file_name);
+				utils_free_pointers(2, project_file_dirname, locale_filename, NULL);
+				return FALSE;
+			}
+		}
+		else
+		{
+			gtk_widget_grab_focus(e->file_name);
+			utils_free_pointers(2, project_file_dirname, locale_filename, NULL);
+			return FALSE;
+		}
+	}
+
+	g_free(project_file_dirname);
+
 	/* finally test whether the given project file can be written */
 	if ((err_code = utils_is_file_writable(locale_filename)) != 0 ||
 		(err_code = g_file_test(locale_filename, G_FILE_TEST_IS_DIR) ? EISDIR : 0) != 0)
