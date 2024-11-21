@@ -12,6 +12,7 @@ themes = [
 
     # MIT
     'earthsong.conf',
+    'kurayami.conf',
     'one-dark.conf',
     'solarized-dark.conf',
     'solarized-light.conf',
@@ -21,6 +22,7 @@ themes = [
     'pygments.conf',
 
     # GPL 2 or later
+    'alt.conf',
     'black.conf',
     'darcula.conf',
     'dark-colors.conf',
@@ -64,7 +66,6 @@ ignored = [
     'fluffy.conf',
     'kary-pro-colors-dark.conf',
     'kary-pro-colors-light.conf',
-    'kurayami.conf',  # original license MIT but no license of the Geany variant
     'monokai.conf',
     'railcasts2.conf',
     'tango-dark.conf',

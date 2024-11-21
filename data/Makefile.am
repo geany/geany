@@ -22,6 +22,7 @@ colorschemes = \
 	colorschemes/himbeere.conf \
 	colorschemes/inkpot.conf \
 	colorschemes/kugel.conf \
+	colorschemes/kurayami.conf \
 	colorschemes/matcha.conf \
 	colorschemes/mc.conf \
 	colorschemes/metallic-bottle.conf \
