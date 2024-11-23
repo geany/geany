@@ -1300,6 +1300,8 @@ static void queue_free(GQueue *queue)
 
 static gboolean do_main_quit(void)
 {
+	g_signal_emit_by_name(geany_object, "geany-before-quit");
+
 	configuration_save();
 
 	if (app->project != NULL)
