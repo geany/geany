@@ -1289,8 +1289,6 @@ static gboolean do_main_quit(void)
 
 	geany_debug("Quitting...");
 
-	main_status.quitting = TRUE;
-
 #ifdef HAVE_SOCKET
 	socket_finalize();
 #endif
