@@ -135,9 +135,9 @@ module testbench;
     generate
         for (genvar j = 0; j < NUM_UUT; j++) begin : uut_gen
             logic [UUT_WIDTH-1:0] data_out;
-            a_module #( // NB: this SHOULDN'T be detected as a module declaration (ctags bug)
+            a_module #(
                 .WIDTH (UUT_WIDTH)
-            ) uut ( // but this should be detected as an instance (ctags works)
+            ) uut (
                 .valid (valid_uut[j]),
                 .*
             );

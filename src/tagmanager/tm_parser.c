@@ -1649,6 +1649,9 @@ gboolean tm_parser_enable_role(TMParserType lang, gchar kind)
 			 * tags and we can't tell which is which just by kind. By disabling
 			 * roles for this kind, we only get package definition tags. */
 			return kind != 'p';
+		case TM_PARSER_VERILOG:
+		case TM_PARSER_SYSVERILOG:
+			return kind != 'm';
 	}
 	return TRUE;
 }
