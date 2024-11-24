@@ -1,0 +1,18 @@
+DUMMY1Ì65536Ö0
+macro:      DUMMY1
+DUMMY2Ì65536Ö0
+macro:      DUMMY2
+buzz?Ì16Ö0
+function:   buzz?
+do-fizz-buzzÌ16Ö0
+function:   do-fizz-buzz
+dummy3Ì16384Ö0
+variable:   dummy3
+dummy4Ì16384Ö0
+variable:   dummy4
+dummy5Ì16384Ö0
+variable:   dummy5
+fizz-buzz?Ì16Ö0
+function:   fizz-buzz?
+fizz?Ì16Ö0
+function:   fizz?

@@ -307,6 +307,7 @@ test_sources = \
 	simple.d						\
 	simple.diff						\
 	simple.docbook					\
+	simple.fth						\
 	simple.hs						\
 	simple.hx						\
 	simple.html						\
