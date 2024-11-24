@@ -4261,6 +4261,35 @@ manual format is:
 
 * ``key=foreground_color;background_color;bold_flag;italic_flag``
 
+``key``
+*******
+
+The ``key`` is the name of a lexical class ("style") valid for the associated
+lexer.
+
+.. _sub-styles:
+
+Some specific lexical classes can be "sub-classed": in association with an
+identically-named key in the `[keywords] section`_, it is possible to define
+several variants of that lexical class.  Those are in the form ``class.N``,
+where ``class`` is the base lexical class name, and ``N`` a plain integer
+starting from 1.
+These "sub-styles" will be used when the regular lexical class would match the
+base class, but that specific instance matches one of the associated keywords,
+effectively allowing to have a large and dynamic set of separately-styled
+keywords.
+
+Note that the values of ``N`` must start at 1 for each lexical class, and must
+be in 1-increments: e.g. it is not allowed to define ``class.1`` and
+``class.3`` omitting ``class.2``.  Any such gap will result in the following
+sub-classes to be ignored.
+
+The maximum number of possible sub-styles also depends on the lexer, but it is
+usually 64 in total, all lexical classes combined.
+
+Value
+*****
+
 Colors have to be specified as RGB hex values prefixed by
 0x or # similar to HTML/CSS hex triplets. For example, all of the following
 are valid values for pure red; 0xff0000, 0xf00, #ff0000, or #f00.  The
@@ -4280,7 +4309,7 @@ This makes the key style have red foreground text, default background
 color text and bold emphasis.
 
 Using a named style
-*******************
++++++++++++++++++++
 The second format uses a *named style* name to reference a style
 defined in filetypes.common.
 
@@ -4327,9 +4356,11 @@ the filetype. Some filetypes do not support keywords, so adding a
 new key will not work. You can only add or remove keywords to/from
 an existing list.
 
+This section also defines keywords for `sub-styles`_ when they have the form
+``class.N``.
+
 .. important::
     The keywords list must be in one line without line ending characters.
-
 
 [lexer_properties] section
 ``````````````````````````

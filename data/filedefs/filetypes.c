@@ -18,11 +18,14 @@ uuid=other
 preprocessor=preprocessor
 operator=operator
 identifier=identifier_1
+#identifier.1=keyword_3
+#identifier.2=keyword_4
 stringeol=string_eol
 verbatim=string_2
 regex=regex
 commentlinedoc=comment_line_doc
 commentdockeyword=comment_doc_keyword
+#commentdockeyword.1=comment_doc_keyword,bold
 commentdockeyworderror=comment_doc_keyword_error
 globalclass=class
 # """verbatim"""
@@ -37,6 +40,9 @@ primary=asm auto break case char const continue default do double else enum exte
 secondary=
 # these are the Doxygen keywords
 docComment=a addindex addtogroup anchor arg attention author authors b brief bug c callergraph callgraph category cite class code cond copybrief copydetails copydoc copyright date def defgroup deprecated details dir dontinclude dot dotfile e else elseif em endcode endcond enddot endhtmlonly endif endinternal endlatexonly endlink endmanonly endmsc endrtfonly endverbatim endxmlonly enum example exception extends file fn headerfile hideinitializer htmlinclude htmlonly if ifnot image implements include includelineno ingroup interface internal invariant latexonly li line link mainpage manonly memberof msc mscfile n name namespace nosubgrouping note overload p package page par paragraph param post pre private privatesection property protected protectedsection protocol public publicsection ref related relatedalso relates relatesalso remark remarks result return returns retval rtfonly sa section see short showinitializer since skip skipline snippet struct subpage subsection subsubsection tableofcontents test throw throws todo tparam typedef union until var verbatim verbinclude version warning weakgroup xmlonly xrefitem
+#identifier.1=
+#identifier.2=
+#commentdockeyword.1=
 
 [lexer_properties]
 styling.within.preprocessor=1

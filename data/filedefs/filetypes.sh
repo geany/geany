@@ -9,15 +9,27 @@ string=string_1
 character=character
 operator=operator
 identifier=identifier
+#identifier.1=keyword_2
+#identifier.2=keyword_3
+#identifier.3=keyword_4
 backticks=backticks
 param=parameter
 scalar=identifier_1
+#scalar.1=identifier_2
+#scalar.2=identifier_3
+#scalar.3=identifier_4
 error=error
 here_delim=here_doc
 here_q=here_doc
 
 [keywords]
 primary=break case continue do done elif else esac eval exit export fi for function goto if in integer return set shift then until while
+#identifier.1=
+#identifier.2=
+#identifier.3=
+#scalar.1=
+#scalar.2=
+#scalar.3=
 
 
 [settings]
