@@ -799,8 +799,8 @@ static TMParserMapGroup group_VERILOG[] = {
 	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t | tm_tag_union_t},
 	{N_("Package"), TM_ICON_NAMESPACE, tm_tag_package_t},
 	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
-	{N_("Structs"), TM_ICON_STRUCT, tm_tag_struct_t},
-	{N_("Typedefs / Enums"), TM_ICON_STRUCT, tm_tag_typedef_t | tm_tag_enum_t},
+	{N_("Structs / Unions / Enums"), TM_ICON_OTHER, tm_tag_struct_t | tm_tag_enum_t},
+	{N_("Typedefs"), TM_ICON_STRUCT, tm_tag_typedef_t},
 };
 
 static TMParserMapEntry map_SYSVERILOG[] = {
@@ -1649,6 +1649,9 @@ gboolean tm_parser_enable_role(TMParserType lang, gchar kind)
 			 * tags and we can't tell which is which just by kind. By disabling
 			 * roles for this kind, we only get package definition tags. */
 			return kind != 'p';
+		case TM_PARSER_VERILOG:
+		case TM_PARSER_SYSVERILOG:
+			return kind != 'm';
 	}
 	return TRUE;
 }

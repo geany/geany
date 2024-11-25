@@ -24,8 +24,6 @@ WIDTHÌ8Îa_moduleÖ0
 field:      a_module :: WIDTH
 a_moduleÌ1024Ö0
 prototype:  a_module
-a_moduleÌ1024Îtestbench.uut_genÖ0
-prototype:  testbench.uut_gen :: a_module
 be_filteredÌ16384Îa_moduleÖ0
 variable:   a_module :: be_filtered
 be_filtered_genÌ256Îa_moduleÖ0
@@ -74,8 +72,6 @@ gen_signalsÌ4ÎtestbenchÖ0Ïgenerate_signals
 enumerator: generate_signals testbench :: gen_signals
 generate_signalsÌ1024Ö0
 prototype:  generate_signals
-generate_signalsÌ1024ÎtestbenchÖ0
-prototype:  testbench :: generate_signals
 iÌ16384Îa_moduleÖ0
 variable:   a_module :: i
 iÌ16384Îa_module.main_blockÖ0
