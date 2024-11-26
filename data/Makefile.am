@@ -57,6 +57,7 @@ filetypes_dist = \
 	filedefs/filetypes.makefile \
 	filedefs/filetypes.markdown \
 	filedefs/filetypes.matlab \
+	filedefs/filetypes.nix \
 	filedefs/filetypes.Meson.conf \
 	filedefs/filetypes.nim \
 	filedefs/filetypes.nsis \

@@ -1327,6 +1327,7 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 		case SCLEX_PASCAL:	/* for multiline comments? */
 		case SCLEX_BASH:
 		case SCLEX_PERL:
+		case SCLEX_NIX:
 		case SCLEX_TCL:
 		case SCLEX_R:
 		case SCLEX_RAKU:
