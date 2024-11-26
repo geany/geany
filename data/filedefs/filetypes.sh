@@ -19,6 +19,11 @@ here_q=here_doc
 [keywords]
 primary=break case continue do done elif else esac eval exit export fi for function goto if in integer return set shift then until while
 
+[lexer_properties]
+lexer.bash.styling.inside.string=1
+lexer.bash.styling.inside.backticks=1
+lexer.bash.styling.inside.parameter=1
+lexer.bash.command.substitution=1
 
 [settings]
 # default extension used when saving files
