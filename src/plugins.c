@@ -1922,7 +1922,8 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(swin), pm_widgets.tree);
 
-	label = geany_wrap_label_new(_("Choose which plugins should be loaded at startup:"));
+	label = gtk_label_new(_("Choose which plugins to load:"));
+	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 	/* plugin popup menu */
 	pm_widgets.popup_menu = gtk_menu_new();
