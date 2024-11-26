@@ -196,7 +196,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( CMAKE,        NONE,         "CMake",            NULL                      );
 	FT_INIT( NSIS,         NSIS,         "NSIS",             NULL                      );
 	FT_INIT( ADA,          ADA,          "Ada",              NULL                      );
-	FT_INIT( FORTH,        NONE,         "Forth",            NULL                      );
+	FT_INIT( FORTH,        FORTH,        "Forth",            NULL                      );
 	FT_INIT( ASCIIDOC,     ASCIIDOC,     "Asciidoc",         NULL                      );
 	FT_INIT( ABAQUS,       ABAQUS,       "Abaqus",           NULL                      );
 	FT_INIT( BATCH,        BATCH,        "Batch",            NULL                      );

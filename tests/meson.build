@@ -304,6 +304,7 @@ ctags_tests = [
 	'ctags/simple.d.tags',
 	'ctags/simple.diff.tags',
 	'ctags/simple.docbook.tags',
+	'ctags/simple.fth.tags',
 	'ctags/simple.hs.tags',
 	'ctags/simple.hx.tags',
 	'ctags/simple.html.tags',
