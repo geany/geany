@@ -1683,17 +1683,6 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_TOML_TRIPLE_STRING_SQ ||
 				style == SCE_TOML_TRIPLE_STRING_DQ);
 
-		case SCLEX_BATCH:
-		case SCLEX_DIFF:
-		case SCLEX_LATEX:
-		case SCLEX_MAKEFILE:
-		case SCLEX_MARKDOWN:
-		case SCLEX_PROPERTIES:
-		case SCLEX_TXT2TAGS:
-		case SCLEX_YAML:
-			/* there is no string type in those lexers, listing here just for completeness */
-			return FALSE;
-
 		case SCLEX_AU3:
 			return (style == SCE_AU3_STRING);
 
@@ -1724,6 +1713,17 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 			return (style == SCE_NIX_STRING ||
 				style == SCE_NIX_STRING_MULTILINE ||
 				style == SCE_NIX_ESCAPECHAR);
+
+		case SCLEX_BATCH:
+		case SCLEX_DIFF:
+		case SCLEX_LATEX:
+		case SCLEX_MAKEFILE:
+		case SCLEX_MARKDOWN:
+		case SCLEX_PROPERTIES:
+		case SCLEX_TXT2TAGS:
+		case SCLEX_YAML:
+			/* there is no string type in those lexers, listing here just for completeness */
+			return FALSE;
 	}
 	return FALSE;
 }
