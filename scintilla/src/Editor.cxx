@@ -6204,6 +6204,7 @@ sptr_t Editor::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam) {
 			sel.Clear();
 			sel.selType = Selection::SelTypes::stream;
 			SetSelection(nEnd, nStart);
+			SetLastXChosen();
 			EnsureCaretVisible();
 		}
 		break;
@@ -6602,6 +6603,7 @@ sptr_t Editor::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case Message::SetSelectionStart:
 		SetSelection(std::max(sel.MainCaret(), PositionFromUPtr(wParam)), PositionFromUPtr(wParam));
+		SetLastXChosen();
 		break;
 
 	case Message::GetSelectionStart:
@@ -6609,6 +6611,7 @@ sptr_t Editor::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case Message::SetSelectionEnd:
 		SetSelection(PositionFromUPtr(wParam), std::min(sel.MainAnchor(), PositionFromUPtr(wParam)));
+		SetLastXChosen();
 		break;
 
 	case Message::GetSelectionEnd:
@@ -6616,6 +6619,7 @@ sptr_t Editor::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case Message::SetEmptySelection:
 		SetEmptySelection(PositionFromUPtr(wParam));
+		SetLastXChosen();
 		break;
 
 	case Message::SetPrintMagnification:
@@ -6657,6 +6661,7 @@ sptr_t Editor::WndProc(Message iMessage, uptr_t wParam, sptr_t lParam) {
 
 	case Message::SelectAll:
 		SelectAll();
+		SetLastXChosen();
 		break;
 
 	case Message::SetSavePoint:
