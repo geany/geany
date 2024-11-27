@@ -863,11 +863,12 @@ static gboolean auto_save(gpointer data)
 
 static void autosave_set_timeout(void)
 {
+	if (autosave_src_id != 0)
+		g_source_remove(autosave_src_id);
+
 	if (! enable_autosave)
 		return;
 
-	if (autosave_src_id != 0)
-		g_source_remove(autosave_src_id);
 	autosave_src_id = g_timeout_add(autosave_interval * 1000, (GSourceFunc) auto_save, NULL);
 }
 
@@ -958,8 +959,8 @@ void plugin_init(GeanyData *data)
 	autosave_interval = utils_get_setting_integer(config, "autosave", "interval", 300);
 	autosave_print_msg = utils_get_setting_boolean(config, "autosave", "print_messages", FALSE);
 	autosave_save_all = utils_get_setting_boolean(config, "autosave", "save_all", FALSE);
-	if (enable_autosave)
-		autosave_set_timeout();
+
+	autosave_set_timeout();
 
 	backupcopy_dir_levels = utils_get_setting_integer(config, "backupcopy", "dir_levels", 0);
 	backupcopy_time_fmt = utils_get_setting_string(
@@ -1213,8 +1214,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 
 		persistent_doc_files_updater_set_timeout();
 
-		if (enable_autosave)
-			autosave_set_timeout(); /* apply the changes */
+		autosave_set_timeout();
 
 		write_config_file_updates(config);
 
