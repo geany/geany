@@ -341,8 +341,8 @@ static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpoint
 
 		doc->file_name = new_filename;
 
-		if (ft != NULL && ft->id == GEANY_FILETYPES_NONE)
-			document_set_filetype(doc, filetypes_lookup_by_name(untitled_doc_default_ft));
+		if (ft != NULL)
+			document_set_filetype(doc, ft);
 
 		/* force saving the file to enable all the related actions(tab name, filetype, etc.) */
 		document_save_file(doc, TRUE);
@@ -386,11 +386,10 @@ static gboolean is_persistent_doc_file_path(const gchar *file_path_utf8)
 }
 
 
-static gchar* create_new_persistent_doc_file_name(GeanyDocument *doc)
+static gchar* create_new_persistent_doc_file_name(GeanyDocument *doc, GeanyFiletype *filetype)
 {
 	gint i;
 	gchar *extension_postfix;
-	GeanyFiletype *filetype = get_doc_filetype(doc);
 
 	if (filetype != NULL && !EMPTY(filetype->extension))
 		extension_postfix = g_strconcat(".", filetype->extension, NULL);
@@ -432,6 +431,7 @@ static void persistent_doc_new_cb(GObject *obj, GeanyDocument *doc, gpointer use
 	if (doc->file_name == NULL)
 	{
 		gchar *files_dir_utf8, *new_file_name_utf8, *new_file_path_utf8;
+		GeanyFiletype *ft;
 
 		if (EMPTY(persistent_docs_target_dir))
 		{
@@ -440,9 +440,11 @@ static void persistent_doc_new_cb(GObject *obj, GeanyDocument *doc, gpointer use
 			return;
 		}
 
-		new_file_name_utf8 = create_new_persistent_doc_file_name(doc);
+	 	ft = get_doc_filetype(doc);
+		new_file_name_utf8 = create_new_persistent_doc_file_name(doc, ft);
 
-		document_set_filetype(doc, filetypes_lookup_by_name(untitled_doc_default_ft));
+		if (ft != NULL)
+			document_set_filetype(doc, ft);
 
 		if (new_file_name_utf8 == NULL)
 		{
