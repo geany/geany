@@ -49,7 +49,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 enum
@@ -1145,6 +1144,42 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 	gtk_widget_show(fif_dlg.dialog);
 	/* bring the dialog back in the foreground in case it is already open but the focus is away */
 	gtk_window_present(GTK_WINDOW(fif_dlg.dialog));
+}
+
+
+/* like dialogs_show_question_full() but makes the non-cancel button default */
+gboolean search_show_wrap_dialog(GtkWidget *parent, const gchar *search_text)
+{
+	gboolean ret;
+	GtkWidget *dialog;
+	GtkWidget *btn;
+	gchar *question_text;
+
+	if (parent == NULL)
+		parent = main_widgets.window;
+
+	question_text = g_strdup_printf(_("\"%s\" was not found."), search_text);
+
+	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
+		GTK_BUTTONS_NONE, "%s", question_text);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
+
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+		"%s", _("Wrap search and find again?"));
+
+	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_NO);
+	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_FIND, GTK_RESPONSE_YES);
+	gtk_widget_grab_default(btn);
+
+	ret = gtk_dialog_run(GTK_DIALOG(dialog));
+
+	gtk_widget_destroy(dialog);
+	g_free(question_text);
+
+	return ret == GTK_RESPONSE_YES;
 }
 
 
