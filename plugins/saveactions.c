@@ -309,9 +309,9 @@ static GeanyFiletype *get_doc_filetype(GeanyDocument *doc)
 }
 
 
-static void instantsave_document_new_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
+static void instantsave_document_new(GeanyDocument *doc)
 {
-	if (doc->file_name == NULL)
+	if (doc->real_path == NULL)
 	{
 		const gchar *directory;
 		gchar *new_filename;
@@ -426,9 +426,9 @@ static gchar* create_new_persistent_doc_file_name(GeanyDocument *doc, GeanyFilet
 }
 
 
-static void persistent_doc_new_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
+static void persistent_doc_new(GeanyDocument *doc)
 {
-	if (doc->file_name == NULL)
+	if (doc->real_path == NULL)
 	{
 		gchar *files_dir_utf8, *new_file_name_utf8, *new_file_path_utf8;
 		GeanyFiletype *ft;
@@ -707,7 +707,7 @@ static gboolean save_on_focus_out_idle(gpointer p_cur_doc)
  * @return always FALSE = Non block signals
  *
  */
-static gboolean on_document_focus_out(GObject *object, GeanyEditor *editor,
+static gboolean on_editor_notify(GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, gpointer data)
 {
 	GeanyDocument *doc = editor->document;
@@ -720,6 +720,20 @@ static gboolean on_document_focus_out(GObject *object, GeanyEditor *editor,
 											&& is_persistent_doc_file_path(doc->file_name)))
 		{
 			plugin_idle_add(geany_plugin, save_on_focus_out_idle, doc);
+		}
+	}
+	else if (nt->nmhdr.code == SCN_MODIFIED &&
+		(nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)))
+	{
+		/* Untitled non-empty documents modified for the first time - empty
+		 * ones are handled by on_document_new() */
+		if (!doc->real_path && doc->changed)
+		{
+			if (enable_instantsave)
+				instantsave_document_new(doc);
+
+			if (enable_persistent_docs)
+				persistent_doc_new(doc);
 		}
 	}
 
@@ -739,11 +753,16 @@ static void on_document_save(GObject *obj, GeanyDocument *doc, gpointer user_dat
 
 static void on_document_new(GObject *obj, GeanyDocument *doc, gpointer user_data)
 {
+	/* We are only interested in empty new documents here. Other documents
+	 * such as templates are handled in on_editor_notify(). */
+	if (!document_is_empty(doc))
+		return;
+
 	if (enable_instantsave)
-		instantsave_document_new_cb(obj, doc, user_data);
+		instantsave_document_new(doc);
 
 	if (enable_persistent_docs)
-		persistent_doc_new_cb(obj, doc, user_data);
+		persistent_doc_new(doc);
 }
 
 
@@ -816,7 +835,7 @@ PluginCallback plugin_callbacks[] =
 	{ "document-before-save-as", (GCallback) &persistent_doc_before_save_as_cb, FALSE, NULL },
 	{ "document-save", (GCallback) &on_document_save, FALSE, NULL },
 	{ "document-activate", (GCallback) &on_document_activate, FALSE, NULL },
-	{ "editor-notify", (GCallback) &on_document_focus_out, FALSE, NULL },
+	{ "editor-notify", (GCallback) &on_editor_notify, FALSE, NULL },
 	{ "project-open", (GCallback) &on_project_open, FALSE, NULL },
 	{ "project-before-close", (GCallback) &on_project_before_close, FALSE, NULL },
 	{ NULL, NULL, FALSE, NULL }
