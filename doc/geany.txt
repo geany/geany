@@ -5371,22 +5371,11 @@ a given delay.
 
 
 Save on focus out
-^^^^^^^^^^^^^^^^^
+`````````````````
 
 You can save the current document when the editor's focus goes out.
 Every pop-up, menu dialogs, or anything else that can make the editor lose the focus,
 will make the current document to be saved.
-
-
-Instant Save
-^^^^^^^^^^^^
-This plugin sets on every new file (*File->New* or *File->New (with template)*)
-a randomly chosen filename and set its filetype appropriate to the used template
-or when no template was used, to a configurable default filetype.
-This enables you to quickly compile, build and/or run the new file without the
-need to give it an explicit filename using the Save As dialog. This might be
-useful when you often create new files just for testing some code or something
-similar.
 
 
 Backup Copy
@@ -5415,6 +5404,37 @@ For example, setting the option
 *Directory levels to include in the backup destination* to *2*
 cause the plugin to create the last two components of the original
 file's path in the backup copy path and place the new file there.
+
+
+Untitled Document Save
+^^^^^^^^^^^^^^^^^^^^^^
+
+This configuration allows to automatically create an underlying file for newly-opened editor tabs
+(or when using *File->New* or *File->New (with template)*).
+File type is set appropriately to the used template.
+When no template is used - filetype will be determined by the configurable default
+value. Such functionality is useful when user often creates new files just for quick
+editing, taking notes, testing code etc.
+
+Instant Save
+````````````
+
+In this mode, for each new editor tab opened by the user, the plugin creates a new
+file with randomly generated name inside the configured directory.
+This enables users to quickly compile, build and/or run the new file without the
+need to assign an explicit filename through the Save As dialog.
+
+By default, the operating system temporary directory is used so files are cleaned up after reboot.
+
+Persistent Untitled Documents
+`````````````````````````````
+
+Unlike Instant Save, which treats untitled documents as temporary files that are automatically deleted,
+untitled documents in this mode behave more like ordinary files that are stored permanently.
+Users do not have to worry about saving or restoring such files by themselves - all untitled
+documents are auto-saved at regular intervals and restored on Geany start or when opening/closing projects.
+
+By default, files backing untitled documents in this mode are stored under the Geany configuration directory.
 
 
 Contributing to this document
