@@ -45,13 +45,17 @@ grep
 gtk-update-icon-cache
 harfbuzz
 hicolor-icon-theme
+lerc
 libdatrie
+libdeflate
 libepoxy
 libffi
 libiconv
+libjpeg-turbo
 libpng
 librsvg
 libthai
+libtiff
 libwinpthread-git
 libxml2
 pango
