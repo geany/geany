@@ -1439,7 +1439,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 0);
 
 		label = gtk_label_new_with_mnemonic(
-			_("Date/_Time format for backup files (for a list of available conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format.html):"));
+			_("Date/_Time format for backup files (see https://docs.gtk.org/glib/method.DateTime.format.html):"));
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 7);
 
@@ -1528,9 +1528,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 0);
 
 		help_label = gtk_label_new(
-			_("<i>If you set the Instant Save directory to a directory "
-				"which is not automatically cleared,\nyou will need to cleanup instantly saved files "
-				"manually. The Instant Save plugin will not delete the created files.</i>"));
+			_("<i>The plugin will not delete the files created in this directory.</i>"));
 		gtk_label_set_use_markup(GTK_LABEL(help_label), TRUE);
 		gtk_misc_set_alignment(GTK_MISC(help_label), 0, 0.5);
 		gtk_widget_set_margin_left(help_label, 12);
