@@ -92,6 +92,17 @@ signal void (*document_reload)(GObject *obj, GeanyDocument *doc, gpointer user_d
  */
 signal void (*document_before_save)(GObject *obj, GeanyDocument *doc, gpointer user_data);
 
+/** Sent before save as is performed with the original document.
+ *
+ * @param obj a GeanyObject instance, should be ignored.
+ * @param doc the original document. The document with the new file name is still
+ *        reported by the "document-save" signal sent afterwards.
+ * @param user_data user data.
+ *
+ * @since 2.1
+ */
+signal void (*document_before_save_as)(GObject *obj, GeanyDocument *doc, gpointer user_data);
+
 /** Sent when a new document is saved.
  *
  * @param obj a GeanyObject instance, should be ignored.
@@ -238,7 +249,7 @@ signal void (*update_editor_menu)(GObject *obj, const gchar *word, gint pos, Gea
  *
  * E.g. Character added, fold level changes, clicks to the line number margin.
  * A detailed description of possible notifications and the SCNotification can be found at
- * http://www.scintilla.org/ScintillaDoc.html#Notifications.
+ * https://www.scintilla.org/ScintillaDoc.html#Notifications.
  *
  * If you connect to this signal, you must check @c nt->nmhdr.code for the notification type
  * to prevent handling unwanted notifications. This is important because for instance SCN_UPDATEUI

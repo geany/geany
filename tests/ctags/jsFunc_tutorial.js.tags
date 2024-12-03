@@ -1,27 +1,27 @@
-Ball1Ã16Õ()÷0
-function:   Ball1()
-Ball3Ã16Õ()÷0
-function:   Ball3()
-D1Ã16Õ(a, b)÷0
-function:   D1(a, b)
-D2Ã16Õ(a, b)÷0
-function:   D2(a, b)
-D2AÃ16Õ(a, b)÷0
-function:   D2A(a, b)
-D3Ã16÷0
-function:   D3
-D4Ã16÷0
-function:   D4
-D5Ã16Õ(myOperator)÷0
-function:   D5(myOperator)
-DT1Ã16Õ()÷0
-function:   DT1()
-DT2Ã16Õ(message)÷0
-function:   DT2(message)
-DT2AÃ16Õ(message)÷0
-function:   DT2A(message)
-DT3Ã16Õ()÷0
-function:   DT3()
+Ball1Ã1Õ()÷0
+class:      Ball1()
+Ball3Ã1Õ()÷0
+class:      Ball3()
+D1Ã1Õ(a, b)÷0
+class:      D1(a, b)
+D2Ã1Õ(a, b)÷0
+class:      D2(a, b)
+D2AÃ1Õ(a, b)÷0
+class:      D2A(a, b)
+D3Ã1÷0
+class:      D3
+D4Ã1÷0
+class:      D4
+D5Ã1Õ(myOperator)÷0
+class:      D5(myOperator)
+DT1Ã1Õ()÷0
+class:      DT1()
+DT2Ã1Õ(message)÷0
+class:      DT2(message)
+DT2AÃ1Õ(message)÷0
+class:      DT2A(message)
+DT3Ã1Õ()÷0
+class:      DT3()
 DT4Ã1Õ(message, specifiedName)÷0
 class:      DT4(message, specifiedName)
 DT5Ã1Õ(color, specifiedName, owner, weight)÷0
@@ -36,26 +36,28 @@ DT8Ã1Õ(name, salary)÷0
 class:      DT8(name, salary)
 DT9Ã1Õ(name, salary)÷0
 class:      DT9(name, salary)
-PT1Ã16Õ()÷0
-function:   PT1()
+PT1Ã1Õ()÷0
+class:      PT1()
 PT2Ã1Õ(name, color)÷0
 class:      PT2(name, color)
 PT3Ã1Õ(name, salary)÷0
 class:      PT3(name, salary)
 addÃ16Õ(a,b)ŒmyObject÷0
 function:   myObject :: add(a,b)
+addÃ16384÷0
+variable:   add
 addSalaryÃ128Õ(addition)ŒPT3÷0
 method:     PT3 :: addSalary(addition)
-addSalaryFunctionÃ1Õ(addition)÷0
-class:      addSalaryFunction(addition)
-addSalaryFunctionDT9Ã1Õ(addition)÷0
-class:      addSalaryFunctionDT9(addition)
+addSalaryFunctionÃ16Õ(addition)÷0
+function:   addSalaryFunction(addition)
+addSalaryFunctionDT9Ã16Õ(addition)÷0
+function:   addSalaryFunctionDT9(addition)
 ball0Ã16384÷0
 variable:   ball0
 ball1Ã16384÷0
 variable:   ball1
-ball2Ã1÷0
-class:      ball2
+ball2Ã16384÷0
+variable:   ball2
 ball3Ã16384÷0
 variable:   ball3
 ball4Ã16384÷0
@@ -104,6 +106,8 @@ livesInÃ128ŒPT2÷0
 method:     PT2 :: livesIn
 managerÃ16384÷0
 variable:   manager
+multiplyÃ16384÷0
+variable:   multiply
 myFunction4Ã16Õ(message)÷0
 function:   myFunction4(message)
 myFunction5Ã16Õ()÷0
@@ -118,22 +122,36 @@ myFunction6BÃ16Õ()÷0
 function:   myFunction6B()
 myFunction6EÃ16Õ()÷0
 function:   myFunction6E()
-myObjectÃ1÷0
-class:      myObject
+myObjectÃ16384÷0
+variable:   myObject
 my_global_var1Ã16384÷0
 variable:   my_global_var1
-object1Ã1÷0
-class:      object1
-object2Ã1÷0
-class:      object2
-object3Ã1÷0
-class:      object3
+object1Ã16384÷0
+variable:   object1
+object2Ã16384÷0
+variable:   object2
+object3Ã16384÷0
+variable:   object3
 priceÃ128ŒPT2÷0
 method:     PT2 :: price
+ptrÃ16384÷0
+variable:   ptr
+ptr1Ã16384÷0
+variable:   ptr1
+ptr2Ã16384÷0
+variable:   ptr2
+resultStringÃ16384÷0
+variable:   resultString
+savedFuncÃ16384÷0
+variable:   savedFunc
 savedFunc6BÃ16Õ()÷0
 function:   savedFunc6B()
+savedFunctionÃ16384÷0
+variable:   savedFunction
 sayName4AÃ16Õ(name)÷0
 function:   sayName4A(name)
+subtractÃ16384÷0
+variable:   subtract
 teamLeaderÃ16384÷0
 variable:   teamLeader
 theAddÃ16Õ(a, b)÷0

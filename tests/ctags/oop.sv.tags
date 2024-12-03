@@ -1,0 +1,118 @@
+ANSWER_TO_LIFEÃ16384Œoop÷0
+variable:   oop :: ANSWER_TO_LIFE
+APPROX_PIÃ8Œoop÷0
+field:      oop :: APPROX_PI
+MACROÃ65536Œoop÷0
+macro:      oop :: MACRO
+TÃ8Œoop.ifclass÷0
+field:      oop.ifclass :: T
+a_classÃ1Œoop÷0
+class:      oop :: a_class
+controlÃ64Œoop.union_t÷0
+member:     oop.union_t :: control
+cs_nÃ16384Œoop.spi÷0
+variable:   oop.spi :: cs_n
+dataÃ64Œoop.struct_t÷0
+member:     oop.struct_t :: data
+dataÃ64Œoop.union_t÷0
+member:     oop.union_t :: data
+disable_csÃ16Œoop.spi÷0
+function:   oop.spi :: disable_cs
+display_intÃ16Œoop÷0
+function:   oop :: display_int
+do_somethingÃ16Œoop.vclass÷0
+function:   oop.vclass :: do_something
+driverÃ32768Œoop.resolve_nettype÷0
+externvar:  oop.resolve_nettype :: driver
+e_memberÃ2Œoop.other_class÷0
+enum:       oop.other_class :: e_member
+enable_csÃ16Œoop.spi÷0
+function:   oop.spi :: enable_cs
+enum_tÃ4096Œoop÷0
+typedef:    oop :: enum_t
+et_memberÃ16384Œoop.other_class÷0
+variable:   oop.other_class :: et_member
+get_valueÃ16Œoop.a_class÷0
+function:   oop.a_class :: get_value
+get_valueÃ16Œoop.ifclass÷0
+function:   oop.ifclass :: get_value
+goÃ8Œoop.other_class.e_member÷0
+field:      oop.other_class.e_member :: go
+greenÃ8Œoop.enum_t÷0
+field:      oop.enum_t :: green
+ifclassÃ1Œoop÷0
+class:      oop :: ifclass
+masterÃ8192Œoop.spi÷0
+union:      oop.spi :: master
+misoÃ16384Œoop.spi÷0
+variable:   oop.spi :: miso
+mosiÃ16384Œoop.spi÷0
+variable:   oop.spi :: mosi
+net_tÃ4096Œoop÷0
+typedef:    oop :: net_t
+oopÃ512÷0
+package:    oop
+other_classÃ1Œoop÷0
+class:      oop :: other_class
+parityÃ64Œoop.struct_t÷0
+member:     oop.struct_t :: parity
+print_valueÃ16Œoop.a_class÷0
+function:   oop.a_class :: print_value
+put_valueÃ16Œoop.a_class÷0
+function:   oop.a_class :: put_value
+readyÃ8Œoop.other_class.e_member÷0
+field:      oop.other_class.e_member :: ready
+redÃ8Œoop.enum_t÷0
+field:      oop.enum_t :: red
+resolve_nettypeÃ16Œoop÷0
+function:   oop :: resolve_nettype
+s_aÃ64Œoop.other_class.s_member÷0
+member:     oop.other_class.s_member :: s_a
+s_bÃ64Œoop.other_class.s_member÷0
+member:     oop.other_class.s_member :: s_b
+s_cÃ64Œoop.other_class.s_member÷0
+member:     oop.other_class.s_member :: s_c
+s_memberÃ2048Œoop.other_class÷0
+struct:     oop.other_class :: s_member
+s_strÃ64Œoop.other_class.s_member÷0
+member:     oop.other_class.s_member :: s_str
+sclkÃ16384Œoop.spi÷0
+variable:   oop.spi :: sclk
+set_valueÃ16Œoop.ifclass÷0
+function:   oop.ifclass :: set_value
+slaveÃ8192Œoop.spi÷0
+union:      oop.spi :: slave
+spiÃ32Œoop÷0
+interface:  oop :: spi
+st_memberÃ16384Œoop.other_class÷0
+variable:   oop.other_class :: st_member
+steadyÃ8Œoop.other_class.e_member÷0
+field:      oop.other_class.e_member :: steady
+struct_tÃ4096Œoop÷0
+typedef:    oop :: struct_t
+u_aÃ64Œoop.other_class.u_member÷0
+member:     oop.other_class.u_member :: u_a
+u_bÃ64Œoop.other_class.u_member÷0
+member:     oop.other_class.u_member :: u_b
+u_memberÃ2048Œoop.other_class÷0
+struct:     oop.other_class :: u_member
+union_tÃ4096Œoop÷0
+typedef:    oop :: union_t
+ut_memberÃ16384Œoop.other_class÷0
+variable:   oop.other_class :: ut_member
+valueÃ16384Œoop.a_class÷0
+variable:   oop.a_class :: value
+value_plusÃ16Œoop.a_class÷0
+function:   oop.a_class :: value_plus
+vclassÃ1Œoop÷0
+class:      oop :: vclass
+xÃ32768Œoop.a_class.put_value÷0
+externvar:  oop.a_class.put_value :: x
+xÃ32768Œoop.a_class.value_plus÷0
+externvar:  oop.a_class.value_plus :: x
+xÃ32768Œoop.display_int÷0
+externvar:  oop.display_int :: x
+xÃ32768Œoop.ifclass.set_value÷0
+externvar:  oop.ifclass.set_value :: x
+yellowÃ8Œoop.enum_t÷0
+field:      oop.enum_t :: yellow

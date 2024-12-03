@@ -43,6 +43,7 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
+#include "pluginextension.h"
 #include "prefs.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
@@ -1016,7 +1017,7 @@ static GtkWidget *create_dialog(void)
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
 	text_renderer = gtk_cell_renderer_text_new();
-	/* we can't use "weight-set", see http://bugzilla.gnome.org/show_bug.cgi?id=355214 */
+	/* we can't use "weight-set", see https://bugzilla.gnome.org/show_bug.cgi?id=355214 */
 	column = gtk_tree_view_column_new_with_attributes(
 		NULL, text_renderer, "text", 0, "weight", 2, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
@@ -1971,14 +1972,8 @@ static gboolean cb_func_clipboard_action(guint key_id)
 
 static void goto_tag(GeanyDocument *doc, gboolean definition)
 {
-	gchar *text = get_current_word_or_sel(doc, FALSE);
-
-	if (text)
-		symbols_goto_tag(text, definition);
-	else
+	if (!symbols_goto_tag(doc, sci_get_current_position(doc->editor->sci), definition))
 		utils_beep();
-
-	g_free(text);
 }
 
 
@@ -2151,10 +2146,16 @@ static gboolean cb_func_editor_action(guint key_id)
 			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);
 			break;
 		case GEANY_KEYS_EDITOR_AUTOCOMPLETE:
-			editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
+			if (plugin_extension_autocomplete_provided(doc, NULL))
+				plugin_extension_autocomplete_perform(doc, TRUE);
+			else
+				editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
 			break;
 		case GEANY_KEYS_EDITOR_CALLTIP:
-			editor_show_calltip(doc->editor, -1);
+			if (plugin_extension_calltips_provided(doc, NULL))
+				plugin_extension_calltips_show(doc, TRUE);
+			else
+				editor_show_calltip(doc->editor, -1);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word(doc, FALSE))

@@ -1,16 +1,42 @@
+aÌ64Îanon_variable_1Ö0
+member:     anon_variable_1 :: a
+aÌ64Îanon_variable_2Ö0
+member:     anon_variable_2 :: a
+aÌ64Îclass.anon_variable_3Ö0
+member:     class.anon_variable_3 :: a
+aÌ64Îclass.anon_variable_4Ö0
+member:     class.anon_variable_4 :: a
 aÌ16384Ö0
 variable:   a
+anon_variable_1Ì16384Ö1
+variable:   anon_variable_1    flags: 1
+anon_variable_2Ì16384Ö1
+variable:   anon_variable_2    flags: 1
+anon_variable_3Ì16384ÎclassÖ1
+variable:   class :: anon_variable_3    flags: 1
+anon_variable_4Ì16384ÎclassÖ1
+variable:   class :: anon_variable_4    flags: 1
+bÌ64Îanon_variable_1Ö0
+member:     anon_variable_1 :: b
+bÌ64Îanon_variable_2Ö0
+member:     anon_variable_2 :: b
+bÌ64Îclass.anon_variable_3Ö0
+member:     class.anon_variable_3 :: b
+bÌ64Îclass.anon_variable_4Ö0
+member:     class.anon_variable_4 :: b
 bÌ16384Ö0
 variable:   b
 barÌ64Îclass.test1Ö0
 member:     class.test1 :: bar
 cÌ16384Ö0
 variable:   c
-classÌ1Í()Ö0
-class:      class()
+classÌ16Í()Ö0
+function:   class()
 fooÌ64Îclass.test1Ö0
 member:     class.test1 :: foo
-test1Ì1ÎclassÖ0
-class:      class :: test1
+test1Ì64ÎclassÖ0
+member:     class :: test1
+test2Ì64ÎclassÖ0
+member:     class :: test2
 test3Ì128Í()ÎclassÖ0
 method:     class :: test3()

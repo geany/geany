@@ -60,7 +60,6 @@ type=0
 [build_settings]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
-# (use only one of it at one time)
 compiler=gfortran -Wall -c "%f"
 linker=gfortran -Wall -o "%e" "%f"
 run_cmd="./%e"

@@ -51,6 +51,7 @@ geany_include_HEADERS = \
 	msgwindow.h \
 	navqueue.h \
 	plugindata.h \
+	pluginextension.h \
 	pluginutils.h \
 	prefs.h \
 	project.h \
@@ -89,6 +90,7 @@ libgeany_la_SOURCES = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
+	pluginextension.c pluginextension.h \
 	plugins.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefs.c prefs.h \
@@ -153,7 +155,7 @@ geany_private.res: $(top_srcdir)/geany_private.rc
 
 libgeany_la_SOURCES += win32.c win32.h
 libgeany_la_LIBADD  += -lole32 -lwsock32 -lcomdlg32
-libgeany_la_LDFLAGS += -Wl,-luuid -mwindows -mms-bitfields -no-undefined
+libgeany_la_LDFLAGS += -mwindows -mms-bitfields -no-undefined
 geany_LDFLAGS       += -mwindows -mms-bitfields
 
 CLEANFILES          += geany_private.res

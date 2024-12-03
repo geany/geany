@@ -22,10 +22,11 @@
 																		\
 	extern prefix##Array *prefix##ArrayNew (void);						\
 	extern unsigned int prefix##ArrayAdd (prefix##Array *const current, type num); \
-	extern void prefix##ArrayRemoveLast (prefix##Array *const current);	\
+	extern type prefix##ArrayRemoveLast (prefix##Array *const current);	\
 	extern void prefix##ArrayCombine (prefix##Array *const current, prefix##Array *const from);	\
 	extern void prefix##ArrayClear (prefix##Array *const current);		\
 	extern unsigned int prefix##ArrayCount (const prefix##Array *const current); \
+	extern bool prefix##ArrayIsEmpty(const prefix##Array *const current); \
 	extern type prefix##ArrayItem (const prefix##Array *const current, const unsigned int indx); \
 	extern type prefix##ArrayLast (const prefix##Array *const current); \
 	extern void prefix##ArrayDelete (prefix##Array *const current);		\

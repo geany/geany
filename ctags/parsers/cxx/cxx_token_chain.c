@@ -385,6 +385,22 @@ vString * cxxTokenChainJoin(
 	return s;
 }
 
+void cxxTokenChainAppendEntries(CXXTokenChain * src, CXXTokenChain * dest)
+{
+	CXXToken * pDestLast = cxxTokenChainLast(dest);
+	CXXToken * pSrcFirst = cxxTokenChainFirst(src);
+
+	pDestLast->pNext = pSrcFirst;
+	pSrcFirst->pPrev = pDestLast;
+
+	dest->iCount += src->iCount;
+	dest->pTail = src->pTail;
+
+	src->iCount = 0;
+	src->pHead = NULL;
+	src->pTail = NULL;
+}
+
 #if 0
 // currently unused
 void cxxTokenChainMoveEntries(CXXTokenChain * src,CXXTokenChain * dest)
@@ -441,6 +457,17 @@ void cxxTokenChainMoveEntryRange(
 }
 #endif
 
+static CXXToken * cxxTokenCreatePlaceholder(CXXToken * pToken)
+{
+	CXXToken * pPlaceholder = cxxTokenCreate();
+
+	pPlaceholder->iLineNumber = pToken->iLineNumber;
+	pPlaceholder->oFilePosition = pToken->oFilePosition;
+	pPlaceholder->eType = CXXTokenTypeUnknown;
+
+	return pPlaceholder;
+}
+
 CXXTokenChain * cxxTokenChainSplitOnComma(CXXTokenChain * tc)
 {
 	if(!tc)
@@ -457,14 +484,31 @@ CXXTokenChain * cxxTokenChainSplitOnComma(CXXTokenChain * tc)
 
 	while(pStart && pToken->pNext)
 	{
-		while(pToken->pNext && (!cxxTokenTypeIs(pToken->pNext,CXXTokenTypeComma)))
-			pToken = pToken->pNext;
+		CXXToken * pNew = NULL;
 
-		CXXToken * pNew = cxxTokenChainExtractRange(pStart,pToken,0);
+		if (cxxTokenTypeIs(pToken,CXXTokenTypeComma))
+		{
+			// If nothing is passed as an argument like
+			//
+			// macro(,b),
+			// macro(a,), or
+			// macro(,)
+			//
+			// , we must inject a dummy token to the chain.
+			pNew = cxxTokenCreatePlaceholder(pToken);
+			// we will not update pToken in this case.
+		}
+		else
+		{
+			while(pToken->pNext && (!cxxTokenTypeIs(pToken->pNext,CXXTokenTypeComma)))
+				pToken = pToken->pNext;
+
+			pNew = cxxTokenChainExtractRange(pStart,pToken,0);
+			pToken = pToken->pNext; // comma or nothing
+		}
 		if(pNew)
 			cxxTokenChainAppend(pRet,pNew);
 
-		pToken = pToken->pNext; // comma or nothing
 		if(pToken)
 			pToken = pToken->pNext; // after comma
 		pStart = pToken;
@@ -577,7 +621,7 @@ CXXToken * cxxTokenChainSkipBackToStartOfTemplateAngleBracket(CXXToken * t)
 	if(!t)
 		return NULL;
 	CXX_DEBUG_ASSERT(
-			t->eType == CXXTokenTypeGreaterThanSign,
+			cxxTokenTypeIs(t, CXXTokenTypeGreaterThanSign),
 			"This function must be called when pointing to a >"
 		);
 	int iLevel = 1;
@@ -609,7 +653,7 @@ CXXToken * cxxTokenChainFirstTokenOfType(
 	CXXToken * t = tc->pHead;
 	while(t)
 	{
-		if(t->eType & uTokenTypes)
+		if(cxxTokenTypeIsOneOf(t, uTokenTypes))
 			return t;
 		t = t->pNext;
 	}
@@ -626,7 +670,7 @@ CXXToken * cxxTokenChainNextTokenOfType(
 	t = t->pNext;
 	while(t)
 	{
-		if(t->eType & uTokenTypes)
+		if(cxxTokenTypeIsOneOf(t, uTokenTypes))
 			return t;
 		t = t->pNext;
 	}
@@ -643,7 +687,7 @@ CXXToken * cxxTokenChainPreviousTokenOfType(
 	t = t->pPrev;
 	while(t)
 	{
-		if(t->eType & uTokenTypes)
+		if(cxxTokenTypeIsOneOf(t, uTokenTypes))
 			return t;
 		t = t->pPrev;
 	}
@@ -660,7 +704,7 @@ CXXToken * cxxTokenChainPreviousTokenNotOfType(
 	t = t->pPrev;
 	while(t)
 	{
-		if(!(t->eType & uTokenTypes))
+		if(!(cxxTokenTypeIsOneOf(t, uTokenTypes)))
 			return t;
 		t = t->pPrev;
 	}
@@ -677,7 +721,7 @@ CXXToken * cxxTokenChainLastTokenOfType(
 	CXXToken * t = tc->pTail;
 	while(t)
 	{
-		if(t->eType & uTokenTypes)
+		if(cxxTokenTypeIsOneOf(t, uTokenTypes))
 			return t;
 		t = t->pPrev;
 	}
@@ -695,13 +739,13 @@ CXXToken * cxxTokenChainLastPossiblyNestedTokenOfType(
 	CXXToken * t = tc->pTail;
 	while(t)
 	{
-		if(t->eType & uTokenTypes)
+		if(cxxTokenTypeIsOneOf(t, uTokenTypes))
 		{
 			if(ppParentChain)
 				*ppParentChain = tc;
 			return t;
 		}
-		if(t->eType == CXXTokenTypeParenthesisChain)
+		if(cxxTokenTypeIs(t, CXXTokenTypeParenthesisChain))
 		{
 			CXXToken * tmp = cxxTokenChainLastPossiblyNestedTokenOfType(
 					t->pChain,
@@ -728,13 +772,13 @@ CXXToken * cxxTokenChainFirstPossiblyNestedTokenOfType(
 	CXXToken * t = tc->pHead;
 	while(t)
 	{
-		if(t->eType & uTokenTypes)
+		if(cxxTokenTypeIsOneOf(t, uTokenTypes))
 		{
 			if(ppParentChain)
 				*ppParentChain = tc;
 			return t;
 		}
-		if(t->eType == CXXTokenTypeParenthesisChain)
+		if(cxxTokenTypeIs(t, CXXTokenTypeParenthesisChain))
 		{
 			CXXToken * tmp = cxxTokenChainFirstPossiblyNestedTokenOfType(
 					t->pChain,
@@ -761,7 +805,7 @@ CXXToken * cxxTokenChainFirstTokenNotOfType(
 	CXXToken * t = tc->pHead;
 	while(t)
 	{
-		if(!(t->eType & uTokenTypes))
+		if(!(cxxTokenTypeIsOneOf(t, uTokenTypes)))
 			return t;
 		t = t->pNext;
 	}
@@ -796,7 +840,7 @@ CXXToken * cxxTokenChainNextTokenNotOfType(
 	t = t->pNext;
 	while(t)
 	{
-		if(!(t->eType & uTokenTypes))
+		if(!(cxxTokenTypeIsOneOf(t, uTokenTypes)))
 			return t;
 		t = t->pNext;
 	}
@@ -813,7 +857,7 @@ CXXToken * cxxTokenChainLastTokenNotOfType(
 	CXXToken * t = tc->pTail;
 	while(t)
 	{
-		if(!(t->eType & uTokenTypes))
+		if(!(cxxTokenTypeIsOneOf(t, uTokenTypes)))
 			return t;
 		t = t->pPrev;
 	}
@@ -905,7 +949,6 @@ int cxxTokenChainFirstKeywordIndex(
 	return -1;
 }
 
-#if 0
 // This is working code but it's unused and coveralls complains.. sigh.
 // Remove the #if above if needed.
 CXXToken * cxxTokenChainFirstKeyword(
@@ -928,7 +971,6 @@ CXXToken * cxxTokenChainFirstKeyword(
 
 	return NULL;
 }
-#endif
 
 CXXToken * cxxTokenChainNextIdentifier(
 		CXXToken * from,
@@ -1172,12 +1214,20 @@ void cxxTokenChainNormalizeTypeNameSpacingInRange(CXXToken * pFrom,CXXToken * pT
 				CXXTokenTypeParenthesisChain | CXXTokenTypeSquareParenthesisChain
 			))
 		{
+			// decltype(a) const
+			// -----------^
+			// In this case, a space is needed.
+			bool bFollowedBySpace = (
+					t->pPrev &&
+					cxxTokenTypeIs(t->pPrev,CXXTokenTypeKeyword) &&
+					cxxKeywordIsDecltype(t->pPrev->eKeyword)
+				);
 			cxxTokenChainNormalizeTypeNameSpacing(t->pChain);
-			t->bFollowedBySpace = false;
+			t->bFollowedBySpace = bFollowedBySpace;
 		} else if(cxxTokenTypeIs(t,CXXTokenTypeKeyword))
 		{
 			t->bFollowedBySpace = t->pNext &&
-				(t->eKeyword != CXXKeywordDECLTYPE) &&
+				(!cxxKeywordIsDecltype(t->eKeyword)) &&
 				cxxTokenTypeIsOneOf(
 						t->pNext,
 						CXXTokenTypeParenthesisChain | CXXTokenTypeIdentifier |

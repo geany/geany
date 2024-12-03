@@ -14,6 +14,7 @@
 #include "cxx_token.h"
 #include "cxx_token_chain.h"
 #include "cxx_scope.h"
+#include "cxx_side_chain.h"
 
 #include "parse.h"
 #include "vstring.h"
@@ -284,6 +285,7 @@ int cxxParserMaybeParseKnRStyleFunctionDefinition(void)
 
 	if(tag)
 	{
+		cxxSideChainScan(pIdentifier->pSideChain);
 		if(pParenthesis->pChain->pTail)
 		{
 			// normalize signature
@@ -304,6 +306,7 @@ int cxxParserMaybeParseKnRStyleFunctionDefinition(void)
 			tag->extensionFields.signature = vStringValue(pszSignature);
 
 		iCorkQueueIndex = cxxTagCommit(&iCorkQueueIndexFQ);
+		cxxTagUseTokenAsPartOfDefTag(iCorkQueueIndex, pIdentifier);
 
 		if(pszSignature)
 			vStringDelete(pszSignature);
@@ -635,6 +638,42 @@ static bool cxxParserLookForFunctionSignatureCheckParenthesisAndIdentifier(
 	}
 
 	CXX_DEBUG_LEAVE_TEXT("Doesn't look like a valid parenthesis chain");
+	return false;
+}
+
+// If pInfo->pIdentifierStart has the same name as the name of
+// class|enum|union|struct scope, we consider pInfo->pIdentifierStart
+// points a constructor.
+static bool cxxParserisConstructor(const char *szFuncname)
+{
+	if (cxxScopeIsGlobal())
+		return false;
+
+	switch (cxxScopeGetType())
+	{
+	case CXXScopeTypeClass:
+	case CXXScopeTypeEnum:
+	case CXXScopeTypeUnion:
+	case CXXScopeTypeStruct:
+		break;
+	default:
+		return false;
+	}
+
+	const char *szScope = cxxScopeGetName();
+	const char *szTmp = strrstr (szScope, szFuncname);
+
+	if (szTmp == NULL)
+		return false;
+
+	/* szFuncname == "C", szScope == "C" */
+	if (szTmp == szScope)
+		return true;
+
+	/* szFuncname == "C", szScope == "X::C" */
+	if (szTmp[-1] == ':')
+		return true;
+
 	return false;
 }
 
@@ -1022,9 +1061,6 @@ bool cxxParserLookForFunctionSignature(
 		if(
 				// The previous token is >
 				cxxTokenTypeIs(pToken->pPrev,CXXTokenTypeGreaterThanSign) &&
-				// We extracted an initial template<*> token chain
-				// (which has been removed from the currently examined chain)
-				g_cxx.pTemplateTokenChain &&
 				// We skipped an additional <...> block in *this* chain
 				bSkippedAngleBrackets
 			)
@@ -1039,7 +1075,17 @@ bool cxxParserLookForFunctionSignature(
 			if(
 					pSpecBegin &&
 					pSpecBegin->pPrev &&
-					cxxTokenTypeIs(pSpecBegin->pPrev,CXXTokenTypeIdentifier)
+					cxxTokenTypeIs(pSpecBegin->pPrev,CXXTokenTypeIdentifier) &&
+					(
+						// We extracted an initial template<*> token chain
+						// (which has been removed from the currently examined chain)
+						g_cxx.pTemplateTokenChain ||
+						// g_cxx.pTemplateTokenChain is set to null if "{" after "class" keyword
+						// is found. As a result, a constructor with <*> defined in a template
+						// class could not be tagged. The next additional condition is for
+						// tagging the condition in this situation.
+						cxxParserisConstructor(vStringValue(pSpecBegin->pPrev->pszWord))
+					)
 				)
 			{
 				// template specialisation
@@ -1063,7 +1109,7 @@ bool cxxParserLookForFunctionSignature(
 							pParamInfo
 						)
 					)
-						goto next_token;
+					goto next_token;
 
 			}
 
@@ -1213,7 +1259,7 @@ next_token:
 					// hmm.. probably a template specialisation
 					pAux = pSmallerThan->pPrev;
 					pInfo->uFlags |= CXXFunctionSignatureInfoScopeTemplateSpecialization;
-				} else if(pAux->eType == CXXTokenTypeAngleBracketChain)
+				} else if(cxxTokenTypeIs(pAux, CXXTokenTypeAngleBracketChain))
 				{
 					// same as above, but already condensed (though it should never happen)
 					if(!pAux->pPrev)
@@ -1499,6 +1545,7 @@ int cxxParserEmitFunctionTags(
 			0
 		);
 
+	cxxSideChainCollectInRange(pInfo->pIdentifierStart,pInfo->pIdentifierEnd,pIdentifier);
 	cxxTokenChainDestroyRange(pInfo->pIdentifierChain,pInfo->pIdentifierStart,pInfo->pIdentifierEnd);
 
 	CXX_DEBUG_ASSERT(
@@ -1609,6 +1656,7 @@ int cxxParserEmitFunctionTags(
 					CXXToken * pTokenBeforeParenthesis = pInfo->pParenthesis->pPrev;
 					cxxTokenChainTake(pInfo->pParenthesisContainerChain,pInfo->pParenthesis);
 
+					cxxSideChainCollectInRange(pInfo->pTypeStart,pInfo->pTypeEnd, pIdentifier);
 					pTypeName = cxxTagCheckAndSetTypeField(pInfo->pTypeStart,pInfo->pTypeEnd);
 
 					cxxTokenChainInsertAfter(
@@ -1620,6 +1668,7 @@ int cxxParserEmitFunctionTags(
 					pTypeName = NULL;
 				}
 			} else {
+				cxxSideChainCollectInRange(pInfo->pTypeStart,pInfo->pTypeEnd, pIdentifier);
 				pTypeName = cxxTagCheckAndSetTypeField(pInfo->pTypeStart,pInfo->pTypeEnd);
 			}
 		} else {
@@ -1686,6 +1735,11 @@ int cxxParserEmitFunctionTags(
 				uProperties |= CXXTagPropertyExtern;
 			if(g_cxx.uKeywordState & CXXParserKeywordStateSeenAttributeDeprecated)
 				uProperties |= CXXTagPropertyDeprecated;
+			if(g_cxx.uKeywordState & CXXParserKeywordStateSeenConstexpr)
+				uProperties |= CXXTagPropertyConstexpr;
+			if(g_cxx.uKeywordState & CXXParserKeywordStateSeenConsteval)
+				uProperties |= CXXTagPropertyConsteval;
+			// constinit is not here; it is for variables.
 			if(pInfo->pSignatureConst)
 				uProperties |= CXXTagPropertyConst;
 			if(pInfo->uFlags & CXXFunctionSignatureInfoPure)
@@ -1707,11 +1761,16 @@ int cxxParserEmitFunctionTags(
 								CXXTagPropertyTemplateSpecialization;
 			if((pInfo->uFlags & CXXFunctionSignatureInfoTemplateSpecialization) || bIsEmptyTemplate)
 				uProperties |= CXXTagPropertyTemplateSpecialization;
+			if(g_cxx.uKeywordState & CXXParserKeywordStateSeenExport)
+				uProperties |= CXXTagPropertyExport;
 
 			pszProperties = cxxTagSetProperties(uProperties);
 		}
 
+		cxxSideChainScan(pIdentifier->pSideChain);
+
 		int iCorkQueueIndex = cxxTagCommit(piCorkQueueIndexFQ);
+		cxxTagUseTokenAsPartOfDefTag(iCorkQueueIndex, pIdentifier);
 
 		if(piCorkQueueIndex)
 			*piCorkQueueIndex = iCorkQueueIndex;
@@ -1878,7 +1937,6 @@ void cxxParserEmitFunctionParameterTags(CXXTypedVariableSet * pInfo)
 		} else {
 			pTypeName = NULL;
 		}
-		tag->extensionFields.nth = i;
 
 		tag->isFileScope = true;
 
@@ -2178,7 +2236,7 @@ try_again:
 						 *
 						 *   void f(int *);
 						 */
-						pIdentifier = cxxTokenCreateAnonymousIdentifier(CXXTagKindPARAMETER);
+						pIdentifier = cxxTokenCreateAnonymousIdentifier(CXXTagKindPARAMETER, NULL);
 						pIdentifier->iLineNumber = t->pPrev->iLineNumber;
 						pIdentifier->oFilePosition = t->pPrev->oFilePosition;
 						pParamInfo->uAnonymous |= (0x1u << pParamInfo->uCount);
@@ -2222,7 +2280,7 @@ try_again:
 			 *
 			 */
 			CXXToken * pFakeStart = cxxTokenCopy(pStart);
-			CXXToken * pFakeId = cxxTokenCreateAnonymousIdentifier(CXXTagKindPARAMETER);
+			CXXToken * pFakeId = cxxTokenCreateAnonymousIdentifier(CXXTagKindPARAMETER, NULL);
 			pFakeId->iLineNumber = pStart->iLineNumber;
 			pFakeId->oFilePosition = pStart->oFilePosition;
 

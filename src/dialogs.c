@@ -38,7 +38,6 @@
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
-#include "win32.h"
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -122,7 +121,7 @@ static void file_chooser_set_filter_idx(GtkFileChooser *chooser, guint idx)
 }
 
 
-static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint response)
+static gboolean open_file_dialog_handle_response(GtkFileChooser *dialog, gint response)
 {
 	gboolean ret = TRUE;
 
@@ -131,24 +130,28 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 		GSList *filelist;
 		GeanyFiletype *ft = NULL;
 		const gchar *charset = NULL;
-		GtkWidget *expander = ui_lookup_widget(dialog, "more_options_expander");
-		GtkWidget *filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
-		GtkWidget *encoding_combo = ui_lookup_widget(dialog, "encoding_combo");
 		gboolean ro = (response == GEANY_RESPONSE_VIEW);	/* View clicked */
 
-		filesel_state.open.more_options_visible = gtk_expander_get_expanded(GTK_EXPANDER(expander));
-		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
-		filesel_state.open.filetype_idx = filetype_combo_box_get_active_filetype(GTK_COMBO_BOX(filetype_combo));
+		if (!GTK_IS_NATIVE_DIALOG(dialog))
+		{
+			GtkWidget *expander = ui_lookup_widget(GTK_WIDGET(dialog), "more_options_expander");
+			GtkWidget *filetype_combo = ui_lookup_widget(GTK_WIDGET(dialog), "filetype_combo");
+			GtkWidget *encoding_combo = ui_lookup_widget(GTK_WIDGET(dialog), "encoding_combo");
+
+			filesel_state.open.more_options_visible = gtk_expander_get_expanded(GTK_EXPANDER(expander));
+			filesel_state.open.filetype_idx = filetype_combo_box_get_active_filetype(GTK_COMBO_BOX(filetype_combo));
+			filesel_state.open.encoding_idx = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(encoding_combo));
+		}
+		filesel_state.open.filter_idx = file_chooser_get_filter_idx(dialog);
 
 		/* ignore detect from file item */
 		if (filesel_state.open.filetype_idx >= 0)
 			ft = filetypes_index(filesel_state.open.filetype_idx);
 
-		filesel_state.open.encoding_idx = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(encoding_combo));
 		if (filesel_state.open.encoding_idx >= 0 && filesel_state.open.encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[filesel_state.open.encoding_idx].charset;
 
-		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
+		filelist = gtk_file_chooser_get_filenames(dialog);
 		if (filelist != NULL)
 		{
 			const gchar *first = filelist->data;
@@ -163,12 +166,11 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 			{
 				document_open_files(filelist, ro, ft, charset);
 			}
-			g_slist_foreach(filelist, (GFunc) g_free, NULL);	/* free filenames */
+			g_slist_free_full(filelist, g_free);
 		}
-		g_slist_free(filelist);
 	}
 	if (app->project && !EMPTY(app->project->base_path))
-		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
+		gtk_file_chooser_remove_shortcut_folder(dialog,
 			app->project->base_path, NULL);
 	return ret;
 }
@@ -209,7 +211,8 @@ static void filetype_combo_cell_data_func(GtkCellLayout *cell_layout, GtkCellRen
 static GtkWidget *create_filetype_combo_box(void)
 {
 	GtkTreeStore *store;
-	GtkTreeIter iter_compiled, iter_script, iter_markup, iter_misc, iter_detect;
+	GtkTreeIter iter_a_b, iter_c, iter_d_e_f, iter_g_h_i, iter_j_k_l, iter_m_n_o,
+		iter_p_q, iter_r_s, iter_t_u_v_w, iter_x_y_z, iter_other, iter_detect;
 	GtkTreeIter *iter_parent;
 	GtkWidget *combo;
 	GtkCellRenderer *renderer;
@@ -217,17 +220,41 @@ static GtkWidget *create_filetype_combo_box(void)
 
 	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
 
-	gtk_tree_store_insert_with_values(store, &iter_detect, NULL, -1,
+	gtk_tree_store_insert_with_values(store, &iter_detect,  NULL, -1,
 			0, -1 /* auto-detect */, 1, _("Detect from file"), -1);
 
-	gtk_tree_store_insert_with_values(store, &iter_compiled, NULL, -1,
-			0, -1, 1, _("Programming Languages"), -1);
-	gtk_tree_store_insert_with_values(store, &iter_script, NULL, -1,
-			0, -1, 1, _("Scripting Languages"), -1);
-	gtk_tree_store_insert_with_values(store, &iter_markup, NULL, -1,
-			0, -1, 1, _("Markup Languages"), -1);
-	gtk_tree_store_insert_with_values(store, &iter_misc, NULL, -1,
-			0, -1, 1, _("Miscellaneous"), -1);
+	gtk_tree_store_insert_with_values(store, &iter_a_b,     NULL, -1,
+			0, -1, 1, "A-B", -1);
+	gtk_tree_store_insert_with_values(store, &iter_c,       NULL, -1,
+			0, -1, 1, "C", -1);
+	gtk_tree_store_insert_with_values(store, &iter_d_e_f,   NULL, -1,
+			0, -1, 1, "D-E-F", -1);
+	gtk_tree_store_insert_with_values(store, &iter_g_h_i,   NULL, -1,
+			0, -1, 1, "G-H-I", -1);
+	gtk_tree_store_insert_with_values(store, &iter_j_k_l,   NULL, -1,
+			0, -1, 1, "J-K-L", -1);
+	gtk_tree_store_insert_with_values(store, &iter_m_n_o,   NULL, -1,
+			0, -1, 1, "M-N-O", -1);
+	gtk_tree_store_insert_with_values(store, &iter_p_q,     NULL, -1,
+			0, -1, 1, "P-Q", -1);
+	gtk_tree_store_insert_with_values(store, &iter_r_s,     NULL, -1,
+			0, -1, 1, "R-S", -1);
+	gtk_tree_store_insert_with_values(store, &iter_t_u_v_w, NULL, -1,
+			0, -1, 1, "T-U-V-W", -1);
+	gtk_tree_store_insert_with_values(store, &iter_x_y_z,   NULL, -1,
+			0, -1, 1, "X-Y-Z", -1);
+
+	foreach_slist (node, filetypes_by_title)
+	{
+		GeanyFiletype *ft = node->data;
+
+		if (ft->group == GEANY_FILETYPE_GROUP_OTHER)
+		{
+			gtk_tree_store_insert_with_values(store, &iter_other,   NULL, -1,
+					0, -1, 1, _("Other"), -1);
+			break;
+		}
+	}
 
 	foreach_slist (node, filetypes_by_title)
 	{
@@ -235,10 +262,17 @@ static GtkWidget *create_filetype_combo_box(void)
 
 		switch (ft->group)
 		{
-			case GEANY_FILETYPE_GROUP_COMPILED: iter_parent = &iter_compiled; break;
-			case GEANY_FILETYPE_GROUP_SCRIPT: iter_parent = &iter_script; break;
-			case GEANY_FILETYPE_GROUP_MARKUP: iter_parent = &iter_markup; break;
-			case GEANY_FILETYPE_GROUP_MISC: iter_parent = &iter_misc; break;
+			case GEANY_FILETYPE_GROUP_A_B:     iter_parent = &iter_a_b;     break;
+			case GEANY_FILETYPE_GROUP_C:       iter_parent = &iter_c;       break;
+			case GEANY_FILETYPE_GROUP_D_E_F:   iter_parent = &iter_d_e_f;   break;
+			case GEANY_FILETYPE_GROUP_G_H_I:   iter_parent = &iter_g_h_i;   break;
+			case GEANY_FILETYPE_GROUP_J_K_L:   iter_parent = &iter_j_k_l;   break;
+			case GEANY_FILETYPE_GROUP_M_N_O:   iter_parent = &iter_m_n_o;   break;
+			case GEANY_FILETYPE_GROUP_P_Q:     iter_parent = &iter_p_q;     break;
+			case GEANY_FILETYPE_GROUP_R_S:     iter_parent = &iter_r_s;     break;
+			case GEANY_FILETYPE_GROUP_T_U_V_W: iter_parent = &iter_t_u_v_w; break;
+			case GEANY_FILETYPE_GROUP_X_Y_Z:   iter_parent = &iter_x_y_z;   break;
+			case GEANY_FILETYPE_GROUP_OTHER:   iter_parent = &iter_other;   break;
 			case GEANY_FILETYPE_GROUP_NONE:
 			default: iter_parent = NULL;
 		}
@@ -366,82 +400,114 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 }
 
 
-static GtkWidget *create_open_file_dialog(void)
+static GtkFileChooser *create_open_file_dialog(void)
 {
-	GtkWidget *dialog;
+	GtkFileChooser *dialog;
+	GtkFileFilter *filter;
 	GtkWidget *viewbtn;
 	GSList *node;
 
-	dialog = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(main_widgets.window),
-			GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
-	gtk_widget_set_name(dialog, "GeanyDialog");
+	if (interface_prefs.use_native_windows_dialogs)
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Open File"),
+			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL));
+	else
+	{
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(main_widgets.window),
+				GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL));
+		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialog");
 
-	viewbtn = gtk_dialog_add_button(GTK_DIALOG(dialog), C_("Open dialog action", "_View"), GEANY_RESPONSE_VIEW);
-	gtk_widget_set_tooltip_text(viewbtn,
-		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."));
+		viewbtn = gtk_dialog_add_button(GTK_DIALOG(dialog), C_("Open dialog action", "_View"), GEANY_RESPONSE_VIEW);
+		gtk_widget_set_tooltip_text(viewbtn,
+			_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."));
 
-	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+		gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
-	gtk_widget_set_size_request(dialog, -1, 460);
-	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
-	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
-	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
+		gtk_widget_set_size_request(GTK_WIDGET(dialog), -1, 460);
+		gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+		gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+		gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+		gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
 
-	/* add checkboxes and filename entry */
-	gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), add_file_open_extra_widget(dialog));
+		/* add checkboxes and filename entry */
+		gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(dialog), add_file_open_extra_widget(GTK_WIDGET(dialog)));
+
+		g_signal_connect(dialog, "notify::show-hidden",
+			G_CALLBACK(on_file_open_show_hidden_notify), NULL);
+	}
 
 	/* add FileFilters(start with "All Files") */
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),
-				filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE]));
+	if ((filter = filetypes_create_file_filter(filetypes[GEANY_FILETYPES_NONE])))
+		gtk_file_chooser_add_filter(dialog, filter);
 	/* now create meta filter "All Source" */
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),
-				filetypes_create_file_filter_all_source());
+	if ((filter = filetypes_create_file_filter_all_source()))
+		gtk_file_chooser_add_filter(dialog, filter);
 	foreach_slist(node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
 
 		if (G_UNLIKELY(ft->id == GEANY_FILETYPES_NONE))
 			continue;
-		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filetypes_create_file_filter(ft));
+		if ((filter = filetypes_create_file_filter(ft)))
+			gtk_file_chooser_add_filter(dialog, filter);
 	}
 
-	g_signal_connect(dialog, "notify::show-hidden",
-		G_CALLBACK(on_file_open_show_hidden_notify), NULL);
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
 	return dialog;
 }
 
 
-static void open_file_dialog_apply_settings(GtkWidget *dialog)
+static void open_file_dialog_apply_settings(GtkFileChooser *dialog)
 {
 	static gboolean initialized = FALSE;
-	GtkWidget *check_hidden = ui_lookup_widget(dialog, "check_hidden");
-	GtkWidget *filetype_combo = ui_lookup_widget(dialog, "filetype_combo");
-	GtkWidget *encoding_combo = ui_lookup_widget(dialog, "encoding_combo");
-	GtkWidget *expander = ui_lookup_widget(dialog, "more_options_expander");
 
 	/* we can't know the initial position of combo boxes, so retrieve it the first time */
 	if (! initialized)
 	{
-		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
+		filesel_state.open.filter_idx = file_chooser_get_filter_idx(dialog);
 
 		initialized = TRUE;
 	}
 	else
 	{
-		file_chooser_set_filter_idx(GTK_FILE_CHOOSER(dialog), filesel_state.open.filter_idx);
+		file_chooser_set_filter_idx(dialog, filesel_state.open.filter_idx);
 	}
-	gtk_expander_set_expanded(GTK_EXPANDER(expander), filesel_state.open.more_options_visible);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_hidden), filesel_state.open.show_hidden);
-	ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(encoding_combo), filesel_state.open.encoding_idx);
-	filetype_combo_box_set_active_filetype(GTK_COMBO_BOX(filetype_combo), filesel_state.open.filetype_idx);
+
+	if (!GTK_IS_NATIVE_DIALOG(dialog))
+	{
+		GtkWidget *check_hidden = ui_lookup_widget(GTK_WIDGET(dialog), "check_hidden");
+		GtkWidget *filetype_combo = ui_lookup_widget(GTK_WIDGET(dialog), "filetype_combo");
+		GtkWidget *encoding_combo = ui_lookup_widget(GTK_WIDGET(dialog), "encoding_combo");
+		GtkWidget *expander = ui_lookup_widget(GTK_WIDGET(dialog), "more_options_expander");
+
+		gtk_expander_set_expanded(GTK_EXPANDER(expander), filesel_state.open.more_options_visible);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_hidden), filesel_state.open.show_hidden);
+		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(encoding_combo), filesel_state.open.encoding_idx);
+		filetype_combo_box_set_active_filetype(GTK_COMBO_BOX(filetype_combo), filesel_state.open.filetype_idx);
+	}
+}
+
+
+gint dialogs_file_chooser_run(GtkFileChooser *dialog)
+{
+	if (GTK_IS_NATIVE_DIALOG(dialog))
+		return gtk_native_dialog_run(GTK_NATIVE_DIALOG(dialog));
+	else
+		return gtk_dialog_run(GTK_DIALOG(dialog));
+}
+
+
+void dialogs_file_chooser_destroy(GtkFileChooser *dialog)
+{
+	if (GTK_IS_NATIVE_DIALOG(dialog))
+		g_object_unref(dialog);
+	else
+		gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 
 
@@ -449,7 +515,7 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 void dialogs_show_open_file(void)
 {
 	gchar *initdir;
-	GtkWidget *dialog;
+	GtkFileChooser *dialog;
 
 	/* set dialog directory to the current file's directory, if present */
 	initdir = utils_get_current_file_dir_utf8();
@@ -465,15 +531,15 @@ void dialogs_show_open_file(void)
 	open_file_dialog_apply_settings(dialog);
 
 	if (initdir != NULL && g_path_is_absolute(initdir))
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initdir);
+			gtk_file_chooser_set_current_folder(dialog, initdir);
 
 	if (app->project && !EMPTY(app->project->base_path))
-		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
+		gtk_file_chooser_add_shortcut_folder(dialog,
 				app->project->base_path, NULL);
 
 	while (!open_file_dialog_handle_response(dialog,
-		gtk_dialog_run(GTK_DIALOG(dialog))));
-	gtk_widget_destroy(dialog);
+		dialogs_file_chooser_run(dialog)));
+	dialogs_file_chooser_destroy(dialog);
 
 	g_free(initdir);
 }
@@ -508,11 +574,11 @@ static gboolean handle_save_as(GeanyDocument *doc,
 
 
 static gboolean save_as_dialog_handle_response(GeanyDocument *doc,
-	GtkWidget *dialog, gint response)
+	GtkFileChooser *dialog, gint response)
 {
 	gboolean rename_file = FALSE;
 	gboolean success = FALSE;
-	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+	gchar *new_filename = gtk_file_chooser_get_filename(dialog);
 
 	switch (response)
 	{
@@ -550,39 +616,46 @@ static gboolean save_as_dialog_handle_response(GeanyDocument *doc,
 }
 
 
-static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
+static GtkFileChooser *create_save_file_dialog(GeanyDocument *doc)
 {
-	GtkWidget *dialog, *rename_btn;
+	GtkFileChooser *dialog;
+	GtkWidget *rename_btn;
 	const gchar *initdir;
 
-	dialog = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
-				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
-	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
-	gtk_widget_set_name(dialog, "GeanyDialog");
+	if (interface_prefs.use_native_windows_dialogs)
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(_("Save File"),
+			GTK_WINDOW(main_widgets.window), GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL));
+	else
+	{
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
+					GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL));
+		gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+		gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+		gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+		gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
+		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialog");
 
-	rename_btn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("R_ename"), GEANY_RESPONSE_RENAME);
-	gtk_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
-	/* disable rename unless file exists on disk */
-	gtk_widget_set_sensitive(rename_btn, doc->real_path != NULL);
+		rename_btn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("R_ename"), GEANY_RESPONSE_RENAME);
+		gtk_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
+		/* disable rename unless file exists on disk */
+		gtk_widget_set_sensitive(rename_btn, doc->real_path != NULL);
 
-	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+		gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+	}
 
-	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
-	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
+	gtk_file_chooser_set_do_overwrite_confirmation(dialog, TRUE);
+	gtk_file_chooser_set_local_only(dialog, FALSE);
 
 	/* set the folder by default to the project base dir or the global pref for opening files */
 	initdir = utils_get_default_dir_utf8();
 	if (initdir)
 	{
 		gchar *linitdir = utils_get_locale_from_utf8(initdir);
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), linitdir);
+		gtk_file_chooser_set_current_folder(dialog, linitdir);
 		g_free(linitdir);
 	}
 	return dialog;
@@ -591,7 +664,7 @@ static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 
 static gboolean show_save_as_gtk(GeanyDocument *doc)
 {
-	GtkWidget *dialog;
+	GtkFileChooser *dialog;
 	gint resp;
 
 	g_return_val_if_fail(DOC_VALID(doc), FALSE);
@@ -606,15 +679,15 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 			gchar *locale_basename = g_path_get_basename(locale_filename);
 			gchar *locale_dirname = g_path_get_dirname(locale_filename);
 
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_dirname);
-			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), locale_basename);
+			gtk_file_chooser_set_current_folder(dialog, locale_dirname);
+			gtk_file_chooser_set_current_name(dialog, locale_basename);
 
 			g_free(locale_filename);
 			g_free(locale_basename);
 			g_free(locale_dirname);
 		}
 		else
-			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), doc->file_name);
+			gtk_file_chooser_set_current_name(dialog, doc->file_name);
 	}
 	else
 	{
@@ -626,7 +699,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 		else
 			fname = g_strdup(GEANY_STRING_UNTITLED);
 
-		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), fname);
+		gtk_file_chooser_set_current_name(dialog, fname);
 
 		g_free(fname);
 	}
@@ -638,15 +711,15 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 	/* Run the dialog synchronously, pausing this function call */
 	do
 	{
-		resp = gtk_dialog_run(GTK_DIALOG(dialog));
+		resp = dialogs_file_chooser_run(dialog);
 	}
 	while (! save_as_dialog_handle_response(doc, dialog, resp));
 
 	if (app->project && !EMPTY(app->project->base_path))
-		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
+		gtk_file_chooser_remove_shortcut_folder(dialog,
 			app->project->base_path, NULL);
 
-	gtk_widget_destroy(dialog);
+	dialogs_file_chooser_destroy(dialog);
 
 	return (resp == GTK_RESPONSE_ACCEPT);
 }
@@ -670,7 +743,6 @@ gboolean dialogs_show_save_as(void)
 }
 
 
-#ifndef G_OS_WIN32
 static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow *parent)
 {
 	const gchar *title;
@@ -696,13 +768,10 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 }
-#endif
 
 
 /**
  *  Shows a message box of the type @a type with @a text.
- *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
- *  message dialog box is shown.
  *
  *  @param type A @c GtkMessageType, e.g. @c GTK_MESSAGE_INFO, @c GTK_MESSAGE_WARNING,
  *              @c GTK_MESSAGE_QUESTION, @c GTK_MESSAGE_ERROR.
@@ -712,9 +781,7 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
 GEANY_API_SYMBOL
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 {
-#ifndef G_OS_WIN32
 	GtkWidget *dialog;
-#endif
 	gchar *string;
 	va_list args;
 	GtkWindow *parent = (main_status.main_window_realized) ? GTK_WINDOW(main_widgets.window) : NULL;
@@ -723,13 +790,9 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 	string = g_strdup_vprintf(text, args);
 	va_end(args);
 
-#ifdef G_OS_WIN32
-	win32_message_dialog(GTK_WIDGET(parent), type, string);
-#else
 	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
 			type, GTK_BUTTONS_OK, "%s", string);
 	show_msgbox_dialog(dialog, type, parent);
-#endif
 	g_free(string);
 }
 
@@ -737,18 +800,12 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary)
 {
 	GtkWindow *parent = (main_status.main_window_realized) ? GTK_WINDOW(main_widgets.window) : NULL;
-#ifdef G_OS_WIN32
-	/* put the two strings together because Windows message boxes don't support secondary texts */
-	gchar *string = g_strconcat(text, "\n", secondary, NULL);
-	win32_message_dialog(GTK_WIDGET(parent), type, string);
-	g_free(string);
-#else
 	GtkWidget *dialog;
+
 	dialog = gtk_message_dialog_new(parent, GTK_DIALOG_DESTROY_WITH_PARENT,
 			type, GTK_BUTTONS_OK, "%s", text);
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", secondary);
 	show_msgbox_dialog(dialog, type, parent);
-#endif
 }
 
 
@@ -815,20 +872,6 @@ gboolean dialogs_show_unsaved_file(GeanyDocument *doc)
 }
 
 
-/* Use GtkFontChooserDialog on GTK3.2 for consistency, and because
- * GtkFontSelectionDialog is somewhat broken on 3.4 */
-#if GTK_CHECK_VERSION(3, 2, 0)
-#	undef GTK_FONT_SELECTION_DIALOG
-#	define GTK_FONT_SELECTION_DIALOG				GTK_FONT_CHOOSER_DIALOG
-
-#	define gtk_font_selection_dialog_new(title) \
-		gtk_font_chooser_dialog_new((title), NULL)
-#	define gtk_font_selection_dialog_get_font_name(dlg) \
-		gtk_font_chooser_get_font(GTK_FONT_CHOOSER(dlg))
-#	define gtk_font_selection_dialog_set_font_name(dlg, font) \
-		gtk_font_chooser_set_font(GTK_FONT_CHOOSER(dlg), (font))
-#endif
-
 static void
 on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
@@ -841,8 +884,8 @@ on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		{
 			gchar *fontname;
 
-			fontname = gtk_font_selection_dialog_get_font_name(
-				GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
+			fontname = gtk_font_chooser_get_font(
+				GTK_FONT_CHOOSER(ui_widgets.open_fontsel));
 			ui_set_editor_font(fontname);
 			g_free(fontname);
 
@@ -863,7 +906,7 @@ void dialogs_show_open_font(void)
 	{
 		GtkWidget *apply_button;
 
-		ui_widgets.open_fontsel = gtk_font_selection_dialog_new(_("Choose font"));;
+		ui_widgets.open_fontsel = gtk_font_chooser_dialog_new(_("Choose font"), NULL);
 		gtk_container_set_border_width(GTK_CONTAINER(ui_widgets.open_fontsel), 4);
 		gtk_window_set_modal(GTK_WINDOW(ui_widgets.open_fontsel), TRUE);
 		gtk_window_set_destroy_with_parent(GTK_WINDOW(ui_widgets.open_fontsel), TRUE);
@@ -883,8 +926,8 @@ void dialogs_show_open_font(void)
 
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(main_widgets.window));
 	}
-	gtk_font_selection_dialog_set_font_name(
-		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
+	gtk_font_chooser_set_font(
+		GTK_FONT_CHOOSER(ui_widgets.open_fontsel), interface_prefs.editor_font);
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_fontsel));
 }
@@ -969,6 +1012,7 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 		GtkWidget *label = gtk_label_new(label_text);
 		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
 		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		ui_hookup_widget(dialog, label, "label");
 		gtk_container_add(GTK_CONTAINER(vbox), label);
 	}
 
@@ -997,7 +1041,7 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 		g_signal_connect(data->entry, "insert-text", insert_text_cb, insert_text_cb_data);
 	g_signal_connect(data->entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
 	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), data->entry);
-	g_signal_connect_data(dialog, "response", G_CALLBACK(on_input_dialog_response), data, (GClosureNotify)g_free, 0);
+	g_signal_connect_data(dialog, "response", G_CALLBACK(on_input_dialog_response), data, CLOSURE_NOTIFY(g_free), 0);
 
 	if (persistent)
 	{
@@ -1209,7 +1253,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gtk_label_set_text(GTK_LABEL(label), doc->file_type->title);
 
 	label = ui_lookup_widget(dialog, "file_size_label");
-	file_size = utils_make_human_readable_str(filesize, 1, 0);
+	file_size = g_format_size(filesize);
 	gtk_label_set_text(GTK_LABEL(label), file_size);
 	g_free(file_size);
 
@@ -1288,20 +1332,6 @@ static gint show_prompt(GtkWidget *parent,
 		response_3 = GTK_RESPONSE_YES;
 	}
 
-#ifdef G_OS_WIN32
-	/* our native dialog code doesn't support custom buttons */
-	if (utils_str_equal(btn_3, GTK_STOCK_YES) &&
-		utils_str_equal(btn_2, GTK_STOCK_NO) && btn_1 == NULL)
-	{
-		gchar *string = (extra_text == NULL) ? g_strdup(question_text) :
-			g_strconcat(question_text, "\n\n", extra_text, NULL);
-
-		ret = win32_message_dialog(parent, GTK_MESSAGE_QUESTION, string);
-		ret = ret ? response_3 : response_2;
-		g_free(string);
-		return ret;
-	}
-#endif
 	if (parent == NULL && main_status.main_window_realized)
 		parent = main_widgets.window;
 
@@ -1334,8 +1364,6 @@ static gint show_prompt(GtkWidget *parent,
 
 /**
  *  Shows a question message box with @a text and Yes/No buttons.
- *  On Unix-like systems a GTK message dialog box is shown, on Win32 systems a native Windows
- *  message dialog box is shown.
  *
  *  @param text Printf()-style format string.
  *  @param ... Arguments for the @a text format string.

@@ -20,13 +20,13 @@
 
 /** @file sciwrappers.h
  * Wrapper functions for the Scintilla editor widget @c SCI_* messages.
- * You should also check the http://scintilla.org documentation, as it is more detailed.
+ * You should also check the https://scintilla.org documentation, as it is more detailed.
  *
  * To get Scintilla notifications, use the
  * @link pluginsignals.c @c "editor-notify" signal @endlink.
  *
  * @note These functions were originally from the cssed project
- * (http://cssed.sf.net, thanks).
+ * (https://sourceforge.net/projects/cssed/, thanks).
  * @see scintilla_send_message().
  */
 
@@ -701,7 +701,14 @@ void sci_set_lexer(ScintillaObject *sci, guint lexer_id)
 	gint old = sci_get_lexer(sci);
 
 	/* TODO, LexerNameFromID() is already deprecated */
-	ILexer5 *lexer = CreateLexer(LexerNameFromID(lexer_id));
+	const char *lexer_name = LexerNameFromID(lexer_id);
+	if (! lexer_name)
+	{
+		g_warning("Failed to find lexer for ID %u", lexer_id);
+		return;
+	}
+
+	ILexer5 *lexer = CreateLexer(lexer_name);
 
 	SSM(sci, SCI_SETILEXER, 0, (uintptr_t) lexer);
 
@@ -1219,7 +1226,7 @@ void sci_set_readonly(ScintillaObject *sci, gboolean readonly)
 /** Sends Scintilla commands without any parameters.
  * @param sci The Scintilla @c GtkWidget.
  * @param cmd @c SCI_COMMAND.
- * @see http://scintilla.org for the documentation.
+ * @see https://scintilla.org for the documentation.
  *
  *  @since 0.16
  */

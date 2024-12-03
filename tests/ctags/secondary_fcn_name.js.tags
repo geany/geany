@@ -1,9 +1,9 @@
-D1Ì16Í(a, b)Ö0
-function:   D1(a, b)
-D2Ì16Í(a, b)Ö0
-function:   D2(a, b)
-D2AÌ16Í(a, b)Ö0
-function:   D2A(a, b)
+D1Ì1Í(a, b)Ö0
+class:      D1(a, b)
+D2Ì1Í(a, b)Ö0
+class:      D2(a, b)
+D2AÌ1Í(a, b)Ö0
+class:      D2A(a, b)
 my_global_var1Ì16384Ö0
 variable:   my_global_var1
 theAddÌ16Í(a, b)Ö0

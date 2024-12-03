@@ -20,7 +20,7 @@
 
 /*
  * A GtkLabel subclass that can wrap to any width, unlike GtkLabel which has a fixed wrap point.
- * (inspired by libview's WrapLabel, http://view.sourceforge.net)
+ * (inspired by libview's WrapLabel, https://view.sourceforge.net/)
  */
 
 #ifdef HAVE_CONFIG_H

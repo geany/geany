@@ -128,6 +128,7 @@ test_sources = \
 	case_sensitivity.php			\
 	char-selector.f90				\
 	classes.php						\
+	class.ps1						\
 	cobol/helloworld.cbl			\
 	cobol/helloworld2.cbl			\
 	cobol/levels.cbl				\
@@ -165,6 +166,7 @@ test_sources = \
 	enum.c							\
 	enum.f90						\
 	enum.java						\
+	enum.ps1						\
 	enumerators.f90					\
 	events.cs						\
 	extern_variable.h				\
@@ -249,9 +251,11 @@ test_sources = \
 	mode.php						\
 	moniker.x68.asm					\
 	namelist.f						\
+	namespace.bas					\
 	namespace.cpp					\
 	namespaces2.php					\
 	namespaces.php					\
+	nested_anon.c					\
 	no_terminator.js				\
 	non-ascii-ident1.php			\
 	numlib.f90						\
@@ -259,6 +263,7 @@ test_sources = \
 	objectivec_interface.mm			\
 	objectivec_property.mm			\
 	objectivec_protocol.mm			\
+	oop.sv							\
 	Package.pm						\
 	php5_5_class_kw.php				\
 	parenthesis-rvalue.js			\
@@ -294,6 +299,7 @@ test_sources = \
 	signature.cpp					\
 	simple.abc						\
 	simple.asciidoc					\
+	simple.au3						\
 	simple.bas						\
 	simple.bat						\
 	simple.clj						\
@@ -301,6 +307,7 @@ test_sources = \
 	simple.d						\
 	simple.diff						\
 	simple.docbook					\
+	simple.fth						\
 	simple.hs						\
 	simple.hx						\
 	simple.html						\
@@ -312,10 +319,12 @@ test_sources = \
 	simple.lua						\
 	simple.mak						\
 	simple.md						\
+	simple.ml						\
 	simple.php						\
 	simple.pl						\
 	simple.ps1						\
 	simple.py						\
+	simple.raku						\
 	simple.rb						\
 	simple.rst						\
 	simple.sh						\
@@ -334,6 +343,7 @@ test_sources = \
 	strings.php						\
 	strings.rb						\
 	structure.f						\
+	sysverilog.sv					\
 	tabindent.py					\
 	test.erl						\
 	test.go							\

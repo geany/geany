@@ -10,6 +10,7 @@
 deps.mak
 .deps/
 .libs/
+.cache/
 Makefile
 Makefile.in
 .dirstamp

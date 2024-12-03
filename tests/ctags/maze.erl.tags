@@ -2,6 +2,8 @@ buildÌ16ÎmazeÖ0
 function:   maze :: build
 generateÌ16ÎmazeÖ0
 function:   maze :: generate
+mazeÌ256Ö0
+namespace:  maze
 pickÌ16ÎmazeÖ0
 function:   maze :: pick
 scrambleÌ16ÎmazeÖ0

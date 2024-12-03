@@ -40,7 +40,8 @@ function validFunctionThree(a,b) {
 
 var my_global_var1 = 33;
 
-function extra.validFunctionFour(a,b) {}
+var extra = {}
+extra.validFunctionFour = function(a,b) {}
 
 //pseudo-module setup
 testlib = {}

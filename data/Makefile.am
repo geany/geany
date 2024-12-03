@@ -10,10 +10,12 @@ filetypes_dist = \
 	filedefs/filetypes.Arduino.conf \
 	filedefs/filetypes.asciidoc \
 	filedefs/filetypes.asm \
+	filedefs/filetypes.autoit \
 	filedefs/filetypes.batch \
 	filedefs/filetypes.bibtex \
 	filedefs/filetypes.c \
 	filedefs/filetypes.caml \
+	filedefs/filetypes.cil \
 	filedefs/filetypes.Clojure.conf \
 	filedefs/filetypes.cmake \
 	filedefs/filetypes.cobol \
@@ -26,8 +28,10 @@ filetypes_dist = \
 	filedefs/filetypes.CUDA.conf \
 	filedefs/filetypes.Cython.conf \
 	filedefs/filetypes.d \
+	filedefs/filetypes.dart \
 	filedefs/filetypes.diff \
 	filedefs/filetypes.docbook \
+	filedefs/filetypes.Dockerfile.conf \
 	filedefs/filetypes.erlang \
 	filedefs/filetypes.f77 \
 	filedefs/filetypes.forth \
@@ -53,8 +57,9 @@ filetypes_dist = \
 	filedefs/filetypes.makefile \
 	filedefs/filetypes.markdown \
 	filedefs/filetypes.matlab \
+	filedefs/filetypes.nix \
 	filedefs/filetypes.Meson.conf \
-	filedefs/filetypes.Nim.conf \
+	filedefs/filetypes.nim \
 	filedefs/filetypes.nsis \
 	filedefs/filetypes.objectivec \
 	filedefs/filetypes.pascal \
@@ -62,7 +67,9 @@ filetypes_dist = \
 	filedefs/filetypes.php \
 	filedefs/filetypes.po \
 	filedefs/filetypes.powershell \
+	filedefs/filetypes.prolog \
 	filedefs/filetypes.r \
+	filedefs/filetypes.raku \
 	filedefs/filetypes.restructuredtext \
 	filedefs/filetypes.ruby \
 	filedefs/filetypes.rust \
@@ -71,6 +78,7 @@ filetypes_dist = \
 	filedefs/filetypes.smalltalk \
 	filedefs/filetypes.sql \
 	filedefs/filetypes.Swift.conf \
+	filedefs/filetypes.SystemVerilog.conf \
 	filedefs/filetypes.TypeScript.conf \
 	filedefs/filetypes.tcl \
 	filedefs/filetypes.txt2tags \
@@ -79,7 +87,8 @@ filetypes_dist = \
 	filedefs/filetypes.vhdl \
 	filedefs/filetypes.xml \
 	filedefs/filetypes.yaml \
-	filedefs/filetypes.zephir
+	filedefs/filetypes.zephir \
+	filedefs/filetypes.zig
 
 # generated filetypes
 filetypes_nodist = \
@@ -102,6 +111,7 @@ template_files = \
 	templates/files/main.cxx \
 	templates/files/main.d \
 	templates/files/main.java \
+	templates/files/main.md \
 	templates/files/main.py \
 	templates/files/main.vala \
 	templates/files/module.erl \
@@ -124,8 +134,6 @@ nobase_dist_pkgdata_DATA = \
 	snippets.conf \
 	ui_toolbar.xml \
 	geany.glade \
-	geany-3.0.css \
-	geany-3.20.css \
 	geany.css
 
 nobase_pkgdata_DATA = \

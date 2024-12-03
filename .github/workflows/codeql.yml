@@ -1,0 +1,80 @@
+name: "CodeQL"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+    paths:
+    - '**.c'
+    - '**.cpp'
+    - '**.h'
+    - '**.hpp'
+    - '**.py'
+    - '!**.yml'
+    - '**/codeql.yml'
+  pull_request:
+    branches: [ "master" ]
+    paths:
+    - '**.c'
+    - '**.cpp'
+    - '**.h'
+    - '**.hpp'
+    - '**.py'
+    - '!**.yml'
+    - '**/codeql.yml'
+  schedule:
+    - cron: '15 20 15 * *'
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+    permissions:
+      # required for all workflows
+      security-events: write
+
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'c-cpp', 'python' ]
+        # CodeQL supports [ 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install --assume-yes --no-install-recommends \
+          ccache \
+          gettext autopoint \
+          libtool \
+          libgtk-3-dev \
+          doxygen \
+          python3-docutils \
+          python3-lxml \
+          rst2pdf
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"

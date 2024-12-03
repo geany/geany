@@ -64,8 +64,10 @@
 /**
  *  Tries to open the given URI in a browser.
  *  On Windows, the system's default browser is opened.
- *  On non-Windows systems, the browser command set in the preferences dialog is used. In case
- *  that fails or it is unset, the user is asked to correct or fill it.
+ *  On non-Windows systems, the browser command can be set in the preferences dialog.
+ *    If unset (empty) the system's default browser is used. If set it specifies the
+ *    command to execute. Either way, if it fails the user is prompted to correct the
+ *    pref.
  *
  *  @param uri The URI to open in the web browser.
  *
@@ -78,15 +80,26 @@ void utils_open_browser(const gchar *uri)
 	g_return_if_fail(uri != NULL);
 	win32_open_browser(uri);
 #else
-	gchar *argv[2] = { (gchar *) uri, NULL };
+	gchar *new_cmd, *argv[2] = { (gchar *) uri, NULL };
 
 	g_return_if_fail(uri != NULL);
 
-	while (!spawn_async(NULL, tool_prefs.browser_cmd, argv, NULL, NULL, NULL))
+	while (1)
 	{
-		gchar *new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
-			_("Failed to spawn the configured browser command. "
-			  "Please correct it or enter another one."),
+		/* Uses the user's default browser akin to xdg-open (in flatpak through a portal) */
+		if (EMPTY(tool_prefs.browser_cmd))
+		{
+			if (gtk_show_uri_on_window(GTK_WINDOW(main_widgets.window), uri, GDK_CURRENT_TIME, NULL))
+				break;
+		}
+		else if (spawn_async(NULL, tool_prefs.browser_cmd, argv, NULL, NULL, NULL))
+			break;
+
+		/* Allow the user to correct the pref. new_cmd may become empty. */
+		new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
+			_("Failed to spawn the configured browser command. Please "
+			  "enter a valid command or leave it empty in order "
+			  "to spawn the system default browser."),
 			tool_prefs.browser_cmd);
 
 		if (new_cmd == NULL) /* user canceled */
@@ -195,9 +208,12 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
  * If the file doesn't exist, it will be created.
  * If it already exists, it will be overwritten.
  *
- * @warning You should use @c g_file_set_contents() instead if you don't need
- * file permissions and other metadata to be preserved, as that always handles
- * disk exhaustion safely.
+ * @warning Currently, this function uses g_file_replace_contents() to save
+ * files which offers a reasonable balence between data safety during save
+ * and other factors such as handling symlinks, remote files, or platform-
+ * dependent aspects. However, plugins with special requirements should
+ * not rely on the exact implementation of this function and should rather
+ * implement file saving by themselves.
  *
  * @param filename The filename of the file to write, in locale encoding.
  * @param text The text to write into the file.
@@ -208,55 +224,29 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 GEANY_API_SYMBOL
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
+	GError *error = NULL;
+	gboolean success;
+	GFile *fp;
+
 	g_return_val_if_fail(filename != NULL, ENOENT);
 	g_return_val_if_fail(text != NULL, EINVAL);
 
-	if (file_prefs.use_safe_file_saving)
+	fp = g_file_new_for_path(filename);
+
+	success = g_file_replace_contents(fp, text, strlen(text), NULL, FALSE,
+		G_FILE_CREATE_NONE, NULL, NULL, &error);
+
+	g_object_unref(fp);
+
+	if (error)
 	{
-		GError *error = NULL;
-		if (! g_file_set_contents(filename, text, -1, &error))
-		{
-			geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
-			g_error_free(error);
-			return EIO;
-		}
+		geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
+		g_error_free(error);
 	}
-	else
-	{
-		FILE *fp;
-		gsize bytes_written, len;
-		gboolean fail = FALSE;
+	else if (!success)
+		geany_debug("%s: could not write to file %s", G_STRFUNC, filename);
 
-		if (filename == NULL)
-			return ENOENT;
-
-		len = strlen(text);
-		errno = 0;
-		fp = g_fopen(filename, "w");
-		if (fp == NULL)
-			fail = TRUE;
-		else
-		{
-			bytes_written = fwrite(text, sizeof(gchar), len, fp);
-
-			if (len != bytes_written)
-			{
-				fail = TRUE;
-				geany_debug(
-					"utils_write_file(): written only %"G_GSIZE_FORMAT" bytes, had to write %"G_GSIZE_FORMAT" bytes to %s",
-					bytes_written, len, filename);
-			}
-			if (fclose(fp) != 0)
-				fail = TRUE;
-		}
-		if (fail)
-		{
-			geany_debug("utils_write_file(): could not write to file %s (%s)",
-				filename, g_strerror(errno));
-			return FALLBACK(errno, EIO);
-		}
-	}
-	return 0;
+	return success ? 0 : EIO;
 }
 
 
@@ -753,21 +743,37 @@ gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 }
 
 
+/* Extracts initials from @p name, with basic Unicode support */
+GEANY_EXPORT_SYMBOL
 gchar *utils_get_initials(const gchar *name)
 {
-	gint i = 1, j = 1;
-	gchar *initials = g_malloc0(5);
+	GString *initials;
+	gchar *composed;
+	gboolean at_bound = TRUE;
 
-	initials[0] = name[0];
-	while (name[i] != '\0' && j < 4)
+	g_return_val_if_fail(name != NULL, NULL);
+
+	composed = g_utf8_normalize(name, -1, G_NORMALIZE_ALL_COMPOSE);
+	g_return_val_if_fail(composed != NULL, NULL);
+
+	initials = g_string_new(NULL);
+	for (const gchar *p = composed; *p; p = g_utf8_next_char(p))
 	{
-		if (name[i] == ' ' && name[i + 1] != ' ')
+		gunichar ch = g_utf8_get_char(p);
+
+		if (g_unichar_isspace(ch))
+			at_bound = TRUE;
+		else if (at_bound)
 		{
-			initials[j++] = name[i + 1];
+			const gchar *end = g_utf8_next_char(p);
+			g_string_append_len(initials, p, end - p);
+			at_bound = FALSE;
 		}
-		i++;
 	}
-	return initials;
+
+	g_free(composed);
+
+	return g_string_free(initials, FALSE);
 }
 
 
@@ -932,55 +938,6 @@ void utils_beep(void)
 {
 	if (prefs.beep_on_errors)
 		gdk_beep();
-}
-
-
-/* taken from busybox, thanks */
-gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
-									 gulong display_unit)
-{
-	/* The code will adjust for additional (appended) units. */
-	static const gchar zero_and_units[] = { '0', 0, 'K', 'M', 'G', 'T' };
-	static const gchar fmt[] = "%Lu %c%c";
-	static const gchar fmt_tenths[] = "%Lu.%d %c%c";
-
-	guint64 val;
-	gint frac;
-	const gchar *u;
-	const gchar *f;
-
-	u = zero_and_units;
-	f = fmt;
-	frac = 0;
-
-	val = size * block_size;
-	if (val == 0)
-		return g_strdup(u);
-
-	if (display_unit)
-	{
-		val += display_unit/2;	/* Deal with rounding. */
-		val /= display_unit;	/* Don't combine with the line above!!! */
-	}
-	else
-	{
-		++u;
-		while ((val >= 1024) && (u < zero_and_units + sizeof(zero_and_units) - 1))
-		{
-			f = fmt_tenths;
-			++u;
-			frac = ((((gint)(val % 1024)) * 10) + (1024 / 2)) / 1024;
-			val /= 1024;
-		}
-		if (frac >= 10)
-		{		/* We need to round up here. */
-			++val;
-			frac = 0;
-		}
-	}
-
-	/* If f==fmt then 'frac' and 'u' are ignored. */
-	return g_strdup_printf(f, val, frac, *u, 'b');
 }
 
 

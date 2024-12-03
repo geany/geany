@@ -46,6 +46,7 @@
 #include "highlighting.h"
 #include "keybindings.h"
 #include "main.h"
+#include "pluginextension.h"
 #include "prefs.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"
@@ -233,7 +234,7 @@ static void add_kb(GKeyFile *keyfile, const gchar *group, gchar **keys)
 
 		gtk_accel_group_connect(snippet_accel_group, key, mods, 0,
 			g_cclosure_new_swap((GCallback)on_snippet_keybinding_activate,
-				g_strdup(keys[i]), (GClosureNotify)g_free));
+				g_strdup(keys[i]), CLOSURE_NOTIFY(g_free)));
 	}
 }
 
@@ -316,11 +317,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		{
 			sci_set_current_position(editor->sci, editor_info.click_pos, FALSE);
 
-			editor_find_current_word(editor, editor_info.click_pos,
-				current_word, sizeof current_word, NULL);
-			if (*current_word)
-				return symbols_goto_tag(current_word, TRUE);
-			else
+			if (!symbols_goto_tag(doc, editor_info.click_pos, TRUE))
 				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
 			return TRUE;
 		}
@@ -346,7 +343,7 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		g_signal_emit_by_name(geany_object, "update-editor-menu",
 			current_word, editor_info.click_pos, doc);
 
-		ui_menu_popup(GTK_MENU(main_widgets.editor_menu), NULL, NULL, event->button, event->time);
+		gtk_menu_popup_at_pointer(GTK_MENU(main_widgets.editor_menu), (GdkEvent *) event);
 		return TRUE;
 	}
 	return FALSE;
@@ -502,6 +499,12 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 {
 	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_current_position(sci);
+
+	if (nt->updated & (SC_UPDATE_H_SCROLL | SC_UPDATE_V_SCROLL))
+	{
+		SSM(sci, SCI_CALLTIPCANCEL, 0, 0);
+		SSM(sci, SCI_AUTOCCANCEL, 0, 0);
+	}
 
 	/* since Scintilla 2.24, SCN_UPDATEUI is also sent on scrolling though we don't need to handle
 	 * this and so ignore every SCN_UPDATEUI events except for content and selection changes */
@@ -702,7 +705,6 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_current_position(editor->sci);
 	gint line = sci_get_current_line(editor->sci) + 1;
-	gchar typed = sci_get_char_at(sci, pos - 1);
 	gchar brace_char;
 	gchar *name;
 	GeanyFiletype *ft = editor->document->file_type;
@@ -722,9 +724,6 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 		/* allow for a space between word and operator */
 		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 			pos--;
-
-		if (pos > 0)
-			typed = sci_get_char_at(sci, pos - 1);
 	}
 
 	autocomplete_suffix_len = scope_autocomplete_suffix(sci, ft->lang, pos,
@@ -825,13 +824,15 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case '(':
 		{
 			auto_close_chars(sci, pos, nt->ch);
-			/* show calltips */
-			editor_show_calltip(editor, --pos);
+			if (!plugin_extension_calltips_provided(editor->document, NULL))
+				/* show calltips */
+				editor_show_calltip(editor, --pos);
 			break;
 		}
 		case ')':
 		{	/* hide calltips */
-			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0))
+			if (SSM(sci, SCI_CALLTIPACTIVE, 0, 0) &&
+				!plugin_extension_calltips_provided(editor->document, NULL))
 			{
 				SSM(sci, SCI_CALLTIPCANCEL, 0, 0);
 			}
@@ -861,13 +862,12 @@ static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 		case ':':	/* C/C++ class:: syntax */
 		/* tag autocompletion */
 		default:
-#if 0
-			if (! editor_start_auto_complete(editor, pos, FALSE))
-				request_reshowing_calltip(nt);
-#else
 			editor_start_auto_complete(editor, pos, FALSE);
-#endif
 	}
+
+	plugin_extension_autocomplete_perform(editor->document, FALSE);
+	plugin_extension_calltips_show(editor->document, FALSE);
+
 	check_line_breaking(editor, pos);
 }
 
@@ -1103,7 +1103,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			/* Visible lines are only laid out accurately just before painting,
 			 * so we need to only call editor_scroll_to_line here, because the document
 			 * may have line wrapping and folding enabled.
-			 * http://scintilla.sourceforge.net/ScintillaDoc.html#LineWrapping
+			 * https://scintilla.sourceforge.io/ScintillaDoc.html#LineWrapping
 			 * This is important e.g. when loading a session and switching pages
 			 * and having the cursor scroll in view. */
 			 /* FIXME: Really we want to do this just before painting, not after it
@@ -1161,7 +1161,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
 			autocomplete_scope_shown = FALSE;
-			request_reshowing_calltip(nt);
+			if (!plugin_extension_calltips_provided(doc, NULL))
+				request_reshowing_calltip(nt);
 			break;
 		case SCN_NEEDSHOWN:
 			ensure_range_visible(sci, nt->position, nt->position + nt->length, FALSE);
@@ -1175,7 +1176,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
 		case SCN_CALLTIPCLICK:
-			if (nt->position > 0)
+			if (!plugin_extension_calltips_provided(doc, NULL) && nt->position > 0)
 			{
 				switch (nt->position)
 				{
@@ -1317,16 +1318,21 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 
 	switch (lexer)
 	{
+		case SCLEX_CIL:
 		case SCLEX_CPP:
 		case SCLEX_D:
+		case SCLEX_DART:
 		case SCLEX_HTML:	/* for PHP & JS */
 		case SCLEX_PHPSCRIPT:
 		case SCLEX_PASCAL:	/* for multiline comments? */
 		case SCLEX_BASH:
 		case SCLEX_PERL:
+		case SCLEX_NIX:
 		case SCLEX_TCL:
 		case SCLEX_R:
+		case SCLEX_RAKU:
 		case SCLEX_RUST:
+		case SCLEX_ZIG:
 			return TRUE;
 		default:
 			return FALSE;
@@ -2225,6 +2231,9 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	GeanyFiletype *ft;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
+
+	if (plugin_extension_autocomplete_provided(editor->document, NULL))
+		return FALSE;
 
 	if (! editor_prefs.auto_complete_symbols && ! force)
 		return FALSE;
@@ -3510,8 +3519,7 @@ static gboolean is_comment_char(gchar c, gint lexer)
 {
 	if ((c == '*' || c == '+') && lexer == SCLEX_D)
 		return TRUE;
-	else
-	if (c == '*')
+	else if (c == '*')
 		return TRUE;
 
 	return FALSE;
@@ -4746,8 +4754,9 @@ gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 	sci_goto_pos(editor->sci, pos, TRUE);
 	editor->scroll_percent = 0.25F;
 
-	/* finally switch to the page */
+	/* switch to the page */
 	document_show_tab(editor->document);
+
 	return TRUE;
 }
 
@@ -4956,14 +4965,6 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	/* input method editor's candidate window behaviour */
 	SSM(sci, SCI_SETIMEINTERACTION, editor_prefs.ime_interaction, 0);
 
-#ifdef GDK_WINDOWING_QUARTZ
-# if ! GTK_CHECK_VERSION(3,16,0)
-	/* "retina" (HiDPI) display support on OS X - requires disabling buffered draw
-	 * on older GTK versions */
-	SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);
-# endif
-#endif
-
 	/* only connect signals if this is for the document notebook, not split window */
 	if (editor->sci == NULL)
 	{
@@ -5148,6 +5149,8 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		case SCLEX_D:
 		case SCLEX_OCTAVE:
 		case SCLEX_RUST:
+		case SCLEX_ZIG:
+		case SCLEX_DART:
 			mode = SC_IV_LOOKBOTH;
 			break;
 
@@ -5200,6 +5203,15 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
+
+	/* Change history */
+	guint change_history_mask;
+	change_history_mask = SC_CHANGE_HISTORY_DISABLED;
+	if (editor_prefs.change_history_markers)
+		change_history_mask |= SC_CHANGE_HISTORY_ENABLED|SC_CHANGE_HISTORY_MARKERS;
+	if (editor_prefs.change_history_indicators)
+		change_history_mask |= SC_CHANGE_HISTORY_ENABLED|SC_CHANGE_HISTORY_INDICATORS;
+	SSM(sci, SCI_SETCHANGEHISTORY, change_history_mask, 0);
 
 	/* caret Y policy */
 	caret_y_policy = CARET_EVEN;

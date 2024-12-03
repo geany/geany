@@ -70,7 +70,6 @@ context_action_cmd=
 [build_settings]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
-# (use only one of it at one time)
 compiler=dmd -w -c "%f"
 linker=dmd -w -of"%e" "%f"
 # you can also use the gdc compiler, please use the "gdmd" wrapper script(included with gdc)

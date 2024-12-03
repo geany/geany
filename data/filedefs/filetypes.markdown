@@ -30,3 +30,6 @@ mime_type=text/x-markdown
 symbol_list_sort_mode=1
 
 
+[lexer_properties]
+# apply heading style to entire line
+lexer.markdown.header.eolfill=1

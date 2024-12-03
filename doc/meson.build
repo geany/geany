@@ -19,6 +19,7 @@ tarball = run_command('test', '-f', 'geany.html', check: false)
 if tarball.returncode() == 0 or rst2html.found()
 	install_data(
 		'images/build_menu_commands_dialog.png',
+		'images/edit_change_history.png',
 		'images/find_dialog.png',
 		'images/find_in_files_dialog.png',
 		'images/main_window.png',

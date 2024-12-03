@@ -264,7 +264,7 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 
 	w->check_print_basename = gtk_check_button_new_with_mnemonic(_("Use the basename of the printed file"));
 	gtk_box_pack_start(GTK_BOX(vbox30), w->check_print_basename, FALSE, FALSE, 0);
-	gtk_widget_set_tooltip_text(w->check_print_basename, _("Print only the basename(without the path) of the printed file"));
+	gtk_widget_set_tooltip_text(w->check_print_basename, _("Print only the basename (without the path) of the printed file"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_basename), printing_prefs.page_header_basename);
 
 	hbox10 = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
@@ -292,6 +292,8 @@ static void end_print(GtkPrintOperation *operation, GtkPrintContext *context, gp
 	if (dinfo == NULL)
 		return;
 
+	/* see ui_progress_bar_stop() for more details on why this is called */
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(main_widgets.progressbar), 0.0);
 	gtk_widget_hide(main_widgets.progressbar);
 	g_object_unref(dinfo->sci);
 	g_object_unref(dinfo->layout);
@@ -602,9 +604,9 @@ static void print_external(GeanyDocument *doc)
 		/* /bin/sh -c emulates the system() call and makes complex commands possible
 		 * but only on non-win32 systems due to the lack of win32's shell capabilities */
 	#ifdef G_OS_UNIX
-		gchar *argv[] = { "/bin/sh", "-c", cmdline, NULL };
+		const gchar *argv[] = { "/bin/sh", "-c", cmdline, NULL };
 
-		if (!spawn_async(NULL, NULL, argv, NULL, NULL, &error))
+		if (!spawn_async(NULL, NULL, (gchar **) argv, NULL, NULL, &error))
 	#else
 		if (!spawn_async(NULL, cmdline, NULL, NULL, NULL, &error))
 	#endif

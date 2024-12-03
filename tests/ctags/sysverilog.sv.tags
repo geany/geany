@@ -1,0 +1,114 @@
+AÌ32768Îtestbench.compareÖ0
+externvar:  testbench.compare :: A
+BÌ32768Îtestbench.compareÖ0
+externvar:  testbench.compare :: B
+BITS_TO_BYTESÌ65536Ö0
+macro:      BITS_TO_BYTES
+BYTESÌ8Îa_moduleÖ0
+field:      a_module :: BYTES
+DEFAULT_WIDTHÌ65536Ö0
+macro:      DEFAULT_WIDTH
+NUM_UUTÌ8Îgenerate_signalsÖ0
+field:      generate_signals :: NUM_UUT
+NUM_UUTÌ8ÎtestbenchÖ0
+field:      testbench :: NUM_UUT
+UUT_BYTESÌ8Îgenerate_signalsÖ0
+field:      generate_signals :: UUT_BYTES
+UUT_BYTESÌ8ÎtestbenchÖ0
+field:      testbench :: UUT_BYTES
+UUT_WIDTHÌ8Îgenerate_signalsÖ0
+field:      generate_signals :: UUT_WIDTH
+UUT_WIDTHÌ8ÎtestbenchÖ0
+field:      testbench :: UUT_WIDTH
+WIDTHÌ8Îa_moduleÖ0
+field:      a_module :: WIDTH
+a_moduleÌ1024Ö0
+prototype:  a_module
+be_filteredÌ16384Îa_moduleÖ0
+variable:   a_module :: be_filtered
+be_filtered_genÌ256Îa_moduleÖ0
+namespace:  a_module :: be_filtered_gen
+byte_dataÌ32768Îgenerate_signals.write_byteÖ0
+externvar:  generate_signals.write_byte :: byte_data
+byte_enÌ16384ÎtestbenchÖ0
+variable:   testbench :: byte_en
+byte_enÌ32768Îa_moduleÖ0
+externvar:  a_module :: byte_en
+byte_enÌ32768Îgenerate_signalsÖ0
+externvar:  generate_signals :: byte_en
+byte_indexÌ32768Îgenerate_signals.write_byteÖ0
+externvar:  generate_signals.write_byte :: byte_index
+clkÌ16384ÎtestbenchÖ0
+variable:   testbench :: clk
+clkÌ32768Îa_moduleÖ0
+externvar:  a_module :: clk
+clkÌ32768Îgenerate_signalsÖ0
+externvar:  generate_signals :: clk
+clk_genÌ256ÎtestbenchÖ0
+namespace:  testbench :: clk_gen
+compareÌ16ÎtestbenchÖ0
+function:   testbench :: compare
+data_inÌ16384ÎtestbenchÖ0
+variable:   testbench :: data_in
+data_inÌ32768Îa_moduleÖ0
+externvar:  a_module :: data_in
+data_inÌ32768Îgenerate_signalsÖ0
+externvar:  generate_signals :: data_in
+data_in_bytesÌ16384Îa_moduleÖ0
+variable:   a_module :: data_in_bytes
+data_in_bytesÌ16384Îgenerate_signals.write_byteÖ0
+variable:   generate_signals.write_byte :: data_in_bytes
+data_outÌ16384Îtestbench.uut_genÖ0
+variable:   testbench.uut_gen :: data_out
+data_outÌ32768Îa_moduleÖ0
+externvar:  a_module :: data_out
+data_out_bytesÌ16384Îa_moduleÖ0
+variable:   a_module :: data_out_bytes
+finishedÌ16384ÎtestbenchÖ0
+variable:   testbench :: finished
+finishedÌ32768Îgenerate_signalsÖ0
+externvar:  generate_signals :: finished
+gen_signalsÌ4ÎtestbenchÖ0Ïgenerate_signals
+enumerator: generate_signals testbench :: gen_signals
+generate_signalsÌ1024Ö0
+prototype:  generate_signals
+iÌ16384Îa_moduleÖ0
+variable:   a_module :: i
+iÌ16384Îa_module.main_blockÖ0
+variable:   a_module.main_block :: i
+iÌ16384Îtestbench.compareÖ0
+variable:   testbench.compare :: i
+main_blockÌ256Îa_moduleÖ0
+namespace:  a_module :: main_block
+maskÌ32768Îtestbench.compareÖ0
+externvar:  testbench.compare :: mask
+resetÌ16384ÎtestbenchÖ0
+variable:   testbench :: reset
+resetÌ32768Îa_moduleÖ0
+externvar:  a_module :: reset
+resetÌ32768Îgenerate_signalsÖ0
+externvar:  generate_signals :: reset
+reset_genÌ256ÎtestbenchÖ0
+namespace:  testbench :: reset_gen
+testbenchÌ1024Ö0
+prototype:  testbench
+trigger_failureÌ16384ÎtestbenchÖ0
+variable:   testbench :: trigger_failure
+trigger_successÌ16384ÎtestbenchÖ0
+variable:   testbench :: trigger_success
+uutÌ4Îtestbench.uut_genÖ0Ïa_module
+enumerator: a_module testbench.uut_gen :: uut
+uut_genÌ256ÎtestbenchÖ0
+namespace:  testbench :: uut_gen
+uut_indexÌ32768Îgenerate_signals.write_byteÖ0
+externvar:  generate_signals.write_byte :: uut_index
+validÌ32768Îa_moduleÖ0
+externvar:  a_module :: valid
+valid_uutÌ16384ÎtestbenchÖ0
+variable:   testbench :: valid_uut
+valid_uutÌ32768Îgenerate_signalsÖ0
+externvar:  generate_signals :: valid_uut
+write_byteÌ16Îgenerate_signalsÖ0
+function:   generate_signals :: write_byte
+xÌ16384Îa_module.be_filtered_genÖ0
+variable:   a_module.be_filtered_gen :: x

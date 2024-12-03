@@ -24,12 +24,15 @@
 *   DATA DECLARATIONS
 */
 
+#define FIELD_NULL_LETTER_CHAR '-'
+#define FIELD_NULL_LETTER_STRING "-"
+
 
 /*
 *   FUNCTION PROTOTYPES
 */
 
-extern fieldType getFieldTypeForOption (char letter);
+extern fieldType getFieldTypeForLetter (char letter);
 
 /*
    `getFieldTypeForName' is for looking for a field not owned by any parser,
@@ -46,7 +49,10 @@ extern fieldType getFieldTypeForName (const char *name);
 extern fieldType getFieldTypeForNameAndLanguage (const char *fieldName, langType language);
 extern bool enableField (fieldType type, bool state);
 extern bool isCommonField (fieldType type);
-extern int     getFieldOwner (fieldType type);
+
+/* Return LANG_IGNORE if the field is a common field.*/
+extern langType getFieldLanguage (fieldType type);
+
 extern const char* getFieldDescription (fieldType type);
 extern const char* getFieldName (fieldType type);
 extern unsigned char getFieldLetter (fieldType type);
@@ -64,7 +70,7 @@ extern const char* renderFieldNoEscaping (fieldType type, const tagEntryInfo *ta
 extern bool  doesFieldHaveTabOrNewlineChar (fieldType type, const tagEntryInfo *tag, int index);
 
 extern void initFieldObjects (void);
-extern int countFields (void);
+extern unsigned int countFields (void);
 
 /* language should be typed to langType.
    Use int here to avoid circular dependency */

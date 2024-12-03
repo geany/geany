@@ -2,7 +2,7 @@ test_deps = declare_dependency(compile_args: geany_cflags + [ '-DG_LOG_DOMAIN="G
                                dependencies: [deps, dep_libgeany],
                                include_directories: '..')
 
-ctags_tests = files([
+ctags_tests = [
 	'ctags/1795612.js.tags',
 	'ctags/1850914.js.tags',
 	'ctags/1878155.js.tags',
@@ -128,6 +128,7 @@ ctags_tests = files([
 	'ctags/case_sensitivity.php.tags',
 	'ctags/char-selector.f90.tags',
 	'ctags/classes.php.tags',
+	'ctags/class.ps1.tags',
 	'ctags/cobol/helloworld.cbl.tags',
 	'ctags/cobol/helloworld2.cbl.tags',
 	'ctags/cobol/levels.cbl.tags',
@@ -165,6 +166,7 @@ ctags_tests = files([
 	'ctags/enum.c.tags',
 	'ctags/enum.f90.tags',
 	'ctags/enum.java.tags',
+	'ctags/enum.ps1.tags',
 	'ctags/enumerators.f90.tags',
 	'ctags/events.cs.tags',
 	'ctags/extern_variable.h.tags',
@@ -246,9 +248,11 @@ ctags_tests = files([
 	'ctags/mode.php.tags',
 	'ctags/moniker.x68.asm.tags',
 	'ctags/namelist.f.tags',
+	'ctags/namespace.bas.tags',
 	'ctags/namespace.cpp.tags',
 	'ctags/namespaces2.php.tags',
 	'ctags/namespaces.php.tags',
+	'ctags/nested_anon.c.tags',
 	'ctags/no_terminator.js.tags',
 	'ctags/non-ascii-ident1.php.tags',
 	'ctags/numlib.f90.tags',
@@ -256,6 +260,7 @@ ctags_tests = files([
 	'ctags/objectivec_interface.mm.tags',
 	'ctags/objectivec_property.mm.tags',
 	'ctags/objectivec_protocol.mm.tags',
+	'ctags/oop.sv.tags',
 	'ctags/Package.pm.tags',
 	'ctags/php5_5_class_kw.php.tags',
 	'ctags/parenthesis-rvalue.js.tags',
@@ -291,6 +296,7 @@ ctags_tests = files([
 	'ctags/signature.cpp.tags',
 	'ctags/simple.abc.tags',
 	'ctags/simple.asciidoc.tags',
+	'ctags/simple.au3.tags',
 	'ctags/simple.bas.tags',
 	'ctags/simple.bat.tags',
 	'ctags/simple.clj.tags',
@@ -298,6 +304,7 @@ ctags_tests = files([
 	'ctags/simple.d.tags',
 	'ctags/simple.diff.tags',
 	'ctags/simple.docbook.tags',
+	'ctags/simple.fth.tags',
 	'ctags/simple.hs.tags',
 	'ctags/simple.hx.tags',
 	'ctags/simple.html.tags',
@@ -309,10 +316,12 @@ ctags_tests = files([
 	'ctags/simple.lua.tags',
 	'ctags/simple.mak.tags',
 	'ctags/simple.md.tags',
+	'ctags/simple.ml.tags',
 	'ctags/simple.php.tags',
 	'ctags/simple.pl.tags',
 	'ctags/simple.ps1.tags',
 	'ctags/simple.py.tags',
+	'ctags/simple.raku.tags',
 	'ctags/simple.rb.tags',
 	'ctags/simple.rst.tags',
 	'ctags/simple.sh.tags',
@@ -331,6 +340,7 @@ ctags_tests = files([
 	'ctags/strings.php.tags',
 	'ctags/strings.rb.tags',
 	'ctags/structure.f.tags',
+	'ctags/sysverilog.sv.tags',
 	'ctags/tabindent.py.tags',
 	'ctags/test.erl.tags',
 	'ctags/test.go.tags',
@@ -350,12 +360,12 @@ ctags_tests = files([
 	'ctags/vhdl-process.vhd.tags',
 	'ctags/vhdl-type.vhd.tags',
 	'ctags/whitespaces.php.tags'
-])
+]
 
 runner = find_program('ctags/runner.sh')
 foreach t : ctags_tests
-	test('@0@'.format(t), runner,
-	     args: [join_paths(meson.build_root(), 'geany'), t],
+	test(t, runner,
+	     args: [join_paths(meson.build_root(), 'geany'), files(t)],
 	     env: ['top_srcdir='+meson.source_root(), 'top_builddir=' + meson.build_root()])
 endforeach
 
@@ -369,3 +379,4 @@ test('ctags/processing-order', runner,
      env: ['top_srcdir='+meson.source_root(), 'top_builddir='+meson.build_root()])
 test('utils', executable('test_utils', 'test_utils.c', dependencies: test_deps))
 test('sidebar', executable('test_sidebar', 'test_sidebar.c', dependencies: test_deps))
+test('encodings', executable('test_encodings', 'test_encodings.c', dependencies: test_deps))

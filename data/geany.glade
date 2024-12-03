@@ -1312,12 +1312,12 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="check_native_windows_dialogs">
-                                    <property name="label" translatable="yes">Use Windows native dialogs</property>
+                                  <object class="GtkCheckButton" id="check_native_dialogs">
+                                    <property name="label" translatable="yes">Use platform-native file dialogs</property>
                                     <property name="visible">True</property>
                                     <property name="can-focus">True</property>
                                     <property name="receives-default">False</property>
-                                    <property name="tooltip-text" translatable="yes">Defines whether to use the Windows native dialogs or whether to use the GTK default dialogs</property>
+                                    <property name="tooltip-text" translatable="yes">Defines whether to use the platform-native file dialogs or the GTK default dialogs</property>
                                     <property name="use-underline">True</property>
                                     <property name="draw-indicator">True</property>
                                   </object>
@@ -3057,6 +3057,91 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkFrame" id="frame40">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label-xalign">0</property>
+                        <property name="shadow-type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment47">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="left-padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox48">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="radio_virtualspace_disabled">
+                                    <property name="label" translatable="yes">Disabled</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="tooltip-text" translatable="yes">Do not show virtual spaces</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="active">True</property>
+                                    <property name="draw-indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="radio_virtualspace_selection">
+                                    <property name="label" translatable="yes">Only for rectangular selections</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="tooltip-text" translatable="yes">Only show virtual spaces beyond the end of lines when drawing a rectangular selection</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
+                                    <property name="group">radio_virtualspace_disabled</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="radio_virtualspace_always">
+                                    <property name="label" translatable="yes">Always</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="tooltip-text" translatable="yes">Always show virtual spaces beyond the end of lines</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
+                                    <property name="group">radio_virtualspace_disabled</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label238">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Virtual spaces&lt;/b&gt;</property>
+                            <property name="use-markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
                 <child type="tab">
@@ -4211,68 +4296,47 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFrame" id="frame40">
+                      <object class="GtkFrame">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment47">
+                          <object class="GtkAlignment">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="left-padding">12</property>
                             <child>
-                              <object class="GtkVBox" id="vbox48">
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="orientation">vertical</property>
                                 <child>
-                                  <object class="GtkRadioButton" id="radio_virtualspace_disabled">
-                                    <property name="label" translatable="yes">Disabled</property>
+                                  <object class="GtkCheckButton" id="check_change_history_markers">
+                                    <property name="label" translatable="yes">Show in markers margin</property>
                                     <property name="visible">True</property>
                                     <property name="can-focus">True</property>
                                     <property name="receives-default">False</property>
-                                    <property name="tooltip-text" translatable="yes">Do not show virtual spaces</property>
-                                    <property name="use-underline">True</property>
                                     <property name="draw-indicator">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="radio_virtualspace_selection">
-                                    <property name="label" translatable="yes">Only for rectangular selections</property>
+                                  <object class="GtkCheckButton" id="check_change_history_indicators">
+                                    <property name="label" translatable="yes">Show as underline indicators</property>
                                     <property name="visible">True</property>
                                     <property name="can-focus">True</property>
                                     <property name="receives-default">False</property>
-                                    <property name="tooltip-text" translatable="yes">Only show virtual spaces beyond the end of lines when drawing a rectangular selection</property>
-                                    <property name="use-underline">True</property>
                                     <property name="draw-indicator">True</property>
-                                    <property name="group">radio_virtualspace_disabled</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkRadioButton" id="radio_virtualspace_always">
-                                    <property name="label" translatable="yes">Always</property>
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">True</property>
-                                    <property name="receives-default">False</property>
-                                    <property name="tooltip-text" translatable="yes">Always show virtual spaces beyond the end of lines</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="draw-indicator">True</property>
-                                    <property name="group">radio_virtualspace_disabled</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -4280,16 +4344,16 @@
                           </object>
                         </child>
                         <child type="label">
-                          <object class="GtkLabel" id="label238">
+                          <object class="GtkLabel" id="label252">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Virtual spaces&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Change History&lt;/b&gt;</property>
                             <property name="use-markup">True</property>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
@@ -4500,22 +4564,6 @@
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="check_open_encoding">
-                                <property name="label" translatable="yes">Use fixed encoding when opening non-Unicode files</property>
-                                <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
-                                <property name="tooltip-text" translatable="yes">This option disables the automatic detection of the file encoding when opening non-Unicode files and opens the file with the specified encoding (usually not needed)</property>
-                                <property name="use-underline">True</property>
-                                <property name="draw-indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
@@ -4908,6 +4956,7 @@
                                     <property name="tooltip-text" translatable="yes">Path (and possibly additional arguments) to your favorite browser</property>
                                     <property name="primary-icon-activatable">False</property>
                                     <property name="secondary-icon-activatable">False</property>
+                                    <property name="placeholder-text" translatable="yes">System default</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
@@ -8759,7 +8808,7 @@
                   <object class="GtkEntry" id="entry_project_dialog_file_patterns">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="tooltip-text" translatable="yes">Space separated list of file patterns used for the find in files dialog (e.g. *.c *.h)</property>
+                    <property name="tooltip-text" translatable="yes">Space separated list of file patterns used for the Find in Files dialog (e.g. *.c *.h)</property>
                     <property name="invisible-char">•</property>
                     <property name="primary-icon-activatable">False</property>
                   </object>

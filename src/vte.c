@@ -124,7 +124,6 @@ struct VteFunctions
 	void (*vte_terminal_set_color_bold) (VteTerminal *terminal, const GdkColor *foreground);
 	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
 	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
-	void (*vte_terminal_im_append_menuitems) (VteTerminal *terminal, GtkMenuShell *menushell);
 	void (*vte_terminal_set_cursor_blink_mode) (VteTerminal *terminal,
 												VteTerminalCursorBlinkMode mode);
 	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
@@ -170,11 +169,11 @@ enum
 
 static const GtkTargetEntry dnd_targets[] =
 {
-  { "UTF8_STRING", 0, TARGET_UTF8_STRING },
-  { "TEXT", 0, TARGET_TEXT },
-  { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
-  { "STRING", 0, TARGET_STRING },
-  { "text/plain", 0, TARGET_TEXT_PLAIN },
+  { (gchar *) "UTF8_STRING", 0, TARGET_UTF8_STRING },
+  { (gchar *) "TEXT", 0, TARGET_TEXT },
+  { (gchar *) "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
+  { (gchar *) "STRING", 0, TARGET_STRING },
+  { (gchar *) "text/plain", 0, TARGET_TEXT_PLAIN },
 };
 
 
@@ -323,9 +322,6 @@ static void on_vte_realize(void)
 {
 	/* the vte widget has to be realised before color changes take effect */
 	vte_apply_user_settings();
-
-	if (vf->vte_terminal_im_append_menuitems && vte_config.im_submenu)
-		vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vte_config.vte), GTK_MENU_SHELL(vte_config.im_submenu));
 }
 
 
@@ -526,7 +522,7 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 	if (event->button == 3)
 	{
 		gtk_widget_grab_focus(vte_config.vte);
-		ui_menu_popup(GTK_MENU(vte_config.menu), NULL, NULL, event->button, event->time);
+		gtk_menu_popup_at_pointer(GTK_MENU(vte_config.menu), (GdkEvent *) event);
 		return TRUE;
 	}
 	else if (event->button == 2)
@@ -619,7 +615,6 @@ static gboolean vte_register_symbols(GModule *mod)
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_background);
 	}
 	BIND_REQUIRED_SYMBOL(vte_terminal_feed_child);
-	BIND_SYMBOL(vte_terminal_im_append_menuitems);
 	if (! BIND_SYMBOL(vte_terminal_set_cursor_blink_mode))
 		/* vte_terminal_set_cursor_blink_mode() is only available since 0.17.1, so if we don't find
 		 * this symbol, we are probably on an older version and use the old API instead */
@@ -718,7 +713,6 @@ static GtkWidget *vte_create_popup_menu(void)
 {
 	GtkWidget *menu, *item;
 	GtkAccelGroup *accel_group;
-	gboolean show_im_menu = TRUE;
 
 	menu = gtk_menu_new();
 
@@ -772,31 +766,6 @@ static GtkWidget *vte_create_popup_menu(void)
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
 
 	msgwin_menu_add_common_items(GTK_MENU(menu));
-
-	/* VTE 2.91 doesn't have IM context items, and GTK >= 3.10 doesn't show them anyway */
-	if (! vf->vte_terminal_im_append_menuitems || gtk_check_version(3, 10, 0) == NULL)
-		show_im_menu = FALSE;
-	else /* otherwise, query the setting */
-		g_object_get(gtk_settings_get_default(), "gtk-show-input-method-menu", &show_im_menu, NULL);
-
-	if (! show_im_menu)
-		vte_config.im_submenu = NULL;
-	else
-	{
-		item = gtk_separator_menu_item_new();
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-
-		/* the IM submenu should always be the last item to be consistent with other GTK popup menus */
-		vte_config.im_submenu = gtk_menu_new();
-
-		item = gtk_image_menu_item_new_with_mnemonic(_("_Input Methods"));
-		gtk_widget_show(item);
-		gtk_container_add(GTK_CONTAINER(menu), item);
-
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vte_config.im_submenu);
-		/* submenu populated after vte realized */
-	}
 
 	return menu;
 }

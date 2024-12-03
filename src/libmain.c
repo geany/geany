@@ -463,6 +463,18 @@ gboolean main_is_realized(void)
 
 
 /**
+ *  Checks whether Geany is 'closing all' documents right now.
+ *
+ *  @return @c TRUE if the Geany is 'closing all' documents right now or @c FALSE otherwise.
+ **/
+GEANY_API_SYMBOL
+gboolean geany_is_closing_all_documents(void)
+{
+	return main_status.closing_all;
+}
+
+
+/**
  *  Initialises the gettext translation system.
  *  This is a convenience function to set up gettext for internationalisation support
  *  in external plugins. You should call this function early in @ref plugin_init().
@@ -882,11 +894,11 @@ static void open_cl_files(gint argc, gchar **argv)
 #endif
 		if (filename && ! main_handle_filename(filename))
 		{
-			const gchar *msg = _("Could not find file '%s'.");
+			gchar *msg = g_strdup_printf(_("Could not find file '%s'."), filename);
 
-			g_printerr(msg, filename);	/* also print to the terminal */
-			g_printerr("\n");
-			ui_set_statusbar(TRUE, msg, filename);
+			g_printerr("%s\n", msg);	/* also print to the terminal */
+			ui_set_statusbar(TRUE, "%s", msg);
+			g_free(msg);
 		}
 		g_free(filename);
 	}
@@ -1033,6 +1045,8 @@ void main_init_headless(void)
 	memset(&template_prefs, 0, sizeof(GeanyTemplatePrefs));
 	memset(&ui_prefs, 0, sizeof(UIPrefs));
 	memset(&ui_widgets, 0, sizeof(UIWidgets));
+
+	encodings_init_headless();
 }
 
 
@@ -1174,9 +1188,11 @@ gint main_lib(gint argc, gchar **argv)
 	ui_set_statusbar(TRUE, _("This is Geany %s."), main_get_version_string());
 	if (config_dir_result != 0)
 	{
-		const gchar *message = _("Configuration directory could not be created (%s).");
-		ui_set_statusbar(TRUE, message, g_strerror(config_dir_result));
-		g_warning(message, g_strerror(config_dir_result));
+		gchar *message = g_strdup_printf(_("Configuration directory could not be created (%s)."),
+				g_strerror(config_dir_result));
+		ui_set_statusbar(TRUE, "%s", message);
+		g_warning("%s", message);
+		g_free(message);
 	}
 #ifdef HAVE_SOCKET
 	if (socket_info.lock_socket == -1)
@@ -1405,8 +1421,7 @@ gboolean main_quit(void)
 		if (do_main_quit())
 			return TRUE;
 	}
-	else
-	if (! prefs.confirm_exit ||
+	else if (! prefs.confirm_exit ||
 		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 			_("Do you really want to quit?")))
 	{

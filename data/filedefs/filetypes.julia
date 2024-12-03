@@ -2,7 +2,7 @@
 #
 # For complete documentation of this file, please see Geany's main documentation
 #
-# Keywords from pygment lexer (http://pygments.org/)
+# Keywords from pygment lexer (https://pygments.org/)
 # and from vim parser (https://github.com/JuliaEditorSupport/julia-vim/)
 #
 
@@ -76,6 +76,5 @@ type=0
 [build-menu]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
-# (use only one of it at one time)
 compiler=
 run_cmd=julia "%f"

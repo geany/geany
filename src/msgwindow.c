@@ -236,7 +236,7 @@ static void prepare_msg_tree_view(void)
 		"foreground-gdk", MSG_COL_COLOR, "text", MSG_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
 
-	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
+	gtk_tree_view_set_search_column(GTK_TREE_VIEW(msgwindow.tree_msg), MSG_COL_STRING);
 
 	ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 
@@ -273,7 +273,7 @@ static void prepare_compiler_tree_view(void)
 		"foreground-gdk", COMPILER_COL_COLOR, "text", COMPILER_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_compiler), column);
 
-	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
+	gtk_tree_view_set_search_column(GTK_TREE_VIEW(msgwindow.tree_compiler), COMPILER_COL_STRING);
 
 	ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
 
@@ -1236,20 +1236,17 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 		{
 			case MSG_STATUS:
 			{
-				ui_menu_popup(GTK_MENU(msgwindow.popup_status_menu), NULL, NULL,
-							  event->button, event->time);
+				gtk_menu_popup_at_pointer(GTK_MENU(msgwindow.popup_status_menu), (GdkEvent *) event);
 				break;
 			}
 			case MSG_MESSAGE:
 			{
-				ui_menu_popup(GTK_MENU(msgwindow.popup_msg_menu), NULL, NULL,
-							  event->button, event->time);
+				gtk_menu_popup_at_pointer(GTK_MENU(msgwindow.popup_msg_menu), (GdkEvent *) event);
 				break;
 			}
 			case MSG_COMPILER:
 			{
-				ui_menu_popup(GTK_MENU(msgwindow.popup_compiler_menu), NULL, NULL,
-							  event->button, event->time);
+				gtk_menu_popup_at_pointer(GTK_MENU(msgwindow.popup_compiler_menu), (GdkEvent *) event);
 				break;
 			}
 		}

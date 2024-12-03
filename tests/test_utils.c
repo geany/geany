@@ -107,7 +107,7 @@ static void test_utils_strv_find_common_prefix(void)
 }
 
 #define DIR_SEP "\\/"
-void test_utils_strv_find_lcs(void)
+static void test_utils_strv_find_lcs(void)
 {
 	gchar **data, *s;
 
@@ -291,7 +291,7 @@ static gboolean strv_eq(gchar **strv1, gchar **strv2)
 	}
 }
 
-void test_utils_strv_shorten_file_list(void)
+static void test_utils_strv_shorten_file_list(void)
 {
 	gchar **data, **expected, **result;
 	gchar *empty[] = { NULL };
@@ -408,6 +408,28 @@ void test_utils_strv_shorten_file_list(void)
 	g_strfreev(data);
 }
 
+static void test_utils_get_initials(void)
+{
+#define CHECK_INITIALS(buf, initials)		\
+	G_STMT_START {							\
+		gchar *r = utils_get_initials(buf);	\
+		g_assert_cmpstr(r, ==, initials);	\
+		g_free(r);							\
+	} G_STMT_END
+
+	CHECK_INITIALS("John Doe", "JD");
+	CHECK_INITIALS(" John Doe ", "JD");
+	CHECK_INITIALS("John", "J");
+	CHECK_INITIALS("John F. Doe", "JFD");
+	CHECK_INITIALS("Gary Errol Anthony Nicholas Yales", "GEANY");
+	CHECK_INITIALS("", "");
+	CHECK_INITIALS("Åsa Åkesson", "ÅÅ"); /* composed */
+	CHECK_INITIALS("Åsa Åkesson", "ÅÅ"); /* decomposed */
+	CHECK_INITIALS("Œdipe", "Œ");
+
+#undef CHECK_INITIALS
+}
+
 int main(int argc, char **argv)
 {
 	g_test_init(&argc, &argv, NULL);
@@ -416,6 +438,7 @@ int main(int argc, char **argv)
 	UTIL_TEST_ADD("strv_find_common_prefix", test_utils_strv_find_common_prefix);
 	UTIL_TEST_ADD("strv_find_lcs", test_utils_strv_find_lcs);
 	UTIL_TEST_ADD("strv_shorten_file_list", test_utils_strv_shorten_file_list);
+	UTIL_TEST_ADD("get_initals", test_utils_get_initials);
 
 	return g_test_run();
 }

@@ -44,7 +44,7 @@ copy_to()
 	dest="$1"
 	shift
 
-	if ! [ -d "$dest" ]; then
+	if ! [ -e "$dest" ]; then
 		echo "$dest does not exist." >&2;
 		exit 1
 	fi
@@ -56,6 +56,7 @@ copy_to()
 # purge executbale bits
 umask 111
 # copy everything from scintilla but lexers
+copy_to scintilla/README          "$SCI_SRC"/README
 copy_to scintilla/src             "$SCI_SRC"/src/*.cxx
 copy_to scintilla/src             "$SCI_SRC"/src/*.h
 copy_to scintilla/include         "$SCI_SRC"/include/*.h
@@ -73,7 +74,7 @@ copy_to scintilla/lexilla/lexlib  "$LEX_SRC"/lexlib/*.h
 copy_to scintilla/lexilla/        "$LEX_SRC"/License.txt
 copy_to scintilla/lexilla/        "$LEX_SRC"/version.txt
 # now copy the lexers we use
-git -C scintilla/lexilla/lexers/ ls-files *.cxx | while read f; do
+git -C scintilla/lexilla/lexers/ ls-files '*.cxx' | while read f; do
   copy_to "scintilla/lexilla/lexers" "$LEX_SRC/lexers/$f"
 done
 

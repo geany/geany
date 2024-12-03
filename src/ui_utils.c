@@ -528,11 +528,9 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 
 	if (IS_SCINTILLA(focusw))
 		enable = (doc == NULL) ? FALSE : sci_has_selection(doc->editor->sci);
-	else
-	if (GTK_IS_EDITABLE(focusw))
+	else if (GTK_IS_EDITABLE(focusw))
 		enable = gtk_editable_get_selection_bounds(GTK_EDITABLE(focusw), NULL, NULL);
-	else
-	if (GTK_IS_TEXT_VIEW(focusw))
+	else if (GTK_IS_TEXT_VIEW(focusw))
 	{
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
 			GTK_TEXT_VIEW(focusw));
@@ -1101,8 +1099,13 @@ void ui_document_show_hide(GeanyDocument *doc)
 }
 
 
+/* success = FALSE indicates an error for widget */
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 {
+	// set the entry, not just the button
+	if (GTK_IS_COMBO_BOX(widget))
+		widget = gtk_bin_get_child(GTK_BIN(widget));
+
 	gtk_widget_set_name(widget, success ? NULL : "geany-search-entry-no-match");
 }
 
@@ -1959,43 +1962,49 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 }
 
 
-#ifndef G_OS_WIN32
 static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 		const gchar *utf8_path)
 {
-	GtkWidget *dialog = gtk_file_chooser_dialog_new(title,
-		GTK_WINDOW(main_widgets.window), action,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+	GtkFileChooser *dialog;
 	gchar *locale_path;
 	gchar *ret_path = NULL;
 
-	gtk_widget_set_name(dialog, "GeanyDialog");
+	if (interface_prefs.use_native_windows_dialogs)
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_native_new(title,
+			GTK_WINDOW(main_widgets.window), action, NULL, NULL));
+	else
+	{
+		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(title,
+			GTK_WINDOW(main_widgets.window), action,
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL));
+		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialog");
+	}
+
 	locale_path = utils_get_locale_from_utf8(utf8_path);
 	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
 		if (g_path_is_absolute(locale_path) && g_file_test(locale_path, G_FILE_TEST_IS_DIR))
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
+			gtk_file_chooser_set_current_folder(dialog, locale_path);
 	}
 	else if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
 		if (g_path_is_absolute(locale_path))
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_path);
+			gtk_file_chooser_set_filename(dialog, locale_path);
 	}
 	g_free(locale_path);
 
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *dir_locale;
 
-		dir_locale = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		dir_locale = gtk_file_chooser_get_filename(dialog);
 		ret_path = utils_get_utf8_from_locale(dir_locale);
 		g_free(dir_locale);
 	}
-	gtk_widget_destroy(dialog);
+	dialogs_file_chooser_destroy(dialog);
 	return ret_path;
 }
-#endif
 
 
 gchar *ui_get_project_directory(const gchar *path)
@@ -2003,11 +2012,7 @@ gchar *ui_get_project_directory(const gchar *path)
 	gchar *utf8_path;
 	const gchar *title = _("Select Project Base Path");
 
-#ifdef G_OS_WIN32
-	utf8_path = win32_show_folder_dialog(ui_widgets.prefs_dialog, title, path);
-#else
 	utf8_path = run_file_chooser(title, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, path);
-#endif
 
 	return utf8_path;
 }
@@ -2030,22 +2035,12 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 
 	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
-#ifdef G_OS_WIN32
-		utf8_path = win32_show_file_dialog(GTK_WINDOW(ui_widgets.prefs_dialog), title,
-						gtk_entry_get_text(GTK_ENTRY(entry)));
-#else
 		utf8_path = run_file_chooser(title, action, gtk_entry_get_text(GTK_ENTRY(entry)));
-#endif
 	}
 	else if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
 		gchar *path = g_path_get_dirname(gtk_entry_get_text(GTK_ENTRY(entry)));
-#ifdef G_OS_WIN32
-		utf8_path = win32_show_folder_dialog(ui_widgets.prefs_dialog, title,
-						gtk_entry_get_text(GTK_ENTRY(entry)));
-#else
 		utf8_path = run_file_chooser(title, action, path);
-#endif
 		g_free(path);
 	}
 
@@ -2159,16 +2154,9 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 			g_file_get_contents(global_file, &global_content, NULL, NULL);
 
 		doc = document_new_file(utf8_filename, ft, global_content);
-		if (global_content)
+		if (global_content && doc->file_type->id == GEANY_FILETYPES_CONF)
 		{
-			if (doc->file_type->id == GEANY_FILETYPES_CONF)
-				comment_conf_files(doc->editor->sci);
-			else
-			{
-				sci_select_all(doc->editor->sci);
-				keybindings_send_command(GEANY_KEY_GROUP_FORMAT,
-					GEANY_KEYS_FORMAT_COMMENTLINETOGGLE);
-			}
+			comment_conf_files(doc->editor->sci);
 			sci_set_current_line(doc->editor->sci, 0);
 			document_set_text_changed(doc, FALSE);
 			sci_empty_undo_buffer(doc->editor->sci);
@@ -2263,11 +2251,11 @@ static void add_stock_icons(const GtkStockItem *items, gsize count)
 
 void ui_init_stock_items(void)
 {
-	GtkStockItem items[] =
+	const GtkStockItem items[] =
 	{
-		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_CLOSE_ALL, N_("Close All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
+		{ (gchar *) GEANY_STOCK_SAVE_ALL, (gchar *) N_("Save All"), 0, 0, (gchar *) GETTEXT_PACKAGE },
+		{ (gchar *) GEANY_STOCK_CLOSE_ALL, (gchar *) N_("Close All"), 0, 0, (gchar *) GETTEXT_PACKAGE },
+		{ (gchar *) GEANY_STOCK_BUILD, (gchar *) N_("Build"), 0, 0, (gchar *) GETTEXT_PACKAGE }
 	};
 
 	gtk_stock_add(items, G_N_ELEMENTS(items));
@@ -2401,7 +2389,7 @@ void ui_init_prefs(void)
 	stash_group_add_boolean(group, &interface_prefs.warn_on_project_close,
 		"warn_on_project_close", TRUE);
 	stash_group_add_spin_button_integer(group, &interface_prefs.tab_label_len,
-		"tab_label_length", 99999, "spin_tab_label_len");
+		"tab_label_length", 1000, "spin_tab_label_len");
 }
 
 
@@ -2582,31 +2570,6 @@ static void init_css_styles(void)
 	theme_fn = g_build_filename(app->datadir, "geany.css", NULL);
 	load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	g_free(theme_fn);
-
-	// load themes to handle breakage between various GTK+ versions
-	const struct
-	{
-		guint min_version;
-		guint max_version;
-		const gchar *file;
-	}
-	css_files[] =
-	{
-		{ 20, G_MAXUINT, "geany-3.20.css" },
-		{ 0, 19, "geany-3.0.css" },
-	};
-
-	guint gtk_version = gtk_get_minor_version();
-	for (guint i = 0; i < G_N_ELEMENTS(css_files); i++)
-	{
-		if (gtk_version >= css_files[i].min_version &&
-			gtk_version <= css_files[i].max_version)
-		{
-			theme_fn = g_build_filename(app->datadir, css_files[i].file, NULL);
-			load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-			g_free(theme_fn);
-		}
-	}
 
 	// if the user provided a geany.css file in their config dir, try and load that
 	theme_fn = g_build_filename(app->configdir, "geany.css", NULL);
@@ -2898,6 +2861,10 @@ void ui_progress_bar_stop(void)
 		g_source_remove(progress_bar_timer_id);
 		progress_bar_timer_id = 0;
 	}
+
+	/* hack to remove tick callback which is created for "activity mode" progress
+	 * bars - without this it is called forever and causes elevated CPU usage */
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(main_widgets.progressbar), 0.0);
 }
 
 
@@ -3063,7 +3030,7 @@ gboolean ui_is_keyval_enter_or_return(guint keyval)
 
 
 /** Reads an integer from the GTK default settings registry
- * (see http://library.gnome.org/devel/gtk/stable/GtkSettings.html).
+ * (see https://docs.gtk.org/gtk3/class.Settings.html).
  * @param property_name The property to read.
  * @param default_value The default value in case the value could not be read.
  * @return The value for the property if it exists, otherwise the @a default_value.
@@ -3261,16 +3228,4 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 		return TRUE;
 	}
 	return FALSE;
-}
-
-void ui_menu_popup(GtkMenu* menu, GtkMenuPositionFunc func, gpointer data, guint button, guint32 activate_time)
-{
-	/* Use appropriate function for menu popup:
-		- gtk_menu_popup_at_pointer is not available on GTK older than 3.22
-		- gtk_menu_popup is deprecated and causes issues on multimonitor wayland setups */
-#if GTK_CHECK_VERSION(3,22,0)
-	gtk_menu_popup_at_pointer(GTK_MENU(menu), NULL);
-#else
-	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, func, data, button, activate_time);
-#endif
 }

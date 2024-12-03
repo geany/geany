@@ -53,6 +53,26 @@ typedef enum
 typedef gint TMParserType;
 
 
+/* keep in sync with icon names in symbols.c */
+/**
+ * Identifiers of icons used by Geany in the symbol tree, in the autocompletion popup,
+ * and in the goto popup.
+ */
+typedef enum
+{
+	TM_ICON_CLASS,
+	TM_ICON_MACRO,
+	TM_ICON_MEMBER,
+	TM_ICON_METHOD,
+	TM_ICON_NAMESPACE,
+	TM_ICON_OTHER,
+	TM_ICON_STRUCT,
+	TM_ICON_VAR,
+	TM_ICON_NONE,
+	TM_N_ICONS = TM_ICON_NONE
+} TMIcon;
+
+
 #ifdef GEANY_PRIVATE
 
 /* keep in sync with tm_parsers.h and parser_map in tm_parser.c */
@@ -118,23 +138,16 @@ enum
 	TM_PARSER_LISP,
 	TM_PARSER_TYPESCRIPT,
 	TM_PARSER_BATCH,
+	TM_PARSER_AUTOIT,
+	TM_PARSER_RAKU,
+	TM_PARSER_OCAML,
+	TM_PARSER_LDSCRIPT,
+	TM_PARSER_FORTH,
+	TM_PARSER_MESON,
+	TM_PARSER_SYSVERILOG,
 	TM_PARSER_COUNT
 };
 
-/* keep in sync with icon names in symbols.c */
-enum
-{
-	TM_ICON_CLASS,
-	TM_ICON_MACRO,
-	TM_ICON_MEMBER,
-	TM_ICON_METHOD,
-	TM_ICON_NAMESPACE,
-	TM_ICON_OTHER,
-	TM_ICON_STRUCT,
-	TM_ICON_VAR,
-	TM_ICON_NONE,
-	TM_N_ICONS = TM_ICON_NONE
-};
 
 void tm_parser_verify_type_mappings(void);
 
@@ -152,7 +165,7 @@ gint tm_parser_scope_autocomplete_suffix(TMParserType lang, const gchar *str);
 
 const gchar *tm_parser_get_constructor_method(TMParserType lang);
 
-gboolean tm_parser_is_anon_name(TMParserType lang, gchar *name);
+gboolean tm_parser_is_anon_name(TMParserType lang, const gchar *name);
 
 gchar *tm_parser_update_scope(TMParserType lang, gchar *scope);
 
@@ -160,7 +173,8 @@ gboolean tm_parser_enable_role(TMParserType lang, gchar kind);
 
 gboolean tm_parser_enable_kind(TMParserType lang, gchar kind);
 
-gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gchar *type);
+gchar *tm_parser_format_variable(TMParserType lang, const gchar *name, const gchar *type,
+	const gchar *scope);
 
 gchar *tm_parser_format_function(TMParserType lang, const gchar *fname, const gchar *args,
 	const gchar *retval, const gchar *scope);

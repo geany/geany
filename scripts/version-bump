@@ -23,6 +23,7 @@ s/^\(#define VER_FILEVERSION_STR  *\)[^ ].*$/\1"'"$VER"'"/
 ' -i geany_private.rc
 
 sed -e 's/^\(AC_INIT([^,]*, *\[\)[^]]*\(\],\)/\1'"$VER"'\2/' -i configure.ac
+sed -re '/^project\W/,/[)]/s/^(.*\Wversion\s*:\s*)'\''[^'\'']*'\''(.*)$/\1'"'$VER'"'\2/' -i meson.build
 sed -e 's/^\(#define GEANY_CODENAME[	]*"\)[^"]*\("\)/\1'"$CODENAME"'\2/' -i src/geany.h
 
 sed -e '

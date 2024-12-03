@@ -1,8 +1,8 @@
 
 #include <windows.h> // include for version info constants
 
-#define VER_FILEVERSION             1,39,0,0
-#define VER_FILEVERSION_STR         "1.39"
+#define VER_FILEVERSION             2,1,0,0
+#define VER_FILEVERSION_STR         "2.1"
 #define APP_MANIFEST                1
 
 A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "icons/geany.ico"
@@ -15,7 +15,7 @@ FILETYPE			VFT_APP
 	BLOCK "StringFileInfo"
 	{
 		// U.S. English, Multilingual
-		// (see http://msdn.microsoft.com/en-us/library/aa381049%28VS.85%29.aspx)
+		// (see https://msdn.microsoft.com/en-us/library/aa381049%28VS.85%29.aspx)
 		BLOCK "040904E4"
 		{
 			VALUE "CompanyName", ""

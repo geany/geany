@@ -1,0 +1,5929 @@
+# Latgalian translation of geany.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Geany 1.23\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-03 18:10+0100\n"
+"PO-Revision-Date: 2013-02-03 18:10+0100\n"
+"Last-Translator: Andrejs Meinerts <inni96@inbox.lv>\n"
+"Language-Team: Austrumi team\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
+msgid "Geany"
+msgstr ""
+
+#: ../geany.desktop.in.h:2
+msgid "Integrated Development Environment"
+msgstr "Integreitō izstrōdis vide"
+
+#: ../geany.desktop.in.h:3
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "Integreitō izstrōdis vide, lītoj GTK+ bibliotekys"
+#: ../geany.desktop.in.h:4
+msgid "Text;Editor;"
+msgstr ""
+
+#: ../data/geany.glade.h:1
+msgid "_Toolbar Preferences"
+msgstr "Reikjūslys īs_tatiejumi"
+
+#: ../data/geany.glade.h:2
+msgid "_Hide Toolbar"
+msgstr "Narōdäț reikjūslu"
+
+#: ../data/geany.glade.h:3
+msgid "_Edit"
+msgstr "_Lobōț"
+
+#: ../data/geany.glade.h:4
+msgid "_Format"
+msgstr "Izskots"
+
+#: ../data/geany.glade.h:5
+msgid "I_nsert"
+msgstr "Dalikț"
+
+#: ../data/geany.glade.h:6
+msgid "Insert _ChangeLog Entry"
+msgstr "Dalikț izmaiņu sarokstu"
+
+#: ../data/geany.glade.h:7
+msgid "Insert _Function Description"
+msgstr "Dalikț _funkcejis aprokstu"
+
+#: ../data/geany.glade.h:8
+msgid "Insert _Multiline Comment"
+msgstr "Dalikț dauḑz-ryndu ko_mentaru"
+
+#: ../data/geany.glade.h:9
+msgid "_More"
+msgstr "_Väļ"
+
+#: ../data/geany.glade.h:10
+msgid "Insert File _Header"
+msgstr "Dalikț faila viersrokstu"
+
+#: ../data/geany.glade.h:11
+msgid "Insert _GPL Notice"
+msgstr "Dalikț _GPL licenzi"
+
+#: ../data/geany.glade.h:12
+msgid "Insert _BSD License Notice"
+msgstr "Dalikț  _BSD licenzi"
+
+#: ../data/geany.glade.h:13
+msgid "Insert Dat_e"
+msgstr "Dalikț datumu"
+
+#: ../data/geany.glade.h:14
+msgid "invisible"
+msgstr "naradzams"
+
+#: ../data/geany.glade.h:15
+msgid "_Insert \"include <...>\""
+msgstr "Dalikț \"include <...>\""
+
+#: ../data/geany.glade.h:16 ../src/keybindings.c:511
+msgid "Insert Alternative _White Space"
+msgstr "Dalikț maineigū atstarpi"
+
+#: ../data/geany.glade.h:17
+msgid "_Search"
+msgstr "_Vaicōț"
+
+#: ../data/geany.glade.h:18
+msgid "Open Selected F_ile"
+msgstr "Attaisäț atlaseitū fa_ilu"
+
+#: ../data/geany.glade.h:19 ../src/symbols.c:2590
+msgid "Find _Usage"
+msgstr "Atrasț lītōtūs"
+
+#: ../data/geany.glade.h:20 ../src/symbols.c:2595
+msgid "Find _Document Usage"
+msgstr "Atrasț dokumenta lītōšonu"
+
+#: ../data/geany.glade.h:21
+msgid "Go to Symbol Defini_tion"
+msgstr "Īț iz simbola aprokstu"
+
+#: ../data/geany.glade.h:22
+msgid "Conte_xt Action"
+msgstr "Fona darbeiba"
+
+#. Column legend:
+#. *   [0] = Filetype constant (GEANY_FILETYPES_*)
+#. *   [1] = CTags parser (TM_PARSER_*)
+#. *   [2] = Non-translated filetype name (*not* label for display)
+#. *   [3] = Translatable human filetype title prefix or NULL to use [2]
+#. *   [4] = Title type (TITLE_*) constant (ex. TITLE_SOURCE_FILE is 'source file' suffix)
+#. *   [5] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
+#. * --------------------------------------------------------------------------------------------------------------------------
+#. *       [0]         [1]           [2]                 [3]                        [4]          [5]
+#: ../data/geany.glade.h:23 ../src/filetypes.c:128 ../src/filetypes.c:1535
+msgid "None"
+msgstr "Bez tipa"
+
+#: ../data/geany.glade.h:24
+msgid "Basic"
+msgstr "Pamat"
+
+#: ../data/geany.glade.h:25
+msgid "Current chars"
+msgstr "Asūšī simboli"
+
+#: ../data/geany.glade.h:26
+msgid "Match braces"
+msgstr "Īzeimäț īkovys"
+
+#: ../data/geany.glade.h:27
+msgid "Left"
+msgstr "Kairō"
+
+#: ../data/geany.glade.h:28
+msgid "Right"
+msgstr "Lobō"
+
+#: ../data/geany.glade.h:29
+msgid "Top"
+msgstr "Vierss"
+
+#: ../data/geany.glade.h:30
+msgid "Bottom"
+msgstr "Zamaška"
+
+#: ../data/geany.glade.h:31 ../src/keybindings.c:521
+msgid "Preferences"
+msgstr "Īstatiejumi"
+
+#: ../data/geany.glade.h:32
+msgid "Load files from the last session"
+msgstr "Īlōdäț pādejōs sesejis failus"
+
+#: ../data/geany.glade.h:33
+msgid "Opens at startup the files from the last session"
+msgstr "Attaisäț pādejōs sesejis failus programys starta laikā"
+
+#: ../data/geany.glade.h:34
+msgid "Load virtual terminal support"
+msgstr "Īlōdäț virtualūs terminalus"
+
+#: ../data/geany.glade.h:35
+msgid ""
+"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
+"disable it if you do not need it"
+msgstr ""
+"Īslägț virtualūs terminalus (VTE) programys starta laikā, "
+"ka navajag var atslägț."
+
+#: ../data/geany.glade.h:36
+msgid "Enable plugin support"
+msgstr "Spraudņu atbolsts"
+
+#: ../data/geany.glade.h:37
+msgid "<b>Startup</b>"
+msgstr "<b>Palaisšona</b>"
+
+#: ../data/geany.glade.h:38
+msgid "Save window position and geometry"
+msgstr "Saglobōț lūga izmāru i vītu"
+
+#: ../data/geany.glade.h:39
+msgid "Saves the window position and geometry and restores it at the start"
+msgstr "Sagloboj lūga izmārus, vītu i pīlītoj programys starta laikā"
+
+#: ../data/geany.glade.h:40
+msgid "Confirm exit"
+msgstr "Jōapstyprynoj izīšona"
+
+#: ../data/geany.glade.h:43
+msgid "Shows a confirmation dialog on exit"
+msgstr "Rōdäț lūgu \"Jōapstyprynoj izīšona\"."
+
+#: ../data/geany.glade.h:44
+msgid "<b>Shutdown</b>"
+msgstr "<b>Izslägț</b>"
+
+#: ../data/geany.glade.h:45
+msgid "Startup path:"
+msgstr "Dorba mapá pec programys starta:"
+
+#: ../data/geany.glade.h:46
+msgid ""
+"Path to start in when opening or saving files. Must be an absolute path."
+msgstr ""
+"Mapá, kur teik saglobōti i nu kureinis teik attaiseiti faily. Celám jōbȳn "
+"absolutam. Atstōjūt itá tukšumu, lai dorbam izmontōtu asūšū mapi."
+
+#: ../data/geany.glade.h:47
+msgid "Project files:"
+msgstr "Projekta faily:"
+
+#: ../data/geany.glade.h:48
+msgid "Path to start in when opening project files"
+msgstr "Projekta mapá"
+
+#: ../data/geany.glade.h:49
+msgid "Extra plugin path:"
+msgstr "Papyldu spraudņu vīta:"
+
+#: ../data/geany.glade.h:50
+msgid ""
+"Geany looks by default in the global installation path and in the "
+"configuration directory. The path entered here will be searched additionally "
+"for plugins. Leave blank to disable."
+msgstr ""
+"Geany pec nūklusiejuma vaicoj spraudņus konfiguracejis mapī. "
+"Itá var nūrōdäț cytu spraudņu vaicōšonys vītu. "
+"Ka atstōsit tukšu, geany papyldu spraudņus navaicōș."
+
+#: ../data/geany.glade.h:51
+msgid "<b>Paths</b>"
+msgstr "<b>Vītys</b>"
+
+#: ../data/geany.glade.h:52
+msgid "Startup"
+msgstr "Palaisšona"
+
+#: ../data/geany.glade.h:53
+msgid "Beep on errors or when compilation has finished"
+msgstr "Par kļūdom ci kompileišonys pabeigšonu signalizäț ai skani"
+
+#: ../data/geany.glade.h:54
+msgid ""
+"Whether to beep if an error occurred or when the compilation process has "
+"finished"
+msgstr ""
+"Par kļūdom i kompileišonys pabeigšonu signalizäț ai skani."
+"Atslägț ci daslägț itū īspieju."
+
+#: ../data/geany.glade.h:55
+msgid "Switch to status message list at new message"
+msgstr "Īt iz paziņōjumu lūgu, ka irā jauns paziņōjums"
+
+#: ../data/geany.glade.h:56
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives"
+msgstr ""
+"Īt iz \"Statuss\" lūgu, kod irā jauni dežūrziņōjumi."
+
+#: ../data/geany.glade.h:57
+msgid "Suppress status messages in the status bar"
+msgstr "Narōdäț dežūrziņōjumus statusa jūslā"
+
+#: ../data/geany.glade.h:58
+msgid ""
+"Removes all messages from the status bar. The messages are still displayed "
+"in the status messages window."
+msgstr ""
+"Narōdäț jaunūs dežūrziņojumus statusa jūslā. Dežūrziņōjumus "
+"rōdäț viņ \"Statuss\" lūgā."
+
+#: ../data/geany.glade.h:59
+msgid "Auto-focus widgets (focus follows mouse)"
+msgstr "Pális autofokuss (lūgi palīk aktivi zam pális kursora)"
+
+#: ../data/geany.glade.h:60
+msgid ""
+"Gives the focus automatically to widgets below the mouse cursor. Works for "
+"the main editor widget, the scribble, the toolbar search and goto line "
+"fields and the VTE."
+msgstr ""
+"Lūgi palīk aktivi zam pális kursora. Dorbojās iz golvonō redigeišonys lūga, "
+"pīzeiḿu lūga, vaicōšonys panelá, sōnu panelá, reikjūslys i "
+"statusa lūgim zamaškā."
+
+#: ../data/geany.glade.h:61
+msgid "Use Windows native dialogs"
+msgstr "Lītōț lūgu menedžera dialoglūgus"
+
+#: ../data/geany.glade.h:62
+msgid ""
+"Defines whether to use the Windows native dialogs or whether to use the GTK "
+"default dialogs"
+msgstr ""
+"Nūsoka, ci izmontōț lūgu menedžera failu Īlōdis/Saglobōšonys dialogus, "
+"ci lītōț GTK standarta dialoglūgus"
+
+#: ../data/geany.glade.h:63
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Cyts</b>"
+
+#: ../data/geany.glade.h:64
+msgid "Always wrap search"
+msgstr "Vaicōț nu faila sōkuma"
+
+#: ../data/geany.glade.h:65
+msgid "Always wrap search around the document"
+msgstr "Vaicōț nu faila sōkuma vysod"
+
+#: ../data/geany.glade.h:66
+msgid "Hide the Find dialog"
+msgstr "Narōdäț vaicōšonys dialoglūgu"
+
+#: ../data/geany.glade.h:67
+msgid "Hide the Find dialog after clicking Find Next/Previous"
+msgstr "Narōdäț vaicōšonys dialoglūgu pec \"Īprīškdejīs/Nōkušīs\" "
+"pūgu nūspīsšonys."
+
+#: ../data/geany.glade.h:68
+msgid "Use the current word under the cursor for Find dialogs"
+msgstr "Vaicōț vōrdu, kurīs ir zam kursora"
+
+#: ../data/geany.glade.h:69
+msgid ""
+"Use current word under the cursor when opening the Find, Find in Files or "
+"Replace dialog and there is no selection"
+msgstr ""
+"Gadīņūs, kod nav īraksteita vaicojamō frāzá, teik vaicōts vōrds zam"
+"kursora; atsataisōs dialoglūgā \"Atrasț\", \"Atrasț failūs\" ci "
+"\"Aizvītōț\"."
+
+#: ../data/geany.glade.h:70
+msgid "Use the current file's directory for Find in Files"
+msgstr "Opceja \"Atrasț failūs\" vaicoj redigejamō faila mapī"
+
+#: ../data/geany.glade.h:71
+msgid "<b>Search</b>"
+msgstr "<b>Vaicōšona</b>"
+
+#: ../data/geany.glade.h:72
+msgid "Use project-based session files"
+msgstr "Projektam lītōț sesejis failus"
+
+#: ../data/geany.glade.h:73
+msgid ""
+"Whether to store a project's session files and open them when re-opening the "
+"project"
+msgstr ""
+"Īslägț sesejis faily attaiseišonu kūpā ar projekta "
+"attaiseišonu."
+
+#: ../data/geany.glade.h:74
+msgid "Store project file inside the project base directory"
+msgstr "Projekta failus globōț projekta mapī"
+
+#: ../data/geany.glade.h:75
+msgid ""
+"When enabled, a project file is stored by default inside the project base "
+"directory when creating new projects instead of one directory above the base "
+"directory. You can still change the path of the project file in the New "
+"Project dialog."
+msgstr ""
+"Pec nūkluseišonys projekta faily teik saglobōti projekta pamat-mapī, "
+"Lai izmaineitu failu saglobōšonys vītu jōsataisa \"Jauns projekts\"."
+
+#: ../data/geany.glade.h:76
+msgid "<b>Projects</b>"
+msgstr "<b>Projekti</b>"
+
+#: ../data/geany.glade.h:77 ../src/dialogs.c:232
+msgid "Miscellaneous"
+msgstr "Cyti"
+
+#. TODO Find a better way to map the current notebook page to the
+#. * corresponding chapter in the documentation, comparing translatable
+#. * strings is easy to break. Maybe attach an identifying string to the
+#. * tab label object.
+#: ../data/geany.glade.h:78 ../src/prefs.c:1603
+msgid "General"
+msgstr "Kūpejī"
+
+#: ../data/geany.glade.h:79
+msgid "Show symbol list"
+msgstr "Rōdäț simbolu sarokstu"
+
+#: ../data/geany.glade.h:80
+msgid "Toggle the symbol list on and off"
+msgstr "Īslägț/Izslägț simbolu sarokstu"
+
+#: ../data/geany.glade.h:81
+msgid "Default symbol sorting mode"
+msgstr "Nūkluseitīs simbolu kōrtōšonys režims"
+
+#: ../data/geany.glade.h:82
+msgid "Default sorting mode:"
+msgstr "Nūkluseitīs kōrtōšonys režims:"
+
+#: ../data/geany.glade.h:83 ../src/stash.c:1170
+msgid "Name"
+msgstr "Nūsaukums"
+
+#: ../data/geany.glade.h:84
+msgid "Appearance"
+msgstr "Izskots"
+
+#: ../data/geany.glade.h:85
+msgid "Show documents list"
+msgstr "Rōdäț dokumentu sarokstu"
+
+#: ../data/geany.glade.h:86
+msgid "Toggle the documents list on and off"
+msgstr "Īslägț/Izslägț dokumentu sarokstu"
+
+#: ../data/geany.glade.h:87
+msgid "Show sidebar"
+msgstr "Rōdäț sōnu paneli"
+
+#: ../data/geany.glade.h:88
+msgid "Position:"
+msgstr "Vīta:"
+
+#: ../data/geany.glade.h:89
+msgid "<b>Sidebar</b>"
+msgstr "<b>Sōnu panelș</b>"
+
+#: ../data/geany.glade.h:90
+msgid "<b>Message window</b>"
+msgstr "<b>Ziņōjumu lūgs</b>"
+
+#: ../data/geany.glade.h:91
+msgid "Symbol list:"
+msgstr "Simbolu saroksts:"
+
+#: ../data/geany.glade.h:92
+msgid "Message window:"
+msgstr "Ziņōjumu lūgs:"
+
+#: ../data/geany.glade.h:93
+msgid "Editor:"
+msgstr "Redaktors:"
+
+#: ../data/geany.glade.h:94
+msgid "Sets the font for the message window"
+msgstr "Ziņōjumu lūga fonti"
+
+#: ../data/geany.glade.h:95
+msgid "Sets the font for the symbol list"
+msgstr "Simbolu saroksta fonti"
+
+#: ../data/geany.glade.h:96
+msgid "Sets the editor font"
+msgstr "Redaktora fonti"
+
+#: ../data/geany.glade.h:97
+msgid "<b>Fonts</b>"
+msgstr "<b>Fonti</b>"
+
+#: ../data/geany.glade.h:98
+msgid "Show status bar"
+msgstr "Rōdäț statusa jūslu"
+
+#: ../data/geany.glade.h:99
+msgid "Whether to show the status bar at the bottom of the main window"
+msgstr "Rōdäț ci narōdäț statusa jūslu golvonō lūga zamaškā."
+
+#: ../data/geany.glade.h:100 ../src/prefs.c:1605
+msgid "Interface"
+msgstr "Reikjūslys"
+
+#: ../data/geany.glade.h:101
+msgid "Show editor tabs"
+msgstr "Rōdäț redaktora tabus"
+
+#: ../data/geany.glade.h:102
+msgid "Show close buttons"
+msgstr "Rōdäț aiztaiseišonys pūgys"
+
+#: ../data/geany.glade.h:103
+msgid ""
+"Shows a small cross button in the file tabs to easily close files when "
+"clicking on it (requires restart of Geany)"
+msgstr ""
+"Rōdäț iz tabim mozu pūgu ar kristeni, lai ar vīnu pális klikški "
+"varātu vīgli aiztaisäț tabu (vajdzeigs programys restarts)."
+
+#: ../data/geany.glade.h:104
+msgid "Placement of new file tabs:"
+msgstr "Jaunūs tabu nūvītōjums:"
+
+#: ../data/geany.glade.h:105
+msgid "File tabs will be placed on the left of the notebook"
+msgstr "Jaunī tabi atsataisōs pa kreisi nu redigejamō"
+
+#: ../data/geany.glade.h:106
+msgid "File tabs will be placed on the right of the notebook"
+msgstr "Jaunī tabi atsataisōs pa labi nu redigejamō"
+
+#: ../data/geany.glade.h:107
+msgid "Next to current"
+msgstr "Aiz redigejamō"
+
+#: ../data/geany.glade.h:108
+msgid ""
+"Whether to place file tabs next to the current tab rather than at the edges "
+"of the notebook"
+msgstr "Jaunī tabi atsataisōs iz raizis aiz redigejamō"
+
+#: ../data/geany.glade.h:109
+msgid "Double-clicking hides all additional widgets"
+msgstr "Dubultklikškis iz taba nūgloboj papyldu lūgus"
+
+#: ../data/geany.glade.h:110
+msgid "Calls the View->Toggle All Additional Widgets command"
+msgstr "Rōdäț/Narōdäț papyldu lūgus"
+
+#: ../data/geany.glade.h:111
+msgid "Switch to last used document after closing a tab"
+msgstr "Pōrīt iz agrōk lītōtu dokumentu pec sávkura taba aiztaiseišonys"
+
+#: ../data/geany.glade.h:112
+msgid "<b>Editor tabs</b>"
+msgstr "<b>Redaktora tabi</b>"
+
+#: ../data/geany.glade.h:113
+msgid "Sidebar:"
+msgstr "Sōnu panelș:"
+
+#: ../data/geany.glade.h:114
+msgid "<b>Tab positions</b>"
+msgstr "<b>Tabu pozicejis</b>"
+
+#: ../data/geany.glade.h:115
+msgid "Notebook tabs"
+msgstr "Tabi"
+
+#: ../data/geany.glade.h:116
+msgid "Show t_oolbar"
+msgstr "Rōdäț reikjūslu"
+
+#: ../data/geany.glade.h:117
+msgid "_Append toolbar to the menu"
+msgstr "Īlikț reikjūslu menu izvieļnī"
+
+#: ../data/geany.glade.h:118
+msgid "Pack the toolbar to the main menu to save vertical space"
+msgstr ""
+"Īlikț reikjūslu menu izvieļnī lai bȳtu vairōk breivys vītys augstumā"
+
+#: ../data/geany.glade.h:119 ../src/toolbar.c:944
+msgid "Customize Toolbar"
+msgstr "Redigäț reikjūslu"
+
+#: ../data/geany.glade.h:120
+msgid "System _default"
+msgstr "Nūkluseitīs"
+
+#: ../data/geany.glade.h:121
+msgid "Images _and text"
+msgstr "Ikonys i teksts"
+
+#: ../data/geany.glade.h:122
+msgid "_Images only"
+msgstr "Viņ _ikonys"
+
+#: ../data/geany.glade.h:123
+msgid "_Text only"
+msgstr "Viņ _teksts"
+
+#: ../data/geany.glade.h:124
+msgid "<b>Icon style</b>"
+msgstr "<b>Ikonu stils</b>"
+
+#: ../data/geany.glade.h:125
+msgid "S_ystem default"
+msgstr "Nūkluseitīs"
+
+#: ../data/geany.glade.h:126
+msgid "_Small icons"
+msgstr "Mozy_s"
+
+#: ../data/geany.glade.h:127
+msgid "_Very small icons"
+msgstr "Pa_vysam mozys"
+
+#: ../data/geany.glade.h:128
+msgid "_Large icons"
+msgstr "_Lelys"
+
+#: ../data/geany.glade.h:129
+msgid "<b>Icon size</b>"
+msgstr "<b>Ikonu izmārs</b>"
+
+#: ../data/geany.glade.h:130
+msgid "<b>Toolbar</b>"
+msgstr "<b>Reikjūsla</b>"
+
+#: ../data/geany.glade.h:131 ../src/prefs.c:1607
+msgid "Toolbar"
+msgstr "Reikjūsla"
+
+#: ../data/geany.glade.h:132
+msgid "Line wrapping"
+msgstr "Ap_lauzț ryndys"
+
+#: ../data/geany.glade.h:133
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+msgstr ""
+"Aplauzț ryndu kei viņ tei sasnīdz lūga molu. Breidynōjums: dinamiskai ryndu "
+"aplauzšonai vāg vaira procesora resursu; deļ tō iz vōrgōkim datorim, dorbojūtīs"
+"ar lelym dokumentim, itū opceju vajdzātu atslägț."
+
+#: ../data/geany.glade.h:134
+msgid "\"Smart\" home key"
+msgstr "\"Gudrīs\" taustenš \"Home\""
+
+#: ../data/geany.glade.h:135
+msgid ""
+"When \"smart\" home is enabled, the HOME key will move the caret to the "
+"first non-blank character of the line, unless it is already there, it moves "
+"to the very beginning of the line. When this feature is disabled, the HOME "
+"key always moves the caret to the start of the current line, regardless of "
+"its current position."
+msgstr ""
+"Itei opceja pōrnas kursoru iz ryndys pyrmū simbolu. Ka kursors jau atsarūn "
+"iz ryndys pyrmō simbola, tys teik pōrnasts iz ryndys sōkumu. "
+"Ai atslāgtu itū opceju kursors vysod teik pōrnasts iz ryndys sōkumu."
+
+#: ../data/geany.glade.h:136
+msgid "Disable Drag and Drop"
+msgstr "Atslägț Drag&Drop"
+
+#: ../data/geany.glade.h:137
+msgid ""
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window"
+msgstr ""
+"Piļneigi teik izslāgts Drag&Drop redaktorā. Pōrnásț ar pōrviļkšonu koč kū "
+"redigeišonys lūgā ci iz cytu lūgu vairs navaräș."
+
+#: ../data/geany.glade.h:138
+msgid "Code folding"
+msgstr "Koda izviersšona"
+
+#: ../data/geany.glade.h:139
+msgid "Fold/unfold all children of a fold point"
+msgstr "Izvärsț/Savärsț koda blokus"
+
+#: ../data/geany.glade.h:140
+msgid ""
+"Fold or unfold all children of a fold point. By pressing the Shift key while "
+"clicking on a fold symbol the contrary behavior is used."
+msgstr ""
+"Izvärsț i savärsț koda elementus. Pīturūt tausteņu Shift "
+"bȳș pretejō darbeiba."
+
+#: ../data/geany.glade.h:141
+msgid "Use indicators to show compile errors"
+msgstr "Izgaismōț kompileišonys kļūdys"
+
+#: ../data/geany.glade.h:133
+msgid ""
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error"
+msgstr ""
+"Īzeimäț rindenis, kur kompilators atroda kļūdu ci napiļneibu, "
+"ar viļņōtu pastreipōjumu."
+
+#: ../data/geany.glade.h:143
+msgid "Newline strips trailing spaces"
+msgstr "Jauna rynda dzieš atstarpis"
+
+#: ../data/geany.glade.h:144
+msgid "Enable newline to strip the trailing spaces on the previous line"
+msgstr "Pōrejmūt iz jaunu ryndu teik dzāstys vysys atstarpis vacōs beigōs."
+
+#: ../data/geany.glade.h:145
+msgid "Line breaking column:"
+msgstr "Teksts tabulys izskotā:"
+
+#: ../data/geany.glade.h:146
+msgid "Comment toggle marker:"
+msgstr "Komentaru īsliegšona:"
+
+#: ../data/geany.glade.h:147
+msgid ""
+"A string which is added when toggling a line comment in a source file, it is "
+"used to mark the comment as toggled."
+msgstr ""
+"Rindená, kura teik pīvīnōta komentaram failā, pec komentaru īsliegšonys "
+"Rindená atzeimej, kod komentars īslāgts/izslāgts."
+
+#: ../data/geany.glade.h:148
+msgid "<b>Features</b>"
+msgstr "<b>Īspiejis</b>"
+
+#: ../data/geany.glade.h:149
+msgid "Features"
+msgstr "Īspiejis"
+
+#: ../data/geany.glade.h:150
+msgid ""
+"Note: To apply these settings to all currently open documents, use "
+"<i>Project->Apply Default Indentation</i>."
+msgstr ""
+"Pīzeimá: lai izmaineitu atkōpis vysim dokumentim, jōīt iz "
+"<i>Projekti->Nūkluseitōs atkōpis</i>."
+
+#: ../data/geany.glade.h:151
+msgid "Width:"
+msgstr "Plotums:"
+
+#: ../data/geany.glade.h:152
+msgid "The width in chars of a single indent"
+msgstr "Vīnys atkōpis plotums atstarṕōs"
+
+#: ../data/geany.glade.h:153
+msgid "Auto-indent mode:"
+msgstr "Auto-atkōpis:"
+
+#: ../data/geany.glade.h:154
+msgid "Detect type from file"
+msgstr "Atpazeiț faila tipu pec tō satura"
+
+#: ../data/geany.glade.h:155
+msgid ""
+"Whether to detect the indentation type from file contents when a file is "
+"opened"
+msgstr "Nūteikț atkōpju veidu pec attaisamō faila satura."
+
+#: ../data/geany.glade.h:156
+msgid "T_abs and spaces"
+msgstr "T_abulatori i atstarpis"
+
+#: ../data/geany.glade.h:157
+msgid ""
+"Use spaces if the total indent is less than the tab width, otherwise use both"
+msgstr ""
+"Lītōț atstarpis, ka atkopá mozōka par tabulatora plotumu,"
+"cytūs gadīņūs lītōț tabulatorus"
+
+#: ../data/geany.glade.h:158
+msgid "_Spaces"
+msgstr "At_starpis"
+
+#: ../data/geany.glade.h:159
+msgid "Use spaces when inserting indentation"
+msgstr "Atkōpi taisäț nu atstarṕom"
+
+#: ../data/geany.glade.h:160
+msgid "_Tabs"
+msgstr "_Tabulatori"
+
+#: ../data/geany.glade.h:161
+msgid "Use one tab per indent"
+msgstr "Atkōpi taisäț nu tabulatora"
+
+#: ../data/geany.glade.h:162
+msgid "Detect width from file"
+msgstr "Plotums nu faila satura"
+
+#: ../data/geany.glade.h:163
+msgid ""
+"Whether to detect the indentation width from file contents when a file is "
+"opened"
+msgstr "Nūteikț plotumu pec faila satura"
+
+#: ../data/geany.glade.h:164
+msgid "Type:"
+msgstr "Tips:"
+
+#: ../data/geany.glade.h:165
+msgid "Tab key indents"
+msgstr "Atkōpá ai tausteni Tab"
+
+#: ../data/geany.glade.h:166
+msgid ""
+"Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
+msgstr ""
+"Tab/Shif-Tab nūspīsšona palelynoj/samozynoj atkōpi, a na dalīk tabulatoru."
+
+#: ../data/geany.glade.h:167
+msgid "<b>Indentation</b>"
+msgstr "<b>Atkōpis</b>"
+
+#: ../data/geany.glade.h:168
+msgid "Indentation"
+msgstr "Atkōpis"
+
+#: ../data/geany.glade.h:169
+msgid "Snippet completion"
+msgstr "Koda fragmentu auto-nūsliegšona."
+
+#: ../data/geany.glade.h:170
+msgid ""
+"Type a defined short character sequence and complete it to a more complex "
+"string using a single keypress"
+msgstr ""
+"Īvodit eisu simbolu seceibu i papyldynojit tū leidz sarežģeitōkai "
+"konstrukcejai nūspīžūt vīnu tausteni."
+
+#: ../data/geany.glade.h:171
+msgid "XML/HTML tag auto-closing"
+msgstr "XML tagu auto-nūsliegšona"
+
+#: ../data/geany.glade.h:172
+msgid "Insert matching closing tag for XML/HTML"
+msgstr "Automatiski dalikț XML/HTML beigu tagus"
+
+#: ../data/geany.glade.h:173
+msgid "Automatic continuation of multi-line comments"
+msgstr "Dauḑz-ryndu komentaru auto-turpynōjums."
+
+#: ../data/geany.glade.h:174
+msgid ""
+"Continue automatically multi-line comments in languages like C, C++ and Java "
+"when a new line is entered inside such a comment"
+msgstr ""
+"Automatiski turpynōt dauḑz-ryndu komentaru C, C++ i Java volūdōs; "
+" komentara tekstam teik pīvīnōta jauna rindená."
+
+#: ../data/geany.glade.h:175
+msgid "Autocomplete symbols"
+msgstr "Nūsaukumu auto-nūsliegšona"
+
+#: ../data/geany.glade.h:176
+msgid ""
+"Automatic completion of known symbols in open files (function names, global "
+"variables, ...)"
+msgstr ""
+"Automatiski pabeigț funkceju, globālūs maineigū nūsaukumus, "
+"kuri jau beja pasludynōti attaiseitijūs failūs"
+
+#: ../data/geany.glade.h:177
+msgid "Autocomplete all words in document"
+msgstr "Vysu vōrdu dokumentā auto-nūsliegšona"
+
+#: ../data/geany.glade.h:178
+msgid "Drop rest of word on completion"
+msgstr "Vōrdu auto-nūsliegšonys bez golūtņom "
+
+#: ../data/geany.glade.h:179
+msgid "Max. symbol name suggestions:"
+msgstr "Lelōkīs vōrdu skaits nūsaukumā:"
+
+#: ../data/geany.glade.h:180
+msgid "Completion list height:"
+msgstr "Ryndu daudzums nūsliegšonai:"
+
+#: ../data/geany.glade.h:181
+msgid "Characters to type for autocompletion:"
+msgstr "Simbolu skaits auto-nūsliegšonai:"
+
+#: ../data/geany.glade.h:182
+msgid ""
+"The amount of characters which are necessary to show the symbol "
+"autocompletion list"
+msgstr ""
+"Mozōkīs simbolu skaits lai pazarōdeitūs auto-nūsliegšonys "
+"variantu saroksts."
+
+#: ../data/geany.glade.h:183
+msgid "Display height in rows for the autocompletion list"
+msgstr "Auto-nūsliegšonys variantu saroksta lelums:"
+
+#: ../data/geany.glade.h:184
+msgid "Maximum number of entries to display in the autocompletion list"
+msgstr "Ryndu skaits auto-nūsliegšonys variantu sarokstā."
+
+#: ../data/geany.glade.h:185
+msgid "Symbol list update frequency:"
+msgstr "Simbolu saroksta atsajaunōšonys bīžums:"
+
+#: ../data/geany.glade.h:186
+msgid ""
+"Minimal delay (in milliseconds) between two automatic updates of the symbol "
+"list. Note that a too short delay may have performance impact, especially "
+"with large files. A delay of 0 disables real-time updates."
+msgstr ""
+"Mozōkō laiks (milisekunḑōs) storp divejom simbolu saroksta "
+"atsajaunōšonom. Cīži mozs laiks var pamozynōț datora ōtrdarbeibu "
+"kod nūteik dorbs ai lela izmāra failym. "
+"Laiks 0 atslādz simbolu saroksta atsajaunōšonu."
+
+#: ../data/geany.glade.h:187
+msgid "<b>Completions</b>"
+msgstr "<b>Auto-nūsliegšona</b>"
+
+#: ../data/geany.glade.h:188
+msgid "Parenthesis ( )"
+msgstr "Īkovys ( )"
+
+#: ../data/geany.glade.h:189
+msgid "Auto-close parenthesis when typing an opening one"
+msgstr "Automatiski nūslägț īkovys iz raizis pec īraksteišonys"
+
+#: ../data/geany.glade.h:190
+msgid "Curly brackets { }"
+msgstr "Figurīkovys { }"
+
+#: ../data/geany.glade.h:191
+msgid "Auto-close curly bracket when typing an opening one"
+msgstr "Automatiski nūslägț figurīkovys iz raizis pec īraksteišonys"
+
+#: ../data/geany.glade.h:192
+msgid "Square brackets [ ]"
+msgstr "Kvadratīkovys [ ]"
+
+#: ../data/geany.glade.h:193
+msgid "Auto-close square-bracket when typing an opening one"
+msgstr "Automatiski nūslägț kvadratīkovys iz raizis pec īraksteišonys"
+
+#: ../data/geany.glade.h:194
+msgid "Single quotes ' '"
+msgstr "Vienpiedenis ( ' ' )"
+
+#: ../data/geany.glade.h:195
+msgid "Auto-close single quote when typing an opening one"
+msgstr "Automatiski nūslägț piedenis iz raizis pec īraksteišonys"
+
+#: ../data/geany.glade.h:196
+msgid "Double quotes \" \""
+msgstr "Dubultpiedeņis \" \""
+
+#: ../data/geany.glade.h:197
+msgid "Auto-close double quote when typing an opening one"
+msgstr "Automatiski nūslägț dubultpiedenis iz raizis pec īraksteišonys"
+
+#: ../data/geany.glade.h:198
+msgid "<b>Auto-close quotes and brackets</b>"
+msgstr "Īkovu i piedeņu auto-nūsliegšona"
+
+#: ../data/geany.glade.h:199
+msgid "Completions"
+msgstr "Auto-nūsliegšona"
+
+#: ../data/geany.glade.h:200
+msgid "Invert syntax highlighting colors"
+msgstr "Pōrmeiț sintaksis izgaismōjumu"
+
+#: ../data/geany.glade.h:201
+msgid "Invert all colors, by default using white text on a black background"
+msgstr "Sameiț vysys krōsus iz pretejū, "
+"pec nūklusiejuma bolti burti iz malna fona."
+
+#: ../data/geany.glade.h:202
+msgid "Show indentation guides"
+msgstr "Atkōpju indikaceja"
+
+#: ../data/geany.glade.h:203
+msgid "Shows small dotted lines to help you to use the right indentation"
+msgstr "Rōda smolkys rausteitys linejis lai varātu vīglōk izavieläț atkōpi"
+
+#: ../data/geany.glade.h:204
+msgid "Show white space"
+msgstr "Rōdäț atstarpis"
+
+#: ../data/geany.glade.h:205
+msgid "Marks spaces with dots and tabs with arrows"
+msgstr "Atzeimōț atstarpis ai punktenim, a tabulatorus ar buļteņom."
+
+#: ../data/geany.glade.h:206
+msgid "Show line endings"
+msgstr "Ryndu beigys"
+
+#: ../data/geany.glade.h:207
+msgid "Shows the line ending character"
+msgstr "Rōdäț ryndys beigu simbolus."
+
+#: ../data/geany.glade.h:208
+msgid "Show line numbers"
+msgstr "Ryndu numeraceja"
+
+#: ../data/geany.glade.h:209
+msgid "Shows or hides the Line Number margin"
+msgstr "Īslägț/Izslägț ryndu numeraceji"
+
+#: ../data/geany.glade.h:210
+msgid "Show markers margin"
+msgstr "Atzeimōtōs ryndys"
+
+#: ../data/geany.glade.h:211
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines"
+msgstr ""
+"Rōdäț/Släpț ryndu atzeimeišonys streipeiti redigeišonys lūga kairijā pusī"
+
+#: ../data/geany.glade.h:212
+msgid "Stop scrolling at last line"
+msgstr "Apturäț rytynōšonu iz pādejū ryndu"
+
+#: ../data/geany.glade.h:213
+msgid "Whether to stop scrolling one page past the last line of a document"
+msgstr "Apturäț rytynōšonu iz dokumenta beigu pādejū ryndu"
+
+#: ../data/geany.glade.h:214
+msgid "Lines visible _around the cursor:"
+msgstr "Ryndys radzamys vysapleik kursoram:"
+
+#: ../data/geany.glade.h:215
+msgid "<b>Display</b>"
+msgstr "<b>Izskots</b>"
+
+#: ../data/geany.glade.h:216
+msgid "Column:"
+msgstr "Kolonna:"
+
+#: ../data/geany.glade.h:217
+msgid "Color:"
+msgstr "Krōsa:"
+
+#: ../data/geany.glade.h:218
+msgid "Sets the color of the long line marker"
+msgstr "Izavieläț garūs ryndu apzeimeišonys krōsu"
+
+#: ../data/geany.glade.h:219 ../src/toolbar.c:74 ../src/tools.c:831
+msgid "Color Chooser"
+msgstr "Krōsys"
+
+#: ../data/geany.glade.h:220
+msgid ""
+"The long line marker is a thin vertical line in the editor, it helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+msgstr ""
+"Garūs ryndu atzeimá ir tīva lineja redaktora lūgā, paleidz atzeimäț garōs "
+"ryndys i podsoka kod vajdzātu pōrīt iz jaunu ryndu."
+"Cypars apzeimej tīvōs linejis nūvītōjumu nu redigeišonys lūga kairōs molys."
+
+#: ../data/geany.glade.h:221
+msgid "Line"
+msgstr "Lineja"
+
+#: ../data/geany.glade.h:222
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)"
+msgstr ""
+"Drukōț vertikalu līneju vītā, kur tān atsarūn pális kursors "
+"(skat. zamōk)."
+
+#: ../data/geany.glade.h:223
+msgid "Background"
+msgstr "Fons"
+
+#: ../data/geany.glade.h:224
+msgid ""
+"The background color of characters after the given cursor position (see "
+"below) changed to the color set below, (this is recommended if you use "
+"proportional fonts)"
+msgstr ""
+"Burtu fona krōsa sōkūt nu kursora pozicejis nūzamainōs iz krōsu, "
+"kas tikș atlaseita zemļōk"
+
+#: ../data/geany.glade.h:225
+msgid "Enabled"
+msgstr "Īslāgts"
+
+#: ../data/geany.glade.h:226
+msgid "<b>Long line marker</b>"
+msgstr "<b>Garūs ryndu atzeimá</b>"
+
+#: ../data/geany.glade.h:227
+msgid "Disabled"
+msgstr "Atslāgts"
+
+#: ../data/geany.glade.h:228
+msgid "Do not show virtual spaces"
+msgstr "Narōdäț virtualōs atstarpis"
+
+#: ../data/geany.glade.h:229
+msgid "Only for rectangular selections"
+msgstr "Viņ īzeimeišonys laikā"
+
+#: ../data/geany.glade.h:230
+msgid ""
+"Only show virtual spaces beyond the end of lines when drawing a rectangular "
+"selection"
+msgstr ""
+"Virtualōs atstarpis rōdäț viņ īzeimeišonys laikā"
+
+#: ../data/geany.glade.h:231
+msgid "Always"
+msgstr "Vysod"
+
+#: ../data/geany.glade.h:232
+msgid "Always show virtual spaces beyond the end of lines"
+msgstr "Virtualōs atstarpis rōdäț vysod"
+
+#: ../data/geany.glade.h:233
+msgid "<b>Virtual spaces</b>"
+msgstr "<b>Virtualōs atstarpis</b>"
+
+#: ../data/geany.glade.h:234
+msgid "Display"
+msgstr "Izskots"
+
+#: ../data/geany.glade.h:235 ../src/keybindings.c:309 ../src/prefs.c:1609
+msgid "Editor"
+msgstr "Redaktors"
+
+#: ../data/geany.glade.h:236
+msgid "Open new documents from the command-line"
+msgstr "Jaunus dokumentus attaisäț nu komandryndys"
+
+#: ../data/geany.glade.h:237
+msgid "Create a new file for each command-line filename that doesn't exist"
+msgstr "Attaisäț jaunu failu, jemūt nūsaukumus nu komandryndys."
+
+#: ../data/geany.glade.h:238
+msgid "Default end of line characters:"
+msgstr "Nūkluseitīs ryndys beigu simbols:"
+
+#: ../data/geany.glade.h:239
+msgid "<b>New files</b>"
+msgstr "<b>Jauni faily</b>"
+
+#: ../data/geany.glade.h:240
+msgid "Default encoding (new files):"
+msgstr "Nūkluseitīs kodiejums (jaunīm failym):"
+
+#: ../data/geany.glade.h:241
+msgid "Sets the default encoding for newly created files"
+msgstr "Izavieläț nūkluseitū kodiejumu jaunīm failym."
+
+#: ../data/geany.glade.h:242
+msgid "Use fixed encoding when opening non-Unicode files"
+msgstr "Vysus na-Unicode failus attaisäț ar vīnu i tū pošu kodiejumu"
+
+#: ../data/geany.glade.h:243
+msgid ""
+"This option disables the automatic detection of the file encoding when "
+"opening non-Unicode files and opens the file with the specified encoding "
+"(usually not needed)"
+msgstr ""
+"Itei opceja atslādz failu kodiejuma auto-nūteikšonu attaiseišonys laikā. "
+"Vysi na-Unicode faily atsataisa ai nūrōdeitū kodiejumu."
+
+#: ../data/geany.glade.h:244
+msgid "Default encoding (existing non-Unicode files):"
+msgstr "Nūkluseitīs kodiejums (na-Unicode failym):"
+
+#: ../data/geany.glade.h:245
+msgid "Sets the default encoding for opening existing non-Unicode files"
+msgstr "Izavieläț nūkluseitū kodiejumu asūšīm na-Unicode failym."
+
+#: ../data/geany.glade.h:246
+msgid "<b>Encodings</b>"
+msgstr "<b>Kodiejums:</b>"
+
+#: ../data/geany.glade.h:247
+msgid "Ensure new line at file end"
+msgstr "Tukša rynda faila beigōs"
+
+#: ../data/geany.glade.h:248
+msgid "Ensures that at the end of the file is a new line"
+msgstr "Kotra faila beigōs dalikț tukšu ryndu, ka tōs nabeja"
+
+#: ../data/geany.glade.h:249
+msgid "Ensure consistent line endings"
+msgstr "Dzäsț līkōs atstarpis i tabulatorus"
+
+#: ../data/geany.glade.h:250
+msgid ""
+"Ensures that newline characters always get converted before saving, avoiding "
+"mixed line endings in the same file"
+msgstr ""
+"Jaunys ryndys simboly pyrms saglobōšonys teik pōrtaiseiti vīnōtā formatā, "
+"lai nabȳtu ryndu beigu sajukuma failā."
+
+#: ../data/geany.glade.h:251
+msgid "Strip trailing spaces and tabs"
+msgstr "Dzäsț līkōs atstarpis i tabulatorus"
+
+#: ../data/geany.glade.h:252
+msgid "Removes trailing spaces and tabs at the end of lines"
+msgstr "Dzäsț līkōs atstarpis i tabulatorus ryndu beigōs"
+
+#: ../data/geany.glade.h:253 ../src/keybindings.c:666
+msgid "Replace tabs with space"
+msgstr "Sameiț tabulatorus pret atstarpēm"
+
+#: ../data/geany.glade.h:254
+msgid "Replaces all tabs in document with spaces"
+msgstr "Sameiț vysus tabulatorus dokumentā pret atstarṕom."
+
+#: ../data/geany.glade.h:255
+msgid "<b>Saving files</b>"
+msgstr "<b>Saglobōšona</b>"
+
+#: ../data/geany.glade.h:256
+msgid "Recent files list length:"
+msgstr "Naseņ attaiseitū failu saroksta lelums:"
+
+#: ../data/geany.glade.h:257
+msgid "Specifies the number of files which are stored in the Recent files list"
+msgstr "Lelōkīs failu skaits naseņ attaiseitū sarokstā"
+
+#: ../data/geany.glade.h:258
+msgid "Disk check timeout:"
+msgstr "Diska pōrbaudis:"
+
+#: ../data/geany.glade.h:259
+msgid ""
+"How often to check for changes to document files on disk, in seconds. Zero "
+"disables checking."
+msgstr ""
+"Periodiskums sekunḑōs dokumenta izmaiņu sinhronizeišonai iz diska. Nullá "
+"atslādz sinhronizeišonu."
+
+#: ../data/geany.glade.h:260 ../src/prefs.c:1611 ../src/symbols.c:467
+#: ../plugins/filebrowser.c:1168
+msgid "Files"
+msgstr "Faily"
+
+#: ../data/geany.glade.h:261
+msgid "Terminal:"
+msgstr "Terminals:"
+
+#: ../data/geany.glade.h:262
+msgid "Browser:"
+msgstr "Pōrlūks:"
+
+#: ../data/geany.glade.h:264
+#, no-c-format
+msgid ""
+"A terminal emulator command (%c is substituted with the Geany run script "
+"filename)"
+msgstr ""
+"Terminala emulators, pīmāri: xterm, gnome-terminal ci urxvt (ai "
+"argumenta -e atbolstu)"
+
+#: ../data/geany.glade.h:265
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr "Ceļš (var bȳț ai argumentim) da pōrlūka"
+
+#: ../data/geany.glade.h:266
+msgid "Grep:"
+msgstr ""
+
+#: ../data/geany.glade.h:267
+msgid "<b>Tool paths</b>"
+msgstr "<b>Reiky vītys</b>"
+
+#: ../data/geany.glade.h:268
+msgid "Context action:"
+msgstr "Fona darbeiba:"
+
+#: ../data/geany.glade.h:270
+#, no-c-format
+msgid ""
+"Context action command. The currently selected word can be used with %s. It "
+"can appear anywhere in the given command and will be replaced before "
+"execution."
+msgstr ""
+"Fona komanda. Atzeimōtū vōrdu var nūdūț fona komandai ai %s."
+
+#: ../data/geany.glade.h:271
+msgid "<b>Commands</b>"
+msgstr "<b>Komandys</b>"
+
+#: ../data/geany.glade.h:272 ../src/keybindings.c:321 ../src/prefs.c:1613
+msgid "Tools"
+msgstr "Reiki"
+
+#: ../data/geany.glade.h:273
+msgid "email address of the developer"
+msgstr "Izstrōdōtōja e-posts"
+
+#: ../data/geany.glade.h:274
+msgid "Initials of the developer name"
+msgstr "Izstrōdōtōja iniciali"
+
+#: ../data/geany.glade.h:275
+msgid "Initial version:"
+msgstr "Starta verseja:"
+
+#: ../data/geany.glade.h:276
+msgid "Version number, which a new file initially has"
+msgstr "Verseja, kurei teik pīškierta jaunam failam"
+
+#: ../data/geany.glade.h:277
+msgid "Company name"
+msgstr "Firmys nūsaukums:"
+
+#: ../data/geany.glade.h:278
+msgid "Developer:"
+msgstr "Izstrōdōtōjs:"
+
+#: ../data/geany.glade.h:279
+msgid "Company:"
+msgstr "Firma:"
+
+#: ../data/geany.glade.h:280
+msgid "Mail address:"
+msgstr "E-posts:"
+
+#: ../data/geany.glade.h:281
+msgid "Initials:"
+msgstr "Iniciali:"
+
+#: ../data/geany.glade.h:282
+msgid "The name of the developer"
+msgstr "Izstrōdōtōja vōrds:"
+
+#: ../data/geany.glade.h:283
+msgid "Year:"
+msgstr "Gods:"
+
+#: ../data/geany.glade.h:284
+msgid "Date:"
+msgstr "Datums:"
+
+#: ../data/geany.glade.h:285
+msgid "Date & time:"
+msgstr "Datums i laiks:"
+
+#: ../data/geany.glade.h:286
+msgid ""
+"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Īrokstit itá sovu simbola {datetime} formatu. Atļauts jimț viņ tūs parametrus, "
+"kurus lītoj ANSI C strftime funkceja."
+
+#: ../data/geany.glade.h:287
+msgid ""
+"Specify a format for the the {year} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Īrokstit itá sovu simbola {year} formatu. Atļauts jimț viņ tūs parametrus, "
+"kurus lītoj ANSI C strftime funkceja."
+
+#: ../data/geany.glade.h:288
+msgid ""
+"Specify a format for the the {date} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Īrokstit itá sovu simbola {date} formatu. Atļauts jimț viņ tūs parametrus, "
+"kurus lītoj ANSI C strftime funkceja."
+
+#: ../data/geany.glade.h:289
+msgid "<b>Template data</b>"
+msgstr "<b>Paraugu dati</b>"
+
+#: ../data/geany.glade.h:290 ../src/prefs.c:1615
+msgid "Templates"
+msgstr "Paraugi"
+
+#: ../data/geany.glade.h:291
+msgid "C_hange"
+msgstr "Mainäț"
+
+#: ../data/geany.glade.h:292
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "<b>Korstī tausteni</b>"
+
+#: ../data/geany.glade.h:293 ../src/plugins.c:1948 ../src/plugins.c:1985
+#: ../src/prefs.c:1617
+msgid "Keybindings"
+msgstr "Korstī tausteni"
+
+#: ../data/geany.glade.h:294
+msgid "Command:"
+msgstr "Komanda:"
+
+#: ../data/geany.glade.h:296
+#, no-c-format
+msgid "Path to the command for printing files (use %f for the filename)"
+msgstr "Ceļš pi drukōšonys komandys (nūsaukumam jōizmontoj %f)"
+
+#: ../data/geany.glade.h:297
+msgid "Use an external command for printing"
+msgstr "Drukōšonai izmontōț ōrejū komandu"
+
+#: ../data/geany.glade.h:298 ../src/printing.c:239
+msgid "Print line numbers"
+msgstr "Drukōț ryndu numeraceji"
+
+#: ../data/geany.glade.h:299 ../src/printing.c:241
+msgid "Add line numbers to the printed page"
+msgstr "Izdrukōtijā lopā bȳș radzama ryndu numeraceja"
+
+#: ../data/geany.glade.h:300 ../src/printing.c:244
+msgid "Print page numbers"
+msgstr "Drukōț lopyspušu numeraceji"
+
+#: ../data/geany.glade.h:301 ../src/printing.c:246
+msgid ""
+"Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr "Kotrus izdrukōtōs lopyspusis zamaškā tikș īraksteits numerș (aizjem 2 ryndys)"
+
+#: ../data/geany.glade.h:302 ../src/printing.c:249
+msgid "Print page header"
+msgstr "Drukōț lopyspušu viersrokstus"
+
+#: ../data/geany.glade.h:303 ../src/printing.c:251
+msgid ""
+"Add a little header to every page containing the page number, the filename "
+"and the current date (see below). It takes 3 lines of the page."
+msgstr ""
+"Kotrā izdrukōtijā lopyspusī tikș dalykts viersroksts ar lopyspusis numeri, "
+"faila nūsaukumu i šudiņdīnys datumu (aizjem 3 ryndys)"
+
+#: ../data/geany.glade.h:304 ../src/printing.c:267
+msgid "Use the basename of the printed file"
+msgstr "Drukōț viņ faila nūsaukumu"
+
+#: ../data/geany.glade.h:305
+msgid "Print only the basename (without the path) of the printed file"
+msgstr "Drukōț viņ faila nūsaukumu, naīrokstūt ceļu da faila."
+
+#: ../data/geany.glade.h:306 ../src/printing.c:275
+msgid "Date format:"
+msgstr "Datuma formats:"
+
+#: ../data/geany.glade.h:297 ../src/printing.c:276
+msgid ""
+"Specify a format for the date and time stamp which is added to the page "
+"header on each page. You can use any conversion specifiers which can be used "
+"with the ANSI C strftime function."
+msgstr ""
+"Datuma i laika formats drukojamō faila viersrokstam. "
+"Ļauts jimț viņ tūs parametrus, kurus lītoj ANSI C strftime funkceja."
+
+#: ../data/geany.glade.h:308
+msgid "Use native GTK printing"
+msgstr "Lītōț GTK drukōšonys īspiejis"
+
+#: ../data/geany.glade.h:309
+msgid "<b>Printing</b>"
+msgstr "<b>Drukōšona</b>"
+
+#: ../data/geany.glade.h:310 ../src/prefs.c:1619
+msgid "Printing"
+msgstr "Drukōšona"
+
+#: ../data/geany.glade.h:311
+msgid "Font:"
+msgstr "Fonti:"
+
+#: ../data/geany.glade.h:312
+msgid "Sets the font for the terminal widget"
+msgstr "Fonti terminala lūgam"
+
+#: ../data/geany.glade.h:313
+msgid "Choose Terminal Font"
+msgstr "Terminala fonti"
+
+#: ../data/geany.glade.h:314
+msgid "Foreground color:"
+msgstr "Burtu krōsa:"
+
+#: ../data/geany.glade.h:315
+msgid "Background color:"
+msgstr "Fona krōsa:"
+
+#: ../data/geany.glade.h:316
+msgid "Scrollback lines:"
+msgstr "Ryndu rytynōšona:"
+
+#: ../data/geany.glade.h:317
+msgid "Shell:"
+msgstr ""
+
+#: ../data/geany.glade.h:318
+msgid "Sets the foreground color of the text in the terminal widget"
+msgstr "Burtu krōsa terminala lūgā"
+
+#: ../data/geany.glade.h:319
+msgid "Sets the background color of the text in the terminal widget"
+msgstr "Fona krōsa terminala lūgā"
+
+#: ../data/geany.glade.h:320
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget"
+msgstr ""
+
+#: ../data/geany.glade.h:321
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation"
+msgstr ""
+
+#: ../data/geany.glade.h:322
+msgid "Scroll on keystroke"
+msgstr ""
+
+#: ../data/geany.glade.h:323
+msgid "Whether to scroll to the bottom if a key was pressed"
+msgstr ""
+
+#: ../data/geany.glade.h:324
+msgid "Scroll on output"
+msgstr ""
+
+#: ../data/geany.glade.h:325
+msgid "Whether to scroll to the bottom when output is generated"
+msgstr ""
+
+#: ../data/geany.glade.h:326
+msgid "Cursor blinks"
+msgstr ""
+
+#: ../data/geany.glade.h:327
+msgid "Whether to blink the cursor"
+msgstr ""
+
+#: ../data/geany.glade.h:328
+msgid "Override Geany keybindings"
+msgstr "Pōrdefiņāt Geany korstūs tausteņus"
+
+#: ../data/geany.glade.h:329
+msgid ""
+"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
+msgstr ""
+""
+
+#: ../data/geany.glade.h:330
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr "Izslägț menu korstū tausteni (nūkluseitīs F10)"
+
+#: ../data/geany.glade.h:331
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+
+#: ../data/geany.glade.h:332
+msgid "Follow path of the current file"
+msgstr "Ceļš da pādejō attaiseitō faila"
+
+#: ../data/geany.glade.h:333
+msgid "Whether to execute \"cd $path\" when you switch between opened files"
+msgstr ""
+"Īslägț komandu \"cd $path\", kod nūteik pōrzasliegšonōs iz cytu attaiseitū failu"
+
+#: ../data/geany.glade.h:334
+msgid "Execute programs in the VTE"
+msgstr "Komandys darbynōț terminalā"
+
+#: ../data/geany.glade.h:335
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped"
+msgstr ""
+"Palaist programys īšk VTE tō vītā, lai atvērtu termināļa emulācijas logu. "
+"Īgōdojit, ka programys, kurys teik darbynōtys īšk VTE, navar apturäț"
+
+#: ../data/geany.glade.h:336
+msgid "Don't use run script"
+msgstr "Nalītōț palaisšonys skriptu"
+
+#: ../data/geany.glade.h:337
+msgid ""
+"Don't use the simple run script which is usually used to display the exit "
+"status of the executed program"
+msgstr ""
+"Nalītōț vīnkōršu palaisšonys skriptu, kurīs teik lītōts, lai "
+"parōdeitu izpiļdeitōs programys izīšonys statusu"
+
+#: ../data/geany.glade.h:338
+msgid "<b>Terminal</b>"
+msgstr "<b>Terminals</b>"
+
+#: ../data/geany.glade.h:339 ../src/prefs.c:1623 ../src/vte.c:384
+msgid "Terminal"
+msgstr "Terminals"
+
+#: ../data/geany.glade.h:340
+msgid "<i>Warning: read the manual before changing these preferences.</i>"
+msgstr ""
+"<i>Breidynōjums: jōpalosa programys aproksts pyrms itūs parametru pōrmeišonys.</i>"
+
+#: ../data/geany.glade.h:341
+msgid "<b>Various preferences</b>"
+msgstr "<b>Pōrejōs opcejis</b>"
+
+#: ../data/geany.glade.h:342 ../src/prefs.c:1621
+msgid "Various"
+msgstr "Pōrejōs"
+
+#: ../data/geany.glade.h:344
+msgid "_File"
+msgstr "_Fails"
+
+#: ../data/geany.glade.h:345
+msgid "New (with _Template)"
+msgstr "Jauns (šablons)"
+
+#: ../data/geany.glade.h:346
+msgid "_Open..."
+msgstr "_Attaisäț..."
+
+#: ../data/geany.glade.h:347
+msgid "Recent _Files"
+msgstr "Pādejī attaiseitī"
+
+#: ../data/geany.glade.h:348
+msgid "Save _As..."
+msgstr "S_aglobōț kei..."
+
+#: ../data/geany.glade.h:349
+msgid "Sa_ve All"
+msgstr "Saglobōț _vysus"
+
+#: ../data/geany.glade.h:350 ../src/document.c:1651 ../src/document.c:3626
+#: ../src/sidebar.c:718
+msgid "_Reload"
+msgstr "Pō_rlōdäț"
+
+#: ../data/geany.glade.h:351
+msgid "R_eload As"
+msgstr "Pōrlōdäț k_ei"
+
+#: ../data/geany.glade.h:352
+msgid "Page Set_up"
+msgstr "Lopys īstatiej_umi"
+
+#: ../data/geany.glade.h:353
+msgid "_Print..."
+msgstr "Drukōț..."
+
+#: ../data/geany.glade.h:354 ../src/notebook.c:493
+msgid "Close Ot_her Documents"
+msgstr "Aiztaisäț cytus"
+
+#: ../data/geany.glade.h:355 ../src/notebook.c:505
+msgid "C_lose All"
+msgstr "Aiztaisäț vysus"
+
+#: ../data/geany.glade.h:356
+msgid "Co_mmands"
+msgstr "Ko_mandys"
+
+#: ../data/geany.glade.h:357 ../src/keybindings.c:434
+msgid "Cu_t Current Line(s)"
+msgstr "Izjimț ryndu zam kursora"
+
+#: ../data/geany.glade.h:358 ../src/keybindings.c:431
+msgid "_Copy Current Line(s)"
+msgstr "Kopäț ryndu zam kursora"
+
+#: ../data/geany.glade.h:359 ../src/keybindings.c:384
+msgid "_Delete Current Line(s)"
+msgstr "Dzäsț ryndu zam kursora"
+
+#: ../data/geany.glade.h:360 ../src/keybindings.c:381
+msgid "D_uplicate Line or Selection"
+msgstr "Dubläț ryndu ci īzeimōtū"
+
+#: ../data/geany.glade.h:361 ../src/keybindings.c:444
+msgid "S_elect Current Line(s)"
+msgstr "Īzeimäț ryndu zam kursora"
+
+#: ../data/geany.glade.h:362 ../src/keybindings.c:447
+msgid "Se_lect Current Paragraph"
+msgstr "Īzeimäț paragrafu zam kursora"
+
+#: ../data/geany.glade.h:363
+msgid "_Move Line(s) Up"
+msgstr "Pōrnásț ryndys iz augšu"
+
+#: ../data/geany.glade.h:364
+msgid "M_ove Line(s) Down"
+msgstr "Pōrnásț ryndys iz láji"
+
+#: ../data/geany.glade.h:365 ../src/keybindings.c:498
+msgid "_Send Selection to Terminal"
+msgstr "Nūsyutäț īzeimōtū iz terminalu"
+
+#: ../data/geany.glade.h:366 ../src/keybindings.c:500
+msgid "_Reflow Lines/Block"
+msgstr "Samainäț ryndu/paragrafa formatiejumu"
+
+#: ../data/geany.glade.h:367 ../src/keybindings.c:458
+msgid "T_oggle Case of Selection"
+msgstr "Pōrmeiț īzeimōtijā burtu lelumu"
+
+#: ../data/geany.glade.h:368
+msgid "_Comment Line(s)"
+msgstr "Aizkomentäț ryndys"
+
+#: ../data/geany.glade.h:369
+msgid "U_ncomment Line(s)"
+msgstr "_Nūjimț komenteišonu"
+
+#: ../data/geany.glade.h:370
+msgid "_Toggle Line Commentation"
+msgstr "Sameiț komenteišonu ryndom"
+
+#: ../data/geany.glade.h:371
+msgid "_Increase Indent"
+msgstr "Palelynōț atkōp_is"
+
+#: ../data/geany.glade.h:372
+msgid "_Decrease Indent"
+msgstr "Samozynōț atkōpis"
+
+#: ../data/geany.glade.h:373 ../src/keybindings.c:477
+msgid "S_mart Line Indent"
+msgstr "\"Gudrō\" atkōpá"
+
+#: ../data/geany.glade.h:374
+msgid "_Send Selection to"
+msgstr "Īzeimōtū _syutäț iz"
+
+#: ../data/geany.glade.h:375
+msgid "I_nsert Comments"
+msgstr "Īsprausț kome_ntaru"
+
+#: ../data/geany.glade.h:376
+msgid "Preference_s"
+msgstr "Ī_statiejumi"
+
+#: ../data/geany.glade.h:377 ../src/keybindings.c:524
+msgid "P_lugin Preferences"
+msgstr "Pap_lašynōjumu īstatiejumi"
+
+#: ../data/geany.glade.h:378
+msgid "_Find..."
+msgstr "_Atrasț..."
+
+#: ../data/geany.glade.h:379
+msgid "Find _Next"
+msgstr "Atrasț iz prīšku"
+
+#: ../data/geany.glade.h:380
+msgid "Find _Previous"
+msgstr "Atrasț atpakaļ"
+
+#: ../data/geany.glade.h:381 ../src/symbols.c:2600
+msgid "Find in F_iles..."
+msgstr "Atrasț fa_ilūs"
+
+#: ../data/geany.glade.h:382
+msgid "_Replace..."
+msgstr "Atrasț i sameiț"
+
+#: ../data/geany.glade.h:383
+msgid "Next Me_ssage"
+msgstr "Nōkušī_s paziņōjums"
+
+#: ../data/geany.glade.h:384
+msgid "Pr_evious Message"
+msgstr "Īp_rīškdejīs paziņōjums"
+
+#: ../data/geany.glade.h:385 ../src/keybindings.c:573
+msgid "Go to Ne_xt Marker"
+msgstr "Iz nōkušū atzeimi"
+
+#: ../data/geany.glade.h:386 ../src/keybindings.c:576
+msgid "Go to Pre_vious Marker"
+msgstr "Iz īprīškdejū atzeimi"
+
+#: ../data/geany.glade.h:387
+msgid "_Go to Line..."
+msgstr "Īț iz ryndu"
+
+#: ../data/geany.glade.h:388 ../src/keybindings.c:536
+msgid "Find Next _Selection"
+msgstr "Atrasț nōkušū atzeimōtū"
+
+#: ../data/geany.glade.h:389 ../src/keybindings.c:538
+msgid "Find Pre_vious Selection"
+msgstr "Atrasț īprīškdejū atzeimōtū"
+
+#: ../data/geany.glade.h:390 ../src/keybindings.c:555
+msgid "_Mark All"
+msgstr "Atzei_mōț vysys"
+
+#: ../data/geany.glade.h:391
+msgid "Go to Symbol Decl_aration"
+msgstr "Īț iz simbola dekl_araceji"
+
+#: ../data/geany.glade.h:392
+msgid "_View"
+msgstr "Rōdäț"
+
+#: ../data/geany.glade.h:393
+msgid "Change _Font..."
+msgstr "Mainäț _fontus..."
+
+#: ../data/geany.glade.h:394
+msgid "Change _Color Scheme..."
+msgstr "Izgaismōjums..."
+
+#: ../data/geany.glade.h:395
+msgid "Show _Markers Margin"
+msgstr "Atzeiḿu _malená"
+
+#: ../data/geany.glade.h:396
+msgid "Show _Line Numbers"
+msgstr "Ryndu numeraceja"
+
+#: ../data/geany.glade.h:397
+msgid "Show White S_pace"
+msgstr "Atstar_pis"
+
+#: ../data/geany.glade.h:398
+msgid "Show Line _Endings"
+msgstr "Ryndu b_eigys"
+
+#: ../data/geany.glade.h:399
+msgid "Show Indentation _Guides"
+msgstr "Atkōṕu paleiglinejis"
+
+#: ../data/geany.glade.h:400
+msgid "Full_screen"
+msgstr "Iz vysa ekrana"
+
+#: ../data/geany.glade.h:401
+msgid "Toggle All _Additional Widgets"
+msgstr "Vysi p_aneli"
+
+#: ../data/geany.glade.h:402
+msgid "Show Message _Window"
+msgstr "Ziņōjumu _lūgs"
+
+#: ../data/geany.glade.h:403
+msgid "Show _Toolbar"
+msgstr "Reikjūsla"
+
+#: ../data/geany.glade.h:404
+msgid "Show Side_bar"
+msgstr "Sōnu panelș"
+
+#: ../data/geany.glade.h:405
+msgid "_Document"
+msgstr "_Dokuments"
+
+#: ../data/geany.glade.h:406
+msgid "_Line Wrapping"
+msgstr "Ap_lauzț ryndys"
+
+#: ../data/geany.glade.h:407
+msgid "Line _Breaking"
+msgstr "Pōrnásț ryndys"
+
+#: ../data/geany.glade.h:408
+msgid "_Auto-indentation"
+msgstr "_Auto-atkōpis"
+
+#: ../data/geany.glade.h:409
+msgid "In_dent Type"
+msgstr "Atkōṕu tips"
+
+#: ../data/geany.glade.h:410
+msgid "_Detect from Content"
+msgstr "Atpazeiț pec satura"
+
+#: ../data/geany.glade.h:411
+msgid "T_abs and Spaces"
+msgstr "T_abulatori i atstarpis"
+
+#: ../data/geany.glade.h:412
+msgid "Indent Widt_h"
+msgstr "Atkōpis plotums"
+
+#: ../data/geany.glade.h:413
+msgid "_1"
+msgstr ""
+
+#: ../data/geany.glade.h:414
+msgid "_2"
+msgstr ""
+
+#: ../data/geany.glade.h:415
+msgid "_3"
+msgstr ""
+
+#: ../data/geany.glade.h:416
+msgid "_4"
+msgstr ""
+
+#: ../data/geany.glade.h:417
+msgid "_5"
+msgstr ""
+
+#: ../data/geany.glade.h:418
+msgid "_6"
+msgstr ""
+
+#: ../data/geany.glade.h:419
+msgid "_7"
+msgstr ""
+
+#: ../data/geany.glade.h:420
+msgid "_8"
+msgstr ""
+
+#: ../data/geany.glade.h:421
+msgid "Read _Only"
+msgstr "Laseišonys režims"
+
+#: ../data/geany.glade.h:422
+msgid "_Write Unicode BOM"
+msgstr "Unikods BOM"
+
+#: ../data/geany.glade.h:423
+msgid "Set File_type"
+msgstr "Faila _tips"
+
+#: ../data/geany.glade.h:424
+msgid "Set _Encoding"
+msgstr "Kodi_ejums"
+
+#: ../data/geany.glade.h:425
+msgid "Set Line E_ndings"
+msgstr "Ry_ndu beigys"
+
+#: ../data/geany.glade.h:426
+msgid "Convert and Set to _CR/LF (Windows)"
+msgstr "_CR/LF (Windows)"
+
+#: ../data/geany.glade.h:427
+msgid "Convert and Set to _LF (Unix)"
+msgstr "_LF (Unix)"
+
+#: ../data/geany.glade.h:428
+msgid "Convert and Set to CR (Classic _Mac)"
+msgstr "CR (klasiskīs _Mac)"
+
+#: ../data/geany.glade.h:429 ../src/keybindings.c:664
+msgid "_Clone"
+msgstr "Kopäț iz jaunu Tabu"
+
+#: ../data/geany.glade.h:430
+msgid "_Strip Trailing Spaces"
+msgstr "Dzäsț atstarpis ryndu beigōs"
+
+#: ../data/geany.glade.h:431
+msgid "Replace Tabs with S_paces"
+msgstr "Tabulatori -> atstar_pis"
+
+#: ../data/geany.glade.h:432
+msgid "_Replace Spaces with Tabs..."
+msgstr "Atstarpis -> tabulato_ri"
+
+#: ../data/geany.glade.h:433
+msgid "_Fold All"
+msgstr "Savärsț vysu"
+
+#: ../data/geany.glade.h:434
+msgid "_Unfold All"
+msgstr "Izvärsț vys_u"
+
+#: ../data/geany.glade.h:435
+msgid "Remove _Markers"
+msgstr "Dzäsț atzei_mis"
+
+#: ../data/geany.glade.h:436
+msgid "Remove Error _Indicators"
+msgstr "Narōdäț kļūdu indikaceji"
+
+#: ../data/geany.glade.h:437
+msgid "_Project"
+msgstr "_Projekti"
+
+#: ../data/geany.glade.h:438
+msgid "_New..."
+msgstr "Jau_ns..."
+
+#: ../data/geany.glade.h:439
+msgid "_Recent Projects"
+msgstr "Nasenejī projekti"
+
+#: ../data/geany.glade.h:440
+msgid "_Close"
+msgstr "Aiztaisäț"
+
+#: ../data/geany.glade.h:441
+msgid "Apply the default indentation settings to all documents"
+msgstr "Vysim dokumentim vīnaids atkōṕu izmārs"
+
+#: ../data/geany.glade.h:442
+msgid "_Apply Default Indentation"
+msgstr "Nūkluseitōs atkōpis"
+
+#. build the code
+#: ../data/geany.glade.h:443 ../src/build.c:2402 ../src/build.c:2679
+msgid "_Build"
+msgstr ""
+
+#: ../data/geany.glade.h:444
+msgid "_Tools"
+msgstr "Reiki"
+
+#: ../data/geany.glade.h:445
+msgid "_Reload Configuration"
+msgstr "Atjaunynōț īstatiejumus"
+
+#: ../data/geany.glade.h:446
+msgid "C_onfiguration Files"
+msgstr "Īstatiejumu faily"
+
+#: ../data/geany.glade.h:447
+msgid "_Color Chooser"
+msgstr "Krōsu izvielá"
+
+#: ../data/geany.glade.h:448
+msgid "_Word Count"
+msgstr "Vōrdu skaits"
+
+#: ../data/geany.glade.h:449
+msgid "Load Ta_gs File..."
+msgstr "Īlōdäț Ta_gu failu"
+
+#: ../data/geany.glade.h:450
+msgid "_Help"
+msgstr "Paleigs"
+
+#: ../data/geany.glade.h:451
+msgid "Keyboard _Shortcuts"
+msgstr "_Korstī tausteni"
+
+#: ../data/geany.glade.h:452
+msgid "Debug _Messages"
+msgstr "_Debug paziņōjumi"
+
+#: ../data/geany.glade.h:453
+msgid "_Website"
+msgstr "Sātyslopa"
+
+#: ../data/geany.glade.h:454
+msgid "Wi_ki"
+msgstr ""
+
+#: ../data/geany.glade.h:455
+msgid "Report a _Bug..."
+msgstr "Ziņōț par kļūdu"
+
+#: ../data/geany.glade.h:456
+msgid "_Donate..."
+msgstr "Zī_dōt"
+
+#: ../data/geany.glade.h:457 ../src/sidebar.c:126
+msgid "Symbols"
+msgstr "Simboly"
+
+#: ../data/geany.glade.h:458
+msgid "Documents"
+msgstr "Dokumenti"
+
+#: ../data/geany.glade.h:459
+msgid "Status"
+msgstr "Statuss"
+
+#: ../data/geany.glade.h:460
+msgid "Compiler"
+msgstr "Kompilators"
+
+#: ../data/geany.glade.h:461
+msgid "Messages"
+msgstr "Paziņōjumi"
+
+#: ../data/geany.glade.h:462
+msgid "Scribble"
+msgstr "Bekōšona"
+
+#: ../data/geany.glade.h:463
+msgid "Project Properties"
+msgstr "Projekta īpašeibys"
+
+#: ../data/geany.glade.h:464 ../src/project.c:180
+msgid "Filename:"
+msgstr "Faila nūsaukums:"
+
+#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr "Nūsaukums:"
+
+#: ../data/geany.glade.h:466
+msgid "Description:"
+msgstr "Aproksts:"
+
+#: ../data/geany.glade.h:467 ../src/project.c:202
+msgid "Base path:"
+msgstr "Bāzis ceļš:"
+
+#: ../data/geany.glade.h:468
+msgid "File patterns:"
+msgstr "Failu šabloni:"
+
+#: ../data/geany.glade.h:469
+msgid ""
+"Space separated list of file patterns used for the find in files dialog (e."
+"g. *.c *.h)"
+msgstr ""
+"Ai atstarṕom sadaleits saroksts ai failu šablonim, deļ lobōkys atrasšonys "
+"failu dialog-lūgā (pīm., *.c *.h)"
+
+#: ../data/geany.glade.h:470 ../src/project.c:209
+msgid ""
+"Base directory of all files that make up the project. This can be a new "
+"path, or an existing directory tree. You can use paths relative to the "
+"project filename."
+msgstr ""
+"Vysu projekta failu bāzis mapá. Itei var bȳț jauna mapá "
+"ci jau asūšs maṕu kūks. Jiuș varot lītōț ceļus, relativus "
+"pret projekta failu nūsaukumu."
+
+#: ../data/geany.glade.h:471 ../src/keybindings.c:319
+msgid "Project"
+msgstr "Projekts"
+
+#: ../data/geany.glade.h:472
+msgid "Display:"
+msgstr "Rōdäț:"
+
+#: ../data/geany.glade.h:473
+msgid "Custom"
+msgstr "Cyts"
+
+#: ../data/geany.glade.h:474
+msgid "Use global settings"
+msgstr "Lītōț globālūs īstatiejumus"
+
+#: ../data/geany.glade.h:475
+msgid "Size:"
+msgstr "Izmārs:"
+
+#: ../data/geany.glade.h:476
+msgid "Location:"
+msgstr "Atsarašonys vīta:"
+
+#: ../data/geany.glade.h:477
+msgid "Read-only:"
+msgstr "Laseišonys režims:"
+
+#: ../data/geany.glade.h:478
+msgid "Encoding:"
+msgstr "Kodiejums:"
+
+#: ../data/geany.glade.h:479
+msgid "Modified:"
+msgstr "Modificeits:"
+
+#: ../data/geany.glade.h:480
+msgid "Changed:"
+msgstr "Izmaineits:"
+
+#: ../data/geany.glade.h:481
+msgid "Accessed:"
+msgstr "Nūlaseits:"
+
+#: ../data/geany.glade.h:482
+msgid "(only inside Geany)"
+msgstr "(viņ īškpuș Geany)"
+
+#: ../data/geany.glade.h:483
+msgid "Permissions:"
+msgstr "Tīseibys:"
+
+#: ../data/geany.glade.h:484
+msgid "Read:"
+msgstr "Lasäț:"
+
+#: ../data/geany.glade.h:485
+msgid "Write:"
+msgstr "Rakstäț:"
+
+#: ../data/geany.glade.h:486
+msgid "Execute:"
+msgstr "Izpiļdäț:"
+
+#: ../data/geany.glade.h:487
+msgid "Owner:"
+msgstr "Īpašnīks:"
+
+#: ../data/geany.glade.h:488
+msgid "Group:"
+msgstr "Grupa:"
+
+#: ../data/geany.glade.h:489
+msgid "Other:"
+msgstr "Cyti:"
+
+#: ../src/about.c:48
+msgid ""
+"Copyright (c)  2005-2017\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+"Autortiesības (c)  2005-2017\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"Vysys tīseibys patureitys."
+
+#: ../src/about.c:171
+msgid "About Geany"
+msgstr "Par"
+
+#: ../src/about.c:215
+msgid "A fast and lightweight IDE"
+msgstr "Integreitō programu izstrōdis vidá"
+
+#: ../src/about.c:237
+#, c-format
+msgid "(built on or after %s)"
+msgstr "(kompileita %s)"
+
+#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
+#: ../src/about.c:269
+msgid "Info"
+msgstr "Informaceja"
+
+#: ../src/about.c:285
+msgid "Developers"
+msgstr "Izstrōdōtōji"
+
+#: ../src/about.c:292
+msgid "maintainer"
+msgstr "autors"
+
+#: ../src/about.c:300 ../src/about.c:308 ../src/about.c:316
+msgid "developer"
+msgstr "izstrōdōtōjs"
+
+#: ../src/about.c:324
+msgid "translation maintainer"
+msgstr "tulkōšonys koordinators"
+
+#: ../src/about.c:333
+msgid "Translators"
+msgstr "Tulkōtōji"
+
+#: ../src/about.c:353
+msgid "Previous Translators"
+msgstr "Vacī tulkōtōji"
+
+#: ../src/about.c:374
+msgid "Contributors"
+msgstr "Atbalsteitōji"
+
+#: ../src/about.c:384
+#, c-format
+msgid ""
+"Some of the many contributors (for a more detailed list, see the file %s):"
+msgstr ""
+"Golvonī programys izstrōdōtōji (pylns saroksts ir failā %s):"
+
+#: ../src/about.c:410
+msgid "Credits"
+msgstr "Par"
+
+#: ../src/about.c:427
+msgid "License"
+msgstr "Licence"
+
+#: ../src/about.c:436
+msgid ""
+"License text could not be found, please visit http://www.gnu.org/licenses/"
+"gpl-2.0.txt to view it online."
+msgstr ""
+"Licencis tekstu var palasäț sātyslopā \n" 
+"http://www.gnu.org/licenses/gpl-2.0.txt ."
+
+#. fall back to %d
+#: ../src/build.c:710
+#, c-format
+msgid "failed to substitute %%p, no project active"
+msgstr "Kļūda aizstōjūt failu %%p, nav aktivō projekta"
+
+#: ../src/build.c:738
+msgid "Process failed, no working directory"
+msgstr "Kļūda: nav nūrōdeita dorba mapá"
+
+#: ../src/build.c:750
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (mapī: %s)"
+
+#: ../src/build.c:775
+#, c-format
+msgid "Process failed (%s)"
+msgstr "Kļūda procesā (%s)"
+
+#: ../src/build.c:809
+#, c-format
+msgid "Invalid working directory \"%s\""
+msgstr "Nadereiga dorba failu mapá \"%s\""
+
+#: ../src/build.c:845
+#, c-format
+msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
+msgstr ""
+"Naizdává palaisț \"%s\" (sōkšonys skripts natyka sataiseits: %s)"
+
+#: ../src/build.c:887
+msgid ""
+"File not executed because the terminal may contain some input (press Ctrl+C "
+"or Enter to clear it)."
+msgstr ""
+"Fails nav palaists partū ka terminals var saturäț keidu cytu īrokstu (nūspīdit "
+"\"Ctrl\"+\"C\" ci \"Enter\", lai tū atteireitu)."
+
+#: ../src/build.c:935
+#, c-format
+msgid ""
+"Cannot execute build command \"%s\": %s. Check the Terminal setting in "
+"Preferences"
+msgstr ""
+"Navar palaisț build komandu \"%s\" (jōapzaver terminala īstatiejumus)"
+
+#: ../src/build.c:1046
+msgid "Compilation failed."
+msgstr "Kļūda kompileišonā."
+
+#: ../src/build.c:1060
+msgid "Compilation finished successfully."
+msgstr "Kompileišona progō veiksmeigi."
+
+#: ../src/build.c:1220
+msgid "Custom Text"
+msgstr "Sovs teksts"
+
+#: ../src/build.c:1221
+msgid "Enter custom text here, all entered text is appended to the command."
+msgstr "Var īrakstäț itá sovys opcejis, vyss teksts tikș nūdūts komandai."
+
+#: ../src/build.c:1299
+msgid "_Next Error"
+msgstr "_Nōkušō kļūda"
+
+#: ../src/build.c:1301
+msgid "_Previous Error"
+msgstr "Ī_pŗīškdejō kļūda"
+
+#. arguments
+#: ../src/build.c:1311 ../src/build.c:2719
+msgid "_Set Build Commands"
+msgstr "Build komanda"
+
+#: ../src/build.c:1586 ../src/toolbar.c:376
+msgid "Build the current file"
+msgstr "Palaisț build redigejamam failam"
+
+#: ../src/build.c:1597
+msgid "Build the current file with Make and the default target"
+msgstr "Apstrōdōț redigejamū failu ar komandys make nūkluseitīm parametrim"
+
+#: ../src/build.c:1599
+msgid "Build the current file with Make and the specified target"
+msgstr "Apstrōdōț redigejamū failu ar komandai make nūdūtīm parametrim"
+
+#: ../src/build.c:1601
+msgid "Compile the current file with Make"
+msgstr "Kompiläț redigejamū failu ar komandu make"
+
+#: ../src/build.c:1620
+#, c-format
+msgid "Process could not be stopped (%s)."
+msgstr "Naizadává apturäț procesu (%s)."
+
+#: ../src/build.c:1634 ../src/build.c:1646
+msgid "No more build errors."
+msgstr "Procesā build vaira nav kļūdu."
+
+#: ../src/build.c:1759 ../src/build.c:1761
+msgid "Set menu item label"
+msgstr "Menu apzeimiejums"
+
+#: ../src/build.c:1786 ../src/symbols.c:522 ../src/tools.c:397
+msgid "Label"
+msgstr "Apzeimiejums"
+
+#. command column, holding status and command display
+#: ../src/build.c:1787 ../src/symbols.c:517 ../src/tools.c:382
+msgid "Command"
+msgstr "Komanda"
+
+#: ../src/build.c:1788
+msgid "Working directory"
+msgstr "Dorba mapá"
+
+#: ../src/build.c:1789
+msgid "Reset"
+msgstr "Nu jauna"
+
+#: ../src/build.c:1846
+msgid "Click to set menu item label"
+msgstr "Menu izvielnis apzeimiejums"
+
+#: ../src/build.c:1930 ../src/build.c:1932
+#, c-format
+msgid "%s commands"
+msgstr "%s komandys"
+
+#: ../src/build.c:1932
+msgid "No filetype"
+msgstr "Fails tips nanūteikts"
+
+#: ../src/build.c:1941 ../src/build.c:1976
+msgid "Error regular expression:"
+msgstr "Kļūda regularijā izteiksmī:"
+
+#: ../src/build.c:1969
+msgid "Independent commands"
+msgstr "Naatkareigōs komandys"
+
+#: ../src/build.c:2001
+msgid "Note: Item 2 opens a dialog and appends the response to the command."
+msgstr ""
+"Pīzeimá: komandai 2 tikș attaiseits dialoglūgs, kur varäș īrakstäț papyldu parametrus."
+
+#: ../src/build.c:2010
+msgid "Execute commands"
+msgstr "Izpiļdäț komandys"
+
+#: ../src/build.c:2022
+msgid ""
+"%d, %e, %f, %p, %l are substituted in command and directory fields, see "
+"manual for details."
+msgstr ""
+"Maineigī %d, %e, %f, %p, %l ir paradzāti dorbam ai komandom i maṕom, "
+"vairōk informacejis ir rūkys-grōmotā."
+
+#: ../src/build.c:2180
+msgid "Set Build Commands"
+msgstr "Sova build komanda"
+
+#: ../src/build.c:2395
+msgid "_Compile"
+msgstr "Kompiläț"
+
+#: ../src/build.c:2409 ../src/build.c:2439 ../src/build.c:2647
+msgid "_Execute"
+msgstr "Izpiļdäț"
+
+#. build the code with make custom
+#: ../src/build.c:2454 ../src/build.c:2645 ../src/build.c:2699
+msgid "Make Custom _Target..."
+msgstr ""
+
+#. build the code with make object
+#: ../src/build.c:2456 ../src/build.c:2646 ../src/build.c:2707
+msgid "Make _Object"
+msgstr ""
+
+#: ../src/build.c:2458 ../src/build.c:2644
+msgid "_Make"
+msgstr ""
+
+#. build the code with make all
+#: ../src/build.c:2691
+msgid "_Make All"
+msgstr ""
+
+#: ../src/callbacks.c:147
+#, c-format
+msgid "%d file saved."
+msgid_plural "%d files saved."
+msgstr[0] "%d fails saglobōts."
+msgstr[1] "%d faily saglobōti."
+msgstr[2] "%d faily saglobōti."
+
+#: ../src/callbacks.c:900 ../src/keybindings.c:564
+msgid "Go to Line"
+msgstr "Īț iz ryndu"
+
+#: ../src/callbacks.c:901
+msgid "Enter the line you want to go to:"
+msgstr "Rynda, iz kurū jōpōrīt:"
+
+#: ../src/callbacks.c:1002 ../src/callbacks.c:1028
+msgid ""
+"Please set the filetype for the current file before using this function."
+msgstr ""
+"Pyrms itōs funkcejis izmontōšonys jōnūrōda redigejamō failam tips"
+
+#: ../src/callbacks.c:1318 ../src/callbacks.c:1326
+msgid "No more message items."
+msgstr "Vairōk paziņōjumu nav."
+
+#: ../src/callbacks.c:1429
+#, c-format
+msgid "Could not open file %s (File not found)"
+msgstr "Naizadūd attaisäț failu %s (fails nav atrosts)"
+
+#: ../src/callbacks.c:1478
+msgid "Check the path setting in Filetype configuration."
+msgstr "Jōpazaver celá īstatiejumus failu tipa konfiguracejī."
+
+#: ../src/callbacks.c:1483
+msgid "Check the path setting in Preferences."
+msgstr "Jōpazaver celá īstatiejumus menu \"Īstatiejumi\"."
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1496
+#, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "Navar izpiļdäț konteksta darbeibys komandu \"%s\": %s. %s"
+
+#: ../src/dialogs.c:161 ../src/document.c:2298 ../src/document.c:2363
+#: ../src/document.c:2371
+#, c-format
+msgid "\"%s\" was not found."
+msgstr "\"%s\" nav atrosts."
+
+#. auto-detect
+#: ../src/dialogs.c:223 ../src/encodings.c:531
+msgid "Detect from file"
+msgstr "Dabōț nu faila"
+
+#: ../src/dialogs.c:226
+msgid "Programming Languages"
+msgstr "Programvolūdys"
+
+#: ../src/dialogs.c:228
+msgid "Scripting Languages"
+msgstr "Skripti"
+
+#: ../src/dialogs.c:230
+msgid "Markup Languages"
+msgstr "Īzeimōšona"
+
+#: ../src/dialogs.c:308
+msgid "_More Options"
+msgstr "Cyti"
+
+#. line 1 with checkbox and encoding combo
+#: ../src/dialogs.c:315
+msgid "Show _hidden files"
+msgstr "Slāptī faily"
+
+#: ../src/dialogs.c:326
+msgid "Set encoding:"
+msgstr "Kodiejums:"
+
+#: ../src/dialogs.c:335
+msgid ""
+"Explicitly defines an encoding for the file, if it would not be detected. "
+"This is useful when you know that the encoding of a file cannot be detected "
+"correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"encoding."
+msgstr ""
+"Faila kodiejuma variantu atlasá gadīņūs, kod automatiska kodiejumu "
+"pazeišona nanūstrōdoj. Atgōdynōjums: ai atlaseitū kodiejumu tōļōk tikș "
+"attaiseiti vysi faily."
+
+#. line 2 with filetype combo
+#: ../src/dialogs.c:342
+msgid "Set filetype:"
+msgstr "Faila tips:"
+
+#: ../src/dialogs.c:325
+msgid ""
+"Explicitly defines a filetype for the file, if it would not be detected by "
+"filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"filetype."
+msgstr ""
+"Faila tipa variantu atlasá gadīņūs, kod nanūstrōdoj tipu pazeišona pec "
+"faila paplašynōjuma. \n"
+"Atgōdynōjums: ai atlaseitū tipu tōļōk tikș attaiseiti vysi faily."
+
+#: ../src/dialogs.c:377 ../src/dialogs.c:467
+msgid "Open File"
+msgstr "Attaisäț failu"
+
+#: ../src/dialogs.c:381
+msgctxt "Open dialog action"
+msgid "_View"
+msgstr "_Skots"
+
+#: ../src/dialogs.c:383
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"Attaisäț failu laseišonys režimā. Ka attaiseiti tikș vairōki faily,  "
+"vysim failym bȳș pīlītōts laseišonys režims."
+
+#: ../src/dialogs.c:380
+msgid "Detect by file extension"
+msgstr "Atpazeiț failu pec paplašynōjuma"
+
+#: ../src/dialogs.c:535 ../src/document.c:2049
+msgid "Overwrite?"
+msgstr "Pōrrakstäț?"
+
+#: ../src/dialogs.c:536
+msgid "Filename already exists!"
+msgstr "Fails ar taidu nūsaukumu jau ir!"
+
+#: ../src/dialogs.c:565 ../src/dialogs.c:679
+msgid "Save File"
+msgstr "Saglobōț failu"
+
+#: ../src/dialogs.c:574
+msgid "R_ename"
+msgstr "Pōrsaukț"
+
+#: ../src/dialogs.c:575
+msgid "Save the file and rename it"
+msgstr "Saglobōț failu zam cyta nūsaukuma."
+
+#: ../src/dialogs.c:697 ../src/win32.c:727
+msgid "Error"
+msgstr "Kļūda"
+
+#: ../src/dialogs.c:700 ../src/dialogs.c:779 ../src/dialogs.c:1337
+#: ../src/win32.c:733
+msgid "Question"
+msgstr "Vaicōjums"
+
+#: ../src/dialogs.c:703 ../src/win32.c:739
+msgid "Warning"
+msgstr "Breidynōjums"
+
+#: ../src/dialogs.c:706 ../src/win32.c:745
+msgid "Information"
+msgstr "Informaceja"
+
+#: ../src/dialogs.c:783
+msgid "_Don't save"
+msgstr "Nasaglobōț"
+
+#: ../src/dialogs.c:812
+#, c-format
+msgid "The file '%s' is not saved."
+msgstr "Fails \"%s\" nav saglobōts."
+
+#: ../src/dialogs.c:813
+msgid "Do you want to save it before closing?"
+msgstr "Saglobōț izmaineitū failā pyrms aiztaiseišonys?"
+
+#: ../src/dialogs.c:891
+msgid "Choose font"
+msgstr "Fonti"
+
+#: ../src/dialogs.c:1185
+msgid ""
+"An error occurred or file information could not be retrieved (e.g. from a "
+"new file)."
+msgstr ""
+"Kļūda, naizadává dabōț informaceju par failu (var gadätīs, ka tys ir "
+"jauns fails)."
+
+#: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
+#: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
+#: ../src/symbols.c:2404 ../src/symbols.c:2420 ../src/ui_utils.c:289
+msgid "unknown"
+msgstr "nazynoms"
+
+#: ../src/dialogs.c:1219
+#, c-format
+msgid "%s Properties"
+msgstr "%s īpašeibys"
+
+#: ../src/dialogs.c:1251 ../src/ui_utils.c:293
+msgid "(with BOM)"
+msgstr "(ai BOM)"
+
+#: ../src/dialogs.c:1251
+msgid "(without BOM)"
+msgstr "(bez BOM)"
+
+#: ../src/document.c:734
+#, c-format
+msgid "File %s closed."
+msgstr "Fails '%s' aiztaiseits."
+
+#: ../src/document.c:890
+#, c-format
+msgid "New file \"%s\" opened."
+msgstr "Jaunīs fails \"%s\" attaiseits."
+
+#: ../src/document.c:964
+#, c-format
+msgid "Could not open file %s (%s)"
+msgstr "Naizadūd attaisäț failu %s (%s)"
+
+#: ../src/document.c:1013
+#, c-format
+msgid "The file \"%s\" is not valid %s."
+msgstr "Fails  \"%s\" nav %s."
+
+#: ../src/document.c:1019
+#, c-format
+msgid ""
+"The file \"%s\" does not look like a text file or the file encoding is not "
+"supported."
+msgstr ""
+"Fails \"%s\" nazaleidzynoj teksta failam, a ci faila kodiejumam nav "
+"atbolsta sistemā."
+
+#: ../src/document.c:1029
+#, c-format
+msgid ""
+"The file \"%s\" could not be opened properly and has been truncated. This "
+"can occur if the file contains a NULL byte. Be aware that saving it can "
+"cause data loss.\n"
+"The file was set to read-only."
+msgstr ""
+"Dalá faila  \"%s\" attaiseišonys laikā tyka atgrīzta. Tai varā nūtikț partū ka "
+"failā saturā ir baits NULL. Uzmaneibu: saglobojūt failu itaidā stōvūklī "
+"dalá datu var bȳț izgaisušs.\n"
+"Faila attaiseišonai jōizmontoj \"viņ lasāt\" režīms."
+
+#: ../src/document.c:1241
+msgid "Spaces"
+msgstr "Atstarpis"
+
+#: ../src/document.c:1244
+msgid "Tabs"
+msgstr "Tabulatori"
+
+#: ../src/document.c:1247
+msgid "Tabs and Spaces"
+msgstr "Tabulatori i atstarpis"
+
+#. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
+#. * and Spaces), the second one is the filename
+#: ../src/document.c:1252
+#, c-format
+msgid "Setting %s indentation mode for %s."
+msgstr "Atkōṕu režims %s failam %s."
+
+#: ../src/document.c:1263
+#, c-format
+msgid "Setting indentation width to %d for %s."
+msgstr "Atkōṕu plotums %d deļ %s."
+
+#: ../src/document.c:1487
+#, c-format
+msgid "File %s reloaded."
+msgstr "Fails %s pōrlōdeits."
+
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1495
+#, c-format
+msgid "File %s opened(%d%s)."
+msgstr "Fails %s attaiseits (%d%s)."
+
+#: ../src/document.c:1497
+msgid ", read-only"
+msgstr ", viņ lasäț"
+
+#: ../src/document.c:1617
+msgid "Discard history"
+msgstr "Atmásț viesturi"
+
+#: ../src/document.c:1618
+msgid ""
+"The buffer's previous state is stored in the history and undoing restores "
+"it. You can disable this by discarding the history upon reload. This message "
+"will not be displayed again but your choice can be changed in the various "
+"preferences."
+msgstr ""
+"Bufera īprīškdejīs stōvūklis teik globōts viesturī i atsaukšona atjaunynoj "
+"tū. Jiuș varot izslägț itū, atmatūt viesturi pi pōrzalōdeišonys. Itys ziņōjums "
+"vaira natikș rōdeits, a jiusu atlaseitīs var tikț izmaineits nazcik īstatiejumūs."
+
+#: ../src/document.c:1622
+msgid "The file has been reloaded."
+msgstr "Fails ir bejș pōrlōdeits."
+
+#: ../src/document.c:1652
+msgid "Any unsaved changes will be lost."
+msgstr "Sávkurys nasaglobōtōs izmainis izgaisș."
+
+#: ../src/document.c:1653
+msgid "Undo history will be lost."
+msgstr "Atsaukšonys viesturá izgaisș."
+
+#: ../src/document.c:1654
+#, c-format
+msgid "Are you sure you want to reload '%s'?"
+msgstr "Jiuș nu tīsys grybot pōrlōdäț '%s'?"
+
+#: ../src/document.c:1760
+msgid "Error renaming file."
+msgstr "Kļūda pōrsaucūt failu."
+
+#: ../src/document.c:1881
+#, c-format
+msgid ""
+"An error occurred while converting the file from UTF-8 in \"%s\". The file "
+"remains unsaved."
+msgstr ""
+"Kļūda pōrtaisūt failu nu UTF-8 iz \"%s\". Fails palyka "
+"nasaglobōts."
+
+#: ../src/document.c:1902
+#, c-format
+msgid ""
+"Error message: %s\n"
+"The error occurred at \"%s\" (line: %d, column: %d)."
+msgstr ""
+"Kļūdys paziņōjums:  %s\n"
+"Kļūda rodōs \"%s\" (rynda: %d, vīta: %d)."
+
+#: ../src/document.c:1906
+#, c-format
+msgid "Error message: %s."
+msgstr "Kļūdys paziņōjums: %s."
+
+#: ../src/document.c:1966
+#, c-format
+msgid "Failed to open file '%s' for writing: fopen() failed: %s"
+msgstr "Naizadává attaisäț failu '%s' raksteišonai: kļūda fopen(): %s"
+
+#: ../src/document.c:1984
+#, c-format
+msgid "Failed to write file '%s': fwrite() failed: %s"
+msgstr "Naizadává pōrrakstäț failu '%s': kļūda fwrite(): %s"
+
+#: ../src/document.c:1998
+#, c-format
+msgid "Failed to close file '%s': fclose() failed: %s"
+msgstr "Naizadává aiztaisäț failu '%s': kļūda fclose(): %s"
+
+#: ../src/document.c:2048 ../src/document.c:3627
+msgid "_Overwrite"
+msgstr "_Pōrrakstäț"
+
+#: ../src/document.c:2050 ../src/document.c:3630
+#, c-format
+msgid "The file '%s' on the disk is more recent than the current buffer."
+msgstr "Iz diska asūšīs fails '%s' ir jaunōks par tānejū buferī."
+
+#: ../src/document.c:2058 ../src/document.c:3679
+msgid "Try to resave the file?"
+msgstr "Raudzäț väļ saglobōț failu?"
+
+#: ../src/document.c:2059 ../src/document.c:3680
+#, c-format
+msgid "File \"%s\" was not found on disk!"
+msgstr "Fails \"%s\" nav atrosts iz diska!"
+
+#: ../src/document.c:2122
+#, c-format
+msgid "Cannot save read-only document '%s'!"
+msgstr "Navar saglobōț laseišonys režima dokumentu '%s'!"
+
+#: ../src/document.c:2190
+#, c-format
+msgid "Error saving file (%s)."
+msgstr "Kļūda saglobojūt failu (%s)."
+
+#: ../src/document.c:2195
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"The file on disk may now be truncated!"
+msgstr ""
+"%s\n"
+"\n"
+"Fails iz diska var tikț apgrīzts!"
+
+#: ../src/document.c:2197
+msgid "Error saving file."
+msgstr "Kļūda saglobojūt failu."
+
+#: ../src/document.c:2221
+#, c-format
+msgid "File %s saved."
+msgstr "Fails %s saglobōts."
+
+#: ../src/document.c:2371
+msgid "Wrap search and find again?"
+msgstr "Īt iz sōkumu i sōkț vaicōšonu nu jauna?"
+
+#: ../src/document.c:2460 ../src/search.c:1368 ../src/search.c:1421
+#: ../src/search.c:2222 ../src/search.c:2223
+#, c-format
+msgid "No matches found for \"%s\"."
+msgstr "Sakryteibys ai \"%s\" nav atrostys."
+
+#: ../src/document.c:2466
+#, c-format
+msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
+msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr[0] "%s: %d pōrmeits nu \"%s\" iz \"%s\"."
+msgstr[1] "%s: %d pōrmeiti nu \"%s\" iz \"%s\"."
+msgstr[2] "%s: %d pōrmeiti nu \"%s\" iz \"%s\"."
+
+#: ../src/document.c:2916
+msgid "Do you want to reload it?"
+msgstr "Raudzäț väļ pōrlōdäț failu?"
+
+#: ../src/editor.c:4470
+msgid "Enter Tab Width"
+msgstr "Tabulacejis plotums"
+
+#: ../src/editor.c:4471
+msgid "Enter the amount of spaces which should be replaced by a tab character."
+msgstr "Ar vīnu tobulatoru aizstōtūs atstarpju skaits."
+
+#: ../src/editor.c:4676
+#, c-format
+msgid "Warning: non-standard hard tab width: %d != 8!"
+msgstr "uzmaneibu: nastandarta tabulatora plotums: %d != 8"
+
+#: ../src/encodings.c:72
+msgid "Celtic"
+msgstr "Keltu"
+
+#: ../src/encodings.c:73 ../src/encodings.c:74
+msgid "Greek"
+msgstr "Greku"
+
+#: ../src/encodings.c:75
+msgid "Nordic"
+msgstr "Skandināvu"
+
+#: ../src/encodings.c:76
+msgid "South European"
+msgstr "Dīnvydkorejis"
+
+#: ../src/encodings.c:77 ../src/encodings.c:78 ../src/encodings.c:79
+#: ../src/encodings.c:80
+msgid "Western"
+msgstr "Rītumu"
+
+#: ../src/encodings.c:82 ../src/encodings.c:83 ../src/encodings.c:84
+msgid "Baltic"
+msgstr "Baltu"
+
+#: ../src/encodings.c:85 ../src/encodings.c:86 ../src/encodings.c:87
+msgid "Central European"
+msgstr "Centraleiropys"
+
+#. ISO-IR-111 not available on Windows
+#: ../src/encodings.c:88 ../src/encodings.c:89 ../src/encodings.c:91
+#: ../src/encodings.c:92 ../src/encodings.c:93
+msgid "Cyrillic"
+msgstr "Kirilica"
+
+#: ../src/encodings.c:94
+msgid "Cyrillic/Russian"
+msgstr "Kirilica/Krīvu"
+
+#: ../src/encodings.c:95
+msgid "Cyrillic/Ukrainian"
+msgstr "Kirilica/Ukraiņu"
+
+#: ../src/encodings.c:96
+msgid "Romanian"
+msgstr "Rumāņu"
+
+#: ../src/encodings.c:98 ../src/encodings.c:99 ../src/encodings.c:100
+msgid "Arabic"
+msgstr "Arabu"
+
+#. not available at all, ?
+#: ../src/encodings.c:101 ../src/encodings.c:103 ../src/encodings.c:104
+msgid "Hebrew"
+msgstr "Ebreju"
+
+#: ../src/encodings.c:105
+msgid "Hebrew Visual"
+msgstr "Ebreju Visual"
+
+#: ../src/encodings.c:107
+msgid "Armenian"
+msgstr "Armeņu"
+
+#: ../src/encodings.c:108
+msgid "Georgian"
+msgstr "Gruzinu"
+
+#: ../src/encodings.c:109
+msgid "Thai"
+msgstr "Tajīšu"
+
+#: ../src/encodings.c:110 ../src/encodings.c:111 ../src/encodings.c:112
+msgid "Turkish"
+msgstr "Turku"
+
+#: ../src/encodings.c:113 ../src/encodings.c:114 ../src/encodings.c:115
+msgid "Vietnamese"
+msgstr "Vjetnamīšu"
+
+#: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
+#: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
+#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:545
+msgid "Unicode"
+msgstr "Unicode"
+
+#. maybe not available on Linux
+#: ../src/encodings.c:126 ../src/encodings.c:127 ../src/encodings.c:128
+#: ../src/encodings.c:130
+msgid "Chinese Simplified"
+msgstr "Kīnys vīnkōršōts"
+
+#: ../src/encodings.c:131 ../src/encodings.c:132 ../src/encodings.c:133
+msgid "Chinese Traditional"
+msgstr "Kīnys tradicionāls"
+
+#: ../src/encodings.c:134 ../src/encodings.c:135 ../src/encodings.c:136
+#: ../src/encodings.c:137
+msgid "Japanese"
+msgstr "Japāņu"
+
+#: ../src/encodings.c:138 ../src/encodings.c:139 ../src/encodings.c:140
+#: ../src/encodings.c:141
+msgid "Korean"
+msgstr "Korejis"
+
+#: ../src/encodings.c:143
+msgid "Without encoding"
+msgstr "Bez kodiejuma"
+
+#: ../src/encodings.c:414
+msgid "_West European"
+msgstr "Rītumeiropys"
+
+#: ../src/encodings.c:415
+msgid "_East European"
+msgstr "Austrum_eiropys"
+
+#: ../src/encodings.c:416
+msgid "East _Asian"
+msgstr "_Austrumāzejis"
+
+#: ../src/encodings.c:417
+msgid "_SE & SW Asian"
+msgstr "DA i DR Āzeji_s"
+
+#: ../src/encodings.c:418
+msgid "_Middle Eastern"
+msgstr "Tyvūs Austru_mu"
+
+#: ../src/encodings.c:419
+msgid "_Unicode"
+msgstr "_Unikods"
+
+#: ../src/encodings.c:535
+msgid "West European"
+msgstr "Rītumeiropys"
+
+#: ../src/encodings.c:537
+msgid "East European"
+msgstr "Austrumeiropys"
+
+#: ../src/encodings.c:539
+msgid "East Asian"
+msgstr "Austrumāzejis"
+
+#: ../src/encodings.c:541
+msgid "SE & SW Asian"
+msgstr "DA i DR Āzejas"
+
+#: ../src/encodings.c:543
+msgid "Middle Eastern"
+msgstr "Videjūs Austrumu"
+
+#: ../src/filetypes.c:87
+#, c-format
+msgid "%s source file"
+msgstr "%s"
+
+#: ../src/filetypes.c:88
+#, c-format
+msgid "%s file"
+msgstr "%s"
+
+#: ../src/filetypes.c:89
+#, c-format
+msgid "%s script"
+msgstr "%s"
+
+#: ../src/filetypes.c:90
+#, c-format
+msgid "%s document"
+msgstr "%s"
+
+#: ../src/filetypes.c:155
+msgid "Shell"
+msgstr ""
+
+#: ../src/filetypes.c:156
+msgid "Makefile"
+msgstr ""
+
+#: ../src/filetypes.c:160
+msgid "Cascading Stylesheet"
+msgstr ""
+
+#: ../src/filetypes.c:169
+msgid "Config"
+msgstr ""
+
+#: ../src/filetypes.c:170
+msgid "Gettext translation"
+msgstr "Gettext"
+
+#: ../src/filetypes.c:431
+msgid "_Programming Languages"
+msgstr "_Programvolūdys"
+
+#: ../src/filetypes.c:432
+msgid "_Scripting Languages"
+msgstr "_Skripti"
+
+#: ../src/filetypes.c:433
+msgid "_Markup Languages"
+msgstr "_Markup"
+
+#: ../src/filetypes.c:434
+msgid "M_iscellaneous"
+msgstr "Cyts"
+
+#: ../src/filetypes.c:1195 ../src/win32.c:156
+msgid "All Source"
+msgstr "Pyrmkods"
+
+#. create meta file filter "All files"
+#: ../src/filetypes.c:1220 ../src/project.c:350 ../src/win32.c:146
+#: ../src/win32.c:191 ../src/win32.c:212 ../src/win32.c:217
+msgid "All files"
+msgstr "Vysi tipi"
+
+#: ../src/filetypes.c:1269
+#, c-format
+msgid "Bad regex for filetype %s: %s"
+msgstr "%s faila tipam nadereiga regex izteiksmá: %s"
+
+#: ../src/geany.h:50
+msgid "untitled"
+msgstr "bez-nusaukuma"
+
+#: ../src/highlighting.c:1230 ../src/libmain.c:866 ../src/socket.c:170
+#: ../src/templates.c:232
+#, c-format
+msgid "Could not find file '%s'."
+msgstr "Naizadává atrasț failu \"%s\"."
+
+#: ../src/highlighting.c:1300
+msgid "Default"
+msgstr "Nūkluseitīs"
+
+#: ../src/highlighting.c:1341
+msgid "The current filetype overrides the default style."
+msgstr "Eistīs faila tips pōrroksta nūkluseitū tipu."
+
+#: ../src/highlighting.c:1342
+msgid "This may cause color schemes to display incorrectly."
+msgstr "Var gadätīs, ka nadaräș sintaksis izgaismōjums."
+
+#: ../src/highlighting.c:1367
+msgid "Color Schemes"
+msgstr "Izgaismōjums"
+
+#. visual group order
+#: ../src/keybindings.c:308 ../src/symbols.c:494
+msgid "File"
+msgstr "Fails"
+
+#: ../src/keybindings.c:310
+msgid "Clipboard"
+msgstr ""
+
+#: ../src/keybindings.c:311
+msgid "Select"
+msgstr "Īzeimäț"
+
+#: ../src/keybindings.c:312
+msgid "Format"
+msgstr "Formats"
+
+#: ../src/keybindings.c:313
+msgid "Insert"
+msgstr "Īlikț"
+
+#: ../src/keybindings.c:314
+msgid "Settings"
+msgstr "Īstatiejumi"
+
+#: ../src/keybindings.c:315
+msgid "Search"
+msgstr "Vaicōț"
+
+#: ../src/keybindings.c:316
+msgid "Go to"
+msgstr "Īț iz"
+
+#: ../src/keybindings.c:317
+msgid "View"
+msgstr "Izskots"
+
+#: ../src/keybindings.c:318 ../src/symbols.c:643
+msgid "Document"
+msgstr "Dokuments"
+
+#: ../src/keybindings.c:320 ../src/keybindings.c:689 ../src/project.c:513
+#: ../src/ui_utils.c:2215
+msgid "Build"
+msgstr ""
+
+#: ../src/keybindings.c:322 ../src/keybindings.c:714
+msgid "Help"
+msgstr "Paleigs"
+
+#: ../src/keybindings.c:323
+msgid "Focus"
+msgstr "Fokuss"
+
+#: ../src/keybindings.c:324
+msgid "Notebook tab"
+msgstr "Tabs"
+
+#: ../src/keybindings.c:333 ../src/keybindings.c:365
+msgid "New"
+msgstr "Jauns"
+
+#: ../src/keybindings.c:335 ../src/keybindings.c:367
+msgid "Open"
+msgstr "Attaisäț"
+
+#: ../src/keybindings.c:338
+msgid "Open selected file"
+msgstr "Attaisäț atlaseitū"
+
+#: ../src/keybindings.c:340
+msgid "Save"
+msgstr "Saglobōț"
+
+#: ../src/keybindings.c:342 ../src/toolbar.c:59
+msgid "Save as"
+msgstr "Saglobōț kei"
+
+#: ../src/keybindings.c:344
+msgid "Save all"
+msgstr "Saglobōț vysus"
+
+#: ../src/keybindings.c:347 ../src/symbols.c:727
+msgid "Properties"
+msgstr "Īpašeibys"
+
+#: ../src/keybindings.c:349
+msgid "Print"
+msgstr "Drukōț"
+
+#: ../src/keybindings.c:351 ../src/keybindings.c:372
+msgid "Close"
+msgstr "Aiztaisäț"
+
+#: ../src/keybindings.c:353
+msgid "Close all"
+msgstr "Aiztaisäț vysus"
+
+#: ../src/keybindings.c:356
+msgid "Reload file"
+msgstr "Pōrlōdäț failu"
+
+#: ../src/keybindings.c:358
+msgid "Re-open last closed tab"
+msgstr "Attaisäț pādejū aiztaiseitū tabu"
+
+#: ../src/keybindings.c:360
+msgid "Quit"
+msgstr "Izīț"
+
+#: ../src/keybindings.c:377
+msgid "Undo"
+msgstr "Atsaukț"
+
+#: ../src/keybindings.c:379
+msgid "Redo"
+msgstr "Atcáļț atsaukšonu"
+
+#: ../src/keybindings.c:388
+msgid "Delete to line end"
+msgstr "Dzäsț da ryndys beigu"
+
+#: ../src/keybindings.c:391
+msgid "Delete to beginning of line"
+msgstr "Dzäsț da ryndys sōkuma"
+
+#: ../src/keybindings.c:394
+msgid "_Transpose Current Line"
+msgstr "Pōrstumț ryndu zam kursora"
+
+#: ../src/keybindings.c:396
+msgid "Scroll to current line"
+msgstr "Īț da ryndys zam kursora"
+
+#: ../src/keybindings.c:398
+msgid "Scroll up the view by one line"
+msgstr "Īț iz augšu par vīnu ryndu"
+
+#: ../src/keybindings.c:400
+msgid "Scroll down the view by one line"
+msgstr "Īț iz láji par vīnu ryndu"
+
+#: ../src/keybindings.c:402
+msgid "Complete snippet"
+msgstr "Vyss koda fragments"
+
+#: ../src/keybindings.c:404
+msgid "Move cursor in snippet"
+msgstr "Pōrīț ai kursoru iz koda fragmentu"
+
+#: ../src/keybindings.c:406
+msgid "Suppress snippet completion"
+msgstr "Atslägț auto-nūsliegšonu koda fragmentam"
+
+#: ../src/keybindings.c:408
+msgid "Context Action"
+msgstr "Fona darbeiba"
+
+#: ../src/keybindings.c:410
+msgid "Complete word"
+msgstr "Pylns vōrds"
+
+#: ../src/keybindings.c:412
+msgid "Show calltip"
+msgstr "Rōdäț prīškā-saceišonu"
+
+#: ../src/keybindings.c:414
+msgid "Word part completion"
+msgstr "Vōrdu auto-nūsliegšonys"
+
+#: ../src/keybindings.c:417
+msgid "Move line(s) up"
+msgstr "Pōrstumț ryndys iz augšu"
+
+#: ../src/keybindings.c:420
+msgid "Move line(s) down"
+msgstr "Pōrstumț ryndys iz láji"
+
+#: ../src/keybindings.c:425
+msgid "Cut"
+msgstr "Izgrīzț"
+
+#: ../src/keybindings.c:427
+msgid "Copy"
+msgstr "Kopäț"
+
+#: ../src/keybindings.c:429
+msgid "Paste"
+msgstr "Īlikț"
+
+#: ../src/keybindings.c:440
+msgid "Select All"
+msgstr "Īzeimōț vysu"
+
+#: ../src/keybindings.c:442
+msgid "Select current word"
+msgstr "Īzeimōț vōrdu zam kursora"
+
+#: ../src/keybindings.c:450
+msgid "Select to previous word part"
+msgstr "Īzeimōț vōrdu pyrms kursora"
+
+#: ../src/keybindings.c:452
+msgid "Select to next word part"
+msgstr "Īzeimōț vōrdu aiz kursora"
+
+#: ../src/keybindings.c:460
+msgid "Toggle line commentation"
+msgstr "Pōrslägț ryndu komenteišonu"
+
+#: ../src/keybindings.c:463
+msgid "Comment line(s)"
+msgstr "Aizkomentäț ryndys"
+
+#: ../src/keybindings.c:465
+msgid "Uncomment line(s)"
+msgstr "Atkomentäț ryndys"
+
+#: ../src/keybindings.c:467
+msgid "Increase indent"
+msgstr "Palelynōț atkōpi"
+
+#: ../src/keybindings.c:470
+msgid "Decrease indent"
+msgstr "Samozynōț atkōpi"
+
+#: ../src/keybindings.c:473
+msgid "Increase indent by one space"
+msgstr "Palelynōț atkōpi par vīnu atstarpi"
+
+#: ../src/keybindings.c:475
+msgid "Decrease indent by one space"
+msgstr "Samozynōț atkōpi par vīnu atstarpi"
+
+#: ../src/keybindings.c:479
+msgid "Send to Custom Command 1"
+msgstr "Syutäț defineitai komandai 1"
+
+#: ../src/keybindings.c:481
+msgid "Send to Custom Command 2"
+msgstr "Syutäț defineitai komandai 2"
+
+#: ../src/keybindings.c:483
+msgid "Send to Custom Command 3"
+msgstr "Syutäț defineitai komandai 3"
+
+#: ../src/keybindings.c:485
+msgid "Send to Custom Command 4"
+msgstr "Syutäț defineitai komandai 4"
+
+#: ../src/keybindings.c:487
+msgid "Send to Custom Command 5"
+msgstr "Syutäț defineitai komandai 5"
+
+#: ../src/keybindings.c:489
+msgid "Send to Custom Command 6"
+msgstr "Syutäț defineitai komandai 6"
+
+#: ../src/keybindings.c:491
+msgid "Send to Custom Command 7"
+msgstr "Syutäț defineitai komandai 7"
+
+#: ../src/keybindings.c:493
+msgid "Send to Custom Command 8"
+msgstr "Syutäț defineitai komandai 8"
+
+#: ../src/keybindings.c:495
+msgid "Send to Custom Command 9"
+msgstr "Syutäț defineitai komandai 9"
+
+#: ../src/keybindings.c:503
+msgid "Join lines"
+msgstr "Salikț ryndys"
+
+#: ../src/keybindings.c:508
+msgid "Insert date"
+msgstr "Īsprausț datumu"
+
+#: ../src/keybindings.c:514
+msgid "Insert New Line Before Current"
+msgstr "Īsprausț ryndu viers kursora"
+
+#: ../src/keybindings.c:516
+msgid "Insert New Line After Current"
+msgstr "Īsprausț ryndu zam kursora"
+
+#: ../src/keybindings.c:529 ../src/search.c:466
+msgid "Find"
+msgstr "Atrasț"
+
+#: ../src/keybindings.c:531
+msgid "Find Next"
+msgstr "Atrasț nōkušū"
+
+#: ../src/keybindings.c:533
+msgid "Find Previous"
+msgstr "Atrasț īprīškdejū"
+
+#: ../src/keybindings.c:540 ../src/search.c:619
+msgid "Replace"
+msgstr "Pōrmeiț"
+
+#: ../src/keybindings.c:542 ../src/search.c:869
+msgid "Find in Files"
+msgstr "Atrasț failūs"
+
+#: ../src/keybindings.c:545
+msgid "Next Message"
+msgstr "Nōkušīs ziņōjums"
+
+#: ../src/keybindings.c:547
+msgid "Previous Message"
+msgstr "Īprīškdejīs ziņōjums"
+
+#: ../src/keybindings.c:550
+msgid "Find Usage"
+msgstr "Atrasț lītōtū"
+
+#: ../src/keybindings.c:553
+msgid "Find Document Usage"
+msgstr "Dokumenta statistiku"
+
+#: ../src/keybindings.c:560 ../src/toolbar.c:70
+msgid "Navigate back a location"
+msgstr "Atsagrīzț sūli atpakaļ"
+
+#: ../src/keybindings.c:562 ../src/toolbar.c:71
+msgid "Navigate forward a location"
+msgstr "Īț sūli iz prīšku"
+
+#: ../src/keybindings.c:567
+msgid "Go to matching brace"
+msgstr "Īț iz ūtrū īkovu"
+
+#: ../src/keybindings.c:570
+msgid "Toggle marker"
+msgstr "Pōrslägț atzeimis"
+
+#: ../src/keybindings.c:579
+msgid "Go to Symbol Definition"
+msgstr "Īț iz simbola defineišonu"
+
+#: ../src/keybindings.c:582
+msgid "Go to Symbol Declaration"
+msgstr "Īț iz simbola deklareišonu"
+
+#: ../src/keybindings.c:584
+msgid "Go to Start of Line"
+msgstr "Īț iz ryndys sōkumu"
+
+#: ../src/keybindings.c:586
+msgid "Go to End of Line"
+msgstr "Īț iz ryndys beigom"
+
+#: ../src/keybindings.c:588
+msgid "Go to Start of Display Line"
+msgstr "Īț iz ryndys zam kursora sōkumu"
+
+#: ../src/keybindings.c:590
+msgid "Go to End of Display Line"
+msgstr "Īț iz ryndys zam kursora beigom"
+
+#: ../src/keybindings.c:592
+msgid "Go to Previous Word Part"
+msgstr "Īț iz īprīškdejū vōrdu"
+
+#: ../src/keybindings.c:594
+msgid "Go to Next Word Part"
+msgstr "Īț iz nōkušū vōrdu"
+
+#: ../src/keybindings.c:599
+msgid "Toggle All Additional Widgets"
+msgstr "Rōdäț vysus paneļus"
+
+#: ../src/keybindings.c:602
+msgid "Fullscreen"
+msgstr "Iz vysa ekrana"
+
+#: ../src/keybindings.c:604
+msgid "Toggle Messages Window"
+msgstr "Rōdäț ziņōjumu lūgu"
+
+#: ../src/keybindings.c:607
+msgid "Toggle Sidebar"
+msgstr "Rōdäț sōnu paneli"
+
+#: ../src/keybindings.c:609
+msgid "Zoom In"
+msgstr "Palelynōț"
+
+#: ../src/keybindings.c:611
+msgid "Zoom Out"
+msgstr "Samozynōț"
+
+#: ../src/keybindings.c:613
+msgid "Zoom Reset"
+msgstr "Standartizmārs"
+
+#: ../src/keybindings.c:618
+msgid "Switch to Editor"
+msgstr "Pōrīț iz redaktoru"
+
+#: ../src/keybindings.c:620
+msgid "Switch to Search Bar"
+msgstr "Pōrīț iz vaicōšonu"
+
+#: ../src/keybindings.c:622
+msgid "Switch to Message Window"
+msgstr "Pōrīț iz paziņōjumu lūgu"
+
+#: ../src/keybindings.c:624
+msgid "Switch to Compiler"
+msgstr "Pōrīț iz kompileišonu"
+
+#: ../src/keybindings.c:626
+msgid "Switch to Messages"
+msgstr "Pōrīț iz paziņōjumim"
+
+#: ../src/keybindings.c:628
+msgid "Switch to Scribble"
+msgstr "Pōrīț iz pīzeiḿom"
+
+#: ../src/keybindings.c:630
+msgid "Switch to VTE"
+msgstr "Pōrīț iz terminalu"
+
+#: ../src/keybindings.c:632
+msgid "Switch to Sidebar"
+msgstr "Pōrīț iz sōnu paneli"
+
+#: ../src/keybindings.c:634
+msgid "Switch to Sidebar Symbol List"
+msgstr "Pōrīț iz sōnu panelá simbolym"
+
+#: ../src/keybindings.c:636
+msgid "Switch to Sidebar Document List"
+msgstr "Pōrīt iz sōnu panelá dokumentim"
+
+#: ../src/keybindings.c:641
+msgid "Switch to left document"
+msgstr "Pōrīț iz dokumentu pa kreisi"
+
+#: ../src/keybindings.c:643
+msgid "Switch to right document"
+msgstr "Pōrīț iz dokumentu pa labi"
+
+#: ../src/keybindings.c:645
+msgid "Switch to last used document"
+msgstr "Pōrīț iz pādejū lītōtū dokumentu"
+
+#: ../src/keybindings.c:648
+msgid "Move document left"
+msgstr "Aizstumț dokumentu iz kairū pusi"
+
+#: ../src/keybindings.c:651
+msgid "Move document right"
+msgstr "Aizstumț dokumentu iz lobū pusi"
+
+#: ../src/keybindings.c:653
+msgid "Move document first"
+msgstr "Aizstumț dokumentu iz sōkumu"
+
+#: ../src/keybindings.c:655
+msgid "Move document last"
+msgstr "Aizstumț dokumentu iz beigom"
+
+#: ../src/keybindings.c:660
+msgid "Toggle Line wrapping"
+msgstr "Pōrslägț ryndu aplauzšonu"
+
+#: ../src/keybindings.c:662
+msgid "Toggle Line breaking"
+msgstr "Pōrslägț ryndu pōrnesšonu"
+
+#: ../src/keybindings.c:668
+msgid "Replace spaces with tabs"
+msgstr "Sameiț atstarpis pret tabulatorim"
+
+#: ../src/keybindings.c:670
+msgid "Toggle current fold"
+msgstr "Izvärsț/Savärsț koda bloku"
+
+#: ../src/keybindings.c:672
+msgid "Fold all"
+msgstr "Savärsț vysu"
+
+#: ../src/keybindings.c:674
+msgid "Unfold all"
+msgstr "Izvärsț vysu"
+
+#: ../src/keybindings.c:676
+msgid "Reload symbol list"
+msgstr "Pōrlōdäț simbolu sarokstu"
+
+#: ../src/keybindings.c:678
+msgid "Remove Markers"
+msgstr "Dzäsț atzeimis"
+
+#: ../src/keybindings.c:680
+msgid "Remove Error Indicators"
+msgstr "Dzäsț kļūdu indikaceji"
+
+#: ../src/keybindings.c:682
+msgid "Remove Markers and Error Indicators"
+msgstr "Dzäsț atzeimis i kļūdu indikaceji"
+
+#: ../src/keybindings.c:687 ../src/toolbar.c:72
+msgid "Compile"
+msgstr "Kompiläț"
+
+#: ../src/keybindings.c:691
+msgid "Make all"
+msgstr ""
+
+#: ../src/keybindings.c:694
+msgid "Make custom target"
+msgstr ""
+
+#: ../src/keybindings.c:696
+msgid "Make object"
+msgstr ""
+
+#: ../src/keybindings.c:698
+msgid "Next error"
+msgstr "Nōkušō kļūda"
+
+#: ../src/keybindings.c:700
+msgid "Previous error"
+msgstr "Īprīškdejō kļūda"
+
+#: ../src/keybindings.c:702
+msgid "Run"
+msgstr "Palaisț"
+
+#: ../src/keybindings.c:704
+msgid "Build options"
+msgstr "Build opcejis"
+
+#: ../src/keybindings.c:709
+msgid "Show Color Chooser"
+msgstr "Rōdäț krōsu izvieli"
+
+#: ../src/keybindings.c:992
+msgid "Keyboard Shortcuts"
+msgstr "Korstī tausteni"
+
+#: ../src/keybindings.c:1004
+msgid "The following keyboard shortcuts are configurable:"
+msgstr "Korstī tausteni i tūs darbeibys:"
+
+#: ../src/keyfile.c:1033
+msgid "Type here what you want, use it as a notice/scratch board"
+msgstr "Itá var rakstäț kū gryb."
+
+#: ../src/keyfile.c:1260
+msgid "Failed to load one or more session files."
+msgstr "Naizadává īlōdäț vīnu ci vairōkus sesejis failus."
+
+#: ../src/libmain.c:122
+msgid ""
+"Set initial column number for the first opened file (useful in conjunction "
+"with --line)"
+msgstr ""
+"Kolonnys numerș pyrmijam attaiseitijam failam (nūdar kūpā "
+"ar --line)"
+
+#: ../src/libmain.c:123
+msgid "Use an alternate configuration directory"
+msgstr "Lītōț cytu konfigureišonys failu mapi"
+
+#: ../src/libmain.c:124
+msgid "Print internal filetype names"
+msgstr "Drukōț īškdejūs faila tipu nūsaukumus"
+
+#: ../src/libmain.c:125
+msgid "Generate global tags file (see documentation)"
+msgstr "Sataisäț globālū Tagu failu"
+
+#: ../src/libmain.c:126
+msgid "Don't preprocess C/C++ files when generating tags file"
+msgstr "Nadaräț prīšk-apstrōdi C/C++ failym, kod teik taiseiti tagu faily"
+
+#: ../src/libmain.c:128
+msgid "Don't open files in a running instance, force opening a new instance"
+msgstr "Failus attaisäț jaunā programys lūgā"
+
+#: ../src/libmain.c:129
+msgid ""
+"Use this socket filename for communication with a running Geany instance"
+msgstr ""
+
+#: ../src/libmain.c:130
+msgid "Return a list of open documents in a running Geany instance"
+msgstr "Palaisšonys laikā Geany attaisa vysus lītōtūs dokumentus"
+
+#: ../src/libmain.c:132
+msgid "Set initial line number for the first opened file"
+msgstr "Rynda iz kurys bȳș kursors pyrmijā attaiseitijā failā"
+
+#: ../src/libmain.c:133
+msgid "Don't show message window at startup"
+msgstr "Pec programys starta narōdäț ziņōjumu lūgu"
+
+#: ../src/libmain.c:134
+msgid "Don't load auto completion data (see documentation)"
+msgstr "Naīlōdäț auto-nūsliegšonys datus"
+
+#: ../src/libmain.c:136
+msgid "Don't load plugins"
+msgstr "Naīlōdäț spraudņus"
+
+#: ../src/libmain.c:138
+msgid "Print Geany's installation prefix"
+msgstr "Rōdäț Geany instaleišonys ryndu"
+
+#: ../src/libmain.c:139
+msgid "Open all FILES in read-only mode (see documentation)"
+msgstr "Attaisäț vysys failus laseišonys režimā"
+
+#: ../src/libmain.c:140
+msgid "Don't load the previous session's files"
+msgstr "Naīlōdäț īprīškdejōs sesejis failus"
+
+#: ../src/libmain.c:142
+msgid "Don't load terminal support"
+msgstr "Naīlōdäț terminala atbolstu"
+
+#: ../src/libmain.c:143
+msgid "Filename of libvte.so"
+msgstr ""
+
+#: ../src/libmain.c:145
+msgid "Be verbose"
+msgstr "Rōdäț detalis"
+
+#: ../src/libmain.c:146
+msgid "Show version and exit"
+msgstr "Programys verseja"
+
+#: ../src/libmain.c:536
+msgid "[FILES...]"
+msgstr ""
+
+#. note for translators: library versions are printed after this
+#: ../src/libmain.c:570
+#, c-format
+msgid "built on %s with "
+msgstr ""
+
+#: ../src/libmain.c:663
+msgid "Move it now?"
+msgstr "Pōrstumț tān?"
+
+#: ../src/libmain.c:665
+msgid "Geany needs to move your old configuration directory before starting."
+msgstr ""
+"Geany vajdzātu pōrlikț jiusu vacū konfiguracejis mapi pyrms palaisšonys."
+
+#: ../src/libmain.c:674
+#, c-format
+msgid ""
+"Your configuration directory has been successfully moved from \"%s\" to \"%s"
+"\"."
+msgstr ""
+"Jiusu konfiguracejis mapá ir veiksmeigi pōrlykta nu \"%s\" iz "
+"\"%s\"."
+
+#. for translators: the third %s in brackets is the error message which
+#. * describes why moving the dir didn't work
+#: ../src/libmain.c:684
+#, c-format
+msgid ""
+"Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
+"Please move manually the directory to the new location."
+msgstr ""
+"Jiusu vacū konfiguracejis mapi \"%s\" naizadává pōrlikț iz "
+"\"%s\" (%s). Raugit ai cytim reikim pōrlikț vacū konfiguracejis mapi "
+"iz jaunu vītu."
+
+#: ../src/libmain.c:766
+#, c-format
+msgid ""
+"Configuration directory could not be created (%s).\n"
+"There could be some problems using Geany without a configuration directory.\n"
+"Start Geany anyway?"
+msgstr ""
+"Konfiguracejis mapi naizadává sataisäț (%s).\n"
+"Deļ tō mož var rastīs nazkeidys problemys, lītojūt Geany bez konfiguracejis failym.\n"
+"Palaisț Geany vysleidza?"
+
+#: ../src/libmain.c:1173
+#, c-format
+msgid "This is Geany %s."
+msgstr "Redaktors Geany %s."
+
+#: ../src/libmain.c:1175
+#, c-format
+msgid "Configuration directory could not be created (%s)."
+msgstr "Konfiguracejis mapi naizadává sataisäț (%s)."
+
+#: ../src/libmain.c:1399
+msgid "Do you really want to quit?"
+msgstr "Voi grybot aiztaisäț programu?"
+
+#: ../src/libmain.c:1437
+msgid "Configuration files reloaded."
+msgstr "Konfiguracejis faily pōrlōdeiti."
+
+#: ../src/log.c:186
+msgid "Debug Messages"
+msgstr "Debug ziņōjumi"
+
+#: ../src/log.c:188
+msgid "Cl_ear"
+msgstr "_Atteiräț"
+
+#: ../src/msgwindow.c:177
+msgid "Status messages"
+msgstr "Statusa ziņōjumi"
+
+#: ../src/msgwindow.c:582
+msgid "C_opy"
+msgstr "Kopäț"
+
+#: ../src/msgwindow.c:591
+msgid "Copy _All"
+msgstr "Kopäț vysus"
+
+#: ../src/msgwindow.c:621
+msgid "_Hide Message Window"
+msgstr "Narōdäț ziņōjumu lūgu"
+
+#: ../src/msgwindow.c:682
+#, c-format
+msgid "Could not find file '%s' - trying the current document path."
+msgstr "Naizadává atrasț failu '%s' - rauga atrasț tānejō dokumenta vītā."
+
+#: ../src/msgwindow.c:1118
+msgid "The document has been closed."
+msgstr "Dokuments ir bejș aiztaiseits."
+
+#: ../src/notebook.c:199
+msgid "Switch to Document"
+msgstr "Pōrīț iz dokumentu"
+
+#: ../src/notebook.c:474
+msgid "Open in New _Window"
+msgstr "Attaisäț jaunā _lūgā"
+
+#: ../src/notebook.c:499
+msgid "Close Documents to the _Right"
+msgstr "Aiztaisäț vysus dokumentus pa labi"
+
+#: ../src/plugins.c:233
+#, c-format
+msgid ""
+"The plugin \"%s\" is not binary compatible with this release of Geany - "
+"please recompile it."
+msgstr ""
+
+#: ../src/plugins.c:1271
+msgid "_Plugin Manager"
+msgstr "S_praudņu menedžers"
+
+#: ../src/plugins.c:1650
+msgid ""
+"\n"
+"<i>Other plugins depend on this. Disable them first to allow deactivation.</"
+"i>\n"
+msgstr ""
+"\n"
+"<i>Cyti spraudnii ir atkareigi nu itō. Atsliedzit pyrma tūs, tūraiz "
+"atsliedzit itū.</i>\n"
+
+#. Four allocations is less than ideal but meh
+#: ../src/plugins.c:1652
+#, c-format
+msgid ""
+"Version:\t%s\n"
+"Author(s):\t%s\n"
+"Filename:\t%s"
+msgstr ""
+"Verseja:\t%s\n"
+"Autors(-i):\t%s\n"
+"Faila nūsaukums:\t%s"
+
+#: ../src/plugins.c:1680
+msgid "No plugins available."
+msgstr "Nav spraudņu."
+
+#: ../src/plugins.c:1812
+msgid "Active"
+msgstr "Aktivs"
+
+#: ../src/plugins.c:1819
+msgid "Plugin"
+msgstr "Spraudnis"
+
+#: ../src/plugins.c:1933
+msgid "Plugins"
+msgstr "Spraudni"
+
+#: ../src/plugins.c:1974
+msgid "Choose which plugins should be loaded at startup:"
+msgstr "Spraudni, kurī teik īlōdeiti Geany palaisšonys laikā:"
+
+#: ../src/plugins.c:2067
+#, c-format
+msgid ""
+"Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
+"plugin."
+msgstr ""
+"Proxy spraudná '%s' paplašynōjums '%s' sōkōs ai punktu. Lyudzu, "
+"salobojit sovu proxy spraudni."
+
+#: ../src/pluginutils.c:427
+msgid "Configure Plugins"
+msgstr "Spraudņu īstatiejumi"
+
+#: ../src/prefs.c:181
+msgid "Grab Key"
+msgstr "Spīsț tausteni"
+
+#: ../src/prefs.c:187
+#, c-format
+msgid "Press the combination of the keys you want to use for \"%s\"."
+msgstr "Jōnūspīž tausteņu kombinaceja, kurū grybot lītōț deļ \"%s\""
+
+#: ../src/prefs.c:227 ../src/symbols.c:2558 ../src/sidebar.c:752
+msgid "_Expand All"
+msgstr "Izvärsț vysus"
+
+#: ../src/prefs.c:232 ../src/symbols.c:2563 ../src/sidebar.c:758
+msgid "_Collapse All"
+msgstr "Savärsț vysus"
+
+#: ../src/prefs.c:292
+msgid "Action"
+msgstr "Darbeiba"
+
+#: ../src/prefs.c:297
+msgid "Shortcut"
+msgstr "Saitá"
+
+#: ../src/prefs.c:1485
+msgid "_Allow"
+msgstr "_Atļauț"
+
+#: ../src/prefs.c:1487
+msgid "_Override"
+msgstr "Pōrdefinäț"
+
+#: ../src/prefs.c:1488
+msgid "Override that keybinding?"
+msgstr "Pōrdefinäț itūs tausteņus?"
+
+#: ../src/prefs.c:1489
+#, c-format
+msgid "The combination '%s' is already used for \"%s\"."
+msgstr "Tausteņu kombinaceja \"%s\" jau teik izmontōta deļ \"%s\"."
+
+#. add manually GeanyWrapLabels because they can't be added with Glade
+#. page Tools
+#: ../src/prefs.c:1698
+msgid "Enter tool paths below. Tools you do not need can be left blank."
+msgstr "Jōīroksta ceļš da reikim. Deļ naizmontōtīm reikim jōpamat tukšumu."
+
+#. page Templates
+#: ../src/prefs.c:1703
+msgid ""
+"Set the information to be used in templates. See the documentation for "
+"details."
+msgstr "Informaceja, kas tikș izmontōta paraugūs."
+
+#. page Keybindings
+#: ../src/prefs.c:1708
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
+msgstr ""
+"Korstūs tausteņu defineišona i pōrmeišona. Definäț ci pōrmeiț var divejūs oupōs:\n"
+"1. Nūspīžūt \"Mainäț\" pūgu tikș attaiseits dialogs ar lyugumu nūspīsț vajdzeigūs;\n"
+"2. Dubultkliškis iz vajdzeigōs rindenis ļauș itū rindeni redigäț."
+
+#. page Editor->Indentation
+#: ../src/prefs.c:1713
+msgid ""
+"<i>Warning: these settings are overridden by the current project. See "
+"<b>Project->Properties</b>.</i>"
+msgstr ""
+"<i>Uzmaneibu: lai izmaineitīs stōtūs spākā, jōpalaiž Geany nu jauna "
+"ci jōīt iz \"Reiki\" i jōnūspīž \"Atjaunynōț īstatiejumus\"."
+"</i>"
+
+#: ../src/printing.c:164
+#, c-format
+msgid "<b>Page %d of %d</b>"
+msgstr "<b>Lopyspusá %d nu %d</b>"
+
+#: ../src/printing.c:234
+msgid "Document Setup"
+msgstr "Dokumenta parametri"
+
+#: ../src/printing.c:269
+msgid "Print only the basename(without the path) of the printed file"
+msgstr "Drukōț viņ faila nūsaukumu, narokstūt ceļu da faila."
+
+#: ../src/printing.c:421
+msgid "Paginating"
+msgstr "Lopu numeri"
+
+#: ../src/printing.c:445
+#, c-format
+msgid "Page %d of %d"
+msgstr "Lopyspusá %d nu %d"
+
+#: ../src/printing.c:501
+#, c-format
+msgid "Did not send document %s to the printing subsystem."
+msgstr "Dokuments %s nav nūsyuteits iz drukōšonu."
+
+#: ../src/printing.c:503
+#, c-format
+msgid "Document %s was sent to the printing subsystem."
+msgstr "Dokuments %s nūsyuteits iz drukōšonu."
+
+#: ../src/printing.c:554
+#, c-format
+msgid "Printing of %s failed (%s)."
+msgstr "Dokumenta %s drukōšona beidzäs ai kļūdu (%s)."
+
+#: ../src/printing.c:592
+msgid "Please set a print command in the preferences dialog first."
+msgstr "Jōīroksta drukōšonys komanda"
+
+#: ../src/printing.c:600
+#, c-format
+msgid ""
+"The file \"%s\" will be printed with the following command:\n"
+"\n"
+"%s"
+msgstr ""
+"Faila \"%s\" drukōšona tikș veikta ar komandu:\n"
+"\n"
+"%s"
+
+#: ../src/printing.c:615
+#, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Navar izpiļdäț drukōšonys komandu \"%s\": %s. Apzaverit celá īstatiejumus "
+"īšk \"Īstatiejumi\"."
+
+#: ../src/printing.c:622
+#, c-format
+msgid "File %s printed."
+msgstr "Fails %s izdrukōts."
+
+#. "projects" is part of the default project base path so be careful when translating
+#. * please avoid special characters and spaces, look at the source for details or ask Frank
+#: ../src/project.c:100
+msgid "projects"
+msgstr "projekti"
+
+#: ../src/project.c:135
+msgid "Move the current documents into the new project's session?"
+msgstr "Pōrnásț tānejūs dokumentus iz jaunu projekta seseji?"
+
+#: ../src/project.c:153
+msgid "New Project"
+msgstr "Jauns projekts"
+
+#: ../src/project.c:158
+msgid "C_reate"
+msgstr "Sataisäț"
+
+#: ../src/project.c:176
+msgid "Project name"
+msgstr "Projekta nūsaukums"
+
+#: ../src/project.c:188
+#, c-format
+msgid ""
+"Path of the file representing the project and storing its settings. It "
+"should normally have the \"%s\" extension."
+msgstr ""
+"Ceļš da tānejō projekta i īstatiejumu failym. Faila paplašynōjumam "
+"vajdzātu bȳț \"%s\"."
+
+#: ../src/project.c:212 ../src/project.c:486
+msgid "Choose Project Base Path"
+msgstr "Projekta failu mapá:"
+
+#: ../src/project.c:251 ../src/project.c:623 ../src/project.c:1156
+msgid "Project file could not be written"
+msgstr "Nav tīseibu rakstäț projekta failūs"
+
+#: ../src/project.c:256
+#, c-format
+msgid "Project \"%s\" created."
+msgstr "Projekts \"%s\" sataiseits."
+
+#: ../src/project.c:295 ../src/project.c:322 ../src/project.c:1023
+#, c-format
+msgid "Project file \"%s\" could not be loaded."
+msgstr "Projekta failu \"%s\" naizadává īlōdäț."
+
+#: ../src/project.c:316 ../src/project.c:334
+msgid "Open Project"
+msgstr "Attaisäț projektu"
+
+#: ../src/project.c:354
+msgid "Project files"
+msgstr "Projekta faily"
+
+#: ../src/project.c:416
+#, c-format
+msgid "Project \"%s\" closed."
+msgstr "Projekts \"%s\" aiztaiseits."
+
+#: ../src/project.c:626
+#, c-format
+msgid "Project \"%s\" saved."
+msgstr "Projekts %s saglobōts."
+
+#: ../src/project.c:659
+msgid "Do you want to close it before proceeding?"
+msgstr "Aiztaisäț pyrms darbeibys veikšonys?"
+
+#: ../src/project.c:660
+#, c-format
+msgid "The '%s' project is open."
+msgstr "Projekts '%s' attaiseits."
+
+#: ../src/project.c:709
+msgid "The specified project name is too short."
+msgstr "Projekta nūsaukums ir par eisu"
+
+#: ../src/project.c:715
+#, c-format
+msgid "The specified project name is too long (max. %d characters)."
+msgstr "Projekta nūsaukums ir par garu (max. simbolu skaits %d)."
+
+#: ../src/project.c:727
+msgid "You have specified an invalid project filename."
+msgstr "Nadereigs projekta nūsaukums."
+
+#: ../src/project.c:750
+msgid "Create the project's base path directory?"
+msgstr "Iztaisäț projekta mapi?"
+
+#: ../src/project.c:751
+#, c-format
+msgid "The path \"%s\" does not exist."
+msgstr "Mapá \"%s\" naeksistej."
+
+#: ../src/project.c:760
+#, c-format
+msgid "Project base directory could not be created (%s)."
+msgstr "Projekta mapi naizadává iztaisäț (%s)."
+
+#: ../src/project.c:773
+#, c-format
+msgid "Project file could not be written (%s)."
+msgstr "Projekta failu naizadává īrakstäț (%s)."
+
+#: ../src/project.c:779 ../src/search.c:629
+msgid "_Replace"
+msgstr "Sameiț"
+
+#: ../src/project.c:781 ../plugins/export.c:331
+#, c-format
+msgid "The file '%s' already exists. Do you want to overwrite it?"
+msgstr "FDails '%s' jau ir. Grybot tū pōrrakstäț?"
+
+#. initialise the dialog
+#: ../src/project.c:927 ../src/project.c:938
+msgid "Choose Project Filename"
+msgstr "Jōnūrōda projekta nūsaukums"
+
+#: ../src/project.c:1013
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr "Projekts \"%s\" attaiseits."
+
+#: ../src/search.c:310 ../src/search.c:962
+msgid "_Use regular expressions"
+msgstr "Lītōț reg_ularōs izteiksmis"
+
+#: ../src/search.c:313
+msgid ""
+"Use Perl-like regular expressions. For detailed information about using "
+"regular expressions, please refer to the manual."
+msgstr ""
+"Lītōț Perl-leidzeigōs regularōs izteiksmis. Seikōkai informacejai par regularūs "
+"izteiksḿu lītōšonu ir pamōceibā."
+
+#: ../src/search.c:318
+msgid "Use _escape sequences"
+msgstr "Lītōț escape seceibu"
+
+#: ../src/search.c:322
+msgid ""
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
+"corresponding control characters"
+msgstr ""
+"Aizstōț \"\\\\\", \"\\t\", \"\\n\", \"\\r\" un \"\\uXXXX\" (Unicode "
+"rokstu zeimis) ai vadeibys rokstu zeiḿom"
+
+#: ../src/search.c:325
+msgid "Use multi-line matchin_g"
+msgstr "_Lītōț vairōk-ryndu vaicōšonu"
+
+#: ../src/search.c:330
+msgid ""
+"Perform regular expression matching on the whole buffer at once rather than "
+"line by line, allowing matches to span multiple lines.  In this mode, "
+"newline characters are part of the input and can be captured as normal "
+"characters by the pattern."
+msgstr ""
+"Izdaräț regularūs izteiksḿu saskaņōšonu izraiz vysā buferī, a na ryndu "
+"pa ryndai, ļaunūt sakryteibom aptvárț vairōkys ryndys.  Itymā režimā jaunōs "
+"ryndys rokstu zeimis ir dalá nu īvadis i var tikț šablonā saprostys kei normalōs "
+"rokstu zeimis."
+
+#: ../src/search.c:343
+msgid "Search _backwards"
+msgstr "Vaicōț _atpakaļ"
+
+#: ../src/search.c:349 ../src/search.c:971
+msgid "C_ase sensitive"
+msgstr "Īvārōț burtu lelumu"
+
+#: ../src/search.c:353 ../src/search.c:976
+msgid "Match only a _whole word"
+msgstr "Viņ vysa vōrda sakryteiba"
+
+#: ../src/search.c:357
+msgid "Match from s_tart of word"
+msgstr "Sakryteiba vōrda sōkumā"
+
+#: ../src/search.c:473
+msgid "_Previous"
+msgstr "Ī_prīškdejīs"
+
+#: ../src/search.c:478
+msgid "_Next"
+msgstr "_Nōkušīs"
+
+#: ../src/search.c:482 ../src/search.c:640 ../src/search.c:879
+msgid "_Search for:"
+msgstr "Vaicōț:"
+
+#. Now add the multiple match options
+#: ../src/search.c:510
+msgid "_Find All"
+msgstr "Vaicōț vysur"
+
+#: ../src/search.c:517
+msgid "_Mark"
+msgstr "Īzeimōtijā"
+
+#: ../src/search.c:519
+msgid "Mark all matches in the current document"
+msgstr "Atzeimōț vysys sakryteibys redigejamā dokumentā."
+
+#: ../src/search.c:524 ../src/search.c:699
+msgid "In Sessi_on"
+msgstr "Sesejis failūs"
+
+#: ../src/search.c:529 ../src/search.c:704
+msgid "_In Document"
+msgstr "Dokumentā"
+
+#. close window checkbox
+#: ../src/search.c:535 ../src/search.c:717
+msgid "Close _dialog"
+msgstr "Aiztaisäț _dialogu"
+
+#: ../src/search.c:539 ../src/search.c:721
+msgid "Disable this option to keep the dialog open"
+msgstr "Atslägț itū opceji lai dialogs palyktu attaiseits."
+
+#: ../src/search.c:634
+msgid "Replace & Fi_nd"
+msgstr "Sameiț i atrasț"
+
+#: ../src/search.c:643
+msgid "Replace wit_h:"
+msgstr "Sameiț ai:"
+
+#. Now add the multiple replace options
+#: ../src/search.c:692
+msgid "Re_place All"
+msgstr "Sameiț vysus"
+
+#: ../src/search.c:709
+msgid "In Se_lection"
+msgstr "Īzeimōtijā"
+
+#: ../src/search.c:711
+msgid "Replace all matches found in the currently selected text"
+msgstr "Sameiț vysys sakryteibys īzeimōtijā teksta fragmentā"
+
+#: ../src/search.c:828
+msgid "all"
+msgstr "vysūs"
+
+#: ../src/search.c:830
+msgid "project"
+msgstr "projekts"
+
+#: ../src/search.c:832
+msgid "custom"
+msgstr "cyti"
+
+#: ../src/search.c:836
+msgid ""
+"All: search all files in the directory\n"
+"Project: use file patterns defined in the project settings\n"
+"Custom: specify file patterns manually"
+msgstr ""
+"vysūs: vaicōț vysūs mapis failūs\n"
+"projektā: vaicōț projekta šablonu failu nūsaukumūs\n"
+"cyti: nūrōdäț projekta šablonu failu nūsaukumus"
+
+#: ../src/search.c:898
+msgid "Fi_les:"
+msgstr "Fai_ly:"
+
+#: ../src/search.c:910
+msgid "File patterns, e.g. *.c *.h"
+msgstr "Šablonu faily (pīmāri, *.c *.h)"
+
+#: ../src/search.c:922
+msgid "_Directory:"
+msgstr "Mapá:"
+
+#: ../src/search.c:941
+msgid "E_ncoding:"
+msgstr "Kodiejums:"
+
+#: ../src/search.c:965
+msgid "See grep's manual page for more information"
+msgstr ""
+
+#: ../src/search.c:967
+msgid "_Recurse in subfolders"
+msgstr "Vysōs apakš-maṕōs"
+
+#: ../src/search.c:980
+msgid "_Invert search results"
+msgstr "_Invertäț vaicōšonys rezultatus"
+
+#: ../src/search.c:984
+msgid "Invert the sense of matching, to select non-matching lines"
+msgstr "Sakryteibu vītā izavieläț nasakryteibys"
+
+#: ../src/search.c:1001
+msgid "E_xtra options:"
+msgstr "Ekstra opcejis:"
+
+#: ../src/search.c:1009
+msgid "Other options to pass to Grep"
+msgstr "Pōrejī parametri deļ Grep"
+
+#: ../src/search.c:1371 ../src/search.c:2228 ../src/search.c:2231
+#, c-format
+msgid "Found %d match for \"%s\"."
+msgid_plural "Found %d matches for \"%s\"."
+msgstr[0] "Atrosta %d sakryteiba deļ \"%s\"."
+msgstr[1] "Atrostys %d sakryteibys deļ \"%s\"."
+msgstr[2] "Atrostys %d sakryteibys deļ \"%s\"."
+
+#: ../src/search.c:1427
+#, c-format
+msgid "Replaced %u matches in %u documents."
+msgstr "Izdareitys %u pōrmeišonys %u dokumentūs."
+
+#: ../src/search.c:1616
+msgid "Invalid directory for find in files."
+msgstr "Nūrōdeita naasūša vaicōšonys mapá."
+
+#: ../src/search.c:1633
+msgid "No text to find."
+msgstr "Nav vaicojamō teksta."
+
+#: ../src/search.c:1709
+msgid "Searching..."
+msgstr "Vaicōšona..."
+
+#: ../src/search.c:1711
+#, c-format
+msgid "%s %s -- %s (in directory: %s)"
+msgstr "%s %s -- %s (mapī: %s)"
+
+#: ../src/search.c:1719
+#, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"Navar palaisț reiku grep \"%s\": %s. Apzaverit celá īstatiejumus īšk "
+"\"Īstatiejumi\"."
+
+#: ../src/search.c:1759
+#, c-format
+msgid "Could not open directory (%s)"
+msgstr "Naizadává attaisäț mapi (%s)"
+
+#: ../src/search.c:1849
+msgid "Search failed."
+msgstr "Vaicōšona naizadává"
+
+#: ../src/search.c:1873
+#, c-format
+msgid "Search completed with %d match."
+msgid_plural "Search completed with %d matches."
+msgstr[0] "Vaicōšona pabeigta, atrosta %d sakryteiba."
+msgstr[1] "Vaicōšona pabeigta, atrostys %d sakryteibys."
+msgstr[2] "Vaicōšona pabeigta, atrostys %d sakryteibys."
+
+#: ../src/search.c:1881
+msgid "No matches found."
+msgstr "Sakryteibu nav."
+
+#: ../src/search.c:1910
+#, c-format
+msgid "Bad regex: %s"
+msgstr ""
+
+#. TODO maybe this message needs a rewording
+#: ../src/socket.c:236
+msgid ""
+"Geany tried to access the Unix Domain socket of another instance running as "
+"another user.\n"
+"This is a fatal error and Geany will now quit."
+msgstr ""
+" Pi Geany raudzä datikț, palaistōs nu cytu lītōtāōju instancis, pa Unix "
+"soketu.\n"
+"Tei ir fatala kļūda i Geany niu aizataisäș."
+
+#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
+msgid "Text ended before matching quote was found"
+msgstr "Teksts beidzīs pyrms vajdzeigō piedená tyka atrosta"
+
+#. TL note: from glib
+#: ../src/spawn.c:130
+msgid "Text was empty (or contained only whitespace)"
+msgstr "Teksts beja tukšs (ci saturäja viņ tukšuma zeimis)"
+
+#: ../src/spawn.c:151 ../src/spawn.c:165
+msgid "A quoted Windows program name must be entirely inside the quotes"
+msgstr ""
+"Piedeņōs asūšam Windows programys nūsaukumam vāg bȳț piļneibā īškpuș "
+"piedeņom"
+
+#: ../src/spawn.c:258
+msgid "Program not found"
+msgstr "Programa nav atrosta"
+
+#: ../src/spawn.c:764
+msgid "Failed to change to the working directory"
+msgstr "Naizadává pōrīț iz dorba failu mapi"
+
+#: ../src/spawn.c:769
+msgid "Unknown error executing child process"
+msgstr "Nazynoma kļūda, palaižūt child-procesu"
+
+#: ../src/stash.c:1177
+msgid "Value"
+msgstr "Vierteiba"
+
+#: ../src/symbols.c:473 ../src/symbols.c:523 ../src/symbols.c:633
+msgid "Chapter"
+msgstr "Nūdalá"
+
+#: ../src/symbols.c:474 ../src/symbols.c:519 ../src/symbols.c:634
+msgid "Section"
+msgstr "Dalá"
+
+#: ../src/symbols.c:475
+msgid "Sect1"
+msgstr ""
+
+#: ../src/symbols.c:476
+msgid "Sect2"
+msgstr ""
+
+#: ../src/symbols.c:477
+msgid "Sect3"
+msgstr ""
+
+#: ../src/symbols.c:478
+msgid "Appendix"
+msgstr "Pīlykums"
+
+#: ../src/symbols.c:479 ../src/symbols.c:524 ../src/symbols.c:549
+#: ../src/symbols.c:565 ../src/symbols.c:580 ../src/symbols.c:591
+#: ../src/symbols.c:692 ../src/symbols.c:703 ../src/symbols.c:716
+#: ../src/symbols.c:730 ../src/symbols.c:742 ../src/symbols.c:754
+#: ../src/symbols.c:771 ../src/symbols.c:800 ../src/symbols.c:832
+msgid "Other"
+msgstr "Cyti"
+
+#: ../src/symbols.c:485 ../src/symbols.c:762 ../src/symbols.c:810
+msgid "Module"
+msgstr "Modulș"
+
+#: ../src/symbols.c:486 ../src/symbols.c:576 ../src/symbols.c:688
+#: ../src/symbols.c:740 ../src/symbols.c:752 ../src/symbols.c:767
+#: ../src/symbols.c:781
+msgid "Types"
+msgstr "Tipi"
+
+#: ../src/symbols.c:487
+msgid "Type constructors"
+msgstr "Tipu konstruktori"
+
+#: ../src/symbols.c:488 ../src/symbols.c:510 ../src/symbols.c:531
+#: ../src/symbols.c:548 ../src/symbols.c:560 ../src/symbols.c:573
+#: ../src/symbols.c:588 ../src/symbols.c:602 ../src/symbols.c:612
+#: ../src/symbols.c:676 ../src/symbols.c:726 ../src/symbols.c:749
+#: ../src/symbols.c:794 ../src/symbols.c:818
+msgid "Functions"
+msgstr "Funkcejis"
+
+#: ../src/symbols.c:493
+msgid "Program"
+msgstr "Programa"
+
+#: ../src/symbols.c:495 ../src/symbols.c:503 ../src/symbols.c:509
+msgid "Sections"
+msgstr "Sadalis"
+
+#: ../src/symbols.c:496
+msgid "Paragraph"
+msgstr "Paragrafs"
+
+#: ../src/symbols.c:497
+msgid "Group"
+msgstr "Grupa"
+
+#: ../src/symbols.c:498
+msgid "Data"
+msgstr "Dati"
+
+#: ../src/symbols.c:504
+msgid "Keys"
+msgstr "Tausteni"
+
+#: ../src/symbols.c:511 ../src/symbols.c:562 ../src/symbols.c:578
+#: ../src/symbols.c:604 ../src/symbols.c:677 ../src/symbols.c:702
+#: ../src/symbols.c:728 ../src/symbols.c:741 ../src/symbols.c:750
+#: ../src/symbols.c:766 ../src/symbols.c:801 ../src/symbols.c:830
+msgid "Variables"
+msgstr "Maineigī"
+
+#: ../src/symbols.c:518
+msgid "Environment"
+msgstr "Vidá"
+
+#: ../src/symbols.c:520 ../src/symbols.c:635
+msgid "Subsection"
+msgstr "Apakš-sadalá"
+
+#: ../src/symbols.c:521 ../src/symbols.c:636
+msgid "Subsubsection"
+msgstr "Apakšapakš-sadalá"
+
+#: ../src/symbols.c:532 ../src/symbols.c:557
+msgid "Structures"
+msgstr "Strukturys"
+
+#: ../src/symbols.c:539
+msgid "Parts"
+msgstr "Dalis"
+
+#: ../src/symbols.c:540
+msgid "Assembly"
+msgstr ""
+
+#: ../src/symbols.c:541
+msgid "Steps"
+msgstr "Sūli"
+
+#: ../src/symbols.c:556 ../src/symbols.c:654 ../src/symbols.c:700
+msgid "Modules"
+msgstr "Moduli"
+
+#: ../src/symbols.c:558 ../src/symbols.c:605
+msgid "Traits"
+msgstr "Pazeimis"
+
+#: ../src/symbols.c:559
+msgid "Implementations"
+msgstr "Sataiseišonys"
+
+#: ../src/symbols.c:561 ../src/symbols.c:821
+msgid "Typedefs / Enums"
+msgstr "Tipu definicejis / skaiteitōji"
+
+#: ../src/symbols.c:563 ../src/symbols.c:779 ../src/symbols.c:788
+#: ../src/symbols.c:827
+msgid "Macros"
+msgstr ""
+
+#: ../src/symbols.c:564 ../src/symbols.c:657 ../src/symbols.c:666
+#: ../src/symbols.c:675 ../src/symbols.c:713 ../src/symbols.c:739
+msgid "Methods"
+msgstr ""
+
+#: ../src/symbols.c:572 ../src/symbols.c:587 ../src/symbols.c:685
+#: ../src/symbols.c:710 ../src/symbols.c:723
+msgid "Package"
+msgstr "Paka"
+
+#: ../src/symbols.c:574 ../src/symbols.c:600 ../src/symbols.c:711
+#: ../src/symbols.c:724 ../src/symbols.c:737 ../src/symbols.c:764
+#: ../src/symbols.c:817
+msgid "Interfaces"
+msgstr "Saskarnis"
+
+#: ../src/symbols.c:575 ../src/symbols.c:820
+msgid "Structs"
+msgstr "Strukturys"
+
+#: ../src/symbols.c:577 ../src/symbols.c:590 ../src/symbols.c:603
+#: ../src/symbols.c:729 ../src/symbols.c:751
+msgid "Constants"
+msgstr "Konstantis"
+
+#: ../src/symbols.c:579 ../src/symbols.c:714 ../src/symbols.c:819
+msgid "Members"
+msgstr ""
+
+#: ../src/symbols.c:589 ../src/symbols.c:753 ../src/symbols.c:778
+msgid "Labels"
+msgstr ""
+
+#: ../src/symbols.c:599 ../src/symbols.c:664 ../src/symbols.c:813
+msgid "Namespaces"
+msgstr ""
+
+#: ../src/symbols.c:601 ../src/symbols.c:623 ../src/symbols.c:655
+#: ../src/symbols.c:665 ../src/symbols.c:674 ../src/symbols.c:712
+#: ../src/symbols.c:725 ../src/symbols.c:738 ../src/symbols.c:816
+msgid "Classes"
+msgstr " "
+
+#: ../src/symbols.c:613
+msgid "Anchors"
+msgstr ""
+
+#: ../src/symbols.c:614
+msgid "H1 Headings"
+msgstr "H1"
+
+#: ../src/symbols.c:615
+msgid "H2 Headings"
+msgstr "H2"
+
+#: ../src/symbols.c:616
+msgid "H3 Headings"
+msgstr "H3"
+
+#: ../src/symbols.c:624
+msgid "ID Selectors"
+msgstr "ID"
+
+#: ../src/symbols.c:625
+msgid "Type Selectors"
+msgstr "Type"
+
+#: ../src/symbols.c:644
+msgid "Section Level 1"
+msgstr ""
+
+#: ../src/symbols.c:645
+msgid "Section Level 2"
+msgstr ""
+
+#: ../src/symbols.c:646
+msgid "Section Level 3"
+msgstr ""
+
+#: ../src/symbols.c:647
+msgid "Section Level 4"
+msgstr ""
+
+#: ../src/symbols.c:835
+msgid "Singletons"
+msgstr ""
+
+#: ../src/symbols.c:667 ../src/symbols.c:795
+msgid "Procedures"
+msgstr ""
+
+#: ../src/symbols.c:678
+msgid "Imports"
+msgstr ""
+
+#: ../src/symbols.c:686
+msgid "Entities"
+msgstr ""
+
+#: ../src/symbols.c:687
+msgid "Architectures"
+msgstr ""
+
+#: ../src/symbols.c:689
+msgid "Functions / Procedures"
+msgstr "Funkcejis / Procedurys"
+
+#: ../src/symbols.c:690
+msgid "Variables / Signals"
+msgstr "Maineigī / Signaly"
+
+#: ../src/symbols.c:691
+msgid "Processes / Blocks / Components"
+msgstr "Procesi / Bloki / Komponentis"
+
+#: ../src/symbols.c:699
+msgid "Events"
+msgstr "Nūtykumi"
+
+#: ../src/symbols.c:701
+msgid "Functions / Tasks"
+msgstr "Funkcejis / Uzdavumi"
+
+#: ../src/symbols.c:715 ../src/symbols.c:770
+msgid "Enums"
+msgstr "Skaiteitōji"
+
+#: ../src/symbols.c:763
+msgid "Programs"
+msgstr "Programys"
+
+#: ../src/symbols.c:765
+msgid "Functions / Subroutines"
+msgstr "Funkcejis / Subroutines"
+
+#: ../src/symbols.c:768
+msgid "Components"
+msgstr ""
+
+#: ../src/symbols.c:769
+msgid "Blocks"
+msgstr ""
+
+#: ../src/symbols.c:780
+msgid "Defines"
+msgstr ""
+
+#: ../src/symbols.c:787
+msgid "Targets"
+msgstr ""
+
+#: ../src/symbols.c:796
+msgid "Indexes"
+msgstr ""
+
+#: ../src/symbols.c:797
+msgid "Tables"
+msgstr ""
+
+#: ../src/symbols.c:798
+msgid "Triggers"
+msgstr ""
+
+#: ../src/symbols.c:799
+msgid "Views"
+msgstr ""
+
+#: ../src/symbols.c:831
+msgid "Extern Variables"
+msgstr "Ōrejī maineigī"
+
+#: ../src/symbols.c:1630
+#, c-format
+msgid "Unknown filetype extension for \"%s\".\n"
+msgstr "Napazeits faila \"%s\" paplašynōjums.\n"
+
+#: ../src/symbols.c:1656
+#, c-format
+msgid "Failed to create tags file, perhaps because no symbols were found.\n"
+msgstr ""
+"Naizadává sataisäț tagu failu, mož partū ka natyka atrosts nivīns "
+"simbols.\n"
+
+#: ../src/symbols.c:1663
+#, c-format
+msgid ""
+"Usage: %s -g <Tags File> <File list>\n"
+"\n"
+msgstr ""
+"Lītōjums: %s -g <Tagu fails> <Failu saroksts>\n"
+"\n"
+
+#: ../src/symbols.c:1664
+#, c-format
+msgid ""
+"Example:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
+"gtk/gtk.h\n"
+msgstr ""
+"Pīmārs:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
+"gtk/gtk.h\n"
+
+#: ../src/symbols.c:1678
+msgid "Load Tags File"
+msgstr "Īlōdäț Tagu failu"
+
+#: ../src/symbols.c:1685
+msgid "Geany tags file (*.*.tags)"
+msgstr "Geany tagu fails (*.*.tags)"
+
+#. For translators: the first wildcard is the filetype, the second the filename
+#: ../src/symbols.c:1705
+#, c-format
+msgid "Loaded %s tags file '%s'."
+msgstr "Īlōdeits %s tagu fails '%s'."
+
+#: ../src/symbols.c:1708
+#, c-format
+msgid "Could not load tags file '%s'."
+msgstr "Naizadává īlōdäț tagu failu '%s'."
+
+#. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
+#: ../src/symbols.c:1943
+#, c-format
+msgid "<b>%s: %lu</b>"
+msgstr ""
+
+#. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
+#: ../src/symbols.c:1946
+#, c-format
+msgid "%s: %lu"
+msgstr ""
+
+#: ../src/symbols.c:2155
+#, c-format
+msgid "Forward declaration \"%s\" not found."
+msgstr "."
+
+#: ../src/symbols.c:2157
+#, c-format
+msgid "Definition of \"%s\" not found."
+msgstr ""
+
+#: ../src/symbols.c:2573
+msgid "Sort by _Name"
+msgstr "Pec _nūsaukuma"
+
+#: ../src/symbols.c:2580
+msgid "Sort by _Appearance"
+msgstr "Pec bīžum_a"
+
+#: ../src/templates.c:83
+#, c-format
+msgid "Failed to convert template file \"%s\" to UTF-8"
+msgstr "Naizadává pōrtaisäț šablona failu \"%s\" iz UTF-8"
+
+#: ../src/templates.c:618
+#, c-format
+msgid ""
+"Cannot execute template command \"%s\". Hint: incorrect paths in the command "
+"are a common cause of errors. Error: %s."
+msgstr ""
+"Navar izpiļdäț šablona komandu \"%s\". Paleigs: vysbīžōk vainá ir tymā, "
+"ka napareizi celi. Kļūda: %s."
+
+#. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
+#: ../src/toolbar.c:58
+msgid "Save the current file"
+msgstr "Saglobōț redigejamū failu"
+
+#: ../src/toolbar.c:60
+msgid "Save all open files"
+msgstr "Saglobōț vysus attaiseitūs failus"
+
+#: ../src/toolbar.c:61
+msgid "Reload the current file from disk"
+msgstr "Pōrlōdäț redigejamū failu nu diska"
+
+#: ../src/toolbar.c:62
+msgid "Close the current file"
+msgstr "Aiztaisäț redigejamū failu"
+
+#: ../src/toolbar.c:63
+msgid "Close all open files"
+msgstr "Aiztaisäț vysus failus"
+
+#: ../src/toolbar.c:64
+msgid "Cut the current selection"
+msgstr "Izgrīzț izvieleitū"
+
+#: ../src/toolbar.c:65
+msgid "Copy the current selection"
+msgstr "Kopäț izvieleitū"
+
+#: ../src/toolbar.c:66
+msgid "Paste the contents of the clipboard"
+msgstr "Īvītōț izvieleitū starplyktuvī"
+
+#: ../src/toolbar.c:67
+msgid "Delete the current selection"
+msgstr "Dzäsț izvieleitū"
+
+#: ../src/toolbar.c:68
+msgid "Undo the last modification"
+msgstr "Atsaukț pādejōs izmainis"
+
+#: ../src/toolbar.c:69
+msgid "Redo the last modification"
+msgstr "Atcáļț atsaukšonu"
+
+#: ../src/toolbar.c:72
+msgid "Compile the current file"
+msgstr "Kompiläț redigejamū failu"
+
+#: ../src/toolbar.c:73
+msgid "Run or view the current file"
+msgstr "Startäț ci apzavärț redigejamū failu"
+
+#: ../src/toolbar.c:74
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette"
+msgstr ""
+"Attaisäț krōsu izvielnis dialogu"
+
+#: ../src/toolbar.c:75
+msgid "Zoom in the text"
+msgstr "Palelynōț tekstu"
+
+#: ../src/toolbar.c:76
+msgid "Zoom out the text"
+msgstr "Samozynōț tekstu"
+
+#: ../src/toolbar.c:77
+msgid "Decrease indentation"
+msgstr "Samozynōț atkōpi"
+
+#: ../src/toolbar.c:78
+msgid "Increase indentation"
+msgstr "Palelynōț atkōpi"
+
+#: ../src/toolbar.c:79 ../src/toolbar.c:384
+msgid "Find the entered text in the current file"
+msgstr "Atrasț īvadeitū tekstu redigejamā failā"
+
+#: ../src/toolbar.c:80 ../src/toolbar.c:394
+msgid "Jump to the entered line number"
+msgstr "Īț iz īvadeitō numera ryndu"
+
+#: ../src/toolbar.c:81
+msgid "Show the preferences dialog"
+msgstr "Īstatiejumu lūgs"
+
+#: ../src/toolbar.c:82
+msgid "Quit Geany"
+msgstr "Izīț nu Geany"
+
+#: ../src/toolbar.c:83
+msgid "Print document"
+msgstr "Drukōț dokumentu"
+
+#: ../src/toolbar.c:84
+msgid "Replace text in the current document"
+msgstr "Sameiț tekstu redigejamā dokumentā"
+
+#: ../src/toolbar.c:360
+msgid "Create a new file"
+msgstr "Iztaisäț jaunu failu"
+
+#: ../src/toolbar.c:361
+msgid "Create a new file from a template"
+msgstr "Iztaisäț jaunu failu nu parauga"
+
+#: ../src/toolbar.c:368
+msgid "Open an existing file"
+msgstr "Attaisäț asūšu failu"
+
+#: ../src/toolbar.c:369
+msgid "Open a recent file"
+msgstr "Attaisäț naseņ lītōtu failu"
+
+#: ../src/toolbar.c:377
+msgid "Choose more build actions"
+msgstr "Papyldu build komandys"
+
+#: ../src/toolbar.c:384
+msgid "Search Field"
+msgstr "Atrasț lauku"
+
+#: ../src/toolbar.c:394
+msgid "Goto Field"
+msgstr "Īț iz lauku"
+
+#: ../src/toolbar.c:587
+msgid "Separator"
+msgstr "Atdaleitōjs"
+
+#: ../src/toolbar.c:588
+msgid "--- Separator ---"
+msgstr "--- Atdaleitōjs ---"
+
+#: ../src/toolbar.c:960
+msgid ""
+"Select items to be displayed on the toolbar. Items can be reordered by drag "
+"and drop."
+msgstr ""
+"Reikjūslys elementu kōrtōšona. Elementus var pōrkōrtōț pōrvalkūt ai pális "
+"kursoru"
+
+#: ../src/toolbar.c:976
+msgid "Available Items"
+msgstr "Pīejamī elementi"
+
+#: ../src/toolbar.c:997
+msgid "Displayed Items"
+msgstr "Reikjūslys elementi"
+
+#: ../src/tools.c:86
+#, c-format
+msgid "Invalid command: %s"
+msgstr "Napareiza komanda: %s"
+
+#: ../src/tools.c:217
+#, c-format
+msgid "Passing data and executing custom command: %s"
+msgstr "Padūd datus i palaiž defineitū komandu: %s"
+
+#: ../src/tools.c:260
+#, c-format
+msgid ""
+"The executed custom command returned an error. Your selection was not "
+"changed. Error message: %s"
+msgstr ""
+"Defineitō komanda atgrīzá kļūdu. Jiusu atlaseitīs natyka maineits. "
+"Kļūdys ziņōjums: %s"
+
+#: ../src/tools.c:233
+msgid "The executed custom command exited with an unsuccessful exit code."
+msgstr "Defineitō komanda izgōja ai naveiksmeigu izejis kodu."
+
+#: ../src/tools.c:242
+#, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"Navar palaisț defineitū komandu \"%s\": %s. Apzaverit celá īstatiejumus "
+"īšk \"Defineitōs komandys\"."
+
+#: ../src/tools.c:357 ../src/tools.c:626
+msgid "Set Custom Commands"
+msgstr "Definäț komandu"
+
+#: ../src/tools.c:365
+msgid ""
+"You can send the current selection to any of these commands and the output "
+"of the command replaces the current selection."
+msgstr ""
+"Jiuș varot nūsyutäț atlaseitū iz sávkuru nu itōm komandom i komandys "
+"izvadá aizstōș atlaseitū."
+
+#: ../src/tools.c:379
+msgid "ID"
+msgstr ""
+
+#: ../src/tools.c:597
+msgid "No custom commands defined."
+msgstr "Nav defineitōs komandys"
+
+#: ../src/tools.c:695
+msgid "Word Count"
+msgstr "Vōrdu skaits"
+
+#: ../src/tools.c:704
+msgid "selection"
+msgstr "atlaseitī"
+
+#: ../src/tools.c:709
+msgid "whole document"
+msgstr "vyss dokuments"
+
+#: ../src/tools.c:718
+msgid "Range:"
+msgstr "Intervals:"
+
+#: ../src/tools.c:730
+msgid "Lines:"
+msgstr "Ryndys:"
+
+#: ../src/tools.c:744
+msgid "Words:"
+msgstr "Vōrdi:"
+
+#: ../src/tools.c:758
+msgid "Characters:"
+msgstr "Rokstu zeimis:"
+
+#: ../src/sidebar.c:178
+msgid "No symbols found"
+msgstr "Nav atrosts nivīns simbols"
+
+#: ../src/sidebar.c:602
+msgid "Show S_ymbol List"
+msgstr "Simbolu saroksts"
+
+#: ../src/sidebar.c:614
+msgid "Show _Document List"
+msgstr "Dokumentu saroksts"
+
+#: ../src/sidebar.c:626 ../plugins/filebrowser.c:708
+msgid "H_ide Sidebar"
+msgstr "Narōdäț sōnu panel_i"
+
+#: ../src/sidebar.c:731 ../plugins/filebrowser.c:679
+msgid "_Find in Files..."
+msgstr "Atrasț _failūs"
+
+#: ../src/sidebar.c:741
+msgid "Show _Paths"
+msgstr "Rōdäț ceļus"
+
+#: ../src/ui_utils.c:64
+msgid ""
+"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
+"encoding: %e      filetype: %f      scope: %S"
+msgstr ""
+"rynda: %l / %L\t kol.: %c\t atl.: %s\t %w      %t      %mrežims: %M      "
+"kodiejums: %e      faila tips: %f      tvierīnș: %S"
+
+#. L = lines
+#: ../src/ui_utils.c:240
+#, c-format
+msgid "%dL"
+msgstr ""
+
+#. RO = read-only
+#: ../src/ui_utils.c:250 ../src/ui_utils.c:257
+msgid "RO "
+msgstr ""
+
+#. OVR = overwrite/overtype, INS = insert
+#: ../src/ui_utils.c:252
+msgid "OVR"
+msgstr ""
+
+#: ../src/ui_utils.c:252
+msgid "INS"
+msgstr ""
+
+#: ../src/ui_utils.c:266
+msgid "TAB"
+msgstr ""
+
+#. SP = space
+#: ../src/ui_utils.c:269
+msgid "SP"
+msgstr ""
+
+#. T/S = tabs and spaces
+#: ../src/ui_utils.c:272
+msgid "T/S"
+msgstr ""
+
+#: ../src/ui_utils.c:280
+msgid "MOD"
+msgstr ""
+
+#: ../src/ui_utils.c:408
+msgid " (new instance)"
+msgstr ""
+
+#: ../src/ui_utils.c:438
+#, c-format
+msgid "Font updated (%s)."
+msgstr ""
+
+#: ../src/ui_utils.c:689
+msgid "C Standard Library"
+msgstr ""
+
+#: ../src/ui_utils.c:690
+msgid "ISO C99"
+msgstr ""
+
+#: ../src/ui_utils.c:691
+msgid "C++ (C Standard Library)"
+msgstr ""
+
+#: ../src/ui_utils.c:692
+msgid "C++ Standard Library"
+msgstr ""
+
+#: ../src/ui_utils.c:693
+msgid "C++ STL"
+msgstr ""
+
+#: ../src/ui_utils.c:715 ../src/ui_utils.c:793
+msgid "dd.mm.yyyy"
+msgstr "dd.mm.gggg"
+
+#: ../src/ui_utils.c:717 ../src/ui_utils.c:794
+msgid "mm.dd.yyyy"
+msgstr "mm.dd.gggg"
+
+#: ../src/ui_utils.c:719 ../src/ui_utils.c:795
+msgid "yyyy/mm/dd"
+msgstr "gggg/mm/dd"
+
+#: ../src/ui_utils.c:721 ../src/ui_utils.c:804
+msgid "dd.mm.yyyy hh:mm:ss"
+msgstr "dd.mm.gggg ss:mm:ss"
+
+#: ../src/ui_utils.c:723 ../src/ui_utils.c:805
+msgid "mm.dd.yyyy hh:mm:ss"
+msgstr "mm.dd.gggg ss:mm:ss"
+
+#: ../src/ui_utils.c:725 ../src/ui_utils.c:806
+msgid "yyyy/mm/dd hh:mm:ss"
+msgstr "gggg/mm/dd ss:mm:ss"
+
+#: ../src/ui_utils.c:727 ../src/ui_utils.c:815
+msgid "_Use Custom Date Format"
+msgstr "Lītōț sov_u datuma formatu"
+
+#: ../src/ui_utils.c:731
+msgid "Custom Date Format"
+msgstr "Sovs datuma formats"
+
+#: ../src/ui_utils.c:732
+msgid ""
+"Enter here a custom date and time format. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Īrokstit itá sovu datuma i laika formatu. Jiuș varot lītōț sávkurus "
+"pōrtaiseitūs parametrus, kurūs ļaun lītōț ANSI C strftime funkceja."
+
+#: ../src/ui_utils.c:753
+msgid "Date format string could not be converted (possibly too long)."
+msgstr ""
+"Datuma formata parametri natyka pōrtaiseiti (mož tūs irā padauḑz)."
+
+#: ../src/ui_utils.c:828
+msgid "_Set Custom Date Format"
+msgstr "_Sovs datuma formats"
+
+#: ../src/ui_utils.c:2016
+msgid "Select Folder"
+msgstr "Izavieläț mapi"
+
+#: ../src/ui_utils.c:2016
+msgid "Select File"
+msgstr "Izavieläț failu"
+
+#: ../src/ui_utils.c:2176
+msgid "_Filetype Configuration"
+msgstr "_Faila tipu konfiguraceja"
+
+#: ../src/ui_utils.c:2213
+msgid "Save All"
+msgstr "Saglobōț vysu"
+
+#: ../src/ui_utils.c:2214
+msgid "Close All"
+msgstr "Aiztaisäț vysu"
+
+#: ../src/ui_utils.c:2448
+msgid "Geany cannot start!"
+msgstr "Geany navar pazalaisț!"
+
+#: ../src/utils.c:88
+msgid "Select Browser"
+msgstr "Atlasäț pōrlūku"
+
+#: ../src/utils.c:89
+msgid ""
+"Failed to spawn the configured browser command. Please correct it or enter "
+"another one."
+msgstr ""
+
+#: ../src/utils.c:374
+msgid "Win (CRLF)"
+msgstr ""
+
+#: ../src/utils.c:377
+msgid "Classic Mac (CR)"
+msgstr ""
+
+#: ../src/utils.c:376
+msgid "Unix (LF)"
+msgstr ""
+
+#: ../src/utils.c:387
+msgid "CRLF"
+msgstr ""
+
+#: ../src/utils.c:388
+msgid "CR"
+msgstr ""
+
+#: ../src/utils.c:389
+msgid "LF"
+msgstr ""
+
+#: ../src/vte.c:577
+#, c-format
+msgid "invalid VTE library \"%s\": missing symbol \"%s\""
+msgstr ""
+
+#: ../src/vte.c:758
+msgid "_Set Path From Document"
+msgstr "Ceļš da dokumenta"
+
+#: ../src/vte.c:763
+msgid "_Restart Terminal"
+msgstr ""
+
+#: ../src/vte.c:796
+msgid "_Input Methods"
+msgstr ""
+
+#: ../src/vte.c:888
+msgid ""
+"Directory not changed because the terminal may contain some input (press Ctrl"
+"+C or Enter to clear it)."
+msgstr ""
+
+#: ../src/win32.c:211
+msgid "Geany project files"
+msgstr "Geany projekta faily"
+
+#: ../src/win32.c:216
+msgid "Executables"
+msgstr "Izpyldamī"
+
+#: ../src/win32.c:799
+#, c-format
+msgid "Failed to open URI \"%s\": %s"
+msgstr "Naizadává attaisäț URI \"%s\": %s"
+
+#: ../plugins/classbuilder.c:36
+msgid "Class Builder"
+msgstr ""
+
+#: ../plugins/classbuilder.c:36
+msgid "Creates source files for new class types."
+msgstr ""
+
+#: ../plugins/classbuilder.c:433
+msgid "Create Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:443
+msgid "Create C++ Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:446
+msgid "Create GTK+ Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:449
+msgid "Create PHP Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:466
+msgid "Namespace"
+msgstr ""
+
+#: ../plugins/classbuilder.c:473 ../plugins/classbuilder.c:475
+msgid "Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:482
+msgid "Header file:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:484
+msgid "Source file:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:486
+msgid "Inheritance"
+msgstr ""
+
+#: ../plugins/classbuilder.c:488
+msgid "Base class:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:496
+msgid "Base source:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:501
+msgid "Base header:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:509
+msgid "Global"
+msgstr ""
+
+#: ../plugins/classbuilder.c:528
+msgid "Base GType:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:533
+msgid "Implements:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:535
+msgid "Options"
+msgstr ""
+
+#: ../plugins/classbuilder.c:552
+msgid "Create constructor"
+msgstr ""
+
+#: ../plugins/classbuilder.c:557
+msgid "Create destructor"
+msgstr ""
+
+#: ../plugins/classbuilder.c:564
+msgid "Is abstract"
+msgstr ""
+
+#: ../plugins/classbuilder.c:567
+msgid "Is singleton"
+msgstr ""
+
+#: ../plugins/classbuilder.c:577
+msgid "Constructor type:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:1089
+msgid "Create Cla_ss"
+msgstr ""
+
+#: ../plugins/classbuilder.c:1095
+msgid "_C++ Class..."
+msgstr ""
+
+#: ../plugins/classbuilder.c:1098
+msgid "_GTK+ Class..."
+msgstr ""
+
+#: ../plugins/classbuilder.c:1101
+msgid "_PHP Class..."
+msgstr ""
+
+#: ../plugins/htmlchars.c:40
+msgid "HTML Characters"
+msgstr ""
+
+#: ../plugins/htmlchars.c:40
+msgid "Inserts HTML character entities like '&amp;'."
+msgstr "Īlikț HTML rokstu zeimis, taidys kei '&amp;'."
+
+#: ../plugins/htmlchars.c:41 ../plugins/export.c:38 ../plugins/filebrowser.c:51
+#: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
+msgid "The Geany developer team"
+msgstr "Geany izstrōdōtōju komanda"
+
+#: ../plugins/htmlchars.c:75
+msgid "HTML characters"
+msgstr "HTML simboly"
+
+#: ../plugins/htmlchars.c:81
+msgid "ISO 8859-1 characters"
+msgstr "ISO 8859-1 simboly"
+
+#: ../plugins/htmlchars.c:179
+msgid "Greek characters"
+msgstr "Greku simboly"
+
+#: ../plugins/htmlchars.c:234
+msgid "Mathematical characters"
+msgstr "Matematiskī simboly"
+
+#: ../plugins/htmlchars.c:275
+msgid "Technical characters"
+msgstr "Tehniskī simboly"
+
+#: ../plugins/htmlchars.c:283
+msgid "Arrow characters"
+msgstr "Bulteņu simboly"
+
+#: ../plugins/htmlchars.c:296
+msgid "Punctuation characters"
+msgstr "Pīturys zeimis"
+
+#: ../plugins/htmlchars.c:312
+msgid "Miscellaneous characters"
+msgstr "Pōrejī simboly"
+
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1203
+#: ../plugins/saveactions.c:538
+msgid "Plugin configuration directory could not be created."
+msgstr "Mapi deļ spraudnū īstatiejumim naizadává sataisäț."
+
+#: ../plugins/htmlchars.c:488
+msgid "Special Characters"
+msgstr "Specialȳ simboly"
+
+#: ../plugins/htmlchars.c:490
+msgid "_Insert"
+msgstr "Īsprausț"
+
+#: ../plugins/htmlchars.c:499
+msgid ""
+"Choose a special character from the list below and double click on it or use "
+"the button to insert it at the current cursor position."
+msgstr ""
+
+#: ../plugins/htmlchars.c:513
+msgid "Character"
+msgstr "Simbols"
+
+#: ../plugins/htmlchars.c:519
+msgid "HTML (name)"
+msgstr ""
+
+#: ../plugins/htmlchars.c:738
+msgid "_Insert Special HTML Characters..."
+msgstr "Īsprausț spec_ialūs HTML simbolus"
+
+#. Add menuitem for html replacement functions
+#: ../plugins/htmlchars.c:753
+msgid "_HTML Replacement"
+msgstr "_HTML sameišona"
+
+#: ../plugins/htmlchars.c:760
+msgid "_Auto-replace Special Characters"
+msgstr "Specialūs simbolu _auto-sameišona"
+
+#: ../plugins/htmlchars.c:769
+msgid "_Replace Characters in Selection"
+msgstr "Sameiț simbolus īzeimōtijā"
+
+#: ../plugins/htmlchars.c:785
+msgid "Insert Special HTML Characters"
+msgstr "Īlikț specialūs HTML simbolus"
+
+#: ../plugins/htmlchars.c:788
+msgid "Replace special characters"
+msgstr "Sameiț specialūs simbolus"
+
+#: ../plugins/htmlchars.c:791
+msgid "Toggle plugin status"
+msgstr "Pōrslägț spraudná statusu"
+
+#: ../plugins/export.c:37
+msgid "Export"
+msgstr "Eksportäț"
+
+#: ../plugins/export.c:37
+msgid "Exports the current file into different formats."
+msgstr "Eksportäț redigejamū failu cytā formatā"
+
+#: ../plugins/export.c:169
+msgid "Export File"
+msgstr "Eksportäț failu"
+
+#: ../plugins/export.c:187
+msgid "_Insert line numbers"
+msgstr "Dalikț ryndu numerus"
+
+#: ../plugins/export.c:189
+msgid "Insert line numbers before each line in the exported document"
+msgstr ""
+"Dalikț ryndu numerus eksportejamijā dokumentā"
+
+#: ../plugins/export.c:199
+msgid "_Use current zoom level"
+msgstr "Lītōț asūšū palelynōjumu"
+
+#: ../plugins/export.c:201
+msgid ""
+"Renders the font size of the document together with the current zoom level"
+msgstr "Pīlītōț asūšū burtu lelumu redigejamam dokumentam."
+
+#: ../plugins/export.c:279
+#, c-format
+msgid "Document successfully exported as '%s'."
+msgstr "Dokuments veiksmeigi eksporteits kei \"%s\"."
+
+#: ../plugins/export.c:281
+#, c-format
+msgid "File '%s' could not be written (%s)."
+msgstr "Failu \"%s\" navar saglobōț kei (%s)."
+
+#: ../plugins/export.c:749
+msgid "_Export"
+msgstr "_Eksports"
+
+#. HTML
+#: ../plugins/export.c:756
+msgid "As _HTML..."
+msgstr "_HTMLā"
+
+#. LaTeX
+#: ../plugins/export.c:762
+msgid "As _LaTeX..."
+msgstr "_LaTeXā"
+
+#: ../plugins/filebrowser.c:50
+msgid "File Browser"
+msgstr "Failu pōrlūks"
+
+#: ../plugins/filebrowser.c:50
+msgid "Adds a file browser tab to the sidebar."
+msgstr "Pīvīnōț failu pōrlūku sōnu panelám."
+
+#: ../plugins/filebrowser.c:424
+msgid "Too many items selected!"
+msgstr "Atlaseits par dauḑz objektu!"
+
+#: ../plugins/filebrowser.c:494
+#, c-format
+msgid "Could not execute configured external command '%s' (%s)."
+msgstr "Naizadává palaisț ōrejū programu \"%s\" (%s)."
+
+#: ../plugins/filebrowser.c:658
+msgid "Open in _Geany"
+msgstr "Attaisäț ai _Geany"
+
+#: ../plugins/filebrowser.c:664
+msgid "Open _Externally"
+msgstr "Attaisäț ōr_ejā programā"
+
+#: ../plugins/filebrowser.c:689
+msgid "Show _Hidden Files"
+msgstr "Rōdäț slāptūs failus"
+
+#: ../plugins/filebrowser.c:919
+msgid "Up"
+msgstr "Iz augšu"
+
+#: ../plugins/filebrowser.c:924
+msgid "Refresh"
+msgstr "Atsvaidzynōț"
+
+#: ../plugins/filebrowser.c:929
+msgid "Home"
+msgstr ""
+
+#: ../plugins/filebrowser.c:934
+msgid "Set path from document"
+msgstr "Ceļš da dokumenta"
+
+#: ../plugins/filebrowser.c:948
+msgid "Filter:"
+msgstr "Filtrs:"
+
+#: ../plugins/filebrowser.c:957
+msgid ""
+"Filter your files with the usual wildcards. Separate multiple patterns with "
+"a space."
+msgstr ""
+"Atlasäț dokumentus pec parauga. Vairōkus paraugus jōatdola ar atstarṕom "
+
+#: ../plugins/filebrowser.c:1173
+msgid "Focus File List"
+msgstr "Failu saroksts"
+
+#: ../plugins/filebrowser.c:1175
+msgid "Focus Path Entry"
+msgstr "Kursors iz celá īraksteišonys"
+
+#: ../plugins/filebrowser.c:1268
+msgid "External open command:"
+msgstr "Ōrejō komanda failu attaiseišonai:"
+
+#: ../plugins/filebrowser.c:1276
+#, c-format
+msgid ""
+"The command to execute when using \"Open with\". You can use %f and %d "
+"wildcards.\n"
+"%f will be replaced with the filename including full path\n"
+"%d will be replaced with the path name of the selected file without the "
+"filename"
+msgstr ""
+"Komandu var darbynōț lītojūt \"Attaisäț ai\". Atļauts lītōț "
+"apzeimiejumus %f i %d.\n"
+"%f tikș sameits pret pylnu ceļu da faila i faila nūsaukumu.\n"
+"%d tikș sameits viņ pret pylnu ceļu da faila."
+
+#: ../plugins/filebrowser.c:1284
+msgid "Show hidden files"
+msgstr "Rōdäț slāptūs failus"
+
+#: ../plugins/filebrowser.c:1292
+msgid "Hide file extensions:"
+msgstr "Narōdäț failu paplašynōjumus"
+
+#: ../plugins/filebrowser.c:1311
+msgid "Follow the path of the current file"
+msgstr "Redigejamō faila atsarasšonōs vīta"
+
+#: ../plugins/filebrowser.c:1317
+msgid "Use the project's base directory"
+msgstr "Lītōț projektu mapi"
+
+#: ../plugins/filebrowser.c:1321
+msgid ""
+"Change the directory to the base directory of the currently opened project"
+msgstr "Redigejamō faila mapi sataisäț par projekta mapi"
+
+#: ../plugins/saveactions.c:43
+msgid "Save Actions"
+msgstr "Saglobōț darbeibys"
+
+#: ../plugins/saveactions.c:43
+msgid "This plugin provides different actions related to saving of files."
+msgstr "Itys spraudnis paleidz saglobōț failus vysaidom darbeibom."
+
+#: ../plugins/saveactions.c:175
+#, c-format
+msgid "Backup Copy: Directory could not be created (%s)."
+msgstr "Rezervis kopeišona: navar sataisäț mapi (%s)."
+
+#. it's unlikely that this happens
+#: ../plugins/saveactions.c:209
+#, c-format
+msgid "Backup Copy: File could not be read (%s)."
+msgstr "Rezervis kopeišona: failam \"%s\" nav laseišonys tīseibu."
+
+#: ../plugins/saveactions.c:234
+#, c-format
+msgid "Backup Copy: File could not be saved (%s)."
+msgstr "Rezervis kopeišona: failam \"%s\" nav raksteišonys tīseibu."
+
+#: ../plugins/saveactions.c:371
+#, c-format
+msgid "Autosave: Saved %d file automatically."
+msgid_plural "Autosave: Saved %d files automatically."
+msgstr[0] "Auto-saglobōšona: saglobōts %d fails."
+msgstr[1] "Auto-saglobōšona: saglobōti %d faily."
+msgstr[2] "Auto-saglobōšona: saglobōti %d faily."
+
+#. initialize the dialog
+#: ../plugins/saveactions.c:442
+msgid "Select Directory"
+msgstr "Atlasäț mapi"
+
+#: ../plugins/saveactions.c:530
+msgid "Backup directory does not exist or is not writable."
+msgstr "Mapá rezervis kopeišonai naeksistej ci tai nav raksteišonys tīseibu."
+
+#: ../plugins/saveactions.c:611
+msgid "Auto Save"
+msgstr "Auto-saglobōšona"
+
+#: ../plugins/saveactions.c:613
+msgid "Enable save when losing _focus"
+msgstr "Īslägț saglobōšonu, kod nūjimts _fokusu"
+
+#: ../plugins/saveactions.c:619 ../plugins/saveactions.c:681
+#: ../plugins/saveactions.c:722
+msgid "_Enable"
+msgstr "Īslägț"
+
+#: ../plugins/saveactions.c:627
+msgid "Auto save _interval:"
+msgstr "Auto-saglobōšonys _intervals:"
+
+#: ../plugins/saveactions.c:635
+msgid "seconds"
+msgstr "sekundis"
+
+#: ../plugins/saveactions.c:644
+msgid "_Print status message if files have been automatically saved"
+msgstr "Rōdäț paziņōjumu par auto-saglobōšonu"
+
+#: ../plugins/saveactions.c:652
+msgid "Save only current open _file"
+msgstr "Saglobōț viņ redigejamū _failu"
+
+#: ../plugins/saveactions.c:659
+msgid "Sa_ve all open files"
+msgstr "Saglobōț vysus failus"
+
+#: ../plugins/saveactions.c:679
+msgid "Instant Save"
+msgstr "Saglobōț tivleņ"
+
+#: ../plugins/saveactions.c:689
+msgid "_Filetype to use for newly opened files:"
+msgstr "Nūkluseitīs tips jaunīm _failym:"
+
+#: ../plugins/saveactions.c:720
+msgid "Backup Copy"
+msgstr "Rezervis kopeišona"
+
+#: ../plugins/saveactions.c:730
+msgid "_Directory to save backup files in:"
+msgstr "Rezervis kopeišonys mapá:"
+
+#: ../plugins/saveactions.c:753
+msgid "Date/_Time format for backup files (\"man strftime\" for details):"
+msgstr "Da_tuma/Laika formats rezervis kopeišonai"
+
+#: ../plugins/saveactions.c:766
+msgid "Directory _levels to include in the backup destination:"
+msgstr "Apakšmaṕu dziļums rezervis kopeišonai:"
+
+#: ../plugins/splitwindow.c:34
+msgid "Split Window"
+msgstr "Sadaläț lūgu"
+
+#: ../plugins/splitwindow.c:34
+msgid "Splits the editor view into two windows."
+msgstr "Sadaläț redigeišonys lūgu divejūs lūgūs."
+
+#: ../plugins/splitwindow.c:300
+msgid "Show the current document"
+msgstr "Redigejamīs dokuments"
+
+#: ../plugins/splitwindow.c:322 ../plugins/splitwindow.c:455
+#: ../plugins/splitwindow.c:470
+msgid "_Unsplit"
+msgstr "Atcáļț sadaleišonu"
+
+#: ../plugins/splitwindow.c:437
+msgid "_Split Window"
+msgstr "_Sadaläț lūgu"
+
+#: ../plugins/splitwindow.c:445
+msgid "_Side by Side"
+msgstr "Divejūs _sōnūs"
+
+#: ../plugins/splitwindow.c:450
+msgid "_Top and Bottom"
+msgstr "Viersā i zamaškā"
+
+#: ../plugins/splitwindow.c:466
+msgid "Side by Side"
+msgstr "Divejūs sōnūs"
+
+#: ../plugins/splitwindow.c:468
+msgid "Top and Bottom"
+msgstr "Viersā i zamaškā"
+

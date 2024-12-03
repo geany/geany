@@ -1,11 +1,11 @@
-fail_define_2Ì16384Ö0
-variable:   fail_define_2
+fail_define_2Ì65536Ö0
+macro:      fail_define_2
 fail_func_2Ì16Ö0
 function:   fail_func_2
 fail_task_2Ì16Ö0
 function:   fail_task_2
-pass_define_1Ì16384Ö0
-variable:   pass_define_1
+pass_define_1Ì65536Ö0
+macro:      pass_define_1
 pass_func_1Ì16Ö0
 function:   pass_func_1
 pass_task_1Ì16Ö0

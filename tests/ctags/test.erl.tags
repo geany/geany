@@ -6,5 +6,7 @@ function1Ã16Œtest÷0
 function:   test :: function1
 record1Ã2048÷0
 struct:     record1
+testÃ256÷0
+namespace:  test
 type1Ã4096÷0
 typedef:    type1

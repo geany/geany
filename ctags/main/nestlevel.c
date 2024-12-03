@@ -17,11 +17,20 @@
 #include "entry.h"
 #include "routines.h"
 #include "nestlevel.h"
+#include "vstring.h"
 
 #include <string.h>
 
-/* TODO: Alignment */
-#define NL_SIZE(nls) (sizeof(NestingLevel) + (nls)->userDataSize)
+/* struct alignment trick, copied from GObject's gtype.c, which borrows
+ * 2*szieof(size_t) from glibc */
+#define STRUCT_ALIGNMENT (2 * sizeof (size_t))
+#define ALIGN_STRUCT(offset) ((offset + (STRUCT_ALIGNMENT - 1)) & -STRUCT_ALIGNMENT)
+
+/* account for the user data alignment if we have user data, otherwise allocate
+ * exactly what's needed not to waste memory for unneeded alignment */
+#define NL_SIZE(nls) ((nls)->userDataSize ? (ALIGN_STRUCT (sizeof (NestingLevel)) + ALIGN_STRUCT ((nls)->userDataSize)) : sizeof (NestingLevel))
+#define NL_USER_DATA(nl) ((void *)(((char *) nl) + ALIGN_STRUCT (sizeof (NestingLevel))))
+
 #define NL_NTH(nls,n) (NestingLevel *)(((char *)((nls)->levels)) + ((n) * NL_SIZE (nls)))
 
 /*
@@ -29,7 +38,7 @@
 */
 
 extern NestingLevels *nestingLevelsNewFull(size_t userDataSize,
-										   void (* deleteUserData)(NestingLevel *))
+										   void (* deleteUserData)(NestingLevel *, void *))
 {
 	NestingLevels *nls = xCalloc (1, NestingLevels);
 	nls->userDataSize = userDataSize;
@@ -42,7 +51,7 @@ extern NestingLevels *nestingLevelsNew(size_t userDataSize)
 	return nestingLevelsNewFull (userDataSize, NULL);
 }
 
-extern void nestingLevelsFree(NestingLevels *nls)
+extern void nestingLevelsFreeFull(NestingLevels *nls, void *ctxData)
 {
 	int i;
 	NestingLevel *nl;
@@ -51,7 +60,7 @@ extern void nestingLevelsFree(NestingLevels *nls)
 	{
 		nl = NL_NTH(nls, i);
 		if (nls->deleteUserData)
-			nls->deleteUserData (nl);
+			nls->deleteUserData (nl, ctxData);
 		nl->corkIndex = CORK_NIL;
 	}
 	if (nls->levels) eFree(nls->levels);
@@ -73,7 +82,7 @@ extern NestingLevel * nestingLevelsPush(NestingLevels *nls, int corkIndex)
 
 	nl->corkIndex = corkIndex;
 	if (nls->userDataSize > 0)
-		memset (nl->userData, 0, nls->userDataSize);
+		memset (NL_USER_DATA (nl), 0, ALIGN_STRUCT (nls->userDataSize));
 
 	return nl;
 }
@@ -89,13 +98,13 @@ extern NestingLevel *nestingLevelsTruncate(NestingLevels *nls, int depth, int co
 }
 
 
-extern void nestingLevelsPop(NestingLevels *nls)
+extern void nestingLevelsPopFull(NestingLevels *nls, void *ctxData)
 {
 	NestingLevel *nl = nestingLevelsGetCurrent(nls);
 
 	Assert (nl != NULL);
 	if (nls->deleteUserData)
-		nls->deleteUserData (nl);
+		nls->deleteUserData (nl, ctxData);
 	nl->corkIndex = CORK_NIL;
 	nls->n--;
 }
@@ -117,5 +126,28 @@ extern NestingLevel *nestingLevelsGetNthParent (const NestingLevels *nls, int n)
 
 extern void *nestingLevelGetUserData (const NestingLevel *nl)
 {
-	return (void *)nl->userData;
+	return NL_USER_DATA (nl);
+}
+
+/* (This function comes from ruby.c)
+*
+* Returns a newly allocated vString describing the scope in 'nls'.
+* We record the current scope as a list of entered scopes.
+* Scopes corresponding to 'if' statements and the like are
+* represented by empty strings. Scopes corresponding to
+* modules and classes are represented by the name of the
+* module or class.
+*/
+extern vString* nestingLevelsToScopeNew (const NestingLevels* nls, const char infixSeparator)
+{
+	int i;
+	vString* result = vStringNew ();
+	for (i = 0; i < nls->n; ++i)
+	{
+		NestingLevel *nl = nestingLevelsGetNthFromRoot (nls, i);
+		tagEntryInfo *e = getEntryOfNestingLevel (nl);
+		if (e && (*e->name != '\0') && (!e->placeholder))
+			vStringJoinS (result, infixSeparator, e->name);
+	}
+	return result;
 }

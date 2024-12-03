@@ -601,7 +601,7 @@ typedef struct
 
 static const GtkTargetEntry tb_editor_dnd_targets[] =
 {
-	{ "GEANY_TB_EDITOR_ROW", 0, 0 }
+	{ (gchar *) "GEANY_TB_EDITOR_ROW", 0, 0 }
 };
 static const gint tb_editor_dnd_targets_len = G_N_ELEMENTS(tb_editor_dnd_targets);
 
@@ -887,7 +887,7 @@ static void tb_editor_write_markup(TBEditorWidget *tbw)
 	/* <ui> must be the first tag, otherwise gtk_ui_manager_add_ui_from_string() will fail. */
 	const gchar *template = "<ui>\n<!--\n\
 This is Geany's toolbar UI definition.\nThe DTD can be found at \n\
-http://library.gnome.org/devel/gtk/stable/GtkUIManager.html#GtkUIManager.description.\n\n\
+https://docs.gtk.org/gtk3/class.UIManager.html.\n\n\
 You can re-order all items and freely add and remove available actions.\n\
 You cannot add new actions which are not listed in the documentation.\n\
 Everything you add or change must be inside the /ui/toolbar/ path.\n\n\
@@ -1118,8 +1118,7 @@ void toolbar_configure(GtkWindow *parent)
 
 	gtk_widget_destroy(tbw->dialog);
 
-	g_slist_foreach(used_items, (GFunc) g_free, NULL);
-	g_slist_free(used_items);
+	g_slist_free_full(used_items, g_free);
 	g_list_free(all_items);
 	tb_editor_free_path(tbw);
 	g_free(tbw);

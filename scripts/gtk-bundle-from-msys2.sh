@@ -14,6 +14,8 @@ run_pi="y"
 cross="no"
 
 UNX_UTILS_URL="https://download.geany.org/contrib/UnxUpdates.zip"
+# we use the Prof-Gnome GTK theme from the Geany macOS repository
+GTK_THEME_URL="https://github.com/geany/geany-osx/archive/refs/heads/master.zip"
 
 # Wine commands for 32bit and 64bit binaries (we still need 32bit for UnxUtils sort.exe)
 # Used only when "-x" is set
@@ -36,7 +38,7 @@ freetype
 fribidi
 gcc-libs
 gdk-pixbuf2
-gettext
+gettext-runtime
 glib2
 graphite2
 grep
@@ -209,8 +211,8 @@ cleanup_unnecessary_files() {
 	echo "Cleanup unnecessary files"
 	# cleanup temporary files
 	rm -rf var/cache/fontconfig
-	rmdir var/cache
-	rmdir var
+	test -d var/cache && rmdir var/cache
+	test -d var && rmdir var
 	# cleanup development and other unnecessary files
 	rm -rf include
 	rm -rf lib/cmake
@@ -245,8 +247,8 @@ cleanup_unnecessary_files() {
 	rm -rf share/vala
 	rm -rf share/xml
 	rm -rf usr/share/libalpm
-	# cleanup binaries and libs (delete anything except *.dll and GSpawn helper binaries)
-	find bin ! -name '*.dll' ! -name 'grep.exe' ! -name 'gspawn-win32-helper*.exe' -type f -delete
+	# cleanup binaries and libs (delete anything except *.dll, glib-compile-schemas and GSpawn helper binaries)
+	find bin ! -name '*.dll' ! -name 'grep.exe' ! -name 'gspawn-win32-helper*.exe' ! -name 'glib-compile-schemas.exe' -type f -delete
 	# cleanup empty directories
 	find . -type d -empty -delete
 }
@@ -258,6 +260,25 @@ download_and_extract_sort() {
 	wget --no-verbose -O ${unxutils_archive} ${UNX_UTILS_URL}
 	unzip ${unxutils_archive} sort.exe -d bin/
 	rm ${unxutils_archive}
+}
+
+download_and_extract_gtk_theme() {
+	echo "Download and unpack GTK theme 'Prof-Gnome'"
+	geany_osx_archive="geany_osx.zip"
+	wget --no-verbose -O ${geany_osx_archive} ${GTK_THEME_URL}
+	unzip ${geany_osx_archive} "geany-osx-master/Prof-Gnome/**" "geany-osx-master/prof_gnome_windows_changes.patch"
+	mkdir -p share/themes/
+	mv geany-osx-master/Prof-Gnome share/themes/
+	patch --dir share/themes/Prof-Gnome -p2 < geany-osx-master/prof_gnome_windows_changes.patch
+	rm ${geany_osx_archive}
+	rm geany-osx-master/prof_gnome_windows_changes.patch
+	rmdir geany-osx-master
+	# create GTK settings to enable the theme
+	if [ -f "etc/gtk-3.0/settings.ini" ]; then
+		echo "etc/gtk-3.0/settings.ini already exists. Aborting."
+		exit 1
+	fi
+	echo -e "[Settings]\r\ngtk-theme-name=Prof-Gnome" > etc/gtk-3.0/settings.ini
 }
 
 create_bundle_dependency_info_file() {
@@ -281,6 +302,9 @@ Sort version: ${sort_version}
 grep.exe is taken from a 64bit MSYS2 installation and
 is bundled together with its dependencies.
 Grep version: ${grep_version}
+
+GTK theme "Prof-Gnome" was downloaded from:
+${GTK_THEME_URL}
 
 Other dependencies are provided by the MSYS2 project
 (https://msys2.github.io) and were downloaded from:
@@ -307,5 +331,6 @@ move_extracted_files
 delayed_post_install
 cleanup_unnecessary_files
 download_and_extract_sort
+download_and_extract_gtk_theme
 create_bundle_dependency_info_file
 create_zip_archive

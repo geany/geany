@@ -44,6 +44,7 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
+#include "pluginextension.h"
 #include "project.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
@@ -114,9 +115,9 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *btn_1, gint response_1,
+	const gchar *btn_2, gint response_2,
+	const gchar *btn_3, gint response_3,
 	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(11, 12);
 
 
@@ -351,9 +352,10 @@ GeanyDocument *document_get_from_notebook_child(GtkWidget *page)
 GEANY_API_SYMBOL
 GeanyDocument *document_get_from_page(guint page_num)
 {
+	gint pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GtkWidget *parent;
 
-	if (page_num >= documents_array->len)
+	if (page_num >= pages)
 		return NULL;
 
 	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
@@ -606,13 +608,6 @@ void document_try_focus(GeanyDocument *doc, GtkWidget *source_widget)
 		if (focusw == source_widget)
 			gtk_widget_grab_focus(sci);
 	}
-}
-
-
-static gboolean on_idle_focus(gpointer doc)
-{
-	document_try_focus(doc, NULL);
-	return FALSE;
 }
 
 
@@ -876,7 +871,6 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
 	/* bring it in front, jump to the start and grab the focus */
 	editor_goto_pos(doc->editor, 0, FALSE);
-	document_try_focus(doc, NULL);
 
 #ifdef USE_GIO_FILEMON
 	monitor_file_setup(doc);
@@ -1008,34 +1002,33 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 	}
 
 	if (! encodings_convert_to_utf8_auto(&filedata->data, &filedata->len, forced_enc,
-				&filedata->enc, &filedata->bom, &filedata->readonly))
+				&filedata->enc, &filedata->bom, &filedata->readonly, &err))
 	{
 		if (forced_enc)
-		{
-			ui_set_statusbar(TRUE, _("The file \"%s\" is not valid %s."),
-				display_filename, forced_enc);
-		}
+			ui_set_statusbar(TRUE, _("Failed to load file \"%s\" as %s: %s."),
+				display_filename, forced_enc, err->message);
 		else
-		{
-			ui_set_statusbar(TRUE,
-	_("The file \"%s\" does not look like a text file or the file encoding is not supported."),
-			display_filename);
-		}
+			ui_set_statusbar(TRUE, _("Failed to load file \"%s\": %s."),
+				display_filename, err->message);
+		g_error_free(err);
 		g_free(filedata->data);
 		return FALSE;
 	}
 
 	if (filedata->readonly)
 	{
-		const gchar *warn_msg = _(
-			"The file \"%s\" could not be opened properly and has been truncated. " \
-			"This can occur if the file contains a NULL byte. " \
-			"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
+		gchar *warn_msg = g_strdup_printf(_(
+			"The file \"%s\" could not be opened properly and has been truncated. "
+			"This can occur if the file contains a NULL byte. "
+			"Be aware that saving it can cause data loss.\nThe file was set to read-only."),
+			display_filename);
 
 		if (main_status.main_window_realized)
-			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, display_filename);
+			dialogs_show_msgbox(GTK_MESSAGE_WARNING, "%s", warn_msg);
 
-		ui_set_statusbar(TRUE, warn_msg, display_filename);
+		ui_set_statusbar(TRUE, "%s", warn_msg);
+
+		g_free(warn_msg);
 	}
 
 	return TRUE;
@@ -1275,8 +1268,17 @@ void document_apply_indent_settings(GeanyDocument *doc)
 
 void document_show_tab(GeanyDocument *doc)
 {
+	if (!doc)
+		return;
+
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook),
 		document_get_notebook_page(doc));
+
+	/* finally, let the editor widget grab the focus so you can start coding
+	 * right away */
+	/* FIXME: is that actually useful??  I don't see any difference disabling this code... */
+	if (!main_status.opening_session_files)
+		document_try_focus(doc, NULL);
 }
 
 
@@ -1327,8 +1329,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		if (doc != NULL)
 		{
 			ui_add_recent_document(doc);	/* either add or reorder recent item */
-			/* show the doc before reload dialog */
-			document_show_tab(doc);
 			document_check_disk_status(doc, TRUE);	/* force a file changed check */
 		}
 	}
@@ -1512,9 +1512,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 	/* now bring the file in front */
 	editor_goto_pos(doc->editor, pos, FALSE);
 
-	/* finally, let the editor widget grab the focus so you can start coding
-	 * right away */
-	g_idle_add(on_idle_focus, doc);
 	return doc;
 }
 
@@ -1821,6 +1818,8 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 	gboolean new_file;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
+
+	g_signal_emit_by_name(geany_object, "document-before-save-as", doc);
 
 	new_file = document_need_save_as(doc) || (utf8_fname != NULL && strcmp(doc->file_name, utf8_fname) != 0);
 	if (utf8_fname != NULL)
@@ -2308,6 +2307,42 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolea
 }
 
 
+/* like dialogs_show_question_full() but makes the non-cancel button default */
+static gboolean show_wrap_search_dialog(GtkWidget *parent, const gchar *search_text)
+{
+	gboolean ret;
+	GtkWidget *dialog;
+	GtkWidget *btn;
+	gchar *question_text;
+
+	if (parent == NULL && main_status.main_window_realized)
+		parent = main_widgets.window;
+
+	question_text = g_strdup_printf(_("\"%s\" was not found."), search_text);
+
+	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
+		GTK_BUTTONS_NONE, "%s", question_text);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
+
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+		"%s", _("Wrap search and find again?"));
+
+	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_NO);
+	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_FIND, GTK_RESPONSE_YES);
+	gtk_widget_grab_default(btn);
+
+	ret = gtk_dialog_run(GTK_DIALOG(dialog));
+
+	gtk_widget_destroy(dialog);
+	g_free(question_text);
+
+	return ret == GTK_RESPONSE_YES;
+}
+
+
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text.
  * Will skip past any selection, ignoring it.
@@ -2371,8 +2406,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
 
 		/* we searched only part of the document, so ask whether to wraparound. */
 		if (search_prefs.always_wrap ||
-			dialogs_show_question_full(parent, GTK_STOCK_FIND, GTK_STOCK_CANCEL,
-				_("Wrap search and find again?"), _("\"%s\" was not found."), original_text))
+			show_wrap_search_dialog(parent, original_text))
 		{
 			gint ret;
 
@@ -2705,6 +2739,9 @@ void document_highlight_tags(GeanyDocument *doc)
 	GString *keywords_str;
 	gint keyword_idx;
 
+	if (plugin_extension_symbol_highlight_provided(doc, NULL))
+		return;
+
 	/* some filetypes support type keywords (such as struct names), but not
 	 * necessarily all filetypes for a particular scintilla lexer.  this
 	 * tells us whether the filetype supports keywords, and if so
@@ -2720,6 +2757,7 @@ void document_highlight_tags(GeanyDocument *doc)
 		case GEANY_FILETYPES_VALA:
 		case GEANY_FILETYPES_RUST:
 		case GEANY_FILETYPES_GO:
+		case GEANY_FILETYPES_ZIG:
 		{
 
 			/* index of the keyword set in the Scintilla lexer, for
@@ -2810,6 +2848,9 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		editor_set_indentation_guides(doc->editor);
 		build_menu_update(doc);
 		queue_colourise(doc);
+		/* forces re-setting SCI_SETKEYWORDS which seems to be needed with
+		 * Scintilla 5 to colorize them properly */
+		doc->priv->keyword_hash = 0;
 		if (type->priv->symbol_list_sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
 			doc->priv->symbol_list_sort_mode = interface_prefs.symbols_sort_mode;
 		else
@@ -3432,9 +3473,9 @@ gboolean document_close_all(void)
  * */
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *btn_1, gint response_1,
+	const gchar *btn_2, gint response_2,
+	const gchar *btn_3, gint response_3,
 	const gchar *extra_text, const gchar *format, ...)
 {
 	va_list args;
@@ -3586,19 +3627,23 @@ static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
 }
 
 
-static void monitor_reload_file(GeanyDocument *doc)
+static gboolean monitor_reload_file_idle(gpointer data)
 {
+	GeanyDocument *doc = data;
+
+	if (doc != document_get_current())
+		return G_SOURCE_REMOVE;
+
 	if (! doc->changed && file_prefs.reload_clean_doc_on_file_change)
 	{
 		document_reload_force(doc, doc->encoding);
-		return;
+		return G_SOURCE_REMOVE;
 	}
-
-	gchar *base_name = g_path_get_basename(doc->file_name);
 
 	/* show this message only once */
 	if (doc->priv->info_bars[MSG_TYPE_RELOAD] == NULL)
 	{
+		gchar *base_name = g_path_get_basename(doc->file_name);
 		GtkWidget *bar;
 
 		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
@@ -3612,8 +3657,10 @@ static void monitor_reload_file(GeanyDocument *doc)
 		protect_document(doc);
 		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
 		enable_key_intercept(doc, bar);
+		g_free(base_name);
 	}
-	g_free(base_name);
+
+	return G_SOURCE_REMOVE;
 }
 
 
@@ -3641,8 +3688,13 @@ static void on_monitor_resave_missing_file_response(GtkWidget *bar,
 }
 
 
-static void monitor_resave_missing_file(GeanyDocument *doc)
+static gboolean monitor_resave_missing_file_idle(gpointer data)
 {
+	GeanyDocument *doc = data;
+
+	if (doc != document_get_current())
+		return G_SOURCE_REMOVE;
+
 	if (doc->priv->info_bars[MSG_TYPE_RESAVE] == NULL)
 	{
 		GtkWidget *bar = doc->priv->info_bars[MSG_TYPE_RELOAD];
@@ -3666,6 +3718,8 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 		doc->priv->info_bars[MSG_TYPE_RESAVE] = bar;
 		enable_key_intercept(doc, bar);
 	}
+
+	return G_SOURCE_REMOVE;
 }
 
 
@@ -3707,7 +3761,11 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	if (!get_mtime(locale_filename, &mtime))
 	{
-		monitor_resave_missing_file(doc);
+		/* document_check_disk_status() call may be a result of a mouse click
+		 * inside Scintilla by which Geany gains focus and showing the info bar
+		 * during the mouse click leads to text selection as Scintilla scrolls
+		 * because the infobar makes the Scintilla widget smaller. */
+		g_idle_add(monitor_resave_missing_file_idle, doc);
 		/* doc may be closed now */
 		ret = TRUE;
 	}
@@ -3715,7 +3773,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	{
 		/* make sure the user is not prompted again after he cancelled the "reload file?" message */
 		doc->priv->mtime = mtime;
-		monitor_reload_file(doc);
+		/* see above for the idle call explanation */
+		g_idle_add(monitor_reload_file_idle, doc);
 		/* doc may be closed now */
 		ret = TRUE;
 	}

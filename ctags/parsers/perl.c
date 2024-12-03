@@ -22,11 +22,9 @@
 #include "routines.h"
 #include "selectors.h"
 #include "subparser.h"
+#include "trace.h"
 #include "vstring.h"
 #include "xtag.h"
-
-#define TRACE_PERL_C 0
-#define TRACE if (TRACE_PERL_C) printf("perl.c:%d: ", __LINE__), printf
 
 /*
 *   DATA DEFINITIONS
@@ -39,6 +37,14 @@ static roleDefinition PerlModuleRoles [] = {
 	{ true, "unused", "specified in `no' built-in function" },
 };
 
+typedef enum {
+	R_HEREDOC_ENDLABEL,
+} perlHeredocRole;
+
+static roleDefinition PerlHeredocRoles [] = {
+	{ true, "endmarker", "end marker" },
+};
+
 static kindDefinition PerlKinds [] = {
 	{ true,  'c', "constant",               "constants" },
 	{ true,  'f', "format",                 "formats" },
@@ -48,13 +54,26 @@ static kindDefinition PerlKinds [] = {
 	{ false, 'd', "subroutineDeclaration",  "subroutine declarations" },
 	{ false, 'M', "module",                 "modules",
 	  .referenceOnly = true,  ATTACH_ROLES(PerlModuleRoles)},
+	{ false, 'h', "heredoc", "marker for here document",
+	  .referenceOnly = false, ATTACH_ROLES (PerlHeredocRoles) },
+};
+
+struct hereDocMarker {
+	vString *marker;
+	bool indented;
+	int corkIndex;
+};
+
+struct hereDocMarkerManager {
+	ptrArray *markers;
+	size_t current;
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-static void notifyEnteringPod ()
+static void notifyEnteringPod (void)
 {
 	subparser *sub;
 
@@ -70,7 +89,7 @@ static void notifyEnteringPod ()
 	}
 }
 
-static void notifyLeavingPod ()
+static void notifyLeavingPod (void)
 {
 	subparser *sub;
 
@@ -233,16 +252,16 @@ static void makeTagFromLeftSide (const char *begin, const char *end,
 	const char *b, *e;
 	if (! PerlKinds[KIND_PERL_CONSTANT].enabled)
 		return;
-	for (e = end - 1; e > begin && isspace(*e); --e)
+	for (e = end - 1; e > begin && isspace((unsigned char) *e); --e)
 		;
 	if (e < begin)
 		return;
-	for (b = e; b >= begin && isIdentifier(*b); --b)
+	for (b = e; b >= begin && isIdentifier((unsigned char) *b); --b)
 		;
 	/* Identifier must be either beginning of line of have some whitespace
 	 * on its left:
 	 */
-	if (b < begin || isspace(*b) || ',' == *b)
+	if (b < begin || isspace((unsigned char) *b) || ',' == *b)
 		++b;
 	else if (b != begin)
 		return;
@@ -363,6 +382,276 @@ static void parseQuotedWords(const unsigned char *cp,
 	} while ((cp = readLineFromInputFile()) != NULL);
 }
 
+/*
+ * Extract heredoc markers and skip the heredoc areas.
+ *
+ * - https://perldoc.perl.org/perlop#%3C%3CEOF
+ */
+static struct hereDocMarker *hereDocMarkerNew (bool indented)
+{
+	struct hereDocMarker *marker = xMalloc(1, struct hereDocMarker);
+
+	marker->indented = indented;
+	marker->marker = vStringNew();
+	marker->corkIndex = CORK_NIL;
+
+	return marker;
+}
+
+static void hereDocMarkerDelete (struct hereDocMarker *marker)
+{
+	vStringDelete (marker->marker);
+	eFree (marker);
+}
+
+static unsigned char *readHereDocMarker (unsigned char *line,
+										 vString *marker,
+										 unsigned char quote_char)
+{
+	unsigned char *cp = line;
+	bool backslash = false;
+
+	for (cp = line; *cp != '\0'; cp++)
+	{
+		if (backslash)
+		{
+			vStringPut (marker, *cp);
+			backslash = false;
+			continue;
+		}
+
+		if (quote_char == '"' && (*cp == '\\'))
+		{
+			backslash = true;
+			continue;
+		}
+
+		if (quote_char && *cp == quote_char)
+		{
+			cp++;
+			break;
+		}
+
+		if (!quote_char && !isIdentifier(*cp))
+			break;
+
+		vStringPut (marker, *cp);
+	}
+
+	return cp;
+}
+
+enum stringType {
+	STRING_TYPE_NONE = '\0',
+	STRING_TYPE_SINGLEQ = '\'',
+	STRING_TYPE_DOUBLEQ = '"',
+	STRING_TYPE_BACKQ = '`',
+};
+
+
+static const unsigned char *escapeFromString (const unsigned char *line,
+											  const unsigned char *end,
+											  enum stringType stype)
+{
+	bool in_escape = false;
+	const unsigned char *cp = line;
+
+	switch (stype)
+	{
+	case STRING_TYPE_NONE:
+		return line;
+	case STRING_TYPE_SINGLEQ:
+	case STRING_TYPE_DOUBLEQ:
+	case STRING_TYPE_BACKQ:
+		while ((end && cp < end) || (end == NULL && *cp != '\0'))
+		{
+			if (in_escape)
+			{
+				cp++;
+				in_escape = false;
+			}
+			else if (*cp == '\\')
+			{
+				cp++;
+				in_escape = true;
+			}
+			else if (*cp == (unsigned char)stype)
+			{
+				cp++;
+				return cp;
+			}
+			else
+				cp++;
+		}
+		return NULL;
+	default:
+		AssertNotReached ();
+		return NULL;
+	}
+}
+
+static enum stringType isInString (const unsigned char *line,
+								   const unsigned char *end)
+{
+	const unsigned char *cp = line;
+	enum stringType t = STRING_TYPE_NONE;
+
+	while (cp && cp < end)
+	{
+		switch (*cp)
+		{
+		case '\'':
+		case '\"':
+		case '`':
+			t = *cp;
+			break;
+		default:
+			t = STRING_TYPE_NONE;
+			break;
+		}
+
+		cp++;
+		if (t != STRING_TYPE_NONE)
+			cp = escapeFromString (cp, end, t);
+	}
+
+	return (cp == NULL)? t: STRING_TYPE_NONE;
+}
+
+
+static const unsigned char *collectHereDocMarker (struct hereDocMarkerManager *mgr,
+												  const unsigned char *line)
+{
+	unsigned char *starter = (unsigned char*)strstr((char *)line, "<<");
+	unsigned char *cp = NULL;
+	bool indented = false;
+	unsigned char quote_char = 0;
+	bool space_seen = false;
+
+	if (starter == NULL)
+		return NULL;
+
+	enum stringType stype;
+	if ((stype = isInString(line, starter)) != STRING_TYPE_NONE)
+		return escapeFromString (starter + 2, NULL, stype);
+
+	cp = starter + 2;
+	while (isspace (*cp))
+	{
+		/* To avoid confusing with a shift operator, we track
+		 * spaces after the starter (<<). */
+		space_seen = true;
+		cp++;
+	}
+
+	if (*cp == '\0')
+		return NULL;
+
+	if (*cp == '~') {
+		if (space_seen)
+			return cp + 1;
+		indented = true;
+		cp++;
+		if (*cp == '\0')
+			return NULL;
+		while (isspace (*cp))
+			cp++;
+		if (*cp == '\0')
+			return NULL;
+	}
+
+	switch (*cp)
+	{
+	case '\'':
+	case '"':
+	case '`':
+		quote_char = *cp;
+		/* Fall through */
+	case '\\':
+		cp++;
+		if (*cp == '\0')
+			return NULL;
+		break;
+	default:
+		if (!isIdentifier1(*cp))
+			return cp;
+		if (space_seen)
+			return cp;
+		break;
+	}
+
+	struct hereDocMarker *marker = hereDocMarkerNew (indented);
+	const unsigned char *last_cp = cp;
+	cp = readHereDocMarker(cp, marker->marker, quote_char);
+	if (vStringLength (marker->marker) > 0)
+	{
+		marker->corkIndex = makeSimpleTag (marker->marker,
+										   KIND_PERL_HEREDOCMARKER);
+		ptrArrayAdd (mgr->markers, marker);
+	}
+	else
+		hereDocMarkerDelete (marker);
+
+	if (*cp != '\0' && cp != last_cp)
+		return cp;
+	return NULL;
+}
+
+static void collectHereDocMarkers (struct hereDocMarkerManager *mgr,
+								   const unsigned char *line)
+{
+	const unsigned char *cp = line;
+#ifdef DEBUG
+	const unsigned char *last = cp;
+#endif
+	while ((cp = collectHereDocMarker(mgr, cp)) != NULL)
+		Assert(last < cp);
+}
+
+static bool isInHereDoc (struct hereDocMarkerManager *mgr,
+						 const unsigned char *line)
+{
+	if (ptrArrayCount (mgr->markers) == 0)
+		return false;
+
+	const unsigned char *cp = line;
+	struct hereDocMarker *current = ptrArrayItem (mgr->markers, mgr->current);
+	if (current->indented)
+	{
+		while (isspace(*cp))
+			cp++;
+	}
+	if (strncmp((const char *)cp, vStringValue (current->marker), vStringLength (current->marker)) == 0
+		&& (cp [vStringLength (current->marker)] == '\0'
+			|| (!isIdentifier (cp [vStringLength (current->marker)]))))
+	{
+		setTagEndLineToCorkEntry (current->corkIndex, getInputLineNumber());
+
+		makeSimpleRefTag (current->marker, KIND_PERL_HEREDOCMARKER, R_HEREDOC_ENDLABEL);
+
+		mgr->current++;
+		if (mgr->current == ptrArrayCount (mgr->markers))
+		{
+			ptrArrayClear (mgr->markers);
+			mgr->current = 0;
+		}
+	}
+	return true;
+}
+
+static void initHereDocMarkerManager(struct hereDocMarkerManager *mgr)
+{
+	mgr->markers = ptrArrayNew((ptrArrayDeleteFunc)hereDocMarkerDelete);
+	mgr->current = 0;
+}
+
+static void finiHereDocMarkerManager(struct hereDocMarkerManager *mgr)
+{
+	ptrArrayDelete (mgr->markers);
+	mgr->markers = NULL;
+	mgr->current = 0;
+}
+
 /* Algorithm adapted from from GNU etags.
  * Perl support by Bart Robinson <lomew@cs.utah.edu>
  * Perl sub names: look for /^ [ \t\n]sub [ \t\n]+ [^ \t\n{ (]+/
@@ -395,6 +684,9 @@ static void findPerlTags (void)
 		RESPECT_DATA	= (1 << 1),
 	} respect_token = RESPECT_END | RESPECT_DATA;
 
+	struct hereDocMarkerManager hdoc_mgr;
+	initHereDocMarkerManager (&hdoc_mgr);
+
 	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		bool spaceRequired = false;
@@ -402,6 +694,9 @@ static void findPerlTags (void)
 		const unsigned char *cp = line;
 		perlKind kind = KIND_PERL_NONE;
 		tagEntryInfo e;
+
+		if (isInHereDoc (&hdoc_mgr, line))
+			continue;
 
 		if (skipPodDoc)
 		{
@@ -460,12 +755,12 @@ static void findPerlTags (void)
 		if (parse_only_pod_area)
 			continue;
 
-		while (isspace (*cp))
+		while (isspace (*cp) || *cp == '{' || *cp == '}')
 			cp++;
 
 		if (strncmp((const char*) cp, "sub", (size_t) 3) == 0)
 		{
-			TRACE("this looks like a sub\n");
+			TRACE_PRINT("this looks like a sub");
 			cp += 3;
 			kind = KIND_PERL_SUBROUTINE;
 			spaceRequired = true;
@@ -490,7 +785,7 @@ static void findPerlTags (void)
 			}
 
 			vString *module = NULL;
-			while (isalnum(*cp) || *cp == ':' || *cp == '.') {
+			while (isalnum(*cp) || *cp == ':' || *cp == '.' || *cp == '_') {
 				if (!module)
 					module = vStringNew();
 				vStringPut(module, *cp);
@@ -550,7 +845,7 @@ static void findPerlTags (void)
 			while (isspace (*cp))
 				cp++;
 			vString *module = NULL;
-			while (isalnum(*cp) || *cp == ':' || *cp == '.') {
+			while (isalnum(*cp) || *cp == ':' || *cp == '.' || *cp == '_') {
 				if (!module)
 					module = vStringNew();
 				vStringPut(module, *cp);
@@ -580,9 +875,9 @@ static void findPerlTags (void)
 			else
 				vStringClear (package);
 			const unsigned char *const first = cp;
-			while (*cp && (int) *cp != ';'  &&  !isspace ((int) *cp))
+			while (*cp && (int) *cp != ';'  &&  !isspace (*cp))
 			{
-				vStringPut (package, (int) *cp);
+				vStringPut (package, *cp);
 				cp++;
 			}
 			vStringCatS (package, "::");
@@ -611,14 +906,16 @@ static void findPerlTags (void)
 				if ((int) *p == ':' && (int) *(p + 1) != ':')
 					kind = KIND_PERL_LABEL;
 			}
+			if (kind != KIND_PERL_LABEL)
+				collectHereDocMarkers (&hdoc_mgr, cp);
 		}
 		if (kind != KIND_PERL_NONE)
 		{
-			TRACE("cp0: %s\n", (const char *) cp);
+			TRACE_PRINT("cp0: %s", (const char *) cp);
 			if (spaceRequired && *cp && !isspace (*cp))
 				continue;
 
-			TRACE("cp1: %s\n", (const char *) cp);
+			TRACE_PRINT("cp1: %s", (const char *) cp);
 			while (isspace (*cp))
 				cp++;
 
@@ -633,7 +930,7 @@ static void findPerlTags (void)
 
 			while (isIdentifier (*cp) || (KIND_PERL_PACKAGE == kind && ':' == *cp))
 			{
-				vStringPut (name, (int) *cp);
+				vStringPut (name, *cp);
 				cp++;
 			}
 
@@ -646,7 +943,7 @@ static void findPerlTags (void)
 				vStringCatS (name, "STDOUT");
 			}
 
-			TRACE("name: %s\n", vStringValue (name));
+			TRACE_PRINT("name: %s", vStringValue (name));
 
 			if (0 == vStringLength(name)) {
 				vStringClear(name);
@@ -710,6 +1007,7 @@ static void findPerlTags (void)
 
 END_MAIN_WHILE:
 	vStringDelete (name);
+	finiHereDocMarkerManager (&hdoc_mgr);
 	if (package != NULL)
 		vStringDelete (package);
 }

@@ -16,9 +16,11 @@ lexilla/lexers/LexAbaqus.cxx           \
 lexilla/lexers/LexAda.cxx              \
 lexilla/lexers/LexAsciidoc.cxx         \
 lexilla/lexers/LexAsm.cxx              \
+lexilla/lexers/LexAU3.cxx              \
 lexilla/lexers/LexBash.cxx             \
 lexilla/lexers/LexBasic.cxx            \
 lexilla/lexers/LexBatch.cxx            \
+lexilla/lexers/LexCIL.cxx              \
 lexilla/lexers/LexCOBOL.cxx            \
 lexilla/lexers/LexCPP.cxx              \
 lexilla/lexers/LexCSS.cxx              \
@@ -26,6 +28,7 @@ lexilla/lexers/LexCaml.cxx             \
 lexilla/lexers/LexCmake.cxx            \
 lexilla/lexers/LexCoffeeScript.cxx     \
 lexilla/lexers/LexD.cxx                \
+lexilla/lexers/LexDart.cxx             \
 lexilla/lexers/LexDiff.cxx             \
 lexilla/lexers/LexErlang.cxx           \
 lexilla/lexers/LexForth.cxx            \
@@ -40,6 +43,8 @@ lexilla/lexers/LexLua.cxx              \
 lexilla/lexers/LexMake.cxx             \
 lexilla/lexers/LexMarkdown.cxx         \
 lexilla/lexers/LexMatlab.cxx           \
+lexilla/lexers/LexNim.cxx              \
+lexilla/lexers/LexNix.cxx              \
 lexilla/lexers/LexNsis.cxx             \
 lexilla/lexers/LexNull.cxx             \
 lexilla/lexers/LexPascal.cxx           \
@@ -49,6 +54,7 @@ lexilla/lexers/LexProps.cxx            \
 lexilla/lexers/LexPython.cxx           \
 lexilla/lexers/LexPO.cxx               \
 lexilla/lexers/LexR.cxx                \
+lexilla/lexers/LexRaku.cxx             \
 lexilla/lexers/LexRuby.cxx             \
 lexilla/lexers/LexRust.cxx             \
 lexilla/lexers/LexSmalltalk.cxx        \
@@ -57,7 +63,9 @@ lexilla/lexers/LexTCL.cxx              \
 lexilla/lexers/LexTxt2tags.cxx         \
 lexilla/lexers/LexVHDL.cxx             \
 lexilla/lexers/LexVerilog.cxx          \
-lexilla/lexers/LexYAML.cxx
+lexilla/lexers/LexVisualProlog.cxx     \
+lexilla/lexers/LexYAML.cxx             \
+lexilla/lexers/LexZig.cxx
 
 LEXLIB_SRCS =                          \
 lexilla/include/Lexilla.h              \
@@ -109,6 +117,7 @@ gtk/ScintillaGTKAccessible.cxx         \
 gtk/ScintillaGTKAccessible.h           \
 gtk/scintilla-marshal.c                \
 gtk/scintilla-marshal.h                \
+gtk/Wrappers.h                         \
 src/AutoComplete.cxx                   \
 src/AutoComplete.h                     \
 src/CallTip.cxx                        \
@@ -119,6 +128,8 @@ src/CaseFolder.cxx                     \
 src/CaseFolder.h                       \
 src/CellBuffer.cxx                     \
 src/CellBuffer.h                       \
+src/ChangeHistory.cxx                  \
+src/ChangeHistory.h                    \
 src/CharacterCategoryMap.cxx           \
 src/CharacterCategoryMap.h             \
 src/CharacterType.cxx                  \

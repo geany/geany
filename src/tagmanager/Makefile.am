@@ -1,6 +1,7 @@
 AM_CPPFLAGS = \
 	-I$(srcdir) \
 	-I$(top_srcdir)/ctags/main \
+	-I$(top_srcdir)/ctags/libreadtags \
 	-I$(top_srcdir)/ctags/dsl \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\"Tagmanager\"

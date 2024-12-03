@@ -98,10 +98,10 @@ See `Committing`_ for more information.
 
 Windows tools
 -------------
-* Git: http://git-scm.com/ and http://msysgit.github.io/
-* diff, grep, etc: http://mingw.org/ or http://unxutils.sourceforge.net/
+* Git: https://git-scm.com/ and https://gitforwindows.org/
+* diff, grep, etc: https://www.msys2.org/ or https://unxutils.sourceforge.net/
 
-See also the 'Building on Windows' document on the website.
+See also the Geany wiki on how to build Geany on Windows at https://wiki.geany.org/howtos/win32/msys2.
 
 File organization
 -----------------
@@ -204,10 +204,7 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.32 and GTK 3.0. At least for the
-  moment, we want to keep the minimum requirement for GTK at 3.0 (of
-  course, you can use the GTK_CHECK_VERSION macro to protect code using
-  later versions).
+* Your code should build against GLib 2.32 and GTK 3.24.
 * Variables should be declared (and initialized) as close as practical
   to their first use. This reduces the chances of intervening code being
   inserted between declaration and use, where the variable may be
@@ -497,7 +494,7 @@ Libraries
 ---------
 We try to use an unmodified version of Scintilla - any new lexers or
 other changes should be passed on to the maintainers at
-http://scintilla.org. We normally update to a new Scintilla release
+https://scintilla.org. We normally update to a new Scintilla release
 shortly after one is made. See also scintilla/README.
 
 We use an unmodified subset of universal-ctags sources
@@ -525,7 +522,7 @@ printf("Prefix: %s", GEANY_PREFIX);
 
 Adding a source file foo.[hc] in src/ or plugins/
 -------------------------------------------------
-* Add foo.c, foo.h to SRCS in path/Makefile.am.
+* Add foo.c, foo.h to SRCS in path/Makefile.am and meson.build.
 * Add path/foo.c to po/POTFILES.in (for string translation).
 
 Adding a filetype
@@ -539,8 +536,7 @@ first (scintilla or ctags).
 If you want to reuse an existing lexer and/or tag parser, making a
 custom filetype is probably easier - it doesn't require any
 changes to the source code. Follow instructions in the manual:
-http://geany.org/manual/index.html#custom-filetypes. Don't forget to
-update the ``[Groups]`` section in ``filetype_extensions.conf``.
+https://geany.org/manual/index.html#custom-filetypes.
 
 .. warning::
   You should use the newer `[build-menu]` section for default build
@@ -558,9 +554,9 @@ The remaining notes relate mostly to built-in filetypes.
 
 filetypes.* configuration file
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-All languages need a data/filetypes.foo configuration file. See
+All languages need a data/filedefs/filetypes.foo configuration file. See
 the "Filetype definition files" section in the manual and/or
-data/filetypes.c for an example.
+data/filedefs/filetypes.c for an example.
 
 Programming languages should have:
 
@@ -585,10 +581,13 @@ LexFoo.cxx. Try the official Scintilla project first.
     Scintilla. All new lexers should be submitted back to the Scintilla
     project to save duplication of work.
 
-When adding a lexer, update:
+When adding a lexer:
 
-* scintilla/Makefile.am
-* scintilla/src/Catalogue.cxx - add a LINK_LEXER command *manually*
+* add LexFoo.cxx to scintilla/lexilla/lexers
+* add ``&lmFoo`` to scintilla/lexilla/src/Lexilla.cxx
+* update scintilla/scintilla_changes.patch to contain ``+ &lmFoo,`` and
+  increment ``s`` in the hunk header ``@@ -R,r +S,s @@`` above the added line
+* update scintilla/Makefile.am and meson.build
 
 For syntax highlighting, you will need to edit highlighting.c and
 highlightingmappings.h and add the following things:
@@ -616,8 +615,8 @@ highlightingmappings.h and add the following things:
    a. Add ``init_styleset_case(FOO);`` in ``highlighting_init_styles()``.
    b. Add ``styleset_case(FOO);`` in ``highlighting_set_styles()``.
 
-3. Write data/filetypes.foo configuration file [styling] section. See
-   the manual and see data/filetypes.d for a named style example.
+3. Write data/filedefs/filetypes.foo configuration file [styling] section. See
+   the manual and see data/filedefs/filetypes.d for a named style example.
 
 .. note::
     Please try to make your styles fit in with the other filetypes'
@@ -648,7 +647,12 @@ For brace indentation, update lexer_has_braces() in editor.c;
 indentation after ':' is done from on_new_line_added().
 
 If the Scintilla lexer supports user type keyword highlighting (e.g.
-SCLEX_CPP), update document_update_tags() in document.c.
+SCLEX_CPP), update document_highlight_tags() in document.c.
+
+If the filetype is a scripting language and the interpreter can be started
+using a shebang, update find_shebang() in filetypes.c.
+
+Update editor_set_indentation_guides() in editor.c if needed.
 
 Adding a CTags parser
 ^^^^^^^^^^^^^^^^^^^^^
@@ -659,7 +663,8 @@ https://github.com/universal-ctags/ctags
 
 Method
 ``````
-* Add foo.c to SRCS in Makefile.am.
+* Add ctags/parsers/foo.c to ``parsers`` in ctags/Makefile.am and to the
+  ``ctags`` library in meson.build.
 * Add Foo to src/tagmanager/tm_parsers.h
 * Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
   exactly the order in src/tagmanager/tm_parsers.h.
@@ -708,8 +713,8 @@ This file contains the tag information expected to be generated from
 the corresponding source file together with its human-readable form.
 
 When you have these two files, you have to list your new test along the
-other ones in the ``test_source`` variable in ``tests/ctags/Makefile.am``.
-Please keep this list sorted alphabetically.
+other ones in the ``test_source`` variable in ``tests/ctags/Makefile.am``
+and ``tests/meson.build``. Please keep this list sorted alphabetically.
 
 Upgrading Scintilla
 -------------------

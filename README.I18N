@@ -47,14 +47,6 @@ translated text.
 user-configurable and users may have become accustomed to using the existing
 mnemonic key.
 
-You can also use intl_stats.sh, e.g. by running the following command in the top
-source directory of Geany:
-
-$ po/intl_stats.sh -a it
-
-This will print some information about the Italian translation and checks for
-menu accelerators.
-
 When you have finished your work - which doesn't mean you finished the
 translation, you will not have to work alone - send the file to the translation
 mailing list [3] or directly to Frank Lanitz [4] and he will add the translation
@@ -74,7 +66,7 @@ translation issues and will contact the maintainer of the translation you want
 to update to avoid any conflicts.
 
 Some translation statistics can be found at:
-http://i18n.geany.org/
+https://i18n.geany.org/
 
 
 I18n mailing list
@@ -84,7 +76,7 @@ There is also a mailing list dedicated to translation issues. Please visit
 https://www.geany.org/Support/MailingList#geany-i18 for more information.
 
 
-[1] http://i18n.geany.org/
-[2] http://www.poedit.net/
-[3] https://www.geany.org/Support/MailingList#geany-i18
+[1] https://i18n.geany.org/
+[2] https://www.poedit.net/
+[3] https://www.geany.org/support/mailing-lists/#geany-i18n
 [4] Frank Lanitz <frank(at)frank(dot)uvena(dot)de>

@@ -46,7 +46,6 @@ context_action_cmd=
 [build-menu]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
-# (use only one of it at one time)
 FT_02_LB=_Lint
 FT_02_CM=jshint "%f"
 FT_02_WD=

@@ -80,6 +80,9 @@ gint dialogs_show_prompt(GtkWidget *parent,
 
 void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary);
 
+gint dialogs_file_chooser_run(GtkFileChooser *dialog);
+void dialogs_file_chooser_destroy(GtkFileChooser *dialog);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

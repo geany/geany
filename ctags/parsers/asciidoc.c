@@ -28,6 +28,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "utf8_str.h"
 #include "nestlevel.h"
 #include "routines.h"
 
@@ -99,12 +100,12 @@ static int makeAsciidocTag (const vString* const name, const int kind, const boo
 		if (two_line)
 		{
 			/* we want the line before the '---' underline chars */
-			const unsigned long line = getInputLineNumber();
-			Assert (line > 0);
-			if (line > 0)
+			Assert (e.lineNumber > 1);
+			if (e.lineNumber > 1)
 			{
-				e.lineNumber--;
-				e.filePosition = getInputFilePositionForLine(line - 1);
+				unsigned long lineNumber = e.lineNumber - 1;
+				updateTagLine (&e, lineNumber,
+							   getInputFilePositionForLine(lineNumber));
 			}
 		}
 
@@ -275,37 +276,6 @@ static void process_name(vString *const name, const int kind,
 	if (start <= end)
 		vStringNCatS(name, (const char*)(&(line[start])), end - start + 1);
 }
-
-
-/* computes the length of an UTF-8 string
- * if the string doesn't look like UTF-8, return -1
- * FIXME consider East_Asian_Width Unicode property */
-static int utf8_strlen(const char *buf, int buf_len)
-{
-	int len = 0;
-	const char *end = buf + buf_len;
-
-	for (len = 0; buf < end; len ++)
-	{
-		/* perform quick and naive validation (no sub-byte checking) */
-		if (! (*buf & 0x80))
-			buf ++;
-		else if ((*buf & 0xe0) == 0xc0)
-			buf += 2;
-		else if ((*buf & 0xf0) == 0xe0)
-			buf += 3;
-		else if ((*buf & 0xf8) == 0xf0)
-			buf += 4;
-		else /* not a valid leading UTF-8 byte, abort */
-			return -1;
-
-		if (buf > end) /* incomplete last byte */
-			return -1;
-	}
-
-	return len;
-}
-
 
 static void findAsciidocTags(void)
 {

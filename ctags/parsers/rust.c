@@ -43,6 +43,7 @@ typedef enum {
 	K_FIELD,
 	K_VARIANT,
 	K_METHOD,
+	K_CONST,
 	K_NONE
 } RustKind;
 
@@ -59,6 +60,7 @@ static kindDefinition rustKinds[] = {
 	{true, 'm', "field", "A struct field"},
 	{true, 'e', "enumerator", "An enum variant"},
 	{true, 'P', "method", "A method"},
+	{true, 'C', "constant", "A constant"},
 };
 
 typedef enum {
@@ -131,7 +133,7 @@ static void writeCurTokenToStr (lexerState *lexer, vString *out_str)
 			vStringCatS(out_str, "->");
 			break;
 		default:
-			vStringPut(out_str, (char) lexer->cur_token);
+			vStringPut(out_str, lexer->cur_token);
 	}
 }
 
@@ -154,7 +156,7 @@ static void advanceNChar (lexerState *lexer, int n)
 static void advanceAndStoreChar (lexerState *lexer)
 {
 	if (vStringLength(lexer->token_str) < MAX_STRING_LENGTH)
-		vStringPut(lexer->token_str, (char) lexer->cur_c);
+		vStringPut(lexer->token_str, lexer->cur_c);
 	advanceChar(lexer);
 }
 
@@ -439,8 +441,7 @@ static void addTag (vString* ident, const char* arg_list, int kind, unsigned lon
 	tagEntryInfo tag;
 	initTagEntry(&tag, vStringValue(ident), kind);
 
-	tag.lineNumber = line;
-	tag.filePosition = pos;
+	updateTagLine (&tag, line, pos);
 
 	tag.extensionFields.signature = arg_list;
 	/*tag.extensionFields.varType = type;*/ /* FIXME: map to typeRef[1]? */
@@ -725,6 +726,18 @@ static void parseStatic (lexerState *lexer, vString *scope, int parent_kind)
 	addTag(lexer->token_str, NULL, K_STATIC, lexer->line, lexer->pos, scope, parent_kind);
 }
 
+/* Const format:
+ * "const" <ident>
+ */
+static void parseConst (lexerState *lexer, vString *scope, int parent_kind)
+{
+	advanceToken(lexer, true);
+	if (lexer->cur_token != TOKEN_IDENT)
+		return;
+
+	addTag(lexer->token_str, NULL, K_CONST, lexer->line, lexer->pos, scope, parent_kind);
+}
+
 /* Type format:
  * "type" <ident>
  */
@@ -917,6 +930,10 @@ static void parseBlock (lexerState *lexer, bool delim, int kind, vString *scope)
 			else if(strcmp(vStringValue(lexer->token_str), "static") == 0)
 			{
 				parseStatic(lexer, scope, kind);
+			}
+			else if(strcmp(vStringValue(lexer->token_str), "const") == 0)
+			{
+				parseConst(lexer, scope, kind);
 			}
 			else if(strcmp(vStringValue(lexer->token_str), "trait") == 0)
 			{

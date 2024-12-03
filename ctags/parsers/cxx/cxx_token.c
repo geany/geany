@@ -31,11 +31,14 @@ static CXXToken *createToken(void *createArg CTAGS_ATTR_UNUSED)
 	// we almost always want a string, and since this token
 	// is being reused..well.. we always want it
 	t->pszWord = vStringNew();
+	t->iCorkIndex = CORK_NIL;
+	t->pSideChain = NULL;
 	return t;
 }
 
 static void deleteToken(CXXToken *token)
 {
+	cxxTokenChainDestroy(token->pSideChain);
 	vStringDelete(token->pszWord);
 	eFree(token);
 }
@@ -53,6 +56,14 @@ static void clearToken(CXXToken *t)
 	t->pChain = NULL;
 	t->pNext = NULL;
 	t->pPrev = NULL;
+
+	t->iCorkIndex = CORK_NIL;
+
+	if(t->pSideChain)
+	{
+		cxxTokenChainDestroy(t->pSideChain);
+		t->pSideChain = NULL;
+	}
 }
 
 void cxxTokenAPIInit(void)
@@ -117,8 +128,9 @@ CXXToken * cxxTokenCopy(CXXToken * pToken)
 	pRetToken->oFilePosition = pToken->oFilePosition;
 	pRetToken->eType = pToken->eType;
 	pRetToken->eKeyword = pToken->eKeyword;
-	pToken->bFollowedBySpace = pToken->bFollowedBySpace;
+	pRetToken->bFollowedBySpace = pToken->bFollowedBySpace;
 	vStringCat(pRetToken->pszWord,pToken->pszWord);
+	pRetToken->iCorkIndex = pToken->iCorkIndex;
 
 	return pRetToken;
 }
@@ -137,11 +149,11 @@ CXXToken * cxxTokenCreateKeyword(int iLineNumber,MIOPos oFilePosition,CXXKeyword
 }
 
 
-CXXToken * cxxTokenCreateAnonymousIdentifier(unsigned int uTagKind)
+CXXToken * cxxTokenCreateAnonymousIdentifier(unsigned int uTagKind, const char *szPrefix)
 {
 	CXXToken * t = cxxTokenCreate();
 
-	anonGenerate (t->pszWord, "__anon", uTagKind);
+	anonGenerate (t->pszWord, szPrefix? szPrefix: "__anon", uTagKind);
 	t->eType = CXXTokenTypeIdentifier;
 	t->bFollowedBySpace = true;
 	t->iLineNumber = getInputLineNumber();

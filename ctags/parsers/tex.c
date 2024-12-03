@@ -341,8 +341,7 @@ static int makeTexTag (tokenInfo *const token, int kind,
 	tagEntryInfo e;
 	initTagEntry (&e, name, kind);
 
-	e.lineNumber   = token->lineNumber;
-	e.filePosition = token->filePosition;
+	updateTagLine (&e, token->lineNumber, token->filePosition);
 
 	vString *parentName = NULL;
 
@@ -603,11 +602,7 @@ static bool parseWithStrategy (tokenInfo *token,
 			while (! isType (token, terminator))
 			{
 				if (capture_name && isType (token, TOKEN_IDENTIFIER))
-				{
-					if (vStringLength (name->string) > 0)
-						vStringPut (name->string, ' ');
-					vStringCat (name->string, token->string);
-				}
+					vStringJoin (name->string, ' ', token->string);
 
 				if (!readTokenFull (token,
 									s->flags & TEX_NAME_FLAG_INCLUDING_WHITESPACE))

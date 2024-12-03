@@ -1123,6 +1123,8 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 		g_free(cur_dir);
 	}
 
+	ui_set_search_entry_background(fif_dlg.search_combo, TRUE);
+	ui_set_search_entry_background(fif_dlg.dir_combo, TRUE);
 	update_fif_file_mode_combo();
 	update_file_patterns(fif_dlg.files_mode_combo, fif_dlg.files_combo);
 
@@ -1460,7 +1462,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 
 	if (response == GEANY_RESPONSE_REPLACE_IN_SESSION) {
-		if (! dialogs_show_question_full(replace_dlg.dialog, NULL, NULL,
+		if (!search_prefs.skip_confirmation_for_replace_in_session &&
+			! dialogs_show_question_full(replace_dlg.dialog, NULL, NULL,
 			_("This operation will modify all open files which contain the text to replace."),
 			_("Are you sure to replace in the whole session?"))) {
 			return;
@@ -1562,6 +1565,15 @@ fail:
 }
 
 
+static void reset_msgwin(void)
+{
+	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
+	gtk_list_store_clear(msgwindow.store_msg);
+	// reset width after any long messages
+	gtk_tree_view_columns_autosize(GTK_TREE_VIEW(msgwindow.tree_msg));
+}
+
+
 static GString *get_grep_options(void)
 {
 	GString *gstr = g_string_new("-nHI");	/* line numbers, filenames, ignore binaries */
@@ -1623,12 +1635,21 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		GtkWidget *dir_combo = fif_dlg.dir_combo;
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
+		gchar *locale_dir = utils_get_locale_from_utf8(utf8_dir);
 		GeanyEncodingIndex enc_idx =
 			ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(fif_dlg.encoding_combo));
 
-		if (G_UNLIKELY(EMPTY(utf8_dir)))
-			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
-		else if (!EMPTY(search_text))
+		if (!g_file_test(locale_dir, G_FILE_TEST_IS_DIR))
+		{
+			ui_set_statusbar(FALSE, _("Invalid directory for Find in Files."));
+			ui_set_search_entry_background(dir_combo, FALSE);
+		}
+		else if (EMPTY(search_text))
+		{
+			ui_set_statusbar(FALSE, _("No text to find."));
+			ui_set_search_entry_background(search_combo, FALSE);
+		}
+		else
 		{
 			GString *opts = get_grep_options();
 			const gchar *enc = (enc_idx == GEANY_ENCODING_UTF_8) ? NULL :
@@ -1643,8 +1664,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			}
 			g_string_free(opts, TRUE);
 		}
-		else
-			ui_set_statusbar(FALSE, _("No text to find."));
+		g_free(locale_dir);
 	}
 	else
 		gtk_widget_hide(fif_dlg.dialog);
@@ -1708,9 +1728,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *utf8_dir, const
 			return FALSE;
 		}
 	}
-
-	gtk_list_store_clear(msgwindow.store_msg);
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
+	reset_msgwin();
 
 	/* we can pass 'enc' without strdup'ing it here because it's a global const string and
 	 * always exits longer than the lifetime of this function */
@@ -1883,12 +1901,14 @@ static void search_finished(GPid child_pid, gint status, gpointer user_data)
 		{
 			gint count = gtk_tree_model_iter_n_children(
 				GTK_TREE_MODEL(msgwindow.store_msg), NULL) - 1;
-			gchar *text = ngettext(
+			gchar *text = g_strdup_printf(ngettext(
 						"Search completed with %d match.",
-						"Search completed with %d matches.", count);
+						"Search completed with %d matches.", count),
+						count);
 
-			msgwin_msg_add(COLOR_BLUE, -1, NULL, text, count);
-			ui_set_statusbar(FALSE, text, count);
+			msgwin_msg_add_string(COLOR_BLUE, -1, NULL, text);
+			ui_set_statusbar(FALSE, "%s", text);
+			g_free(text);
 			break;
 		}
 		case 1:
@@ -2212,9 +2232,7 @@ void search_find_usage(const gchar *search_text, const gchar *original_search_te
 		utils_beep();
 		return;
 	}
-
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
-	gtk_list_store_clear(msgwindow.store_msg);
+	reset_msgwin();
 
 	if (! in_session)
 	{	/* use current document */

@@ -24,6 +24,7 @@
 #include "parse.h"
 #include "read.h"
 #include "routines.h"
+#include "selectors.h"
 #include "vstring.h"
 #include "xtag.h"
 
@@ -40,6 +41,14 @@
 /*
 *   DATA DECLARATIONS
 */
+
+typedef enum eFortranPass {
+	INIT_PASS = 1,
+	PASS_FIXED_FORM = INIT_PASS,
+	PASS_FREE_FORM,
+	MAX_PASS = PASS_FREE_FORM
+} fortranPass;
+
 /*  Used to designate type of line read in fixed source form.
  */
 typedef enum eFortranLineType {
@@ -220,10 +229,21 @@ typedef struct sTokenInfo {
 
 static langType Lang_fortran;
 static int Ungetc;
-static unsigned int Column;
-static bool FreeSourceForm;
-static bool FreeSourceFormFound = false;
-static bool ParsingString;
+
+static fortranPass currentPass;
+#define inFreeSourceForm  ((currentPass) == PASS_FREE_FORM)
+#define inFixedSourceForm ((currentPass) == PASS_FIXED_FORM)
+
+/* State used only in FixedSourceForm pass */
+static struct {
+	unsigned int column;
+	bool freeSourceFormFound;
+} Fixed;
+
+/* State used only in FreeSourceForm pass */
+static struct {
+	bool newline;
+} Free;
 
 /* indexed by tagType */
 static kindDefinition FortranKinds [] = {
@@ -347,6 +367,18 @@ static const keywordTable FortranKeywordTable [] = {
 	{ "volatile",       KEYWORD_volatile     },
 	{ "where",          KEYWORD_where        },
 	{ "while",          KEYWORD_while        }
+};
+
+typedef enum {
+	X_LINK_NAME,
+} fortranXtag;
+
+static xtagDefinition FortranXtagTable [] = {
+	{
+		.enabled = false,
+		.name    = "linkName",
+		.description = "Linking name used in foreign languages",
+	},
 };
 
 static struct {
@@ -535,6 +567,46 @@ static const char *implementationString (const impType imp)
 	return names [(int) imp];
 }
 
+static bool hasLinkName(tagEntryInfo *e)
+{
+	switch (e->kindIndex)
+	{
+	case TAG_FUNCTION:
+	case TAG_SUBROUTINE:
+	case TAG_BLOCK_DATA:
+	case TAG_COMMON_BLOCK:
+	case TAG_ENTRY_POINT:
+		return true;
+	default:
+		return false;
+	}
+}
+
+/* ref.
+ * * https://gcc.gnu.org/onlinedocs/gfortran/Code-Gen-Options.html
+ *   - -fno-underscoring
+ *   - -fsecond-underscore
+ * * https://docs.oracle.com/cd/E19957-01/805-4940/z400091044a7/index.html
+ */
+static void makeFortranLinkNameTag(tagEntryInfo *e)
+{
+	vString *ln = vStringNewInit (e->name);
+	vStringLower(ln);
+
+#if 0
+	if (strchr(vStringValue (ln), '_'))
+		vStringPut(ln, '_');
+#endif
+
+	vStringPut(ln, '_');
+
+	tagEntryInfo ln_e = *e;
+	ln_e.name = vStringValue (ln);
+	markTagExtraBit (&ln_e, FortranXtagTable[X_LINK_NAME].xtype);
+	makeTagEntry (&ln_e);
+	vStringDelete (ln);
+}
+
 static void makeFortranTag (tokenInfo *const token, tagType tag)
 {
 	token->tag = tag;
@@ -551,8 +623,7 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 		if (token->anonymous)
 			markTagExtraBit (&e, XTAG_ANONYMOUS);
 
-		e.lineNumber	= token->lineNumber;
-		e.filePosition	= token->filePosition;
+		updateTagLine (&e, token->lineNumber, token->filePosition);
 		e.isFileScope	= isFileScope (token->tag);
 		if (e.isFileScope)
 			markTagExtraBit (&e, XTAG_FILE_SCOPE);
@@ -581,6 +652,9 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 			 token->tag == TAG_PROTOTYPE))
 			e.extensionFields.signature = vStringValue (token->signature);
 		makeTagEntry (&e);
+		if (isXtagEnabled (FortranXtagTable[X_LINK_NAME].xtype)
+			&& hasLinkName(&e))
+			makeFortranLinkNameTag(&e);
 	}
 }
 
@@ -679,61 +753,61 @@ static lineType getLineType (void)
 	return type;
 }
 
-static int getFixedFormChar (void)
+static int getFixedFormChar (bool parsingString, bool *freeSourceFormFound)
 {
 	bool newline = false;
 	lineType type;
 	int c = '\0';
 
-	if (Column > 0)
+	if (Fixed.column > 0)
 	{
 #ifdef STRICT_FIXED_FORM
 		/*  EXCEPTION! Some compilers permit more than 72 characters per line.
 		 */
-		if (Column > 71)
+		if (Fixed.column > 71)
 			c = skipLine ();
 		else
 #endif
 		{
 			c = getcFromInputFile ();
-			++Column;
+			++Fixed.column;
 		}
 		if (c == '\n')
 		{
 			newline = true;  /* need to check for continuation line */
-			Column = 0;
+			Fixed.column = 0;
 		}
-		else if (c == '!'  &&  ! ParsingString)
+		else if (c == '!'  &&  ! parsingString)
 		{
 			c = skipLine ();
 			newline = true;  /* need to check for continuation line */
-			Column = 0;
+			Fixed.column = 0;
 		}
 		else if (c == '&')  /* check for free source form */
 		{
 			const int c2 = getcFromInputFile ();
 			if (c2 == '\n')
-				FreeSourceFormFound = true;
+				*freeSourceFormFound = true;
 			else
 				ungetcToInputFile (c2);
 		}
 	}
-	while (Column == 0)
+	while (Fixed.column == 0)
 	{
 		type = getLineType ();
 		switch (type)
 		{
 			case LTYPE_UNDETERMINED:
 			case LTYPE_INVALID:
-				FreeSourceFormFound = true;
-				if (! FreeSourceForm)
+				*freeSourceFormFound = true;
+				if (inFixedSourceForm)
 				    return EOF;
 
 			case LTYPE_SHORT: break;
 			case LTYPE_COMMENT: skipLine (); break;
 
 			case LTYPE_EOF:
-				Column = 6;
+				Fixed.column = 6;
 				if (newline)
 					c = '\n';
 				else
@@ -744,20 +818,20 @@ static int getFixedFormChar (void)
 				if (newline)
 				{
 					c = '\n';
-					Column = 6;
+					Fixed.column = 6;
 					break;
 				}
 				/* fall through to next case */
 			case LTYPE_CONTINUATION:
-				Column = 5;
+				Fixed.column = 5;
 				do
 				{
 					c = getcFromInputFile ();
-					++Column;
+					++Fixed.column;
 				} while (isBlank (c));
 				if (c == '\n')
-					Column = 0;
-				else if (Column > 6)
+					Fixed.column = 0;
+				else if (Fixed.column > 6)
 				{
 					ungetcToInputFile (c);
 					c = ' ';
@@ -781,7 +855,6 @@ static int skipToNextLine (void)
 
 static int getFreeFormChar (void)
 {
-	static bool newline = true;
 	bool advanceLine = false;
 	int c = getcFromInputFile ();
 
@@ -796,7 +869,7 @@ static int getFreeFormChar (void)
 		while (isspace (c)  &&  c != '\n');
 		if (c == '\n')
 		{
-			newline = true;
+			Free.newline = true;
 			advanceLine = true;
 		}
 		else if (c == '!')
@@ -807,16 +880,16 @@ static int getFreeFormChar (void)
 			c = '&';
 		}
 	}
-	else if (newline && (c == '!' || c == '#'))
+	else if (Free.newline && (c == '!' || c == '#'))
 		advanceLine = true;
 	while (advanceLine)
 	{
 		while (isspace (c))
 			c = getcFromInputFile ();
-		if (c == '!' || (newline && c == '#'))
+		if (c == '!' || (Free.newline && c == '#'))
 		{
 			c = skipToNextLine ();
-			newline = true;
+			Free.newline = true;
 			continue;
 		}
 		if (c == '&')
@@ -824,11 +897,11 @@ static int getFreeFormChar (void)
 		else
 			advanceLine = false;
 	}
-	newline = (bool) (c == '\n');
+	Free.newline = (bool) (c == '\n');
 	return c;
 }
 
-static int getChar (void)
+static int getCharFull (bool parsingString, bool *freeSourceFormFound)
 {
 	int c;
 
@@ -837,11 +910,17 @@ static int getChar (void)
 		c = Ungetc;
 		Ungetc = '\0';
 	}
-	else if (FreeSourceForm)
+	else if (inFreeSourceForm)
 		c = getFreeFormChar ();
 	else
-		c = getFixedFormChar ();
+		c = getFixedFormChar (parsingString,
+							  freeSourceFormFound);
 	return c;
+}
+
+static int getChar (void)
+{
+	return getCharFull (false, &Fixed.freeSourceFormFound);
 }
 
 static void ungetChar (const int c)
@@ -909,22 +988,20 @@ static vString *parseNumeric (int c)
 static void parseString (vString *const string, const int delimiter)
 {
 	const unsigned long inputLineNumber = getInputLineNumber ();
-	int c;
-	ParsingString = true;
-	c = getChar ();
+	int c = getCharFull (true, &Fixed.freeSourceFormFound);
+
 	while (c != delimiter  &&  c != '\n'  &&  c != EOF)
 	{
 		vStringPut (string, c);
-		c = getChar ();
+		c = getCharFull (true, &Fixed.freeSourceFormFound);
 	}
 	if (c == '\n'  ||  c == EOF)
 	{
 		verbose ("%s: unterminated character string at line %lu\n",
 				getInputFileName (), inputLineNumber);
-		if (c != EOF && ! FreeSourceForm)
-			FreeSourceFormFound = true;
+		if (c != EOF && inFixedSourceForm)
+			Fixed.freeSourceFormFound = true;
 	}
-	ParsingString = false;
 }
 
 /*  Read a C identifier beginning with "firstChar" and places it into "name".
@@ -1049,7 +1126,7 @@ getNextChar:
 		}
 
 		case '!':
-			if (FreeSourceForm)
+			if (inFreeSourceForm)
 			{
 				do
 				   c = getChar ();
@@ -1058,12 +1135,12 @@ getNextChar:
 			else
 			{
 				skipLine ();
-				Column = 0;
+				Fixed.column = 0;
 			}
 			/* fall through to newline case */
 		case '\n':
 			token->type = TOKEN_STATEMENT_END;
-			if (FreeSourceForm)
+			if (inFreeSourceForm)
 				checkForLabel ();
 			break;
 
@@ -2649,13 +2726,22 @@ static rescanReason findFortranTags (const unsigned int passCount)
 	tokenInfo *token;
 	rescanReason rescan;
 
-	Assert (passCount < 3);
+	Assert (passCount <= MAX_PASS);
 	token = newToken ();
 
-	FreeSourceForm = (bool) (passCount > 1);
-	Column = 0;
+	currentPass = (fortranPass)passCount;
+	if (currentPass == INIT_PASS)
+		Ungetc = '\0';
+	if (inFreeSourceForm)
+		Free.newline = true;
+	if (inFixedSourceForm)
+	{
+		Fixed.column = 0;
+		Fixed.freeSourceFormFound = false;
+	}
+
 	parseProgramUnit (token);
-	if (FreeSourceFormFound  &&  ! FreeSourceForm)
+	if (inFixedSourceForm && Fixed.freeSourceFormFound)
 	{
 		verbose ("%s: not fixed source form; retry as free source form\n",
 				getInputFileName ());
@@ -2685,6 +2771,9 @@ extern parserDefinition* FortranParser (void)
 #endif
 		NULL
 	};
+	static selectLanguage selectors[] = { selectFortranOrForthByForthMarker,
+					      NULL };
+
 	parserDefinition* def = parserNew ("Fortran");
 	def->kindTable      = FortranKinds;
 	def->kindCount  = ARRAY_SIZE (FortranKinds);
@@ -2693,5 +2782,12 @@ extern parserDefinition* FortranParser (void)
 	def->initialize = initialize;
 	def->keywordTable = FortranKeywordTable;
 	def->keywordCount = ARRAY_SIZE (FortranKeywordTable);
+	def->xtagTable  = FortranXtagTable;
+	def->xtagCount  = ARRAY_SIZE(FortranXtagTable);
+
+	def->versionCurrent = 1;
+	def->versionAge = 1;
+	def->selectLanguage = selectors;
+
 	return def;
 }

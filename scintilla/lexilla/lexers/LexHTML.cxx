@@ -5,12 +5,12 @@
 // Copyright 1998-2005 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <assert.h>
-#include <ctype.h>
+#include <cstdlib>
+#include <cassert>
+#include <cstring>
+#include <cctype>
+#include <cstdio>
+#include <cstdarg>
 
 #include <string>
 #include <string_view>
@@ -42,16 +42,16 @@ namespace {
 enum script_type { eScriptNone = 0, eScriptJS, eScriptVBS, eScriptPython, eScriptPHP, eScriptXML, eScriptSGML, eScriptSGMLblock, eScriptComment };
 enum script_mode { eHtml = 0, eNonHtmlScript, eNonHtmlPreProc, eNonHtmlScriptPreProc };
 
-inline bool IsAWordChar(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
+constexpr bool IsAWordChar(int ch) noexcept {
+	return IsAlphaNumeric(ch) || ch == '.' || ch == '_';
 }
 
-inline bool IsAWordStart(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '_');
+constexpr bool IsAWordStart(int ch) noexcept {
+	return IsAlphaNumeric(ch) || ch == '_';
 }
 
-inline bool IsOperator(int ch) {
-	if (IsASCII(ch) && isalnum(ch))
+bool IsOperator(int ch) noexcept {
+	if (IsAlphaNumeric(ch))
 		return false;
 	// '.' left out as it is used to make up numbers
 	if (ch == '%' || ch == '^' || ch == '&' || ch == '*' ||
@@ -62,6 +62,10 @@ inline bool IsOperator(int ch) {
 	        ch == '?' || ch == '!' || ch == '.' || ch == '~')
 		return true;
 	return false;
+}
+
+unsigned char SafeGetUnsignedCharAt(Accessor &styler, Sci_Position position, char chDefault = ' ') {
+	return styler.SafeGetCharAt(position, chDefault);
 }
 
 void GetTextSegment(Accessor &styler, Sci_PositionU start, Sci_PositionU end, char *s, size_t len) {
@@ -99,15 +103,13 @@ script_type segIsScriptingIndicator(Accessor &styler, Sci_PositionU start, Sci_P
 	char s[100];
 	GetTextSegment(styler, start, end, s, sizeof(s));
 	//Platform::DebugPrintf("Scripting indicator [%s]\n", s);
-	if (strstr(s, "src"))	// External script
-		return eScriptNone;
 	if (strstr(s, "vbs"))
 		return eScriptVBS;
 	if (strstr(s, "pyth"))
 		return eScriptPython;
-	if (strstr(s, "javas"))
-		return eScriptJS;
-	if (strstr(s, "jscr"))
+	// https://html.spec.whatwg.org/multipage/scripting.html#attr-script-type
+	// https://mimesniff.spec.whatwg.org/#javascript-mime-type
+	if (strstr(s, "javas") || strstr(s, "ecmas") || strstr(s, "module") || strstr(s, "jscr"))
 		return eScriptJS;
 	if (strstr(s, "php"))
 		return eScriptPHP;
@@ -133,14 +135,14 @@ int PrintScriptingIndicatorOffset(Accessor &styler, Sci_PositionU start, Sci_Pos
 	return iResult;
 }
 
-script_type ScriptOfState(int state) {
+script_type ScriptOfState(int state) noexcept {
 	if ((state >= SCE_HP_START) && (state <= SCE_HP_IDENTIFIER)) {
 		return eScriptPython;
-	} else if ((state >= SCE_HB_START) && (state <= SCE_HB_STRINGEOL)) {
+	} else if ((state >= SCE_HB_START && state <= SCE_HB_STRINGEOL) || (state == SCE_H_ASPAT || state == SCE_H_XCCOMMENT)) {
 		return eScriptVBS;
 	} else if ((state >= SCE_HJ_START) && (state <= SCE_HJ_REGEX)) {
 		return eScriptJS;
-	} else if ((state >= SCE_HPHP_DEFAULT) && (state <= SCE_HPHP_COMMENTLINE)) {
+	} else if ((state >= SCE_HPHP_DEFAULT && state <= SCE_HPHP_COMMENTLINE) || (state == SCE_HPHP_COMPLEX_VARIABLE)) {
 		return eScriptPHP;
 	} else if ((state >= SCE_H_SGML_DEFAULT) && (state < SCE_H_SGML_BLOCK_DEFAULT)) {
 		return eScriptSGML;
@@ -151,7 +153,7 @@ script_type ScriptOfState(int state) {
 	}
 }
 
-int statePrintForState(int state, script_mode inScriptType) {
+int statePrintForState(int state, script_mode inScriptType) noexcept {
 	int StateToPrint = state;
 
 	if (state >= SCE_HJ_START) {
@@ -167,7 +169,7 @@ int statePrintForState(int state, script_mode inScriptType) {
 	return StateToPrint;
 }
 
-int stateForPrintState(int StateToPrint) {
+int stateForPrintState(int StateToPrint) noexcept {
 	int state;
 
 	if ((StateToPrint >= SCE_HPA_START) && (StateToPrint <= SCE_HPA_IDENTIFIER)) {
@@ -183,12 +185,11 @@ int stateForPrintState(int StateToPrint) {
 	return state;
 }
 
-inline bool IsNumber(Sci_PositionU start, Accessor &styler) {
-	return IsADigit(styler[start]) || (styler[start] == '.') ||
-	       (styler[start] == '-') || (styler[start] == '#');
+constexpr bool IsNumberChar(char ch) noexcept {
+	return IsADigit(ch) || ch == '.' || ch == '-' || ch == '#';
 }
 
-inline bool isStringState(int state) {
+bool isStringState(int state) noexcept {
 	bool bResult;
 
 	switch (state) {
@@ -219,11 +220,10 @@ inline bool isStringState(int state) {
 	return bResult;
 }
 
-inline bool stateAllowsTermination(int state) {
+bool stateAllowsTermination(int state) noexcept {
 	bool allowTermination = !isStringState(state);
 	if (allowTermination) {
 		switch (state) {
-		case SCE_HB_COMMENTLINE:
 		case SCE_HPHP_COMMENT:
 		case SCE_HP_COMMENTLINE:
 		case SCE_HPA_COMMENTLINE:
@@ -233,8 +233,19 @@ inline bool stateAllowsTermination(int state) {
 	return allowTermination;
 }
 
+bool isPreProcessorEndTag(int state, int ch) {
+	const script_type type = ScriptOfState(state);
+	if (state == SCE_H_ASP || AnyOf(type, eScriptVBS, eScriptJS, eScriptPython)) {
+		return ch == '%';
+	}
+	if (type == eScriptPHP) {
+		return ch == '%' || ch == '?';
+	}
+	return ch == '?';
+}
+
 // not really well done, since it's only comments that should lex the %> and <%
-inline bool isCommentASPState(int state) {
+bool isCommentASPState(int state) noexcept {
 	bool bResult;
 
 	switch (state) {
@@ -254,20 +265,27 @@ inline bool isCommentASPState(int state) {
 	return bResult;
 }
 
-void classifyAttribHTML(Sci_PositionU start, Sci_PositionU end, const WordList &keywords, Accessor &styler) {
-	const bool wordIsNumber = IsNumber(start, styler);
+bool classifyAttribHTML(script_mode inScriptType, Sci_PositionU start, Sci_PositionU end, const WordList &keywords, Accessor &styler) {
 	char chAttr = SCE_H_ATTRIBUTEUNKNOWN;
-	if (wordIsNumber) {
+	bool isLanguageType = false;
+	if (IsNumberChar(styler[start])) {
 		chAttr = SCE_H_NUMBER;
 	} else {
-		std::string s = GetStringSegment(styler, start, end);
+		const std::string s = GetStringSegment(styler, start, end);
 		if (keywords.InList(s.c_str()))
 			chAttr = SCE_H_ATTRIBUTE;
+		if (inScriptType == eNonHtmlScript) {
+			// see https://html.spec.whatwg.org/multipage/scripting.html#script-processing-model
+			if (s == "type" || s == "language") {
+				isLanguageType = true;
+			}
+		}
 	}
 	if ((chAttr == SCE_H_ATTRIBUTEUNKNOWN) && !keywords)
 		// No keywords -> all are known
 		chAttr = SCE_H_ATTRIBUTE;
 	styler.ColourTo(end, chAttr);
+	return isLanguageType;
 }
 
 // https://html.spec.whatwg.org/multipage/custom-elements.html#custom-elements-core-concepts
@@ -430,7 +448,7 @@ bool isWordCdata(Sci_PositionU start, Sci_PositionU end, Accessor &styler) {
 }
 
 // Return the first state to reach when entering a scripting language
-int StateForScript(script_type scriptLanguage) {
+int StateForScript(script_type scriptLanguage) noexcept {
 	int Result;
 	switch (scriptLanguage) {
 	case eScriptVBS:
@@ -458,20 +476,20 @@ int StateForScript(script_type scriptLanguage) {
 	return Result;
 }
 
-inline bool issgmlwordchar(int ch) {
+constexpr bool issgmlwordchar(int ch) noexcept {
 	return !IsASCII(ch) ||
-		(isalnum(ch) || ch == '.' || ch == '_' || ch == ':' || ch == '!' || ch == '#' || ch == '[');
+		(IsAlphaNumeric(ch) || ch == '.' || ch == '_' || ch == ':' || ch == '!' || ch == '#' || ch == '[');
 }
 
-inline bool IsPhpWordStart(int ch) {
-	return (IsASCII(ch) && (isalpha(ch) || (ch == '_'))) || (ch >= 0x7f);
+constexpr bool IsPhpWordStart(int ch) noexcept {
+	return (IsUpperOrLowerCase(ch) || (ch == '_')) || (ch >= 0x7f);
 }
 
-inline bool IsPhpWordChar(int ch) {
+constexpr bool IsPhpWordChar(int ch) noexcept {
 	return IsADigit(ch) || IsPhpWordStart(ch);
 }
 
-bool InTagState(int state) {
+bool InTagState(int state) noexcept {
 	return state == SCE_H_TAG || state == SCE_H_TAGUNKNOWN ||
 	       state == SCE_H_SCRIPT ||
 	       state == SCE_H_ATTRIBUTE || state == SCE_H_ATTRIBUTEUNKNOWN ||
@@ -479,16 +497,16 @@ bool InTagState(int state) {
 	       state == SCE_H_DOUBLESTRING || state == SCE_H_SINGLESTRING;
 }
 
-bool IsCommentState(const int state) {
+bool IsCommentState(const int state) noexcept {
 	return state == SCE_H_COMMENT || state == SCE_H_SGML_COMMENT;
 }
 
-bool IsScriptCommentState(const int state) {
+bool IsScriptCommentState(const int state) noexcept {
 	return state == SCE_HJ_COMMENT || state == SCE_HJ_COMMENTLINE || state == SCE_HJA_COMMENT ||
 		   state == SCE_HJA_COMMENTLINE || state == SCE_HB_COMMENTLINE || state == SCE_HBA_COMMENTLINE;
 }
 
-bool isLineEnd(int ch) {
+constexpr bool isLineEnd(int ch) noexcept {
 	return ch == '\r' || ch == '\n';
 }
 
@@ -542,8 +560,8 @@ class PhpNumberState {
 	bool exponentChar = false;
 
 public:
-	inline bool isInvalid() { return invalid; }
-	inline bool isFinished() { return finished; }
+	[[nodiscard]] bool isInvalid() const noexcept { return invalid; }
+	[[nodiscard]] bool isFinished() const noexcept { return finished; }
 
 	bool init(int ch, int chPlus1, int chPlus2) {
 		base = BASE_10;
@@ -637,7 +655,7 @@ public:
 	}
 };
 
-bool isPHPStringState(int state) {
+bool isPHPStringState(int state) noexcept {
 	return
 	    (state == SCE_HPHP_HSTRING) ||
 	    (state == SCE_HPHP_SIMPLESTRING) ||
@@ -701,8 +719,6 @@ struct OptionsHTML {
 	bool foldComment = false;
 	bool foldHeredoc = false;
 	bool foldXmlAtTagOpen = false;
-	OptionsHTML() noexcept {
-	}
 };
 
 const char * const htmlWordListDesc[] = {
@@ -712,7 +728,7 @@ const char * const htmlWordListDesc[] = {
 	"Python keywords",
 	"PHP keywords",
 	"SGML and DTD keywords",
-	0,
+	nullptr,
 };
 
 const char * const phpscriptWordListDesc[] = {
@@ -722,7 +738,7 @@ const char * const phpscriptWordListDesc[] = {
 	"", //Unused
 	"PHP keywords",
 	"", //Unused
-	0,
+	nullptr,
 };
 
 struct OptionSetHTML : public OptionSet<OptionsHTML> {
@@ -773,7 +789,7 @@ struct OptionSetHTML : public OptionSet<OptionsHTML> {
 	}
 };
 
-LexicalClass lexicalClassesHTML[] = {
+const LexicalClass lexicalClassesHTML[] = {
 	// Lexer HTML SCLEX_HTML SCE_H_ SCE_HJ_ SCE_HJA_ SCE_HB_ SCE_HBA_ SCE_HP_ SCE_HPHP_ SCE_HPA_:
 	0, "SCE_H_DEFAULT", "default", "Text",
 	1, "SCE_H_TAG", "tag", "Tags",
@@ -795,7 +811,7 @@ LexicalClass lexicalClassesHTML[] = {
 	17, "SCE_H_CDATA", "literal", "CDATA",
 	18, "SCE_H_QUESTION", "preprocessor", "PHP",
 	19, "SCE_H_VALUE", "literal string", "Unquoted values",
-	20, "SCE_H_XCCOMMENT", "comment", "JSP Comment <%-- ... --%>",
+	20, "SCE_H_XCCOMMENT", "comment", "ASP.NET, JSP Comment <%-- ... --%>",
 	21, "SCE_H_SGML_DEFAULT", "default", "SGML tags <! ... >",
 	22, "SCE_H_SGML_COMMAND", "preprocessor", "SGML command",
 	23, "SCE_H_SGML_1ST_PARAM", "preprocessor", "SGML 1st param",
@@ -905,7 +921,7 @@ LexicalClass lexicalClassesHTML[] = {
 	127, "SCE_HPHP_OPERATOR", "server php operator", "PHP operator",
 };
 
-LexicalClass lexicalClassesXML[] = {
+const LexicalClass lexicalClassesXML[] = {
 	// Lexer.Secondary XML SCLEX_XML SCE_H_:
 	0, "SCE_H_DEFAULT", "default", "Default",
 	1, "SCE_H_TAG", "tag", "Tags",
@@ -941,7 +957,7 @@ LexicalClass lexicalClassesXML[] = {
 	31, "SCE_H_SGML_BLOCK_DEFAULT", "default", "SGML block",
 };
 
-const char *tagsThatDoNotFold[] = {
+const char * const tagsThatDoNotFold[] = {
 	"area",
 	"base",
 	"basefont",
@@ -1033,7 +1049,7 @@ Sci_Position SCI_METHOD LexerHTML::PropertySet(const char *key, const char *val)
 }
 
 Sci_Position SCI_METHOD LexerHTML::WordListSet(int n, const char *wl) {
-	WordList *wordListN = 0;
+	WordList *wordListN = nullptr;
 	switch (n) {
 	case 0:
 		wordListN = &keywords;
@@ -1056,10 +1072,7 @@ Sci_Position SCI_METHOD LexerHTML::WordListSet(int n, const char *wl) {
 	}
 	Sci_Position firstModification = -1;
 	if (wordListN) {
-		WordList wlNew;
-		wlNew.Set(wl);
-		if (*wordListN != wlNew) {
-			wordListN->Set(wl);
+		if (wordListN->Set(wl)) {
 			firstModification = 0;
 		}
 	}
@@ -1129,6 +1142,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 	script_type aspScript = static_cast<script_type>((lineState >> 4) & 0x0F); // 4 bits of script name
 	script_type clientScript = static_cast<script_type>((lineState >> 8) & 0x0F); // 4 bits of script name
 	int beforePreProc = (lineState >> 12) & 0xFF; // 8 bits of state
+	bool isLanguageType = (lineState >> 20) & 1; // type or language attribute for script tag
 
 	script_type scriptLanguage = ScriptOfState(state);
 	// If eNonHtmlScript coincides with SCE_H_COMMENT, assume eScriptComment
@@ -1152,10 +1166,12 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 	const CharacterSet setAttributeContinue(CharacterSet::setAlphaNum, ".-_:!#/", true);
 	// TODO: also handle + and - (except if they're part of ++ or --) and return keywords
 	const CharacterSet setOKBeforeJSRE(CharacterSet::setNone, "([{=,:;!%^&*|?~");
+	// Only allow [A-Za-z0-9.#-_:] in entities
+	const CharacterSet setEntity(CharacterSet::setAlphaNum, ".#-_:");
 
 	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 	int levelCurrent = levelPrev;
-	int visibleChars = 0;
+	Sci_Position visibleChars = 0;
 	int lineStartVisibleChars = 0;
 
 	int chPrev = ' ';
@@ -1172,7 +1188,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				break;
 		}
 		if (style == SCE_HJ_SYMBOLS) {
-			chPrevNonWhite = static_cast<unsigned char>(styler.SafeGetCharAt(back));
+			chPrevNonWhite = SafeGetUnsignedCharAt(styler, back);
 		}
 	}
 
@@ -1185,8 +1201,8 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			state != SCE_HJ_COMMENTLINE && state != SCE_HJ_COMMENTDOC)
 			chPrevNonWhite = ch;
 		ch = static_cast<unsigned char>(styler[i]);
-		int chNext = static_cast<unsigned char>(styler.SafeGetCharAt(i + 1));
-		const int chNext2 = static_cast<unsigned char>(styler.SafeGetCharAt(i + 2));
+		int chNext = SafeGetUnsignedCharAt(styler, i + 1);
+		const int chNext2 = SafeGetUnsignedCharAt(styler, i + 2);
 
 		// Handle DBCS codepages
 		if (styler.IsLeadByte(static_cast<char>(ch))) {
@@ -1210,7 +1226,9 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			case eScriptPHP:
 				//not currently supported				case eScriptVBS:
 
-				if ((state != SCE_HPHP_COMMENT) && (state != SCE_HPHP_COMMENTLINE) && (state != SCE_HJ_COMMENT) && (state != SCE_HJ_COMMENTLINE) && (state != SCE_HJ_COMMENTDOC) && (!isStringState(state))) {
+				if (!(state == SCE_HPHP_COMMENT || state == SCE_HPHP_COMMENTLINE) &&
+				    !(state == SCE_HJ_REGEX || state == SCE_HJ_COMMENT || state == SCE_HJ_COMMENTLINE || state == SCE_HJ_COMMENTDOC) &&
+				    !isStringState(state)) {
 				//Platform::DebugPrintf("state=%d, StateToPrint=%d, initStyle=%d\n", state, StateToPrint, initStyle);
 				//if ((state == SCE_HPHP_OPERATOR) || (state == SCE_HPHP_DEFAULT) || (state == SCE_HJ_SYMBOLS) || (state == SCE_HJ_START) || (state == SCE_HJ_DEFAULT)) {
 					if (ch == '#') {
@@ -1226,7 +1244,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 					} else if ((ch == '{') || (ch == '}') || (foldComment && (ch == '/') && (chNext == '*'))) {
 						levelCurrent += (((ch == '{') || (ch == '/')) ? 1 : -1);
 					}
-				} else if (((state == SCE_HPHP_COMMENT) || (state == SCE_HJ_COMMENT)) && foldComment && (ch == '*') && (chNext == '/')) {
+				} else if (((state == SCE_HPHP_COMMENT) || (state == SCE_HJ_COMMENT || state == SCE_HJ_COMMENTDOC)) && foldComment && (ch == '*') && (chNext == '/')) {
 					levelCurrent--;
 				}
 				break;
@@ -1282,7 +1300,8 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			                    ((tagClosing ? 1 : 0) << 3) |
 			                    ((aspScript & 0x0F) << 4) |
 			                    ((clientScript & 0x0F) << 8) |
-			                    ((beforePreProc & 0xFF) << 12));
+			                    ((beforePreProc & 0xFF) << 12) |
+			                    ((isLanguageType ? 1 : 0) << 20));
 			lineCurrent++;
 			lineStartVisibleChars = 0;
 		}
@@ -1322,7 +1341,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			case SCE_HJ_COMMENTDOC:
 			//case SCE_HJ_COMMENTLINE: // removed as this is a common thing done to hide
 			// the end of script marker from some JS interpreters.
-			case SCE_HB_COMMENTLINE:
+			//case SCE_HB_COMMENTLINE:
 			case SCE_HBA_COMMENTLINE:
 			case SCE_HJ_DOUBLESTRING:
 			case SCE_HJ_SINGLESTRING:
@@ -1340,8 +1359,8 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			default :
 				// check if the closing tag is a script tag
 				if (const char *tag =
-						state == SCE_HJ_COMMENTLINE || isXml ? "script" :
-						state == SCE_H_COMMENT ? "comment" : 0) {
+						(state == SCE_HJ_COMMENTLINE || state == SCE_HB_COMMENTLINE || isXml) ? "script" :
+						state == SCE_H_COMMENT ? "comment" : nullptr) {
 					Sci_Position j = i + 2;
 					int chr;
 					do {
@@ -1355,6 +1374,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				inScriptType = eHtml;
 				scriptLanguage = eScriptNone;
 				clientScript = eScriptJS;
+				isLanguageType = false;
 				i += 2;
 				visibleChars += 2;
 				tagClosing = true;
@@ -1396,7 +1416,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				levelCurrent++;
 			}
 			// should be better
-			ch = static_cast<unsigned char>(styler.SafeGetCharAt(i));
+			ch = SafeGetUnsignedCharAt(styler, i);
 			continue;
 		}
 
@@ -1433,14 +1453,14 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			styler.ColourTo(i, SCE_H_ASP);
 			if (ch != '%' && ch != '$' && ch != '/') {
 				i += makoBlockType.length();
-				visibleChars += static_cast<int>(makoBlockType.length());
+				visibleChars += makoBlockType.length();
 				if (keywords4.InList(makoBlockType.c_str()))
 					styler.ColourTo(i, SCE_HP_WORD);
 				else
 					styler.ColourTo(i, SCE_H_TAGUNKNOWN);
 			}
 
-			ch = static_cast<unsigned char>(styler.SafeGetCharAt(i));
+			ch = SafeGetUnsignedCharAt(styler, i);
 			continue;
 		}
 
@@ -1458,7 +1478,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			scriptLanguage = eScriptComment;
 			state = SCE_H_COMMENT;
 			styler.ColourTo(i, SCE_H_ASP);
-			ch = static_cast<unsigned char>(styler.SafeGetCharAt(i));
+			ch = SafeGetUnsignedCharAt(styler, i);
 			continue;
 		} else if (isDjango && state == SCE_H_COMMENT && (ch == '#' && chNext == '}')) {
 			styler.ColourTo(i - 1, StateToPrint);
@@ -1494,7 +1514,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			scriptLanguage = eScriptPython;
 			styler.ColourTo(i, SCE_H_ASP);
 
-			ch = static_cast<unsigned char>(styler.SafeGetCharAt(i));
+			ch = SafeGetUnsignedCharAt(styler, i);
 			continue;
 		}
 
@@ -1506,7 +1526,9 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				inScriptType = eNonHtmlScriptPreProc;
 			else
 				inScriptType = eNonHtmlPreProc;
-
+			// fold whole script
+			if (foldHTMLPreprocessor)
+				levelCurrent++;
 			if (chNext2 == '@') {
 				i += 2; // place as if it was the second next char treated
 				visibleChars += 2;
@@ -1530,11 +1552,8 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				scriptLanguage = aspScript;
 			}
 			styler.ColourTo(i, SCE_H_ASP);
-			// fold whole script
-			if (foldHTMLPreprocessor)
-				levelCurrent++;
 			// should be better
-			ch = static_cast<unsigned char>(styler.SafeGetCharAt(i));
+			ch = SafeGetUnsignedCharAt(styler, i);
 			continue;
 		}
 
@@ -1629,7 +1648,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 		// handle the end of a pre-processor = Non-HTML
 		else if ((!isMako && !isDjango && ((inScriptType == eNonHtmlPreProc) || (inScriptType == eNonHtmlScriptPreProc)) &&
 				  (((scriptLanguage != eScriptNone) && stateAllowsTermination(state))) &&
-				  (((ch == '%') || (ch == '?')) && (chNext == '>'))) ||
+				  ((chNext == '>') && isPreProcessorEndTag(state, ch))) ||
 		         ((scriptLanguage == eScriptSGML) && (ch == '>') && (state != SCE_H_SGML_COMMENT))) {
 			if (state == SCE_H_ASPAT) {
 				aspScript = segIsScriptingIndicator(styler,
@@ -1718,7 +1737,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 					styler.ColourTo(i - 2, StateToPrint);
 				}
 				state = SCE_H_SGML_COMMENT;
-			} else if (IsASCII(ch) && isalpha(ch) && (chPrev == '%')) {
+			} else if (IsUpperOrLowerCase(ch) && (chPrev == '%')) {
 				styler.ColourTo(i - 2, StateToPrint);
 				state = SCE_H_SGML_ENTITY;
 			} else if (ch == '#') {
@@ -1777,13 +1796,13 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 					styler.ColourTo(i - 1, SCE_H_SGML_DEFAULT);
 				}
 				// find the length of the word
-				int size = 1;
-				while (setHTMLWord.Contains(static_cast<unsigned char>(styler.SafeGetCharAt(i + size))))
+				Sci_Position size = 1;
+				while (setHTMLWord.Contains(SafeGetUnsignedCharAt(styler, i + size)))
 					size++;
 				styler.ColourTo(i + size - 1, StateToPrint);
 				i += size - 1;
 				visibleChars += size - 1;
-				ch = static_cast<unsigned char>(styler.SafeGetCharAt(i));
+				ch = SafeGetUnsignedCharAt(styler, i);
 				if (scriptLanguage == eScriptSGMLblock) {
 					state = SCE_H_SGML_BLOCK_DEFAULT;
 				} else {
@@ -1837,9 +1856,9 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			}
 			break;
 		case SCE_H_SGML_SPECIAL:
-			if (!(IsASCII(ch) && isupper(ch))) {
+			if (!IsUpperCase(ch)) {
 				styler.ColourTo(i - 1, StateToPrint);
-				if (isalnum(ch)) {
+				if (IsAlphaNumeric(ch)) {
 					state = SCE_H_SGML_ERROR;
 				} else {
 					state = SCE_H_SGML_DEFAULT;
@@ -1850,7 +1869,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			if (ch == ';') {
 				styler.ColourTo(i, StateToPrint);
 				state = SCE_H_SGML_DEFAULT;
-			} else if (!(IsASCII(ch) && isalnum(ch)) && ch != '-' && ch != '.') {
+			} else if (!(IsAlphaNumeric(ch)) && ch != '-' && ch != '.') {
 				styler.ColourTo(i, SCE_H_SGML_ERROR);
 				state = SCE_H_SGML_DEFAULT;
 			}
@@ -1859,14 +1878,15 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			if (ch == ';') {
 				styler.ColourTo(i, StateToPrint);
 				state = SCE_H_DEFAULT;
-			}
-			if (ch != '#' && !(IsASCII(ch) && isalnum(ch))	// Should check that '#' follows '&', but it is unlikely anyway...
-				&& ch != '.' && ch != '-' && ch != '_' && ch != ':') { // valid in XML
-				if (!IsASCII(ch))	// Possibly start of a multibyte character so don't allow this byte to be in entity style
-					styler.ColourTo(i-1, SCE_H_TAGUNKNOWN);
-				else
-					styler.ColourTo(i, SCE_H_TAGUNKNOWN);
+			} else if (!setEntity.Contains(ch)) {
+				styler.ColourTo(i-1, SCE_H_TAGUNKNOWN);
 				state = SCE_H_DEFAULT;
+				if (!isLineEnd(ch)) {
+					// Retreat one byte so the character that is invalid inside entity
+					// may start something else like a tag.
+					--i;
+					continue;
+				}
 			}
 			break;
 		case SCE_H_TAGUNKNOWN:
@@ -1880,6 +1900,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 					} else {
 						scriptLanguage = eScriptNone;
 					}
+					isLanguageType = false;
 					eClass = SCE_H_TAG;
 				}
 				if (ch == '>') {
@@ -1925,14 +1946,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			break;
 		case SCE_H_ATTRIBUTE:
 			if (!setAttributeContinue.Contains(ch)) {
-				if (inScriptType == eNonHtmlScript) {
-					const int scriptLanguagePrev = scriptLanguage;
-					clientScript = segIsScriptingIndicator(styler, styler.GetStartSegment(), i - 1, scriptLanguage);
-					scriptLanguage = clientScript;
-					if ((scriptLanguagePrev != scriptLanguage) && (scriptLanguage == eScriptNone))
-						inScriptType = eHtml;
-				}
-				classifyAttribHTML(styler.GetStartSegment(), i - 1, keywords, styler);
+				isLanguageType = classifyAttribHTML(inScriptType, styler.GetStartSegment(), i - 1, keywords, styler);
 				if (ch == '>') {
 					styler.ColourTo(i, SCE_H_TAG);
 					if (inScriptType == eNonHtmlScript) {
@@ -2007,8 +2021,10 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			break;
 		case SCE_H_DOUBLESTRING:
 			if (ch == '\"') {
-				if (inScriptType == eNonHtmlScript) {
+				if (isLanguageType) {
 					scriptLanguage = segIsScriptingIndicator(styler, styler.GetStartSegment(), i, scriptLanguage);
+					clientScript = scriptLanguage;
+					isLanguageType = false;
 				}
 				styler.ColourTo(i, SCE_H_DOUBLESTRING);
 				state = SCE_H_OTHER;
@@ -2016,8 +2032,10 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 			break;
 		case SCE_H_SINGLESTRING:
 			if (ch == '\'') {
-				if (inScriptType == eNonHtmlScript) {
+				if (isLanguageType) {
 					scriptLanguage = segIsScriptingIndicator(styler, styler.GetStartSegment(), i, scriptLanguage);
+					clientScript = scriptLanguage;
+					isLanguageType = false;
 				}
 				styler.ColourTo(i, SCE_H_SINGLESTRING);
 				state = SCE_H_OTHER;
@@ -2031,7 +2049,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				} else if (ch == '\'' && chPrev == '=') {
 					state = SCE_H_SINGLESTRING;
 				} else {
-					if (IsNumber(styler.GetStartSegment(), styler)) {
+					if (IsNumberChar(styler[styler.GetStartSegment()])) {
 						styler.ColourTo(i - 1, SCE_H_NUMBER);
 					} else {
 						styler.ColourTo(i - 1, StateToPrint);
@@ -2186,10 +2204,10 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 		case SCE_HJ_REGEX:
 			if (ch == '\r' || ch == '\n' || ch == '/') {
 				if (ch == '/') {
-					while (IsASCII(chNext) && islower(chNext)) {   // gobble regex flags
+					while (IsLowerCase(chNext)) {   // gobble regex flags
 						i++;
 						ch = chNext;
-						chNext = static_cast<unsigned char>(styler.SafeGetCharAt(i + 1));
+						chNext = SafeGetUnsignedCharAt(styler, i + 1);
 					}
 				}
 				styler.ColourTo(i, StateToPrint);
@@ -2199,7 +2217,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				if (chNext == '\\' || chNext == '/') {
 					i++;
 					ch = chNext;
-					chNext = static_cast<unsigned char>(styler.SafeGetCharAt(i + 1));
+					chNext = SafeGetUnsignedCharAt(styler, i + 1);
 				}
 			}
 			break;
@@ -2287,7 +2305,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 					state = SCE_HP_TRIPLEDOUBLE;
 					ch = ' ';
 					chPrev = ' ';
-					chNext = static_cast<unsigned char>(styler.SafeGetCharAt(i + 1));
+					chNext = SafeGetUnsignedCharAt(styler, i + 1);
 				} else {
 					//					state = statePrintForState(SCE_HP_STRING,inScriptType);
 					state = SCE_HP_STRING;
@@ -2299,7 +2317,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 					state = SCE_HP_TRIPLE;
 					ch = ' ';
 					chPrev = ' ';
-					chNext = static_cast<unsigned char>(styler.SafeGetCharAt(i + 1));
+					chNext = SafeGetUnsignedCharAt(styler, i + 1);
 				} else {
 					state = SCE_HP_CHARACTER;
 				}
@@ -2325,7 +2343,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 						state = SCE_HP_TRIPLEDOUBLE;
 						ch = ' ';
 						chPrev = ' ';
-						chNext = static_cast<unsigned char>(styler.SafeGetCharAt(i + 1));
+						chNext = SafeGetUnsignedCharAt(styler, i + 1);
 					} else {
 						state = SCE_HP_STRING;
 					}
@@ -2335,7 +2353,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 						state = SCE_HP_TRIPLE;
 						ch = ' ';
 						chPrev = ' ';
-						chNext = static_cast<unsigned char>(styler.SafeGetCharAt(i + 1));
+						chNext = SafeGetUnsignedCharAt(styler, i + 1);
 					} else {
 						state = SCE_HP_CHARACTER;
 					}
@@ -2355,7 +2373,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				if (chNext == '\"' || chNext == '\'' || chNext == '\\') {
 					i++;
 					ch = chNext;
-					chNext = static_cast<unsigned char>(styler.SafeGetCharAt(i + 1));
+					chNext = SafeGetUnsignedCharAt(styler, i + 1);
 				}
 			} else if (ch == '\"') {
 				styler.ColourTo(i, StateToPrint);
@@ -2367,7 +2385,7 @@ void SCI_METHOD LexerHTML::Lex(Sci_PositionU startPos, Sci_Position length, int 
 				if (chNext == '\"' || chNext == '\'' || chNext == '\\') {
 					i++;
 					ch = chNext;
-					chNext = static_cast<unsigned char>(styler.SafeGetCharAt(i + 1));
+					chNext = SafeGetUnsignedCharAt(styler, i + 1);
 				}
 			} else if (ch == '\'') {
 				styler.ColourTo(i, StateToPrint);

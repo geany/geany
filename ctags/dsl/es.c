@@ -30,6 +30,7 @@
 #include <string.h>
 #include <errno.h>
 #include <limits.h>
+#include <math.h>
 
 #include <regex.h>
 
@@ -822,7 +823,6 @@ es_symbol_print(const EsObject* object, MIO* fp)
 	unsigned char cc;
 	unsigned char mask;
 	int needs_bar;
-	int i;
 
 	string = es_symbol_get(object);
 	if (!string)
@@ -840,7 +840,7 @@ es_symbol_print(const EsObject* object, MIO* fp)
     {
 		/* 0 => 1? */
 		mask = 0x2;
-		for (i = 0; i< len; i++)
+		for (size_t i = 0; i< len; i++)
 		{
 			c = string[i];
 			cc = get_char_class(c);
@@ -854,7 +854,7 @@ es_symbol_print(const EsObject* object, MIO* fp)
 	if (needs_bar)
 		mio_printf(fp, "|");
 
-	for (i = 0; i < len; i++)
+	for (size_t i = 0; i < len; i++)
     {
 		c = string[i];
 		if (c == '\\' || c == '|')
@@ -1028,7 +1028,7 @@ es_string_print(const EsObject* object, MIO* fp)
 	const char* string;
 	char  c;
 	size_t len;
-	int      i;
+	size_t   i;
 
 
 	string = es_string_get(object);
@@ -1350,6 +1350,29 @@ es_regex_exec    (const EsObject* regex,
 {
 	return regexec (((EsRegex*)regex)->code, es_string_get (str),
 					0, NULL, 0)? es_false: es_true;
+}
+
+EsObject*
+es_regex_exec_extract_match_new (const EsObject* regex,
+								 const EsObject* str,
+								 unsigned int group)
+{
+	EsObject *r;
+	regmatch_t *pmatch = calloc(group + 1, sizeof(regmatch_t));
+	if (!pmatch)
+		return ES_ERROR_MEMORY;
+
+	const char *s = es_string_get (str);
+	if (regexec(((EsRegex*)regex)->code, s, group + 1, pmatch, 0))
+		r = es_false;
+	else
+		r = pmatch[group].rm_so == -1
+			? es_nil:
+			es_string_newL(s + pmatch[group].rm_so,
+						   pmatch[group].rm_eo - pmatch[group].rm_so);
+
+	free (pmatch);
+	return r;
 }
 
 /*
@@ -2167,7 +2190,7 @@ static void
 dump_token (MIO* stream, const char* prefix, Token* seed)
 {
 	const char* buf;
-	int i;
+	size_t i;
 	char  c;
 
 
@@ -2562,8 +2585,8 @@ is_real      (const char* cstr,
 		return 0;
 	else if (*endptr != '\0')
 		return 0;
-
-	/* TODO: INF, NAN... */
+	else if (isinf(*d) || isnan(*d))
+		return 0;
 	return 1;
 }
 
