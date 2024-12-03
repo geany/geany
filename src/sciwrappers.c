@@ -591,6 +591,7 @@ GEANY_API_SYMBOL
 void sci_set_selection_start(ScintillaObject *sci, gint position)
 {
 	SSM(sci, SCI_SETSELECTIONSTART, (uptr_t) position, 0);
+	SSM(sci, SCI_CHOOSECARETX, 0, 0);
 }
 
 
@@ -601,12 +602,14 @@ GEANY_API_SYMBOL
 void sci_set_selection_end(ScintillaObject *sci, gint position)
 {
 	SSM(sci, SCI_SETSELECTIONEND, (uptr_t) position, 0);
+	SSM(sci, SCI_CHOOSECARETX, 0, 0);
 }
 
 
 void sci_set_selection(ScintillaObject *sci, gint anchorPos, gint currentPos)
 {
 	SSM(sci, SCI_SETSEL, (uptr_t) anchorPos, currentPos);
+	SSM(sci, SCI_CHOOSECARETX, 0, 0);
 }
 
 
@@ -1320,6 +1323,7 @@ void sci_select_all(ScintillaObject *sci)
 {
 	SSM(sci, SCI_SELECTALL, 0, 0);
 	SSM(sci, SCI_SWAPMAINANCHORCARET, 0, 0);
+	SSM(sci, SCI_CHOOSECARETX, 0, 0);
 }
 
 
