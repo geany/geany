@@ -1319,6 +1319,7 @@ void sci_indicator_clear(ScintillaObject *sci, gint pos, gint len)
 void sci_select_all(ScintillaObject *sci)
 {
 	SSM(sci, SCI_SELECTALL, 0, 0);
+	SSM(sci, SCI_SWAPMAINANCHORCARET, 0, 0);
 }
 
 
