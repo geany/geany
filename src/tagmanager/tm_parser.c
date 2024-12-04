@@ -1242,6 +1242,24 @@ static TMParserMapGroup group_MESON[] = {
 	{N_("Tests"), TM_ICON_NONE, tm_tag_field_t},
 };
 
+static TMParserMapEntry map_SCSS[] = {
+	{'m', tm_tag_macro_t},       // mixin
+	{'f', tm_tag_function_t},    // function
+	{'v', tm_tag_member_t},      // variable
+	{'c', tm_tag_class_t},       // class
+	{'P', tm_tag_enum_t},        // placeholder
+	{'i', tm_tag_variable_t},    // id
+	{'z', tm_tag_local_var_t},   // parameter
+};
+static TMParserMapGroup group_SCSS[] = {
+	{N_("Mixins"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Variables"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Placeholders"), TM_ICON_OTHER, tm_tag_enum_t},
+	{N_("ID Selectors"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1320,6 +1338,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(FORTH),
 	MAP_ENTRY(MESON),
 	MAP_ENTRY(SYSVERILOG),
+	MAP_ENTRY(SCSS),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
