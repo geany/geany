@@ -27,7 +27,7 @@
 #ifndef GEANY_SEARCH_H
 #define GEANY_SEARCH_H 1
 
-#include <gtk/gtk.h>
+#include <glib.h>
 
 
 G_BEGIN_DECLS
@@ -120,7 +120,7 @@ void search_show_replace_dialog(void);
 
 void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir);
 
-gboolean search_show_wrap_dialog(GtkWidget *parent, const gchar *search_text);
+gboolean search_show_wrap_dialog(const gchar *search_text);
 
 void geany_match_info_free(GeanyMatchInfo *info);
 

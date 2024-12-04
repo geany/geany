@@ -2316,7 +2316,7 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolea
  */
 gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
 		GeanyFindFlags flags, gboolean search_backwards, GeanyMatchInfo **match_,
-		gboolean scroll, GtkWidget *parent)
+		gboolean scroll)
 {
 	gint selection_end, selection_start, search_pos;
 
@@ -2370,12 +2370,12 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
 
 		/* we searched only part of the document, so ask whether to wraparound. */
 		if (search_prefs.always_wrap ||
-			search_show_wrap_dialog(parent, original_text))
+			search_show_wrap_dialog(original_text))
 		{
 			gint ret;
 
 			sci_set_current_position(doc->editor->sci, (search_backwards) ? sci_len : 0, FALSE);
-			ret = document_find_text(doc, text, original_text, flags, search_backwards, match_, scroll, parent);
+			ret = document_find_text(doc, text, original_text, flags, search_backwards, match_, scroll);
 			if (ret == -1)
 			{	/* return to original cursor position if not found */
 				sci_set_current_position(doc->editor->sci, selection_start, FALSE);
@@ -2416,7 +2416,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	if (selection_end == selection_start)
 	{
 		/* no selection so just find the next match */
-		document_find_text(doc, find_text, original_find_text, flags, search_backwards, NULL, TRUE, NULL);
+		document_find_text(doc, find_text, original_find_text, flags, search_backwards, NULL, TRUE);
 		return -1;
 	}
 	/* there's a selection so go to the start before finding to search through it
@@ -2426,7 +2426,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	else
 		sci_goto_pos(doc->editor->sci, selection_start, TRUE);
 
-	search_pos = document_find_text(doc, find_text, original_find_text, flags, search_backwards, &match, TRUE, NULL);
+	search_pos = document_find_text(doc, find_text, original_find_text, flags, search_backwards, &match, TRUE);
 	/* return if the original selected text did not match (at the start of the selection) */
 	if (search_pos != selection_start)
 	{
