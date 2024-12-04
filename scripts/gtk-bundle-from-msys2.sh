@@ -39,12 +39,14 @@ fribidi
 gcc-libs
 gdk-pixbuf2
 gettext-runtime
+giflib
 glib2
 graphite2
 grep
 gtk-update-icon-cache
 harfbuzz
 hicolor-icon-theme
+jbigkit
 lerc
 libdatrie
 libdeflate
@@ -56,6 +58,7 @@ libpng
 librsvg
 libthai
 libtiff
+libwebp
 libwinpthread-git
 libxml2
 pango
@@ -63,6 +66,7 @@ pcre2
 pixman
 xz
 zlib
+zstd
 "
 
 handle_command_line_options() {
