@@ -1153,7 +1153,16 @@ gboolean search_show_wrap_dialog(GtkWidget *parent, const gchar *search_text)
 	gboolean ret;
 	GtkWidget *dialog;
 	GtkWidget *btn;
+	GtkWidget *visible_dialog = NULL;
 	gchar *question_text;
+
+	if (find_dlg.dialog && gtk_widget_is_visible(find_dlg.dialog))
+		visible_dialog = find_dlg.dialog;
+	else if (replace_dlg.dialog && gtk_widget_is_visible(replace_dlg.dialog))
+		visible_dialog = replace_dlg.dialog;
+
+	if (visible_dialog)
+		gtk_widget_hide(visible_dialog);
 
 	if (parent == NULL)
 		parent = main_widgets.window;
@@ -1178,6 +1187,9 @@ gboolean search_show_wrap_dialog(GtkWidget *parent, const gchar *search_text)
 
 	gtk_widget_destroy(dialog);
 	g_free(question_text);
+
+	if (visible_dialog && ret == GTK_RESPONSE_YES)
+		gtk_widget_show(visible_dialog);
 
 	return ret == GTK_RESPONSE_YES;
 }
