@@ -526,6 +526,7 @@ static void create_find_dialog(void)
 		G_CALLBACK(on_expander_activated), &find_dlg.all_expanded);
 
 	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_widget_set_margin_top(bbox, 6);
 
 	/* close window checkbox */
 	check_close = gtk_check_button_new_with_mnemonic(_("Close _dialog"));
@@ -719,6 +720,7 @@ static void create_replace_dialog(void)
 		G_CALLBACK(on_expander_activated), &replace_dlg.all_expanded);
 
 	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_widget_set_margin_top(bbox, 6);
 
 	/* close window checkbox */
 	check_close = gtk_check_button_new_with_mnemonic(_("Close _dialog"));
