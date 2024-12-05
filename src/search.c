@@ -373,9 +373,8 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	gtk_box_pack_start(GTK_BOX(mbox), checkbox5, FALSE, FALSE, 0);
 
 	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
-	gtk_box_set_homogeneous(GTK_BOX(hbox), TRUE);
-	gtk_container_add(GTK_CONTAINER(hbox), fbox);
-	gtk_container_add(GTK_CONTAINER(hbox), mbox);
+	gtk_box_pack_start(GTK_BOX(hbox), fbox, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), mbox, TRUE, TRUE, 0);
 	return hbox;
 }
 
