@@ -1621,6 +1621,31 @@ static void cb_func_menu_opencolorchooser(G_GNUC_UNUSED guint key_id)
 }
 
 
+static void on_toggle_menubar(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
+	gboolean show = TRUE;
+
+	if (gtk_widget_is_visible(geany_menubar))
+	{
+		GeanyKeyGroup *group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
+		GeanyKeyBinding *kb = keybindings_get_item(group, GEANY_KEYS_TOGGLE_MENUBAR);
+		if (kb->key != 0)
+		{
+			gchar *val = gtk_accelerator_name(kb->key, kb->mods);
+			gtk_widget_hide(geany_menubar);
+			show = FALSE;
+			msgwin_status_add(_("Menubar has been hidden. To reshow it, use: %s"), val);
+			g_free(val);
+		}
+	}
+	else
+		gtk_widget_show(geany_menubar);
+
+	ui_prefs.menubar_visible = show;
+}
+
+
 static gboolean cb_func_view_action(guint key_id)
 {
 	switch (key_id)
@@ -1641,29 +1666,8 @@ static gboolean cb_func_view_action(guint key_id)
 			on_normal_size1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_TOGGLE_MENUBAR:
-		{
-			GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
-			gboolean show = TRUE;
-
-			if (gtk_widget_is_visible(geany_menubar))
-			{
-				GeanyKeyGroup *group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
-				GeanyKeyBinding *kb = keybindings_get_item(group, GEANY_KEYS_TOGGLE_MENUBAR);
-				if (kb->key != 0)
-				{
-					gchar *val = gtk_accelerator_name(kb->key, kb->mods);
-					gtk_widget_hide(geany_menubar);
-					show = FALSE;
-					msgwin_status_add(_("Menubar has been hidden. To reshow it, use: %s"), val);
-					g_free(val);
-				}
-			}
-			else
-				gtk_widget_show(geany_menubar);
-
-			ui_prefs.menubar_visible = show;
+			on_toggle_menubar(NULL, NULL);
 			break;
-		}
 		default:
 			break;
 	}
