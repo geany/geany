@@ -1643,24 +1643,27 @@ static gboolean cb_func_view_action(guint key_id)
 		case GEANY_KEYS_TOGGLE_MENUBAR:
 		{
 			GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
+			gboolean show = TRUE;
+
 			if (gtk_widget_is_visible(geany_menubar))
 			{
 				GeanyKeyGroup *group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
 				GeanyKeyBinding *kb = keybindings_get_item(group, GEANY_KEYS_TOGGLE_MENUBAR);
 				if (kb->key != 0)
 				{
-					gtk_widget_hide(geany_menubar);
 					gchar *val = gtk_accelerator_name(kb->key, kb->mods);
-					msgwin_status_add("Menubar has been hidden.  To reshow it, use: %s", val);
+					gtk_widget_hide(geany_menubar);
+					show = FALSE;
+					msgwin_status_add(_("Menubar has been hidden. To reshow it, use: %s"), val);
 					g_free(val);
 				}
-				else
-					msgwin_status_add("Menubar will not be hidden until after a keybinding to reshow it has been set.");
 			}
 			else
 				gtk_widget_show(geany_menubar);
-		}
+
+			ui_prefs.menubar_visible = show;
 			break;
+		}
 		default:
 			break;
 	}

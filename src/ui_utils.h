@@ -74,7 +74,6 @@ typedef struct GeanyInterfacePrefs
 	gint			openfiles_path_mode;
 	/** number of characters of a filename to be visible on the tab label */
 	gint			tab_label_len;
-	gboolean		on_startup_hide_menubar;	/**< hide menubar on startup */
 }
 GeanyInterfacePrefs;
 

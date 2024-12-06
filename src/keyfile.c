@@ -40,6 +40,7 @@
 #include "encodingsprivate.h"
 #include "filetypes.h"
 #include "geanyobject.h"
+#include "keybindings.h"
 #include "main.h"
 #include "msgwindow.h"
 #include "prefs.h"
@@ -664,19 +665,13 @@ static void save_dialog_prefs(GKeyFile *config)
 
 static void save_ui_prefs(GKeyFile *config)
 {
+	g_key_file_set_boolean(config, PACKAGE, "menubar_visible", ui_prefs.menubar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
 	g_key_file_set_boolean(config, PACKAGE, "symbols_group_by_type", ui_prefs.symbols_group_by_type);
 	g_key_file_set_string(config, PACKAGE, "color_picker_palette", ui_prefs.color_picker_palette);
-
-	/* Update and save current menubar state */
-	{
-		GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
-		ui_prefs.menubar_visible = gtk_widget_is_visible(geany_menubar);
-		g_key_file_set_boolean(config, PACKAGE, "menubar_visible", ui_prefs.menubar_visible);
-	}
 
 	/* get the text from the scribble textview */
 	{
@@ -1445,6 +1440,10 @@ void configuration_apply_settings(void)
 		ui_prefs.fullscreen = TRUE;
 		ui_set_fullscreen();
 	}
+
+	/* restore menubar state or hide on startup */
+	if (!ui_prefs.menubar_visible)
+		keybindings_send_command(GEANY_KEY_GROUP_VIEW, GEANY_KEYS_TOGGLE_MENUBAR);
 
 	msgwin_show_hide_tabs();
 }
