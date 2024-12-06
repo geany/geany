@@ -1630,17 +1630,41 @@ static void on_toggle_menubar(GtkMenuItem *menuitem, gpointer user_data)
 	{
 		GeanyKeyGroup *group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
 		GeanyKeyBinding *kb = keybindings_get_item(group, GEANY_KEYS_TOGGLE_MENUBAR);
+
 		if (kb->key != 0)
 		{
 			gchar *val = gtk_accelerator_name(kb->key, kb->mods);
+			GtkWidget *item;
+
 			gtk_widget_hide(geany_menubar);
 			show = FALSE;
-			msgwin_status_add(_("Menubar has been hidden. To reshow it, use: %s"), val);
+
+			item = gtk_separator_menu_item_new();
+			gtk_container_add(GTK_CONTAINER(main_widgets.editor_menu), item);
+			gtk_widget_show(item);
+			ui_hookup_widget(main_widgets.editor_menu, item, "context_menu_menubar_item_separator");
+
+			item = gtk_menu_item_new_with_mnemonic(_("Show _Menubar"));
+			gtk_container_add(GTK_CONTAINER(main_widgets.editor_menu), item);
+			gtk_widget_show(item);
+			g_signal_connect(item, "activate", G_CALLBACK(on_toggle_menubar), NULL);
+			ui_hookup_widget(main_widgets.editor_menu, item, "context_menu_menubar_item");
+
+			msgwin_status_add(_("Menubar has been hidden. To reshow it, press %s or use the Show Menubar item from the context menu."), val);
 			g_free(val);
 		}
 	}
 	else
+	{
+		GtkWidget *item;
+
+		item = ui_lookup_widget(main_widgets.editor_menu, "context_menu_menubar_item_separator");
+		gtk_widget_destroy(item);
+		item = ui_lookup_widget(main_widgets.editor_menu, "context_menu_menubar_item");
+		gtk_widget_destroy(item);
+
 		gtk_widget_show(geany_menubar);
+	}
 
 	ui_prefs.menubar_visible = show;
 }
