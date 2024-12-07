@@ -42,7 +42,7 @@ struct SocketInfo
 
 extern struct SocketInfo socket_info;
 
-gint socket_init(gint argc, gchar **argv, gushort socket_port);
+gint socket_init(gint argc, gchar **argv, gushort socket_port, const gchar *desktop_startup_id);
 
 gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpointer data);
 
