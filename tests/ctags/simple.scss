@@ -1,0 +1,89 @@
+// _library.scss
+$black: #000 !default;
+$border-radius: 0.25rem !default;
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.15) !default;
+
+code {
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+}
+
+.button {
+  padding: 3px 10px;
+  font-size: 12px;
+  border-radius: 3px;
+  border: 1px solid #e1e4e8;
+}
+
+@mixin prefix($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+    -#{$prefix}-#{$property}: $value;
+  }
+  #{$property}: $value;
+}
+
+.gray {
+  @include prefix(filter, grayscale(50%), moz webkit);
+}
+
+.enlarge {
+  font-size: 14px;
+  transition: {
+    property: font-size;
+    duration: 4s;
+    delay: 2s;
+  }
+
+  &:hover { font-size: 36px; }
+}
+
+%toolbelt {
+  box-sizing: border-box;
+  border-top: 1px rgba(#000, .12) solid;
+  padding: 16px 0;
+  width: 100%;
+
+  &:hover { border: 2px rgba(#000, .5) solid; }
+}
+
+.action-buttons {
+  @extend %toolbelt;
+  color: #4285f4;
+}
+
+.reset-buttons {
+  @extend %toolbelt;
+  color: #cddc39;
+}
+
+@use "sass:list";
+@use "sass:meta";
+@use "sass:string";
+
+/// Return a copy of $list with all elements for which $condition returns `true`
+/// removed.
+@function remove-where($list, $condition) {
+  $new-list: ();
+  $separator: list.separator($list);
+  @each $element in $list {
+    @if not meta.call($condition, $element) {
+      $new-list: list.append($new-list, $element, $separator: $separator);
+    }
+  }
+  @return $new-list;
+}
+
+$fonts: Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+.content {
+  @function contains-helvetica($string) {
+    @return string.index($string, "Helvetica");
+  }
+  font-family: remove-where($fonts, meta.get-function("contains-helvetica"));
+}
+
+#para1 {
+  text-align: center;
+  color: red;
+}
+
