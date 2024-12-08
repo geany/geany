@@ -45,13 +45,17 @@ grep
 gtk-update-icon-cache
 harfbuzz
 hicolor-icon-theme
+lerc
 libdatrie
+libdeflate
 libepoxy
 libffi
 libiconv
+libjpeg-turbo
 libpng
 librsvg
 libthai
+libtiff
 libwinpthread-git
 libxml2
 pango
@@ -248,7 +252,7 @@ cleanup_unnecessary_files() {
 	rm -rf share/xml
 	rm -rf usr/share/libalpm
 	# cleanup binaries and libs (delete anything except *.dll, glib-compile-schemas and GSpawn helper binaries)
-	find bin ! -name '*.dll' ! -name 'grep.exe' ! -name 'gspawn-win32-helper*.exe' ! -name 'glib-compile-schemas.exe' -type f -delete
+	find bin ! -name '*.dll' ! -name 'grep.exe' ! -name 'gspawn-win64-helper*.exe' ! -name 'glib-compile-schemas.exe' -type f -delete
 	# cleanup empty directories
 	find . -type d -empty -delete
 }
