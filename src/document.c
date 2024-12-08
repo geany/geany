@@ -2307,42 +2307,6 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolea
 }
 
 
-/* like dialogs_show_question_full() but makes the non-cancel button default */
-static gboolean show_wrap_search_dialog(GtkWidget *parent, const gchar *search_text)
-{
-	gboolean ret;
-	GtkWidget *dialog;
-	GtkWidget *btn;
-	gchar *question_text;
-
-	if (parent == NULL && main_status.main_window_realized)
-		parent = main_widgets.window;
-
-	question_text = g_strdup_printf(_("\"%s\" was not found."), search_text);
-
-	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
-		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
-		GTK_BUTTONS_NONE, "%s", question_text);
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
-	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
-
-	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-		"%s", _("Wrap search and find again?"));
-
-	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_NO);
-	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_FIND, GTK_RESPONSE_YES);
-	gtk_widget_grab_default(btn);
-
-	ret = gtk_dialog_run(GTK_DIALOG(dialog));
-
-	gtk_widget_destroy(dialog);
-	g_free(question_text);
-
-	return ret == GTK_RESPONSE_YES;
-}
-
-
 /* General search function, used from the find dialog.
  * Returns -1 on failure or the start position of the matching text.
  * Will skip past any selection, ignoring it.
@@ -2352,7 +2316,7 @@ static gboolean show_wrap_search_dialog(GtkWidget *parent, const gchar *search_t
  */
 gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
 		GeanyFindFlags flags, gboolean search_backwards, GeanyMatchInfo **match_,
-		gboolean scroll, GtkWidget *parent)
+		gboolean scroll)
 {
 	gint selection_end, selection_start, search_pos;
 
@@ -2406,12 +2370,12 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
 
 		/* we searched only part of the document, so ask whether to wraparound. */
 		if (search_prefs.always_wrap ||
-			show_wrap_search_dialog(parent, original_text))
+			search_show_wrap_dialog(original_text))
 		{
 			gint ret;
 
 			sci_set_current_position(doc->editor->sci, (search_backwards) ? sci_len : 0, FALSE);
-			ret = document_find_text(doc, text, original_text, flags, search_backwards, match_, scroll, parent);
+			ret = document_find_text(doc, text, original_text, flags, search_backwards, match_, scroll);
 			if (ret == -1)
 			{	/* return to original cursor position if not found */
 				sci_set_current_position(doc->editor->sci, selection_start, FALSE);
@@ -2452,7 +2416,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	if (selection_end == selection_start)
 	{
 		/* no selection so just find the next match */
-		document_find_text(doc, find_text, original_find_text, flags, search_backwards, NULL, TRUE, NULL);
+		document_find_text(doc, find_text, original_find_text, flags, search_backwards, NULL, TRUE);
 		return -1;
 	}
 	/* there's a selection so go to the start before finding to search through it
@@ -2462,7 +2426,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 	else
 		sci_goto_pos(doc->editor->sci, selection_start, TRUE);
 
-	search_pos = document_find_text(doc, find_text, original_find_text, flags, search_backwards, &match, TRUE, NULL);
+	search_pos = document_find_text(doc, find_text, original_find_text, flags, search_backwards, &match, TRUE);
 	/* return if the original selected text did not match (at the start of the selection) */
 	if (search_pos != selection_start)
 	{

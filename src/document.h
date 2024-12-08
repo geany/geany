@@ -261,7 +261,7 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolea
 
 gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
 		GeanyFindFlags flags, gboolean search_backwards, GeanyMatchInfo **match_,
-		gboolean scroll, GtkWidget *parent);
+		gboolean scroll);
 
 gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *original_find_text,
 		const gchar *replace_text, GeanyFindFlags flags, gboolean search_backwards);
