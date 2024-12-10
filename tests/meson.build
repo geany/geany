@@ -324,6 +324,7 @@ ctags_tests = [
 	'ctags/simple.raku.tags',
 	'ctags/simple.rb.tags',
 	'ctags/simple.rst.tags',
+	'ctags/simple.scss.tags',
 	'ctags/simple.sh.tags',
 	'ctags/simple.tcl.tags',
 	'ctags/simple.ts.tags',
