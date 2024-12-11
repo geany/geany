@@ -3072,9 +3072,8 @@ void document_undo(GeanyDocument *doc)
 			}
 			case UNDO_EOL:
 			{
+				gint old_eol_mode = sci_get_eol_mode(doc->editor->sci);
 				undo_action *next_action;
-
-				document_redo_add(doc, UNDO_EOL, GINT_TO_POINTER(sci_get_eol_mode(doc->editor->sci)));
 
 				sci_set_eol_mode(doc->editor->sci, GPOINTER_TO_INT(action->data));
 
@@ -3087,6 +3086,27 @@ void document_undo(GeanyDocument *doc)
 				next_action = g_trash_stack_peek(&doc->priv->undo_actions);
 				if (next_action && next_action->type == UNDO_SCINTILLA)
 					document_undo(doc);
+
+				document_redo_add(doc, UNDO_EOL, GINT_TO_POINTER(old_eol_mode));
+				break;
+			}
+			case UNDO_INDENT:
+			{
+				GeanyIndentType old_indent_type = doc->editor->indent_type;
+				undo_action *next_action;
+
+				editor_set_indent(doc->editor, GPOINTER_TO_INT(action->data), doc->editor->indent_width);
+
+				ui_document_show_hide(doc);
+
+				/* When undoing, UNDO_INDENT is always followed by UNDO_SCINTILLA
+				 * which undos the indent type change and should be
+				 * performed together with UNDO_INDENT. */
+				next_action = g_trash_stack_peek(&doc->priv->undo_actions);
+				if (next_action && next_action->type == UNDO_SCINTILLA)
+					document_undo(doc);
+
+				document_redo_add(doc, UNDO_INDENT, GINT_TO_POINTER(old_indent_type));
 				break;
 			}
 			case UNDO_RELOAD:
@@ -3153,18 +3173,9 @@ void document_redo(GeanyDocument *doc)
 		{
 			case UNDO_SCINTILLA:
 			{
-				undo_action *next_action;
-
 				document_undo_add_internal(doc, UNDO_SCINTILLA, NULL);
 
 				sci_redo(doc->editor->sci);
-
-				/* When redoing an EOL change, the UNDO_SCINTILLA which changes
-				 * the line ends in the editor is followed by UNDO_EOL
-				 * which should be performed together with UNDO_SCINTILLA. */
-				next_action = g_trash_stack_peek(&doc->priv->redo_actions);
-				if (next_action != NULL && next_action->type == UNDO_EOL)
-					document_redo(doc);
 				break;
 			}
 			case UNDO_BOM:
@@ -3187,14 +3198,43 @@ void document_redo(GeanyDocument *doc)
 				ui_document_show_hide(doc);
 				break;
 			}
+			case UNDO_INDENT:
+			{
+				GeanyIndentType old_indent_type = doc->editor->indent_type;
+				undo_action *next_action;
+
+				editor_set_indent(doc->editor, GPOINTER_TO_INT(action->data), doc->editor->indent_width);
+
+				ui_document_show_hide(doc);
+
+				/* When redoing, UNDO_INDENT is always followed by UNDO_SCINTILLA
+				 * which redos the indent type change and should be
+				 * performed together with UNDO_INDENT. */
+				next_action = g_trash_stack_peek(&doc->priv->undo_actions);
+				if (next_action && next_action->type == UNDO_SCINTILLA)
+					document_redo(doc);
+
+				document_undo_add_internal(doc, UNDO_INDENT, GINT_TO_POINTER(old_indent_type));
+				break;
+			}
 			case UNDO_EOL:
 			{
-				document_undo_add_internal(doc, UNDO_EOL, GINT_TO_POINTER(sci_get_eol_mode(doc->editor->sci)));
+				gint old_eol_mode = sci_get_eol_mode(doc->editor->sci);
+				undo_action *next_action;
 
 				sci_set_eol_mode(doc->editor->sci, GPOINTER_TO_INT(action->data));
 
 				ui_update_statusbar(doc, -1);
 				ui_document_show_hide(doc);
+
+				/* When redoing, UNDO_EOL is always followed by UNDO_SCINTILLA
+				 * which redos the indent type change and should be
+				 * performed together with UNDO_EOL. */
+				next_action = g_trash_stack_peek(&doc->priv->undo_actions);
+				if (next_action && next_action->type == UNDO_SCINTILLA)
+					document_redo(doc);
+
+				document_undo_add_internal(doc, UNDO_EOL, GINT_TO_POINTER(old_eol_mode));
 				break;
 			}
 			case UNDO_RELOAD:
