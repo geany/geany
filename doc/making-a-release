@@ -3,6 +3,9 @@ For major releases:
 * Agree string freeze period for translations.
 * Try to synchronize release date with geany-plugins.
 
+If not updated during the release cycle, copy the latest versions themes from
+geany-themes to Geany source tree using scripts/update-themes.py.
+
 Update NEWS file - ideally each committer should review their changes
 and summarize the interesting ones.  Use `git log --author='name'`
 to filter commits by a particular developer name.
