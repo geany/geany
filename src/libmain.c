@@ -1068,6 +1068,18 @@ gint main_lib(gint argc, gchar **argv)
 #ifdef ENABLE_NLS
 	main_locale_init(utils_resource_dir(RESOURCE_DIR_LOCALE), GETTEXT_PACKAGE);
 #endif
+
+	/* Magic ID used on X11 and Wayland for bringing our existing window on top;
+	 * need to read it here, since GTK will clear this from the environment in
+	 * gtk_init () (called from parse_command_line_options () below). Need to
+	 * make a copy, since the value is not guaranteed to be valid after calling
+	 * unsetenv() (which is done by GTK). */
+#ifdef HAVE_SOCKET
+	gchar *desktop_startup_id = g_strdup(getenv("DESKTOP_STARTUP_ID"));
+	if (!desktop_startup_id)
+		desktop_startup_id = g_strdup(getenv("XDG_ACTIVATION_TOKEN"));
+#endif
+
 	/* initialize TM before parsing command-line - needed for tag file generation */
 	app->tm_workspace = tm_get_workspace();
 	parse_command_line_options(&argc, &argv);
@@ -1097,7 +1109,7 @@ gint main_lib(gint argc, gchar **argv)
 #endif
 		socket_info.lock_socket = -1;
 		socket_info.lock_socket_tag = 0;
-		socket_info.lock_socket = socket_init(argc, argv, socket_port);
+		socket_info.lock_socket = socket_init(argc, argv, socket_port, desktop_startup_id);
 		/* Quit if filenames were sent to first instance or the list of open
 		 * documents has been printed */
 		if ((socket_info.lock_socket == -2 /* socket exists */ && argc > 1) ||
@@ -1109,6 +1121,7 @@ gint main_lib(gint argc, gchar **argv)
 			g_free(app->datadir);
 			g_free(app->docdir);
 			g_free(app);
+			g_free(desktop_startup_id);
 			return 0;
 		}
 		/* Start a new instance if no command line strings were passed,
@@ -1119,6 +1132,7 @@ gint main_lib(gint argc, gchar **argv)
 			cl_options.new_instance = TRUE;
 		}
 	}
+	g_free(desktop_startup_id);
 #endif
 
 #ifdef G_OS_WIN32

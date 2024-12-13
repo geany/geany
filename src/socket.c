@@ -92,7 +92,9 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
-
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif
 
 #ifdef G_OS_WIN32
 #define SOCKET_IS_VALID(s)	((s) != INVALID_SOCKET)
@@ -124,12 +126,19 @@ static gint socket_fd_close			(gint sock);
 
 
 
-static void send_open_command(gint sock, gint argc, gchar **argv)
+static void send_open_command(gint sock, gint argc, gchar **argv, const gchar *desktop_startup_id)
 {
 	gint i;
 
 	g_return_if_fail(argc > 1);
 	geany_debug("using running instance of Geany");
+
+	if (desktop_startup_id != NULL)
+	{
+		socket_fd_write_all(sock, "desktop_startup_id\n", 19);
+		socket_fd_write_all(sock, desktop_startup_id, strlen(desktop_startup_id));
+		socket_fd_write_all(sock, "\n.\n", 3);
+	}
 
 	if (cl_options.goto_line >= 0)
 	{
@@ -247,7 +256,7 @@ static void check_socket_permissions(void)
  * (taken from Sylpheed, thanks)
  * Returns the created socket, -1 if an error occurred or -2 if another socket exists and files
  * were sent to it. */
-gint socket_init(gint argc, gchar **argv, G_GNUC_UNUSED gushort socket_port)
+gint socket_init(gint argc, gchar **argv, G_GNUC_UNUSED gushort socket_port, const gchar *desktop_startup_id)
 {
 	gint sock;
 #ifdef G_OS_WIN32
@@ -334,7 +343,7 @@ gint socket_init(gint argc, gchar **argv, G_GNUC_UNUSED gushort socket_port)
 			SetForegroundWindow(hwnd);
 #endif
 
-		send_open_command(sock, argc, argv);
+		send_open_command(sock, argc, argv, desktop_startup_id);
 	}
 
 	if (cl_options.list_documents)
@@ -717,6 +726,30 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 				g_strstrip(buf); /* remove \n char */
 				/* on any error we get 0 which should be safe enough as fallback */
 				cl_options.goto_column = atoi(buf);
+			}
+		}
+		else if (strncmp(buf, "desktop_startup_id", 18) == 0)
+		{
+			if (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+			{
+#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+				g_strstrip(buf); /* remove \n char */
+				geany_debug("Received IPC command from remote instance: desktop_startup_id (%s)", buf);
+				GdkDisplay *display = gdk_display_get_default();
+#ifdef GDK_WINDOWING_WAYLAND
+				if (GDK_IS_WAYLAND_DISPLAY(display))
+					gdk_wayland_display_set_startup_notification_id(display, buf);
+#endif
+#ifdef GDK_WINDOWING_X11
+				if (GDK_IS_X11_DISPLAY(display))
+					gdk_x11_display_set_startup_notification_id(display, buf);
+#endif
+#endif // GDK_WINDOWING_WAYLAND || GDK_WINDOWING_X11
+				while (socket_fd_gets(sock, buf, sizeof(buf)) != -1 && *buf != '.')
+				{
+					/* we expect only one line with the token,
+					 * skip anything until the end of the message */
+				}
 			}
 		}
 #ifdef G_OS_WIN32
