@@ -327,6 +327,7 @@ test_sources = \
 	simple.raku						\
 	simple.rb						\
 	simple.rst						\
+	simple.scss						\
 	simple.sh						\
 	simple.tcl						\
 	simple.ts						\
