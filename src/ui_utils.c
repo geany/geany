@@ -1640,33 +1640,6 @@ void ui_entry_add_activate_backward_signal(GtkEntry *entry)
 }
 
 
-static void add_to_size_group(GtkWidget *widget, gpointer size_group)
-{
-	g_return_if_fail(GTK_IS_SIZE_GROUP(size_group));
-	gtk_size_group_add_widget(GTK_SIZE_GROUP(size_group), widget);
-}
-
-
-/* Copies the spacing and layout of the master GtkHButtonBox and synchronises
- * the width of each button box's children.
- * Should be called after all child widgets have been packed. */
-void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy)
-{
-	GtkSizeGroup *size_group;
-
-	gtk_box_set_spacing(GTK_BOX(copy), 10);
-	gtk_button_box_set_layout(copy, gtk_button_box_get_layout(master));
-
-	/* now we need to put the widest widget from each button box in a size group,
-	* but we don't know the width before they are drawn, and for different label
-	* translations the widest widget can vary, so we just add all widgets. */
-	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
-	gtk_container_foreach(GTK_CONTAINER(master), add_to_size_group, size_group);
-	gtk_container_foreach(GTK_CONTAINER(copy), add_to_size_group, size_group);
-	g_object_unref(size_group);
-}
-
-
 static gboolean tree_model_find_text(GtkTreeModel *model,
 		GtkTreeIter *iter, gint column, const gchar *text)
 {
