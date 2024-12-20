@@ -1572,10 +1572,12 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_HJA_SINGLESTRING ||
 				style == SCE_HJA_STRINGEOL ||
 				style == SCE_HJA_REGEX ||
+				style == SCE_HJA_TEMPLATELITERAL ||
 				style == SCE_HJ_DOUBLESTRING ||
 				style == SCE_HJ_SINGLESTRING ||
 				style == SCE_HJ_STRINGEOL ||
 				style == SCE_HJ_REGEX ||
+				style == SCE_HJ_TEMPLATELITERAL ||
 				style == SCE_HPA_CHARACTER ||
 				style == SCE_HPA_STRING ||
 				style == SCE_HPA_TRIPLE ||
@@ -1623,6 +1625,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_RUST_STRINGR ||
 				style == SCE_RUST_BYTESTRING ||
 				style == SCE_RUST_BYTESTRINGR ||
+				style == SCE_RUST_CSTRING ||
+				style == SCE_RUST_CSTRINGR ||
 				style == SCE_RUST_LEXERROR);
 
 		case SCLEX_COFFEESCRIPT:
