@@ -116,7 +116,7 @@ parse_geany_version() {
 
 log_environment() {
 	log "Using environment"
-	CONFIGURE_OPTIONS="--disable-silent-rules --host=${HOST} --prefix=${GEANY_RELEASE_DIR} --with-libiconv-prefix=/windows/mingw64"
+	CONFIGURE_OPTIONS="--disable-silent-rules --host=${HOST} --prefix=${GEANY_RELEASE_DIR} --with-libiconv-prefix=/windows/mingw64 LDFLAGS=-static-libstdc++"
 	echo "Geany version        : ${GEANY_VERSION}"
 	echo "Geany GIT revision   : ${GEANY_GIT_REVISION}"
 	echo "PATH                 : ${PATH}"
