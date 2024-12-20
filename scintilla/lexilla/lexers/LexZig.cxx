@@ -248,7 +248,7 @@ Sci_Position SCI_METHOD LexerZig::WordListSet(int n, const char *wl) {
 		break;
 	}
 	Sci_Position firstModification = -1;
-	if (wordListN && wordListN->Set(wl)) {
+	if (wordListN && wordListN->Set(wl, false)) {
 		firstModification = 0;
 	}
 	return firstModification;

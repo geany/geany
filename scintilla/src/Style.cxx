@@ -5,6 +5,8 @@
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <cstdint>
+
 #include <stdexcept>
 #include <string_view>
 #include <vector>
@@ -27,6 +29,7 @@ bool FontSpecification::operator==(const FontSpecification &other) const noexcep
 	       weight == other.weight &&
 	       italic == other.italic &&
 	       size == other.size &&
+	       stretch == other.stretch &&
 	       characterSet == other.characterSet &&
 	       extraFontFlag == other.extraFontFlag &&
 	       checkMonospaced == other.checkMonospaced;
@@ -41,6 +44,8 @@ bool FontSpecification::operator<(const FontSpecification &other) const noexcept
 		return !italic;
 	if (size != other.size)
 		return size < other.size;
+	if (stretch != other.stretch)
+		return stretch < other.stretch;
 	if (characterSet != other.characterSet)
 		return characterSet < other.characterSet;
 	if (extraFontFlag != other.extraFontFlag)
@@ -65,8 +70,8 @@ int DefaultFontSize() noexcept {
 
 Style::Style(const char *fontName_) noexcept :
 	FontSpecification(fontName_, DefaultFontSize() * FontSizeMultiplier),
-	fore(0,0,0),
-	back(0xff, 0xff, 0xff),
+	fore(black),
+	back(white),
 	eolFilled(false),
 	underline(false),
 	caseForce(CaseForce::mixed),
