@@ -889,6 +889,7 @@ static const HLStyle highlighting_styles_HTML[] =
 	{ SCE_HJ_SYMBOLS,				"jscript_symbols",			FALSE	 },
 	{ SCE_HJ_STRINGEOL,				"jscript_stringeol",		FALSE	 },
 	{ SCE_HJ_REGEX,					"jscript_regex",			FALSE	 },
+	{ SCE_HJ_TEMPLATELITERAL,		"jscript_templateliteral",	FALSE	 },
 
 	/* for HB, VBScript?, use the same styles as for JavaScript */
 	{ SCE_HB_START,					"jscript_start",			FALSE	 },
@@ -924,6 +925,7 @@ static const HLStyle highlighting_styles_HTML[] =
 	{ SCE_HJA_SYMBOLS,				"jscript_symbols",			FALSE	 },
 	{ SCE_HJA_STRINGEOL,			"jscript_stringeol",		FALSE	 },
 	{ SCE_HJA_REGEX,				"jscript_regex",			FALSE	 },
+	{ SCE_HJA_TEMPLATELITERAL,		"jscript_templateliteral",	FALSE	 },
 
 	/* embedded Python */
 	{ SCE_HP_START,					"jscript_start",			FALSE	 },
@@ -1681,8 +1683,10 @@ static const HLStyle highlighting_styles_RUST[] =
 	{ SCE_RUST_MACRO,				"macro",					FALSE },
 	{ SCE_RUST_LEXERROR,			"lexerror",					FALSE },
 	{ SCE_RUST_BYTESTRING,			"bytestring",				FALSE },
-	{ SCE_RUST_BYTESTRINGR,			"bytestringr",				FALSE },
-	{ SCE_RUST_BYTECHARACTER,		"bytecharacter",			FALSE }
+	{ SCE_RUST_BYTESTRINGR,			"bytestringraw",			FALSE },
+	{ SCE_RUST_BYTECHARACTER,		"bytecharacter",			FALSE },
+	{ SCE_RUST_CSTRING,				"cstring",					FALSE },
+	{ SCE_RUST_CSTRINGR,			"cstringraw",				FALSE }
 };
 static const HLKeyword highlighting_keywords_RUST[] =
 {
