@@ -179,7 +179,7 @@ build_geany() {
 	log "Running make"
 	make -j ${JOBS}
 	log "Running install-strip"
-	make install-strip
+	LDFLAGS=-static-libstdc++ make install-strip
 }
 
 
