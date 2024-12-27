@@ -221,9 +221,9 @@ create_gtk_bundle() {
 	# We use the "posix" variant of the mingw64 cross compiler which has support for
 	# C++ features like "std:future". For this to work, we need to use the corresponding
 	# C++ runtime library and copy (and strip) it to the resulting bundle.
-	gcc_version="$(${HOST}-gcc -dumpversion)/libstdc++-6.dll"
-	cp "/usr/lib/gcc/${HOST}/${gcc_version}" "${GTK_BUNDLE_DIR}/bin"
-	${HOST}-strip "${GTK_BUNDLE_DIR}/bin/libstdc++-6.dll"
+	#gcc_version="$(${HOST}-gcc -dumpversion)/libstdc++-6.dll"
+	#cp "/usr/lib/gcc/${HOST}/${gcc_version}" "${GTK_BUNDLE_DIR}/bin"
+	#${HOST}-strip "${GTK_BUNDLE_DIR}/bin/libstdc++-6.dll"
 }
 
 
