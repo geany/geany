@@ -14,6 +14,7 @@ colorschemes = \
 	colorschemes/delt-dark.conf \
 	colorschemes/dark-fruit-salad.conf \
 	colorschemes/earthsong.conf \
+	colorschemes/epsilon.conf \
 	colorschemes/evg-ega-dark.conf \
 	colorschemes/gedit.conf \
 	colorschemes/github.conf \
@@ -37,6 +38,7 @@ colorschemes = \
 	colorschemes/solarized-light.conf \
 	colorschemes/spyder-dark.conf \
 	colorschemes/steampunk.conf \
+	colorschemes/tango-dark.conf \
 	colorschemes/tango-light.conf \
 	colorschemes/tinge.conf \
 	colorschemes/ubuntu.conf \

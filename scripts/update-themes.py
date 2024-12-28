@@ -9,6 +9,7 @@ themes = [
     # Public domain
     'evg-ega-dark.conf',
     'sleepy-pastel.conf',
+    'tango-dark.conf',
 
     # MIT
     'earthsong.conf',
@@ -29,6 +30,7 @@ themes = [
     'dark.conf',
     'dark-fruit-salad.conf',
     'delt-dark.conf',
+    'epsilon.conf',
     'grey8.conf',
     'hacker.conf',
     'mc.conf',
@@ -59,20 +61,19 @@ themes = [
 ]
 
 ignored = [
-    # GPL 3 or later
-    'epsilon.conf',
-
-    # no explicit license
+    # converted to Geany from https://github.com/mig/gedit-themes which does
+    # not mention any license or authors of individual themes
     'fluffy.conf',
+    'railcasts2.conf',
+    'zenburn.conf',
+
+    # exact license not yet clarified
     'kary-pro-colors-dark.conf',
     'kary-pro-colors-light.conf',
     'monokai.conf',
-    'railcasts2.conf',
-    'tango-dark.conf',
-    'zenburn.conf',
 ]
 
-usage_msg = 'Usage: update-themes.py <geany-themes/colorschemes> <geany/data/colorschemes directory>'
+usage_msg = 'Usage: update-themes.py <geany-themes/colorschemes> <geany/data/colorschemes>'
 
 if len(sys.argv) != 3:
     print(usage_msg)
@@ -83,7 +84,7 @@ dstdir = os.path.abspath(sys.argv[2])
 
 # some sanity checks
 if (not os.path.isdir(srcdir) or not os.path.isdir(dstdir) or
-    not os.path.isfile(srcdir + '/dark.conf') or not dstdir.endswith('data/colorschemes')):
+    not os.path.isfile(srcdir + '/alt.conf') or not dstdir.endswith('data/colorschemes')):
     print(usage_msg)
     sys.exit(1)
 
