@@ -120,6 +120,8 @@ void search_show_replace_dialog(void);
 
 void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir);
 
+gboolean search_show_wrap_dialog(const gchar *search_text);
+
 void geany_match_info_free(GeanyMatchInfo *info);
 
 gint search_find_prev(struct _ScintillaObject *sci, const gchar *str, GeanyFindFlags flags, GeanyMatchInfo **match_);

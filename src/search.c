@@ -49,7 +49,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 enum
@@ -437,7 +436,7 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 	{
 		setup_find_next(s);	/* allow find next/prev */
 
-		if (document_find_text(doc, s, NULL, 0, search_backwards, NULL, FALSE, NULL) > -1)
+		if (document_find_text(doc, s, NULL, 0, search_backwards, NULL, FALSE) > -1)
 			editor_display_current_line(doc->editor, 0.3F);
 		g_free(s);
 	}
@@ -1148,6 +1147,51 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 }
 
 
+/* like dialogs_show_question_full() but makes the non-cancel button default */
+gboolean search_show_wrap_dialog(const gchar *search_text)
+{
+	gboolean ret;
+	GtkWidget *dialog;
+	GtkWidget *btn;
+	GtkWidget *visible_dialog = NULL;
+	gchar *question_text;
+
+	if (find_dlg.dialog && gtk_widget_is_visible(find_dlg.dialog))
+		visible_dialog = find_dlg.dialog;
+	else if (replace_dlg.dialog && gtk_widget_is_visible(replace_dlg.dialog))
+		visible_dialog = replace_dlg.dialog;
+
+	if (visible_dialog)
+		gtk_widget_hide(visible_dialog);
+
+	question_text = g_strdup_printf(_("\"%s\" was not found."), search_text);
+
+	dialog = gtk_message_dialog_new(GTK_WINDOW(main_widgets.window),
+		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION,
+		GTK_BUTTONS_NONE, "%s", question_text);
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
+	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
+
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+		"%s", _("Wrap search and find again?"));
+
+	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_NO);
+	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_FIND, GTK_RESPONSE_YES);
+	gtk_widget_grab_default(btn);
+
+	ret = gtk_dialog_run(GTK_DIALOG(dialog));
+
+	gtk_widget_destroy(dialog);
+	g_free(question_text);
+
+	if (visible_dialog && ret == GTK_RESPONSE_YES)
+		gtk_widget_show(visible_dialog);
+
+	return ret == GTK_RESPONSE_YES;
+}
+
+
 static void
 on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
@@ -1355,7 +1399,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			case GEANY_RESPONSE_FIND_PREVIOUS:
 			{
 				gint result = document_find_text(doc, search_data.text, search_data.original_text, search_data.flags,
-					(response == GEANY_RESPONSE_FIND_PREVIOUS), NULL, TRUE, GTK_WIDGET(find_dlg.dialog));
+					(response == GEANY_RESPONSE_FIND_PREVIOUS), NULL, TRUE);
 				ui_set_search_entry_background(find_dlg.entry, (result > -1));
 				check_close = search_prefs.hide_find_dialog;
 				break;
@@ -1513,7 +1557,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				search_backwards_re);
 			if (rep != -1)
 				document_find_text(doc, find, original_find, search_flags_re, search_backwards_re,
-					NULL, TRUE, NULL);
+					NULL, TRUE);
 			break;
 		}
 		case GEANY_RESPONSE_REPLACE:
@@ -1524,7 +1568,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		case GEANY_RESPONSE_FIND:
 		{
 			gint result = document_find_text(doc, find, original_find, search_flags_re,
-								search_backwards_re, NULL, TRUE, GTK_WIDGET(dialog));
+								search_backwards_re, NULL, TRUE);
 			ui_set_search_entry_background(replace_dlg.find_entry, (result > -1));
 			break;
 		}
@@ -2319,7 +2363,7 @@ void search_find_again(gboolean change_direction)
 	{
 		gboolean forward = ! search_data.backwards;
 		gint result = document_find_text(doc, search_data.text, search_data.original_text, search_data.flags,
-			change_direction ? forward : !forward, NULL, FALSE, NULL);
+			change_direction ? forward : !forward, NULL, FALSE);
 
 		if (result > -1)
 			editor_display_current_line(doc->editor, 0.3F);
