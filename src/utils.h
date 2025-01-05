@@ -338,6 +338,8 @@ gchar *utils_get_os_info_string(void);
 
 gchar *utils_utf8_strdown(const gchar *str);
 
+gboolean utils_utf8_substring_match(const gchar *key, const gchar *haystack);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS
