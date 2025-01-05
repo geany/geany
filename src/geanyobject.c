@@ -213,6 +213,12 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		0, NULL, NULL, g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+	geany_object_signals[GCB_GEANY_BEFORE_QUIT] = g_signal_new (
+		"geany-before-quit",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		0, NULL, NULL, g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE, 0);
 	geany_object_signals[GCB_BUILD_START] = g_signal_new (
 		"build-start",
 		G_OBJECT_CLASS_TYPE (g_object_class),
