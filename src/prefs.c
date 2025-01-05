@@ -84,6 +84,10 @@ static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *
 static void kb_change_iter_shortcut(KbData *kbdata, GtkTreeIter *iter, const gchar *new_text);
 static gboolean kb_find_duplicate(GtkTreeStore *store, GtkWidget *parent, GtkTreeIter *old_iter,
 		guint key, GdkModifierType mods, const gchar *shortcut);
+static void kb_filter_entry_changed_cb(GtkEntry *entry, gpointer user_data);
+static void kb_filter_entry_icon_release_cb(GtkEntry *entry, GtkEntryIconPosition icon_pos,
+		GdkEvent *event, gpointer user_data);
+static gboolean kb_tree_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -141,6 +145,7 @@ enum
 	KB_TREE_INDEX,
 	KB_TREE_EDITABLE,
 	KB_TREE_WEIGHT,
+	KB_TREE_VISIBLE,
 	KB_TREE_COLUMNS
 };
 
@@ -261,16 +266,21 @@ static gboolean kb_tree_view_button_press_event_cb(GtkWidget *widget, GdkEventBu
 }
 
 
-static void kb_init_tree(KbData *kbdata)
+static void kb_init_tree(KbData *kbdata, GtkWidget *kb_filter_entry)
 {
 	GtkCellRenderer *renderer;
+	GtkTreeModel *filter_model;
 	GtkTreeViewColumn *column;
 
 	kbdata->tree = GTK_TREE_VIEW(ui_lookup_widget(ui_widgets.prefs_dialog, "treeview7"));
 
 	kbdata->store = gtk_tree_store_new(KB_TREE_COLUMNS,
-		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN, G_TYPE_INT);
-	gtk_tree_view_set_model(GTK_TREE_VIEW(kbdata->tree), GTK_TREE_MODEL(kbdata->store));
+		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN, G_TYPE_INT, G_TYPE_BOOLEAN);
+	filter_model = gtk_tree_model_filter_new(GTK_TREE_MODEL(kbdata->store), NULL);
+	gtk_tree_model_filter_set_visible_column(GTK_TREE_MODEL_FILTER(filter_model), KB_TREE_VISIBLE);
+	/* set model to tree view */
+	gtk_tree_view_set_model(GTK_TREE_VIEW(kbdata->tree), filter_model);
+	g_object_unref(filter_model);
 	g_object_unref(kbdata->store);
 
 	renderer = gtk_cell_renderer_text_new();
@@ -292,9 +302,13 @@ static void kb_init_tree(KbData *kbdata)
 
 	g_signal_connect(renderer, "edited", G_CALLBACK(kb_cell_edited_cb), kbdata);
 	g_signal_connect(kbdata->tree, "button-press-event", G_CALLBACK(kb_tree_view_button_press_event_cb), kbdata);
+	g_signal_connect(kbdata->tree, "key-press-event", G_CALLBACK(kb_tree_key_press_cb), kb_filter_entry);
 	g_signal_connect(kbdata->tree, "popup-menu", G_CALLBACK(kb_popup_menu_cb), kbdata);
 	g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "button2"), "clicked",
 				G_CALLBACK(kb_tree_view_change_button_clicked_cb), kbdata);
+	g_signal_connect(kb_filter_entry, "changed", G_CALLBACK(kb_filter_entry_changed_cb), NULL);
+	g_signal_connect(kb_filter_entry, "icon-release", G_CALLBACK(kb_filter_entry_icon_release_cb), NULL);
+
 }
 
 
@@ -348,7 +362,7 @@ void prefs_kb_search_name(const gchar *search)
 }
 
 
-static void kb_init(KbData *kbdata)
+static void kb_init(KbData *kbdata, GtkWidget *kb_filter_entry)
 {
 	GtkTreeIter parent, iter;
 	gsize g, i;
@@ -357,20 +371,21 @@ static void kb_init(KbData *kbdata)
 	GeanyKeyBinding *kb;
 
 	if (kbdata->store == NULL)
-		kb_init_tree(kbdata);
+		kb_init_tree(kbdata, kb_filter_entry);
 
+	gtk_entry_set_text(GTK_ENTRY(kb_filter_entry), "");
 	foreach_ptr_array(group, g, keybinding_groups)
 	{
 		gtk_tree_store_append(kbdata->store, &parent, NULL);
 		gtk_tree_store_set(kbdata->store, &parent, KB_TREE_ACTION, group->label,
-			KB_TREE_INDEX, g, -1);
+			KB_TREE_INDEX, g, KB_TREE_VISIBLE, TRUE, -1);
 
 		foreach_ptr_array(kb, i, group->key_items)
 		{
 			label = keybindings_get_label(kb);
 			gtk_tree_store_append(kbdata->store, &iter, &parent);
 			gtk_tree_store_set(kbdata->store, &iter, KB_TREE_ACTION, label,
-				KB_TREE_EDITABLE, TRUE, KB_TREE_INDEX, kb->id, -1);
+				KB_TREE_EDITABLE, TRUE, KB_TREE_INDEX, kb->id, KB_TREE_VISIBLE, TRUE, -1);
 			kb_set_shortcut(kbdata->store, &iter, kb->key, kb->mods);
 			g_free(label);
 		}
@@ -691,7 +706,8 @@ static void prefs_init_dialog(void)
 
 
 	/* Keybindings */
-	kb_init(&global_kb_data);
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_keybinding_filter");
+	kb_init(&global_kb_data, widget);
 
 	/* Printing */
 	{
@@ -1397,6 +1413,94 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext,
 }
 
 
+static void kb_tree_update_visibility(GtkTreeStore *store, const gchar *entry_text)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	GtkTreeIter child, parent;
+
+	/* get first parent */
+	if (! gtk_tree_model_iter_children(model, &parent, NULL))
+		return;
+
+	/* foreach parent */
+	while (TRUE)
+	{
+		gboolean visible_parent = FALSE;
+		gboolean visible_children = FALSE;
+		gchar *group_name;
+
+		/* check if group name matches and then display *all* its children, otherwise
+		 * check each child if the action name matches */
+		gtk_tree_model_get(model, &parent, KB_TREE_ACTION, &group_name, -1);
+		if (group_name && ! EMPTY(entry_text))
+			visible_parent = utils_utf8_substring_match(entry_text, group_name);
+		else
+			visible_parent = FALSE;
+		g_free(group_name);
+
+		/* get first child */
+		if (! gtk_tree_model_iter_children(model, &child, &parent))
+			return;
+
+		/* foreach child */
+		while (TRUE)
+		{
+			gboolean visible;
+			gchar *action_name;
+
+			gtk_tree_model_get(model, &child, KB_TREE_ACTION, &action_name, -1);
+			if (!action_name || EMPTY(entry_text))
+				visible = TRUE;
+			else
+				visible = utils_utf8_substring_match(entry_text, action_name);
+			g_free(action_name);
+
+			if (visible)
+				visible_children = TRUE;
+
+			gtk_tree_store_set(store, &child, KB_TREE_VISIBLE, visible || visible_parent, -1);
+
+			if (! gtk_tree_model_iter_next(model, &child))
+				break;
+		}
+
+		gtk_tree_store_set(store, &parent, KB_TREE_VISIBLE, visible_children || visible_parent, -1);
+
+		if (! gtk_tree_model_iter_next(model, &parent))
+			return;
+	}
+}
+
+
+static void kb_filter_entry_changed_cb(GtkEntry *entry, gpointer user_data)
+{
+	const gchar *entry_text = gtk_entry_get_text(entry);
+
+	kb_tree_update_visibility(global_kb_data.store, entry_text);
+	gtk_tree_view_expand_all(global_kb_data.tree);
+}
+
+
+static void kb_filter_entry_icon_release_cb(GtkEntry *entry, GtkEntryIconPosition icon_pos,
+		GdkEvent *event, gpointer user_data)
+{
+	if (event->button.button == 1 && icon_pos == GTK_ENTRY_ICON_PRIMARY)
+		kb_filter_entry_changed_cb(entry, user_data);
+}
+
+
+static gboolean kb_tree_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+	if (event->keyval == GDK_KEY_f && (event->state & GEANY_PRIMARY_MOD_MASK))
+	{
+		GtkWidget *kb_filter_entry = user_data;
+		gtk_widget_grab_focus(kb_filter_entry);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, GtkLabel *label)
 {
 	gchar *str;
@@ -1719,6 +1823,7 @@ void prefs_show_dialog(void)
 				"entry_com_term",
 				"entry_browser",
 				"entry_grep",
+				"entry_keybinding_filter",
 				"entry_contextaction",
 				"entry_template_developer",
 				"entry_template_initial",
