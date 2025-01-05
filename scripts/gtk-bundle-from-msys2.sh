@@ -287,7 +287,7 @@ download_and_extract_gtk_theme() {
 		echo "etc/gtk-3.0/settings.ini already exists. Aborting."
 		exit 1
 	fi
-	echo -e "[Settings]\r\ngtk-theme-name=Prof-Gnome" > etc/gtk-3.0/settings.ini
+	echo -e "[Settings]\r\ngtk-theme-name=Prof-Gnome\r\ngtk-toolbar-icon-size=GTK_ICON_SIZE_SMALL_TOOLBAR\r\n" > etc/gtk-3.0/settings.ini
 }
 
 create_bundle_dependency_info_file() {
