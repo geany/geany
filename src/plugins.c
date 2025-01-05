@@ -1648,6 +1648,17 @@ static gboolean pm_treeview_button_press_cb(GtkWidget *widget, GdkEventButton *e
 }
 
 
+static gboolean pm_treeview_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+	if (event->keyval == GDK_KEY_f && (event->state & GEANY_PRIMARY_MOD_MASK))
+	{
+		gtk_widget_grab_focus(pm_widgets.filter_entry);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 static gint pm_tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 		gpointer user_data)
 {
@@ -1740,6 +1751,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkTreeStore *store)
 	g_signal_connect(sel, "changed", G_CALLBACK(pm_selection_changed), NULL);
 
 	g_signal_connect(tree, "button-press-event", G_CALLBACK(pm_treeview_button_press_cb), NULL);
+	g_signal_connect(tree, "key-press-event", G_CALLBACK(pm_treeview_key_press_cb), NULL);
 
 	/* filter */
 	filter_model = gtk_tree_model_filter_new(GTK_TREE_MODEL(store), NULL);
