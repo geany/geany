@@ -45,20 +45,28 @@ grep
 gtk-update-icon-cache
 harfbuzz
 hicolor-icon-theme
+jbigkit
+lerc
 libdatrie
+libdeflate
 libepoxy
 libffi
 libiconv
+libjpeg-turbo
 libpng
 librsvg
 libthai
+libtiff
+libwebp
 libwinpthread-git
 libxml2
 pango
 pcre2
 pixman
+shared-mime-info
 xz
 zlib
+zstd
 "
 
 handle_command_line_options() {
@@ -203,7 +211,8 @@ delayed_post_install() {
 		${EXE_WRAPPER_64} bin/gdk-pixbuf-query-loaders.exe --update-cache
 		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/hicolor
 		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/Adwaita
-		${EXE_WRAPPER_64} bin/glib-compile-schemas share/glib-2.0/schemas/
+		${EXE_WRAPPER_64} bin/glib-compile-schemas.exe share/glib-2.0/schemas/
+		${EXE_WRAPPER_64} bin/update-mime-database.exe share/mime
 	fi
 }
 
@@ -248,7 +257,7 @@ cleanup_unnecessary_files() {
 	rm -rf share/xml
 	rm -rf usr/share/libalpm
 	# cleanup binaries and libs (delete anything except *.dll, glib-compile-schemas and GSpawn helper binaries)
-	find bin ! -name '*.dll' ! -name 'grep.exe' ! -name 'gspawn-win32-helper*.exe' ! -name 'glib-compile-schemas.exe' -type f -delete
+	find bin ! -name '*.dll' ! -name 'grep.exe' ! -name 'gspawn-win64-helper*.exe' ! -name 'glib-compile-schemas.exe' -type f -delete
 	# cleanup empty directories
 	find . -type d -empty -delete
 }
