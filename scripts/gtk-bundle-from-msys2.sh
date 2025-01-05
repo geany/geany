@@ -27,11 +27,11 @@ gtk3_dependency_pkgs=""
 gtk4_dependency_pkgs=""
 
 packages="
-adwaita-icon-theme
 atk
 brotli
 bzip2
 cairo
+elementary-icon-theme
 expat
 fontconfig
 freetype
@@ -210,7 +210,7 @@ delayed_post_install() {
 		${EXE_WRAPPER_64} bin/fc-cache.exe -f
 		${EXE_WRAPPER_64} bin/gdk-pixbuf-query-loaders.exe --update-cache
 		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/hicolor
-		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/Adwaita
+		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/elementary
 		${EXE_WRAPPER_64} bin/glib-compile-schemas.exe share/glib-2.0/schemas/
 		${EXE_WRAPPER_64} bin/update-mime-database.exe share/mime
 	fi
@@ -249,7 +249,7 @@ cleanup_unnecessary_files() {
 	rm -rf share/graphite2
 	rm -rf share/gtk-3.0
 	rm -rf share/gtk-doc
-	rm -rf share/icons/Adwaita/cursors
+#	rm -rf share/icons/Adwaita/cursors
 	rm -rf share/info
 	rm -rf share/man
 	rm -rf share/thumbnailers
