@@ -475,6 +475,54 @@ gchar *utils_utf8_strdown(const gchar *str)
 }
 
 
+/* Returns @c TRUE if @a key is a substring of @a haystack, case-insensitive.
+ * Applies @c g_utf8_normalize and @c g_utf8_casefold on both input strings before comparison.
+ */
+gboolean utils_utf8_substring_match(const gchar *key, const gchar *haystack)
+{
+	gchar *normalized_string = NULL;
+	gchar *normalized_key = NULL;
+	gchar *case_normalized_string = NULL;
+	gchar *case_normalized_key = NULL;
+	gboolean matched = TRUE;
+
+	g_return_val_if_fail(key != NULL, FALSE);
+	g_return_val_if_fail(haystack != NULL, FALSE);
+
+	normalized_string = g_utf8_normalize(haystack, -1, G_NORMALIZE_ALL);
+	normalized_key = g_utf8_normalize(key, -1, G_NORMALIZE_ALL);
+
+	if (normalized_string != NULL && normalized_key != NULL)
+	{
+		GString *stripped_key;
+		gchar **subkey, **subkeys;
+
+		case_normalized_string = g_utf8_casefold(normalized_string, -1);
+		case_normalized_key = g_utf8_casefold(normalized_key, -1);
+		stripped_key = g_string_new(case_normalized_key);
+		do {} while (utils_string_replace_all(stripped_key, "  ", " "));
+		subkeys = g_strsplit(stripped_key->str, " ", -1);
+		g_string_free(stripped_key, TRUE);
+		foreach_strv(subkey, subkeys)
+		{
+			if (strstr(case_normalized_string, *subkey) == NULL)
+			{
+				matched = FALSE;
+				break;
+			}
+		}
+		g_strfreev(subkeys);
+	}
+
+	g_free(normalized_key);
+	g_free(normalized_string);
+	g_free(case_normalized_key);
+	g_free(case_normalized_string);
+
+	return matched;
+}
+
+
 /**
  *  A replacement function for g_strncasecmp() to compare strings case-insensitive.
  *  It converts both strings into lowercase using g_utf8_strdown() and then compare

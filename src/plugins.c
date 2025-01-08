@@ -1648,6 +1648,17 @@ static gboolean pm_treeview_button_press_cb(GtkWidget *widget, GdkEventButton *e
 }
 
 
+static gboolean pm_treeview_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+	if (event->keyval == GDK_KEY_f && (event->state & GEANY_PRIMARY_MOD_MASK))
+	{
+		gtk_widget_grab_focus(pm_widgets.filter_entry);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 static gint pm_tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 		gpointer user_data)
 {
@@ -1660,48 +1671,6 @@ static gint pm_tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *
 		return strcmp(pa->info.name, pb->info.name);
 	else
 		return pa - pb;
-}
-
-
-static gboolean pm_tree_search(const gchar *key, const gchar *haystack)
-{
-	gchar *normalized_string = NULL;
-	gchar *normalized_key = NULL;
-	gchar *case_normalized_string = NULL;
-	gchar *case_normalized_key = NULL;
-	gboolean matched = TRUE;
-
-	normalized_string = g_utf8_normalize(haystack, -1, G_NORMALIZE_ALL);
-	normalized_key = g_utf8_normalize(key, -1, G_NORMALIZE_ALL);
-
-	if (normalized_string != NULL && normalized_key != NULL)
-	{
-		GString *stripped_key;
-		gchar **subkey, **subkeys;
-
-		case_normalized_string = g_utf8_casefold(normalized_string, -1);
-		case_normalized_key = g_utf8_casefold(normalized_key, -1);
-		stripped_key = g_string_new(case_normalized_key);
-		do {} while (utils_string_replace_all(stripped_key, "  ", " "));
-		subkeys = g_strsplit(stripped_key->str, " ", -1);
-		g_string_free(stripped_key, TRUE);
-		foreach_strv(subkey, subkeys)
-		{
-			if (strstr(case_normalized_string, *subkey) == NULL)
-			{
-				matched = FALSE;
-				break;
-			}
-		}
-		g_strfreev(subkeys);
-	}
-
-	g_free(normalized_key);
-	g_free(normalized_string);
-	g_free(case_normalized_key);
-	g_free(case_normalized_string);
-
-	return matched;
 }
 
 
@@ -1721,7 +1690,7 @@ static gboolean pm_tree_filter_func(GtkTreeModel *model, GtkTreeIter *iter, gpoi
 	filename = g_path_get_basename(plugin->filename);
 	haystack = g_strjoin(" ", plugin->info.name, plugin->info.description,
 					plugin->info.author, filename, NULL);
-	matched = pm_tree_search(key, haystack);
+	matched = utils_utf8_substring_match(key, haystack);
 	g_free(haystack);
 	g_free(filename);
 
@@ -1782,6 +1751,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkTreeStore *store)
 	g_signal_connect(sel, "changed", G_CALLBACK(pm_selection_changed), NULL);
 
 	g_signal_connect(tree, "button-press-event", G_CALLBACK(pm_treeview_button_press_cb), NULL);
+	g_signal_connect(tree, "key-press-event", G_CALLBACK(pm_treeview_key_press_cb), NULL);
 
 	/* filter */
 	filter_model = gtk_tree_model_filter_new(GTK_TREE_MODEL(store), NULL);
