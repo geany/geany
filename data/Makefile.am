@@ -51,6 +51,7 @@ filetypes_dist = \
 	filedefs/filetypes.julia \
 	filedefs/filetypes.JSON.conf \
 	filedefs/filetypes.latex \
+	filedefs/filetypes.LESS.conf \
 	filedefs/filetypes.lisp \
 	filedefs/filetypes.lua \
 	filedefs/filetypes.Kotlin.conf \
@@ -74,6 +75,7 @@ filetypes_dist = \
 	filedefs/filetypes.ruby \
 	filedefs/filetypes.rust \
 	filedefs/filetypes.Scala.conf \
+	filedefs/filetypes.SCSS.conf \
 	filedefs/filetypes.sh \
 	filedefs/filetypes.smalltalk \
 	filedefs/filetypes.sql \
