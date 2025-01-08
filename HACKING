@@ -716,21 +716,23 @@ When you have these two files, you have to list your new test along the
 other ones in the ``test_source`` variable in ``tests/ctags/Makefile.am``
 and ``tests/meson.build``. Please keep this list sorted alphabetically.
 
-Upgrading Scintilla
--------------------
+Upgrading Scintilla and Lexilla
+-------------------------------
 
-To upgrade the local Scintilla copy, use the ``scripts/update-scintilla.sh``
-script.
+To upgrade the local Scintilla and Lexilla copy, use the
+``scripts/update-scintilla.sh`` script.
 
-To use it, you need to first obtain a copy of the Scintilla sources you want
-to update to.  This will generally mean checking out a release tag from the
-Scintilla Mercurial repository, or extracting a tarball.
+To use it, you need to first obtain a copy of the Scintilla and Lexilla sources
+you want to update to.  This will generally mean checking out a release tag
+from the Scintilla Mercurial repository and the Lexilla git repository, or
+extracting a tarball.
 
-Then, just run the script from Geany's to source directory passing the path
-to the Scintilla source directory as first argument, and follow the
+Then, just run the script from Geany's ``scripts`` directory, passing the path
+to the Scintilla source directory as the first argument and the Lexilla
+source directory as the second argument, and follow the
 instructions, if any::
 
-    ./scripts/update-scintilla.sh /path/to/scintilla/
+    ./scripts/update-scintilla.sh /path/to/scintilla/ /path/to/lexilla/
 
 GDB
 ---
