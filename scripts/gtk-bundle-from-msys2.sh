@@ -28,6 +28,7 @@ gtk4_dependency_pkgs=""
 
 packages="
 adwaita-icon-theme
+adwaita-icon-theme-legacy
 atk
 brotli
 bzip2
@@ -211,6 +212,7 @@ delayed_post_install() {
 		${EXE_WRAPPER_64} bin/gdk-pixbuf-query-loaders.exe --update-cache
 		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/hicolor
 		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/Adwaita
+		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/AdwaitaLegacy
 		${EXE_WRAPPER_64} bin/glib-compile-schemas.exe share/glib-2.0/schemas/
 		${EXE_WRAPPER_64} bin/update-mime-database.exe share/mime
 	fi
