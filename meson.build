@@ -11,8 +11,8 @@ cxx = meson.get_compiler('cpp')
 prefix = get_option('prefix')
 
 deps_in = [
-	['glib-2.0',    '2.32'],
-	['gmodule-2.0', '2.32'],
+	['glib-2.0',    '2.56'],
+	['gmodule-2.0', '2.56'],
 	['gtk+-3.0',    '3.24']
 ]
 
@@ -201,7 +201,7 @@ def_cflags = basic_cflags + [
 # we're using lots of deprecated stuff with gtk3 (often because there is no proper alternative!)
 	'-Wno-deprecated-declarations',
 	'-DGDK_DISABLE_DEPRECATION_WARNINGS',
-	'-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_32',
+	'-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_56',
 	'-DGEANY_PREFIX="@0@"'.format(get_option('prefix')),
 	'-DGEANY_DOCDIR="@0@"'.format(join_paths(prefix, get_option('datadir'), 'doc'))
 ]

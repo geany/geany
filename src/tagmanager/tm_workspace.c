@@ -681,31 +681,6 @@ gboolean tm_workspace_is_autocomplete_tag(TMTag *tag,
 }
 
 
-#if ! GLIB_CHECK_VERSION(2, 54, 0)
-static gboolean
-g_ptr_array_find (GPtrArray     *haystack,
-                  gconstpointer  needle,
-                  guint         *index_)
-{
-  guint i;
-
-  g_return_val_if_fail (haystack != NULL, FALSE);
-
-  for (i = 0; i < haystack->len; i++)
-    {
-      if (g_direct_equal (g_ptr_array_index (haystack, i), needle))
-        {
-          if (index_ != NULL)
-            *index_ = i;
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-#endif
-
-
 typedef struct
 {
 	TMSourceFile *file;
