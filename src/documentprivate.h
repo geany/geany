@@ -84,9 +84,9 @@ typedef struct GeanyDocumentPrivate
 	/* Iter for this document within the Open Files treeview of the sidebar. */
 	GtkTreeIter		 iter;
 	/* Used by the Undo/Redo management code. */
-	GTrashStack		*undo_actions;
+	GSList			*undo_actions;
 	/* Used by the Undo/Redo management code. */
-	GTrashStack		*redo_actions;
+	GSList			*redo_actions;
 	/* Used so Undo/Redo works for encoding changes. */
 	FileEncoding	 saved_encoding;
 	gboolean		 colourise_needed;	/* use document.c:queue_colourise() instead */
