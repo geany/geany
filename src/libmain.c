@@ -1259,6 +1259,9 @@ gint main_lib(gint argc, gchar **argv)
 
 	/* finally show the window */
 	document_grab_focus(doc);
+#ifdef G_OS_WIN32
+	win32_update_titlebar_theme(main_widgets.window);
+#endif
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 
