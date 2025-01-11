@@ -44,6 +44,7 @@
 #include "toolbar.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "win32.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -547,6 +548,10 @@ static void create_find_dialog(void)
 		GTK_BUTTON_BOX(bbox));
 	gtk_container_add(GTK_CONTAINER(exp), bbox);
 	gtk_container_add(GTK_CONTAINER(vbox), exp);
+
+#ifdef G_OS_WIN32
+	win32_update_titlebar_theme(find_dlg.dialog);
+#endif
 }
 
 
@@ -731,6 +736,10 @@ static void create_replace_dialog(void)
 		GTK_BUTTON_BOX(bbox));
 	gtk_container_add(GTK_CONTAINER(exp), bbox);
 	gtk_container_add(GTK_CONTAINER(vbox), exp);
+
+#ifdef G_OS_WIN32
+		win32_update_titlebar_theme(replace_dlg.dialog);
+#endif
 }
 
 
@@ -1029,6 +1038,10 @@ static void create_fif_dialog(void)
 			G_CALLBACK(on_find_in_files_dialog_response), NULL);
 	g_signal_connect(fif_dlg.dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+
+#ifdef G_OS_WIN32
+		win32_update_titlebar_theme(fif_dlg.dialog);
+#endif
 }
 
 

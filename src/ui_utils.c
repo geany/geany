@@ -2521,6 +2521,11 @@ void ui_init_builder(void)
 
 		widget = GTK_WIDGET(iter->data);
 
+#ifdef G_OS_WIN32
+		if (GTK_IS_WINDOW(widget))
+			win32_update_titlebar_theme(widget);
+#endif
+
 		name = ui_guess_object_name(G_OBJECT(widget));
 		if (! name)
 		{
