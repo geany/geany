@@ -53,11 +53,16 @@
 
 #include <windows.h>
 #include <commdlg.h>
+#include <dwmapi.h>
 #include <shellapi.h>
 #include <shlobj.h>
 
 #include <glib/gstdio.h>
 #include <gdk/gdkwin32.h>
+
+#ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
+#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
+#endif
 
 
 /* Little wrapper for _waccess(), returns errno or 0 if there was no error */
@@ -325,6 +330,24 @@ gchar *win32_get_user_config_dir(void)
 	// glib fallback
 	g_warning("Failed to retrieve Windows config dir, falling back to default");
 	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
+}
+
+
+void win32_init_titlebar(void)
+{
+	GdkWindow *window;
+
+	if (!main_widgets.window)
+		return;
+
+	window = gtk_widget_get_window(main_widgets.window);
+	if (window)
+	{
+		HWND hWnd = GDK_WINDOW_HWND(window);
+		BOOL value = TRUE;
+
+		DwmSetWindowAttribute(hWnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(value));
+	}
 }
 
 #endif

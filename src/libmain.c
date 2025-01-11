@@ -268,6 +268,9 @@ static void main_init(void)
 
 	main_widgets.window = create_window1();
 	g_signal_connect(main_widgets.window, "notify::is-active", G_CALLBACK(on_window_active_changed), NULL);
+#ifdef G_OS_WIN32
+	win32_init_titlebar();
+#endif
 
 	/* add recent projects to the Project menu */
 	ui_widgets.recent_projects_menuitem = ui_lookup_widget(main_widgets.window, "recent_projects1");
