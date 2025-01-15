@@ -79,6 +79,7 @@
 	LdScriptParser, \
 	ForthParser, \
 	MesonParser, \
-	SystemVerilogParser
+	SystemVerilogParser, \
+	SCSSParser
 
 #endif
