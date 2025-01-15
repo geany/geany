@@ -60,6 +60,7 @@ lexilla/lexers/LexRust.cxx             \
 lexilla/lexers/LexSmalltalk.cxx        \
 lexilla/lexers/LexSQL.cxx              \
 lexilla/lexers/LexTCL.cxx              \
+lexilla/lexers/LexTOML.cxx             \
 lexilla/lexers/LexTxt2tags.cxx         \
 lexilla/lexers/LexVHDL.cxx             \
 lexilla/lexers/LexVerilog.cxx          \
