@@ -78,6 +78,7 @@ enum
 
 static GtkTreeStore *store_openfiles;
 static GtkWidget *openfiles_popup_menu;
+static gchar *openfiles_filter;
 static GtkWidget *tag_window;	/* scrolled window that holds the symbol list GtkTreeView */
 
 /* callback prototypes */
@@ -598,7 +599,7 @@ static void tree_copy_node(GtkTreeStore *tree, GtkTreeIter *new_node, GtkTreeIte
 	GdkColor *color;
 	GeanyDocument *doc;
 	GtkTreeModel *model = GTK_TREE_MODEL(tree);
-	gboolean fold;
+	gboolean fold, visible;
 
 	gtk_tree_store_append(tree, new_node, parent_new);
 	gtk_tree_model_get(model,                node,
@@ -608,6 +609,7 @@ static void tree_copy_node(GtkTreeStore *tree, GtkTreeIter *new_node, GtkTreeIte
 	                   DOCUMENTS_COLOR,     &color,
 	                   DOCUMENTS_FILENAME,  &filename,
 	                   DOCUMENTS_FOLD,      &fold,
+	                   DOCUMENTS_VISIBLE,   &visible,
 	                   -1);
 
 	if (doc)
@@ -622,6 +624,7 @@ static void tree_copy_node(GtkTreeStore *tree, GtkTreeIter *new_node, GtkTreeIte
 	                   DOCUMENTS_COLOR,     color,
 	                   DOCUMENTS_FILENAME,  filename,
 	                   DOCUMENTS_FOLD,      fold,
+	                   DOCUMENTS_VISIBLE,   visible,
 	                   -1);
 	g_free(filename);
 	g_free(shortname);
@@ -671,9 +674,13 @@ static void tree_add_new_dir(GtkTreeStore *tree, GtkTreeIter *child, GtkTreeIter
 {
 	static GIcon *dir_icon = NULL;
 	gchar *dirname = parent_dir_name(tree, parent, file);
+	gboolean visible = TRUE;
 
 	if (!dir_icon)
 		dir_icon = ui_get_mime_icon("inode/directory");
+
+	if (!EMPTY(openfiles_filter))
+		visible = utils_utf8_substring_match(openfiles_filter, dirname);
 
 	gtk_tree_store_append(tree, child, parent);
 	gtk_tree_store_set(tree,                child,
@@ -681,6 +688,7 @@ static void tree_add_new_dir(GtkTreeStore *tree, GtkTreeIter *child, GtkTreeIter
 	                   DOCUMENTS_FILENAME,  file,
 	                   DOCUMENTS_SHORTNAME, dirname,
 	                   DOCUMENTS_FOLD,      TRUE, /* GTK inserts folded by default, caller may expand */
+	                   DOCUMENTS_VISIBLE,   visible,
 	                   -1);
 
 	g_free(dirname);
@@ -927,6 +935,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 	const GdkColor *color = document_get_status_color(doc);
 	static GIcon *file_icon = NULL;
 	gboolean expand = FALSE;
+	gboolean visible = TRUE;
 
 	if (interface_prefs.openfiles_path_mode != OPENFILES_PATHS_NONE)
 		expand = sidebar_openfiles_add_iter(store_openfiles, filename, iter, &parent);
@@ -937,11 +946,16 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 		file_icon = ui_get_mime_icon("text/plain");
 
 	basename = g_path_get_basename(filename);
+
+	if (!EMPTY(openfiles_filter))
+		visible = utils_utf8_substring_match(openfiles_filter, basename);
+
 	gtk_tree_store_set(store_openfiles, iter,
 		DOCUMENTS_ICON, (doc->file_type && doc->file_type->icon) ? doc->file_type->icon : file_icon,
 		DOCUMENTS_SHORTNAME, basename, DOCUMENTS_DOCUMENT, doc, DOCUMENTS_COLOR, color,
 		DOCUMENTS_FILENAME, DOC_FILENAME(doc),
 		DOCUMENTS_FOLD, FALSE,
+		DOCUMENTS_VISIBLE, visible,
 		-1);
 	g_free(basename);
 
@@ -1077,6 +1091,54 @@ void sidebar_openfiles_update_all(void)
 	{
 		sidebar_openfiles_add(documents[i]);
 	}
+}
+
+
+static gboolean update_visibility(GtkTreeStore *store, GtkTreeIter *root, gboolean visible_root)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	gboolean is_visible = FALSE;
+	GtkTreeIter parent;
+
+	if (!gtk_tree_model_iter_children(model, &parent, root))
+		return FALSE;
+
+	while (TRUE)
+	{
+		gboolean visible_parent = TRUE;
+		gboolean visible_children;
+		gchar *parent_name;
+
+		/* check if parent matches and then display *all* its children, otherwise
+		 * check each child if the action name matches */
+		gtk_tree_model_get(model, &parent, DOCUMENTS_SHORTNAME, &parent_name, -1);
+		if (! EMPTY(openfiles_filter))
+			visible_parent = utils_utf8_substring_match(openfiles_filter, parent_name);
+		g_free(parent_name);
+
+		visible_children = update_visibility(store, &parent, visible_root || visible_parent);
+
+		if (visible_parent || visible_children)
+			is_visible = TRUE;
+
+		gtk_tree_store_set(store, &parent, DOCUMENTS_VISIBLE,
+			visible_root || visible_parent || visible_children, -1);
+
+		if (! gtk_tree_model_iter_next(model, &parent))
+			return is_visible;
+	}
+}
+
+
+void sidebar_openfiles_set_filter(const gchar *filter)
+{
+	GeanyDocument *doc = document_get_current();
+
+	SETPTR(openfiles_filter, g_strdup(filter));
+	update_visibility(store_openfiles, NULL, FALSE);
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(tv.tree_openfiles));
+	if (doc)
+		sidebar_openfiles_select(doc);
 }
 
 
@@ -1668,6 +1730,8 @@ void sidebar_init(void)
 {
 	StashGroup *group;
 
+	openfiles_filter = g_strdup("");
+
 	group = stash_group_new(PACKAGE);
 	stash_group_add_widget_property(group, &ui_prefs.sidebar_page, "sidebar_page", GINT_TO_POINTER(0),
 		main_widgets.sidebar_notebook, "page", 0);
@@ -1702,6 +1766,8 @@ void sidebar_finalize(void)
 		gtk_widget_destroy(tv.popup_taglist);
 	if (WIDGET(openfiles_popup_menu))
 		gtk_widget_destroy(openfiles_popup_menu);
+
+	g_free(openfiles_filter);
 }
 
 

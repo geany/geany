@@ -475,6 +475,37 @@ void on_entry_tagfilter_activate(GtkEntry *entry, gpointer user_data)
 }
 
 
+void on_entry_docfilter_changed(GtkAction *action, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+	GtkEntry *filter_entry;
+
+	if (!doc)
+		return;
+
+	filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_docfilter"));
+	sidebar_openfiles_set_filter(gtk_entry_get_text(filter_entry));
+}
+
+
+void on_entry_docfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data)
+{
+	if (event->button.button == 1)
+		gtk_entry_set_text(entry, "");
+}
+
+
+void on_entry_docfilter_activate(GtkEntry *entry, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (!doc)
+		return;
+
+	sidebar_focus_openfiles_tab();
+}
+
+
 /* hides toolbar from toolbar popup menu */
 static void on_hide_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
