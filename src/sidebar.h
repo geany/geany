@@ -81,6 +81,8 @@ void sidebar_openfiles_add(GeanyDocument *doc);
 
 void sidebar_openfiles_update(GeanyDocument *doc);
 
+void sidebar_openfiles_select(GeanyDocument *doc);
+
 void sidebar_openfiles_update_all(void);
 
 void sidebar_select_openfiles_item(GeanyDocument *doc);

@@ -658,21 +658,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	notebook_new_tab(doc);
 
-	/* select document in sidebar */
-	{
-		GtkTreeModel *filter_model = gtk_tree_view_get_model(GTK_TREE_VIEW(tv.tree_openfiles));
-		GtkTreeIter filter_iter;
-		gboolean have_filter_iter;
-
-		have_filter_iter = gtk_tree_model_filter_convert_child_iter_to_iter(
-			GTK_TREE_MODEL_FILTER(filter_model), &filter_iter, &doc->priv->iter);
-
-		if (have_filter_iter)
-		{
-			GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
-			gtk_tree_selection_select_iter(sel, &filter_iter);
-		}
-	}
+	sidebar_openfiles_select(doc);
 
 	ui_document_buttons_update();
 
