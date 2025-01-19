@@ -53,11 +53,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: ${{ matrix.language }}
-
     - name: Install dependencies
       if: matrix.language == 'c-cpp'
       run: |
@@ -72,8 +67,11 @@ jobs:
           python3-lxml \
           rst2pdf
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        build-mode: autobuild
+        languages: ${{ matrix.language }}
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
