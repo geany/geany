@@ -67,6 +67,8 @@ enum
 	DOCUMENTS_COLOR,
 	DOCUMENTS_FILENAME,     /* full filename */
 	DOCUMENTS_FOLD,         /* fold state stored when folding parent rows */
+	DOCUMENTS_VISIBLE,
+	DOCUMENTS_COLUMNS_NUM
 };
 
 void sidebar_init(void);
