@@ -59,6 +59,7 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Install dependencies
+      if: matrix.language == 'c-cpp'
       run: |
         sudo apt-get update -qq
         sudo apt-get install --assume-yes --no-install-recommends \
