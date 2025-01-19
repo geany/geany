@@ -70,7 +70,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
-        build-mode: ${{ matrix.language == 'c-cpp' && 'autobuild' || 'none' }}
+        build-mode: autobuild
         languages: ${{ matrix.language }}
 
     - name: Perform CodeQL Analysis
