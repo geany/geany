@@ -658,7 +658,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	notebook_new_tab(doc);
 
-	sidebar_openfiles_select(doc);
+	sidebar_select_openfiles_item(doc);
 
 	ui_document_buttons_update();
 
