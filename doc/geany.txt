@@ -282,6 +282,7 @@ described by that plugin documentation):
   * save to or reload from files
   * search tree based at selected file
   * show or hide the document paths
+  * filter documents based on their name similarly to the Symbols tab
 
 Command line options
 --------------------
