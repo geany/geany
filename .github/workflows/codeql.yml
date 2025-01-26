@@ -61,6 +61,9 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
+        config: |
+          paths-ignore:
+            - tests/ctags/simple.py
 
     - name: Install dependencies
       if: matrix.language == 'c-cpp'
