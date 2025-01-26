@@ -311,7 +311,7 @@ static GeanyFiletype *get_doc_filetype(GeanyDocument *doc)
 
 static void instantsave_document_new(GeanyDocument *doc)
 {
-	if (doc->real_path == NULL)
+	if (doc->real_path == NULL && doc->file_name == NULL)
 	{
 		const gchar *directory;
 		gchar *new_filename;
@@ -428,7 +428,7 @@ static gchar* create_new_persistent_doc_file_name(GeanyDocument *doc, GeanyFilet
 
 static void persistent_doc_new(GeanyDocument *doc)
 {
-	if (doc->real_path == NULL)
+	if (doc->real_path == NULL && doc->file_name == NULL)
 	{
 		gchar *files_dir_utf8, *new_file_name_utf8, *new_file_path_utf8;
 		GeanyFiletype *ft;
