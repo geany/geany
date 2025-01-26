@@ -1030,10 +1030,6 @@ static const gchar *get_locale(void)
 GEANY_EXPORT_SYMBOL
 void main_init_headless(void)
 {
-#if ! GLIB_CHECK_VERSION(2, 36, 0)
-	g_type_init();
-#endif
-
 	app = g_new0(GeanyApp, 1);
 	memset(&main_status, 0, sizeof(GeanyStatus));
 	memset(&prefs, 0, sizeof(GeanyPrefs));
@@ -1083,13 +1079,6 @@ gint main_lib(gint argc, gchar **argv)
 	/* initialize TM before parsing command-line - needed for tag file generation */
 	app->tm_workspace = tm_get_workspace();
 	parse_command_line_options(&argc, &argv);
-
-#if ! GLIB_CHECK_VERSION(2, 32, 0)
-	/* Initialize GLib's thread system in case any plugins want to use it or their
-	 * dependencies (e.g. WebKit, Soup, ...). Deprecated since GLIB 2.32. */
-	if (!g_thread_supported())
-		g_thread_init(NULL);
-#endif
 
 #ifdef G_OS_UNIX
 	g_unix_signal_add(SIGTERM, signal_cb, GINT_TO_POINTER(SIGTERM));

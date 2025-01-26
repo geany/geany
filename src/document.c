@@ -91,7 +91,6 @@ GPtrArray *documents_array = NULL;
 /* an undo action, also used for redo actions */
 typedef struct
 {
-	GTrashStack *next;	/* pointer to the next stack element(required for the GTrashStack) */
 	guint type;			/* to identify the action */
 	gpointer *data; 	/* the old value (before the change), in case of a redo action
 						 * it contains the new value */
@@ -108,7 +107,7 @@ enum
 static guint doc_id_counter = 0;
 
 
-static void document_undo_clear_stack(GTrashStack **stack);
+static void document_undo_clear_stack(GSList **stack);
 static void document_undo_clear(GeanyDocument *doc);
 static void document_undo_add_internal(GeanyDocument *doc, guint type, gpointer data);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
@@ -1371,10 +1370,10 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			 * reloading, and at the end add an UNDO_RELOAD action that performs
 			 * all these actions in bulk. To keep track of how many undo actions
 			 * were added during this time, we compare the current undo-stack height
-			 * with its height at the end of the process. Note that g_trash_stack_height()
+			 * with its height at the end of the process. Note that g_slist_length()
 			 * is O(N), which is a little ugly, but this seems like the most maintainable
 			 * option. */
-			undo_reload_data->actions_count = g_trash_stack_height(&doc->priv->undo_actions);
+			undo_reload_data->actions_count = g_slist_length(doc->priv->undo_actions);
 
 			/* We use add_undo_reload_action to track any changes to the document that
 			 * require adding an undo action to revert the reload, but that do not
@@ -1441,7 +1440,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 				/* Calculate the number of undo actions that are part of the reloading
 				 * process, and add the UNDO_RELOAD action. */
 				undo_reload_data->actions_count =
-					g_trash_stack_height(&doc->priv->undo_actions) - undo_reload_data->actions_count;
+					g_slist_length(doc->priv->undo_actions) - undo_reload_data->actions_count;
 
 				/* We only add an undo-reload action if the document has actually changed.
 				 * At the time of writing, this condition is moot because sci_set_text
@@ -2902,11 +2901,12 @@ void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
  * All Scintilla events are stored in the undo / redo buffer and are passed through. */
 
 /* Clears an Undo or Redo buffer. */
-void document_undo_clear_stack(GTrashStack **stack)
+void document_undo_clear_stack(GSList **stack)
 {
-	while (g_trash_stack_height(stack) > 0)
+	while (*stack)
 	{
-		undo_action *a = g_trash_stack_pop(stack);
+		GSList *top = *stack;
+		undo_action *a = top->data;
 
 		if (G_LIKELY(a != NULL))
 		{
@@ -2919,8 +2919,10 @@ void document_undo_clear_stack(GTrashStack **stack)
 			}
 			g_free(a);
 		}
+
+		*stack = top->next;
+		g_slist_free1(top);
 	}
-	*stack = NULL;
 }
 
 /* Clears the Undo and Redo buffer (to be called when reloading or closing the document) */
@@ -2948,7 +2950,7 @@ void document_undo_add_internal(GeanyDocument *doc, guint type, gpointer data)
 	action->type = type;
 	action->data = data;
 
-	g_trash_stack_push(&doc->priv->undo_actions, action);
+	doc->priv->undo_actions = g_slist_prepend(doc->priv->undo_actions, action);
 
 	/* avoid unnecessary redraws */
 	if (type != UNDO_SCINTILLA || !doc->changed)
@@ -2971,7 +2973,7 @@ gboolean document_can_undo(GeanyDocument *doc)
 {
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	if (g_trash_stack_height(&doc->priv->undo_actions) > 0 || sci_can_undo(doc->editor->sci))
+	if (doc->priv->undo_actions || sci_can_undo(doc->editor->sci))
 		return TRUE;
 	else
 		return FALSE;
@@ -2990,11 +2992,18 @@ static void update_changed_state(GeanyDocument *doc)
 
 void document_undo(GeanyDocument *doc)
 {
-	undo_action *action;
+	GSList *top;
+	undo_action *action = NULL;
 
 	g_return_if_fail(doc != NULL);
 
-	action = g_trash_stack_pop(&doc->priv->undo_actions);
+	top = doc->priv->undo_actions;
+	if (top)
+	{
+		action = top->data;
+		doc->priv->undo_actions = top->next;
+		g_slist_free1(top);
+	}
 
 	if (G_UNLIKELY(action == NULL))
 	{
@@ -3048,7 +3057,7 @@ void document_undo(GeanyDocument *doc)
 				/* When undoing, UNDO_EOL is always followed by UNDO_SCINTILLA
 				 * which undos the line endings in the editor and should be
 				 * performed together with UNDO_EOL. */
-				next_action = g_trash_stack_peek(&doc->priv->undo_actions);
+				next_action = doc->priv->undo_actions ? doc->priv->undo_actions->data : NULL;
 				if (next_action && next_action->type == UNDO_SCINTILLA)
 					document_undo(doc);
 				break;
@@ -3090,7 +3099,7 @@ gboolean document_can_redo(GeanyDocument *doc)
 {
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	if (g_trash_stack_height(&doc->priv->redo_actions) > 0 || sci_can_redo(doc->editor->sci))
+	if (doc->priv->redo_actions || sci_can_redo(doc->editor->sci))
 		return TRUE;
 	else
 		return FALSE;
@@ -3099,11 +3108,18 @@ gboolean document_can_redo(GeanyDocument *doc)
 
 void document_redo(GeanyDocument *doc)
 {
-	undo_action *action;
+	GSList *top;
+	undo_action *action = NULL;
 
 	g_return_if_fail(doc != NULL);
 
-	action = g_trash_stack_pop(&doc->priv->redo_actions);
+	top = doc->priv->redo_actions;
+	if (top)
+	{
+		action = top->data;
+		doc->priv->redo_actions = top->next;
+		g_slist_free1(top);
+	}
 
 	if (G_UNLIKELY(action == NULL))
 	{
@@ -3126,7 +3142,7 @@ void document_redo(GeanyDocument *doc)
 				/* When redoing an EOL change, the UNDO_SCINTILLA which changes
 				 * the line ends in the editor is followed by UNDO_EOL
 				 * which should be performed together with UNDO_SCINTILLA. */
-				next_action = g_trash_stack_peek(&doc->priv->redo_actions);
+				next_action = doc->priv->redo_actions ? doc->priv->redo_actions->data : NULL;
 				if (next_action != NULL && next_action->type == UNDO_EOL)
 					document_redo(doc);
 				break;
@@ -3204,7 +3220,7 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 	action->type = type;
 	action->data = data;
 
-	g_trash_stack_push(&doc->priv->redo_actions, action);
+	doc->priv->redo_actions = g_slist_prepend(doc->priv->redo_actions, action);
 
 	if (type != UNDO_SCINTILLA || !doc->changed)
 		document_set_text_changed(doc, TRUE);
