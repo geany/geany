@@ -657,13 +657,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	notebook_new_tab(doc);
 
-	/* select document in sidebar */
-	{
-		GtkTreeSelection *sel;
-
-		sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
-		gtk_tree_selection_select_iter(sel, &doc->priv->iter);
-	}
+	sidebar_select_openfiles_item(doc);
 
 	ui_document_buttons_update();
 

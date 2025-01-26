@@ -78,6 +78,12 @@ void on_entry_tagfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_po
 
 void on_entry_tagfilter_activate(GtkEntry *entry, gpointer user_data);
 
+void on_entry_docfilter_changed(GtkAction *action, gpointer user_data);
+
+void on_entry_docfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data);
+
+void on_entry_docfilter_activate(GtkEntry *entry, gpointer user_data);
+
 void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_find_usage1_activate(GtkMenuItem *menuitem, gpointer user_data);

@@ -8399,17 +8399,47 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow7">
+                      <object class="GtkVBox" id="vbox47">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
+                        <property name="can-focus">False</property>
                         <child>
-                          <object class="GtkTreeView" id="treeview6">
+                          <object class="GtkEntry" id="entry_docfilter">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection"/>
+                            <property name="tooltip-text" translatable="yes">Filter the document list using the entered text. Separate multiple filters with a space.</property>
+                            <property name="invisible-char">•</property>
+                            <property name="primary-icon-stock">gtk-find</property>
+                            <property name="secondary-icon-stock">gtk-clear</property>
+                            <property name="primary-icon-activatable">False</property>
+                            <signal name="activate" handler="on_entry_docfilter_activate" swapped="no"/>
+                            <signal name="changed" handler="on_entry_docfilter_changed" swapped="no"/>
+                            <signal name="icon-press" handler="on_entry_docfilter_icon_press" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkScrolledWindow" id="scrolledwindow7">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <child>
+                              <object class="GtkTreeView" id="treeview6">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection"/>
+                                </child>
+                              </object>
                             </child>
                           </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>

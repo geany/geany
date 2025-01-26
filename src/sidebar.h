@@ -67,6 +67,8 @@ enum
 	DOCUMENTS_COLOR,
 	DOCUMENTS_FILENAME,     /* full filename */
 	DOCUMENTS_FOLD,         /* fold state stored when folding parent rows */
+	DOCUMENTS_VISIBLE,
+	DOCUMENTS_COLUMNS_NUM
 };
 
 void sidebar_init(void);
@@ -80,6 +82,8 @@ void sidebar_openfiles_add(GeanyDocument *doc);
 void sidebar_openfiles_update(GeanyDocument *doc);
 
 void sidebar_openfiles_update_all(void);
+
+void sidebar_openfiles_set_filter(const gchar *filter);
 
 void sidebar_select_openfiles_item(GeanyDocument *doc);
 
