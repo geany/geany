@@ -46,8 +46,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'c-cpp', 'python' ]
-        # CodeQL supports [ 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift' ]
+        include:
+          - language: c-cpp
+            #build-mode: autobuild
+            build-mode: manual
+          - language: python
+            build-mode: none
 
     steps:
     - name: Checkout repository
@@ -57,21 +61,33 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
+        config: |
+          paths-ignore:
+            - tests/ctags/simple.py
 
     - name: Install dependencies
+      if: matrix.language == 'c-cpp'
       run: |
         sudo apt-get update -qq
         sudo apt-get install --assume-yes --no-install-recommends \
-          ccache \
-          gettext autopoint \
-          libtool \
-          libgtk-3-dev \
+          autopoint \
           doxygen \
+          gettext \
+          libgtk-3-dev \
+          libtool \
+          meson \
           python3-docutils \
           python3-lxml \
           rst2pdf
 
+    - name: Build Geany
+      if: matrix.build-mode == 'manual'
+      run: |
+          meson _build
+          ninja -C _build
+
     - name: Autobuild
+      if: matrix.build-mode == 'autobuild'
       uses: github/codeql-action/autobuild@v3
 
     - name: Perform CodeQL Analysis
