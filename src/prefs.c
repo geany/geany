@@ -590,6 +590,7 @@ static void prefs_init_dialog(void)
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_line_endings);
+	on_check_line_end_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_endings_only_when_differ");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
