@@ -1041,8 +1041,8 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 	{
 		/* path has changed, so remove and re-add */
 		GtkTreeModel *filter_model = gtk_tree_view_get_model(GTK_TREE_VIEW(tv.tree_openfiles));
+		GtkTreeSelection *treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
 		GtkTreeIter filter_iter;
-		GtkTreeSelection *treesel;
 		gboolean sel = FALSE;
 		gboolean have_filter_iter;
 
@@ -1050,16 +1050,20 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 			GTK_TREE_MODEL_FILTER(filter_model), &filter_iter, iter);
 
 		if (have_filter_iter)
-		{
-			treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
 			sel = gtk_tree_selection_iter_is_selected(treesel, &filter_iter);
-		}
 
 		openfiles_remove(doc);
 		sidebar_openfiles_add(doc);
 
 		if (sel)
-			gtk_tree_selection_select_iter(treesel, &filter_iter);
+		{
+			/* we need to re-convert iter->filter_iter as the original iter
+			 * becomes invalid after removal and re-addition of doc from/to sidebar */
+			have_filter_iter = gtk_tree_model_filter_convert_child_iter_to_iter(
+				GTK_TREE_MODEL_FILTER(filter_model), &filter_iter, iter);
+			if (have_filter_iter)
+				gtk_tree_selection_select_iter(treesel, &filter_iter);
+		}
 	}
 	g_free(fname);
 }
