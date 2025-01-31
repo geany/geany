@@ -760,7 +760,9 @@ Column mode editing (rectangular selections)
 
 There is basic support for column mode editing. To use it, create a
 rectangular selection by holding down the Control and Shift keys
-(or Alt and Shift on Windows) while selecting some text.
+(or Alt and Shift on Windows) while selecting some text using the mouse.
+To create a rectangular selection using the keyboard only, hold down the
+Alt and Shift keys while using the cursor keys to select some text.
 Once a rectangular selection exists you can start editing the text within
 this selection and the modifications will be done for every line in the
 selection.
