@@ -53,11 +53,16 @@
 
 #include <windows.h>
 #include <commdlg.h>
+#include <dwmapi.h>
 #include <shellapi.h>
 #include <shlobj.h>
 
 #include <glib/gstdio.h>
 #include <gdk/gdkwin32.h>
+
+#ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
+#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
+#endif
 
 
 /* Little wrapper for _waccess(), returns errno or 0 if there was no error */
@@ -325,6 +330,45 @@ gchar *win32_get_user_config_dir(void)
 	// glib fallback
 	g_warning("Failed to retrieve Windows config dir, falling back to default");
 	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
+}
+
+
+/* Makes titlebar dark when using dark theme; call this before
+ * gtk_widget_show(window) to avoid titlebar color change */
+void win32_update_titlebar_theme(GtkWidget *window)
+{
+	const gchar *reg_path = "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+	gboolean is_light_theme = TRUE;
+	DWORD val;
+	DWORD data_size = sizeof(val);
+
+	g_return_if_fail(GTK_IS_WINDOW(window));
+
+	if (RegGetValueA(HKEY_CURRENT_USER, reg_path, "AppsUseLightTheme", RRF_RT_DWORD, NULL, &val, &data_size) == ERROR_SUCCESS)
+		is_light_theme = val;
+
+	if (!is_light_theme)
+	{
+		GdkWindow *gdk_window;
+
+		/* make sure the window is realized so the underlying GdkWindow is created */
+		gtk_widget_realize(window);
+
+		gdk_window = gtk_widget_get_window(window);
+		if (gdk_window)
+		{
+			HWND hwnd = (HWND)gdk_win32_window_get_handle(gdk_window);
+			if (hwnd)
+			{
+				BOOL use_dark_mode = TRUE;
+				DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &use_dark_mode, sizeof(use_dark_mode));
+			}
+			else
+				g_warning("Failed to get HWND from GdkWindow.");
+		}
+		else
+			g_warning("Failed to get GdkWindow from GtkWidget.");
+	}
 }
 
 #endif

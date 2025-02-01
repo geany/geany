@@ -44,6 +44,7 @@
 #include "toolbar.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "win32.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -574,6 +575,9 @@ void search_show_find_dialog(void)
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
 
 		set_dialog_position(find_dlg.dialog, find_dlg.position);
+#ifdef G_OS_WIN32
+		win32_update_titlebar_theme(find_dlg.dialog);
+#endif
 		gtk_widget_show_all(find_dlg.dialog);
 	}
 	else
@@ -752,6 +756,9 @@ void search_show_replace_dialog(void)
 			gtk_entry_set_text(GTK_ENTRY(replace_dlg.find_entry), sel);
 
 		set_dialog_position(replace_dlg.dialog, replace_dlg.position);
+#ifdef G_OS_WIN32
+		win32_update_titlebar_theme(replace_dlg.dialog);
+#endif
 		gtk_widget_show_all(replace_dlg.dialog);
 	}
 	else
@@ -1058,6 +1065,9 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 	if (fif_dlg.dialog == NULL)
 	{
 		create_fif_dialog();
+#ifdef G_OS_WIN32
+		win32_update_titlebar_theme(fif_dlg.dialog);
+#endif
 		gtk_widget_show_all(fif_dlg.dialog);
 		if (doc && !text)
 			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
