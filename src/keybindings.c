@@ -2158,7 +2158,7 @@ static gboolean cb_func_editor_action(guint key_id)
 				editor_show_calltip(doc->editor, -1);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
-			if (check_current_word(doc, FALSE))
+			//do not check here: if (check_current_word(doc, FALSE))
 				on_context_action1_activate(GTK_MENU_ITEM(ui_lookup_widget(main_widgets.editor_menu,
 					"context_action1")), NULL);
 			break;
