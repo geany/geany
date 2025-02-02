@@ -2817,8 +2817,8 @@ The following format characters are available for the statusbar template:
 ============  ===========================================================
 Placeholder   Description
 ============  ===========================================================
-  ``%l``      The current line number starting at 1
-  ``%L``      The total number of lines
+  ``%l``      The current line number starting at 1.
+  ``%L``      The total number of lines.
   ``%c``      The current column number starting at 0, including virtual
               space.
   ``%C``      The current column number starting at 1, including virtual
@@ -2828,20 +2828,27 @@ Placeholder   Description
   ``%n``      The number of selected characters, even if only whole lines
               are selected.
   ``%w``      Shows ``RO`` when the document is in read-only mode,
-              otherwise shows whether the editor is in overtype (OVR)
-              or insert (INS) mode.
-  ``%t``      Shows the indentation mode, either tabs (TAB),
-              spaces (SP) or both (T/S).
-  ``%m``      Shows whether the document is modified (MOD) or nothing.
+              otherwise shows whether the editor is in overtype (``OVR``)
+              or insert (``INS``) mode.
+  ``%t``      Shows the indentation mode, either tabs (``TAB``),
+              spaces (``SP``) or both (``T/S``).
+  ``%m``      Shows whether the document is modified (``MOD``) or nothing.
   ``%M``      The name of the document's line-endings (ex. ``Unix (LF)``)
-  ``%e``      The name of the document's encoding (ex. UTF-8).
-  ``%f``      The filetype of the document (ex. None, Python, C, etc).
+  ``%e``      The name of the document's encoding (ex. ``UTF-8``).
+  ``%f``      The filetype of the document (ex. ``None``, ``Python``,
+              ``C``, etc).
   ``%S``      The name of the scope where the caret is located.
   ``%p``      The caret position in the entire document starting at 0.
-  ``%r``      Shows whether the document is read-only (RO) or nothing.
+  ``%r``      Shows whether the document is read-only (``RO``) or nothing.
   ``%Y``      The Scintilla style number at the caret position. This is
               useful if you're debugging color schemes or related code.
 ============  ===========================================================
+
+Every placeholder may also specify width, e. g. ``%3l``. Width is the minimum
+number of characters to be shown. If the value to show is shorter than width,
+the result is left-padded with spaces, or right-padded in case of negative
+width. The value is not truncated even if the result is larger. Width should be
+in range [-300..300], if width is out of the range, it will be clipped.
 
 Terminal (VTE) preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
