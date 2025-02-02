@@ -854,7 +854,7 @@ static void styleset_init_from_mapping(guint ft_id, GKeyFile *config, GKeyFile *
 
 
 /* STYLE_DEFAULT will be set to match the first style. */
-static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer,
+static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, const gchar *lexer_name,
 		const HLStyle *styles, gsize n_styles,
 		const HLKeyword *keywords, gsize n_keywords,
 		const HLProperty *properties, gsize n_properties)
@@ -864,7 +864,7 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 	g_assert(ft_id != GEANY_FILETYPES_NONE);
 
 	/* lexer */
-	sci_set_lexer(sci, lexer);
+	sci_set_lexer(sci, lexer_name);
 
 	/* styles */
 	styleset_common(sci, ft_id);
@@ -898,7 +898,7 @@ static void styleset_from_mapping(ScintillaObject *sci, guint ft_id, guint lexer
 
 static void styleset_default(ScintillaObject *sci, guint ft_id)
 {
-	sci_set_lexer(sci, SCLEX_NULL);
+	sci_set_lexer(sci, "null");
 
 	/* we need to set STYLE_DEFAULT before we call SCI_STYLECLEARALL in styleset_common() */
 	set_sci_style(sci, STYLE_DEFAULT, GEANY_FILETYPES_NONE, GCS_DEFAULT);
