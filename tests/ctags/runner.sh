@@ -14,7 +14,10 @@ trap 'rm -rf "$TMPDIR"' EXIT
 # related configuration files
 mkdir -p "$CONFDIR" || exit 99
 mkdir -p "$CONFDIR/filedefs/" || exit 99
-cp "${top_srcdir:-../..}"/data/filetype_extensions.conf "$CONFDIR" || exit 99
+# Add *.Filetype_unittest extension so we can match filetypes for which there
+# are no extension patterns, like e.g. Meson.
+sed 's/^\([^=[]\{1,\}\)\(=[^;]\{1,\}\(;[^;]\{1,\}\)*\);*$/\1\2;*.\1_unittest;/' \
+  < "${top_srcdir:-../..}"/data/filetype_extensions.conf > "$CONFDIR/filetype_extensions.conf" || exit 99
 cp "${top_srcdir:-../..}"/data/filedefs/filetypes.* "$CONFDIR/filedefs/" || exit 99
 
 shift
