@@ -203,9 +203,11 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 			gtk_widget_show_all(dialog);
 			if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 			{
+				GtkTreeIter child_iter;
 				const gchar *new_text = gtk_label_get_text(GTK_LABEL(accel_label));
 
-				kb_change_iter_shortcut(kbdata, &iter, new_text);
+				gtk_tree_model_filter_convert_iter_to_child_iter(GTK_TREE_MODEL_FILTER(model), &child_iter, &iter);
+				kb_change_iter_shortcut(kbdata, &child_iter, new_text);
 			}
 			gtk_widget_destroy(dialog);
 
