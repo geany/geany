@@ -50,13 +50,17 @@ AC_CHECK_HEADERS([fcntl.h stdlib.h sys/time.h errno.h limits.h])
 # Checks for dependencies needed by ctags
 AC_CHECK_HEADERS([dirent.h fnmatch.h direct.h io.h sys/dir.h])
 AC_DEFINE([HAVE_STDBOOL_H], [1], [whether or not to use <stdbool.h>.])
-AC_CHECK_FUNC([regcomp],
-		[have_regcomp=yes],
-		[have_regcomp=no
-		 dnl various stuff for ctags/gnu_regex/
-		 AC_CHECK_HEADERS([langinfo.h locale.h libintl.h wctype.h wchar.h])
-		 AC_CHECK_FUNCS([memcpy isblank wcrtomb mbrtowc wcscoll])
-		 AC_FUNC_ALLOCA])
+AC_CANONICAL_HOST
+AS_CASE([${host_os}],
+        [darwin*], [dnl Using builtin regex on macOS for performance reasons
+                    have_regcomp=no],
+        [AC_CHECK_FUNC([regcomp],
+                       [have_regcomp=yes],
+                       [have_regcomp=no
+                        dnl various stuff for ctags/gnu_regex/
+                        AC_CHECK_HEADERS([langinfo.h locale.h libintl.h wctype.h wchar.h])
+                        AC_CHECK_FUNCS([memcpy isblank wcrtomb mbrtowc wcscoll])
+                        AC_FUNC_ALLOCA])])
 AM_CONDITIONAL([USE_BUNDLED_REGEX], [test "xno" = "x$have_regcomp"])
 AC_CHECK_FUNC([fnmatch], [have_fnmatch=yes], [have_fnmatch=no])
 AM_CONDITIONAL([USE_BUNDLED_FNMATCH], [test "xno" = "x$have_fnmatch"])
