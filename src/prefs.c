@@ -1405,13 +1405,17 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext,
 {
 	if (path != NULL && new_text != NULL)
 	{
+		GtkTreeModel *filter_model = gtk_tree_view_get_model(kbdata->tree);
 		GtkTreeIter iter;
+		GtkTreeIter child_iter;
 
-		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(kbdata->store), &iter, path);
-		if (gtk_tree_model_iter_has_child(GTK_TREE_MODEL(kbdata->store), &iter))
+		gtk_tree_model_get_iter_from_string(filter_model, &iter, path);
+		if (gtk_tree_model_iter_has_child(filter_model, &iter))
 			return;	/* ignore group items */
 
-		kb_change_iter_shortcut(kbdata, &iter, new_text);
+		gtk_tree_model_filter_convert_iter_to_child_iter(GTK_TREE_MODEL_FILTER(filter_model),
+				&child_iter, &iter);
+		kb_change_iter_shortcut(kbdata, &child_iter, new_text);
 	}
 }
 
