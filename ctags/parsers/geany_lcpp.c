@@ -646,11 +646,9 @@ static int skipToEndOfCxxRawLiteralString (void)
 static int skipToEndOfChar (void)
 {
 	int c;
-	int count = 0;
 
 	while ((c = getcAndCollect ()) != EOF)
 	{
-	    ++count;
 		if (c == BACKSLASH)
 			getcAndCollect ();  /* throw away next character, too */
 		else if (c == SINGLE_QUOTE)
