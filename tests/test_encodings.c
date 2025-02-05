@@ -137,7 +137,7 @@ static void test_encodings_convert_utf8_to_utf8_auto(void)
 	G_STMT_START {																							\
 		gboolean has_bom = strncmp(str, UTF8_BOM, 3) == 0;													\
 		g_assert(success == assert_convert_to_utf8_auto(str, G_N_ELEMENTS(str) - 1, G_N_ELEMENTS(str) - 1,	\
-				forced_enc, str + (has_bom ? 3 : 0), G_N_ELEMENTS(str) - 1 - (has_bom ? 3 : 0),				\
+				forced_enc, &str[has_bom ? 3 : 0], G_N_ELEMENTS(str) - 1 - (has_bom ? 3 : 0),				\
 				forced_enc, has_bom, strlen(str) != G_N_ELEMENTS(str) - 1));								\
 	} G_STMT_END
 
