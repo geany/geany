@@ -106,8 +106,6 @@ static GeanyFiletypeGroupID get_group(const gchar *name)
 
 static GeanyFiletypeGroupID get_filetype_group(const gchar *title, const gchar *name)
 {
-	GeanyFiletypeGroupID ret;
-
 	if (g_strcmp0(name, "None") == 0)
 		return GEANY_FILETYPE_GROUP_NONE;
 
