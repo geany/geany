@@ -289,7 +289,6 @@ gint socket_init(gint argc, gchar **argv, G_GNUC_UNUSED gushort socket_port, con
 #else
 	gchar *display_name = NULL;
 	const gchar *hostname = g_get_host_name();
-	GdkDisplay *display = gdk_display_get_default();
 	gchar *p;
 
 	/* On OS X with quartz backend gdk_display_get_name() returns hostname
@@ -297,6 +296,7 @@ gint socket_init(gint argc, gchar **argv, G_GNUC_UNUSED gushort socket_port, con
 	 * as display name is a X11 specific thing). This call can lead to network
 	 * query and block for several seconds so better skip it. */
 #ifndef GDK_WINDOWING_QUARTZ
+	GdkDisplay *display = gdk_display_get_default();
 	if (display != NULL)
 		display_name = g_strdup(gdk_display_get_name(display));
 #endif
