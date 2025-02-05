@@ -47,6 +47,8 @@ gchar *win32_expand_environment_variables(const gchar *str);
 
 gchar *win32_get_user_config_dir(void);
 
+void win32_update_titlebar_theme(GtkWidget *window);
+
 G_END_DECLS
 
 #endif /* G_OS_WIN32 */
