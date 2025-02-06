@@ -1739,6 +1739,7 @@ static void on_sidebar_switch_page(GtkNotebook *notebook,
 
 void sidebar_init(void)
 {
+	GtkEntry *filter_entry;
 	StashGroup *group;
 
 	openfiles_filter = g_strdup("");
@@ -1762,6 +1763,11 @@ void sidebar_init(void)
 		G_CALLBACK(sidebar_tabs_show_hide), NULL);
 	g_signal_connect_after(main_widgets.sidebar_notebook, "switch-page",
 		G_CALLBACK(on_sidebar_switch_page), NULL);
+
+	filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_docfilter"));
+	ui_entry_add_clear_icon(filter_entry);
+	filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
+	ui_entry_add_clear_icon(filter_entry);
 }
 
 #define WIDGET(w) w && GTK_IS_WIDGET(w)
