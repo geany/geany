@@ -212,6 +212,14 @@ static gboolean update_visibility(GtkTreeStore *store, GtkTreeIter *root,
 
 
 void sidebar_tagtree_set_filter(GeanyDocument *doc, const gchar *filter)
+{
+	SETPTR(doc->priv->tag_filter, g_strdup(filter));
+	update_visibility(doc->priv->tag_store, NULL, FALSE,
+		SYMBOLS_COLUMN_VISIBLE, SYMBOLS_COLUMN_NAME, doc->priv->tag_filter);
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc->priv->tag_tree));
+}
+
+
 /* update = rescan the tags for doc->filename */
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
@@ -253,16 +261,28 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 	{	/* updating the tag list in the left tag window */
 		if (doc->priv->tag_tree == NULL)
 		{
+			GtkTreeModel *filter_model;
+
 			doc->priv->tag_store = gtk_tree_store_new(
-				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, TM_TYPE_TAG, G_TYPE_STRING);
+				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, TM_TYPE_TAG,
+				G_TYPE_STRING, G_TYPE_BOOLEAN);
 			doc->priv->tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc->priv->tag_tree, doc->priv->tag_store);
+
+			filter_model = gtk_tree_model_filter_new(GTK_TREE_MODEL(doc->priv->tag_store), NULL);
+			gtk_tree_model_filter_set_visible_column(GTK_TREE_MODEL_FILTER(filter_model),
+				SYMBOLS_COLUMN_VISIBLE);
+			gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree), filter_model);
+			g_object_unref(filter_model);
+
 			gtk_widget_show(doc->priv->tag_tree);
 			g_object_ref((gpointer)doc->priv->tag_tree);	/* to hold it after removing */
 		}
 
 		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
 		doc->priv->tag_tree_dirty = FALSE;
+		/* always update visibility (necessary to correctly update parents) */
+		sidebar_tagtree_set_filter(doc, doc->priv->tag_filter);
 	}
 
 	if (doc->has_tags)
