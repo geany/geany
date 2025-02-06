@@ -315,6 +315,7 @@ ctags_tests = [
 	'ctags/simple.lisp.tags',
 	'ctags/simple.lua.tags',
 	'ctags/simple.mak.tags',
+	'ctags/simple.Meson_unittest.tags',
 	'ctags/simple.md.tags',
 	'ctags/simple.ml.tags',
 	'ctags/simple.php.tags',

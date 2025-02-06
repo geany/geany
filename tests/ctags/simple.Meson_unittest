@@ -1,0 +1,48 @@
+project('c++ foolib', 'cpp',
+  version : '1.0.0',
+  license : 'MIT')
+add_global_arguments('-DSOME_TOKEN=value', language : 'cpp')
+glib_dep = dependency('glib-2.0')
+
+inc = include_directories('include')
+
+subdir('include')
+subdir('src')
+subdir('test')
+
+pkg_mod = import('pkgconfig')
+pkg_mod.generate(libraries : foolib,
+                 version : '1.0',
+                 name : 'libfoobar',
+                 filebase : 'foobar',
+                 description : 'A Library to barnicate your foos.')
+
+foo_sources = ['source1.cpp', 'source2.cpp']
+foolib = shared_library('foo',
+                        foo_sources,
+                        include_directories : inc,
+                        dependencies : glib_dep,
+                        install : true)
+
+testexe = executable('testexe', 'footest.cpp',
+                     include_directories : inc,
+                     link_with : foolib)
+test('foolib test', testexe)
+
+mytarget = custom_target('targetname',
+  output : outfile,
+  input : infile,
+  command : [comp, '@INPUT@', '@OUTPUT@'],
+  install : true,
+  install_dir : 'subdir')
+
+suites = [
+        { 'suite': 'dbus-broker', 'env': ['DBUS_BROKER_TEST_BROKER=' + exe_dbus_broker.full_path()]},
+]
+foreach suite : suites
+        benchmark('Connection', bench_connect, timeout: 60, kwargs: suite)
+        benchmark('Message passing', bench_message, timeout: 120, kwargs: suite)
+endforeach
+
+run_target('inspector',
+  command : ['scripts/inspect.sh', '--exclude', 'tests'])
