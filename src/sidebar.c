@@ -173,7 +173,8 @@ static void create_default_tag_tree(void)
 }
 
 
-static gboolean update_visibility(GtkTreeStore *store, GtkTreeIter *root, gboolean visible_root)
+static gboolean update_visibility(GtkTreeStore *store, GtkTreeIter *root,
+	gboolean visible_root, guint visibility_column, guint name_column, const gchar *filter)
 {
 	GtkTreeModel *model = GTK_TREE_MODEL(store);
 	gboolean is_visible = FALSE;
@@ -190,17 +191,18 @@ static gboolean update_visibility(GtkTreeStore *store, GtkTreeIter *root, gboole
 
 		/* check if parent matches and then display *all* its children, otherwise
 		 * check each child if the action name matches */
-		gtk_tree_model_get(model, &parent, DOCUMENTS_SHORTNAME, &parent_name, -1);
-		if (! EMPTY(openfiles_filter))
-			visible_parent = utils_utf8_substring_match(openfiles_filter, parent_name);
+		gtk_tree_model_get(model, &parent, name_column, &parent_name, -1);
+		if (! EMPTY(filter))
+			visible_parent = utils_utf8_substring_match(filter, parent_name);
 		g_free(parent_name);
 
-		visible_children = update_visibility(store, &parent, visible_root || visible_parent);
+		visible_children = update_visibility(store, &parent, visible_root || visible_parent,
+			visibility_column, name_column, filter);
 
 		if (visible_parent || visible_children)
 			is_visible = TRUE;
 
-		gtk_tree_store_set(store, &parent, DOCUMENTS_VISIBLE,
+		gtk_tree_store_set(store, &parent, visibility_column,
 			visible_root || visible_parent || visible_children, -1);
 
 		if (! gtk_tree_model_iter_next(model, &parent))
@@ -1123,7 +1125,8 @@ void sidebar_openfiles_set_filter(const gchar *filter)
 	GeanyDocument *doc = document_get_current();
 
 	SETPTR(openfiles_filter, g_strdup(filter));
-	update_visibility(store_openfiles, NULL, FALSE);
+	update_visibility(store_openfiles, NULL, FALSE,
+		DOCUMENTS_VISIBLE, DOCUMENTS_SHORTNAME, openfiles_filter);
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(tv.tree_openfiles));
 	if (doc)
 		sidebar_select_openfiles_item(doc);
