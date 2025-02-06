@@ -173,6 +173,43 @@ static void create_default_tag_tree(void)
 }
 
 
+static gboolean update_visibility(GtkTreeStore *store, GtkTreeIter *root, gboolean visible_root)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	gboolean is_visible = FALSE;
+	GtkTreeIter parent;
+
+	if (!gtk_tree_model_iter_children(model, &parent, root))
+		return FALSE;
+
+	while (TRUE)
+	{
+		gboolean visible_parent = TRUE;
+		gboolean visible_children;
+		gchar *parent_name;
+
+		/* check if parent matches and then display *all* its children, otherwise
+		 * check each child if the action name matches */
+		gtk_tree_model_get(model, &parent, DOCUMENTS_SHORTNAME, &parent_name, -1);
+		if (! EMPTY(openfiles_filter))
+			visible_parent = utils_utf8_substring_match(openfiles_filter, parent_name);
+		g_free(parent_name);
+
+		visible_children = update_visibility(store, &parent, visible_root || visible_parent);
+
+		if (visible_parent || visible_children)
+			is_visible = TRUE;
+
+		gtk_tree_store_set(store, &parent, DOCUMENTS_VISIBLE,
+			visible_root || visible_parent || visible_children, -1);
+
+		if (! gtk_tree_model_iter_next(model, &parent))
+			return is_visible;
+	}
+}
+
+
+void sidebar_tagtree_set_filter(GeanyDocument *doc, const gchar *filter)
 /* update = rescan the tags for doc->filename */
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
@@ -1077,42 +1114,6 @@ void sidebar_openfiles_update_all(void)
 	foreach_document (i)
 	{
 		sidebar_openfiles_add(documents[i]);
-	}
-}
-
-
-static gboolean update_visibility(GtkTreeStore *store, GtkTreeIter *root, gboolean visible_root)
-{
-	GtkTreeModel *model = GTK_TREE_MODEL(store);
-	gboolean is_visible = FALSE;
-	GtkTreeIter parent;
-
-	if (!gtk_tree_model_iter_children(model, &parent, root))
-		return FALSE;
-
-	while (TRUE)
-	{
-		gboolean visible_parent = TRUE;
-		gboolean visible_children;
-		gchar *parent_name;
-
-		/* check if parent matches and then display *all* its children, otherwise
-		 * check each child if the action name matches */
-		gtk_tree_model_get(model, &parent, DOCUMENTS_SHORTNAME, &parent_name, -1);
-		if (! EMPTY(openfiles_filter))
-			visible_parent = utils_utf8_substring_match(openfiles_filter, parent_name);
-		g_free(parent_name);
-
-		visible_children = update_visibility(store, &parent, visible_root || visible_parent);
-
-		if (visible_parent || visible_children)
-			is_visible = TRUE;
-
-		gtk_tree_store_set(store, &parent, DOCUMENTS_VISIBLE,
-			visible_root || visible_parent || visible_children, -1);
-
-		if (! gtk_tree_model_iter_next(model, &parent))
-			return is_visible;
 	}
 }
 
