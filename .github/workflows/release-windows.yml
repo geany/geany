@@ -1,0 +1,91 @@
+#
+# Copyright:	2021, The Geany contributors
+# License:		GNU GPL v2 or later
+
+name: Release Windows
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+# cancel already running builds of the same branch or pull request
+concurrency:
+  group: ${{ github.workflow }}-${{ github.sha }}
+  cancel-in-progress: true
+
+env:
+  CFLAGS: -O2 -Werror=pointer-arith -Werror=implicit-function-declaration
+  JOBS: 2
+  DEBUG: 0
+
+jobs:
+
+  mingw64:
+    name: Mingw-w64 Build (Windows)
+    runs-on: ubuntu-24.04
+
+    env:
+      INFRASTRUCTURE_PATH:      ${{ github.workspace }}/.infrastructure
+      BUILDER_PATH:             ${{ github.workspace }}/.infrastructure/builders
+      DOCKER_REGISTRY:          "ghcr.io"
+      DOCKER_IMAGE_NAME:        "geany-mingw64-ci"
+      DOCKER_IMAGE_TAG:         "ghcr.io/geany/geany-mingw64-ci:latest"
+
+    steps:
+      - name: Checkout Geany
+        uses: actions/checkout@v4
+
+      - name: Checkout Build Scripts
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          repository: geany/infrastructure
+          path: ${{ env.INFRASTRUCTURE_PATH }}
+          token: ${{ github.token }}
+
+      - name: Show Environment
+        if: ${{ env.DEBUG == '1' }}
+        run: |
+            env | sort
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Or Build Docker Image
+        working-directory: ${{ env.BUILDER_PATH }}
+        run: |
+          docker_image_created=
+          docker pull ${{ env.DOCKER_IMAGE_TAG }} || true
+          if $(docker image inspect ${{ env.DOCKER_IMAGE_TAG }} --format="ignored" >/dev/null 2>&1); then
+              docker tag ${{ env.DOCKER_IMAGE_TAG }} ${{ env.DOCKER_IMAGE_NAME }}
+              docker_image_created=$(docker image inspect ${{ env.DOCKER_IMAGE_NAME }} --format='{{ index .Config.Labels "org.opencontainers.image.created" }}')
+              echo "Docker image built on: ${docker_image_created}"
+          fi
+
+          bash start_build.sh --log-to-stdout --mingw64 --rebuild-images
+          docker_image_created_new=$(docker image inspect ${{ env.DOCKER_IMAGE_NAME }} --format='{{ index .Config.Labels "org.opencontainers.image.created" }}')
+          # tag the image
+          if [ "${docker_image_created}" != "${docker_image_created_new}" ]; then
+              docker tag ${{ env.DOCKER_IMAGE_NAME }} ${{ env.DOCKER_IMAGE_TAG }}
+          fi
+
+      - name: Build Geany
+        working-directory: ${{ env.BUILDER_PATH }}
+        run: |
+            rm -rf ${{ github.workspace }}/.git
+            CI= bash start_build.sh --log-to-stdout --mingw64 --geany --geany-source "${{ github.workspace }}"
+
+      - name: Archive Geany Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: geany-installer-release-${{ github.ref_name }}
+          retention-days: 30
+          path: |
+            ${{ env.BUILDER_PATH }}/output/mingw64/geany-*.exe
+            ${{ env.BUILDER_PATH }}/output/mingw64/geany-*.zip
