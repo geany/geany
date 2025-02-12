@@ -262,8 +262,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 
 /** Gets the icon data corresponding to the provided TMIcon.
  * @param icon TMIcon.
- *
- * Returns the GdkPixbuf corresponding to the provided TMIcon.
+ * @returns The GdkPixbuf corresponding to the provided TMIcon.
  *
  * @since 2.1
  */
