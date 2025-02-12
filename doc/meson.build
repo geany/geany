@@ -88,12 +88,14 @@ if doxygen.found()
 	doxcfg.set('HTML', 'YES')
 	doxcfg.set('XML', 'NO')
 	doxcfg.set('SORT', 'YES')
+	doxcfg.set('WARN', 'YES')
 
 	doxgicfg = doxcfg
 	doxgicfg.set('GIRONLY', '')
 	doxgicfg.set('HTML', 'NO')
 	doxgicfg.set('XML', 'YES')
 	doxgicfg.set('SORT', 'NO')
+	doxgicfg.set('WARN', 'NO')
 
 	dep_doxygen = files([
 		'plugins.dox',

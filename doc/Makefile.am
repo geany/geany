@@ -101,6 +101,7 @@ Doxyfile: Doxyfile.in
 		-e 's,$(AT)HTML$(AT),YES,' \
 		-e 's,$(AT)XML$(AT),NO,' \
 		-e 's,$(AT)SORT$(AT),YES,' \
+		-e 's,$(AT)WARN$(AT),YES,' \
 		$< > $@ || ( $(RM) -f $@ ; exit 1 )
 
 doxygen_sources = \
@@ -141,6 +142,7 @@ Doxyfile-gi: Doxyfile.in
 		-e 's,$(AT)HTML$(AT),NO,' \
 		-e 's,$(AT)XML$(AT),YES,' \
 		-e 's,$(AT)SORT$(AT),NO,' \
+		-e 's,$(AT)WARN$(AT),NO,' \
 		$< > $@ || ( $(RM) -f $@ ; exit 1 )
 
 # we depend on Doxyfile.stamp not have this run in parallel with it to avoid
