@@ -136,8 +136,8 @@ else
 	cdata.set('GEANY_DATA_DIR', join_paths(prefix, get_option('datadir'), 'geany'))
 	cdata.set('GEANY_DOC_DIR', join_paths(prefix, get_option('datadir'), 'doc', 'geany'))
 endif
-cdata.set('top_srcdir', meson.source_root())
-cdata.set('top_builddir', meson.build_root())
+cdata.set('top_srcdir', meson.project_source_root())
+cdata.set('top_builddir', meson.project_build_root())
 
 # for geany.pc (adapted from GTK+)
 pcconf = cdata
@@ -923,7 +923,7 @@ executable('geany',
 	link_with: libgeany,
 	c_args: geany_cflags + [ '-DG_LOG_DOMAIN="Geany"' ],
 	dependencies: deps,
-	build_rpath: meson.build_root(),
+	build_rpath: meson.project_build_root(),
 	install_rpath: '$ORIGIN/../' + get_option('libdir'),
 	install: true,
 	win_subsystem: 'windows',
