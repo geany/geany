@@ -800,6 +800,7 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 	GtkTreeSelection *selection;
 	gchar *string;
 	GdkColor *color;
+	gchar *type;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
@@ -825,7 +826,7 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 			path = gtk_tree_model_get_path(model, &iter);
 			find_prev_build_dir(path, model, &dir);
 			gtk_tree_path_free(path);
-			msgwin_parse_compiler_error_line(string, dir, &filename, &line);
+			msgwin_parse_compiler_error_line(string, dir, &filename, &line, &type);
 			g_free(string);
 			g_free(dir);
 
@@ -861,17 +862,18 @@ static void make_absolute(gchar **filename, const gchar *dir)
  * relevant file with the error in *filename.
  * *line will be -1 if no error was found in string.
  * *filename must be freed unless it is NULL. */
-static void parse_file_line(ParseData *data, gchar **filename, gint *line)
+static void parse_file_line(ParseData *data, gchar **filename, gint *line, gchar **type)
 {
 	gchar *end = NULL;
 	gchar **fields;
+	gint default_number_of_tokens = -1;
 
 	*filename = NULL;
 	*line = -1;
 
 	g_return_if_fail(data->string != NULL);
 
-	fields = g_strsplit_set(data->string, data->pattern, data->min_fields);
+	fields = g_strsplit_set(data->string, data->pattern, default_number_of_tokens);
 
 	/* parse the line */
 	if (g_strv_length(fields) < data->min_fields)
@@ -881,6 +883,11 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 	}
 
 	*line = strtol(fields[data->line_idx], &end, 10);
+
+	if (data->line_idx+2 < g_strv_length(fields))
+	{
+		*type = g_strstrip(g_strdup(fields[data->line_idx+2]));
+	}
 
 	/* if the line could not be read, line is 0 and an error occurred, so we leave */
 	if (fields[data->line_idx] == end)
@@ -906,7 +913,7 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 
 
 static void parse_compiler_error_line(const gchar *string,
-		gchar **filename, gint *line)
+		gchar **filename, gint *line, gchar **type)
 {
 	ParseData data = {NULL, NULL, 0, 0, 0};
 
@@ -1058,7 +1065,7 @@ static void parse_compiler_error_line(const gchar *string,
 	}
 
 	if (data.pattern != NULL)
-		parse_file_line(&data, filename, line);
+		parse_file_line(&data, filename, line, type);
 }
 
 
@@ -1068,13 +1075,14 @@ static void parse_compiler_error_line(const gchar *string,
  * *line will be -1 if no error was found in string.
  * *filename must be freed unless it is NULL. */
 void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
-		gchar **filename, gint *line)
+		gchar **filename, gint *line, gchar **type)
 {
 	GeanyFiletype *ft;
 	gchar *trimmed_string, *utf8_dir;
 
 	*filename = NULL;
 	*line = -1;
+	*type = NULL;
 
 	if (G_UNLIKELY(string == NULL))
 		return;
@@ -1094,7 +1102,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line))
 	{
 		/* fallback to default old-style parsing */
-		parse_compiler_error_line(trimmed_string, filename, line);
+		parse_compiler_error_line(trimmed_string, filename, line, type);
 	}
 	make_absolute(filename, utf8_dir);
 	g_free(trimmed_string);
