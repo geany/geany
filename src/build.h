@@ -39,7 +39,7 @@ typedef enum
 	GEANY_GBG_COUNT		/**< count of groups. */
 } GeanyBuildGroup;
 
-/** Build menu item sources in increasing priority */
+/** Build command sources in increasing priority */
 typedef enum
 {
 	GEANY_BCS_DEF,		/**< Default values. */
