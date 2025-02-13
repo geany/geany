@@ -500,12 +500,12 @@ void ui_update_popup_copy_items(GeanyDocument *doc)
 }
 
 
-void ui_update_popup_goto_items(gboolean enable)
+void ui_update_popup_goto_items(gchar* enable)
 {
-	guint i, len;
-	len = G_N_ELEMENTS(widgets.popup_goto_items);
-	for (i = 0; i < len; i++)
-		ui_widget_set_sensitive(widgets.popup_goto_items[i], enable);
+    guint i, len;
+    len = G_N_ELEMENTS(widgets.popup_goto_items);
+    for (i = 0; i < len; i++)
+        ui_widget_set_sensitive(widgets.popup_goto_items[i], enable[i]=='1');
 }
 
 
