@@ -486,8 +486,8 @@ gboolean utils_utf8_substring_match(const gchar *key, const gchar *haystack)
 	gchar *case_normalized_key = NULL;
 	gboolean matched = TRUE;
 
-	g_return_val_if_fail(key != NULL, FALSE);
-	g_return_val_if_fail(haystack != NULL, FALSE);
+	if (!key || !haystack)
+		return FALSE;
 
 	normalized_string = g_utf8_normalize(haystack, -1, G_NORMALIZE_ALL);
 	normalized_key = g_utf8_normalize(key, -1, G_NORMALIZE_ALL);
