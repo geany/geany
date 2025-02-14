@@ -24,6 +24,7 @@ foreach dep : deps_in
 endforeach
 
 glib = deps[0]
+gtk = deps[2]
 
 # detect libc
 glibc = false
@@ -191,6 +192,16 @@ configure_file(
 	install_dir: join_paths(prefix, get_option('libdir'), 'pkgconfig'),
 	output: 'geany.pc',
 	configuration: pcconf
+)
+
+configure_file(
+	input: 'geany.nsi.in',
+	install: false,
+	output: 'geany.nsi',
+	configuration: {
+		'VERSION': meson.project_version(),
+		'GTK_VERSION': gtk.version(),
+	}
 )
 
 # CFLAGS for basic stuff that only depends on libc
