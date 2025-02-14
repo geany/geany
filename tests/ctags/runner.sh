@@ -18,6 +18,9 @@ mkdir -p "$CONFDIR/filedefs/" || exit 99
 # are no extension patterns, like e.g. Meson.
 sed 's/^\([^=[]\{1,\}\)\(=[^;]\{1,\}\(;[^;]\{1,\}\)*\);*$/\1\2;*.\1_unittest;/' \
   < "${top_srcdir:-../..}"/data/filetype_extensions.conf > "$CONFDIR/filetype_extensions.conf" || exit 99
+# add HCL filetype extension for the Terraform parser test (HCL is not an official Geany filetype)
+echo 'HCL=*.tf;*.tfvars;*.hcl;' >> "$CONFDIR/filetype_extensions.conf"
+echo -e '[settings]\nextension=tf\ntag_parser=Terraform' > "$CONFDIR/filedefs/filetypes.HCL.conf"
 cp "${top_srcdir:-../..}"/data/filedefs/filetypes.* "$CONFDIR/filedefs/" || exit 99
 
 shift

@@ -1260,6 +1260,23 @@ static TMParserMapGroup group_SCSS[] = {
 	{N_("ID Selectors"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
 };
 
+static TMParserMapEntry map_TERRAFORM[] = {
+	{'r', tm_tag_class_t},       // resource
+	{'d', tm_tag_enum_t},        // data
+	{'m', tm_tag_package_t},     // module
+	{'v', tm_tag_variable_t},    // variable
+	{'p', tm_tag_macro_t},       // provider
+	{'o', tm_tag_function_t},    // output
+};
+static TMParserMapGroup group_TERRAFORM[] = {
+	{N_("Resources"), TM_ICON_CLASS, tm_tag_class_t},
+	{N_("Data"), TM_ICON_OTHER, tm_tag_enum_t},
+	{N_("Modules"), TM_ICON_NAMESPACE, tm_tag_package_t},
+	{N_("Variable"), TM_ICON_VAR, tm_tag_variable_t},
+	{N_("Providers"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Outputs"), TM_ICON_METHOD, tm_tag_function_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1339,6 +1356,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(MESON),
 	MAP_ENTRY(SYSVERILOG),
 	MAP_ENTRY(SCSS),
+	MAP_ENTRY(TERRAFORM),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
