@@ -231,6 +231,11 @@ void plugin_extension_autocomplete_perform(GeanyDocument *doc, gboolean force)
 /**
  * Checks whether the provided extension is used for showing calltips.
  * 
+ * @param doc Document for which the check is performed.
+ * @param ext The extension for which the check is performed.
+ * @return @c TRUE if calltips are provided by the passed extension,
+ *         @c FALSE otherwise.
+ *
  * @see @c plugin_extension_autocomplete_provided()
  *
  * @since 2.1
@@ -252,6 +257,11 @@ void plugin_extension_calltips_show(GeanyDocument *doc, gboolean force)
  * Checks whether the provided extension is used for going to symbol
  * definition/declaration.
  * 
+ * @param doc Document for which the check is performed.
+ * @param ext The extension for which the check is performed.
+ * @return @c TRUE if symbol goto is provided by the passed extension,
+ *         @c FALSE otherwise.
+ *
  * @see @c plugin_extension_autocomplete_provided()
  *
  * @since 2.1
@@ -273,6 +283,11 @@ gboolean plugin_extension_goto_perform(GeanyDocument *doc, gint pos, gboolean de
  * Checks whether the provided extension is used for highlighting symbols in
  * the document.
  * 
+ * @param doc Document for which the check is performed.
+ * @param ext The extension for which the check is performed.
+ * @return @c TRUE if symbol highlighting is provided by the passed extension,
+ *         @c FALSE otherwise.
+ *
  * @see @c plugin_extension_autocomplete_provided()
  *
  * @since 2.1
