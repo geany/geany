@@ -14,6 +14,7 @@ parsers = \
 	optlib/forth.c \
 	optlib/meson.c \
 	optlib/scss.c \
+	optlib/terraform.c \
 	parsers/cxx/cxx.c \
 	parsers/cxx/cxx_debug.c \
 	parsers/cxx/cxx_debug.h \
