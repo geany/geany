@@ -80,6 +80,7 @@
 	ForthParser, \
 	MesonParser, \
 	SystemVerilogParser, \
-	SCSSParser
+	SCSSParser, \
+	TerraformParser
 
 #endif

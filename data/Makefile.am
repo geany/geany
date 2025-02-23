@@ -45,6 +45,7 @@ filetypes_dist = \
 	filedefs/filetypes.Groovy.conf \
 	filedefs/filetypes.haskell \
 	filedefs/filetypes.haxe \
+	filedefs/filetypes.HCL.conf \
 	filedefs/filetypes.html \
 	filedefs/filetypes.java \
 	filedefs/filetypes.javascript \
