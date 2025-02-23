@@ -1,6 +1,51 @@
 
 colorschemes = \
-	colorschemes/alt.conf
+	colorschemes/lgpl-2.0.txt \
+	colorschemes/lgpl-2.1.txt \
+	colorschemes/abc-dark.conf \
+	colorschemes/abc-light.conf \
+	colorschemes/alt.conf \
+	colorschemes/bespin.conf \
+	colorschemes/black.conf \
+	colorschemes/carbonfox.conf \
+	colorschemes/cyber-sugar.conf \
+	colorschemes/darcula.conf \
+	colorschemes/dark-colors.conf \
+	colorschemes/dark.conf \
+	colorschemes/delt-dark.conf \
+	colorschemes/dark-fruit-salad.conf \
+	colorschemes/earthsong.conf \
+	colorschemes/epsilon.conf \
+	colorschemes/evg-ega-dark.conf \
+	colorschemes/gedit.conf \
+	colorschemes/github.conf \
+	colorschemes/grey8.conf \
+	colorschemes/hacker.conf \
+	colorschemes/himbeere.conf \
+	colorschemes/inkpot.conf \
+	colorschemes/kugel.conf \
+	colorschemes/kurayami.conf \
+	colorschemes/matcha.conf \
+	colorschemes/mc.conf \
+	colorschemes/metallic-bottle.conf \
+	colorschemes/notepad-plus-plus.conf \
+	colorschemes/oblivion2.conf \
+	colorschemes/octagon.conf \
+	colorschemes/one-dark.conf \
+	colorschemes/pygments.conf \
+	colorschemes/retro.conf \
+	colorschemes/sleepy-pastel.conf \
+	colorschemes/slushpoppies.conf \
+	colorschemes/solarized-dark.conf \
+	colorschemes/solarized-light.conf \
+	colorschemes/spyder-dark.conf \
+	colorschemes/steampunk.conf \
+	colorschemes/tango-dark.conf \
+	colorschemes/tango-light.conf \
+	colorschemes/tinge.conf \
+	colorschemes/ubuntu.conf \
+	colorschemes/underthesea.conf \
+	colorschemes/vibrant-ink.conf
 
 filetypes_dist = \
 	filedefs/filetypes.abaqus \
