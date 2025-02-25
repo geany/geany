@@ -595,29 +595,27 @@ static void print_external(GeanyDocument *doc)
 		return;
 	}
 
-    /* TO DO - Pynckels - Add other replacements to extend the options for an external print command */
-
 	cmdline = g_strdup(printing_prefs.external_print_cmd);
-    utils_str_replace_all(&cmdline, "%f", doc->file_name);
 
-    /* replace %d with the absolute path of the dir of the current file */
-//    replacement = g_path_get_dirname(doc->file_name);
-//    utils_string_replace_all(&cmdline, "%d", replacement);
-//    g_free(replacement);
+    /* replace %d with the absolute path */
+    replacement = g_path_get_dirname(doc->file_name);
+    utils_str_replace_all(&cmdline, "%d", replacement);
+    g_free(replacement);
 
     /* replace %e with the filename (excluding extension) */
-//    executable = utils_remove_ext_from_filename(doc->file_name);
-//    replacement = g_path_get_basename(executable);
-//    utils_string_replace_all(&cmdline, "%e", replacement);
-//    g_free(replacement);
-//    g_free(executable);
+    executable = utils_remove_ext_from_filename(doc->file_name);
+    replacement = g_path_get_basename(executable);
+    utils_str_replace_all(&cmdline, "%e", replacement);
+    g_free(replacement);
+    g_free(executable);
 
     /* replace %f with the filename (including extension) */
-//    replacement = g_path_get_basename(doc->file_name);
-//    utils_str_replace_all(&cmdline, "%f", replacement);
-//    g_free(replacement);
+    replacement = g_path_get_basename(doc->file_name);
+    utils_str_replace_all(&cmdline, "%f", replacement);
+    g_free(replacement);
 
-    /* TO DO - Pynckels - End */
+    /* replace %p with the absolute path/filename (including extension) */
+    utils_str_replace_all(&cmdline, "%p", doc->file_name);
 
 	if (dialogs_show_question(
 			_("The file \"%s\" will be printed with the following command:\n\n%s"),
