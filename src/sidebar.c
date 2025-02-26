@@ -37,6 +37,7 @@
 #include "navqueue.h"
 #include "stash.h"
 #include "support.h"
+#include "symbol.h"
 #include "symbols.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -215,14 +216,14 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		if (doc->priv->tag_tree == NULL)
 		{
 			doc->priv->tag_store = gtk_tree_store_new(
-				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, TM_TYPE_TAG, G_TYPE_STRING);
+				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, GEANY_TYPE_SYMBOL, G_TYPE_STRING);
 			doc->priv->tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc->priv->tag_tree, doc->priv->tag_store);
 			gtk_widget_show(doc->priv->tag_tree);
 			g_object_ref((gpointer)doc->priv->tag_tree);	/* to hold it after removing */
 		}
 
-		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
+		doc->has_tags = symbols_recreate_symbol_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
 		doc->priv->tag_tree_dirty = FALSE;
 	}
 
@@ -1515,7 +1516,7 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 	{
 		TMTag *tag;
 
-		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
+		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_SYMBOL, &tag, -1);
 		if (! tag)
 			return FALSE;
 
