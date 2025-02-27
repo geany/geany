@@ -327,58 +327,21 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
 	guint i;
-	gchar **tf_strv;
 
 	g_return_val_if_fail(doc, NULL);
 
 	if (! doc->tm_file || ! doc->tm_file->tags_array)
 		return NULL;
 
-	tf_strv = g_strsplit_set(doc->priv->tag_filter, " ", -1);
-
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
 	{
 		TMTag *tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
 
 		if (tag->type & tag_types)
-		{
-			gboolean filtered = FALSE;
-			gchar **val;
-			gchar *full_tagname = g_strconcat(tag->scope ? tag->scope : "",
-				tag->scope ? tm_parser_scope_separator_printable(tag->lang) : "",
-				tag->name, NULL);
-			gchar *normalized_tagname = g_utf8_normalize(full_tagname, -1, G_NORMALIZE_ALL);
-
-			foreach_strv(val, tf_strv)
-			{
-				gchar *normalized_val = g_utf8_normalize(*val, -1, G_NORMALIZE_ALL);
-
-				if (normalized_tagname != NULL && normalized_val != NULL)
-				{
-					gchar *case_normalized_tagname = g_utf8_casefold(normalized_tagname, -1);
-					gchar *case_normalized_val = g_utf8_casefold(normalized_val, -1);
-
-					filtered = strstr(case_normalized_tagname, case_normalized_val) == NULL;
-					g_free(case_normalized_tagname);
-					g_free(case_normalized_val);
-				}
-				g_free(normalized_val);
-
-				if (filtered)
-					break;
-			}
-			if (!filtered)
-				tag_names = g_list_prepend(tag_names, tag);
-
-			g_free(normalized_tagname);
-			g_free(full_tagname);
-		}
+			tag_names = g_list_prepend(tag_names, tag);
 	}
-	tag_names = g_list_sort(tag_names, compare_symbol_lines);
 
-	g_strfreev(tf_strv);
-
-	return tag_names;
+	return g_list_sort(tag_names, compare_symbol_lines);
 }
 
 
@@ -655,11 +618,18 @@ static guint tag_hash(gconstpointer v)
 /* like gtk_tree_view_expand_to_path() but with an iter */
 static void tree_view_expand_to_iter(GtkTreeView *view, GtkTreeIter *iter)
 {
-	GtkTreeModel *model = gtk_tree_view_get_model(view);
-	GtkTreePath *path = gtk_tree_model_get_path(model, iter);
+	GtkTreeModel *filter_model = gtk_tree_view_get_model(view);
+	GtkTreeModel *store_model = gtk_tree_model_filter_get_model(
+		GTK_TREE_MODEL_FILTER(filter_model));
+	GtkTreePath *path = gtk_tree_model_get_path(store_model, iter);
+	GtkTreePath *filter_path = gtk_tree_model_filter_convert_child_path_to_path(
+		GTK_TREE_MODEL_FILTER(filter_model), path);
 
-	gtk_tree_view_expand_to_path(view, path);
+	if (filter_path)
+		gtk_tree_view_expand_to_path(view, filter_path);
+
 	gtk_tree_path_free(path);
+	gtk_tree_path_free(filter_path);
 }
 
 

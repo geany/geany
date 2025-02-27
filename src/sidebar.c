@@ -173,6 +173,53 @@ static void create_default_tag_tree(void)
 }
 
 
+static gboolean update_visibility(GtkTreeStore *store, GtkTreeIter *root,
+	gboolean visible_root, guint visibility_column, guint name_column, const gchar *filter)
+{
+	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	gboolean is_visible = FALSE;
+	GtkTreeIter parent;
+
+	if (!gtk_tree_model_iter_children(model, &parent, root))
+		return FALSE;
+
+	while (TRUE)
+	{
+		gboolean visible_parent = TRUE;
+		gboolean visible_children;
+		gchar *parent_name;
+
+		/* check if parent matches and then display *all* its children, otherwise
+		 * check each child if the action name matches */
+		gtk_tree_model_get(model, &parent, name_column, &parent_name, -1);
+		if (! EMPTY(filter))
+			visible_parent = utils_utf8_substring_match(filter, parent_name);
+		g_free(parent_name);
+
+		visible_children = update_visibility(store, &parent, visible_root || visible_parent,
+			visibility_column, name_column, filter);
+
+		if (visible_parent || visible_children)
+			is_visible = TRUE;
+
+		gtk_tree_store_set(store, &parent, visibility_column,
+			visible_root || visible_parent || visible_children, -1);
+
+		if (! gtk_tree_model_iter_next(model, &parent))
+			return is_visible;
+	}
+}
+
+
+void sidebar_tagtree_set_filter(GeanyDocument *doc, const gchar *filter)
+{
+	SETPTR(doc->priv->tag_filter, g_strdup(filter));
+	update_visibility(doc->priv->tag_store, NULL, FALSE,
+		SYMBOLS_COLUMN_VISIBLE, SYMBOLS_COLUMN_NAME, doc->priv->tag_filter);
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(doc->priv->tag_tree));
+}
+
+
 /* update = rescan the tags for doc->filename */
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
@@ -214,16 +261,28 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 	{	/* updating the tag list in the left tag window */
 		if (doc->priv->tag_tree == NULL)
 		{
+			GtkTreeModel *filter_model;
+
 			doc->priv->tag_store = gtk_tree_store_new(
-				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, TM_TYPE_TAG, G_TYPE_STRING);
+				SYMBOLS_N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, TM_TYPE_TAG,
+				G_TYPE_STRING, G_TYPE_BOOLEAN);
 			doc->priv->tag_tree = gtk_tree_view_new();
 			prepare_taglist(doc->priv->tag_tree, doc->priv->tag_store);
+
+			filter_model = gtk_tree_model_filter_new(GTK_TREE_MODEL(doc->priv->tag_store), NULL);
+			gtk_tree_model_filter_set_visible_column(GTK_TREE_MODEL_FILTER(filter_model),
+				SYMBOLS_COLUMN_VISIBLE);
+			gtk_tree_view_set_model(GTK_TREE_VIEW(doc->priv->tag_tree), filter_model);
+			g_object_unref(filter_model);
+
 			gtk_widget_show(doc->priv->tag_tree);
 			g_object_ref((gpointer)doc->priv->tag_tree);	/* to hold it after removing */
 		}
 
 		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
 		doc->priv->tag_tree_dirty = FALSE;
+		/* always update visibility (necessary to correctly update parents) */
+		sidebar_tagtree_set_filter(doc, doc->priv->tag_filter);
 	}
 
 	if (doc->has_tags)
@@ -1081,48 +1140,13 @@ void sidebar_openfiles_update_all(void)
 }
 
 
-static gboolean update_visibility(GtkTreeStore *store, GtkTreeIter *root, gboolean visible_root)
-{
-	GtkTreeModel *model = GTK_TREE_MODEL(store);
-	gboolean is_visible = FALSE;
-	GtkTreeIter parent;
-
-	if (!gtk_tree_model_iter_children(model, &parent, root))
-		return FALSE;
-
-	while (TRUE)
-	{
-		gboolean visible_parent = TRUE;
-		gboolean visible_children;
-		gchar *parent_name;
-
-		/* check if parent matches and then display *all* its children, otherwise
-		 * check each child if the action name matches */
-		gtk_tree_model_get(model, &parent, DOCUMENTS_SHORTNAME, &parent_name, -1);
-		if (! EMPTY(openfiles_filter))
-			visible_parent = utils_utf8_substring_match(openfiles_filter, parent_name);
-		g_free(parent_name);
-
-		visible_children = update_visibility(store, &parent, visible_root || visible_parent);
-
-		if (visible_parent || visible_children)
-			is_visible = TRUE;
-
-		gtk_tree_store_set(store, &parent, DOCUMENTS_VISIBLE,
-			visible_root || visible_parent || visible_children, -1);
-
-		if (! gtk_tree_model_iter_next(model, &parent))
-			return is_visible;
-	}
-}
-
-
 void sidebar_openfiles_set_filter(const gchar *filter)
 {
 	GeanyDocument *doc = document_get_current();
 
 	SETPTR(openfiles_filter, g_strdup(filter));
-	update_visibility(store_openfiles, NULL, FALSE);
+	update_visibility(store_openfiles, NULL, FALSE,
+		DOCUMENTS_VISIBLE, DOCUMENTS_SHORTNAME, openfiles_filter);
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(tv.tree_openfiles));
 	if (doc)
 		sidebar_select_openfiles_item(doc);
@@ -1715,6 +1739,7 @@ static void on_sidebar_switch_page(GtkNotebook *notebook,
 
 void sidebar_init(void)
 {
+	GtkEntry *filter_entry;
 	StashGroup *group;
 
 	openfiles_filter = g_strdup("");
@@ -1738,6 +1763,11 @@ void sidebar_init(void)
 		G_CALLBACK(sidebar_tabs_show_hide), NULL);
 	g_signal_connect_after(main_widgets.sidebar_notebook, "switch-page",
 		G_CALLBACK(on_sidebar_switch_page), NULL);
+
+	filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_docfilter"));
+	ui_entry_add_clear_icon(filter_entry);
+	filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
+	ui_entry_add_clear_icon(filter_entry);
 }
 
 #define WIDGET(w) w && GTK_IS_WIDGET(w)

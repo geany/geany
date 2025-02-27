@@ -446,21 +446,7 @@ void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data)
 		return;
 
 	filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
-	g_free(doc->priv->tag_filter);
-	doc->priv->tag_filter = g_strdup(gtk_entry_get_text(filter_entry));
-
-	/* make sure the tree is fully re-created so it appears correctly
-	 * after applying filter */
-	if (doc->priv->tag_store)
-		gtk_tree_store_clear(doc->priv->tag_store);
-	sidebar_update_tag_list(doc, TRUE);
-}
-
-
-void on_entry_tagfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data)
-{
-	if (event->button.button == 1)
-		gtk_entry_set_text(entry, "");
+	sidebar_tagtree_set_filter(doc, gtk_entry_get_text(filter_entry));
 }
 
 
@@ -485,13 +471,6 @@ void on_entry_docfilter_changed(GtkAction *action, gpointer user_data)
 
 	filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_docfilter"));
 	sidebar_openfiles_set_filter(gtk_entry_get_text(filter_entry));
-}
-
-
-void on_entry_docfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data)
-{
-	if (event->button.button == 1)
-		gtk_entry_set_text(entry, "");
 }
 
 
@@ -551,7 +530,6 @@ static void handle_switch_page(GeanyDocument *doc)
 	if (doc != NULL)
 	{
 		GtkEntry *filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
-		const gchar *entry_text = gtk_entry_get_text(filter_entry);
 
 		sidebar_select_openfiles_item(doc);
 		ui_save_buttons_toggle(doc->changed);
@@ -560,13 +538,8 @@ static void handle_switch_page(GeanyDocument *doc)
 		ui_update_popup_reundo_items(doc);
 		ui_document_show_hide(doc); /* update the document menu */
 		build_menu_update(doc);
-		if (g_strcmp0(entry_text, doc->priv->tag_filter) != 0)
-		{
-			/* calls sidebar_update_tag_list() in on_entry_tagfilter_changed() */
-			gtk_entry_set_text(filter_entry, doc->priv->tag_filter);
-		}
-		else
-			sidebar_update_tag_list(doc, TRUE);
+		sidebar_update_tag_list(doc, FALSE);
+		gtk_entry_set_text(filter_entry, doc->priv->tag_filter);
 		document_highlight_tags(doc);
 
 		document_check_disk_status(doc, TRUE);

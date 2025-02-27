@@ -74,13 +74,9 @@ void on_toolbar_search_entry_activate(GtkAction *action, const gchar *text, gpoi
 
 void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data);
 
-void on_entry_tagfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data);
-
 void on_entry_tagfilter_activate(GtkEntry *entry, gpointer user_data);
 
 void on_entry_docfilter_changed(GtkAction *action, gpointer user_data);
-
-void on_entry_docfilter_icon_press(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data);
 
 void on_entry_docfilter_activate(GtkEntry *entry, gpointer user_data);
 
