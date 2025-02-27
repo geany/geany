@@ -28,6 +28,8 @@ CRCCheck force
 RequestExecutionLevel highest ; set execution level for Windows Vista
 ; NSIS 3 Unicode support
 Unicode true
+; Create 64bit installer (and uninstaller)
+Target amd64-unicode
 
 ;;;;;;;;;;;;;;;;;;;
 ; helper defines  ;
