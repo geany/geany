@@ -744,7 +744,7 @@ gint notebook_new_tab(GeanyDocument *this)
 		gtk_button_set_focus_on_click(GTK_BUTTON(btn), FALSE);
 		gtk_widget_set_name(btn, "geany-close-tab-button");
 
-		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+		image = gtk_image_new_from_icon_name("window-close-symbolic", GTK_ICON_SIZE_MENU);
 		gtk_container_add(GTK_CONTAINER(btn), image);
 
 		align = gtk_alignment_new(1.0, 0.5, 0.0, 0.0);
