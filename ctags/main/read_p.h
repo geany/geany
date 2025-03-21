@@ -43,7 +43,6 @@ extern unsigned int countInputLanguageRoles (int kindIndex);
 
 extern bool doesInputLanguageAllowNullTag (void);
 extern bool doesInputLanguageRequestAutomaticFQTag (const tagEntryInfo *e);
-extern bool doesParserRunAsGuest (void);
 extern bool doesSubparserRun (void);
 extern langType getLanguageForBaseParser (void);
 
@@ -91,6 +90,8 @@ extern void   pushArea (
 				       unsigned long sourceLineOffset,
 				       int promise);
 extern void   popArea  (void);
+
+extern bool isAreaStacked (void);
 
 /* args (startLine): [absolute]
  * args (endLine): [absolute]

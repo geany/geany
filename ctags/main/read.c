@@ -1255,7 +1255,7 @@ extern void   pushArea (
 	File.source.lineNumberOrigin = ((sourceLineOffset == 0)? 0: sourceLineOffset - 1);
 }
 
-extern bool doesParserRunAsGuest (void)
+extern bool isAreaStacked (void)
 {
 	return !(File.areaInfo.startLine == 0
 			 && File.areaInfo.startColumn == 0
@@ -1267,8 +1267,7 @@ extern unsigned int getAreaBoundaryInfo (unsigned long lineNumber)
 {
 	unsigned int info;
 
-	if (!doesParserRunAsGuest())
-		/* Not in a stacked area  */
+	if (!isAreaStacked())
 		return 0;
 
 	info = 0;
