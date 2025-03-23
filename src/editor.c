@@ -4965,6 +4965,12 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	/* input method editor's candidate window behaviour */
 	SSM(sci, SCI_SETIMEINTERACTION, editor_prefs.ime_interaction, 0);
 
+	/* paste to all cursor positions, not just the primary one */
+	SSM(sci, SCI_SETMULTIPASTE, SC_MULTIPASTE_EACH, 0);
+
+	/* perform autocomplete for all cursor positions, not just the primary one */
+	SSM(sci, SCI_AUTOCSETMULTI, SC_MULTIAUTOC_EACH , 0);
+
 	/* only connect signals if this is for the document notebook, not split window */
 	if (editor->sci == NULL)
 	{
