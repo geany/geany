@@ -1443,7 +1443,7 @@ void configuration_apply_settings(void)
 
 	/* restore menubar state or hide on startup */
 	if (!ui_prefs.menubar_visible)
-		keybindings_send_command(GEANY_KEY_GROUP_VIEW, GEANY_KEYS_TOGGLE_MENUBAR);
+		ui_menubar_show_hide();
 
 	msgwin_show_hide_tabs();
 }
