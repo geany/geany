@@ -1022,6 +1022,36 @@ void ui_sidebar_show_hide(void)
 }
 
 
+void ui_menubar_show_hide(void)
+{
+	GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
+	GtkWidget *editor_separator_item = ui_lookup_widget(main_widgets.editor_menu, "show_menubar_separator1");
+	GtkWidget *editor_show_menubar_item = ui_lookup_widget(main_widgets.editor_menu, "show_menubar1");
+	GeanyKeyGroup *group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
+	GeanyKeyBinding *kb = keybindings_get_item(group, GEANY_KEYS_TOGGLE_MENUBAR);
+	gboolean show = TRUE;
+
+	if (gtk_widget_is_visible(geany_menubar))
+	{
+		if (kb->key != 0)
+		{
+			gchar *val = gtk_accelerator_name(kb->key, kb->mods);
+
+			msgwin_status_add(_("Menubar has been hidden. To reshow it, press %s or use the Show Menubar item from the context menu."), val);
+			g_free(val);
+
+			show = FALSE;
+		}
+	}
+
+	ui_prefs.menubar_visible = show;
+
+	gtk_widget_set_visible(geany_menubar, show);
+	gtk_widget_set_visible(editor_separator_item, !show);
+	gtk_widget_set_visible(editor_show_menubar_item, !show);
+}
+
+
 void ui_document_show_hide(GeanyDocument *doc)
 {
 	const gchar *widget_name;

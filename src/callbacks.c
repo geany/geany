@@ -1370,6 +1370,12 @@ void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer use
 }
 
 
+void on_show_menubar1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	ui_menubar_show_hide();
+}
+
+
 static void on_menu_write_unicode_bom1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
 	if (! ignore_callback)
