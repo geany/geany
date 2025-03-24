@@ -1025,6 +1025,7 @@ void ui_sidebar_show_hide(void)
 void ui_menubar_show_hide(void)
 {
 	GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
+	GtkWidget *menu_item = ui_lookup_widget(main_widgets.window, "menu_show_menubar1");
 	GtkWidget *editor_separator_item = ui_lookup_widget(main_widgets.editor_menu, "show_menubar_separator1");
 	GtkWidget *editor_show_menubar_item = ui_lookup_widget(main_widgets.editor_menu, "show_menubar1");
 	GeanyKeyGroup *group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
@@ -1046,7 +1047,12 @@ void ui_menubar_show_hide(void)
 
 	ui_prefs.menubar_visible = show;
 
+	ignore_callback = TRUE;
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item), show);
+	ignore_callback = FALSE;
+
 	gtk_widget_set_visible(geany_menubar, show);
+	gtk_widget_set_visible(menu_item, !show);
 	gtk_widget_set_visible(editor_separator_item, !show);
 	gtk_widget_set_visible(editor_show_menubar_item, !show);
 }
