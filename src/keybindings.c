@@ -75,6 +75,8 @@ static const gboolean swap_alt_tab_order = FALSE;
 /* central keypress event handler, almost all keypress events go to this function */
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
+static void on_menubar_deactivate(GtkMenuShell *shell, gpointer data);
+
 static gboolean check_current_word(GeanyDocument *doc, gboolean sci_word);
 static gboolean read_current_word(GeanyDocument *doc, gboolean sci_word);
 static gchar *get_current_word_or_sel(GeanyDocument *doc, gboolean sci_word);
@@ -755,6 +757,9 @@ void keybindings_init(void)
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), kb_accel_group);
 
 	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(on_key_press_event), NULL);
+	g_signal_connect(ui_lookup_widget(main_widgets.window, "menubar1"),
+			"deactivate", G_CALLBACK(on_menubar_deactivate),
+			ui_lookup_widget(main_widgets.window, "hbox_menubar"));
 }
 
 
@@ -1123,6 +1128,17 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), -1);
 			return TRUE;
 		}
+	}
+	/* temporarily show the menubar again when triggering it while hidden */
+	if (state == 0 && keyval == GDK_KEY_F10 && ! ui_prefs.menubar_visible)
+	{
+		GtkWidget *const geany_menubar_box = ui_lookup_widget(main_widgets.window, "hbox_menubar");
+		GtkWidget *const geany_menubar = ui_lookup_widget(main_widgets.window, "menubar1");
+
+		gtk_widget_show(geany_menubar_box);
+		gtk_menu_shell_select_first(GTK_MENU_SHELL(geany_menubar), TRUE);
+
+		return TRUE;
 	}
 	return FALSE;
 }
@@ -1618,6 +1634,13 @@ static gboolean cb_func_search_action(guint key_id)
 static void cb_func_menu_opencolorchooser(G_GNUC_UNUSED guint key_id)
 {
 	on_show_color_chooser1_activate(NULL, NULL);
+}
+
+
+static void on_menubar_deactivate(GtkMenuShell *shell, gpointer data)
+{
+	if (! ui_prefs.menubar_visible)
+		gtk_widget_hide(data);
 }
 
 
