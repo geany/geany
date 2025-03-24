@@ -609,7 +609,7 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_VIEW_FULLSCREEN, cb_func_menu_fullscreen,
 		GDK_KEY_F11, 0, "menu_fullscreen", _("Fullscreen"), "menu_fullscreen1");
 	add_kb(group, GEANY_KEYS_TOGGLE_MENUBAR, NULL,
-		0, 0, "toggle_menubar", _("Toggle Menubar"), NULL);
+		0, 0, "toggle_menubar", _("Toggle Menubar"), "menu_show_menubar1");
 	add_kb(group, GEANY_KEYS_VIEW_MESSAGEWINDOW, cb_func_menu_messagewindow,
 		0, 0, "menu_messagewindow", _("Toggle Messages Window"),
 		"menu_show_messages_window1");

@@ -7596,6 +7596,15 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkCheckMenuItem" id="menu_show_menubar1">
+                            <property name="visible">False</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">Show Menuba_r</property>
+                            <property name="use-underline">True</property>
+                            <signal name="toggled" handler="on_menu_show_menubar1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkSeparatorMenuItem" id="menu_separator5">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
