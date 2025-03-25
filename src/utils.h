@@ -340,6 +340,8 @@ gchar *utils_utf8_strdown(const gchar *str);
 
 gboolean utils_utf8_substring_match(const gchar *key, const gchar *haystack);
 
+gboolean utils_replace_placeholder(gchar **haystack, const gchar *needles, gchar *filename);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

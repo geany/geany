@@ -2497,3 +2497,90 @@ gchar *utils_get_os_info_string(void)
 
 	return os_info;
 }
+
+
+/**
+ * @brief Replaces placeholders in a string with a given filename / path / ...
+ *
+ * This function searches for specified placeholders within the given string
+ * and replaces it with the provided filename / path / ...
+ *
+ * @param[in,out] haystack A pointer to the string where replacements occur.
+ *                         The function modifies this string in place.
+ * @param[in] needles The string with placeholders to replace.
+ *                    The string is a combination of 'd', 'e', 'f' and 'p'.
+ *                    'd' : replace %d with the absolute path
+ *                    'e' : replace %e with the filename (excluding extension)
+ *                    'f' : replace %f with the filename (including extension)
+ *                    'p' : replace %p with the absolute path/filename (including extension)
+ *                    e.g. 'df' will replace all %d and %f placeholders
+ * @param[in] filename The filename that replaces occurrences of the placeholder.
+ *
+ * @return `TRUE` if the replacement was successful, `FALSE` if an error occurred.
+ *
+ * @note The caller is responsible for ensuring that `haystack` has enough memory
+ *       allocated to accommodate the modified string if necessary.
+ *
+ * @note Character repetitions in the needles string is accepted but sloppy on the edges
+ *
+ * @note Invalid characters in the needles string will be ignored
+ */
+gboolean utils_replace_placeholder(gchar **haystack, const gchar *needles, gchar *filename)
+{
+	gchar *executable  = NULL;
+	gchar *replacement = NULL;
+
+	if (haystack  == NULL) return FALSE;
+	if (needles   == NULL) return FALSE;
+	if ((filename == NULL) || (*filename == '\0')) return FALSE;
+
+	if ( g_utf8_strchr(needles, -1, 'd') != NULL ) {
+		/* replace %d with the absolute path */
+		replacement = g_path_get_dirname(filename);
+		utils_str_replace_all(haystack, "%d", replacement);
+		g_free(replacement);
+	}
+
+	if ( g_utf8_strchr(needles, -1, 'e') != NULL ) {
+		/* replace %e with the filename (excluding extension) */
+		executable = utils_remove_ext_from_filename(filename);
+		replacement = g_path_get_basename(executable);
+		utils_str_replace_all(haystack, "%e", replacement);
+		g_free(replacement);
+		g_free(executable);
+	}
+
+	if ( g_utf8_strchr(needles, -1, 'f') != NULL ) {
+		/* replace %f with the filename (including extension) */
+		replacement = g_path_get_basename(filename);
+		utils_str_replace_all(haystack, "%f", replacement);
+		g_free(replacement);
+	}
+
+	if ( g_utf8_strchr(needles, -1, 'p') != NULL ) {
+		/* replace %p with the absolute path/filename (including extension) */
+		utils_str_replace_all(haystack, "%p", filename);
+	}
+
+	return TRUE;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
