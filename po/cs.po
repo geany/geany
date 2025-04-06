@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2023-10-04 23:48+0200\n"
-"PO-Revision-Date: 2023-10-12 19:35+0200\n"
+"PO-Revision-Date: 2025-04-06 22:03+0200\n"
 "Last-Translator: Unknown <zen@drak>\n"
 "Language-Team: Czech <geany-i18n@uvena.de>\n"
 "Language: cs\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n>=2 && n<=4 ? 1 : 2;\n"
-"X-Generator: Geany / PoHelper 1.38\n"
+"X-Generator: Poedit 3.5\n"
 
 #: geany.desktop.in:5 data/geany.glade:6456
 msgid "Geany"
@@ -211,24 +211,20 @@ msgid "<b>Startup</b>"
 msgstr "<b>Při spuštění</b>"
 
 #: data/geany.glade:958
-#, fuzzy
 msgid "Save window size"
-msgstr "Uložit pozici a rozměry okna"
+msgstr "Uložit rozměry okna"
 
 #: data/geany.glade:962
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr "Uloží pozici a rozměry okna a použije je při příštím spuštění"
+msgstr "Uloží rozměry okna a použije je při příštím spuštění"
 
 #: data/geany.glade:974
-#, fuzzy
 msgid "Save window position"
-msgstr "Uložit pozici a rozměry okna"
+msgstr "Uložit pozici okna"
 
 #: data/geany.glade:978
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr "Uloží pozici a rozměry okna a použije je při příštím spuštění"
+msgstr "Uloží pozici okna a použije ji při příštím spuštění"
 
 #: data/geany.glade:990
 msgid "Confirm exit"
@@ -419,9 +415,8 @@ msgid "Default symbol sorting mode"
 msgstr "Výchozí způsob řazení symbolů"
 
 #: data/geany.glade:1596
-#, fuzzy
 msgid "Default sorting mode:"
-msgstr "Výchozí kódování (nových souborů):"
+msgstr "Výchozí způsob řazení:"
 
 #: data/geany.glade:1606 src/stash.c:1219
 msgid "Name"
@@ -761,9 +756,8 @@ msgid "The width in chars of a single indent"
 msgstr "Šířka jednoho odsazení ve znacích"
 
 #: data/geany.glade:3179 data/geany.glade:8988
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Mód automatického odsazování:"
+msgstr "_Mód automatického odsazování:"
 
 #: data/geany.glade:3214 data/geany.glade:9023
 msgid "Detect type from file"
@@ -819,9 +813,8 @@ msgid "Type:"
 msgstr "Typ:"
 
 #: data/geany.glade:3332
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Klávesa tabelátor odsazuje"
+msgstr "K_lávesa tabelátor odsazuje"
 
 #: data/geany.glade:3336
 msgid ""
@@ -1167,9 +1160,8 @@ msgid "<b>Virtual spaces</b>"
 msgstr "<b>Virtuální mezery</b>"
 
 #: data/geany.glade:4315
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Zobrazovat označovací okraj"
+msgstr "Zobrazit v označovacím okraji"
 
 #: data/geany.glade:4329
 msgid "Show as underline indicators"
@@ -1265,7 +1257,7 @@ msgstr "Odstranit mezery a tabelátory na konci řádků"
 
 #: data/geany.glade:4702
 msgid "Removes trailing spaces and tabs at the end of lines"
-msgstr "Odstraní mezery a tabulátory na konci řádků"
+msgstr "Odstraní mezery a tabelátory na konci řádků"
 
 #: data/geany.glade:4714 data/geany.glade:9516 src/keybindings.c:673
 msgid "Replace tabs with space"
@@ -1880,9 +1872,8 @@ msgid "_Mark All"
 msgstr "_Označit všechny výskyty"
 
 #: data/geany.glade:7448
-#, fuzzy
 msgid "Go to Symbol Decl_aration"
-msgstr "Přejít na deklaraci"
+msgstr "Přejít na deklaraci symbolu"
 
 #: data/geany.glade:7465
 msgid "_View"
@@ -2021,18 +2012,16 @@ msgid "Set Line E_ndings"
 msgstr "Nastavit uk_ončování řádků"
 
 #: data/geany.glade:7926
-#, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Převést a nastavit na _CR/LF (Win)"
+msgstr "Převést a nastavit na _CR/LF (Windows)"
 
 #: data/geany.glade:7935
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Převést a nastavit na _LF (Unix)"
 
 #: data/geany.glade:7946
-#, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Převést a nastavit na CR (_Mac)"
+msgstr "Převést a nastavit na CR (klasický _Mac)"
 
 #: data/geany.glade:7966 src/keybindings.c:669
 msgid "_Clone"
@@ -2192,24 +2181,20 @@ msgid "Filename:"
 msgstr "Soubor projektu:"
 
 #: data/geany.glade:8716
-#, fuzzy
 msgid "_Name:"
 msgstr "_Název:"
 
 #: data/geany.glade:8732
-#, fuzzy
 msgid "_Description:"
 msgstr "_Popis:"
 
 #: data/geany.glade:8749
-#, fuzzy
 msgid "_Base path:"
 msgstr "_Základní cesta:"
 
 #: data/geany.glade:8765 src/search.c:905
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Masky souborů:"
+msgstr "_Masky souborů:"
 
 #: data/geany.glade:8826
 msgid ""
@@ -2637,17 +2622,14 @@ msgid "Detect from file"
 msgstr "Zjistit podle souboru"
 
 #: src/dialogs.c:224
-#, fuzzy
 msgid "Programming Languages"
 msgstr "_Programovací jazyky"
 
 #: src/dialogs.c:226
-#, fuzzy
 msgid "Scripting Languages"
 msgstr "_Skriptovací jazyky"
 
 #: src/dialogs.c:228
-#, fuzzy
 msgid "Markup Languages"
 msgstr "_Značkovací jazyky"
 
@@ -2858,7 +2840,7 @@ msgid "File %s reloaded."
 msgstr "Soubor %s znovu načten."
 
 #: src/document.c:1517
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
 msgstr "Soubor %s otevřen (%d%s)."
 
@@ -2891,9 +2873,8 @@ msgid "Any unsaved changes will be lost."
 msgstr "Neuložené změny budou ztraceny."
 
 #: src/document.c:1673
-#, fuzzy
 msgid "Undo history will be lost."
-msgstr "Historie bude ztracena."
+msgstr "Historie návratů zpět bude ztracena."
 
 #: src/document.c:1674
 #, c-format
@@ -2942,7 +2923,6 @@ msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Chyba při zavírání souboru '%s': fclose() selhal: %s"
 
 #: src/document.c:2066 src/document.c:3620
-#, fuzzy
 msgid "_Overwrite"
 msgstr "_Přepsat"
 
@@ -3018,7 +2998,7 @@ msgstr "Zadejte šířku tabelátoru"
 
 #: src/editor.c:4468
 msgid "Enter the amount of spaces which should be replaced by a tab character."
-msgstr "Zadejte kolik znaků mezery nahradit znakem tabelátoru."
+msgstr "Zadejte, kolik znaků mezery nahradit znakem tabelátoru."
 
 #: src/editor.c:4684
 #, c-format
@@ -3214,9 +3194,8 @@ msgid "Config"
 msgstr "Konfigurační soubor"
 
 #: src/filetypes.c:170
-#, fuzzy
 msgid "Gettext translation"
-msgstr "Gettext jazykový soubor"
+msgstr "Překlad Gettext"
 
 #: src/filetypes.c:434
 msgid "_Programming Languages"
@@ -3620,14 +3599,12 @@ msgid "Toggle marker"
 msgstr "Označit řádek"
 
 #: src/keybindings.c:584
-#, fuzzy
 msgid "Go to Symbol Definition"
-msgstr "Přejít na definici"
+msgstr "Přejít na definici symbolu"
 
 #: src/keybindings.c:587
-#, fuzzy
 msgid "Go to Symbol Declaration"
-msgstr "Přejít na deklaraci"
+msgstr "Přejít na deklaraci symbolu"
 
 #: src/keybindings.c:589
 msgid "Go to Start of Line"
@@ -4061,9 +4038,8 @@ msgid "Open in New _Window"
 msgstr "Otevřít v novém _Okně"
 
 #: src/notebook.c:504
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "Zavřít dokumenty _Vpravo"
+msgstr "Zavřít dokumenty _vpravo"
 
 #: src/plugins.c:231
 #, c-format
@@ -4314,7 +4290,7 @@ msgstr "Základní cesta:"
 
 #: src/project.c:235 src/project.c:493
 msgid "Choose Project Base Path"
-msgstr "Zvolte základní cestu projektu"
+msgstr "Vybrat základní cestu projektu"
 
 #: src/project.c:277 src/project.c:630 src/project.c:1187
 msgid "Project file could not be written"
@@ -4970,12 +4946,13 @@ msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Spuštěný vlastní příkaz proběhl s neúspěšným výstupním kódem."
 
 #: src/tools.c:239
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
 msgstr ""
-"Nemohu spustit nástroj grep '%s'; zkontrolujte nastavení cest v Nastavení."
+"Nelze spustit nástroj vlastní příkaz \"%s\": %s. Zkontrolujte nastavení cest "
+"ve vlastních příkazech."
 
 #: src/tools.c:354 src/tools.c:623
 msgid "Set Custom Commands"
@@ -5026,9 +5003,8 @@ msgid "Characters:"
 msgstr "Znaky:"
 
 #: src/sidebar.c:165
-#, fuzzy
 msgid "No symbols found"
-msgstr "Nenalezeny žádné tagy"
+msgstr "Nenalezeny žádné symboly"
 
 #: src/sidebar.c:1070
 msgid "Show S_ymbol List"
@@ -5044,18 +5020,16 @@ msgid "H_ide Sidebar"
 msgstr "S_krýt postranní panel"
 
 #: src/sidebar.c:1173
-#, fuzzy
 msgid "D_ocuments Only"
-msgstr "Dokumenty"
+msgstr "Pouze _dokumenty"
 
 #: src/sidebar.c:1174
 msgid "Show _Paths"
 msgstr "Zobrazovat _cesty"
 
 #: src/sidebar.c:1175
-#, fuzzy
 msgid "Show _Tree"
-msgstr "_Panel nástrojů"
+msgstr "Zobrazovat s_trom"
 
 #: src/sidebar.c:1228 plugins/filebrowser.c:678
 msgid "_Find in Files..."
@@ -5184,9 +5158,8 @@ msgid "_Set Custom Date Format"
 msgstr "_Nastavit vlastní formát data"
 
 #: src/ui_utils.c:2004
-#, fuzzy
 msgid "Select Project Base Path"
-msgstr "Zvolte základní cestu projektu"
+msgstr "Vybrat základní cestu projektu"
 
 #: src/ui_utils.c:2029
 msgid "Select Folder"
@@ -5227,31 +5200,26 @@ msgstr ""
 "zadejte jiný prohlížeč."
 
 #: src/utils.c:388
-#, fuzzy
 msgid "Windows (CRLF)"
-msgstr "Win (CRLF)"
+msgstr "Windows (CRLF)"
 
 #: src/utils.c:389
-#, fuzzy
 msgid "Classic Mac (CR)"
-msgstr "Mac (CR)"
+msgstr "Klasický Mac (CR)"
 
 #: src/utils.c:390
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
 #: src/utils.c:399
-#, fuzzy
 msgid "CRLF"
 msgstr "CRLF"
 
 #: src/utils.c:400
-#, fuzzy
 msgid "CR"
 msgstr "CR"
 
 #: src/utils.c:401
-#, fuzzy
 msgid "LF"
 msgstr "LF"
 
@@ -5365,9 +5333,8 @@ msgid "Variables"
 msgstr "Proměnné"
 
 #: src/tagmanager/tm_parser.c:96 src/tagmanager/tm_parser.c:446
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Proměnné"
+msgstr "Externí proměnné"
 
 #: src/tagmanager/tm_parser.c:97 src/tagmanager/tm_parser.c:127
 #: src/tagmanager/tm_parser.c:164 src/tagmanager/tm_parser.c:264
@@ -5391,7 +5358,6 @@ msgstr "Metody"
 
 #: src/tagmanager/tm_parser.c:126 src/tagmanager/tm_parser.c:654
 #: src/tagmanager/tm_parser.c:984 src/tagmanager/tm_parser.c:1031
-#, fuzzy
 msgid "Enums"
 msgstr "Výčty"
 
@@ -5459,19 +5425,16 @@ msgid "Articles"
 msgstr "Články"
 
 #: src/tagmanager/tm_parser.c:258
-#, fuzzy
 msgid "Book Chapters"
-msgstr "Kapitola"
+msgstr "Kapitoly knih"
 
 #: src/tagmanager/tm_parser.c:259
-#, fuzzy
 msgid "Books & Conference Proceedings"
 msgstr "Knihy a sborníky z konferencí"
 
 #: src/tagmanager/tm_parser.c:260
-#, fuzzy
 msgid "Conference Papers"
-msgstr "Konferenční Příspěvky"
+msgstr "Konferenční příspěvky"
 
 #: src/tagmanager/tm_parser.c:261
 msgid "Theses"
@@ -5479,9 +5442,8 @@ msgstr "Teze"
 
 # Původní nepřesný překlad je "Sekce".
 #: src/tagmanager/tm_parser.c:262
-#, fuzzy
 msgid "Strings"
-msgstr "Nastavení"
+msgstr "Řetězce"
 
 #: src/tagmanager/tm_parser.c:263
 msgid "Unpublished"
