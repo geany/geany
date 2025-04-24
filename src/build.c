@@ -708,64 +708,6 @@ static void clear_all_errors(void)
 }
 
 
-/* Replaces occurrences of %e and %p with the appropriate filenames and
- * %l with current line number. %d and %p replacements should be in UTF8 */
-static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
-{
-	GString *stack;
-	gchar *replacement;
-	gchar *executable = NULL;
-	gint line_num;
-
-	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
-
-	stack = g_string_new(src);
-	if (doc != NULL && doc->file_name != NULL)
-	{
-		/* replace %f with the filename (including extension) */
-		replacement = g_path_get_basename(doc->file_name);
-		utils_string_replace_all(stack, "%f", replacement);
-		g_free(replacement);
-
-		/* replace %d with the absolute path of the dir of the current file */
-		replacement = g_path_get_dirname(doc->file_name);
-		utils_string_replace_all(stack, "%d", replacement);
-		g_free(replacement);
-
-		/* replace %e with the filename (excluding extension) */
-		executable = utils_remove_ext_from_filename(doc->file_name);
-		replacement = g_path_get_basename(executable);
-		utils_string_replace_all(stack, "%e", replacement);
-		g_free(replacement);
-
-		/* replace %l with the current 1-based line number */
-		line_num = sci_get_current_line(doc->editor->sci) + 1;
-		replacement = g_strdup_printf("%i", line_num);
-		utils_string_replace_all(stack, "%l", replacement);
-		g_free(replacement);
-	}
-
-	/* replace %p with the current project's (absolute) base directory */
-	replacement = NULL; /* prevent double free if no replacement found */
-	if (app->project)
-	{
-		replacement = project_get_base_path();
-	}
-	else if (strstr(stack->str, "%p"))
-	{   /* fall back to %d */
-		ui_set_statusbar(FALSE, _("failed to substitute %%p, no project active"));
-		if (doc != NULL && doc->file_name != NULL)
-			replacement = g_path_get_dirname(doc->file_name);
-	}
-
-	utils_string_replace_all(stack, "%p", replacement);
-	g_free(replacement);
-	g_free(executable);
-
-	return g_string_free(stack, FALSE); /* don't forget to free src also if needed */
-}
-
-
 /* dir is the UTF-8 working directory to run cmd in. It can be NULL to use the
  * idx document directory */
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
@@ -844,11 +786,11 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
-	cmd_string_utf8 = build_replace_placeholder(doc, cmd->command);
+	cmd_string_utf8 = utils_replace_placeholder(doc, cmd->command, "deflp");
 	cmd_working_dir =  cmd->working_dir;
 	if (EMPTY(cmd_working_dir))
 		cmd_working_dir = "%d";
-	working_dir_utf8 = build_replace_placeholder(doc, cmd_working_dir);
+	working_dir_utf8 = utils_replace_placeholder(doc, cmd_working_dir, "deflp");
 	*working_dir = utils_get_locale_from_utf8(working_dir_utf8);
 
 	if (EMPTY(*working_dir) || ! g_file_test(*working_dir, G_FILE_TEST_EXISTS) ||
@@ -1221,8 +1163,8 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, guint cmd, gc
 	else
 		full_command = cmdstr;
 
-	dir = build_replace_placeholder(doc, buildcmd->working_dir);
-	subs_command = build_replace_placeholder(doc, full_command);
+	dir = utils_replace_placeholder(doc, buildcmd->working_dir, "deflp");
+	subs_command = utils_replace_placeholder(doc, full_command, "deflp");
 	build_info.grp = grp;
 	build_info.cmd = cmd;
 	build_spawn_cmd(doc, subs_command, dir);
