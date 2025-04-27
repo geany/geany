@@ -581,7 +581,7 @@ void printing_page_setup_gtk(void)
 /* simple file print using an external tool */
 static void print_external(GeanyDocument *doc)
 {
-	gchar *cmdline;
+	gchar *cmdline = NULL;
 
 	if (doc->file_name == NULL)
 		return;
@@ -593,8 +593,8 @@ static void print_external(GeanyDocument *doc)
 		return;
 	}
 
-	cmdline = g_strdup(printing_prefs.external_print_cmd);
-	utils_str_replace_all(&cmdline, "%f", doc->file_name);
+	/* replace d, e, f and p placeholders in cmdline */
+	cmdline = utils_replace_placeholder(doc, printing_prefs.external_print_cmd, "defp");
 
 	if (dialogs_show_question(
 			_("The file \"%s\" will be printed with the following command:\n\n%s"),
