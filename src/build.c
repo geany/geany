@@ -710,7 +710,8 @@ static void clear_all_errors(void)
 
 /* Replaces occurrences of %e and %p with the appropriate filenames and
  * %l with current line number. %d and %p replacements should be in UTF8 */
-static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
+GEANY_API_SYMBOL
+gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
 {
 	GString *stack;
 	gchar *replacement;

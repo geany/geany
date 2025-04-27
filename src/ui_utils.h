@@ -302,7 +302,7 @@ void ui_update_popup_reundo_items(GeanyDocument *doc);
 
 void ui_update_popup_copy_items(GeanyDocument *doc);
 
-void ui_update_popup_goto_items(gboolean enable);
+void ui_update_popup_goto_items(gchar* enable);
 
 
 void ui_menu_copy_items_set_sensitive(gboolean sensitive);
