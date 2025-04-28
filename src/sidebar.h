@@ -47,6 +47,7 @@ enum
 	SYMBOLS_COLUMN_NAME,
 	SYMBOLS_COLUMN_TAG,
 	SYMBOLS_COLUMN_TOOLTIP,
+	SYMBOLS_COLUMN_VISIBLE,
 	SYMBOLS_N_COLUMNS
 };
 
@@ -76,6 +77,8 @@ void sidebar_init(void);
 void sidebar_finalize(void);
 
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update);
+
+void sidebar_tagtree_set_filter(GeanyDocument *doc, const gchar *filter);
 
 void sidebar_openfiles_add(GeanyDocument *doc);
 
