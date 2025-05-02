@@ -943,6 +943,8 @@ static void process_build_output_line(gchar *msg, gint color)
 	gchar *tmp;
 	gchar *filename;
 	gint line;
+	gchar *type;
+	const gchar *warning = "warning";
 
 	g_strchomp(msg);
 
@@ -953,7 +955,7 @@ static void process_build_output_line(gchar *msg, gint color)
 	{
 		SETPTR(current_dir_entered, tmp);
 	}
-	msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line);
+	msgwin_parse_compiler_error_line(msg, current_dir_entered, &filename, &line, &type);
 
 	if (line != -1 && filename != NULL)
 	{
@@ -966,6 +968,14 @@ static void process_build_output_line(gchar *msg, gint color)
 			if (line > 0) /* some compilers, like pdflatex report errors on line 0 */
 				line--;   /* so only adjust the line number if it is greater than 0 */
 			editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
+			if(type != NULL && g_ascii_strcasecmp(type, warning) == 0)
+			{
+				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_WARNING, line);
+			}
+			else
+			{
+				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line);
+			}
 		}
 		build_info.message_count++;
 		color = COLOR_RED;	/* error message parsed on the line */
