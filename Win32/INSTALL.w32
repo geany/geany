@@ -1,0 +1,30 @@
+pacman --needed -Sy bash pacman pacman-mirrors msys2-runtime
+
+# Now exit and re-open the msys2 environment
+pacman -Sy
+pacman -Su
+
+# Now exit and re-open the msys2 environment
+# toolchain
+pacman -S mingw-w64-i686-binutils mingw-w64-i686-gcc mingw-w64-i686-gdb
+# make and Autotools
+pacman -S make pkg-config autoconf automake libtool intltool
+# gtk familiy
+pacman -S mingw-w64-i686-gtk2 mingw-w64-i686-gtk3
+# and if you fancy building from git
+pacman -S git
+# necessary for GTK bundle and installer steps
+pacman -S rsync
+
+# It is possible that you have to create a symbolic link to windres.exe
+# for use it in i686 enviroment, check is exist in mingw32/bin 
+# and if its missisng do:
+#ln -s windres.exe i686-w64-mingw32-windres.exe
+
+NOCONFIGURE=1 ./autogen.sh
+./configure --prefix=/c/geany --host=i686-w64-mingw32 --disable-html-docs --enable-gtk2
+make -j2
+make install
+
+# After that, copy from the created folder C:\geany\bin the two files and override
+# with those in the regular intalation of Geany (The created from the official installer).

@@ -64,6 +64,12 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname);
 
 gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname);
 
+TMTag* symbols_get_current_selection_tag();
+
+gboolean symbols_select_tag_at_line(gint line);
+
+void symbols_clear_selection();
+
 const gchar *symbols_get_icon_name(guint icon_id);
 
 #endif /* GEANY_PRIVATE */
