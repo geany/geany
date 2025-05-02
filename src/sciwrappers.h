@@ -184,7 +184,7 @@ void				sci_selection_duplicate		(ScintillaObject *sci);
 void				sci_line_duplicate			(ScintillaObject *sci);
 
 void				sci_set_keywords			(ScintillaObject *sci, guint k, const gchar *text);
-void				sci_set_lexer				(ScintillaObject *sci, guint lexer_id);
+void				sci_set_lexer				(ScintillaObject *sci, const gchar *lexer_name);
 void				sci_set_readonly			(ScintillaObject *sci, gboolean readonly);
 
 gint				sci_get_lines_selected		(ScintillaObject *sci);

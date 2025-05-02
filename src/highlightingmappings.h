@@ -31,7 +31,7 @@
 G_BEGIN_DECLS
 
 /* contains all filtypes informations in the form of:
- *  - highlighting_lexer_LANG:		the SCI lexer
+ *  - highlighting_lexer_LANG:		the SCI lexer name
  *  - highlighting_styles_LANG:		SCI style/named style mappings.  The first
  * 									item is also used for the default style.
  *  - highlighting_keywords_LANG:	keywords ID/name mappings
@@ -81,7 +81,7 @@ typedef struct
 
 
 /* Abaqus */
-#define highlighting_lexer_ABAQUS			SCLEX_ABAQUS
+#define highlighting_lexer_ABAQUS			"abaqus"
 static const HLStyle highlighting_styles_ABAQUS[] =
 {
 	{ SCE_ABAQUS_DEFAULT,		"default",		FALSE },
@@ -106,7 +106,7 @@ static const HLKeyword highlighting_keywords_ABAQUS[] =
 
 
 /* Ada */
-#define highlighting_lexer_ADA			SCLEX_ADA
+#define highlighting_lexer_ADA			"ada"
 static const HLStyle highlighting_styles_ADA[] =
 {
 	{ SCE_ADA_DEFAULT,		"default",		FALSE },
@@ -130,7 +130,7 @@ static const HLKeyword highlighting_keywords_ADA[] =
 
 
 /* ActionScript */
-#define highlighting_lexer_AS		SCLEX_CPP
+#define highlighting_lexer_AS		"cpp"
 #define highlighting_styles_AS		highlighting_styles_C
 static const HLKeyword highlighting_keywords_AS[] =
 {
@@ -142,7 +142,7 @@ static const HLKeyword highlighting_keywords_AS[] =
 
 
 /* Asccidoc */
-#define highlighting_lexer_ASCIIDOC			SCLEX_ASCIIDOC
+#define highlighting_lexer_ASCIIDOC			"asciidoc"
 static const HLStyle highlighting_styles_ASCIIDOC[] =
 {
 	{ SCE_ASCIIDOC_DEFAULT,		"default",		FALSE },
@@ -175,7 +175,7 @@ static const HLStyle highlighting_styles_ASCIIDOC[] =
 
 
 /* ASM */
-#define highlighting_lexer_ASM			SCLEX_ASM
+#define highlighting_lexer_ASM			"asm"
 static const HLStyle highlighting_styles_ASM[] =
 {
 	{ SCE_ASM_DEFAULT,			"default",				FALSE },
@@ -207,7 +207,7 @@ static const HLKeyword highlighting_keywords_ASM[] =
 
 
 /* BASIC */
-#define highlighting_lexer_BASIC		SCLEX_FREEBASIC
+#define highlighting_lexer_BASIC		"freebasic"
 static const HLStyle highlighting_styles_BASIC[] =
 {
 	{ SCE_B_DEFAULT,		"default",			FALSE },
@@ -245,7 +245,7 @@ static const HLKeyword highlighting_keywords_BASIC[] =
 
 
 /* BATCH */
-#define highlighting_lexer_BATCH		SCLEX_BATCH
+#define highlighting_lexer_BATCH		"batch"
 static const HLStyle highlighting_styles_BATCH[] =
 {
 	{ SCE_BAT_DEFAULT,		"default",		FALSE },
@@ -267,7 +267,7 @@ static const HLKeyword highlighting_keywords_BATCH[] =
 
 /* C */
 /* Also used by some other SCLEX_CPP-based filetypes */
-#define highlighting_lexer_C		SCLEX_CPP
+#define highlighting_lexer_C		"cpp"
 static const HLStyle highlighting_styles_C[] =
 {
 	{ SCE_C_DEFAULT,				"default",					FALSE },
@@ -316,7 +316,7 @@ static const HLProperty highlighting_properties_C[] =
 
 
 /* Caml */
-#define highlighting_lexer_CAML			SCLEX_CAML
+#define highlighting_lexer_CAML			"caml"
 static const HLStyle highlighting_styles_CAML[] =
 {
 	{ SCE_CAML_DEFAULT,		"default",		FALSE },
@@ -370,7 +370,7 @@ static const HLKeyword highlighting_keywords_CIL[] =
 
 
 /* CMake */
-#define highlighting_lexer_CMAKE		SCLEX_CMAKE
+#define highlighting_lexer_CMAKE		"cmake"
 static const HLStyle highlighting_styles_CMAKE[] =
 {
 	{ SCE_CMAKE_DEFAULT,		"default",		FALSE },
@@ -398,7 +398,7 @@ static const HLKeyword highlighting_keywords_CMAKE[] =
 #define highlighting_properties_CMAKE	EMPTY_PROPERTIES
 
 /* CoffeeScript */
-#define highlighting_lexer_COFFEESCRIPT		SCLEX_COFFEESCRIPT
+#define highlighting_lexer_COFFEESCRIPT		"coffeescript"
 static const HLStyle highlighting_styles_COFFEESCRIPT[] =
 {
 	{ SCE_COFFEESCRIPT_DEFAULT,					"default",				FALSE },
@@ -428,7 +428,7 @@ static const HLKeyword highlighting_keywords_COFFEESCRIPT[] =
 
 
 /* CSS */
-#define highlighting_lexer_CSS			SCLEX_CSS
+#define highlighting_lexer_CSS			"css"
 static const HLStyle highlighting_styles_CSS[] =
 {
 	{ SCE_CSS_DEFAULT,					"default",					FALSE },
@@ -471,7 +471,7 @@ static const HLKeyword highlighting_keywords_CSS[] =
 
 
 /* Cobol */
-#define highlighting_lexer_COBOL		SCLEX_COBOL
+#define highlighting_lexer_COBOL		"COBOL"
 #define highlighting_styles_COBOL		highlighting_styles_C
 static const HLKeyword highlighting_keywords_COBOL[] =
 {
@@ -483,7 +483,7 @@ static const HLKeyword highlighting_keywords_COBOL[] =
 
 
 /* Conf */
-#define highlighting_lexer_CONF			SCLEX_PROPERTIES
+#define highlighting_lexer_CONF			"props"
 static const HLStyle highlighting_styles_CONF[] =
 {
 	{ SCE_PROPS_DEFAULT,	"default",		FALSE },
@@ -498,7 +498,7 @@ static const HLStyle highlighting_styles_CONF[] =
 
 
 /* D */
-#define highlighting_lexer_D		SCLEX_D
+#define highlighting_lexer_D		"d"
 static const HLStyle highlighting_styles_D[] =
 {
 	{ SCE_D_DEFAULT,				"default",					FALSE },
@@ -581,7 +581,7 @@ static const HLKeyword highlighting_keywords_DART[] =
 
 
 /* Diff */
-#define highlighting_lexer_DIFF			SCLEX_DIFF
+#define highlighting_lexer_DIFF			"diff"
 static const HLStyle highlighting_styles_DIFF[] =
 {
 	{ SCE_DIFF_DEFAULT,					"default",				FALSE },
@@ -601,7 +601,7 @@ static const HLStyle highlighting_styles_DIFF[] =
 #define highlighting_properties_DIFF	EMPTY_PROPERTIES
 
 
-#define highlighting_lexer_DOCBOOK			SCLEX_XML
+#define highlighting_lexer_DOCBOOK			"xml"
 static const HLStyle highlighting_styles_DOCBOOK[] =
 {
 	{ SCE_H_DEFAULT,				"default",					FALSE	 },
@@ -643,7 +643,7 @@ static const HLKeyword highlighting_keywords_DOCBOOK[] =
 
 
 /* Erlang */
-#define highlighting_lexer_ERLANG		SCLEX_ERLANG
+#define highlighting_lexer_ERLANG		"erlang"
 static const HLStyle highlighting_styles_ERLANG[] =
 {
 	{ SCE_ERLANG_DEFAULT,			"default",				FALSE },
@@ -686,7 +686,7 @@ static const HLKeyword highlighting_keywords_ERLANG[] =
 
 
 /* F77 */
-#define highlighting_lexer_F77			SCLEX_F77
+#define highlighting_lexer_F77			"f77"
 static const HLStyle highlighting_styles_F77[] =
 {
 	{ SCE_F_DEFAULT,		"default",			FALSE },
@@ -715,7 +715,7 @@ static const HLKeyword highlighting_keywords_F77[] =
 
 
 /* Forth */
-#define highlighting_lexer_FORTH		SCLEX_FORTH
+#define highlighting_lexer_FORTH		"forth"
 static const HLStyle highlighting_styles_FORTH[] =
 {
 	{ SCE_FORTH_DEFAULT,	"default",		FALSE },
@@ -745,14 +745,14 @@ static const HLKeyword highlighting_keywords_FORTH[] =
 
 /* Fortran */
 /* F77 and Fortran (F9x) uses different lexers but shares styles and keywords */
-#define highlighting_lexer_FORTRAN			SCLEX_FORTRAN
+#define highlighting_lexer_FORTRAN			"fortran"
 #define highlighting_styles_FORTRAN			highlighting_styles_F77
 #define highlighting_keywords_FORTRAN		highlighting_keywords_F77
 #define highlighting_properties_FORTRAN		highlighting_properties_F77
 
 
 /* GDScript */
-#define highlighting_lexer_GDSCRIPT		SCLEX_GDSCRIPT
+#define highlighting_lexer_GDSCRIPT		"gdscript"
 static const HLStyle highlighting_styles_GDSCRIPT[] =
 {
 	{ SCE_GD_DEFAULT,		"default",			FALSE },
@@ -782,14 +782,14 @@ static const HLKeyword highlighting_keywords_GDSCRIPT[] =
 
 
 /* Go */
-#define highlighting_lexer_GO		SCLEX_CPP
+#define highlighting_lexer_GO		highlighting_lexer_C
 #define highlighting_styles_GO		highlighting_styles_C
 #define highlighting_keywords_GO	highlighting_keywords_C
 #define highlighting_properties_GO	highlighting_properties_C
 
 
 /* Haskell */
-#define highlighting_lexer_HASKELL			SCLEX_HASKELL
+#define highlighting_lexer_HASKELL			"haskell"
 static const HLStyle highlighting_styles_HASKELL[] =
 {
 	{ SCE_HA_DEFAULT,				"default",				FALSE },
@@ -826,7 +826,7 @@ static const HLKeyword highlighting_keywords_HASKELL[] =
 
 
 /* HAXE */
-#define highlighting_lexer_HAXE			SCLEX_CPP
+#define highlighting_lexer_HAXE			highlighting_lexer_C
 #define highlighting_styles_HAXE		highlighting_styles_C
 static const HLKeyword highlighting_keywords_HAXE[] =
 {
@@ -838,7 +838,7 @@ static const HLKeyword highlighting_keywords_HAXE[] =
 
 
 /* HTML */
-#define highlighting_lexer_HTML		SCLEX_HTML
+#define highlighting_lexer_HTML		"hypertext"
 static const HLStyle highlighting_styles_HTML[] =
 {
 	{ SCE_H_DEFAULT,				"html_default",				FALSE	 },
@@ -987,7 +987,7 @@ static const HLProperty highlighting_properties_HTML[] =
 
 
 /* Java */
-#define highlighting_lexer_JAVA			SCLEX_CPP
+#define highlighting_lexer_JAVA			highlighting_lexer_C
 #define highlighting_styles_JAVA		highlighting_styles_C
 static const HLKeyword highlighting_keywords_JAVA[] =
 {
@@ -1002,7 +1002,7 @@ static const HLKeyword highlighting_keywords_JAVA[] =
 
 
 /* JavaScript */
-#define highlighting_lexer_JS		SCLEX_CPP
+#define highlighting_lexer_JS		highlighting_lexer_C
 #define highlighting_styles_JS		highlighting_styles_C
 static const HLKeyword highlighting_keywords_JS[] =
 {
@@ -1012,7 +1012,7 @@ static const HLKeyword highlighting_keywords_JS[] =
 #define highlighting_properties_JS	highlighting_properties_C
 
 /* Julia */
-#define highlighting_lexer_JULIA		SCLEX_JULIA
+#define highlighting_lexer_JULIA		"julia"
 static const HLStyle highlighting_styles_JULIA[] =
 {
 	{ SCE_JULIA_DEFAULT,			"default",				FALSE },
@@ -1049,7 +1049,7 @@ static const HLKeyword highlighting_keywords_JULIA[] =
 
 
 /* LaTeX */
-#define highlighting_lexer_LATEX		SCLEX_LATEX
+#define highlighting_lexer_LATEX		"latex"
 static const HLStyle highlighting_styles_LATEX[] =
 {
 	{ SCE_L_DEFAULT,	"default",		FALSE },
@@ -1074,7 +1074,7 @@ static const HLKeyword highlighting_keywords_LATEX[] =
 
 
 /* Lisp */
-#define highlighting_lexer_LISP			SCLEX_LISP
+#define highlighting_lexer_LISP			"lisp"
 static const HLStyle highlighting_styles_LISP[] =
 {
 	{ SCE_LISP_DEFAULT,			"default",			FALSE },
@@ -1099,7 +1099,7 @@ static const HLKeyword highlighting_keywords_LISP[] =
 
 
 /* Lua */
-#define highlighting_lexer_LUA			SCLEX_LUA
+#define highlighting_lexer_LUA			"lua"
 static const HLStyle highlighting_styles_LUA[] =
 {
 	{ SCE_LUA_DEFAULT,			"default",			FALSE },
@@ -1139,7 +1139,7 @@ static const HLKeyword highlighting_keywords_LUA[] =
 
 
 /* Makefile */
-#define highlighting_lexer_MAKE			SCLEX_MAKEFILE
+#define highlighting_lexer_MAKE			"makefile"
 static const HLStyle highlighting_styles_MAKE[] =
 {
 	{ SCE_MAKE_DEFAULT,			"default",		FALSE },
@@ -1155,7 +1155,7 @@ static const HLStyle highlighting_styles_MAKE[] =
 
 
 /* Markdown */
-#define highlighting_lexer_MARKDOWN			SCLEX_MARKDOWN
+#define highlighting_lexer_MARKDOWN			"markdown"
 static const HLStyle highlighting_styles_MARKDOWN[] =
 {
 	{ SCE_MARKDOWN_DEFAULT,		"default",		FALSE },
@@ -1186,7 +1186,7 @@ static const HLStyle highlighting_styles_MARKDOWN[] =
 
 
 /* Matlab */
-#define highlighting_lexer_MATLAB		SCLEX_OCTAVE /* not MATLAB to support Octave's # comments */
+#define highlighting_lexer_MATLAB		"octave" /* not MATLAB to support Octave's # comments */
 static const HLStyle highlighting_styles_MATLAB[] =
 {
 	{ SCE_MATLAB_DEFAULT,			"default",				FALSE },
@@ -1267,7 +1267,7 @@ static const HLKeyword highlighting_keywords_NIX[] =
 
 
 /* NSIS */
-#define highlighting_lexer_NSIS			SCLEX_NSIS
+#define highlighting_lexer_NSIS			"nsis"
 static const HLStyle highlighting_styles_NSIS[] =
 {
 	{ SCE_NSIS_DEFAULT,			"default",			FALSE },
@@ -1315,7 +1315,7 @@ static const HLKeyword highlighting_keywords_OBJECTIVEC[] =
 
 
 /* Pascal */
-#define highlighting_lexer_PASCAL		SCLEX_PASCAL
+#define highlighting_lexer_PASCAL		"pascal"
 static const HLStyle highlighting_styles_PASCAL[] =
 {
 	{ SCE_PAS_DEFAULT,			"default",			FALSE },
@@ -1342,7 +1342,7 @@ static const HLKeyword highlighting_keywords_PASCAL[] =
 
 
 /* Perl */
-#define highlighting_lexer_PERL			SCLEX_PERL
+#define highlighting_lexer_PERL			"perl"
 static const HLStyle highlighting_styles_PERL[] =
 {
 	{ SCE_PL_DEFAULT,			"default",				FALSE },
@@ -1399,14 +1399,14 @@ static const HLKeyword highlighting_keywords_PERL[] =
 
 
 /* PHP */
-#define highlighting_lexer_PHP			SCLEX_HTML
+#define highlighting_lexer_PHP			highlighting_lexer_HTML
 #define highlighting_styles_PHP			highlighting_styles_HTML
 #define highlighting_keywords_PHP		highlighting_keywords_HTML
 #define highlighting_properties_PHP		highlighting_properties_HTML
 
 
 /* PO (gettext) */
-#define highlighting_lexer_PO		SCLEX_PO
+#define highlighting_lexer_PO		"po"
 static const HLStyle highlighting_styles_PO[] =
 {
 	{ SCE_PO_DEFAULT,				"default",				FALSE },
@@ -1431,7 +1431,7 @@ static const HLStyle highlighting_styles_PO[] =
 
 
 /* PowerShell */
-#define highlighting_lexer_POWERSHELL		SCLEX_POWERSHELL
+#define highlighting_lexer_POWERSHELL		"powershell"
 static const HLStyle highlighting_styles_POWERSHELL[] =
 {
 	{ SCE_POWERSHELL_DEFAULT,			"default",				FALSE },
@@ -1498,7 +1498,7 @@ static const HLKeyword highlighting_keywords_PROLOG[] =
 
 
 /* Python */
-#define highlighting_lexer_PYTHON		SCLEX_PYTHON
+#define highlighting_lexer_PYTHON		"python"
 static const HLStyle highlighting_styles_PYTHON[] =
 {
 	{ SCE_P_DEFAULT,		"default",			FALSE },
@@ -1532,7 +1532,7 @@ static const HLKeyword highlighting_keywords_PYTHON[] =
 
 
 /* R */
-#define highlighting_lexer_R		SCLEX_R
+#define highlighting_lexer_R		"r"
 static const HLStyle highlighting_styles_R[] =
 {
 	{ SCE_R_DEFAULT,		"default",			FALSE },
@@ -1609,7 +1609,7 @@ static const HLKeyword highlighting_keywords_RAKU[] =
 
 
 /* Ruby */
-#define highlighting_lexer_RUBY			SCLEX_RUBY
+#define highlighting_lexer_RUBY			"ruby"
 static const HLStyle highlighting_styles_RUBY[] =
 {
 	{ SCE_RB_DEFAULT,		"default",			FALSE },
@@ -1658,7 +1658,7 @@ static const HLKeyword highlighting_keywords_RUBY[] =
 #define highlighting_properties_RUBY	EMPTY_PROPERTIES
 
 /* Rust */
-#define highlighting_lexer_RUST		SCLEX_RUST
+#define highlighting_lexer_RUST		"rust"
 static const HLStyle highlighting_styles_RUST[] =
 {
 	{ SCE_RUST_DEFAULT,				"default",					FALSE },
@@ -1699,7 +1699,7 @@ static const HLKeyword highlighting_keywords_RUST[] =
 #define highlighting_properties_RUST		EMPTY_PROPERTIES
 
 /* SH */
-#define highlighting_lexer_SH		SCLEX_BASH
+#define highlighting_lexer_SH		"bash"
 static const HLStyle highlighting_styles_SH[] =
 {
 	{ SCE_SH_DEFAULT,		"default",		FALSE },
@@ -1725,7 +1725,7 @@ static const HLKeyword highlighting_keywords_SH[] =
 
 
 /* SMALLTALK */
-#define highlighting_lexer_SMALLTALK SCLEX_SMALLTALK
+#define highlighting_lexer_SMALLTALK "smalltalk"
 static const HLStyle highlighting_styles_SMALLTALK[] =
 {
 	{ SCE_ST_DEFAULT,		"default",				FALSE },
@@ -1754,7 +1754,7 @@ static const HLKeyword highlighting_keywords_SMALLTALK[] =
 
 
 /* SQL */
-#define highlighting_lexer_SQL			SCLEX_SQL
+#define highlighting_lexer_SQL			"sql"
 static const HLStyle highlighting_styles_SQL[] =
 {
 	{ SCE_SQL_DEFAULT,					"default",					FALSE },
@@ -1790,7 +1790,7 @@ static const HLKeyword highlighting_keywords_SQL[] =
 
 
 /* TCL */
-#define highlighting_lexer_TCL			SCLEX_TCL
+#define highlighting_lexer_TCL			"tcl"
 static const HLStyle highlighting_styles_TCL[] =
 {
 	{ SCE_TCL_DEFAULT,			"default",			FALSE },
@@ -1856,7 +1856,7 @@ static const HLKeyword highlighting_keywords_TOML[] =
 
 
 /* Txt2Tags */
-#define highlighting_lexer_TXT2TAGS			SCLEX_TXT2TAGS
+#define highlighting_lexer_TXT2TAGS			"txt2tags"
 static const HLStyle highlighting_styles_TXT2TAGS[] =
 {
 	{ SCE_TXT2TAGS_DEFAULT,		"default",		FALSE },
@@ -1891,7 +1891,7 @@ static const HLStyle highlighting_styles_TXT2TAGS[] =
 
 
 /* VHDL */
-#define highlighting_lexer_VHDL			SCLEX_VHDL
+#define highlighting_lexer_VHDL			"vhdl"
 static const HLStyle highlighting_styles_VHDL[] =
 {
 	{ SCE_VHDL_DEFAULT,			"default",				FALSE },
@@ -1925,7 +1925,7 @@ static const HLKeyword highlighting_keywords_VHDL[] =
 
 
 /* Verilog */
-#define highlighting_lexer_VERILOG			SCLEX_VERILOG
+#define highlighting_lexer_VERILOG			"verilog"
 static const HLStyle highlighting_styles_VERILOG[] =
 {
 	{ SCE_V_DEFAULT,			"default",				FALSE },
@@ -1959,7 +1959,7 @@ static const HLKeyword highlighting_keywords_VERILOG[] =
 
 
 /* XML */
-#define highlighting_lexer_XML			SCLEX_XML
+#define highlighting_lexer_XML			"xml"
 #define highlighting_styles_XML			highlighting_styles_HTML
 static const HLKeyword highlighting_keywords_XML[] =
 {
@@ -1969,7 +1969,7 @@ static const HLKeyword highlighting_keywords_XML[] =
 
 
 /* YAML */
-#define highlighting_lexer_YAML			SCLEX_YAML
+#define highlighting_lexer_YAML			"yaml"
 static const HLStyle highlighting_styles_YAML[] =
 {
 	{ SCE_YAML_DEFAULT,		"default",		FALSE },
@@ -2024,14 +2024,14 @@ static const HLKeyword highlighting_keywords_ZIG[] =
 
 
 /* Zephir */
-#define highlighting_lexer_ZEPHIR		SCLEX_PHPSCRIPT
+#define highlighting_lexer_ZEPHIR		"phpscript"
 #define highlighting_styles_ZEPHIR		highlighting_styles_PHP
 #define highlighting_keywords_ZEPHIR	highlighting_keywords_PHP
 #define highlighting_properties_ZEPHIR	highlighting_properties_PHP
 
 
 /* AutoIt */
-#define highlighting_lexer_AU3			SCLEX_AU3
+#define highlighting_lexer_AU3			"au3"
 static const HLStyle highlighting_styles_AU3[] =
 {
 	{ SCE_AU3_DEFAULT,		"default",		FALSE},
