@@ -1087,9 +1087,11 @@ GIOChannel *utils_set_up_io_channel(
 }
 
 
-/* Contributed by Stefan Oltmanns, thanks.
+/* Replace escapes in place.
+ * Contributed by Stefan Oltmanns, thanks.
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts.
  * keep_backslash is used for regex strings to leave '\\' and '\?' in place */
+// See also g_strcompress which allocates.
 gboolean utils_str_replace_escape(gchar *string, gboolean keep_backslash)
 {
 	gsize i, j, len;
