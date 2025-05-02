@@ -167,6 +167,7 @@ typedef struct UIPrefs
 	gboolean	sidebar_visible;
 	gint		sidebar_page;
 	gboolean	msgwindow_visible;
+	gboolean	menubar_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 	gchar		*statusbar_template;
 	gboolean	new_document_after_close;
@@ -325,6 +326,8 @@ void ui_document_buttons_update(void);
 
 
 void ui_sidebar_show_hide(void);
+
+void ui_menubar_show_hide(void);
 
 void ui_document_show_hide(GeanyDocument *doc);
 

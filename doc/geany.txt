@@ -3859,8 +3859,10 @@ Action                          Default shortcut          Description
 =============================== ========================= ==================================================
 Fullscreen                      F11  (C)                  Switches to fullscreen mode.
 
-Toggle Messages Window                                    Toggles the message window (status and compiler
-                                                          messages) on and off.
+Toggle Menubar                                            Shows or hides the menubar.
+
+Toggle Messages Window                                    Shows or hides the message window
+                                                          (status and compiler messages).
 
 Toggle Sidebar                                            Shows or hides the sidebar.
 
