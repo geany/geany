@@ -448,9 +448,10 @@ gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from)
 			GeanyDocument *doc = document_get_current();
 			if (doc != NULL)
 				ft = doc->file_type;
+			if (ft == NULL)
+				return NULL;
 		}
-		if (ft == NULL)
-			return NULL;
+
 		return_nonblank_regex(GEANY_BCS_PROJ, ft->priv->projerror_regex_string);
 		return_nonblank_regex(GEANY_BCS_HOME_FT, ft->priv->homeerror_regex_string);
 		return_nonblank_regex(GEANY_BCS_FT, ft->error_regex_string);
