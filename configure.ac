@@ -160,6 +160,7 @@ AC_CONFIG_FILES([
 		icons/tango/32x32/Makefile
 		icons/tango/48x48/Makefile
 		icons/tango/scalable/Makefile
+		icons/fallback/Makefile
 		ctags/Makefile
 		scintilla/Makefile
 		src/Makefile

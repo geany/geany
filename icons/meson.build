@@ -1,3 +1,5 @@
+fs = import('fs')
+
 icon_dirs = [ '16x16', '24x24', '32x32', '48x48', 'scalable' ]
 
 # in all resolutions
@@ -36,6 +38,14 @@ class_icons = [
 
 foreach icon : class_icons
     install_data(join_paths('16x16', icon), install_dir: join_paths(icons_dir, '16x16', 'apps'))
+endforeach
+
+# fallback icons
+fallback_icons = [
+    'Adwaita/16x16/actions/edit-clear.png',
+]
+foreach fallback_icon: fallback_icons
+    install_data(join_paths('fallback', fallback_icon), install_dir: join_paths(get_option('datadir'), 'geany', 'icons-fallback', fs.parent(fallback_icon)))
 endforeach
 
 if meson.version().version_compare('>=0.57.0')

@@ -244,8 +244,15 @@ static void on_window_active_changed(GtkWindow *window, GParamSpec *pspec, gpoin
 
 static void main_init(void)
 {
+	gchar *fallback_icons_dir;
+
 	/* add our icon path in case we aren't installed in the system prefix */
 	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), utils_resource_dir(RESOURCE_DIR_ICON));
+
+	/* add our fallback icon path for patching up themes when icons are missing */
+	fallback_icons_dir = g_build_filename(utils_resource_dir(RESOURCE_DIR_DATA), "icons-fallback", NULL);
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), fallback_icons_dir);
+	g_free(fallback_icons_dir);
 
 	/* inits */
 	ui_init_stock_items();
