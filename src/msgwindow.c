@@ -649,7 +649,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 
 	message_popup_menu = gtk_menu_new();
 
-	clear = ui_image_menu_item_new_with_icon_name("edit-clear-symbolic", _("_Clear"));
+	clear = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLEAR, NULL);
 	gtk_widget_show(clear);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), clear);
 	g_signal_connect(clear, "activate",

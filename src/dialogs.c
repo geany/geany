@@ -820,7 +820,7 @@ static gint run_unsaved_dialog(const gchar *msg, const gchar *msg2)
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg2);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 
-	button = ui_button_new_with_icon_name("edit-clear-symbolic", _("_Don't save"));
+	button = ui_button_new_with_image(GTK_STOCK_CLEAR, _("_Don't save"));
 	gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, GTK_RESPONSE_NO);
 	gtk_widget_show(button);
 
