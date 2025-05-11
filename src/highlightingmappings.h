@@ -1843,12 +1843,13 @@ static const HLStyle highlighting_styles_TOML[] =
 	{ SCE_TOML_KEY,					"key",				FALSE },
 	{ SCE_TOML_ERROR,				"error",			FALSE },
 	{ SCE_TOML_OPERATOR,			"operator",			FALSE },
-	{ SCE_TOML_STRING_SQ,			"stringsq",		FALSE },
-	{ SCE_TOML_STRING_DQ,			"stringdq",		FALSE },
+	{ SCE_TOML_STRING_SQ,			"stringsq",			FALSE },
+	{ SCE_TOML_STRING_DQ,			"stringdq",			FALSE },
 	{ SCE_TOML_TRIPLE_STRING_SQ,	"triplestringsq",	FALSE },
 	{ SCE_TOML_TRIPLE_STRING_DQ,	"triplestringdq",	FALSE },
 	{ SCE_TOML_ESCAPECHAR,			"escapechar",		FALSE },
 	{ SCE_TOML_DATETIME,			"datetime",			FALSE },
+	{ SCE_TOML_STRINGEOL,			"stringeol",		FALSE },
 };
 static const HLKeyword highlighting_keywords_TOML[] =
 {

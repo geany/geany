@@ -1681,7 +1681,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 			return (style == SCE_TOML_STRING_SQ ||
 				style == SCE_TOML_STRING_DQ ||
 				style == SCE_TOML_TRIPLE_STRING_SQ ||
-				style == SCE_TOML_TRIPLE_STRING_DQ);
+				style == SCE_TOML_TRIPLE_STRING_DQ ||
+				style == SCE_TOML_STRINGEOL);
 
 		case SCLEX_AU3:
 			return (style == SCE_AU3_STRING);
