@@ -1697,7 +1697,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 			return (style == SCE_ZIG_STRING ||
 				style == SCE_ZIG_MULTISTRING ||
 				style == SCE_ZIG_CHARACTER ||
-				style == SCE_ZIG_ESCAPECHAR);
+				style == SCE_ZIG_ESCAPECHAR ||
+				style == SCE_ZIG_STRINGEOL);
 
 		case SCLEX_DART:
 			return (style == SCE_DART_STRING_SQ ||

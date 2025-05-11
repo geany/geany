@@ -2013,7 +2013,8 @@ static const HLStyle highlighting_styles_ZIG[] =
 	{ SCE_ZIG_KW_SECONDARY,			"kw_secondary",			FALSE },
 	{ SCE_ZIG_KW_TERTIARY,			"kw_tertiary",			FALSE },
 	{ SCE_ZIG_KW_TYPE,				"kw_type",				FALSE },
-	{ SCE_ZIG_IDENTIFIER_STRING,	"identifer_string",		FALSE }
+	{ SCE_ZIG_IDENTIFIER_STRING,	"identifer_string",		FALSE },
+	{ SCE_ZIG_STRINGEOL,			"stringeol",			FALSE },
 };
 static const HLKeyword highlighting_keywords_ZIG[] =
 {
