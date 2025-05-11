@@ -29,6 +29,7 @@ kwprimary=keyword_1
 kwsecondary=keyword_1
 kwtertiary=keyword_2
 kwtype=class
+stringeol=string_eol
 
 [keywords]
 # all items must be in one line

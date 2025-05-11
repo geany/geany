@@ -569,6 +569,7 @@ static const HLStyle highlighting_styles_DART[] =
 	{ SCE_DART_KW_SECONDARY,		"kwsecondary",			FALSE },
 	{ SCE_DART_KW_TERTIARY,			"kwtertiary",			FALSE },
 	{ SCE_DART_KW_TYPE,				"kwtype",				FALSE },
+	{ SCE_DART_STRINGEOL,			"stringeol",			FALSE },
 };
 static const HLKeyword highlighting_keywords_DART[] =
 {

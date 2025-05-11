@@ -1707,7 +1707,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_DART_RAWSTRING_SQ ||
 				style == SCE_DART_RAWSTRING_DQ ||
 				style == SCE_DART_TRIPLE_RAWSTRING_SQ ||
-				style == SCE_DART_TRIPLE_RAWSTRING_DQ);
+				style == SCE_DART_TRIPLE_RAWSTRING_DQ ||
+				style == SCE_DART_STRINGEOL);
 
 		case SCLEX_NIX:
 			return (style == SCE_NIX_STRING ||
