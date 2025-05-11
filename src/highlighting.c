@@ -1713,7 +1713,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_NIX:
 			return (style == SCE_NIX_STRING ||
 				style == SCE_NIX_STRING_MULTILINE ||
-				style == SCE_NIX_ESCAPECHAR);
+				style == SCE_NIX_ESCAPECHAR ||
+				style == SCE_NIX_STRINGEOL);
 
 		case SCLEX_BATCH:
 		case SCLEX_DIFF:

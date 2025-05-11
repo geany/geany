@@ -1256,6 +1256,7 @@ static const HLStyle highlighting_styles_NIX[] =
 	{ SCE_NIX_KEYWORD2,				"keyword2",				FALSE },
 	{ SCE_NIX_KEYWORD3,				"keyword3",				FALSE },
 	{ SCE_NIX_KEYWORD4,				"keyword4",				FALSE },
+	{ SCE_NIX_STRINGEOL,			"stringeol",			FALSE },
 };
 static const HLKeyword highlighting_keywords_NIX[] =
 {
