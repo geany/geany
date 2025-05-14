@@ -327,7 +327,7 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 static gboolean is_symbol_within_parent(const TMTag *tag, const TMTag *parent)
 {
 	const gchar *scope_sep = tm_parser_scope_separator(tag->lang);
-	guint scope_len = 0;
+	gsize scope_len = 0;
 
 	if (EMPTY(tag->scope))
 		return FALSE;
