@@ -317,7 +317,7 @@ static void refresh(void)
 	GSList *list, *node;
 
 	/* don't clear when the new path doesn't exist */
-	if (! g_file_test(current_dir, G_FILE_TEST_EXISTS))
+	if (! current_dir || ! g_file_test(current_dir, G_FILE_TEST_EXISTS))
 		return;
 
 	clear();
