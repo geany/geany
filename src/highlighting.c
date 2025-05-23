@@ -1681,7 +1681,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 			return (style == SCE_TOML_STRING_SQ ||
 				style == SCE_TOML_STRING_DQ ||
 				style == SCE_TOML_TRIPLE_STRING_SQ ||
-				style == SCE_TOML_TRIPLE_STRING_DQ);
+				style == SCE_TOML_TRIPLE_STRING_DQ ||
+				style == SCE_TOML_STRINGEOL);
 
 		case SCLEX_AU3:
 			return (style == SCE_AU3_STRING);
@@ -1697,7 +1698,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 			return (style == SCE_ZIG_STRING ||
 				style == SCE_ZIG_MULTISTRING ||
 				style == SCE_ZIG_CHARACTER ||
-				style == SCE_ZIG_ESCAPECHAR);
+				style == SCE_ZIG_ESCAPECHAR ||
+				style == SCE_ZIG_STRINGEOL);
 
 		case SCLEX_DART:
 			return (style == SCE_DART_STRING_SQ ||
@@ -1707,12 +1709,14 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_DART_RAWSTRING_SQ ||
 				style == SCE_DART_RAWSTRING_DQ ||
 				style == SCE_DART_TRIPLE_RAWSTRING_SQ ||
-				style == SCE_DART_TRIPLE_RAWSTRING_DQ);
+				style == SCE_DART_TRIPLE_RAWSTRING_DQ ||
+				style == SCE_DART_STRINGEOL);
 
 		case SCLEX_NIX:
 			return (style == SCE_NIX_STRING ||
 				style == SCE_NIX_STRING_MULTILINE ||
-				style == SCE_NIX_ESCAPECHAR);
+				style == SCE_NIX_ESCAPECHAR ||
+				style == SCE_NIX_STRINGEOL);
 
 		case SCLEX_BATCH:
 		case SCLEX_DIFF:

@@ -19,6 +19,7 @@ kw_secondary=keyword_2
 kw_tertiary=keyword_2
 kw_type=class
 identifer_string=preprocessor
+stringeol=string_eol
 
 [keywords]
 # all items must be in one line
