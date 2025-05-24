@@ -77,7 +77,8 @@ jobs:
             doxygen \
             python3-docutils \
             python3-lxml \
-            rst2pdf
+            rst2pdf \
+            xvfb
 
       - name: Configure
         run: |
@@ -94,12 +95,12 @@ jobs:
       - name: Run Tests
         run: |
           cd _build
-          make -j ${{ env.JOBS }} check
+          xvfb-run -a -e /tmp/xvfb-error-make-tests make -j ${{ env.JOBS }} check
 
       - name: Run distcheck
         run: |
           cd _build
-          make -j ${{ env.JOBS }} distcheck DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS";
+          xvfb-run -a -e /tmp/xvfb-error-make-distcheck make -j ${{ env.JOBS }} distcheck DISTCHECK_CONFIGURE_FLAGS="$CONFIGURE_FLAGS";
 
       - name: ccache statistics
         run: ccache --show-stats
@@ -150,7 +151,8 @@ jobs:
             python3-docutils \
             python3-lxml \
             rst2pdf \
-            meson
+            meson \
+            xvfb
 
       - name: Configuration
         run: |
@@ -162,7 +164,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          ninja -C _build test
+          xvfb-run -a -e /tmp/xvfb-error-meson-tests ninja -C _build test
 
       # distcheck not applicable, meson exports the source tree per git-archive
 
