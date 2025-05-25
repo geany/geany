@@ -599,7 +599,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		gchar *build_date = utils_parse_and_format_build_date(__DATE__);
 
 		printf(PACKAGE " %s (", main_get_version_string());
-		/* note for translators: library versions are printed after this */
+		/* Translators: library versions are printed after this */
 		printf(_("built on %s with "), build_date);
 		printf(geany_lib_versions,
 			GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
@@ -712,7 +712,7 @@ static gint create_config_dir(void)
 				else
 				{
 					dialogs_show_msgbox(GTK_MESSAGE_WARNING,
-						/* for translators: the third %s in brackets is the error message which
+						/* Translators: the third %s in brackets is the error message which
 						 * describes why moving the dir didn't work */
 						_("Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 						  "Please move manually the directory to the new location."),

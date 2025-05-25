@@ -96,7 +96,7 @@ static void destroy_project(gboolean open_default);
 #define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
 #define SHOW_ERR1(args, more) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args, more)
 #define MAX_NAME_LEN 50
-/* "projects" is part of the default project base path so be careful when translating
+/* Translators: "projects" is part of the default project base path so be careful when translating
  * please avoid special characters and spaces, look at the source for details or ask Frank */
 #define PROJECT_DIR _("projects")
 

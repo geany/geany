@@ -1235,7 +1235,7 @@ void document_apply_indent_settings(GeanyDocument *doc)
 					name = _("Tabs and Spaces");
 					break;
 			}
-			/* For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
+			/* Translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 			 * and Spaces), the second one is the filename */
 			ui_set_statusbar(TRUE, _("Setting %s indentation mode for %s."), name,
 				DOC_FILENAME(doc));
@@ -1484,7 +1484,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		else
 		{
 			g_signal_emit_by_name(geany_object, "document-open", doc);
-			/* For translators: this is the status window message for opening a file. %d is the number
+			/* Translators: this is the status window message for opening a file. %d is the number
 			 * of the newly opened file, %s indicates whether the file is opened read-only
 			 * (it is replaced with the string ", read-only"). */
 			msgwin_status_add(_("File %s opened (%d%s)."),
