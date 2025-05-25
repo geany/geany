@@ -124,7 +124,7 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 	if (!*command_line)
 	{
 		g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_EMPTY_STRING,
-			/* TL note: from glib */
+			/* Translators: this is from glib */
 			_("Text was empty (or contained only whitespace)"));
 		return FALSE;
 	}

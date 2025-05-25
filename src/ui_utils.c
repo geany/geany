@@ -233,7 +233,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 					sci_get_col_from_position(sci,
 						sci_get_selection_end(sci)) != 0)
 					g_string_append_printf(stats_str, "%d", len);
-				else /* L = lines */
+				else /* Translators: L = lines */
 					g_string_append_printf(stats_str, _("%dL"),
 						sci_get_lines_selected(doc->editor->sci) - 1);
 				break;
@@ -243,15 +243,15 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 					sci_get_selected_text_length2(doc->editor->sci));
 				break;
 			case 'w':
-				/* RO = read-only */
+				/* Translators: RO = read-only */
 				g_string_append(stats_str, (doc->readonly) ? _("RO ") :
-					/* OVR = overwrite/overtype, INS = insert */
+					/* Translators: OVR = overwrite/overtype, INS = insert */
 					(sci_get_overtype(doc->editor->sci) ? _("OVR") : _("INS")));
 				break;
 			case 'r':
 				if (doc->readonly)
 				{
-					g_string_append(stats_str, _("RO "));	/* RO = read-only */
+					g_string_append(stats_str, _("RO "));	/* Translators: RO = read-only */
 					g_string_append(stats_str, sp + 1);
 				}
 				break;
@@ -262,10 +262,10 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 					case GEANY_INDENT_TYPE_TABS:
 						g_string_append(stats_str, _("TAB"));
 						break;
-					case GEANY_INDENT_TYPE_SPACES:	/* SP = space */
+					case GEANY_INDENT_TYPE_SPACES:	/* Translators: SP = space */
 						g_string_append(stats_str, _("SP"));
 						break;
-					case GEANY_INDENT_TYPE_BOTH:	/* T/S = tabs and spaces */
+					case GEANY_INDENT_TYPE_BOTH:	/* Translators: T/S = tabs and spaces */
 						g_string_append(stats_str, _("T/S"));
 						break;
 				}
@@ -274,7 +274,8 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 			case 'm':
 				if (doc->changed)
 				{
-					g_string_append(stats_str, _("MOD"));	/* MOD = modified */
+					/* Translators: MOD = modified */
+					g_string_append(stats_str, _("MOD"));
 					g_string_append(stats_str, sp);
 				}
 				break;
@@ -287,7 +288,8 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				if (encodings_is_unicode_charset(doc->encoding) && (doc->has_bom))
 				{
 					g_string_append_c(stats_str, ' ');
-					g_string_append(stats_str, _("(with BOM)"));	/* BOM = byte order mark */
+					/* Translators: BOM = byte order mark */
+					g_string_append(stats_str, _("(with BOM)"));
 				}
 				break;
 			case 'f':
