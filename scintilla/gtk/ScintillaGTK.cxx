@@ -2013,7 +2013,7 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		// where the X11 server already has an adaptive scrolling algorithm
 		// that fights with this one
 		int cLineScroll;
-#if (defined(__APPLE__) || defined(PLAT_GTK_WIN32)) && !defined(GDK_WINDOWING_QUARTZ)
+#if defined(__APPLE__) && !defined(GDK_WINDOWING_QUARTZ)
 		cLineScroll = sciThis->linesPerScroll;
 		if (cLineScroll == 0)
 			cLineScroll = 4;
