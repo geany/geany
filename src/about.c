@@ -330,6 +330,14 @@ static GtkWidget *create_dialog(void)
 	ROW("", row, 0, 0, 0, 0);
 	row++;
 
+	g_snprintf(buffer, sizeof(buffer), "Jiří Techet - %s", _("developer"));
+	ROW(buffer, row, 0, 0, 0, 1);
+	row++;
+	ROW("&lt;techet@gmail.com&gt;", row, 0, 0, 0, 1);
+	row++;
+	ROW("", row, 0, 0, 0, 0);
+	row++;
+
 	g_snprintf(buffer, sizeof(buffer), "Matthew Brush - %s", _("developer"));
 	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
