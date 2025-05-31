@@ -1,4 +1,5 @@
 
+#include "main.h"
 #include "utils.h"
 
 #include "gtkcompat.h"
@@ -430,15 +431,47 @@ static void test_utils_get_initials(void)
 #undef CHECK_INITIALS
 }
 
+static void test_utils_replace_document_placeholders(void)
+{
+#define CHECK_DOC_PL(src, result) \
+	G_STMT_START {													\
+		gchar *r = utils_replace_document_placeholders(NULL, src);	\
+		g_assert_cmpstr(r, ==, result);								\
+		g_free(r);													\
+	} G_STMT_END
+
+	CHECK_DOC_PL("some thing", "some thing");
+	CHECK_DOC_PL("some %% thing", "some % thing");
+	/* a trailing % is kept */
+	CHECK_DOC_PL("some %% thing %", "some % thing %");
+	CHECK_DOC_PL("some %%f thing %%", "some %f thing %");
+	CHECK_DOC_PL("some %%f thing %%%", "some %f thing %%");
+	CHECK_DOC_PL("some %%f thing %%%%", "some %f thing %%");
+	CHECK_DOC_PL("some %%f thing %%%%%", "some %f thing %%%");
+	/* We give a NULL doc, so replacements are not made */
+	CHECK_DOC_PL("some %d thing %%", "some %d thing %");
+	CHECK_DOC_PL("some %e thing %%", "some %e thing %");
+	CHECK_DOC_PL("some %f thing %%", "some %f thing %");
+	CHECK_DOC_PL("some %l thing %%", "some %l thing %");
+	CHECK_DOC_PL("some %p thing %%", "some %p thing %");
+	/* Unknown placeholder, left as-is */
+	CHECK_DOC_PL("some %z thing %%", "some %z thing %");
+
+#undef CHECK_DOC_PL
+}
+
 int main(int argc, char **argv)
 {
 	g_test_init(&argc, &argv, NULL);
+
+	main_init_headless();
 
 	UTIL_TEST_ADD("strv_join", test_utils_strv_new);
 	UTIL_TEST_ADD("strv_find_common_prefix", test_utils_strv_find_common_prefix);
 	UTIL_TEST_ADD("strv_find_lcs", test_utils_strv_find_lcs);
 	UTIL_TEST_ADD("strv_shorten_file_list", test_utils_strv_shorten_file_list);
 	UTIL_TEST_ADD("get_initals", test_utils_get_initials);
+	UTIL_TEST_ADD("replace_document_placeholders", test_utils_replace_document_placeholders);
 
 	return g_test_run();
 }

@@ -593,8 +593,8 @@ static void print_external(GeanyDocument *doc)
 		return;
 	}
 
-	/* replace d, e, f and p placeholders in cmdline */
-	cmdline = utils_replace_placeholder(doc, printing_prefs.external_print_cmd, "defp");
+	/* replace placeholders in cmdline */
+	cmdline = utils_replace_document_placeholders(doc, printing_prefs.external_print_cmd);
 
 	if (dialogs_show_question(
 			_("The file \"%s\" will be printed with the following command:\n\n%s"),

@@ -2499,149 +2499,125 @@ gchar *utils_get_os_info_string(void)
 }
 
 
-/**
- * @brief Replaces placeholders in a string with a given filename / path / ...
+static gchar *utils_replace_placeholders(const gchar *str,
+		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
+		gpointer data)
+{
+	GString *res;
+	const gchar *p;
+
+	g_return_val_if_fail(insert_replacement != NULL, NULL);
+
+	if (! str)
+		return g_strdup("");
+
+	res = g_string_new(NULL);
+	while ((p = strchr(str, '%')) != NULL)
+	{
+		g_string_append_len(res, str, p - str);
+
+		p++;
+		if (! *p || *p == '%') /* %% or trailing % -> % */
+			g_string_append_c(res, '%');
+		else if (! insert_replacement(res, *p, data))
+		{
+			/* unknown placeholder, leave it literally */
+			g_string_append_c(res, '%');
+			g_string_append_c(res, *p);
+		}
+
+		str = p;
+		if (*str)
+			str++;
+		else
+			break;
+	}
+	g_string_append(res, str);
+
+	return g_string_free(res, FALSE);
+}
+
+
+static gboolean generate_document_replacements(GString *buffer,
+		const gchar placeholder, gpointer data)
+{
+	const GeanyDocument *doc = data;
+	gchar *r = NULL;
+
+	/* %p is the project base path, if any */
+	if (placeholder == 'p' && app->project)
+		r = project_get_base_path();
+	else if (! doc || ! doc->file_name)
+	{
+		ui_set_statusbar(FALSE, _("failed to substitute %%%c: document has no path"), placeholder);
+		/* TODO: Shouldn't we rather return an empty string for known placeholders?
+		 *       That's not what the previous code did, though. */
+	}
+	else
+	{
+		switch (placeholder)
+		{
+			case 'p': /* we only end up here if no project are open, so fallback on %d */
+				ui_set_statusbar(FALSE, _("failed to substitute %%p, no project active"));
+				/* fall through */
+			case 'd':
+				r = g_path_get_dirname(doc->file_name);
+				break;
+			case 'e':
+			{
+				gchar *basename = g_path_get_basename(doc->file_name);
+				r = utils_remove_ext_from_filename(basename);
+				g_free(basename);
+				break;
+			}
+			case 'f':
+				r = g_path_get_basename(doc->file_name);
+				break;
+			case 'l':
+				g_string_append_printf(buffer, "%i", sci_get_current_line(doc->editor->sci) + 1);
+				return TRUE;
+		}
+	}
+
+	if (r)
+	{
+		g_string_append(buffer, r);
+		g_free(r);
+	}
+
+	return r != NULL;
+}
+
+
+/*
+ * @brief Replaces document-related placeholders in a string
  *
  * This function searches for specified placeholders within the given string
- * and replaces it with the provided doc information (filename / path / ...)
+ * and replaces them with the provided doc information (filename / path / ...)
  *
  * @param[in] doc The document from which the name/path replaces the placeholders.
- *
  * @param[in] src The original string including the placeholder tokens (...%d...%e...)
  *
- * @param[in] needles The string with placeholders to replace.
- *                    The string is a combination of 'd', 'e', 'f', 'l' and 'p'.
- *                    'd' : replace %d with the absolute path
- *                    'e' : replace %e with the filename (excluding extension)
- *                    'f' : replace %f with the filename (including extension)
- *                    'l' : replace %l with the current 1-based linenumber
- *                    'p' : within a project context:
- *                             replace %p with the absolute project base directory
- *                          within a document context:
- *                             replace %p with the absolute path/filename (including extension)
+ * The following placeholders are handled:
+ * %%: %
+ * %d: The document's dirname
+ * %e: The document's basename, without extension
+ * %f: The document's basename (including extension)
+ * %l: The document's current line number, 1-based
+ * %p: The project's base directory, or the document's basename if no project are open.
  *
- *                    e.g. 'df' will replace all %d and %f placeholders
+ * If an unknown placeholder is encountered, it is left unmodified.  However,
+ * it is safer not to rely on this in case new placeholders are added in the
+ * future, and explicitly use %% instead.
  *
- * @return `changed string` if the replacement was successful, `NULL` if an error occurred.
- *
- * @note The returned gchar string MUST be FREED with g_free() by the calling function
- *
- * @note Character repetitions in the needles string is accepted but sloppy on the edges
- *
- * @note Invalid characters in the needles string will be ignored
+ * @return a copy of @p src with placeholders replaced, which should be freed.
  *
  * @note This function uses the global variable app (type GeanyApp)
- *
- * @note Substituting "%%e" for a file called fam.c would give the result "fam.cam".
- *       To prevent this side-effect, multiple consecutive "%" are reduced to "%".
  */
-gchar *utils_replace_placeholder(const GeanyDocument *doc, const gchar *src, const gchar *needles)
+GEANY_EXPORT_SYMBOL
+gchar *utils_replace_document_placeholders(const GeanyDocument *doc, const gchar *src)
 {
-	GString *haystack    = NULL;
-	gchar   *executable  = NULL;
-	gchar   *replacement = NULL;
-	gint    line_num     = 0;
-	GRegex  *regex       = NULL;
-	GString *errormsg    = NULL;
+	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
 
-	g_return_val_if_fail(doc != NULL    , NULL);
-	g_return_val_if_fail(doc->is_valid  , NULL);
-	g_return_val_if_fail(needles != NULL, NULL);
-	g_return_val_if_fail(src != NULL    , NULL);
-
-	haystack = g_string_new(src);
-
-	/* Reduce "%%%..." to one "%" */
-	regex = g_regex_new("%+", 0, 0, NULL);
-
-	replacement = g_regex_replace(regex, haystack->str, -1, 0, "%", 0, NULL);
-	g_string_assign(haystack, replacement);
-
-	g_regex_unref(regex);
-	regex = NULL;
-	g_free(replacement);
-	replacement = NULL;
-
-	/* Execute effective substitutions */
-
-	if (app->project) {
-		/* replace %p with the current project's (absolute) base directory */
-		replacement = project_get_base_path();
-		utils_string_replace_all(haystack, "%p", replacement);
-	}
-
-	if (doc->file_name != NULL)
-	{
-		if (g_utf8_strchr(needles, -1, 'd') != NULL) {
-			/* replace %d with the absolute path */
-			replacement = g_path_get_dirname(doc->file_name);
-			utils_string_replace_all(haystack, "%d", replacement);
-			g_free(replacement);
-		}
-
-		if (g_utf8_strchr(needles, -1, 'e') != NULL) {
-			/* replace %e with the filename (excluding extension) */
-			executable = utils_remove_ext_from_filename(doc->file_name);
-			replacement = g_path_get_basename(executable);
-			utils_string_replace_all(haystack, "%e", replacement);
-			g_free(replacement);
-			g_free(executable);
-		}
-
-		if (g_utf8_strchr(needles, -1, 'f') != NULL) {
-			/* replace %f with the filename (including extension) */
-			replacement = g_path_get_basename(doc->file_name);
-			utils_string_replace_all(haystack, "%f", replacement);
-			g_free(replacement);
-		}
-
-		if (g_utf8_strchr(needles, -1, 'l') != NULL) {
-			/* replace %l with the current 1-based line number */
-			line_num = sci_get_current_line(doc->editor->sci) + 1;
-			replacement = g_strdup_printf("%i", line_num);
-			utils_string_replace_all(haystack, "%l", replacement);
-			g_free(replacement);
-		}
-
-		/* if app->Project then                      */
-		/*   all %p placeholders are already removed */
-		/* else                                      */
-		/*   fall back to absolute path/name.ext     */
-		if (g_utf8_strchr(needles, -1, 'p') != NULL) {
-			/* replace %p with the absolute path/filename (including extension) */
-			utils_string_replace_all(haystack, "%p", doc->file_name);
-		}
-	}
-
-	/* Show error message if placeholders should have been replaced but are not replaced */
-	errormsg = g_string_new("");
-
-	if (g_utf8_strchr(needles, -1, 'd') != NULL && strstr(haystack->str, "%d")) {
-		g_string_append(errormsg, " %%d");
-	}
-
-	if (g_utf8_strchr(needles, -1, 'e') != NULL && strstr(haystack->str, "%e")) {
-		g_string_append(errormsg, " %%e");
-	}
-
-	if (g_utf8_strchr(needles, -1, 'f') != NULL && strstr(haystack->str, "%f")) {
-		g_string_append(errormsg, " %%f");
-	}
-
-	if (g_utf8_strchr(needles, -1, 'l') != NULL && strstr(haystack->str, "%l")) {
-		g_string_append(errormsg, " %%l");
-	}
-
-	if (g_utf8_strchr(needles, -1, 'p') != NULL && strstr(haystack->str, "%p")) {
-		g_string_append(errormsg, " %%p");
-	}
-
-	if (errormsg->len > 0) {
-		g_string_prepend(errormsg, "failed to substitute");
-		ui_set_statusbar(FALSE, "%s", errormsg->str);
-	}
-
-	g_string_free(errormsg, TRUE);
-
-	return g_string_free(haystack, FALSE); /* don't forget to free src if needed */
+	return utils_replace_placeholders(src, generate_document_replacements, (gpointer) doc);
 }
