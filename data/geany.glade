@@ -5668,7 +5668,15 @@
                                       <object class="GtkEntry" id="entry_print_external_cmd">
                                         <property name="visible">True</property>
                                         <property name="can-focus">True</property>
-                                        <property name="tooltip-text" translatable="yes">Path to the command for printing files (use %f for the filename)</property>
+                                        <property name="tooltip-markup" translatable="yes">Command for printing files.
+
+Supported placeholders are:
+• &lt;tt&gt;%d&lt;/tt&gt;: the directory containing the file.
+• &lt;tt&gt;%e&lt;/tt&gt;: the file name without path nor extension.
+• &lt;tt&gt;%f&lt;/tt&gt;: the file name without path.
+• &lt;tt&gt;%l&lt;/tt&gt;: the current line number in the file, starting at 1.
+• &lt;tt&gt;%p&lt;/tt&gt;: the directory of the current project, or equivalent to &lt;tt&gt;%d&lt;/tt&gt; if there are no project open.
+• &lt;tt&gt;%%&lt;/tt&gt;: a literal &lt;tt&gt;%&lt;/tt&gt; character.</property>
                                         <property name="primary-icon-activatable">False</property>
                                         <property name="secondary-icon-activatable">False</property>
                                       </object>
