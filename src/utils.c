@@ -2499,7 +2499,24 @@ gchar *utils_get_os_info_string(void)
 }
 
 
-static gchar *utils_replace_placeholders(const gchar *str,
+/*
+ * @brief Replace %-placeholders in a string
+ * @param str Format string including placeholders
+ * @param insert_replacement Callback function to insert placeholder replacements.
+ *                           It gets called with the buffer to which append the
+ *                           replacement, the placeholder character, and @p data.
+ *                           It should return whether the placeholder was handled
+ *                           or not.
+ * @param data User data to pass to the @p insert_replacement
+ * @returns A copy of @p str with placeholders replaced
+ *
+ * Replaces arbitrary placeholders in a printf-style format string.  Unknown
+ * placeholders are left unmodified in the resulting string.
+ * There is one special placeholder that is always handled and replaced, that
+ * is `%`: it is replaced with a literal "%"; that is `%%` results in `%`.
+ */
+GEANY_EXPORT_SYMBOL
+gchar *utils_replace_placeholders(const gchar *str,
 		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
 		gpointer data)
 {
