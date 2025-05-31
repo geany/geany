@@ -623,7 +623,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	build_save_menu(config, NULL, GEANY_BCS_PREF);
 
 	/* printing */
-	g_key_file_set_string(config, "printing", "print_cmd", printing_prefs.external_print_cmd ? printing_prefs.external_print_cmd : "");
+	g_key_file_set_string(config, "printing", "print_cmd_common_format", printing_prefs.external_print_cmd ? printing_prefs.external_print_cmd : "");
 	g_key_file_set_boolean(config, "printing", "use_gtk_printing", printing_prefs.use_gtk_printing);
 	g_key_file_set_boolean(config, "printing", "print_line_numbers", printing_prefs.print_line_numbers);
 	g_key_file_set_boolean(config, "printing", "print_page_numbers", printing_prefs.print_page_numbers);
@@ -1073,9 +1073,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	if (!EMPTY(tmp_string2))
 	{
 	#ifdef G_OS_WIN32
-		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " \"%f\"", NULL);
+		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " \"%d\\%f\"", NULL);
 	#else
-		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " '%f'", NULL);
+		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " '%d/%f'", NULL);
 	#endif
 	}
 	else
@@ -1083,7 +1083,17 @@ static void load_dialog_prefs(GKeyFile *config)
 		tmp_string = g_strdup("");
 	}
 
-	printing_prefs.external_print_cmd = utils_get_setting_string(config, "printing", "print_cmd", tmp_string);
+	/* new value is print_cmd_common_format with build-like format, old is print_cmd with only %f for full path */
+	if (g_key_file_has_key(config, "printing", "print_cmd_common_format", NULL))
+		printing_prefs.external_print_cmd = utils_get_setting_string(config, "printing", "print_cmd_common_format", tmp_string);
+	else /* load old value */
+	{
+		printing_prefs.external_print_cmd = g_key_file_get_string(config, "printing", "print_cmd", NULL);
+		if (! printing_prefs.external_print_cmd)
+			printing_prefs.external_print_cmd = g_strdup(tmp_string);
+		else /* transform the old value */
+			utils_str_replace_all(&printing_prefs.external_print_cmd, "%f", "%d" G_DIR_SEPARATOR_S "%f");
+	}
 	g_free(tmp_string);
 	g_free(tmp_string2);
 
