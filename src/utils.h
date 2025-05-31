@@ -342,7 +342,7 @@ gchar *utils_utf8_strdown(const gchar *str);
 
 gboolean utils_utf8_substring_match(const gchar *key, const gchar *haystack);
 
-gchar *utils_replace_placeholder(const GeanyDocument *doc, const gchar *src, const gchar *needles);
+gchar *utils_replace_document_placeholders(const GeanyDocument *doc, const gchar *src);
 
 #endif /* GEANY_PRIVATE */
 

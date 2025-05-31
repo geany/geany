@@ -786,11 +786,11 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
-	cmd_string_utf8 = utils_replace_placeholder(doc, cmd->command, "deflp");
+	cmd_string_utf8 = utils_replace_document_placeholders(doc, cmd->command);
 	cmd_working_dir =  cmd->working_dir;
 	if (EMPTY(cmd_working_dir))
 		cmd_working_dir = "%d";
-	working_dir_utf8 = utils_replace_placeholder(doc, cmd_working_dir, "deflp");
+	working_dir_utf8 = utils_replace_document_placeholders(doc, cmd_working_dir);
 	*working_dir = utils_get_locale_from_utf8(working_dir_utf8);
 
 	if (EMPTY(*working_dir) || ! g_file_test(*working_dir, G_FILE_TEST_EXISTS) ||
@@ -1163,8 +1163,8 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, guint cmd, gc
 	else
 		full_command = cmdstr;
 
-	dir = utils_replace_placeholder(doc, buildcmd->working_dir, "deflp");
-	subs_command = utils_replace_placeholder(doc, full_command, "deflp");
+	dir = utils_replace_document_placeholders(doc, buildcmd->working_dir);
+	subs_command = utils_replace_document_placeholders(doc, full_command);
 	build_info.grp = grp;
 	build_info.cmd = cmd;
 	build_spawn_cmd(doc, subs_command, dir);
