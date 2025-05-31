@@ -18,6 +18,7 @@ keyword1=keyword_1
 keyword2=keyword_1
 keyword3=keyword_2
 keyword4=keyword_2
+stringeol=string_eol
 
 [keywords]
 # all items must be in one line
