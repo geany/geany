@@ -285,7 +285,7 @@ void ui_init_stock_items(void);
 void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
 		GtkContainer *parent);
 
-void ui_update_statusbar(GeanyDocument *doc, gint pos);
+void ui_update_statusbar(GeanyDocument *doc);
 
 
 /* This sets the window title according to the current filename. */

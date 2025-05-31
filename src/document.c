@@ -469,7 +469,7 @@ void document_set_text_changed(GeanyDocument *doc, gboolean changed)
 		ui_update_tab_status(doc);
 		ui_save_buttons_toggle(changed);
 		ui_set_window_title(doc);
-		ui_update_statusbar(doc, -1);
+		ui_update_statusbar(doc);
 	}
 }
 
@@ -1651,7 +1651,7 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 	{
 		result = document_reload_force(doc, forced_enc);
 		if (forced_enc != NULL)
-			ui_update_statusbar(doc, -1);
+			ui_update_statusbar(doc);
 	}
 	g_free(base_name);
 	return result;
@@ -2215,7 +2215,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		document_update_tab_label(doc);
 
 		msgwin_status_add(_("File %s saved."), doc->file_name);
-		ui_update_statusbar(doc, -1);
+		ui_update_statusbar(doc);
 #ifdef HAVE_VTE
 		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
 #endif
@@ -2884,7 +2884,7 @@ void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 	g_free(doc->encoding);
 	doc->encoding = g_strdup(new_encoding);
 
-	ui_update_statusbar(doc, -1);
+	ui_update_statusbar(doc);
 	gtk_widget_set_sensitive(ui_lookup_widget(main_widgets.window, "menu_write_unicode_bom1"),
 			encodings_is_unicode_charset(doc->encoding));
 }
@@ -3021,7 +3021,7 @@ void document_undo(GeanyDocument *doc)
 				document_redo_add(doc, UNDO_BOM, GINT_TO_POINTER(doc->has_bom));
 
 				doc->has_bom = GPOINTER_TO_INT(action->data);
-				ui_update_statusbar(doc, -1);
+				ui_update_statusbar(doc);
 				ui_document_show_hide(doc);
 				break;
 			}
@@ -3033,7 +3033,7 @@ void document_undo(GeanyDocument *doc)
 				document_set_encoding(doc, (const gchar*)action->data);
 				g_free(action->data);
 
-				ui_update_statusbar(doc, -1);
+				ui_update_statusbar(doc);
 				ui_document_show_hide(doc);
 				break;
 			}
@@ -3045,7 +3045,7 @@ void document_undo(GeanyDocument *doc)
 
 				sci_set_eol_mode(doc->editor->sci, GPOINTER_TO_INT(action->data));
 
-				ui_update_statusbar(doc, -1);
+				ui_update_statusbar(doc);
 				ui_document_show_hide(doc);
 
 				/* When undoing, UNDO_EOL is always followed by UNDO_SCINTILLA
@@ -3073,7 +3073,7 @@ void document_undo(GeanyDocument *doc)
 				/* Restore the previous EOL mode. */
 				sci_set_eol_mode(doc->editor->sci, eol_mode);
 				/* This might affect the status bar and document menu, so update them. */
-				ui_update_statusbar(doc, -1);
+				ui_update_statusbar(doc);
 				ui_document_show_hide(doc);
 
 				document_redo_add(doc, UNDO_RELOAD, data);
@@ -3146,7 +3146,7 @@ void document_redo(GeanyDocument *doc)
 				document_undo_add_internal(doc, UNDO_BOM, GINT_TO_POINTER(doc->has_bom));
 
 				doc->has_bom = GPOINTER_TO_INT(action->data);
-				ui_update_statusbar(doc, -1);
+				ui_update_statusbar(doc);
 				ui_document_show_hide(doc);
 				break;
 			}
@@ -3157,7 +3157,7 @@ void document_redo(GeanyDocument *doc)
 				document_set_encoding(doc, (const gchar*)action->data);
 				g_free(action->data);
 
-				ui_update_statusbar(doc, -1);
+				ui_update_statusbar(doc);
 				ui_document_show_hide(doc);
 				break;
 			}
@@ -3167,7 +3167,7 @@ void document_redo(GeanyDocument *doc)
 
 				sci_set_eol_mode(doc->editor->sci, GPOINTER_TO_INT(action->data));
 
-				ui_update_statusbar(doc, -1);
+				ui_update_statusbar(doc);
 				ui_document_show_hide(doc);
 				break;
 			}
@@ -3188,7 +3188,7 @@ void document_redo(GeanyDocument *doc)
 				/* Restore the previous EOL mode. */
 				sci_set_eol_mode(doc->editor->sci, eol_mode);
 				/* This might affect the status bar and document menu, so update them. */
-				ui_update_statusbar(doc, -1);
+				ui_update_statusbar(doc);
 				ui_document_show_hide(doc);
 
 				document_undo_add_internal(doc, UNDO_RELOAD, data);
