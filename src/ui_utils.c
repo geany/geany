@@ -322,7 +322,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 
 
 /* updates the status bar document statistics */
-void ui_update_statusbar(GeanyDocument *doc, gint pos)
+void ui_update_statusbar(GeanyDocument *doc)
 {
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
@@ -334,11 +334,11 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 
 	if (doc != NULL)
 	{
+		gint pos;
 		guint line, vcol;
 		gchar *stats_str;
 
-		if (pos == -1)
-			pos = sci_get_current_position(doc->editor->sci);
+		pos = sci_get_current_position(doc->editor->sci);
 		line = sci_get_line_from_position(doc->editor->sci, pos);
 
 		/* Add temporary fix for sci infinite loop in Document::GetColumn(int)
@@ -2032,7 +2032,7 @@ void ui_statusbar_showhide(gboolean state)
 	if (state)
 	{
 		gtk_widget_show(ui_widgets.statusbar);
-		ui_update_statusbar(NULL, -1);
+		ui_update_statusbar(NULL);
 	}
 	else
 		gtk_widget_hide(ui_widgets.statusbar);

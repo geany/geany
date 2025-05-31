@@ -517,7 +517,7 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 	/* brace highlighting */
 	editor_highlight_braces(editor, pos);
 
-	ui_update_statusbar(editor->document, pos);
+	ui_update_statusbar(editor->document);
 
 #if 0
 	/** experimental code for inverting selections */
@@ -4802,7 +4802,7 @@ static gboolean editor_check_colourise(GeanyEditor *editor)
 	/* now that the current document is colourised, fold points are now accurate,
 	 * so force an update of the current function/tag. */
 	symbols_get_current_function(NULL, NULL);
-	ui_update_statusbar(NULL, -1);
+	ui_update_statusbar(NULL);
 
 	return TRUE;
 }
