@@ -22,9 +22,9 @@
 *   DATA DECLARATIONS
 */
 
-enum nestedInputBoundaryFlag {
-	INPUT_BOUNDARY_START = 1UL << 0,
-	INPUT_BOUNDARY_END   = 1UL << 1,
+enum areaBoundaryFlag {
+	AREA_BOUNDARY_START = 1UL << 0,
+	AREA_BOUNDARY_END   = 1UL << 1,
 };
 
 /*
@@ -34,6 +34,8 @@ enum nestedInputBoundaryFlag {
 extern const char *getInputLanguageName (void);
 extern const char *getInputFileTagPath (void);
 
+/* return: [absolute],
+ * args (line): [absolute] */
 extern long getInputFileOffsetForLine (unsigned int line);
 
 extern unsigned int countInputLanguageKinds (void);
@@ -41,7 +43,6 @@ extern unsigned int countInputLanguageRoles (int kindIndex);
 
 extern bool doesInputLanguageAllowNullTag (void);
 extern bool doesInputLanguageRequestAutomaticFQTag (const tagEntryInfo *e);
-extern bool doesParserRunAsGuest (void);
 extern bool doesSubparserRun (void);
 extern langType getLanguageForBaseParser (void);
 
@@ -59,26 +60,55 @@ extern void resetInputFile (const langType language, bool resetLineFposMap_);
 extern void closeInputFile (void);
 extern void *getInputFileUserData(void);
 
-extern unsigned int getNestedInputBoundaryInfo (unsigned long lineNumber);
+
+/* args (line): [absolute] */
+extern unsigned int getAreaBoundaryInfo (unsigned long lineNumber);
 
 extern const char *getSourceFileTagPath (void);
 extern langType getSourceLanguage (void);
 
 extern time_t getInputFileMtime (void);
 
-/* Bypass: reading from fp in inputFile WITHOUT updating fields in input fields */
+/* Bypass : read a line at POS from the current area WITHOUT updating the state of the area.
+ * If OFFSET is not NULL, the function sets the offset value for POS.
+ *
+ * args (pos): [buggy]
+ * args (offset): [buggy]
+ */
 extern char *readLineFromBypass (vString *const vLine, MIOPos location, long *const pSeekValue);
-extern void   pushNarrowedInputStream (
+
+/* args (startLine): [absolute]
+ * args (startColumn): [buggy]
+ * args (endLine): [absolute]
+ * args (endColumn): [absolute]
+ * args (sourceLineOffset): [buggy]
+ */
+extern void   pushArea (
 				       bool useMemoryStreamInput,
-				       unsigned long startLine, long startCharOffset,
-				       unsigned long endLine, long endCharOffset,
+				       unsigned long startLine, long startColumn,
+				       unsigned long endLine, long endColumn,
 				       unsigned long sourceLineOffset,
 				       int promise);
-extern void   popNarrowedInputStream  (void);
+extern void   popArea  (void);
 
-#define THIN_STREAM_SPEC 0, 0, 0, 0, 0
-extern bool isThinStreamSpec(unsigned long startLine, long startCharOffset,
-							 unsigned long endLine, long endCharOffset,
-							 unsigned long sourceLineOffset);
+extern bool isAreaStacked (void);
+
+/* args (startLine): [absolute]
+ * args (endLine): [absolute]
+ * args (sourceLineOffset): [buggy]
+ */
+#define THIN_AREA_SPEC 0, 0, 0, 0, 0
+extern bool isThinAreaSpec (unsigned long startLine, long startColumn,
+							unsigned long endLine, long endColumn,
+							unsigned long sourceLineOffset);
+
+/* args (startLine): [absolute]
+   args (startColumn): [buggy]
+   args (endLine): [absolute]
+   args (endColumn): [absolute] */
+extern void getAreaInfo (unsigned long *startLine,
+						 long *startColumn,
+						 unsigned long *endLine,
+						 long *endColumn);
 
 #endif  /* CTAGS_MAIN_READ_PRIVATE_H */
