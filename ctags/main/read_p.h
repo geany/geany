@@ -68,7 +68,7 @@ extern time_t getInputFileMtime (void);
 
 /* Bypass: reading from fp in inputFile WITHOUT updating fields in input fields */
 extern char *readLineFromBypass (vString *const vLine, MIOPos location, long *const pSeekValue);
-extern void   pushNarrowedInputStream (
+extern bool   pushNarrowedInputStream (
 				       bool useMemoryStreamInput,
 				       unsigned long startLine, long startCharOffset,
 				       unsigned long endLine, long endCharOffset,
