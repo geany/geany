@@ -508,7 +508,7 @@ static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 			NULL));
 
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
 		gtk_entry_set_text(GTK_ENTRY(base_path_entry),
 			gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)));
