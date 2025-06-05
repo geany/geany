@@ -78,7 +78,7 @@ void utils_open_browser(const gchar *uri)
 {
 #ifdef G_OS_WIN32
 	g_return_if_fail(uri != NULL);
-	win32_open_browser(uri);
+	gtk_show_uri_on_window(GTK_WINDOW(main_widgets.window), uri, GDK_CURRENT_TIME, NULL);
 #else
 	gchar *new_cmd, *argv[2] = { (gchar *) uri, NULL };
 

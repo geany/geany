@@ -30,9 +30,6 @@
 
 G_BEGIN_DECLS
 
-void win32_open_browser(const gchar *uri);
-
-
 gint win32_check_write_permission(const gchar *dir);
 
 void win32_init_debug_code(void);
