@@ -1309,7 +1309,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		/* various preferences */
 		ui_save_buttons_toggle((doc != NULL) ? doc->changed : FALSE);
 		msgwin_show_hide_tabs();
-		ui_update_statusbar(doc, -1);
+		ui_update_statusbar(doc);
 		ui_set_window_title(doc);
 
 		/* store all settings */
