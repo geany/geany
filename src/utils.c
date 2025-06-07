@@ -2588,7 +2588,7 @@ static gboolean generate_document_replacements(GString *buffer,
 		switch (placeholder)
 		{
 			case 'p': /* we only end up here if no project are open, so fallback on %d */
-				ui_set_statusbar(FALSE, _("failed to substitute %%p, no project active"));
+				ui_set_statusbar(FALSE, _("no project active, %%p is substituted as %%d"));
 				/* fall through */
 			case 'd':
 				r = g_path_get_dirname(doc->file_name);
