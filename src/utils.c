@@ -2563,12 +2563,25 @@ static gboolean generate_document_replacements(GString *buffer,
 
 	/* %p is the project base path, if any */
 	if (placeholder == 'p' && app->project)
+	{
 		r = project_get_base_path();
+		if (! r) /* replace with nothing if it's empty */
+			r = g_strdup("");
+	}
 	else if (! doc || ! doc->file_name)
 	{
-		ui_set_statusbar(FALSE, _("failed to substitute %%%c: document has no path"), placeholder);
-		/* TODO: Shouldn't we rather return an empty string for known placeholders?
-		 *       That's not what the previous code did, though. */
+		/* replace valid placeholders with nothing as we don't have a meaningful value */
+		switch (placeholder)
+		{
+			case 'p':
+			case 'd':
+			case 'e':
+			case 'f':
+			case 'l':
+				ui_set_statusbar(FALSE, _("failed to substitute %%%c: document has no path"), placeholder);
+				r = g_strdup("");
+				break;
+		}
 	}
 	else
 	{

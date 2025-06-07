@@ -498,12 +498,12 @@ static void test_utils_replace_document_placeholders(void)
 	CHECK_DOC_PL("some %%f thing %%%", "some %f thing %%");
 	CHECK_DOC_PL("some %%f thing %%%%", "some %f thing %%");
 	CHECK_DOC_PL("some %%f thing %%%%%", "some %f thing %%%");
-	/* We give a NULL doc, so replacements are not made */
-	CHECK_DOC_PL("some %d thing %%", "some %d thing %");
-	CHECK_DOC_PL("some %e thing %%", "some %e thing %");
-	CHECK_DOC_PL("some %f thing %%", "some %f thing %");
-	CHECK_DOC_PL("some %l thing %%", "some %l thing %");
-	CHECK_DOC_PL("some %p thing %%", "some %p thing %");
+	/* We give a NULL doc, so replacements are empty */
+	CHECK_DOC_PL("some %d thing %%", "some  thing %");
+	CHECK_DOC_PL("some %e thing %%", "some  thing %");
+	CHECK_DOC_PL("some %f thing %%", "some  thing %");
+	CHECK_DOC_PL("some %l thing %%", "some  thing %");
+	CHECK_DOC_PL("some %p thing %%", "some  thing %");
 	/* Unknown placeholder, left as-is */
 	CHECK_DOC_PL("some %z thing %%", "some %z thing %");
 
