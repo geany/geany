@@ -2522,6 +2522,7 @@ gchar *utils_replace_placeholders(const gchar *str,
 {
 	GString *res;
 	const gchar *p;
+	const gchar *const base = str;
 
 	g_return_val_if_fail(insert_replacement != NULL, NULL);
 
@@ -2538,6 +2539,7 @@ gchar *utils_replace_placeholders(const gchar *str,
 			g_string_append_c(res, '%');
 		else if (! insert_replacement(res, *p, data))
 		{
+			geany_debug(_("Unknown placeholder \"%%%c\" in \"%s\""), *p, base);
 			/* unknown placeholder, leave it literally */
 			g_string_append_c(res, '%');
 			g_string_append_c(res, *p);
