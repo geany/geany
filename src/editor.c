@@ -46,6 +46,7 @@
 #include "highlighting.h"
 #include "keybindings.h"
 #include "main.h"
+#include "navqueue.h"
 #include "pluginextension.h"
 #include "prefs.h"
 #include "projectprivate.h"
@@ -346,6 +347,19 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		gtk_menu_popup_at_pointer(GTK_MENU(main_widgets.editor_menu), (GdkEvent *) event);
 		return TRUE;
 	}
+	
+	if (event->button == 8)
+	{
+		navqueue_go_back();
+		return TRUE;
+	}
+
+	if (event->button == 9)
+	{
+		navqueue_go_forward();
+		return TRUE;
+	}
+
 	return FALSE;
 }
 
