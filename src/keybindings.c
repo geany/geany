@@ -1769,7 +1769,7 @@ static gboolean cb_func_switch_action(guint key_id)
 			{
 				GtkWidget *sci = GTK_WIDGET(doc->editor->sci);
 				if (gtk_widget_has_focus(sci))
-					ui_update_statusbar(doc, -1);
+					ui_update_statusbar(doc);
 				else
 					gtk_widget_grab_focus(sci);
 			}

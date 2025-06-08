@@ -1,4 +1,5 @@
 
+#include "main.h"
 #include "utils.h"
 
 #include "gtkcompat.h"
@@ -430,15 +431,98 @@ static void test_utils_get_initials(void)
 #undef CHECK_INITIALS
 }
 
+static gboolean replace_placeholders(GString *buffer, const gchar placeholder, gpointer data)
+{
+	g_assert_cmpint(GPOINTER_TO_INT(data), ==, 42);
+
+	switch (placeholder)
+	{
+		case 'a': g_string_append(buffer, "alpha"); break;
+		case 'b': g_string_append(buffer, "beta"); break;
+		case 'c': g_string_append(buffer, "charlie"); break;
+		case 'C': g_string_append(buffer, "Charlie"); break;
+		case 'd': g_string_append_printf(buffer, "%d", 42); break;
+		case 'f': g_string_append_printf(buffer, "%f", 4.2); break;
+		case 'g': g_string_append_printf(buffer, "%g", 4.2); break;
+		default: return FALSE;
+	}
+
+	return TRUE;
+}
+
+static void test_utils_replace_placeholders(void)
+{
+#define CHECK_PL(src, result) \
+	G_STMT_START {																				\
+		gchar *r = utils_replace_placeholders(src, replace_placeholders, GINT_TO_POINTER(42));	\
+		g_assert_cmpstr(r, ==, result);															\
+		g_free(r);																				\
+	} G_STMT_END
+
+	CHECK_PL("some thing", "some thing");
+	CHECK_PL("some %% thing", "some % thing");
+	/* a trailing % is kept */
+	CHECK_PL("some %% thing %", "some % thing %");
+	CHECK_PL("some %%f thing %%", "some %f thing %");
+	CHECK_PL("some %%f thing %%%", "some %f thing %%");
+	CHECK_PL("some %%f thing %%%%", "some %f thing %%");
+	CHECK_PL("some %%f thing %%%%%", "some %f thing %%%");
+	/* Some actual replacements */
+	CHECK_PL("some %a thing %%", "some alpha thing %");
+	CHECK_PL("some %b thing %%", "some beta thing %");
+	CHECK_PL("some %c thing %%", "some charlie thing %");
+	CHECK_PL("some %C thing %%", "some Charlie thing %");
+	CHECK_PL("some %d thing %%", "some 42 thing %");
+	CHECK_PL("some %f thing %%", "some 4.200000 thing %");
+	CHECK_PL("some %g thing %%", "some 4.2 thing %");
+	/* Unknown placeholder, left as-is */
+	CHECK_PL("some %z thing %%", "some %z thing %");
+
+#undef CHECK_PL
+}
+
+static void test_utils_replace_document_placeholders(void)
+{
+#define CHECK_DOC_PL(src, result) \
+	G_STMT_START {													\
+		gchar *r = utils_replace_document_placeholders(NULL, src);	\
+		g_assert_cmpstr(r, ==, result);								\
+		g_free(r);													\
+	} G_STMT_END
+
+	CHECK_DOC_PL("some thing", "some thing");
+	CHECK_DOC_PL("some %% thing", "some % thing");
+	/* a trailing % is kept */
+	CHECK_DOC_PL("some %% thing %", "some % thing %");
+	CHECK_DOC_PL("some %%f thing %%", "some %f thing %");
+	CHECK_DOC_PL("some %%f thing %%%", "some %f thing %%");
+	CHECK_DOC_PL("some %%f thing %%%%", "some %f thing %%");
+	CHECK_DOC_PL("some %%f thing %%%%%", "some %f thing %%%");
+	/* We give a NULL doc, so replacements are empty */
+	CHECK_DOC_PL("some %d thing %%", "some  thing %");
+	CHECK_DOC_PL("some %e thing %%", "some  thing %");
+	CHECK_DOC_PL("some %f thing %%", "some  thing %");
+	CHECK_DOC_PL("some %l thing %%", "some  thing %");
+	CHECK_DOC_PL("some %p thing %%", "some  thing %");
+	/* Unknown placeholder, left as-is */
+	CHECK_DOC_PL("some %z thing %%", "some %z thing %");
+
+#undef CHECK_DOC_PL
+}
+
 int main(int argc, char **argv)
 {
 	g_test_init(&argc, &argv, NULL);
+
+	main_init_headless();
 
 	UTIL_TEST_ADD("strv_join", test_utils_strv_new);
 	UTIL_TEST_ADD("strv_find_common_prefix", test_utils_strv_find_common_prefix);
 	UTIL_TEST_ADD("strv_find_lcs", test_utils_strv_find_lcs);
 	UTIL_TEST_ADD("strv_shorten_file_list", test_utils_strv_shorten_file_list);
 	UTIL_TEST_ADD("get_initals", test_utils_get_initials);
+	UTIL_TEST_ADD("replace_placeholders", test_utils_replace_placeholders);
+	UTIL_TEST_ADD("replace_document_placeholders", test_utils_replace_document_placeholders);
 
 	return g_test_run();
 }
