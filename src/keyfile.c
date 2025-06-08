@@ -78,6 +78,7 @@
 #define GEANY_MSGWIN_HEIGHT				208
 #define GEANY_DISK_CHECK_TIMEOUT		30
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
+
 #ifdef G_OS_WIN32
 # define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
 # define GEANY_DEFAULT_USE_NATIVE_DLGS	TRUE
@@ -88,18 +89,28 @@
 # define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 # define GEANY_DEFAULT_USE_NATIVE_DLGS	FALSE
 #endif
+
 #ifdef __APPLE__
-#define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
-#define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
+# define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
+# define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
+# define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
+# define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
 #else
 /* Browser chosen by GTK */
-#define GEANY_DEFAULT_TOOLS_BROWSER		""
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
-#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
+# define GEANY_DEFAULT_TOOLS_BROWSER		""
+# define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
+# define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
+# define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 #endif
+
+#if defined(G_OS_WIN32) || defined(__APPLE__)
+# define GEANY_DEFAULT_MULTI_CARET_MODIF GDK_MOD1_MASK
+# define GEANY_DEFAULT_RECT_SELECTION_MODIF (GDK_MOD1_MASK | GDK_SHIFT_MASK)
+#else
+# define GEANY_DEFAULT_MULTI_CARET_MODIF (GDK_CONTROL_MASK | GDK_MOD1_MASK)
+# define GEANY_DEFAULT_RECT_SELECTION_MODIF (GDK_CONTROL_MASK | GDK_SHIFT_MASK)
+#endif
+
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
 #define GEANY_DEFAULT_MRU_LENGTH		10
@@ -551,6 +562,9 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
 	g_key_file_set_integer(config, PACKAGE, "tab_label_length", interface_prefs.tab_label_len);
 	g_key_file_set_boolean(config, PACKAGE, "use_native_dialogs", interface_prefs.use_native_windows_dialogs);
+  g_key_file_set_integer(config, PACKAGE, "modifier_goto_definition", interface_prefs.goto_definition_modifier);
+	g_key_file_set_integer(config, PACKAGE, "modifier_multi_caret", interface_prefs.multi_caret_modifier);
+	g_key_file_set_integer(config, PACKAGE, "modifier_rect_selection", interface_prefs.rect_selection_modifier);
 
 	/* display */
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
@@ -902,6 +916,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
 	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_dialogs", GEANY_DEFAULT_USE_NATIVE_DLGS);
+	interface_prefs.goto_definition_modifier = utils_get_setting_integer(config, PACKAGE, "modifier_goto_definition", GDK_CONTROL_MASK);
+	interface_prefs.multi_caret_modifier = utils_get_setting_integer(config, PACKAGE, "modifier_multi_caret", GEANY_DEFAULT_MULTI_CARET_MODIF);
+	interface_prefs.rect_selection_modifier = utils_get_setting_integer(config, PACKAGE, "modifier_rect_selection", GEANY_DEFAULT_RECT_SELECTION_MODIF);
 
 	/* display, editor */
 	editor_prefs.long_line_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);
