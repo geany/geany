@@ -28,6 +28,7 @@ gtk4_dependency_pkgs=""
 
 packages="
 adwaita-icon-theme
+adwaita-icon-theme-legacy
 atk
 brotli
 bzip2
@@ -211,6 +212,7 @@ delayed_post_install() {
 		${EXE_WRAPPER_64} bin/gdk-pixbuf-query-loaders.exe --update-cache
 		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/hicolor
 		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/Adwaita
+		${EXE_WRAPPER_64} bin/gtk-update-icon-cache-3.0.exe -q -t -f share/icons/AdwaitaLegacy
 		${EXE_WRAPPER_64} bin/glib-compile-schemas.exe share/glib-2.0/schemas/
 		${EXE_WRAPPER_64} bin/update-mime-database.exe share/mime
 	fi
@@ -287,7 +289,7 @@ download_and_extract_gtk_theme() {
 		echo "etc/gtk-3.0/settings.ini already exists. Aborting."
 		exit 1
 	fi
-	echo -e "[Settings]\r\ngtk-theme-name=Prof-Gnome" > etc/gtk-3.0/settings.ini
+	echo -e "[Settings]\r\ngtk-theme-name=Prof-Gnome\r\ngtk-toolbar-icon-size=GTK_ICON_SIZE_SMALL_TOOLBAR\r\n" > etc/gtk-3.0/settings.ini
 }
 
 create_bundle_dependency_info_file() {
