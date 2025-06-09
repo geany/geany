@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2025-06-09 22:11+0200\n"
-"PO-Revision-Date: 2023-02-15 23:29+0100\n"
+"PO-Revision-Date: 2025-06-09 23:37+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -314,17 +314,15 @@ msgstr ""
 "les champs aller à la ligne et le VTE."
 
 #: data/geany.glade:1317
-#, fuzzy
 msgid "Use platform-native file dialogs"
-msgstr "Utiliser les boîtes de dialogue Windows"
+msgstr "Utiliser les boîtes de dialogue natives"
 
 #: data/geany.glade:1321
-#, fuzzy
 msgid ""
 "Defines whether to use the platform-native file dialogs or the GTK default "
 "dialogs"
 msgstr ""
-"Utiliser ou non les boîtes de dialogue Windows à la place des boîtes de "
+"Utiliser ou non les boîtes de dialogue natives à la place des boîtes de "
 "dialogue GTK"
 
 #: data/geany.glade:1339 data/geany.glade:2006 data/geany.glade:4825
@@ -1489,6 +1487,17 @@ msgid ""
 "<tt>%d</tt> if there are no project open.\n"
 "• <tt>%%</tt>: a literal <tt>%</tt> character."
 msgstr ""
+"Commande pour imprimer les fichiers.\n"
+"\n"
+"Les substitutions suivantes sont disponibles :\n"
+"• <tt>%d</tt>: le chemin du dossier contenant le fichier.\n"
+"• <tt>%e</tt>: le nom de fichier sans chemin ni extension.\n"
+"• <tt>%f</tt>: le nom de fichier sans chemin.\n"
+"• <tt>%l</tt>: la ligne courante dans le fichier, en comptant à partir de 1."
+"\n"
+"• <tt>%p</tt>: le chemin de base projet actuel, ou équivalent à <tt>%d</tt> "
+"si aucun projet n'est ouvert.\n"
+"• <tt>%%</tt>: un caractère <tt>%</tt> littéral."
 
 #: data/geany.glade:5714
 msgid "Use an external command for printing"
@@ -2190,13 +2199,12 @@ msgid "Symbols"
 msgstr "Symboles"
 
 #: data/geany.glade:8417
-#, fuzzy
 msgid ""
 "Filter the document list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"Filtre la liste de symboles avec le texte saisi. Séparez chaque motif par un "
-"espace."
+"Filtre la liste des documents avec le texte saisi. Séparez chaque motif par "
+"un espace."
 
 #: data/geany.glade:8461
 msgid "Documents"
@@ -2243,7 +2251,6 @@ msgid "File _patterns:"
 msgstr "_Motifs de fichier :"
 
 #: data/geany.glade:8848
-#, fuzzy
 msgid ""
 "Space separated list of file patterns used for the Find in Files dialog "
 "(e.g. *.c *.h)"
@@ -2479,11 +2486,9 @@ msgid "Compilation finished successfully."
 msgstr "Compilation terminée avec succès."
 
 #: src/build.c:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Enter custom text to append to the command \"%s\":"
-msgstr ""
-"Entrez votre texte personnalisé ici, tout texte entré ici est ajouté à la "
-"commande."
+msgstr "Entrez le texte personnalisé à ajouter à la commande « %s » :"
 
 #: src/build.c:1303
 msgid "_Next Error"
@@ -2841,14 +2846,14 @@ msgid "Could not open file %s (%s)"
 msgstr "Impossible d'ouvrir le fichier %s (%s)"
 
 #: src/document.c:1001
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\" as %s: %s."
-msgstr "Impossible d'ouvrir l'URI « %s » : %s"
+msgstr "Impossible de charger le fichier « %s » en %s : %s"
 
 #: src/document.c:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\": %s."
-msgstr "Impossible d'ouvrir l'URI « %s » : %s"
+msgstr "Impossible de charger le fichier « %s » : %s"
 
 #: src/document.c:1014
 #, c-format
@@ -3210,15 +3215,16 @@ msgstr "Moyen-Oriental"
 
 #: src/encodings.c:674
 msgid "Data contains NULs"
-msgstr ""
+msgstr "Les données contiennent des octets NUL"
 
 #: src/encodings.c:816
 msgid "Data contains NULs or the encoding is not supported"
 msgstr ""
+"Les données contiennent des octets NUL ou l'encodage n'est pas supporté"
 
 #: src/encodings.c:937
 msgid "Data contains NULs or is not valid UTF-8"
-msgstr ""
+msgstr "Les données contiennent des octets NUL ou ne sont pas en UTF-8 valide"
 
 #: src/filetypes.c:1240
 msgid "All Source"
@@ -4110,9 +4116,8 @@ msgid "Plugins"
 msgstr "Plugins"
 
 #: src/plugins.c:1895
-#, fuzzy
 msgid "Choose which plugins to load:"
-msgstr "Choisissez les plugins à charger au démarrage :"
+msgstr "Choisissez les plugins à charger :"
 
 #: src/plugins.c:1989
 #, c-format
@@ -4128,9 +4133,8 @@ msgid "Configure Plugins"
 msgstr "Configurer les plugins"
 
 #: src/prefs.c:184
-#, fuzzy
 msgid "Assign Keybinding"
-msgstr "Raccourcis"
+msgstr "Saisir un raccourci"
 
 #: src/prefs.c:191
 #, c-format
@@ -4207,6 +4211,8 @@ msgstr ""
 #: src/prefs.c:1892
 msgid "Not configurable on Windows (the system default browser is used)."
 msgstr ""
+"Non configurable sous Windows (le navigateur par défaut du système est "
+"utilisé)"
 
 #: src/printing.c:162
 #, c-format
@@ -4614,7 +4620,6 @@ msgid "Are you sure to replace in the whole session?"
 msgstr "Êtes-vous sur de vouloir remplacer dans l'ensemble de la session ?"
 
 #: src/search.c:1721
-#, fuzzy
 msgid "Invalid directory for Find in Files."
 msgstr "Dossier invalide pour la recherche dans les fichiers."
 
@@ -4781,9 +4786,9 @@ msgid "_Group by Type"
 msgstr "_Grouper par type"
 
 #: src/templates.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8: %s"
-msgstr "Impossible de convertir le fichier de modèle « %s » en UTF-8"
+msgstr "Impossible de convertir le fichier de modèle « %s » en UTF-8 : %s"
 
 #: src/templates.c:654
 #, c-format
@@ -5168,14 +5173,12 @@ msgid "Custom Date Format"
 msgstr "Format de date personnalisé"
 
 #: src/ui_utils.c:715
-#, fuzzy
 msgid ""
 "Custom date format (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"Entrez ici un format de date et d'heure personnalisé. Référez-vous à https://"
-"docs.gtk.org/glib/method.DateTime.format.html pour la liste des "
-"spécificateurs de conversion disponibles."
+"Format de date personnalisé (voir https://docs.gtk.org/glib/method.DateTime."
+"format.html) :"
 
 #: src/ui_utils.c:735
 msgid "Date format string could not be converted (possibly too long)."
@@ -5218,7 +5221,6 @@ msgid "Select Browser"
 msgstr "Sélection du navigateur"
 
 #: src/utils.c:100
-#, fuzzy
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command "
 "or leave it empty in order to spawn the system default browser."
@@ -5253,17 +5255,17 @@ msgstr "LF"
 #: src/utils.c:2542
 #, c-format
 msgid "Unknown placeholder \"%%%c\" in \"%s\""
-msgstr ""
+msgstr "Marqueur de substitution « %%%c » inconnu dans « %s »"
 
 #: src/utils.c:2583
-#, fuzzy, c-format
+#, c-format
 msgid "failed to substitute %%%c: document has no path"
-msgstr "impossible de substituer %%p, aucun projet actif"
+msgstr "impossible de substituer %%%c : le document n'a pas de chemin"
 
 #: src/utils.c:2593
 #, c-format
 msgid "no project active, %%p is substituted as %%d"
-msgstr ""
+msgstr "aucun projet actif, %%p est substitué comme %%d"
 
 #: src/vte.c:570
 #, c-format
@@ -5659,26 +5661,26 @@ msgid "Functions / Tasks"
 msgstr "Fonctions / Tâches"
 
 #: src/tagmanager/tm_parser.c:794
+#, fuzzy
 msgid "Parameters / Constants"
-msgstr ""
+msgstr "Paramètres / Conctantes"
 
 #: src/tagmanager/tm_parser.c:795
-#, fuzzy
 msgid "Ports"
-msgstr "Imports"
+msgstr "Ports"
 
 #: src/tagmanager/tm_parser.c:796
 msgid "Signals"
-msgstr ""
+msgstr "Signaux"
 
 #: src/tagmanager/tm_parser.c:802
 msgid "Structs / Unions / Enums"
-msgstr ""
+msgstr "Structs / Unions / Enums"
 
 #: src/tagmanager/tm_parser.c:803
 #, fuzzy
 msgid "Typedefs"
-msgstr "Types"
+msgstr "Typedefs"
 
 #: src/tagmanager/tm_parser.c:858
 msgid "Program"
@@ -5760,7 +5762,7 @@ msgstr "Inconnus"
 #: src/tagmanager/tm_parser.c:1127
 #, fuzzy
 msgid "Packages"
-msgstr "Package"
+msgstr "Packages"
 
 #: src/tagmanager/tm_parser.c:1130
 #, fuzzy
@@ -5770,57 +5772,61 @@ msgstr "Tâches"
 #: src/tagmanager/tm_parser.c:1154
 #, fuzzy
 msgid "Regions"
-msgstr "Sections"
+msgstr "Régions"
 
 #: src/tagmanager/tm_parser.c:1171
 #, fuzzy
 msgid "Packages / Modules"
-msgstr "Package"
+msgstr "Packages / Modules"
 
 #: src/tagmanager/tm_parser.c:1172
 #, fuzzy
 msgid "Classes / Roles"
-msgstr "Classes"
+msgstr "Classes / Rôles"
 
 #: src/tagmanager/tm_parser.c:1173
+#, fuzzy
 msgid "Grammars"
-msgstr ""
+msgstr "Grammaires"
 
 #: src/tagmanager/tm_parser.c:1175
 msgid "Subroutines"
 msgstr "Sous-routines"
 
 #: src/tagmanager/tm_parser.c:1176
+#, fuzzy
 msgid "Rules / Tokens"
-msgstr ""
+msgstr "Règles / Jetons"
 
 #: src/tagmanager/tm_parser.c:1217
 #, fuzzy
 msgid "Words"
-msgstr "Mots :"
+msgstr "Mots"
 
 #: src/tagmanager/tm_parser.c:1234
 #, fuzzy
 msgid "Projects"
-msgstr "Projet"
+msgstr "Projets"
 
 #: src/tagmanager/tm_parser.c:1237
+#, fuzzy
 msgid "Subdirs"
-msgstr ""
+msgstr "Sous-dossiers"
 
 #: src/tagmanager/tm_parser.c:1238
 #, fuzzy
 msgid "Build Targets"
-msgstr "Cibles"
+msgstr "Cibles de construction"
 
 #: src/tagmanager/tm_parser.c:1239
 #, fuzzy
 msgid "Custom Targets"
-msgstr "Texte personnalisé"
+msgstr "Cibles personnalisées"
 
 #: src/tagmanager/tm_parser.c:1240
+#, fuzzy
 msgid "Benchmark Targets"
-msgstr ""
+msgstr "Cibles de benchmark"
 
 #: src/tagmanager/tm_parser.c:1241
 #, fuzzy
@@ -5829,33 +5835,35 @@ msgstr "Cibles"
 
 #: src/tagmanager/tm_parser.c:1242
 msgid "Tests"
-msgstr ""
+msgstr "Tests"
 
 #: src/tagmanager/tm_parser.c:1255
 msgid "Mixins"
 msgstr "Mixins"
 
 #: src/tagmanager/tm_parser.c:1259
+#, fuzzy
 msgid "Placeholders"
-msgstr ""
+msgstr "Substituts"
 
 #: src/tagmanager/tm_parser.c:1272
 #, fuzzy
 msgid "Resources"
-msgstr "Source de base :"
+msgstr "Ressources"
 
 #: src/tagmanager/tm_parser.c:1275
-#, fuzzy
 msgid "Variable"
-msgstr "Variables"
+msgstr "Variable"
 
 #: src/tagmanager/tm_parser.c:1276
+#, fuzzy
 msgid "Providers"
-msgstr ""
+msgstr "Fournisseurs"
 
 #: src/tagmanager/tm_parser.c:1277
+#, fuzzy
 msgid "Outputs"
-msgstr ""
+msgstr "Sorties"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -6258,12 +6266,11 @@ msgid "Instant Save filename could not be generated (%s)."
 msgstr "Le nom du fichier de sauvegarde immédiate n'a pas pu être généré (%s)."
 
 #: plugins/saveactions.c:439 plugins/saveactions.c:1225
-#, fuzzy
 msgid ""
 "Persistent untitled document directory does not exist or is not writable."
 msgstr ""
-"Le dossier de sauvegarde immédiate n'existe pas ou n'est pas accessible en "
-"écriture."
+"Le dossier des documents sans titre persistants n'existe pas ou n'est pas "
+"accessible en écriture."
 
 #: plugins/saveactions.c:507
 #, fuzzy
@@ -6271,28 +6278,27 @@ msgid "_Don't save (discard)"
 msgstr "Ne pas enre_gistrer"
 
 #: plugins/saveactions.c:529
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document %s is not saved."
-msgstr "Le fichier « %s » n'est pas enregistré."
+msgstr "Le document sans titre « %s » n'est pas enregistré."
 
 #: plugins/saveactions.c:530
-#, fuzzy
 msgid "Do you want to save it?"
-msgstr "Voulez-vous le recharger ?"
+msgstr "Voulez-vous l'enregistrer ?"
 
 #: plugins/saveactions.c:559 plugins/saveactions.c:605
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document file %s was deleted"
-msgstr "L'impression du fichier %s a été annulée."
+msgstr "Le document sans titre %s a été supprimé"
 
 #: plugins/saveactions.c:622
 msgid "Persistent untitled document directory not found"
-msgstr ""
+msgstr "Le dossier des documents sans titre persistants introuvable"
 
 #: plugins/saveactions.c:817
 #, c-format
 msgid "Empty untitled document file %s was deleted"
-msgstr ""
+msgstr "Le document sans titre vide %s a été supprimé"
 
 #: plugins/saveactions.c:875
 #, c-format
@@ -6364,23 +6370,20 @@ msgid ""
 "Date/_Time format for backup files (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"_Format de date et heure pour les fichiers de sauvegarde (référez-vous à "
-"https://docs.gtk.org/glib/method.DateTime.format.html pour la liste des "
-"spécificateurs de conversion disponibles) :"
+"_Format de date et heure pour les fichiers de sauvegarde (voir https://docs."
+"gtk.org/glib/method.DateTime.format.html) :"
 
 #: plugins/saveactions.c:1455
 msgid "Directory _levels to include in the backup destination:"
 msgstr "Niveau_x de dossiers à inclure dans la sauvegarde :"
 
 #: plugins/saveactions.c:1482
-#, fuzzy
 msgid "Untitled Document Save"
-msgstr "Rechercher dans le document"
+msgstr "Enregistrement des documents sans titre"
 
 #: plugins/saveactions.c:1495
-#, fuzzy
 msgid "Instant Save After Creation"
-msgstr "Sauvegarde immédiate"
+msgstr "Sauvegarde immédiate après création"
 
 #: plugins/saveactions.c:1505
 #, c-format
@@ -6391,32 +6394,27 @@ msgstr ""
 
 #: plugins/saveactions.c:1531
 msgid "<i>The plugin will not delete the files created in this directory.</i>"
-msgstr ""
+msgstr "<i>Le plugin ne supprimera pas les fichiers créés dans ce dossier.</i>"
 
 #: plugins/saveactions.c:1541
-#, fuzzy
 msgid "Persistent Untitled Documents"
-msgstr "Imprimer le document"
+msgstr "Documents sans titre persistants"
 
 #: plugins/saveactions.c:1550
-#, fuzzy
 msgid "_Directory to save persistent untitled documents in:"
-msgstr "_Dossier de sauvegarde des fichiers :"
+msgstr "_Dossier de sauvegarde des documents sans titre :"
 
 #: plugins/saveactions.c:1575
-#, fuzzy
 msgid "Untitled document save _interval:"
-msgstr "_Intervalle de sauvegarde automatique :"
+msgstr "_Intervalle de sauvegarde des documents sans titre :"
 
 #: plugins/saveactions.c:1587
-#, fuzzy
 msgid "milliseconds"
-msgstr "secondes"
+msgstr "millisecondes"
 
 #: plugins/saveactions.c:1597
-#, fuzzy
 msgid "Default _filetype to use for untitled documents:"
-msgstr "_Type de fichier à utiliser lors de la création de nouveaux fichiers :"
+msgstr "_Type de fichier par défaut à utiliser pour les documents sans titres :"
 
 #: plugins/splitwindow.c:33
 msgid "Split Window"
