@@ -94,7 +94,13 @@ jobs:
       - name: Run Tests
         run: |
           cd _build
-          make -j ${{ env.JOBS }} check
+          make -j ${{ env.JOBS }} check || {                      \
+            err="$?";                                             \
+            echo "make exited with code $err" >&2;                \
+            echo "Test suite logs:" >&2;                          \
+            find . -name 'test-suite.log' -exec cat '{}' ';' >&2; \
+            exit "${err:-1}";                                     \
+          }
 
       - name: Run distcheck
         run: |
