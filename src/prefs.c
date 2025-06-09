@@ -1885,6 +1885,13 @@ void prefs_show_dialog(void)
 			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,
 			GTK_ENTRY(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser")));
+#ifdef G_OS_WIN32
+		/* Browser isn't configurable on Windows, see utils_open_browser() */
+		gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser"), FALSE);
+		gtk_widget_set_tooltip_text(ui_lookup_widget(ui_widgets.prefs_dialog, "entry_browser"),
+			_("Not configurable on Windows (the system default browser is used)."));
+		gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "button_browser"), FALSE);
+#endif
 		ui_setup_open_button_callback(ui_lookup_widget(ui_widgets.prefs_dialog, "button_grep"),
 			NULL,
 			GTK_FILE_CHOOSER_ACTION_OPEN,
