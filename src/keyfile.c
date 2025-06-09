@@ -1443,7 +1443,7 @@ void configuration_apply_settings(void)
 
 	/* restore menubar state or hide on startup */
 	if (!ui_prefs.menubar_visible)
-		ui_menubar_show_hide();
+		ui_menubar_show_hide(FALSE);
 
 	msgwin_show_hide_tabs();
 }

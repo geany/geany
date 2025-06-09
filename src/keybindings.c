@@ -1646,7 +1646,7 @@ static void on_menubar_deactivate(GtkMenuShell *shell, gpointer data)
 
 static void on_toggle_menubar(GtkMenuItem *menuitem, gpointer user_data)
 {
-	ui_menubar_show_hide();
+	ui_menubar_show_hide(!ui_prefs.menubar_visible);
 }
 
 

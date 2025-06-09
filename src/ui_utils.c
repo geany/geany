@@ -1022,7 +1022,7 @@ void ui_sidebar_show_hide(void)
 }
 
 
-void ui_menubar_show_hide(void)
+void ui_menubar_show_hide(gboolean show)
 {
 	GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
 	GtkWidget *menu_item = ui_lookup_widget(main_widgets.window, "menu_show_menubar1");
@@ -1030,19 +1030,15 @@ void ui_menubar_show_hide(void)
 	GtkWidget *editor_show_menubar_item = ui_lookup_widget(main_widgets.editor_menu, "show_menubar1");
 	GeanyKeyGroup *group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
 	GeanyKeyBinding *kb = keybindings_get_item(group, GEANY_KEYS_TOGGLE_MENUBAR);
-	gboolean show = TRUE;
 
-	if (gtk_widget_is_visible(geany_menubar))
+	if (!show && kb->key == 0)
+		return;  /* don't allow hiding menubar when no keybinding set */
+
+	if (!show)
 	{
-		if (kb->key != 0)
-		{
-			gchar *val = gtk_accelerator_name(kb->key, kb->mods);
-
-			msgwin_status_add(_("Menubar has been hidden. To reshow it, press %s or use the Show Menubar item from the context menu."), val);
-			g_free(val);
-
-			show = FALSE;
-		}
+		gchar *val = gtk_accelerator_name(kb->key, kb->mods);
+		msgwin_status_add(_("Menubar has been hidden. To reshow it, press %s or use the Show Menubar item from the context menu."), val);
+		g_free(val);
 	}
 
 	ui_prefs.menubar_visible = show;
