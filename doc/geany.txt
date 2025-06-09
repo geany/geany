@@ -3859,7 +3859,11 @@ Action                          Default shortcut          Description
 =============================== ========================= ==================================================
 Fullscreen                      F11  (C)                  Switches to fullscreen mode.
 
-Toggle Menubar                                            Shows or hides the menubar.
+Toggle Menubar                                            Shows or hides the menubar. In addition to the
+                                                          assigned keybinding, the menubar can be shown
+                                                          temporarily using F10 and then shown permanently
+                                                          using the corresponding item from the View menu
+                                                          or the editor context menu.
 
 Toggle Messages Window                                    Shows or hides the message window
                                                           (status and compiler messages).
