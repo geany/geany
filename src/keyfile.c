@@ -81,21 +81,21 @@
 #ifdef G_OS_WIN32
 # define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
 # define GEANY_DEFAULT_USE_NATIVE_DLGS	TRUE
+# define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
+# define GEANY_DEFAULT_FONT_MSG_WINDOW	"Consolas 9"
+# define GEANY_DEFAULT_FONT_EDITOR		"Consolas 10"
 #elif defined(__APPLE__)
 # define GEANY_DEFAULT_TOOLS_TERMINAL	"open -a terminal %c"
 # define GEANY_DEFAULT_USE_NATIVE_DLGS	TRUE
+# define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
+# define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
+# define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
 #else
 # define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 # define GEANY_DEFAULT_USE_NATIVE_DLGS	FALSE
-#endif
-#ifdef __APPLE__
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
-#define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
-#else
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
-#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
+# define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
+# define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
+# define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 #endif
 /* Browser chosen by GTK */
 #define GEANY_DEFAULT_TOOLS_BROWSER		""
