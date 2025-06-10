@@ -6,7 +6,8 @@ Geany 2.1 (unreleased)
     * Improve compatibility focusing the editor window when opening a file
       externally (Kondor Dániel, Issue#3531, PR#4071).
     * Require GLib 2.56 (PR#4199).
-    * Change placeholders for external printing command (Pynckels, PR#4250).
+    * Change placeholders for external printing command to use the same ones as
+      build commands (Pynckels, PR#4250).
 
     Bug Fixes
     * Improve corner-case encoding detection and conversion (PR#3716).
@@ -25,6 +26,7 @@ Geany 2.1 (unreleased)
       startup (Issue#3844, PR#3846).
     * Fix Meson build when either fnmatch() or regcomp() is missing on the
       system (Issue#3618).
+    * Fix replacing placeholders in filenames in build commands (PR#4318).
 
     Interface
     * Add support for searching the Messages and Compiler output (PR#3823).
@@ -72,6 +74,8 @@ Geany 2.1 (unreleased)
     * Update JavaScript keywords (Azq2, PR#3440).
     * Update PowerShell keywords (PR#3886).
     * Update Verilog keywords (Javier Mora, PR#4037).
+    * Improve Shell highlighting inside strings (Issue#1754, Issue#1821,
+      PR#4081).
     * Improve Erlang symbols (Issue#2650, PR#3837).
     * Improve Nim highlighting (Issue#3520, PR#3648).
     * Add symbols support for Ocaml, Meson and Forth filetypes (PR#3163,
@@ -94,8 +98,11 @@ Geany 2.1 (unreleased)
       PR#3911, PR#4077).
 
     Windows
-    * Improve Meson support (Biswapriyo Nath, PR#3811, PR#3812).
+    * Use Consolas as the default monospaced font (PR#4326).
+    * Improve Meson support (Biswapriyo Nath, PR#3811, PR#3812, #4236).
     * Use themed title bar (GabrielFrigo & Jiří Techet, Issue#4200, PR#4205).
+    * Use smaller toolbar icons by default (PR#4197).
+    * Fix opening some help URIs (PR#4322).
 
     API
     * Add *Plugin Extension* API allowing plugins to take over some features
