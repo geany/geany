@@ -6,7 +6,7 @@ Geany 2.1 (unreleased)
     * Improve compatibility focusing the editor window when opening a file
       externally (Kondor Dániel, Issue#3531, PR#4071).
     * Require GLib 2.56 (PR#4199).
-    * Change placeholders for external printing command to use the same ones as
+    * Update placeholders for external printing command to use the same ones as
       build commands (Pynckels, PR#4250).
 
     Bug Fixes
