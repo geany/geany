@@ -99,7 +99,7 @@ Geany 2.1 (unreleased)
 
     Windows
     * Use Consolas as the default monospaced font (PR#4326).
-    * Improve Meson support (Biswapriyo Nath, PR#3811, PR#3812, #4236).
+    * Improve Meson support (Biswapriyo Nath, PR#3811, PR#3812, PR#4236).
     * Use themed title bar (GabrielFrigo & Jiří Techet, Issue#4200, PR#4205).
     * Use smaller toolbar icons by default (PR#4197).
     * Fix opening some help URIs (PR#4322).
