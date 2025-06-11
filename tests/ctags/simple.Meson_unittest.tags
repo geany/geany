@@ -1,0 +1,24 @@
+ConnectionÌ16Ö0
+function:   Connection
+Message passingÌ16Ö0
+function:   Message passing
+c++ foolibÌ256Ö0
+namespace:  c++ foolib
+fooÌ524288Ö0
+other:      foo
+foolib testÌ8Ö0
+field:      foolib test
+includeÌ65536Ö0
+macro:      include
+inspectorÌ64Ö0
+member:     inspector
+pkgconfigÌ512Ö0
+package:    pkgconfig
+srcÌ65536Ö0
+macro:      src
+targetnameÌ4Ö0
+enumerator: targetname
+testÌ65536Ö0
+macro:      test
+testexeÌ524288Ö0
+other:      testexe

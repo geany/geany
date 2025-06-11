@@ -40,7 +40,6 @@ typedef struct _GeanyEntryActionPrivate		GeanyEntryActionPrivate;
 
 struct _GeanyEntryActionPrivate
 {
-	GtkWidget	*entry;
 	gboolean	 numeric;
 };
 
@@ -58,31 +57,9 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_TYPE(GeanyEntryAction, geany_entry_action, GTK_TYPE_ACTION)
 
 
-static GtkWidget *geany_entry_action_create_tool_item(GtkAction *action)
-{
-	GtkWidget *toolitem;
-	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
-
-	priv->entry = gtk_entry_new();
-	if (priv->numeric)
-		gtk_entry_set_width_chars(GTK_ENTRY(priv->entry), 9);
-
-	ui_entry_add_clear_icon(GTK_ENTRY(priv->entry));
-	ui_entry_add_activate_backward_signal(GTK_ENTRY(priv->entry));
-
-	gtk_widget_show(priv->entry);
-
-	toolitem = g_object_new(GTK_TYPE_TOOL_ITEM, NULL);
-	gtk_container_add(GTK_CONTAINER(toolitem), priv->entry);
-
-	return toolitem;
-}
-
-
 static void delegate_entry_activate_cb(GtkEntry *entry, GeanyEntryAction *action)
 {
-	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
-	const gchar *text = gtk_entry_get_text(GTK_ENTRY(priv->entry));
+	const gchar *text = gtk_entry_get_text(entry);
 
 	g_signal_emit(action, signals[ENTRY_ACTIVATE], 0, text);
 }
@@ -90,8 +67,7 @@ static void delegate_entry_activate_cb(GtkEntry *entry, GeanyEntryAction *action
 
 static void delegate_entry_activate_backward_cb(GtkEntry *entry, GeanyEntryAction *action)
 {
-	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
-	const gchar *text = gtk_entry_get_text(GTK_ENTRY(priv->entry));
+	const gchar *text = gtk_entry_get_text(entry);
 
 	g_signal_emit(action, signals[ENTRY_ACTIVATE_BACKWARD], 0, text);
 }
@@ -99,32 +75,39 @@ static void delegate_entry_activate_backward_cb(GtkEntry *entry, GeanyEntryActio
 
 static void delegate_entry_changed_cb(GtkEditable *editable, GeanyEntryAction *action)
 {
-	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
-	const gchar *text = gtk_entry_get_text(GTK_ENTRY(priv->entry));
+	const gchar *text = gtk_entry_get_text(GTK_ENTRY(editable));
 
 	g_signal_emit(action, signals[ENTRY_CHANGED], 0, text);
 }
 
 
-static void geany_entry_action_connect_proxy(GtkAction *action, GtkWidget *widget)
+static GtkWidget *geany_entry_action_create_tool_item(GtkAction *action)
 {
+	GtkWidget *toolitem;
+	GtkWidget *entry;
 	GeanyEntryActionPrivate *priv = GEANY_ENTRY_ACTION_GET_PRIVATE(action);
 
-	/* make sure not to connect handlers twice */
-	if (! g_object_get_data(G_OBJECT(widget), "gea-connected"))
-	{
-		if (priv->numeric)
-			g_signal_connect(priv->entry, "insert-text",
-				G_CALLBACK(ui_editable_insert_text_callback), NULL);
-		g_signal_connect(priv->entry, "changed", G_CALLBACK(delegate_entry_changed_cb), action);
-		g_signal_connect(priv->entry, "activate", G_CALLBACK(delegate_entry_activate_cb), action);
-		g_signal_connect(priv->entry, "activate-backward",
-			G_CALLBACK(delegate_entry_activate_backward_cb), action);
+	entry = gtk_entry_new();
+	if (priv->numeric)
+		gtk_entry_set_width_chars(GTK_ENTRY(entry), 9);
 
-		g_object_set_data(G_OBJECT(widget), "gea-connected", action /* anything non-NULL */);
-	}
+	ui_entry_add_clear_icon(GTK_ENTRY(entry));
+	ui_entry_add_activate_backward_signal(GTK_ENTRY(entry));
 
-	GTK_ACTION_CLASS(geany_entry_action_parent_class)->connect_proxy(action, widget);
+	if (priv->numeric)
+		g_signal_connect(entry, "insert-text",
+			G_CALLBACK(ui_editable_insert_text_callback), NULL);
+	g_signal_connect(entry, "changed", G_CALLBACK(delegate_entry_changed_cb), action);
+	g_signal_connect(entry, "activate", G_CALLBACK(delegate_entry_activate_cb), action);
+	g_signal_connect(entry, "activate-backward",
+		G_CALLBACK(delegate_entry_activate_backward_cb), action);
+
+	gtk_widget_show(entry);
+
+	toolitem = g_object_new(GTK_TYPE_TOOL_ITEM, NULL);
+	gtk_container_add(GTK_CONTAINER(toolitem), entry);
+
+	return toolitem;
 }
 
 
@@ -132,7 +115,6 @@ static void geany_entry_action_class_init(GeanyEntryActionClass *klass)
 {
 	GtkActionClass *action_class = GTK_ACTION_CLASS(klass);
 
-	action_class->connect_proxy = geany_entry_action_connect_proxy;
 	action_class->create_tool_item = geany_entry_action_create_tool_item;
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 
@@ -173,7 +155,6 @@ static void geany_entry_action_init(GeanyEntryAction *action)
 		GEANY_ENTRY_ACTION_TYPE, GeanyEntryActionPrivate);
 
 	priv = action->priv;
-	priv->entry = NULL;
 	priv->numeric = FALSE;
 }
 

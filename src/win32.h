@@ -30,9 +30,6 @@
 
 G_BEGIN_DECLS
 
-void win32_open_browser(const gchar *uri);
-
-
 gint win32_check_write_permission(const gchar *dir);
 
 void win32_init_debug_code(void);
@@ -46,6 +43,8 @@ gchar *win32_get_installation_dir(void);
 gchar *win32_expand_environment_variables(const gchar *str);
 
 gchar *win32_get_user_config_dir(void);
+
+void win32_update_titlebar_theme(GtkWidget *window);
 
 G_END_DECLS
 

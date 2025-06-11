@@ -262,8 +262,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 
 /** Gets the icon data corresponding to the provided TMIcon.
  * @param icon TMIcon.
- *
- * Returns the GdkPixbuf corresponding to the provided TMIcon.
+ * @returns The GdkPixbuf corresponding to the provided TMIcon.
  *
  * @since 2.1
  */
@@ -324,6 +323,56 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 }
 
 
+static gboolean is_symbol_within_parent(const TMTag *tag, const TMTag *parent)
+{
+	const gchar *scope_sep = tm_parser_scope_separator(tag->lang);
+	gsize scope_len = 0;
+
+	if (EMPTY(tag->scope))
+		return FALSE;
+
+	if (!EMPTY(parent->scope))
+	{
+		if (!g_str_has_prefix(tag->scope, parent->scope))
+			return FALSE;
+		scope_len = strlen(parent->scope);
+
+		if (!g_str_has_prefix(tag->scope + scope_len, scope_sep))
+			return FALSE;
+		scope_len += strlen(scope_sep);
+	}
+
+	if (!g_str_has_prefix(tag->scope + scope_len, parent->name))
+		return FALSE;
+	scope_len += strlen(parent->name);
+
+	if (tag->scope[scope_len] == '\0')
+		return TRUE;
+
+	if (!g_str_has_prefix(tag->scope + scope_len, scope_sep))
+		return FALSE;
+
+	return TRUE;
+}
+
+
+/* for symbol tree construction make sure that symbol parents appear before
+ * their children in the list */
+static gint compare_symbol_parent_first(gconstpointer a, gconstpointer b)
+{
+	const TMTag *tag_a = TM_TAG(a);
+	const TMTag *tag_b = TM_TAG(b);
+
+	if (is_symbol_within_parent(tag_a, tag_b))
+		return 1;
+
+	if (is_symbol_within_parent(tag_b, tag_a))
+		return -1;
+
+	return compare_symbol_lines(a, b);
+}
+
+
 static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
@@ -375,7 +424,7 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 			g_free(full_tagname);
 		}
 	}
-	tag_names = g_list_sort(tag_names, compare_symbol_lines);
+	tag_names = g_list_sort(tag_names, compare_symbol_parent_first);
 
 	g_strfreev(tf_strv);
 
@@ -1317,7 +1366,7 @@ void symbols_show_load_tags_dialog(void)
 			ft = detect_global_tags_filetype(utf8_fname);
 
 			if (ft != NULL && symbols_load_global_tags(fname, ft))
-				/* For translators: the first wildcard is the filetype, the second the filename */
+				/* Translators: the first wildcard is the filetype, the second the filename */
 				ui_set_statusbar(TRUE, _("Loaded %s tags file '%s'."),
 					filetypes_get_display_name(ft), utf8_fname);
 			else

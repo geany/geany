@@ -8,7 +8,7 @@ test -z "$srcdir" && srcdir=.
 
 DIE=0
 
-(test -f $srcdir/configure.ac) || {
+(test -f "$srcdir/configure.ac") || {
 	echo "**Error**: Directory "\`$srcdir\'" does not look like the top-level package directory"
 	exit 1
 }
@@ -30,11 +30,11 @@ fi
 
 echo "Processing configure.ac"
 
-(cd $srcdir; autoreconf --install --verbose)
+(cd "$srcdir"; autoreconf --install --verbose)
 
 if [ "$NOCONFIGURE" = 1 ]; then
     echo "Done. configure skipped."
     exit 0;
 fi
 echo "Running $srcdir/configure $@ ..."
-$srcdir/configure "$@" && echo "Now type 'make' to compile." || exit 1
+"$srcdir/configure" "$@" && echo "Now type 'make' to compile." || exit 1

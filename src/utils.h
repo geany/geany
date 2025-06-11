@@ -32,6 +32,8 @@
 #include <glib.h>
 #include <gdk/gdk.h> /* for GdkColor */
 
+#include "document.h"
+
 G_BEGIN_DECLS
 
 /** Returns @c TRUE if @a ptr is @c NULL or @c *ptr is @c FALSE. */
@@ -339,6 +341,12 @@ gchar *utils_get_os_info_string(void);
 gchar *utils_utf8_strdown(const gchar *str);
 
 gboolean utils_utf8_substring_match(const gchar *key, const gchar *haystack);
+
+gchar *utils_replace_placeholders(const gchar *str,
+		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
+		gpointer data);
+
+gchar *utils_replace_document_placeholders(const GeanyDocument *doc, const gchar *src);
 
 #endif /* GEANY_PRIVATE */
 

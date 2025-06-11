@@ -694,7 +694,7 @@ re_string_reconstruct (re_string_t *pstr, int idx, int eflags)
 
 	      if (pstr->is_utf8)
 		{
-		  const unsigned char *raw, *p, *q, *end;
+		  const unsigned char *raw, *p, *end;
 
 		  /* Special case UTF-8.  Multi-byte chars start with any
 		     byte other than 0x80 - 0xbf.  */
@@ -723,13 +723,11 @@ re_string_reconstruct (re_string_t *pstr, int idx, int eflags)
 			  unsigned char buf[6];
 			  size_t mbclen;
 
-			  q = p;
 			  if (BE (pstr->trans != NULL, 0))
 			    {
 			      int i = mlen < 6 ? mlen : 6;
 			      while (--i >= 0)
 				buf[i] = pstr->trans[p[i]];
-			      q = buf;
 			    }
 			  /* XXX Don't use mbrtowc, we know which conversion
 			     to use (UTF-8 -> UCS4).  */

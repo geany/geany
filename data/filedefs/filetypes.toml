@@ -16,6 +16,7 @@ triplestringsq=string_1
 triplestringdq=string_1
 escapechar=string_2
 datetime=number_2
+stringeol=string_eol
 
 [keywords]
 # all items must be in one line

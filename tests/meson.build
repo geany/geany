@@ -315,6 +315,7 @@ ctags_tests = [
 	'ctags/simple.lisp.tags',
 	'ctags/simple.lua.tags',
 	'ctags/simple.mak.tags',
+	'ctags/simple.Meson_unittest.tags',
 	'ctags/simple.md.tags',
 	'ctags/simple.ml.tags',
 	'ctags/simple.php.tags',
@@ -327,6 +328,7 @@ ctags_tests = [
 	'ctags/simple.scss.tags',
 	'ctags/simple.sh.tags',
 	'ctags/simple.tcl.tags',
+	'ctags/simple.tf.tags',
 	'ctags/simple.ts.tags',
 	'ctags/simple.vala.tags',
 	'ctags/simple.zep.tags',
@@ -366,8 +368,8 @@ ctags_tests = [
 runner = find_program('ctags/runner.sh')
 foreach t : ctags_tests
 	test(t, runner,
-	     args: [join_paths(meson.build_root(), 'geany'), files(t)],
-	     env: ['top_srcdir='+meson.source_root(), 'top_builddir=' + meson.build_root()])
+	     args: [join_paths(meson.project_build_root(), 'geany'), files(t)],
+	     env: ['top_srcdir='+meson.project_source_root(), 'top_builddir=' + meson.project_build_root()])
 endforeach
 
 process_order_sources = files([
@@ -376,8 +378,8 @@ process_order_sources = files([
 	'ctags/process_order_2.h'
 ])
 test('ctags/processing-order', runner,
-     args: [join_paths(meson.build_root(), 'geany'), '--result', process_order_sources],
-     env: ['top_srcdir='+meson.source_root(), 'top_builddir='+meson.build_root()])
+     args: [join_paths(meson.project_build_root(), 'geany'), '--result', process_order_sources],
+     env: ['top_srcdir='+meson.project_source_root(), 'top_builddir='+meson.project_build_root()])
 test('utils', executable('test_utils', 'test_utils.c', dependencies: test_deps))
 test('sidebar', executable('test_sidebar', 'test_sidebar.c', dependencies: test_deps))
 test('encodings', executable('test_encodings', 'test_encodings.c', dependencies: test_deps))

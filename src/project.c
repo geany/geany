@@ -96,7 +96,7 @@ static void destroy_project(gboolean open_default);
 #define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
 #define SHOW_ERR1(args, more) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args, more)
 #define MAX_NAME_LEN 50
-/* "projects" is part of the default project base path so be careful when translating
+/* Translators: "projects" is part of the default project base path so be careful when translating
  * please avoid special characters and spaces, look at the source for details or ask Frank */
 #define PROJECT_DIR _("projects")
 
@@ -508,7 +508,7 @@ static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 			NULL));
 
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
 		gtk_entry_set_text(GTK_ENTRY(base_path_entry),
 			gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)));

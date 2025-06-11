@@ -7,7 +7,7 @@ Geany 2.0 (October 19, 2023)
     * Split "session data" into session.conf, preferences are written to
       and read from geany.conf (PR#2776, PR#2779, PR#3014, PR#3125 and more).
     * Add new build system Meson (experimental) (PR#2761).
-    * Require GTK 3.24 (#3580).
+    * Require GTK 3.24 (PR#3580).
 
     Bug fixes
     * (Re-)Add ability to scroll over document tabs (Luke Horwell, PR#3134).

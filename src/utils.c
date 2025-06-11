@@ -78,7 +78,7 @@ void utils_open_browser(const gchar *uri)
 {
 #ifdef G_OS_WIN32
 	g_return_if_fail(uri != NULL);
-	win32_open_browser(uri);
+	gtk_show_uri_on_window(GTK_WINDOW(main_widgets.window), uri, GDK_CURRENT_TIME, NULL);
 #else
 	gchar *new_cmd, *argv[2] = { (gchar *) uri, NULL };
 
@@ -2496,4 +2496,160 @@ gchar *utils_get_os_info_string(void)
 #endif
 
 	return os_info;
+}
+
+
+/*
+ * @brief Replace %-placeholders in a string
+ * @param str Format string including placeholders
+ * @param insert_replacement Callback function to insert placeholder replacements.
+ *                           It gets called with the buffer to which append the
+ *                           replacement, the placeholder character, and @p data.
+ *                           It should return whether the placeholder was handled
+ *                           or not.
+ * @param data User data to pass to the @p insert_replacement
+ * @returns A copy of @p str with placeholders replaced
+ *
+ * Replaces arbitrary placeholders in a printf-style format string.  Unknown
+ * placeholders are left unmodified in the resulting string.
+ * There is one special placeholder that is always handled and replaced, that
+ * is `%`: it is replaced with a literal "%"; that is `%%` results in `%`.
+ */
+GEANY_EXPORT_SYMBOL
+gchar *utils_replace_placeholders(const gchar *str,
+		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
+		gpointer data)
+{
+	GString *res;
+	const gchar *p;
+	const gchar *const base = str;
+
+	g_return_val_if_fail(insert_replacement != NULL, NULL);
+
+	if (! str)
+		return g_strdup("");
+
+	res = g_string_new(NULL);
+	while ((p = strchr(str, '%')) != NULL)
+	{
+		g_string_append_len(res, str, p - str);
+
+		p++;
+		if (! *p || *p == '%') /* %% or trailing % -> % */
+			g_string_append_c(res, '%');
+		else if (! insert_replacement(res, *p, data))
+		{
+			geany_debug(_("Unknown placeholder \"%%%c\" in \"%s\""), *p, base);
+			/* unknown placeholder, leave it literally */
+			g_string_append_c(res, '%');
+			g_string_append_c(res, *p);
+		}
+
+		str = p;
+		if (*str)
+			str++;
+		else
+			break;
+	}
+	g_string_append(res, str);
+
+	return g_string_free(res, FALSE);
+}
+
+
+static gboolean generate_document_replacements(GString *buffer,
+		const gchar placeholder, gpointer data)
+{
+	const GeanyDocument *doc = data;
+	gchar *r = NULL;
+
+	/* %p is the project base path, if any */
+	if (placeholder == 'p' && app->project)
+	{
+		r = project_get_base_path();
+		if (! r) /* replace with nothing if it's empty */
+			r = g_strdup("");
+	}
+	else if (! doc || ! doc->file_name)
+	{
+		/* replace valid placeholders with nothing as we don't have a meaningful value */
+		switch (placeholder)
+		{
+			case 'p':
+			case 'd':
+			case 'e':
+			case 'f':
+			case 'l':
+				ui_set_statusbar(FALSE, _("failed to substitute %%%c: document has no path"), placeholder);
+				r = g_strdup("");
+				break;
+		}
+	}
+	else
+	{
+		switch (placeholder)
+		{
+			case 'p': /* we only end up here if no project are open, so fallback on %d */
+				ui_set_statusbar(FALSE, _("no project active, %%p is substituted as %%d"));
+				/* fall through */
+			case 'd':
+				r = g_path_get_dirname(doc->file_name);
+				break;
+			case 'e':
+			{
+				gchar *basename = g_path_get_basename(doc->file_name);
+				r = utils_remove_ext_from_filename(basename);
+				g_free(basename);
+				break;
+			}
+			case 'f':
+				r = g_path_get_basename(doc->file_name);
+				break;
+			case 'l':
+				g_string_append_printf(buffer, "%i", sci_get_current_line(doc->editor->sci) + 1);
+				return TRUE;
+		}
+	}
+
+	if (r)
+	{
+		g_string_append(buffer, r);
+		g_free(r);
+	}
+
+	return r != NULL;
+}
+
+
+/*
+ * @brief Replaces document-related placeholders in a string
+ *
+ * This function searches for specified placeholders within the given string
+ * and replaces them with the provided doc information (filename / path / ...)
+ *
+ * @param[in] doc The document from which the name/path replaces the placeholders.
+ * @param[in] src The original string including the placeholder tokens (...%d...%e...)
+ *
+ * The following placeholders are handled:
+ * %%: %
+ * %d: The document's dirname
+ * %e: The document's basename, without extension
+ * %f: The document's basename (including extension)
+ * %l: The document's current line number, 1-based
+ * %p: The project's base directory, or the document's basename if no project are open.
+ *
+ * If an unknown placeholder is encountered, it is left unmodified.  However,
+ * it is safer not to rely on this in case new placeholders are added in the
+ * future, and explicitly use %% instead.
+ *
+ * @return a copy of @p src with placeholders replaced, which should be freed.
+ *
+ * @note This function uses the global variable app (type GeanyApp)
+ */
+GEANY_EXPORT_SYMBOL
+gchar *utils_replace_document_placeholders(const GeanyDocument *doc, const gchar *src)
+{
+	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
+
+	return utils_replace_placeholders(src, generate_document_replacements, (gpointer) doc);
 }

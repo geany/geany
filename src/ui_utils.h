@@ -241,8 +241,6 @@ gchar *ui_menu_item_get_text(GtkMenuItem *menu_item);
 
 void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...);
 
-void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
-
 void ui_combo_box_prepend_text_once(GtkComboBoxText *combo, const gchar *text);
 
 void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
@@ -287,7 +285,7 @@ void ui_init_stock_items(void);
 void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
 		GtkContainer *parent);
 
-void ui_update_statusbar(GeanyDocument *doc, gint pos);
+void ui_update_statusbar(GeanyDocument *doc);
 
 
 /* This sets the window title according to the current filename. */

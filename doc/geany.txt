@@ -760,7 +760,9 @@ Column mode editing (rectangular selections)
 
 There is basic support for column mode editing. To use it, create a
 rectangular selection by holding down the Control and Shift keys
-(or Alt and Shift on Windows) while selecting some text.
+(or Alt and Shift on Windows) while selecting some text using the mouse.
+To create a rectangular selection using the keyboard only, hold down the
+Alt and Shift keys while using the cursor keys to select some text.
 Once a rectangular selection exists you can start editing the text within
 this selection and the modifications will be done for every line in the
 selection.
@@ -3338,11 +3340,12 @@ Before the command is run, the first occurrence of each of the following
 two character sequences in each of the command and working directory 
 fields is substituted by the items specified below:
 
-* %d - the absolute path to the directory of the current file.
-* %e - the name of the current file without the extension or path.
-* %f - the name of the current file without the path.
-* %p - if a project is open, the base path from the project.
-* %l - the line number at the current cursor position.
+* ``%%`` - a literal ``%`` sign.
+* ``%d`` - the absolute path to the directory of the current file.
+* ``%e`` - the name of the current file without the extension or path.
+* ``%f`` - the name of the current file without the path.
+* ``%p`` - if a project is open, the base path from the project.
+* ``%l`` - the line number at the current cursor position.
 
 .. note::
    If the base path set in `Project Properties`_ is not an absolute path, then it is
@@ -3429,16 +3432,16 @@ print command. However, the printed document contains no syntax highlighting.
 You can adjust the command to which the filename is passed in the preferences
 dialog. The default command is::
 
-    % lpr %f
+    % lpr "%d/%f"
 
-``%f`` will be substituted by the filename of the current file. Geany
-will not show errors from the command itself, so you should make
-sure that it works before(e.g. by trying to execute it from the
-command line).
+See `Substitutions in commands and working directories`_ for available
+placeholders referencing the current file. Geany will not show errors from the
+command itself, so you should make sure that it works before (e.g. by trying
+to execute it from the command line).
 
 A nicer example, which many prefer is::
 
-    % a2ps -1 --medium=A4 -o - %f | xfprint4
+    % a2ps -1 --medium=A4 -o - "%d/%f" | xfprint4
 
 But this depends on a2ps and xfprint4. As a replacement for xfprint4,
 gtklp or similar programs can be used.
