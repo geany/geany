@@ -29,13 +29,6 @@ GEANY_THEMES_URL = 'https://github.com/geany/geany-themes/archive/refs/heads/mas
 GEANY_THEMES_DIR = join(BUNDLE_BASE_DIR, 'geany-themes')
 INSTALLER_NAME = join(BASE_DIR, f'geany-{VERSION}_setup.exe')
 
-# signing params
-SIGN_CERTIFICATE = join(BASE_DIR, 'codesign.pem')  # adjust to your needs
-SIGN_CERTIFICATE_KEY = join(BASE_DIR, 'codesign_key.pem')  # adjust to your needs
-SIGN_WEBSITE = 'https://www.geany.org'
-SIGN_NAME = 'Geany Binary'
-SIGN_TIMESTAMP = 'https://zeitstempel.dfn.de/'
-
 
 def run_command(*cmd, **kwargs):
     print('Execute command: {}'.format(' '.join(cmd)))
@@ -73,28 +66,6 @@ def strip_files(*paths):
             run_command('strip', filename)
 
 
-def sign_files(*paths):
-    if not isfile(SIGN_CERTIFICATE_KEY):
-        print('Skipped signing {} as {} not found'.format(paths, SIGN_CERTIFICATE_KEY))
-        return
-    for item in paths:
-        files = glob.glob(item)
-        for filename in files:
-            run_command(
-                'osslsigncode',
-                'sign',
-                '-verbose',
-                '-certs', SIGN_CERTIFICATE,
-                '-key', SIGN_CERTIFICATE_KEY,
-                '-n', SIGN_NAME,
-                '-i', SIGN_WEBSITE,
-                '-ts', SIGN_TIMESTAMP,
-                '-h', 'sha512',
-                '-in', filename,
-                '-out', f'{filename}-signed')
-            os.replace(f'{filename}-signed', filename)
-
-
 def make_release():
     # copy the release dir as it gets modified implicitly by signing and converting files,
     # we want to keep a pristine version before we start
@@ -109,8 +80,6 @@ def make_release():
         f'{RELEASE_DIR}/lib/*.dll')
     # strip binaries
     strip_files(*binary_files)
-    # sign binaries
-    sign_files(*binary_files)
     # unix2dos conversion
     text_files = (
         f'{RELEASE_DIR}/*.txt',
@@ -127,8 +96,6 @@ def make_release():
         f'/DGTK_BUNDLE_DIR={BUNDLE_GTK}',
         f'-DGEANY_INSTALLER_NAME={INSTALLER_NAME}',
         f'{SOURCE_DIR}/geany.nsi')
-    # sign installer
-    sign_files(INSTALLER_NAME)
 
 
 if __name__ == '__main__':
