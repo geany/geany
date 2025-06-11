@@ -362,7 +362,8 @@ ctags_tests = [
 	'ctags/vhdl-port.vhd.tags',
 	'ctags/vhdl-process.vhd.tags',
 	'ctags/vhdl-type.vhd.tags',
-	'ctags/whitespaces.php.tags'
+	'ctags/whitespaces.php.tags',
+	'ctags/wp-guest.php.tags'
 ]
 
 runner = find_program('ctags/runner.sh')
