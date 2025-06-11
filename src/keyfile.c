@@ -40,6 +40,7 @@
 #include "encodingsprivate.h"
 #include "filetypes.h"
 #include "geanyobject.h"
+#include "keybindings.h"
 #include "main.h"
 #include "msgwindow.h"
 #include "prefs.h"
@@ -663,6 +664,7 @@ static void save_dialog_prefs(GKeyFile *config)
 
 static void save_ui_prefs(GKeyFile *config)
 {
+	g_key_file_set_boolean(config, PACKAGE, "menubar_visible", ui_prefs.menubar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
@@ -1107,6 +1109,7 @@ static void load_dialog_prefs(GKeyFile *config)
 
 static void load_ui_prefs(GKeyFile *config)
 {
+	ui_prefs.menubar_visible = utils_get_setting_boolean(config, PACKAGE, "menubar_visible", TRUE);
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
@@ -1446,6 +1449,10 @@ void configuration_apply_settings(void)
 		ui_prefs.fullscreen = TRUE;
 		ui_set_fullscreen();
 	}
+
+	/* restore menubar state or hide on startup */
+	if (!ui_prefs.menubar_visible)
+		ui_menubar_show_hide(FALSE);
 
 	msgwin_show_hide_tabs();
 }
