@@ -1,0 +1,57 @@
+name: Windows/MSYS2 Build
+on: [workflow_dispatch]
+
+jobs:
+  msys2-ucrt64:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: |
+            ${MINGW_PACKAGE_PREFIX}-gcc
+            ${MINGW_PACKAGE_PREFIX}-autotools
+            ${MINGW_PACKAGE_PREFIX}-gtk3
+            ${MINGW_PACKAGE_PREFIX}-python-docutils
+            patch
+            rsync
+            unzip
+            dos2unix
+            ${MINGW_PACKAGE_PREFIX}-nsis
+      - name: GTK-Bundle
+        run: |
+          mkdir -p geany_build/bundle/geany-gtk
+          cd geany_build/bundle/geany-gtk
+          bash ~/git/geany/scripts/gtk-bundle-from-msys2.sh -3
+      - name: CI-Build
+        run: |
+          DESTINATON=geany_build
+          VERSION="2.1"
+          NOCONFIGURE=1 ./autogen.sh
+          export lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}
+          mkdir -p _build
+          cd _build
+          ../configure --prefix=${DESTINATON}/build/geany --disable-silent-rules
+          make -j
+          make install
+          mkdir -p $DESTINATON/release/geany-orig
+          rsync -a --delete ${DESTINATON}/build/geany/ $DESTINATON/release/geany-orig
+      - name: Compile NSIS
+        run: |
+          python scripts/msys2-geany-release.py
+      - name: Upload Unsigned Artifact
+        id: upload-unsigned-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: |
+            geany_build/*.exe
+          retention-days: 3
+          overwrite: true
+          if-no-files-found: error
