@@ -934,12 +934,12 @@ getNextChar:
 		unsigned long startSourceLineNumber = getSourceLineNumber ();
 		unsigned long startLineNumber = getInputLineNumber ();
 		int startLineOffset = getInputLineOffset ();
-		int endLineOffset;
+		int endLineOffset = -1;
 
 		c = findPhpStart (&endLineOffset);
 		if (c != EOF)
 			InPhp = true;
-		else
+		else if (endLineOffset < 0)
 			endLineOffset = getInputLineOffset ();
 
 		unsigned long endLineNumber = getInputLineNumber ();
