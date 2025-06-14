@@ -30,7 +30,7 @@ with open(join(SOURCE_DIR, 'configure.ac'), 'r') as f:
         VERSION=ver
         print(f"GOT VERSION {VERSION} FROM {f.name}")
 BUILD_DIR = join(SOURCE_DIR, '_build')
-GEANY_THEMES_DIR = join(SOURCE_DIR, 'data', 'colorschemes')
+GEANY_THEMES_DIR = join(SOURCE_DIR, 'data')
 RELEASE_DIR_ORIG = join(BASE_DIR, 'release', 'geany-orig')
 RELEASE_DIR = join(BASE_DIR, 'release', 'geany')
 BUNDLE_BASE_DIR = join(BASE_DIR, 'bundle')
