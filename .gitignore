@@ -22,6 +22,7 @@ Makefile.in
 /aclocal.m4
 /autom4te.cache
 /build/
+/_build/
 /builddir/
 /build-*/
 /build-aux/
