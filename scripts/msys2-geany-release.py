@@ -5,6 +5,7 @@ import os
 import shutil
 from os.path import exists, isfile, join
 from subprocess import check_call
+import re
 
 """
 This script prepares a Geany release on Windows.
@@ -14,7 +15,6 @@ The following steps will be executed:
 - create installers
 """
 
-VERSION = '2.1'
 if 'GITHUB_WORKSPACE' in os.environ:
     SOURCE_DIR = os.environ['GITHUB_WORKSPACE']
     BASE_DIR = join(SOURCE_DIR, 'geany_build')
@@ -23,6 +23,23 @@ else:
     # adjust paths to your needs ($HOME is used because expanduser() returns the Windows home directory)
     BASE_DIR = join(os.environ['HOME'], 'geany_build')
     SOURCE_DIR = join(os.environ['HOME'], 'git', 'geany')
+VERSION="2.0"
+with open(join(SOURCE_DIR, 'configure.ac'), 'r') as f:
+    for line in f:
+        # Look for lines containing 'AC_INIT'
+        if 'AC_INIT' in line:
+            # Use a regular expression to find the pattern:
+            # AC_INIT([ProjectName], [Version], ...)
+            # We want to capture the content of the second square bracket group.
+            # The regex looks for 'AC_INIT(', then '[anything]', then a comma
+            # and optional spaces, then captures '[Version]' into group 1.
+            match = re.search(r'AC_INIT\(\[[^\]]+],\s*\[([^\]]+)\].*', line)
+            if match:
+                VERSION = match.group(1)
+                print(f"GOT VERSION {VERSION} FROM {line}")
+            else:
+                print(f"!! FAILED TO GET VERSION FROM {line}")
+            break # Stop after finding the first AC_INIT line with a version
 BUILD_DIR = join(SOURCE_DIR, '_build')
 RELEASE_DIR_ORIG = join(BASE_DIR, 'release', 'geany-orig')
 RELEASE_DIR = join(BASE_DIR, 'release', 'geany')

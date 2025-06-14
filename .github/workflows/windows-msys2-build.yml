@@ -33,7 +33,7 @@ jobs:
       - name: CI-Build
         run: |
           DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build
-          VERSION="2.1"
+          VERSION=$(grep 'AC_INIT' configure.ac | sed -E 's/AC_INIT\(\[[^]]+\],\s*\[([^]]+)\].*/\1/')
           NOCONFIGURE=1 ./autogen.sh
           export lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}
           mkdir -p _build
