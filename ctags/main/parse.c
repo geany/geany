@@ -4230,7 +4230,7 @@ extern bool runParserInNarrowedInputStream (const langType language,
 					       unsigned long sourceLineOffset,
 					       int promise)
 {
-	bool tagFileResized;
+	bool tagFileResized = false;
 
 	verbose ("runParserInNarrowedInputStream: %s; "
 			 "file: %s, "
@@ -4242,14 +4242,16 @@ extern bool runParserInNarrowedInputStream (const langType language,
 			 startLine, startCharOffset, sourceLineOffset,
 			 endLine, endCharOffset);
 
-	pushNarrowedInputStream (
+	if (pushNarrowedInputStream (
 				 doesParserRequireMemoryStream (language),
 				 startLine, startCharOffset,
 				 endLine, endCharOffset,
 				 sourceLineOffset,
-				 promise);
-	tagFileResized = createTagsWithFallback1 (language, NULL);
-	popNarrowedInputStream  ();
+				 promise))
+	{
+		tagFileResized = createTagsWithFallback1 (language, NULL);
+		popNarrowedInputStream  ();
+	}
 	return tagFileResized;
 
 }

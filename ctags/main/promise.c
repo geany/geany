@@ -62,6 +62,20 @@ static void attachPromiseModifier (int promise,
 								   void *data);
 
 
+static bool havePromise (const struct promise *p)
+{
+	for (int i = 0; i < promise_count; i++)
+	{
+		struct promise *q = promises + i;
+		if (p->lang == q->lang &&
+			p->startLine == q->startLine && p->startCharOffset == q->startCharOffset)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 int  makePromise   (const char *parser,
 		    unsigned long startLine, long startCharOffset,
 		    unsigned long endLine, long endCharOffset,
@@ -115,6 +129,9 @@ int  makePromise   (const char *parser,
 	p->endCharOffset = endCharOffset;
 	p->sourceLineOffset = sourceLineOffset;
 	p->modifiers = NULL;
+
+	if (havePromise (p))
+		return -1;
 
 	r = promise_count;
 	promise_count++;
