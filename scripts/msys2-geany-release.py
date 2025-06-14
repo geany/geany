@@ -43,7 +43,6 @@ RELEASE_DIR_ORIG = join(BASE_DIR, 'release', 'geany-orig')
 RELEASE_DIR = join(BASE_DIR, 'release', 'geany')
 BUNDLE_BASE_DIR = join(BASE_DIR, 'bundle')
 BUNDLE_GTK = join(BASE_DIR, 'bundle', 'geany-gtk')
-GEANY_THEMES_DIR = join(BUNDLE_BASE_DIR, 'geany-themes')
 INSTALLER_NAME = join(BASE_DIR, f'geany-{VERSION}_setup.exe')
 
 
@@ -98,7 +97,6 @@ def make_release():
         '/WX',
         '/V3',
         f'/DGEANY_RELEASE_DIR={RELEASE_DIR}',
-        f'/DGEANY_THEMES_DIR={GEANY_THEMES_DIR}/geany-themes-master',
         f'/DGTK_BUNDLE_DIR={BUNDLE_GTK}',
         f'-DGEANY_INSTALLER_NAME={INSTALLER_NAME}',
         f'{SOURCE_DIR}/geany.nsi')
