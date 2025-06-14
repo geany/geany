@@ -30,6 +30,7 @@ with open(join(SOURCE_DIR, 'configure.ac'), 'r') as f:
         VERSION=ver
         print(f"GOT VERSION {VERSION} FROM {f.name}")
 BUILD_DIR = join(SOURCE_DIR, '_build')
+GEANY_THEMES_DIR = join(SOURCE_DIR, 'data', 'colorschemes')
 RELEASE_DIR_ORIG = join(BASE_DIR, 'release', 'geany-orig')
 RELEASE_DIR = join(BASE_DIR, 'release', 'geany')
 BUNDLE_BASE_DIR = join(BASE_DIR, 'bundle')
@@ -88,6 +89,7 @@ def make_release():
         '/WX',
         '/V3',
         f'/DGEANY_RELEASE_DIR={RELEASE_DIR}',
+        f'/DGEANY_THEMES_DIR={GEANY_THEMES_DIR}',
         f'/DGTK_BUNDLE_DIR={BUNDLE_GTK}',
         f'-DGEANY_INSTALLER_NAME={INSTALLER_NAME}',
         f'{SOURCE_DIR}/geany.nsi')
