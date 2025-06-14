@@ -11,16 +11,19 @@ This script prepares a Geany release on Windows.
 The following steps will be executed:
 - update geany-themes repository
 - strip binary files (geany.exe, plugin .dlls)
-- sign binary files with certificate
 - create installers
-- sign installers
 """
 
 VERSION = '2.1'
-# adjust paths to your needs ($HOME is used because expanduser() returns the Windows home directory)
-BASE_DIR = join(os.environ['HOME'], 'geany_build')
-SOURCE_DIR = join(os.environ['HOME'], 'git', 'geany')
-BUILD_DIR = join(os.environ['HOME'], 'git', 'geany', '_build')
+if 'GITHUB_WORKSPACE' in os.environ:
+    SOURCE_DIR = os.environ['GITHUB_WORKSPACE']
+    BASE_DIR = join(SOURCE_DIR, 'geany_build')
+    #TODO PARSE VERSION FROM configure.ac
+else:
+    # adjust paths to your needs ($HOME is used because expanduser() returns the Windows home directory)
+    BASE_DIR = join(os.environ['HOME'], 'geany_build')
+    SOURCE_DIR = join(os.environ['HOME'], 'git', 'geany')
+BUILD_DIR = join(SOURCE_DIR, '_build')
 RELEASE_DIR_ORIG = join(BASE_DIR, 'release', 'geany-orig')
 RELEASE_DIR = join(BASE_DIR, 'release', 'geany')
 BUNDLE_BASE_DIR = join(BASE_DIR, 'bundle')
