@@ -16,15 +16,15 @@ jobs:
           msystem: MINGW64
           update: true
           install: |
-            ${MINGW_PACKAGE_PREFIX}-gcc
-            ${MINGW_PACKAGE_PREFIX}-autotools
-            ${MINGW_PACKAGE_PREFIX}-gtk3
-            ${MINGW_PACKAGE_PREFIX}-python-docutils
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-autotools
+            mingw-w64-x86_64-gtk3
+            mingw-w64-x86_64-python-docutils
             patch
             rsync
             unzip
             dos2unix
-            ${MINGW_PACKAGE_PREFIX}-nsis
+            mingw-w64-x86_64-nsis
       - name: GTK-Bundle
         run: |
           mkdir -p geany_build/bundle/geany-gtk
