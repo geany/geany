@@ -68,8 +68,7 @@ static bool havePromise (const struct promise *p)
 	{
 		struct promise *q = promises + i;
 		if (p->lang == q->lang &&
-			p->startLine == q->startLine && p->startCharOffset == q->startCharOffset &&
-			p->endLine == q->endLine && p->endCharOffset == q->endCharOffset)
+			p->startLine == q->startLine && p->startCharOffset == q->startCharOffset)
 		{
 			return true;
 		}
