@@ -23,21 +23,12 @@ else:
     SOURCE_DIR = join(os.environ['HOME'], 'git', 'geany')
 VERSION="2.0"
 with open(join(SOURCE_DIR, 'configure.ac'), 'r') as f:
-    for line in f:
-        # Look for lines containing 'AC_INIT'
-        if 'AC_INIT' in line:
-            # Use a regular expression to find the pattern:
-            # AC_INIT([ProjectName], [Version], ...)
-            # We want to capture the content of the second square bracket group.
-            # The regex looks for 'AC_INIT(', then '[anything]', then a comma
-            # and optional spaces, then captures '[Version]' into group 1.
-            match = re.search(r'AC_INIT\(\[[^\]]+],\s*\[([^\]]+)\].*', line)
-            if match:
-                VERSION = match.group(1)
-                print(f"GOT VERSION {VERSION} FROM {line}")
-            else:
-                print(f"!! FAILED TO GET VERSION FROM {line}")
-            break # Stop after finding the first AC_INIT line with a version
+    ver = next((l.split(',')[1].strip(' []') for l in f if l.startswith('AC_INIT')), None)
+    if ver is None:
+        print(f"!! FAILED TO GET VERSION FROM {line}")
+    else:
+        VERSION=ver
+        print(f"GOT VERSION {VERSION} FROM {f.name}")
 BUILD_DIR = join(SOURCE_DIR, '_build')
 RELEASE_DIR_ORIG = join(BASE_DIR, 'release', 'geany-orig')
 RELEASE_DIR = join(BASE_DIR, 'release', 'geany')
