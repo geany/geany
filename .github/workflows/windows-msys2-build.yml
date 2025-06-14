@@ -2,7 +2,7 @@ name: Windows/MSYS2 Build
 on: [workflow_dispatch]
 
 jobs:
-  msys2-ucrt64:
+  msys2-mingw64:
     runs-on: windows-latest
     defaults:
       run:
@@ -29,7 +29,7 @@ jobs:
         run: |
           mkdir -p geany_build/bundle/geany-gtk
           cd geany_build/bundle/geany-gtk
-          bash ~/git/geany/scripts/gtk-bundle-from-msys2.sh -3
+          bash ${GITHUB_WORKSPACE}/scripts/gtk-bundle-from-msys2.sh -3
       - name: CI-Build
         run: |
           DESTINATON=geany_build
