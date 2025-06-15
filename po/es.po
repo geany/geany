@@ -7,18 +7,20 @@
 # Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 2.0\n"
+"Project-Id-Version: Geany 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2025-06-09 22:11+0200\n"
-"PO-Revision-Date: 2023-10-05 09:27+0200\n"
+"PO-Revision-Date: 2025-06-15 14:09+0200\n"
 "Last-Translator: Lucas Vieites <lucas.vieites@gmail.com>\n"
-"Language-Team: Español <geany-i18n@uvena.de>\n"
+"Language-Team: Español <i18n@lists.geany.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.6\n"
+"X-Poedit-Basepath: ../2.0\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: geany.desktop.in:4 data/geany.glade:6448
 msgid "Geany"
@@ -311,18 +313,16 @@ msgstr ""
 "campo «ir a línea» y la VTE."
 
 #: data/geany.glade:1317
-#, fuzzy
 msgid "Use platform-native file dialogs"
-msgstr "Utilizar diálogos nativos de Windows"
+msgstr "Utilizar diálogos nativos de plataforma"
 
 #: data/geany.glade:1321
-#, fuzzy
 msgid ""
 "Defines whether to use the platform-native file dialogs or the GTK default "
 "dialogs"
 msgstr ""
-"Define si se utilizarán los diálogos nativos de Windows o los "
-"predeterminados de GTK."
+"Define si se utilizarán los diálogos nativos de su plataforma o los "
+"predeterminados de GTK"
 
 #: data/geany.glade:1339 data/geany.glade:2006 data/geany.glade:4825
 msgid "<b>Miscellaneous</b>"
@@ -522,7 +522,7 @@ msgid ""
 "of the notebook"
 msgstr ""
 "Define si se colocan las pestañas de archivos al lado de la pestaña actual "
-"en vez de en los laterales de la libreta."
+"en vez de en los bordes de la libreta"
 
 #: data/geany.glade:2176
 msgid "Double-clicking hides all additional widgets"
@@ -722,7 +722,7 @@ msgstr "Columna de salto de línea:"
 
 #: data/geany.glade:3012
 msgid "Comment toggle marker:"
-msgstr "Marcador para activar/desactivar comentarios"
+msgstr "Marcador para conmutar comentarios:"
 
 #: data/geany.glade:3025
 msgid ""
@@ -793,9 +793,7 @@ msgstr "Detectar tipo desde archivo"
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
-msgstr ""
-"Define si detectar, cuando se abre un archivo, el tipo de sangría según el "
-"contenido del archivo."
+msgstr "Define si detectar el tipo de sangría según el contenido del archivo"
 
 #: data/geany.glade:3304 data/geany.glade:9064
 msgid "T_abs and spaces"
@@ -832,9 +830,7 @@ msgstr "Detectar ancho desde archivo"
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
-msgstr ""
-"Define si detectar, cuando se abre un archivo, el tipo de sangría según su "
-"contenido."
+msgstr "Define si detectar el tipo de sangría según el contenido del archivo"
 
 #: data/geany.glade:3384 data/geany.glade:4153 data/geany.glade:9125
 #: data/geany.glade:9700
@@ -861,8 +857,8 @@ msgid ""
 "With the cursor in the indentation, pressing backspace unindents instead of "
 "deleting one character"
 msgstr ""
-"Con el cursor en la tabulación, al pulsar Retroceso se deshace la "
-"indentación en vez de borrar un caracter."
+"Con el cursor en la tabulación, la tecla Retroceso deshace el sangrado en "
+"vez de borrar un carácter"
 
 #: data/geany.glade:3441
 msgid "<b>Indentation</b>"
@@ -926,7 +922,7 @@ msgstr "Eliminar caracteres posteriores tras autocompletar"
 
 #: data/geany.glade:3595
 msgid "Max. symbol name suggestions:"
-msgstr "Número máximo de sugerencias para nombres de símbolos"
+msgstr "Número máximo de sugerencias para nombres de símbolos:"
 
 #: data/geany.glade:3610
 msgid "Completion list height:"
@@ -1059,7 +1055,7 @@ msgid ""
 "line ending character"
 msgstr ""
 "Muestra los caracteres de fin de línea solamente cuando son distintos del "
-"caracter de fin de línea predet. del archivo."
+"carácter de fin de línea predet. del archivo"
 
 #: data/geany.glade:3976
 msgid "Show line endings"
@@ -1170,19 +1166,16 @@ msgid "<b>Long line marker</b>"
 msgstr "<b>Marcador de líneas largas</b>"
 
 #: data/geany.glade:4302
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "Muestra el margen de marcas"
+msgstr "Muestra en el margen de marcas"
 
 #: data/geany.glade:4316
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "Muestra el carácter de fin de línea"
+msgstr "Mostrar como indicator de subrayado"
 
 #: data/geany.glade:4336
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>Cambiado:</b>"
+msgstr "<b>Historial de cambios</b>"
 
 #: data/geany.glade:4356
 msgid "Display"
@@ -1285,7 +1278,7 @@ msgstr ""
 
 #: data/geany.glade:4778
 msgid "Disk check timeout:"
-msgstr "Tiempo de espera para la comprobación en disco"
+msgstr "Tiempo de espera para la comprobación en disco:"
 
 #: data/geany.glade:4793
 msgid ""
@@ -1471,6 +1464,16 @@ msgid ""
 "<tt>%d</tt> if there are no project open.\n"
 "• <tt>%%</tt>: a literal <tt>%</tt> character."
 msgstr ""
+"Comando para imprimir archivos.\n"
+"\n"
+"Los comodines admitidos son:\n"
+"• <tt>%d</tt>: el directorio que contiene el archivo.\r\n"
+"• <tt>%e</tt>: el nombre de archivo sin trayecto ni extensión.\r\n"
+"• <tt>%f</tt>: el nombre de archivo sin trayecto.\r\n"
+"• <tt>%l</tt>: el número de línea actual en el archivo, comienza en 1.\r\n"
+"• <tt>%p</tt>: el directorio del proyecto actual, o equivalente a <tt>%d</"
+"tt> si no hay proyecto abierto.\r\n"
+"• <tt>%%</tt>: el carácter <tt>%</tt>."
 
 #: data/geany.glade:5714
 msgid "Use an external command for printing"
@@ -1576,7 +1579,7 @@ msgstr "Establece el color del texto en la terminal"
 
 #: data/geany.glade:6061
 msgid "Sets the background color of the text in the terminal widget"
-msgstr "Establece el color de fondo del texto en el componente de terminal"
+msgstr "Establece el color de fondo del texto en la terminal"
 
 #: data/geany.glade:6077
 msgid ""
@@ -1584,7 +1587,7 @@ msgid ""
 "widget"
 msgstr ""
 "Indica el número de líneas de historial que pueden volver a usarse en la "
-"terminal."
+"terminal"
 
 #: data/geany.glade:6097
 msgid ""
@@ -1666,7 +1669,7 @@ msgid ""
 msgstr ""
 "Ejecutar programas en la VTE en lugar de abrir una ventana de emulación de "
 "terminal. Fíjese en que los programas ejecutados en la VTE no pueden ser "
-"detenidos."
+"detenidos"
 
 #: data/geany.glade:6251
 msgid "Don't use run script"
@@ -1678,7 +1681,7 @@ msgid ""
 "status of the executed program"
 msgstr ""
 "No usar el script de ejecución simple que normalmente se usa para mostrar el "
-"estado de salida del programa ejecutado."
+"estado de salida del programa ejecutado"
 
 #: data/geany.glade:6280
 msgid "<b>Terminal</b>"
@@ -2175,13 +2178,12 @@ msgid "Symbols"
 msgstr "Símbolos"
 
 #: data/geany.glade:8417
-#, fuzzy
 msgid ""
 "Filter the document list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"Filtre la lista de símbolos mediante el texto introducido. Separe diferentes "
-"filtros con un espacio."
+"Filtre la lista de documentos mediante el texto introducido. Separe "
+"diferentes filtros con un espacio."
 
 #: data/geany.glade:8461
 msgid "Documents"
@@ -2228,12 +2230,11 @@ msgid "File _patterns:"
 msgstr "_Patrones de archivos:"
 
 #: data/geany.glade:8848
-#, fuzzy
 msgid ""
 "Space separated list of file patterns used for the Find in Files dialog "
 "(e.g. *.c *.h)"
 msgstr ""
-"Lista de patrones de archivos, separados por comas, usado para el diálogo "
+"Lista de patrones de archivos, separados por espacios, usado para el diálogo "
 "«Buscar en archivos» (p.ej: *.c *.h)"
 
 #: data/geany.glade:8882 src/project.c:232
@@ -2452,7 +2453,7 @@ msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"No se ha podido ejecutar el comando de construccion «%s»: %s. Verifique el "
+"No se ha podido ejecutar el comando de construcción «%s»: %s. Verifique el "
 "ajuste Terminal en «Preferencias»."
 
 #: src/build.c:1042
@@ -2464,9 +2465,9 @@ msgid "Compilation finished successfully."
 msgstr "La compilación ha terminado con éxito."
 
 #: src/build.c:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Enter custom text to append to the command \"%s\":"
-msgstr "Introduzca su texto personalizado, éste se añadirá al comando."
+msgstr "Introduzca su texto personalizado, éste se añadirá al comando «%s»:"
 
 #: src/build.c:1303
 msgid "_Next Error"
@@ -2822,14 +2823,14 @@ msgid "Could not open file %s (%s)"
 msgstr "No se ha podido abrir el archivo %s (%s)"
 
 #: src/document.c:1001
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\" as %s: %s."
-msgstr "No se ha podido abrir el URI «%s»: «%s»"
+msgstr "No se ha podido cargar el archivo «%s» como «%s»: %s."
 
 #: src/document.c:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\": %s."
-msgstr "No se ha podido abrir el URI «%s»: «%s»"
+msgstr "No se ha podido cargar el archivo «%s»: %s."
 
 #: src/document.c:1014
 #, c-format
@@ -3196,15 +3197,15 @@ msgstr "Oriente _medio"
 
 #: src/encodings.c:674
 msgid "Data contains NULs"
-msgstr ""
+msgstr "Los datos contienen valores NUL"
 
 #: src/encodings.c:816
 msgid "Data contains NULs or the encoding is not supported"
-msgstr ""
+msgstr "Los datos contienen valores NUL, o no se admite la codificación"
 
 #: src/encodings.c:937
 msgid "Data contains NULs or is not valid UTF-8"
-msgstr ""
+msgstr "Los datos contienen valores NUL, o no es UTF-8 válido"
 
 #: src/filetypes.c:1240
 msgid "All Source"
@@ -4091,9 +4092,8 @@ msgid "Plugins"
 msgstr "Complementos"
 
 #: src/plugins.c:1895
-#, fuzzy
 msgid "Choose which plugins to load:"
-msgstr "Seleccione los complementos que se activarán al inicio:"
+msgstr "Seleccione los complementos que se cargarán:"
 
 #: src/plugins.c:1989
 #, c-format
@@ -4109,9 +4109,8 @@ msgid "Configure Plugins"
 msgstr "Configurar complementos"
 
 #: src/prefs.c:184
-#, fuzzy
 msgid "Assign Keybinding"
-msgstr "Combinaciones"
+msgstr "Asignar combinación de teclas"
 
 #: src/prefs.c:191
 #, c-format
@@ -4186,7 +4185,7 @@ msgstr ""
 
 #: src/prefs.c:1892
 msgid "Not configurable on Windows (the system default browser is used)."
-msgstr ""
+msgstr "No se puede configurar en Windows (se utiliza el navegador predet.)."
 
 #: src/printing.c:162
 #, c-format
@@ -4591,9 +4590,8 @@ msgid "Are you sure to replace in the whole session?"
 msgstr "¿Está seguro de que desea reemplazar en toda la sesión?"
 
 #: src/search.c:1721
-#, fuzzy
 msgid "Invalid directory for Find in Files."
-msgstr "Directorio no válido para buscar archivos."
+msgstr "Directorio no válido para «Buscar en archivos»."
 
 #: src/search.c:1726
 msgid "No text to find."
@@ -4755,9 +4753,9 @@ msgid "_Group by Type"
 msgstr "A_grupar por tipo"
 
 #: src/templates.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8: %s"
-msgstr "Error al convertir en archivo de plantilla «%s» a UTF-8"
+msgstr "No se ha podido convertir la plantilla «%s» a UTF-8: %s"
 
 #: src/templates.c:654
 #, c-format
@@ -5140,14 +5138,12 @@ msgid "Custom Date Format"
 msgstr "Formato de fecha personalizado"
 
 #: src/ui_utils.c:715
-#, fuzzy
 msgid ""
 "Custom date format (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"Introduzca aquí un formato de fecha y hora personalizado. Consulte https://"
-"docs.gtk.org/glib/method.DateTime.format.html para obtener una lista de "
-"indicadores de conversión disponibles."
+"Formato de fecha personalizado (vea https://docs.gtk.org/glib/"
+"method.DateTime.format.html):"
 
 #: src/ui_utils.c:735
 msgid "Date format string could not be converted (possibly too long)."
@@ -5227,17 +5223,17 @@ msgstr "LF"
 #: src/utils.c:2542
 #, c-format
 msgid "Unknown placeholder \"%%%c\" in \"%s\""
-msgstr ""
+msgstr "Marcador de posición desconocido «%%%c» en «%s»"
 
 #: src/utils.c:2583
-#, fuzzy, c-format
+#, c-format
 msgid "failed to substitute %%%c: document has no path"
-msgstr "no se ha podido sustituir %%p, no hay proyecto activo"
+msgstr "no se ha podido sustituir %%%c: el documento no tiene trayecto"
 
 #: src/utils.c:2593
 #, c-format
 msgid "no project active, %%p is substituted as %%d"
-msgstr ""
+msgstr "no hay proyecto activo, %%p se sustituye con %%d"
 
 #: src/vte.c:570
 #, c-format
@@ -5556,14 +5552,12 @@ msgid "Type constructors"
 msgstr "Constructores de tipos"
 
 #: src/tagmanager/tm_parser.c:605
-#, fuzzy
 msgid "Title"
-msgstr "sin título"
+msgstr "Título"
 
 #: src/tagmanager/tm_parser.c:606
-#, fuzzy
 msgid "Subtitle"
-msgstr "sin título"
+msgstr "Subtítulo"
 
 #: src/tagmanager/tm_parser.c:627
 msgid "Anchors"
@@ -5618,9 +5612,8 @@ msgid "Level 5 sections"
 msgstr "Secciones de 5º nivel"
 
 #: src/tagmanager/tm_parser.c:790
-#, fuzzy
 msgid "Instances"
-msgstr "Herencia"
+msgstr "Instancias"
 
 #: src/tagmanager/tm_parser.c:792
 msgid "Functions / Tasks"
@@ -5628,25 +5621,23 @@ msgstr "Funciones/tareas"
 
 #: src/tagmanager/tm_parser.c:794
 msgid "Parameters / Constants"
-msgstr ""
+msgstr "Parámetros/Constantes"
 
 #: src/tagmanager/tm_parser.c:795
-#, fuzzy
 msgid "Ports"
-msgstr "Imports"
+msgstr "Puertos"
 
 #: src/tagmanager/tm_parser.c:796
 msgid "Signals"
-msgstr ""
+msgstr "Señales"
 
 #: src/tagmanager/tm_parser.c:802
 msgid "Structs / Unions / Enums"
-msgstr ""
+msgstr "Estructuras/Uniones/Enumeraciones"
 
 #: src/tagmanager/tm_parser.c:803
-#, fuzzy
 msgid "Typedefs"
-msgstr "Tipos"
+msgstr "Definiciones de tipo"
 
 #: src/tagmanager/tm_parser.c:858
 msgid "Program"
@@ -5733,18 +5724,16 @@ msgid "Regions"
 msgstr "Regiones"
 
 #: src/tagmanager/tm_parser.c:1171
-#, fuzzy
 msgid "Packages / Modules"
-msgstr "Paquetes"
+msgstr "Paquetes/Módulos"
 
 #: src/tagmanager/tm_parser.c:1172
-#, fuzzy
 msgid "Classes / Roles"
-msgstr "Clases"
+msgstr "Clases/Roles"
 
 #: src/tagmanager/tm_parser.c:1173
 msgid "Grammars"
-msgstr ""
+msgstr "Gramáticas"
 
 #: src/tagmanager/tm_parser.c:1175
 msgid "Subroutines"
@@ -5752,70 +5741,63 @@ msgstr "Subrutinas"
 
 #: src/tagmanager/tm_parser.c:1176
 msgid "Rules / Tokens"
-msgstr ""
+msgstr "Reglas/Tokens"
 
 #: src/tagmanager/tm_parser.c:1217
-#, fuzzy
 msgid "Words"
-msgstr "Palabras:"
+msgstr "Palabras"
 
 #: src/tagmanager/tm_parser.c:1234
-#, fuzzy
 msgid "Projects"
-msgstr "Proyecto"
+msgstr "Proyectos"
 
 #: src/tagmanager/tm_parser.c:1237
 msgid "Subdirs"
-msgstr ""
+msgstr "Subdirectorios"
 
 #: src/tagmanager/tm_parser.c:1238
-#, fuzzy
 msgid "Build Targets"
-msgstr "Objetivos"
+msgstr "Objetivos de construcción"
 
 #: src/tagmanager/tm_parser.c:1239
-#, fuzzy
 msgid "Custom Targets"
-msgstr "Texto personalizado"
+msgstr "Objetivos personalizados"
 
 #: src/tagmanager/tm_parser.c:1240
 msgid "Benchmark Targets"
-msgstr ""
+msgstr "Objetivo de referencia"
 
 #: src/tagmanager/tm_parser.c:1241
-#, fuzzy
 msgid "Run Targets"
-msgstr "Objetivos"
+msgstr "Ejecutar objetivos"
 
 #: src/tagmanager/tm_parser.c:1242
 msgid "Tests"
-msgstr ""
+msgstr "Pruebas"
 
 #: src/tagmanager/tm_parser.c:1255
 msgid "Mixins"
-msgstr ""
+msgstr "Mezclas"
 
 #: src/tagmanager/tm_parser.c:1259
 msgid "Placeholders"
-msgstr ""
+msgstr "Marcadores de posición"
 
 #: src/tagmanager/tm_parser.c:1272
-#, fuzzy
 msgid "Resources"
-msgstr "Fuente base:"
+msgstr "Recursos"
 
 #: src/tagmanager/tm_parser.c:1275
-#, fuzzy
 msgid "Variable"
-msgstr "Variables"
+msgstr "Variable"
 
 #: src/tagmanager/tm_parser.c:1276
 msgid "Providers"
-msgstr ""
+msgstr "Proveedores"
 
 #: src/tagmanager/tm_parser.c:1277
 msgid "Outputs"
-msgstr ""
+msgstr "Salidas"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -6216,39 +6198,38 @@ msgstr ""
 "No se ha podido generar un nombre de archivo para guardado instantáneo (%s)."
 
 #: plugins/saveactions.c:439 plugins/saveactions.c:1225
-#, fuzzy
 msgid ""
 "Persistent untitled document directory does not exist or is not writable."
-msgstr "El directorio instantsave no existe o no se puede escribir en él."
+msgstr ""
+"El directorio de documentos sin título no existe o no se puede escribir en "
+"él."
 
 #: plugins/saveactions.c:507
-#, fuzzy
 msgid "_Don't save (discard)"
-msgstr "_No guardar"
+msgstr "No guar_dar (descartar)"
 
 #: plugins/saveactions.c:529
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document %s is not saved."
-msgstr "El archivo «%s» todavía no se ha guardado."
+msgstr "El archivo sin título «%s» no se ha guardado."
 
 #: plugins/saveactions.c:530
-#, fuzzy
 msgid "Do you want to save it?"
-msgstr "¿Quiere recargarlo?"
+msgstr "¿Lo quiere guardar?"
 
 #: plugins/saveactions.c:559 plugins/saveactions.c:605
 #, c-format
 msgid "Untitled document file %s was deleted"
-msgstr ""
+msgstr "Se ha borrado el archivo «%s»"
 
 #: plugins/saveactions.c:622
 msgid "Persistent untitled document directory not found"
-msgstr ""
+msgstr "No se ha encontrado el directorio de archivos sin titulo persistente"
 
 #: plugins/saveactions.c:817
 #, c-format
 msgid "Empty untitled document file %s was deleted"
-msgstr ""
+msgstr "Se a borrado el archivo sin título vacío «%s»"
 
 #: plugins/saveactions.c:875
 #, c-format
@@ -6312,13 +6293,11 @@ msgid "_Directory to save backup files in:"
 msgstr "_Directorio para guardar las copias de seguridad"
 
 #: plugins/saveactions.c:1442
-#, fuzzy
 msgid ""
 "Date/_Time format for backup files (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"Formato _Fecha/Hora para archivos de respaldo. (Consulte la lista de "
-"indicadores disponibles en https://docs.gtk.org/glib/"
+"Formato _Fecha/Hora para archivos de respaldo (vea https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 
 #: plugins/saveactions.c:1455
@@ -6326,14 +6305,12 @@ msgid "Directory _levels to include in the backup destination:"
 msgstr "_Niveles de directorio a incluir en la copia de seguridad de destino:"
 
 #: plugins/saveactions.c:1482
-#, fuzzy
 msgid "Untitled Document Save"
-msgstr "Encontrar uso en el documento"
+msgstr "Guardado de documento sin títulos"
 
 #: plugins/saveactions.c:1495
-#, fuzzy
 msgid "Instant Save After Creation"
-msgstr "Guardado instantáneo"
+msgstr "Guardado instantáneo después de creación"
 
 #: plugins/saveactions.c:1505
 #, c-format
@@ -6344,32 +6321,27 @@ msgstr ""
 
 #: plugins/saveactions.c:1531
 msgid "<i>The plugin will not delete the files created in this directory.</i>"
-msgstr ""
+msgstr "<i>El plugin no borrará los archivos creados en este directorio.</i>"
 
 #: plugins/saveactions.c:1541
-#, fuzzy
 msgid "Persistent Untitled Documents"
-msgstr "Imprimir documento"
+msgstr "Documentos sin título persistentes"
 
 #: plugins/saveactions.c:1550
-#, fuzzy
 msgid "_Directory to save persistent untitled documents in:"
-msgstr "_Directorio para guardar las copias de seguridad"
+msgstr "_Directorio para guardar archivos sin título persistentes:"
 
 #: plugins/saveactions.c:1575
-#, fuzzy
 msgid "Untitled document save _interval:"
-msgstr "_Intervalo de autoguardado:"
+msgstr "_Intervalo de guardado de documentos sin título:"
 
 #: plugins/saveactions.c:1587
-#, fuzzy
 msgid "milliseconds"
-msgstr "segundos"
+msgstr "milisegundos"
 
 #: plugins/saveactions.c:1597
-#, fuzzy
 msgid "Default _filetype to use for untitled documents:"
-msgstr "Tipo de _archivo para archivos nuevos:"
+msgstr "Tipo de _archivo predet. para archivos nuevos:"
 
 #: plugins/splitwindow.c:33
 msgid "Split Window"
