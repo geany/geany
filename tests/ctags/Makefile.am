@@ -366,6 +366,7 @@ test_sources = \
 	vhdl-process.vhd				\
 	vhdl-type.vhd					\
 	whitespaces.php					\
+	wp-guest.php					\
 	$(NULL)
 test_results = $(test_sources:=.tags)
 

@@ -1144,7 +1144,7 @@ extern char *readLineFromBypass (
 	return result;
 }
 
-extern void   pushNarrowedInputStream (
+extern bool   pushNarrowedInputStream (
 				       bool useMemoryStreamInput,
 				       unsigned long startLine, long startCharOffset,
 				       unsigned long endLine, long endCharOffset,
@@ -1165,7 +1165,7 @@ extern void   pushNarrowedInputStream (
 		{
 			File.thinDepth++;
 			verbose ("push thin stream (%d)\n", File.thinDepth);
-			return;
+			return true;
 		}
 		error(WARNING, "INTERNAL ERROR: though pushing thin MEMORY stream, "
 			  "underlying input stream is a FILE stream: %s@%s",
@@ -1177,12 +1177,15 @@ extern void   pushNarrowedInputStream (
 	original = getInputFilePosition ();
 
 	tmp = getInputFilePositionForLine (startLine);
-	mio_setpos (File.mio, &tmp);
-	mio_seek (File.mio, startCharOffset, SEEK_CUR);
+	if (mio_setpos (File.mio, &tmp) != 0)
+		goto fail;
+	if (mio_seek (File.mio, startCharOffset, SEEK_CUR) != 0)
+		goto fail;
 	p = mio_tell (File.mio);
 
 	tmp = getInputFilePositionForLine (endLine);
-	mio_setpos (File.mio, &tmp);
+	if (mio_setpos (File.mio, &tmp) != 0)
+		goto fail;
 	if (endCharOffset == EOL_CHAR_OFFSET)
 	{
 		long line_start = mio_tell (File.mio);
@@ -1193,10 +1196,20 @@ extern void   pushNarrowedInputStream (
 		Assert (endCharOffset >= 0);
 	}
 	else
-		mio_seek (File.mio, endCharOffset, SEEK_CUR);
+	{
+		if (mio_seek (File.mio, endCharOffset, SEEK_CUR) != 0)
+			goto fail;
+	}
 	q = mio_tell (File.mio);
 
+	if (q < p || p == -1 || q == -1)
+		goto fail;
+
 	mio_setpos (File.mio, &original);
+
+	/* nothing to do */
+	if (q == p)
+		return false;
 
 	invalidatePatternCache();
 
@@ -1222,6 +1235,15 @@ extern void   pushNarrowedInputStream (
 
 	File.input.lineNumberOrigin = ((startLine == 0)? 0: startLine - 1);
 	File.source.lineNumberOrigin = ((sourceLineOffset == 0)? 0: sourceLineOffset - 1);
+
+	return true;
+
+fail:
+	error (WARNING, "Failed to push narrowed input stream: IO error or invalid offsets: "
+	       "start(line: %lu, offset: %ld, srcline: %lu), end(line: %lu, offset: %ld)",
+	       startLine, startCharOffset, sourceLineOffset, endLine, endCharOffset);
+	mio_setpos (File.mio, &original);
+	return false;
 }
 
 extern bool doesParserRunAsGuest (void)
