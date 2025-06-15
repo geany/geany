@@ -515,8 +515,8 @@ static TMParserMapEntry map_JAVASCRIPT[] = {
 static TMParserMapGroup group_JAVASCRIPT[] = {
 	{N_("Classes"), TM_ICON_CLASS, tm_tag_class_t},
 	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
-	{N_("Members"), TM_ICON_MEMBER, tm_tag_member_t},
-	{N_("Macros"), TM_ICON_MACRO, tm_tag_macro_t},
+	{N_("Properties"), TM_ICON_MEMBER, tm_tag_member_t},
+	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
 	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
 };
 
