@@ -25,7 +25,7 @@ VERSION="2.0"
 with open(join(SOURCE_DIR, 'configure.ac'), 'r') as f:
     ver = next((l.split(',')[1].strip(' []') for l in f if l.startswith('AC_INIT')), None)
     if ver is None:
-        print(f"!! FAILED TO GET VERSION FROM {line}")
+        print(f"!! FAILED TO GET VERSION FROM {f.name}")
     else:
         VERSION=ver
         print(f"GOT VERSION {VERSION} FROM {f.name}")
