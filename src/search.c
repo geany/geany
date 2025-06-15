@@ -500,6 +500,8 @@ static void create_find_dialog(void)
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
 	find_dlg.entry = gtk_bin_get_child(GTK_BIN(entry));
+	gtk_style_context_add_class(gtk_widget_get_style_context(find_dlg.entry),
+		GTK_STYLE_CLASS_MONOSPACE);
 
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
 			G_CALLBACK(on_find_entry_activate), entry);
@@ -674,6 +676,8 @@ static void create_replace_dialog(void)
 
 	replace_dlg.find_combobox = gtk_combo_box_text_new_with_entry();
 	replace_dlg.find_entry = gtk_bin_get_child(GTK_BIN(replace_dlg.find_combobox));
+	gtk_style_context_add_class(gtk_widget_get_style_context(replace_dlg.find_entry),
+		GTK_STYLE_CLASS_MONOSPACE);
 	ui_entry_add_clear_icon(GTK_ENTRY(replace_dlg.find_entry));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label_find), replace_dlg.find_combobox);
 	gtk_entry_set_width_chars(GTK_ENTRY(replace_dlg.find_entry), 50);
@@ -681,6 +685,8 @@ static void create_replace_dialog(void)
 
 	replace_dlg.replace_combobox = gtk_combo_box_text_new_with_entry();
 	replace_dlg.replace_entry = gtk_bin_get_child(GTK_BIN(replace_dlg.replace_combobox));
+	gtk_style_context_add_class(gtk_widget_get_style_context(replace_dlg.replace_entry),
+		GTK_STYLE_CLASS_MONOSPACE);
 	ui_entry_add_clear_icon(GTK_ENTRY(replace_dlg.replace_entry));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label_replace), replace_dlg.replace_combobox);
 	gtk_entry_set_width_chars(GTK_ENTRY(replace_dlg.replace_entry), 50);
@@ -916,6 +922,8 @@ static void create_fif_dialog(void)
 
 	combo = gtk_combo_box_text_new_with_entry();
 	entry = gtk_bin_get_child(GTK_BIN(combo));
+	gtk_style_context_add_class(gtk_widget_get_style_context(entry),
+		GTK_STYLE_CLASS_MONOSPACE);
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
@@ -940,6 +948,8 @@ static void create_fif_dialog(void)
 
 	fcombo = gtk_combo_box_text_new_with_entry();
 	entry = gtk_bin_get_child(GTK_BIN(fcombo));
+	gtk_style_context_add_class(gtk_widget_get_style_context(entry),
+		GTK_STYLE_CLASS_MONOSPACE);
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
 	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 	gtk_widget_set_tooltip_text(entry,
@@ -1039,6 +1049,8 @@ static void create_fif_dialog(void)
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_extra), FALSE);
 
 	entry_extra = gtk_entry_new();
+	gtk_style_context_add_class(gtk_widget_get_style_context(entry_extra),
+		GTK_STYLE_CLASS_MONOSPACE);
 	ui_entry_add_clear_icon(GTK_ENTRY(entry_extra));
 	gtk_entry_set_activates_default(GTK_ENTRY(entry_extra), TRUE);
 	gtk_widget_set_sensitive(entry_extra, FALSE);
