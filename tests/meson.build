@@ -134,6 +134,8 @@ ctags_tests = [
 	'ctags/cobol/levels.cbl.tags',
 	'ctags/cobol/quoted-program-id.cbl.tags',
 	'ctags/cobol/simple.cbl.tags',
+	'ctags/combined.html.tags',
+	'ctags/combined.php.tags',
 	'ctags/common.f.tags',
 	'ctags/complex-return.js.tags',
 	'ctags/continuation.f90.tags',

@@ -134,6 +134,8 @@ test_sources = \
 	cobol/levels.cbl				\
 	cobol/quoted-program-id.cbl		\
 	cobol/simple.cbl				\
+	combined.html					\
+	combined.php					\
 	common.f						\
 	complex-return.js				\
 	continuation.f90				\

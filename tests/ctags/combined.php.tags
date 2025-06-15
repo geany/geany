@@ -1,0 +1,8 @@
+Home pageÌ512Ö0
+package:    Home page
+documentÌ16384Ö0
+variable:   document
+onloadÌ16Í()ÎdocumentÖ0
+function:   document :: onload()
+paginateÌ16Í()Ö0
+function:   paginate()
