@@ -186,6 +186,29 @@ static TMParserMapGroup group_PHP[] = {
 	{N_("Constants"), TM_ICON_MACRO, tm_tag_macro_t},
 	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t | tm_tag_local_var_t},
 	{N_("Traits"), TM_ICON_STRUCT, tm_tag_struct_t},
+	/* Embedded JavaScript */
+	{N_("Properties"), TM_ICON_MEMBER, tm_tag_field_t},
+	/* Embedded HTML */
+	{N_("Anchors"), TM_ICON_NONE, tm_tag_typedef_t},
+	{N_("H1 Headings"), TM_ICON_NONE, tm_tag_package_t},
+	{N_("H2 Headings"), TM_ICON_NONE, tm_tag_prototype_t},
+	{N_("H3 Headings"), TM_ICON_NONE, tm_tag_union_t},
+};
+
+static TMSubparserMapEntry subparser_PHP_javascript_map[] = {
+	{tm_tag_class_t, tm_tag_class_t},       // class
+	{tm_tag_function_t, tm_tag_function_t}, // function / generator
+	{tm_tag_macro_t, tm_tag_macro_t},       // constant
+	{tm_tag_member_t, tm_tag_field_t},      // property
+	{tm_tag_method_t, tm_tag_function_t},   // method
+	{tm_tag_variable_t, tm_tag_variable_t}, // variable
+};
+
+static TMSubparserMapEntry subparser_PHP_html_map[] = {
+	{tm_tag_member_t, tm_tag_typedef_t},    // anchors
+	{tm_tag_namespace_t, tm_tag_package_t}, // h1
+	{tm_tag_class_t, tm_tag_prototype_t},   // h2
+	{tm_tag_variable_t, tm_tag_union_t},    // h3
 };
 
 static TMParserMapEntry map_PYTHON[] = {
@@ -1491,6 +1514,8 @@ static void init_subparser_map(void)
 {
 	SUBPARSER_MAP_ENTRY(HTML, JAVASCRIPT, subparser_HTML_javascript_map);
 	SUBPARSER_MAP_ENTRY(HTML, PHP, subparser_HTML_php_map);
+	SUBPARSER_MAP_ENTRY(PHP, HTML, subparser_PHP_html_map);
+	SUBPARSER_MAP_ENTRY(PHP, JAVASCRIPT, subparser_PHP_javascript_map);
 	SUBPARSER_MAP_ENTRY(TCLOO, TCL, subparser_TCLOO_TCL_map);
 }
 
