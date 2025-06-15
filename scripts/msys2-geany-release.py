@@ -5,7 +5,6 @@ import os
 import shutil
 from os.path import exists, isfile, join
 from subprocess import check_call
-import re
 
 """
 This script prepares a Geany release on Windows.
