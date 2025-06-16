@@ -14,12 +14,16 @@ The following steps will be executed:
 """
 
 if 'GITHUB_WORKSPACE' in os.environ:
-    SOURCE_DIR = os.environ['GITHUB_WORKSPACE']
+    if os.environ['GITHUB_REPOSITORY'].endswith("/geany"):
+        SOURCE_DIR = os.environ['GITHUB_WORKSPACE']
+    else:
+        print(f"GITHUB_REPOSITORY={os.environ['GITHUB_REPOSITORY']}")
+        SOURCE_DIR = join(os.environ['GITHUB_WORKSPACE'], ".geany_source")
     BASE_DIR = join(SOURCE_DIR, 'geany_build')
 else:
     # adjust paths to your needs ($HOME is used because expanduser() returns the Windows home directory)
-    BASE_DIR = join(os.environ['HOME'], 'geany_build')
     SOURCE_DIR = join(os.environ['HOME'], 'git', 'geany')
+    BASE_DIR = join(os.environ['HOME'], 'geany_build')
 VERSION="2.0"
 with open(join(SOURCE_DIR, 'configure.ac'), 'r') as f:
     ver = next((l.split(',')[1].strip(' []') for l in f if l.startswith('AC_INIT')), None)
