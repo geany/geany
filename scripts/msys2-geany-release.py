@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import glob
 import os
 import shutil
@@ -7,7 +8,7 @@ from os.path import exists, isfile, join
 from subprocess import check_call
 
 """
-This script prepares a Geany release on Windows.
+This script prepares a Geany release installer on Windows.
 The following steps will be executed:
 - strip binary files (geany.exe, plugin .dlls)
 - create installer
@@ -24,21 +25,12 @@ else:
     # adjust paths to your needs ($HOME is used because expanduser() returns the Windows home directory)
     SOURCE_DIR = join(os.environ['HOME'], 'git', 'geany')
     BASE_DIR = join(os.environ['HOME'], 'geany_build')
-VERSION="2.0"
-with open(join(SOURCE_DIR, 'configure.ac'), 'r') as f:
-    ver = next((l.split(',')[1].strip(' []') for l in f if l.startswith('AC_INIT')), None)
-    if ver is None:
-        print(f"!! FAILED TO GET VERSION FROM {f.name}")
-    else:
-        VERSION=ver
-        print(f"GOT VERSION {VERSION} FROM {f.name}")
 BUILD_DIR = join(SOURCE_DIR, '_build')
 GEANY_THEMES_DIR = join(SOURCE_DIR, 'data')
 RELEASE_DIR_ORIG = join(BASE_DIR, 'release', 'geany-orig')
 RELEASE_DIR = join(BASE_DIR, 'release', 'geany')
 BUNDLE_BASE_DIR = join(BASE_DIR, 'bundle')
 BUNDLE_GTK = join(BASE_DIR, 'bundle', 'geany-gtk')
-INSTALLER_NAME = join(BASE_DIR, f'geany-{VERSION}_setup.exe')
 
 
 def run_command(*cmd, **kwargs):
@@ -68,7 +60,7 @@ def strip_files(*paths):
             run_command('strip', filename)
 
 
-def make_release():
+def make_release(version_number):
     # copy the release dir as it gets modified implicitly by converting files,
     # we want to keep a pristine version before we start
     prepare_release_dir()
@@ -87,6 +79,7 @@ def make_release():
     convert_text_files(*text_files)
     # create installer
     shutil.copy(join(BUILD_DIR, 'geany.nsi'), SOURCE_DIR)
+    INSTALLER_NAME = join(BASE_DIR, f'geany-{version_number}_setup.exe')
     run_command(
         'makensis',
         '/WX',
@@ -99,4 +92,7 @@ def make_release():
 
 
 if __name__ == '__main__':
-    make_release()
+    parser = argparse.ArgumentParser(description="This script prepares a Geany release installer on Windows")
+    parser.add_argument("version_number", help="Version Number (e.g. 2.1)")
+    opts = parser.parse_args()
+    make_release(opts.version_number)

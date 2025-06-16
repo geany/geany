@@ -45,7 +45,8 @@ jobs:
           rsync -a --delete ${DESTINATON}/build/geany/ ${DESTINATON}/release/geany-orig
       - name: Compile NSIS
         run: |
-          python scripts/msys2-geany-release.py
+          VERSION=$(autom4te --no-cache --language=Autoconf-without-aclocal-m4 --trace AC_INIT:\$2 configure.ac)
+          python scripts/msys2-geany-release.py ${VERSION}
       - name: Upload Unsigned Artifact
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v4
