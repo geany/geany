@@ -472,7 +472,22 @@ static const HLKeyword highlighting_keywords_CSS[] =
 
 /* Cobol */
 #define highlighting_lexer_COBOL		SCLEX_COBOL
-#define highlighting_styles_COBOL		highlighting_styles_C
+static const HLStyle highlighting_styles_COBOL[] =
+{
+	{ SCE_COBOL_DEFAULT,		"default",			FALSE },
+	{ SCE_COBOL_COMMENT,		"comment",			FALSE },
+	{ SCE_COBOL_COMMENTLINE,	"commentline",		FALSE },
+	{ SCE_COBOL_COMMENTDOC,		"commentdoc",		FALSE },
+	{ SCE_COBOL_NUMBER,			"number",			FALSE },
+	{ SCE_COBOL_WORD,			"word",				FALSE },
+	{ SCE_COBOL_WORD2,			"word2",			FALSE },
+	{ SCE_COBOL_STRING,			"string",			FALSE },
+	{ SCE_COBOL_CHARACTER,		"character",		FALSE },
+	{ SCE_COBOL_WORD3,			"word3",			FALSE },
+	{ SCE_COBOL_PREPROCESSOR,	"preprocessor",		FALSE },
+	{ SCE_COBOL_OPERATOR,		"operator",			FALSE },
+	{ SCE_COBOL_IDENTIFIER,		"identifier",		FALSE }
+};
 static const HLKeyword highlighting_keywords_COBOL[] =
 {
 	{ 0, "primary",				FALSE },
