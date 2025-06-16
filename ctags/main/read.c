@@ -1239,9 +1239,9 @@ extern bool   pushNarrowedInputStream (
 	return true;
 
 fail:
-	error (WARNING, "Failed to push narrowed input stream: IO error or invalid offsets: "
+	error (WARNING, "Failed to push narrowed input stream when parsing %s: IO error or invalid offsets: "
 	       "start(line: %lu, offset: %ld, srcline: %lu), end(line: %lu, offset: %ld)",
-	       startLine, startCharOffset, sourceLineOffset, endLine, endCharOffset);
+	       getInputFileName (), startLine, startCharOffset, sourceLineOffset, endLine, endCharOffset);
 	mio_setpos (File.mio, &original);
 	return false;
 }
