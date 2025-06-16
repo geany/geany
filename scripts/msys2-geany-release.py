@@ -19,7 +19,7 @@ if 'GITHUB_WORKSPACE' in os.environ:
     else:
         print(f"GITHUB_REPOSITORY={os.environ['GITHUB_REPOSITORY']}")
         SOURCE_DIR = join(os.environ['GITHUB_WORKSPACE'], ".geany_source")
-    BASE_DIR = join(SOURCE_DIR, 'geany_build')
+    BASE_DIR = join(os.environ['GITHUB_WORKSPACE'], 'geany_build')
 else:
     # adjust paths to your needs ($HOME is used because expanduser() returns the Windows home directory)
     SOURCE_DIR = join(os.environ['HOME'], 'git', 'geany')
