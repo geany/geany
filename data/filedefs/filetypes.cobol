@@ -8,11 +8,12 @@ commentdoc=comment_doc
 number=number_1
 word=keyword_1
 word2=keyword_2
+word3=keyword_3
 string=string_1
 character=character
 operator=operator
 identifier=identifier_1
-quotedidentifier=identifier_2
+preprocessor=preprocessor
 
 [keywords]
 # all items must be in one line
