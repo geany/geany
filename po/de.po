@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
-"POT-Creation-Date: 2025-06-09 22:11+0200\n"
+"POT-Creation-Date: 2025-06-19 22:29+0200\n"
 "PO-Revision-Date: 2023-08-08 23:24+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -1303,7 +1303,7 @@ msgstr ""
 "deaktiviert die Funktion."
 
 #: data/geany.glade:4845 data/geany.glade:9579 src/prefs.c:1707
-#: src/tagmanager/tm_parser.c:462 plugins/filebrowser.c:1163
+#: src/tagmanager/tm_parser.c:485 plugins/filebrowser.c:1163
 msgid "Files"
 msgstr "Dateien"
 
@@ -1475,6 +1475,17 @@ msgid ""
 "<tt>%d</tt> if there are no project open.\n"
 "• <tt>%%</tt>: a literal <tt>%</tt> character."
 msgstr ""
+"Befehl zu Drucken von Dateien.\n"
+"\n"
+"Unterstütze Platzhalter sind:\n"
+"• <tt>%d</tt>: Das Verzeichnis der Datei.\n"
+"• <tt>%e</tt>: Der Dateiname ohne Extension/Endung.\n"
+"• <tt>%f</tt>: Der Dateiname ohne Pfad.\n"
+"• <tt>%l</tt>: Die aktuelle Zeilennummer in einer Datei – beginnt bei "
+"1.\n"
+"• <tt>%p</tt>: Das Verzeichnis des aktuellen Projektes, oder dessen "
+"Äquivalent (<tt>%d</tt>) wenn kein Projekt geöffnet ist.\n"
+"• <tt>%%</tt>: Ein <tt>%</tt>-Zeichen."
 
 #: data/geany.glade:5714
 msgid "Use an external command for printing"
@@ -2172,7 +2183,7 @@ msgstr ""
 "Filtern der Symbol-Liste mit dem eingegebenen Text. Verschiedene Filter "
 "können mit einem Leerzeichen getrennt werden."
 
-#: data/geany.glade:8403 src/sidebar.c:115 src/tagmanager/tm_parser.c:1426
+#: data/geany.glade:8403 src/sidebar.c:115 src/tagmanager/tm_parser.c:1473
 msgid "Symbols"
 msgstr "Symbole"
 
@@ -2509,11 +2520,11 @@ msgstr "Keine weiteren Fehlermeldungen."
 msgid "Set menu item label"
 msgstr "Bezeichnung für den Menüeintrag definieren"
 
-#: src/build.c:1784 src/tools.c:394 src/tagmanager/tm_parser.c:238
+#: src/build.c:1784 src/tools.c:394 src/tagmanager/tm_parser.c:261
 msgid "Label"
 msgstr "Label"
 
-#: src/build.c:1785 src/tools.c:379 src/tagmanager/tm_parser.c:230
+#: src/build.c:1785 src/tools.c:379 src/tagmanager/tm_parser.c:253
 msgid "Command"
 msgstr "Kommando"
 
@@ -2659,9 +2670,9 @@ msgstr "Aus Datei lesen"
 
 #: src/dialogs.c:254 src/filetypes.c:477 src/tagmanager/tm_parser.c:97
 #: src/tagmanager/tm_parser.c:129 src/tagmanager/tm_parser.c:167
-#: src/tagmanager/tm_parser.c:267 src/tagmanager/tm_parser.c:721
-#: src/tagmanager/tm_parser.c:844 src/tagmanager/tm_parser.c:1096
-#: src/tagmanager/tm_parser.c:1133
+#: src/tagmanager/tm_parser.c:290 src/tagmanager/tm_parser.c:768
+#: src/tagmanager/tm_parser.c:891 src/tagmanager/tm_parser.c:1143
+#: src/tagmanager/tm_parser.c:1180
 msgid "Other"
 msgstr "Sonstiges"
 
@@ -3248,7 +3259,7 @@ msgstr ""
 msgid "Color Schemes"
 msgstr "Farbschemata"
 
-#: src/keybindings.c:310 src/tagmanager/tm_parser.c:859
+#: src/keybindings.c:310 src/tagmanager/tm_parser.c:906
 msgid "File"
 msgstr "Datei"
 
@@ -3284,7 +3295,7 @@ msgstr "Gehe zu"
 msgid "View"
 msgstr "Ansicht"
 
-#: src/keybindings.c:320 src/tagmanager/tm_parser.c:896
+#: src/keybindings.c:320 src/tagmanager/tm_parser.c:943
 msgid "Document"
 msgstr "Dokument"
 
@@ -3329,7 +3340,9 @@ msgstr "Speichern unter"
 msgid "Save all"
 msgstr "Alle speichern"
 
-#: src/keybindings.c:349 src/tagmanager/tm_parser.c:718
+#: src/keybindings.c:349 src/tagmanager/tm_parser.c:190
+#: src/tagmanager/tm_parser.c:541 src/tagmanager/tm_parser.c:661
+#: src/tagmanager/tm_parser.c:765
 msgid "Properties"
 msgstr "Eigenschaften"
 
@@ -4194,7 +4207,7 @@ msgstr ""
 
 #: src/prefs.c:1892
 msgid "Not configurable on Windows (the system default browser is used)."
-msgstr ""
+msgstr "Nicht konfigurierbar unter Windows (der hinterlegte System-Browser wird genutzt)."
 
 #: src/printing.c:162
 #, c-format
@@ -5231,17 +5244,17 @@ msgstr "LF"
 #: src/utils.c:2542
 #, c-format
 msgid "Unknown placeholder \"%%%c\" in \"%s\""
-msgstr ""
+msgstr "Unbekannter Platzhalter »%%%c« in »%s«."
 
 #: src/utils.c:2583
-#, fuzzy, c-format
+#, c-format
 msgid "failed to substitute %%%c: document has no path"
-msgstr "konnte %%p nicht ersetzen. Kein Projekt aktiv."
+msgstr "konnte »%%%c« nicht ersetzen: Das Dokument hat keinen Pfad."
 
 #: src/utils.c:2593
 #, c-format
 msgid "no project active, %%p is substituted as %%d"
-msgstr ""
+msgstr "Kein Projekt aktiv, %%p wurde als %%d ersetzt."
 
 #: src/vte.c:570
 #, c-format
@@ -5265,109 +5278,111 @@ msgstr ""
 "zu sein scheint. Es könnte helfen Strg+C oder Enter im Terminal zu drücken."
 
 #: src/tagmanager/tm_parser.c:87 src/tagmanager/tm_parser.c:182
-#: src/tagmanager/tm_parser.c:399 src/tagmanager/tm_parser.c:568
-#: src/tagmanager/tm_parser.c:1054 src/tagmanager/tm_parser.c:1089
+#: src/tagmanager/tm_parser.c:422 src/tagmanager/tm_parser.c:591
+#: src/tagmanager/tm_parser.c:654 src/tagmanager/tm_parser.c:1101
+#: src/tagmanager/tm_parser.c:1136
 msgid "Namespaces"
 msgstr "Namensräume"
 
 #: src/tagmanager/tm_parser.c:88 src/tagmanager/tm_parser.c:125
-#: src/tagmanager/tm_parser.c:184 src/tagmanager/tm_parser.c:205
-#: src/tagmanager/tm_parser.c:371 src/tagmanager/tm_parser.c:388
-#: src/tagmanager/tm_parser.c:400 src/tagmanager/tm_parser.c:445
-#: src/tagmanager/tm_parser.c:516 src/tagmanager/tm_parser.c:587
-#: src/tagmanager/tm_parser.c:676 src/tagmanager/tm_parser.c:716
-#: src/tagmanager/tm_parser.c:798 src/tagmanager/tm_parser.c:995
-#: src/tagmanager/tm_parser.c:1043 src/tagmanager/tm_parser.c:1090
-#: src/tagmanager/tm_parser.c:1193 src/tagmanager/tm_parser.c:1258
+#: src/tagmanager/tm_parser.c:184 src/tagmanager/tm_parser.c:228
+#: src/tagmanager/tm_parser.c:394 src/tagmanager/tm_parser.c:411
+#: src/tagmanager/tm_parser.c:423 src/tagmanager/tm_parser.c:468
+#: src/tagmanager/tm_parser.c:539 src/tagmanager/tm_parser.c:610
+#: src/tagmanager/tm_parser.c:656 src/tagmanager/tm_parser.c:723
+#: src/tagmanager/tm_parser.c:763 src/tagmanager/tm_parser.c:845
+#: src/tagmanager/tm_parser.c:1042 src/tagmanager/tm_parser.c:1090
+#: src/tagmanager/tm_parser.c:1137 src/tagmanager/tm_parser.c:1240
+#: src/tagmanager/tm_parser.c:1305
 msgid "Classes"
 msgstr "Klassen"
 
 #: src/tagmanager/tm_parser.c:89 src/tagmanager/tm_parser.c:124
-#: src/tagmanager/tm_parser.c:183 src/tagmanager/tm_parser.c:446
-#: src/tagmanager/tm_parser.c:586 src/tagmanager/tm_parser.c:661
-#: src/tagmanager/tm_parser.c:715 src/tagmanager/tm_parser.c:799
-#: src/tagmanager/tm_parser.c:962 src/tagmanager/tm_parser.c:1091
+#: src/tagmanager/tm_parser.c:183 src/tagmanager/tm_parser.c:469
+#: src/tagmanager/tm_parser.c:609 src/tagmanager/tm_parser.c:655
+#: src/tagmanager/tm_parser.c:708 src/tagmanager/tm_parser.c:762
+#: src/tagmanager/tm_parser.c:846 src/tagmanager/tm_parser.c:1009
+#: src/tagmanager/tm_parser.c:1138
 msgid "Interfaces"
 msgstr "Interfaces"
 
 #: src/tagmanager/tm_parser.c:90 src/tagmanager/tm_parser.c:148
 #: src/tagmanager/tm_parser.c:164 src/tagmanager/tm_parser.c:185
-#: src/tagmanager/tm_parser.c:207 src/tagmanager/tm_parser.c:322
-#: src/tagmanager/tm_parser.c:357 src/tagmanager/tm_parser.c:425
-#: src/tagmanager/tm_parser.c:447 src/tagmanager/tm_parser.c:500
-#: src/tagmanager/tm_parser.c:517 src/tagmanager/tm_parser.c:534
-#: src/tagmanager/tm_parser.c:569 src/tagmanager/tm_parser.c:626
-#: src/tagmanager/tm_parser.c:677 src/tagmanager/tm_parser.c:717
-#: src/tagmanager/tm_parser.c:737 src/tagmanager/tm_parser.c:843
-#: src/tagmanager/tm_parser.c:936 src/tagmanager/tm_parser.c:961
-#: src/tagmanager/tm_parser.c:996 src/tagmanager/tm_parser.c:1016
-#: src/tagmanager/tm_parser.c:1055 src/tagmanager/tm_parser.c:1066
-#: src/tagmanager/tm_parser.c:1092 src/tagmanager/tm_parser.c:1129
-#: src/tagmanager/tm_parser.c:1153 src/tagmanager/tm_parser.c:1195
-#: src/tagmanager/tm_parser.c:1256
+#: src/tagmanager/tm_parser.c:230 src/tagmanager/tm_parser.c:345
+#: src/tagmanager/tm_parser.c:380 src/tagmanager/tm_parser.c:448
+#: src/tagmanager/tm_parser.c:470 src/tagmanager/tm_parser.c:523
+#: src/tagmanager/tm_parser.c:540 src/tagmanager/tm_parser.c:557
+#: src/tagmanager/tm_parser.c:592 src/tagmanager/tm_parser.c:657
+#: src/tagmanager/tm_parser.c:724 src/tagmanager/tm_parser.c:764
+#: src/tagmanager/tm_parser.c:784 src/tagmanager/tm_parser.c:890
+#: src/tagmanager/tm_parser.c:983 src/tagmanager/tm_parser.c:1008
+#: src/tagmanager/tm_parser.c:1043 src/tagmanager/tm_parser.c:1063
+#: src/tagmanager/tm_parser.c:1102 src/tagmanager/tm_parser.c:1113
+#: src/tagmanager/tm_parser.c:1139 src/tagmanager/tm_parser.c:1176
+#: src/tagmanager/tm_parser.c:1200 src/tagmanager/tm_parser.c:1242
+#: src/tagmanager/tm_parser.c:1303
 msgid "Functions"
 msgstr "Funktionen"
 
 #: src/tagmanager/tm_parser.c:91 src/tagmanager/tm_parser.c:127
-#: src/tagmanager/tm_parser.c:448 src/tagmanager/tm_parser.c:518
-#: src/tagmanager/tm_parser.c:801 src/tagmanager/tm_parser.c:967
-#: src/tagmanager/tm_parser.c:979
+#: src/tagmanager/tm_parser.c:471 src/tagmanager/tm_parser.c:848
+#: src/tagmanager/tm_parser.c:1014 src/tagmanager/tm_parser.c:1026
 msgid "Members"
 msgstr "Instanzvariablen"
 
-#: src/tagmanager/tm_parser.c:92 src/tagmanager/tm_parser.c:358
-#: src/tagmanager/tm_parser.c:449 src/tagmanager/tm_parser.c:963
+#: src/tagmanager/tm_parser.c:92 src/tagmanager/tm_parser.c:381
+#: src/tagmanager/tm_parser.c:472 src/tagmanager/tm_parser.c:1010
 msgid "Structs"
 msgstr "Strukturen"
 
-#: src/tagmanager/tm_parser.c:93 src/tagmanager/tm_parser.c:359
-#: src/tagmanager/tm_parser.c:450 src/tagmanager/tm_parser.c:937
+#: src/tagmanager/tm_parser.c:93 src/tagmanager/tm_parser.c:382
+#: src/tagmanager/tm_parser.c:473 src/tagmanager/tm_parser.c:984
 msgid "Typedefs / Enums"
 msgstr "Typendefinition und Enumerates"
 
 #: src/tagmanager/tm_parser.c:94 src/tagmanager/tm_parser.c:140
-#: src/tagmanager/tm_parser.c:279 src/tagmanager/tm_parser.c:360
-#: src/tagmanager/tm_parser.c:519 src/tagmanager/tm_parser.c:793
-#: src/tagmanager/tm_parser.c:939 src/tagmanager/tm_parser.c:1018
-#: src/tagmanager/tm_parser.c:1067
+#: src/tagmanager/tm_parser.c:302 src/tagmanager/tm_parser.c:383
+#: src/tagmanager/tm_parser.c:840 src/tagmanager/tm_parser.c:986
+#: src/tagmanager/tm_parser.c:1065 src/tagmanager/tm_parser.c:1114
 msgid "Macros"
 msgstr "Makros"
 
 #: src/tagmanager/tm_parser.c:95 src/tagmanager/tm_parser.c:187
-#: src/tagmanager/tm_parser.c:208 src/tagmanager/tm_parser.c:328
-#: src/tagmanager/tm_parser.c:451 src/tagmanager/tm_parser.c:520
-#: src/tagmanager/tm_parser.c:570 src/tagmanager/tm_parser.c:590
-#: src/tagmanager/tm_parser.c:663 src/tagmanager/tm_parser.c:719
-#: src/tagmanager/tm_parser.c:738 src/tagmanager/tm_parser.c:938
-#: src/tagmanager/tm_parser.c:966 src/tagmanager/tm_parser.c:998
-#: src/tagmanager/tm_parser.c:1045 src/tagmanager/tm_parser.c:1068
-#: src/tagmanager/tm_parser.c:1094 src/tagmanager/tm_parser.c:1131
-#: src/tagmanager/tm_parser.c:1142 src/tagmanager/tm_parser.c:1155
-#: src/tagmanager/tm_parser.c:1196 src/tagmanager/tm_parser.c:1218
-#: src/tagmanager/tm_parser.c:1236 src/tagmanager/tm_parser.c:1257
+#: src/tagmanager/tm_parser.c:231 src/tagmanager/tm_parser.c:351
+#: src/tagmanager/tm_parser.c:474 src/tagmanager/tm_parser.c:543
+#: src/tagmanager/tm_parser.c:593 src/tagmanager/tm_parser.c:613
+#: src/tagmanager/tm_parser.c:659 src/tagmanager/tm_parser.c:710
+#: src/tagmanager/tm_parser.c:766 src/tagmanager/tm_parser.c:785
+#: src/tagmanager/tm_parser.c:985 src/tagmanager/tm_parser.c:1013
+#: src/tagmanager/tm_parser.c:1045 src/tagmanager/tm_parser.c:1092
+#: src/tagmanager/tm_parser.c:1115 src/tagmanager/tm_parser.c:1141
+#: src/tagmanager/tm_parser.c:1178 src/tagmanager/tm_parser.c:1189
+#: src/tagmanager/tm_parser.c:1202 src/tagmanager/tm_parser.c:1243
+#: src/tagmanager/tm_parser.c:1265 src/tagmanager/tm_parser.c:1283
+#: src/tagmanager/tm_parser.c:1304
 msgid "Variables"
 msgstr "Variablen"
 
-#: src/tagmanager/tm_parser.c:96 src/tagmanager/tm_parser.c:452
+#: src/tagmanager/tm_parser.c:96 src/tagmanager/tm_parser.c:475
 msgid "Extern Variables"
 msgstr "Externe Variablen"
 
 #: src/tagmanager/tm_parser.c:123 src/tagmanager/tm_parser.c:163
-#: src/tagmanager/tm_parser.c:486 src/tagmanager/tm_parser.c:714
-#: src/tagmanager/tm_parser.c:800 src/tagmanager/tm_parser.c:960
+#: src/tagmanager/tm_parser.c:509 src/tagmanager/tm_parser.c:761
+#: src/tagmanager/tm_parser.c:847 src/tagmanager/tm_parser.c:1007
 msgid "Package"
 msgstr "Package"
 
-#: src/tagmanager/tm_parser.c:126 src/tagmanager/tm_parser.c:206
-#: src/tagmanager/tm_parser.c:390 src/tagmanager/tm_parser.c:401
-#: src/tagmanager/tm_parser.c:588 src/tagmanager/tm_parser.c:940
-#: src/tagmanager/tm_parser.c:1044 src/tagmanager/tm_parser.c:1174
+#: src/tagmanager/tm_parser.c:126 src/tagmanager/tm_parser.c:229
+#: src/tagmanager/tm_parser.c:413 src/tagmanager/tm_parser.c:424
+#: src/tagmanager/tm_parser.c:611 src/tagmanager/tm_parser.c:987
+#: src/tagmanager/tm_parser.c:1091 src/tagmanager/tm_parser.c:1221
 msgid "Methods"
 msgstr "Methoden"
 
-#: src/tagmanager/tm_parser.c:128 src/tagmanager/tm_parser.c:667
-#: src/tagmanager/tm_parser.c:997 src/tagmanager/tm_parser.c:1046
-#: src/tagmanager/tm_parser.c:1093
+#: src/tagmanager/tm_parser.c:128 src/tagmanager/tm_parser.c:714
+#: src/tagmanager/tm_parser.c:1044 src/tagmanager/tm_parser.c:1093
+#: src/tagmanager/tm_parser.c:1140
 msgid "Enums"
 msgstr "Enums"
 
@@ -5375,445 +5390,439 @@ msgstr "Enums"
 msgid "Targets"
 msgstr "Targets"
 
-#: src/tagmanager/tm_parser.c:165 src/tagmanager/tm_parser.c:278
-#: src/tagmanager/tm_parser.c:573 src/tagmanager/tm_parser.c:1141
+#: src/tagmanager/tm_parser.c:165 src/tagmanager/tm_parser.c:301
+#: src/tagmanager/tm_parser.c:596 src/tagmanager/tm_parser.c:1188
 msgid "Labels"
 msgstr "Label"
 
 #: src/tagmanager/tm_parser.c:166 src/tagmanager/tm_parser.c:186
-#: src/tagmanager/tm_parser.c:571 src/tagmanager/tm_parser.c:720
-#: src/tagmanager/tm_parser.c:965 src/tagmanager/tm_parser.c:1014
-#: src/tagmanager/tm_parser.c:1069 src/tagmanager/tm_parser.c:1095
-#: src/tagmanager/tm_parser.c:1132 src/tagmanager/tm_parser.c:1219
+#: src/tagmanager/tm_parser.c:542 src/tagmanager/tm_parser.c:594
+#: src/tagmanager/tm_parser.c:658 src/tagmanager/tm_parser.c:767
+#: src/tagmanager/tm_parser.c:1012 src/tagmanager/tm_parser.c:1061
+#: src/tagmanager/tm_parser.c:1116 src/tagmanager/tm_parser.c:1142
+#: src/tagmanager/tm_parser.c:1179 src/tagmanager/tm_parser.c:1266
 msgid "Constants"
 msgstr "Konstanten"
 
-#: src/tagmanager/tm_parser.c:188 src/tagmanager/tm_parser.c:934
+#: src/tagmanager/tm_parser.c:188 src/tagmanager/tm_parser.c:660
+#: src/tagmanager/tm_parser.c:981
 msgid "Traits"
 msgstr "Charakteristika"
 
-#: src/tagmanager/tm_parser.c:209 src/tagmanager/tm_parser.c:713
-msgid "Imports"
-msgstr "Importe"
-
-#: src/tagmanager/tm_parser.c:231
-msgid "Environment"
-msgstr "Umgebung"
-
-#: src/tagmanager/tm_parser.c:232
-msgid "Part"
-msgstr "Teil"
-
-#: src/tagmanager/tm_parser.c:233 src/tagmanager/tm_parser.c:340
-#: src/tagmanager/tm_parser.c:607
-msgid "Chapter"
-msgstr "Kapitel"
-
-#: src/tagmanager/tm_parser.c:234 src/tagmanager/tm_parser.c:341
-#: src/tagmanager/tm_parser.c:608
-msgid "Section"
-msgstr "Abschnitt"
-
-#: src/tagmanager/tm_parser.c:235 src/tagmanager/tm_parser.c:609
-msgid "Subsection"
-msgstr "Unterabschnitt"
-
-#: src/tagmanager/tm_parser.c:236 src/tagmanager/tm_parser.c:610
-msgid "Subsubsection"
-msgstr "Unterunterabschnitt"
-
-#: src/tagmanager/tm_parser.c:237
-msgid "Bibitem"
-msgstr "Bibitem"
-
-#: src/tagmanager/tm_parser.c:260
-msgid "Articles"
-msgstr "Artikel"
-
-#: src/tagmanager/tm_parser.c:261
-msgid "Book Chapters"
-msgstr "Kapitel"
-
-#: src/tagmanager/tm_parser.c:262
-msgid "Books & Conference Proceedings"
-msgstr "Bücher & Tagungsberichte"
-
-#: src/tagmanager/tm_parser.c:263
-msgid "Conference Papers"
-msgstr "Konferenzbänder"
-
-#: src/tagmanager/tm_parser.c:264
-msgid "Theses"
-msgstr "Thesis"
-
-#: src/tagmanager/tm_parser.c:265
-msgid "Strings"
-msgstr "Strings"
-
-#: src/tagmanager/tm_parser.c:266
-msgid "Unpublished"
-msgstr "Unveröffentlicht"
-
-#: src/tagmanager/tm_parser.c:280
-msgid "Defines"
-msgstr "Definitionen"
-
-#: src/tagmanager/tm_parser.c:281 src/tagmanager/tm_parser.c:489
-#: src/tagmanager/tm_parser.c:532 src/tagmanager/tm_parser.c:572
-#: src/tagmanager/tm_parser.c:589 src/tagmanager/tm_parser.c:664
-#: src/tagmanager/tm_parser.c:964 src/tagmanager/tm_parser.c:1020
-#: src/tagmanager/tm_parser.c:1128 src/tagmanager/tm_parser.c:1194
-msgid "Types"
-msgstr "Typen"
-
-#: src/tagmanager/tm_parser.c:289 src/tagmanager/tm_parser.c:736
-#: src/tagmanager/tm_parser.c:753 src/tagmanager/tm_parser.c:861
-msgid "Sections"
-msgstr "Abschnitte"
-
-#: src/tagmanager/tm_parser.c:290
-msgid "Keys"
-msgstr "Indizes"
-
-#: src/tagmanager/tm_parser.c:323 src/tagmanager/tm_parser.c:402
-msgid "Procedures"
-msgstr "Prozeduren"
-
-#: src/tagmanager/tm_parser.c:324
-msgid "Indexes"
-msgstr "Indizies"
-
-#: src/tagmanager/tm_parser.c:325
-msgid "Tables"
-msgstr "Tabellen"
-
-#: src/tagmanager/tm_parser.c:326
-msgid "Triggers"
-msgstr "Trigger"
-
-#: src/tagmanager/tm_parser.c:327
-msgid "Views"
-msgstr "Ansichten"
-
-#: src/tagmanager/tm_parser.c:342
-msgid "Sect1"
-msgstr "Sect1"
-
-#: src/tagmanager/tm_parser.c:343
-msgid "Sect2"
-msgstr "Sect2"
-
-#: src/tagmanager/tm_parser.c:344
-msgid "Sect3"
-msgstr "Sect3"
-
-#: src/tagmanager/tm_parser.c:345
-msgid "Appendix"
-msgstr "Anhang"
-
-#: src/tagmanager/tm_parser.c:361 src/tagmanager/tm_parser.c:444
-#: src/tagmanager/tm_parser.c:531 src/tagmanager/tm_parser.c:659
-msgid "Module"
-msgstr "Modul"
-
-#: src/tagmanager/tm_parser.c:372 src/tagmanager/tm_parser.c:1260
-msgid "ID Selectors"
-msgstr "ID"
-
-#: src/tagmanager/tm_parser.c:373
-msgid "Type Selectors"
-msgstr "Typ"
-
-#: src/tagmanager/tm_parser.c:387 src/tagmanager/tm_parser.c:789
-#: src/tagmanager/tm_parser.c:932 src/tagmanager/tm_parser.c:1015
-#: src/tagmanager/tm_parser.c:1192 src/tagmanager/tm_parser.c:1235
-#: src/tagmanager/tm_parser.c:1274
-msgid "Modules"
-msgstr "Module"
-
-#: src/tagmanager/tm_parser.c:389
-msgid "Singletons"
-msgstr "Singletons"
-
-#: src/tagmanager/tm_parser.c:487
-msgid "Entities"
-msgstr "Entitäten"
-
-#: src/tagmanager/tm_parser.c:488
-msgid "Architectures"
-msgstr "Architekturen"
-
-#: src/tagmanager/tm_parser.c:490
-msgid "Functions / Procedures"
-msgstr "Funktionen/Prozeduren"
-
-#: src/tagmanager/tm_parser.c:491
-msgid "Variables / Signals / Ports"
-msgstr "Variablen / Signale / Ports"
-
-#: src/tagmanager/tm_parser.c:492
-msgid "Processes / Blocks / Components"
-msgstr "Prozesse / Blöcke / Komponenten"
-
-#: src/tagmanager/tm_parser.c:533
-msgid "Type constructors"
-msgstr "Typkonstruktoren"
-
-#: src/tagmanager/tm_parser.c:605
-msgid "Title"
-msgstr "Titel"
-
-#: src/tagmanager/tm_parser.c:606
-msgid "Subtitle"
-msgstr "Untertitel"
-
-#: src/tagmanager/tm_parser.c:627
+#: src/tagmanager/tm_parser.c:192 src/tagmanager/tm_parser.c:649
 msgid "Anchors"
 msgstr "Anker"
 
-#: src/tagmanager/tm_parser.c:628
+#: src/tagmanager/tm_parser.c:193 src/tagmanager/tm_parser.c:650
 msgid "H1 Headings"
 msgstr "Überschrift (H1)"
 
-#: src/tagmanager/tm_parser.c:629
+#: src/tagmanager/tm_parser.c:194 src/tagmanager/tm_parser.c:651
 msgid "H2 Headings"
 msgstr "Überschrift (H2)"
 
-#: src/tagmanager/tm_parser.c:630
+#: src/tagmanager/tm_parser.c:195 src/tagmanager/tm_parser.c:652
 msgid "H3 Headings"
 msgstr "Überschrift (H3)"
 
-#: src/tagmanager/tm_parser.c:660
+#: src/tagmanager/tm_parser.c:232 src/tagmanager/tm_parser.c:760
+msgid "Imports"
+msgstr "Importe"
+
+#: src/tagmanager/tm_parser.c:254
+msgid "Environment"
+msgstr "Umgebung"
+
+#: src/tagmanager/tm_parser.c:255
+msgid "Part"
+msgstr "Teil"
+
+#: src/tagmanager/tm_parser.c:256 src/tagmanager/tm_parser.c:363
+#: src/tagmanager/tm_parser.c:630
+msgid "Chapter"
+msgstr "Kapitel"
+
+#: src/tagmanager/tm_parser.c:257 src/tagmanager/tm_parser.c:364
+#: src/tagmanager/tm_parser.c:631
+msgid "Section"
+msgstr "Abschnitt"
+
+#: src/tagmanager/tm_parser.c:258 src/tagmanager/tm_parser.c:632
+msgid "Subsection"
+msgstr "Unterabschnitt"
+
+#: src/tagmanager/tm_parser.c:259 src/tagmanager/tm_parser.c:633
+msgid "Subsubsection"
+msgstr "Unterunterabschnitt"
+
+#: src/tagmanager/tm_parser.c:260
+msgid "Bibitem"
+msgstr "Bibitem"
+
+#: src/tagmanager/tm_parser.c:283
+msgid "Articles"
+msgstr "Artikel"
+
+#: src/tagmanager/tm_parser.c:284
+msgid "Book Chapters"
+msgstr "Kapitel"
+
+#: src/tagmanager/tm_parser.c:285
+msgid "Books & Conference Proceedings"
+msgstr "Bücher & Tagungsberichte"
+
+#: src/tagmanager/tm_parser.c:286
+msgid "Conference Papers"
+msgstr "Konferenzbänder"
+
+#: src/tagmanager/tm_parser.c:287
+msgid "Theses"
+msgstr "Thesis"
+
+#: src/tagmanager/tm_parser.c:288
+msgid "Strings"
+msgstr "Strings"
+
+#: src/tagmanager/tm_parser.c:289
+msgid "Unpublished"
+msgstr "Unveröffentlicht"
+
+#: src/tagmanager/tm_parser.c:303
+msgid "Defines"
+msgstr "Definitionen"
+
+#: src/tagmanager/tm_parser.c:304 src/tagmanager/tm_parser.c:512
+#: src/tagmanager/tm_parser.c:555 src/tagmanager/tm_parser.c:595
+#: src/tagmanager/tm_parser.c:612 src/tagmanager/tm_parser.c:711
+#: src/tagmanager/tm_parser.c:1011 src/tagmanager/tm_parser.c:1067
+#: src/tagmanager/tm_parser.c:1175 src/tagmanager/tm_parser.c:1241
+msgid "Types"
+msgstr "Typen"
+
+#: src/tagmanager/tm_parser.c:312 src/tagmanager/tm_parser.c:783
+#: src/tagmanager/tm_parser.c:800 src/tagmanager/tm_parser.c:908
+msgid "Sections"
+msgstr "Abschnitte"
+
+#: src/tagmanager/tm_parser.c:313
+msgid "Keys"
+msgstr "Indizes"
+
+#: src/tagmanager/tm_parser.c:346 src/tagmanager/tm_parser.c:425
+msgid "Procedures"
+msgstr "Prozeduren"
+
+#: src/tagmanager/tm_parser.c:347
+msgid "Indexes"
+msgstr "Indizies"
+
+#: src/tagmanager/tm_parser.c:348
+msgid "Tables"
+msgstr "Tabellen"
+
+#: src/tagmanager/tm_parser.c:349
+msgid "Triggers"
+msgstr "Trigger"
+
+#: src/tagmanager/tm_parser.c:350
+msgid "Views"
+msgstr "Ansichten"
+
+#: src/tagmanager/tm_parser.c:365
+msgid "Sect1"
+msgstr "Sect1"
+
+#: src/tagmanager/tm_parser.c:366
+msgid "Sect2"
+msgstr "Sect2"
+
+#: src/tagmanager/tm_parser.c:367
+msgid "Sect3"
+msgstr "Sect3"
+
+#: src/tagmanager/tm_parser.c:368
+msgid "Appendix"
+msgstr "Anhang"
+
+#: src/tagmanager/tm_parser.c:384 src/tagmanager/tm_parser.c:467
+#: src/tagmanager/tm_parser.c:554 src/tagmanager/tm_parser.c:706
+msgid "Module"
+msgstr "Modul"
+
+#: src/tagmanager/tm_parser.c:395 src/tagmanager/tm_parser.c:1307
+msgid "ID Selectors"
+msgstr "ID"
+
+#: src/tagmanager/tm_parser.c:396
+msgid "Type Selectors"
+msgstr "Typ"
+
+#: src/tagmanager/tm_parser.c:410 src/tagmanager/tm_parser.c:836
+#: src/tagmanager/tm_parser.c:979 src/tagmanager/tm_parser.c:1062
+#: src/tagmanager/tm_parser.c:1239 src/tagmanager/tm_parser.c:1282
+#: src/tagmanager/tm_parser.c:1321
+msgid "Modules"
+msgstr "Module"
+
+#: src/tagmanager/tm_parser.c:412
+msgid "Singletons"
+msgstr "Singletons"
+
+#: src/tagmanager/tm_parser.c:510
+msgid "Entities"
+msgstr "Entitäten"
+
+#: src/tagmanager/tm_parser.c:511
+msgid "Architectures"
+msgstr "Architekturen"
+
+#: src/tagmanager/tm_parser.c:513
+msgid "Functions / Procedures"
+msgstr "Funktionen/Prozeduren"
+
+#: src/tagmanager/tm_parser.c:514
+msgid "Variables / Signals / Ports"
+msgstr "Variablen / Signale / Ports"
+
+#: src/tagmanager/tm_parser.c:515
+msgid "Processes / Blocks / Components"
+msgstr "Prozesse / Blöcke / Komponenten"
+
+#: src/tagmanager/tm_parser.c:556
+msgid "Type constructors"
+msgstr "Typkonstruktoren"
+
+#: src/tagmanager/tm_parser.c:628
+msgid "Title"
+msgstr "Titel"
+
+#: src/tagmanager/tm_parser.c:629
+msgid "Subtitle"
+msgstr "Untertitel"
+
+#: src/tagmanager/tm_parser.c:707
 msgid "Programs"
 msgstr "Programme"
 
-#: src/tagmanager/tm_parser.c:662
+#: src/tagmanager/tm_parser.c:709
 msgid "Functions / Subroutines"
 msgstr "Funktionen/Prozeduren"
 
-#: src/tagmanager/tm_parser.c:665
+#: src/tagmanager/tm_parser.c:712
 msgid "Components"
 msgstr "Komponenten"
 
-#: src/tagmanager/tm_parser.c:666 src/tagmanager/tm_parser.c:791
+#: src/tagmanager/tm_parser.c:713 src/tagmanager/tm_parser.c:838
 msgid "Blocks"
 msgstr "Blöcke"
 
-#: src/tagmanager/tm_parser.c:752
+#: src/tagmanager/tm_parser.c:799
 msgid "Chapters"
 msgstr "Kapitel"
 
-#: src/tagmanager/tm_parser.c:754
+#: src/tagmanager/tm_parser.c:801
 msgid "Subsections"
 msgstr "Unterabschnitt"
 
-#: src/tagmanager/tm_parser.c:755
+#: src/tagmanager/tm_parser.c:802
 msgid "Subsubsections"
 msgstr "Unter-Unterabschnitt"
 
-#: src/tagmanager/tm_parser.c:756
+#: src/tagmanager/tm_parser.c:803
 msgid "Level 4 sections"
 msgstr "Stufe 4-Abschnitt"
 
-#: src/tagmanager/tm_parser.c:757
+#: src/tagmanager/tm_parser.c:804
 msgid "Level 5 sections"
 msgstr "Stufe 5-Abschnitt"
 
-#: src/tagmanager/tm_parser.c:790
+#: src/tagmanager/tm_parser.c:837
 msgid "Instances"
 msgstr "Instanzen"
 
-#: src/tagmanager/tm_parser.c:792
+#: src/tagmanager/tm_parser.c:839
 msgid "Functions / Tasks"
 msgstr "Funktionen"
 
-#: src/tagmanager/tm_parser.c:794
+#: src/tagmanager/tm_parser.c:841
 msgid "Parameters / Constants"
 msgstr "Parameter / Konstanten"
 
-#: src/tagmanager/tm_parser.c:795
-#, fuzzy
+#: src/tagmanager/tm_parser.c:842
 msgid "Ports"
-msgstr "Importe"
+msgstr "Ports"
 
-#: src/tagmanager/tm_parser.c:796
+#: src/tagmanager/tm_parser.c:843
 msgid "Signals"
 msgstr "Signale"
 
-#: src/tagmanager/tm_parser.c:802
+#: src/tagmanager/tm_parser.c:849
 msgid "Structs / Unions / Enums"
 msgstr "Structs / Unios / Enums"
 
-#: src/tagmanager/tm_parser.c:803
-#, fuzzy
+#: src/tagmanager/tm_parser.c:850
 msgid "Typedefs"
-msgstr "Typen"
+msgstr "Typedefs"
 
-#: src/tagmanager/tm_parser.c:858
+#: src/tagmanager/tm_parser.c:905
 msgid "Program"
 msgstr "Programm"
 
-#: src/tagmanager/tm_parser.c:860
+#: src/tagmanager/tm_parser.c:907
 msgid "Divisions"
 msgstr "Bereiche (Divisions)"
 
-#: src/tagmanager/tm_parser.c:862
+#: src/tagmanager/tm_parser.c:909
 msgid "Paragraph"
 msgstr "Absatz"
 
-#: src/tagmanager/tm_parser.c:863
+#: src/tagmanager/tm_parser.c:910
 msgid "Group"
 msgstr "Gruppe"
 
-#: src/tagmanager/tm_parser.c:864 src/tagmanager/tm_parser.c:1273
+#: src/tagmanager/tm_parser.c:911 src/tagmanager/tm_parser.c:1320
 msgid "Data"
 msgstr "Daten"
 
-#: src/tagmanager/tm_parser.c:865
+#: src/tagmanager/tm_parser.c:912
 msgid "Copies"
 msgstr "Kopien (Copies)"
 
-#: src/tagmanager/tm_parser.c:897
+#: src/tagmanager/tm_parser.c:944
 msgid "Section Level 1"
 msgstr "Überschrift Ebene 1"
 
-#: src/tagmanager/tm_parser.c:898
+#: src/tagmanager/tm_parser.c:945
 msgid "Section Level 2"
 msgstr "Überschrift Ebene 2"
 
-#: src/tagmanager/tm_parser.c:899
+#: src/tagmanager/tm_parser.c:946
 msgid "Section Level 3"
 msgstr "Überschrift Ebene 3"
 
-#: src/tagmanager/tm_parser.c:900
+#: src/tagmanager/tm_parser.c:947
 msgid "Section Level 4"
 msgstr "Überschrift Ebene 4"
 
-#: src/tagmanager/tm_parser.c:901
+#: src/tagmanager/tm_parser.c:948
 msgid "Section Level 5"
 msgstr "Überschrift Ebene 5"
 
-#: src/tagmanager/tm_parser.c:911
+#: src/tagmanager/tm_parser.c:958
 msgid "Parts"
 msgstr "Parts"
 
-#: src/tagmanager/tm_parser.c:912
+#: src/tagmanager/tm_parser.c:959
 msgid "Assembly"
 msgstr "Assembly"
 
-#: src/tagmanager/tm_parser.c:913
+#: src/tagmanager/tm_parser.c:960
 msgid "Steps"
 msgstr "Steps"
 
-#: src/tagmanager/tm_parser.c:933 src/tagmanager/tm_parser.c:1019
+#: src/tagmanager/tm_parser.c:980 src/tagmanager/tm_parser.c:1066
 msgid "Structures"
 msgstr "Strukturen"
 
-#: src/tagmanager/tm_parser.c:935
+#: src/tagmanager/tm_parser.c:982
 msgid "Implementations"
 msgstr "Implementierungen"
 
-#: src/tagmanager/tm_parser.c:1017
+#: src/tagmanager/tm_parser.c:1064
 msgid "Fields"
 msgstr "Felder"
 
-#: src/tagmanager/tm_parser.c:1021
+#: src/tagmanager/tm_parser.c:1068
 msgid "Unknowns"
 msgstr "Unbekannte"
 
-#: src/tagmanager/tm_parser.c:1127
+#: src/tagmanager/tm_parser.c:1174
 msgid "Packages"
 msgstr "Pakete"
 
-#: src/tagmanager/tm_parser.c:1130
+#: src/tagmanager/tm_parser.c:1177
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: src/tagmanager/tm_parser.c:1154
+#: src/tagmanager/tm_parser.c:1201
 msgid "Regions"
 msgstr "Regionen"
 
-#: src/tagmanager/tm_parser.c:1171
+#: src/tagmanager/tm_parser.c:1218
 msgid "Packages / Modules"
 msgstr "Pakete/Module"
 
-#: src/tagmanager/tm_parser.c:1172
+#: src/tagmanager/tm_parser.c:1219
 msgid "Classes / Roles"
 msgstr "Klassen/Rollen"
 
-#: src/tagmanager/tm_parser.c:1173
+#: src/tagmanager/tm_parser.c:1220
 msgid "Grammars"
 msgstr "Grammatiken"
 
-#: src/tagmanager/tm_parser.c:1175
+#: src/tagmanager/tm_parser.c:1222
 msgid "Subroutines"
 msgstr "Subroutinen"
 
-#: src/tagmanager/tm_parser.c:1176
+#: src/tagmanager/tm_parser.c:1223
 msgid "Rules / Tokens"
 msgstr "Rollen/Token"
 
-#: src/tagmanager/tm_parser.c:1217
-#, fuzzy
+#: src/tagmanager/tm_parser.c:1264
 msgid "Words"
-msgstr "Wörter:"
+msgstr "Wörter"
 
-#: src/tagmanager/tm_parser.c:1234
-#, fuzzy
+#: src/tagmanager/tm_parser.c:1281
 msgid "Projects"
-msgstr "Projekt"
+msgstr "Projekte"
 
-#: src/tagmanager/tm_parser.c:1237
+#: src/tagmanager/tm_parser.c:1284
 msgid "Subdirs"
 msgstr "Unterordner"
 
-#: src/tagmanager/tm_parser.c:1238
-#, fuzzy
+#: src/tagmanager/tm_parser.c:1285
 msgid "Build Targets"
-msgstr "Targets"
+msgstr "Build Targets"
 
-#: src/tagmanager/tm_parser.c:1239
-#, fuzzy
+#: src/tagmanager/tm_parser.c:1286
 msgid "Custom Targets"
-msgstr "Freitext"
+msgstr "Custom Targets"
 
-#: src/tagmanager/tm_parser.c:1240
+#: src/tagmanager/tm_parser.c:1287
 msgid "Benchmark Targets"
-msgstr ""
+msgstr "Benchmark Targets"
 
-#: src/tagmanager/tm_parser.c:1241
-#, fuzzy
+#: src/tagmanager/tm_parser.c:1288
 msgid "Run Targets"
-msgstr "Targets"
+msgstr "Run Targets"
 
-#: src/tagmanager/tm_parser.c:1242
+#: src/tagmanager/tm_parser.c:1289
 msgid "Tests"
 msgstr "Tests"
 
-#: src/tagmanager/tm_parser.c:1255
+#: src/tagmanager/tm_parser.c:1302
 msgid "Mixins"
 msgstr "Mixins"
 
-#: src/tagmanager/tm_parser.c:1259
+#: src/tagmanager/tm_parser.c:1306
 msgid "Placeholders"
 msgstr "Platzhalter"
 
-#: src/tagmanager/tm_parser.c:1272
-#, fuzzy
+#: src/tagmanager/tm_parser.c:1319
 msgid "Resources"
-msgstr "Quellen für Basis:"
+msgstr "Ressourcen"
 
-#: src/tagmanager/tm_parser.c:1275
+#: src/tagmanager/tm_parser.c:1322
 msgid "Variable"
 msgstr "Variablen"
 
-#: src/tagmanager/tm_parser.c:1276
+#: src/tagmanager/tm_parser.c:1323
 msgid "Providers"
-msgstr ""
+msgstr "Provider"
 
-#: src/tagmanager/tm_parser.c:1277
+#: src/tagmanager/tm_parser.c:1324
 msgid "Outputs"
-msgstr ""
+msgstr "Outputs"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -6212,39 +6221,36 @@ msgid "Instant Save filename could not be generated (%s)."
 msgstr "Instant Save-Dateiname konnte nicht generiert werden (%s)."
 
 #: plugins/saveactions.c:439 plugins/saveactions.c:1225
-#, fuzzy
 msgid ""
 "Persistent untitled document directory does not exist or is not writable."
-msgstr "Instant Save-Verzeichnis existiert nicht oder ist nicht beschreibbar."
+msgstr "Das Verzeichnis für persistente, nicht benannte Dokumente existiert nicht oder ist nicht beschreibbar.."
 
 #: plugins/saveactions.c:507
-#, fuzzy
 msgid "_Don't save (discard)"
-msgstr "_Nicht speichern"
+msgstr "_Nicht speichern (verwerfen)"
 
 #: plugins/saveactions.c:529
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document %s is not saved."
-msgstr "»%s« wurde nicht gespeichert."
+msgstr "Unbenanntes Dokument »%s« wurde nicht gespeichert."
 
 #: plugins/saveactions.c:530
-#, fuzzy
 msgid "Do you want to save it?"
-msgstr "Möchten Sie die Datei neu laden?"
+msgstr "Möchten Sie die Datei neu sichern?"
 
 #: plugins/saveactions.c:559 plugins/saveactions.c:605
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document file %s was deleted"
-msgstr "Drucken der Datei »%s« wurde abgebrochen."
+msgstr "Unbenanntes Dokument »%s« wurde gelöscht."
 
 #: plugins/saveactions.c:622
 msgid "Persistent untitled document directory not found"
-msgstr ""
+msgstr "Das Verzeichnis für persistente, nicht benannte Dokumente konnte nicht gefunden werden."
 
 #: plugins/saveactions.c:817
 #, c-format
 msgid "Empty untitled document file %s was deleted"
-msgstr ""
+msgstr "Leeres, umbenannten Dokument %s wurde gelöscht."
 
 #: plugins/saveactions.c:875
 #, c-format
@@ -6306,7 +6312,6 @@ msgid "_Directory to save backup files in:"
 msgstr "_Verzeichnis zum Speichern der Sicherheitskopien"
 
 #: plugins/saveactions.c:1442
-#, fuzzy
 msgid ""
 "Date/_Time format for backup files (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
@@ -6320,14 +6325,12 @@ msgid "Directory _levels to include in the backup destination:"
 msgstr "Verzeichnis_ebenen die im Zielpfad übernommen werden sollen:"
 
 #: plugins/saveactions.c:1482
-#, fuzzy
 msgid "Untitled Document Save"
-msgstr "Auftreten im Dokument finden"
+msgstr "Unbenanntes Dokument speichern"
 
 #: plugins/saveactions.c:1495
-#, fuzzy
 msgid "Instant Save After Creation"
-msgstr "Instant Save"
+msgstr "Sofortiges Sichern nach Anlage"
 
 #: plugins/saveactions.c:1505
 #, c-format
@@ -6338,32 +6341,28 @@ msgstr ""
 
 #: plugins/saveactions.c:1531
 msgid "<i>The plugin will not delete the files created in this directory.</i>"
-msgstr ""
+msgstr "<i>Das Plugin wird Dateien, die in dem Verzeichnis angelegt wurden, nicht löschen.</i>"
 
 #: plugins/saveactions.c:1541
-#, fuzzy
 msgid "Persistent Untitled Documents"
-msgstr "Dokument drucken"
+msgstr "Persistente, unbenannte Dokumente"
 
-#: plugins/saveactions.c:1550
-#, fuzzy
+#: plugins/saveactions.c:1549
 msgid "_Directory to save persistent untitled documents in:"
-msgstr "_Verzeichnis zum Speichern der Sicherheitskopien"
+msgstr "_Verzeichnis zum Speichern der persistente, unbenannte Dokumente:"
 
-#: plugins/saveactions.c:1575
-#, fuzzy
+#: plugins/saveactions.c:1574
+
 msgid "Untitled document save _interval:"
-msgstr "_Intervall für Autospeicherung:"
+msgstr "_Intervall für Speicherung von unbenannten Dokumenten:"
 
-#: plugins/saveactions.c:1587
-#, fuzzy
+#: plugins/saveactions.c:1586
 msgid "milliseconds"
-msgstr "Sekunden"
+msgstr "Millisekunden"
 
-#: plugins/saveactions.c:1597
-#, fuzzy
+#: plugins/saveactions.c:1596
 msgid "Default _filetype to use for untitled documents:"
-msgstr "_Dateityp der für neue Dateien angenommen wird:"
+msgstr "Standard _Dateityp der für neue, unbenannte Dateien:"
 
 #: plugins/splitwindow.c:33
 msgid "Split Window"
