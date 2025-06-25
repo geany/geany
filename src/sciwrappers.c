@@ -105,6 +105,10 @@ void sci_set_line_numbers(ScintillaObject *sci, gboolean set)
 		gint len = (gint) SSM(sci, SCI_GETLINECOUNT, 0, 0);
 		gint width;
 
+		if (len < 10)
+			/* assume at least 10 lines as minimum to reduce automatic scaling for small files */
+			len = 10;
+
 		g_snprintf(tmp_str, 15, "_%d", len);
 		width = sci_text_width(sci, STYLE_LINENUMBER, tmp_str);
 		SSM(sci, SCI_SETMARGINWIDTHN, 0, width);
