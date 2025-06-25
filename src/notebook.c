@@ -98,6 +98,9 @@ static void on_notebook_switch_page(GtkNotebook *notebook,
 {
 	GeanyDocument *new;
 
+	if (gtk_notebook_get_n_pages(notebook) == 1)
+		return;
+
 	new = document_get_from_page(page_num);
 
 	/* insert the very first document (when adding the second document

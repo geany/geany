@@ -296,7 +296,8 @@ gint document_get_notebook_page(GeanyDocument *doc)
 
 /*
  * Recursively searches a containers children until it finds a
- * Scintilla widget, or NULL if one was not found.
+ * Scintilla widget corresponding to an open document, or NULL if one was not
+ * found.
  */
 static ScintillaObject *locate_sci_in_container(GtkWidget *container)
 {
@@ -311,7 +312,9 @@ static ScintillaObject *locate_sci_in_container(GtkWidget *container)
 		if (IS_SCINTILLA(iter->data))
 		{
 			sci = SCINTILLA(iter->data);
-			break;
+			if (document_find_by_sci(sci))
+				break;
+			sci = NULL;
 		}
 		else if (GTK_IS_CONTAINER(iter->data))
 		{
