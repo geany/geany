@@ -2303,7 +2303,7 @@ static void assign_cmd(GeanyBuildCommand *type, guint id,
 }
 
 /* for the specified source load new format build menu items or try to make some sense of
- * old format setings, not done perfectly but better than ignoring them */
+ * old format settings, not done perfectly but better than ignoring them */
 void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 {
 	GeanyFiletype *ft;

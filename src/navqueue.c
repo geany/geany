@@ -205,7 +205,7 @@ void navqueue_go_back(void)
 		/* see also https://github.com/geany/geany/pull/1537 */
 		g_warning("Attempted navigation when nothing is open");
 
-	/* return if theres no place to go back to */
+	/* return if there's no place to go back to */
 	if (g_queue_is_empty(navigation_queue) ||
 		nav_queue_pos >= g_queue_get_length(navigation_queue) - 1)
 		return;

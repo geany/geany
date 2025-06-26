@@ -108,7 +108,7 @@ typedef struct GeanyDocumentPrivate
 	/* Whether it's temporarily protected (read-only and saving needs confirmation). Does
 	 * not imply doc->readonly as writable files can be protected */
 	gint			 protected;
-	/* Save pointer to info bars allowing to cancel them programatically (to avoid multiple ones) */
+	/* Save pointer to info bars allowing to cancel them programmatically (to avoid multiple ones) */
 	GtkWidget		*info_bars[NUM_MSG_TYPES];
 	/* Keyed Data List to attach arbitrary data to the document */
 	GData			*data;

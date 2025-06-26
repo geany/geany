@@ -594,7 +594,7 @@ static void set_character_classes(ScintillaObject *sci, guint ft_id)
 	SSM(sci, SCI_SETWORDCHARS, 0, (sptr_t) word);
 
 	/* setting wordchars resets character classes, so we have to set whitespaces after
-	 * wordchars, but we want wordchars to have precenence over whitepace chars */
+	 * wordchars, but we want wordchars to have precedence over whitepace chars */
 	whitespace = g_malloc0(strlen(whitespace_chars) + 1);
 	for (i = 0, j = 0; whitespace_chars[i] != 0; i++)
 	{

@@ -148,7 +148,7 @@ static gboolean demo_init(GeanyPlugin *plugin, gpointer data)
 	 * GEANY_PLUING_REGISTER_FULL() or geany_plugin_set_data() by default (unless the data pointer
 	 * was set to non-NULL at compile time).
 	 * This is really only done for demoing PluginCallback. Actual plugins will use real custom
-	 * data and perhaps embed the GeanyPlugin or GeanyData pointer their if they also use
+	 * data and perhaps embed the GeanyPlugin or GeanyData pointer there if they also use
 	 * PluginCallback. */
 	geany_plugin_set_data(plugin, plugin, NULL);
 	return TRUE;

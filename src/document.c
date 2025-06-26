@@ -1924,7 +1924,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 
 	if (file_prefs.use_safe_file_saving)
 	{
-		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons).
+		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissions).
 		 * This is the only option that handles disk space exhaustion. */
 		if (g_file_set_contents(locale_filename, data, len, &error))
 			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
@@ -2891,7 +2891,7 @@ void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 
 
 /* own Undo / Redo implementation to be able to undo / redo changes
- * to the encoding or the Unicode BOM (which are Scintilla independet).
+ * to the encoding or the Unicode BOM (which are Scintilla independent).
  * All Scintilla events are stored in the undo / redo buffer and are passed through. */
 
 /* Clears an Undo or Redo buffer. */

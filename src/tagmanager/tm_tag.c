@@ -136,7 +136,7 @@ static void tm_tag_destroy(TMTag *tag)
 void tm_tag_unref(TMTag *tag)
 {
 	/* be NULL-proof because tm_tag_free() was NULL-proof and we indent to be a
-	 * drop-in replacment of it */
+	 * drop-in replacement of it */
 	if (NULL != tag && g_atomic_int_dec_and_test(&tag->refcount))
 	{
 		tm_tag_destroy(tag);
@@ -288,7 +288,7 @@ void tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboole
 }
 
 /*
- Sort an array of tags on the specified attribuites using the inbuilt comparison
+ Sort an array of tags on the specified attributes using the inbuilt comparison
  function.
  @param tags_array The array of tags to be sorted
  @param sort_attributes Attributes to be sorted on (int array terminated by 0)
@@ -417,7 +417,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array,
 			cmpnum++;
 #endif
 			/* if the value in big_array after making the big step is still smaller
-			 * than the value in small_array, we can copy all the values inbetween
+			 * than the value in small_array, we can copy all the values in-between
 			 * into the result without making expensive string comparisons */
 			if (tm_tag_compare(&val1, &val2, sort_options) < 0)
 			{

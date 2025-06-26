@@ -231,7 +231,7 @@ typedef struct GeanyProxyFuncs GeanyProxyFuncs;
 typedef struct GeanyPlugin
 {
 	PluginInfo	*info;	/**< Fields set in plugin_set_info(). */
-	GeanyData	*geany_data;	/**< Pointer to global GeanyData intance */
+	GeanyData	*geany_data;	/**< Pointer to global GeanyData instance */
 	GeanyPluginFuncs *funcs;	/**< Functions implemented by the plugin, set in geany_load_module() */
 	GeanyProxyFuncs	*proxy_funcs; /**< Hooks implemented by the plugin if it wants to act as a proxy
 									   Must be set prior to calling geany_plugin_register_proxy() */

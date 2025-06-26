@@ -1046,7 +1046,7 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 	guint i;
 
 	if (depth == 10)
-		return NULL;  /* simple inheritence cycle avoidance */
+		return NULL;  /* simple inheritance cycle avoidance */
 
 	tags = g_ptr_array_new();
 

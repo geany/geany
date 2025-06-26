@@ -2334,7 +2334,7 @@ Geany 0.12 (October 10, 2007)
     * Added Class Builder plugin (thanks to Alexander Rodin).
     * Added Export plugin to export current file as HTML or LaTeX.
 
-    Keyboard shorcuts:
+    Keyboard shortcuts:
     * Common bash Ctrl-[a-z] keyboard shortcuts now work when the VTE is
       focused, and there is an 'enable_bash_keys' hidden preference.
     * Added 'Move document left' and 'Move document right' keybindings.
@@ -2473,7 +2473,7 @@ Geany 0.11 (May 21, 2007)
       in .gtkrc-2.0.
     * Add context actions to run custom commands on current selection
       or the current word below cursor.
-    * Add different auto indention modes.
+    * Add different auto indentation modes.
     * Improve replacing in rectangle selections.
     * Add custom commands to send selected text through some definable
       commands and replace the selection with the output.
@@ -2757,7 +2757,7 @@ Geany 0.5 (January 27, 2006)
           the current file (thanks to Nick Treleaven for this patch)
         * fixed some bugs when opening files with non UTF-8 filenames
         * updated included Scintilla to version 1.67
-        * improved auto indention, now "for (...) {" works, too
+        * improved auto indentation, now "for (...) {" works, too
         * added popup menu to sidebar lists, to quickly hide them
         * symbol list support for filetypes LaTeX and DocBook
         * added .cc, .hh and .hxx extension for filetype C++

@@ -187,7 +187,7 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 typedef struct PluginSourceData
 {
 	Plugin		*plugin;
-	GList		list_link;	/* element of plugin->sources cointaining this GSource */
+	GList		list_link;	/* element of plugin->sources containing this GSource */
 	GSourceFunc	function;
 	gpointer	user_data;
 } PluginSourceData;

@@ -214,7 +214,7 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
  *
  *  Unix:
  *     - the standard shell quoting and escaping rules are used, see @c g_shell_parse_argv()
- *     - as a consequence, an unqouted # at the start of an argument comments to the end of line
+ *     - as a consequence, an unquoted # at the start of an argument comments to the end of line
  *
  *  Windows:
  *     - leading carriage returns are skipped too
@@ -543,7 +543,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 		}
 		else
 		{
-			/* quote the first token, to avoid Windows attemps to run two or more
+			/* quote the first token, to avoid Windows attempts to run two or more
 			   unquoted tokens as a program until an existing file name is found */
 			g_string_printf(command, "\"%s\"", program);
 		}
@@ -898,7 +898,7 @@ static gboolean spawn_timeout_read_cb(gpointer data)
 {
 	SpawnChannelData *sc = (SpawnChannelData *) data;
 
-	/* The solution for continuous empty G_IO_IN-s is to generate them outselves. :) */
+	/* The solution for continuous empty G_IO_IN-s is to generate them ourselves. :) */
 	return spawn_read_cb(sc->channel, G_IO_IN, data);
 }
 
