@@ -402,7 +402,7 @@ static const gchar *get_entity(gchar *letter)
 
 	len = G_N_ELEMENTS(chars);
 
-	/* Ignore tags marking caracters as well as spaces*/
+	/* Ignore tags marking characters as well as spaces */
 	for (i = 7; i < len; i++)
 	{
 		if (utils_str_equal(chars[i][0], letter) &&
@@ -570,7 +570,7 @@ static void sc_fill_store(GtkTreeStore *store)
 }
 
 
-/* just inserts the HTML_NAME coloumn of the selected row at current position
+/* just inserts the HTML_NAME column of the selected row at current position
  * returns only TRUE if a valid selection(i.e. no category) could be found */
 static gboolean sc_insert(GtkTreeModel *model, GtkTreeIter *iter)
 {

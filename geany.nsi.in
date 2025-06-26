@@ -439,7 +439,7 @@ Function un.onInit
 	${if} $Answer == "yes"
 		SetShellVarContext all
 	${else}
-		; check if the Geany has been installed with admin permisions
+		; check if the Geany has been installed with admin permissions
 		ReadRegStr $0 HKLM "${PRODUCT_UNINST_KEY}" "Publisher"
 		${if} $0 != ""
 			MessageBox MB_OK|MB_ICONSTOP "You need administrator privileges to uninstall Geany!" \

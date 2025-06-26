@@ -595,11 +595,11 @@ highlightingmappings.h and add the following things:
 1. In highlightingmappings.h:
 
    a. define ``highlighting_lexer_FOO`` to the Scintilla lexer ID for
-      this filtype, e.g. ``SCLEX_CPP``.
+      this filetype, e.g. ``SCLEX_CPP``.
    b. define the ``highlighting_styles_FOO`` array that maps Scintilla
       style states to style names in the configuration file.
    c. define ``highlighting_keywords_FOO`` to ``EMPTY_KEYWORDS`` if the
-      filtype has no keywords, or as an ``HLKeyword`` array mapping
+      filetype has no keywords, or as an ``HLKeyword`` array mapping
       the Scintilla keyword IDs to names in the configuration file.
    d. define ``highlighting_properties_FOO`` to ``EMPTY_PROPERTIES``, or
       as an array of ``HLProperty`` if the filetype requires some lexer
@@ -607,7 +607,7 @@ highlightingmappings.h and add the following things:
       normally be set in the ``[lexer_properties]`` section of the
       configuration file instead.
 
-   You may look at other filtype's definitions for some examples
+   You may look at other filetype's definitions for some examples
    (Ada, CSS or Diff being good examples).
 
 2. In highlighting.c:

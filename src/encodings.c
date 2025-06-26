@@ -182,7 +182,7 @@ static gboolean encodings_charset_equals(const gchar *a, const gchar *b)
 		if (g_ascii_toupper(*a) == g_ascii_toupper(*b) &&
 			((is_alpha = g_ascii_isalpha(*a)) || g_ascii_isdigit(*a)))
 		{
-			/* either there was a real separator, or we need a implicit one (a chage from alpha to
+			/* either there was a real separator, or we need a implicit one (a change from alpha to
 			 * numeric or so) */
 			if (! need_sep || (was_alpha != is_alpha))
 			{

@@ -30,7 +30,7 @@
 
 G_BEGIN_DECLS
 
-/* contains all filtypes informations in the form of:
+/* contains all filetypes information in the form of:
  *  - highlighting_lexer_LANG:		the SCI lexer
  *  - highlighting_styles_LANG:		SCI style/named style mappings.  The first
  * 									item is also used for the default style.

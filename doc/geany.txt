@@ -574,7 +574,7 @@ If a document is saved via `Document->Save As...` then the filename is
 automatically inserted into the comment header replacing text like
 `untitled.ext` in the first 3 lines of the file. E.g. if a new ``.c``
 file is created using `File->New (with Template)` then the text `untitled.c`
-in line 2 would be replaced with the choosen file name on `Save As...`
+in line 2 would be replaced with the chosen file name on `Save As...`
 (this example assumes the default file templates being used).
 
 
@@ -2352,7 +2352,7 @@ Invert syntax highlighting colors
     Invert all colors, by default this makes white text on a black
     background.
 
-Show indendation guides
+Show indentation guides
     Show vertical lines to help show how much leading indentation there
     is on each line.
 
@@ -4751,7 +4751,7 @@ line_wrap_visuals
     * 2 -- Visual flag at begin of subline of a wrapped line. Subline is
       indented by at least 1 to make room for the flag.
 
-    Second argument: wether the visual flags to indicate a line is wrapped
+    Second argument: whether the visual flags to indicate a line is wrapped
     are drawn near the border or near the text. This is a bitmask of the values:
 
     * 0 -- Visual flags drawn near border
@@ -5396,7 +5396,7 @@ in Geany.
 
 The created backup copy file permissions are set to read-write only for
 the user. This should help to not create world-readable files on possibly
-unsecure destination directories like /tmp (especially useful
+insecure destination directories like /tmp (especially useful
 on multi-user systems).
 This applies only to non-Windows systems. On Windows, no explicit file
 permissions are set.

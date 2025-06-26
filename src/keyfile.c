@@ -795,7 +795,7 @@ static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
 
 
 /*
- * Load session list from the given keyfile and return an array containg the file names
+ * Load session list from the given keyfile and return an array containing the file names
  * */
 GPtrArray *configuration_load_session_files(GKeyFile *config)
 {

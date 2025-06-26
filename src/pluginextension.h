@@ -72,7 +72,7 @@ typedef struct
 	 * @param data User data passed during the @c plugin_extension_register()
 	 * call.
 	 *
-	 * @return Plugins should return @c TRUE if they impelment autocompletion
+	 * @return Plugins should return @c TRUE if they implement autocompletion
 	 * for the provided document, @c FALSE otherwise.
 	 *
 	 * @since 2.1

@@ -209,7 +209,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
  * If it already exists, it will be overwritten.
  *
  * @warning Currently, this function uses g_file_replace_contents() to save
- * files which offers a reasonable balence between data safety during save
+ * files which offers a reasonable balance between data safety during save
  * and other factors such as handling symlinks, remote files, or platform-
  * dependent aspects. However, plugins with special requirements should
  * not rely on the exact implementation of this function and should rather
@@ -2065,7 +2065,7 @@ gchar **utils_strv_join(gchar **first, gchar **second)
 
 /* * Returns the common prefix in a list of strings.
  *
- * The size of the list may be given explicitely, but defaults to @c g_strv_length(strv).
+ * The size of the list may be given explicitly, but defaults to @c g_strv_length(strv).
  *
  * @param strv The list of strings to process.
  * @param strv_len The number of strings contained in @a strv. Can be -1 if it's terminated by @c NULL.
@@ -2101,7 +2101,7 @@ gchar *utils_strv_find_common_prefix(gchar **strv, gssize strv_len)
 
 /* * Returns the longest common substring in a list of strings.
  *
- * The size of the list may be given explicitely, but defaults to @c g_strv_length(strv).
+ * The size of the list may be given explicitly, but defaults to @c g_strv_length(strv).
  *
  * @param strv The list of strings to process.
  * @param strv_len The number of strings contained in @a strv. Can be -1 if it's terminated by @c NULL.
@@ -2176,7 +2176,7 @@ gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len, const gchar *delim)
  * for dialogs which present the file list to the user, where the base name may result
  * in duplicates (showing the full path might be inappropriate).
  *
- * The algorthm strips the common prefix (e-g. the user's home directory) and
+ * The algorithm strips the common prefix (e-g. the user's home directory) and
  * replaces the longest common substring with an ellipsis ("...").
  *
  * @param file_names @array{length=file_names_len} The list of strings to process.
@@ -2225,7 +2225,7 @@ gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len)
 	}
 
 	/* Second: determine the longest common substring (lcs), that will be ellipsized. Again,
-	 * we look only for full path compnents so that we ellipsize between separators. This implies
+	 * we look only for full path components so that we ellipsize between separators. This implies
 	 * that the file name cannot be ellipsized which is desirable anyway.
 	 */
 	lcs = utils_strv_find_lcs(names, num, G_DIR_SEPARATOR_S"/");
@@ -2251,7 +2251,7 @@ gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len)
 		{
 			const gchar *lcs_start = strstr(names[i], lcs);
 			const gchar *lcs_end = lcs_start + lcs_len;
-			/* Dir seperators are included in lcs but shouldn't be elipsized. */
+			/* Dir separators are included in lcs but shouldn't be elipsized. */
 			names[i] = g_strdup_printf("%.*s...%s", (int)(lcs_start - names[i] + 1), names[i], lcs_end - 1);
 		}
 	}
