@@ -1869,6 +1869,19 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 		g_error_free(error);
 		return NULL;
 	}
+	// remove dirs
+	GString *str = g_string_new(dir);
+	g_string_append_c(str, G_DIR_SEPARATOR);
+	const gint len = str->len;
+	for (GSList *item = list; item != NULL; item = item->next)
+	{
+		g_string_set_size(str, len);
+		g_string_append(str, item->data);
+		if (g_file_test(str->str, G_FILE_TEST_IS_DIR))
+			item->data = NULL;
+	}
+	g_string_free(str, TRUE);
+	list = g_slist_remove_all(list, NULL);
 	if (list == NULL)
 		return NULL;
 
