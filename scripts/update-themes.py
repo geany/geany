@@ -33,6 +33,7 @@ themes = [
     'delt-dark.conf',
     'epsilon.conf',
     'grey8.conf',
+    'gruvbox-dark.conf',
     'hacker.conf',
     'mc.conf',
     'metallic-bottle.conf',
