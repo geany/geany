@@ -862,8 +862,6 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 	ui_document_show_hide(doc); /* update the document menu */
 
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
-	/* bring it in front, jump to the start and grab the focus */
-	editor_goto_pos(doc->editor, 0, FALSE);
 
 #ifdef USE_GIO_FILEMON
 	monitor_file_setup(doc);
@@ -878,6 +876,9 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 
 	msgwin_status_add(_("New file \"%s\" opened."),
 		DOC_FILENAME(doc));
+
+	/* bring it in front, jump to the start and grab the focus */
+	editor_goto_pos(doc->editor, 0, FALSE);
 
 	return doc;
 }
