@@ -2,14 +2,14 @@
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the Geany package.
 # Tomáš Havlas <tomas.havlas@raven-systems.eu>, 2014.
-# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2023.
+# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2025-06-09 22:11+0200\n"
-"PO-Revision-Date: 2023-10-06 19:59+0200\n"
+"PO-Revision-Date: 2025-06-22 22:00+0200\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -306,18 +306,16 @@ msgstr ""
 "umiestnené na panely nástrojov a virtuálny terminál."
 
 #: data/geany.glade:1317
-#, fuzzy
 msgid "Use platform-native file dialogs"
-msgstr "Použiť natívne dialógové okná Windows"
+msgstr "Použiť natívne súborové dialógové okná platformy"
 
 #: data/geany.glade:1321
-#, fuzzy
 msgid ""
 "Defines whether to use the platform-native file dialogs or the GTK default "
 "dialogs"
 msgstr ""
-"Určuje či budú použité natívne dialógové okná Windows, alebo budú použité "
-"štandardné dialógové okná GTK"
+"Určuje, či budú použité natívne súborové dialógové okná platformy, alebo "
+"budú použité štandardné dialógové okná GTK"
 
 #: data/geany.glade:1339 data/geany.glade:2006 data/geany.glade:4825
 msgid "<b>Miscellaneous</b>"
@@ -1436,6 +1434,16 @@ msgid ""
 "<tt>%d</tt> if there are no project open.\n"
 "• <tt>%%</tt>: a literal <tt>%</tt> character."
 msgstr ""
+"Príkaz pre tlač súborov.\n"
+"\n"
+"Podporované zástupné symboly sú:\n"
+"• <tt>%d</tt>: adresár obsahujúci súbor.\n"
+"• <tt>%e</tt>: názov súboru bez cesty a prípony.\n"
+"• <tt>%f</tt>: názov súboru bez cesty.\n"
+"• <tt>%l</tt>: číslo aktuálneho riadku v súbore, začína číslom 1.\n"
+"• <tt>%p</tt>: adresár aktuálneho projektu, alebo zhodné s <tt>%d</tt>, ak "
+"nie je otvorený žiadny projekt.\n"
+"• <tt>%%</tt>: znak <tt>%</tt>."
 
 #: data/geany.glade:5714
 msgid "Use an external command for printing"
@@ -2131,12 +2139,11 @@ msgid "Symbols"
 msgstr "Symboly"
 
 #: data/geany.glade:8417
-#, fuzzy
 msgid ""
 "Filter the document list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"Filtrovať zoznam symbolov pomocou zadaného textu. Jednotlivé filtre oddeľte "
+"Filtrovať zoznam dokumentov pomocou zadaného textu. Jednotlivé filtre oddeľte "
 "medzerou."
 
 #: data/geany.glade:8461
@@ -2184,13 +2191,12 @@ msgid "File _patterns:"
 msgstr "_Vzory názvov súborov:"
 
 #: data/geany.glade:8848
-#, fuzzy
 msgid ""
 "Space separated list of file patterns used for the Find in Files dialog "
 "(e.g. *.c *.h)"
 msgstr ""
 "Medzerami oddelený zoznam vzorov pre názvy súborov, použitý v dialógovom "
-"okne vyhľadať v súboroch (napr. „*.c *.h“)"
+"okne „Nájsť v súboroch“ (napr. „*.c *.h“)"
 
 #: data/geany.glade:8882 src/project.c:232
 msgid ""
@@ -2416,11 +2422,10 @@ msgid "Compilation finished successfully."
 msgstr "Kompilácia bola úspešne dokončená."
 
 #: src/build.c:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Enter custom text to append to the command \"%s\":"
 msgstr ""
-"Sem zadajte vlastný text. Čokoľvek sem zadané bude pripojené na koniec "
-"príkazu."
+"Sem zadajte vlastný text, ktorý bude pripojený k príkazu „%s“:"
 
 #: src/build.c:1303
 msgid "_Next Error"
@@ -2776,14 +2781,14 @@ msgid "Could not open file %s (%s)"
 msgstr "Nepodarilo sa otvoriť súbor %s (%s)"
 
 #: src/document.c:1001
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\" as %s: %s."
-msgstr "Nepodarilo sa otvoriť URI „%s“: %s"
+msgstr "Nepodarilo sa načítať súbor „%s“ ako %s: %s."
 
 #: src/document.c:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\": %s."
-msgstr "Nepodarilo sa otvoriť URI „%s“: %s"
+msgstr "Nepodarilo sa načítať súbor „%s“: %s."
 
 #: src/document.c:1014
 #, c-format
@@ -3144,15 +3149,15 @@ msgstr "Blízky Východ"
 
 #: src/encodings.c:674
 msgid "Data contains NULs"
-msgstr ""
+msgstr "Dáta obsahujú znaky NUL"
 
 #: src/encodings.c:816
 msgid "Data contains NULs or the encoding is not supported"
-msgstr ""
+msgstr "Dáta obsahujú znaky NUL, alebo kódovanie nie je podporované"
 
 #: src/encodings.c:937
 msgid "Data contains NULs or is not valid UTF-8"
-msgstr ""
+msgstr "Dáta obsahujú znaky NUL, alebo ich kódovanie nie je UTF-8"
 
 #: src/filetypes.c:1240
 msgid "All Source"
@@ -4028,9 +4033,8 @@ msgid "Plugins"
 msgstr "Zásuvné moduly"
 
 #: src/plugins.c:1895
-#, fuzzy
 msgid "Choose which plugins to load:"
-msgstr "Vyberte, ktoré zásuvné moduly by mali byť načítané pri spustení:"
+msgstr "Vyberte, ktoré zásuvné moduly sa majú načítať:"
 
 #: src/plugins.c:1989
 #, c-format
@@ -4044,9 +4048,8 @@ msgid "Configure Plugins"
 msgstr "Nastaviť zásuvné moduly"
 
 #: src/prefs.c:184
-#, fuzzy
 msgid "Assign Keybinding"
-msgstr "Klávesové skratky"
+msgstr "Priradiť klávesovú skratku"
 
 #: src/prefs.c:191
 #, c-format
@@ -4084,7 +4087,7 @@ msgstr "Prepísať túto klávesovú skratku?"
 #: src/prefs.c:1586
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
-msgstr "Kombinácia „%s“ je už nastavená pre „%s“."
+msgstr "Kombinácia „%s“ je už použitá pre „%s“."
 
 #: src/prefs.c:1795
 msgid "Enter tool paths below. Tools you do not need can be left blank."
@@ -4119,6 +4122,8 @@ msgstr ""
 #: src/prefs.c:1892
 msgid "Not configurable on Windows (the system default browser is used)."
 msgstr ""
+"Nie je konfigurovateľný vo Windows (bude použitý predvolený prehliadač "
+"systému)."
 
 #: src/printing.c:162
 #, c-format
@@ -4519,9 +4524,8 @@ msgid "Are you sure to replace in the whole session?"
 msgstr "Ste si istý, že chcete nahradiť v celej relácii?"
 
 #: src/search.c:1721
-#, fuzzy
 msgid "Invalid directory for Find in Files."
-msgstr "Nesprávny adresár na vyhľadávanie v súboroch."
+msgstr "Nesprávny adresár pre „Nájsť v súboroch“."
 
 #: src/search.c:1726
 msgid "No text to find."
@@ -4681,9 +4685,9 @@ msgid "_Group by Type"
 msgstr "Zoskupiť podľa _typu"
 
 #: src/templates.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8: %s"
-msgstr "Pri prevode šablóny „%s“ do kódovania UTF-8 nastala chyba"
+msgstr "Pri prevode šablóny „%s“ do kódovania UTF-8 nastala chyba: %s"
 
 #: src/templates.c:654
 #, c-format
@@ -5064,13 +5068,12 @@ msgid "Custom Date Format"
 msgstr "Vlastný formát dátumu"
 
 #: src/ui_utils.c:715
-#, fuzzy
 msgid ""
 "Custom date format (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"Zadajte vlastný formát pre dátum a čas. Pre zoznam dostupných špecifikátorov "
-"formátu viď https://docs.gtk.org/glib/method.DateTime.format.html."
+"Vlastný formát pre dátum (https://docs.gtk.org/glib/method.DateTime.format."
+"html pre viac informácií)"
 
 #: src/ui_utils.c:735
 msgid "Date format string could not be converted (possibly too long)."
@@ -5149,17 +5152,17 @@ msgstr "LF"
 #: src/utils.c:2542
 #, c-format
 msgid "Unknown placeholder \"%%%c\" in \"%s\""
-msgstr ""
+msgstr "Neznámy zástupný symbol „%%%c“ v „%s“"
 
 #: src/utils.c:2583
-#, fuzzy, c-format
+#, c-format
 msgid "failed to substitute %%%c: document has no path"
-msgstr "nepodarilo sa nahradiť %%p, žiadny projekt nie je aktívny"
+msgstr "nepodarilo sa nahradiť %%%c: dokument nemá žiadnu cestu"
 
 #: src/utils.c:2593
 #, c-format
 msgid "no project active, %%p is substituted as %%d"
-msgstr ""
+msgstr "žiadny projekt nie je aktívny, %%p bude nahradený ako %%d"
 
 #: src/vte.c:570
 #, c-format
@@ -5478,14 +5481,12 @@ msgid "Type constructors"
 msgstr "Konštruktory typov"
 
 #: src/tagmanager/tm_parser.c:605
-#, fuzzy
 msgid "Title"
-msgstr "bez_nazvu"
+msgstr "Nadpis"
 
 #: src/tagmanager/tm_parser.c:606
-#, fuzzy
 msgid "Subtitle"
-msgstr "bez_nazvu"
+msgstr "Podnadpis"
 
 #: src/tagmanager/tm_parser.c:627
 msgid "Anchors"
@@ -5540,9 +5541,8 @@ msgid "Level 5 sections"
 msgstr "Sekcie 5. úrovne"
 
 #: src/tagmanager/tm_parser.c:790
-#, fuzzy
 msgid "Instances"
-msgstr "Dedičnosť"
+msgstr "Inštancie"
 
 #: src/tagmanager/tm_parser.c:792
 msgid "Functions / Tasks"
@@ -5550,25 +5550,23 @@ msgstr "Funkcie / Úlohy"
 
 #: src/tagmanager/tm_parser.c:794
 msgid "Parameters / Constants"
-msgstr ""
+msgstr "Parametre / Konštanty"
 
 #: src/tagmanager/tm_parser.c:795
-#, fuzzy
 msgid "Ports"
-msgstr "Importy"
+msgstr "Porty"
 
 #: src/tagmanager/tm_parser.c:796
 msgid "Signals"
-msgstr ""
+msgstr "Signály"
 
 #: src/tagmanager/tm_parser.c:802
 msgid "Structs / Unions / Enums"
-msgstr ""
+msgstr "Štruktúry / Únie / Enumerácie"
 
 #: src/tagmanager/tm_parser.c:803
-#, fuzzy
 msgid "Typedefs"
-msgstr "Typy"
+msgstr "Definície typov"
 
 #: src/tagmanager/tm_parser.c:858
 msgid "Program"
@@ -5655,90 +5653,80 @@ msgid "Regions"
 msgstr "Oblasti"
 
 #: src/tagmanager/tm_parser.c:1171
-#, fuzzy
 msgid "Packages / Modules"
-msgstr "Balíčky"
+msgstr "Balíčky / Moduly"
 
 #: src/tagmanager/tm_parser.c:1172
-#, fuzzy
 msgid "Classes / Roles"
-msgstr "Triedy"
+msgstr "Triedy / Role"
 
 #: src/tagmanager/tm_parser.c:1173
 msgid "Grammars"
-msgstr ""
+msgstr "Gramatiky"
 
 #: src/tagmanager/tm_parser.c:1175
-#, fuzzy
 msgid "Subroutines"
-msgstr "Funkcie / Podprogramy"
+msgstr "Podprogramy"
 
 #: src/tagmanager/tm_parser.c:1176
 msgid "Rules / Tokens"
-msgstr ""
+msgstr "Pravidlá / Tokeny"
 
 #: src/tagmanager/tm_parser.c:1217
-#, fuzzy
 msgid "Words"
-msgstr "Slová:"
+msgstr "Slová"
 
 #: src/tagmanager/tm_parser.c:1234
-#, fuzzy
 msgid "Projects"
-msgstr "Projekt"
+msgstr "Projekty"
 
 #: src/tagmanager/tm_parser.c:1237
 msgid "Subdirs"
-msgstr ""
+msgstr "Podadresáre"
 
 #: src/tagmanager/tm_parser.c:1238
-#, fuzzy
 msgid "Build Targets"
-msgstr "Ciele"
+msgstr "Ciele pre zostavenie"
 
 #: src/tagmanager/tm_parser.c:1239
-#, fuzzy
 msgid "Custom Targets"
-msgstr "Vlastný text"
+msgstr "Vlastné ciele"
 
 #: src/tagmanager/tm_parser.c:1240
 msgid "Benchmark Targets"
-msgstr ""
+msgstr "Ciele pre testy rýchlosti"
 
 #: src/tagmanager/tm_parser.c:1241
-#, fuzzy
 msgid "Run Targets"
-msgstr "Ciele"
+msgstr "Ciele pre spustenie"
 
 #: src/tagmanager/tm_parser.c:1242
 msgid "Tests"
-msgstr ""
+msgstr "Testy"
 
 #: src/tagmanager/tm_parser.c:1255
 msgid "Mixins"
-msgstr ""
+msgstr "Mixins"
 
 #: src/tagmanager/tm_parser.c:1259
 msgid "Placeholders"
-msgstr ""
+msgstr "Zástupcovia"
 
 #: src/tagmanager/tm_parser.c:1272
-#, fuzzy
 msgid "Resources"
-msgstr "Základný zdrojový súbor:"
+msgstr "Prostriedky"
 
 #: src/tagmanager/tm_parser.c:1275
-#, fuzzy
 msgid "Variable"
 msgstr "Premenné"
 
 #: src/tagmanager/tm_parser.c:1276
 msgid "Providers"
-msgstr ""
+msgstr "Poskytovatelia"
 
 #: src/tagmanager/tm_parser.c:1277
 msgid "Outputs"
-msgstr ""
+msgstr "Výstupy"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -6134,41 +6122,38 @@ msgid "Instant Save filename could not be generated (%s)."
 msgstr "Nie je možné vytvoriť názov súboru pre okamžité uloženie (%s)."
 
 #: plugins/saveactions.c:439 plugins/saveactions.c:1225
-#, fuzzy
 msgid ""
 "Persistent untitled document directory does not exist or is not writable."
 msgstr ""
-"Adresár pre okamžité uloženie neexistuje, alebo do neho nie je možné "
-"zapisovať."
+"Adresár s trvalými nepomenovanými dokumentami neexistuje, alebo do neho nie "
+"je možné zapisovať."
 
 #: plugins/saveactions.c:507
-#, fuzzy
 msgid "_Don't save (discard)"
-msgstr "_Neuložiť"
+msgstr "_Neuložiť (zahodiť)"
 
 #: plugins/saveactions.c:529
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document %s is not saved."
-msgstr "Súbor „%s“ nebol uložený."
+msgstr "Nepomenovaný dokument „%s“ nebol uložený."
 
 #: plugins/saveactions.c:530
-#, fuzzy
 msgid "Do you want to save it?"
-msgstr "Naozaj ho chcete znova načítať?"
+msgstr "Chcete ho uložiť?"
 
 #: plugins/saveactions.c:559 plugins/saveactions.c:605
 #, c-format
 msgid "Untitled document file %s was deleted"
-msgstr ""
+msgstr "Súbor s nepomenovaným dokumentom „%s“ bol vymazaný"
 
 #: plugins/saveactions.c:622
 msgid "Persistent untitled document directory not found"
-msgstr ""
+msgstr "Adresár s trvalými nepomenovanými dokumentami nebol nájdený"
 
 #: plugins/saveactions.c:817
 #, c-format
 msgid "Empty untitled document file %s was deleted"
-msgstr ""
+msgstr "Prázdny súbor s nepomenovaným dokumentom „%s“ bol vymazaný"
 
 #: plugins/saveactions.c:875
 #, c-format
@@ -6233,63 +6218,55 @@ msgid "_Directory to save backup files in:"
 msgstr "_Adresár pre ukladanie záložných kópií:"
 
 #: plugins/saveactions.c:1442
-#, fuzzy
 msgid ""
 "Date/_Time format for backup files (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"_Formát dátumu/času pre záložné súbory (pre zoznam dostupných špecifikátorov "
-"formátu viď https://docs.gtk.org/glib/method.DateTime.format.html)"
+"_Formát dátumu/času pre záložné súbory (https://docs.gtk.org/glib/method."
+"DateTime.format.html pre viac informácií)"
 
 #: plugins/saveactions.c:1455
 msgid "Directory _levels to include in the backup destination:"
 msgstr "_Počet adresárových úrovní vytváraných v adresári so zálohou:"
 
 #: plugins/saveactions.c:1482
-#, fuzzy
 msgid "Untitled Document Save"
-msgstr "Nájsť použitie v dokumente"
+msgstr "Ukladanie nepomenovaného dokumentu"
 
 #: plugins/saveactions.c:1495
-#, fuzzy
 msgid "Instant Save After Creation"
-msgstr "Okamžité uloženie"
+msgstr "Okamžité uloženie po vytvorení"
 
 #: plugins/saveactions.c:1505
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
 msgstr ""
-"_Adresár pre ukladanie súborov (nechajte prázdne pre použitie predvoleného: "
+"_Adresár pre ukladanie súborov (nechajte prázdny pre použitie predvoleného: "
 "%s):"
 
 #: plugins/saveactions.c:1531
 msgid "<i>The plugin will not delete the files created in this directory.</i>"
-msgstr ""
+msgstr "<i>Zásuvný modul neodstráni súbory vytvorené v tomto adresári.</i>"
 
 #: plugins/saveactions.c:1541
-#, fuzzy
 msgid "Persistent Untitled Documents"
-msgstr "Vytlačiť dokument"
+msgstr "Trvalé nepomenované dokumenty"
 
 #: plugins/saveactions.c:1550
-#, fuzzy
 msgid "_Directory to save persistent untitled documents in:"
-msgstr "_Adresár pre ukladanie záložných kópií:"
+msgstr "_Adresár pre ukladanie trvalých nepomenovaných dokumentov:"
 
 #: plugins/saveactions.c:1575
-#, fuzzy
 msgid "Untitled document save _interval:"
-msgstr "_Interval pre automatické ukladanie:"
+msgstr "_Interval pre ukladanie nepomenovaného dokumentu:"
 
 #: plugins/saveactions.c:1587
-#, fuzzy
 msgid "milliseconds"
-msgstr "sekúnd"
+msgstr "milisekúnd"
 
 #: plugins/saveactions.c:1597
-#, fuzzy
 msgid "Default _filetype to use for untitled documents:"
-msgstr "Predvolený _typ súboru pre nové súbory:"
+msgstr "Predvolený _typ súboru pre nepomenované dokumenty:"
 
 #: plugins/splitwindow.c:33
 msgid "Split Window"
@@ -6327,114 +6304,3 @@ msgstr "Vedľa seba"
 #: plugins/splitwindow.c:434
 msgid "Top and Bottom"
 msgstr "Nad sebou"
-
-#~ msgid "Use fixed encoding when opening non-Unicode files"
-#~ msgstr ""
-#~ "Použiť predvolené kódovanie pri otváraní súborov ktoré nie sú v Unicode"
-
-#~ msgid ""
-#~ "This option disables the automatic detection of the file encoding when "
-#~ "opening non-Unicode files and opens the file with the specified encoding "
-#~ "(usually not needed)"
-#~ msgstr ""
-#~ "Táto možnosť zakáže automatické zisťovanie kódovania súboru pri otváraní. "
-#~ "Súbor ktorý nie je v Unicode sa otvorí s predvoleným kódovaním (zvyčajne "
-#~ "to nie je potrebné)"
-
-#~ msgid "Path to the command for printing files (use %f for the filename)"
-#~ msgstr "Cesta k príkazu na tlač súborov (použite %f pre názov súboru)"
-
-#~ msgid "Programming Languages"
-#~ msgstr "Programovacie jazyky"
-
-#~ msgid "Scripting Languages"
-#~ msgstr "Skriptovacie jazyky"
-
-#~ msgid "Markup Languages"
-#~ msgstr "Značkovanie jazyky"
-
-#, c-format
-#~ msgid "The file \"%s\" is not valid %s."
-#~ msgstr "Súbor „%s“ nie je platný %s."
-
-#, c-format
-#~ msgid ""
-#~ "The file \"%s\" does not look like a text file or the file encoding is "
-#~ "not supported."
-#~ msgstr ""
-#~ "Súbor „%s“ pravdepodobne nie je textový súbor, alebo jeho kódovanie nie "
-#~ "je podporované."
-
-#, c-format
-#~ msgid "%s source file"
-#~ msgstr "%s zdrojový súbor"
-
-#, c-format
-#~ msgid "%s file"
-#~ msgstr "%s súbor"
-
-#, c-format
-#~ msgid "%s script"
-#~ msgstr "%s skript"
-
-#, c-format
-#~ msgid "%s document"
-#~ msgstr "%s dokument"
-
-#~ msgid "Shell"
-#~ msgstr "Shell"
-
-#~ msgid "Makefile"
-#~ msgstr "Makefile"
-
-#~ msgid "Cascading Stylesheet"
-#~ msgstr "Kaskádový Štýl (CSS)"
-
-#~ msgid "Config"
-#~ msgstr "Konfigurácia"
-
-#~ msgid "Gettext translation"
-#~ msgstr "Preklad Gettext"
-
-#~ msgid "_Programming Languages"
-#~ msgstr "_Programovacie jazyky"
-
-#~ msgid "_Scripting Languages"
-#~ msgstr "_Skriptovacie jazyky"
-
-#~ msgid "_Markup Languages"
-#~ msgstr "_Značkovanie jazyky"
-
-#~ msgid "M_iscellaneous"
-#~ msgstr "_Ostatné"
-
-#~ msgid "Grab Key"
-#~ msgstr "Zachytiť kláves"
-
-#~ msgid "Print only the basename(without the path) of the printed file"
-#~ msgstr "Tlačiť iba názov tlačeného súboru (bez cesty)"
-
-#, c-format
-#~ msgid "<b>%s:%lu:</b> %s"
-#~ msgstr "<b>%s:%lu:</b> %s"
-
-#, c-format
-#~ msgid "<i>%s:%lu:</i> %s"
-#~ msgstr "<i>%s:%lu:</i> %s"
-
-#~ msgid "_Input Methods"
-#~ msgstr "_Metódy vstupu"
-
-#~ msgid "Events"
-#~ msgstr "Udalosti"
-
-#~ msgid ""
-#~ "<i>If you set the Instant Save directory to a directory which is not "
-#~ "automatically cleared,\n"
-#~ "you will need to cleanup instantly saved files manually. The Instant Save "
-#~ "plugin will not delete the created files.</i>"
-#~ msgstr ""
-#~ "<i>Ak použijete ako adresár pre okamžité ukladanie adresár, ktorý nie je "
-#~ "automaticky čistený,\n"
-#~ "musíte okamžite uložené súbory čistiť manuálne. Zásuvný modul pre "
-#~ "okamžité uloženie nemaže vytvárané súbory.</i>"
