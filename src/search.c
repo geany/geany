@@ -118,11 +118,13 @@ static StashGroup *replace_prefs = NULL;
 static struct
 {
 	GtkWidget	*dialog;
+	GtkWidget	*combobox;
 	GtkWidget	*entry;
 	gboolean	all_expanded;
 	gint		position[2]; /* x, y */
+	gchar		**recent_search;
 }
-find_dlg = {NULL, NULL, FALSE, {0, 0}};
+find_dlg = {NULL, NULL, NULL, FALSE, {0, 0}, NULL};
 
 static struct
 {
@@ -133,8 +135,10 @@ static struct
 	GtkWidget	*replace_entry;
 	gboolean	all_expanded;
 	gint		position[2]; /* x, y */
+	gchar		**recent_search;
+	gchar		**recent_replace;
 }
-replace_dlg = {NULL, NULL, NULL, NULL, NULL, FALSE, {0, 0}};
+replace_dlg = {NULL, NULL, NULL, NULL, NULL, FALSE, {0, 0}, NULL, NULL};
 
 static struct
 {
@@ -145,8 +149,11 @@ static struct
 	GtkWidget	*encoding_combo;
 	GtkWidget	*files_mode_combo;
 	gint		position[2]; /* x, y */
+	gchar		**recent_search;
+	gchar		**recent_files;
+	gchar		**recent_dir;
 }
-fif_dlg = {NULL, NULL, NULL, NULL, NULL, NULL, {0, 0}};
+fif_dlg = {NULL, NULL, NULL, NULL, NULL, NULL, {0, 0}, NULL, NULL, NULL};
 
 
 static void search_read_io(GString *string, GIOCondition condition, gpointer data);
@@ -186,6 +193,9 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user
 static gboolean
 search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gchar *opts,
 	const gchar *enc);
+
+static void load_combo_box_history(GtkWidget *combo_entry, gchar **recent_terms);
+static void save_combo_box_history(GtkComboBox *combo, gchar ***recent_terms);
 
 
 static void init_prefs(void)
@@ -236,6 +246,12 @@ static void init_prefs(void)
 		"fif_files", "", "entry_files");
 	stash_group_add_combo_box(group, &settings.fif_files_mode,
 		"fif_files_mode", FILES_MODE_ALL, "combo_files_mode");
+	stash_group_add_string_vector(group, &fif_dlg.recent_search,
+		"fif_recent_search", NULL);
+	stash_group_add_string_vector(group, &fif_dlg.recent_files,
+		"fif_recent_files", NULL);
+	stash_group_add_string_vector(group, &fif_dlg.recent_dir,
+		"fif_recent_dir", NULL);
 
 	group = stash_group_new("search");
 	find_prefs = group;
@@ -254,6 +270,8 @@ static void init_prefs(void)
 		"find_match_word_start", FALSE, "check_wordstart");
 	stash_group_add_toggle_button(group, &settings.find_close_dialog,
 		"find_close_dialog", TRUE, "check_close");
+	stash_group_add_string_vector(group, &find_dlg.recent_search,
+		"find_recent_search", NULL);
 
 	group = stash_group_new("search");
 	replace_prefs = group;
@@ -274,6 +292,10 @@ static void init_prefs(void)
 		"replace_search_backwards", FALSE, "check_back");
 	stash_group_add_toggle_button(group, &settings.replace_close_dialog,
 		"replace_close_dialog", TRUE, "check_close");
+	stash_group_add_string_vector(group, &replace_dlg.recent_search,
+		"replace_recent_search", NULL);
+	stash_group_add_string_vector(group, &replace_dlg.recent_replace,
+		"replace_recent_replace", NULL);
 }
 
 
@@ -496,6 +518,7 @@ static void create_find_dialog(void)
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
 
 	entry = gtk_combo_box_text_new_with_entry();
+	find_dlg.combobox = entry;
 	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
@@ -606,6 +629,8 @@ void search_show_find_dialog(void)
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(find_dlg.dialog));
 	}
+
+	load_combo_box_history(find_dlg.combobox, find_dlg.recent_search);
 
 	g_free(sel);
 }
@@ -798,6 +823,9 @@ void search_show_replace_dialog(void)
 		/* bring the dialog back in the foreground in case it is already open but the focus is away */
 		gtk_window_present(GTK_WINDOW(replace_dlg.dialog));
 	}
+
+	load_combo_box_history(replace_dlg.find_combobox, replace_dlg.recent_search);
+	load_combo_box_history(replace_dlg.replace_combobox, replace_dlg.recent_replace);
 
 	g_free(sel);
 }
@@ -1094,6 +1122,11 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 		gtk_widget_show_all(fif_dlg.dialog);
 		if (doc && !text)
 			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
+
+		load_combo_box_history(fif_dlg.search_combo, fif_dlg.recent_search);
+		load_combo_box_history(fif_dlg.files_combo, fif_dlg.recent_files);
+		load_combo_box_history(fif_dlg.dir_combo, fif_dlg.recent_dir);
+
 	}
 	stash_group_display(fif_prefs, fif_dlg.dialog);
 
@@ -1425,6 +1458,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 				goto fail;
 		}
 		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(user_data), search_data.original_text, 0);
+		save_combo_box_history(GTK_COMBO_BOX(find_dlg.combobox), &find_dlg.recent_search);
 
 		switch (response)
 		{
@@ -1581,6 +1615,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(replace_dlg.find_combobox), original_find, 0);
 	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(replace_dlg.replace_combobox), original_replace, 0);
+	save_combo_box_history(GTK_COMBO_BOX(replace_dlg.find_combobox), &replace_dlg.recent_search);
+	save_combo_box_history(GTK_COMBO_BOX(replace_dlg.replace_combobox), &replace_dlg.recent_replace);
 
 	switch (response)
 	{
@@ -1738,6 +1774,10 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(fif_dlg.files_combo), NULL, 0);
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(dir_combo), utf8_dir, 0);
 				gtk_widget_hide(fif_dlg.dialog);
+
+				save_combo_box_history(GTK_COMBO_BOX(fif_dlg.search_combo), &fif_dlg.recent_search);
+				save_combo_box_history(GTK_COMBO_BOX(fif_dlg.files_combo), &fif_dlg.recent_files);
+				save_combo_box_history(GTK_COMBO_BOX(fif_dlg.dir_combo), &fif_dlg.recent_dir);
 			}
 			g_string_free(opts, TRUE);
 		}
@@ -2405,4 +2445,53 @@ void search_find_again(gboolean change_direction)
 			ui_set_search_entry_background(
 				toolbar_get_widget_child_by_name("SearchEntry"), (result > -1));
 	}
+}
+
+
+static void load_combo_box_history(GtkWidget *combo_entry, gchar **recent_terms)
+{
+	for (; recent_terms != NULL && *recent_terms != NULL; recent_terms++)
+	{
+		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo_entry), *recent_terms, 0);
+	}
+}
+
+
+static void save_combo_box_history(GtkComboBox *combo, gchar ***recent_terms)
+{
+	guint i = 0;
+	gchar *combo_text;
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	gsize count;
+
+	model = gtk_combo_box_get_model(combo);
+	count = gtk_tree_model_iter_n_children(model, NULL);
+
+	g_strfreev(*recent_terms);
+
+	if (count == 0 || !gtk_tree_model_get_iter_first(model, &iter))
+	{
+		*recent_terms = NULL;
+		return;
+	}
+
+	*recent_terms = g_new0(gchar*, count + 1);
+
+	do
+	{
+		gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
+		if (!EMPTY(combo_text))
+		{
+			(*recent_terms)[i] = combo_text;
+		}
+		else
+		{
+			g_free(combo_text);
+		}
+		i++;
+	}
+	while (gtk_tree_model_iter_next(model, &iter));
+
+	(*recent_terms)[count] = NULL;
 }
