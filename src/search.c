@@ -77,6 +77,14 @@ enum
 };
 
 
+enum
+{
+	REGEXP_MODE_EXTENDED,
+	REGEXP_MODE_BASIC,
+	REGEXP_MODE_PERL
+};
+
+
 GeanySearchData search_data;
 GeanySearchPrefs search_prefs;
 
@@ -84,6 +92,7 @@ GeanySearchPrefs search_prefs;
 static struct
 {
 	gboolean fif_regexp;
+	gint fif_regexp_mode;
 	gboolean fif_case_sensitive;
 	gboolean fif_match_whole_word;
 	gboolean fif_invert_results;
@@ -236,6 +245,8 @@ static void init_prefs(void)
 		"fif_files", "", "entry_files");
 	stash_group_add_combo_box(group, &settings.fif_files_mode,
 		"fif_files_mode", FILES_MODE_ALL, "combo_files_mode");
+	stash_group_add_combo_box(group, &settings.fif_regexp_mode,
+		"fif_regexp_mode", REGEXP_MODE_EXTENDED, "combo_regexp_mode");
 
 	group = stash_group_new("search");
 	find_prefs = group;
@@ -896,7 +907,8 @@ static void create_fif_dialog(void)
 {
 	GtkWidget *dir_combo, *combo, *fcombo, *e_combo, *entry;
 	GtkWidget *label, *label1, *label2, *label3, *checkbox1, *checkbox2, *check_wholeword,
-		*check_recursive, *check_extra, *entry_extra, *check_regexp, *combo_files_mode;
+		*check_recursive, *check_extra, *entry_extra, *check_regexp,
+		*combo_files_mode, *combo_regexp_mode;
 	GtkWidget *dbox, *sbox, *lbox, *rbox, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
 
@@ -1000,6 +1012,18 @@ static void create_fif_dialog(void)
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
 	gtk_widget_set_tooltip_text(check_regexp, _("See grep's manual page for more information"));
 
+	combo_regexp_mode = gtk_combo_box_text_new();
+	gtk_combo_box_text_insert_text(GTK_COMBO_BOX(combo_regexp_mode), 0, _("Use Extended reg. expr."));
+	gtk_combo_box_text_insert_text(GTK_COMBO_BOX(combo_regexp_mode), 1, _("Use Basic reg. expr."));
+	gtk_combo_box_text_insert_text(GTK_COMBO_BOX(combo_regexp_mode), 2, _("Use Perl reg. expr."));
+	gtk_combo_box_set_active(GTK_COMBO_BOX(combo_regexp_mode), REGEXP_MODE_EXTENDED);
+	gtk_widget_set_sensitive(combo_regexp_mode, FALSE);
+	ui_hookup_widget(fif_dlg.dialog, combo_regexp_mode, "combo_regexp_mode");
+
+	/* enable combo_regexp_mode when check_regexp is checked */
+	g_signal_connect(check_regexp, "toggled",
+		G_CALLBACK(on_widget_toggled_set_sensitive), combo_regexp_mode);
+
 	check_recursive = gtk_check_button_new_with_mnemonic(_("_Recurse in subfolders"));
 	ui_hookup_widget(fif_dlg.dialog, check_recursive, "check_recursive");
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_recursive), FALSE);
@@ -1021,6 +1045,7 @@ static void create_fif_dialog(void)
 
 	lbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add(GTK_CONTAINER(lbox), check_regexp);
+	gtk_container_add(GTK_CONTAINER(lbox), combo_regexp_mode);
 	gtk_container_add(GTK_CONTAINER(lbox), checkbox2);
 	gtk_container_add(GTK_CONTAINER(lbox), check_recursive);
 
@@ -1239,6 +1264,7 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		GtkWidget *check_wordstart = ui_lookup_widget(dialog, "check_wordstart");
 		GtkWidget *check_escape = ui_lookup_widget(dialog, "check_escape");
 		GtkWidget *check_multiline = ui_lookup_widget(dialog, "check_multiline");
+		GtkWidget *combobox = ui_lookup_widget(dialog, "choose_regexp");
 		gboolean replace = (dialog != find_dlg.dialog);
 		const char *back_button[2] = { "btn_previous" , "check_back" };
 
@@ -1248,6 +1274,7 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		gtk_widget_set_sensitive(check_word, ! regex_set);
 		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
 		gtk_widget_set_sensitive(check_multiline, regex_set);
+		gtk_widget_set_sensitive(combobox, regex_set);
 	}
 }
 
@@ -1667,7 +1694,20 @@ static GString *get_grep_options(void)
 	if (!settings.fif_regexp)
 		g_string_append_c(gstr, 'F');
 	else
-		g_string_append_c(gstr, 'E');
+	{
+		switch (settings.fif_regexp_mode)
+		{
+			case REGEXP_MODE_EXTENDED:
+				g_string_append_c(gstr, 'E');
+				break;
+			case REGEXP_MODE_BASIC:
+				g_string_append_c(gstr, 'G');
+				break;
+			case REGEXP_MODE_PERL:
+				g_string_append_c(gstr, 'P');
+				break;
+		}
+	}
 
 	if (settings.fif_use_extra_options)
 	{
