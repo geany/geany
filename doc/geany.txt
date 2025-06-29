@@ -1297,8 +1297,7 @@ might be hard to read with a proportional font.
 If you want to change the font, you can do this easily by using the following
 custom CSS snippet, see `Customizing Geany's appearance using GTK+ CSS`_::
 
-    #GeanyDialogSearch GtkEntry /* GTK < 3.20 */,
-    #GeanyDialogSearch entry /* GTK >= 3.20 */ {
+    #GeanyDialogSearch entry {
         font: 8pt monospace;
     }
 
