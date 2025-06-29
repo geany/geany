@@ -20,6 +20,7 @@ colorschemes = \
 	colorschemes/gedit.conf \
 	colorschemes/github.conf \
 	colorschemes/grey8.conf \
+	colorschemes/gruvbox-dark.conf \
 	colorschemes/hacker.conf \
 	colorschemes/himbeere.conf \
 	colorschemes/inkpot.conf \
