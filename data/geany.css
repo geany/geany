@@ -16,6 +16,7 @@
 
 /* use monospaced font in search entries for easier reading of regexp (#1907117) */
 #GeanyDialogSearch entry {
+	/* use "Consolas" instead of "monospace" on Windows for better font in search entries */
 	font-family: monospace;
 }
 
