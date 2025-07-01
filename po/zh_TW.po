@@ -5,21 +5,22 @@
 # Wei-Lun Chao <chaoweilun@gmail.com>, 2011.
 # Matthew Lien <BlueT@BlueT.org>, 2012
 # Hsiu-Ming Chang <cges30901@gmail.com>, 2018
+# anenasa <anenasaa@yahoo.com>, 2025
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 2.0\n"
+"Project-Id-Version: Geany 2.1\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2025-06-09 22:11+0200\n"
-"PO-Revision-Date: 2018-12-06 10:21+0800\n"
-"Last-Translator: Hsiu-Ming Chang <cges30901@gmail.com>\n"
+"PO-Revision-Date: 2025-07-01 18:18+0800\n"
+"Last-Translator: anenasa <anenasaa@yahoo.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 3.6\n"
 
 #: geany.desktop.in:4 data/geany.glade:6448
 msgid "Geany"
@@ -300,16 +301,14 @@ msgstr ""
 "尋和前往列號欄位以及 VTE。"
 
 #: data/geany.glade:1317
-#, fuzzy
 msgid "Use platform-native file dialogs"
-msgstr "使用原生 Windows 對話框"
+msgstr "使用平台原生對話框"
 
 #: data/geany.glade:1321
-#, fuzzy
 msgid ""
 "Defines whether to use the platform-native file dialogs or the GTK default "
 "dialogs"
-msgstr "定義是否要使用原生 Windows 對話框，或是使用 GTK 預設對話框"
+msgstr "定義是否要使用平台原生對話框，或是使用 GTK 預設對話框"
 
 #: data/geany.glade:1339 data/geany.glade:2006 data/geany.glade:4825
 msgid "<b>Miscellaneous</b>"
@@ -516,15 +515,15 @@ msgstr "關閉分頁後切換至最近一次使用的文件"
 
 #: data/geany.glade:2214
 msgid "Set limit on visible characters in tab label."
-msgstr ""
+msgstr "設定分頁標籤可見字元限制。"
 
 #: data/geany.glade:2215
 msgid "Tab label length:"
-msgstr ""
+msgstr "分頁標籤長度："
 
 #: data/geany.glade:2227
 msgid "Characters to be visible on the tab label of the file."
-msgstr ""
+msgstr "檔案分頁標籤可見字元數。"
 
 #: data/geany.glade:2255
 msgid "<b>Editor tabs</b>"
@@ -552,7 +551,7 @@ msgstr "附加工具列到選單(_A)"
 
 #: data/geany.glade:2476
 msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr "包裝工具列到主選單以儲存垂直空格"
+msgstr "將工具列塞到主選單以節省垂直空間"
 
 #: data/geany.glade:2530 src/toolbar.c:941
 msgid "Customize Toolbar"
@@ -631,9 +630,9 @@ msgid ""
 "key always moves the caret to the start of the current line, regardless of "
 "its current position."
 msgstr ""
-"當啟用「智慧」個人資料夾時，HOME 按鍵將移動 ^ 到該列第一個非空白字元，萬一它"
-"已經在那裡，它則會移動到該列最起始的部份。如果停用這個特徵，HOME 按鍵會自動移"
-"動 ^ 到目前列的開始，而不管它的現在位置。"
+"當啟用「智慧」home 鍵時，HOME 按鍵將移動 ^ 到該列第一個非空白字元，萬一它已經"
+"在那裡，它則會移動到該列開頭。如果停用這個特徵，HOME 按鍵會自動移動 ^ 到目前"
+"列的開始，而不管它的現在位置。"
 
 #: data/geany.glade:2885
 msgid "Disable Drag and Drop"
@@ -670,7 +669,7 @@ msgstr "使用指示器以顯示編譯錯誤"
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
-msgstr "是否要使用指示器 (潦草底線) 以標示編譯器找到警告或錯誤的位置列"
+msgstr "是否要使用指示器 (彎曲底線) 以標示編譯器找到警告或錯誤的位置列"
 
 #: data/geany.glade:2948
 msgid "Newline strips trailing spaces"
@@ -804,15 +803,14 @@ msgid ""
 msgstr "按下 跳格/shift-跳格 就會縮排/取消縮排，而非插入跳格字元"
 
 #: data/geany.glade:3419
-#, fuzzy
 msgid "_Backspace key unindents"
-msgstr "跳格鍵縮排(_K)"
+msgstr "退格鍵取消縮排(_B)"
 
 #: data/geany.glade:3423
 msgid ""
 "With the cursor in the indentation, pressing backspace unindents instead of "
 "deleting one character"
-msgstr ""
+msgstr "當游標在縮排中時，按下退格鍵會取消縮排，而不是刪除一個字元"
 
 #: data/geany.glade:3441
 msgid "<b>Indentation</b>"
@@ -874,7 +872,7 @@ msgstr "最長符號名稱建議："
 
 #: data/geany.glade:3610
 msgid "Completion list height:"
-msgstr "標示補完清單："
+msgstr "補完清單高度："
 
 #: data/geany.glade:3625
 msgid "Characters to type for autocompletion:"
@@ -984,15 +982,14 @@ msgid "Marks spaces with dots and tabs with arrows"
 msgstr "以點標記空格而以箭頭標記跳格"
 
 #: data/geany.glade:3963
-#, fuzzy
 msgid "Show only non-default line endings"
-msgstr "顯示列尾符號"
+msgstr "只顯示非預設的列尾符號"
 
 #: data/geany.glade:3967
 msgid ""
 "Shows line ending characters only when they differ from the file default "
 "line ending character"
-msgstr ""
+msgstr "只有當列尾符號與檔案預設列尾符號不同時才會顯示"
 
 #: data/geany.glade:3976
 msgid "Show line endings"
@@ -1059,8 +1056,8 @@ msgid ""
 "long lines, or as a hint to break the line. Set this value to a value "
 "greater than 0 to specify the column where it should appear."
 msgstr ""
-"長列標誌是在編輯器中的細垂線，它協助標記長列，或做為中斷列的提示。設定這個值"
-"大於 0 以指定它應該出現的直欄。"
+"長列標誌是在編輯器中的細垂直線，它協助標記長列，或做為中斷列的提示。設定這個"
+"值大於 0 以指定它應該出現的欄位。"
 
 #: data/geany.glade:4209
 msgid "Line"
@@ -1094,19 +1091,16 @@ msgid "<b>Long line marker</b>"
 msgstr "<b>長列標誌</b>"
 
 #: data/geany.glade:4302
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "顯示標誌邊界"
+msgstr "顯示於標誌邊界"
 
 #: data/geany.glade:4316
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "顯示列尾結束字元"
+msgstr "使用底線顯示"
 
 #: data/geany.glade:4336
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>變更:</b>"
+msgstr "<b>變更記錄</b>"
 
 #: data/geany.glade:4356
 msgid "Display"
@@ -1155,11 +1149,11 @@ msgstr "<b>編碼</b>"
 
 #: data/geany.glade:4637 data/geany.glade:9493
 msgid "Ensure new line at file end"
-msgstr "確保換列於檔案結束"
+msgstr "確保換列於檔案結尾"
 
 #: data/geany.glade:4641
 msgid "Ensures that at the end of the file is a new line"
-msgstr "確保於檔案結束是換列字元"
+msgstr "確保檔案結尾有換列字元"
 
 #: data/geany.glade:4653 data/geany.glade:9508
 msgid "Ensure consistent line endings"
@@ -1235,9 +1229,8 @@ msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "您所偏好瀏覽器的路徑 (以及可能的額外引數)"
 
 #: data/geany.glade:4945
-#, fuzzy
 msgid "System default"
-msgstr "系統預設(_Y)"
+msgstr "系統預設"
 
 #: data/geany.glade:5001
 msgid "Grep:"
@@ -1321,32 +1314,29 @@ msgid "Date & time:"
 msgstr "日期和時間："
 
 #: data/geany.glade:5419
-#, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
-"conversion specifiers see https://docs.gtk.org/glib/"
-"method.DateTime.format.html."
+"conversion specifiers see https://docs.gtk.org/glib/method.DateTime.format."
+"html."
 msgstr ""
-"指定用於 {datetime} 萬用變數的格式。您可以使用任何相容於 ANSI C strftime 函式"
-"的轉換指示符號。"
+"指定用於 {datetime} 萬用變數的格式。可用的轉換指示符號請參見 https://docs."
+"gtk.org/glib/method.DateTime.format.html。"
 
 #: data/geany.glade:5435
-#, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"指定用於 {year} 萬用變數的格式。您可以使用任何相容於 ANSI C strftime 函式的轉"
-"換指示符號。"
+"指定用於 {year} 萬用變數的格式。可用的轉換指示符號請參見 https://docs.gtk."
+"org/glib/method.DateTime.format.html。"
 
 #: data/geany.glade:5451
-#, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"指定用於 {date} 萬用變數的格式。您可以使用任何相容於 ANSI C strftime 函式的轉"
-"換指示符號。"
+"指定用於 {date} 萬用變數的格式。可用的轉換指示符號請參見 https://docs.gtk."
+"org/glib/method.DateTime.format.html。"
 
 #: data/geany.glade:5478
 msgid "<b>Template data</b>"
@@ -1385,6 +1375,15 @@ msgid ""
 "<tt>%d</tt> if there are no project open.\n"
 "• <tt>%%</tt>: a literal <tt>%</tt> character."
 msgstr ""
+"列印檔案的命令。\n"
+"\n"
+"支援的佔位符號有：\n"
+"• <tt>%d</tt>: 包含檔案的目錄。\n"
+"• <tt>%e</tt>: 檔案名稱，不含路徑與副檔名。\n"
+"• <tt>%f</tt>: 檔案名稱，不含路徑。\n"
+"• <tt>%l</tt>: 檔案中目前的列號，從 1 開始。\n"
+"• <tt>%p</tt>: 目前專案的目錄，如果沒有開啟的專案則相當於 <tt>%d</tt>。\n"
+"• <tt>%%</tt>: 字元 <tt>%</tt> 本身。"
 
 #: data/geany.glade:5714
 msgid "Use an external command for printing"
@@ -1432,14 +1431,13 @@ msgid "Date format:"
 msgstr "日期格式："
 
 #: data/geany.glade:5848 src/printing.c:279
-#, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. For a list of available conversion specifiers see "
 "https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"指定於每個頁面加入頁首的日期和時間戳記格式。您可以使用任何相容於 ANSI C "
-"strftime 函式的轉換指示符號。"
+"指定於每個頁面加入頁首的日期和時間戳記格式。可用的轉換指示符號請參見 https://"
+"docs.gtk.org/glib/method.DateTime.format.html。"
 
 #: data/geany.glade:5883
 msgid "Use native GTK printing"
@@ -1519,11 +1517,11 @@ msgstr "產生輸出時是否要捲動到底部"
 
 #: data/geany.glade:6176
 msgid "Cursor blinks"
-msgstr "游標閃動"
+msgstr "游標閃爍"
 
 #: data/geany.glade:6180
 msgid "Whether to blink the cursor"
-msgstr "是否要閃動游標"
+msgstr "是否要閃爍游標"
 
 #: data/geany.glade:6191
 msgid "Override Geany keybindings"
@@ -1687,9 +1685,8 @@ msgid "_Send Selection to Terminal"
 msgstr "發送選取區域到終端機(_S)"
 
 #: data/geany.glade:6930 src/keybindings.c:509
-#, fuzzy
 msgid "_Join Lines"
-msgstr "合併多列"
+msgstr "合併多列(_J)"
 
 #: data/geany.glade:6939 src/keybindings.c:506
 msgid "_Reflow Lines/Block"
@@ -1753,7 +1750,7 @@ msgstr "找上一個(_P)"
 
 #: data/geany.glade:7266 src/symbols.c:2268
 msgid "Find in F_iles..."
-msgstr "在檔案中尋找(_I)..."
+msgstr "多重檔案尋找(_I)..."
 
 #: data/geany.glade:7277
 msgid "_Replace..."
@@ -1985,7 +1982,7 @@ msgstr "新增(_N)..."
 
 #: data/geany.glade:8065
 msgid "New from _Folder..."
-msgstr ""
+msgstr "從資料夾新增(_F)..."
 
 #: data/geany.glade:8089
 msgid "_Recent Projects"
@@ -2060,22 +2057,20 @@ msgid "_Donate..."
 msgstr "捐款(_D)..."
 
 #: data/geany.glade:8361
-#, fuzzy
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
-msgstr "以常用的萬用字元篩選您的檔案，多重式樣之間利用空格分隔。"
+msgstr "以輸入的文字篩選符號清單。多重篩選器之間利用空格分隔。"
 
 #: data/geany.glade:8403 src/sidebar.c:115 src/tagmanager/tm_parser.c:1426
 msgid "Symbols"
 msgstr "符號"
 
 #: data/geany.glade:8417
-#, fuzzy
 msgid ""
 "Filter the document list using the entered text. Separate multiple filters "
 "with a space."
-msgstr "以常用的萬用字元篩選您的檔案，多重式樣之間利用空格分隔。"
+msgstr "以輸入的文字篩選文件清單。多重篩選器之間利用空格分隔。"
 
 #: data/geany.glade:8461
 msgid "Documents"
@@ -2122,11 +2117,10 @@ msgid "File _patterns:"
 msgstr "檔案式樣(_P)："
 
 #: data/geany.glade:8848
-#, fuzzy
 msgid ""
-"Space separated list of file patterns used for the Find in Files dialog "
-"(e.g. *.c *.h)"
-msgstr "空格分隔的檔案式樣清單，用於多重檔案中尋找的對話框 (例如 *.c *.h)"
+"Space separated list of file patterns used for the Find in Files dialog (e."
+"g. *.c *.h)"
+msgstr "空格分隔的檔案式樣清單，用於多重檔案尋找對話框 (例如 *.c *.h)"
 
 #: data/geany.glade:8882 src/project.c:232
 msgid ""
@@ -2226,6 +2220,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"版權 (c) 2005\n"
+"Geany 貢獻者"
 
 #: src/about.c:173
 msgid "About Geany"
@@ -2238,12 +2234,12 @@ msgstr "快速且輕巧的整合開發環境"
 #: src/about.c:239
 #, c-format
 msgid "(built on or after %s)"
-msgstr "(於 %s 或其之後建立)"
+msgstr "(於 %s 或其之後組建)"
 
 #: src/about.c:253
 #, c-format
 msgid "Using GTK+ v%u.%u.%u and GLib v%u.%u.%u runtime libraries"
-msgstr ""
+msgstr "使用 GTK+ v%u.%u.%u 與 GLib v%u.%u.%u 執行時函式庫"
 
 #: src/about.c:286
 msgid "Info"
@@ -2281,7 +2277,7 @@ msgstr "貢獻者"
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
-msgstr "眾多貢獻者之部份 (更詳細的清單請參看檔案 %s 以取得)："
+msgstr "眾多貢獻者中的一部分 (更詳細的清單請參看檔案 %s 以取得)："
 
 #: src/about.c:435
 msgid "Credits"
@@ -2345,9 +2341,9 @@ msgid "Compilation finished successfully."
 msgstr "編譯成功結束。"
 
 #: src/build.c:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Enter custom text to append to the command \"%s\":"
-msgstr "在此輸入自訂文字，所有輸入的文字會被附加到命令。"
+msgstr "輸入附加到命令「%s」的自訂文字："
 
 #: src/build.c:1303
 msgid "_Next Error"
@@ -2477,12 +2473,11 @@ msgstr[0] "%d 個檔案已儲存。"
 
 #: src/callbacks.c:353
 msgid "Changes detected, reloading all will lose any changes and history."
-msgstr ""
+msgstr "偵測到變更，全部重新載入將會遺失所有變更和記錄。"
 
 #: src/callbacks.c:354
-#, fuzzy
 msgid "Are you sure you want to reload all files?"
-msgstr "確定要重新載入「%s」？"
+msgstr "確定要重新載入所有檔案？"
 
 #: src/callbacks.c:1035 src/keybindings.c:570
 msgid "Go to Line"
@@ -2651,7 +2646,7 @@ msgstr "選擇字型"
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
-msgstr "發生錯誤或是無法取回檔案資訊 (亦即來自新的檔案)。"
+msgstr "發生錯誤或是無法取回檔案資訊 (例如來自新的檔案)。"
 
 #: src/dialogs.c:1223 src/dialogs.c:1224 src/dialogs.c:1225 src/dialogs.c:1231
 #: src/dialogs.c:1232 src/dialogs.c:1233 src/symbols.c:2044 src/symbols.c:2060
@@ -2689,14 +2684,14 @@ msgid "Could not open file %s (%s)"
 msgstr "無法開啟檔案 %s (%s)"
 
 #: src/document.c:1001
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\" as %s: %s."
-msgstr "無法開啟 URI「%s」：%s"
+msgstr "無法載入檔案「%s」為 %s：%s。"
 
 #: src/document.c:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\": %s."
-msgstr "無法開啟 URI「%s」：%s"
+msgstr "無法載入檔案「%s」：%s。"
 
 #: src/document.c:1014
 #, c-format
@@ -2722,8 +2717,7 @@ msgstr "跳格"
 msgid "Tabs and Spaces"
 msgstr "跳格與空格"
 
-#. Translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
-#. * and Spaces), the second one is the filename
+#. Translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs* and Spaces), the second one is the filename
 #: src/document.c:1240
 #, c-format
 msgid "Setting %s indentation mode for %s."
@@ -2739,9 +2733,7 @@ msgstr "設定縮排寬度為 %d 用於 %s。"
 msgid "File %s reloaded."
 msgstr "檔案 %s 已重新載入。"
 
-#. Translators: this is the status window message for opening a file. %d is the number
-#. * of the newly opened file, %s indicates whether the file is opened read-only
-#. * (it is replaced with the string ", read-only").
+#. Translators: this is the status window message for opening a file. %d is the number* of the newly opened file, %s indicates whether the file is opened read-only* (it is replaced with the string ", read-only").
 #: src/document.c:1490
 #, c-format
 msgid "File %s opened (%d%s)."
@@ -2849,7 +2841,7 @@ msgstr "無法儲存唯讀文件「%s」！"
 #: src/document.c:2186
 #, c-format
 msgid "Error saving file (%s)."
-msgstr "儲存檔案 (%s) 時發生錯誤。"
+msgstr "儲存檔案時發生錯誤 (%s) 。"
 
 #: src/document.c:2191
 #, c-format
@@ -3052,15 +3044,15 @@ msgstr "中東語系"
 
 #: src/encodings.c:674
 msgid "Data contains NULs"
-msgstr ""
+msgstr "資料包含 NUL"
 
 #: src/encodings.c:816
 msgid "Data contains NULs or the encoding is not supported"
-msgstr ""
+msgstr "資料包含 NUL 或編碼不支援"
 
 #: src/encodings.c:937
 msgid "Data contains NULs or is not valid UTF-8"
-msgstr ""
+msgstr "資料包含 NUL 或不是有效的 UTF-8"
 
 #: src/filetypes.c:1240
 msgid "All Source"
@@ -3203,9 +3195,8 @@ msgid "Reload file"
 msgstr "重新載入檔案"
 
 #: src/keybindings.c:360
-#, fuzzy
 msgid "Reload all files"
-msgstr "重新載入檔案"
+msgstr "重新載入所有檔案"
 
 #: src/keybindings.c:362
 msgid "Re-open last closed tab"
@@ -3217,7 +3208,7 @@ msgstr "退出"
 
 #: src/keybindings.c:371
 msgid "New from Folder"
-msgstr ""
+msgstr "從資料夾新增"
 
 #: src/keybindings.c:383
 msgid "Undo"
@@ -3791,8 +3782,7 @@ msgid ""
 "\"%s\"."
 msgstr "您的組態目錄已經成功地從「%s」移動到「%s」。"
 
-#. Translators: the third %s in brackets is the error message which
-#. * describes why moving the dir didn't work
+#. Translators: the third %s in brackets is the error message which* describes why moving the dir didn't work
 #: src/libmain.c:717
 #, c-format
 msgid ""
@@ -3824,7 +3814,7 @@ msgstr "無法建立組態目錄 (%s)。"
 
 #: src/libmain.c:1204
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
-msgstr ""
+msgstr "無法建立 IPC 通訊端，請到「求助」->「除錯訊息」檢視詳細資料。"
 
 #: src/libmain.c:1429
 msgid "Do you really want to quit?"
@@ -3927,9 +3917,8 @@ msgid "Plugins"
 msgstr "外掛程式"
 
 #: src/plugins.c:1895
-#, fuzzy
 msgid "Choose which plugins to load:"
-msgstr "選擇啟動時應該載入哪些外掛程式："
+msgstr "選擇要載入哪些外掛程式："
 
 #: src/plugins.c:1989
 #, c-format
@@ -3943,9 +3932,8 @@ msgid "Configure Plugins"
 msgstr "設定外掛程式"
 
 #: src/prefs.c:184
-#, fuzzy
 msgid "Assign Keybinding"
-msgstr "按鍵繫結"
+msgstr "指定按鍵繫結"
 
 #: src/prefs.c:191
 #, c-format
@@ -4012,7 +4000,7 @@ msgstr "<i>警告：這些設定項目被目前的專案所覆寫。參看<b>專
 
 #: src/prefs.c:1892
 msgid "Not configurable on Windows (the system default browser is used)."
-msgstr ""
+msgstr "無法在 Windows 設定（會使用系統預設瀏覽器）。"
 
 #: src/printing.c:162
 #, c-format
@@ -4074,8 +4062,7 @@ msgstr "無法執行列印命令「%s」：%s。檢查偏好設定中的路徑�
 msgid "File %s printed."
 msgstr "檔案 %s 已列印。"
 
-#. Translators: "projects" is part of the default project base path so be careful when translating
-#. * please avoid special characters and spaces, look at the source for details or ask Frank
+#. Translators: "projects" is part of the default project base path so be careful when translating* please avoid special characters and spaces, look at the source for details or ask Frank
 #: src/project.c:101
 msgid "projects"
 msgstr "專案"
@@ -4339,9 +4326,8 @@ msgstr ""
 "自訂：手動指定檔案式樣"
 
 #: src/search.c:946
-#, fuzzy
 msgid "Space separated list of file patterns (e.g. *.c *.h)"
-msgstr "空格分隔的檔案式樣清單，用於多重檔案中尋找的對話框 (例如 *.c *.h)"
+msgstr "空格分隔的檔案式樣清單（例如 *.c *.h）"
 
 #: src/search.c:958
 msgid "_Directory:"
@@ -4393,16 +4379,15 @@ msgstr "取代 %u 項符合者於 %u 份文件中。"
 #: src/search.c:1544
 msgid ""
 "This operation will modify all open files which contain the text to replace."
-msgstr ""
+msgstr "這個操作會修改所有包含要取代的文字的開啟的檔案。"
 
 #: src/search.c:1545
 msgid "Are you sure to replace in the whole session?"
-msgstr ""
+msgstr "確定要在整個作業階段取代嗎？"
 
 #: src/search.c:1721
-#, fuzzy
 msgid "Invalid directory for Find in Files."
-msgstr "無效的目錄用於多重檔案尋找。"
+msgstr "無效的多重檔案尋找目錄。"
 
 #: src/search.c:1726
 msgid "No text to find."
@@ -4488,7 +4473,7 @@ msgstr "值"
 #: src/symbols.c:1289
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr "不明檔案類型延伸檔名用於「%s」。\n"
+msgstr "不明檔案類型副檔名用於「%s」。\n"
 
 #: src/symbols.c:1315
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
@@ -4553,12 +4538,12 @@ msgstr "依據出現排序(_A)"
 
 #: src/symbols.c:2249
 msgid "_Group by Type"
-msgstr ""
+msgstr "依據類型分組(_G)"
 
 #: src/templates.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8: %s"
-msgstr "轉換範本檔案「%s」到 UTF-8 時失敗"
+msgstr "轉換範本檔案「%s」到 UTF-8 時失敗：%s"
 
 #: src/templates.c:654
 #, c-format
@@ -4808,37 +4793,34 @@ msgid "H_ide Sidebar"
 msgstr "隱藏側邊欄(_I)"
 
 #: src/sidebar.c:1280
-#, fuzzy
 msgid "D_ocuments Only"
-msgstr "文件"
+msgstr "只有文件(_O)"
 
 #: src/sidebar.c:1281
 msgid "Show _Paths"
 msgstr "顯示路徑(_P)"
 
 #: src/sidebar.c:1282
-#, fuzzy
 msgid "Show _Tree"
-msgstr "顯示工具列(_T)"
+msgstr "顯示目錄樹(_T)"
 
 #: src/sidebar.c:1335 plugins/filebrowser.c:674
 msgid "_Find in Files..."
-msgstr "在檔案中尋找(_F)..."
+msgstr "多重檔案尋找(_F)..."
 
 #: src/ui_utils.c:62
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: "
 "%e      filetype: %f      scope: %S"
 msgstr ""
-"列：%l / %L\t 行：%c\t 選：%s\t %w      %t      %m模式：%M      編碼："
-"%e      檔案型態：%f      範圍：%S"
+"列：%l / %L\t 行：%c\t 選：%s\t %w      %t      %mEOL：%M      編碼：%e      "
+"檔案型態：%f      範圍：%S"
 
 #. Translators: L = lines
 #: src/ui_utils.c:238
 #, c-format
 msgid "%dL"
-msgstr "%dL"
+msgstr "%d列"
 
 #. Translators: RO = read-only
 #: src/ui_utils.c:248 src/ui_utils.c:255
@@ -4871,7 +4853,7 @@ msgstr "跳/空格"
 #. Translators: MOD = modified
 #: src/ui_utils.c:279
 msgid "MOD"
-msgstr "MOD"
+msgstr "修改"
 
 #: src/ui_utils.c:393
 msgid " (new instance)"
@@ -4935,13 +4917,11 @@ msgid "Custom Date Format"
 msgstr "自訂日期格式"
 
 #: src/ui_utils.c:715
-#, fuzzy
 msgid ""
-"Custom date format (see https://docs.gtk.org/glib/"
-"method.DateTime.format.html):"
+"Custom date format (see https://docs.gtk.org/glib/method.DateTime.format."
+"html):"
 msgstr ""
-"在此輸入自訂日期和時間格式。您可以使用任何相容於 ANSI C strftime 函式的轉換指"
-"示符號。"
+"自訂日期格式（參見 https://docs.gtk.org/glib/method.DateTime.format.html）："
 
 #: src/ui_utils.c:735
 msgid "Date format string could not be converted (possibly too long)."
@@ -4952,7 +4932,6 @@ msgid "_Set Custom Date Format"
 msgstr "設定自訂日期格式(_S)"
 
 #: src/ui_utils.c:1973
-#, fuzzy
 msgid "Select Project Base Path"
 msgstr "選擇專案基底路徑"
 
@@ -4985,12 +4964,11 @@ msgid "Select Browser"
 msgstr "選擇瀏覽器"
 
 #: src/utils.c:100
-#, fuzzy
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command "
 "or leave it empty in order to spawn the system default browser."
 msgstr ""
-"試著衍生被設定的瀏覽器指令時發生錯誤。請修正它或是輸入其他的瀏覽器指令。"
+"衍生設定的瀏覽器命令時發生錯誤。請輸入有效的命令或留空衍生系統預設瀏覽器。"
 
 #: src/utils.c:365
 msgid "Windows (CRLF)"
@@ -5019,17 +4997,17 @@ msgstr "LF"
 #: src/utils.c:2542
 #, c-format
 msgid "Unknown placeholder \"%%%c\" in \"%s\""
-msgstr ""
+msgstr "未知佔位符號「%%%c」於「%s」"
 
 #: src/utils.c:2583
-#, fuzzy, c-format
+#, c-format
 msgid "failed to substitute %%%c: document has no path"
-msgstr "替代 %%p 時失敗，沒有活躍中的專案"
+msgstr "替代 %%%c 時失敗：文件沒有路徑"
 
 #: src/utils.c:2593
 #, c-format
 msgid "no project active, %%p is substituted as %%d"
-msgstr ""
+msgstr "沒有使用中的專案，%%p 取代為 %%d"
 
 #: src/vte.c:570
 #, c-format
@@ -5187,9 +5165,8 @@ msgid "Environment"
 msgstr "環境"
 
 #: src/tagmanager/tm_parser.c:232
-#, fuzzy
 msgid "Part"
-msgstr "零件"
+msgstr "部分"
 
 #: src/tagmanager/tm_parser.c:233 src/tagmanager/tm_parser.c:340
 #: src/tagmanager/tm_parser.c:607
@@ -5211,37 +5188,35 @@ msgstr "子子區段"
 
 #: src/tagmanager/tm_parser.c:237
 msgid "Bibitem"
-msgstr ""
+msgstr "Bibitem"
 
 #: src/tagmanager/tm_parser.c:260
 msgid "Articles"
-msgstr ""
+msgstr "文章"
 
 #: src/tagmanager/tm_parser.c:261
-#, fuzzy
 msgid "Book Chapters"
-msgstr "章節"
+msgstr "書籍章節"
 
 #: src/tagmanager/tm_parser.c:262
 msgid "Books & Conference Proceedings"
-msgstr ""
+msgstr "書籍與會議論文集"
 
 #: src/tagmanager/tm_parser.c:263
 msgid "Conference Papers"
-msgstr ""
+msgstr "會議論文"
 
 #: src/tagmanager/tm_parser.c:264
 msgid "Theses"
-msgstr ""
+msgstr "論文"
 
 #: src/tagmanager/tm_parser.c:265
-#, fuzzy
 msgid "Strings"
-msgstr "設定"
+msgstr "字串"
 
 #: src/tagmanager/tm_parser.c:266
 msgid "Unpublished"
-msgstr ""
+msgstr "未發表"
 
 #: src/tagmanager/tm_parser.c:280
 msgid "Defines"
@@ -5337,9 +5312,8 @@ msgid "Functions / Procedures"
 msgstr "函式/程序"
 
 #: src/tagmanager/tm_parser.c:491
-#, fuzzy
 msgid "Variables / Signals / Ports"
-msgstr "變數/信號"
+msgstr "變數/信號/通訊埠"
 
 #: src/tagmanager/tm_parser.c:492
 msgid "Processes / Blocks / Components"
@@ -5350,14 +5324,12 @@ msgid "Type constructors"
 msgstr "型態建構子"
 
 #: src/tagmanager/tm_parser.c:605
-#, fuzzy
 msgid "Title"
-msgstr "無標題"
+msgstr "標題"
 
 #: src/tagmanager/tm_parser.c:606
-#, fuzzy
 msgid "Subtitle"
-msgstr "無標題"
+msgstr "子標題"
 
 #: src/tagmanager/tm_parser.c:627
 msgid "Anchors"
@@ -5392,34 +5364,28 @@ msgid "Blocks"
 msgstr "區塊"
 
 #: src/tagmanager/tm_parser.c:752
-#, fuzzy
 msgid "Chapters"
 msgstr "章節"
 
 #: src/tagmanager/tm_parser.c:754
-#, fuzzy
 msgid "Subsections"
 msgstr "子區段"
 
 #: src/tagmanager/tm_parser.c:755
-#, fuzzy
 msgid "Subsubsections"
 msgstr "子子區段"
 
 #: src/tagmanager/tm_parser.c:756
-#, fuzzy
 msgid "Level 4 sections"
-msgstr "儲存動作"
+msgstr "層級 4 區段"
 
 #: src/tagmanager/tm_parser.c:757
-#, fuzzy
 msgid "Level 5 sections"
-msgstr "儲存動作"
+msgstr "層級 5 區段"
 
 #: src/tagmanager/tm_parser.c:790
-#, fuzzy
 msgid "Instances"
-msgstr "繼承"
+msgstr "實體"
 
 #: src/tagmanager/tm_parser.c:792
 msgid "Functions / Tasks"
@@ -5427,25 +5393,23 @@ msgstr "功能/事務"
 
 #: src/tagmanager/tm_parser.c:794
 msgid "Parameters / Constants"
-msgstr ""
+msgstr "參數/常數"
 
 #: src/tagmanager/tm_parser.c:795
-#, fuzzy
 msgid "Ports"
-msgstr "匯入"
+msgstr "通訊埠"
 
 #: src/tagmanager/tm_parser.c:796
 msgid "Signals"
-msgstr ""
+msgstr "訊號"
 
 #: src/tagmanager/tm_parser.c:802
 msgid "Structs / Unions / Enums"
-msgstr ""
+msgstr "結構/聯合/枚舉"
 
 #: src/tagmanager/tm_parser.c:803
-#, fuzzy
 msgid "Typedefs"
-msgstr "型態"
+msgstr "Typedefs"
 
 #: src/tagmanager/tm_parser.c:858
 msgid "Program"
@@ -5453,7 +5417,7 @@ msgstr "程式"
 
 #: src/tagmanager/tm_parser.c:860
 msgid "Divisions"
-msgstr ""
+msgstr "部"
 
 #: src/tagmanager/tm_parser.c:862
 msgid "Paragraph"
@@ -5465,7 +5429,7 @@ msgstr "群組"
 
 #: src/tagmanager/tm_parser.c:864 src/tagmanager/tm_parser.c:1273
 msgid "Data"
-msgstr "日期"
+msgstr "資料"
 
 #: src/tagmanager/tm_parser.c:865
 msgid "Copies"
@@ -5488,9 +5452,8 @@ msgid "Section Level 4"
 msgstr "區段層級 4"
 
 #: src/tagmanager/tm_parser.c:901
-#, fuzzy
 msgid "Section Level 5"
-msgstr "區段層級 1"
+msgstr "區段層級 5"
 
 #: src/tagmanager/tm_parser.c:911
 msgid "Parts"
@@ -5513,42 +5476,36 @@ msgid "Implementations"
 msgstr "實作"
 
 #: src/tagmanager/tm_parser.c:1017
-#, fuzzy
 msgid "Fields"
-msgstr "前往欄位"
+msgstr "欄位"
 
 #: src/tagmanager/tm_parser.c:1021
-#, fuzzy
 msgid "Unknowns"
 msgstr "不明"
 
 #: src/tagmanager/tm_parser.c:1127
-#, fuzzy
 msgid "Packages"
 msgstr "套件"
 
 #: src/tagmanager/tm_parser.c:1130
 msgid "Tasks"
-msgstr ""
+msgstr "任務"
 
 #: src/tagmanager/tm_parser.c:1154
-#, fuzzy
 msgid "Regions"
 msgstr "區段"
 
 #: src/tagmanager/tm_parser.c:1171
-#, fuzzy
 msgid "Packages / Modules"
-msgstr "套件"
+msgstr "套件 / 模組"
 
 #: src/tagmanager/tm_parser.c:1172
-#, fuzzy
 msgid "Classes / Roles"
-msgstr "類別"
+msgstr "類別/ Roles"
 
 #: src/tagmanager/tm_parser.c:1173
 msgid "Grammars"
-msgstr ""
+msgstr "語法"
 
 #: src/tagmanager/tm_parser.c:1175
 msgid "Subroutines"
@@ -5559,67 +5516,60 @@ msgid "Rules / Tokens"
 msgstr ""
 
 #: src/tagmanager/tm_parser.c:1217
-#, fuzzy
 msgid "Words"
-msgstr "字詞："
+msgstr "字詞"
 
 #: src/tagmanager/tm_parser.c:1234
-#, fuzzy
 msgid "Projects"
 msgstr "專案"
 
 #: src/tagmanager/tm_parser.c:1237
 msgid "Subdirs"
-msgstr ""
+msgstr "子目錄"
 
 #: src/tagmanager/tm_parser.c:1238
-#, fuzzy
 msgid "Build Targets"
-msgstr "目標"
+msgstr "組件目標"
 
 #: src/tagmanager/tm_parser.c:1239
-#, fuzzy
 msgid "Custom Targets"
-msgstr "自訂文字"
+msgstr "自訂目標"
 
 #: src/tagmanager/tm_parser.c:1240
 msgid "Benchmark Targets"
-msgstr ""
+msgstr "效能測試目標"
 
 #: src/tagmanager/tm_parser.c:1241
-#, fuzzy
 msgid "Run Targets"
-msgstr "目標"
+msgstr "執行目標"
 
 #: src/tagmanager/tm_parser.c:1242
 msgid "Tests"
-msgstr ""
+msgstr "測試"
 
 #: src/tagmanager/tm_parser.c:1255
 msgid "Mixins"
-msgstr ""
+msgstr "混合"
 
 #: src/tagmanager/tm_parser.c:1259
 msgid "Placeholders"
-msgstr ""
+msgstr "佔位符號"
 
 #: src/tagmanager/tm_parser.c:1272
-#, fuzzy
 msgid "Resources"
-msgstr "基底原始碼："
+msgstr "資源"
 
 #: src/tagmanager/tm_parser.c:1275
-#, fuzzy
 msgid "Variable"
 msgstr "變數"
 
 #: src/tagmanager/tm_parser.c:1276
 msgid "Providers"
-msgstr ""
+msgstr "提供者"
 
 #: src/tagmanager/tm_parser.c:1277
 msgid "Outputs"
-msgstr ""
+msgstr "輸出"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -5703,7 +5653,7 @@ msgstr "建立解構子"
 
 #: plugins/classbuilder.c:562
 msgid "Is abstract"
-msgstr "是摘要"
+msgstr "是抽象"
 
 #: plugins/classbuilder.c:565
 msgid "Is singleton"
@@ -6005,44 +5955,41 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "備份副本：檔案無法儲存 (%s)。"
 
 #: plugins/saveactions.c:332
-#, fuzzy, c-format
+#, c-format
 msgid "Instant Save filename could not be generated (%s)."
-msgstr "無法寫入專案檔案 (%s)。"
+msgstr "無法產生即時儲存檔案名稱 (%s)。"
 
 #: plugins/saveactions.c:439 plugins/saveactions.c:1225
-#, fuzzy
 msgid ""
 "Persistent untitled document directory does not exist or is not writable."
-msgstr "備份目錄不存在或是不可寫入。"
+msgstr "持久性無標題文件目錄不存在或是不可寫入。"
 
 #: plugins/saveactions.c:507
-#, fuzzy
 msgid "_Don't save (discard)"
-msgstr "不要儲存(_D)"
+msgstr "不要儲存（捨棄）(_D)"
 
 #: plugins/saveactions.c:529
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document %s is not saved."
-msgstr "檔案「%s」未儲存。"
+msgstr "無標題文件「%s」未儲存。"
 
 #: plugins/saveactions.c:530
-#, fuzzy
 msgid "Do you want to save it?"
-msgstr "您要重新載入它嗎？"
+msgstr "您要儲存它嗎？"
 
 #: plugins/saveactions.c:559 plugins/saveactions.c:605
 #, c-format
 msgid "Untitled document file %s was deleted"
-msgstr ""
+msgstr "無標題文件 %s 已刪除"
 
 #: plugins/saveactions.c:622
 msgid "Persistent untitled document directory not found"
-msgstr ""
+msgstr "找不到持久性無標題文件資料夾"
 
 #: plugins/saveactions.c:817
 #, c-format
 msgid "Empty untitled document file %s was deleted"
-msgstr ""
+msgstr "空的無標題文件 %s 已刪除"
 
 #: plugins/saveactions.c:875
 #, c-format
@@ -6059,9 +6006,8 @@ msgid "Backup directory does not exist or is not writable."
 msgstr "備份目錄不存在或是不可寫入。"
 
 #: plugins/saveactions.c:1194
-#, fuzzy
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "備份目錄不存在或是不可寫入。"
+msgstr "即時儲存目錄不存在或是不可寫入。"
 
 #: plugins/saveactions.c:1343
 msgid "Auto Save"
@@ -6104,61 +6050,53 @@ msgid "_Directory to save backup files in:"
 msgstr "要儲存備份檔案的目錄(_D)："
 
 #: plugins/saveactions.c:1442
-#, fuzzy
 msgid ""
-"Date/_Time format for backup files (see https://docs.gtk.org/glib/"
-"method.DateTime.format.html):"
+"Date/_Time format for backup files (see https://docs.gtk.org/glib/method."
+"DateTime.format.html):"
 msgstr ""
-"在此輸入自訂日期和時間格式。您可以使用任何相容於 ANSI C strftime 函式的轉換指"
-"示符號。"
+"備份檔案的日期/時間格式（參見 https://docs.gtk.org/glib/method.DateTime."
+"format.html）(_T)："
 
 #: plugins/saveactions.c:1455
 msgid "Directory _levels to include in the backup destination:"
 msgstr "要包含在備份目的地中的目錄層級(_L)："
 
 #: plugins/saveactions.c:1482
-#, fuzzy
 msgid "Untitled Document Save"
-msgstr "尋找用法文件"
+msgstr "無標題文件儲存"
 
 #: plugins/saveactions.c:1495
-#, fuzzy
 msgid "Instant Save After Creation"
-msgstr "即時儲存"
+msgstr "建立後即時儲存"
 
 #: plugins/saveactions.c:1505
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
-msgstr ""
+msgstr "儲存檔案的資料夾（留空使用預設值：%s）(_D)："
 
 #: plugins/saveactions.c:1531
 msgid "<i>The plugin will not delete the files created in this directory.</i>"
-msgstr ""
+msgstr "<i>外掛程式不會刪除建立於這個資料夾的檔案。</i>"
 
 #: plugins/saveactions.c:1541
-#, fuzzy
 msgid "Persistent Untitled Documents"
-msgstr "列印文件"
+msgstr "持久性無標題文件"
 
 #: plugins/saveactions.c:1550
-#, fuzzy
 msgid "_Directory to save persistent untitled documents in:"
-msgstr "要儲存備份檔案的目錄(_D)："
+msgstr "要儲存持久性無標題文件的目錄(_D)："
 
 #: plugins/saveactions.c:1575
-#, fuzzy
 msgid "Untitled document save _interval:"
-msgstr "自動儲存間隔(_I)："
+msgstr "無標題文件儲存間隔(_I)："
 
 #: plugins/saveactions.c:1587
-#, fuzzy
 msgid "milliseconds"
-msgstr "秒"
+msgstr "毫秒"
 
 #: plugins/saveactions.c:1597
-#, fuzzy
 msgid "Default _filetype to use for untitled documents:"
-msgstr "用於新開啟檔案的檔案型態(_F)："
+msgstr "用於無標題文件的預設檔案型態(_F)："
 
 #: plugins/splitwindow.c:33
 msgid "Split Window"
@@ -6196,275 +6134,3 @@ msgstr "並排"
 #: plugins/splitwindow.c:434
 msgid "Top and Bottom"
 msgstr "頂端和底部"
-
-#~ msgid "Use fixed encoding when opening non-Unicode files"
-#~ msgstr "開啟非萬國碼檔案時使用固定的編碼"
-
-#~ msgid ""
-#~ "This option disables the automatic detection of the file encoding when "
-#~ "opening non-Unicode files and opens the file with the specified encoding "
-#~ "(usually not needed)"
-#~ msgstr ""
-#~ "這個選項停用開啟非萬國碼檔案時的編碼自動偵測，並且以指定的編碼開啟檔案 (通"
-#~ "常並不需要)"
-
-#~ msgid "Path to the command for printing files (use %f for the filename)"
-#~ msgstr "用於列印檔案的命令路徑 (使用 %f 做為檔名)"
-
-#~ msgid "Programming Languages"
-#~ msgstr "程式語言"
-
-#~ msgid "Scripting Languages"
-#~ msgstr "命令稿語言"
-
-#~ msgid "Markup Languages"
-#~ msgstr "標記語言"
-
-#, c-format
-#~ msgid "The file \"%s\" is not valid %s."
-#~ msgstr "檔案「%s」是無效的 %s。"
-
-#, c-format
-#~ msgid ""
-#~ "The file \"%s\" does not look like a text file or the file encoding is "
-#~ "not supported."
-#~ msgstr "檔案「%s」看起來不像文字檔，或是檔案編碼未被支援。"
-
-#, c-format
-#~ msgid "%s source file"
-#~ msgstr "%s 原始碼檔案"
-
-#, c-format
-#~ msgid "%s file"
-#~ msgstr "%s 檔案"
-
-#, c-format
-#~ msgid "%s script"
-#~ msgstr "%s 命令稿"
-
-#, c-format
-#~ msgid "%s document"
-#~ msgstr "%s 文件"
-
-#~ msgid "Shell"
-#~ msgstr "命令殼"
-
-#~ msgid "Makefile"
-#~ msgstr "Makefile"
-
-#~ msgid "Cascading Stylesheet"
-#~ msgstr "階層式樣式表"
-
-#~ msgid "Config"
-#~ msgstr "組態檔案"
-
-#~ msgid "Gettext translation"
-#~ msgstr "Gettext 翻譯檔案"
-
-#~ msgid "_Programming Languages"
-#~ msgstr "程式語言(_P)"
-
-#~ msgid "_Scripting Languages"
-#~ msgstr "命令稿語言(_S)"
-
-#~ msgid "_Markup Languages"
-#~ msgstr "標記語言(_M)"
-
-#~ msgid "M_iscellaneous"
-#~ msgstr "雜項(_I)"
-
-#~ msgid "Grab Key"
-#~ msgstr "擷取鍵"
-
-#~ msgid "Print only the basename(without the path) of the printed file"
-#~ msgstr "只印出要列印檔案的基底名稱（不含路徑）"
-
-#, fuzzy, c-format
-#~ msgid "<b>%s:%lu:</b> %s"
-#~ msgstr "<b>%s: %lu</b>"
-
-#, fuzzy, c-format
-#~ msgid "<i>%s:%lu:</i> %s"
-#~ msgstr "<b>%s: %lu</b>"
-
-#~ msgid "_Input Methods"
-#~ msgstr "輸入法(_I)"
-
-#~ msgid "Events"
-#~ msgstr "事件"
-
-#~ msgid "Use project-based session files"
-#~ msgstr "使用基於專案的作業階段檔案"
-
-#~ msgid ""
-#~ "Whether to store a project's session files and open them when re-opening "
-#~ "the project"
-#~ msgstr "是否要儲存專案作業階段檔案，並於重新開啟專案時開啟它們"
-
-#, c-format
-#~ msgid "%s: %lu"
-#~ msgstr "%s: %lu"
-
-#~ msgid "Geany project files"
-#~ msgstr "Geany 專案檔案"
-
-#~ msgid "Executables"
-#~ msgstr "可執行檔案"
-
-#~ msgid "Date/_Time format for backup files (\"man strftime\" for details):"
-#~ msgstr "用於備份檔案的日期/時間格式(\"man strftime\" 以瞭解細節)(_T)："
-
-#~ msgid "Fi_les:"
-#~ msgstr "檔案(_L)："
-
-#~ msgid "File patterns, e.g. *.c *.h"
-#~ msgstr "檔案式樣，例如：*.c *.h"
-
-#~ msgid ""
-#~ "Copyright (c) 2005-2019\n"
-#~ "Colomban Wendling\n"
-#~ "Nick Treleaven\n"
-#~ "Matthew Brush\n"
-#~ "Enrico Tröger\n"
-#~ "Frank Lanitz\n"
-#~ "All rights reserved."
-#~ msgstr ""
-#~ "著作權 (c) 2005-2019\n"
-#~ "Colomban Wendling\n"
-#~ "Nick Treleaven\n"
-#~ "Matthew Brush\n"
-#~ "Enrico Tröger\n"
-#~ "Frank Lanitz\n"
-#~ "版權所有。"
-
-#~ msgid "Filename of libvte.so"
-#~ msgstr "libvte.so 的檔名"
-
-#, fuzzy
-#~ msgid "Background image:"
-#~ msgstr "背景"
-
-#, fuzzy
-#~ msgid "Sets the path to the background image in the terminal widget"
-#~ msgstr "在終端機視窗元件中設定文字的背景顏色"
-
-#, fuzzy
-#~ msgid ""
-#~ "Cannot execute terminal command \"%s\": %s. Check the path setting in "
-#~ "Preferences."
-#~ msgstr "無法執行 grep 工具 '%s'；檢查在偏好設定中的路徑設定。"
-
-#~ msgid "Go to _Tag Definition"
-#~ msgstr "前往標記定義(_T)"
-
-#~ msgid "Go to T_ag Declaration"
-#~ msgstr "前往標記宣告(_A)"
-
-#~ msgid "Printing of \"%s\" failed (return code: %s)."
-#~ msgstr "列印「%s」時失敗 (回傳碼：%s)。"
-
-#, fuzzy
-#~ msgid "TerminateProcess() failed: %s"
-#~ msgstr "處理失敗 (%s)"
-
-#~ msgid "Custom command failed: %s"
-#~ msgstr "自訂命令失敗：%s"
-
-#~ msgid ""
-#~ "Could not execute the file in the VTE because it probably contains a "
-#~ "command."
-#~ msgstr "無法執行在 VTE 中的檔案，因為它或許含有命令。"
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not parse terminal command \"%s\" (check Terminal tool setting in "
-#~ "Preferences)"
-#~ msgstr "找不到終端機「%s」(檢查偏好設定中關於終端機工具的設定路徑)"
-
-#~ msgid ""
-#~ "Could not find terminal \"%s\" (check path for Terminal tool setting in "
-#~ "Preferences)"
-#~ msgstr "找不到終端機「%s」(檢查偏好設定中關於終端機工具的設定路徑)"
-
-#~ msgid "Detect by file extension"
-#~ msgstr "以附加檔名偵測"
-
-#~ msgid "Close _without saving"
-#~ msgstr "關閉而不儲存(_W)"
-
-#~ msgid "Show macro list"
-#~ msgstr "顯示巨集清單"
-
-#~ msgid "%s %s"
-#~ msgstr "%s %s"
-
-#, fuzzy
-#~ msgid "Description"
-#~ msgstr "描述："
-
-#~ msgid "<b>Plugin details:</b>"
-#~ msgstr "<b>外掛程式細節:</b>"
-
-#~ msgid "Plugin:"
-#~ msgstr "外掛程式："
-
-#~ msgid "Author(s):"
-#~ msgstr "作者："
-
-#~ msgid ""
-#~ "Could not change the directory in the VTE because it probably contains a "
-#~ "command."
-#~ msgstr "無法在 VTE 中變更目錄，因為它或許含有命令。"
-
-#~ msgid "<b>Type:</b>"
-#~ msgstr "<b>型態:</b>"
-
-#~ msgid "<b>Size:</b>"
-#~ msgstr "<b>大小:</b>"
-
-#~ msgid "<b>Read-only:</b>"
-#~ msgstr "<b>唯讀:</b>"
-
-#~ msgid "<b>Encoding:</b>"
-#~ msgstr "<b>編碼:</b>"
-
-#~ msgid "Split Horizontally"
-#~ msgstr "水平分割"
-
-#~ msgid "Split Vertically"
-#~ msgstr "垂直分割"
-
-#~ msgid ""
-#~ "A terminal emulator like xterm, gnome-terminal or konsole (should accept "
-#~ "the -e argument)"
-#~ msgstr ""
-#~ "終端機模擬器諸如 xterm，gnome-terminal 或 konsole (應該要能接受 -e 引數)"
-
-#~ msgid "_Open file in a new tab"
-#~ msgstr "在新的分頁中開啟檔案(_O)"
-
-#~ msgid ""
-#~ "Keep the current unsaved document open and open the newly saved file in a "
-#~ "new tab"
-#~ msgstr "保持目前未儲存的文件開啟，並在新的分頁中開啟新儲存的檔案"
-
-#~ msgid "The editor font is not a monospaced font!"
-#~ msgstr "編輯器字型並非定寬字型！"
-
-#~ msgid "Text will be wrongly spaced."
-#~ msgstr "文字間隔將會不正確。"
-
-#~ msgid "Invalid filename"
-#~ msgstr "無效的檔案名稱"
-
-#~ msgid "_Debug Messages"
-#~ msgstr "除錯訊息(_D)"
-
-#~ msgid "Project properties"
-#~ msgstr "專案屬性"
-
-#~ msgid "Goto"
-#~ msgstr "前往"
-
-#~ msgid "Clear the filter"
-#~ msgstr "清空篩選器"
