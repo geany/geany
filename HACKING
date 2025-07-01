@@ -169,13 +169,9 @@ Glade
 Add user-interface widgets to the Glade 3 file ``data/geany.glade``.
 Callbacks for the user-interface should go in ``src/callbacks.c``.
 
-Use Glade 3.8.5. The 3.8 series still supports GTK+ 2, and earlier
-point releases did not preserve the order of XML elements, leading to
-unmanageable diffs.
-
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 3.0 and GLib >= 2.32. API symbols from newer GTK/GLib
+Geany requires GTK 3.24 and GLib >= 2.56. API symbols from newer GTK/GLib
 versions should be avoided or made optional to keep the source code building
 on older systems.
 
@@ -184,7 +180,7 @@ libs (including GLib, GDK and Pango) has the advantages
 that you don't get confused by any newer API additions and you
 don't have to take care about whether you can use them or not.
 
-You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_32`` C
+You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_56`` C
 preprocessor flag to get warnings about newer symbols from the GLib.
 
 On the contrary, you might also want to get deprecation warnings for symbols
@@ -204,7 +200,7 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.32 and GTK 3.24.
+* Your code should build against GLib 2.56 and GTK 3.24.
 * Variables should be declared (and initialized) as close as practical
   to their first use. This reduces the chances of intervening code being
   inserted between declaration and use, where the variable may be
