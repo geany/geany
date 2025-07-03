@@ -1,7 +1,8 @@
 Geany 2.1 (unreleased)
 
     General
-    * Include themes from geany-themes (Issue#4035, PR#4044).
+    * Include themes from geany-themes (Issue#4035, PR#4044, Issue#4340,
+      PR#4354).
     * Fix silently truncating files containing NUL bytes (PR#3716).
     * Improve compatibility focusing the editor window when opening a file
       externally (Kondor Dániel, Issue#3531, PR#4071).
@@ -52,6 +53,7 @@ Geany 2.1 (unreleased)
     * Update Scintilla to 5.5.4 and Lexilla to 5.4.2 (PR#4168).
     * Allow pasting and autocompletion for multiple carets (Issue#625,
       Issue#2328, PR#4278).
+    * Increase minimal number margin width (Issue#4332, PR#4334).
 
     Filetypes
     * Update parsers to Universal Ctags p6.1.20240519.0, which leads to many
@@ -74,6 +76,7 @@ Geany 2.1 (unreleased)
     * Update JavaScript keywords (Azq2, PR#3440).
     * Update PowerShell keywords (PR#3886).
     * Update Verilog keywords (Javier Mora, PR#4037).
+    * Improve support for mixed PHP/HTML/JavaScript symbols (PR#4335).
     * Improve Shell highlighting inside strings (Issue#1754, Issue#1821,
       PR#4081).
     * Improve Erlang symbols (Issue#2650, PR#3837).
@@ -82,6 +85,7 @@ Geany 2.1 (unreleased)
       PR#4013).
     * Support triple-quoted strings in Java (Issue#3995, PR#4000).
     * Improve Groovy comments support (Issue#3761, PR#4015).
+    * Fix highlighting of COBOL keywords (PR#4337).
     * Recognize shell scripts when using busybox (Issue#3884, PR#4016).
     * Recognize .lpr as Pascal (rdipardo, PR#3694).
     * Recognize .mjs, .cjs and .jsx as JavaScript (Damon Harris, PR#3698,
@@ -111,9 +115,13 @@ Geany 2.1 (unreleased)
     * Add `symbols_get_icon_pixbuf()` (PR#3916).
     * Add "document-before-save-as" signal (PR#3572).
     * Add "geany-before-quit" signal (PR#4069).
+    * Adjust the internal state when emitting the "document-new" signal to be
+      closer to the one when emitting the "document-open" one. This should not
+      affect most users, but it fixes a crash in the Overview plugin
+      (geany/geany-plugins#1354, PR#4348).
 
     Internationalization
-    * Updated translations: cs, da, de, fr, nl, pt, pt_br, ru
+    * Updated translations: cs, da, de, es, fr, nl, pt, pt_br, ru, sk, zh_TW
     * Added translation: ltg, ta
 
 
