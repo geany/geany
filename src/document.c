@@ -210,22 +210,6 @@ GeanyDocument *document_find_by_filename(const gchar *utf8_filename)
 }
 
 
-/* returns the document which has sci, or NULL. */
-GeanyDocument *document_find_by_sci(ScintillaObject *sci)
-{
-	guint i;
-
-	g_return_val_if_fail(sci != NULL, NULL);
-
-	for (i = 0; i < documents_array->len; i++)
-	{
-		if (documents[i]->is_valid && documents[i]->editor->sci == sci)
-			return documents[i];
-	}
-	return NULL;
-}
-
-
 /** Lookup an old document by its ID.
  * Useful when the corresponding document may have been closed since the
  * ID was retrieved.
@@ -294,50 +278,21 @@ gint document_get_notebook_page(GeanyDocument *doc)
 }
 
 
-/*
- * Recursively searches a containers children until it finds a
- * Scintilla widget, or NULL if one was not found.
- */
-static ScintillaObject *locate_sci_in_container(GtkWidget *container)
-{
-	ScintillaObject *sci = NULL;
-	GList *children, *iter;
-
-	g_return_val_if_fail(GTK_IS_CONTAINER(container), NULL);
-
-	children = gtk_container_get_children(GTK_CONTAINER(container));
-	for (iter = children; iter != NULL; iter = g_list_next(iter))
-	{
-		if (IS_SCINTILLA(iter->data))
-		{
-			sci = SCINTILLA(iter->data);
-			break;
-		}
-		else if (GTK_IS_CONTAINER(iter->data))
-		{
-			sci = locate_sci_in_container(iter->data);
-			if (IS_SCINTILLA(sci))
-				break;
-			sci = NULL;
-		}
-	}
-	g_list_free(children);
-
-	return sci;
-}
-
-
 /* Finds the document for the given notebook page widget */
 GeanyDocument *document_get_from_notebook_child(GtkWidget *page)
 {
-	ScintillaObject *sci;
+	GeanyDocument *doc;
 
 	g_return_val_if_fail(GTK_IS_BOX(page), NULL);
 
-	sci = locate_sci_in_container(page);
-	g_return_val_if_fail(IS_SCINTILLA(sci), NULL);
+	/* set by notebook_new_tab() */
+	doc = g_object_get_data(G_OBJECT(page), "geany_document");
+	g_return_val_if_fail(doc, NULL);
 
-	return document_find_by_sci(sci);
+	if (!DOC_VALID(doc))
+		return NULL;  /* can happen when called during document creation */
+
+	return doc;
 }
 
 

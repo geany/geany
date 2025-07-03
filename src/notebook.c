@@ -775,6 +775,8 @@ gint notebook_new_tab(GeanyDocument *this)
 	else
 		cur_page = 0;
 
+	/* used by document_get_from_notebook_child() */
+	g_object_set_data(G_OBJECT(vbox), "geany_document", this);
 	tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), vbox,
 		ebox, NULL, cur_page);
 
