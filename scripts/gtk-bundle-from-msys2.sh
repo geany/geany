@@ -148,9 +148,16 @@ _getpkg() {
 		# use @(gz|xz|zst) to filter out signature files (e.g. mingw-w64-x86_64-...-any.pkg.tar.zst.sig)
 		ls $cachedir/mingw-w64-${ABI}-${1}-${package_version}-*.tar.@(gz|xz|zst) | sort -V | tail -n 1
 	else
-		# -dd to ignore dependencies as we listed them already above in $packages and
-		# make pacman ignore its possibly existing cache (otherwise we would get an URL to the cache)
-		pacman -Sddp --cachedir /nonexistent mingw-w64-${ABI}-${1}
+		if [ "$1" = "cairo" ]; then
+			# stick with cairo-1.18.4-1 until lagging issue resolved
+			# https://github.com/geany/geany-plugins/issues/1466
+			# https://gitlab.freedesktop.org/cairo/cairo/-/issues/905
+			echo "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-cairo-1.18.4-1-any.pkg.tar.zst"
+		else
+			# -dd to ignore dependencies as we listed them already above in $packages and
+			# make pacman ignore its possibly existing cache (otherwise we would get an URL to the cache)
+			pacman -Sddp --cachedir /nonexistent mingw-w64-${ABI}-${1}
+		fi
 	fi
 }
 
