@@ -1,5 +1,9 @@
 name: Windows/MSYS2 Build
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - 'windows-signing-tests'
 
 jobs:
   msys2-mingw64:
@@ -53,6 +57,24 @@ jobs:
         with:
           path: |
             geany_build/*.exe
+          retention-days: 3
+          overwrite: true
+          if-no-files-found: error
+      - name: SignPath Signing
+        uses: signpath/github-action-submit-signing-request@v1.2
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
+          project-slug: 'geany'
+          signing-policy-slug: 'test-signing'
+          github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: geany-signed
+      - name: Upload Signed Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: geany-signed
+          path: geany-signed
           retention-days: 3
           overwrite: true
           if-no-files-found: error
