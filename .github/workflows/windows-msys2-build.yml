@@ -1,5 +1,9 @@
 name: Windows/MSYS2 Build
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - 'windows-signing-tests'
 
 jobs:
   msys2-mingw64:
