@@ -148,7 +148,7 @@ _getpkg() {
 		# use @(gz|xz|zst) to filter out signature files (e.g. mingw-w64-x86_64-...-any.pkg.tar.zst.sig)
 		ls $cachedir/mingw-w64-${ABI}-${1}-${package_version}-*.tar.@(gz|xz|zst) | sort -V | tail -n 1
 	else
-		case "$1" in:
+		case "$1" in
 		"cairo")
 			# stick with cairo-1.18.4-1 until lagging issue resolved
 			# https://github.com/geany/geany-plugins/issues/1466
