@@ -153,7 +153,7 @@ _getpkg() {
 			# stick with cairo-1.18.4-1 until lagging issue resolved
 			# https://github.com/geany/geany-plugins/issues/1466
 			# https://gitlab.freedesktop.org/cairo/cairo/-/issues/905
-			echo "https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-cairo-1.18.4-1-any.pkg.tar.zst"
+			echo "https://mirror.msys2.org/mingw/mingw64/mingw-w64-${ABI}-cairo-1.18.4-1-any.pkg.tar.zst"
 			;;
 		"pango")
 			# stick with pango-1.56.3-2 until lagging issue resolved
