@@ -52,8 +52,8 @@ jobs:
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v4
         with:
-          path: |
-            geany_build/*.exe
+          name: geany-unsigned
+          path: geany_build/*.exe
           retention-days: 3
           overwrite: true
           if-no-files-found: error
