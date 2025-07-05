@@ -158,7 +158,7 @@ _getpkg() {
 		"pango")
 			# stick with pango-1.56.3-2 until lagging issue resolved
 			# https://github.com/geany/geany/pull/4360
-			echo "https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-pango-1.56.3-2-any.pkg.tar.zst"
+			echo "https://repo.msys2.org/mingw/mingw64/mingw-w64-${ABI}-pango-1.56.3-2-any.pkg.tar.zst"
 			;;
 		*)
 			# -dd to ignore dependencies as we listed them already above in $packages and
