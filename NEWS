@@ -1,5 +1,130 @@
 Geany 2.1 (unreleased)
 
+    General
+    * Include themes from geany-themes (Issue#4035, PR#4044, Issue#4340,
+      PR#4354).
+    * Fix silently truncating files containing NUL bytes (PR#3716).
+    * Improve compatibility focusing the editor window when opening a file
+      externally (Kondor Dániel, Issue#3531, PR#4071).
+    * Require GLib 2.56 (PR#4199).
+    * Update placeholders for external printing command to use the same ones as
+      build commands (Pynckels, PR#4250).
+
+    Bug Fixes
+    * Improve corner-case encoding detection and conversion (PR#3716).
+    * Fix losing session after opening several projects (Issue#3897, PR#3898).
+    * Fix emission of the "document-activate" signal, leading to glitches in
+      UI and plugins (Issue#3684, PR#3891).
+    * Fix spurious CPU load after running a build command (PR#3902).
+    * Use a more reliable method for saving preferences and other auxiliary
+      files (Issue#3946, PR#3950).
+    * Fix focusing the symbol list through key binding (Pascal Baillehache,
+      Issue#3678, PR#3681).
+    * Fix search entry after editing the toolbar (Issue#3831, PR#3838).
+    * Fix non-deterministic anonymous symbol names (Issue#3717, PR#3785).
+    * Fix displaying symbols declared out of order (Issue#4060, PR#4063).
+    * Fix possible invalid memory access when generating user initials on first
+      startup (Issue#3844, PR#3846).
+    * Fix Meson build when either `fnmatch()` or `regcomp()` is missing on the
+      system (Issue#3618).
+    * Fix replacing placeholders in filenames in build commands (PR#4318).
+
+    Interface
+    * Add support for searching the Messages and Compiler output (PR#3823).
+    * Add support for modern platform-native file selection dialogs
+      (Issue#1310, Issue#2794, Issue#3458, Issue#3868, Issue#4220, Issue#4259,
+      PR#3861).
+    * Regroup filetypes by letter (PR#3977).
+    * Add filter for open documents sidebar (PR#4210).
+    * Add filter for keybindings preferences (Issue#2848, PR#4192).
+    * Add various pref to skip "replace in session" confirmation dialog
+      (Issue#3702, PR#3851).
+    * Make it easier to wrap search when the confirmation dialog is shown
+      (Issue#1192, PR#4042).
+    * Fix spurious selection when clicking an externally-modified file
+      (Issue#3906, PR#3909).
+    * Fix translation of the Various preferences tab (Issue#3628, PR#3634).
+    * Do not show redundant None encoding (Issue#3624, PR#3640).
+    * Do not display encodings not supported on the system (PR#3720).
+    * Move "Virtual Spaces" preference to "Editor -> Features" (Issue#3605).
+    * Various UI tweaks (PR#3560, Issue#3630, PR#3637, PR#4098, PR#4149).
+
+    Editor
+    * Update Scintilla to 5.5.4 and Lexilla to 5.4.2 (PR#4168).
+    * Allow pasting and autocompletion for multiple carets (Issue#625,
+      Issue#2328, PR#4278).
+    * Increase minimal number margin width (Issue#4332, PR#4334).
+
+    Filetypes
+    * Update parsers to Universal Ctags p6.1.20240519.0, which leads to many
+      updated symbol parsers (PR#3859, PR#3877).
+    * Add CIL filetype (Christian Schrötter, PR#3480).
+    * Add Dart filetype (Issue#371, PR#3973).
+    * Add Dockerfile filetype (andy5995, Issue#3752, PR#3757).
+    * Add LESS and SCSS filetypes (Kirill Zhumarin & Jiří Techet, PR#4095).
+    * Add Nix filetype (PR#3954).
+    * Add Prolog filetype (PR#3171).
+    * Add Raku (Perl 6) filetype (PR#3169).
+    * Add SystemVerilog filetype (Javier Mora, PR#4039).
+    * Add Terraform HCL filetype (PR#4246).
+    * Add TOML filetype (PR#3934).
+    * Add Zig filetype (Issue#3724, PR#3974).
+    * Update R filetype (hieeupomalrf, Issue#3376, PR#3607).
+    * Update Fortran keywords (cx384, PR#3656).
+    * Update Pascal filetype (rdipardo, PR#3694).
+    * Update Java keywords (PR#4014).
+    * Update JavaScript keywords (Azq2, PR#3440).
+    * Update PowerShell keywords (PR#3886).
+    * Update Verilog keywords (Javier Mora, PR#4037).
+    * Improve support for mixed PHP/HTML/JavaScript symbols (PR#4335).
+    * Improve Shell highlighting inside strings (Issue#1754, Issue#1821,
+      PR#4081).
+    * Improve Erlang symbols (Issue#2650, PR#3837).
+    * Improve Nim highlighting (Issue#3520, PR#3648).
+    * Add symbols support for Ocaml, Meson and Forth filetypes (PR#3163,
+      PR#4013).
+    * Support triple-quoted strings in Java (Issue#3995, PR#4000).
+    * Improve Groovy comments support (Issue#3761, PR#4015).
+    * Fix highlighting of COBOL keywords (PR#4337).
+    * Recognize shell scripts when using busybox (Issue#3884, PR#4016).
+    * Recognize .lpr as Pascal (rdipardo, PR#3694).
+    * Recognize .mjs, .cjs and .jsx as JavaScript (Damon Harris, PR#3698,
+      Chocobo1, PR#3866, ajpf44, PR#3892).
+    * Recognize .mts, .cts and .tsx as TypeScript (Chocobo1, PR#3867,
+      ajpf44, PR#3892).
+    * Recognize .pyi as Python (Issue#3873, PR#3976).
+    * Recognize .tmpl and .vue as HTML (Azq2, PR#3440).
+
+    Plugins
+    * FileBrowser: Use `xdg-open` to open external files by default on Linux
+      and others (PR#3815).
+    * SaveActions: Add support for "persistent untitled documents" (LiquidCake,
+      PR#3911, PR#4077).
+
+    Windows
+    * Add installer signing using SignPath.io (Giuseppe Penone, PR#4223).
+    * Use Consolas as the default monospaced font (PR#4326).
+    * Improve Meson support (Biswapriyo Nath, PR#3811, PR#3812, PR#4236).
+    * Use themed title bar (GabrielFrigo & Jiří Techet, Issue#4200, PR#4205).
+    * Use smaller toolbar icons by default (PR#4197).
+    * Fix opening some help URIs (PR#4322).
+
+    API
+    * Add *Plugin Extension* API allowing plugins to take over some features
+      for selected documents, including autocompletion, symbol goto,
+      symbol highlighting and calltip display (PR#3849).
+    * Add `symbols_get_icon_pixbuf()` (PR#3916).
+    * Add "document-before-save-as" signal (PR#3572).
+    * Add "geany-before-quit" signal (PR#4069).
+    * Adjust the internal state when emitting the "document-new" signal to be
+      closer to the one when emitting the "document-open" one. This should not
+      affect most users, but it fixes a crash in the Overview plugin
+      (geany/geany-plugins#1354, PR#4348).
+
+    Internationalization
+    * Updated translations: cs, da, de, es, fr, nl, pt, pt_br, ru, sk, zh_TW
+    * Added translation: ltg, ta
+
 
 Geany 2.0 (October 19, 2023)
 
