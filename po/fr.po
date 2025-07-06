@@ -537,7 +537,7 @@ msgstr "Un double-clic cache les fenêtres supplémentaires"
 #: data/geany.glade:2180
 msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr ""
-"Appelle la commande Affichage->Afficher/Cacher toutes les fenêtres "
+"Appelle la commande Affichage→Afficher/Cacher toutes les fenêtres "
 "supplémentaires"
 
 #: data/geany.glade:2192
@@ -2278,7 +2278,7 @@ msgid ""
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
 "Note : pour appliquer ces préférences sur tous les documents actuellement "
-"ouverts, utiliser <i>Projet->Appliquer l'indentation par défaut</i>."
+"ouverts, utiliser <i>Projet→Appliquer l'indentation par défaut</i>."
 
 #: data/geany.glade:9338
 msgid "Display:"
@@ -4007,7 +4007,7 @@ msgstr "Le dossier de configuration n'a pas pu être créé (%s)."
 #: src/libmain.c:1204
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
-"Le socket IPC n'a pas pu être créé, voyez Aide->Messages de débogage pour "
+"Le socket IPC n'a pas pu être créé, voyez Aide→Messages de débogage pour "
 "plus de détails."
 
 #: src/libmain.c:1429
@@ -4206,7 +4206,7 @@ msgid ""
 "<b>Project->Properties</b>.</i>"
 msgstr ""
 "<i>Avertissement : ces préférences sont remplacées par celles du projet "
-"courant. Voir <b>Projet->Propriétés</b>.</i>"
+"courant. Voir <b>Projet→Propriétés</b>.</i>"
 
 #: src/prefs.c:1892
 msgid "Not configurable on Windows (the system default browser is used)."
