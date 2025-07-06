@@ -1818,7 +1818,7 @@ void prefs_show_dialog(void)
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
 		gtk_misc_set_padding(GTK_MISC(label), 6, 0);
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog,
-			"label_project_indent_warning")), label, FALSE, TRUE, 5);
+			"label_indent_warning")), label, FALSE, TRUE, 5);
 
 		/* add the clear icon to GtkEntry widgets in the dialog */
 		{
