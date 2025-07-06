@@ -33,6 +33,9 @@ jobs:
           bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3
       - name: CI-Build
         run: |
+          # Remove the GIT directory to prevent having the GIT hash added to the version number
+          rm -rf ${{ github.workspace }}/.git
+
           DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build
           VERSION=$(autom4te --no-cache --language=Autoconf-without-aclocal-m4 --trace AC_INIT:\$2 configure.ac)
           NOCONFIGURE=1 ./autogen.sh
