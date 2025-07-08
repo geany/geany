@@ -17,9 +17,8 @@ UNX_UTILS_URL="https://download.geany.org/contrib/UnxUpdates.zip"
 # we use the Prof-Gnome GTK theme from the Geany macOS repository
 GTK_THEME_URL="https://github.com/geany/geany-osx/archive/refs/heads/master.zip"
 
-# Wine commands for 32bit and 64bit binaries (we still need 32bit for UnxUtils sort.exe)
+# Wine command for 64bit binaries
 # Used only when "-x" is set
-EXE_WRAPPER_32="mingw-w64-i686-wine"
 EXE_WRAPPER_64="mingw-w64-x86_64-wine"
 
 package_urls=""
@@ -127,7 +126,6 @@ initialize() {
 
 	if [ "$cross" != "yes" ]; then
 		# if running natively, we do not need wine or any other wrappers
-		EXE_WRAPPER_32=""
 		EXE_WRAPPER_64=""
 	fi
 
@@ -308,8 +306,6 @@ download_and_extract_gtk_theme() {
 }
 
 create_bundle_dependency_info_file() {
-	# sort.exe from UnxUtils is a 32bit binary, so use $EXE_WRAPPER_32
-	sort_version="$(${EXE_WRAPPER_32} bin/sort.exe --version | sed -n 1p)"
 	# use "sed -n 1p" instead of "head -n1" as grep will otherwise prints a weird error,
 	# probably because the output pipe is closed prematurely
 	grep_version="$(${EXE_WRAPPER_64} bin/grep.exe --version | sed -n 1p)"
@@ -323,7 +319,7 @@ full download URL as used to create this installation.
 
 sort.exe is extracted from the ZIP archive at
 ${UNX_UTILS_URL}.
-Sort version: ${sort_version}
+Sort version: (textutils) 2.1
 
 grep.exe is taken from a 64bit MSYS2 installation and
 is bundled together with its dependencies.
