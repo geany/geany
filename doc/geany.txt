@@ -4084,8 +4084,8 @@ On Windows 7 and above you most likely will find it at:
 ``C:\users\UserName\Roaming\geany``
 
 
-Tools menu items
-----------------
+Configuration files menu
+------------------------
 There's a *Configuration files* submenu in the *Tools* menu that
 contains items for some of the available user configuration files.
 Clicking on one opens it in the editor for you to update. Geany will
@@ -5062,18 +5062,19 @@ clicked.
 Customizing templates
 ^^^^^^^^^^^^^^^^^^^^^
 
-Each template can be customized to your needs. The templates are
-stored in the ``~/.config/geany/templates/`` directory (see the section called
-`Command line options`_ for further information about the configuration
-directory). Just open the desired template with an editor (ideally,
-Geany ;-) ) and edit the template to your needs. There are some
-wildcards which will be automatically replaced by Geany at startup.
+Each template can be customized to your needs. User templates are
+stored in the ``templates`` subdirectory of your configuration directory
+(see `Configuration file paths`_).
+These can be handily opened for editing using the
+*Tools->Configuration Files->Templates* submenu. See also: `Configuration files menu`_.
 
 
 Template wildcards
 ``````````````````
 
-All wildcards must be enclosed by "{" and "}", e.g. {date}.
+There are some wildcards which will be automatically replaced by Geany on inserting a template
+or completing a snippet (see `User-definable snippets`_).
+All wildcards must be enclosed by "{" and "}", e.g. ``{date}``.
 
 **Wildcards for character escaping**
 
