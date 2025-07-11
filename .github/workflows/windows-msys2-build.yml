@@ -1,6 +1,9 @@
 name: Windows/MSYS2 Build
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - '*'
 
 jobs:
   msys2-mingw64:
