@@ -8,6 +8,10 @@ AM_CFLAGS = \
 	$(GTK_CFLAGS) \
 	@LIBGEANY_CFLAGS@
 
+if MINGW
+AM_CFLAGS += -DUSE_SYSTEM_STRNLEN=1
+endif
+
 noinst_LTLIBRARIES = libctags.la
 
 parsers = \
@@ -117,7 +121,12 @@ parsers = \
 	parsers/txt2tags.c \
 	parsers/typescript.c \
 	parsers/verilog.c \
-	parsers/vhdl.c
+	parsers/vhdl.c \
+	peg/peg_common.h \
+	peg/kotlin.c \
+	peg/kotlin.h \
+	peg/kotlin_post.h \
+	peg/kotlin_pre.h
 
 # skip cmd.c and mini-geany.c which define main()
 # also skip lregex-pcre2.c which we don't use
