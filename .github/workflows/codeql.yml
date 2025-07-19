@@ -57,13 +57,17 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
+        config: |
+          paths-ignore:
+            - 'tests/ctags/**'
 
     - name: Install dependencies
+      if: matrix.language == 'c-cpp'
       run: |
         sudo apt-get update -qq
         sudo apt-get install --assume-yes --no-install-recommends \
-          ccache \
-          gettext autopoint \
+          gettext \
+          autopoint \
           libtool \
           libgtk-3-dev \
           doxygen \
