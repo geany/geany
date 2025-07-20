@@ -136,6 +136,10 @@ void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
 
+void on_menu_show_menubar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+
+void on_show_menubar1_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_menu_comment_line1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_menu_uncomment_line1_activate(GtkMenuItem *menuitem, gpointer user_data);
