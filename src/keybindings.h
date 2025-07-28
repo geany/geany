@@ -280,7 +280,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_PROJECT_NEW_FROM_FOLDER,			/**< Keybinding.
 												 * @since 2.0 (API 243) */
 	GEANY_KEYS_TOGGLE_MENUBAR,					/**< Keybinding.
-												 * @since 2.1 (API TODO) */
+												 * @since 2.2 (API 251) */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
