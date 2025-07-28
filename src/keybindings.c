@@ -1140,7 +1140,6 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 
 		return TRUE;
 	}
-	/* FIXME: handle Alt to focus the menu bar? */
 	return FALSE;
 }
 
