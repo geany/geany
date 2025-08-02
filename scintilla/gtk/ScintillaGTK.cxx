@@ -2008,8 +2008,13 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		int cLineScroll = 0;
 		int hScroll = 0;
 		if (event->direction == GDK_SCROLL_SMOOTH) {
+#ifdef GDK_WINDOWING_QUARTZ
+			sciThis->smoothScrollY += event->delta_y * scrollIntensity / 60.0;
+			sciThis->smoothScrollX += event->delta_x * scrollIntensity / 60.0;
+#else
 			sciThis->smoothScrollY += event->delta_y * scrollIntensity;
 			sciThis->smoothScrollX += event->delta_x * scrollIntensity;
+#endif
 			if (ABS(sciThis->smoothScrollY) >= 1.0) {
 				cLineScroll = std::trunc(sciThis->smoothScrollY);
 				sciThis->smoothScrollY -= cLineScroll;
