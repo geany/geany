@@ -1,5 +1,4 @@
 <!--
-<!--
 This is Geany's toolbar UI definition.
 The DTD can be found at
 https://docs.gtk.org/gtk3/class.UIManager.html.
@@ -17,29 +16,19 @@ at https://www.geany.org/manual/current/index.html#customizing-the-toolbar.
 
 <ui>
 	<toolbar name='GeanyToolbar'>
-		<toolitem action='New' />
 		<toolitem action='Open' />
 		<toolitem action='Save' />
-		<toolitem action='SaveAll' />
 		<separator/>
 		<toolitem action='Reload' />
-		<toolitem action='Close' />
 		<separator/>
 		<toolitem action='NavBack' />
 		<toolitem action='NavFor' />
 		<separator/>
 		<toolitem action='Compile' />
 		<toolitem action='Build' />
-		<toolitem action='Run' />
-		<separator/>
-		<toolitem action='Color' />
 		<separator/>
 		<toolitem action='SearchEntry' />
 		<toolitem action='Search' />
 		<separator/>
-		<toolitem action='GotoEntry' />
-		<toolitem action='Goto' />
-		<separator/>
-		<toolitem action='Quit' />
 	</toolbar>
 </ui>
