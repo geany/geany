@@ -246,6 +246,8 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 #define SPI_GETWHEELSCROLLLINES   104
 #endif
 	::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &linesPerScroll, 0);
+	if (linesPerScroll == 0)
+		linesPerScroll = 4;
 #else
 	linesPerScroll = 4;
 #endif
@@ -1982,12 +1984,27 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		if (widget == nullptr || event == nullptr)
 			return FALSE;
 
+		// Compute scroll intensity
+		int scrollIntensity = 0;
+		const gint64 curTime = g_get_monotonic_time();
+		const gint64 timeDelta = curTime - sciThis->lastWheelMouseTime;
+		if (!event->is_stop && (event->direction == sciThis->lastWheelMouseDirection) &&
+			(timeDelta < 250000)) {
+			if (sciThis->wheelMouseIntensity < 12)
+				sciThis->wheelMouseIntensity++;
+			scrollIntensity = sciThis->wheelMouseIntensity;
+		} else {
+			scrollIntensity = sciThis->linesPerScroll;
+			sciThis->wheelMouseIntensity = scrollIntensity;
+		}
+		sciThis->lastWheelMouseTime = curTime;
+		sciThis->lastWheelMouseDirection = event->direction;
+
 		int cLineScroll = 0;
 		int hScroll = 0;
 #if GTK_CHECK_VERSION(3,4,0)
-		const int smoothScrollFactor = 4;
-		sciThis->smoothScrollY += event->delta_y * smoothScrollFactor;
-		sciThis->smoothScrollX += event->delta_x * smoothScrollFactor;
+		sciThis->smoothScrollY += event->delta_y * scrollIntensity;
+		sciThis->smoothScrollX += event->delta_x * scrollIntensity;
 		if (ABS(sciThis->smoothScrollY) >= 1.0) {
 			cLineScroll = std::trunc(sciThis->smoothScrollY);
 			sciThis->smoothScrollY -= cLineScroll;
@@ -1997,26 +2014,10 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 			sciThis->smoothScrollX -= hScroll;
 		}
 #else
-		// Compute amount and direction to scroll
-		const gint64 curTime = g_get_monotonic_time();
-		const gint64 timeDelta = curTime - sciThis->lastWheelMouseTime;
-		if ((event->direction == sciThis->lastWheelMouseDirection) && (timeDelta < 250000)) {
-			if (sciThis->wheelMouseIntensity < 12)
-				sciThis->wheelMouseIntensity++;
-			cLineScroll = sciThis->wheelMouseIntensity;
-		} else {
-			cLineScroll = sciThis->linesPerScroll;
-			if (cLineScroll == 0)
-				cLineScroll = 4;
-			sciThis->wheelMouseIntensity = cLineScroll;
-		}
-		sciThis->lastWheelMouseTime = curTime;
-
+		cLineScroll = scrollIntensity;
 		if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT) {
 			cLineScroll *= -1;
 		}
-		sciThis->lastWheelMouseDirection = event->direction;
-
 		// Horizontal scrolling
 		if (event->direction == GDK_SCROLL_LEFT || event->direction == GDK_SCROLL_RIGHT || event->state & GDK_SHIFT_MASK) {
 			hScroll = cLineScroll;
