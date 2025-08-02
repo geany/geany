@@ -26,7 +26,7 @@ current_line=current_line
 # translucency for the current line(first argument) and the selection (second argument)
 # values between 0 and 256 are accepted. Note for Windows 95, 98 and ME users:
 # keep this value at 256 to disable translucency otherwise Geany might crash
-translucency=256;256
+translucency=256;120
 
 # style for a highlighted line (e.g when using Goto line or goto tag)
 marker_line=marker_line
@@ -94,7 +94,7 @@ line_height=0;0;
 calltips=call_tips
 
 # error indicator color
-indicator_error=0xff3030
+indicator_error=0xff0000
 
 [settings]
 # which characters should be skipped when moving (or included when deleting) to word boundaries
@@ -104,78 +104,81 @@ whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~
 
 [named_styles]
 # This is the Default "built-in" color scheme
-default=0x000000;0xffffff;false;false
-error=0xff0000;0xBFBFBF;false;italic
+default=0xffffff;0x000000;false;false
+error=0xff88bb;0x332200;false;italic
 
-selection=0x000000;0xc0c0c0;false;true
-current_line=0x000000;0xf0f0f0;true;
-brace_good=0x0000ff;0xFFFFFF;true;false
-brace_bad=0xff0000;0xFFFFFF;true;false
-margin_line_number=0x000000;0xd0d0d0;
-margin_folding=0x000000;0xdfdfdf;
-fold_symbol_highlight=0xffffff
-indent_guide=0xc0c0c0;;
-caret=0x000000;0x000000;false;
-marker_line=0x000000;0xffff00;
-marker_search=0x000000;0x0000f0;
-marker_mark=0x000000;0xb8f4b8;
-call_tips=0xc0c0c0;0xffffff;false;false
-white_space=0xc0c0c0;0xffffff;true;false
+selection=0x999900;0x999900;false;true
+current_line=0xf0f0f0;0x151515;true;false
+brace_good=0xFFFFFF;0x0000ff;true;false
+brace_bad=0xFFFFFF;0xff0000;true;false
+margin_line_number=0xa0a0a0
+margin_folding=0xafafaf;0x000000;
+fold_symbol_highlight=0x880000
+indent_guide=0x303030
+caret=0xffff00
+marker_line=0xffff60;0x220000;true;true
+marker_search==0x000000;0x00ff00;true;true
+marker_mark=0xbb0000;0xbb0000;true;true
+call_tips=0xffffff;0xa0a0a0
+white_space=0x777777;;true;false
 
-comment=0xd00000
-comment_doc=0x3f5fbf
+comment=0x889988
+comment_doc=0x889988
 comment_line=comment
 comment_line_doc=comment_doc
 comment_doc_keyword=comment_doc,bold
 comment_doc_keyword_error=comment_doc,italic
 
-number=0x007f00
+number=0xff4477
 number_1=number
 number_2=number_1
-number_3=0x808000
+number_3=number_1
 
-type=0x0000d0;;true;false
+# User defined:
+type=0x6DFFFF
 class=type
-function=0x000080
+function=0x009090
 parameter=function
 annotation=0x8080ff;;true;false
 
-keyword=0x00007f;;true;false
+# Language:
+keyword=0xaa6600
 keyword_1=keyword
-keyword_2=0x991111;;true;false
+keyword_2=0xaa7700
 keyword_3=keyword_1
 keyword_4=keyword_1
 
-identifier=default
+# Variables
+identifier=0xffffff
 identifier_1=identifier
 identifier_2=identifier_1
 identifier_3=identifier_1
 identifier_4=identifier_1
 
-string=0xff8000
+string=0xdd77ff
 string_1=string
-string_2=0x008000
-string_eol=0x000000;0xe0c0e0;false;false
-character=string_1
+string_2=string
+string_eol=0xe0c0e0;false;false
+character=0xffbbee
 backticks=string_2
-here_doc=string_2
+here_doc=0xbbbbbb
 
-label=default,bold
-preprocessor=0x007f7f
+label=0xffff7f,bold
+preprocessor=0xff7777
 regex=number_1
-operator=0x301010
+operator=0x888888;;true
 decorator=string_1,bold
 macro=preprocessor,bold
-other=0x404080
+other=0xb0b0f0
 
 tag=type
 tag_unknown=tag,bold
 tag_end=tag,bold
-attribute=keyword_1
+attribute=0xff7777
 attribute_unknown=attribute,bold
 value=string_1
-entity=default
+entity=0xff7777
 
-line_added=0x34b034;0xffffff;false;false
-line_removed=0xff2727;0xffffff;false;false
-line_changed=0x7f007f;0xffffff;false;false
+line_added=0xffffff;0x34b034;false;false
+line_removed=0xffffff;0x992727;false;false
+line_changed=0xffffff;0x7f007f;false;false
