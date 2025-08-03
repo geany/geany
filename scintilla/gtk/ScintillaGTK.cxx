@@ -2014,10 +2014,10 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		if (event->direction == GDK_SCROLL_SMOOTH) {
 #ifdef GDK_WINDOWING_QUARTZ
 			sciThis->smoothScrollY += event->delta_y * scrollIntensity / 60.0;
-			sciThis->smoothScrollX += event->delta_x * scrollIntensity / 60.0;
+			sciThis->smoothScrollX += event->delta_x * sciThis->linesPerScroll / 60.0;
 #else
 			sciThis->smoothScrollY += event->delta_y * scrollIntensity;
-			sciThis->smoothScrollX += event->delta_x * scrollIntensity;
+			sciThis->smoothScrollX += event->delta_x * sciThis->linesPerScroll;
 #endif
 			if (ABS(sciThis->smoothScrollY) >= 1.0) {
 				cLineScroll = std::trunc(sciThis->smoothScrollY);
@@ -2028,14 +2028,14 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 				sciThis->smoothScrollX -= hScroll;
 			}
 		} else {
-			cLineScroll = scrollIntensity;
+			int direction = 1;
 			if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT) {
-				cLineScroll *= -1;
+				direction = -1;
 			}
-			// Horizontal scrolling
 			if (event->direction == GDK_SCROLL_LEFT || event->direction == GDK_SCROLL_RIGHT || event->state & GDK_SHIFT_MASK) {
-				hScroll = cLineScroll;
-				cLineScroll = 0;
+				hScroll = sciThis->linesPerScroll * direction;
+			} else {
+				cLineScroll = scrollIntensity * direction;
 			}
 		}
 
