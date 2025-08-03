@@ -225,6 +225,7 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 	wheelMouseIntensityUpdateTime(0),
 	smoothScrollY(0),
 	smoothScrollX(0),
+	distanceY(0),
 	rgnUpdate(nullptr),
 	repaintFullWindow(false),
 	styleIdleID(0),
@@ -1994,17 +1995,32 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		int scrollIntensity = 0;
 		const gint64 curTime = g_get_monotonic_time();
 		const gint64 timeDelta = curTime - sciThis->lastWheelMouseTime;
+		if (event->direction == GDK_SCROLL_SMOOTH)
+			sciThis->distanceY += ABS(event->delta_y);
+		else
+			sciThis->distanceY += 1;
 		if (!event->is_stop && (event->direction == sciThis->lastWheelMouseDirection) &&
 			(timeDelta < 250000)) {
 			const gint64 intensityUpdateDelta = curTime - sciThis->wheelMouseIntensityUpdateTime;
-			if (sciThis->wheelMouseIntensity < 12 && intensityUpdateDelta > 50000) {
-				sciThis->wheelMouseIntensity++;
+			if (intensityUpdateDelta > 50000) {
+				const double speed_y = 1000000.0 * sciThis->distanceY / intensityUpdateDelta;
+#ifdef GDK_WINDOWING_QUARTZ
+				speed_y /= 60.0;
+#endif
+				if (speed_y >= 40.0 && sciThis->wheelMouseIntensity < 12)
+					sciThis->wheelMouseIntensity++;
+				else if (speed_y < 40.0 && sciThis->wheelMouseIntensity > 4)
+					sciThis->wheelMouseIntensity--;
+				//printf("%d   %g\n", sciThis->wheelMouseIntensity, speed_y);
 				sciThis->wheelMouseIntensityUpdateTime = g_get_monotonic_time();
+				sciThis->distanceY = 0;
 			}
 			scrollIntensity = sciThis->wheelMouseIntensity;
 		} else {
 			scrollIntensity = sciThis->linesPerScroll;
 			sciThis->wheelMouseIntensity = scrollIntensity;
+			sciThis->wheelMouseIntensityUpdateTime = g_get_monotonic_time();
+			sciThis->distanceY = 0;
 		}
 		sciThis->lastWheelMouseTime = curTime;
 		sciThis->lastWheelMouseDirection = event->direction;
