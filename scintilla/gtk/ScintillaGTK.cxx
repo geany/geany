@@ -222,6 +222,7 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 	lastWheelMouseTime(0),
 	lastWheelMouseDirection(0),
 	wheelMouseIntensity(0),
+	wheelMouseIntensityUpdateTime(0),
 	smoothScrollY(0),
 	smoothScrollX(0),
 	rgnUpdate(nullptr),
@@ -1995,8 +1996,11 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		const gint64 timeDelta = curTime - sciThis->lastWheelMouseTime;
 		if (!event->is_stop && (event->direction == sciThis->lastWheelMouseDirection) &&
 			(timeDelta < 250000)) {
-			if (sciThis->wheelMouseIntensity < 12)
+			const gint64 intensityUpdateDelta = curTime - sciThis->wheelMouseIntensityUpdateTime;
+			if (sciThis->wheelMouseIntensity < 12 && intensityUpdateDelta > 50000) {
 				sciThis->wheelMouseIntensity++;
+				sciThis->wheelMouseIntensityUpdateTime = g_get_monotonic_time();
+			}
 			scrollIntensity = sciThis->wheelMouseIntensity;
 		} else {
 			scrollIntensity = sciThis->linesPerScroll;

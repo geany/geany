@@ -73,6 +73,7 @@ class ScintillaGTK : public ScintillaBase {
 	gint64 lastWheelMouseTime;
 	gint lastWheelMouseDirection;
 	gint wheelMouseIntensity;
+	gint64 wheelMouseIntensityUpdateTime;
 	gdouble smoothScrollY;
 	gdouble smoothScrollX;
 
