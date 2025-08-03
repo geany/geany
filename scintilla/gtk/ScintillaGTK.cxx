@@ -2004,9 +2004,6 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 			const gint64 intensityUpdateDelta = curTime - sciThis->wheelMouseIntensityUpdateTime;
 			if (intensityUpdateDelta > 50000) {
 				const double speed_y = 1000000.0 * sciThis->distanceY / intensityUpdateDelta;
-#ifdef GDK_WINDOWING_QUARTZ
-				speed_y /= 60.0;
-#endif
 				if (speed_y >= 40.0 && sciThis->wheelMouseIntensity < 12)
 					sciThis->wheelMouseIntensity++;
 				else if (speed_y < 40.0 && sciThis->wheelMouseIntensity > 4)
@@ -2029,8 +2026,12 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		int hScroll = 0;
 		if (event->direction == GDK_SCROLL_SMOOTH) {
 #ifdef GDK_WINDOWING_QUARTZ
-			sciThis->smoothScrollY += event->delta_y * scrollIntensity / 60.0;
-			sciThis->smoothScrollX += event->delta_x * sciThis->linesPerScroll / 60.0;
+			// Don't use computed scroll intensity on macOS as the same is already
+			// done by the system and the result is too sensitive. Also, the
+			// quartz backend returns delta in pixels and not in lines scrolled
+			// so adjust the value to roughly match other systems behavior.
+			sciThis->smoothScrollY += event->delta_y / 10.0;
+			sciThis->smoothScrollX += event->delta_x / 10.0;
 #else
 			sciThis->smoothScrollY += event->delta_y * scrollIntensity;
 			sciThis->smoothScrollX += event->delta_x * sciThis->linesPerScroll;
