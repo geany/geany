@@ -2002,7 +2002,7 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		if (!event->is_stop && (event->direction == sciThis->lastWheelMouseDirection) &&
 			(timeDelta < 250000)) {
 			const gint64 intensityUpdateDelta = curTime - sciThis->wheelMouseIntensityUpdateTime;
-			if (intensityUpdateDelta > 50000) {
+			if (intensityUpdateDelta > 50000) {  // prevent too fast intensity ramp up
 				const double speed_y = 1000000.0 * sciThis->distanceY / intensityUpdateDelta;
 				if (speed_y >= 40.0 && sciThis->wheelMouseIntensity < 12)
 					sciThis->wheelMouseIntensity++;
@@ -2022,9 +2022,11 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		sciThis->lastWheelMouseTime = curTime;
 		sciThis->lastWheelMouseDirection = event->direction;
 
+		// Compute cLineScroll (vertical scroll in number of lines) and hScroll
+		// (horizontal scroll in pixels)
 		int cLineScroll = 0;
 		int hScroll = 0;
-		if (event->direction == GDK_SCROLL_SMOOTH) {
+		if (event->direction == GDK_SCROLL_SMOOTH) {  // backend supports smooth scrolling
 #ifdef GDK_WINDOWING_QUARTZ
 			// Don't use computed scroll intensity on macOS as the same is already
 			// done by the system and the result is too sensitive. Also, the
@@ -2044,7 +2046,7 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 				hScroll = std::trunc(sciThis->smoothScrollX);
 				sciThis->smoothScrollX -= hScroll;
 			}
-		} else {
+		} else {  // backend only supports discrete scrolling
 			int direction = 1;
 			if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT) {
 				direction = -1;
@@ -2056,8 +2058,9 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 			}
 		}
 
-		// Text font size zoom
+		// Perform scroll (or zoom when control modifier pressed)
 		if ((event->state & GDK_CONTROL_MASK) && cLineScroll != 0) {
+			// Text font size zoom
 			if (cLineScroll < 0) {
 				sciThis->KeyCommand(Message::ZoomIn);
 			} else {
