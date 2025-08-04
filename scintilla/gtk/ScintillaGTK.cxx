@@ -2027,16 +2027,23 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		int cLineScroll = 0;
 		int hScroll = 0;
 		if (event->direction == GDK_SCROLL_SMOOTH) {  // backend supports smooth scrolling
+			double deltaY = event->delta_y;
+			double deltaX = event->delta_x;
+			// Ignore the other direction to avoid accidental diagonal scrolls on touchpad
+			if (ABS(deltaY) >= ABS(deltaX))
+				deltaX = 0.0;
+			else
+				deltaY = 0.0;
 #ifdef GDK_WINDOWING_QUARTZ
 			// Don't use computed scroll intensity on macOS as the same is already
 			// done by the system and the result is too sensitive. Also, the
 			// quartz backend returns delta in pixels and not in lines scrolled
 			// so adjust the value to roughly match other systems behavior.
-			sciThis->smoothScrollY += event->delta_y / 10.0;
-			sciThis->smoothScrollX += event->delta_x / 10.0;
+			sciThis->smoothScrollY += deltaY / 10.0;
+			sciThis->smoothScrollX += deltaX / 10.0;
 #else
-			sciThis->smoothScrollY += event->delta_y * scrollIntensity;
-			sciThis->smoothScrollX += event->delta_x * sciThis->linesPerScroll;
+			sciThis->smoothScrollY += deltaY * scrollIntensity;
+			sciThis->smoothScrollX += deltaX * sciThis->linesPerScroll;
 #endif
 			if (ABS(sciThis->smoothScrollY) >= 1.0) {
 				cLineScroll = std::trunc(sciThis->smoothScrollY);
