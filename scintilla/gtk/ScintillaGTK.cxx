@@ -1997,7 +1997,7 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		const gint64 timeDelta = curTime - sciThis->lastWheelMouseTime;
 		if (event->direction == GDK_SCROLL_SMOOTH)
 			sciThis->distanceY += ABS(event->delta_y);
-		else
+		else if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_DOWN)
 			sciThis->distanceY += 1;
 		if (!event->is_stop && (event->direction == sciThis->lastWheelMouseDirection) &&
 			(timeDelta < 250000)) {
