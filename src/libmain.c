@@ -1216,7 +1216,7 @@ gint main_lib(gint argc, gchar **argv)
 		plugins_load_active();
 #endif
 
-	ui_sidebar_show_hide();
+	sidebar_show_hide();
 
 	/* set the active sidebar page after plugins have been loaded */
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_prefs.sidebar_page);

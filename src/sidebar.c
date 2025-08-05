@@ -1146,7 +1146,7 @@ void sidebar_remove_document(GeanyDocument *doc)
 static void on_hide_sidebar(void)
 {
 	ui_prefs.sidebar_visible = FALSE;
-	ui_sidebar_show_hide();
+	sidebar_show_hide();
 }
 
 
@@ -1224,7 +1224,7 @@ static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer us
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	interface_prefs.sidebar_openfiles_visible = gtk_check_menu_item_get_active(item);
-	ui_sidebar_show_hide();
+	sidebar_show_hide();
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
@@ -1232,7 +1232,7 @@ static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	interface_prefs.sidebar_symbol_visible = gtk_check_menu_item_get_active(item);
-	ui_sidebar_show_hide();
+	sidebar_show_hide();
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
@@ -1794,4 +1794,33 @@ static void sidebar_tabs_show_hide(GtkNotebook *notebook, GtkWidget *child,
 		tabs--;
 
 	gtk_notebook_set_show_tabs(notebook, (tabs > 1));
+}
+
+
+void sidebar_show_hide(void)
+{
+	GtkWidget *widget;
+
+	/* check that there are no other notebook pages before hiding the sidebar completely
+	 * other pages could be e.g. the file browser plugin */
+	if (! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible &&
+		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) <= 2)
+	{
+		ui_prefs.sidebar_visible = FALSE;
+	}
+
+	widget = ui_lookup_widget(main_widgets.window, "menu_show_sidebar1");
+	if (ui_prefs.sidebar_visible != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+	{
+		ignore_callback = TRUE;
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), ui_prefs.sidebar_visible);
+		ignore_callback = FALSE;
+	}
+
+	ui_widget_show_hide(main_widgets.sidebar_notebook, ui_prefs.sidebar_visible);
+
+	ui_widget_show_hide(gtk_notebook_get_nth_page(
+		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0), interface_prefs.sidebar_symbol_visible);
+	ui_widget_show_hide(gtk_notebook_get_nth_page(
+		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 1), interface_prefs.sidebar_openfiles_visible);
 }

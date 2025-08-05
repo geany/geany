@@ -323,8 +323,6 @@ void ui_save_buttons_toggle(gboolean enable);
 void ui_document_buttons_update(void);
 
 
-void ui_sidebar_show_hide(void);
-
 void ui_menubar_show_hide(gboolean show);
 
 void ui_document_show_hide(GeanyDocument *doc);

@@ -95,6 +95,8 @@ void sidebar_focus_openfiles_tab(void);
 
 void sidebar_focus_symbols_tab(void);
 
+void sidebar_show_hide(void);
+
 GtkTreeStore *sidebar_create_store_openfiles(void);
 #endif
 
