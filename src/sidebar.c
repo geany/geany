@@ -65,16 +65,13 @@ doc_items;
 
 enum
 {
-	TREEVIEW_SYMBOL = 0,
-	TREEVIEW_OPENFILES
-};
-
-enum
-{
 	OPENFILES_ACTION_REMOVE = 0,
 	OPENFILES_ACTION_SAVE,
 	OPENFILES_ACTION_RELOAD
 };
+
+static GtkWidget *symbol_page;
+static GtkWidget *openfiles_page;
 
 static GtkTreeStore *store_openfiles;
 static GtkWidget *openfiles_popup_menu;
@@ -177,13 +174,14 @@ static void create_default_tag_tree(void)
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
 	GtkWidget *child = gtk_bin_get_child(GTK_BIN(tag_window));
+	gint current_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook));
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (update && doc != NULL)
 		doc->priv->tag_tree_dirty = TRUE;
 
-	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) != TREEVIEW_SYMBOL)
+	if (gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), current_page) != symbol_page)
 		return; /* don't bother updating symbol tree if we don't see it */
 
 	/* changes the tree view to the given one, trying not to do useless changes */
@@ -1706,9 +1704,9 @@ static void on_save_settings(void)
 
 
 static void on_sidebar_switch_page(GtkNotebook *notebook,
-	gpointer page, guint page_num, gpointer user_data)
+	GtkWidget *page, guint page_num, gpointer user_data)
 {
-	if (page_num == TREEVIEW_SYMBOL)
+	if (page == symbol_page)
 		sidebar_update_tag_list(document_get_current(), FALSE);
 }
 
@@ -1716,6 +1714,10 @@ static void on_sidebar_switch_page(GtkNotebook *notebook,
 void sidebar_init(void)
 {
 	StashGroup *group;
+
+	/* pre-inserted in the glade file */
+	symbol_page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0);
+	openfiles_page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), 1);
 
 	openfiles_filter = g_strdup("");
 
@@ -1763,8 +1765,9 @@ void sidebar_focus_openfiles_tab(void)
 	if (ui_prefs.sidebar_visible && interface_prefs.sidebar_openfiles_visible)
 	{
 		GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
+		gint openfiles_page_num = gtk_notebook_page_num(notebook, openfiles_page);
 
-		gtk_notebook_set_current_page(notebook, TREEVIEW_OPENFILES);
+		gtk_notebook_set_current_page(notebook, openfiles_page_num);
 		gtk_widget_grab_focus(tv.tree_openfiles);
 	}
 }
@@ -1776,8 +1779,9 @@ void sidebar_focus_symbols_tab(void)
 	{
 		GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
 		GtkWidget *symbol_list_scrollwin = ui_lookup_widget(main_widgets.window, "scrolledwindow2");
+		gint symbol_page_num = gtk_notebook_page_num(notebook, symbol_page);
 
-		gtk_notebook_set_current_page(notebook, TREEVIEW_SYMBOL);
+		gtk_notebook_set_current_page(notebook, symbol_page_num);
 		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(symbol_list_scrollwin)));
 	}
 }
@@ -1819,8 +1823,6 @@ void sidebar_show_hide(void)
 
 	ui_widget_show_hide(main_widgets.sidebar_notebook, ui_prefs.sidebar_visible);
 
-	ui_widget_show_hide(gtk_notebook_get_nth_page(
-		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0), interface_prefs.sidebar_symbol_visible);
-	ui_widget_show_hide(gtk_notebook_get_nth_page(
-		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 1), interface_prefs.sidebar_openfiles_visible);
+	ui_widget_show_hide(symbol_page, interface_prefs.sidebar_symbol_visible);
+	ui_widget_show_hide(openfiles_page, interface_prefs.sidebar_openfiles_visible);
 }
