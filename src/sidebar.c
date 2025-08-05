@@ -1711,13 +1711,24 @@ static void on_sidebar_switch_page(GtkNotebook *notebook,
 }
 
 
+static void on_page_added(GtkNotebook *notebook,
+	GtkWidget *child, guint page_num, gpointer user_data)
+{
+	gtk_notebook_set_tab_reorderable(notebook, child, TRUE);
+	sidebar_tabs_show_hide(notebook, child, page_num, user_data);
+}
+
+
 void sidebar_init(void)
 {
+	GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
 	StashGroup *group;
 
 	/* pre-inserted in the glade file */
-	symbol_page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0);
-	openfiles_page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), 1);
+	symbol_page = gtk_notebook_get_nth_page(notebook, 0);
+	gtk_notebook_set_tab_reorderable(notebook, symbol_page, TRUE);
+	openfiles_page = gtk_notebook_get_nth_page(notebook, 1);
+	gtk_notebook_set_tab_reorderable(notebook, openfiles_page, TRUE);
 
 	openfiles_filter = g_strdup("");
 
@@ -1732,7 +1743,7 @@ void sidebar_init(void)
 	g_signal_connect(geany_object, "save-settings", on_save_settings, NULL);
 
 	g_signal_connect(main_widgets.sidebar_notebook, "page-added",
-		G_CALLBACK(sidebar_tabs_show_hide), NULL);
+		G_CALLBACK(on_page_added), NULL);
 	g_signal_connect(main_widgets.sidebar_notebook, "page-removed",
 		G_CALLBACK(sidebar_tabs_show_hide), NULL);
 	/* tabs may have changed when sidebar is reshown */
