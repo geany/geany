@@ -1359,6 +1359,7 @@ static gboolean do_main_quit(void)
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
 	g_strfreev(ui_prefs.custom_commands_labels);
+	g_strfreev(ui_prefs.sidebar_tab_order);
 
 	queue_free(ui_prefs.recent_queue);
 	queue_free(ui_prefs.recent_projects_queue);

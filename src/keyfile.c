@@ -1207,6 +1207,8 @@ static void load_ui_session(GKeyFile *config)
 				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) :
 				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
 
+	ui_prefs.sidebar_tab_order = g_key_file_get_string_list(config, PACKAGE, "treeview_tab_order", NULL, NULL);
+
 	g_free(geo);
 }
 

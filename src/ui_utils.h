@@ -172,6 +172,7 @@ typedef struct UIPrefs
 	gchar		*statusbar_template;
 	gboolean	new_document_after_close;
 	gboolean	symbols_group_by_type;
+	gchar		**sidebar_tab_order;
 
 	/* Menu-item related data */
 	GQueue		*recent_queue;
