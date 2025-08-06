@@ -702,6 +702,11 @@ static void save_ui_prefs(GKeyFile *config)
 
 static void save_ui_session(GKeyFile *config)
 {
+	GPtrArray *sidebar_tab_names = g_ptr_array_new_full(10, g_free);
+	GtkNotebook *sidebar_nb = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
+	gint page_num = gtk_notebook_get_n_pages(sidebar_nb);
+	gint i;
+
 	if (prefs.save_winpos || prefs.save_wingeom)
 	{
 		GdkWindowState wstate;
@@ -717,6 +722,18 @@ static void save_ui_session(GKeyFile *config)
 		ui_prefs.geometry[4] = (wstate & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
 		g_key_file_set_integer_list(config, PACKAGE, "geometry", ui_prefs.geometry, 5);
 	}
+
+	for (i = 0; i < page_num; i++)
+	{
+		GtkWidget *page = gtk_notebook_get_nth_page(sidebar_nb, i);
+		const gchar *label = gtk_notebook_get_tab_label_text(sidebar_nb, page);
+		if (label)
+			g_ptr_array_add(sidebar_tab_names, g_strdup(label));
+	}
+	g_key_file_set_string_list(config, PACKAGE, "treeview_tab_order",
+		(const gchar **)sidebar_tab_names->pdata, sidebar_tab_names->len);
+
+	g_ptr_array_free(sidebar_tab_names, TRUE);
 }
 
 static void write_config_file(ConfigPayload payload)
