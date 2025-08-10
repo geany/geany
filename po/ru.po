@@ -1165,7 +1165,7 @@ msgstr "Отображать в виде индикаторов подчёрки
 
 #: data/geany.glade:4336
 msgid "<b>Change History</b>"
-msgstr "<b>Изменить историю</b>"
+msgstr "<b>История изменений</b>"
 
 #: data/geany.glade:4356
 msgid "Display"
