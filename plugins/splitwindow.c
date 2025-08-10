@@ -141,7 +141,7 @@ static void on_sci_notify(ScintillaObject *sci, gint param,
 static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 {
 	gpointer sdoc;
-	gint pos;
+	gint pos, line;
 
 	/* set the new sci widget to view the existing Scintilla document */
 	sdoc = (gpointer) scintilla_send_message(current, SCI_GETDOCPOINTER, 0, 0);
@@ -150,6 +150,11 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 	highlighting_set_styles(sci, edit_window.editor->document->file_type);
 	pos = sci_get_current_position(current);
 	sci_set_current_position(sci, pos, TRUE);
+
+	/* vertical scroll synchronization */
+	line = scintilla_send_message(current, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	scintilla_send_message(sci, SCI_SETFIRSTVISIBLELINE, line, 0);
+	scintilla_send_message(sci, SCI_SETXOFFSET, 0, 0);
 
 	/* override some defaults */
 	set_line_numbers(sci, geany->editor_prefs->show_linenumber_margin);
