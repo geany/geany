@@ -1169,6 +1169,7 @@ gint main_lib(gint argc, gchar **argv)
 #endif
 	sidebar_init();
 	load_settings();	/* load keyfile */
+	sidebar_update_page_order();
 
 	msgwin_init();
 	build_init();

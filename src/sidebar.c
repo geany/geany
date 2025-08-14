@@ -1711,11 +1711,37 @@ static void on_sidebar_switch_page(GtkNotebook *notebook,
 }
 
 
+void sidebar_update_page_order(void)
+{
+	GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
+	gint page_num = gtk_notebook_get_n_pages(notebook);
+	gchar **ptr;
+	gint pos = 0;
+
+	foreach_strv(ptr, ui_prefs.sidebar_tab_order)
+	{
+		gint i;
+		for (i = pos; i < page_num; i++)
+		{
+			GtkWidget *page = gtk_notebook_get_nth_page(notebook, i);
+			const gchar *text =  gtk_notebook_get_tab_label_text(notebook, page);
+			if (g_strcmp0(text, *ptr) == 0)
+			{
+				gtk_notebook_reorder_child(notebook, page, pos);
+				pos++;
+				break;
+			}
+		}
+	}
+}
+
+
 static void on_page_added(GtkNotebook *notebook,
 	GtkWidget *child, guint page_num, gpointer user_data)
 {
 	gtk_notebook_set_tab_reorderable(notebook, child, TRUE);
 	sidebar_tabs_show_hide(notebook, child, page_num, user_data);
+	sidebar_update_page_order();
 }
 
 

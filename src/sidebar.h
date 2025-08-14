@@ -75,6 +75,8 @@ void sidebar_init(void);
 
 void sidebar_finalize(void);
 
+void sidebar_update_page_order(void);
+
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update);
 
 void sidebar_openfiles_add(GeanyDocument *doc);
