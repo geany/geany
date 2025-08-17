@@ -630,6 +630,7 @@ static void write_html_file(GeanyDocument *doc, const gchar *filename,
 			if (span_open)
 			{
 				g_string_append(body, "</span>");
+				span_open = FALSE;
 			}
 			if (i < doc_len)
 			{
