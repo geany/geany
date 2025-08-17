@@ -1624,6 +1624,12 @@ translations, e.g.::
     key[de]=Hallo
     key[fr_FR]=Bonjour
 
+Toggle all additional widgets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Show/Hide all additional widgets such as the notebook tabs, the toolbar,
+the messages window and the status bar.
+
+
 Symbols and tags files
 ----------------------
 
@@ -2074,12 +2080,15 @@ Next to current
     rather than at the edges of the notebook.
 
 Double-clicking hides all additional widgets
-    Whether to call the View->Toggle All Additional Widgets command
+    Whether to call the `Toggle All Additional Widgets`_ command
     when double-clicking on a notebook tab.
 
 Tab label length
     If filenames are long, set the number of characters that should be
     visible on each tab's label.
+
+See also `document tab tips <#document-notebook>`_.
+
 
 Tab positions
 `````````````
@@ -3872,9 +3881,7 @@ Toggle Messages Window                                    Shows or hides the mes
 
 Toggle Sidebar                                            Shows or hides the sidebar.
 
-Toggle all additional widgets                             Hide and show all additional widgets like the
-                                                          notebook tabs, the toolbar, the messages window
-                                                          and the status bar.
+Toggle all additional widgets                             See `here <#toggle-all-additional-widgets>`_.
 
 Zoom In                         Ctrl-+  (C)               Zooms in the text.
 
@@ -5558,9 +5565,9 @@ Document notebook
 * Middle-click on a document's notebook tab to close the document.
 * Hold `Ctrl` and click on any notebook tab to switch to the last used
   document.
-* Double-click on a document's notebook tab to toggle all additional
-  widgets (to show them again use the View menu or the keyboard
-  shortcut). The interface pref must be enabled for this to work.
+* Double-click on a document's notebook tab to `toggle all additional
+  widgets`_ (to show them again use the View menu or the keyboard
+  shortcut). The `interface pref <#editor-tabs>`_ must be enabled for this to work.
 
 Editor
 ------
