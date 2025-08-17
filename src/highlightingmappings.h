@@ -1235,6 +1235,7 @@ static const HLStyle highlighting_styles_NIM[] =
 	{ SCE_NIM_STRING,				"string",				FALSE },
 	{ SCE_NIM_CHARACTER,			"character",			FALSE },
 	{ SCE_NIM_WORD,					"word",					FALSE },
+	{ SCE_NIM_WORD2,					"word2",					FALSE },
 	{ SCE_NIM_TRIPLE,				"triple",				FALSE },
 	{ SCE_NIM_TRIPLEDOUBLE,			"tripledouble",			FALSE },
 	{ SCE_NIM_BACKTICKS,			"backticks",			FALSE },
@@ -1247,6 +1248,7 @@ static const HLStyle highlighting_styles_NIM[] =
 static const HLKeyword highlighting_keywords_NIM[] =
 {
 	{ 0, "keywords",		FALSE },
+	{ 1, "builtin_identifiers",	FALSE }
 };
 #define highlighting_properties_NIM	EMPTY_PROPERTIES
 
