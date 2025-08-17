@@ -1583,6 +1583,24 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 }
 
 
+/* Creates a @c GtkButton with custom text and a named icon similar to
+ * @c gtk_button_new_from_icon_name().
+ * @param icon_name The icon name.
+ * @param text Button label text, can include mnemonics.
+ *
+ * @return @transfer{floating} The new @c GtkButton.
+ */
+GtkWidget *ui_button_new_with_icon_name(const gchar *icon_name, const gchar *text)
+{
+	return g_object_new(GTK_TYPE_BUTTON,
+			"label", text,
+			"use-underline", TRUE,
+			"visible", TRUE,
+			"image", gtk_image_new_from_icon_name(icon_name, GTK_ICON_SIZE_BUTTON),
+			NULL);
+}
+
+
 /** Creates a @c GtkImageMenuItem with a stock image and a custom label.
  * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
  * @param label Menu item label, can include mnemonics.
@@ -1600,6 +1618,26 @@ ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	gtk_widget_show(image);
 	return item;
+}
+
+
+/* Creates a @c GtkImageMenuItem with a named icon and a custom label.
+ * @param icon_name The icon name.
+ * @param label Menu item label, can include mnemonics.
+ * @return @transfer{floating} The new @c GtkImageMenuItem.
+ */
+GtkWidget *
+ui_image_menu_item_new_with_icon_name(const gchar *icon_name, const gchar *label)
+{
+	return g_object_new(GTK_TYPE_IMAGE_MENU_ITEM,
+			"label", label,
+			"use-underline", TRUE,
+			"image", g_object_new(GTK_TYPE_IMAGE,
+					"icon-name", icon_name,
+					"icon-size", GTK_ICON_SIZE_MENU,
+					"visible", TRUE,
+					NULL),
+			NULL);
 }
 
 
@@ -1624,7 +1662,7 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
 GEANY_API_SYMBOL
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
-	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR,
+	g_object_set(entry, "secondary-icon-name", "edit-clear-symbolic",
 		"secondary-icon-activatable", TRUE, NULL);
 	g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
 }
