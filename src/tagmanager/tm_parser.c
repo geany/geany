@@ -1324,6 +1324,24 @@ static TMParserMapGroup group_TERRAFORM[] = {
 	{N_("Outputs"), TM_ICON_METHOD, tm_tag_function_t},
 };
 
+static TMParserMapEntry map_KOTLIN[] = {
+	{'p', tm_tag_namespace_t},
+	{'c', tm_tag_class_t},
+	{'o', tm_tag_class_t},
+	{'i', tm_tag_interface_t},
+	{'T', tm_tag_typedef_t},
+	{'m', tm_tag_function_t},
+	{'C', tm_tag_variable_t},
+	{'v', tm_tag_variable_t},
+};
+static TMParserMapGroup group_KOTLIN[] = {
+	{N_("Packages"), TM_ICON_NAMESPACE, tm_tag_namespace_t},
+	{N_("Types"), TM_ICON_STRUCT, tm_tag_class_t | tm_tag_typedef_t},
+	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
+	{N_("Functions"), TM_ICON_METHOD, tm_tag_function_t},
+	{N_("Variables"), TM_ICON_VAR, tm_tag_variable_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1404,6 +1422,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(SYSVERILOG),
 	MAP_ENTRY(SCSS),
 	MAP_ENTRY(TERRAFORM),
+	MAP_ENTRY(KOTLIN),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -1926,6 +1945,7 @@ gboolean tm_parser_has_full_scope(TMParserType lang)
 		case TM_PARSER_JSON:
 		case TM_PARSER_LATEX:
 		case TM_PARSER_LUA:
+		case TM_PARSER_KOTLIN:
 		case TM_PARSER_MARKDOWN:
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
