@@ -3357,7 +3357,7 @@ fields is substituted by the items specified below:
 Build menu keyboard shortcuts
 `````````````````````````````
 
-Keyboard shortcuts can be defined for:
+By default, keyboard shortcuts are defined for:
 
 * the first two filetype build menu items
 * the first three independent build menu items
@@ -3367,7 +3367,9 @@ Keyboard shortcuts can be defined for:
 In the keybindings configuration dialog (see `Keybinding preferences`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
 
-It is currently not possible to bind keyboard shortcuts to more than these menu items.
+Shortcuts can also be set for the other custom menu items -
+see `Build keybindings`_ for details.
+
 You can also use underlines in the labels to set mnemonic characters.
 
 Old settings
@@ -4021,6 +4023,13 @@ Run                             F5                        Executes the current f
 
 Set Build Commands                                        Opens the build commands dialog.
 =============================== ========================= ==================================================
+
+Shortcuts can also be set for the other custom menu items which are
+listed in separate groups under the main build keybindings.
+
+.. tip::
+    The number of custom commands in each group can be increased
+    using the extra build settings in `Various preferences`_.
 
 
 Tools keybindings
