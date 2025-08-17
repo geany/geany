@@ -184,18 +184,6 @@ void build_finalize(void)
 }
 
 
-/* note: copied from keybindings.c, may be able to go away */
-static void add_menu_accel(GeanyKeyGroup *group, guint kb_id,
-	GtkAccelGroup *accel_group, GtkWidget *menuitem)
-{
-	GeanyKeyBinding *kb = keybindings_get_item(group, kb_id);
-
-	if (kb->key != 0)
-		gtk_widget_add_accelerator(menuitem, "activate", accel_group,
-			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
-}
-
-
 /* convenience routines to access parts of GeanyBuildCommand */
 static gchar *id_to_str(GeanyBuildCommand *bc, gint id)
 {
@@ -782,7 +770,6 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	const gchar *cmd_working_dir;
 	gboolean autoclose = FALSE;
 	gchar *cmd_string_utf8, *working_dir_utf8, *run_cmd, *cmd_string;
-	GError *error = NULL;
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
@@ -829,6 +816,7 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	run_cmd = g_strdup_printf("\"%s\" \"%s\" %d %s", helper, *working_dir, autoclose ? 1 : 0, cmd_string);
 	g_free(helper);
 #else
+	GError *error = NULL;
 	run_cmd = build_create_shellscript(*working_dir, cmd_string, autoclose, &error);
 	if (!run_cmd)
 	{
@@ -915,8 +903,8 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		if (spawn_async(working_dir, locale_term_cmd, NULL, NULL, &(run_info[cmdindex].pid),
 			&error))
 		{
-			g_child_watch_add(run_info[cmdindex].pid, (GChildWatchFunc) run_exit_cb,
-								(gpointer) &(run_info[cmdindex]));
+			g_child_watch_add(run_info[cmdindex].pid, run_exit_cb,
+				&(run_info[cmdindex]));
 			build_menu_update(doc);
 		}
 		else
@@ -1330,7 +1318,14 @@ static void create_build_menu_item(GtkWidget *menu, GeanyKeyGroup *group, GtkAcc
 	}
 	gtk_widget_show(item);
 	if (bs->key_binding >= 0)
-		add_menu_accel(group, (guint) bs->key_binding, ag, item);
+	{
+		GeanyKeyBinding *kb = keybindings_get_item(group,
+			(guint) bs->key_binding);
+
+		if (kb->key != 0)
+			gtk_widget_add_accelerator(item, "activate", ag,
+				kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+	}
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	if (bs->cb != NULL)
 	{
@@ -1543,7 +1538,6 @@ void build_menu_update(GeanyDocument *doc)
 
 	/* show the stop command if a program is running from execute 0 , otherwise show run command */
 	set_stop_button(run_running);
-
 }
 
 
@@ -1554,25 +1548,18 @@ static void set_stop_button(gboolean stop)
 	GtkToolButton *run_button;
 
 	run_button = GTK_TOOL_BUTTON(toolbar_get_widget_by_name("Run"));
-	if (run_button != NULL)
-		button_stock_id = gtk_tool_button_get_stock_id(run_button);
-
+	if (!run_button)
+		return;
+		
+	button_stock_id = gtk_tool_button_get_stock_id(run_button);
 	if (stop && utils_str_equal(button_stock_id, GTK_STOCK_STOP))
 		return;
 	if (! stop && utils_str_equal(button_stock_id, GTK_STOCK_EXECUTE))
 		return;
 
 	 /* use the run button also as stop button  */
-	if (stop)
-	{
-		if (run_button != NULL)
-			gtk_tool_button_set_stock_id(run_button, GTK_STOCK_STOP);
-	}
-	else
-	{
-		if (run_button != NULL)
-			gtk_tool_button_set_stock_id(run_button, GTK_STOCK_EXECUTE);
-	}
+	gtk_tool_button_set_stock_id(run_button,
+		stop ? GTK_STOCK_STOP : GTK_STOCK_EXECUTE);
 }
 
 
