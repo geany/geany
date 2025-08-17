@@ -578,6 +578,7 @@ void plugin_builder_connect_signals(GeanyPlugin *plugin,
  *
  * @see geany_plugin_set_data()
  */
+GEANY_API_SYMBOL
 gpointer geany_plugin_get_data(const GeanyPlugin *plugin)
 {
 	g_return_val_if_fail (plugin != NULL, NULL);
