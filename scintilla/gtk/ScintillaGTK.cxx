@@ -222,8 +222,10 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 	lastWheelMouseTime(0),
 	lastWheelMouseDirection(0),
 	wheelMouseIntensity(0),
+	wheelMouseIntensityUpdateTime(0),
 	smoothScrollY(0),
 	smoothScrollX(0),
+	distanceY(0),
 	rgnUpdate(nullptr),
 	repaintFullWindow(false),
 	styleIdleID(0),
@@ -246,6 +248,8 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 #define SPI_GETWHEELSCROLLLINES   104
 #endif
 	::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &linesPerScroll, 0);
+	if (linesPerScroll == 0)
+		linesPerScroll = 4;
 #else
 	linesPerScroll = 4;
 #endif
@@ -593,12 +597,8 @@ void ScintillaGTK::Init() {
 			      g_type_class_ref(gtk_container_get_type()));
 
 	gint maskSmooth = 0;
-#if defined(GDK_WINDOWING_WAYLAND)
-	GdkDisplay *pdisplay = gdk_display_get_default();
-	if (GDK_IS_WAYLAND_DISPLAY(pdisplay)) {
-		// On Wayland, touch pads only produce smooth scroll events
-		maskSmooth = GDK_SMOOTH_SCROLL_MASK;
-	}
+#if GTK_CHECK_VERSION(3,4,0)
+	maskSmooth = GDK_SMOOTH_SCROLL_MASK;
 #endif
 
 	gtk_widget_set_can_focus(PWidget(wMain), TRUE);
@@ -1978,6 +1978,10 @@ gint ScintillaGTK::MouseRelease(GtkWidget *widget, GdkEventButton *event) {
 	return FALSE;
 }
 
+#ifndef GDK_SCROLL_SMOOTH  // GTK < 3.4
+# define GDK_SCROLL_SMOOTH 4
+#endif
+
 // win32gtk and GTK >= 2 use SCROLL_* events instead of passing the
 // button4/5/6/7 events to the GTK app
 gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
@@ -1987,86 +1991,97 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 		if (widget == nullptr || event == nullptr)
 			return FALSE;
 
-#if defined(GDK_WINDOWING_WAYLAND)
-		if (event->direction == GDK_SCROLL_SMOOTH && GDK_IS_WAYLAND_WINDOW(event->window)) {
-			const int smoothScrollFactor = 4;
-			sciThis->smoothScrollY += event->delta_y * smoothScrollFactor;
-			sciThis->smoothScrollX += event->delta_x * smoothScrollFactor;;
-			if (ABS(sciThis->smoothScrollY) >= 1.0) {
-				const int scrollLines = std::trunc(sciThis->smoothScrollY);
-				sciThis->ScrollTo(sciThis->topLine + scrollLines);
-				sciThis->smoothScrollY -= scrollLines;
-			}
-			if (ABS(sciThis->smoothScrollX) >= 1.0) {
-				const int scrollPixels = std::trunc(sciThis->smoothScrollX);
-				sciThis->HorizontalScrollTo(sciThis->xOffset + scrollPixels);
-				sciThis->smoothScrollX -= scrollPixels;
-			}
-			return TRUE;
-		}
-#endif
-
-		// Compute amount and direction to scroll (even tho on win32 there is
-		// intensity of scrolling info in the native message, gtk doesn't
-		// support this so we simulate similarly adaptive scrolling)
-		// Note that this is disabled on macOS (Darwin) with the X11 backend
-		// where the X11 server already has an adaptive scrolling algorithm
-		// that fights with this one
-		int cLineScroll;
-#if (defined(__APPLE__) || defined(PLAT_GTK_WIN32)) && !defined(GDK_WINDOWING_QUARTZ)
-		cLineScroll = sciThis->linesPerScroll;
-		if (cLineScroll == 0)
-			cLineScroll = 4;
-		sciThis->wheelMouseIntensity = cLineScroll;
-#else
+		// Compute scroll intensity
+		int scrollIntensity = 0;
 		const gint64 curTime = g_get_monotonic_time();
 		const gint64 timeDelta = curTime - sciThis->lastWheelMouseTime;
-		if ((event->direction == sciThis->lastWheelMouseDirection) && (timeDelta < 250000)) {
-			if (sciThis->wheelMouseIntensity < 12)
-				sciThis->wheelMouseIntensity++;
-			cLineScroll = sciThis->wheelMouseIntensity;
+		if (event->direction == GDK_SCROLL_SMOOTH)
+			sciThis->distanceY += ABS(event->delta_y);
+		else if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_DOWN)
+			sciThis->distanceY += 1;
+		if (!event->is_stop && (event->direction == sciThis->lastWheelMouseDirection) &&
+			(timeDelta < 250000)) {
+			const gint64 intensityUpdateDelta = curTime - sciThis->wheelMouseIntensityUpdateTime;
+			if (intensityUpdateDelta > 50000) {  // prevent too fast intensity ramp up
+				const double speed_y = 1000000.0 * sciThis->distanceY / intensityUpdateDelta;
+				if (speed_y >= 40.0 && sciThis->wheelMouseIntensity < 12)
+					sciThis->wheelMouseIntensity++;
+				else if (speed_y < 40.0 && sciThis->wheelMouseIntensity > 4)
+					sciThis->wheelMouseIntensity--;
+				//printf("%d   %g\n", sciThis->wheelMouseIntensity, speed_y);
+				sciThis->wheelMouseIntensityUpdateTime = g_get_monotonic_time();
+				sciThis->distanceY = 0;
+			}
+			scrollIntensity = sciThis->wheelMouseIntensity;
 		} else {
-			cLineScroll = sciThis->linesPerScroll;
-			if (cLineScroll == 0)
-				cLineScroll = 4;
-			sciThis->wheelMouseIntensity = cLineScroll;
+			scrollIntensity = sciThis->linesPerScroll;
+			sciThis->wheelMouseIntensity = scrollIntensity;
+			sciThis->wheelMouseIntensityUpdateTime = g_get_monotonic_time();
+			sciThis->distanceY = 0;
 		}
 		sciThis->lastWheelMouseTime = curTime;
-#endif
-		if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT) {
-			cLineScroll *= -1;
-		}
 		sciThis->lastWheelMouseDirection = event->direction;
 
-		// Note:  Unpatched versions of win32gtk don't set the 'state' value so
-		// only regular scrolling is supported there.  Also, unpatched win32gtk
-		// issues spurious button 2 mouse events during wheeling, which can cause
-		// problems (a patch for both was submitted by archaeopteryx.com on 13Jun2001)
-
-#if GTK_CHECK_VERSION(3,4,0)
-		// Smooth scrolling not supported
-		if (event->direction == GDK_SCROLL_SMOOTH) {
-			return FALSE;
-		}
+		// Compute cLineScroll (vertical scroll in number of lines) and hScroll
+		// (horizontal scroll in pixels)
+		int cLineScroll = 0;
+		int hScroll = 0;
+		if (event->direction == GDK_SCROLL_SMOOTH) {  // backend supports smooth scrolling
+			double deltaY = event->delta_y;
+			double deltaX = event->delta_x;
+			// Ignore the other direction to avoid accidental diagonal scrolls on touchpad
+			if (ABS(deltaY) >= ABS(deltaX))
+				deltaX = 0.0;
+			else
+				deltaY = 0.0;
+#ifdef GDK_WINDOWING_QUARTZ
+			// Don't use computed scroll intensity on macOS as the same is already
+			// done by the system and the result is too sensitive. Also, the
+			// quartz backend returns delta in pixels and not in lines scrolled
+			// so adjust the value to roughly match other systems behavior.
+			sciThis->smoothScrollY += deltaY / 10.0;
+			sciThis->smoothScrollX += deltaX / 10.0;
+#else
+			sciThis->smoothScrollY += deltaY * scrollIntensity;
+			sciThis->smoothScrollX += deltaX * sciThis->linesPerScroll;
 #endif
+			if (ABS(sciThis->smoothScrollY) >= 1.0) {
+				cLineScroll = std::trunc(sciThis->smoothScrollY);
+				sciThis->smoothScrollY -= cLineScroll;
+			}
+			if (ABS(sciThis->smoothScrollX) >= 1.0) {
+				hScroll = std::trunc(sciThis->smoothScrollX);
+				sciThis->smoothScrollX -= hScroll;
+			}
+		} else {  // backend only supports discrete scrolling
+			int direction = 1;
+			if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT) {
+				direction = -1;
+			}
+			if (event->direction == GDK_SCROLL_LEFT || event->direction == GDK_SCROLL_RIGHT || event->state & GDK_SHIFT_MASK) {
+				hScroll = sciThis->linesPerScroll * direction;
+			} else {
+				cLineScroll = scrollIntensity * direction;
+			}
+		}
 
-		// Horizontal scrolling
-		if (event->direction == GDK_SCROLL_LEFT || event->direction == GDK_SCROLL_RIGHT || event->state & GDK_SHIFT_MASK) {
-			int hScroll = gtk_adjustment_get_step_increment(sciThis->adjustmenth);
-			hScroll *= cLineScroll; // scroll by this many characters
-			sciThis->HorizontalScrollTo(sciThis->xOffset + hScroll);
-
+		// Perform scroll (or zoom when control modifier pressed)
+		if ((event->state & GDK_CONTROL_MASK) && cLineScroll != 0) {
 			// Text font size zoom
-		} else if (event->state & GDK_CONTROL_MASK) {
 			if (cLineScroll < 0) {
 				sciThis->KeyCommand(Message::ZoomIn);
 			} else {
 				sciThis->KeyCommand(Message::ZoomOut);
 			}
-
-			// Regular scrolling
 		} else {
-			sciThis->ScrollTo(sciThis->topLine + cLineScroll);
+			// Regular scrolling
+			if (cLineScroll != 0) {
+				sciThis->ScrollTo(sciThis->topLine + cLineScroll);
+			}
+			if (hScroll != 0) {
+				hScroll *= gtk_adjustment_get_step_increment(sciThis->adjustmenth);
+				sciThis->HorizontalScrollTo(sciThis->xOffset + hScroll);
+			}
 		}
 		return TRUE;
 	} catch (...) {
