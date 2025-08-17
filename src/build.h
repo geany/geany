@@ -126,8 +126,10 @@ typedef struct BuildMenuItems
 typedef struct BuildDestination
 {
 	GeanyBuildCommand	**dst[GEANY_GBG_COUNT];
-	gchar				**fileregexstr;
-	gchar				**nonfileregexstr;
+	gchar		**fileregexstr;
+	Trinary	*fileregex_add_default_val;
+	gchar		**nonfileregexstr;
+	Trinary	*nonfileregex_add_default_val;
 } BuildDestination;
 
 /* opaque pointers returned from build functions and passed back to them */
@@ -166,6 +168,8 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src);
 void build_set_group_count(GeanyBuildGroup grp, gint count);
 
 gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
+
+Trinary *build_get_regex_add_default(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
 
 gboolean build_keybinding(guint key_id);
 

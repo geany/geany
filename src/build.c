@@ -254,8 +254,10 @@ static GeanyBuildCommand *exec_pref = NULL;
 static GeanyBuildCommand *exec_def = NULL;
 /* and the regexen not in the filetype structure */
 static gchar *regex_pref = NULL;
+static Trinary regex_pref_add_default = TRINARY_NOT_SET;
 /* project non-fileregex string */
 static gchar *regex_proj = NULL;
+static Trinary regex_proj_add_default = TRINARY_NOT_SET;
 
 /* control if build commands are printed by get_build_cmd, for debug purposes only*/
 #ifndef PRINTBUILDCMDS
@@ -433,6 +435,9 @@ static GeanyBuildCommand *get_build_cmd(GeanyDocument *doc, guint grp, guint cmd
 	if (!EMPTY(ptr)) \
 		{ *fr = (src); return &(ptr); }
 
+#define return_set_regex_add_default(src, val)\
+	if (val != TRINARY_NOT_SET) \
+		{ *fr = (src); return &val; }
 
 /* like get_build_cmd, but for regexen, used by filetypes */
 gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from)
@@ -459,6 +464,36 @@ gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from)
 	{
 		return_nonblank_regex(GEANY_BCS_PROJ, regex_proj);
 		return_nonblank_regex(GEANY_BCS_PREF, regex_pref);
+	}
+	return NULL;
+}
+
+
+/* like build_get_regex, but for regexen add default, used by filetypes */
+Trinary *build_get_regex_add_default(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from)
+{
+	guint sink, *fr = &sink;
+
+	if (from != NULL)
+		fr = from;
+	if (grp == GEANY_GBG_FT)
+	{
+		if (ft == NULL)
+		{
+			GeanyDocument *doc = document_get_current();
+			if (doc != NULL)
+				ft = doc->file_type;
+		}
+		if (ft == NULL)
+			return NULL;
+		return_set_regex_add_default(GEANY_BCS_PROJ, ft->priv->projerror_regex_add_default);
+		return_set_regex_add_default(GEANY_BCS_HOME_FT, ft->priv->homeerror_regex_add_default);
+		return_set_regex_add_default(GEANY_BCS_FT, ft->error_regex_add_default);
+	}
+	else if (grp == GEANY_GBG_NON_FT)
+	{
+		return_set_regex_add_default(GEANY_BCS_PROJ, regex_proj_add_default);
+		return_set_regex_add_default(GEANY_BCS_PREF, regex_pref_add_default);
 	}
 	return NULL;
 }
@@ -1888,9 +1923,13 @@ typedef struct BuildTableFields
 {
 	RowWidgets 	**rows;
 	GtkWidget	 *fileregex;
+	GtkWidget  *fileregex_add_default;
 	GtkWidget	 *nonfileregex;
+	GtkWidget  *nonfileregex_add_default;;
 	gchar		**fileregexstring;
+	Trinary *fileregex_add_default_value;
 	gchar		**nonfileregexstring;
+	Trinary *nonfileregex_add_default_value;
 } BuildTableFields;
 
 
@@ -1900,6 +1939,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	GtkWidget *label, *sep, *clearicon, *clear;
 	BuildTableFields *fields;
 	GtkTable *table;
+	GtkWidget *hbox;
 	const gchar **ch;
 	gchar *txt;
 	guint col, row, cmdindex;
@@ -1935,6 +1975,8 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	label = gtk_label_new(_("Error regular expression:"));
 	gtk_table_attach(table, label, 0, DC_ENTRIES + 1, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
+
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	fields->fileregex = gtk_entry_new();
 	fields->fileregexstring = build_get_regex(GEANY_GBG_FT, NULL, &src);
 	sensitivity = (ft == NULL) ? FALSE : TRUE;
@@ -1944,8 +1986,15 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 		if (src > dst)
 			sensitivity = FALSE;
 	}
-	gtk_table_attach(table, fields->fileregex, DC_ENTRIES + 1, DC_CLEAR, row, row + 1, GTK_FILL,
+	gtk_box_pack_start(GTK_BOX(hbox), fields->fileregex, TRUE, TRUE, 0);
+	fields->fileregex_add_default = gtk_check_button_new_with_label("default");
+	fields->fileregex_add_default_value = build_get_regex_add_default(GEANY_GBG_FT, NULL, &src);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(fields->fileregex_add_default),
+		fields->fileregex_add_default_value != NULL && *fields->fileregex_add_default_value == TRINARY_YES);
+	gtk_box_pack_start(GTK_BOX(hbox), fields->fileregex_add_default, FALSE, FALSE, 0);
+	gtk_table_attach(table, hbox, DC_ENTRIES + 1, DC_CLEAR, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
+
 	clearicon = gtk_image_new_from_stock(GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
 	clear = gtk_button_new();
 	gtk_button_set_image(GTK_BUTTON(clear), clearicon);
@@ -1967,9 +2016,11 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	for (++row, cmd = 0; cmd < build_groups_count[GEANY_GBG_NON_FT]; ++row, ++cmdindex, ++cmd)
 		fields->rows[cmdindex] = build_add_dialog_row(
 			doc, table, row, dst, GEANY_GBG_NON_FT, cmd, TRUE);
+
 	label = gtk_label_new(_("Error regular expression:"));
 	gtk_table_attach(table, label, 0, DC_ENTRIES + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	fields->nonfileregex = gtk_entry_new();
 	fields->nonfileregexstring = build_get_regex(GEANY_GBG_NON_FT, NULL, &src);
 	sensitivity = TRUE;
@@ -1978,8 +2029,15 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 		gtk_entry_set_text(GTK_ENTRY(fields->nonfileregex), *(fields->nonfileregexstring));
 		sensitivity = src > dst ? FALSE : TRUE;
 	}
-	gtk_table_attach(table, fields->nonfileregex, DC_ENTRIES + 1, DC_CLEAR, row, row + 1, GTK_FILL,
+	gtk_box_pack_start(GTK_BOX(hbox), fields->nonfileregex, TRUE, TRUE, 0);
+	fields->nonfileregex_add_default = gtk_check_button_new_with_label("default");
+	fields->nonfileregex_add_default_value = build_get_regex_add_default(GEANY_GBG_NON_FT, NULL, &src);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(fields->nonfileregex_add_default),
+		fields->nonfileregex_add_default_value != NULL && *fields->nonfileregex_add_default_value == TRINARY_YES);
+	gtk_box_pack_start(GTK_BOX(hbox), fields->nonfileregex_add_default, FALSE, FALSE, 0);
+	gtk_table_attach(table, hbox, DC_ENTRIES + 1, DC_CLEAR, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
+
 	clearicon = gtk_image_new_from_stock(GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
 	clear = gtk_button_new();
 	gtk_button_set_image(GTK_BUTTON(clear), clearicon);
@@ -2124,6 +2182,26 @@ static gboolean read_regex(GtkWidget *regexentry, gchar **src, gchar **dst)
 }
 
 
+static gboolean read_add_default(GtkWidget *add_default_button, Trinary *src, Trinary *dst)
+{
+	gboolean changed = FALSE;
+ 	const Trinary add_default = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(add_default_button))
+																	 ? TRINARY_YES
+																	 : TRINARY_NO;
+
+	if ((src == NULL)						/* originally there was no add_default */
+		||(*src != add_default))	/* it has been changed */
+	{
+		if (dst != NULL)
+		{
+			*dst = add_default;
+			changed = TRUE;
+		}
+	}
+	return changed;
+}
+
+
 static gboolean build_read_commands(BuildDestination *dst, BuildTableData table_data, gint response)
 {
 	guint cmdindex, cmd;
@@ -2139,6 +2217,8 @@ static gboolean build_read_commands(BuildDestination *dst, BuildTableData table_
 			changed |= read_row(dst, table_data, cmdindex, GEANY_GBG_EXEC, cmd);
 		changed |= read_regex(table_data->fileregex, table_data->fileregexstring, dst->fileregexstr);
 		changed |= read_regex(table_data->nonfileregex, table_data->nonfileregexstring, dst->nonfileregexstr);
+		changed |= read_add_default(table_data->fileregex_add_default, table_data->fileregex_add_default_value, dst->fileregex_add_default_val);
+		changed |= read_add_default(table_data->nonfileregex_add_default, table_data->nonfileregex_add_default_value, dst->nonfileregex_add_default_val);
 	}
 	return changed;
 }
@@ -2152,15 +2232,18 @@ void build_read_project(GeanyFiletype *ft, BuildTableData build_properties)
 	{
 		menu_dst.dst[GEANY_GBG_FT] = &(ft->priv->projfilecmds);
 		menu_dst.fileregexstr = &(ft->priv->projerror_regex_string);
+		menu_dst.fileregex_add_default_val = &(ft->priv->projerror_regex_add_default);
 	}
 	else
 	{
 		menu_dst.dst[GEANY_GBG_FT] = NULL;
 		menu_dst.fileregexstr = NULL;
+		menu_dst.fileregex_add_default_val = NULL;
 	}
 	menu_dst.dst[GEANY_GBG_NON_FT] = &non_ft_proj;
 	menu_dst.dst[GEANY_GBG_EXEC] = &exec_proj;
 	menu_dst.nonfileregexstr = &regex_proj;
+	menu_dst.nonfileregex_add_default_val = &regex_proj_add_default;
 
 	build_read_commands(&menu_dst, build_properties, GTK_RESPONSE_ACCEPT);
 }
@@ -2194,15 +2277,18 @@ static void show_build_commands_dialog(void)
 	{
 		prefdsts.dst[GEANY_GBG_FT] = &(ft->priv->homefilecmds);
 		prefdsts.fileregexstr = &(ft->priv->homeerror_regex_string);
+		prefdsts.fileregex_add_default_val = &(ft->priv->homeerror_regex_add_default);
 		prefdsts.dst[GEANY_GBG_EXEC] = &(ft->priv->homeexeccmds);
 	}
 	else
 	{
 		prefdsts.dst[GEANY_GBG_FT] = NULL;
 		prefdsts.fileregexstr = NULL;
+		prefdsts.fileregex_add_default_val = NULL;
 		prefdsts.dst[GEANY_GBG_EXEC] = NULL;
 	}
 	prefdsts.nonfileregexstr = &regex_pref;
+	prefdsts.nonfileregex_add_default_val  = &regex_pref_add_default;
 	if (build_read_commands(&prefdsts, table_data, response) && ft != NULL)
 		filetypes_save_commands(ft);
 	build_free_fields(table_data);
@@ -2286,6 +2372,22 @@ static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint 
 }
 
 
+static void build_load_menu_add_default(GKeyFile *config, const gchar *grp_name, const gchar *regkey, Trinary *add_default)
+{
+	g_assert(add_default != NULL);
+
+	if (g_key_file_has_key(config, build_grp_name, regkey, NULL))
+	{
+		*add_default = g_key_file_get_boolean(config, build_grp_name, regkey, NULL)
+			? TRINARY_YES : TRINARY_NO;
+	}
+	else
+	{
+		*add_default = TRINARY_NOT_SET;
+	}
+}
+
+
 /* set GeanyBuildCommand if it doesn't already exist and there is a command */
 static void assign_cmd(GeanyBuildCommand *type, guint id,
 		const gchar *label, gchar *value)
@@ -2325,6 +2427,7 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 				build_load_menu_grp(config, &(ft->priv->execcmds), GEANY_GBG_EXEC, NULL, TRUE);
 				SETPTR(ft->error_regex_string,
 						g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
+				build_load_menu_add_default(config, build_grp_name, "error_regex_add_default", &(ft->error_regex_add_default));
 				break;
 			case GEANY_BCS_HOME_FT:
 				ft = (GeanyFiletype*)p;
@@ -2334,16 +2437,19 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 				build_load_menu_grp(config, &(ft->priv->homeexeccmds), GEANY_GBG_EXEC, NULL, FALSE);
 				SETPTR(ft->priv->homeerror_regex_string,
 						g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
+				build_load_menu_add_default(config, build_grp_name, "error_regex_add_default", &(ft->priv->homeerror_regex_add_default));
 				break;
 			case GEANY_BCS_PREF:
 				build_load_menu_grp(config, &non_ft_pref, GEANY_GBG_NON_FT, NULL, FALSE);
 				build_load_menu_grp(config, &exec_pref, GEANY_GBG_EXEC, NULL, FALSE);
 				SETPTR(regex_pref, g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
+				build_load_menu_add_default(config, build_grp_name, "error_regex_add_default", &regex_pref_add_default);
 				break;
 			case GEANY_BCS_PROJ:
 				build_load_menu_grp(config, &non_ft_proj, GEANY_GBG_NON_FT, NULL, FALSE);
 				build_load_menu_grp(config, &exec_proj, GEANY_GBG_EXEC, NULL, FALSE);
 				SETPTR(regex_proj, g_key_file_get_string(config, build_grp_name, "error_regex", NULL));
+				build_load_menu_add_default(config, build_grp_name, "error_regex_add_default", &regex_proj_add_default);
 				pj = (GeanyProject*)p;
 				if (p == NULL)
 					return;
@@ -2363,6 +2469,9 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 							g_ptr_array_add(pj->priv->build_filetypes_list, ft);
 							SETPTR(ft->priv->projerror_regex_string,
 									g_key_file_get_string(config, build_grp_name, regkey, NULL));
+							g_free(regkey);
+							regkey = g_strdup_printf("%serror_regex_add_default", *ftname);
+							build_load_menu_add_default(config, build_grp_name, regkey, &ft->priv->projerror_regex_add_default);
 							g_free(regkey);
 							build_load_menu_grp(config, &(ft->priv->projfilecmds), GEANY_GBG_FT, *ftname, FALSE);
 							build_load_menu_grp(config, &(ft->priv->projexeccmds), GEANY_GBG_EXEC, *ftname, FALSE);
@@ -2505,6 +2614,26 @@ static guint build_save_menu_grp(GKeyFile *config, GeanyBuildCommand *src, gint 
 }
 
 
+static guint build_save_menu_add_default(GKeyFile *config, const gchar *grp_name, const gchar *regkey, Trinary add_default)
+{
+	guint count = 0;
+
+	switch (add_default)
+	{
+		case TRINARY_NOT_SET:
+			g_key_file_remove_key(config, grp_name, regkey, NULL);
+			break;
+		case TRINARY_YES:
+		case TRINARY_NO:
+			g_key_file_set_boolean(config, grp_name, regkey, add_default == TRINARY_YES);
+			count = 1;
+			break;
+	}
+
+	return count;
+}
+
+
 static gboolean save_project_filetype(GeanyFiletype *ft, GKeyFile *config)
 {
 	guint i = 0;
@@ -2520,6 +2649,11 @@ static gboolean save_project_filetype(GeanyFiletype *ft, GKeyFile *config)
 	else
 		g_key_file_remove_key(config, build_grp_name, regkey, NULL);
 	g_free(regkey);
+
+	regkey = g_strdup_printf("%serror_regex_add_default", ft->name);
+	i += build_save_menu_add_default(config, build_grp_name, regkey, ft->priv->projerror_regex_add_default);
+	g_free(regkey);
+
 	return (i > 0);
 }
 
@@ -2541,6 +2675,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 				g_key_file_set_string(config, build_grp_name, "error_regex", ft->priv->homeerror_regex_string);
 			else
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
+			build_save_menu_add_default(config, build_grp_name, "error_regex_add_default", ft->priv->homeerror_regex_add_default);
 			break;
 		case GEANY_BCS_PREF:
 			build_save_menu_grp(config, non_ft_pref, GEANY_GBG_NON_FT, NULL);
@@ -2549,6 +2684,7 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 				g_key_file_set_string(config, build_grp_name, "error_regex", regex_pref);
 			else
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
+			build_save_menu_add_default(config, build_grp_name, "error_regex_add_default", regex_pref_add_default);
 			break;
 		case GEANY_BCS_PROJ:
 			pj = (GeanyProject*)ptr;
@@ -2558,11 +2694,12 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src)
 				g_key_file_set_string(config, build_grp_name, "error_regex", regex_proj);
 			else
 				g_key_file_remove_key(config, build_grp_name, "error_regex", NULL);
+			build_save_menu_add_default(config, build_grp_name, "error_regex_add_default", regex_proj_add_default);
 			if (pj->priv->build_filetypes_list != NULL)
 			{
 				GPtrArray *ft_names = g_ptr_array_new();
 				const GPtrArray *build_fts = pj->priv->build_filetypes_list;
-				
+
 				for (guint i = 0; i < build_fts->len; i++)
 				{
 					ft = build_fts->pdata[i];
