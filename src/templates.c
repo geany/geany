@@ -133,6 +133,7 @@ static void init_general_templates(void)
 	/* read the contents */
 	read_template("fileheader", GEANY_TEMPLATE_FILEHEADER);
 	read_template("gpl", GEANY_TEMPLATE_GPL);
+	read_template("gpl3", GEANY_TEMPLATE_GPL3);
 	read_template("bsd", GEANY_TEMPLATE_BSD);
 	read_template("function", GEANY_TEMPLATE_FUNCTION);
 	read_template("changelog", GEANY_TEMPLATE_CHANGELOG);
@@ -459,7 +460,10 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 	GString *template;
 
 	g_return_val_if_fail(DOC_VALID(doc), NULL);
-	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL);
+	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL ||
+						licence_type == GEANY_TEMPLATE_GPL3 ||
+						licence_type == GEANY_TEMPLATE_BSD,
+						NULL);
 
 	template = g_string_new(templates[licence_type]);
 	replace_static_values(template);
@@ -481,6 +485,7 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 
 	templates_replace_valist(template,
 		"{gpl}", templates[GEANY_TEMPLATE_GPL],
+		"{gpl3}", templates[GEANY_TEMPLATE_GPL3],
 		"{bsd}", templates[GEANY_TEMPLATE_BSD],
 		NULL);
 
