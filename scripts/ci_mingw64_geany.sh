@@ -68,7 +68,7 @@ CFLAGS="\
 
 # cross-compilation environment
 ARCH="x86_64"
-MINGW_ARCH="mingw64"
+MINGW_ARCH="ucrt64"
 HOST="x86_64-w64-mingw32"
 export LDFLAGS="-static-libgcc ${LDFLAGS}"
 export PKG_CONFIG_SYSROOT_DIR="/windows"
