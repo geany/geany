@@ -863,7 +863,18 @@ gboolean main_handle_filename(const gchar *locale_filename)
 		if (doc)
 			document_show_tab(doc);
 		else
-			doc = document_new_file(utf8_filename, NULL, NULL);
+		{
+			gchar *path = g_path_get_dirname(filename);
+
+			if (g_file_test(path, G_FILE_TEST_EXISTS))
+				doc = document_new_file(utf8_filename, NULL, NULL);
+			else
+			{
+				SETPTR(path, utils_get_utf8_from_locale(path));
+				ui_set_statusbar(TRUE, _("The path \"%s\" does not exist."), path);
+			}
+			g_free(path);
+		}
 		g_free(utf8_filename);
 		g_free(filename);
 		return TRUE;
