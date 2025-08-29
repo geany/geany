@@ -567,8 +567,29 @@ static void create_find_dialog(void)
 
 static void set_dialog_position(GtkWidget *dialog, gint *position)
 {
-	if (position[0] >= 0)
-		gtk_window_move(GTK_WINDOW(dialog), position[0], position[1]);
+	if (position[0] >= 0) {
+		GdkDisplay* display = gtk_widget_get_display(dialog);
+		if (display) {
+			GdkMonitor* monitor;
+			const gint n_monitors = gdk_display_get_n_monitors(display);
+			gboolean position_is_valid = FALSE;
+			GdkRectangle geometry;
+			for (gint i = 0; i < n_monitors; ++i) {
+				monitor = gdk_display_get_monitor(display, i);
+				if (monitor) {
+					gdk_monitor_get_geometry(monitor, &geometry);
+					if (position[0] >= geometry.x && position[0] <= geometry.x + geometry.width &&
+						position[1] >= geometry.y && position[1] <= geometry.y + geometry.height) {
+						position_is_valid = TRUE;
+						break;
+					}
+				}
+			}
+			if (position_is_valid) {
+				gtk_window_move(GTK_WINDOW(dialog), position[0], position[1]);
+			}
+		}
+	}
 }
 
 
