@@ -883,6 +883,8 @@ static void init_document_widgets(void)
 	add_doc_widget("insert_date1");
 	add_doc_widget("insert_alternative_white_space1");
 	add_doc_widget("menu_format1");
+	add_doc_widget("send_selecion_to2");
+	add_doc_widget("send_selecion_to3");
 	add_doc_widget("commands2");
 	add_doc_widget("menu_open_selected_file1");
 	add_doc_widget("page_setup1");
@@ -2621,6 +2623,7 @@ void ui_init(void)
 		GeanySharedMenu arr[] = {
 			{"commands2_menu", "commands2", "commands1"},
 			{"menu_format1_menu", "menu_format1", "menu_format2"},
+			{"send_selection_to2_menu", "send_selection_to2", "send_selection_to3"},
 			{"more1_menu", "more1", "search2"},
 			{NULL, NULL, NULL}
 		};
