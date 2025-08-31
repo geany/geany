@@ -101,7 +101,7 @@ filetypes_dist = \
 	filedefs/filetypes.LESS.conf \
 	filedefs/filetypes.lisp \
 	filedefs/filetypes.lua \
-	filedefs/filetypes.Kotlin.conf \
+	filedefs/filetypes.kotlin \
 	filedefs/filetypes.makefile \
 	filedefs/filetypes.markdown \
 	filedefs/filetypes.matlab \
