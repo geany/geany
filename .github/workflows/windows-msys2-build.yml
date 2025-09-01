@@ -1,6 +1,15 @@
 name: Windows/MSYS2 Build
 on:
   workflow_dispatch:
+    inputs:
+      sign_build:
+        description: 'Set to true to sign the build artifact.'
+        required: false
+        default: 'false'
+        type: boolean
+  pull_request:
+    branches:
+      - master
 
 jobs:
   msys2-mingw64:
@@ -14,18 +23,18 @@ jobs:
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
         with:
-          msystem: MINGW64
+          msystem: UCRT64
           update: true
           install: |
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-autotools
-            mingw-w64-x86_64-gtk3
-            mingw-w64-x86_64-python-docutils
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-autotools
+            mingw-w64-ucrt-x86_64-gtk3
+            mingw-w64-ucrt-x86_64-python-docutils
             patch
             rsync
             unzip
             dos2unix
-            mingw-w64-x86_64-nsis
+            mingw-w64-ucrt-x86_64-nsis
       - name: GTK-Bundle
         run: |
           mkdir -p geany_build/bundle/geany-gtk
@@ -58,16 +67,18 @@ jobs:
           overwrite: true
           if-no-files-found: error
       - name: SignPath Signing
-        uses: signpath/github-action-submit-signing-request@v1.2
+        if: ${{ github.event.inputs.sign_build == 'true' }}
+        uses: signpath/github-action-submit-signing-request@v1
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
           project-slug: 'geany'
-          signing-policy-slug: 'test-signing'
+          signing-policy-slug: 'release-signing'
           github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: geany-signed
       - name: Upload Signed Artifact
+        if: ${{ github.event.inputs.sign_build == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: geany-signed
