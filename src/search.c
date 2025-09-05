@@ -1669,16 +1669,6 @@ static GString *get_grep_options(void)
 	else
 		g_string_append_c(gstr, 'E');
 
-	if (settings.fif_use_extra_options)
-	{
-		g_strstrip(settings.fif_extra_options);
-
-		if (*settings.fif_extra_options != 0)
-		{
-			g_string_append_c(gstr, ' ');
-			g_string_append(gstr, settings.fif_extra_options);
-		}
-	}
 	g_strstrip(settings.fif_files);
 	if (settings.fif_files_mode != FILES_MODE_ALL && *settings.fif_files)
 	{
@@ -1691,6 +1681,16 @@ static GString *get_grep_options(void)
 		utils_string_replace_all(tmp, " ", " --include=");
 		g_string_append(gstr, tmp->str);
 		g_string_free(tmp, TRUE);
+	}
+	if (settings.fif_use_extra_options)
+	{
+		g_strstrip(settings.fif_extra_options);
+
+		if (*settings.fif_extra_options != 0)
+		{
+			g_string_append_c(gstr, ' ');
+			g_string_append(gstr, settings.fif_extra_options);
+		}
 	}
 	return gstr;
 }
