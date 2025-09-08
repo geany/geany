@@ -1,17 +1,17 @@
 # Portuguese translation for geany
-# Copyright (C) 2006-2022 The Geany contributors.
+# Copyright (C) 2006-2025 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 #
 # André Glória <gloria_dot_andre_at_gmail_dot_com>, 2009 - 2014.
 # Pedro Albuquerque <pmra@protonmail.com>, 2015 - 2021.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2022, 2023, 2024.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2022, 2023, 2024, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2025-06-09 22:11+0200\n"
-"PO-Revision-Date: 2024-08-14 23:17+0100\n"
+"PO-Revision-Date: 2025-09-08 19:05+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <translation-team-pt@lists.sourceforge.net>\n"
 "Language: pt\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.6\n"
 
 #: geany.desktop.in:4 data/geany.glade:6448
 msgid "Geany"
@@ -110,7 +110,7 @@ msgstr "Pro_curar"
 
 #: data/geany.glade:482 data/geany.glade:6518
 msgid "Open Selected F_ile"
-msgstr "Abrir f_icheiro seleccionado"
+msgstr "Abrir f_icheiro selecionado"
 
 #: data/geany.glade:493 data/geany.glade:7392 src/symbols.c:2258
 msgid "Find _Usage"
@@ -234,11 +234,11 @@ msgstr ""
 
 #: data/geany.glade:1095
 msgid "Project files:"
-msgstr "Ficheiros do projecto:"
+msgstr "Ficheiros do projeto:"
 
 #: data/geany.glade:1110
 msgid "Path to start in when opening project files"
-msgstr "Caminho onde começar ao abrir ficheiros do projecto"
+msgstr "Caminho onde começar ao abrir ficheiros do projeto"
 
 #: data/geany.glade:1149
 msgid "Extra plugin path:"
@@ -250,9 +250,9 @@ msgid ""
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
-"Por norma o Geany procura na pasta de instalação predefinida e na pasta de "
-"configuração. O caminho aqui inserido será usado para procurar mais "
-"extensões. Deixe em branco para desactivar."
+"Por norma o Geany procura no diretório de instalação predefinida e na "
+"diretório de configuração. O caminho aqui inserido será usado para procurar "
+"mais extensões. Deixe em branco para desativar."
 
 #: data/geany.glade:1207
 msgid "<b>Paths</b>"
@@ -353,11 +353,11 @@ msgid ""
 "Replace dialog and there is no selection"
 msgstr ""
 "Usar a palavra sob o cursor quando abrir um dos diálogos Procurar, Procurar "
-"em ficheiros ou Substituir, se não houver uma selecção feita"
+"em ficheiros ou Substituir, se não houver uma seleção feita"
 
 #: data/geany.glade:1415
 msgid "Use the current file's directory for Find in Files"
-msgstr "Usar a pasta actual quando executar \"Localizar em Ficheiros\""
+msgstr "Usar o diretório atual quando executar \"Localizar em Ficheiros\""
 
 #: data/geany.glade:1436
 msgid "<b>Search</b>"
@@ -365,7 +365,7 @@ msgstr "<b>Procurar</b>"
 
 #: data/geany.glade:1464
 msgid "Store project file inside the project base directory"
-msgstr "Gravar o ficheiro de projecto na pasta base do projecto"
+msgstr "Gravar o ficheiro de projeto no diretório base do projeto"
 
 #: data/geany.glade:1468
 msgid ""
@@ -374,10 +374,10 @@ msgid ""
 "directory. You can still change the path of the project file in the New "
 "Project dialog."
 msgstr ""
-"Quando activo, o ficheiro de projecto é gravado por predefinição, dentro da "
-"pasta base do projecto quando criar novos, ao invés de ser gravado um nível "
-"acima desta. Pode, no entanto, alterar o caminho do ficheiro de projecto no "
-"diálogo Novo projecto."
+"Quando ativo, o ficheiro de projeto é gravado por predefinição, dentro da "
+"pasta base do projeto quando criar novos, ao invés de ser gravado um nível "
+"acima desta. Pode, no entanto, alterar o caminho do ficheiro de projeto no "
+"diálogo Novo projeto."
 
 #: data/geany.glade:1486
 msgid "<b>Projects</b>"
@@ -510,14 +510,14 @@ msgstr "Separadores de ficheiro serão colocados à direita do bloco de notas"
 
 #: data/geany.glade:2150
 msgid "Next to current"
-msgstr "A seguir ao actual"
+msgstr "A seguir ao atual"
 
 #: data/geany.glade:2154
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
 msgstr ""
-"Se se devem colocar os separadores de ficheiro a seguir ao separador actual, "
+"Se se devem colocar os separadores de ficheiro a seguir ao separador atual, "
 "ao invés de nas margens do bloco de notas"
 
 #: data/geany.glade:2176
@@ -657,7 +657,7 @@ msgstr ""
 "move o cursor para o primeiro carácter não branco da linha, excepto se já lá "
 "estiver, caso em que será movido mesmo para o início da linha. Quando esta "
 "funcionalidade está desactivada, a tecla Home move sempre o cursor para o "
-"inicio da linha actual, independentemente da sua posição."
+"inicio da linha atual, independentemente da sua posição."
 
 #: data/geany.glade:2885
 msgid "Disable Drag and Drop"
@@ -740,7 +740,7 @@ msgstr "Não mostrar espaços virtuais"
 
 #: data/geany.glade:3095
 msgid "Only for rectangular selections"
-msgstr "Só para selecções rectangulares"
+msgstr "Só para seleções retangulares"
 
 #: data/geany.glade:3099
 msgid ""
@@ -748,7 +748,7 @@ msgid ""
 "selection"
 msgstr ""
 "Mostrar os espaços virtuais para além do final das linhas, só quando "
-"desenhar uma selecção rectangular"
+"desenhar uma seleção retangular"
 
 #: data/geany.glade:3112
 msgid "Always"
@@ -948,7 +948,7 @@ msgstr "Número máximo de entradas a mostrar na lista de conclusão automática
 
 #: data/geany.glade:3693
 msgid "Symbol list update frequency:"
-msgstr "Frequência de actualização da lista de símbolos:"
+msgstr "Frequência de atualização da lista de símbolos:"
 
 #: data/geany.glade:3708
 msgid ""
@@ -956,10 +956,10 @@ msgid ""
 "list. Note that a too short delay may have performance impact, especially "
 "with large files. A delay of 0 disables real-time updates."
 msgstr ""
-"Atraso mínimo (em mili-segundos) entre 2 actualizações automáticas da lista "
+"Atraso mínimo (em milissegundos) entre 2 atualizações automáticas da lista "
 "de símbolos. Note que um atraso muito curto poderá causar um impacto no "
 "desempenho, especialmente com ficheiros muito grandes. Um atraso de 0 (zero) "
-"desactiva as actualizações em tempo real."
+"desativa as atualizações em tempo real."
 
 #: data/geany.glade:3738 data/geany.glade:9298
 msgid "<b>Completions</b>"
@@ -1329,9 +1329,9 @@ msgid ""
 "can appear anywhere in the given command and will be replaced before "
 "execution."
 msgstr ""
-"Comando de acção contextual. A palavra actualmente seleccionada pode ser "
-"usada com %s. Pode aparecer em qualquer ponto do comando e será substituído "
-"antes da execução."
+"Comando de ação contextual. A palavra atualmente selecionada pode ser usada "
+"com %s. Pode aparecer em qualquer ponto do comando e será substituído antes "
+"da execução."
 
 #: data/geany.glade:5148
 msgid "<b>Commands</b>"
@@ -1458,6 +1458,16 @@ msgid ""
 "<tt>%d</tt> if there are no project open.\n"
 "• <tt>%%</tt>: a literal <tt>%</tt> character."
 msgstr ""
+"Comando para imprimir ficheiros.\n"
+"\n"
+"Os placeholders suportados são:\n"
+"• <tt>%d</tt>: o diretório que contém o ficheiro.\n"
+"• <tt>%e</tt>: o nome do ficheiro sem caminho nem extensão.\n"
+"• <tt>%f</tt>: o nome do ficheiro sem caminho.\n"
+"• <tt>%l</tt>: o número da linha atual no ficheiro, começando em 1.\n"
+"• <tt>%p</tt>: o diretório do projeto atual, ou equivalente a <tt>%d</tt> se "
+"não houver nenhum projeto aberto.\n"
+"• <tt>%%</tt>: um caractere literal <tt>%</tt>."
 
 #: data/geany.glade:5714
 msgid "Use an external command for printing"
@@ -1492,7 +1502,7 @@ msgid ""
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
 "Adiciona um pequeno cabeçalho a todas as páginas, com o número da página, o "
-"nome do ficheiro e a data actual (ver Formato da data). Consome 3 linhas de "
+"nome do ficheiro e a data atual (ver Formato da data). Consome 3 linhas de "
 "cada página."
 
 #: data/geany.glade:5812 src/printing.c:265
@@ -1739,27 +1749,27 @@ msgstr "Co_mandos"
 
 #: data/geany.glade:6812 src/keybindings.c:440
 msgid "Cu_t Current Line(s)"
-msgstr "Cor_tar linha(s) actual(is)"
+msgstr "Cor_tar linha(s) atual(is)"
 
 #: data/geany.glade:6823 src/keybindings.c:437
 msgid "_Copy Current Line(s)"
-msgstr "_Copiar linha(s) actual(is)"
+msgstr "_Copiar linha(s) atual(is)"
 
 #: data/geany.glade:6836 src/keybindings.c:390
 msgid "_Delete Current Line(s)"
-msgstr "_Eliminar linha(s) actual(is)"
+msgstr "_Eliminar linha(s) atual(is)"
 
 #: data/geany.glade:6845 src/keybindings.c:387
 msgid "D_uplicate Line or Selection"
-msgstr "_Duplicar linha ou selecção"
+msgstr "_Duplicar linha ou seleção"
 
 #: data/geany.glade:6860 src/keybindings.c:450
 msgid "S_elect Current Line(s)"
-msgstr "_Seleccionar linha(s) actual(is)"
+msgstr "_Selecionar linha(s) atual(is)"
 
 #: data/geany.glade:6869 src/keybindings.c:453
 msgid "Se_lect Current Paragraph"
-msgstr "_Seleccionar o parágrafo actual"
+msgstr "_Selecionar o parágrafo atual"
 
 #: data/geany.glade:6884
 msgid "_Move Line(s) Up"
@@ -1771,7 +1781,7 @@ msgstr "_Mover linha(s) abaixo"
 
 #: data/geany.glade:6908 src/keybindings.c:504
 msgid "_Send Selection to Terminal"
-msgstr "Enviar _selecção para o terminal"
+msgstr "Enviar _seleção para o terminal"
 
 #: data/geany.glade:6930 src/keybindings.c:509
 msgid "_Join Lines"
@@ -1811,7 +1821,7 @@ msgstr "_Indentação inteligente"
 
 #: data/geany.glade:7033
 msgid "_Send Selection to"
-msgstr "Enviar _selecção para"
+msgstr "Enviar _seleção para"
 
 #: data/geany.glade:7061
 msgid "I_nsert Comments"
@@ -1867,11 +1877,11 @@ msgstr "Ir para a _linha..."
 
 #: data/geany.glade:7368 src/keybindings.c:542
 msgid "Find Next _Selection"
-msgstr "Pr_ocurar a selecção seguinte"
+msgstr "Pr_ocurar a seleção seguinte"
 
 #: data/geany.glade:7377 src/keybindings.c:544
 msgid "Find Pre_vious Selection"
-msgstr "Proc_urar a selecção anterior"
+msgstr "Proc_urar a seleção anterior"
 
 #: data/geany.glade:7416 src/keybindings.c:561
 msgid "_Mark All"
@@ -2158,7 +2168,6 @@ msgid "Symbols"
 msgstr "Símbolos"
 
 #: data/geany.glade:8417
-#, fuzzy
 msgid ""
 "Filter the document list using the entered text. Separate multiple filters "
 "with a space."
@@ -2188,7 +2197,7 @@ msgstr "Rabiscar"
 
 #: data/geany.glade:8655
 msgid "Project Properties"
-msgstr "Propriedades do projecto"
+msgstr "Propriedades do projeto"
 
 #: data/geany.glade:8725 src/project.c:203
 msgid "Filename:"
@@ -2224,9 +2233,9 @@ msgid ""
 "path, or an existing directory tree. You can use paths relative to the "
 "project filename."
 msgstr ""
-"Pasta base para todos os ficheiros que constituem o projecto. Pode ser um "
+"Pasta base para todos os ficheiros que constituem o projeto. Pode ser um "
 "novo caminho ou um já existente. Pode usar caminhos relativos ao nome do "
-"ficheiro de projecto."
+"ficheiro de projeto."
 
 #: data/geany.glade:8926 src/keybindings.c:321
 msgid "Project"
@@ -2946,7 +2955,7 @@ msgstr "S_obrescrever"
 #: src/document.c:2046 src/document.c:3628
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
-msgstr "O ficheiro '%s' em disco é mais recente que o da memória actual."
+msgstr "O ficheiro '%s' em disco é mais recente que o da memória atual."
 
 #: src/document.c:2054 src/document.c:3684
 msgid "Try to resave the file?"
@@ -3228,7 +3237,7 @@ msgstr "Área de transferência"
 
 #: src/keybindings.c:313
 msgid "Select"
-msgstr "Seleccionar"
+msgstr "Selecionar"
 
 #: src/keybindings.c:314
 msgid "Format"
@@ -3285,7 +3294,7 @@ msgstr "Abrir"
 
 #: src/keybindings.c:340
 msgid "Open selected file"
-msgstr "Abrir ficheiro seleccionado"
+msgstr "Abrir ficheiro selecionado"
 
 #: src/keybindings.c:342
 msgid "Save"
@@ -3353,11 +3362,11 @@ msgstr "Eliminar até ao início da linha"
 
 #: src/keybindings.c:400
 msgid "_Transpose Current Line"
-msgstr "_Transpor a linha actual"
+msgstr "_Transpor a linha atual"
 
 #: src/keybindings.c:402
 msgid "Scroll to current line"
-msgstr "Deslocar até à linha actual"
+msgstr "Deslocar até à linha atual"
 
 #: src/keybindings.c:404
 msgid "Scroll up the view by one line"
@@ -3417,19 +3426,19 @@ msgstr "Colar"
 
 #: src/keybindings.c:446
 msgid "Select All"
-msgstr "Seleccionar tudo"
+msgstr "Selecionar tudo"
 
 #: src/keybindings.c:448
 msgid "Select current word"
-msgstr "Seleccionar a palavra actual"
+msgstr "Selecionar a palavra atual"
 
 #: src/keybindings.c:456
 msgid "Select to previous word part"
-msgstr "Seleccionar a parte anterior da palavra"
+msgstr "Selecionar a parte anterior da palavra"
 
 #: src/keybindings.c:458
 msgid "Select to next word part"
-msgstr "Seleccionar a parte seguinte da palavra"
+msgstr "Selecionar a parte seguinte da palavra"
 
 #: src/keybindings.c:466
 msgid "Toggle line commentation"
@@ -3501,11 +3510,11 @@ msgstr "Inserir data"
 
 #: src/keybindings.c:520
 msgid "Insert New Line Before Current"
-msgstr "Inserir nova linha antes da actual"
+msgstr "Inserir nova linha antes da atual"
 
 #: src/keybindings.c:522
 msgid "Insert New Line After Current"
-msgstr "Inserir nova linha depois da actual"
+msgstr "Inserir nova linha depois da atual"
 
 #: src/keybindings.c:535 src/search.c:471
 msgid "Find"
@@ -3541,7 +3550,7 @@ msgstr "Localizar utilização"
 
 #: src/keybindings.c:559
 msgid "Find Document Usage"
-msgstr "Localizar utilização no documento actual"
+msgstr "Localizar utilização no documento atual"
 
 #: src/keybindings.c:566 src/toolbar.c:69
 msgid "Navigate back a location"
@@ -3701,7 +3710,7 @@ msgstr "Substituir espaços por tabulações"
 
 #: src/keybindings.c:678
 msgid "Toggle current fold"
-msgstr "Alternar dobragem actual"
+msgstr "Alternar dobragem atual"
 
 #: src/keybindings.c:680
 msgid "Fold all"
@@ -3814,8 +3823,8 @@ msgstr "Não pré-processar ficheiros de C/C++ ao gerar ficheiro de etiquetas"
 #: src/libmain.c:127
 msgid "Don't open files in a running instance, force opening a new instance"
 msgstr ""
-"Não abrir ficheiros na instância actual do programa, forçar a abertura de "
-"uma nova instância"
+"Não abrir ficheiros na instância atual do programa, forçar a abertura de uma "
+"nova instância"
 
 #: src/libmain.c:128
 msgid ""
@@ -4059,9 +4068,8 @@ msgid "Plugins"
 msgstr "Extensões"
 
 #: src/plugins.c:1895
-#, fuzzy
 msgid "Choose which plugins to load:"
-msgstr "Escolha quais as extensões a carregar ao iniciar:"
+msgstr "Escolha quais as extensões a carregar:"
 
 #: src/plugins.c:1989
 #, c-format
@@ -4077,9 +4085,8 @@ msgid "Configure Plugins"
 msgstr "Configurar extensões"
 
 #: src/prefs.c:184
-#, fuzzy
 msgid "Assign Keybinding"
-msgstr "Atalhos de teclado"
+msgstr "Atalhos de teclado assinado"
 
 #: src/prefs.c:191
 #, c-format
@@ -4148,12 +4155,13 @@ msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
 msgstr ""
-"<i>Aviso: estas definições são sobrescritas pelo projecto actual. Veja "
-"<b>Projecto -> Propriedades</b>.</i>"
+"<i>Aviso: estas definições são sobrescritas pelo projeto atual. Veja "
+"<b>Projeto -> Propriedades</b>.</i>"
 
 #: src/prefs.c:1892
 msgid "Not configurable on Windows (the system default browser is used)."
 msgstr ""
+"Não configurável no Windows (é utilizado o navegador predefinido do sistema)."
 
 #: src/printing.c:162
 #, c-format
@@ -4221,15 +4229,15 @@ msgstr "O ficheiro %s foi imprimido."
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
 #: src/project.c:101
 msgid "projects"
-msgstr "projectos"
+msgstr "projetos"
 
 #: src/project.c:124
 msgid "Move the current documents into the new project's session?"
-msgstr "Mover o documento actual para a sessão do novo projecto?"
+msgstr "Mover o documento atual para a sessão do novo projeto?"
 
 #: src/project.c:176
 msgid "New Project"
-msgstr "Novo projecto"
+msgstr "Novo projeto"
 
 #: src/project.c:181
 msgid "C_reate"
@@ -4241,7 +4249,7 @@ msgstr "Nome:"
 
 #: src/project.c:199
 msgid "Project name"
-msgstr "Nome do projecto"
+msgstr "Nome do projeto"
 
 #: src/project.c:211
 #, c-format
@@ -4249,7 +4257,7 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
-"Caminho do ficheiro que representa o projecto e grava as suas definições. "
+"Caminho do ficheiro que representa o projeto e grava as suas definições. "
 "Normalmente deverá ter a extensão \"%s\"."
 
 #: src/project.c:225
@@ -4258,11 +4266,11 @@ msgstr "Caminho base:"
 
 #: src/project.c:235 src/project.c:502 src/project.c:505
 msgid "Choose Project Base Path"
-msgstr "Escolha a pasta base para o projecto"
+msgstr "Escolha a pasta base para o projeto"
 
 #: src/project.c:277 src/project.c:642 src/project.c:1211
 msgid "Project file could not be written"
-msgstr "O ficheiro de projecto não pôde ser escrito"
+msgstr "O ficheiro de projeto não pôde ser gravado"
 
 #: src/project.c:282
 #, c-format
@@ -4272,15 +4280,15 @@ msgstr "Projecto \"%s\" criado."
 #: src/project.c:328 src/project.c:1073
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
-msgstr "O ficheiro de projecto \"%s\" não pôde ser carregado."
+msgstr "O ficheiro de projeto \"%s\" não pôde ser carregado."
 
 #: src/project.c:349 src/project.c:353
 msgid "Open Project"
-msgstr "Abrir projecto"
+msgstr "Abrir projeto"
 
 #: src/project.c:376
 msgid "Project files"
-msgstr "Ficheiros de projecto"
+msgstr "Ficheiros de projeto"
 
 #: src/project.c:434
 #, c-format
@@ -4299,25 +4307,25 @@ msgstr "Quer fechá-lo antes de prosseguir?"
 #: src/project.c:680
 #, c-format
 msgid "The '%s' project is open."
-msgstr "O projecto '%s' está aberto."
+msgstr "O projeto '%s' está aberto."
 
 #: src/project.c:729
 msgid "The specified project name is too short."
-msgstr "O nome de projecto fornecido é demasiado curto."
+msgstr "O nome de projeto fornecido é demasiado curto."
 
 #: src/project.c:735
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr ""
-"O nome de projecto fornecido é demasiado longo (no máximo %d caracteres)."
+"O nome de projeto fornecido é demasiado longo (no máximo %d caracteres)."
 
 #: src/project.c:747
 msgid "You have specified an invalid project filename."
-msgstr "Forneceu um nome de projecto inválido."
+msgstr "Forneceu um nome de projeto inválido."
 
 #: src/project.c:770
 msgid "Create the project's base path directory?"
-msgstr "Criar a pasta base do projecto?"
+msgstr "Criar a pasta base do projeto?"
 
 #: src/project.c:771
 #, c-format
@@ -4327,12 +4335,12 @@ msgstr "O caminho \"%s\" não existe."
 #: src/project.c:780
 #, c-format
 msgid "Project base directory could not be created (%s)."
-msgstr "A pasta base do projecto não pôde ser criada (%s)."
+msgstr "A pasta base do projeto não pôde ser criada (%s)."
 
 #: src/project.c:793
 #, c-format
 msgid "Project file could not be written (%s)."
-msgstr "O ficheiro de projecto não pôde ser escrito (%s)."
+msgstr "O ficheiro de projeto não pôde ser escrito (%s)."
 
 #: src/project.c:799 src/search.c:656
 msgid "_Replace"
@@ -4345,7 +4353,7 @@ msgstr "O ficheiro '%s' já existe. Quer substituí-lo?"
 
 #: src/project.c:948 src/project.c:952
 msgid "Choose Project Filename"
-msgstr "Escolha o nome do ficheiro de projecto"
+msgstr "Escolha o nome do ficheiro de projeto"
 
 #: src/project.c:1063
 #, c-format
@@ -4466,7 +4474,7 @@ msgstr "Na se_lecção"
 
 #: src/search.c:752
 msgid "Replace all matches found in the currently selected text"
-msgstr "Substituir todas as ocorrências no texto que se encontra seleccionado"
+msgstr "Substituir todas as ocorrências no texto que se encontra selecionado"
 
 #: src/search.c:863
 msgid "all"
@@ -4474,7 +4482,7 @@ msgstr "todos"
 
 #: src/search.c:865
 msgid "project"
-msgstr "projecto"
+msgstr "projeto"
 
 #: src/search.c:867
 msgid "custom"
@@ -4487,7 +4495,7 @@ msgid ""
 "Custom: specify file patterns manually"
 msgstr ""
 "Todos: procura todos os ficheiros na pasta.\n"
-"Projecto: usa padrões de ficheiros definidos nas definições do projecto.\n"
+"Projeto: usa padrões de ficheiros definidos nas definições do projeto.\n"
 "Personalizado: especificar os padrões de ficheiros manualmente"
 
 #: src/search.c:946
@@ -4516,7 +4524,7 @@ msgstr "_Inverter o resultado da procura"
 
 #: src/search.c:1020
 msgid "Invert the sense of matching, to select non-matching lines"
-msgstr "Inverte a comparação, para seleccionar linhas diferentes da expressão"
+msgstr "Inverte a comparação, para selecionar linhas diferentes da expressão"
 
 #: src/search.c:1037
 msgid "E_xtra options:"
@@ -4751,11 +4759,11 @@ msgstr "Fechar todos os ficheiros abertos"
 
 #: src/toolbar.c:63
 msgid "Cut the current selection"
-msgstr "Cortar a selecção actual"
+msgstr "Cortar a seleção atual"
 
 #: src/toolbar.c:64
 msgid "Copy the current selection"
-msgstr "Copiar a selecção actual"
+msgstr "Copiar a seleção atual"
 
 #: src/toolbar.c:65
 msgid "Paste the contents of the clipboard"
@@ -4763,7 +4771,7 @@ msgstr "Colar o conteúdo da área de transferência"
 
 #: src/toolbar.c:66
 msgid "Delete the current selection"
-msgstr "Eliminar a selecção actual"
+msgstr "Eliminar a seleção atual"
 
 #: src/toolbar.c:67
 msgid "Undo the last modification"
@@ -4826,7 +4834,7 @@ msgstr "Imprimir documento"
 
 #: src/toolbar.c:83
 msgid "Replace text in the current document"
-msgstr "Substitui texto no documento actual"
+msgstr "Substitui texto no documento atual"
 
 #: src/toolbar.c:359
 msgid "Create a new file"
@@ -4869,8 +4877,8 @@ msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
-"Seleccione itens para serem mostrados na barra de ferramentas. Os itens "
-"podem ser reordenados com \"Arrastar e largar\"."
+"Selecione itens para serem mostrados na barra de ferramentas. Os itens podem "
+"ser reordenados com \"Arrastar e largar\"."
 
 #: src/toolbar.c:973
 msgid "Available Items"
@@ -4896,7 +4904,7 @@ msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
-"O comando personalizado executado devolveu um erro. A sua selecção não foi "
+"O comando personalizado executado devolveu um erro. A sua seleção não foi "
 "modificada. Mensagem de erro: %s"
 
 #: src/tools.c:230
@@ -4921,8 +4929,8 @@ msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
 msgstr ""
-"Pode enviar a selecção actual para qualquer um destes comandos e o seu "
-"resultado substituirá a referida selecção."
+"Pode enviar a seleção atual para qualquer um destes comandos e o seu "
+"resultado substituirá a referida seleção."
 
 #: src/tools.c:376
 msgid "ID"
@@ -4938,7 +4946,7 @@ msgstr "Contagem de palavras"
 
 #: src/tools.c:702
 msgid "selection"
-msgstr "selecção"
+msgstr "seleção"
 
 #: src/tools.c:707
 msgid "whole document"
@@ -5046,7 +5054,7 @@ msgstr " (nova instância)"
 #: src/ui_utils.c:423
 #, c-format
 msgid "Font updated (%s)."
-msgstr "Letra actualizada (%s)."
+msgstr "Letra atualizada (%s)."
 
 #: src/ui_utils.c:672
 msgid "C Standard Library"
@@ -5101,14 +5109,12 @@ msgid "Custom Date Format"
 msgstr "Formato de data personalizado"
 
 #: src/ui_utils.c:715
-#, fuzzy
 msgid ""
 "Custom date format (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"Insira aqui o formato de data e hora personalizado. Veja https://"
-"docs.gtk.org/glib/method.DateTime.format.html para uma lista de "
-"modificadores disponíveis."
+"Formato de data personalizado (consulte https://docs.gtk.org/glib/"
+"method.DateTime.format.html):"
 
 #: src/ui_utils.c:735
 msgid "Date format string could not be converted (possibly too long)."
@@ -5121,15 +5127,15 @@ msgstr "Definir formato de data per_sonalizado"
 
 #: src/ui_utils.c:1973
 msgid "Select Project Base Path"
-msgstr "Escolha o caminho base para o projecto"
+msgstr "Escolha o caminho base para o projeto"
 
 #: src/ui_utils.c:1994
 msgid "Select Folder"
-msgstr "Seleccionar pasta"
+msgstr "Selecionar pasta"
 
 #: src/ui_utils.c:1994
 msgid "Select File"
-msgstr "Seleccionar ficheiro"
+msgstr "Selecionar ficheiro"
 
 #: src/ui_utils.c:2179
 msgid "_Filetype Configuration"
@@ -5149,7 +5155,7 @@ msgstr "O Geany não consegue iniciar!"
 
 #: src/utils.c:99
 msgid "Select Browser"
-msgstr "Seleccionar navegador"
+msgstr "Selecionar navegador"
 
 #: src/utils.c:100
 msgid ""
@@ -5186,17 +5192,17 @@ msgstr "LF"
 #: src/utils.c:2542
 #, c-format
 msgid "Unknown placeholder \"%%%c\" in \"%s\""
-msgstr ""
+msgstr "Placeholder desconhecido \"%%%c\" em \"%s\""
 
 #: src/utils.c:2583
-#, fuzzy, c-format
+#, c-format
 msgid "failed to substitute %%%c: document has no path"
-msgstr "erro ao substituir %%p, nenhum projecto activo"
+msgstr "erro ao substituir %%%c: o documento não tem caminho"
 
 #: src/utils.c:2593
 #, c-format
 msgid "no project active, %%p is substituted as %%d"
-msgstr ""
+msgstr "nenhum projeto ativo, %%p é substituído por %%d"
 
 #: src/vte.c:570
 #, c-format
@@ -5575,9 +5581,8 @@ msgid "Level 5 sections"
 msgstr "Secções de nível 5"
 
 #: src/tagmanager/tm_parser.c:790
-#, fuzzy
 msgid "Instances"
-msgstr "Herança"
+msgstr "Instâncias"
 
 #: src/tagmanager/tm_parser.c:792
 msgid "Functions / Tasks"
@@ -5585,25 +5590,23 @@ msgstr "Funções/Tarefas"
 
 #: src/tagmanager/tm_parser.c:794
 msgid "Parameters / Constants"
-msgstr ""
+msgstr "Parâmetros / Constantes"
 
 #: src/tagmanager/tm_parser.c:795
-#, fuzzy
 msgid "Ports"
-msgstr "Importações"
+msgstr "Portas"
 
 #: src/tagmanager/tm_parser.c:796
 msgid "Signals"
-msgstr ""
+msgstr "Sinais"
 
 #: src/tagmanager/tm_parser.c:802
 msgid "Structs / Unions / Enums"
-msgstr ""
+msgstr "Estruturas / Uniões / Enums"
 
 #: src/tagmanager/tm_parser.c:803
-#, fuzzy
 msgid "Typedefs"
-msgstr "Tipos"
+msgstr "Typedefs"
 
 #: src/tagmanager/tm_parser.c:858
 msgid "Program"
@@ -5631,19 +5634,19 @@ msgstr "Cópias"
 
 #: src/tagmanager/tm_parser.c:897
 msgid "Section Level 1"
-msgstr "Secção nível 1"
+msgstr "Secção de nível 1"
 
 #: src/tagmanager/tm_parser.c:898
 msgid "Section Level 2"
-msgstr "Secção nível 2"
+msgstr "Secção de nível 2"
 
 #: src/tagmanager/tm_parser.c:899
 msgid "Section Level 3"
-msgstr "Secção nível 3"
+msgstr "Secção de nível 3"
 
 #: src/tagmanager/tm_parser.c:900
 msgid "Section Level 4"
-msgstr "Secção nível 4"
+msgstr "Secção de nível 4"
 
 #: src/tagmanager/tm_parser.c:901
 msgid "Section Level 5"
@@ -5710,71 +5713,64 @@ msgid "Rules / Tokens"
 msgstr "Regras / Tokens"
 
 #: src/tagmanager/tm_parser.c:1217
-#, fuzzy
 msgid "Words"
-msgstr "Palavras:"
+msgstr "Palavras"
 
 #: src/tagmanager/tm_parser.c:1234
-#, fuzzy
 msgid "Projects"
-msgstr "Projecto"
+msgstr "Projectos"
 
 #: src/tagmanager/tm_parser.c:1237
 msgid "Subdirs"
-msgstr ""
+msgstr "Subdiretórios"
 
 #: src/tagmanager/tm_parser.c:1238
-#, fuzzy
 msgid "Build Targets"
-msgstr "Destinos"
+msgstr "Destinos de compilações"
 
 #: src/tagmanager/tm_parser.c:1239
-#, fuzzy
 msgid "Custom Targets"
-msgstr "Texto personalizado"
+msgstr "Destinos personalizados"
 
 #: src/tagmanager/tm_parser.c:1240
 msgid "Benchmark Targets"
-msgstr ""
+msgstr "Metas de referência"
 
 #: src/tagmanager/tm_parser.c:1241
-#, fuzzy
 msgid "Run Targets"
-msgstr "Destinos"
+msgstr "Destinos de execução"
 
 #: src/tagmanager/tm_parser.c:1242
 msgid "Tests"
-msgstr ""
+msgstr "Testes"
 
 #: src/tagmanager/tm_parser.c:1255
 msgid "Mixins"
-msgstr ""
+msgstr "Mixins"
 
 #: src/tagmanager/tm_parser.c:1259
 msgid "Placeholders"
-msgstr ""
+msgstr "Placeholders"
 
 #: src/tagmanager/tm_parser.c:1272
-#, fuzzy
 msgid "Resources"
-msgstr "Fonte base:"
+msgstr "Recursos"
 
 #: src/tagmanager/tm_parser.c:1275
-#, fuzzy
 msgid "Variable"
-msgstr "Variáveis"
+msgstr "Variável"
 
 #: src/tagmanager/tm_parser.c:1276
 msgid "Providers"
-msgstr ""
+msgstr "Fornecedores"
 
 #: src/tagmanager/tm_parser.c:1277
 msgid "Outputs"
-msgstr ""
+msgstr "Resultados"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
-msgstr "Construtor de classe"
+msgstr "Compilador de classe"
 
 #: plugins/classbuilder.c:34
 msgid "Creates source files for new class types."
@@ -5943,7 +5939,7 @@ msgid ""
 "the button to insert it at the current cursor position."
 msgstr ""
 "Escolha um carácter especial da lista abaixo e faça duplo clique sobre o "
-"mesmo, ou use o botão para o inserir na posição actual do cursor."
+"mesmo, ou use o botão para o inserir na posição atual do cursor."
 
 #: plugins/htmlchars.c:511
 msgid "Character"
@@ -5967,7 +5963,7 @@ msgstr "Substituir _automaticamente caracteres especiais"
 
 #: plugins/htmlchars.c:767
 msgid "_Replace Characters in Selection"
-msgstr "Substituir ca_racteres na selecção"
+msgstr "Substituir ca_racteres na seleção"
 
 #: plugins/htmlchars.c:783
 msgid "Insert Special HTML Characters"
@@ -6003,13 +5999,13 @@ msgstr "Inserir números de linha antes de cada linha no documento exportado"
 
 #: plugins/export.c:198
 msgid "_Use current zoom level"
-msgstr "_Usar nível de ampliação actual"
+msgstr "_Usar nível de ampliação atual"
 
 #: plugins/export.c:200
 msgid ""
 "Renders the font size of the document together with the current zoom level"
 msgstr ""
-"Entrega o tamanho da letra do documento em conjunto com o actual nível de "
+"Entrega o tamanho da letra do documento em conjunto com o atual nível de "
 "ampliação"
 
 #: plugins/export.c:278
@@ -6044,7 +6040,7 @@ msgstr "Adiciona um separador para o navegador de ficheiros na barra lateral."
 
 #: plugins/filebrowser.c:423
 msgid "Too many items selected!"
-msgstr "Demasiados itens seleccionados!"
+msgstr "Demasiados itens selecionados!"
 
 #: plugins/filebrowser.c:493
 #, c-format
@@ -6115,7 +6111,7 @@ msgstr ""
 "O comando a executar ao usar \"Abrir com\". Pode usar os descritores %f e "
 "%d.\n"
 "%f será substituído pelo nome do ficheiro incluindo o caminho completo.\n"
-"%d será substituído pelo caminho do ficheiro seleccionado, sem o nome do "
+"%d será substituído pelo caminho do ficheiro selecionado, sem o nome do "
 "ficheiro"
 
 #: plugins/filebrowser.c:1279
@@ -6132,12 +6128,12 @@ msgstr "Seguir o caminho do ficheiro activo"
 
 #: plugins/filebrowser.c:1312
 msgid "Use the project's base directory"
-msgstr "Usar a pasta base do projecto"
+msgstr "Usar a pasta base do projeto"
 
 #: plugins/filebrowser.c:1316
 msgid ""
 "Change the directory to the base directory of the currently opened project"
-msgstr "Alterar a pasta para a pasta base do projecto actualmente aberto"
+msgstr "Alterar a pasta para a pasta base do projeto atualmente aberto"
 
 #: plugins/saveactions.c:43
 msgid "Save Actions"
@@ -6169,39 +6165,38 @@ msgid "Instant Save filename could not be generated (%s)."
 msgstr "O ficheiro Gravação instantânea não pôde ser gerado (%s)."
 
 #: plugins/saveactions.c:439 plugins/saveactions.c:1225
-#, fuzzy
 msgid ""
 "Persistent untitled document directory does not exist or is not writable."
-msgstr "A pasta Gravação instantânea não existe ou não pode ser escrita."
+msgstr ""
+"O diretório persistente de documentos sem título não existe ou não é "
+"gravável."
 
 #: plugins/saveactions.c:507
-#, fuzzy
 msgid "_Don't save (discard)"
-msgstr "Não gra_var"
+msgstr "Não gra_var (descartar)"
 
 #: plugins/saveactions.c:529
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document %s is not saved."
-msgstr "O ficheiro '%s' não está gravado."
+msgstr "O documento sem título %s não está gravado."
 
 #: plugins/saveactions.c:530
-#, fuzzy
 msgid "Do you want to save it?"
-msgstr "Quer recarregá-lo?"
+msgstr "Quer gravá-lo?"
 
 #: plugins/saveactions.c:559 plugins/saveactions.c:605
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document file %s was deleted"
-msgstr "A impressão do ficheiro %s foi cancelada."
+msgstr "O ficheiro de documento sem título %s foi eliminado"
 
 #: plugins/saveactions.c:622
 msgid "Persistent untitled document directory not found"
-msgstr ""
+msgstr "Diretório persistente de documentos sem título não encontrado"
 
 #: plugins/saveactions.c:817
 #, c-format
 msgid "Empty untitled document file %s was deleted"
-msgstr ""
+msgstr "O ficheiro de documento em branco sem título %s foi eliminado"
 
 #: plugins/saveactions.c:875
 #, c-format
@@ -6212,7 +6207,7 @@ msgstr[1] "Gravação automática: %d ficheiros gravados automaticamente."
 
 #: plugins/saveactions.c:1077 plugins/saveactions.c:1081
 msgid "Select Directory"
-msgstr "Seleccione uma pasta"
+msgstr "Selecione um diretório"
 
 #: plugins/saveactions.c:1173
 msgid "Backup directory does not exist or is not writable."
@@ -6220,7 +6215,7 @@ msgstr "A pasta para a cópia de segurança não existe ou não pode ser escrita
 
 #: plugins/saveactions.c:1194
 msgid "Instantsave directory does not exist or is not writable."
-msgstr "A pasta Gravação instantânea não existe ou não pode ser escrita."
+msgstr "O diretório Gravação instantânea não existe ou não pode ser gravado."
 
 #: plugins/saveactions.c:1343
 msgid "Auto Save"
@@ -6249,7 +6244,7 @@ msgstr ""
 
 #: plugins/saveactions.c:1384
 msgid "Save only current open _file"
-msgstr "Gravar apenas o _ficheiro actualmente aberto"
+msgstr "Gravar apenas o _ficheiro atualmente aberto"
 
 #: plugins/saveactions.c:1391
 msgid "Sa_ve all open files"
@@ -6264,27 +6259,24 @@ msgid "_Directory to save backup files in:"
 msgstr "Pasta on_de gravar cópias de segurança:"
 
 #: plugins/saveactions.c:1442
-#, fuzzy
 msgid ""
 "Date/_Time format for backup files (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"Formato de data/_hora para salvaguardas (veja https://docs.gtk.org/glib/"
-"method.DateTime.format.html para uma lista de modificadores disponíveis):"
+"Formato de data/_hora para ficheiros de salvaguarda (veja https://"
+"docs.gtk.org/glib/method.DateTime.format.html):"
 
 #: plugins/saveactions.c:1455
 msgid "Directory _levels to include in the backup destination:"
-msgstr "Número de _níveis de pastas a incluir na cópia de segurança:"
+msgstr "Número de _níveis de diretórios a incluir na cópia de segurança:"
 
 #: plugins/saveactions.c:1482
-#, fuzzy
 msgid "Untitled Document Save"
-msgstr "Localizar utilização no documento actual"
+msgstr "Gravação de documento sem título"
 
 #: plugins/saveactions.c:1495
-#, fuzzy
 msgid "Instant Save After Creation"
-msgstr "Gravar instantâneo"
+msgstr "Gravação instantânea após a criação"
 
 #: plugins/saveactions.c:1505
 #, c-format
@@ -6296,31 +6288,27 @@ msgstr ""
 #: plugins/saveactions.c:1531
 msgid "<i>The plugin will not delete the files created in this directory.</i>"
 msgstr ""
+"<i>A extensão não irá eliminar os ficheiros criados neste diretório.</i>"
 
 #: plugins/saveactions.c:1541
-#, fuzzy
 msgid "Persistent Untitled Documents"
-msgstr "Imprimir documento"
+msgstr "Documentos sem título persistentes"
 
 #: plugins/saveactions.c:1550
-#, fuzzy
 msgid "_Directory to save persistent untitled documents in:"
-msgstr "Pasta on_de gravar cópias de segurança:"
+msgstr "_Diretório para gravar documentos persistentes sem título em:"
 
 #: plugins/saveactions.c:1575
-#, fuzzy
 msgid "Untitled document save _interval:"
-msgstr "Frequênc_ia da gravação automática:"
+msgstr "Frequênc_ia de gravação de documentos sem título:"
 
 #: plugins/saveactions.c:1587
-#, fuzzy
 msgid "milliseconds"
-msgstr "segundos"
+msgstr "milissegundos"
 
 #: plugins/saveactions.c:1597
-#, fuzzy
 msgid "Default _filetype to use for untitled documents:"
-msgstr "Tipo de _ficheiro predefinido a usar para novos ficheiros:"
+msgstr "Tipo de _ficheiro predefinido a usar para ficheiros sem título:"
 
 #: plugins/splitwindow.c:33
 msgid "Split Window"
@@ -6332,7 +6320,7 @@ msgstr "Divide a janela do editor em duas janelas."
 
 #: plugins/splitwindow.c:271
 msgid "Show the current document"
-msgstr "Mostra o documento actual"
+msgstr "Mostra o documento atual"
 
 #: plugins/splitwindow.c:288 plugins/splitwindow.c:421
 #: plugins/splitwindow.c:436
