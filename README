@@ -52,11 +52,14 @@ https://www.geany.org.
 Installation from sources
 -------------------------
 
+NOTE: use the Dockerfile as a guide to install the dependencies, and to configure the theme.
+............................................................................................
+
 Requirements
 ++++++++++++
-For compiling Geany yourself, you will need the GTK3 libraries and 
-header files. You will also need its dependency libraries and header 
-files, such as Pango, Glib and ATK. All these files are available at 
+For compiling Geany yourself, you will need the GTK3 libraries and
+header files. You will also need its dependency libraries and header
+files, such as Pango, Glib and ATK. All these files are available at
 https://www.gtk.org.
 
 Furthermore you need, of course, a C compiler and the Make tool; a C++

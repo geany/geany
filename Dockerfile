@@ -1,7 +1,5 @@
 
-FROM ubuntu:24.04
-
-ENV DEBIAN_FRONTEND noninteractive
+FROM debian:trixie
 
 RUN apt-get update && apt-get install -y git
 
@@ -14,17 +12,15 @@ RUN apt-get update && apt-get install -y \
      python3-packaging  libmount-dev libenchant-2-dev libgit2-dev \
      x11-common libglvnd-dev dconf-service  humanity-icon-theme \
      libgtk-3-dev  libvte-2.91-dev  gnupg  libfakeroot \
-     build-essential autopoint libtool
+     build-essential autopoint libtool && \
+     apt-get install -y libegl-mesa0
 
-RUN apt-get update && apt-get install -y libegl-mesa0
 
-
+# Force black background, who wants to look at a light bulb!
+ENV GTK_THEME=Adwaita:dark
 RUN apt-get install -y yaru-theme-gtk  xdg-desktop-portal-gtk
-
-# RUN apt-get install libcanberra-gtk-module libcanberra-gtk3-module
 RUN gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 
-# RUN rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /home/geany
 WORKDIR /home/geany
