@@ -75,7 +75,7 @@
 /* some default settings which are used at the very first start of Geany to fill
  * the configuration file */
 #define GEANY_MAX_SYMBOLLIST_HEIGHT		10
-#define GEANY_MIN_SYMBOLLIST_CHARS		4
+#define GEANY_MIN_SYMBOLLIST_CHARS		2
 #define GEANY_MSGWIN_HEIGHT				208
 #define GEANY_DISK_CHECK_TIMEOUT		30
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
@@ -94,16 +94,16 @@
 #else
 # define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 # define GEANY_DEFAULT_USE_NATIVE_DLGS	FALSE
-# define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-# define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
-# define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
+# define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 11"
+# define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 11"
+# define GEANY_DEFAULT_FONT_EDITOR		"Monospace 12"
 #endif
 /* Browser chosen by GTK */
-#define GEANY_DEFAULT_TOOLS_BROWSER		""
+#define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
 #define GEANY_DEFAULT_MRU_LENGTH		10
-#define GEANY_TOGGLE_MARK				"~ "
+#define GEANY_TOGGLE_MARK				" "
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
 #define GEANY_MAX_SYMBOLS_UPDATE_FREQ	250
 #define GEANY_DEFAULT_FILETYPE_REGEX    "-\\*-\\s*([^\\s]+)\\s*-\\*-"
@@ -892,12 +892,12 @@ static void load_dialog_prefs(GKeyFile *config)
 	/* interface */
 	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
 	interface_prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
-	interface_prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
+	interface_prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", FALSE);
 	interface_prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
 	interface_prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
 	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
 	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
-	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
+	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", FALSE);
 	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
 	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
@@ -912,17 +912,17 @@ static void load_dialog_prefs(GKeyFile *config)
 		editor_prefs.long_line_type = 0;
 		editor_prefs.long_line_enabled = FALSE;
 	}
-	editor_prefs.long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
+	editor_prefs.long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#5E5C64");
 	editor_prefs.long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
 	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
 	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_wrapping", FALSE); /* default is off for better performance */
 	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
-	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
-	editor_prefs.show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
+	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", TRUE);
+	editor_prefs.show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", TRUE);
 	editor_prefs.show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
-	editor_prefs.show_line_endings_only_when_differ = utils_get_setting_boolean(config, PACKAGE, "show_line_endings_only_when_differ", FALSE);
-	editor_prefs.scroll_stop_at_last_line = utils_get_setting_boolean(config, PACKAGE, "scroll_stop_at_last_line", TRUE);
+	editor_prefs.show_line_endings_only_when_differ = utils_get_setting_boolean(config, PACKAGE, "show_line_endings_only_when_differ", TRUE);
+	editor_prefs.scroll_stop_at_last_line = utils_get_setting_boolean(config, PACKAGE, "scroll_stop_at_last_line", FALSE);
 	editor_prefs.auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
 	editor_prefs.complete_snippets = utils_get_setting_boolean(config, PACKAGE, "complete_snippets", TRUE);
 	editor_prefs.auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
@@ -971,11 +971,11 @@ static void load_dialog_prefs(GKeyFile *config)
 	file_prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
 	file_prefs.ensure_convert_new_lines = utils_get_setting_boolean(config, PACKAGE, "pref_editor_ensure_convert_line_endings", FALSE);
 	file_prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
-	file_prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
+	file_prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", TRUE);
 
 	/* toolbar */
 	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
-	toolbar_prefs.append_to_menu = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", FALSE);
+	toolbar_prefs.append_to_menu = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", TRUE);
 	{
 		toolbar_prefs.use_gtk_default_style = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_use_gtk_default_style", TRUE);
 		if (! toolbar_prefs.use_gtk_default_style)
@@ -1013,14 +1013,14 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
 		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
-		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
+		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", FALSE);
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
 		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
-		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
+		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 5000);
 		get_setting_color(config, "VTE", "colour_fore", &vc->colour_fore, "#ffffff");
 		get_setting_color(config, "VTE", "colour_back", &vc->colour_back, "#000000");
 	}
@@ -1066,7 +1066,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
 
-	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
+	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", GEANY_DEFAULT_TOOLS_BROWSER " --new-tab  'https://www.google.com/search?q=\"%s\"'");
 
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
