@@ -8374,11 +8374,13 @@ Supported placeholders are:
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="position">400</property>
+            <signal name="notify::position" handler="on_vpaned1_position_notify" swapped="no"/>
             <child>
               <object class="GtkHPaned" id="hpaned1">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="position">167</property>
+                <signal name="notify::position" handler="on_hpaned1_position_notify" swapped="no"/>
                 <child>
                   <object class="GtkNotebook" id="notebook3">
                     <property name="visible">True</property>
