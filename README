@@ -126,12 +126,10 @@ Installing from a release tarball
 
 Run the the following three commands::
 
-    $ ./configure
+    $ ./autogen.sh
     $ make
     (as root, or using sudo)
     % make install
-
-For more configuration details run ``./configure --help``.
 
 If there are any errors during compilation, check your build environment
 and try to find the error, otherwise contact the mailing list or one of
