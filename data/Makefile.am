@@ -124,6 +124,7 @@ filetypes_dist = \
 	filedefs/filetypes.Scala.conf \
 	filedefs/filetypes.SCSS.conf \
 	filedefs/filetypes.sh \
+	filedefs/filetypes.sinex \
 	filedefs/filetypes.smalltalk \
 	filedefs/filetypes.sql \
 	filedefs/filetypes.Swift.conf \

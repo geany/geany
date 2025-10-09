@@ -223,6 +223,7 @@ static void AddGeanyLexers()
 		&lmRaku,
 		&lmRuby,
 		&lmRust,
+		&lmSINEX,
 		&lmSmalltalk,
 		&lmSQL,
 		&lmTCL,

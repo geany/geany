@@ -58,6 +58,7 @@ lexilla/lexers/LexR.cxx                \
 lexilla/lexers/LexRaku.cxx             \
 lexilla/lexers/LexRuby.cxx             \
 lexilla/lexers/LexRust.cxx             \
+lexilla/lexers/LexSINEX.cxx            \
 lexilla/lexers/LexSmalltalk.cxx        \
 lexilla/lexers/LexSQL.cxx              \
 lexilla/lexers/LexTCL.cxx              \
