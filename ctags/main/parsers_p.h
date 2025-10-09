@@ -169,6 +169,7 @@
 	SchemeParser, \
 	SCSSParser, \
 	ShParser, \
+	SinexParser, \
 	SlangParser, \
 	SmlParser, \
 	SqlParser, \
