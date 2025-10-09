@@ -1324,6 +1324,14 @@ static TMParserMapGroup group_TERRAFORM[] = {
 	{N_("Outputs"), TM_ICON_METHOD, tm_tag_function_t},
 };
 
+static TMParserMapEntry map_SINEX[] = {
+	{'b', tm_tag_namespace_t},  // block
+};
+static TMParserMapGroup group_SINEX[] = {
+	{N_("Blocks"), TM_ICON_CLASS, tm_tag_namespace_t},
+};
+
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -1404,6 +1412,7 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(SYSVERILOG),
 	MAP_ENTRY(SCSS),
 	MAP_ENTRY(TERRAFORM),
+	MAP_ENTRY(SINEX),
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
