@@ -155,6 +155,8 @@ void tm_parser_verify_type_mappings(void);
 
 TMTagType tm_parser_get_tag_type(gchar kind, TMParserType lang);
 
+TMTagType tm_parser_get_tag_type_from_role(gchar kind, const gchar *role, TMParserType lang);
+
 gchar tm_parser_get_tag_kind(TMTagType type, TMParserType lang);
 
 gint tm_parser_get_sidebar_group(TMParserType lang, TMTagType type);
