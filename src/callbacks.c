@@ -460,7 +460,10 @@ void on_entry_tagfilter_changed(GtkAction *action, gpointer user_data)
 void on_entry_tagfilter_icon_release(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data)
 {
 	if (event->button.button == 1)
+	{
 		gtk_entry_set_text(entry, "");
+		gtk_widget_grab_focus(GTK_WIDGET(entry));
+	}
 }
 
 
@@ -491,7 +494,10 @@ void on_entry_docfilter_changed(GtkAction *action, gpointer user_data)
 void on_entry_docfilter_icon_release(GtkEntry *entry, GtkEntryIconPosition icon_pos, GdkEvent *event, gpointer user_data)
 {
 	if (event->button.button == 1)
+	{
 		gtk_entry_set_text(entry, "");
+		gtk_widget_grab_focus(GTK_WIDGET(entry));
+	}
 }
 
 
