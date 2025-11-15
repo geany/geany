@@ -50,7 +50,7 @@ jobs:
           python scripts/msys2-geany-release.py ${VERSION}
       - name: Upload Unsigned Artifact
         id: upload-unsigned-artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: geany-unsigned
           path: geany_build/*.exe
@@ -68,7 +68,7 @@ jobs:
           wait-for-completion: true
           output-artifact-directory: geany-signed
       - name: Upload Signed Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: geany-signed
           path: geany-signed
