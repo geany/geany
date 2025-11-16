@@ -1,4 +1,4 @@
-SUBDIRS =  16x16 24x24 32x32 48x48 scalable tango
+SUBDIRS =  16x16 24x24 32x32 48x48 scalable tango fallback
 
 # only install index.theme on Windows
 if MINGW
@@ -15,6 +15,7 @@ install-data-hook:
 		echo "Updating Gtk icon cache.";			\
 		$(gtk_update_icon_cache) "$(datadir)/icons/hicolor";	\
 		$(gtk_update_icon_cache) "$(datadir)/icons/Tango"; \
+		$(gtk_update_icon_cache) "$(pkgdatadir)/icons-fallback/Adwaita"; \
 	else								\
 		echo "*** Icon cache not updated. Remember to run:";	\
 		echo "***";						\
@@ -26,4 +27,5 @@ install-data-hook:
 uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/icons/hicolor/icon-theme.cache
 	rm -f $(DESTDIR)$(datadir)/icons/Tango/icon-theme.cache
+	rm -f $(DESTDIR)$(pkgdatadir)/icons-fallback/Adwaita/icon-theme.cache
 
