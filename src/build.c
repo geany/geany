@@ -1007,7 +1007,7 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
 		gchar *input;
 
 		/* get the start of the path */
-		pos = strstr(string, "/");
+		pos = strchr(pos, '/');
 
 		if (pos == NULL)
 			return FALSE;
