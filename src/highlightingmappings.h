@@ -1770,6 +1770,25 @@ static const HLKeyword highlighting_keywords_SMALLTALK[] =
 #define highlighting_properties_SMALLTALK	EMPTY_PROPERTIES
 
 
+
+/* SINEX */
+#define highlighting_lexer_SINEX			SCLEX_SINEX
+static const HLStyle highlighting_styles_SINEX[] =
+{
+	{ SCE_SINEX_DEFAULT,				"default",					FALSE },
+	{ SCE_SINEX_COMMENTLINE,			"commentline",				FALSE },
+	{ SCE_SINEX_BLOCK_START,			"block",					FALSE },
+	{ SCE_SINEX_BLOCK_END,				"block",					FALSE },
+	{ SCE_SINEX_DATE,					"date",						FALSE },
+	{ SCE_SINEX_NUMBER,					"number",					FALSE },
+};
+static const HLKeyword highlighting_keywords_SINEX[] =
+{
+	{ 0, "keywords",	FALSE }
+};
+#define highlighting_properties_SINEX	EMPTY_PROPERTIES
+
+
 /* SQL */
 #define highlighting_lexer_SQL			SCLEX_SQL
 static const HLStyle highlighting_styles_SQL[] =
