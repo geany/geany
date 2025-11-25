@@ -249,7 +249,7 @@ test_installer() {
 	log "Test NSIS installer"
 	exiftool -FileName -FileType -FileVersion -FileVersionNumber ${GEANY_BUILD_DIR}/${GEANY_INSTALLER_FILENAME}
 	# install Geany: perform a silent install and check for installed files
-	xvfb-run -a mingw-w64-i686-wine ${GEANY_BUILD_DIR}/${GEANY_INSTALLER_FILENAME} /S /D=${GEANY_INSTALLATION_DIR_WIN}
+	mingw-w64-i686-wine ${GEANY_BUILD_DIR}/${GEANY_INSTALLER_FILENAME} /S /D=${GEANY_INSTALLATION_DIR_WIN}
 	# check if we have something installed
 	test -f ${GEANY_INSTALLATION_DIR}/uninst.exe || exit 1
 	test -f ${GEANY_INSTALLATION_DIR}/bin/geany.exe || exit 1
@@ -260,7 +260,7 @@ test_installer() {
 
 log_geany_version() {
 	log "Log installed Geany version"
-	xvfb-run -a mingw-w64-x86_64-wine ${GEANY_INSTALLATION_DIR}/bin/geany.exe --version 2>/dev/null
+	mingw-w64-x86_64-wine ${GEANY_INSTALLATION_DIR}/bin/geany.exe --version 2>/dev/null
 	exiftool -FileName -FileType -FileVersion -FileVersionNumber ${GEANY_INSTALLATION_DIR}/bin/geany.exe
 }
 
@@ -268,7 +268,7 @@ log_geany_version() {
 test_uninstaller() {
 	log "Test NSIS uninstaller"
 	# uninstall Geany and test if everything is clean
-	xvfb-run -a mingw-w64-i686-wine ${GEANY_INSTALLATION_DIR}/uninst.exe /S
+	mingw-w64-i686-wine ${GEANY_INSTALLATION_DIR}/uninst.exe /S
 	sleep 10  # it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
 	test ! -e ${GEANY_INSTALLATION_DIR}
 }
@@ -307,4 +307,6 @@ main() {
 
 set -x
 apt-get update && apt-get install -y xvfb libvulkan1 libvulkan1:i386
+test "x$DISPLAY" = x && exec xvfb-run -a "$0" "$@"
+
 main
