@@ -249,7 +249,8 @@ test_installer() {
 	log "Test NSIS installer"
 	exiftool -FileName -FileType -FileVersion -FileVersionNumber ${GEANY_BUILD_DIR}/${GEANY_INSTALLER_FILENAME}
 	# install Geany: perform a silent install and check for installed files
-	mingw-w64-i686-wine ${GEANY_BUILD_DIR}/${GEANY_INSTALLER_FILENAME} /S /D=${GEANY_INSTALLATION_DIR_WIN}
+	apt-get install -y xvfb
+	xvfb-run -a mingw-w64-i686-wine ${GEANY_BUILD_DIR}/${GEANY_INSTALLER_FILENAME} /S /D=${GEANY_INSTALLATION_DIR_WIN}
 	# check if we have something installed
 	test -f ${GEANY_INSTALLATION_DIR}/uninst.exe || exit 1
 	test -f ${GEANY_INSTALLATION_DIR}/bin/geany.exe || exit 1
