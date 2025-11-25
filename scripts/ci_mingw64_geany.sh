@@ -260,7 +260,7 @@ test_installer() {
 
 log_geany_version() {
 	log "Log installed Geany version"
-	mingw-w64-x86_64-wine ${GEANY_INSTALLATION_DIR}/bin/geany.exe --version 2>/dev/null
+	xvfb-run -a mingw-w64-x86_64-wine ${GEANY_INSTALLATION_DIR}/bin/geany.exe --version 2>/dev/null
 	exiftool -FileName -FileType -FileVersion -FileVersionNumber ${GEANY_INSTALLATION_DIR}/bin/geany.exe
 }
 
@@ -268,7 +268,7 @@ log_geany_version() {
 test_uninstaller() {
 	log "Test NSIS uninstaller"
 	# uninstall Geany and test if everything is clean
-	mingw-w64-i686-wine ${GEANY_INSTALLATION_DIR}/uninst.exe /S
+	xvfb-run -a mingw-w64-i686-wine ${GEANY_INSTALLATION_DIR}/uninst.exe /S
 	sleep 10  # it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
 	test ! -e ${GEANY_INSTALLATION_DIR}
 }
