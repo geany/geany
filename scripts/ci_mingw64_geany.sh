@@ -307,6 +307,8 @@ main() {
 
 set -x
 apt-get update && apt-get install -y xvfb libvulkan1 libvulkan1:i386
-test "x$DISPLAY" = x && exec xvfb-run -a "$0" "$@"
-
-main
+if test "x$DISPLAY" = x; then
+	xvfb-run -a "$SHELL" "$0" "$@"
+else
+	main
+fi
