@@ -305,5 +305,6 @@ main() {
 	log "Done."
 }
 
-apt-get update && apt-get install -y xvfb
+set -x
+apt-get update && apt-get install -y xvfb libvulkan1 libvulkan1:i386
 main
