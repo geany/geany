@@ -1,5 +1,13 @@
 name: Windows/MSYS2 Build
 on:
+  push:
+    branches:
+      - master
+    tags:
+      - '[0-9]**'
+  pull_request:
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:
@@ -58,7 +66,10 @@ jobs:
           overwrite: true
           if-no-files-found: error
       - name: SignPath Signing
+        id: sign-artifact
         uses: signpath/github-action-submit-signing-request@v2.0
+        # Only sign artifacts on tags
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
@@ -69,6 +80,7 @@ jobs:
           output-artifact-directory: geany-signed
       - name: Upload Signed Artifact
         uses: actions/upload-artifact@v5
+        if: steps.sign-artifact.outcome == 'success'
         with:
           name: geany-signed
           path: geany-signed
