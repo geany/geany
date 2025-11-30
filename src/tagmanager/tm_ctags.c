@@ -87,6 +87,27 @@ static void enable_kinds_and_roles(void)
 }
 
 
+static TMTagType get_type_from_roles(const tagEntryInfo *tag_entry, guchar kind_letter, TMParserType lang)
+{
+	kindDefinition *kind_definition = getLanguageKind(tag_entry->langType, tag_entry->kindIndex);
+	if (tag_entry->extensionFields.roleBits > 0 && kind_definition->nRoles > 0)
+	{
+		gint i;
+		for (i = 0; i < kind_definition->nRoles; i++)
+		{
+			if (kind_definition->roles[i].enabled &&
+				((tag_entry->extensionFields.roleBits >> i) & (roleBitsType)1))
+			{
+				TMTagType type = tm_parser_get_tag_type_from_role(kind_letter, kind_definition->roles[i].name, lang);
+				if (type != tm_tag_undef_t)
+					return type;
+			}
+		}
+	}
+	return tm_tag_undef_t;
+}
+
+
 /*
  Initializes a TMTag structure with information from a ctagsTag struct
  used by the ctags parsers. Note that the TMTag structure must be malloc()ed
@@ -107,7 +128,9 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 
 	lang = tag_entry->langType;
 	kind_letter = getLanguageKind(tag_entry->langType, tag_entry->kindIndex)->letter;
-	type = tm_parser_get_tag_type(kind_letter, lang);
+	type = get_type_from_roles(tag_entry, kind_letter, lang);
+	if (type == tm_tag_undef_t)
+		type = tm_parser_get_tag_type(kind_letter, lang);
 	if (file->lang != lang)  /* this is a tag from a subparser */
 	{
 		/* check for possible re-definition of subparser type */

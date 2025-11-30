@@ -1425,6 +1425,24 @@ TMTagType tm_parser_get_tag_type(gchar kind, TMParserType lang)
 }
 
 
+TMTagType tm_parser_get_tag_type_from_role(gchar kind, const gchar *role, TMParserType lang)
+{
+	switch (lang)
+	{
+/*
+		case TM_PARSER_GO:
+		{
+			if (kind == 'p' && g_strcmp0(role, "imported") == 0)
+				return tm_tag_externvar_t;
+		}
+*/
+		default:
+			break;
+	}
+	return tm_tag_undef_t;
+}
+
+
 gchar tm_parser_get_tag_kind(TMTagType type, TMParserType lang)
 {
 	TMParserMap *map = &parser_map[lang];
