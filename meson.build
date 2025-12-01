@@ -987,14 +987,10 @@ misc = [
 ]
 install_data(misc, install_dir: cdata.get('GEANY_DOC_DIR'))
 if host_machine.system() == 'windows'
-misc_rename = [
-	'Authors.txt',
-	'Changelog.txt',
-	'Copying.txt',
-	'Readme.txt',
-	'News.txt',
-	'Thanks.txt',
-	'Todo.txt'
-]
-install_data(misc, install_dir: prefix, rename: misc_rename)
+	# on Windows, install those files as "Somename.txt" in the prefix as well
+	misc_rename = []
+	foreach name: misc
+		misc_rename += name.substring(0, 1).to_upper() + name.substring(1).to_lower() + '.txt'
+	endforeach
+	install_data(misc, install_dir: prefix, rename: misc_rename)
 endif
