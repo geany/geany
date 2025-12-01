@@ -57,6 +57,7 @@ jobs:
           make install
           mkdir -p ${DESTINATON}/release/geany-orig
           rsync -a --delete ${DESTINATON}/build/geany/ ${DESTINATON}/release/geany-orig
+          find "${DESTINATON}/release/geany-orig" | sort
       - name: Compile NSIS
         run: |
           VERSION=$(autom4te --no-cache --language=Autoconf-without-aclocal-m4 --trace AC_INIT:\$2 configure.ac)
@@ -130,6 +131,7 @@ jobs:
           meson install -C _build
           mkdir -p ${DESTINATON}/release/geany-orig
           rsync -a --delete ${DESTINATON}/build/geany/ ${DESTINATON}/release/geany-orig
+          find "${DESTINATON}/release/geany-orig" | sort
       - name: Compile NSIS
         run: |
           VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)
