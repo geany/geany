@@ -87,3 +87,54 @@ jobs:
           retention-days: 3
           overwrite: true
           if-no-files-found: error
+
+  msys2-mingw64-meson:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: |
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-meson
+            mingw-w64-x86_64-jq
+            mingw-w64-x86_64-gtk3
+            mingw-w64-x86_64-python-docutils
+            patch
+            rsync
+            unzip
+            dos2unix
+            mingw-w64-x86_64-nsis
+      - name: GTK-Bundle
+        run: |
+          mkdir -p geany_build/bundle/geany-gtk
+          cd geany_build/bundle/geany-gtk
+          bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3
+      - name: CI-Build
+        run: |
+          DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build
+          meson setup --prefix=${DESTINATON}/build/geany _build .
+          meson compile -C _build
+          meson install -C _build
+          mkdir -p ${DESTINATON}/release/geany-orig
+          rsync -a --delete ${DESTINATON}/build/geany/ ${DESTINATON}/release/geany-orig
+      - name: Compile NSIS
+        run: |
+          VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)
+          python scripts/msys2-geany-release.py ${VERSION}
+      - name: Upload Unsigned Artifact
+        id: upload-unsigned-artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: geany-unsigned
+          path: geany_build/*.exe
+          retention-days: 3
+          overwrite: true
+          if-no-files-found: error
