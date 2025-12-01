@@ -13,6 +13,13 @@ action_icons = [
 icons_dir = join_paths(get_option('datadir'), 'icons', 'hicolor')
 tango_dir = join_paths(get_option('datadir'), 'icons', 'Tango')
 
+if host_machine.system() == 'windows'
+    # only install index.theme on Windows
+    foreach dir : [icons_dir, tango_dir]
+	install_data('index.theme', install_dir: dir)
+    endforeach
+endif
+
 foreach dir : icon_dirs
     ext = dir == 'scalable' ? '.svg' : '.png'
     install_data(join_paths(dir, app_icon+ext), install_dir: join_paths(icons_dir, dir, 'apps'))
