@@ -9,6 +9,11 @@ on:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      sign_artifacts:
+        description: 'Sign artifacts'
+        required: false
+        type: boolean
 
 jobs:
   msys2-mingw64:
@@ -69,7 +74,7 @@ jobs:
         id: sign-artifact
         uses: signpath/github-action-submit-signing-request@v2.0
         # Only sign artifacts on tags
-        if: startsWith(github.ref, 'refs/tags/')
+        if: inputs.sign_artifacts || startsWith(github.ref, 'refs/tags/')
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
