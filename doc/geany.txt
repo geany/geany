@@ -4784,14 +4784,11 @@ line_wrap_indent
 
 translucency
     Translucency for the current line (first argument) and the selection
-    (second argument). Values between 0 and 256 are accepted.
-
-    Note for Windows 95, 98 and ME users:
-    keep this value at 256 to disable translucency otherwise Geany might crash.
+    (second argument). Values between 0 and 255 (inclusive) are accepted.
 
     Only the first and second arguments are interpreted.
 
-    *Example:* ``translucency=256;256;false;false``
+    *Example:* ``translucency=255;255``
 
 marker_line
     The style for a highlighted line (e.g when using *Go to line* or *Go to symbol*).
@@ -4800,7 +4797,7 @@ marker_line
 
     Only the first and second arguments are interpreted.
 
-    *Example:* ``marker_line=0x000000;0xffff00;false;false``
+    *Example:* ``marker_line=0x000000;0xffff00``
 
 marker_search
     The style for a marked search results (when using "Mark" in Search dialogs).
@@ -4810,6 +4807,15 @@ marker_search
 
     *Example:* ``marker_search=0x000000;0xb8f4b8;false;false``
 
+marker_search_translucency
+    Translucency for the search marker's outline (first argument) and
+    background (second argument). Values between 0 and 255 (inclusive) are
+    accepted.
+
+    Only the first and second arguments are interpreted.
+
+    *Example:* ``marker_search_translucency=127;64``
+
 marker_mark
     The style for a marked line (e.g when using the "Toggle Marker" keybinding
     (Ctrl-M)). The foreground color (first argument) is only used
@@ -4817,18 +4823,15 @@ marker_mark
 
     Only the first and second arguments are interpreted.
 
-    *Example:* ``marker_mark=0x000000;0xb8f4b8;false;false``
+    *Example:* ``marker_mark=0x000000;0xb8f4b8``
 
 marker_translucency
-    Translucency for the line marker (first argument) and the search marker
-    (second argument). Values between 0 and 256 are accepted.
-
-    Note for Windows 95, 98 and ME users:
-    keep this value at 256 to disable translucency otherwise Geany might crash.
+    Translucency for the line marker (first argument) and the user marker
+    (second argument). Values between 0 and 255 (inclusive) are accepted.
 
     Only the first and second arguments are interpreted.
 
-    *Example:* ``marker_translucency=256;256;false;false``
+    *Example:* ``marker_translucency=255;255``
 
 line_height
     Amount of space to be drawn above and below the line's baseline.
@@ -4837,7 +4840,7 @@ line_height
 
     Only the first and second arguments are interpreted.
 
-    *Example:* ``line_height=0;0;false;false``
+    *Example:* ``line_height=0;0``
 
 calltips
     The style for coloring the calltips. The first two arguments
