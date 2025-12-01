@@ -966,7 +966,7 @@ subdir('icons')
 subdir('plugins')
 subdir('tests')
 
-install_data('COPYING', rename: 'GPL-2')
+install_data('COPYING', rename: 'GPL-2', install_dir: cdata.get('GEANY_DATA_DIR'))
 install_data(
 	'scintilla/License.txt',
 	'scintilla/lexilla/License.txt',
