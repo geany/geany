@@ -778,6 +778,12 @@ if (host_machine.system() == 'windows')
 	foreach lib : ['ole32', 'wsock32', 'comdlg32']
 		win_deps += cc.find_library(lib)
 	endforeach
+	# install Windows run helper
+	install_data(
+		'src/geany-run-helper.bat',
+		install_mode: 'rwxr-xr-x',
+		install_dir: join_paths(get_option('libexecdir'), 'geany'),
+	)
 endif
 
 osx_src = []
