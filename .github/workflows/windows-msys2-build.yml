@@ -22,6 +22,12 @@ env:
 jobs:
   msys2-mingw64:
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - build-tool: autotools
+          - build-tool: meson
     defaults:
       run:
         shell: msys2 {0}
@@ -38,7 +44,8 @@ jobs:
           update: true
           install: |
             mingw-w64-ucrt-x86_64-gcc
-            mingw-w64-ucrt-x86_64-autotools
+            mingw-w64-ucrt-x86_64-${{ matrix.build-tool }}
+            ${{ matrix.build-tool == 'meson' && 'mingw-w64-ucrt-x86_64-jq' || '' }}
             mingw-w64-ucrt-x86_64-sccache
             mingw-w64-ucrt-x86_64-gtk3
             mingw-w64-ucrt-x86_64-python-docutils
@@ -70,13 +77,16 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.SCCACHE_DIR }}
-          key: ${{ runner.os }}-${{ github.job }}-sccache-${{ github.run_id }}
-          restore-keys: ${{ runner.os }}-${{ github.job }}-sccache-
+          key: ${{ runner.os }}-${{ github.job }}-${{ matrix.build-tool }}-sccache-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-${{ github.job }}-${{ matrix.build-tool }}-sccache-
 
-      - name: CI-Build
+      - name: Prepare Build environment
         run: |
-          DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build
-          VERSION=$(autom4te --no-cache --language=Autoconf-without-aclocal-m4 --trace AC_INIT:\$2 configure.ac)
+          echo "DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build" >> $GITHUB_ENV
+      - name: Build (Autotools)
+        if: matrix.build-tool == 'autotools'
+        run: |
+          echo "VERSION=$(autom4te --no-cache --language=Autoconf-without-aclocal-m4 --trace AC_INIT:\$2 configure.ac)" >> $GITHUB_ENV
           NOCONFIGURE=1 ./autogen.sh
           export lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}
           mkdir -p _build
@@ -84,12 +94,19 @@ jobs:
           ../configure --prefix=${DESTINATON}/build/geany --disable-silent-rules
           make -j
           make install
-          mkdir -p ${DESTINATON}/release/geany-orig
-          rsync -a --delete ${DESTINATON}/build/geany/ ${DESTINATON}/release/geany-orig
+      - name: Build (Meson)
+        if: matrix.build-tool == 'meson'
+        run: |
+          echo "VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)" >> $GITHUB_ENV
+          meson setup --prefix=${DESTINATON}/build/geany _build .
+          meson compile -C _build
+          meson install -C _build
       - name: Compile NSIS
         run: |
-          VERSION=$(autom4te --no-cache --language=Autoconf-without-aclocal-m4 --trace AC_INIT:\$2 configure.ac)
+          mkdir -p ${DESTINATON}/release/geany-orig
+          rsync -a --delete ${DESTINATON}/build/geany/ ${DESTINATON}/release/geany-orig
           python scripts/msys2-geany-release.py ${VERSION}
+
       - name: Upload Unsigned Artifact
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v5
@@ -107,7 +124,7 @@ jobs:
         id: sign-artifact
         uses: signpath/github-action-submit-signing-request@v2.0
         # Only sign artifacts on tags
-        if: inputs.sign_artifacts || startsWith(github.ref, 'refs/tags/')
+        if: matrix.build-tool == 'autotools' && (inputs.sign_artifacts || startsWith(github.ref, 'refs/tags/'))
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
