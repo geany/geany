@@ -132,11 +132,10 @@ cdata.set('HAVE_PLUGINS', get_option('plugins'))
 cdata.set('HAVE_SOCKET', get_option('socket'))
 if (host_machine.system() == 'windows')
 	cdata.set('GEANY_DATA_DIR', join_paths(prefix, 'data'))
-	cdata.set('GEANY_DOC_DIR', join_paths(prefix))
 else
 	cdata.set('GEANY_DATA_DIR', join_paths(prefix, get_option('datadir'), 'geany'))
-	cdata.set('GEANY_DOC_DIR', join_paths(prefix, get_option('datadir'), 'doc', 'geany'))
 endif
+cdata.set('GEANY_DOC_DIR', join_paths(prefix, get_option('datadir'), 'doc', 'geany'))
 cdata.set('top_srcdir', meson.project_source_root())
 cdata.set('top_builddir', meson.project_build_root())
 
