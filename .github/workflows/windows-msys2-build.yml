@@ -149,10 +149,13 @@ jobs:
       - name: Test installed Geany
         shell: cmd
         run: |
+          ECHO ON
+          PUSHD %GITHUB_WORKSPACE%\geany_install\bin\
           %GITHUB_WORKSPACE%\geany_install\bin\geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
         run: |
+          ECHO ON
           SET DESTINATION=%GITHUB_WORKSPACE%\geany_install
           %DESTINATION%\uninst.exe /S
           REM it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
