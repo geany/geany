@@ -150,7 +150,7 @@ jobs:
         shell: cmd
         run: |
           ECHO ON
-          PUSHD %GITHUB_WORKSPACE%\geany_install\bin\
+          DIR /S %GITHUB_WORKSPACE%\geany_install
           %GITHUB_WORKSPACE%\geany_install\bin\geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
