@@ -137,24 +137,27 @@ jobs:
           VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)
           python scripts/msys2-geany-release.py ${VERSION}
       - name: Test NSIS
+        shell: cmd
         run: |
-          VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)
-          DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_install
-          geany_build/geany-${VERSION}_setup.exe /S /D=${DESTINATON}
-          test -f ${DESTINATON}/uninst.exe || exit 1
-          test -f ${DESTINATON}/bin/geany.exe || exit 1
-          test -f ${DESTINATON}/lib/geany/export.dll || exit 1
-          test ! -f ${DESTINATON}/lib/geany/demoplugin.dll || exit 1
+          ECHO ON
+          SET DESTINATION=%GITHUB_WORKSPACE%\\geany_install
+          geany_build/geany-*_setup.exe /S /D=%DESTINATION%
+          IF NOT EXIST "%DESTINATION%\\uninst.exe" EXIT /B 1
+          IF NOT EXIST "%DESTINATION%\\bin\\geany.exe" EXIT /B 1
+          IF NOT EXIST "%DESTINATION%\\lib\\geany\\export.dll" EXIT /B 1
+          IF EXIST "%DESTINATION%\\lib\\geany\\demoplugin.dll" EXIT /B 1
       - name: Test installed Geany
+        shell: cmd
         run: |
-          DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_install
-          ${DESTINATON}/bin/geany.exe --version
+          %GITHUB_WORKSPACE%\\geany_install\\bin\\geany.exe --version
       - name: Test NSIS uninstaller
+        shell: cmd
         run: |
-          DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_install
-          ${DESTINATON}/uninst.exe uninst.exe /S
-          sleep 10  # it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
-          ! test -e ${DESTINATON}
+          SET DESTINATION=%GITHUB_WORKSPACE%\\geany_install
+          %DESTINATION%\\uninst.exe /S
+          REM it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
+          TIMEOUT /T 10
+          IF EXISTS "%DESTINATION%" EXIT /B 1
       - name: Upload Unsigned Artifact
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v5
