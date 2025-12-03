@@ -147,11 +147,9 @@ jobs:
           IF NOT EXIST "%DESTINATION%\lib\geany\export.dll" EXIT /B 1
           IF EXIST "%DESTINATION%\lib\geany\demoplugin.dll" EXIT /B 1
       - name: Test installed Geany
-        shell: cmd
         run: |
-          ECHO ON
-          DIR /S %GITHUB_WORKSPACE%\geany_install
-          %GITHUB_WORKSPACE%\geany_install\bin\geany.exe --version
+          ldd ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe
+          ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
         run: |
