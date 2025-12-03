@@ -136,6 +136,22 @@ jobs:
         run: |
           VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)
           python scripts/msys2-geany-release.py ${VERSION}
+      - name: Test NSIS
+        run: |
+          VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)
+          geany_build/geany-${VERSION}_setup.exe /S /D=/geany_install
+          test -f /geany_install/uninst.exe || exit 1
+          test -f /geany_install/bin/geany.exe || exit 1
+          test -f /geany_install/lib/geany/export.dll || exit 1
+          test ! -f /geany_install/lib/geany/demoplugin.dll || exit 1
+      - name: Test installed Geany
+        run: |
+          /geany_install/bin/geany.exe --version
+      - name: Test NSIS uninstaller
+        run: |
+          /geany_install/uninst.exe uninst.exe /S
+          sleep 10  # it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
+          ! test -e /geany_install
       - name: Upload Unsigned Artifact
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v5
