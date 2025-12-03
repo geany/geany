@@ -140,21 +140,21 @@ jobs:
         shell: cmd
         run: |
           ECHO ON
-          SET DESTINATION=%GITHUB_WORKSPACE%\\geany_install
-          geany_build/geany-*_setup.exe /S /D=%DESTINATION%
-          IF NOT EXIST "%DESTINATION%\\uninst.exe" EXIT /B 1
-          IF NOT EXIST "%DESTINATION%\\bin\\geany.exe" EXIT /B 1
-          IF NOT EXIST "%DESTINATION%\\lib\\geany\\export.dll" EXIT /B 1
-          IF EXIST "%DESTINATION%\\lib\\geany\\demoplugin.dll" EXIT /B 1
+          SET DESTINATION=%GITHUB_WORKSPACE%\geany_install
+          .\geany_build\geany-*_setup.exe /S /D=%DESTINATION%
+          IF NOT EXIST "%DESTINATION%\uninst.exe" EXIT /B 1
+          IF NOT EXIST "%DESTINATION%\bin\geany.exe" EXIT /B 1
+          IF NOT EXIST "%DESTINATION%\lib\geany\export.dll" EXIT /B 1
+          IF EXIST "%DESTINATION%\lib\geany\demoplugin.dll" EXIT /B 1
       - name: Test installed Geany
         shell: cmd
         run: |
-          %GITHUB_WORKSPACE%\\geany_install\\bin\\geany.exe --version
+          %GITHUB_WORKSPACE%\geany_install\bin\geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
         run: |
-          SET DESTINATION=%GITHUB_WORKSPACE%\\geany_install
-          %DESTINATION%\\uninst.exe /S
+          SET DESTINATION=%GITHUB_WORKSPACE%\geany_install
+          %DESTINATION%\uninst.exe /S
           REM it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
           TIMEOUT /T 10
           IF EXISTS "%DESTINATION%" EXIT /B 1
