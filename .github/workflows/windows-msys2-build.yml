@@ -148,6 +148,9 @@ jobs:
           IF EXIST "%DESTINATION%\lib\geany\demoplugin.dll" EXIT /B 1
       - name: Test installed Geany
         run: |
+          set -x
+          cygcheck ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe
+          ntldd ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe
           ldd ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe
           ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe --version
       - name: Test NSIS uninstaller
