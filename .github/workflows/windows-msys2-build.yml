@@ -158,12 +158,14 @@ jobs:
           (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ldd ./geany.exe) || echo "ERR $?"
           ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe --version || echo "ERR $?"
           (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ./geany.exe --version) || echo "ERR $?"
+          ${GITHUB_WORKSPACE}/geany_install/Geany.lnk --version || echo "ERR $?"
+          (cd ${GITHUB_WORKSPACE}/geany_install/ && ./Geany.lnk --version) || echo "ERR $?"
       - name: Test installed Geany (2)
         shell: cmd
         run: |
           ECHO ON
-          CD %GITHUB_WORKSPACE%\geany_install
-          geany.exe --version
+          CD %GITHUB_WORKSPACE%\geany_install\bin
+          .\geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
         run: |
