@@ -164,8 +164,9 @@ jobs:
         shell: cmd
         run: |
           ECHO ON
-          CD %GITHUB_WORKSPACE%\geany_install\bin
-          .\geany.exe --version
+          CD /D %GITHUB_WORKSPACE%\geany_install\bin
+          geany.exe --version || ECHO failed
+          start geany.exe --version || ECHO failed
       - name: Test NSIS uninstaller
         shell: cmd
         run: |
@@ -173,7 +174,7 @@ jobs:
           SET DESTINATION=%GITHUB_WORKSPACE%\geany_install
           %DESTINATION%\uninst.exe /S
           REM it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
-          TIMEOUT /T 10
+          REM TIMEOUT /T 10
           IF EXISTS "%DESTINATION%" EXIT /B 1
       - name: Upload Unsigned Artifact
         id: upload-unsigned-artifact
