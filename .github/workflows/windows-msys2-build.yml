@@ -34,7 +34,6 @@ jobs:
             mingw-w64-x86_64-autotools
             mingw-w64-x86_64-gtk3
             mingw-w64-x86_64-python-docutils
-            mingw-w64-x86_64-ntldd
             patch
             rsync
             unzip
@@ -114,6 +113,7 @@ jobs:
             mingw-w64-x86_64-jq
             mingw-w64-x86_64-gtk3
             mingw-w64-x86_64-python-docutils
+            mingw-w64-x86_64-ntldd
             patch
             rsync
             unzip
@@ -150,14 +150,20 @@ jobs:
       - name: Test installed Geany
         run: |
           set -x
-          cygcheck ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe || :
-          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && cygcheck ./geany.exe) || :
-          ntldd ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe || :
-          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ntldd ./geany.exe) || :
-          ldd ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe || :
-          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ldd ./geany.exe) || :
-          ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe --version || :
-          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ./geany.exe --version) || :
+          cygcheck ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe || echo "ERR $?"
+          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && cygcheck ./geany.exe) || echo "ERR $?"
+          ntldd ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe || echo "ERR $?"
+          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ntldd ./geany.exe) || echo "ERR $?"
+          ldd ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe || echo "ERR $?"
+          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ldd ./geany.exe) || echo "ERR $?"
+          ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe --version || echo "ERR $?"
+          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ./geany.exe --version) || echo "ERR $?"
+      - name: Test installed Geany (2)
+        shell: cmd
+        run: |
+          ECHO ON
+          CD %GITHUB_WORKSPACE%\geany_install
+          geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
         run: |
