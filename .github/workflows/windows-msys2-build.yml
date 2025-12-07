@@ -178,7 +178,8 @@ jobs:
           where libintl-8.dll
           
           ECHO %PATH%
-          set PATH=C:\geany_install\bin;%SystemRoot%\System32;%SystemRoot%
+          set PATH=C:\geany_install\bin;%SystemRoot%\System32;%SystemRoot%;%PATH%
+          ECHO %PATH%
           geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
