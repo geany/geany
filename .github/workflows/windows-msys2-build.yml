@@ -156,6 +156,7 @@ jobs:
         run: |
           set -x
           DESTINATION=C:\\geany_install
+          command -v cygcheck
           cygcheck ${DESTINATION}/bin/geany.exe || echo "ERR $?"
           (cd ${DESTINATION}/bin/ && cygcheck ./geany.exe) || echo "ERR $?"
           ntldd ${DESTINATION}/bin/geany.exe || echo "ERR $?"
@@ -181,7 +182,12 @@ jobs:
           ECHO %PATH%
           set PATH=C:\geany_install\bin;%SystemRoot%\System32;%SystemRoot%
           ECHO %PATH%
-          cygcheck geany.exe
+          
+          dumpbin /imports geany.exe
+          dumpbin /exports libgeany-0.dll
+          
+          /c/mingw64/bin/cygcheck geany.exe
+          
           geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
