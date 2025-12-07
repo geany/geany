@@ -142,6 +142,7 @@ jobs:
         run: |
           ECHO ON
           SET DESTINATION=C:\geany_install
+          RMDIR /S /Q %DESTINATION%
           %GITHUB_WORKSPACE%\geany_build\geany-2.2.0_setup.exe /S /D=%DESTINATION%
           IF NOT EXIST "%DESTINATION%\uninst.exe" EXIT /B 1
           IF NOT EXIST "%DESTINATION%\bin\geany.exe" EXIT /B 1
@@ -150,7 +151,7 @@ jobs:
       - name: Test installed Geany
         run: |
           set -x
-          DESTINATION=C:\geany_install
+          DESTINATION=C:\\geany_install
           cygcheck ${DESTINATION}/bin/geany.exe || echo "ERR $?"
           (cd ${DESTINATION}/bin/ && cygcheck ./geany.exe) || echo "ERR $?"
           ntldd ${DESTINATION}/bin/geany.exe || echo "ERR $?"
@@ -166,8 +167,15 @@ jobs:
         run: |
           ECHO ON
           CD /D C:\geany_install\bin
-          geany.exe --version || ECHO failed
-          start geany.exe --version || ECHO failed
+          
+          where libstdc++-6.dll
+          where libwinpthread-1.dll
+          where libgcc_s_seh-1.dll
+          where libiconv-2.dll
+          where libintl-8.dll
+          
+          set PATH=C:\geany_install\bin;%SystemRoot%\System32;%SystemRoot%
+          geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
         run: |
