@@ -141,7 +141,7 @@ jobs:
         shell: cmd
         run: |
           ECHO ON
-          SET DESTINATION=%GITHUB_WORKSPACE%\geany_install
+          SET DESTINATION=C:\geany_install
           %GITHUB_WORKSPACE%\geany_build\geany-2.2.0_setup.exe /S /D=%DESTINATION%
           IF NOT EXIST "%DESTINATION%\uninst.exe" EXIT /B 1
           IF NOT EXIST "%DESTINATION%\bin\geany.exe" EXIT /B 1
@@ -150,28 +150,29 @@ jobs:
       - name: Test installed Geany
         run: |
           set -x
-          cygcheck ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe || echo "ERR $?"
-          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && cygcheck ./geany.exe) || echo "ERR $?"
-          ntldd ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe || echo "ERR $?"
-          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ntldd ./geany.exe) || echo "ERR $?"
-          ldd ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe || echo "ERR $?"
-          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ldd ./geany.exe) || echo "ERR $?"
-          ${GITHUB_WORKSPACE}/geany_install/bin/geany.exe --version || echo "ERR $?"
-          (cd ${GITHUB_WORKSPACE}/geany_install/bin/ && ./geany.exe --version) || echo "ERR $?"
-          ${GITHUB_WORKSPACE}/geany_install/Geany.lnk --version || echo "ERR $?"
-          (cd ${GITHUB_WORKSPACE}/geany_install/ && ./Geany.lnk --version) || echo "ERR $?"
+          DESTINATION=C:\geany_install
+          cygcheck ${DESTINATION}/bin/geany.exe || echo "ERR $?"
+          (cd ${DESTINATION}/bin/ && cygcheck ./geany.exe) || echo "ERR $?"
+          ntldd ${DESTINATION}/bin/geany.exe || echo "ERR $?"
+          (cd ${DESTINATION}/bin/ && ntldd ./geany.exe) || echo "ERR $?"
+          ldd ${DESTINATION}/bin/geany.exe || echo "ERR $?"
+          (cd ${DESTINATION}/bin/ && ldd ./geany.exe) || echo "ERR $?"
+          ${DESTINATION}/bin/geany.exe --version || echo "ERR $?"
+          (cd ${DESTINATION}/bin/ && ./geany.exe --version) || echo "ERR $?"
+          ${DESTINATION}/Geany.lnk --version || echo "ERR $?"
+          (cd ${DESTINATION}/ && ./Geany.lnk --version) || echo "ERR $?"
       - name: Test installed Geany (2)
         shell: cmd
         run: |
           ECHO ON
-          CD /D %GITHUB_WORKSPACE%\geany_install\bin
+          CD /D C:\geany_install\bin
           geany.exe --version || ECHO failed
           start geany.exe --version || ECHO failed
       - name: Test NSIS uninstaller
         shell: cmd
         run: |
           ECHO ON
-          SET DESTINATION=%GITHUB_WORKSPACE%\geany_install
+          SET DESTINATION=C:\geany_install
           %DESTINATION%\uninst.exe /S
           REM it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
           REM TIMEOUT /T 10
