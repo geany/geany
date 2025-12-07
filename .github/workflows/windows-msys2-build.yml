@@ -126,9 +126,11 @@ jobs:
           bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3
       - name: CI-Build
         run: |
+          set -x
           DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build
           echo "$PATH"
           echo "$LD_LIBRARY_PATH"
+          export PATH="/c/mingw64/bin:$PATH"
           meson setup --prefix=${DESTINATON}/build/geany _build .
           cat _build/meson-logs/*log*
           meson compile -C _build
