@@ -129,7 +129,7 @@ GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array,
 void tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes,
 	gboolean dedup, gboolean unref_duplicates);
 
-GPtrArray *tm_tags_extract(GPtrArray *tags_array, guint tag_types);
+GPtrArray *tm_tags_extract(GPtrArray *tags_array, TMTagType tag_types);
 
 void tm_tags_prune(GPtrArray *tags_array);
 
