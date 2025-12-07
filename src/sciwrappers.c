@@ -78,7 +78,7 @@ sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject
 		}
 #define SCI_STATUS_FORMAT_STRING "%s:%u: scintilla has non-zero status " \
 			"code '%d' after sending message '%u' to instance '%p' with " \
-			"wParam='%lu' and lParam='%ld': %s"
+			"wParam='%zu' and lParam='%zd': %s"
 		if (status >= SC_STATUS_WARN_START)
 		{
 			g_warning(SCI_STATUS_FORMAT_STRING, file, line, status, msg,
