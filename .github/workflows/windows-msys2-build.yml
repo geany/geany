@@ -130,7 +130,6 @@ jobs:
           DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build
           echo "$PATH"
           echo "$LD_LIBRARY_PATH"
-          export PATH="/c/mingw64/bin:$PATH"
           meson setup --prefix=${DESTINATON}/build/geany _build .
           cat _build/meson-logs/*log*
           meson compile -C _build
@@ -180,8 +179,9 @@ jobs:
           where libintl-8.dll
           
           ECHO %PATH%
-          set PATH=C:\geany_install\bin;%SystemRoot%\System32;%SystemRoot%;%PATH%
+          set PATH=C:\geany_install\bin;%SystemRoot%\System32;%SystemRoot%
           ECHO %PATH%
+          cygcheck geany.exe
           geany.exe --version
       - name: Test NSIS uninstaller
         shell: cmd
