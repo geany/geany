@@ -34,7 +34,7 @@ static void assert_cmpmem_eq_impl(const char *p1, const char *p2, gsize len,
 	if (i == len)
 		return;
 
-	msg = g_strdup_printf("assertion failed (%s): bytes %#x and %#x differ at offset %lu (at \"%s\" and \"%s\")",
+	msg = g_strdup_printf("assertion failed (%s): bytes %#x and %#x differ at offset %zu (at \"%s\" and \"%s\")",
 			expr, (guint) (guchar) p1[i], (guint) (guchar) p2[i], i, p1 + i, p2 + i);
 	g_assertion_message(domain, file, line, func, msg);
 	g_free(msg);
@@ -76,7 +76,7 @@ static gboolean assert_convert_to_utf8_auto_impl(
 	gboolean ret;
 	GError *err = NULL;
 
-	g_log(domain, G_LOG_LEVEL_INFO, "%s:%d:%s: converting %lu bytes", file, line, func, input_size);
+	g_log(domain, G_LOG_LEVEL_INFO, "%s:%d:%s: converting %zu bytes", file, line, func, input_size);
 	ret = encodings_convert_to_utf8_auto(&buf, &size, forced_enc, &used_encoding, &has_bom, &partial, &err);
 	fflush(stdout);
 	if (! ret)
