@@ -40,6 +40,7 @@ tagWriter geanyWriter = {
 };
 
 
+G_GNUC_PRINTF(2, 0)
 static bool nonfatal_error_printer(const errorSelection selection,
 					  const gchar *const format,
 					  va_list ap, void *data CTAGS_ATTR_UNUSED)
