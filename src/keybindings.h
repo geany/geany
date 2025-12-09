@@ -281,6 +281,10 @@ enum GeanyKeyBindingID
 												 * @since 2.0 (API 243) */
 	GEANY_KEYS_TOGGLE_MENUBAR,					/**< Keybinding.
 												 * @since 2.2 (API 251) */
+	GEANY_KEYS_SEARCH_NEXTERRORINDICATOR,		/**< Keybinding.
+												 * @since 2.2 (API 251) */
+	GEANY_KEYS_SEARCH_PREVIOUSERRORINDICATOR,	/**< Keybinding.
+												 * @since 2.2 (API 251) */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
