@@ -981,35 +981,6 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show)
 }
 
 
-void ui_sidebar_show_hide(void)
-{
-	GtkWidget *widget;
-
-	/* check that there are no other notebook pages before hiding the sidebar completely
-	 * other pages could be e.g. the file browser plugin */
-	if (! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible &&
-		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) <= 2)
-	{
-		ui_prefs.sidebar_visible = FALSE;
-	}
-
-	widget = ui_lookup_widget(main_widgets.window, "menu_show_sidebar1");
-	if (ui_prefs.sidebar_visible != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
-	{
-		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), ui_prefs.sidebar_visible);
-		ignore_callback = FALSE;
-	}
-
-	ui_widget_show_hide(main_widgets.sidebar_notebook, ui_prefs.sidebar_visible);
-
-	ui_widget_show_hide(gtk_notebook_get_nth_page(
-		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0), interface_prefs.sidebar_symbol_visible);
-	ui_widget_show_hide(gtk_notebook_get_nth_page(
-		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 1), interface_prefs.sidebar_openfiles_visible);
-}
-
-
 void ui_menubar_show_hide(gboolean show)
 {
 	GtkWidget *geany_menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");

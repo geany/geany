@@ -65,16 +65,13 @@ doc_items;
 
 enum
 {
-	TREEVIEW_SYMBOL = 0,
-	TREEVIEW_OPENFILES
-};
-
-enum
-{
 	OPENFILES_ACTION_REMOVE = 0,
 	OPENFILES_ACTION_SAVE,
 	OPENFILES_ACTION_RELOAD
 };
+
+static GtkWidget *symbol_page;
+static GtkWidget *openfiles_page;
 
 static GtkTreeStore *store_openfiles;
 static GtkWidget *openfiles_popup_menu;
@@ -177,13 +174,14 @@ static void create_default_tag_tree(void)
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
 	GtkWidget *child = gtk_bin_get_child(GTK_BIN(tag_window));
+	gint current_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook));
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (update && doc != NULL)
 		doc->priv->tag_tree_dirty = TRUE;
 
-	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) != TREEVIEW_SYMBOL)
+	if (gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), current_page) != symbol_page)
 		return; /* don't bother updating symbol tree if we don't see it */
 
 	/* changes the tree view to the given one, trying not to do useless changes */
@@ -1146,7 +1144,7 @@ void sidebar_remove_document(GeanyDocument *doc)
 static void on_hide_sidebar(void)
 {
 	ui_prefs.sidebar_visible = FALSE;
-	ui_sidebar_show_hide();
+	sidebar_show_hide();
 }
 
 
@@ -1224,7 +1222,7 @@ static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer us
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	interface_prefs.sidebar_openfiles_visible = gtk_check_menu_item_get_active(item);
-	ui_sidebar_show_hide();
+	sidebar_show_hide();
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
@@ -1232,7 +1230,7 @@ static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	interface_prefs.sidebar_symbol_visible = gtk_check_menu_item_get_active(item);
-	ui_sidebar_show_hide();
+	sidebar_show_hide();
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
@@ -1706,16 +1704,57 @@ static void on_save_settings(void)
 
 
 static void on_sidebar_switch_page(GtkNotebook *notebook,
-	gpointer page, guint page_num, gpointer user_data)
+	GtkWidget *page, guint page_num, gpointer user_data)
 {
-	if (page_num == TREEVIEW_SYMBOL)
+	if (page == symbol_page)
 		sidebar_update_tag_list(document_get_current(), FALSE);
+}
+
+
+void sidebar_update_page_order(void)
+{
+	GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
+	gint page_num = gtk_notebook_get_n_pages(notebook);
+	gchar **ptr;
+	gint pos = 0;
+
+	foreach_strv(ptr, ui_prefs.sidebar_tab_order)
+	{
+		gint i;
+		for (i = pos; i < page_num; i++)
+		{
+			GtkWidget *page = gtk_notebook_get_nth_page(notebook, i);
+			const gchar *text =  gtk_notebook_get_tab_label_text(notebook, page);
+			if (g_strcmp0(text, *ptr) == 0)
+			{
+				gtk_notebook_reorder_child(notebook, page, pos);
+				pos++;
+				break;
+			}
+		}
+	}
+}
+
+
+static void on_page_added(GtkNotebook *notebook,
+	GtkWidget *child, guint page_num, gpointer user_data)
+{
+	gtk_notebook_set_tab_reorderable(notebook, child, TRUE);
+	sidebar_tabs_show_hide(notebook, child, page_num, user_data);
+	sidebar_update_page_order();
 }
 
 
 void sidebar_init(void)
 {
+	GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
 	StashGroup *group;
+
+	/* pre-inserted in the glade file */
+	symbol_page = gtk_notebook_get_nth_page(notebook, 0);
+	gtk_notebook_set_tab_reorderable(notebook, symbol_page, TRUE);
+	openfiles_page = gtk_notebook_get_nth_page(notebook, 1);
+	gtk_notebook_set_tab_reorderable(notebook, openfiles_page, TRUE);
 
 	openfiles_filter = g_strdup("");
 
@@ -1730,7 +1769,7 @@ void sidebar_init(void)
 	g_signal_connect(geany_object, "save-settings", on_save_settings, NULL);
 
 	g_signal_connect(main_widgets.sidebar_notebook, "page-added",
-		G_CALLBACK(sidebar_tabs_show_hide), NULL);
+		G_CALLBACK(on_page_added), NULL);
 	g_signal_connect(main_widgets.sidebar_notebook, "page-removed",
 		G_CALLBACK(sidebar_tabs_show_hide), NULL);
 	/* tabs may have changed when sidebar is reshown */
@@ -1763,8 +1802,9 @@ void sidebar_focus_openfiles_tab(void)
 	if (ui_prefs.sidebar_visible && interface_prefs.sidebar_openfiles_visible)
 	{
 		GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
+		gint openfiles_page_num = gtk_notebook_page_num(notebook, openfiles_page);
 
-		gtk_notebook_set_current_page(notebook, TREEVIEW_OPENFILES);
+		gtk_notebook_set_current_page(notebook, openfiles_page_num);
 		gtk_widget_grab_focus(tv.tree_openfiles);
 	}
 }
@@ -1776,8 +1816,9 @@ void sidebar_focus_symbols_tab(void)
 	{
 		GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
 		GtkWidget *symbol_list_scrollwin = ui_lookup_widget(main_widgets.window, "scrolledwindow2");
+		gint symbol_page_num = gtk_notebook_page_num(notebook, symbol_page);
 
-		gtk_notebook_set_current_page(notebook, TREEVIEW_SYMBOL);
+		gtk_notebook_set_current_page(notebook, symbol_page_num);
 		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(symbol_list_scrollwin)));
 	}
 }
@@ -1794,4 +1835,31 @@ static void sidebar_tabs_show_hide(GtkNotebook *notebook, GtkWidget *child,
 		tabs--;
 
 	gtk_notebook_set_show_tabs(notebook, (tabs > 1));
+}
+
+
+void sidebar_show_hide(void)
+{
+	GtkWidget *widget;
+
+	/* check that there are no other notebook pages before hiding the sidebar completely
+	 * other pages could be e.g. the file browser plugin */
+	if (! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible &&
+		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) <= 2)
+	{
+		ui_prefs.sidebar_visible = FALSE;
+	}
+
+	widget = ui_lookup_widget(main_widgets.window, "menu_show_sidebar1");
+	if (ui_prefs.sidebar_visible != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+	{
+		ignore_callback = TRUE;
+		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), ui_prefs.sidebar_visible);
+		ignore_callback = FALSE;
+	}
+
+	ui_widget_show_hide(main_widgets.sidebar_notebook, ui_prefs.sidebar_visible);
+
+	ui_widget_show_hide(symbol_page, interface_prefs.sidebar_symbol_visible);
+	ui_widget_show_hide(openfiles_page, interface_prefs.sidebar_openfiles_visible);
 }

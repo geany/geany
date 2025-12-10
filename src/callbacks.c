@@ -1372,7 +1372,7 @@ void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer use
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 	}
 
-	ui_sidebar_show_hide();
+	sidebar_show_hide();
 }
 
 
