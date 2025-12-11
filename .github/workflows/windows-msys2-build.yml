@@ -47,7 +47,20 @@ jobs:
             unzip
             dos2unix
             mingw-w64-x86_64-nsis
+      # build the GTK bundle, but cache it for a week
+      - name: Cache timestamp for GTK-Bundle
+        id: cache_gtk_bundle_timestamp
+        # we use a Monday-based weekly cache, so it usually doesn't change
+        # right before a release, as we usually do them on Sundays.
+        run: echo "timestamp=$(date +%Y-%W)" >> $GITHUB_OUTPUT
+      - name: Cache GTK-Bundle
+        id: cache_gtk_bundle
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/geany_build/bundle/geany-gtk
+          key: ${{ runner.os }}-${{ github.job }}-bundle-geany-gtk-${{ hashFiles('scripts/gtk-bundle-from-msys2.sh') }}-${{ steps.cache_gtk_bundle_timestamp.outputs.timestamp }}
       - name: GTK-Bundle
+        if: steps.cache_gtk_bundle.outputs.cache-hit != 'true'
         run: |
           mkdir -p geany_build/bundle/geany-gtk
           cd geany_build/bundle/geany-gtk
