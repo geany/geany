@@ -15,12 +15,19 @@ on:
         required: false
         type: boolean
 
+env:
+  SCCACHE_DIR: ${{ github.workspace }}/.sccache
+  SCCACHE_CACHE_SIZE: 1G
+
 jobs:
   msys2-mingw64:
     runs-on: windows-latest
     defaults:
       run:
         shell: msys2 {0}
+    env:
+      CC: sccache gcc
+      CXX: sccache g++
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -32,6 +39,7 @@ jobs:
           install: |
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-autotools
+            mingw-w64-x86_64-sccache
             mingw-w64-x86_64-gtk3
             mingw-w64-x86_64-python-docutils
             patch
@@ -44,6 +52,14 @@ jobs:
           mkdir -p geany_build/bundle/geany-gtk
           cd geany_build/bundle/geany-gtk
           bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3
+
+      - name: Configure sccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.SCCACHE_DIR }}
+          key: ${{ runner.os }}-${{ github.job }}-sccache-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-${{ github.job }}-sccache-
+
       - name: CI-Build
         run: |
           DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build
@@ -70,6 +86,10 @@ jobs:
           retention-days: 3
           overwrite: true
           if-no-files-found: error
+
+      - name: sccache statistics
+        run: sccache --show-stats
+
       - name: SignPath Signing
         id: sign-artifact
         uses: signpath/github-action-submit-signing-request@v2.0
