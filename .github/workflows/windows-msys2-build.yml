@@ -1,6 +1,19 @@
 name: Windows/MSYS2 Build
 on:
+  push:
+    branches:
+      - master
+    tags:
+      - '[0-9]**'
+  pull_request:
+    branches:
+      - master
   workflow_dispatch:
+    inputs:
+      sign_artifacts:
+        description: 'Sign artifacts'
+        required: false
+        type: boolean
 
 jobs:
   msys2-mingw64:
@@ -44,6 +57,7 @@ jobs:
           make install
           mkdir -p ${DESTINATON}/release/geany-orig
           rsync -a --delete ${DESTINATON}/build/geany/ ${DESTINATON}/release/geany-orig
+          find "${DESTINATON}/release/geany-orig" | sort
       - name: Compile NSIS
         run: |
           VERSION=$(autom4te --no-cache --language=Autoconf-without-aclocal-m4 --trace AC_INIT:\$2 configure.ac)
@@ -58,7 +72,10 @@ jobs:
           overwrite: true
           if-no-files-found: error
       - name: SignPath Signing
+        id: sign-artifact
         uses: signpath/github-action-submit-signing-request@v2.0
+        # Only sign artifacts on tags
+        if: inputs.sign_artifacts || startsWith(github.ref, 'refs/tags/')
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
@@ -69,9 +86,124 @@ jobs:
           output-artifact-directory: geany-signed
       - name: Upload Signed Artifact
         uses: actions/upload-artifact@v5
+        if: steps.sign-artifact.outcome == 'success'
         with:
           name: geany-signed
           path: geany-signed
+          retention-days: 3
+          overwrite: true
+          if-no-files-found: error
+
+  msys2-mingw64-meson:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: |
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-meson
+            mingw-w64-x86_64-jq
+            mingw-w64-x86_64-gtk3
+            mingw-w64-x86_64-python-docutils
+            mingw-w64-x86_64-ntldd
+            patch
+            rsync
+            unzip
+            dos2unix
+            mingw-w64-x86_64-nsis
+      - name: GTK-Bundle
+        run: |
+          mkdir -p geany_build/bundle/geany-gtk
+          cd geany_build/bundle/geany-gtk
+          bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3
+      - name: CI-Build
+        run: |
+          set -x
+          DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build
+          echo "$PATH"
+          echo "$LD_LIBRARY_PATH"
+          meson setup --prefix=${DESTINATON}/build/geany _build .
+          cat _build/meson-logs/*log*
+          meson compile -C _build
+          meson install -C _build
+          mkdir -p ${DESTINATON}/release/geany-orig
+          rsync -a --delete ${DESTINATON}/build/geany/ ${DESTINATON}/release/geany-orig
+          find "${DESTINATON}/release/geany-orig" | sort
+      - name: Compile NSIS
+        run: |
+          VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)
+          python scripts/msys2-geany-release.py ${VERSION}
+      - name: Test NSIS
+        shell: cmd
+        run: |
+          ECHO ON
+          SET DESTINATION=C:\geany_install
+          RMDIR /S /Q %DESTINATION%
+          %GITHUB_WORKSPACE%\geany_build\geany-2.2.0_setup.exe /S /D=%DESTINATION%
+          IF NOT EXIST "%DESTINATION%\uninst.exe" EXIT /B 1
+          IF NOT EXIST "%DESTINATION%\bin\geany.exe" EXIT /B 1
+          IF NOT EXIST "%DESTINATION%\lib\geany\export.dll" EXIT /B 1
+          IF EXIST "%DESTINATION%\lib\geany\demoplugin.dll" EXIT /B 1
+      - name: Test installed Geany
+        run: |
+          set -x
+          DESTINATION=C:\\geany_install
+          command -v cygcheck
+          cygcheck ${DESTINATION}/bin/geany.exe || echo "ERR $?"
+          (cd ${DESTINATION}/bin/ && cygcheck ./geany.exe) || echo "ERR $?"
+          ntldd ${DESTINATION}/bin/geany.exe || echo "ERR $?"
+          (cd ${DESTINATION}/bin/ && ntldd ./geany.exe) || echo "ERR $?"
+          ldd ${DESTINATION}/bin/geany.exe || echo "ERR $?"
+          (cd ${DESTINATION}/bin/ && ldd ./geany.exe) || echo "ERR $?"
+          ${DESTINATION}/bin/geany.exe --version || echo "ERR $?"
+          (cd ${DESTINATION}/bin/ && ./geany.exe --version) || echo "ERR $?"
+          ${DESTINATION}/Geany.lnk --version || echo "ERR $?"
+          (cd ${DESTINATION}/ && ./Geany.lnk --version) || echo "ERR $?"
+      - name: Test installed Geany (2)
+        shell: cmd
+        run: |
+          ECHO ON
+          CD /D C:\geany_install\bin
+          
+          where libstdc++-6.dll
+          where libwinpthread-1.dll
+          where libgcc_s_seh-1.dll
+          where libiconv-2.dll
+          where libintl-8.dll
+          
+          ECHO %PATH%
+          set PATH=C:\geany_install\bin;%SystemRoot%\System32;%SystemRoot%
+          ECHO %PATH%
+          
+          dumpbin /imports geany.exe
+          dumpbin /exports libgeany-0.dll
+          
+          /c/mingw64/bin/cygcheck geany.exe
+          
+          geany.exe --version
+      - name: Test NSIS uninstaller
+        shell: cmd
+        run: |
+          ECHO ON
+          SET DESTINATION=C:\geany_install
+          %DESTINATION%\uninst.exe /S
+          REM it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
+          REM TIMEOUT /T 10
+          IF EXISTS "%DESTINATION%" EXIT /B 1
+      - name: Upload Unsigned Artifact
+        id: upload-unsigned-artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: geany-unsigned
+          path: geany_build/*.exe
           retention-days: 3
           overwrite: true
           if-no-files-found: error
