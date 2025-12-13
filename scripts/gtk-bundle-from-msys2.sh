@@ -6,7 +6,10 @@
 # To be run within a MSYS2 shell. The extracted files will be
 # placed into the current directory.
 
-ABI="ucrt-x86_64"  # do not change, i686 is not supported any longer
+# only x86_64, i686 is not supported any longer
+ABI_MINGW64="x86_64"
+ABI_UCRT64="ucrt-x86_64"
+ABI="$ABI_UCRT64"  # default to UCRT64
 use_cache="no"
 make_zip="no"
 gtkv="3"
@@ -16,11 +19,6 @@ cross="no"
 UNX_UTILS_URL="https://download.geany.org/contrib/UnxUpdates.zip"
 # we use the Prof-Gnome GTK theme from the Geany macOS repository
 GTK_THEME_URL="https://github.com/geany/geany-osx/archive/refs/heads/master.zip"
-
-# Wine commands for 32bit and 64bit binaries (we still need 32bit for UnxUtils sort.exe)
-# Used only when "-x" is set
-EXE_WRAPPER_32="mingw-w64-i686-wine"
-EXE_WRAPPER_64="mingw-w64-ucrt-x86_64-wine"
 
 package_urls=""
 gtk3_dependency_pkgs=""
@@ -91,8 +89,14 @@ handle_command_line_options() {
 		"-x")
 			cross="yes"
 			;;
+		"--ucrt64")
+			ABI="$ABI_UCRT64"
+			;;
+		"--mingw64")
+			ABI="$ABI_MINGW64"
+			;;
 		"-h"|"--help")
-			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-3 | -4] [CACHEDIR]"
+			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-3 | -4] [--ucrt64 | --mingw64] [CACHEDIR]"
 			echo "      -c Use pacman cache. Otherwise pacman will download"
 			echo "         archive files"
 			echo "      -h Show this help screen"
@@ -100,6 +104,8 @@ handle_command_line_options() {
 			echo "      -z Create a zip afterwards"
 			echo "      -3 Prefer gtk3"
 			echo "      -4 Prefer gtk4"
+			echo "      --ucrt64 Use ABI $ABI_UCRT64"
+			echo "      --mingw64 Use ABI $ABI_MINGW64"
 			echo "      -x Set when the script is executed in a cross-compilation context (e.g. to use wine)"
 			echo "CACHEDIR Directory where to look for cached packages (default: /var/cache/pacman/pkg)"
 			exit 1
@@ -129,6 +135,11 @@ initialize() {
 		# if running natively, we do not need wine or any other wrappers
 		EXE_WRAPPER_32=""
 		EXE_WRAPPER_64=""
+	else
+		# Wine commands for 32bit and 64bit binaries (we still need 32bit for UnxUtils sort.exe)
+		# Used only when "-x" is set
+		EXE_WRAPPER_32="mingw-w64-i686-wine"
+		EXE_WRAPPER_64="mingw-w64-${ABI}-wine"
 	fi
 
 	gtk="gtk$gtkv"
@@ -141,6 +152,16 @@ ${gtk}
 "
 }
 
+_mingw_base_dir() {
+	case "$ABI" in
+		"$ABI_MINGW64") echo mingw64;;
+		"$ABI_UCRT64") echo ucrt64;;
+		*)
+			echo "E: Unknown ABI '$ABI', falling back to '$ABI_UCRT64'" >&2
+			echo ucrt64;;
+	esac
+}
+
 _getpkg() {
 	if [ "$use_cache" = "yes" ]; then
 		package_info=$(pacman -Qi mingw-w64-$ABI-$1)
@@ -150,7 +171,7 @@ _getpkg() {
 	else
 		case "$1" in
 		# add version overrides here if needed, like
-		# PACKAGE) echo "https://mirror.msys2.org/mingw/ucrt64/mingw-w64-${ABI}-PACKAGE-VERSION.pkg.tar.zst";;
+		# PACKAGE) echo "https://mirror.msys2.org/mingw/$(_mingw_base_dir)/mingw-w64-${ABI}-PACKAGE-VERSION.pkg.tar.zst";;
 		*)
 			# -dd to ignore dependencies as we listed them already above in $packages and
 			# make pacman ignore its possibly existing cache (otherwise we would get an URL to the cache)
@@ -196,17 +217,18 @@ extract_packages() {
 }
 
 move_extracted_files() {
+	local basedir="$(_mingw_base_dir)"
 	echo "Move extracted data to destination directory"
-	if [ -d ucrt64 ]; then
+	if [ -d "$basedir" ]; then
 		for d in bin etc home include lib locale share var; do
-			if [ -d "ucrt64/$d" ]; then
-				rm -rf $d
+			if [ -d "$basedir/$d" ]; then
+				rm -rf "$d"
 				# prevent sporadic 'permission denied' errors on my system, not sure why they happen
 				sleep 0.5
-				mv ucrt64/$d .
+				mv "$basedir/$d" .
 			fi
 		done
-		rmdir ucrt64
+		rmdir "$basedir"
 	fi
 }
 
