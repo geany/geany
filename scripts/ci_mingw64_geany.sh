@@ -216,7 +216,7 @@ create_gtk_bundle() {
 	log "Creating GTK bundle"
 	mkdir ${GTK_BUNDLE_DIR}
 	cd ${GTK_BUNDLE_DIR}
-	bash ${GEANY_BUILD_DIR}/scripts/gtk-bundle-from-msys2.sh -x -3
+	bash ${GEANY_BUILD_DIR}/scripts/gtk-bundle-from-msys2.sh -x -3 --mingw64
 }
 
 
