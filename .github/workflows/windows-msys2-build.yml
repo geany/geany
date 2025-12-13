@@ -1,6 +1,23 @@
 name: Windows/MSYS2 Build
 on:
+  push:
+    branches:
+      - master
+    tags:
+      - '[0-9]**'
+  pull_request:
+    branches:
+      - master
   workflow_dispatch:
+    inputs:
+      sign_artifacts:
+        description: 'Sign artifacts'
+        required: false
+        type: boolean
+
+env:
+  SCCACHE_DIR: ${{ github.workspace }}/.sccache
+  SCCACHE_CACHE_SIZE: 1G
 
 jobs:
   msys2-mingw64:
@@ -8,6 +25,9 @@ jobs:
     defaults:
       run:
         shell: msys2 {0}
+    env:
+      CC: sccache gcc
+      CXX: sccache g++
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -19,6 +39,7 @@ jobs:
           install: |
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-autotools
+            mingw-w64-x86_64-sccache
             mingw-w64-x86_64-gtk3
             mingw-w64-x86_64-python-docutils
             patch
@@ -26,11 +47,32 @@ jobs:
             unzip
             dos2unix
             mingw-w64-x86_64-nsis
+      # build the GTK bundle, but cache it for a week
+      - name: Cache timestamp for GTK-Bundle
+        id: cache_gtk_bundle_timestamp
+        # we use a Monday-based weekly cache, so it usually doesn't change
+        # right before a release, as we usually do them on Sundays.
+        run: echo "timestamp=$(date +%Y-%W)" >> $GITHUB_OUTPUT
+      - name: Cache GTK-Bundle
+        id: cache_gtk_bundle
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/geany_build/bundle/geany-gtk
+          key: ${{ runner.os }}-${{ github.job }}-bundle-geany-gtk-${{ hashFiles('scripts/gtk-bundle-from-msys2.sh') }}-${{ steps.cache_gtk_bundle_timestamp.outputs.timestamp }}
       - name: GTK-Bundle
+        if: steps.cache_gtk_bundle.outputs.cache-hit != 'true'
         run: |
           mkdir -p geany_build/bundle/geany-gtk
           cd geany_build/bundle/geany-gtk
           bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3
+
+      - name: Configure sccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.SCCACHE_DIR }}
+          key: ${{ runner.os }}-${{ github.job }}-sccache-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-${{ github.job }}-sccache-
+
       - name: CI-Build
         run: |
           DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build
@@ -57,8 +99,15 @@ jobs:
           retention-days: 3
           overwrite: true
           if-no-files-found: error
+
+      - name: sccache statistics
+        run: sccache --show-stats
+
       - name: SignPath Signing
+        id: sign-artifact
         uses: signpath/github-action-submit-signing-request@v2.0
+        # Only sign artifacts on tags
+        if: inputs.sign_artifacts || startsWith(github.ref, 'refs/tags/')
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
@@ -69,6 +118,7 @@ jobs:
           output-artifact-directory: geany-signed
       - name: Upload Signed Artifact
         uses: actions/upload-artifact@v5
+        if: steps.sign-artifact.outcome == 'success'
         with:
           name: geany-signed
           path: geany-signed
