@@ -34,19 +34,19 @@ jobs:
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
         with:
-          msystem: MINGW64
+          msystem: UCRT64
           update: true
           install: |
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-autotools
-            mingw-w64-x86_64-sccache
-            mingw-w64-x86_64-gtk3
-            mingw-w64-x86_64-python-docutils
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-autotools
+            mingw-w64-ucrt-x86_64-sccache
+            mingw-w64-ucrt-x86_64-gtk3
+            mingw-w64-ucrt-x86_64-python-docutils
             patch
             rsync
             unzip
             dos2unix
-            mingw-w64-x86_64-nsis
+            mingw-w64-ucrt-x86_64-nsis
       # build the GTK bundle, but cache it for a week
       - name: Cache timestamp for GTK-Bundle
         id: cache_gtk_bundle_timestamp
@@ -64,7 +64,7 @@ jobs:
         run: |
           mkdir -p geany_build/bundle/geany-gtk
           cd geany_build/bundle/geany-gtk
-          bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3
+          bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3 --ucrt64
 
       - name: Configure sccache
         uses: actions/cache@v4
