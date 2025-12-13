@@ -149,17 +149,8 @@ _getpkg() {
 		ls $cachedir/mingw-w64-${ABI}-${1}-${package_version}-*.tar.@(gz|xz|zst) | sort -V | tail -n 1
 	else
 		case "$1" in
-		"cairo")
-			# stick with cairo-1.18.4-1 until lagging issue resolved
-			# https://github.com/geany/geany-plugins/issues/1466
-			# https://gitlab.freedesktop.org/cairo/cairo/-/issues/905
-			echo "https://mirror.msys2.org/mingw/mingw64/mingw-w64-${ABI}-cairo-1.18.4-1-any.pkg.tar.zst"
-			;;
-		"pango")
-			# stick with pango-1.56.3-2 until lagging issue resolved
-			# https://github.com/geany/geany/pull/4360
-			echo "https://mirror.msys2.org/mingw/mingw64/mingw-w64-${ABI}-pango-1.56.3-2-any.pkg.tar.zst"
-			;;
+		# add version overrides here if needed, like
+		# PACKAGE) echo "https://mirror.msys2.org/mingw/mingw64/mingw-w64-${ABI}-PACKAGE-VERSION.pkg.tar.zst";;
 		*)
 			# -dd to ignore dependencies as we listed them already above in $packages and
 			# make pacman ignore its possibly existing cache (otherwise we would get an URL to the cache)
