@@ -607,7 +607,9 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 				utf8_working_directory = tmp;
 			else
 			{
-				g_propagate_error(error, gerror);
+				g_set_error(error, gerror->domain, gerror->code,
+					_("Failed to convert working directory into UTF-8 encoding: %s"), gerror->message);
+				g_clear_error(&gerror);
 				success = FALSE;
 			}
 		}
@@ -619,11 +621,9 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 			w_working_directory = g_utf8_to_utf16(utf8_working_directory, -1, NULL, NULL, &gerror);
 			if (! w_working_directory)
 			{
-				/* TODO use the code below post-1.28 as it introduces a new string
 				g_set_error(error, gerror->domain, gerror->code,
 					_("Failed to convert working directory into locale encoding: %s"), gerror->message);
-				*/
-				g_propagate_error(error, gerror);
+				g_clear_error(&gerror);
 				success = FALSE;
 			}
 		}
@@ -644,7 +644,9 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 				utf8_cmd = tmp;
 			else
 			{
-				g_propagate_error(error, gerror);
+				g_set_error(error, gerror->domain, gerror->code,
+					_("Failed to convert command into UTF-8 encoding: %s"), gerror->message);
+				g_clear_error(&gerror);
 				success = FALSE;
 			}
 		}
@@ -656,11 +658,9 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 			w_command = g_utf8_to_utf16(utf8_cmd, -1, NULL, NULL, &gerror);
 			if (! w_command)
 			{
-				/* TODO use the code below post-1.28 as it introduces a new string
 				g_set_error(error, gerror->domain, gerror->code,
 					_("Failed to convert command into locale encoding: %s"), gerror->message);
-				*/
-				g_propagate_error(error, gerror);
+				g_clear_error(&gerror);
 				success = FALSE;
 			}
 		}
