@@ -82,7 +82,7 @@ jobs:
 
       - name: Prepare Build environment
         run: |
-          echo "DESTINATON=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build" >> $GITHUB_ENV
+          echo "DESTINATION=$(cygpath -u "${GITHUB_WORKSPACE}")/geany_build" >> $GITHUB_ENV
       - name: Build (Autotools)
         if: matrix.build-tool == 'autotools'
         run: |
@@ -91,20 +91,20 @@ jobs:
           export lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}
           mkdir -p _build
           cd _build
-          ../configure --prefix=${DESTINATON}/build/geany --disable-silent-rules
+          ../configure --prefix=${DESTINATION}/build/geany --disable-silent-rules
           make -j
           make install
       - name: Build (Meson)
         if: matrix.build-tool == 'meson'
         run: |
           echo "VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)" >> $GITHUB_ENV
-          meson setup --prefix=${DESTINATON}/build/geany _build .
+          meson setup --prefix=${DESTINATION}/build/geany _build .
           meson compile -C _build
           meson install -C _build
       - name: Compile NSIS
         run: |
-          mkdir -p ${DESTINATON}/release/geany-orig
-          rsync -a --delete ${DESTINATON}/build/geany/ ${DESTINATON}/release/geany-orig
+          mkdir -p ${DESTINATION}/release/geany-orig
+          rsync -a --delete ${DESTINATION}/build/geany/ ${DESTINATION}/release/geany-orig
           python scripts/msys2-geany-release.py ${VERSION}
 
       - name: Upload Unsigned Artifact
