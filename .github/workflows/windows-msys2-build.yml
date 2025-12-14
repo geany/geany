@@ -107,6 +107,32 @@ jobs:
           rsync -a --delete ${DESTINATION}/build/geany/ ${DESTINATION}/release/geany-orig
           python scripts/msys2-geany-release.py ${VERSION}
 
+      # Test the resulting installer.  We use cmd.exe as the shell because the
+      # installer doesn't seem to love MSYS2 for some reason.
+      - name: Test NSIS
+        shell: cmd
+        run: |
+          ECHO ON
+          SET DESTINATION=%GITHUB_WORKSPACE%\geany_install
+          start "geany-2.2.0_setup.exe" /wait %GITHUB_WORKSPACE%\geany_build\geany-2.2.0_setup.exe /S /D=%DESTINATION%
+          IF NOT EXIST "%DESTINATION%\uninst.exe" EXIT /B 1
+          IF NOT EXIST "%DESTINATION%\bin\geany.exe" EXIT /B 1
+          IF NOT EXIST "%DESTINATION%\lib\geany\export.dll" EXIT /B 1
+          IF EXIST "%DESTINATION%\lib\geany\demoplugin.dll" EXIT /B 1
+      - name: Test installed Geany
+        shell: cmd
+        run: |
+          %GITHUB_WORKSPACE%\geany_install\bin\geany.exe --version
+      - name: Test NSIS uninstaller
+        shell: cmd
+        run: |
+          ECHO ON
+          SET DESTINATION=%GITHUB_WORKSPACE%\geany_install
+          start "uninst" /wait %DESTINATION%\uninst.exe /S
+          REM it seems the uninstaller returns earlier than the files are actually removed, so wait a moment
+          ping -n 10 127.0.0.1 >NUL
+          IF EXIST "%DESTINATION%" EXIT /B 1
+
       - name: Upload Unsigned Artifact
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v5
