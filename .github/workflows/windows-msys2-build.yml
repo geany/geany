@@ -137,7 +137,7 @@ jobs:
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v5
         with:
-          name: geany-unsigned
+          name: geany-unsigned${{ matrix.build-tool != 'autotools' && format('-{0}', matrix.build-tool) || '' }}
           path: geany_build/*.exe
           retention-days: 3
           overwrite: true
