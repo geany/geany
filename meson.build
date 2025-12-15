@@ -132,11 +132,10 @@ cdata.set('HAVE_PLUGINS', get_option('plugins'))
 cdata.set('HAVE_SOCKET', get_option('socket'))
 if (host_machine.system() == 'windows')
 	cdata.set('GEANY_DATA_DIR', join_paths(prefix, 'data'))
-	cdata.set('GEANY_DOC_DIR', join_paths(prefix))
 else
 	cdata.set('GEANY_DATA_DIR', join_paths(prefix, get_option('datadir'), 'geany'))
-	cdata.set('GEANY_DOC_DIR', join_paths(prefix, get_option('datadir'), 'doc', 'geany'))
 endif
+cdata.set('GEANY_DOC_DIR', join_paths(prefix, get_option('datadir'), 'doc', 'geany'))
 cdata.set('top_srcdir', meson.project_source_root())
 cdata.set('top_builddir', meson.project_build_root())
 
@@ -778,6 +777,12 @@ if (host_machine.system() == 'windows')
 	foreach lib : ['ole32', 'wsock32', 'comdlg32']
 		win_deps += cc.find_library(lib)
 	endforeach
+	# install Windows run helper
+	install_data(
+		'src/geany-run-helper.bat',
+		install_mode: 'rwxr-xr-x',
+		install_dir: join_paths(get_option('libexecdir'), 'geany'),
+	)
 endif
 
 osx_src = []
@@ -960,7 +965,7 @@ subdir('icons')
 subdir('plugins')
 subdir('tests')
 
-install_data('COPYING', rename: 'GPL-2')
+install_data('COPYING', rename: 'GPL-2', install_dir: cdata.get('GEANY_DATA_DIR'))
 install_data(
 	'scintilla/License.txt',
 	'scintilla/lexilla/License.txt',
@@ -981,14 +986,10 @@ misc = [
 ]
 install_data(misc, install_dir: cdata.get('GEANY_DOC_DIR'))
 if host_machine.system() == 'windows'
-misc_rename = [
-	'Authors.txt',
-	'Changelog.txt',
-	'Copying.txt',
-	'Readme.txt',
-	'News.txt',
-	'Thanks.txt',
-	'Todo.txt'
-]
-install_data(misc, install_dir: prefix, rename: misc_rename)
+	# on Windows, install those files as "Somename.txt" in the prefix as well
+	misc_rename = []
+	foreach name: misc
+		misc_rename += name.substring(0, 1).to_upper() + name.substring(1).to_lower() + '.txt'
+	endforeach
+	install_data(misc, install_dir: prefix, rename: misc_rename)
 endif
