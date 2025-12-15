@@ -193,10 +193,11 @@ typedef enum eTagType {
 	TAG_ENUMERATOR,
 	TAG_PROGRAM,
 	TAG_PROTOTYPE,
+	TAG_PROCEDURE,
 	TAG_SUBROUTINE,
+	TAG_SUBMODULE,
 	TAG_DERIVED_TYPE,
 	TAG_VARIABLE,
-	TAG_SUBMODULE,
 	TAG_COUNT  /* must be last */
 } tagType;
 
@@ -262,10 +263,11 @@ static kindDefinition FortranKinds [] = {
 	{ true,  'N', "enumerator", "enumeration values"},
 	{ true,  'p', "program",    "programs"},
 	{ false, 'P', "prototype",  "subprogram prototypes"},
+	{ true,  'r', "procedure",  "module procedures"},
 	{ true,  's', "subroutine", "subroutines"},
+	{ true,  'S', "submodule",  "submodules"},
 	{ true,  't', "type",       "derived types and structures"},
 	{ true,  'v', "variable",   "program (global) and module variables"},
-	{ true,  'S', "submodule",  "submodules"},
 };
 
 /* For definitions of Fortran 77 with extensions:
@@ -1600,6 +1602,7 @@ static tagType variableTagType (tokenInfo *const st)
 				break;
 			case TAG_FUNCTION:     result = TAG_LOCAL;     break;
 			case TAG_SUBROUTINE:   result = TAG_LOCAL;     break;
+			case TAG_PROCEDURE:    result = TAG_LOCAL;     break;
 			case TAG_PROTOTYPE:    result = TAG_LOCAL;     break;
 			case TAG_ENUM:         result = TAG_ENUMERATOR; break;
 			default:               result = TAG_VARIABLE;  break;
@@ -2107,6 +2110,7 @@ static void parseInterfaceBlock (tokenInfo *const token)
 	{
 		switch (token->keyword)
 		{
+			case KEYWORD_module:     readToken (token);       break;    /* module procedure declaration in interface */
 			case KEYWORD_function:
 			case KEYWORD_subroutine: parseSubprogram (token); break;
 
@@ -2377,6 +2381,7 @@ static void parseBlockData (tokenInfo *const token)
  *  internal-subprogram
  *      is function-subprogram
  *      or subroutine-subprogram
+ *      or module-procedure-subprogram
  */
 static void parseInternalSubprogramPart (tokenInfo *const token)
 {
@@ -2387,6 +2392,8 @@ static void parseInternalSubprogramPart (tokenInfo *const token)
 	{
 		switch (token->keyword)
 		{
+			case KEYWORD_module:     readToken (token);       break;    /* module procedures in submodules */
+			case KEYWORD_procedure:
 			case KEYWORD_function:
 			case KEYWORD_subroutine: parseSubprogram (token); break;
 			case KEYWORD_end:        done = true;             break;
@@ -2603,13 +2610,15 @@ static void parseSubprogramFull (tokenInfo *const token, const tagType tag)
 {
 	Assert (isKeyword (token, KEYWORD_program) ||
 			isKeyword (token, KEYWORD_function) ||
-			isKeyword (token, KEYWORD_subroutine));
+			isKeyword (token, KEYWORD_subroutine) ||
+			isKeyword (token, KEYWORD_procedure));
 	readToken (token);
 	if (isType (token, TOKEN_IDENTIFIER) || isType (token, TOKEN_KEYWORD))
 	{
 		tokenInfo* name = newTokenFrom (token);
 		token->type = TOKEN_IDENTIFIER;
 		if (tag == TAG_SUBROUTINE ||
+			tag == TAG_FUNCTION ||
 			tag == TAG_PROTOTYPE)
 			name->signature = parseSignature (token);
 		makeFortranTag (name, tag);
@@ -2642,6 +2651,8 @@ static tagType subprogramTagType (tokenInfo *const token)
 		result = TAG_SUBROUTINE;
 	else if (isKeyword (token, KEYWORD_function))
 		result = TAG_FUNCTION;
+	else if (isKeyword (token, KEYWORD_procedure))
+		result = TAG_PROCEDURE;
 
 	Assert (result != TAG_UNDEFINED);
 
@@ -2664,7 +2675,14 @@ static tagType subprogramTagType (tokenInfo *const token)
  *          [specification-part]
  *          [execution-part]
  *          [internal-subprogram-part]
- *          end-subroutine-stmt (is END [SUBROUTINE [function-name]])
+ *          end-subroutine-stmt (is END [SUBROUTINE [subroutine-name]])
+ */
+/*  module-procedure-subprogram is
+ *      module-procedure-stmt (is MODULE PROCEDURE procedure-name)
+ *          [specification-part]
+ *          [execution-part]
+ *          [internal-subprogram-part]
+ *          end-module-procedure-stmt (is END [PROCEDURE [procedure-name]])
  */
 static void parseSubprogram (tokenInfo *const token)
 {
