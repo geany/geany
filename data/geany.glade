@@ -4051,6 +4051,22 @@
                                   </packing>
                                 </child>
                                 <child>
+                                  <object class="GtkCheckButton" id="check_fold_margin">
+                                    <property name="label" translatable="yes">Show fold margin</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="tooltip-text" translatable="yes">Shows or hides the fold margin right of the line numbers, which is used to fold code</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="draw-indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">7</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <object class="GtkCheckButton" id="check_scroll_stop_at_last_line">
                                     <property name="label" translatable="yes">Stop scrolling at last line</property>
                                     <property name="visible">True</property>
@@ -4063,7 +4079,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                    <property name="position">7</property>
+                                    <property name="position">8</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4104,7 +4120,7 @@
                                   <packing>
                                     <property name="expand">True</property>
                                     <property name="fill">True</property>
-                                    <property name="position">8</property>
+                                    <property name="position">9</property>
                                   </packing>
                                 </child>
                               </object>
@@ -7534,6 +7550,16 @@ Supported placeholders are:
                             <property name="use-underline">True</property>
                             <property name="active">True</property>
                             <signal name="toggled" handler="on_show_line_numbers1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckMenuItem" id="menu_fold_margin1">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">Show _Fold Margin</property>
+                            <property name="use-underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_fold_margin1_toggled" swapped="no"/>
                           </object>
                         </child>
                         <child>
