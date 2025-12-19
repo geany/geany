@@ -3774,6 +3774,13 @@ Next message                                              Jumps to the line with
 Previous message                                          Jumps to the line with the previous message
                                                           in the Messages window.
 
+Next error indicator                                      Jumps to the next error indicator.
+                                                          Indicators are usually used to
+                                                          show compile errors or warnings, misspelled
+                                                          words or other hints.
+
+Previous error indicator                                  Jumps to the the previous error indicator.
+
 Find Usage                      Ctrl-Shift-E              Finds all occurrences of the current word
                                                           or selection (see note below) in all open
                                                           documents and displays them in the messages
