@@ -62,7 +62,7 @@ jobs:
         run: echo "timestamp=$(date +%Y-%W)" >> $GITHUB_OUTPUT
       - name: Cache GTK-Bundle
         id: cache_gtk_bundle
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ github.workspace }}/geany_build/bundle/geany-gtk
           key: ${{ runner.os }}-${{ github.job }}-bundle-geany-gtk-${{ hashFiles('scripts/gtk-bundle-from-msys2.sh') }}-${{ steps.cache_gtk_bundle_timestamp.outputs.timestamp }}
@@ -74,7 +74,7 @@ jobs:
           bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3 --ucrt64
 
       - name: Configure sccache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.SCCACHE_DIR }}
           key: ${{ runner.os }}-${{ github.job }}-${{ matrix.build-tool }}-sccache-${{ github.run_id }}
