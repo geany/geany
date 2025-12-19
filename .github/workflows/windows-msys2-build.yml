@@ -148,7 +148,7 @@ jobs:
 
       - name: SignPath Signing
         id: sign-artifact
-        uses: signpath/github-action-submit-signing-request@v2.0
+        uses: signpath/github-action-submit-signing-request@v2
         # Only sign artifacts on tags
         if: matrix.build-tool == 'autotools' && (inputs.sign_artifacts || startsWith(github.ref, 'refs/tags/'))
         with:
