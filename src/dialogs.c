@@ -85,7 +85,24 @@ filesel_state = {
 };
 
 
+static gchar *default_save_dir;
+
+
 static gint filetype_combo_box_get_active_filetype(GtkComboBox *combo);
+
+
+/* sets the default directory for saving new files - no effect if NULL */
+void dialogs_set_default_dir(const gchar *filename) {
+	if (filename) {
+		if (default_save_dir)
+			g_free(default_save_dir);
+
+		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+			default_save_dir = g_strdup(filename);
+		else
+			default_save_dir = g_path_get_dirname(filename);
+	}
+}
 
 
 /* gets the ID of the current file filter */
@@ -698,6 +715,9 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 								doc->file_type->extension, NULL);
 		else
 			fname = g_strdup(GEANY_STRING_UNTITLED);
+
+		if (default_save_dir)
+			gtk_file_chooser_set_current_folder(dialog, default_save_dir);
 
 		gtk_file_chooser_set_current_name(dialog, fname);
 
