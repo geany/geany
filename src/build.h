@@ -134,6 +134,11 @@ typedef struct BuildDestination
 typedef struct BuildTableFields *BuildTableData;
 
 
+#ifdef GEANY_PRIVATE
+extern gboolean build_execute_autoclose;
+#endif
+
+
 void build_init(void);
 
 void build_finalize(void);
