@@ -102,6 +102,8 @@ static void close_block(GeanyEditor *editor, gint pos);
 static void editor_highlight_braces(GeanyEditor *editor, gint cur_pos);
 static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen,
 		const gchar *wc, gboolean stem);
+static void read_scope_prefix(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen,
+		const gchar *wc);
 static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent);
 static const gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name);
 static void snippets_make_replacements(GeanyEditor *editor, GString *pattern);
@@ -1698,6 +1700,65 @@ static void close_block(GeanyEditor *editor, gint pos)
 /* checks whether @p c is an ASCII character (e.g. < 0x80) */
 #define IS_ASCII(c) (((unsigned char)(c)) < 0x80)
 
+/* Similar to read_current_word. it will read the scope prefixing the current word
+ * and write it into the given buffer. The buffer will be NULL terminated in any case,
+ * even when the word is truncated because worlden is too small. position can be -1, then
+ * the current position is used.
+ * wc are the wordchars to use, if NULL, GEANY_WORDCHARS will be used */
+static void read_scope_prefix(GeanyEditor *editor, gint pos, gchar *word, gsize wordlen,
+		const gchar *wc)
+{
+	gint line, line_start, startword, endword;
+	gchar *chunk;
+	ScintillaObject *sci;
+
+	g_return_if_fail(editor != NULL);
+	sci = editor->sci;
+
+	if (pos == -1)
+		pos = sci_get_current_position(sci);
+
+	line = sci_get_line_from_position(sci, pos);
+	line_start = sci_get_position_from_line(sci, line);
+	startword = pos - line_start;
+	endword = pos - line_start;
+
+	word[0] = '\0';
+	chunk = sci_get_line(sci, line);
+
+	const char *punctuation = ":.";
+	const char *whitespace = " \t\n";
+	if (wc == NULL)
+		wc = GEANY_WORDCHARS;
+		
+	// first, loop backwards until punctuation ScopeA::ScopeB::Function
+	//                                                         ^
+	while (endword > 0 && (strchr(wc, chunk[endword - 1]) || ! IS_ASCII(chunk[endword - 1])))
+		endword--;
+	// then loop past the first punctuation ScopeA::ScopeB::Function
+	//                                                   ^
+	while (endword > 0 && strchr(punctuation, chunk[endword - 1]))
+		endword--;
+	// then move startword to the start of all scopes  ScopeA::ScopeB::Function
+	//                                                 ^-------------
+	startword = endword;
+	while (startword > 0
+	       &&(strchr(wc, chunk[startword - 1])
+	       || strchr(punctuation, chunk[startword - 1] 
+	       || ! IS_ASCII(chunk[startword - 1]))))
+		startword--;
+
+	if (startword != endword)
+	{
+		chunk[endword] = '\0';
+
+		g_strlcpy(word, chunk + startword, wordlen); /* ensure null terminated */
+	}
+	else
+		g_strlcpy(word, "", wordlen);
+
+	g_free(chunk);
+}
 
 /* Reads the word at given cursor position and writes it into the given buffer. The buffer will be
  * NULL terminated in any case, even when the word is truncated because wordlen is too small.
@@ -1910,7 +1971,7 @@ static void update_tag_name_and_scope_for_calltip(const gchar *word, TMTag *tag,
 }
 
 
-static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
+static gchar *find_calltip(const gchar *word, const gchar *scope, GeanyFiletype *ft)
 {
 	const gchar *constructor_method;
 	GPtrArray *tags;
@@ -1921,11 +1982,18 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	g_return_val_if_fail(ft && word && *word, NULL);
 
 	/* use all types in case language uses wrong tag type e.g. python "members" instead of "methods" */
-	tags = tm_workspace_find(word, NULL, tm_tag_max_t, NULL, ft->lang);
+	// first, try to generate a tag list within the given scope
+	tags = tm_workspace_find(word, scope, tm_tag_max_t, NULL, ft->lang);
 	if (tags->len == 0)
 	{
-		g_ptr_array_free(tags, TRUE);
-		return NULL;
+		//didn't find any tags inside scope, fall back, ignore scope and display whatever tags we can
+		g_ptr_array_free(tags, FALSE);
+		tags = tm_workspace_find(word, NULL, tm_tag_max_t, NULL, ft->lang);
+		if (tags->len == 0)
+		{
+			g_ptr_array_free(tags, TRUE);
+			return NULL;
+		}
 	}
 
 	tag = TM_TAG(tags->pdata[0]);
@@ -2020,6 +2088,7 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	gint lexer;
 	gint style;
 	gchar word[GEANY_MAX_WORD_LENGTH];
+	gchar scope[GEANY_MAX_WORD_LENGTH];
 	gchar *str;
 	ScintillaObject *sci;
 
@@ -2065,8 +2134,10 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	editor_find_current_word(editor, pos - 1, word, sizeof word, NULL);
 	if (word[0] == '\0')
 		return FALSE;
-
-	str = find_calltip(word, editor->document->file_type);
+	
+	scope[0] = '\0';
+	read_scope_prefix(editor, pos - 1, scope, sizeof scope, NULL);
+	str = find_calltip(word, scope, editor->document->file_type);
 	if (str)
 	{
 		g_free(calltip.text);	/* free the old calltip */
