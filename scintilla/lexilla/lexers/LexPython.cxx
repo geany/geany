@@ -54,6 +54,9 @@ namespace {
 
    The PEP for f-strings is at https://www.python.org/dev/peps/pep-0498/
 */
+/* t-string are lexed identically to f-strings and use the stack of state values
+   and the lexer states for f-strings
+*/
 struct SingleFStringExpState {
 	int state;
 	int nestingCount;
@@ -62,7 +65,7 @@ struct SingleFStringExpState {
 /* kwCDef, kwCTypeName only used for Cython */
 enum kwType { kwOther, kwClass, kwDef, kwImport, kwCDef, kwCTypeName, kwCPDef };
 
-enum literalsAllowed { litNone = 0, litU = 1, litB = 2, litF = 4 };
+enum literalsAllowed { litNone = 0, litU = 1, litB = 2, litF = 4, litT = 8 };
 
 constexpr int indicatorWhitespace = 1;
 
@@ -74,7 +77,8 @@ constexpr bool IsPyStringTypeChar(int ch, literalsAllowed allowed) noexcept {
 	return
 		((allowed & litB) && (ch == 'b' || ch == 'B')) ||
 		((allowed & litU) && (ch == 'u' || ch == 'U')) ||
-		((allowed & litF) && (ch == 'f' || ch == 'F'));
+		((allowed & litF) && (ch == 'f' || ch == 'F')) ||
+		((allowed & litT) && (ch == 't' || ch == 'T'));
 }
 
 constexpr bool IsQuote(int ch) {
@@ -88,7 +92,7 @@ constexpr bool IsRawPrefix(int ch) {
 bool IsPyStringStart(int ch, int chNext, int chNext2, literalsAllowed allowed) noexcept {
 	// To cover both python2 and python3 lex character prefixes as --
 	// ur'' is a string, but ru'' is not
-	// fr'', rf'', br'', rb'' are all strings
+	// fr'', rf'', br'', rb'', tr'', rt'' are all strings
 	if (IsQuote(ch))
 		return true;
 	if (IsPyStringTypeChar(ch, allowed)) {
@@ -163,14 +167,14 @@ int GetPyStringState(Accessor &styler, Sci_Position i, Sci_PositionU *nextIndex,
 	if (IsRawPrefix(ch)) {
 		i++;
 		if (IsPyStringTypeChar(chNext, allowed)) {
-			if (AnyOf(chNext, 'f', 'F'))
+			if (AnyOf(chNext, 'f', 'F', 't', 'T'))
 				isFString = true;
 			i++;
 		}
 		ch = styler.SafeGetCharAt(i);
 		chNext = styler.SafeGetCharAt(i + 1);
 	} else if (IsPyStringTypeChar(ch, allowed)) {
-		if (AnyOf(ch, 'f', 'F'))
+		if (AnyOf(ch, 'f', 'F', 't', 'T'))
 			isFString = true;
 		if (IsRawPrefix(chNext))
 			i += 2;
@@ -291,6 +295,7 @@ struct OptionsPython {
 	bool stringsU = true;
 	bool stringsB = true;
 	bool stringsF = true;
+	bool stringsT = true;
 	bool stringsOverNewline = false;
 	bool keywords2NoSubIdentifiers = false;
 	bool fold = false;
@@ -307,6 +312,8 @@ struct OptionsPython {
 			allowedLiterals = static_cast<literalsAllowed>(allowedLiterals | litB);
 		if (stringsF)
 			allowedLiterals = static_cast<literalsAllowed>(allowedLiterals | litF);
+		if (stringsT)
+			allowedLiterals = static_cast<literalsAllowed>(allowedLiterals | litT);
 		return allowedLiterals;
 	}
 };
@@ -342,6 +349,9 @@ struct OptionSetPython : public OptionSet<OptionsPython> {
 
 		DefineProperty("lexer.python.strings.f.pep.701", &OptionsPython::pep701StringsF,
 			       "Set to 0 to use pre-PEP 701 / Python 3.12 f-string lexing.");
+
+		DefineProperty("lexer.python.strings.t", &OptionsPython::stringsT,
+			       "Set to 0 to not recognise Python 3.14 t-string literals t\"var={var}\".");
 
 		DefineProperty("lexer.python.strings.over.newline", &OptionsPython::stringsOverNewline,
 			       "Set to 1 to allow strings to span newline characters.");
@@ -409,7 +419,6 @@ public:
 	explicit LexerPython() :
 		DefaultLexer("python", SCLEX_PYTHON, lexicalClasses, std::size(lexicalClasses)) {
 	}
-	~LexerPython() override = default;
 	void SCI_METHOD Release() override {
 		delete this;
 	}
@@ -534,11 +543,7 @@ void LexerPython::ProcessLineEnd(StyleContext &sc, std::vector<SingleFStringExpS
 	}
 
 	if (!fstringStateStack.empty()) {
-		std::pair<Sci_Position, std::vector<SingleFStringExpState> > val;
-		val.first = sc.currentLine;
-		val.second = fstringStateStack;
-
-		ftripleStateAtEol.insert(val);
+		ftripleStateAtEol.insert({sc.currentLine, fstringStateStack});
 	}
 
 	if ((sc.state == SCE_P_DEFAULT)
@@ -714,9 +719,9 @@ void SCI_METHOD LexerPython::Lex(Sci_PositionU startPos, Sci_Position length, in
 							pos--;
 							ch = styler.SafeGetCharAt(pos, '\0');
 						}
-						if (pos < 0 || ch == '.') {
+						if (ch == '.') {
 							// Is this an attribute we could style? if it is, do as asked
-							bool isComment = false;
+							bool isComment = AnyOf(styler.BufferStyleAt(pos), SCE_P_COMMENTLINE, SCE_P_COMMENTBLOCK);
 							bool isDecoratorAttribute = false;
 							const Sci_Position attrLine = styler.GetLine(pos);
 							for (Sci_Position i = styler.LineStart(attrLine); i < pos; i++) {
@@ -726,7 +731,7 @@ void SCI_METHOD LexerPython::Lex(Sci_PositionU startPos, Sci_Position length, in
 								if (attrCh == '#')
 									isComment = true;
 								// Detect if this attribute belongs to a decorator
-								if (!IsASpaceOrTab(ch))
+								if (!IsASpaceOrTab(attrCh))
 									break;
 							}
 							if (((isDecoratorAttribute) && (!isComment)) && (((options.decoratorAttributes == 1)  && (style == SCE_P_IDENTIFIER)) || (options.decoratorAttributes == 2))) {

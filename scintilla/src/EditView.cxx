@@ -277,7 +277,7 @@ void EditView::DropGraphics() noexcept {
 }
 
 void EditView::RefreshPixMaps(Surface *surfaceWindow, const ViewStyle &vsDraw) {
-	if (!pixmapIndentGuide) {
+	if (!(pixmapIndentGuide && pixmapIndentGuideHighlight)) {
 		// 1 extra pixel in height so can handle odd/even positions and so produce a continuous line
 		pixmapIndentGuide = surfaceWindow->AllocatePixMap(1, vsDraw.lineHeight + 1);
 		pixmapIndentGuideHighlight = surfaceWindow->AllocatePixMap(1, vsDraw.lineHeight + 1);
@@ -602,7 +602,7 @@ void EditView::LayoutLine(const EditModel &model, Surface *surface, const ViewSt
 // Fill the LineLayout bidirectional data fields according to each char style
 
 void EditView::UpdateBidiData(const EditModel &model, const ViewStyle &vstyle, LineLayout *ll) {
-	if (model.BidirectionalEnabled()) {
+	if (model.BidirectionalEnabled() && (ll->numCharsInLine >= 0)) {
 		ll->EnsureBidiData();
 		for (int stylesInLine = 0; stylesInLine < ll->numCharsInLine; stylesInLine++) {
 			ll->bidiData->stylesFonts[stylesInLine] = vstyle.styles[ll->styles[stylesInLine]].font;
@@ -670,8 +670,8 @@ Point EditView::LocationFromPosition(Surface *surface, const EditModel &model, S
 				pt.y = static_cast<XYPOSITION>(subLine*vs.lineHeight);
 			}
 		}
-		pt.y += (lineVisible - topLine) * vs.lineHeight;
-		pt.x += pos.VirtualSpace() * vs.styles[ll->EndLineStyle()].spaceWidth;
+		pt.y += static_cast<XYPOSITION>((lineVisible - topLine) * vs.lineHeight);
+		pt.x += pos.VirtualSpaceWidth(vs.styles[ll->EndLineStyle()].spaceWidth);
 	}
 	return pt;
 }
@@ -958,7 +958,7 @@ void EditView::DrawEOL(Surface *surface, const EditModel &model, const ViewStyle
 	XYPOSITION virtualSpace = 0;
 	if (lastSubLine) {
 		const XYPOSITION spaceWidth = vsDraw.styles[ll->EndLineStyle()].spaceWidth;
-		virtualSpace = model.sel.VirtualSpaceFor(model.pdoc->LineEnd(line)) * spaceWidth;
+		virtualSpace = static_cast<XYPOSITION>(model.sel.VirtualSpaceFor(model.pdoc->LineEnd(line))) * spaceWidth;
 	}
 	const XYPOSITION xEol = ll->positions[lineEnd] - subLineStart;
 
@@ -977,9 +977,9 @@ void EditView::DrawEOL(Surface *surface, const EditModel &model, const ViewStyle
 				if (!portion.Empty()) {
 					const XYPOSITION spaceWidth = vsDraw.styles[ll->EndLineStyle()].spaceWidth;
 					rcSegment.left = xStart + ll->positions[portion.start.Position() - posLineStart] -
-						subLineStart+portion.start.VirtualSpace() * spaceWidth;
+						subLineStart + portion.start.VirtualSpaceWidth(spaceWidth);
 					rcSegment.right = xStart + ll->positions[portion.end.Position() - posLineStart] -
-						subLineStart+portion.end.VirtualSpace() * spaceWidth;
+						subLineStart + portion.end.VirtualSpaceWidth(spaceWidth);
 					rcSegment.left = (rcSegment.left > rcLine.left) ? rcSegment.left : rcLine.left;
 					rcSegment.right = (rcSegment.right < rcLine.right) ? rcSegment.right : rcLine.right;
 					surface->FillRectangleAligned(rcSegment, Fill(
@@ -1149,8 +1149,8 @@ void EditView::DrawFoldDisplayText(Surface *surface, const EditModel &model, con
 	}
 
 	const XYPOSITION spaceWidth = vsDraw.styles[ll->EndLineStyle()].spaceWidth;
-	const XYPOSITION virtualSpace = model.sel.VirtualSpaceFor(
-		model.pdoc->LineEnd(line)) * spaceWidth;
+	const XYPOSITION virtualSpace = static_cast<XYPOSITION>(model.sel.VirtualSpaceFor(
+		model.pdoc->LineEnd(line))) * spaceWidth;
 	rcSegment.left = xStart + ll->positions[ll->numCharsInLine] - subLineStart + virtualSpace + vsDraw.aveCharWidth;
 	rcSegment.right = rcSegment.left + static_cast<XYPOSITION>(widthFoldDisplayText);
 
@@ -1267,8 +1267,8 @@ void EditView::DrawEOLAnnotationText(Surface *surface, const EditModel &model, c
 		leftBoxSpace + rightBoxSpace);
 
 	const XYPOSITION spaceWidth = vsDraw.styles[ll->EndLineStyle()].spaceWidth;
-	const XYPOSITION virtualSpace = model.sel.VirtualSpaceFor(
-		model.pdoc->LineEnd(line)) * spaceWidth;
+	const XYPOSITION virtualSpace = static_cast<XYPOSITION>(model.sel.VirtualSpaceFor(
+		model.pdoc->LineEnd(line))) * spaceWidth;
 	rcSegment.left = xStart +
 		ll->positions[ll->numCharsInLine] - subLineStart
 		+ virtualSpace + vsDraw.aveCharWidth;
@@ -1518,7 +1518,7 @@ void EditView::DrawCarets(Surface *surface, const EditModel &model, const ViewSt
 		}
 		const int offset = static_cast<int>(posCaret.Position() - posLineStart);
 		const XYPOSITION spaceWidth = vsDraw.styles[ll->EndLineStyle()].spaceWidth;
-		const XYPOSITION virtualOffset = posCaret.VirtualSpace() * spaceWidth;
+		const XYPOSITION virtualOffset = posCaret.VirtualSpaceWidth(spaceWidth);
 		if (ll->InLine(offset, subLine) && offset <= ll->numCharsBeforeEOL) {
 			XYPOSITION xposCaret = ll->positions[offset] + virtualOffset - ll->positions[ll->LineStart(subLine)];
 			if (model.BidirectionalEnabled() && (posCaret.VirtualSpace() == 0)) {
@@ -1785,7 +1785,9 @@ void DrawTranslucentSelection(Surface *surface, const EditModel &model, const Vi
 				const ColourRGBA selectionBack = SelectionBackground(
 					model, vsDraw, model.sel.RangeType(r));
 				const XYPOSITION spaceWidth = vsDraw.styles[ll->EndLineStyle()].spaceWidth;
-				const Interval intervalVirtual{ portion.start.VirtualSpace() * spaceWidth, portion.end.VirtualSpace() * spaceWidth };
+				const Interval intervalVirtual{
+					portion.start.VirtualSpaceWidth(spaceWidth),
+					portion.end.VirtualSpaceWidth(spaceWidth) };
 				if (model.BidirectionalEnabled()) {
 					const SelectionSegment portionInSubLine = portionInLine.Subtract(lineRange.start);
 
@@ -2530,19 +2532,13 @@ void EditView::PaintText(Surface *surfaceWindow, const EditModel &model, const V
 
 		Sci::Line lineDocPrevious = -1;	// Used to avoid laying out one document line multiple times
 		std::shared_ptr<LineLayout> ll;
-		std::vector<DrawPhase> phases;
+		DrawPhase phase = DrawPhase::all;
 		if ((phasesDraw == PhasesDraw::Multiple) && !bufferedDraw) {
-			for (DrawPhase phase = DrawPhase::back; phase <= DrawPhase::carets; phase = static_cast<DrawPhase>(static_cast<int>(phase) * 2)) {
-				phases.push_back(phase);
-			}
-		} else {
-			phases.push_back(DrawPhase::all);
+			phase = DrawPhase::back;
 		}
-		for (const DrawPhase &phase : phases) {
-			int ypos = 0;
-			if (!bufferedDraw)
-				ypos += screenLinePaintFirst * vsDraw.lineHeight;
+		for (;;) {
 			int yposScreen = screenLinePaintFirst * vsDraw.lineHeight;
+			int ypos = bufferedDraw ? 0 : yposScreen;
 			Sci::Line visibleLine = model.TopLineOfMain() + screenLinePaintFirst;
 			while (visibleLine < model.pcs->LinesDisplayed() && yposScreen < rcArea.bottom) {
 
@@ -2561,6 +2557,10 @@ void EditView::PaintText(Surface *surfaceWindow, const EditModel &model, const V
 					ll = RetrieveLineLayout(lineDoc, model);
 					LayoutLine(model, surface, vsDraw, ll.get(), model.wrapWidth);
 					lineDocPrevious = lineDoc;
+					if (ll && model.BidirectionalEnabled()) {
+						// Fill the line bidi data
+						UpdateBidiData(model, vsDraw, ll.get());
+					}
 				}
 #if defined(TIME_PAINTING)
 				durLayout += ep.Duration(true);
@@ -2586,11 +2586,6 @@ void EditView::PaintText(Surface *surfaceWindow, const EditModel &model, const V
 						rcSpacer.right = rcSpacer.left;
 						rcSpacer.left -= 1;
 						surface->FillRectangleAligned(rcSpacer, Fill(vsDraw.styles[StyleDefault].back));
-					}
-
-					if (model.BidirectionalEnabled()) {
-						// Fill the line bidi data
-						UpdateBidiData(model, vsDraw, ll.get());
 					}
 
 					DrawLine(surface, model, vsDraw, ll.get(), lineDoc, visibleLine, xStart, rcLine, subLine, phase);
@@ -2631,6 +2626,11 @@ void EditView::PaintText(Surface *surfaceWindow, const EditModel &model, const V
 				yposScreen += vsDraw.lineHeight;
 				visibleLine++;
 			}
+
+			if (phase >= DrawPhase::carets) {
+				break;
+			}
+			phase = static_cast<DrawPhase>(static_cast<int>(phase) * 2);
 		}
 		ll.reset();
 #if defined(TIME_PAINTING)

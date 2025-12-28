@@ -249,6 +249,7 @@ install_headers(
 	'scintilla/include/Scintilla.iface',
 	'scintilla/include/ScintillaWidget.h',
 	'scintilla/include/Sci_Position.h',
+	'scintilla/lexilla/include/LexicalStyles.iface',
 	'scintilla/lexilla/include/SciLexer.h',
 	subdir: 'geany/scintilla'
 )

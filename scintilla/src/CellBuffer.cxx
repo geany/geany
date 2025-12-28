@@ -21,6 +21,7 @@
 #include <optional>
 #include <algorithm>
 #include <memory>
+#include <type_traits>
 
 #include "ScintillaTypes.h"
 
@@ -215,7 +216,7 @@ public:
 	}
 	void InsertLines(Sci::Line line, const Sci::Position *positions, size_t lines, bool lineStart) override {
 		const POS lineAsPos = pos_cast(line);
-		if constexpr (sizeof(Sci::Position) == sizeof(POS)) {
+		if constexpr (std::is_convertible_v<Sci::Position *, POS *>) {
 			starts.InsertPartitions(lineAsPos, positions, lines);
 		} else {
 			starts.InsertPartitionsWithCast(lineAsPos, positions, lines);
@@ -1073,6 +1074,10 @@ void CellBuffer::EndUndoAction() noexcept {
 
 int CellBuffer::UndoSequenceDepth() const noexcept {
 	return uh->UndoSequenceDepth();
+}
+
+bool CellBuffer::AfterUndoSequenceStart() const noexcept {
+	return uh->AfterUndoSequenceStart();
 }
 
 void CellBuffer::AddUndoAction(Sci::Position token, bool mayCoalesce) {
