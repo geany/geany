@@ -553,6 +553,10 @@ static void init_default_kb(void)
 		0, 0, "menu_nextmessage", _("Next Message"), "next_message1");
 	add_kb(group, GEANY_KEYS_SEARCH_PREVIOUSMESSAGE, NULL,
 		0, 0, "menu_previousmessage", _("Previous Message"), "previous_message1");
+	add_kb(group, GEANY_KEYS_SEARCH_NEXTERRORINDICATOR, NULL,
+		0, 0, "menu_nexterrorindicator", _("Next Error Indicator"), NULL);
+	add_kb(group, GEANY_KEYS_SEARCH_PREVIOUSERRORINDICATOR, NULL,
+		0, 0, "menu_previouserrorindicator", _("Previous Error Indicator"), NULL);
 	add_kb(group, GEANY_KEYS_SEARCH_FINDUSAGE, NULL,
 		GDK_KEY_e, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "popup_findusage",
 		_("Find Usage"), "find_usage1");
@@ -1565,7 +1569,7 @@ static void cb_func_menu_help(G_GNUC_UNUSED guint key_id)
 
 static gboolean cb_func_search_action(guint key_id)
 {
-	GeanyDocument *doc = document_get_current();
+	GeanyDocument *doc;
 	ScintillaObject *sci;
 
 	/* these work without docs */
@@ -1578,6 +1582,7 @@ static gboolean cb_func_search_action(guint key_id)
 		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
 			on_previous_message1_activate(NULL, NULL); return TRUE;
 	}
+	doc = document_get_current();
 	if (!doc)
 		return TRUE;
 	sci = doc->editor->sci;
@@ -1600,6 +1605,10 @@ static gboolean cb_func_search_action(guint key_id)
 			on_find_usage1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE:
 			on_find_document_usage1_activate(NULL, NULL); break;
+		case GEANY_KEYS_SEARCH_NEXTERRORINDICATOR:
+			search_find_next_error_indicator(sci); break;
+		case GEANY_KEYS_SEARCH_PREVIOUSERRORINDICATOR:
+			search_find_previous_error_indicator(sci); break;
 		case GEANY_KEYS_SEARCH_MARKALL:
 		{
 			gchar *text = NULL;

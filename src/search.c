@@ -2170,6 +2170,68 @@ gint search_find_next(ScintillaObject *sci, const gchar *str, GeanyFindFlags fla
 }
 
 
+static void go_to_next_indicator(ScintillaObject *sci, gboolean search_backwards, GeanyIndicator indicator)
+{
+	gint current_pos;
+	gint current_pos_has_indicator;
+	gint last_pos;
+	gint next_indicator_pos;
+	gint sci_indicator_search_command;
+
+	g_return_if_fail(sci != NULL);
+
+	current_pos = sci_get_current_position(sci);
+	current_pos_has_indicator = SSM(sci, SCI_INDICATORVALUEAT, indicator, current_pos);
+	last_pos = sci_get_length(sci);
+
+	if (search_backwards)
+		sci_indicator_search_command = SCI_INDICATORSTART;
+	else
+		sci_indicator_search_command = SCI_INDICATOREND;
+
+	/* if the cursor is within an indicator, first go to the end or start */
+	if (current_pos_has_indicator)
+	{
+		gint indicator_end_pos = SSM(sci, sci_indicator_search_command, indicator, current_pos);
+		current_pos = (search_backwards) ? indicator_end_pos - 1 : indicator_end_pos;
+	}
+
+	/* search next(or previous) indicator */
+	next_indicator_pos = SSM(sci, sci_indicator_search_command, indicator, current_pos);
+	if (search_backwards)
+	{	/* search again to get the start of the indicator */
+		next_indicator_pos = SSM(sci, SCI_INDICATORSTART, indicator, next_indicator_pos - 1);
+	}
+
+	/* end of document, wrap around and search from the start */
+	if (! search_backwards && next_indicator_pos >= last_pos)
+	{
+		next_indicator_pos = SSM(sci, sci_indicator_search_command, indicator, 0);
+	}
+	if (search_backwards && next_indicator_pos <= 0)
+	{
+		next_indicator_pos = SSM(sci, sci_indicator_search_command, indicator, last_pos);
+		/* search again to get the start of the indicator */
+		next_indicator_pos = SSM(sci, SCI_INDICATORSTART, indicator, next_indicator_pos - 1);
+	}
+
+	/* go to the next indicator */
+	scintilla_send_message(sci, SCI_GOTOPOS, next_indicator_pos, 0);
+}
+
+
+void search_find_previous_error_indicator(ScintillaObject *sci)
+{
+	go_to_next_indicator(sci, TRUE, GEANY_INDICATOR_ERROR);
+}
+
+
+void search_find_next_error_indicator(ScintillaObject *sci)
+{
+	go_to_next_indicator(sci, FALSE, GEANY_INDICATOR_ERROR);
+}
+
+
 gint search_replace_match(ScintillaObject *sci, const GeanyMatchInfo *match, const gchar *replace_text)
 {
 	GString *str;
