@@ -172,6 +172,7 @@ typedef struct UIPrefs
 	gchar		*statusbar_template;
 	gboolean	new_document_after_close;
 	gboolean	symbols_group_by_type;
+	gchar		**sidebar_tab_order;
 
 	/* Menu-item related data */
 	GQueue		*recent_queue;
@@ -322,8 +323,6 @@ void ui_save_buttons_toggle(gboolean enable);
 
 void ui_document_buttons_update(void);
 
-
-void ui_sidebar_show_hide(void);
 
 void ui_menubar_show_hide(gboolean show);
 

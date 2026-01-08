@@ -75,6 +75,8 @@ void sidebar_init(void);
 
 void sidebar_finalize(void);
 
+void sidebar_update_page_order(void);
+
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update);
 
 void sidebar_openfiles_add(GeanyDocument *doc);
@@ -94,6 +96,8 @@ void sidebar_add_common_menu_items(GtkMenu *menu);
 void sidebar_focus_openfiles_tab(void);
 
 void sidebar_focus_symbols_tab(void);
+
+void sidebar_show_hide(void);
 
 GtkTreeStore *sidebar_create_store_openfiles(void);
 #endif

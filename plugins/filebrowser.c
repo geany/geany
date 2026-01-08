@@ -89,8 +89,6 @@ static gchar *config_file;
 static gchar **filter = NULL;
 static gchar *hidden_file_extensions = NULL;
 
-static gint page_number = 0;
-
 static struct
 {
 	GtkWidget *open;
@@ -1109,6 +1107,8 @@ static void document_save_cb(GObject *obj, GeanyDocument *doc, gpointer user_dat
 
 static void kb_activate(guint key_id)
 {
+	gint page_number = gtk_notebook_page_num(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook), file_view_vbox);
+
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook), page_number);
 	switch (key_id)
 	{
@@ -1159,7 +1159,7 @@ void plugin_init(GeanyData *data)
 	load_settings();
 
 	gtk_widget_show_all(file_view_vbox);
-	page_number = gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook),
+	gtk_notebook_append_page(GTK_NOTEBOOK(geany->main_widgets->sidebar_notebook),
 		file_view_vbox, gtk_label_new(_("Files")));
 
 	/* setup keybindings */

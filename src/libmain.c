@@ -1169,6 +1169,7 @@ gint main_lib(gint argc, gchar **argv)
 #endif
 	sidebar_init();
 	load_settings();	/* load keyfile */
+	sidebar_update_page_order();
 
 	msgwin_init();
 	build_init();
@@ -1216,7 +1217,7 @@ gint main_lib(gint argc, gchar **argv)
 		plugins_load_active();
 #endif
 
-	ui_sidebar_show_hide();
+	sidebar_show_hide();
 
 	/* set the active sidebar page after plugins have been loaded */
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_prefs.sidebar_page);
@@ -1359,6 +1360,7 @@ static gboolean do_main_quit(void)
 	g_free(printing_prefs.page_header_datefmt);
 	g_strfreev(ui_prefs.custom_commands);
 	g_strfreev(ui_prefs.custom_commands_labels);
+	g_strfreev(ui_prefs.sidebar_tab_order);
 
 	queue_free(ui_prefs.recent_queue);
 	queue_free(ui_prefs.recent_projects_queue);
