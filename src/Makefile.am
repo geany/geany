@@ -151,7 +151,7 @@ geany_LDADD += geany_private.res
 WINDRES = $(host_alias)-windres
 
 geany_private.res: $(top_srcdir)/geany_private.rc
-	$(WINDRES) -i $(top_srcdir)/geany_private.rc --input-format=rc -o $@ -O coff
+	$(WINDRES) -i $(top_srcdir)/geany_private.rc --input-format=rc -o $@ -O coff --use-temp-file
 
 libgeany_la_SOURCES += win32.c win32.h
 libgeany_la_LIBADD  += -lole32 -lwsock32 -lcomdlg32
