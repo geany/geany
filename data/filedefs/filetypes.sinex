@@ -1,0 +1,39 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+commentline=comment
+block=function
+date=keyword
+number=number
+
+[lexer_properties]
+# uncomment to disable block and comment folding
+#fold=0
+# uncomment to disable comment folding (useless if folding is already disabled)
+#fold.comment=0
+
+[settings]
+# default extension used when saving files
+extension=snx
+
+# MIME type
+mime_type=text/vnd.iers.sinex
+
+# these characters define word boundaries when making selections and searching
+# using word matching options
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# single comments, like # in this file
+comment_single=*
+# multiline comments
+#comment_open=
+#comment_close=
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+type=0

@@ -108,6 +108,7 @@ parsers = \
 	parsers/rust.c \
 	parsers/sh.c \
 	parsers/sh.h \
+	parsers/sinex.c \
 	parsers/sql.c \
 	parsers/tcl.c \
 	parsers/tcl.h \
