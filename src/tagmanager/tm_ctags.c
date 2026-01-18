@@ -22,6 +22,7 @@
 #include "param_p.h"
 
 #include <string.h>
+#include <errno.h>
 
 
 static gint write_entry(tagWriter *writer, MIO * mio, const tagEntryInfo *const tag, void *user_data);
@@ -44,7 +45,27 @@ static bool nonfatal_error_printer(const errorSelection selection,
 					  const gchar *const format,
 					  va_list ap, void *data CTAGS_ATTR_UNUSED)
 {
-	g_logv(G_LOG_DOMAIN, G_LOG_LEVEL_WARNING, format, ap);
+	GLogLevelFlags lvl_flags;
+
+	if (selection & FATAL)
+		lvl_flags = G_LOG_LEVEL_CRITICAL;
+	else if (selection & WARNING)
+		lvl_flags = G_LOG_LEVEL_WARNING;
+	else if (selection & NOTICE)
+		lvl_flags = G_LOG_LEVEL_INFO;
+	else /* use WARNING level by default */
+		lvl_flags = G_LOG_LEVEL_WARNING;
+
+	if (! (selection & PERROR))
+		g_logv(G_LOG_DOMAIN, lvl_flags, format, ap);
+	else
+	{
+		const gchar *err = g_strerror(errno);
+		gchar *msg = g_strdup_vprintf(format, ap);
+
+		g_log(G_LOG_DOMAIN, lvl_flags, "%s: %s", msg, err);
+		g_free(msg);
+	}
 
 	return false;
 }
