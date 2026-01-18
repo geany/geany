@@ -69,6 +69,7 @@ copy_to scintilla                 "$SCI_SRC"/License.txt
 copy_to scintilla                 "$SCI_SRC"/version.txt
 copy_to scintilla/lexilla/src     "$LEX_SRC"/src/*.cxx
 copy_to scintilla/lexilla/include "$LEX_SRC"/include/*.h
+copy_to scintilla/lexilla/include "$LEX_SRC"/include/*.iface
 copy_to scintilla/lexilla/lexlib  "$LEX_SRC"/lexlib/*.cxx
 copy_to scintilla/lexilla/lexlib  "$LEX_SRC"/lexlib/*.h
 copy_to scintilla/lexilla/        "$LEX_SRC"/License.txt
@@ -100,7 +101,8 @@ should be added to version control if appropriate, or removed.
 You can add them to Git with the command:
 $ git add $(git status -unormal -s scintilla | grep '^??' | cut -b4- | sed '$!{s/$/ \\/};1!{s/^/          /}')
 
-Don't forget to add new files to the build system (scintilla/Makefile.am).
+Don't forget to add new files to the build system (scintilla/Makefile.am
+and meson.build).
 EOF
 fi
 
