@@ -689,22 +689,22 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 		g_free(tmp);
 	}
 	/* detect HTML files */
-	if (g_str_has_prefix(line, "<!DOCTYPE html") || g_str_has_prefix(line, "<html"))
+	else if (g_str_has_prefix(line, "<!DOCTYPE html") || g_str_has_prefix(line, "<html"))
 	{
 		/* PHP, Perl and Python files might also start with <html, so detect them based on filename
 		 * extension and use the detected filetype, else assume HTML */
-		if (! shebang_find_and_match_filetype(utf8_filename,
+		if (! utf8_filename || ! shebang_find_and_match_filetype(utf8_filename,
 				GEANY_FILETYPES_PERL, GEANY_FILETYPES_PHP, GEANY_FILETYPES_PYTHON, -1))
 		{
 			ft = filetypes[GEANY_FILETYPES_HTML];
 		}
 	}
 	/* detect XML files */
-	else if (utf8_filename && g_str_has_prefix(line, "<?xml"))
+	else if (g_str_has_prefix(line, "<?xml"))
 	{
 		/* HTML and DocBook files might also start with <?xml, so detect them based on filename
 		 * extension and use the detected filetype, else assume XML */
-		if (! shebang_find_and_match_filetype(utf8_filename,
+		if (! utf8_filename || ! shebang_find_and_match_filetype(utf8_filename,
 				GEANY_FILETYPES_HTML, GEANY_FILETYPES_DOCBOOK,
 				/* Perl, Python and PHP only to be safe */
 				GEANY_FILETYPES_PERL, GEANY_FILETYPES_PHP, GEANY_FILETYPES_PYTHON, -1))
