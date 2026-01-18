@@ -378,6 +378,24 @@ void msgwin_show_hide(gboolean show)
 		show);
 	ignore_callback = FALSE;
 	ui_widget_show_hide(main_widgets.message_window_notebook, show);
+	if (show)
+	{
+		/* When msgwin has the size <10px, re-show it with rougly the default
+		 * size. This prevents the situation when the separator is too close
+		 * to the window edge and hard to grab/notice. */
+		GtkPaned *vpaned = GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1"));
+		GtkAllocation allocation;
+
+		gtk_widget_get_allocation(GTK_WIDGET(vpaned), &allocation);
+
+		if (interface_prefs.msgwin_orientation == GTK_ORIENTATION_VERTICAL &&
+				allocation.height - gtk_paned_get_position(vpaned) < 10)
+			gtk_paned_set_position(vpaned, allocation.height - 160);
+		else if (interface_prefs.msgwin_orientation == GTK_ORIENTATION_HORIZONTAL &&
+				allocation.width - gtk_paned_get_position(vpaned) < 10)
+			gtk_paned_set_position(vpaned, allocation.width - 300);
+	}
+
 	/* set the input focus back to the editor */
 	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }

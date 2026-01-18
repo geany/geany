@@ -2118,6 +2118,44 @@ static void builder_connect_func(GtkBuilder *builder, GObject *object,
 }
 
 
+/* When resized so it's less than 10px from the edge, hide the sidebar/message window */
+static void on_hpaned1_position_notify(GObject *object, GParamSpec *pspec, gpointer data)
+{
+	GtkPaned *hpaned = GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"));
+	GtkAllocation allocation;
+
+	gtk_widget_get_allocation(GTK_WIDGET(hpaned), &allocation);
+
+	if (interface_prefs.sidebar_pos == GTK_POS_LEFT && gtk_paned_get_position(hpaned) < 10)
+	{
+		ui_prefs.sidebar_visible = FALSE;
+		ui_sidebar_show_hide();
+	}
+	else if (interface_prefs.sidebar_pos == GTK_POS_RIGHT &&
+		allocation.width - gtk_paned_get_position(hpaned) < 10)
+	{
+		ui_prefs.sidebar_visible = FALSE;
+		ui_sidebar_show_hide();
+	}
+}
+
+
+static void on_vpaned1_position_notify(GObject *object, GParamSpec *pspec, gpointer data)
+{
+	GtkPaned *vpaned = GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1"));
+	GtkAllocation allocation;
+
+	gtk_widget_get_allocation(GTK_WIDGET(vpaned), &allocation);
+
+	if (interface_prefs.msgwin_orientation == GTK_ORIENTATION_VERTICAL &&
+			allocation.height - gtk_paned_get_position(vpaned) < 10)
+		msgwin_show_hide(FALSE);
+	else if (interface_prefs.msgwin_orientation == GTK_ORIENTATION_HORIZONTAL &&
+			allocation.width - gtk_paned_get_position(vpaned) < 10)
+		msgwin_show_hide(FALSE);
+}
+
+
 void callbacks_connect(GtkBuilder *builder)
 {
 	GHashTable *hash;
