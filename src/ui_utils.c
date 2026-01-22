@@ -1033,7 +1033,7 @@ void ui_menubar_show_hide(gboolean show)
 	GtkWidget *editor_separator_item = ui_lookup_widget(main_widgets.editor_menu, "show_menubar_separator1");
 	GtkWidget *editor_show_menubar_item = ui_lookup_widget(main_widgets.editor_menu, "show_menubar1");
 	GeanyKeyGroup *group = keybindings_get_core_group(GEANY_KEY_GROUP_VIEW);
-	GeanyKeyBinding *kb = keybindings_get_item(group, GEANY_KEYS_TOGGLE_MENUBAR);
+	GeanyKeyBinding *kb = keybindings_get_item(group, GEANY_KEYS_VIEW_TOGGLE_MENUBAR);
 
 	if (!show && kb->key == 0)
 		return;  /* don't allow hiding menubar when no keybinding set */
