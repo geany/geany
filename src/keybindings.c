@@ -608,7 +608,7 @@ static void init_default_kb(void)
 		"menu_toggle_all_additional_widgets1");
 	add_kb(group, GEANY_KEYS_VIEW_FULLSCREEN, cb_func_menu_fullscreen,
 		GDK_KEY_F11, 0, "menu_fullscreen", _("Fullscreen"), "menu_fullscreen1");
-	add_kb(group, GEANY_KEYS_TOGGLE_MENUBAR, NULL,
+	add_kb(group, GEANY_KEYS_VIEW_TOGGLE_MENUBAR, NULL,
 		0, 0, "toggle_menubar", _("Toggle Menubar"), "menu_show_menubar1");
 	add_kb(group, GEANY_KEYS_VIEW_MESSAGEWINDOW, cb_func_menu_messagewindow,
 		0, 0, "menu_messagewindow", _("Toggle Messages Window"),
@@ -1669,7 +1669,7 @@ static gboolean cb_func_view_action(guint key_id)
 		case GEANY_KEYS_VIEW_ZOOMRESET:
 			on_normal_size1_activate(NULL, NULL);
 			break;
-		case GEANY_KEYS_TOGGLE_MENUBAR:
+		case GEANY_KEYS_VIEW_TOGGLE_MENUBAR:
 			on_toggle_menubar(NULL, NULL);
 			break;
 		default:
