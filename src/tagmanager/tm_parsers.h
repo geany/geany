@@ -81,6 +81,7 @@
 	MesonParser, \
 	SystemVerilogParser, \
 	SCSSParser, \
-	TerraformParser
+	TerraformParser, \
+	SinexParser
 
 #endif

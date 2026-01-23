@@ -332,6 +332,7 @@ test_sources = \
 	simple.rst						\
 	simple.scss						\
 	simple.sh						\
+	simple.snx						\
 	simple.tcl						\
 	simple.tf						\
 	simple.ts						\
