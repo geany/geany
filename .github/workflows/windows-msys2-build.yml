@@ -135,7 +135,7 @@ jobs:
 
       - name: Upload Unsigned Artifact
         id: upload-unsigned-artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: geany-unsigned${{ matrix.build-tool != 'autotools' && format('-{0}', matrix.build-tool) || '' }}
           path: geany_build/*.exe
@@ -160,7 +160,7 @@ jobs:
           wait-for-completion: true
           output-artifact-directory: geany-signed
       - name: Upload Signed Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: steps.sign-artifact.outcome == 'success'
         with:
           name: geany-signed
