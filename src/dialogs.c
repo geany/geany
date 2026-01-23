@@ -676,14 +676,14 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 		if (g_path_is_absolute(doc->file_name))
 		{
 			gchar *locale_filename = utils_get_locale_from_utf8(doc->file_name);
-			gchar *locale_basename = g_path_get_basename(locale_filename);
+			gchar *utf8_basename = g_path_get_basename(doc->file_name);
 			gchar *locale_dirname = g_path_get_dirname(locale_filename);
 
 			gtk_file_chooser_set_current_folder(dialog, locale_dirname);
-			gtk_file_chooser_set_current_name(dialog, locale_basename);
+			gtk_file_chooser_set_current_name(dialog, utf8_basename);
 
 			g_free(locale_filename);
-			g_free(locale_basename);
+			g_free(utf8_basename);
 			g_free(locale_dirname);
 		}
 		else

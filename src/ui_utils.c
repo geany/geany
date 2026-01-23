@@ -2194,7 +2194,7 @@ void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label, Gt
 	{
 		gchar *base_name;
 
-		base_name = g_path_get_basename(real_path);
+		base_name = g_filename_display_basename(real_path);
 		item = gtk_menu_item_new_with_label(base_name);
 		g_free(base_name);
 	}
