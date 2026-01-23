@@ -258,6 +258,15 @@ static void add_file_item(const gchar *fname, GtkWidget *menu)
 }
 
 
+static void add_config_file_item(const gchar *fname, GtkWidget *menu)
+{
+	gchar *real_path = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, "files", fname, NULL);
+
+	ui_add_config_file_menu_item(real_path, NULL, GTK_CONTAINER(menu));
+	g_free(real_path);
+}
+
+
 typedef struct
 {
 	gint count;
@@ -265,7 +274,7 @@ typedef struct
 }
 FTMenu;
 
-static void populate_file_template_menu(GtkWidget *menu)
+static void populate_file_template_menu(GtkWidget *menu, void add_item(const gchar *, GtkWidget *))
 {
 	GSList *list = utils_get_config_files(GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S "files");
 	GSList *node;
@@ -289,7 +298,7 @@ static void populate_file_template_menu(GtkWidget *menu)
 		FTMenu *group = &ft_groups[ft->id];
 
 		if (group->count == 1)
-			add_file_item(fname, menu);
+			add_item(fname, menu);
 		else
 		{
 			if (!group->menu)
@@ -300,7 +309,7 @@ static void populate_file_template_menu(GtkWidget *menu)
 				group->menu = gtk_menu_new();
 				gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), group->menu);
 			}
-			add_file_item(fname, group->menu);
+			add_item(fname, group->menu);
 		}
 		g_free(fname);
 	}
@@ -313,7 +322,6 @@ static void create_file_template_menus(void)
 {
 	GtkWidget *item, *menu;
 	GSList *list, *node;
-	const gchar *subdir;
 
 	new_with_template_menu = gtk_menu_new();
 	item = ui_lookup_widget(main_widgets.window, "menu_new_with_template1");
@@ -347,18 +355,7 @@ static void create_file_template_menus(void)
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), item);
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
-
-	subdir = GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S "files";
-	list = utils_get_config_files(subdir);
-	foreach_slist(node, list)
-	{
-		gchar *fname = node->data;
-
-		SETPTR(fname, g_build_filename(app->configdir, subdir, fname, NULL));
-		ui_add_config_file_menu_item(fname, NULL, GTK_CONTAINER(menu));
-		g_free(fname);
-	}
-	g_slist_free(list);
+	populate_file_template_menu(menu, add_config_file_item);
 }
 
 
@@ -394,8 +391,8 @@ void templates_init(void)
 		init_done = TRUE;
 	}
 
-	populate_file_template_menu(new_with_template_menu);
-	populate_file_template_menu(new_with_template_toolbar_menu);
+	populate_file_template_menu(new_with_template_menu, add_file_item);
+	populate_file_template_menu(new_with_template_toolbar_menu, add_file_item);
 }
 
 
