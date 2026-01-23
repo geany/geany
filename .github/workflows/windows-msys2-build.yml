@@ -114,7 +114,7 @@ jobs:
         run: |
           ECHO ON
           SET DESTINATION=%GITHUB_WORKSPACE%\geany_install
-          start "geany-2.2.0_setup.exe" /wait %GITHUB_WORKSPACE%\geany_build\geany-2.2.0_setup.exe /S /D=%DESTINATION%
+          start "geany-%VERSION%_setup.exe" /wait %GITHUB_WORKSPACE%\geany_build\geany-%VERSION%_setup.exe /S /D=%DESTINATION%
           IF NOT EXIST "%DESTINATION%\uninst.exe" EXIT /B 1
           IF NOT EXIST "%DESTINATION%\bin\geany.exe" EXIT /B 1
           IF NOT EXIST "%DESTINATION%\lib\geany\export.dll" EXIT /B 1
