@@ -198,6 +198,7 @@ typedef struct UIWidgets
 	GtkWidget	*print_page_setup;
 	GtkWidget	*recent_projects_menuitem;
 	GtkWidget	*recent_projects_menu_menubar;
+	GtkWidget	*config_files_menu;
 	GtkWidget	*config_files_filetype_menu;
 
 	/* dialogs */
