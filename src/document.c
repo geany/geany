@@ -2056,6 +2056,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	gsize len;
 	gchar *locale_filename;
 	const GeanyFilePrefs *fp;
+	const gchar *cwd_path;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
@@ -2172,9 +2173,11 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 		msgwin_status_add(_("File %s saved."), doc->file_name);
 		ui_update_statusbar(doc);
+		cwd_path = doc->real_path ? doc->real_path : doc->file_name;
 #ifdef HAVE_VTE
-		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
+		vte_cwd(cwd_path, FALSE);
 #endif
+		dialogs_set_default_dir(cwd_path);
 	}
 	g_free(locale_filename);
 
