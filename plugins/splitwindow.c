@@ -44,6 +44,7 @@ enum
 	KB_SPLIT_HORIZONTAL,
 	KB_SPLIT_VERTICAL,
 	KB_SPLIT_UNSPLIT,
+	KB_SPLIT_SWITCH,
 	KB_COUNT
 };
 
@@ -141,7 +142,7 @@ static void on_sci_notify(ScintillaObject *sci, gint param,
 static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 {
 	gpointer sdoc;
-	gint pos;
+	gint pos, line;
 
 	/* set the new sci widget to view the existing Scintilla document */
 	sdoc = (gpointer) scintilla_send_message(current, SCI_GETDOCPOINTER, 0, 0);
@@ -150,6 +151,11 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 	highlighting_set_styles(sci, edit_window.editor->document->file_type);
 	pos = sci_get_current_position(current);
 	sci_set_current_position(sci, pos, TRUE);
+
+	/* vertical scroll synchronization */
+	line = scintilla_send_message(current, SCI_GETFIRSTVISIBLELINE, 0, 0);
+	scintilla_send_message(sci, SCI_SETFIRSTVISIBLELINE, line, 0);
+	scintilla_send_message(sci, SCI_SETXOFFSET, 0, 0);
 
 	/* override some defaults */
 	set_line_numbers(sci, geany->editor_prefs->show_linenumber_margin);
@@ -375,6 +381,27 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+static void on_switch_split(void)
+{
+	GeanyDocument *doc;
+	gboolean focus_on_split;
+	ScintillaObject *sci_target;
+
+	doc = document_get_current();
+
+	g_return_if_fail(doc);
+	g_return_if_fail(edit_window.sci);
+
+	focus_on_split = scintilla_send_message(edit_window.sci, SCI_GETFOCUS, 0, 0);
+	if (focus_on_split)
+		sci_target = doc->editor->sci;
+	else
+		sci_target = edit_window.sci;
+
+	scintilla_send_message(sci_target, SCI_GRABFOCUS, 0, 0);
+}
+
+
 static void kb_activate(guint key_id)
 {
 	switch (key_id)
@@ -390,6 +417,10 @@ static void kb_activate(guint key_id)
 		case KB_SPLIT_UNSPLIT:
 			if (plugin_state != STATE_UNSPLIT)
 				on_unsplit(NULL, NULL);
+			break;
+		case KB_SPLIT_SWITCH:
+			if (plugin_state != STATE_UNSPLIT)
+				on_switch_split();
 			break;
 	}
 }
@@ -434,6 +465,8 @@ void plugin_init(GeanyData *data)
 		0, 0, "split_vertical", _("Top and Bottom"), menu_items.vertical);
 	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
 		0, 0, "split_unsplit", _("_Unsplit"), menu_items.unsplit);
+	keybindings_set_item(key_group, KB_SPLIT_SWITCH, kb_activate,
+		0, 0, "split_switch", _("Switch between splits"), NULL);
 }
 
 
