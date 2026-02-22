@@ -1111,11 +1111,19 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 			page = npages - 1;
 		/* invert the order if tabs are added on the other side */
 		if (swap_alt_tab_order && ! file_prefs.tab_order_ltr)
-			page = (npages - 1) - page;
+ 			page = (npages - 1) - page;
+ 
+ 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
+		/* alt+0 to alt+9 toggles menubar if hidden */
+		if (!ui_prefs.menubar_visible)
+		{
+			GtkWidget *const geany_menubar_box = ui_lookup_widget(main_widgets.window, "hbox_menubar");
 
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
-		return TRUE;
-	}
+			if (gtk_widget_get_visible(geany_menubar_box))
+				gtk_widget_hide(geany_menubar_box);
+		}
+ 		return TRUE;
+ 	}
 	/* note: these are now overridden by default with move tab bindings */
 	if (keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_Page_Down)
 	{
@@ -1126,22 +1134,43 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), 0);
 			if (keyval == GDK_KEY_Page_Down)
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), -1);
-			return TRUE;
-		}
-	}
-	/* temporarily show the menubar again when triggering it while hidden */
-	if (state == 0 && keyval == GDK_KEY_F10 && ! ui_prefs.menubar_visible)
+ 			return TRUE;
+ 		}
+ 	}
+	if (!ui_prefs.menubar_visible)
 	{
 		GtkWidget *const geany_menubar_box = ui_lookup_widget(main_widgets.window, "hbox_menubar");
-		GtkWidget *const geany_menubar = ui_lookup_widget(main_widgets.window, "menubar1");
+		/* temporarily show the menubar again when triggering it while hidden */
+		if (state == 0 && keyval == GDK_KEY_F10)
+		{
+			GtkWidget *const geany_menubar = ui_lookup_widget(main_widgets.window, "menubar1");
 
-		gtk_widget_show(geany_menubar_box);
-		gtk_menu_shell_select_first(GTK_MENU_SHELL(geany_menubar), TRUE);
+			gtk_widget_show(geany_menubar_box);
+			gtk_menu_shell_select_first(GTK_MENU_SHELL(geany_menubar), TRUE);
 
-		return TRUE;
+			return TRUE;
+		}
+		/* show or hide menu on alt key press */
+		if (state == 0 && (keyval == GDK_KEY_Alt_L || keyval == GDK_KEY_Alt_R))
+		{
+			if (gtk_widget_get_visible(geany_menubar_box))
+				gtk_widget_hide(geany_menubar_box);
+			else
+				gtk_widget_show(geany_menubar_box);
+			return FALSE;
+		}
+		/* handle alt+key menu mnemonics while menubar is hidden */
+		if (state & GDK_MOD1_MASK)
+		{
+			gtk_widget_show(geany_menubar_box);
+			return FALSE;
+		}
+		/* any other keystroke following alt will hide menubar */
+		if (gtk_widget_get_visible(geany_menubar_box))
+			gtk_widget_hide(geany_menubar_box);
 	}
-	return FALSE;
-}
+ 	return FALSE;
+ }
 
 
 static gboolean check_snippet_completion(GeanyDocument *doc)
