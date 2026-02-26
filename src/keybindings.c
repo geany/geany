@@ -1111,8 +1111,8 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 			page = npages - 1;
 		/* invert the order if tabs are added on the other side */
 		if (swap_alt_tab_order && ! file_prefs.tab_order_ltr)
- 			page = (npages - 1) - page;
- 
+			page = (npages - 1) - page;
+
  		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
 		/* alt+0 to alt+9 toggles menubar if hidden */
 		if (!ui_prefs.menubar_visible)
@@ -1150,15 +1150,6 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 
 			return TRUE;
 		}
-		/* show or hide menu on alt key press */
-		if (state == 0 && (keyval == GDK_KEY_Alt_L || keyval == GDK_KEY_Alt_R))
-		{
-			if (gtk_widget_get_visible(geany_menubar_box))
-				gtk_widget_hide(geany_menubar_box);
-			else
-				gtk_widget_show(geany_menubar_box);
-			return FALSE;
-		}
 		/* handle alt+key menu mnemonics while menubar is hidden */
 		if (state & GDK_MOD1_MASK)
 		{
@@ -1169,8 +1160,8 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 		if (gtk_widget_get_visible(geany_menubar_box))
 			gtk_widget_hide(geany_menubar_box);
 	}
- 	return FALSE;
- }
+	return FALSE;
+}
 
 
 static gboolean check_snippet_completion(GeanyDocument *doc)
