@@ -215,6 +215,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( NIX,          NONE,         "Nix",              NULL                      );
 	FT_INIT( TOML,         CONF,         "TOML",             NULL                      );
 	FT_INIT( SINEX,        SINEX,        "SINEX",            NULL                      );
+	FT_INIT( KOTLIN,       KOTLIN,       "Kotlin",           NULL                      );
 }
 
 
@@ -519,7 +520,7 @@ static guint match_basename(const GeanyFiletype *ft, const gchar *base_filename)
 	for (guint j = 0; ft->pattern[j] != NULL; j++)
 	{
 		gchar *pat = ft->pattern[j];
-		
+
 		if (g_pattern_match_simple(pat, base_filename))
 		{
 			return strlen(pat);
@@ -580,7 +581,7 @@ GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename)
 	for (guint i = 0; i < filetypes_array->len; i++)
 	{
 		guint mlen = match_basename(filetypes[i], base_filename);
-		
+
 		if (mlen > plen)
 		{	// longest pattern match wins
 			plen = mlen;
