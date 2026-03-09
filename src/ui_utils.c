@@ -1590,10 +1590,9 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 	GtkWidget *image, *button;
 
 	button = gtk_button_new_with_mnemonic(text);
-	gtk_widget_show(button);
-	image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_BUTTON);
+	image = gtk_image_new_from_icon_name(stock_id, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image(GTK_BUTTON(button), image);
-	/* note: image is shown by gtk */
+	gtk_button_set_always_show_image(GTK_BUTTON(button), TRUE);
 	return button;
 }
 
