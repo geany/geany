@@ -2037,6 +2037,7 @@ static gchar *get_regex_match_string(const gchar *text, const GeanyMatchInfo *ma
 
 static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, gboolean multiline, GeanyMatchInfo *match)
 {
+	GError *match_error = NULL;
 	const gchar *text;
 	GMatchInfo *minfo;
 	guint document_length;
@@ -2053,7 +2054,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, gboolean 
 	{
 		/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
 		text = (void*)SSM(sci, SCI_GETCHARACTERPOINTER, 0, 0);
-		g_regex_match_full(regex, text, -1, pos, 0, &minfo, NULL);
+		g_regex_match_full(regex, text, -1, pos, 0, &minfo, &match_error);
 	}
 	else /* single-line mode, manually match against each line */
 	{
@@ -2065,9 +2066,13 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, gboolean 
 			gint end = sci_get_line_end_position(sci, line);
 
 			text = (void*)SSM(sci, SCI_GETRANGEPOINTER, start, end - start);
-			if (g_regex_match_full(regex, text, end - start, pos - start, 0, &minfo, NULL))
+			if (g_regex_match_full(regex, text, end - start, pos - start, 0, &minfo, &match_error))
 			{
 				offset = start;
+				break;
+			}
+			else if (match_error) /* match error, abort search */
+			{
 				break;
 			}
 			else /* not found, try next line */
@@ -2080,6 +2085,13 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, gboolean 
 				g_match_info_free(minfo);
 			}
 		}
+	}
+
+	/* if there was a match error, log it because it's probably a bug */
+	if (match_error)
+	{
+		g_warning("Failed to match regex: %s", match_error->message);
+		g_error_free(match_error);
 	}
 
 	/* Warning: minfo will become invalid when 'text' does! */
