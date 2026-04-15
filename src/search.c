@@ -1302,7 +1302,10 @@ static GSList *find_range(ScintillaObject *sci, GeanyFindFlags flags, struct Sci
 		 * note we cannot assume a match will always be empty or not and then break out, since
 		 * matches like "a?(?=b)" will sometimes be empty and sometimes not */
 		if (ttf->chrgText.cpMax == ttf->chrgText.cpMin)
-			ttf->chrg.cpMin ++;
+		{
+			/* move past a whole character */
+			ttf->chrg.cpMin = sci_get_position_after(sci, ttf->chrg.cpMin);
+		}
 	}
 
 	return g_slist_reverse(matches);
