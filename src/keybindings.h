@@ -116,6 +116,9 @@ enum GeanyKeyGroupID
 	GEANY_KEY_GROUP_BUILD,			/**< Group. */
 	GEANY_KEY_GROUP_TOOLS,			/**< Group. */
 	GEANY_KEY_GROUP_HELP,			/**< Group. */
+	GEANY_KEY_GROUP_BUILD_FT,
+	GEANY_KEY_GROUP_BUILD_IND,
+	GEANY_KEY_GROUP_BUILD_EXEC,
 	GEANY_KEY_GROUP_COUNT	/* must not be used by plugins */
 };
 
@@ -313,8 +316,9 @@ void keybindings_free(void);
 
 GeanyKeyGroup *keybindings_get_core_group(guint id);
 
-GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_name,
-		const gchar *label, gsize count, GeanyKeyGroupCallback callback) G_GNUC_WARN_UNUSED_RESULT;
+GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group,
+	const gchar *section_name, const gchar *label,
+	gsize count, GeanyKeyGroupCallback callback);
 
 void keybindings_free_group(GeanyKeyGroup *group);
 
