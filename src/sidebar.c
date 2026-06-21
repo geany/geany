@@ -1713,6 +1713,29 @@ static void on_sidebar_switch_page(GtkNotebook *notebook,
 }
 
 
+static void on_page_added(GtkNotebook *notebook, GtkWidget *child, guint page_num)
+{
+	GtkWidget *label = gtk_notebook_get_tab_label(notebook, child);
+	gtk_label_set_angle(GTK_LABEL(label), 90);
+
+	sidebar_tabs_show_hide(notebook, child, page_num, NULL);
+}
+
+
+static void rotate_all_tabs(void)
+{
+	GList *children = gtk_container_get_children(GTK_CONTAINER(main_widgets.sidebar_notebook));
+	GList *node;
+
+	for (node = children; node; node = node->next)
+	{
+		GtkWidget *label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(main_widgets.sidebar_notebook), node->data);
+		gtk_label_set_angle(GTK_LABEL(label), 90);
+	}
+	g_list_free(children);
+}
+
+
 void sidebar_init(void)
 {
 	StashGroup *group;
@@ -1725,12 +1748,14 @@ void sidebar_init(void)
 	configuration_add_session_group(group, FALSE);
 	stash_group = group;
 
+	rotate_all_tabs();
+
 	/* Delay building documents treeview until sidebar font has been read and prefs are sanitized */
 	g_signal_connect(geany_object, "load-settings", on_load_settings, NULL);
 	g_signal_connect(geany_object, "save-settings", on_save_settings, NULL);
 
 	g_signal_connect(main_widgets.sidebar_notebook, "page-added",
-		G_CALLBACK(sidebar_tabs_show_hide), NULL);
+		G_CALLBACK(on_page_added), NULL);
 	g_signal_connect(main_widgets.sidebar_notebook, "page-removed",
 		G_CALLBACK(sidebar_tabs_show_hide), NULL);
 	/* tabs may have changed when sidebar is reshown */
