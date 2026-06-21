@@ -6524,6 +6524,16 @@ Supported placeholders are:
                           </object>
                         </child>
                         <child>
+                          <object class="GtkImageMenuItem" id="menu_new_instance1">
+                            <property name="label">New Geany Instance</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="use_stock">False</property>
+                            <signal name="activate" handler="on_new_instance1_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkSeparatorMenuItem" id="separator12">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
