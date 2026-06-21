@@ -21,7 +21,6 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
-#include "geany.h" /* for GEANY_DEPRECATED */
 #include "document.h"
 
 #include "gtkcompat.h"
@@ -142,13 +141,6 @@ void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 const gchar *ui_lookup_stock_label(const gchar *stock_id);
 
 void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column);
-
-
-#ifndef GEANY_DISABLE_DEPRECATED
-GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment) GEANY_DEPRECATED;
-
-void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text) GEANY_DEPRECATED_FOR(gtk_widget_set_tooltip_text);
-#endif	/* GEANY_DISABLE_DEPRECATED */
 
 
 #ifdef GEANY_PRIVATE
