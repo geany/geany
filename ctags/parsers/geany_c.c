@@ -6,6 +6,8 @@
 *
 *   This module contains functions for parsing and scanning C, C++, C#, D and Java
 *   source files.
+*
+*   *** This file is not used for C and C++, see cxx/cxx.c ***
 */
 
 /*
