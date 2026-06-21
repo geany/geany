@@ -53,6 +53,8 @@ typedef struct GeanyFiletypePrivate
 	gint			 project_list_entry;
 	gchar			 *projerror_regex_string;
 	gchar			 *homeerror_regex_string;
+	Trinary		  homeerror_regex_add_default;
+	Trinary		  projerror_regex_add_default;
 }
 GeanyFiletypePrivate;
 
