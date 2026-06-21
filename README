@@ -32,6 +32,10 @@ The basic features of Geany are:
 - embedded terminal emulation
 - extensibility through plugins
 
+Changelog
+---------
+See the release notes on `the website <https://www.geany.org/documentation/releasenotes/>`_ or `on GitHub <https://github.com/geany/geany/releases>`_.
+
 
 Installation from distribution packages
 ---------------------------------------
