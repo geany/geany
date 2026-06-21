@@ -496,13 +496,29 @@ static GKeyFile *utils_key_file_new(const gchar *filename)
 
 static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 {
+	/* first set default to the "default" named style */
+	add_named_style(config, "default");
+	read_named_style("default", &gsd_default);	/* in case user overrides but not with both colors */
+	add_named_style(config_home, "default");
+	read_named_style("default", &gsd_default);
+
+	get_named_styles(config);
+	/* home overrides any system named style */
+	get_named_styles(config_home);
+}
+
+
+static void load_color_scheme(GKeyFile *config, GKeyFile *config_home)
+{
 	const gchar *scheme = editor_prefs.color_scheme;
-	gboolean free_kf = FALSE;
 
 	if (named_style_hash)
 		g_hash_table_destroy(named_style_hash);	/* reloading */
 
 	named_style_hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+
+	/* load the default color scheme unconditionally first in case the user's one misses some stuff */
+	load_named_styles(config, config_home);
 
 	if (!EMPTY(scheme))
 	{
@@ -515,33 +531,22 @@ static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 		{
 			config = utils_key_file_new(path);
 			config_home = utils_key_file_new(path_home);
-			free_kf = TRUE;
+
+			/* load the actual color scheme */
+			load_named_styles(config, config_home);
+
+			g_key_file_free(config);
+			g_key_file_free(config_home);
 		}
-		/* if color scheme is missing, use default */
 		g_free(path);
 		g_free(path_home);
-	}
-	/* first set default to the "default" named style */
-	add_named_style(config, "default");
-	read_named_style("default", &gsd_default);	/* in case user overrides but not with both colors */
-	add_named_style(config_home, "default");
-	read_named_style("default", &gsd_default);
-
-	get_named_styles(config);
-	/* home overrides any system named style */
-	get_named_styles(config_home);
-
-	if (free_kf)
-	{
-		g_key_file_free(config);
-		g_key_file_free(config_home);
 	}
 }
 
 
 static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 {
-	load_named_styles(config, config_home);
+	load_color_scheme(config, config_home);
 
 	get_keyfile_style(config, config_home, "default", &common_style_set.styling[GCS_DEFAULT]);
 	get_keyfile_style(config, config_home, "selection", &common_style_set.styling[GCS_SELECTION]);
