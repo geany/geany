@@ -290,7 +290,7 @@ static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 	if (tag_b->name == NULL)
 		return tag_a->name != tag_b->name;
 
-	ret = strcmp(tag_a->name, tag_b->name);
+	ret = strcasecmp(tag_a->name, tag_b->name);
 	if (ret == 0)
 	{
 		return tag_a->line - tag_b->line;
@@ -1173,7 +1173,7 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 				cmp = astr != bstr;
 			else
 			{
-				cmp = strcmp(astr, bstr);
+				cmp = strcasecmp(astr, bstr);
 
 				/* sort duplicate 'ScopeName::OverloadedTagName' items by line as well */
 				if (tag_a && tag_b)
