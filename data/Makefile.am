@@ -164,6 +164,7 @@ template_files = \
 	templates/files/main.java \
 	templates/files/main.md \
 	templates/files/main.py \
+    templates/files/main.tf \
 	templates/files/main.vala \
 	templates/files/module.erl \
 	templates/files/program.pas
