@@ -10,6 +10,7 @@ number=number_1
 string=string_1
 character=character
 word=keyword_1
+word2=keyword_2
 triple=string_2
 tripledouble=string_2
 backticks=identifier_1
@@ -21,7 +22,11 @@ identifier=identifier_1
 
 [keywords]
 # all items must be in one line
-keywords=addr and array as asm assert auto bind block bool break byte case cast char concept const continue converter defer discard distinct div do doAssert echo elif else end enum except export false finally float float32 float64 for from func if import in include int int16 int32 int64 int8 interface is isnot iterator lent let macro method mixin mod Natural nil nil not notin object of openArray or Ordinal out parallel Positive proc ptr raise ref result return seq shl shr sink spawn static string template true try tuple type uint uint16 uint32 uint64 uint8 using var when while xor yield
+# entries taken from https://nim-lang.org/docs/manual.html
+keywords=addr and as asm bind block break case cast concept const continue converter defer discard distinct div do elif else end enum except export finally for from func if import in include interface is isnot iterator let macro method mixin mod nil not notin object of or out proc ptr raise ref return shl shr static template try tuple type using var when while xor yield
+
+# built-in identifiers, will be highlighted with style "word2"
+builtin_identifiers=array assert auto bool byte char doAssert echo false float float32 float64 int int16 int32 int64 int8 lent Natural openArray Ordinal parallel Positive result seq sink spawn string true uint uint16 uint32 uint64 uint8
 
 [lexer_properties]
 
