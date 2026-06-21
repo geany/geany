@@ -604,6 +604,9 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_markers_margin);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_fold_margin);
+
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.scroll_stop_at_last_line);
 
@@ -1058,6 +1061,16 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding");
+
+		if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)) != editor_prefs.folding)
+		{
+			if(!editor_prefs.folding) {
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(
+					ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin")), TRUE);
+			} else
+				editor_unfold_all(doc->editor);
+		}
+
 		editor_prefs.folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		ui_update_fold_items();
 
@@ -1082,6 +1095,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
 		editor_prefs.show_markers_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin");
+		editor_prefs.show_fold_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
 		editor_prefs.scroll_stop_at_last_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1635,6 +1651,7 @@ static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
 
 	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children"), sens);
+	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_fold_margin"), sens);
 }
 
 
