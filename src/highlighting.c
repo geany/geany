@@ -91,6 +91,7 @@ enum	/* Geany common styling */
 	GCS_TRANSLUCENCY,
 	GCS_MARKER_LINE,
 	GCS_MARKER_SEARCH,
+	GCS_MARKER_SEARCH_TRANSLUCENCY,
 	GCS_MARKER_MARK,
 	GCS_MARKER_TRANSLUCENCY,
 	GCS_LINE_HEIGHT,
@@ -574,6 +575,8 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 		256, 256, &common_style_set.styling[GCS_TRANSLUCENCY]);
 	get_keyfile_int(config, config_home, "styling", "marker_translucency",
 		256, 256, &common_style_set.styling[GCS_MARKER_TRANSLUCENCY]);
+	get_keyfile_int(config, config_home, "styling", "marker_search_translucency",
+		50, 60, &common_style_set.styling[GCS_MARKER_SEARCH_TRANSLUCENCY]);
 	get_keyfile_int(config, config_home, "styling", "line_height",
 		0, 0, &common_style_set.styling[GCS_LINE_HEIGHT]);
 
@@ -655,7 +658,8 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH,
 		invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
-	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, 60);
+	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, common_style_set.styling[GCS_MARKER_SEARCH_TRANSLUCENCY].background);
+	SSM(sci, SCI_INDICSETOUTLINEALPHA, GEANY_INDICATOR_SEARCH, common_style_set.styling[GCS_MARKER_SEARCH_TRANSLUCENCY].foreground);
 
 	/* Snippet cursor indicator, when inserting snippets with multiple
 	 * cursor positions. */
