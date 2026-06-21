@@ -573,6 +573,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_GOTO_MATCHINGBRACE, NULL,
 		GDK_KEY_b, GEANY_PRIMARY_MOD_MASK, "edit_gotomatchingbrace",
 		_("Go to matching brace"), NULL);
+	add_kb(group, GEANY_KEYS_SELECT_UPTOMATCHINGBRACE, NULL,
+		GDK_KEY_b, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "edit_selectuptomatchingbrace",
+		_("Select up to matching brace"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_TOGGLEMARKER, NULL,
 		GDK_KEY_m, GEANY_PRIMARY_MOD_MASK, "edit_togglemarker",
 		_("Toggle marker"), NULL);
@@ -1976,6 +1979,26 @@ static void goto_matching_brace(GeanyDocument *doc)
 }
 
 
+static void select_up_to_matching_brace(GeanyDocument *doc)
+{
+	gint initial_pos, pos, new_pos;
+	gint after_brace;
+
+	g_return_if_fail(DOC_VALID(doc));
+
+	initial_pos = sci_get_current_position(doc->editor->sci);
+	after_brace = initial_pos > 0 && utils_isbrace(sci_get_char_at(doc->editor->sci, initial_pos - 1), TRUE);
+	pos = initial_pos - after_brace;	/* set pos to the brace */
+
+	new_pos = sci_find_matching_brace(doc->editor->sci, pos);
+	if (new_pos != -1)
+	{	/* set the cursor at/after the brace */
+		sci_set_selection(doc->editor->sci, initial_pos, new_pos + (!after_brace));
+		editor_display_current_line(doc->editor, 0.5F);
+	}
+}
+
+
 static gboolean cb_func_clipboard_action(guint key_id)
 {
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
@@ -2048,6 +2071,9 @@ static gboolean cb_func_goto_action(guint key_id)
 		}
 		case GEANY_KEYS_GOTO_MATCHINGBRACE:
 			goto_matching_brace(doc);
+			return TRUE;
+		case GEANY_KEYS_SELECT_UPTOMATCHINGBRACE:
+			select_up_to_matching_brace(doc);
 			return TRUE;
 		case GEANY_KEYS_GOTO_TOGGLEMARKER:
 		{
