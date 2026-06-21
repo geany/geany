@@ -382,6 +382,15 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="insert_gpl3_notice1">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">Insert GPLv_3 Notice</property>
+                        <property name="use-underline">True</property>
+                        <signal name="activate" handler="on_comments_gpl3_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="insert_bsd_license_notice1">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -7145,6 +7154,15 @@ Supported placeholders are:
                                     <property name="label" translatable="yes">Insert _GPL Notice</property>
                                     <property name="use-underline">True</property>
                                     <signal name="activate" handler="on_menu_comments_gpl_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_gpl3_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">Insert GPLv_3 Notice</property>
+                                    <property name="use-underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_gpl3_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>
