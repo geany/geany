@@ -57,9 +57,7 @@
 	color: #ff3030;
 }
 
-/* Uncomment the following to reduce the size of the statusbar if needed */
-/*
+/* comment the following to increase the size of the statusbar if needed */
 statusbar {
 	margin: -6px 0;
 }
-*/
