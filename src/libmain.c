@@ -238,7 +238,17 @@ static void on_window_active_changed(GtkWindow *window, GParamSpec *pspec, gpoin
 	GeanyDocument *doc = document_get_current();
 
 	if (doc && gtk_window_is_active(window))
+	{
 		document_check_disk_status(doc, TRUE);
+
+		/* If window lost focus and menubar is set to hidden, hide it */
+		if (!ui_prefs.menubar_visible)
+		{
+			GtkWidget *menubar = ui_lookup_widget(main_widgets.window, "hbox_menubar");
+
+			gtk_widget_hide(menubar);
+		}
+	}
 }
 
 
