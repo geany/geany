@@ -66,7 +66,7 @@ const GeanyData *geany_data;
 const GeanyFunctions *geany_functions;
 
 /** Plugin owned fields, including flags.
- * @deprecated Use @ref ui_add_document_sensitive() instead.*/
+ * @deprecated Use @ref ui_add_document_sensitive instead.*/
 PluginFields *plugin_fields;
 
 /** An array for connecting GeanyObject events, which should be terminated with
