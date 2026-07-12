@@ -128,6 +128,10 @@ gint search_find_prev(struct _ScintillaObject *sci, const gchar *str, GeanyFindF
 
 gint search_find_next(struct _ScintillaObject *sci, const gchar *str, GeanyFindFlags flags, GeanyMatchInfo **match_);
 
+void search_find_previous_error_indicator(struct _ScintillaObject *sci);
+
+void search_find_next_error_indicator(struct _ScintillaObject *sci);
+
 gint search_find_text(struct _ScintillaObject *sci, GeanyFindFlags flags, struct Sci_TextToFind *ttf, GeanyMatchInfo **match_);
 
 void search_find_again(gboolean change_direction);
