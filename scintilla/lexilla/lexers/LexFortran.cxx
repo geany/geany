@@ -421,40 +421,40 @@ static int classifyFoldPointFortran(const char* s, const char* prevWord, const c
 	int lev = 0;
 
 	if ((strcmp(prevWord, "module") == 0 && strcmp(s, "subroutine") == 0)
-		|| (strcmp(prevWord, "module") == 0 && strcmp(s, "function") == 0)) {
+		|| (strcmp(prevWord, "module") == 0 && strcmp(s, "function") == 0)
+		|| (strcmp(prevWord, "module") == 0 && strcmp(s, "procedure") == 0)) { // Take care of the "module procedure" statement
 		lev = 0;
 	} else if (strcmp(s, "associate") == 0 || strcmp(s, "block") == 0
-	        || strcmp(s, "blockdata") == 0 || strcmp(s, "select") == 0
-	        || strcmp(s, "selecttype") == 0 || strcmp(s, "selectcase") == 0
-	        || strcmp(s, "do") == 0 || strcmp(s, "enum") ==0
-	        || strcmp(s, "function") == 0 || strcmp(s, "interface") == 0
-	        || strcmp(s, "module") == 0 || strcmp(s, "program") == 0
-	        || strcmp(s, "subroutine") == 0 || strcmp(s, "then") == 0
-	        || (strcmp(s, "type") == 0 && chNextNonBlank != '(')
-		|| strcmp(s, "critical") == 0 || strcmp(s, "submodule") == 0){
+			|| strcmp(s, "blockdata") == 0 || strcmp(s, "select") == 0
+			|| strcmp(s, "selecttype") == 0 || strcmp(s, "selectcase") == 0
+			|| strcmp(s, "do") == 0 || strcmp(s, "enum") ==0
+			|| strcmp(s, "function") == 0 || strcmp(s, "interface") == 0
+			|| strcmp(s, "module") == 0 || strcmp(s, "program") == 0
+			|| strcmp(s, "subroutine") == 0 || strcmp(s, "then") == 0
+			|| (strcmp(s, "type") == 0 && chNextNonBlank != '(')
+			|| strcmp(s, "critical") == 0 || strcmp(s, "submodule") == 0) {
 		if (strcmp(prevWord, "end") == 0)
 			lev = 0;
 		else
 			lev = 1;
 	} else if ((strcmp(s, "end") == 0 && chNextNonBlank != '=')
-	        || strcmp(s, "endassociate") == 0 || strcmp(s, "endblock") == 0
-	        || strcmp(s, "endblockdata") == 0 || strcmp(s, "endselect") == 0
-	        || strcmp(s, "enddo") == 0 || strcmp(s, "endenum") ==0
-	        || strcmp(s, "endif") == 0 || strcmp(s, "endforall") == 0
-	        || strcmp(s, "endfunction") == 0 || strcmp(s, "endinterface") == 0
-	        || strcmp(s, "endmodule") == 0 || strcmp(s, "endprogram") == 0
-	        || strcmp(s, "endsubroutine") == 0 || strcmp(s, "endtype") == 0
-	        || strcmp(s, "endwhere") == 0 || strcmp(s, "endcritical") == 0
-		|| (strcmp(prevWord, "module") == 0 && strcmp(s, "procedure") == 0)  // Take care of the "module procedure" statement
-		|| strcmp(s, "endsubmodule") == 0 || strcmp(s, "endteam") == 0) {
+			|| strcmp(s, "endassociate") == 0 || strcmp(s, "endblock") == 0
+			|| strcmp(s, "endblockdata") == 0 || strcmp(s, "endselect") == 0
+			|| strcmp(s, "enddo") == 0 || strcmp(s, "endenum") ==0
+			|| strcmp(s, "endif") == 0 || strcmp(s, "endforall") == 0
+			|| strcmp(s, "endfunction") == 0 || strcmp(s, "endinterface") == 0
+			|| strcmp(s, "endmodule") == 0 || strcmp(s, "endprogram") == 0
+			|| strcmp(s, "endsubroutine") == 0 || strcmp(s, "endtype") == 0
+			|| strcmp(s, "endwhere") == 0 || strcmp(s, "endcritical") == 0
+			|| strcmp(s, "endsubmodule") == 0 || strcmp(s, "endteam") == 0
+			|| strcmp(s, "endprocedure") == 0) {
 		lev = -1;
 	} else if (strcmp(prevWord, "end") == 0 && strcmp(s, "if") == 0){ // end if
 		lev = 0;
 	} else if (strcmp(prevWord, "type") == 0 && strcmp(s, "is") == 0){ // type is
 		lev = -1;
-	} else if ((strcmp(prevWord, "end") == 0 && strcmp(s, "procedure") == 0)
-			   || strcmp(s, "endprocedure") == 0) {
-			lev = 1; // level back to 0, because no folding support for "module procedure" in submodule
+	} else if ((strcmp(prevWord, "end") == 0 && strcmp(s, "procedure") == 0)) {
+		lev = 0; 
 	} else if (strcmp(prevWord, "change") == 0 && strcmp(s, "team") == 0){ // change team
 		lev = 1;
 	}

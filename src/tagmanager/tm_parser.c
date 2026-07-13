@@ -697,13 +697,14 @@ static TMParserMapEntry map_FORTRAN[] = {
 	{'N', tm_tag_enumerator_t},  // enumerator
 	{'p', tm_tag_struct_t},      // program
 	{'P', tm_tag_undef_t},       // prototype
+	{'r', tm_tag_method_t},      // module procedure
 	{'s', tm_tag_method_t},      // subroutine
+	{'S', tm_tag_namespace_t},   // submodule
 	{'t', tm_tag_class_t},       // type
 	{'v', tm_tag_variable_t},    // variable
-	{'S', tm_tag_undef_t},       // submodule
 };
 static TMParserMapGroup group_FORTRAN[] = {
-	{N_("Module"), TM_ICON_CLASS, tm_tag_namespace_t},
+	{N_("Modules / Submodules"), TM_ICON_CLASS, tm_tag_namespace_t},
 	{N_("Programs"), TM_ICON_CLASS, tm_tag_struct_t},
 	{N_("Interfaces"), TM_ICON_STRUCT, tm_tag_interface_t},
 	{N_("Functions / Subroutines"), TM_ICON_METHOD, tm_tag_function_t | tm_tag_method_t},
