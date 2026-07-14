@@ -27,6 +27,8 @@
 #include "geanyplugin.h"
 #include "gtkcompat.h"
 #include <string.h>
+#include <Scintilla.h>
+#include <SciLexer.h>
 
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
@@ -112,6 +114,8 @@ static void on_sci_notify(ScintillaObject *sci, gint param,
 	{
 		/* adapted from editor.c: on_margin_click() */
 		case SCN_MARGINCLICK:
+			if (sci != edit_window.sci)
+				break;
 			/* left click to marker margin toggles marker */
 			if (nt->margin == 1)
 			{
@@ -133,6 +137,26 @@ static void on_sci_notify(ScintillaObject *sci, gint param,
 			}
 			break;
 
+		case SCN_ZOOM:
+		{
+			GeanyDocument *doc = document_get_current();
+			if (!doc || !edit_window.sci)
+			{
+				break;
+			}
+			ScintillaObject *main_sci = doc->editor->sci;
+			ScintillaObject *split_sci = edit_window.sci;
+			gint zoom = scintilla_send_message(sci, SCI_GETZOOM, 0, 0);
+			if (sci == main_sci)
+			{
+				scintilla_send_message(split_sci, SCI_SETZOOM, zoom, 0);
+			}
+			else if (sci == split_sci)
+			{
+				scintilla_send_message(main_sci, SCI_SETZOOM, zoom, 0);
+			}
+			break;
+		}
 		default: break;
 	}
 }
@@ -179,6 +203,8 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 	scintilla_send_message(editwin->sci, SCI_USEPOPUP, 1, 0);
 	/* for margin events */
 	g_signal_connect(editwin->sci, "sci-notify",
+			G_CALLBACK(on_sci_notify), NULL);
+	g_signal_connect(editwin->editor->sci, "sci-notify",
 			G_CALLBACK(on_sci_notify), NULL);
 
 	gtk_label_set_text(GTK_LABEL(editwin->name_label), DOC_FILENAME(editor->document));
@@ -312,6 +338,7 @@ static void split_view(gboolean horizontal)
 
 	pane = gtk_paned_new(horizontal ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL);
 	gtk_container_add(GTK_CONTAINER(parent), pane);
+	gint zoom = scintilla_send_message(doc->editor->sci, SCI_GETZOOM, 0, 0);
 
 	gtk_container_add(GTK_CONTAINER(pane), notebook);
 	g_object_unref(notebook);
@@ -328,6 +355,7 @@ static void split_view(gboolean horizontal)
 	gtk_container_add(GTK_CONTAINER(pane), splitwin_notebook);
 
 	set_editor(&edit_window, doc->editor);
+	scintilla_send_message(edit_window.sci, SCI_SETZOOM, zoom, 0);
 
 	if (horizontal)
 	{
