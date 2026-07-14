@@ -133,7 +133,7 @@ static void ColouriseForthDoc(Sci_PositionU startPos, Sci_Position length, int i
 				sc.SetState(SCE_FORTH_IDENTIFIER);
 			} else if (sc.ch == '{') {
 				sc.SetState(SCE_FORTH_LOCALE);
-			} else if (sc.ch == ':' && IsASCII(sc.chNext) && isspace(sc.chNext)) {
+			} else if (sc.ch == ':' && IsASCII(sc.chNext) && isspace(sc.chNext) && (sc.atLineStart || IsASpaceChar(sc.chPrev))) {
 				// highlight word definitions e.g.  : GCD ( n n -- n ) ..... ;
 				//                                  ^ ^^^
 				sc.SetState(SCE_FORTH_DEFWORD);

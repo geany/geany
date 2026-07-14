@@ -46,12 +46,12 @@ extern parserDefinition* ForthParser (void)
 	static tagRegexTable ForthTagRegexTable [] = {
 		{"^[[:space:]]*\\\\.*", "",
 		"", "{exclusive}", NULL, false},
-		{"^:[[:space:]]+([^[:space:]]+)", "\\1",
-		"w", "{exclusive}", NULL, false},
-		{"^variable[[:space:]]+([^[:space:]]+)", "\\1",
-		"v", "{exclusive}{icase}", NULL, false},
-		{"^[[:alnum:]]+[[:space:]]+constant[[:space:]]+([^[:space:]]+)", "\\1",
-		"c", "{exclusive}{icase}", NULL, false},
+		{"(^|[[:space:]]+):[[:space:]]+([^[:space:]]+)", "\\2",
+		"w", NULL, NULL, false},
+		{"variable[[:space:]]+([^[:space:]]+)", "\\1",
+		"v", "{icase}", NULL, false},
+		{"constant[[:space:]]+([^[:space:]]+)", "\\1",
+		"c", "{icase}", NULL, false},
 	};
 
 	static selectLanguage selectors[] = { selectFortranOrForthByForthMarker, NULL };
