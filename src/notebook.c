@@ -62,6 +62,7 @@ static guint mru_pos = 0;
 static gboolean switch_in_progress = FALSE;
 static GtkWidget *switch_dialog = NULL;
 static GtkWidget *switch_dialog_label = NULL;
+static guint switch_timeout_id = 0;
 
 
 static void
@@ -166,27 +167,61 @@ static gboolean is_modifier_key(guint keyval)
 }
 
 
+static void stop_switch(void)
+{
+	GeanyDocument *doc;
+
+	switch_in_progress = FALSE;
+
+	if (switch_dialog)
+	{
+		gtk_widget_destroy(switch_dialog);
+		switch_dialog = NULL;
+	}
+
+	if (switch_timeout_id != 0)
+	{
+		g_source_remove(switch_timeout_id);
+		switch_timeout_id = 0;
+	}
+
+	doc = document_get_current();
+	update_mru_docs_head(doc);
+	mru_pos = 0;
+	document_check_disk_status(doc, TRUE);
+}
+
+
+static gboolean on_switch_dialog_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
+{
+	GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_NOTEBOOK,
+			GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED);
+
+	if (keybindings_check_event(ev, kb))
+	{
+		notebook_switch_tablastused();
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
 static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
 	/* user may have rebound keybinding to a different modifier than Ctrl, so check all */
-	if (switch_in_progress && is_modifier_key(ev->keyval))
-	{
-		GeanyDocument *doc;
+	if (switch_in_progress && (is_modifier_key(ev->keyval) ||
+				(keybindings_get_modifiers(ev->state) == 0 && ev->keyval == GDK_KEY_Escape)))
+		stop_switch();
 
-		switch_in_progress = FALSE;
-
-		if (switch_dialog)
-		{
-			gtk_widget_destroy(switch_dialog);
-			switch_dialog = NULL;
-		}
-
-		doc = document_get_current();
-		update_mru_docs_head(doc);
-		mru_pos = 0;
-		document_check_disk_status(doc, TRUE);
-	}
 	return FALSE;
+}
+
+
+static void on_is_active_notify(GObject *object, GParamSpec *pspec, gpointer data)
+{
+	if (switch_in_progress && ! gtk_window_is_active(GTK_WINDOW(object)))
+		stop_switch();
 }
 
 
@@ -211,6 +246,7 @@ static GtkWidget *create_switch_dialog(void)
 	switch_dialog_label = widget;
 
 	g_signal_connect(dialog, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+	g_signal_connect(dialog, "key-press-event", G_CALLBACK(on_switch_dialog_key_press_event), NULL);
 	return dialog;
 }
 
@@ -226,6 +262,7 @@ static void update_filename_label(void)
 	{
 		switch_dialog = create_switch_dialog();
 		gtk_widget_show_all(switch_dialog);
+		gtk_grab_add(switch_dialog);
 	}
 
 	queue_length = g_queue_get_length(mru_docs);
@@ -260,12 +297,18 @@ static void update_filename_label(void)
 
 static gboolean on_switch_timeout(G_GNUC_UNUSED gpointer data)
 {
+	switch_timeout_id = 0;
+
 	if (!switch_in_progress || switch_dialog)
 	{
 		return FALSE;
 	}
 
-	update_filename_label();
+	if (gtk_window_is_active(GTK_WINDOW(main_widgets.window)))
+		update_filename_label();
+	else
+		stop_switch();
+
 	return FALSE;
 }
 
@@ -293,7 +336,11 @@ void notebook_switch_tablastused(void)
 	/* if there's a modifier key, we can switch back in MRU order each time unless
 	 * the key is released */
 	if (switch_start)
-		g_timeout_add(600, on_switch_timeout, NULL);
+	{
+		if (switch_timeout_id != 0)
+			g_source_remove(switch_timeout_id);
+		switch_timeout_id = g_timeout_add(600, on_switch_timeout, NULL);
+	}
 	else
 		update_filename_label();
 }
@@ -594,6 +641,7 @@ void notebook_init(void)
 
 	/* in case the switch dialog misses an event while drawing the dialog */
 	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+	g_signal_connect(main_widgets.window, "notify::is-active", G_CALLBACK(on_is_active_notify), NULL);
 
 	setup_tab_dnd();
 }
