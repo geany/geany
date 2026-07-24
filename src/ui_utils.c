@@ -1149,22 +1149,54 @@ static void recent_create_menu(GeanyRecentFiles *grf)
 	guint i, len;
 
 	len = MIN(file_prefs.mru_length, g_queue_get_length(grf->recent_queue));
-	for (i = 0; i < len; i++)
-	{
-		/* create menu item for the recent files menu in the menu bar */
-		const gchar *filename = g_queue_peek_nth(grf->recent_queue, i);
-		GtkWidget *tmp = gtk_menu_item_new_with_label(filename);
 
-		gtk_widget_show(tmp);
-		gtk_container_add(GTK_CONTAINER(grf->menubar), tmp);
-		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
-		/* create menu item for the recent files menu in the toolbar */
-		if (grf->toolbar != NULL)
+	/* Loop over each parent container */
+	GtkWidget *parents[] = { grf->menubar, grf->toolbar };
+	for (guint p = 0; p < G_N_ELEMENTS(parents); p++)
+	{
+		if (!parents[p])
+			continue;
+
+		for (i = 0; i < len; i++)
 		{
-			tmp = gtk_menu_item_new_with_label(filename);
-			gtk_widget_show(tmp);
-			gtk_container_add(GTK_CONTAINER(grf->toolbar), tmp);
-			g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
+			const gchar *filename = g_queue_peek_nth(grf->recent_queue, i);
+
+			/* double underscore to escape any '_' in filename */
+			GString *gs = g_string_new(NULL);
+			for (const gchar *c = filename; *c; c++)
+		   {
+				if (*c == '_')
+					g_string_append(gs, "__");
+				else
+					g_string_append_c(gs, *c);
+			}
+			gchar *escaped = g_string_free(gs, FALSE);
+
+			/* build the mnemonic label */
+			gchar *label;
+			if (i < 9)
+				label = g_strdup_printf("_%d %s", i + 1, escaped);
+			else if (i == 9)
+				label = g_strdup_printf("_0 %s", escaped);
+			else
+				label = g_strdup(escaped);
+
+			/* create the item */
+			GtkWidget *item = gtk_menu_item_new_with_mnemonic(label);
+
+			/* store the real filename for activation */
+			g_object_set_data_full(G_OBJECT(item),
+								   "recent-filename",
+								   g_strdup(filename),
+								   g_free);
+
+			gtk_widget_show(item);
+			gtk_container_add(GTK_CONTAINER(parents[p]), item);
+			g_signal_connect(item, "activate",
+							 G_CALLBACK(grf->activate_cb), NULL);
+
+			g_free(label);
+			g_free(escaped);
 		}
 	}
 }
@@ -1210,14 +1242,13 @@ void ui_create_recent_menus(void)
 
 static void recent_file_activate_cb(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_data)
 {
-	gchar *utf8_filename = ui_menu_item_get_text(menuitem);
+	const gchar *utf8_filename = g_object_get_data(G_OBJECT(menuitem), "recent-filename");
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
 	if (document_open_file(locale_filename, FALSE, NULL, NULL) != NULL)
 		recent_file_loaded(utf8_filename, recent_get_recent_files());
 
 	g_free(locale_filename);
-	g_free(utf8_filename);
 }
 
 
@@ -1385,72 +1416,77 @@ static void add_recent_file_menu_item(const gchar *utf8_filename, GeanyRecentFil
 
 static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf)
 {
-	GList *item;
-	GtkWidget *parents[] = { grf->menubar, grf->toolbar };
-	guint i;
-
-	/* first reorder the queue */
-	item = g_queue_find_custom(grf->recent_queue, utf8_filename, (GCompareFunc) strcmp);
+	/* update ordering in the queue */
+	GList *item = g_queue_find_custom(grf->recent_queue, utf8_filename,
+									   (GCompareFunc)strcmp);
 	g_return_if_fail(item != NULL);
-
 	g_queue_unlink(grf->recent_queue, item);
 	g_queue_push_head_link(grf->recent_queue, item);
 
-	for (i = 0; i < G_N_ELEMENTS(parents); i++)
-	{
-		GList *children;
-
-		if (! parents[i])
-			continue;
-
-		children = gtk_container_get_children(GTK_CONTAINER(parents[i]));
-		item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
-		/* either reorder or prepend a new one */
-		if (item)
-			menu_reorder_child(GTK_MENU(parents[i]), item->data, 0);
-		else
-			add_recent_file_menu_item(utf8_filename, grf, parents[i]);
-		g_list_free(children);
-	}
-
-	if (grf->type == RECENT_FILE_PROJECT)
-		ui_update_recent_project_menu();
+	/* rebuild the menu now that positions changed */
+	update_recent_menu(grf);
 }
 
 
 static void update_recent_menu(GeanyRecentFiles *grf)
 {
-	gchar *filename;
+	if (!grf) return;
+
+	/* iterate over each parent container */
 	GtkWidget *parents[] = { grf->menubar, grf->toolbar };
-	guint i;
-
-	filename = g_queue_peek_head(grf->recent_queue);
-
-	for (i = 0; i < G_N_ELEMENTS(parents); i++)
+	for (guint p = 0; p < G_N_ELEMENTS(parents); p++)
 	{
-		GList *children;
-
-		if (! parents[i])
+		GtkWidget *parent = parents[p];
+		if (!parent)
 			continue;
 
-		/* clean the MRU list before adding an item */
-		children = gtk_container_get_children(GTK_CONTAINER(parents[i]));
-		if (g_list_length(children) > file_prefs.mru_length - 1)
-		{
-			GList *item = g_list_nth(children, file_prefs.mru_length - 1);
-			while (item != NULL)
-			{
-				if (GTK_IS_MENU_ITEM(item->data))
-					gtk_widget_destroy(GTK_WIDGET(item->data));
-				item = g_list_next(item);
-			}
-		}
-		g_list_free(children);
+		/* safely destroy all existing items in this container */
+		gtk_container_foreach(GTK_CONTAINER(parent),
+							  (GtkCallback)gtk_widget_destroy, NULL);
 
-		/* create the new item */
-		add_recent_file_menu_item(filename, grf, parents[i]);
+		/* rebuild the menu items inline */
+		guint len = MIN(file_prefs.mru_length, g_queue_get_length(grf->recent_queue));
+		for (guint i = 0; i < len; i++)
+		{
+			const gchar *filename = g_queue_peek_nth(grf->recent_queue, i);
+
+			/* escape underscores in filename */
+			GString *gs = g_string_new(NULL);
+			for (const gchar *c = filename; *c; c++)
+			{
+				if (*c == '_')
+					g_string_append(gs, "__");
+				else
+					g_string_append_c(gs, *c);
+			}
+			gchar *escaped = g_string_free(gs, FALSE);
+
+			/* assign mnemonic */
+			gchar *label;
+			if (i < 9)
+				label = g_strdup_printf("_%d %s", i + 1, escaped);
+			else if (i == 9)
+				label = g_strdup_printf("_0 %s", escaped);
+			else
+				label = g_strdup(escaped);
+
+			/* create the menu item */
+			GtkWidget *item = gtk_menu_item_new_with_mnemonic(label);
+
+			/* store original filename for activate callback */
+			g_object_set_data_full(G_OBJECT(item),
+								   "recent-filename", g_strdup(filename), g_free);
+
+			gtk_widget_show(item);
+			gtk_container_add(GTK_CONTAINER(parent), item);
+			g_signal_connect(item, "activate", G_CALLBACK(grf->activate_cb), NULL);
+
+			g_free(label);
+			g_free(escaped);
+		}
 	}
 
+	/* update recent projects menu if applicable */
 	if (grf->type == RECENT_FILE_PROJECT)
 		ui_update_recent_project_menu();
 }
