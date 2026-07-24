@@ -65,7 +65,7 @@ context_action_cmd=
 #type=0
 
 [build-menu]
-FT_00_LB=Compile
+FT_00_LB=_Compile
 FT_00_CM=rustc "%f"
 FT_00_WD=
 NF_00_LB=Cargo Build
@@ -77,7 +77,7 @@ NF_01_WD=
 NF_02_LB=Cargo Bench
 NF_02_CM=cargo bench
 NF_02_WD=
-EX_00_LB=Run
+EX_00_LB=_Execute
 EX_00_CM="./%e"
 EX_00_WD=
 EX_01_LB=Cargo Run
