@@ -29,7 +29,7 @@ globalclass=class
 tripleverbatim=string_2
 hashquotedstring=string_2
 taskmarker=comment
-escapesequence=string_1
+escapesequence=string_1,bold
 
 [keywords]
 # all items must be in one line
@@ -41,6 +41,7 @@ docComment=a addindex addtogroup anchor arg attention author authors b brief bug
 [lexer_properties]
 styling.within.preprocessor=1
 lexer.cpp.track.preprocessor=0
+lexer.cpp.escape.sequence=1
 
 [settings]
 # default extension used when saving files
