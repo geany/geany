@@ -45,6 +45,8 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent,
 	const gchar *label_text, const gchar *default_text);
 
+void dialogs_set_default_dir(const gchar *filename);
+
 
 #ifdef GEANY_PRIVATE
 

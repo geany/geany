@@ -558,6 +558,7 @@ static void handle_switch_page(GeanyDocument *doc)
 	{
 		GtkEntry *filter_entry = GTK_ENTRY(ui_lookup_widget(main_widgets.window, "entry_tagfilter"));
 		const gchar *entry_text = gtk_entry_get_text(filter_entry);
+		const gchar *cwd_path = doc->real_path ? doc->real_path : doc->file_name;
 
 		sidebar_select_openfiles_item(doc);
 		ui_save_buttons_toggle(doc->changed);
@@ -578,8 +579,9 @@ static void handle_switch_page(GeanyDocument *doc)
 		document_check_disk_status(doc, TRUE);
 
 #ifdef HAVE_VTE
-		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
+		vte_cwd(cwd_path, FALSE);
 #endif
+		dialogs_set_default_dir(cwd_path);
 
 		g_signal_emit_by_name(geany_object, "document-activate", doc);
 	}
