@@ -59,7 +59,8 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg);
 
 void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 			G_GNUC_PRINTF (4, 5);
-void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const char *msg);
+void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string);
+void msgwin_msg_add_markup(gint msg_color, gint line, GeanyDocument *doc, const gchar *markup);
 
 void msgwin_clear_tab(gint tabnum);
 
