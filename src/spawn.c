@@ -706,7 +706,8 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 			for (argc = 0; argv[argc]; argc++);
 
 		full_argv = g_renew(gchar *, cl_argv, cl_argc + argc + 1);
-		memcpy(full_argv + cl_argc, argv, argc * sizeof(gchar *));
+		if (argv)
+			memcpy(full_argv + cl_argc, argv, argc * sizeof(gchar *));
 		full_argv[cl_argc + argc] = NULL;
 	}
 	else
