@@ -32,6 +32,8 @@ extern gboolean	ignore_callback;
 
 void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
+void on_new_instance1_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_save1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_save_as1_activate(GtkMenuItem *menuitem, gpointer user_data);
