@@ -651,6 +651,10 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR,
 		invert(common_style_set.styling[GCS_INDICATOR_ERROR].foreground));
 
+	/* Warning Indicator */
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_WARNING, INDIC_SQUIGGLEPIXMAP);
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_WARNING, (0xA52A2A /* bluish, in BGR */));
+
 	/* Search indicator, used for 'Mark' matches */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH,
