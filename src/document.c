@@ -1265,7 +1265,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		/* if filename is a shortcut, try to resolve it */
 		locale_filename = win32_get_shortcut_target(filename);
 #else
-		locale_filename = g_strdup(filename);
+		locale_filename = utils_get_real_path(filename);
 #endif
 		/* remove relative junk */
 		utils_tidy_path(locale_filename);
