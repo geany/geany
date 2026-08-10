@@ -474,6 +474,24 @@ gchar *utils_utf8_strdown(const gchar *str)
 	return down;
 }
 
+/* like g_utf8_strup() but if @str is not valid UTF8, convert it from locale first.
+ * returns NULL on charset conversion failure */
+gchar *utils_utf8_strup(const gchar *str)
+{
+	gchar *up;
+
+	if (g_utf8_validate(str, -1, NULL))
+		up = g_utf8_strup(str, -1);
+	else
+	{
+		up = g_locale_to_utf8(str, -1, NULL, NULL, NULL);
+		if (up)
+			SETPTR(up, g_utf8_strup(up, -1));
+	}
+
+	return up;
+}
+
 
 /* Returns @c TRUE if @a key is a substring of @a haystack, case-insensitive.
  * Applies @c g_utf8_normalize and @c g_utf8_casefold on both input strings before comparison.
