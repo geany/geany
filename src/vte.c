@@ -851,7 +851,7 @@ void vte_cwd(const gchar *filename, gboolean force)
 			/* use g_shell_quote to avoid problems with spaces, '!' or something else in path */
 			gchar *quoted_path = g_shell_quote(path);
 			const gchar *cmd_prefix = vte_config.send_cmd_prefix ? vte_config.send_cmd_prefix : "";
-			gchar *cmd = g_strconcat(cmd_prefix, "cd ", quoted_path, "\n", NULL);
+			gchar *cmd = g_strconcat(" ", cmd_prefix, "cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
 			{
 				const gchar *msg = _("Directory not changed because the terminal may contain some input (press Ctrl+C or Enter to clear it).");
