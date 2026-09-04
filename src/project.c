@@ -175,22 +175,23 @@ void project_new(gboolean from_folder)
 
 	e.dialog = gtk_dialog_new_with_buttons(_("New Project"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
-										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+										 _("_Cancel"), GTK_RESPONSE_CANCEL, NULL);
 
 	gtk_widget_set_name(e.dialog, "GeanyDialogProject");
-	button = ui_button_new_with_image(GTK_STOCK_NEW, _("C_reate"));
+	button = ui_button_new_with_image("document-new", _("C_reate"));
 	gtk_widget_set_can_default(button, TRUE);
 	gtk_window_set_default(GTK_WINDOW(e.dialog), button);
 	gtk_dialog_add_action_widget(GTK_DIALOG(e.dialog), button, GTK_RESPONSE_OK);
 
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(e.dialog));
 
-	table = gtk_table_new(3, 2, FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
+	table = gtk_grid_new();
+	gtk_grid_set_row_spacing(GTK_GRID(table), 5);
+	gtk_grid_set_column_spacing(GTK_GRID(table), 10);
 
 	label = gtk_label_new(_("Name:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 
 	e.name = gtk_entry_new();
 	gtk_entry_set_activates_default(GTK_ENTRY(e.name), TRUE);
@@ -198,10 +199,11 @@ void project_new(gboolean from_folder)
 	gtk_entry_set_max_length(GTK_ENTRY(e.name), MAX_NAME_LEN);
 	gtk_widget_set_tooltip_text(e.name, _("Project name"));
 
-	ui_table_add_row(GTK_TABLE(table), 0, label, e.name, NULL);
+	ui_grid_add_row(GTK_GRID(table), 0, label, e.name, NULL);
 
 	label = gtk_label_new(_("Filename:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 
 	e.file_name = gtk_entry_new();
 	gtk_entry_set_activates_default(GTK_ENTRY(e.file_name), TRUE);
@@ -214,16 +216,17 @@ void project_new(gboolean from_folder)
 	g_free(tooltip);
 	button = gtk_button_new();
 	g_signal_connect(button, "clicked", G_CALLBACK(on_file_save_button_clicked), &e);
-	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
+	image = gtk_image_new_from_icon_name("document-open", GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(button), image);
 	bbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 	gtk_box_pack_start(GTK_BOX(bbox), e.file_name, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
-	ui_table_add_row(GTK_TABLE(table), 1, label, bbox, NULL);
+	ui_grid_add_row(GTK_GRID(table), 1, label, bbox, NULL);
 
 	label = gtk_label_new(_("Base path:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 
 	e.base_path = gtk_entry_new();
 	gtk_entry_set_activates_default(GTK_ENTRY(e.base_path), TRUE);
@@ -235,7 +238,7 @@ void project_new(gboolean from_folder)
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e.base_path));
 
-	ui_table_add_row(GTK_TABLE(table), 2, label, bbox, NULL);
+	ui_grid_add_row(GTK_GRID(table), 2, label, bbox, NULL);
 
 	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 
@@ -317,7 +320,7 @@ static void run_open_dialog(GtkFileChooser *dialog)
 {
 	while (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
-		gchar *filename = gtk_file_chooser_get_filename(dialog);
+		gchar *filename = dialogs_file_chooser_get_filename(dialog);
 
 		if (app->project && !project_close(FALSE)) {}
 		/* try to load the config */
@@ -352,8 +355,8 @@ void project_open(void)
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Open Project"), GTK_WINDOW(main_widgets.window),
 				GTK_FILE_CHOOSER_ACTION_OPEN,
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL));
+				_("_Cancel"), GTK_RESPONSE_CANCEL,
+				_("_Open"), GTK_RESPONSE_ACCEPT, NULL));
 		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialogProject");
 
 		/* set default Open, so pressing enter can open multiple files */
@@ -504,14 +507,16 @@ static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 	else
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Choose Project Base Path"),
 			NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+			_("_Cancel"), GTK_RESPONSE_CANCEL,
+			_("_Open"), GTK_RESPONSE_ACCEPT,
 			NULL));
 
 	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
-		gtk_entry_set_text(GTK_ENTRY(base_path_entry),
-			gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)));
+		gchar *filename = dialogs_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+		gtk_entry_set_text(GTK_ENTRY(base_path_entry), filename);
+		g_free(filename);
 	}
 
 	dialogs_file_chooser_destroy(dialog);
@@ -675,7 +680,7 @@ gboolean project_ask_close(void)
 	if (app->project != NULL)
 	{
 		if (!interface_prefs.warn_on_project_close ||
-			dialogs_show_question_full(NULL, GTK_STOCK_CLOSE, GTK_STOCK_CANCEL,
+			dialogs_show_question_full(NULL, _("_Close"), _("_Cancel"),
 			_("Do you want to close it before proceeding?"),
 			_("The '%s' project is open."), app->project->name))
 		{
@@ -766,7 +771,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		{
 			gboolean create_dir;
 
-			create_dir = dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
+			create_dir = dialogs_show_question_full(NULL, _("_OK"), _("_Cancel"),
 				_("Create the project's base path directory?"),
 				_("The path \"%s\" does not exist."),
 				base_path);
@@ -796,7 +801,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		return FALSE;
 	}
 	else if (new_project && g_file_test(locale_filename, G_FILE_TEST_EXISTS) &&
-			 ! dialogs_show_question_full(NULL, _("_Replace"), GTK_STOCK_CANCEL,
+			 ! dialogs_show_question_full(NULL, _("_Replace"), _("_Cancel"),
 				NULL,
 				_("The file '%s' already exists. Do you want to overwrite it?"),
 				file_name))
@@ -903,7 +908,12 @@ static void run_dialog(GtkFileChooser *dialog, GtkWidget *entry)
 			if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
 				gtk_file_chooser_set_current_folder(dialog, locale_filename);
 			else
-				gtk_file_chooser_set_filename(dialog, utf8_filename);
+			{
+				GFile *file = g_file_new_for_path(locale_filename);
+
+				gtk_file_chooser_set_file(dialog, file, NULL);
+				g_object_unref(file);
+			}
 		}
 		else /* if the file doesn't yet exist, use at least the current directory */
 		{
@@ -927,7 +937,7 @@ static void run_dialog(GtkFileChooser *dialog, GtkWidget *entry)
 	/* run it */
 	if (dialogs_file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
-		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		gchar *filename = dialogs_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 		gchar *tmp_utf8_filename = utils_get_utf8_from_locale(filename);
 
 		gtk_entry_set_text(GTK_ENTRY(entry), tmp_utf8_filename);
@@ -951,8 +961,8 @@ static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElement
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Choose Project Filename"), NULL,
 						GTK_FILE_CHOOSER_ACTION_SAVE,
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL));
+						_("_Cancel"), GTK_RESPONSE_CANCEL,
+						_("_Save"), GTK_RESPONSE_ACCEPT, NULL));
 		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialogProject");
 		gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);

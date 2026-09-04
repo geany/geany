@@ -7392,3 +7392,151 @@ msgstr "Góra i dół"
 #, fuzzy
 #~ msgid "Do you want to save all opened files before processing?"
 #~ msgstr "Czy chcesz zapisać wszystkie otwarte pliki przed kontynuacją?"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "_Wytnij"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "Zmniejsz wcięcie"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "Zn_ajdź i zastąp"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "Zwiększ wcięcie"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "Zapi_sz jako"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "Po_większ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "Po_mniejsz"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "_O programie"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "_Dodaj"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "_Zastosuj"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "_Wstecz"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "_Anuluj"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "Wy_czyść"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "S_kopiuj"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "_Usuń"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "W _dół"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "_Znajdź"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "_Dalej"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "Prz_ejdź do"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "_Nowy"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "_Nie"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "_Zwykły rozmiar"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "_OK"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "_Otwórz"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "Wk_lej"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "P_referencje"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "Wy_drukuj"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "_Właściwości"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "Za_kończ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "P_onów"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "_Odśwież"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "_Usuń"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "_Przywróć"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "_Zapisz"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "Cof_nij"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "W _górę"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "_Tak"

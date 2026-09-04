@@ -73,18 +73,18 @@ struct cc_dialog
 static void cc_dialog_update_row_status(GtkListStore *store, GtkTreeIter *iter, const gchar *cmd)
 {
 	GError *err = NULL;
-	const gchar *stock_id = GTK_STOCK_NO;
+	const gchar *icon_name = "gtk-no";
 	gchar *tooltip = NULL;
 
 	if (EMPTY(cmd) || spawn_check_command(cmd, TRUE, &err))
-		stock_id = GTK_STOCK_YES;
+		icon_name = "gtk-yes";
 	else
 	{
 		tooltip = g_strdup_printf(_("Invalid command: %s"), err->message);
 		g_error_free(err);
 	}
 
-	gtk_list_store_set(store, iter, CC_COLUMN_STATUS, stock_id, CC_COLUMN_TOOLTIP, tooltip, -1);
+	gtk_list_store_set(store, iter, CC_COLUMN_STATUS, icon_name, CC_COLUMN_TOOLTIP, tooltip, -1);
 	g_free(tooltip);
 }
 
@@ -352,8 +352,8 @@ static void cc_show_dialog_custom_commands(void)
 	struct cc_dialog cc;
 
 	dialog = gtk_dialog_new_with_buttons(_("Set Custom Commands"), GTK_WINDOW(main_widgets.window),
-						GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+						GTK_DIALOG_DESTROY_WITH_PARENT, _("_Cancel"), GTK_RESPONSE_CANCEL,
+						_("_OK"), GTK_RESPONSE_ACCEPT, NULL);
 	gtk_window_set_default_size(GTK_WINDOW(dialog), 300, 300); /* give a reasonable minimal default size */
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
@@ -361,7 +361,7 @@ static void cc_show_dialog_custom_commands(void)
 
 	label = gtk_label_new(_("You can send the current selection to any of these commands and the output of the command replaces the current selection."));
 	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 	cc.count = 1;
@@ -379,7 +379,7 @@ static void cc_show_dialog_custom_commands(void)
 	column = g_object_new(GTK_TYPE_TREE_VIEW_COLUMN, "title", _("Command"), "expand", TRUE, "resizable", TRUE, NULL);
 	renderer = gtk_cell_renderer_pixbuf_new();
 	gtk_tree_view_column_pack_start(column, renderer, FALSE);
-	gtk_tree_view_column_set_attributes(column, renderer, "stock-id", CC_COLUMN_STATUS, NULL);
+	gtk_tree_view_column_set_attributes(column, renderer, "icon-name", CC_COLUMN_STATUS, NULL);
 	renderer = gtk_cell_renderer_text_new();
 	g_object_set(renderer, "editable", TRUE, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
 	g_signal_connect(renderer, "edited", G_CALLBACK(cc_dialog_on_command_edited), &cc);
@@ -428,16 +428,16 @@ static void cc_show_dialog_custom_commands(void)
 	buttonbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
 	gtk_box_set_spacing(GTK_BOX(buttonbox), 6);
 	gtk_box_pack_start(GTK_BOX(vbox), buttonbox, FALSE, FALSE, 0);
-	cc.button_add = gtk_button_new_from_stock(GTK_STOCK_ADD);
+	cc.button_add = gtk_button_new_with_mnemonic(_("_Add"));
 	g_signal_connect(cc.button_add, "clicked", G_CALLBACK(cc_on_dialog_add_clicked), &cc);
 	gtk_container_add(GTK_CONTAINER(buttonbox), cc.button_add);
-	cc.button_remove = gtk_button_new_from_stock(GTK_STOCK_REMOVE);
+	cc.button_remove = gtk_button_new_with_mnemonic(_("_Remove"));
 	g_signal_connect(cc.button_remove, "clicked", G_CALLBACK(cc_on_dialog_remove_clicked), &cc);
 	gtk_container_add(GTK_CONTAINER(buttonbox), cc.button_remove);
-	cc.button_up = gtk_button_new_from_stock(GTK_STOCK_GO_UP);
+	cc.button_up = gtk_button_new_with_mnemonic(_("_Up"));
 	g_signal_connect(cc.button_up, "clicked", G_CALLBACK(cc_on_dialog_move_up_clicked), &cc);
 	gtk_container_add(GTK_CONTAINER(buttonbox), cc.button_up);
-	cc.button_down = gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
+	cc.button_down = gtk_button_new_with_mnemonic(_("_Down"));
 	g_signal_connect(cc.button_down, "clicked", G_CALLBACK(cc_on_dialog_move_down_clicked), &cc);
 	gtk_container_add(GTK_CONTAINER(buttonbox), cc.button_down);
 
@@ -692,7 +692,7 @@ void tools_word_count(void)
 
 	dialog = gtk_dialog_new_with_buttons(_("Word Count"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
-										 GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+										 _("_Close"), GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
@@ -709,62 +709,70 @@ void tools_word_count(void)
 	word_count(text, &chars, &lines, &words);
 	g_free(text);
 
-	table = gtk_table_new(4, 2, FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
+	table = gtk_grid_new();
+	gtk_grid_set_row_spacing(GTK_GRID(table), 5);
+	gtk_grid_set_column_spacing(GTK_GRID(table), 10);
 
 	label = gtk_label_new(_("Range:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_grid_attach(GTK_GRID(table), label, 0, 0, 1, 1);
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 
 	label = gtk_label_new(range);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 20, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_start(label, 20);
+	gtk_widget_set_margin_end(label, 20);
+	gtk_grid_attach(GTK_GRID(table), label, 1, 0, 1, 1);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 
 	label = gtk_label_new(_("Lines:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_grid_attach(GTK_GRID(table), label, 0, 1, 1, 1);
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 
 	text = g_strdup_printf("%d", lines);
 	label = gtk_label_new(text);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 20, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_start(label, 20);
+	gtk_widget_set_margin_end(label, 20);
+	gtk_grid_attach(GTK_GRID(table), label, 1, 1, 1, 1);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 	g_free(text);
 
 	label = gtk_label_new(_("Words:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_grid_attach(GTK_GRID(table), label, 0, 2, 1, 1);
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 
 	text = g_strdup_printf("%d", words);
 	label = gtk_label_new(text);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 20, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_start(label, 20);
+	gtk_widget_set_margin_end(label, 20);
+	gtk_grid_attach(GTK_GRID(table), label, 1, 2, 1, 1);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 	g_free(text);
 
 	label = gtk_label_new(_("Characters:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_grid_attach(GTK_GRID(table), label, 0, 3, 1, 1);
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 
 	text = g_strdup_printf("%d", chars);
 	label = gtk_label_new(text);
-	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 3, 4,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 20, 0);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_start(label, 20);
+	gtk_widget_set_margin_end(label, 20);
+	gtk_grid_attach(GTK_GRID(table), label, 1, 3, 1, 1);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 	g_free(text);
 
 	gtk_container_add(GTK_CONTAINER(vbox), table);
@@ -788,16 +796,13 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 			/* fall through */
 		case GTK_RESPONSE_APPLY:
 		{
-			GdkColor color;
+			GdkRGBA color;
 			GeanyDocument *doc = document_get_current();
 			gchar *hex;
-			GtkWidget *colorsel;
 
 			g_return_if_fail(doc != NULL);
 
-			colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
-			gtk_color_selection_get_current_color(GTK_COLOR_SELECTION(colorsel), &color);
-
+			gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(dialog), &color);
 			hex = utils_get_hex_from_color(&color);
 			editor_insert_color(doc->editor, hex);
 			g_free(hex);
@@ -810,51 +815,29 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 }
 
 
-static void on_color_selection_change_palette_with_screen(GdkScreen *screen, const GdkColor *colors, gint n_colors)
-{
-	GtkSettings *settings;
-
-	/* Get the updated palette */
-	g_free(ui_prefs.color_picker_palette);
-	ui_prefs.color_picker_palette = gtk_color_selection_palette_to_string(colors, n_colors);
-
-	/* Update the gtk-color-palette setting so all GtkColorSelection widgets will be modified */
-	settings = gtk_settings_get_for_screen(screen);
-	g_object_set(G_OBJECT(settings), "gtk-color-palette", ui_prefs.color_picker_palette, NULL);
-}
-
-
-/* This shows the color selection dialog to choose a color. */
+/* This shows the color chooser dialog to choose a color. */
 void tools_color_chooser(const gchar *color)
 {
-	GdkColor gc;
-	GtkWidget *colorsel;
+	GdkRGBA gc;
 
 	if (ui_widgets.open_colorsel == NULL)
 	{
-		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
-		gtk_dialog_add_button(GTK_DIALOG(ui_widgets.open_colorsel), GTK_STOCK_APPLY, GTK_RESPONSE_APPLY);
+		ui_widgets.open_colorsel = gtk_color_chooser_dialog_new(_("Color Chooser"),
+			GTK_WINDOW(main_widgets.window));
+		gtk_color_chooser_set_use_alpha(GTK_COLOR_CHOOSER(ui_widgets.open_colorsel), FALSE);
+		gtk_dialog_add_button(GTK_DIALOG(ui_widgets.open_colorsel), _("_Apply"), GTK_RESPONSE_APPLY);
 		ui_dialog_set_primary_button_order(GTK_DIALOG(ui_widgets.open_colorsel),
 				GTK_RESPONSE_APPLY, GTK_RESPONSE_CANCEL, GTK_RESPONSE_OK, -1);
 		gtk_widget_set_name(ui_widgets.open_colorsel, "GeanyDialog");
-		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(main_widgets.window));
-		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
-		gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colorsel), TRUE);
-		gtk_color_selection_set_change_palette_with_screen_hook(on_color_selection_change_palette_with_screen);
 
 		g_signal_connect(ui_widgets.open_colorsel, "response",
 						G_CALLBACK(on_color_dialog_response), NULL);
 		g_signal_connect(ui_widgets.open_colorsel, "delete-event",
 						G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 	}
-	else
-		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
 	/* if color is non-NULL set it in the dialog as preselected color */
 	if (color != NULL && utils_parse_color(color, &gc))
-	{
-		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colorsel), &gc);
-		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(colorsel), &gc);
-	}
+		gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(ui_widgets.open_colorsel), &gc);
 
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_colorsel));

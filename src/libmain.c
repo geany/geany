@@ -693,7 +693,7 @@ static gint create_config_dir(void)
 			if (g_file_test(old_dir, G_FILE_TEST_EXISTS))
 			{
 				if (! dialogs_show_question_full(main_widgets.window,
-					GTK_STOCK_YES, GTK_STOCK_QUIT, _("Move it now?"),
+					_("_Yes"), _("_Quit"), _("Move it now?"),
 					"%s",
 					_("Geany needs to move your old configuration directory before starting.")))
 					exit(0);
@@ -1339,7 +1339,6 @@ static gboolean do_main_quit(void)
 	g_free(prefs.default_open_path);
 	g_free(prefs.custom_plugin_path);
 	g_free(ui_prefs.custom_date_format);
-	g_free(ui_prefs.color_picker_palette);
 	g_free(interface_prefs.editor_font);
 	g_free(interface_prefs.tagbar_font);
 	g_free(interface_prefs.msgwin_font);
@@ -1425,7 +1424,7 @@ gboolean main_quit(void)
 			return TRUE;
 	}
 	else if (! prefs.confirm_exit ||
-		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
+		dialogs_show_question_full(NULL, _("_Quit"), _("_Cancel"), NULL,
 			_("Do you really want to quit?")))
 	{
 		if (do_main_quit())

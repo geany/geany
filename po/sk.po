@@ -6304,3 +6304,155 @@ msgstr "Vedľa seba"
 #: plugins/splitwindow.c:434
 msgid "Top and Bottom"
 msgstr "Nad sebou"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "Vystri_hnúť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "Zmenšiť odsadenie"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "Nájsť a na_hradiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "Zväčšiť odsadenie"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "Uložiť _ako"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Select _All"
+msgstr "Vybr_ať všetko"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "Z_väčšiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "Z_menšiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "_O programe"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "P_ridať"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "Po_užiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "_Späť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "_Zrušiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "Vy_mazať"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "_Kopírovať"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "O_dstrániť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "_Dole"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "_Nájsť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "Ď_alej"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "Prejsť _na"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "_Nový"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "_Nie"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "_Normálna veľkosť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "_Ok"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "_Otvoriť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "_Vložiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "Nas_tavenia"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "_Tlačiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "_Vlastnosti"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "U_končiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "_Opakovať vrátené"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "_Obnoviť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "O_dstrániť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "Vrá_tiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "_Uložiť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "Vrátiť _späť"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "_Hore"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "Án_o"

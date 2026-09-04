@@ -57,7 +57,7 @@ GtkAction*	geany_menu_button_action_new		(const gchar	*name,
 												 const gchar	*label,
 												 const gchar	*tooltip,
 												 const gchar	*tooltip_arrow,
-												 const gchar	*stock_id);
+												 const gchar	*icon_name);
 GtkWidget*	geany_menu_button_action_get_menu	(GeanyMenubuttonAction *action);
 
 void		geany_menu_button_action_set_menu	(GeanyMenubuttonAction *action, GtkWidget *menu);

@@ -7004,3 +7004,151 @@ msgstr "Fent és lent"
 #~ msgstr ""
 #~ "Az ebben a fájlban történt valamennyi változtatás életbe lépéséhez a "
 #~ "Geany újraindítása szükséges."
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "_Kivágás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "Behúzás csökkentése"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "Keresés és _csere"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "Behúzás növelése"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "Men_tés másként"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "_Nagyítás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "_Kicsinyítés"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "_Névjegy"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "Hozzá_adás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "_Alkalmaz"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "_Vissza"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "Mé_gse"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "_Törlés"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "_Másolás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "_Törlés"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "_Le"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "_Keresés"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "_Tovább"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "_Ugrás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "Ú_j"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "_Nem"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "_Normál méret"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "_OK"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "_Megnyitás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "_Beillesztés"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "B_eállítások"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "_Nyomtatás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "_Tulajdonságok"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "_Kilépés"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "Mé_gis"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "_Frissítés"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "_Eltávolítás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "_Visszaállítás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "M_entés"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "_Visszavonás"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "_Fel"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "_Igen"

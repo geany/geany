@@ -6134,3 +6134,155 @@ msgstr "並排"
 #: plugins/splitwindow.c:434
 msgid "Top and Bottom"
 msgstr "頂端和底部"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "剪下(_T)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "減少縮排"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "尋找與取代(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "增加縮排"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "另存新檔(_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Select _All"
+msgstr "全選(_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "拉近(_I)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "拉遠(_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "關於(_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "加入(_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "套用(_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "返回(_B)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "清除(_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "複製(_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "刪除(_D)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "向下(_D)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "尋找(_F)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "前進(_F)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "跳轉到(_J)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "新增(_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "否(_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "一般大小(_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "確定(_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "開啟(_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "貼上(_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "偏好設定(_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "列印(_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "屬性(_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "退出(_Q)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "重做(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "重新整理(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "移除(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "還原(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "儲存(_S)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "還原(_U)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "向上(_U)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "是(_Y)"

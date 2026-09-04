@@ -7361,3 +7361,151 @@ msgstr "Jos"
 
 #~ msgid "Rows of symbol completion list:"
 #~ msgstr "Rânduri pentru lista de completare a simbolurilor:"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "_Taie"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "Micșorează indentarea"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "Caută și î_nlocuiește"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "Mărește indentarea"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "Salvează c_a"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "_Mărește"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "Micș_orează"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "_Despre"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "_Adaugă"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "_Aplică"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "Îna_poi"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "_Renunță"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "_Curăță"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "_Copiază"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "Șter_ge"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "_Jos"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "C_aută"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "Înai_nte"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "_Sari la"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "_Nou"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "_Nu"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "Dimensiune _normală"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "_OK"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "_Deschide"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "_Lipește"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "_Preferințe"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "_Tipărește"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "_Proprietăți"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "_Ieșire"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "_Refă"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "_Reîmprospătează"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "E_limină"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "_Restaurează"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "_Salvează"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "An_ulează"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "_Sus"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "_Da"

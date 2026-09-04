@@ -6099,3 +6099,155 @@ msgstr "नीचे"
 #, fuzzy
 #~ msgid "Split Vertically"
 #~ msgstr "लंबबत भाजित"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "काटें (_t)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "दूरी कम करें"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "ढूँढें और बदलें (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "दूरी बढ़ाएँ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "ऐसे सहेजें (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Select _All"
+msgstr "सभी चुनें (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "बड़ा करें (_I)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "छोटा करें (_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "परिचय (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "जोड़ें (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "लागू करें (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "पीछे (_B)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "रद्द करें (_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "साफ़ करें (_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "नक़ल करें (_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "मिटाएँ (_D)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "नीचे (_D)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "ढूँढें (_F)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "आगे (_F)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "यहाँ जाएँ (_J)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "नया (_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "नहीं (_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "सामान्य आकार (_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "ठीक (_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "खोलें (_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "चिपकाएँ (_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "वरीयता (_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "छापें (_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "गुण (_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "बाहर जाएँ (_Q)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "फिर करें (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "ताज़ा करें (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "हटाएँ (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "पुरानी स्थिति लौटाएँ (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "सहेजें (_S)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "पहले जैसा (_U)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "ऊपर (_U)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "हाँ (_Y)"

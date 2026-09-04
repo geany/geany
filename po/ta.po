@@ -6216,3 +6216,155 @@ msgstr ""
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
 msgstr "முகவரி \" %s\" ஐ திறக்கத் தவறிவிட்டது: %s"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "வெட்டு (_t)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "உள்ளடக்கத்தைக் குறைக்கவும்"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "தேடி மாற்று (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "உள்ளடக்கத்தை அதிகரி"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "மறுபெயரில் சேமி (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Select _All"
+msgstr "அனைத்தையும் தேர்ந்தெடு (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "பெரிதாக்கு (_I)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "சிறிதாக்கு (_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "பற்றி (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "சேர் (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "செயல்படுத்து (_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "பின்னால் (_B)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "ரத்து (_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "துப்பரவாக்கு (_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "நகல் (_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "அழி (_D)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "கீழே (_D)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "தேடு"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "முன்னோக்கு (_F)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "தாவு (_J)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "புதிய (_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "இல்லை (_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "சாதாரண அளவு (_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "சரி (_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "திற (_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "ஒட்டு (_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "முன்னுரிமைகள் (_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "அச்சிடு (_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "பண்புகள் (_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "வெளியேறு (_Q)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "மீள் (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "புதுப்பி (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "நீக்கு (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "நிலைமீட்டு (_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "சேமி (_S)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "மறை (_U)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "மேலே (_U)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "ஆம் (_Y)"

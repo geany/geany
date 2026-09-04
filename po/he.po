@@ -6564,3 +6564,155 @@ msgstr "עליון ותחתון"
 
 #~ msgid "Text will be wrongly spaced."
 #~ msgstr "הטקסט יוצג במרווחים שונים בצורה לא נכונה."
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "_גזירה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "הקטנת זיח"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "חיפוש וה_חלפה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "הגדלת זיח"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "שמירה _בשם"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Select _All"
+msgstr "בחירת ה_כול"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "הת_קרבות"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "הת_רחקות"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "על _אודות"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "הו_ספה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "ה_חלה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "_חזרה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "_ביטול"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "_פינוי"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "ה_עתקה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "מ_חיקה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "_מטה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "_חיפוש"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "_קדימה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "_קפיצה אל"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "_חדש"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "_לא"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "גודל _רגיל"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "_אישור"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "_פתיחה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "ה_דבקה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "_העדפות"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "_הדפסה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "_מאפיינים"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "י_ציאה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "_ביצוע שוב"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "_רענון"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "ה_סרה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "ה_חזרה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "_שמירה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "_ביטול"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "מ_עלה"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "_כן"

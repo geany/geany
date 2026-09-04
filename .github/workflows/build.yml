@@ -176,6 +176,59 @@ jobs:
         run: ccache --show-stats
         if: ${{ env.DEBUG == '1' }}
 
+  linux-gtk-deprecations:
+    name: GTK 4 readiness report
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install --assume-yes --no-install-recommends \
+            gettext \
+            libgtk-3-dev \
+            libgtk-3-bin \
+            libgtk-4-bin \
+            meson \
+            xvfb
+
+      - name: Configuration
+        run: |
+          meson setup _build -Ddeprecation-warnings=true
+
+      # the number of deprecated GTK/GLib symbols still in use is the metric for
+      # the remaining work towards GTK 4 (see HACKING); it should only ever go down
+      - name: Build and count uses of deprecated GTK/GLib API
+        shell: bash
+        run: |
+          set -o pipefail
+          ninja -C _build 2>&1 | tee build.log
+          count=$(grep -c 'is deprecated' build.log || true)
+          echo "Uses of deprecated GTK/GLib API: $count"
+          {
+            echo "### Uses of deprecated GTK/GLib API: $count"
+            echo
+            echo '```'
+            grep 'is deprecated' build.log | \
+              sed -E "s/.*warning: [^A-Za-z_]*([A-Za-z_0-9]+)[^A-Za-z_]* is deprecated.*/\1/" | \
+              sort | uniq -c | sort -rn
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate geany.glade with GTK 3
+        run: xvfb-run -a gtk-builder-tool validate data/geany.glade
+
+      # informational until the file has been modernized enough for the conversion to succeed
+      - name: Check whether geany.glade converts to GTK 4
+        shell: bash
+        continue-on-error: true
+        run: |
+          gtk4-builder-tool simplify --3to4 data/geany.glade > geany-gtk4.ui 2> convert.log || true
+          echo "### gtk4-builder-tool simplify --3to4 warnings: $(wc -l < convert.log)" >> "$GITHUB_STEP_SUMMARY"
+          gtk4-builder-tool validate geany-gtk4.ui
+
   mingw64:
     name: Mingw-w64 Build (Windows)
     runs-on: ubuntu-22.04

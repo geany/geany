@@ -6328,3 +6328,155 @@ msgstr "أعلى و أسفل"
 
 #~ msgid "_Debug Messages"
 #~ msgstr "رسائل المعالجة"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "_قصّ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "اخفض المحاذاة"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "ابحث وا_ستبدِل"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "زِد المحاذاة"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "احفظ با_سم"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Select _All"
+msgstr "اختر ال_كل"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "_قرّب"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "_بعّد"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "_عنْ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "أ_ضف"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "_طبّق"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "خل_ف"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "أل_غِ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "ا_مسح"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "ا_نسخ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "ا_حذف"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "أ_سفل"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "ا_بحث"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "أ_مام"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "ا_قفز إلى"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "_جديد"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "_لا"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "_الحجم العادي"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "_نعم"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "ا_فتح"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "أ_لصق"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "_التفضيلات"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "ا_طبع"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "_الخصائص"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "أ_نهِ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "أ_عد"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "_حدِّث"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "ا_حذِف"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "ا_عكس"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "ا_حفظ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "_تراجع"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "ف_وق"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "_نعم"

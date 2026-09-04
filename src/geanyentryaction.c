@@ -54,7 +54,7 @@ enum
 static guint signals[LAST_SIGNAL];
 
 
-G_DEFINE_TYPE(GeanyEntryAction, geany_entry_action, GTK_TYPE_ACTION)
+G_DEFINE_TYPE_WITH_PRIVATE(GeanyEntryAction, geany_entry_action, GTK_TYPE_ACTION)
 
 
 static void delegate_entry_activate_cb(GtkEntry *entry, GeanyEntryAction *action)
@@ -118,8 +118,6 @@ static void geany_entry_action_class_init(GeanyEntryActionClass *klass)
 	action_class->create_tool_item = geany_entry_action_create_tool_item;
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 
-	g_type_class_add_private(klass, sizeof(GeanyEntryActionPrivate));
-
 	signals[ENTRY_CHANGED] = g_signal_new("entry-changed",
 									G_TYPE_FROM_CLASS(klass),
 									G_SIGNAL_RUN_LAST,
@@ -151,8 +149,7 @@ static void geany_entry_action_init(GeanyEntryAction *action)
 {
 	GeanyEntryActionPrivate *priv;
 
-	action->priv = G_TYPE_INSTANCE_GET_PRIVATE(action,
-		GEANY_ENTRY_ACTION_TYPE, GeanyEntryActionPrivate);
+	action->priv = geany_entry_action_get_instance_private(action);
 
 	priv = action->priv;
 	priv->numeric = FALSE;

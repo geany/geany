@@ -351,17 +351,13 @@ get_template_class_source(ClassInfo *class_info)
 /* Creates a new option label, indented on the left */
 static GtkWidget *cc_option_label_new(const gchar *text)
 {
-	GtkWidget *align;
 	GtkWidget *label;
 
-	align = gtk_alignment_new(0.0, 0.5, 1.0, 1.0);
-	gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 0, 12, 0);
-
 	label = gtk_label_new(text);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-	gtk_container_add(GTK_CONTAINER(align), label);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_widget_set_margin_start(label, 12);
 
-	return align;
+	return label;
 }
 
 /* Attaches a new section label at the specified table row, optionally
@@ -370,22 +366,18 @@ static GtkWidget *cc_table_attach_section_label(GtkWidget *table, const gchar *t
 		guint row, gboolean top_padding)
 {
 	gchar *markup;
-	GtkWidget *label, *align;
+	GtkWidget *label;
 
 	label = gtk_label_new(NULL);
 	markup = g_markup_printf_escaped("<b>%s</b>", text);
 	gtk_label_set_markup(GTK_LABEL(label), markup);
 	g_free(markup);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-
-	align = gtk_alignment_new(0.0, 0.5, 1.0, 1.0);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	if (top_padding)
-		gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 0, 0, 0);
-	gtk_container_add(GTK_CONTAINER(align), label);
+		gtk_widget_set_margin_top(label, 6);
 
-	gtk_table_attach(GTK_TABLE(table), align,
-					 0, 2, row, row+1,
-					 GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+	gtk_widget_set_hexpand(label, TRUE);
+	gtk_grid_attach(GTK_GRID(table), label, 0, row, 2, 1);
 
 	return label;
 }
@@ -395,9 +387,7 @@ static GtkWidget *cc_table_attach_section_label(GtkWidget *table, const gchar *t
 static GtkWidget *cc_table_attach_option_label(GtkWidget *table, const gchar *text, guint row)
 {
 	GtkWidget *opt_label = cc_option_label_new(text);
-	gtk_table_attach(GTK_TABLE(table), opt_label,
-					 0, 1, row, row+1,
-					 GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
+	gtk_grid_attach(GTK_GRID(table), opt_label, 0, row, 1, 1);
 	return opt_label;
 }
 
@@ -412,9 +402,8 @@ static GtkWidget *cc_table_attach_option_entry(GtkWidget *table, const gchar *te
 	label = cc_table_attach_option_label(table, text, row);
 	entry = gtk_entry_new();
 	g_object_set_data(G_OBJECT(entry), "label", label);
-	gtk_table_attach(GTK_TABLE(table), entry,
-					 1, 2, row, row+1,
-					 GTK_EXPAND|GTK_FILL, GTK_FILL, 0, 0);
+	gtk_widget_set_hexpand(entry, TRUE);
+	gtk_grid_attach(GTK_GRID(table), entry, 1, row, 1, 1);
 	return entry;
 }
 
@@ -422,7 +411,7 @@ static void show_dialog_create_class(gint type)
 {
 	CreateClassDialog *cc_dlg;
 	GtkWidget *main_box, *table, *label, *hdr_hbox;
-	GtkWidget *opt_table, *align;
+	GtkWidget *opt_table;
 	guint row;
 
 	cc_dlg = g_new0(CreateClassDialog, 1);
@@ -431,8 +420,8 @@ static void show_dialog_create_class(gint type)
 	cc_dlg->dialog = gtk_dialog_new_with_buttons(_("Create Class"),
 			GTK_WINDOW(geany->main_widgets->window),
 			GTK_DIALOG_MODAL,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OK, GTK_RESPONSE_OK,
+			_("_Cancel"), GTK_RESPONSE_CANCEL,
+			_("_OK"), GTK_RESPONSE_OK,
 			NULL);
 
 	switch (type)
@@ -450,9 +439,9 @@ static void show_dialog_create_class(gint type)
 
 	g_signal_connect_swapped(cc_dlg->dialog, "destroy", G_CALLBACK(g_free), (gpointer)cc_dlg);
 
-	table = gtk_table_new(13, 2, FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
-	gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+	table = gtk_grid_new();
+	gtk_grid_set_column_spacing(GTK_GRID(table), 6);
+	gtk_grid_set_row_spacing(GTK_GRID(table), 6);
 
 	main_box = ui_dialog_vbox_new(GTK_DIALOG(cc_dlg->dialog));
 	gtk_box_pack_start(GTK_BOX(main_box), table, TRUE, TRUE, 0);
@@ -510,11 +499,9 @@ static void show_dialog_create_class(gint type)
 						   cc_dlg->base_header_global_box,
 						   FALSE, TRUE, 0);
 
-		gtk_table_attach(GTK_TABLE(table), hdr_hbox,
-						 1, 2, row, row+1,
-						 GTK_FILL | GTK_EXPAND,
-						 GTK_FILL | GTK_EXPAND,
-						 0, 0);
+		gtk_widget_set_hexpand(hdr_hbox, TRUE);
+		gtk_widget_set_vexpand(hdr_hbox, TRUE);
+		gtk_grid_attach(GTK_GRID(table), hdr_hbox, 1, row, 1, 1);
 		row++;
 	}
 
@@ -532,42 +519,32 @@ static void show_dialog_create_class(gint type)
 
 	cc_table_attach_section_label(table, _("Options"), row++, TRUE);
 
-	align = gtk_alignment_new(0.0, 0.5, 1.0, 1.0);
-	gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 0, 12, 0);
+	opt_table = gtk_grid_new();
+	gtk_grid_set_row_spacing(GTK_GRID(opt_table), 6);
+	gtk_grid_set_column_spacing(GTK_GRID(opt_table), 6);
+	gtk_widget_set_margin_start(opt_table, 12);
 
-	opt_table = gtk_table_new(1, 2, FALSE);
-	gtk_table_set_row_spacings(GTK_TABLE(opt_table), 6);
-	gtk_table_set_col_spacings(GTK_TABLE(opt_table), 6);
-	gtk_container_add(GTK_CONTAINER(align), opt_table);
-
-	gtk_table_attach(GTK_TABLE(table), align,
-					 0, 2, row, row+1,
-					 GTK_FILL|GTK_EXPAND,
-					 GTK_FILL|GTK_EXPAND,
-					 0, 0);
+	gtk_widget_set_hexpand(opt_table, TRUE);
+	gtk_widget_set_vexpand(opt_table, TRUE);
+	gtk_grid_attach(GTK_GRID(table), opt_table, 0, row, 2, 1);
 	row++;
 
 	cc_dlg->create_constructor_box = gtk_check_button_new_with_label(_("Create constructor"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(cc_dlg->create_constructor_box), TRUE);
-	gtk_table_attach(GTK_TABLE(opt_table), cc_dlg->create_constructor_box,
-					 0, 1, 0, 1, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
+	gtk_grid_attach(GTK_GRID(opt_table), cc_dlg->create_constructor_box, 0, 0, 1, 1);
 
 	cc_dlg->create_destructor_box = gtk_check_button_new_with_label(_("Create destructor"));
-	gtk_table_attach(GTK_TABLE(opt_table), cc_dlg->create_destructor_box,
-					 1, 2, 0, 1, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
+	gtk_grid_attach(GTK_GRID(opt_table), cc_dlg->create_destructor_box, 1, 0, 1, 1);
 
 	if (type == GEANY_CLASS_TYPE_PHP)
 	{
-		gtk_table_resize(GTK_TABLE(opt_table), 2, 2);
 		cc_dlg->create_isabstract_box = gtk_check_button_new_with_label(_("Is abstract"));
-		gtk_table_attach(GTK_TABLE(opt_table), cc_dlg->create_isabstract_box,
-						 0, 1, 1, 2, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
+		gtk_grid_attach(GTK_GRID(opt_table), cc_dlg->create_isabstract_box, 0, 1, 1, 1);
 		cc_dlg->create_issingleton_box = gtk_check_button_new_with_label(_("Is singleton"));
-		gtk_table_attach(GTK_TABLE(opt_table), cc_dlg->create_issingleton_box,
-						 1, 2, 1, 2, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 0, 0);
+		gtk_grid_attach(GTK_GRID(opt_table), cc_dlg->create_issingleton_box, 1, 1, 1, 1);
 	}
 
-	gtk_widget_show_all(align);
+	gtk_widget_show_all(opt_table);
 
 	if (type == GEANY_CLASS_TYPE_GTK)
 	{
@@ -578,10 +555,6 @@ static void show_dialog_create_class(gint type)
 						 G_CALLBACK(cc_dlg_on_set_sensitive_toggled),
 						 cc_dlg->gtk_constructor_type_entry);
 	}
-	else if (type == GEANY_CLASS_TYPE_PHP)
-		gtk_table_resize(GTK_TABLE(table), row, 2);
-	else if (type == GEANY_CLASS_TYPE_CPP)
-		gtk_table_resize(GTK_TABLE(table), row, 2);
 
 	gtk_widget_show_all(cc_dlg->dialog);
 	while (gtk_dialog_run(GTK_DIALOG(cc_dlg->dialog)) == GTK_RESPONSE_OK)
@@ -589,7 +562,7 @@ static void show_dialog_create_class(gint type)
 		if (create_class(cc_dlg))
 			break;
 		else
-			gdk_beep();
+			gdk_display_beep(gdk_display_get_default());
 	}
 	gtk_widget_destroy(cc_dlg->dialog);
 }
@@ -1084,7 +1057,7 @@ void plugin_init(GeanyData *data)
 	GtkWidget *menu_create_gtk_class;
 	GtkWidget *menu_create_php_class;
 
-	menu_create_class1 = ui_image_menu_item_new (GTK_STOCK_ADD, _("Create Cla_ss"));
+	menu_create_class1 = ui_image_menu_item_new ("list-add", _("Create Cla_ss"));
 	gtk_container_add (GTK_CONTAINER (geany->main_widgets->tools_menu), menu_create_class1);
 
 	menu_create_class1_menu = gtk_menu_new ();

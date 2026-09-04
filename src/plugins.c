@@ -1738,7 +1738,6 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkTreeStore *store)
 		pm_treeview_text_cell_data_func, NULL, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
 	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), PLUGIN_COLUMN_PLUGIN,
 		pm_tree_sort_func, NULL, NULL);
@@ -1862,17 +1861,17 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_window_set_default_size(GTK_WINDOW(pm_widgets.dialog), 500, 450);
 
 	pm_widgets.help_button = gtk_dialog_add_button(
-		GTK_DIALOG(pm_widgets.dialog), GTK_STOCK_HELP, PM_BUTTON_HELP);
+		GTK_DIALOG(pm_widgets.dialog), _("_Help"), PM_BUTTON_HELP);
 	pm_widgets.configure_button = gtk_dialog_add_button(
-		GTK_DIALOG(pm_widgets.dialog), GTK_STOCK_PREFERENCES, PM_BUTTON_CONFIGURE);
+		GTK_DIALOG(pm_widgets.dialog), _("_Preferences"), PM_BUTTON_CONFIGURE);
 	pm_widgets.keybindings_button = gtk_dialog_add_button(
 		GTK_DIALOG(pm_widgets.dialog), _("Keybindings"), PM_BUTTON_KEYBINDINGS);
-	gtk_dialog_add_button(GTK_DIALOG(pm_widgets.dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+	gtk_dialog_add_button(GTK_DIALOG(pm_widgets.dialog), _("_Close"), GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response(GTK_DIALOG(pm_widgets.dialog), GTK_RESPONSE_CLOSE);
 
 	/* filter */
 	pm_widgets.filter_entry = filter_entry = gtk_entry_new();
-	gtk_entry_set_icon_from_stock(GTK_ENTRY(filter_entry), GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_FIND);
+	gtk_entry_set_icon_from_icon_name(GTK_ENTRY(filter_entry), GTK_ENTRY_ICON_PRIMARY, "edit-find");
 	ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
 	g_signal_connect(filter_entry, "changed", G_CALLBACK(on_pm_tree_filter_entry_changed_cb), NULL);
 	g_signal_connect(filter_entry, "icon-release",
@@ -1893,12 +1892,12 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_container_add(GTK_CONTAINER(swin), pm_widgets.tree);
 
 	label = gtk_label_new(_("Choose which plugins to load:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 
 	/* plugin popup menu */
 	pm_widgets.popup_menu = gtk_menu_new();
 
-	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL);
+	menu_item = ui_image_menu_item_new("preferences-system", _("_Preferences"));
 	gtk_container_add(GTK_CONTAINER(pm_widgets.popup_menu), menu_item);
 	g_signal_connect(menu_item, "activate",
 			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_CONFIGURE));
@@ -1910,7 +1909,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_KEYBINDINGS));
 	pm_widgets.popup_keybindings_menu_item = menu_item;
 
-	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP, NULL);
+	menu_item = ui_image_menu_item_new("help-browser", _("_Help"));
 	gtk_container_add(GTK_CONTAINER(pm_widgets.popup_menu), menu_item);
 	g_signal_connect(menu_item, "activate",
 			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_HELP));

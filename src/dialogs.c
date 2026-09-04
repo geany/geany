@@ -334,57 +334,66 @@ static gboolean filetype_combo_box_set_active_filetype(GtkComboBox *combo, const
 static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 {
 	GtkWidget *expander, *vbox, *table, *check_hidden;
-	GtkWidget *filetype_ebox, *filetype_label, *filetype_combo;
-	GtkWidget *encoding_ebox, *encoding_label, *encoding_combo;
+	GtkWidget *filetype_label, *filetype_combo;
+	GtkWidget *encoding_label, *encoding_combo, *spacer;
 
 	expander = gtk_expander_new_with_mnemonic(_("_More Options"));
 	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 	gtk_container_add(GTK_CONTAINER(expander), vbox);
 
-	table = gtk_table_new(2, 4, FALSE);
+	table = gtk_grid_new();
 
 	/* line 1 with checkbox and encoding combo */
 	check_hidden = gtk_check_button_new_with_mnemonic(_("Show _hidden files"));
 	gtk_widget_show(check_hidden);
-	gtk_table_attach(GTK_TABLE(table), check_hidden, 0, 1, 0, 1,
-					(GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
-					(GtkAttachOptions) (0), 0, 5);
+	gtk_widget_set_hexpand(check_hidden, TRUE);
+	gtk_widget_set_valign(check_hidden, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_top(check_hidden, 5);
+	gtk_widget_set_margin_bottom(check_hidden, 5);
+	gtk_grid_attach(GTK_GRID(table), check_hidden, 0, 0, 1, 1);
 
 	/* spacing */
-	gtk_table_attach(GTK_TABLE(table), gtk_label_new(""), 1, 2, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 5, 5);
+	spacer = gtk_label_new("");
+	gtk_widget_set_margin_start(spacer, 5);
+	gtk_widget_set_margin_end(spacer, 5);
+	gtk_widget_set_margin_top(spacer, 5);
+	gtk_widget_set_margin_bottom(spacer, 5);
+	gtk_grid_attach(GTK_GRID(table), spacer, 1, 0, 1, 1);
 
 	encoding_label = gtk_label_new(_("Set encoding:"));
-	gtk_misc_set_alignment(GTK_MISC(encoding_label), 1, 0);
-	gtk_table_attach(GTK_TABLE(table), encoding_label, 2, 3, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 4, 5);
-	/* the ebox is for the tooltip, because gtk_combo_box can't show tooltips */
-	encoding_ebox = gtk_event_box_new();
+	gtk_label_set_xalign(GTK_LABEL(encoding_label), 1);
+	gtk_label_set_yalign(GTK_LABEL(encoding_label), 0);
+	gtk_widget_set_valign(encoding_label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_start(encoding_label, 4);
+	gtk_widget_set_margin_end(encoding_label, 4);
+	gtk_widget_set_margin_top(encoding_label, 5);
+	gtk_widget_set_margin_bottom(encoding_label, 5);
+	gtk_grid_attach(GTK_GRID(table), encoding_label, 2, 0, 1, 1);
 	encoding_combo = ui_create_encodings_combo_box(TRUE, GEANY_ENCODINGS_MAX);
-	gtk_widget_set_tooltip_text(encoding_ebox,
+	gtk_widget_set_tooltip_text(encoding_combo,
 		_("Explicitly defines an encoding for the file, if it would not be detected. This is useful when you know that the encoding of a file cannot be detected correctly by Geany.\nNote if you choose multiple files, they will all be opened with the chosen encoding."));
-	gtk_container_add(GTK_CONTAINER(encoding_ebox), encoding_combo);
-	gtk_table_attach(GTK_TABLE(table), encoding_ebox, 3, 4, 0, 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 5);
+	gtk_widget_set_valign(encoding_combo, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_top(encoding_combo, 5);
+	gtk_widget_set_margin_bottom(encoding_combo, 5);
+	gtk_grid_attach(GTK_GRID(table), encoding_combo, 3, 0, 1, 1);
 
 	/* line 2 with filetype combo */
 	filetype_label = gtk_label_new(_("Set filetype:"));
-	gtk_misc_set_alignment(GTK_MISC(filetype_label), 1, 0);
-	gtk_table_attach(GTK_TABLE(table), filetype_label, 2, 3, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 4, 5);
-	/* the ebox is for the tooltip, because gtk_combo_box can't show tooltips */
-	filetype_ebox = gtk_event_box_new();
+	gtk_label_set_xalign(GTK_LABEL(filetype_label), 1);
+	gtk_label_set_yalign(GTK_LABEL(filetype_label), 0);
+	gtk_widget_set_valign(filetype_label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_start(filetype_label, 4);
+	gtk_widget_set_margin_end(filetype_label, 4);
+	gtk_widget_set_margin_top(filetype_label, 5);
+	gtk_widget_set_margin_bottom(filetype_label, 5);
+	gtk_grid_attach(GTK_GRID(table), filetype_label, 2, 1, 1, 1);
 	filetype_combo = create_filetype_combo_box();
-	gtk_widget_set_tooltip_text(filetype_ebox,
+	gtk_widget_set_tooltip_text(filetype_combo,
 		_("Explicitly defines a filetype for the file, if it would not be detected by filename extension.\nNote if you choose multiple files, they will all be opened with the chosen filetype."));
-	gtk_container_add(GTK_CONTAINER(filetype_ebox), filetype_combo);
-	gtk_table_attach(GTK_TABLE(table), filetype_ebox, 3, 4, 1, 2,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 5);
+	gtk_widget_set_valign(filetype_combo, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_top(filetype_combo, 5);
+	gtk_widget_set_margin_bottom(filetype_combo, 5);
+	gtk_grid_attach(GTK_GRID(table), filetype_combo, 3, 1, 1, 1);
 
 	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 0);
 	gtk_widget_show_all(vbox);
@@ -421,8 +430,8 @@ static GtkFileChooser *create_open_file_dialog(void)
 			_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."));
 
 		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+			_("_Cancel"), GTK_RESPONSE_CANCEL,
+			_("_Open"), GTK_RESPONSE_ACCEPT, NULL);
 		gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
 		gtk_widget_set_size_request(GTK_WIDGET(dialog), -1, 460);
@@ -511,6 +520,22 @@ void dialogs_file_chooser_destroy(GtkFileChooser *dialog)
 }
 
 
+/* Returns the selected file as a filename in locale encoding, or NULL if nothing
+ * is selected or the selection is not a local file. Free the result with g_free(). */
+gchar *dialogs_file_chooser_get_filename(GtkFileChooser *dialog)
+{
+	GFile *file = gtk_file_chooser_get_file(dialog);
+	gchar *filename = NULL;
+
+	if (file)
+	{
+		filename = g_file_get_path(file);
+		g_object_unref(file);
+	}
+	return filename;
+}
+
+
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file(void)
 {
@@ -578,7 +603,7 @@ static gboolean save_as_dialog_handle_response(GeanyDocument *doc,
 {
 	gboolean rename_file = FALSE;
 	gboolean success = FALSE;
-	gchar *new_filename = gtk_file_chooser_get_filename(dialog);
+	gchar *new_filename = dialogs_file_chooser_get_filename(dialog);
 
 	switch (response)
 	{
@@ -642,8 +667,8 @@ static GtkFileChooser *create_save_file_dialog(GeanyDocument *doc)
 		gtk_widget_set_sensitive(rename_btn, doc->real_path != NULL);
 
 		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			_("_Cancel"), GTK_RESPONSE_CANCEL,
+			_("_Save"), GTK_RESPONSE_ACCEPT, NULL);
 		gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 	}
 
@@ -818,13 +843,13 @@ static gint run_unsaved_dialog(const gchar *msg, const gchar *msg2)
 			GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg2);
-	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
 
-	button = ui_button_new_with_image(GTK_STOCK_CLEAR, _("_Don't save"));
+	button = ui_button_new_with_image("edit-clear", _("_Don't save"));
 	gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, GTK_RESPONSE_NO);
 	gtk_widget_show(button);
 
-	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Save"), GTK_RESPONSE_YES);
 
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 	ret = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -996,8 +1021,8 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 	InputDialogData *data = g_malloc(sizeof *data);
 
 	dialog = gtk_dialog_new_with_buttons(title, parent,
-		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+		GTK_DIALOG_DESTROY_WITH_PARENT, _("_Cancel"), GTK_RESPONSE_CANCEL,
+		_("_OK"), GTK_RESPONSE_ACCEPT, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
@@ -1011,7 +1036,7 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 	{
 		GtkWidget *label = gtk_label_new(label_text);
 		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
 		ui_hookup_widget(dialog, label, "label");
 		gtk_container_add(GTK_CONTAINER(vbox), label);
 	}
@@ -1137,14 +1162,14 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
-										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+										_("_Cancel"), GTK_RESPONSE_CANCEL,
+										_("_OK"), GTK_RESPONSE_ACCEPT, NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	label = gtk_label_new(label_text);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 
 	spin = gtk_spin_button_new_with_range(min, max, step);
 	ui_entry_add_clear_icon(GTK_ENTRY(spin));
@@ -1323,12 +1348,12 @@ static gint show_prompt(GtkWidget *parent,
 
 	if (btn_2 == NULL)
 	{
-		btn_2 = GTK_STOCK_NO;
+		btn_2 = _("_No");
 		response_2 = GTK_RESPONSE_NO;
 	}
 	if (btn_3 == NULL)
 	{
-		btn_3 = GTK_STOCK_YES;
+		btn_3 = _("_Yes");
 		response_3 = GTK_RESPONSE_YES;
 	}
 
@@ -1383,8 +1408,8 @@ gboolean dialogs_show_question(const gchar *text, ...)
 	va_end(args);
 	result = show_prompt(parent,
 		NULL, GTK_RESPONSE_NONE,
-		GTK_STOCK_NO, GTK_RESPONSE_NO,
-		GTK_STOCK_YES, GTK_RESPONSE_YES,
+		_("_No"), GTK_RESPONSE_NO,
+		_("_Yes"), GTK_RESPONSE_YES,
 		string, NULL);
 	g_free(string);
 	return (result == GTK_RESPONSE_YES);

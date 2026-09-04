@@ -212,13 +212,25 @@ endif
 # CFLAGS common between Geany and bundled plugins
 def_cflags = basic_cflags + [
 	'-DGTK',
-# we're using lots of deprecated stuff with gtk3 (often because there is no proper alternative!)
-	'-Wno-deprecated-declarations',
-	'-DGDK_DISABLE_DEPRECATION_WARNINGS',
-	'-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_56',
 	'-DGEANY_PREFIX="@0@"'.format(get_option('prefix')),
 	'-DGEANY_DOCDIR="@0@"'.format(join_paths(prefix, get_option('datadir'), 'doc'))
 ]
+if get_option('deprecation-warnings')
+	# warn about everything deprecated up to the GTK version we require and, by leaving
+	# GLIB_VERSION_MIN_REQUIRED at its default (the newest), about all GLib deprecations;
+	# this is used to track the remaining work towards GTK 4, see HACKING
+	def_cflags += [
+		'-Wdeprecated-declarations',
+		'-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_24'
+	]
+else
+	# we're using lots of deprecated stuff with gtk3 (often because there is no proper alternative!)
+	def_cflags += [
+		'-Wno-deprecated-declarations',
+		'-DGDK_DISABLE_DEPRECATION_WARNINGS',
+		'-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_56'
+	]
+endif
 foreach d : [ 'includedir', 'libdir', 'libexecdir', 'datadir', 'localedir' ]
 	def_cflags += '-DGEANY_@0@="@1@"'.format(d.underscorify().to_upper(), join_paths(prefix, get_option(d)))
 endforeach
@@ -235,6 +247,10 @@ elif have_gcc4_visibility
 endif
 geany_cflags += '-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL'
 sci_cflags = geany_cflags
+if get_option('deprecation-warnings')
+	# Scintilla is upstream code, keep its deprecation warnings silenced
+	sci_cflags += '-Wno-deprecated-declarations'
+endif
 sci_cflags += [ '-std=c++17', '-Wno-non-virtual-dtor', '-DNDEBUG', '-DSCI_LEXER', '-DNO_CXX11_REGEX' ]
 
 iregex = include_directories('ctags/gnu_regex')

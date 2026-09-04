@@ -120,9 +120,9 @@ struct VteFunctions
 	gboolean (*vte_terminal_get_has_selection) (VteTerminal *terminal);
 	void (*vte_terminal_copy_clipboard) (VteTerminal *terminal);
 	void (*vte_terminal_paste_clipboard) (VteTerminal *terminal);
-	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkColor *foreground);
-	void (*vte_terminal_set_color_bold) (VteTerminal *terminal, const GdkColor *foreground);
-	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkColor *background);
+	void (*vte_terminal_set_color_foreground) (VteTerminal *terminal, const GdkRGBA *foreground);
+	void (*vte_terminal_set_color_bold) (VteTerminal *terminal, const GdkRGBA *foreground);
+	void (*vte_terminal_set_color_background) (VteTerminal *terminal, const GdkRGBA *background);
 	void (*vte_terminal_feed_child) (VteTerminal *terminal, const char *data, glong length);
 	void (*vte_terminal_set_cursor_blink_mode) (VteTerminal *terminal,
 												VteTerminalCursorBlinkMode mode);
@@ -131,10 +131,10 @@ struct VteFunctions
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
 	GtkAdjustment* (*vte_terminal_get_adjustment) (VteTerminal *terminal);
 
-	/* hack for the VTE 2.91 API using GdkRGBA: we wrap the API to keep using GdkColor on our side */
-	void (*vte_terminal_set_color_foreground_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
-	void (*vte_terminal_set_color_bold_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
-	void (*vte_terminal_set_color_background_rgba) (VteTerminal *terminal, const GdkRGBA *background);
+	/* the VTE 2.90 API uses GdkColor: we wrap it to keep using GdkRGBA on our side */
+	void (*vte_terminal_set_color_foreground_color) (VteTerminal *terminal, const GdkColor *foreground);
+	void (*vte_terminal_set_color_bold_color) (VteTerminal *terminal, const GdkColor *foreground);
+	void (*vte_terminal_set_color_background_color) (VteTerminal *terminal, const GdkColor *background);
 };
 
 
@@ -187,29 +187,29 @@ static GtkAdjustment *default_vte_terminal_get_adjustment(VteTerminal *vte)
 }
 
 
-/* Wrap VTE 2.91 API using GdkRGBA with GdkColor so we use a single API on our side */
+/* Wrap the VTE 2.90 API using GdkColor with GdkRGBA so we use a single API on our side */
 
-static void rgba_from_color(GdkRGBA *rgba, const GdkColor *color)
+static void color_from_rgba(GdkColor *color, const GdkRGBA *rgba)
 {
-	rgba->red = color->red / 65535.0;
-	rgba->green = color->green / 65535.0;
-	rgba->blue = color->blue / 65535.0;
-	rgba->alpha = 1.0;
+	color->pixel = 0;
+	color->red = rgba->red * 65535 + 0.5;
+	color->green = rgba->green * 65535 + 0.5;
+	color->blue = rgba->blue * 65535 + 0.5;
 }
 
-#define WRAP_RGBA_SETTER(name) \
-	static void wrap_##name(VteTerminal *terminal, const GdkColor *color) \
+#define WRAP_COLOR_SETTER(name) \
+	static void wrap_##name(VteTerminal *terminal, const GdkRGBA *rgba) \
 	{ \
-		GdkRGBA rgba; \
-		rgba_from_color(&rgba, color); \
-		vf->name##_rgba(terminal, &rgba); \
+		GdkColor color; \
+		color_from_rgba(&color, rgba); \
+		vf->name##_color(terminal, &color); \
 	}
 
-WRAP_RGBA_SETTER(vte_terminal_set_color_background)
-WRAP_RGBA_SETTER(vte_terminal_set_color_bold)
-WRAP_RGBA_SETTER(vte_terminal_set_color_foreground)
+WRAP_COLOR_SETTER(vte_terminal_set_color_background)
+WRAP_COLOR_SETTER(vte_terminal_set_color_bold)
+WRAP_COLOR_SETTER(vte_terminal_set_color_foreground)
 
-#undef WRAP_RGBA_SETTER
+#undef WRAP_COLOR_SETTER
 
 
 static gchar **vte_get_child_environment(void)
@@ -227,11 +227,11 @@ static void override_menu_key(void)
 			"gtk-menu-bar-accel", &gtk_menu_key_accel, NULL);
 
 	if (vte_config.ignore_menu_bar_accel)
-		gtk_settings_set_string_property(gtk_settings_get_default(),
-			"gtk-menu-bar-accel", "<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", "Geany");
+		g_object_set(gtk_settings_get_default(),
+			"gtk-menu-bar-accel", "<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10", NULL);
 	else
-		gtk_settings_set_string_property(gtk_settings_get_default(),
-			"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
+		g_object_set(gtk_settings_get_default(),
+			"gtk-menu-bar-accel", gtk_menu_key_accel, NULL);
 }
 
 
@@ -574,9 +574,9 @@ static gboolean vte_register_symbols(GModule *mod)
 		} G_STMT_END
 	#define BIND_REQUIRED_SYMBOL(field) \
 		BIND_REQUIRED_SYMBOL_FULL(#field, &vf->field)
-	#define BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(field) \
+	#define BIND_REQUIRED_SYMBOL_COLOR_WRAPPED(field) \
 		G_STMT_START { \
-			BIND_REQUIRED_SYMBOL_FULL(#field, &vf->field##_rgba); \
+			BIND_REQUIRED_SYMBOL_FULL(#field, &vf->field##_color); \
 			vf->field = wrap_##field; \
 		} G_STMT_END
 
@@ -604,15 +604,15 @@ static gboolean vte_register_symbols(GModule *mod)
 
 	if (vte_is_2_91())
 	{
-		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_foreground);
-		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_bold);
-		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_background);
-	}
-	else
-	{
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_foreground);
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_bold);
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_background);
+	}
+	else
+	{
+		BIND_REQUIRED_SYMBOL_COLOR_WRAPPED(vte_terminal_set_color_foreground);
+		BIND_REQUIRED_SYMBOL_COLOR_WRAPPED(vte_terminal_set_color_bold);
+		BIND_REQUIRED_SYMBOL_COLOR_WRAPPED(vte_terminal_set_color_background);
 	}
 	BIND_REQUIRED_SYMBOL(vte_terminal_feed_child);
 	if (! BIND_SYMBOL(vte_terminal_set_cursor_blink_mode))
@@ -719,14 +719,14 @@ static GtkWidget *vte_create_popup_menu(void)
 	accel_group = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), accel_group);
 
-	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY, NULL);
+	item = ui_image_menu_item_new("edit-copy", _("_Copy"));
 	gtk_widget_add_accelerator(item, "activate", accel_group,
 		GDK_KEY_c, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_COPY));
 
-	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE, NULL);
+	item = ui_image_menu_item_new("edit-paste", _("_Paste"));
 	gtk_widget_add_accelerator(item, "activate", accel_group,
 		GDK_KEY_v, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
@@ -737,7 +737,7 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_SELECT_ALL, NULL);
+	item = ui_image_menu_item_new("edit-select-all", _("Select _All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_SELECTALL));
@@ -760,7 +760,7 @@ static GtkWidget *vte_create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL);
+	item = ui_image_menu_item_new("preferences-system", _("_Preferences"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PREFERENCES));
@@ -896,25 +896,27 @@ static void on_check_run_in_vte_toggled(GtkToggleButton *togglebutton, GtkWidget
 
 static void on_term_font_set(GtkFontButton *widget, gpointer user_data)
 {
-	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
+	gchar *fontbtn = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(widget));
 
 	if (! utils_str_equal(fontbtn, vte_config.font))
 	{
-		SETPTR(vte_config.font, g_strdup(gtk_font_button_get_font_name(widget)));
+		SETPTR(vte_config.font, fontbtn);
 		vte_apply_user_settings();
 	}
+	else
+		g_free(fontbtn);
 }
 
 
 static void on_term_fg_color_set(GtkColorButton *widget, gpointer user_data)
 {
-	gtk_color_button_get_color(widget, &vte_config.colour_fore);
+	gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &vte_config.colour_fore);
 }
 
 
 static void on_term_bg_color_set(GtkColorButton *widget, gpointer user_data)
 {
-	gtk_color_button_get_color(widget, &vte_config.colour_back);
+	gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &vte_config.colour_back);
 }
 
 

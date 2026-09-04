@@ -185,7 +185,7 @@ void log_show_debug_messages_dialog(void)
 	dialog = gtk_dialog_new_with_buttons(_("Debug Messages"), GTK_WINDOW(main_widgets.window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				_("Cl_ear"), DIALOG_RESPONSE_CLEAR,
-				GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+				_("_Close"), GTK_RESPONSE_CLOSE, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 	gtk_widget_set_name(dialog, "GeanyDialog");

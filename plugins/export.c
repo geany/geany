@@ -174,7 +174,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 	gtk_widget_set_name(dialog, "GeanyExportDialog");
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+		_("_Cancel"), GTK_RESPONSE_CANCEL, _("_Save"), GTK_RESPONSE_ACCEPT, NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
 	/* file chooser extra widget */
@@ -308,11 +308,13 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 
 	if (response == GTK_RESPONSE_ACCEPT && exi != NULL)
 	{
-		gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		GFile *file = gtk_file_chooser_get_file(GTK_FILE_CHOOSER(dialog));
+		gchar *new_filename = g_file_get_path(file);
 		gchar *utf8_filename;
 		gboolean insert_line_numbers;
 		gboolean use_zoom_level = FALSE;
 
+		g_object_unref(file);
 		if (exi->have_zoom_level_checkbox)
 		{
 			use_zoom_level = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(

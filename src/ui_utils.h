@@ -179,9 +179,6 @@ typedef struct UIPrefs
 	gchar		*custom_date_format;
 	gchar		**custom_commands;
 	gchar		**custom_commands_labels;
-
-	/* Color picker settings */
-	gchar		*color_picker_palette;
 }
 UIPrefs;
 
@@ -242,6 +239,10 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show);
 gchar *ui_menu_item_get_text(GtkMenuItem *menu_item);
 
 void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...);
+
+void ui_grid_add_row(GtkGrid *grid, gint row, ...) G_GNUC_NULL_TERMINATED;
+
+void ui_widget_set_css(GtkWidget *widget, const gchar *css);
 
 void ui_combo_box_prepend_text_once(GtkComboBoxText *combo, const gchar *text);
 

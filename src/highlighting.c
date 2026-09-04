@@ -1382,7 +1382,6 @@ void highlighting_show_color_scheme_dialog(void)
 
 	tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
-	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 	gtk_tree_view_set_search_equal_func(GTK_TREE_VIEW(tree),
 		color_scheme_search_equal_func, NULL, NULL);
@@ -1407,7 +1406,7 @@ void highlighting_show_color_scheme_dialog(void)
 		gtk_widget_destroy(dialog);
 	dialog = gtk_dialog_new_with_buttons(_("Color Schemes"),
 		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+		_("_Close"), GTK_RESPONSE_CLOSE, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 	gtk_widget_set_name(dialog, "GeanyDialog");

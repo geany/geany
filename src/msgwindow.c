@@ -82,9 +82,9 @@ enum
 };
 
 
-static GdkColor color_error = {0, 0xFFFF, 0, 0};
-static GdkColor color_context = {0, 0x7FFF, 0, 0};
-static GdkColor color_message = {0, 0, 0, 0xD000};
+static GdkRGBA color_error = {1.0, 0, 0, 1.0};
+static GdkRGBA color_context = {0.5, 0, 0, 1.0};
+static GdkRGBA color_message = {0, 0, 0.8125, 1.0};
 
 
 static void prepare_msg_tree_view(void);
@@ -118,9 +118,8 @@ void msgwin_set_messages_dir(const gchar *messages_dir)
 }
 
 
-static void load_color(const gchar *color_name, GdkColor *color)
+static void load_color(const gchar *color_name, GdkRGBA *color)
 {
-	GdkRGBA rgba_color;
 	GtkWidgetPath *path = gtk_widget_path_new();
 	GtkStyleContext *ctx = gtk_style_context_new();
 
@@ -128,11 +127,7 @@ static void load_color(const gchar *color_name, GdkColor *color)
 	gtk_widget_path_iter_set_name(path, -1, color_name);
 	gtk_style_context_set_screen(ctx, gdk_screen_get_default());
 	gtk_style_context_set_path(ctx, path);
-	gtk_style_context_get_color(ctx, gtk_style_context_get_state(ctx), &rgba_color);
-
-	color->red   = 0xffff * rgba_color.red;
-	color->green = 0xffff * rgba_color.green;
-	color->blue  = 0xffff * rgba_color.blue;
+	gtk_style_context_get_color(ctx, gtk_style_context_get_state(ctx), color);
 
 	gtk_widget_path_unref(path);
 	g_object_unref(ctx);
@@ -227,13 +222,13 @@ static void prepare_msg_tree_view(void)
 
 	/* line, doc id, fg, str */
 	msgwindow.store_msg = gtk_list_store_new(MSG_COL_COUNT, G_TYPE_INT, G_TYPE_UINT,
-		GDK_TYPE_COLOR, G_TYPE_STRING);
+		GDK_TYPE_RGBA, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
 	g_object_unref(msgwindow.store_msg);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
-		"foreground-gdk", MSG_COL_COLOR, "text", MSG_COL_STRING, NULL);
+		"foreground-rgba", MSG_COL_COLOR, "text", MSG_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
 
 	gtk_tree_view_set_search_column(GTK_TREE_VIEW(msgwindow.tree_msg), MSG_COL_STRING);
@@ -264,13 +259,13 @@ static void prepare_compiler_tree_view(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 
-	msgwindow.store_compiler = gtk_list_store_new(COMPILER_COL_COUNT, GDK_TYPE_COLOR, G_TYPE_STRING);
+	msgwindow.store_compiler = gtk_list_store_new(COMPILER_COL_COUNT, GDK_TYPE_RGBA, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_compiler), GTK_TREE_MODEL(msgwindow.store_compiler));
 	g_object_unref(msgwindow.store_compiler);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
-		"foreground-gdk", COMPILER_COL_COLOR, "text", COMPILER_COL_STRING, NULL);
+		"foreground-rgba", COMPILER_COL_COLOR, "text", COMPILER_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_compiler), column);
 
 	gtk_tree_view_set_search_column(GTK_TREE_VIEW(msgwindow.tree_compiler), COMPILER_COL_STRING);
@@ -293,7 +288,7 @@ static void prepare_compiler_tree_view(void)
 	/*g_signal_connect(selection, "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
 }
 
-static const GdkColor *get_color(gint msg_color)
+static const GdkRGBA *get_color(gint msg_color)
 {
 	switch (msg_color)
 	{
@@ -343,7 +338,7 @@ GEANY_API_SYMBOL
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
-	const GdkColor *color = get_color(msg_color);
+	const GdkRGBA *color = get_color(msg_color);
 	gchar *utf8_msg;
 
 	if (! g_utf8_validate(msg, -1, NULL))
@@ -451,7 +446,7 @@ GEANY_API_SYMBOL
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
-	const GdkColor *color = get_color(msg_color);
+	const GdkRGBA *color = get_color(msg_color);
 	gchar *tmp;
 	gsize len;
 	gchar *utf8_msg;
@@ -667,7 +662,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 
 	message_popup_menu = gtk_menu_new();
 
-	clear = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLEAR, NULL);
+	clear = ui_image_menu_item_new("edit-clear", _("_Clear"));
 	gtk_widget_show(clear);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), clear);
 	g_signal_connect(clear, "activate",
@@ -676,7 +671,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 	copy = gtk_image_menu_item_new_with_mnemonic(_("C_opy"));
 	gtk_widget_show(copy);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy);
-	image = gtk_image_new_from_stock(GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_icon_name("edit-copy", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(copy), image);
 	g_signal_connect(copy, "activate",
@@ -685,7 +680,7 @@ static GtkWidget *create_message_popup_menu(gint type)
 	copy_all = gtk_image_menu_item_new_with_mnemonic(_("Copy _All"));
 	gtk_widget_show(copy_all);
 	gtk_container_add(GTK_CONTAINER(message_popup_menu), copy_all);
-	image = gtk_image_new_from_stock(GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_icon_name("edit-copy", GTK_ICON_SIZE_MENU);
 	gtk_widget_show(image);
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(copy_all), image);
 	g_signal_connect(copy_all, "activate",
@@ -817,20 +812,20 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
 	gchar *string;
-	GdkColor *color;
+	GdkRGBA *color;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(msgwindow.tree_compiler));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
 		/* if the item is not coloured red, it's not an error line */
 		gtk_tree_model_get(model, &iter, COMPILER_COL_COLOR, &color, -1);
-		if (color == NULL || ! gdk_color_equal(color, &color_error))
+		if (color == NULL || ! gdk_rgba_equal(color, &color_error))
 		{
 			if (color != NULL)
-				gdk_color_free(color);
+				gdk_rgba_free(color);
 			return FALSE;
 		}
-		gdk_color_free(color);
+		gdk_rgba_free(color);
 
 		gtk_tree_model_get(model, &iter, COMPILER_COL_STRING, &string, -1);
 		if (string != NULL)

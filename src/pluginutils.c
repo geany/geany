@@ -391,25 +391,28 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 		}
 		else
 		{
-			GtkWidget *align = gtk_alignment_new(0.5, 0.5, 1, 1);
+			GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 
-			gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 6, 6, 6);
-			gtk_container_add(GTK_CONTAINER(align), page);
-			page = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-			gtk_box_pack_start(GTK_BOX(page), align, TRUE, TRUE, 0);
+			gtk_widget_set_margin_start(box, 6);
+			gtk_widget_set_margin_end(box, 6);
+			gtk_widget_set_margin_top(box, 6);
+			gtk_widget_set_margin_bottom(box, 6);
+			gtk_box_pack_start(GTK_BOX(box), page, TRUE, TRUE, 0);
+			page = box;
 		}
 	}
 	else if (p->configure_single)
 	{
-		GtkWidget *align = gtk_alignment_new(0.5, 0.5, 0, 0);
-		GtkWidget *btn;
+		GtkWidget *btn = gtk_button_new_with_mnemonic(_("_Preferences"));
 
-		gtk_alignment_set_padding(GTK_ALIGNMENT(align), 6, 6, 6, 6);
-
-		btn = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
+		gtk_widget_set_halign(btn, GTK_ALIGN_CENTER);
+		gtk_widget_set_valign(btn, GTK_ALIGN_CENTER);
+		gtk_widget_set_margin_start(btn, 6);
+		gtk_widget_set_margin_end(btn, 6);
+		gtk_widget_set_margin_top(btn, 6);
+		gtk_widget_set_margin_bottom(btn, 6);
 		g_signal_connect(btn, "clicked", G_CALLBACK(on_pref_btn_clicked), p);
-		gtk_container_add(GTK_CONTAINER(align), btn);
-		page = align;
+		page = btn;
 	}
 	return page;
 }
@@ -425,9 +428,9 @@ static void configure_plugins(Plugin *current_plugin)
 
 	dialog = gtk_dialog_new_with_buttons(_("Configure Plugins"),
 		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+		_("_Apply"), GTK_RESPONSE_APPLY,
+		_("_Cancel"), GTK_RESPONSE_CANCEL,
+		_("_OK"), GTK_RESPONSE_OK, NULL);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));

@@ -43,14 +43,6 @@ GObject	*geany_object;
 static guint geany_object_signals[GCB_MAX] = { 0 };
 
 
-typedef struct _GeanyObjectPrivate GeanyObjectPrivate;
-
-struct _GeanyObjectPrivate
-{
-	/* to avoid warnings (g_type_class_add_private: assertion `private_size > 0' failed) */
-	gchar dummy;
-};
-
 /** @gironly
  * Get the GObject-derived GType for GeanyObject
  *
@@ -257,8 +249,6 @@ static void geany_object_class_init(GeanyObjectClass *klass)
 {
 	GObjectClass *g_object_class;
 	g_object_class = G_OBJECT_CLASS(klass);
-
-	g_type_class_add_private(klass, sizeof(GeanyObjectPrivate));
 
 	create_signals(g_object_class);
 }

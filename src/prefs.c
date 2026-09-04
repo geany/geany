@@ -184,17 +184,23 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 			dialog = gtk_dialog_new_with_buttons(_("Assign Keybinding"),
 					GTK_WINDOW(ui_widgets.prefs_dialog),
 					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+					_("_Cancel"), GTK_RESPONSE_CANCEL,
+					_("_OK"), GTK_RESPONSE_ACCEPT, NULL);
 
 			str = g_strdup_printf(
 					_("Press the combination of the keys you want to use for \"%s\"."), name);
 			label = gtk_label_new(str);
-			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
+			gtk_widget_set_margin_start(label, 5);
+			gtk_widget_set_margin_end(label, 5);
+			gtk_widget_set_margin_top(label, 10);
+			gtk_widget_set_margin_bottom(label, 10);
 			gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), label);
 
 			accel_label = gtk_label_new("");
-			gtk_misc_set_padding(GTK_MISC(accel_label), 5, 10);
+			gtk_widget_set_margin_start(accel_label, 5);
+			gtk_widget_set_margin_end(accel_label, 5);
+			gtk_widget_set_margin_top(accel_label, 10);
+			gtk_widget_set_margin_bottom(accel_label, 10);
 			gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), accel_label);
 
 			g_signal_connect(dialog, "key-press-event",
@@ -228,12 +234,12 @@ static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget, GdkEventButton
 
 		menu = gtk_menu_new();
 
-		item = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
+		item = ui_image_menu_item_new("list-add", _("_Expand All"));
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
 		g_signal_connect_swapped(item, "activate", G_CALLBACK(gtk_tree_view_expand_all), kbdata->tree);
 
-		item = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("_Collapse All"));
+		item = ui_image_menu_item_new("list-remove", _("_Collapse All"));
 		gtk_widget_show(item);
 		gtk_container_add(GTK_CONTAINER(menu), item);
 		g_signal_connect_swapped(item, "activate", G_CALLBACK(gtk_tree_view_collapse_all), kbdata->tree);
@@ -401,7 +407,7 @@ static void kb_init(KbData *kbdata, GtkWidget *kb_filter_entry)
 static void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
-	GdkColor color = {0};
+	GdkRGBA color = {0};
 
 	/* Synchronize with Stash settings */
 	prefs_action(PREF_DISPLAY);
@@ -461,13 +467,13 @@ static void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_openfiles_visible);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.tagbar_font);
+	gtk_font_chooser_set_font(GTK_FONT_CHOOSER(widget), interface_prefs.tagbar_font);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "msgwin_font");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.msgwin_font);
+	gtk_font_chooser_set_font(GTK_FONT_CHOOSER(widget), interface_prefs.msgwin_font);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "editor_font");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.editor_font);
+	gtk_font_chooser_set_font(GTK_FONT_CHOOSER(widget), interface_prefs.editor_font);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.long_line_column);
@@ -484,7 +490,7 @@ static void prefs_init_dialog(void)
 
 	utils_parse_color(editor_prefs.long_line_color, &color);
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
+	gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(widget), &color);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.show_notebook_tabs);
@@ -766,13 +772,13 @@ static void prefs_init_dialog(void)
 		VteConfig *vc = &vte_config;
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "font_term");
-		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
+		gtk_font_chooser_set_font(GTK_FONT_CHOOSER(widget), vc->font);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_fore");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_fore);
+		gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(widget), &vc->colour_fore);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_back);
+		gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(widget), &vc->colour_back);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
@@ -1330,16 +1336,16 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 static void on_color_button_choose_cb(GtkColorButton *widget, gpointer user_data)
 {
-	GdkColor color;
+	GdkRGBA color;
 
-	gtk_color_button_get_color(widget, &color);
+	gtk_color_chooser_get_rgba(GTK_COLOR_CHOOSER(widget), &color);
 	SETPTR(editor_prefs.long_line_color, utils_get_hex_from_color(&color));
 }
 
 
 static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 {
-	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
+	gchar *fontbtn = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(widget));
 	guint i;
 
 	switch (GPOINTER_TO_INT(user_data))
@@ -1380,6 +1386,7 @@ static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			break;
 		}
 	}
+	g_free(fontbtn);
 }
 
 
@@ -1580,7 +1587,7 @@ static gboolean kb_find_duplicate(GtkTreeStore *store, GtkWidget *parent, GtkTre
 				gtk_tree_model_get(model, &iter, KB_TREE_ACTION, &label, -1);
 				ret = dialogs_show_prompt(parent,
 					_("_Allow"), GTK_RESPONSE_APPLY,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
+					_("_Cancel"), GTK_RESPONSE_NO,
 					_("_Override"), GTK_RESPONSE_YES,
 					_("Override that keybinding?"),
 					_("The combination '%s' is already used for \"%s\"."),
@@ -1810,13 +1817,15 @@ void prefs_show_dialog(void)
 		label = geany_wrap_label_new(_("<i>Warning: these settings are overridden by the current project. See <b>Project->Properties</b>.</i>"));
 		gtk_widget_show(label);
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-		gtk_misc_set_padding(GTK_MISC(label), 6, 0);
+		gtk_widget_set_margin_start(label, 6);
+		gtk_widget_set_margin_end(label, 6);
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog,
 			"label_project_indent_warning")), label, FALSE, TRUE, 5);
 		label = geany_wrap_label_new(_("Note: To apply these settings to all currently open documents, use <i>Project->Apply Default Indentation</i>."));
 		gtk_widget_show(label);
 		gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-		gtk_misc_set_padding(GTK_MISC(label), 6, 0);
+		gtk_widget_set_margin_start(label, 6);
+		gtk_widget_set_margin_end(label, 6);
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog,
 			"label_indent_warning")), label, FALSE, TRUE, 5);
 

@@ -22,6 +22,7 @@
  * A small Pong-like.
  */
 
+#include "support.h"
 #include "utils.h"
 
 #include <gtk/gtk.h>
@@ -90,10 +91,9 @@ static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *se
 	 * background and we want something to paint for the overlay */
 	GtkStyleContext *ctx = gtk_widget_get_style_context(GTK_WIDGET(self));
 	GtkStateFlags state = gtk_style_context_get_state(ctx);
-	GdkRGBA fg, bg;
+	GdkRGBA fg;
 
 	gtk_style_context_get_color(ctx, state, &fg);
-	gtk_style_context_get_background_color(ctx, state, &bg);
 
 	self->area_width = gtk_widget_get_allocated_width(area);
 	self->area_height = gtk_widget_get_allocated_height(area);
@@ -123,9 +123,11 @@ static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *se
 		gdouble scale;
 		PangoFontDescription *font = NULL;
 
-		geany_pong_set_cairo_source_color(cr, &bg, 0.8);
-		cairo_rectangle(cr, 0, 0, self->area_width, self->area_height);
-		cairo_paint(cr);
+		/* dim the area with the window's background */
+		cairo_push_group(cr);
+		gtk_render_background(ctx, cr, 0, 0, self->area_width, self->area_height);
+		cairo_pop_group_to_source(cr);
+		cairo_paint_with_alpha(cr, 0.8);
 
 		geany_pong_set_cairo_source_color(cr, &fg, 1.0);
 		layout = pango_cairo_create_layout(cr);
@@ -328,7 +330,7 @@ static void geany_pong_init(GeanyPong *self)
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
 	label = gtk_label_new("Score:");
-	gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 1);
 	gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
 
 	self->score_label = gtk_label_new("0");
@@ -343,8 +345,8 @@ static void geany_pong_init(GeanyPong *self)
 	gtk_box_pack_start(GTK_BOX(vbox), self->area, TRUE, TRUE, 0);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(self),
-		GTK_STOCK_HELP, GTK_RESPONSE_HELP,
-		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+		_("_Help"), GTK_RESPONSE_HELP,
+		_("_Close"), GTK_RESPONSE_CLOSE,
 		NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(self), GTK_RESPONSE_HELP);
 	gtk_widget_grab_focus(gtk_dialog_get_widget_for_response(GTK_DIALOG(self), GTK_RESPONSE_HELP));
@@ -374,7 +376,7 @@ static void geany_pong_help(GeanyPong *self)
 
 	dialog = gtk_dialog_new_with_buttons("Help", GTK_WINDOW(self),
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
-		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+		_("_Close"), GTK_RESPONSE_CLOSE, NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 	gtk_container_set_border_width(GTK_CONTAINER(dialog), 1);
 	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);

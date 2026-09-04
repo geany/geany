@@ -201,7 +201,7 @@ static GIcon *get_icon(const gchar *fname)
 				icon = NULL;
 			}
 			else
-				gtk_icon_info_free(icon_info);
+				g_object_unref(icon_info);
 		}
 		g_free(ctype);
 	}
@@ -650,13 +650,13 @@ static GtkWidget *create_popup_menu(void)
 
 	menu = gtk_menu_new();
 
-	item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open in _Geany"));
+	item = ui_image_menu_item_new("document-open", _("Open in _Geany"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_open_clicked), NULL);
 	popup_items.open = item;
 
-	item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open _Externally"));
+	item = ui_image_menu_item_new("document-open", _("Open _Externally"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_external_open), NULL);
@@ -666,12 +666,12 @@ static GtkWidget *create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_REFRESH, NULL);
+	item = ui_image_menu_item_new("view-refresh", _("_Refresh"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(refresh), NULL);
 
-	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files..."));
+	item = ui_image_menu_item_new("edit-find", _("_Find in Files..."));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);
@@ -691,7 +691,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL);
+	item = ui_image_menu_item_new("preferences-system", _("_Preferences"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_show_preferences), NULL);
@@ -700,7 +700,7 @@ static GtkWidget *create_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("H_ide Sidebar"));
+	item = ui_image_menu_item_new("window-close", _("H_ide Sidebar"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
@@ -910,22 +910,26 @@ static GtkWidget *make_toolbar(void)
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
-	wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_GO_UP));
+	wid = GTK_WIDGET(gtk_tool_button_new(NULL, _("Up")));
+	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(wid), "go-up");
 	gtk_widget_set_tooltip_text(wid, _("Up"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_up), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
-	wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_REFRESH));
+	wid = GTK_WIDGET(gtk_tool_button_new(NULL, _("Refresh")));
+	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(wid), "view-refresh");
 	gtk_widget_set_tooltip_text(wid, _("Refresh"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(refresh), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
-	wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_HOME));
+	wid = GTK_WIDGET(gtk_tool_button_new(NULL, _("Home")));
+	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(wid), "go-home");
 	gtk_widget_set_tooltip_text(wid, _("Home"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_go_home), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
 
-	wid = GTK_WIDGET(gtk_tool_button_new_from_stock(GTK_STOCK_JUMP_TO));
+	wid = GTK_WIDGET(gtk_tool_button_new(NULL, _("Set path from document")));
+	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(wid), "go-jump");
 	gtk_widget_set_tooltip_text(wid, _("Set path from document"));
 	g_signal_connect(wid, "clicked", G_CALLBACK(on_current_path), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), wid);
@@ -1255,13 +1259,13 @@ static void on_toggle_hidden(void)
 GtkWidget *plugin_configure(GtkDialog *dialog)
 {
 	GtkWidget *label, *entry, *checkbox_of, *checkbox_hf, *checkbox_fp, *checkbox_pb, *vbox;
-	GtkWidget *box, *align;
+	GtkWidget *box;
 
 	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 6);
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 3);
 
 	label = gtk_label_new(_("External open command:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	gtk_box_pack_start(GTK_BOX(box), label, FALSE, FALSE, 0);
 
 	entry = gtk_entry_new();
@@ -1277,7 +1281,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 3);
 
 	checkbox_hf = gtk_check_button_new_with_label(_("Show hidden files"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_hf), FALSE);
+	gtk_widget_set_focus_on_click(checkbox_hf, FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_hf), show_hidden_files);
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_hf, FALSE, FALSE, 0);
 	pref_widgets.show_hidden_checkbox = checkbox_hf;
@@ -1285,7 +1289,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 	box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 3);
 	checkbox_of = gtk_check_button_new_with_label(_("Hide file extensions:"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_of), FALSE);
+	gtk_widget_set_focus_on_click(checkbox_of, FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_of), hide_object_files);
 	gtk_box_pack_start(GTK_BOX(box), checkbox_of, FALSE, FALSE, 0);
 	pref_widgets.hide_objects_checkbox = checkbox_of;
@@ -1297,20 +1301,18 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 	gtk_box_pack_start(GTK_BOX(box), entry, FALSE, FALSE, 0);
 	pref_widgets.hidden_files_entry = entry;
 
-	align = gtk_alignment_new(1, 0.5, 1, 1);
-	gtk_alignment_set_padding(GTK_ALIGNMENT(align), 0, 0, 12, 0);
-	gtk_container_add(GTK_CONTAINER(align), box);
-	gtk_box_pack_start(GTK_BOX(vbox), align, FALSE, FALSE, 0);
+	gtk_widget_set_margin_start(box, 12);
+	gtk_box_pack_start(GTK_BOX(vbox), box, FALSE, FALSE, 0);
 	on_toggle_hidden();
 
 	checkbox_fp = gtk_check_button_new_with_label(_("Follow the path of the current file"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_fp), FALSE);
+	gtk_widget_set_focus_on_click(checkbox_fp, FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_fp), fb_follow_path);
 	gtk_box_pack_start(GTK_BOX(vbox), checkbox_fp, FALSE, FALSE, 0);
 	pref_widgets.follow_path_checkbox = checkbox_fp;
 
 	checkbox_pb = gtk_check_button_new_with_label(_("Use the project's base directory"));
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_pb), FALSE);
+	gtk_widget_set_focus_on_click(checkbox_pb, FALSE);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_pb), fb_set_project_base_path);
 	gtk_widget_set_tooltip_text(checkbox_pb,
 		_("Change the directory to the base directory of the currently opened project"));

@@ -132,8 +132,8 @@ void ui_widget_set_sensitive(GtkWidget *widget, gboolean set)
 static void set_statusbar(const gchar *text, gboolean allow_override)
 {
 	static guint id = 0;
-	static glong last_time = 0;
-	GTimeVal timeval;
+	static gint64 last_time = 0;
+	gint64 now;
 	const gint GEANY_STATUS_TIMEOUT = 1;
 
 	if (! interface_prefs.statusbar_visible)
@@ -142,16 +142,16 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	if (id == 0)
 		id = gtk_statusbar_get_context_id(GTK_STATUSBAR(ui_widgets.statusbar), "geany-main");
 
-	g_get_current_time(&timeval);
+	now = g_get_real_time() / G_USEC_PER_SEC;
 
 	if (! allow_override)
 	{
 		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), id);
 		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), id, text);
-		last_time = timeval.tv_sec;
+		last_time = now;
 	}
 	else
-	if (timeval.tv_sec > last_time + GEANY_STATUS_TIMEOUT)
+	if (now > last_time + GEANY_STATUS_TIMEOUT)
 	{
 		gtk_statusbar_pop(GTK_STATUSBAR(ui_widgets.statusbar), id);
 		gtk_statusbar_push(GTK_STATUSBAR(ui_widgets.statusbar), id, text);
@@ -1577,9 +1577,149 @@ void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
 }
 
 
+/* The GTK 3 stock items, so that ui_lookup_stock_label() and the stock ids plugins may
+ * still pass to ui_button_new_with_image() and ui_image_menu_item_new() keep working
+ * without GTK's deprecated stock API. The icon names are the replacements GTK documents;
+ * a stock id without one is used as an icon name as it is, which GTK 3 resolves from its
+ * built-in legacy icons. The labels are GTK's, spelled exactly as in its message catalog
+ * so they can be translated through it (see ui_lookup_stock_label()). */
+typedef struct
+{
+	const gchar *stock_id;
+	const gchar *icon_name;
+	const gchar *label;
+}
+StockItem;
+
+static const StockItem stock_items[] =
+{
+	{ "gtk-about", "help-about", "_About" },
+	{ "gtk-add", "list-add", "_Add" },
+	{ "gtk-apply", NULL, "_Apply" },
+	{ "gtk-bold", "format-text-bold", "_Bold" },
+	{ "gtk-cancel", NULL, "_Cancel" },
+	{ "gtk-cdrom", "media-optical", "_CD-ROM" },
+	{ "gtk-clear", "edit-clear", "_Clear" },
+	{ "gtk-close", "window-close", "_Close" },
+	{ "gtk-connect", NULL, "C_onnect" },
+	{ "gtk-convert", NULL, "_Convert" },
+	{ "gtk-copy", "edit-copy", "_Copy" },
+	{ "gtk-cut", "edit-cut", "Cu_t" },
+	{ "gtk-delete", "edit-delete", "_Delete" },
+	{ "gtk-dialog-error", "dialog-error", "Error" },
+	{ "gtk-dialog-info", "dialog-information", "Information" },
+	{ "gtk-dialog-question", "dialog-question", "Question" },
+	{ "gtk-dialog-warning", "dialog-warning", "Warning" },
+	{ "gtk-discard", NULL, "_Discard" },
+	{ "gtk-disconnect", NULL, "_Disconnect" },
+	{ "gtk-edit", NULL, "_Edit" },
+	{ "gtk-execute", "system-run", "_Execute" },
+	{ "gtk-file", "text-x-generic", "_File" },
+	{ "gtk-find", "edit-find", "_Find" },
+	{ "gtk-find-and-replace", "edit-find-replace", "Find and _Replace" },
+	{ "gtk-floppy", NULL, "_Floppy" },
+	{ "gtk-fullscreen", "view-fullscreen", "_Fullscreen" },
+	{ "gtk-go-back", "go-previous", "_Back" },
+	{ "gtk-go-down", "go-down", "_Down" },
+	{ "gtk-go-forward", "go-next", "_Forward" },
+	{ "gtk-go-up", "go-up", "_Up" },
+	{ "gtk-goto-bottom", "go-bottom", "_Bottom" },
+	{ "gtk-goto-first", "go-first", "_First" },
+	{ "gtk-goto-last", "go-last", "_Last" },
+	{ "gtk-goto-top", "go-top", "_Top" },
+	{ "gtk-harddisk", "drive-harddisk", "_Hard Disk" },
+	{ "gtk-help", "help-browser", "_Help" },
+	{ "gtk-home", "go-home", "_Home" },
+	{ "gtk-indent", "format-indent-more", "Increase Indent" },
+	{ "gtk-index", NULL, "_Index" },
+	{ "gtk-info", "dialog-information", "_Information" },
+	{ "gtk-italic", "format-text-italic", "_Italic" },
+	{ "gtk-jump-to", "go-jump", "_Jump to" },
+	{ "gtk-justify-center", "format-justify-center", "_Center" },
+	{ "gtk-justify-fill", "format-justify-fill", "_Fill" },
+	{ "gtk-justify-left", "format-justify-left", "_Left" },
+	{ "gtk-justify-right", "format-justify-right", "_Right" },
+	{ "gtk-leave-fullscreen", "view-restore", "_Leave Fullscreen" },
+	{ "gtk-media-forward", "media-seek-forward", "_Forward" },
+	{ "gtk-media-next", "media-skip-forward", "_Next" },
+	{ "gtk-media-pause", "media-playback-pause", "P_ause" },
+	{ "gtk-media-play", "media-playback-start", "_Play" },
+	{ "gtk-media-previous", "media-skip-backward", "Pre_vious" },
+	{ "gtk-media-record", "media-record", "_Record" },
+	{ "gtk-media-rewind", "media-seek-backward", "R_ewind" },
+	{ "gtk-media-stop", "media-playback-stop", "_Stop" },
+	{ "gtk-network", "network-workgroup", "_Network" },
+	{ "gtk-new", "document-new", "_New" },
+	{ "gtk-no", NULL, "_No" },
+	{ "gtk-ok", NULL, "_OK" },
+	{ "gtk-open", "document-open", "_Open" },
+	{ "gtk-orientation-landscape", NULL, "Landscape" },
+	{ "gtk-orientation-portrait", NULL, "Portrait" },
+	{ "gtk-orientation-reverse-landscape", NULL, "Reverse landscape" },
+	{ "gtk-orientation-reverse-portrait", NULL, "Reverse portrait" },
+	{ "gtk-page-setup", "document-page-setup", "Page Set_up" },
+	{ "gtk-paste", "edit-paste", "_Paste" },
+	{ "gtk-preferences", "preferences-system", "_Preferences" },
+	{ "gtk-print", "document-print", "_Print" },
+	{ "gtk-print-preview", NULL, "Print Pre_view" },
+	{ "gtk-properties", "document-properties", "_Properties" },
+	{ "gtk-quit", "application-exit", "_Quit" },
+	{ "gtk-redo", "edit-redo", "_Redo" },
+	{ "gtk-refresh", "view-refresh", "_Refresh" },
+	{ "gtk-remove", "list-remove", "_Remove" },
+	{ "gtk-revert-to-saved", "document-revert", "_Revert" },
+	{ "gtk-save", "document-save", "_Save" },
+	{ "gtk-save-as", "document-save-as", "Save _As" },
+	{ "gtk-select-all", "edit-select-all", "Select _All" },
+	{ "gtk-select-color", NULL, "_Color" },
+	{ "gtk-select-font", NULL, "_Font" },
+	{ "gtk-sort-ascending", "view-sort-ascending", "_Ascending" },
+	{ "gtk-sort-descending", "view-sort-descending", "_Descending" },
+	{ "gtk-spell-check", "tools-check-spelling", "_Spell Check" },
+	{ "gtk-stop", "process-stop", "_Stop" },
+	{ "gtk-strikethrough", "format-text-strikethrough", "_Strikethrough" },
+	{ "gtk-undelete", NULL, "_Undelete" },
+	{ "gtk-underline", "format-text-underline", "_Underline" },
+	{ "gtk-undo", "edit-undo", "_Undo" },
+	{ "gtk-unindent", "format-indent-less", "Decrease Indent" },
+	{ "gtk-yes", NULL, "_Yes" },
+	{ "gtk-zoom-100", "zoom-original", "_Normal Size" },
+	{ "gtk-zoom-fit", "zoom-fit-best", "Best _Fit" },
+	{ "gtk-zoom-in", "zoom-in", "Zoom _In" },
+	{ "gtk-zoom-out", "zoom-out", "Zoom _Out" },
+	/* Geany's own items, translated in Geany's domain */
+	{ GEANY_STOCK_SAVE_ALL, GEANY_STOCK_SAVE_ALL, N_("Save All") },
+	{ GEANY_STOCK_CLOSE_ALL, GEANY_STOCK_CLOSE_ALL, N_("Close All") },
+	{ GEANY_STOCK_BUILD, GEANY_STOCK_BUILD, N_("Build") }
+};
+
+
+static const StockItem *stock_item_lookup(const gchar *stock_id)
+{
+	guint i;
+
+	for (i = 0; i < G_N_ELEMENTS(stock_items); i++)
+	{
+		if (g_strcmp0(stock_items[i].stock_id, stock_id) == 0)
+			return &stock_items[i];
+	}
+	return NULL;
+}
+
+
+/* Returns the icon name to use for @a id, which is either an icon name already or a
+ * legacy stock id */
+static const gchar *icon_name_from_stock_id(const gchar *id)
+{
+	const StockItem *item = stock_item_lookup(id);
+
+	return (item != NULL && item->icon_name != NULL) ? item->icon_name : id;
+}
+
+
 /** Creates a @c GtkButton with custom text and a stock image similar to
  * @c gtk_button_new_from_stock().
- * @param stock_id A @c GTK_STOCK_NAME string.
+ * @param stock_id An icon name, or a legacy @c GTK_STOCK_NAME string.
  * @param text Button label text, can include mnemonics.
  *
  * @return @transfer{floating} The new @c GtkButton.
@@ -1591,7 +1731,7 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 
 	button = gtk_button_new_with_mnemonic(text);
 	gtk_widget_show(button);
-	image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_BUTTON);
+	image = gtk_image_new_from_icon_name(icon_name_from_stock_id(stock_id), GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image(GTK_BUTTON(button), image);
 	/* note: image is shown by gtk */
 	return button;
@@ -1599,7 +1739,7 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 
 
 /** Creates a @c GtkImageMenuItem with a stock image and a custom label.
- * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
+ * @param stock_id An icon name, or a legacy stock image ID such as @c GTK_STOCK_OPEN.
  * @param label Menu item label, can include mnemonics.
  * @return @transfer{floating} The new @c GtkImageMenuItem.
  *
@@ -1610,7 +1750,7 @@ GtkWidget *
 ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
 {
 	GtkWidget *item = gtk_image_menu_item_new_with_mnemonic(label);
-	GtkWidget *image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_MENU);
+	GtkWidget *image = gtk_image_new_from_icon_name(icon_name_from_stock_id(stock_id), GTK_ICON_SIZE_MENU);
 
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item), image);
 	gtk_widget_show(image);
@@ -1639,7 +1779,7 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
 GEANY_API_SYMBOL
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
-	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR,
+	g_object_set(entry, "secondary-icon-name", "edit-clear",
 		"secondary-icon-activatable", TRUE, NULL);
 	g_signal_connect(entry, "icon-release", G_CALLBACK(entry_clear_icon_release_cb), NULL);
 }
@@ -1893,8 +2033,83 @@ void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column)
 }
 
 
+/* Styles @a widget with @a css, a stylesheet whose rules should use the "*" selector,
+ * replacing what a previous call set; @a css may be NULL to remove it. Only @a widget
+ * itself is matched, but its children inherit the inheritable properties (fonts, colors).
+ * This is the CSS way to do what gtk_widget_modify_*()/gtk_widget_override_*() did. */
+void ui_widget_set_css(GtkWidget *widget, const gchar *css)
+{
+	GtkStyleContext *ctx = gtk_widget_get_style_context(widget);
+	GtkCssProvider *provider = g_object_get_data(G_OBJECT(widget), "geany-css-provider");
+
+	if (provider != NULL)
+	{
+		gtk_style_context_remove_provider(ctx, GTK_STYLE_PROVIDER(provider));
+		g_object_set_data(G_OBJECT(widget), "geany-css-provider", NULL);
+	}
+	if (css != NULL)
+	{
+		provider = gtk_css_provider_new();
+		gtk_css_provider_load_from_data(provider, css, -1, NULL);
+		gtk_style_context_add_provider(ctx, GTK_STYLE_PROVIDER(provider),
+			GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+		g_object_set_data_full(G_OBJECT(widget), "geany-css-provider", provider, g_object_unref);
+	}
+}
+
+
+/* Builds the CSS font properties equivalent to @a pfd */
+static gchar *css_from_font_description(const PangoFontDescription *pfd)
+{
+	static const gchar *styles[] = { "normal", "oblique", "italic" };
+	static const gchar *stretches[] = { "ultra-condensed", "extra-condensed", "condensed",
+		"semi-condensed", "normal", "semi-expanded", "expanded", "extra-expanded", "ultra-expanded" };
+	PangoFontMask mask = pango_font_description_get_set_fields(pfd);
+	GString *css = g_string_new("* {");
+
+	if (mask & PANGO_FONT_MASK_FAMILY)
+	{
+		gchar **families = g_strsplit(pango_font_description_get_family(pfd), ",", -1);
+		gchar **family;
+
+		g_string_append(css, " font-family:");
+		for (family = families; *family != NULL; family++)
+		{
+			g_string_append_printf(css, "%s \"%s\"", family == families ? "" : ",",
+				g_strstrip(*family));
+		}
+		g_string_append_c(css, ';');
+		g_strfreev(families);
+	}
+	if (mask & PANGO_FONT_MASK_STYLE)
+		g_string_append_printf(css, " font-style: %s;",
+			styles[CLAMP(pango_font_description_get_style(pfd), 0, G_N_ELEMENTS(styles) - 1)]);
+	if (mask & PANGO_FONT_MASK_VARIANT)
+		g_string_append_printf(css, " font-variant: %s;",
+			pango_font_description_get_variant(pfd) == PANGO_VARIANT_SMALL_CAPS ? "small-caps" : "normal");
+	if (mask & PANGO_FONT_MASK_WEIGHT)
+	{	/* CSS only knows the multiples of 100 */
+		gint weight = pango_font_description_get_weight(pfd);
+		g_string_append_printf(css, " font-weight: %d;", CLAMP((weight + 50) / 100 * 100, 100, 900));
+	}
+	if (mask & PANGO_FONT_MASK_STRETCH)
+		g_string_append_printf(css, " font-stretch: %s;",
+			stretches[CLAMP(pango_font_description_get_stretch(pfd), 0, G_N_ELEMENTS(stretches) - 1)]);
+	if (mask & PANGO_FONT_MASK_SIZE)
+	{
+		gchar buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+		g_ascii_formatd(buf, sizeof buf, "%g", pango_font_description_get_size(pfd) / (gdouble) PANGO_SCALE);
+		g_string_append_printf(css, " font-size: %s%s;", buf,
+			pango_font_description_get_size_is_absolute(pfd) ? "px" : "pt");
+	}
+	g_string_append(css, " }");
+	return g_string_free(css, FALSE);
+}
+
+
 /**
- * Modifies the font of a widget using gtk_widget_modify_font().
+ * Modifies the font of a widget (and of its children, which inherit it).
  *
  * @param widget The widget.
  * @param str The font name as expected by pango_font_description_from_string().
@@ -1903,9 +2118,12 @@ GEANY_API_SYMBOL
 void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
 {
 	PangoFontDescription *pfd;
+	gchar *css;
 
 	pfd = pango_font_description_from_string(str);
-	gtk_widget_modify_font(widget, pfd);
+	css = css_from_font_description(pfd);
+	ui_widget_set_css(widget, css);
+	g_free(css);
 	pango_font_description_free(pfd);
 }
 
@@ -1940,7 +2158,7 @@ GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkE
 	gtk_box_pack_start(GTK_BOX(vbox), parent, TRUE, FALSE, 0);
 
 	dirbtn = gtk_button_new();
-	openimg = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
+	openimg = gtk_image_new_from_icon_name("document-open", GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(dirbtn), openimg);
 	ui_setup_open_button_callback(dirbtn, title, action, entry);
 
@@ -1983,8 +2201,8 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(title,
 			GTK_WINDOW(main_widgets.window), action,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL));
+			_("_Cancel"), GTK_RESPONSE_CANCEL,
+			_("_Open"), GTK_RESPONSE_ACCEPT, NULL));
 		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialog");
 	}
 
@@ -1997,7 +2215,12 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	else if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
 		if (g_path_is_absolute(locale_path))
-			gtk_file_chooser_set_filename(dialog, locale_path);
+		{
+			GFile *file = g_file_new_for_path(locale_path);
+
+			gtk_file_chooser_set_file(dialog, file, NULL);
+			g_object_unref(file);
+		}
 	}
 	g_free(locale_path);
 
@@ -2005,7 +2228,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	{
 		gchar *dir_locale;
 
-		dir_locale = gtk_file_chooser_get_filename(dialog);
+		dir_locale = dialogs_file_chooser_get_filename(dialog);
 		ret_path = utils_get_utf8_from_locale(dir_locale);
 		g_free(dir_locale);
 	}
@@ -2092,6 +2315,26 @@ void ui_table_add_row(GtkTable *table, gint row, ...)
 
 		gtk_table_attach(GTK_TABLE(table), widget, i, i + 1, row, row + 1,
 			options, 0, 0, 0);
+	}
+	va_end(args);
+}
+
+
+/* Like ui_table_add_row() for a GtkGrid: packs the widgets passed after the row
+ * argument into that row, one per column. The first widget (usually a label) is
+ * not expanded as the grid grows. */
+void ui_grid_add_row(GtkGrid *grid, gint row, ...)
+{
+	va_list args;
+	guint i;
+	GtkWidget *widget;
+
+	va_start(args, row);
+	for (i = 0; (widget = va_arg(args, GtkWidget*), widget != NULL); i++)
+	{
+		gtk_widget_set_hexpand(widget, i > 0);
+		gtk_widget_set_valign(widget, GTK_ALIGN_CENTER);
+		gtk_grid_attach(grid, widget, i, row, 1, 1);
 	}
 	va_end(args);
 }
@@ -3106,7 +3349,7 @@ GIcon *ui_get_mime_icon(const gchar *mime_type)
 				icon = NULL;
 			}
 			else
-				gtk_icon_info_free(icon_info);
+				g_object_unref(icon_info);
 		}
 
 		g_free(ctype);
@@ -3142,13 +3385,25 @@ void ui_focus_current_document(void)
 GEANY_API_SYMBOL
 const gchar *ui_lookup_stock_label(const gchar *stock_id)
 {
-	GtkStockItem item;
+	const StockItem *item = stock_item_lookup(stock_id);
+	const gchar *context;
 
-	if (gtk_stock_lookup(stock_id, &item))
-		return item.label;
+	if (item == NULL)
+	{
+		g_warning("No stock id '%s'!", stock_id);
+		return NULL;
+	}
+	if (g_str_has_prefix(item->stock_id, "geany-"))
+		return _(item->label);
 
-	g_warning("No stock id '%s'!", stock_id);
-	return NULL;
+	/* GTK 3 translates its former stock labels in these message contexts */
+	if (g_str_has_prefix(item->stock_id, "gtk-media-"))
+		context = "Stock label, media";
+	else if (g_str_has_prefix(item->stock_id, "gtk-go"))
+		context = "Stock label, navigation";
+	else
+		context = "Stock label";
+	return g_dpgettext2("gtk30", context, item->label);
 }
 
 

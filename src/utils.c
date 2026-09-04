@@ -442,7 +442,7 @@ const gchar *utils_path_skip_root(const gchar *path)
 
 
 /* Convert a fractional @a val in the range [0, 1] to a whole value in the range [0, @a factor].
- * In particular, this is used for converting a @c GdkColor to the "#RRGGBB" format in a way that
+ * In particular, this is used for converting a @c GdkRGBA to the "#RRGGBB" format in a way that
  * agrees with GTK+, so the "#RRGGBB" in the color picker is the same "#RRGGBB" that is inserted
  * into the document. See https://github.com/geany/geany/issues/1527
  */
@@ -947,14 +947,14 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 }
 
 
-gchar *utils_get_hex_from_color(GdkColor *color)
+gchar *utils_get_hex_from_color(const GdkRGBA *color)
 {
 	g_return_val_if_fail(color != NULL, NULL);
 
 	return g_strdup_printf("#%02X%02X%02X",
-		(guint) (utils_scale_round(color->red / 65535.0, 255)),
-		(guint) (utils_scale_round(color->green / 65535.0, 255)),
-		(guint) (utils_scale_round(color->blue / 65535.0, 255)));
+		(guint) (utils_scale_round(color->red, 255)),
+		(guint) (utils_scale_round(color->green, 255)),
+		(guint) (utils_scale_round(color->blue, 255)));
 }
 
 
@@ -985,13 +985,13 @@ gchar *utils_get_current_file_dir_utf8(void)
 void utils_beep(void)
 {
 	if (prefs.beep_on_errors)
-		gdk_beep();
+		gdk_display_beep(gdk_display_get_default());
 }
 
 
-/* converts a color representation using gdk_color_parse(), with additional
+/* converts a color representation using gdk_rgba_parse(), with additional
  * support of the "0x" prefix as a synonym for "#" */
-gboolean utils_parse_color(const gchar *spec, GdkColor *color)
+gboolean utils_parse_color(const gchar *spec, GdkRGBA *color)
 {
 	gchar buf[64] = {0};
 
@@ -1005,16 +1005,18 @@ gboolean utils_parse_color(const gchar *spec, GdkColor *color)
 		spec = buf;
 	}
 
-	return gdk_color_parse(spec, color);
+	return gdk_rgba_parse(color, spec);
 }
 
 
-/* converts a GdkColor to the packed 24 bits BGR format, as understood by Scintilla
+/* converts a GdkRGBA to the packed 24 bits BGR format, as understood by Scintilla
  * returns a 24 bits BGR color, or -1 on failure */
-gint utils_color_to_bgr(const GdkColor *c)
+gint utils_color_to_bgr(const GdkRGBA *c)
 {
 	g_return_val_if_fail(c != NULL, -1);
-	return (c->red / 256) | ((c->green / 256) << 8) | ((c->blue / 256) << 16);
+	return (gint) utils_scale_round(c->red, 255) |
+		((gint) utils_scale_round(c->green, 255) << 8) |
+		((gint) utils_scale_round(c->blue, 255) << 16);
 }
 
 
@@ -1022,7 +1024,7 @@ gint utils_color_to_bgr(const GdkColor *c)
  * utils_color_to_bgr() */
 gint utils_parse_color_to_bgr(const gchar *spec)
 {
-	GdkColor color;
+	GdkRGBA color;
 	if (utils_parse_color(spec, &color))
 		return utils_color_to_bgr(&color);
 	else

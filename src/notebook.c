@@ -202,7 +202,7 @@ static GtkWidget *create_switch_dialog(void)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 12);
 	gtk_container_add(GTK_CONTAINER(dialog), vbox);
 
-	widget = gtk_image_new_from_stock(GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_BUTTON);
+	widget = gtk_image_new_from_icon_name("go-jump", GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(vbox), widget);
 
 	widget = gtk_label_new(NULL);
@@ -476,7 +476,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open in New _Window"));
+	menu_item = ui_image_menu_item_new("document-open", _("Open in New _Window"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate",
@@ -489,25 +489,25 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE, NULL);
+	menu_item = ui_image_menu_item_new("window-close", _("_Close"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(notebook_tab_close_clicked_cb), doc);
 	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (doc != NULL));
 
-	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Ot_her Documents"));
+	menu_item = ui_image_menu_item_new("window-close", _("Close Ot_her Documents"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), doc);
 	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (doc != NULL));
 
-	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Documents to the _Right"));
+	menu_item = ui_image_menu_item_new("window-close", _("Close Documents to the _Right"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_documents_right_activate), doc);
 	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), doc != NULL && has_tabs_on_right(doc));
 
-	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("C_lose All"));
+	menu_item = ui_image_menu_item_new("window-close", _("C_lose All"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_all1_activate), NULL);
@@ -689,7 +689,7 @@ static void notebook_tab_close_button_style_set(GtkWidget *btn, GtkRcStyle *prev
 {
 	gint w, h;
 
-	gtk_icon_size_lookup_for_settings(gtk_widget_get_settings(btn), GTK_ICON_SIZE_MENU, &w, &h);
+	gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &w, &h);
 	gtk_widget_set_size_request(btn, w + 2, h + 2);
 }
 
@@ -737,19 +737,19 @@ gint notebook_new_tab(GeanyDocument *this)
 
 	if (file_prefs.show_tab_cross)
 	{
-		GtkWidget *image, *btn, *align;
+		GtkWidget *image, *btn;
 
 		btn = gtk_button_new();
 		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
-		gtk_button_set_focus_on_click(GTK_BUTTON(btn), FALSE);
+		gtk_widget_set_focus_on_click(btn, FALSE);
 		gtk_widget_set_name(btn, "geany-close-tab-button");
 
-		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+		image = gtk_image_new_from_icon_name("window-close", GTK_ICON_SIZE_MENU);
 		gtk_container_add(GTK_CONTAINER(btn), image);
 
-		align = gtk_alignment_new(1.0, 0.5, 0.0, 0.0);
-		gtk_container_add(GTK_CONTAINER(align), btn);
-		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
+		gtk_widget_set_halign(btn, GTK_ALIGN_END);
+		gtk_widget_set_valign(btn, GTK_ALIGN_CENTER);
+		gtk_box_pack_start(GTK_BOX(hbox), btn, TRUE, TRUE, 0);
 
 		g_signal_connect(btn, "clicked", G_CALLBACK(notebook_tab_close_clicked_cb), this);
 		/* button overrides event box, so make middle click on button also close tab */

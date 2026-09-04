@@ -502,13 +502,13 @@ static gint run_dialog_for_persistent_doc_tab_closing(const gchar *msg, const gc
 			GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", msg);
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Question"));
 	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), "%s", msg2);
-	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
 
-	button = ui_button_new_with_image(GTK_STOCK_CLEAR, _("_Don't save (discard)"));
+	button = ui_button_new_with_image("edit-clear", _("_Don't save (discard)"));
 	gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, GTK_RESPONSE_NO);
 	gtk_widget_show(button);
 
-	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Save"), GTK_RESPONSE_YES);
 
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 	ret = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -1080,8 +1080,8 @@ static void target_directory_button_clicked_cb(GtkButton *button, gpointer item)
 	else
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Select Directory"),
 						NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL));
+						_("_Cancel"), GTK_RESPONSE_CANCEL,
+						_("_Open"), GTK_RESPONSE_ACCEPT, NULL));
 
 	text = utils_get_locale_from_utf8(gtk_entry_get_text(GTK_ENTRY(item)));
 	if (!EMPTY(text))
@@ -1091,9 +1091,11 @@ static void target_directory_button_clicked_cb(GtkButton *button, gpointer item)
 	if (file_chooser_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
 		gchar *utf8_filename, *tmp;
+		GFile *file = gtk_file_chooser_get_file(dialog);
 
-		tmp = gtk_file_chooser_get_filename(dialog);
+		tmp = g_file_get_path(file);
 		utf8_filename = utils_get_utf8_from_locale(tmp);
+		g_object_unref(file);
 
 		gtk_entry_set_text(GTK_ENTRY(item), utf8_filename);
 
@@ -1343,13 +1345,13 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 			notebook_vbox, gtk_label_new(_("Auto Save")), NOTEBOOK_PAGE_AUTOSAVE);
 
 		checkbox_enable_as_lf = gtk_check_button_new_with_mnemonic(_("Enable save when losing _focus"));
-		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_enable_as_lf), FALSE);
+		gtk_widget_set_focus_on_click(checkbox_enable_as_lf, FALSE);
 		pref_widgets.checkbox_enable_autosave_losing_focus = checkbox_enable_as_lf;
 		gtk_box_pack_start(GTK_BOX(inner_vbox), checkbox_enable_as_lf, FALSE, FALSE, 6);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_enable_as_lf), enable_autosave_losing_focus);
 
 		checkbox_enable = gtk_check_button_new_with_mnemonic(_("_Enable"));
-		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_enable), FALSE);
+		gtk_widget_set_focus_on_click(checkbox_enable, FALSE);
 		pref_widgets.checkbox_enable_autosave = checkbox_enable;
 		gtk_box_pack_start(GTK_BOX(inner_vbox), checkbox_enable, FALSE, FALSE, 6);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_enable), enable_autosave);
@@ -1357,7 +1359,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 			G_CALLBACK(checkbox_toggled_cb), GINT_TO_POINTER(NOTEBOOK_PAGE_AUTOSAVE));
 
 		label = gtk_label_new_with_mnemonic(_("Auto save _interval:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 6);
 
 		pref_widgets.autosave_interval_spin = spin = gtk_spin_button_new_with_range(1, 1800, 1);
@@ -1374,7 +1376,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		checkbox = gtk_check_button_new_with_mnemonic(
 			_("_Print status message if files have been automatically saved"));
-		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox), FALSE);
+		gtk_widget_set_focus_on_click(checkbox, FALSE);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), autosave_print_msg);
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), checkbox);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), checkbox, FALSE, FALSE, 5);
@@ -1384,14 +1386,14 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 			_("Save only current open _file"));
 		pref_widgets.autosave_save_all_radio1 = radio1;
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), radio1);
-		gtk_button_set_focus_on_click(GTK_BUTTON(radio1), FALSE);
+		gtk_widget_set_focus_on_click(radio1, FALSE);
 		gtk_container_add(GTK_CONTAINER(inner_vbox), radio1);
 
 		radio2 = gtk_radio_button_new_with_mnemonic_from_widget(
 			GTK_RADIO_BUTTON(radio1), _("Sa_ve all open files"));
 		pref_widgets.autosave_save_all_radio2 = radio2;
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), radio2);
-		gtk_button_set_focus_on_click(GTK_BUTTON(radio2), FALSE);
+		gtk_widget_set_focus_on_click(radio2, FALSE);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio2), autosave_save_all);
 		gtk_container_add(GTK_CONTAINER(inner_vbox), radio2);
 	}
@@ -1410,14 +1412,14 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		checkbox_enable = gtk_check_button_new_with_mnemonic(_("_Enable"));
 		pref_widgets.checkbox_enable_backupcopy = checkbox_enable;
-		gtk_button_set_focus_on_click(GTK_BUTTON(checkbox_enable), FALSE);
+		gtk_widget_set_focus_on_click(checkbox_enable, FALSE);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox_enable), enable_backupcopy);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), checkbox_enable, FALSE, FALSE, 6);
 		g_signal_connect(checkbox_enable, "toggled",
 			G_CALLBACK(checkbox_toggled_cb), GINT_TO_POINTER(NOTEBOOK_PAGE_BACKUPCOPY));
 
 		label = gtk_label_new_with_mnemonic(_("_Directory to save backup files in:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
 
 		pref_widgets.backupcopy_entry_dir = entry_dir = gtk_entry_new();
@@ -1429,7 +1431,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		g_signal_connect(button, "clicked",
 			G_CALLBACK(target_directory_button_clicked_cb), entry_dir);
 
-		image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
+		image = gtk_image_new_from_icon_name("document-open", GTK_ICON_SIZE_BUTTON);
 		gtk_container_add(GTK_CONTAINER(button), image);
 
 		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
@@ -1440,7 +1442,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		label = gtk_label_new_with_mnemonic(
 			_("Date/_Time format for backup files (see https://docs.gtk.org/glib/method.DateTime.format.html):"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 7);
 
 		pref_widgets.backupcopy_entry_time = entry_time = gtk_entry_new();
@@ -1453,7 +1455,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		label = gtk_label_new_with_mnemonic(
 			_("Directory _levels to include in the backup destination:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
 		spin_dir_levels = gtk_spin_button_new_with_range(0, 20, 1);
@@ -1484,7 +1486,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		disabled_radio = gtk_radio_button_new_with_mnemonic(NULL, _("Disabled"));
 		pref_widgets.untitled_doc_disabled_radio = disabled_radio;
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), disabled_radio);
-		gtk_button_set_focus_on_click(GTK_BUTTON(disabled_radio), FALSE);
+		gtk_widget_set_focus_on_click(disabled_radio, FALSE);
 		gtk_container_add(GTK_CONTAINER(inner_vbox), disabled_radio);
 		g_signal_connect(disabled_radio, "toggled",
 			G_CALLBACK(radio_toggled_cb), GINT_TO_POINTER(NOTEBOOK_UNTITLEDDOC_RADIO_DISABLED));
@@ -1495,7 +1497,7 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 			GTK_RADIO_BUTTON(disabled_radio), _("Instant Save After Creation"));
 		pref_widgets.untitled_doc_instantsave_radio = instantsave_radio;
 		gtk_label_set_mnemonic_widget(GTK_LABEL(label), instantsave_radio);
-		gtk_button_set_focus_on_click(GTK_BUTTON(instantsave_radio), FALSE);
+		gtk_widget_set_focus_on_click(instantsave_radio, FALSE);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(instantsave_radio), enable_instantsave);
 		gtk_container_add(GTK_CONTAINER(inner_vbox), instantsave_radio);
 		g_signal_connect(instantsave_radio, "toggled",
@@ -1504,8 +1506,8 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		entry_dir_label_text = g_strdup_printf(
 			_("_Directory to save files in (leave empty to use the default: %s):"), g_get_tmp_dir());
 		label = gtk_label_new_with_mnemonic(entry_dir_label_text);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-		gtk_widget_set_margin_left(label, 12);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
+		gtk_widget_set_margin_start(label, 12);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
 		g_free(entry_dir_label_text);
 
@@ -1518,20 +1520,20 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		g_signal_connect(button, "clicked",
 			G_CALLBACK(target_directory_button_clicked_cb), entry_dir);
 
-		image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
+		image = gtk_image_new_from_icon_name("document-open", GTK_ICON_SIZE_BUTTON);
 		gtk_container_add(GTK_CONTAINER(button), image);
 
-		hbox = gtk_hbox_new(FALSE, 6);
+		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 		gtk_box_pack_start(GTK_BOX(hbox), entry_dir, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
-		gtk_widget_set_margin_left(hbox, 12);
+		gtk_widget_set_margin_start(hbox, 12);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 0);
 
 		help_label = gtk_label_new(
 			_("<i>The plugin will not delete the files created in this directory.</i>"));
 		gtk_label_set_use_markup(GTK_LABEL(help_label), TRUE);
-		gtk_misc_set_alignment(GTK_MISC(help_label), 0, 0.5);
-		gtk_widget_set_margin_left(help_label, 12);
+		gtk_label_set_xalign(GTK_LABEL(help_label), 0);
+		gtk_widget_set_margin_start(help_label, 12);
 		gtk_widget_set_margin_bottom(help_label, 8);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), help_label, FALSE, FALSE, 0);
 
@@ -1540,15 +1542,15 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		persistent_radio = gtk_radio_button_new_with_mnemonic_from_widget(
 			GTK_RADIO_BUTTON(disabled_radio), _("Persistent Untitled Documents"));
 		pref_widgets.untitled_doc_persistent_radio = persistent_radio;
-		gtk_button_set_focus_on_click(GTK_BUTTON(persistent_radio), FALSE);
+		gtk_widget_set_focus_on_click(persistent_radio, FALSE);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(persistent_radio), enable_persistent_docs);
 		gtk_container_add(GTK_CONTAINER(inner_vbox), persistent_radio);
 		g_signal_connect(persistent_radio, "toggled",
 			G_CALLBACK(radio_toggled_cb), GINT_TO_POINTER(NOTEBOOK_UNTITLEDDOC_RADIO_PERSISTENT));
 
 		label = gtk_label_new_with_mnemonic(_("_Directory to save persistent untitled documents in:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-		gtk_widget_set_margin_left(label, 12);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
+		gtk_widget_set_margin_start(label, 12);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
 
 		pref_widgets.persistent_doc_entry_dir = entry_dir = gtk_entry_new();
@@ -1560,21 +1562,21 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 		g_signal_connect(button, "clicked",
 			G_CALLBACK(target_directory_button_clicked_cb), entry_dir);
 
-		image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
+		image = gtk_image_new_from_icon_name("document-open", GTK_ICON_SIZE_BUTTON);
 		gtk_container_add(GTK_CONTAINER(button), image);
 
 		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
 		gtk_box_pack_start(GTK_BOX(hbox), entry_dir, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
-		gtk_widget_set_margin_left(hbox, 12);
+		gtk_widget_set_margin_start(hbox, 12);
 
 		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 0);
 
 		hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 1);
 		label = gtk_label_new_with_mnemonic(_("Untitled document save _interval:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
 		gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
-		gtk_widget_set_margin_left(hbox, 12);
+		gtk_widget_set_margin_start(hbox, 12);
 
 		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 5);
 
@@ -1587,14 +1589,14 @@ GtkWidget *plugin_configure(GtkDialog *dialog)
 
 		gtk_box_pack_start(GTK_BOX(hbox), spin, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 5);
-		gtk_widget_set_margin_left(hbox, 12);
+		gtk_widget_set_margin_start(hbox, 12);
 
 		gtk_box_pack_start(GTK_BOX(inner_vbox), hbox, FALSE, FALSE, 0);
 
 		/* Common */
 
 		label = gtk_label_new_with_mnemonic(_("Default _filetype to use for untitled documents:"));
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
 		gtk_widget_set_margin_top(label, 15);
 		gtk_box_pack_start(GTK_BOX(inner_vbox), label, FALSE, FALSE, 0);
 

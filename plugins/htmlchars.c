@@ -484,7 +484,7 @@ static void tools_show_dialog_insert_special_chars(void)
 
 		sc_dialog = gtk_dialog_new_with_buttons(
 					_("Special Characters"), GTK_WINDOW(geany->main_widgets->window),
-					GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					GTK_DIALOG_DESTROY_WITH_PARENT, _("_Cancel"), GTK_RESPONSE_CANCEL,
 					_("_Insert"), GTK_RESPONSE_OK, NULL);
 		vbox = ui_dialog_vbox_new(GTK_DIALOG(sc_dialog));
 		gtk_box_set_spacing(GTK_BOX(vbox), 6);
@@ -496,7 +496,7 @@ static void tools_show_dialog_insert_special_chars(void)
 
 		label = gtk_label_new(_("Choose a special character from the list below and double click on it or use the button to insert it at the current cursor position."));
 		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_label_set_xalign(GTK_LABEL(label), 0);
 		gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 		sc_tree = GTK_TREE_VIEW(gtk_tree_view_new());

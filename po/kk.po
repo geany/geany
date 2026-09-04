@@ -6479,3 +6479,155 @@ msgstr "Үсті мен астында"
 
 #~ msgid "_Vertically"
 #~ msgstr "_Вертикалды"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "Қ_иып алу"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "Шегінуді кішірейту"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "Табу м_ен алмастыру"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "Шегінуді үлкейту"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "Қала_йша сақтау"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Select _All"
+msgstr "Б_арлығын таңдау"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "Үлке_йту"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "Кі_шірейту"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "Осы тур_алы"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "Қ_осу"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "Іске _асыру"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "Ар_тқа"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "Ба_с тарту"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "Та_зарту"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "_Көшіру"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "Ө_шіру"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "Тө_мен"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "_Табу"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "А_лға"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "Ө_ту"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "Ж_аңа"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "Ж_оқ"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "Қалы_пты өлшемі"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "О_К"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "_Ашу"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "Кірі_стіру"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "_Баптаулар"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "Бас_паға шығару"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "Қас_иеттері"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "_Шығу"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "Қа_йталау"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "Жаңар_ту"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "Ө_шіру"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "Қай_тару"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "_Сақтау"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "Бол_дырмау"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "Жоғ_ары"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "_Иә"

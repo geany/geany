@@ -56,7 +56,7 @@ enum
 static guint signals[LAST_SIGNAL];
 
 
-G_DEFINE_TYPE(GeanyMenubuttonAction, geany_menu_button_action, GTK_TYPE_ACTION)
+G_DEFINE_TYPE_WITH_PRIVATE(GeanyMenubuttonAction, geany_menu_button_action, GTK_TYPE_ACTION)
 
 
 static void geany_menu_button_action_finalize(GObject *object)
@@ -119,8 +119,6 @@ static void geany_menu_button_action_class_init(GeanyMenubuttonActionClass *klas
 	action_class->create_tool_item = geany_menu_button_action_create_tool_item;
 	action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 
-	g_type_class_add_private(klass, sizeof(GeanyMenubuttonActionPrivate));
-
 	g_object_class_install_property(g_object_class,
 									PROP_TOOLTIP_ARROW,
 									g_param_spec_string(
@@ -145,8 +143,7 @@ static void geany_menu_button_action_init(GeanyMenubuttonAction *action)
 {
 	GeanyMenubuttonActionPrivate *priv;
 
-	action->priv = G_TYPE_INSTANCE_GET_PRIVATE(action,
-		GEANY_MENU_BUTTON_ACTION_TYPE, GeanyMenubuttonActionPrivate);
+	action->priv = geany_menu_button_action_get_instance_private(action);
 
 	priv = action->priv;
 	priv->tooltip_arrow = NULL;
@@ -158,14 +155,14 @@ GtkAction *geany_menu_button_action_new(const gchar *name,
 										const gchar *label,
 									    const gchar *tooltip,
 									    const gchar *tooltip_arrow,
-										const gchar *stock_id)
+										const gchar *icon_name)
 {
 	GtkAction *action = g_object_new(GEANY_MENU_BUTTON_ACTION_TYPE,
 		"name", name,
 		"label", label,
 		"tooltip", tooltip,
 		"tooltip-arrow", tooltip_arrow,
-		"stock-id", stock_id,
+		"icon-name", icon_name,
 		NULL);
 
 	return action;

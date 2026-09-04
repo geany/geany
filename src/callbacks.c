@@ -349,7 +349,7 @@ void on_reload_all(GtkAction *action, gpointer user_data)
 			doc = documents[i];
 			if (doc->changed || document_can_undo(doc) || document_can_redo(doc))
 			{
-				if (dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
+				if (dialogs_show_question_full(NULL, _("_Reload"), _("_Cancel"),
 					_("Changes detected, reloading all will lose any changes and history."),
 					_("Are you sure you want to reload all files?")))
 				{

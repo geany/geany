@@ -189,7 +189,7 @@ static GtkWidget *demo_configure(GeanyPlugin *plugin, GtkDialog *dialog, gpointe
 
 	/* add a label and a text entry to the dialog */
 	label = gtk_label_new(_("Welcome text to show:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	entry = gtk_entry_new();
 	if (welcome_text != NULL)
 		gtk_entry_set_text(GTK_ENTRY(entry), welcome_text);

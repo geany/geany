@@ -30,7 +30,7 @@
 #include <time.h>
 
 #include <glib.h>
-#include <gdk/gdk.h> /* for GdkColor */
+#include <gdk/gdk.h> /* for GdkRGBA */
 
 #include "document.h"
 
@@ -277,7 +277,7 @@ gint utils_strpos(const gchar* haystack, const gchar *needle);
 
 gchar *utils_get_initials(const gchar *name);
 
-gchar *utils_get_hex_from_color(GdkColor *color);
+gchar *utils_get_hex_from_color(const GdkRGBA *color);
 
 const gchar *utils_get_default_dir_utf8(void);
 
@@ -285,9 +285,9 @@ gchar *utils_get_current_file_dir_utf8(void);
 
 void utils_beep(void);
 
-gboolean utils_parse_color(const gchar *spec, GdkColor *color);
+gboolean utils_parse_color(const gchar *spec, GdkRGBA *color);
 
-gint utils_color_to_bgr(const GdkColor *color);
+gint utils_color_to_bgr(const GdkRGBA *color);
 
 gint utils_parse_color_to_bgr(const gchar *spec);
 

@@ -1341,8 +1341,8 @@ void symbols_show_load_tags_dialog(void)
 	{
 		dialog = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(_("Load Tags File"), GTK_WINDOW(main_widgets.window),
 			GTK_FILE_CHOOSER_ACTION_OPEN,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+			_("_Cancel"), GTK_RESPONSE_CANCEL,
+			_("_Open"), GTK_RESPONSE_ACCEPT,
 			NULL));
 		gtk_widget_set_name(GTK_WIDGET(dialog), "GeanyDialog");
 	}
@@ -2214,12 +2214,12 @@ static void create_taglist_popup_menu(void)
 
 	tv.popup_taglist = menu = gtk_menu_new();
 
-	symbol_menu.expand_all = item = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
+	symbol_menu.expand_all = item = ui_image_menu_item_new("list-add", _("_Expand All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GINT_TO_POINTER(TRUE));
 
-	symbol_menu.collapse_all = item = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("_Collapse All"));
+	symbol_menu.collapse_all = item = ui_image_menu_item_new("list-remove", _("_Collapse All"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_expand_collapse), GINT_TO_POINTER(FALSE));
@@ -2255,17 +2255,17 @@ static void create_taglist_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 
-	symbol_menu.find_usage = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find _Usage"));
+	symbol_menu.find_usage = item = ui_image_menu_item_new("edit-find", _("Find _Usage"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), symbol_menu.find_usage);
 
-	symbol_menu.find_doc_usage = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find _Document Usage"));
+	symbol_menu.find_doc_usage = item = ui_image_menu_item_new("edit-find", _("Find _Document Usage"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), symbol_menu.find_doc_usage);
 
-	symbol_menu.find_in_files = item = ui_image_menu_item_new(GTK_STOCK_FIND, _("Find in F_iles..."));
+	symbol_menu.find_in_files = item = ui_image_menu_item_new("edit-find", _("Find in F_iles..."));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_usage), NULL);

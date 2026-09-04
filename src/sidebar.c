@@ -164,7 +164,8 @@ static void create_default_tag_tree(void)
 		gtk_scrolled_window_get_vadjustment(scrolled_window));
 	gtk_viewport_set_shadow_type(GTK_VIEWPORT(tv.default_tag_tree), GTK_SHADOW_NONE);
 	label = gtk_label_new(_("No symbols found"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0.1f, 0.01f);
+	gtk_label_set_xalign(GTK_LABEL(label), 0.1);
+	gtk_label_set_yalign(GTK_LABEL(label), 0.01);
 	gtk_container_add(GTK_CONTAINER(tv.default_tag_tree), label);
 	gtk_widget_show_all(tv.default_tag_tree);
 	g_signal_connect(tv.default_tag_tree, "button-press-event",
@@ -287,7 +288,7 @@ GtkTreeStore *sidebar_create_store_openfiles(void)
 	/* store the icon and the short filename to show, and the index as reference,
 	 * the colour (black/red/green) and the full name for the tooltip */
 	store = gtk_tree_store_new(DOCUMENTS_COLUMNS_NUM, G_TYPE_ICON, G_TYPE_STRING,
-		G_TYPE_POINTER, GDK_TYPE_COLOR, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
+		G_TYPE_POINTER, GDK_TYPE_RGBA, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 
 	/* sort opened filenames in the store_openfiles treeview */
 	sortable = GTK_TREE_SORTABLE(GTK_TREE_MODEL(store));
@@ -460,7 +461,7 @@ static void prepare_openfiles(void)
 	gtk_tree_view_column_set_attributes(column, icon_renderer, "gicon", DOCUMENTS_ICON, NULL);
 	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
 	gtk_tree_view_column_set_attributes(column, text_renderer, "text", DOCUMENTS_SHORTNAME,
-		"foreground-gdk", DOCUMENTS_COLOR, NULL);
+		"foreground-rgba", DOCUMENTS_COLOR, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tv.tree_openfiles), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tv.tree_openfiles), FALSE);
 
@@ -596,7 +597,7 @@ static void tree_copy_node(GtkTreeStore *tree, GtkTreeIter *new_node, GtkTreeIte
 	GIcon *icon;
 	gchar *filename;
 	gchar *shortname;
-	GdkColor *color;
+	GdkRGBA *color;
 	GeanyDocument *doc;
 	GtkTreeModel *model = GTK_TREE_MODEL(tree);
 	gboolean fold, visible;
@@ -629,7 +630,7 @@ static void tree_copy_node(GtkTreeStore *tree, GtkTreeIter *new_node, GtkTreeIte
 	g_free(filename);
 	g_free(shortname);
 	if (color)
-		gdk_color_free(color);
+		gdk_rgba_free(color);
 }
 
 
@@ -932,7 +933,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 	GtkTreeIter parent;
 	const gchar *filename = DOC_FILENAME(doc);
 	gchar *basename;
-	const GdkColor *color = document_get_status_color(doc);
+	const GdkRGBA *color = document_get_status_rgba(doc);
 	static GIcon *file_icon = NULL;
 	gboolean expand = FALSE;
 	gboolean visible = TRUE;
@@ -1030,7 +1031,7 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 	if (utils_str_equal(fname, DOC_FILENAME(doc)))
 	{
 		/* just update color and the icon */
-		const GdkColor *color = document_get_status_color(doc);
+		const GdkRGBA *color = document_get_status_rgba(doc);
 		GIcon *icon = doc->file_type->icon;
 
 		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_COLOR, color, -1);
@@ -1190,7 +1191,7 @@ void sidebar_add_common_menu_items(GtkMenu *menu)
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("H_ide Sidebar"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-		gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU));
+		gtk_image_new_from_icon_name("window-close", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_hide_sidebar), NULL);
@@ -1301,7 +1302,7 @@ static void create_openfiles_popup_menu(void)
 
 	openfiles_popup_menu = gtk_menu_new();
 
-	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE, NULL);
+	item = ui_image_menu_item_new("window-close", _("_Close"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
@@ -1312,7 +1313,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
-	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, NULL);
+	item = ui_image_menu_item_new("document-save", _("_Save"));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
@@ -1321,7 +1322,7 @@ static void create_openfiles_popup_menu(void)
 
 	item = gtk_image_menu_item_new_with_mnemonic(_("_Reload"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
-		gtk_image_new_from_stock(GTK_STOCK_REVERT_TO_SAVED, GTK_ICON_SIZE_MENU));
+		gtk_image_new_from_icon_name("document-revert", GTK_ICON_SIZE_MENU));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate",
@@ -1332,7 +1333,7 @@ static void create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
-	item = ui_image_menu_item_new(GTK_STOCK_FIND, _("_Find in Files..."));
+	item = ui_image_menu_item_new("edit-find", _("_Find in Files..."));
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(on_find_in_files), NULL);
@@ -1348,13 +1349,13 @@ static void create_openfiles_popup_menu(void)
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
 
-	doc_items.expand_all = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
+	doc_items.expand_all = ui_image_menu_item_new("list-add", _("_Expand All"));
 	gtk_widget_show(doc_items.expand_all);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.expand_all);
 	g_signal_connect(doc_items.expand_all, "activate",
 					 G_CALLBACK(on_openfiles_expand_collapse), GINT_TO_POINTER(TRUE));
 
-	doc_items.collapse_all = ui_image_menu_item_new(GTK_STOCK_REMOVE, _("_Collapse All"));
+	doc_items.collapse_all = ui_image_menu_item_new("list-remove", _("_Collapse All"));
 	gtk_widget_show(doc_items.collapse_all);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), doc_items.collapse_all);
 	g_signal_connect(doc_items.collapse_all, "activate",

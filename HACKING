@@ -185,11 +185,24 @@ preprocessor flag to get warnings about newer symbols from the GLib.
 
 On the contrary, you might also want to get deprecation warnings for symbols
 deprecated in newer versions, typically when preparing a dependency bump or
-trying to improve forward compatibility.
-To do so, use the ``-UGLIB_VERSION_MIN_REQUIRED`` flag for GLib deprecations,
-and ``-UGDK_DISABLE_DEPRECATION_WARNINGS`` for GTK and GDK ones.
-To change the lower deprecation bound for GLib (and then get warnings about
-symbols deprecated more recently) instead of simply removing it entirely, use
+trying to improve forward compatibility. The easiest way is the
+``deprecation-warnings`` build option::
+
+    meson setup _build -Ddeprecation-warnings=true
+    ./configure --enable-deprecation-warnings
+
+It warns about everything deprecated up to the GTK version Geany requires and
+about all GLib deprecations (Scintilla, being upstream code, stays silent).
+The "GTK 4 readiness report" CI job builds with this option and shows the
+number of warnings in its summary; that number should only ever go down, and
+new code should not add to it.
+
+To set the bounds manually instead, use the ``-UGLIB_VERSION_MIN_REQUIRED``
+flag for GLib deprecations, and ``-UGDK_DISABLE_DEPRECATION_WARNINGS`` for GTK
+and GDK ones (with Meson this only works through the option above, because the
+project's own flags come last). To change the lower deprecation bound for GLib
+(and then get warnings about symbols deprecated more recently) instead of
+simply removing it entirely, use
 ``-UGLIB_VERSION_MIN_REQUIRED -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_X_YY``.
 
 See `Compiler options & warnings`_ for how to set such flags.

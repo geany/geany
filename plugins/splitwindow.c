@@ -202,21 +202,17 @@ static void set_state(enum State id)
  * @param label can be NULL to use stock label text. @a label can contain underscores,
  * which will be removed.
  * @param tooltip can be NULL to use label text (useful for GTK_TOOLBAR_ICONS). */
-static GtkWidget *ui_tool_button_new(const gchar *stock_id, const gchar *label, const gchar *tooltip)
+static GtkWidget *ui_tool_button_new(const gchar *icon_name, const gchar *label, const gchar *tooltip)
 {
 	GtkToolItem *item;
 	gchar *dupl = NULL;
 
-	if (stock_id && !label)
-	{
-		label = ui_lookup_stock_label(stock_id);
-	}
 	dupl = utils_str_remove_chars(g_strdup(label), "_");
 	label = dupl;
 
 	item = gtk_tool_button_new(NULL, label);
-	if (stock_id)
-		gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(item), stock_id);
+	if (icon_name)
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(item), icon_name);
 
 	if (!tooltip)
 		tooltip = label;
@@ -266,7 +262,7 @@ static GtkWidget *create_toolbar(void)
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
 	tool_item = gtk_menu_tool_button_new(NULL, NULL);
-	gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(tool_item), GTK_STOCK_JUMP_TO);
+	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(tool_item), "go-jump");
 	item = (GtkWidget*)tool_item;
 	gtk_widget_set_tooltip_text(item, _("Show the current document"));
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
@@ -285,7 +281,7 @@ static GtkWidget *create_toolbar(void)
 	gtk_container_add(GTK_CONTAINER(tool_item), item);
 	edit_window.name_label = item;
 
-	item = ui_tool_button_new(GTK_STOCK_CLOSE, _("_Unsplit"), NULL);
+	item = ui_tool_button_new("window-close", _("_Unsplit"), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_unsplit), NULL);
 

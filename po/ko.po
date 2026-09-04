@@ -7048,3 +7048,151 @@ msgstr "위 그리고 아래"
 #~ msgstr ""
 #~ "터미널 에뮬레이터 행동 조절.\n"
 #~ "무엇인지 확실히 알기전에는 변경하지 마십시오."
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Cu_t"
+msgstr "잘라내기(_T)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Decrease Indent"
+msgstr "들여 쓰기 줄이기"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Find and _Replace"
+msgstr "찾아서 바꾸기(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Increase Indent"
+msgstr "들여 쓰기 늘리기"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Save _As"
+msgstr "다른 이름으로 저장(_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _In"
+msgstr "확대(_I)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "Zoom _Out"
+msgstr "축소(_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_About"
+msgstr "정보(_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Add"
+msgstr "추가(_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Apply"
+msgstr "적용(_A)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Back"
+msgstr "뒤로(_B)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Cancel"
+msgstr "취소(_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Clear"
+msgstr "지우기(_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Copy"
+msgstr "복사(_C)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Delete"
+msgstr "삭제(_D)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Down"
+msgstr "아래로(_D)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Find"
+msgstr "찾기(_F)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Forward"
+msgstr "앞으로(_F)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Jump to"
+msgstr "이동(_J)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_New"
+msgstr "새로 만들기(_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_No"
+msgstr "아니요(_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Normal Size"
+msgstr "보통 크기(_N)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_OK"
+msgstr "확인(_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Open"
+msgstr "열기(_O)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Paste"
+msgstr "붙여넣기(_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Preferences"
+msgstr "기본 설정(_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Print"
+msgstr "인쇄(_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Properties"
+msgstr "속성(_P)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Quit"
+msgstr "끝내기(_Q)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Redo"
+msgstr "다시 실행(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Refresh"
+msgstr "새로 고침(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Remove"
+msgstr "제거(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Revert"
+msgstr "되돌리기(_R)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Save"
+msgstr "저장(_S)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Undo"
+msgstr "입력 취소(_U)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Up"
+msgstr "위로(_U)"
+
+# Taken from GTK, which translated this former stock label for Geany before
+msgid "_Yes"
+msgstr "예(_Y)"

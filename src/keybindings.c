@@ -375,7 +375,7 @@ static void init_default_kb(void)
 		0, 0, "project_open", _("Open"), "project_open1");
 	add_kb(group, GEANY_KEYS_PROJECT_PROPERTIES, NULL,
 		0, 0, "project_properties",
-		ui_lookup_stock_label(GTK_STOCK_PROPERTIES), "project_properties1");
+		_("_Properties"), "project_properties1");
 	add_kb(group, GEANY_KEYS_PROJECT_CLOSE, NULL,
 		0, 0, "project_close", _("Close"), "project_close1");
 
@@ -1006,8 +1006,8 @@ static GtkWidget *create_dialog(void)
 
 	dialog = gtk_dialog_new_with_buttons(_("Keyboard Shortcuts"), GTK_WINDOW(main_widgets.window),
 				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_STOCK_EDIT, GTK_RESPONSE_APPLY,
-				GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+				_("_Edit"), GTK_RESPONSE_APPLY,
+				_("_Close"), GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 	gtk_widget_set_name(dialog, "GeanyDialog");
@@ -1017,10 +1017,9 @@ static GtkWidget *create_dialog(void)
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
 	label = gtk_label_new(_("The following keyboard shortcuts are configurable:"));
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 
 	tree = gtk_tree_view_new();
-	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
 	text_renderer = gtk_cell_renderer_text_new();

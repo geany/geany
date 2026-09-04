@@ -223,7 +223,6 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 {	/* copied from interface.c */
 	GtkWidget *page;
 	GtkWidget *frame33;
-	GtkWidget *alignment36;
 	GtkWidget *vbox30;
 	GtkWidget *hbox10;
 	GtkWidget *label203;
@@ -255,12 +254,9 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	gtk_frame_set_label_align(GTK_FRAME(frame33), 0, 0);
 	gtk_frame_set_shadow_type(GTK_FRAME(frame33), GTK_SHADOW_NONE);
 
-	alignment36 = gtk_alignment_new(0, 0.5, 1, 1);
-	gtk_container_add(GTK_CONTAINER(frame33), alignment36);
-	gtk_alignment_set_padding(GTK_ALIGNMENT(alignment36), 0, 0, 12, 0);
-
 	vbox30 = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
-	gtk_container_add(GTK_CONTAINER(alignment36), vbox30);
+	gtk_widget_set_margin_start(vbox30, 12);
+	gtk_container_add(GTK_CONTAINER(frame33), vbox30);
 
 	w->check_print_basename = gtk_check_button_new_with_mnemonic(_("Use the basename of the printed file"));
 	gtk_box_pack_start(GTK_BOX(vbox30), w->check_print_basename, FALSE, FALSE, 0);

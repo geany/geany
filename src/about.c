@@ -124,17 +124,18 @@ static const gchar *contributors =
 "Tyler Mulligan, Walery Studennikov, Yura Siamashka";
 
 
-static void header_eventbox_style_set(GtkWidget *widget);
-static void header_label_style_set(GtkWidget *widget);
+static void header_set_theme_color(GtkWidget *widget, const gchar *property, const gchar *color_name);
 static void homepage_clicked(GtkButton *button, gpointer data);
 
 
 #define ROW(text, row, col, x_align, y_padding, col_span) \
 	label = gtk_label_new((text)); \
-	gtk_table_attach(GTK_TABLE(table), label, (col), (col) + (col_span) + 1, (row), (row) + 1, \
-			(GtkAttachOptions) (GTK_FILL), (GtkAttachOptions) (GTK_FILL), 0, (y_padding)); \
+	gtk_widget_set_margin_top(label, (y_padding)); \
+	gtk_widget_set_margin_bottom(label, (y_padding)); \
+	gtk_grid_attach(GTK_GRID(table), label, (col), (row), (col_span) + 1, 1); \
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE); \
-	gtk_misc_set_alignment(GTK_MISC(label), (x_align), 0);
+	gtk_label_set_xalign(GTK_LABEL(label), (x_align)); \
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 
 
 static GtkWidget *create_dialog(void)
@@ -173,7 +174,7 @@ static GtkWidget *create_dialog(void)
 	gtk_window_set_title(GTK_WINDOW(dialog), _("About Geany"));
 	gtk_window_set_icon_name(GTK_WINDOW(dialog), "geany");
 	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+	gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Close"), GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
 	g_signal_connect(dialog, "key-press-event", G_CALLBACK(gb_on_key_pressed), NULL);
 
@@ -193,10 +194,8 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_markup(GTK_LABEL(header_label), buffer);
 	gtk_widget_show(header_label);
 	gtk_box_pack_start(GTK_BOX(header_hbox), header_label, FALSE, FALSE, 0);
-	header_eventbox_style_set(header_eventbox);
-	header_label_style_set(header_label);
-	g_signal_connect_after(header_eventbox, "style-set", G_CALLBACK(header_eventbox_style_set), NULL);
-	g_signal_connect_after(header_label, "style-set", G_CALLBACK(header_label_style_set), NULL);
+	header_set_theme_color(header_eventbox, "background-color", "theme_selected_bg_color");
+	header_set_theme_color(header_label, "color", "theme_selected_fg_color");
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), header_eventbox, FALSE, FALSE, 0);
 
 	/* create notebook */
@@ -216,7 +215,10 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_use_markup(GTK_LABEL(label_info), TRUE);
 	g_snprintf(buffer, sizeof(buffer), INFO, _("A fast and lightweight IDE"));
 	gtk_label_set_markup(GTK_LABEL(label_info), buffer);
-	gtk_misc_set_padding(GTK_MISC(label_info), 2, 11);
+	gtk_widget_set_margin_start(label_info, 2);
+	gtk_widget_set_margin_end(label_info, 2);
+	gtk_widget_set_margin_top(label_info, 11);
+	gtk_widget_set_margin_bottom(label_info, 11);
 	gtk_widget_show(label_info);
 	gtk_box_pack_start(GTK_BOX(info_box), label_info, FALSE, FALSE, 0);
 
@@ -226,7 +228,10 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_selectable(GTK_LABEL(codename_label), TRUE);
 	gtk_label_set_use_markup(GTK_LABEL(codename_label), TRUE);
 	gtk_label_set_markup(GTK_LABEL(codename_label), CODENAME);
-	gtk_misc_set_padding(GTK_MISC(codename_label), 2, 8);
+	gtk_widget_set_margin_start(codename_label, 2);
+	gtk_widget_set_margin_end(codename_label, 2);
+	gtk_widget_set_margin_top(codename_label, 8);
+	gtk_widget_set_margin_bottom(codename_label, 8);
 	gtk_widget_show(codename_label);
 	gtk_box_pack_start(GTK_BOX(info_box), codename_label, FALSE, FALSE, 0);
 
@@ -240,7 +245,10 @@ static GtkWidget *create_dialog(void)
 	g_free(build_date);
 	g_snprintf(buffer, sizeof(buffer), BUILDDATE, buffer2);
 	gtk_label_set_markup(GTK_LABEL(builddate_label), buffer);
-	gtk_misc_set_padding(GTK_MISC(builddate_label), 2, 2);
+	gtk_widget_set_margin_start(builddate_label, 2);
+	gtk_widget_set_margin_end(builddate_label, 2);
+	gtk_widget_set_margin_top(builddate_label, 2);
+	gtk_widget_set_margin_bottom(builddate_label, 2);
 	gtk_widget_show(builddate_label);
 	gtk_box_pack_start(GTK_BOX(info_box), builddate_label, FALSE, FALSE, 0);
 
@@ -255,7 +263,10 @@ static GtkWidget *create_dialog(void)
 		glib_major_version, glib_minor_version, glib_micro_version);
 	g_snprintf(buffer, sizeof(buffer), RUNTIME, buffer2);
 	gtk_label_set_markup(GTK_LABEL(runtime_label), buffer);
-	gtk_misc_set_padding(GTK_MISC(runtime_label), 2, 2);
+	gtk_widget_set_margin_start(runtime_label, 2);
+	gtk_widget_set_margin_end(runtime_label, 2);
+	gtk_widget_set_margin_top(runtime_label, 2);
+	gtk_widget_set_margin_bottom(runtime_label, 2);
 	gtk_widget_show(runtime_label);
 	gtk_box_pack_start(GTK_BOX(info_box), runtime_label, FALSE, FALSE, 0);
 
@@ -278,7 +289,10 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_selectable(GTK_LABEL(cop_label), FALSE);
 	gtk_label_set_use_markup(GTK_LABEL(cop_label), TRUE);
 	gtk_label_set_markup(GTK_LABEL(cop_label), COPYRIGHT);
-	gtk_misc_set_padding(GTK_MISC(cop_label), 2, 10);
+	gtk_widget_set_margin_start(cop_label, 2);
+	gtk_widget_set_margin_end(cop_label, 2);
+	gtk_widget_set_margin_top(cop_label, 10);
+	gtk_widget_set_margin_bottom(cop_label, 10);
 	gtk_widget_show(cop_label);
 	gtk_box_pack_start(GTK_BOX(info_box), cop_label, FALSE, FALSE, 0);
 	/*gtk_container_add(GTK_CONTAINER(info_box), cop_label); */
@@ -294,16 +308,20 @@ static GtkWidget *create_dialog(void)
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(credits_scrollwin),
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-	table = gtk_table_new(23 + translators_len + prev_translators_len, 3, FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 10);
+	table = gtk_grid_new();
+	gtk_grid_set_column_spacing(GTK_GRID(table), 10);
 
 	row = 0;
 	g_snprintf(buffer, sizeof(buffer),
 		"<span size=\"larger\" weight=\"bold\">%s</span>", _("Developers"));
 	label = gtk_label_new(buffer);
-	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1, GTK_FILL, 0, 0, 5);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_top(label, 5);
+	gtk_widget_set_margin_bottom(label, 5);
+	gtk_grid_attach(GTK_GRID(table), label, 0, row, 2, 1);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
+	gtk_label_set_yalign(GTK_LABEL(label), 0);
 	row++;
 
 	g_snprintf(buffer, sizeof(buffer), "Colomban Wendling - %s", _("maintainer"));
@@ -357,11 +375,12 @@ static GtkWidget *create_dialog(void)
 	g_snprintf(buffer, sizeof(buffer),
 		"<span size=\"larger\" weight=\"bold\">%s</span>", _("Translators"));
 	label = gtk_label_new(buffer);
-	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 5);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_top(label, 5);
+	gtk_widget_set_margin_bottom(label, 5);
+	gtk_grid_attach(GTK_GRID(table), label, 0, row, 2, 1);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	row++;
 
 	for (i = 0; i < translators_len; i++)
@@ -377,11 +396,12 @@ static GtkWidget *create_dialog(void)
 	g_snprintf(buffer, sizeof(buffer),
 		"<span size=\"larger\" weight=\"bold\">%s</span>", _("Previous Translators"));
 	label = gtk_label_new(buffer);
-	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 5);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_top(label, 5);
+	gtk_widget_set_margin_bottom(label, 5);
+	gtk_grid_attach(GTK_GRID(table), label, 0, row, 2, 1);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	row++;
 
 	for (i = 0; i < prev_translators_len; i++)
@@ -398,11 +418,12 @@ static GtkWidget *create_dialog(void)
 	g_snprintf(buffer, sizeof(buffer),
 		"<span size=\"larger\" weight=\"bold\">%s</span>", _("Contributors"));
 	label = gtk_label_new(buffer);
-	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 5);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_top(label, 5);
+	gtk_widget_set_margin_bottom(label, 5);
+	gtk_grid_attach(GTK_GRID(table), label, 0, row, 2, 1);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	row++;
 
 	g_snprintf(buffer, sizeof(buffer),
@@ -414,22 +435,25 @@ static GtkWidget *create_dialog(void)
 #endif
 		);
 	label = geany_wrap_label_new(buffer);
-	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
-					(GtkAttachOptions) (GTK_FILL),
-					(GtkAttachOptions) (0), 0, 5);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_top(label, 5);
+	gtk_widget_set_margin_bottom(label, 5);
+	gtk_grid_attach(GTK_GRID(table), label, 0, row, 2, 1);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	row++;
 
 	label = geany_wrap_label_new(contributors);
-	gtk_table_attach(GTK_TABLE(table), label, 0, 2, row, row + 1,
-					(GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
-					(GtkAttachOptions) (0), 0, 5);
+	gtk_widget_set_hexpand(label, TRUE);
+	gtk_widget_set_valign(label, GTK_ALIGN_CENTER);
+	gtk_widget_set_margin_top(label, 5);
+	gtk_widget_set_margin_bottom(label, 5);
+	gtk_grid_attach(GTK_GRID(table), label, 0, row, 2, 1);
 	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+	gtk_label_set_xalign(GTK_LABEL(label), 0);
 	row++;
 
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(credits_scrollwin), table);
+	gtk_container_add(GTK_CONTAINER(credits_scrollwin), table);
 	gtk_viewport_set_shadow_type(GTK_VIEWPORT(gtk_widget_get_parent(table)), GTK_SHADOW_NONE);
 	gtk_widget_show_all(table);
 	label = gtk_label_new(_("Credits"));
@@ -483,19 +507,19 @@ void about_dialog_show(void)
 }
 
 
-static void header_eventbox_style_set(GtkWidget *widget)
+/* Paints the header in the theme's selection colors, referenced by name so that a theme
+ * change is followed; themes that do not define them leave the header unpainted. */
+static void header_set_theme_color(GtkWidget *widget, const gchar *property, const gchar *color_name)
 {
-	GtkStyle *style = gtk_widget_get_style(widget);
-	if (! gdk_color_equal(&style->bg[GTK_STATE_NORMAL], &style->bg[GTK_STATE_SELECTED]))
-		gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &style->bg[GTK_STATE_SELECTED]);
-}
+	GdkRGBA color;
 
+	if (gtk_style_context_lookup_color(gtk_widget_get_style_context(widget), color_name, &color))
+	{
+		gchar *css = g_strdup_printf("* { %s: @%s; }", property, color_name);
 
-static void header_label_style_set(GtkWidget *widget)
-{
-	GtkStyle *style = gtk_widget_get_style(widget);
-	if (! gdk_color_equal(&style->fg[GTK_STATE_NORMAL], &style->fg[GTK_STATE_SELECTED]))
-		gtk_widget_modify_fg(widget, GTK_STATE_NORMAL, &style->fg[GTK_STATE_SELECTED]);
+		ui_widget_set_css(widget, css);
+		g_free(css);
+	}
 }
 
 

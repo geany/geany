@@ -296,6 +296,8 @@ void document_update_tab_label(GeanyDocument *doc);
 
 const gchar *document_get_status_widget_class(GeanyDocument *doc);
 
+const GdkRGBA *document_get_status_rgba(GeanyDocument *doc);
+
 gboolean document_need_save_as(GeanyDocument *doc);
 
 gboolean document_detect_indent_type(GeanyDocument *doc, GeanyIndentType *type_);

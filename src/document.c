@@ -881,11 +881,8 @@ static gboolean get_mtime(const gchar *locale_filename, time_t *time)
 
 		if (info)
 		{
-			GTimeVal timeval;
-
-			g_file_info_get_modification_time(info, &timeval);
+			*time = (time_t) g_file_info_get_attribute_uint64(info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
 			g_object_unref(info);
-			*time = timeval.tv_sec;
 		}
 		else if (error)
 			err_msg = error->message;
@@ -1565,7 +1562,7 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 	{
 		bar = document_show_message(doc, GTK_MESSAGE_INFO,
 						on_keep_edit_history_on_reload_response,
-						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+						_("_OK"), GTK_RESPONSE_ACCEPT,
 						_("Discard history"), GTK_RESPONSE_NO,
 						NULL, 0, _("The buffer's previous state is stored in the history and "
 						"undoing restores it. You can disable this by discarding the history upon "
@@ -1600,7 +1597,7 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 	prompt = !file_prefs.keep_edit_history_on_reload &&
 			(doc->changed || (document_can_undo(doc) || document_can_redo(doc)));
 
-	if (!prompt || dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
+	if (!prompt || dialogs_show_question_full(NULL, _("_Reload"), _("_Cancel"),
 		doc->changed ? _("Any unsaved changes will be lost.") :
 			_("Undo history will be lost."),
 		_("Are you sure you want to reload '%s'?"), base_name))
@@ -1997,7 +1994,7 @@ static gboolean save_file_handle_infobars(GeanyDocument *doc, gboolean force)
 
 	if (doc->priv->info_bars[MSG_TYPE_RELOAD])
 	{
-		if (!dialogs_show_question_full(NULL, _("_Overwrite"), GTK_STOCK_CANCEL,
+		if (!dialogs_show_question_full(NULL, _("_Overwrite"), _("_Cancel"),
 			_("Overwrite?"),
 			_("The file '%s' on the disk is more recent than the current buffer."),
 			doc->file_name))
@@ -2006,7 +2003,7 @@ static gboolean save_file_handle_infobars(GeanyDocument *doc, gboolean force)
 	}
 	else if (doc->priv->info_bars[MSG_TYPE_RESAVE])
 	{
-		if (!dialogs_show_question_full(NULL, GTK_STOCK_SAVE, GTK_STOCK_CANCEL,
+		if (!dialogs_show_question_full(NULL, _("_Save"), _("_Cancel"),
 			_("Try to resave the file?"),
 			_("File \"%s\" was not found on disk!"),
 			doc->file_name))
@@ -3189,12 +3186,13 @@ enum
 static struct
 {
 	const gchar *name;
-	GdkColor color;
+	GdkRGBA rgba;
+	GdkColor color;	/* the same, for document_get_status_color() */
 	gboolean loaded;
 } document_status_styles[] = {
-	{ "geany-document-status-changed",      {0}, FALSE },
-	{ "geany-document-status-disk-changed", {0}, FALSE },
-	{ "geany-document-status-readonly",     {0}, FALSE }
+	{ "geany-document-status-changed",      {0}, {0}, FALSE },
+	{ "geany-document-status-disk-changed", {0}, {0}, FALSE },
+	{ "geany-document-status-readonly",     {0}, {0}, FALSE }
 };
 
 
@@ -3232,6 +3230,41 @@ const gchar *document_get_status_widget_class(GeanyDocument *doc)
 }
 
 
+const GdkRGBA *document_get_status_rgba(GeanyDocument *doc)
+{
+	gint status;
+
+	g_return_val_if_fail(doc != NULL, NULL);
+
+	status = document_get_status_id(doc);
+	if (status < 0)
+		return NULL;
+	if (! document_status_styles[status].loaded)
+	{
+		GdkRGBA *rgba = &document_status_styles[status].rgba;
+		GdkColor *color = &document_status_styles[status].color;
+		GtkWidgetPath *path = gtk_widget_path_new();
+		GtkStyleContext *ctx = gtk_style_context_new();
+		gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
+		gtk_widget_path_append_type(path, GTK_TYPE_BOX);
+		gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
+		gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
+		gtk_widget_path_iter_set_name(path, -1, document_status_styles[status].name);
+		gtk_style_context_set_screen(ctx, gtk_widget_get_screen(GTK_WIDGET(doc->editor->sci)));
+		gtk_style_context_set_path(ctx, path);
+		gtk_style_context_get_color(ctx, gtk_style_context_get_state(ctx), rgba);
+		color->red   = 0xffff * rgba->red;
+		color->green = 0xffff * rgba->green;
+		color->blue  = 0xffff * rgba->blue;
+		document_status_styles[status].loaded = TRUE;
+		gtk_widget_path_unref(path);
+		g_object_unref(ctx);
+	}
+	return &document_status_styles[status].rgba;
+}
+
+
+
 /**
  *  Gets the status color of the document, or @c NULL if default widget coloring should be used.
  *  Returned colors are red if the document has changes, green if the document is read-only
@@ -3247,34 +3280,9 @@ const gchar *document_get_status_widget_class(GeanyDocument *doc)
 GEANY_API_SYMBOL
 const GdkColor *document_get_status_color(GeanyDocument *doc)
 {
-	gint status;
-
-	g_return_val_if_fail(doc != NULL, NULL);
-
-	status = document_get_status_id(doc);
-	if (status < 0)
+	if (document_get_status_rgba(doc) == NULL)
 		return NULL;
-	if (! document_status_styles[status].loaded)
-	{
-		GdkRGBA color;
-		GtkWidgetPath *path = gtk_widget_path_new();
-		GtkStyleContext *ctx = gtk_style_context_new();
-		gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
-		gtk_widget_path_append_type(path, GTK_TYPE_BOX);
-		gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-		gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
-		gtk_widget_path_iter_set_name(path, -1, document_status_styles[status].name);
-		gtk_style_context_set_screen(ctx, gtk_widget_get_screen(GTK_WIDGET(doc->editor->sci)));
-		gtk_style_context_set_path(ctx, path);
-		gtk_style_context_get_color(ctx, gtk_style_context_get_state(ctx), &color);
-		document_status_styles[status].color.red   = 0xffff * color.red;
-		document_status_styles[status].color.green = 0xffff * color.green;
-		document_status_styles[status].color.blue  = 0xffff * color.blue;
-		document_status_styles[status].loaded = TRUE;
-		gtk_widget_path_unref(path);
-		g_object_unref(ctx);
-	}
-	return &document_status_styles[status].color;
+	return &document_status_styles[document_get_status_id(doc)].color;
 }
 
 
@@ -3448,16 +3456,16 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	switch (msgtype)
 	{
 		case GTK_MESSAGE_INFO:
-			icon = gtk_image_new_from_stock(GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
+			icon = gtk_image_new_from_icon_name("dialog-information", GTK_ICON_SIZE_DIALOG);
 			break;
 		case GTK_MESSAGE_WARNING:
-			icon = gtk_image_new_from_stock(GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
+			icon = gtk_image_new_from_icon_name("dialog-warning", GTK_ICON_SIZE_DIALOG);
 			break;
 		case GTK_MESSAGE_QUESTION:
-			icon = gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
+			icon = gtk_image_new_from_icon_name("dialog-question", GTK_ICON_SIZE_DIALOG);
 			break;
 		case GTK_MESSAGE_ERROR:
-			icon = gtk_image_new_from_stock(GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
+			icon = gtk_image_new_from_icon_name("dialog-error", GTK_ICON_SIZE_DIALOG);
 			break;
 		default:
 			icon = NULL;
@@ -3579,7 +3587,7 @@ static gboolean monitor_reload_file_idle(gpointer data)
 		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
 				_("_Reload"), RESPONSE_DOCUMENT_RELOAD,
 				_("_Overwrite"), RESPONSE_DOCUMENT_SAVE,
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				_("_Cancel"), GTK_RESPONSE_CANCEL,
 				_("Do you want to reload it?"),
 				_("The file '%s' on the disk is more recent than the current buffer."),
 				base_name);
@@ -3634,8 +3642,8 @@ static gboolean monitor_resave_missing_file_idle(gpointer data)
 
 		bar = document_show_message(doc, GTK_MESSAGE_WARNING,
 				on_monitor_resave_missing_file_response,
-				GTK_STOCK_SAVE, RESPONSE_DOCUMENT_SAVE,
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				_("_Save"), RESPONSE_DOCUMENT_SAVE,
+				_("_Cancel"), GTK_RESPONSE_CANCEL,
 				NULL, GTK_RESPONSE_NONE,
 				_("Try to resave the file?"),
 				_("File \"%s\" was not found on disk!"),
