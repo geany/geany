@@ -4070,7 +4070,7 @@
                                   <object class="GtkHBox" id="hbox4">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="tooltip-markup">Number of lines to maintain between the cursor and the top and bottom edges of the view. This allows some lines of context around the cursor to always be visible. If &lt;i&gt;Stop scrolling at last line&lt;/i&gt; is &lt;b&gt;disabled&lt;/b&gt;, the cursor will never reach the bottom edge when this value is greater than 0.</property>
+                                    <property name="tooltip-markup" translatable="yes">Number of lines to maintain between the cursor and the top and bottom edges of the view. This allows some lines of context around the cursor to always be visible. If &lt;i&gt;Stop scrolling at last line&lt;/i&gt; is &lt;b&gt;disabled&lt;/b&gt;, the cursor will never reach the bottom edge when this value is greater than 0.</property>
                                     <property name="spacing">6</property>
                                     <child>
                                       <object class="GtkLabel" id="label25">
