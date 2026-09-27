@@ -78,5 +78,8 @@ desktopdir = $(datadir)/applications
 desktop_in_files = geany.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
+mimedir = $(datadir)/mime/packages
+mime_DATA = geany.xml
+
 $(desktop_DATA): $(desktop_in_files) $(wildcard $(top_srcdir)/po/*.po)
 	$(AM_V_GEN)$(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
