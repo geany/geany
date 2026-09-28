@@ -73,7 +73,7 @@ typedef struct _PropertyDialogElements
 	GtkWidget *base_path;
 	GtkWidget *patterns;
 	BuildTableData build_properties;
-	gint build_page_num;
+	GtkWidget *build_page;
 	gboolean entries_modified;
 } PropertyDialogElements;
 
@@ -530,8 +530,8 @@ static void insert_build_page(PropertyDialogElements *e)
 	build_table = build_commands_table(doc, GEANY_BCS_PROJ, &(e->build_properties), ft);
 	gtk_container_set_border_width(GTK_CONTAINER(build_table), 6);
 	label = gtk_label_new(_("Build"));
-	e->build_page_num = gtk_notebook_append_page(GTK_NOTEBOOK(e->notebook),
-		build_table, label);
+	e->build_page = build_table;
+	gtk_notebook_append_page(GTK_NOTEBOOK(e->notebook), build_table, label);
 }
 
 
@@ -629,7 +629,8 @@ static void show_project_properties(gboolean show_build)
 
 	/* note: notebook page must be shown before setting current page */
 	if (show_build)
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook),
+			gtk_notebook_page_num(GTK_NOTEBOOK(e.notebook), e.build_page));
 	else
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), 0);
 
@@ -650,7 +651,8 @@ static void show_project_properties(gboolean show_build)
 
 	build_free_fields(e.build_properties);
 	g_signal_emit_by_name(geany_object, "project-dialog-close", e.notebook);
-	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
+	gtk_widget_destroy(e.build_page);
+	e.build_page = NULL;
 	gtk_widget_hide(e.dialog);
 }
 
