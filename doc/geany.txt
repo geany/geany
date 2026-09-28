@@ -369,8 +369,8 @@ Short option  Long option              Function
 
 -?            --help                   Show help information and exit.
 
-*none*        *files ...*              Open all given filenames at startup.
-                                       If a running instance is detected, pass filenames
+*none*        *files ...*              Open all given filenames at startup, or
+                                       if a running instance is detected, pass filenames
               *file:line ...*          to it instead.
 
               *file:line:col ...*      Geany also recognizes line and column information when
@@ -382,8 +382,10 @@ Short option  Long option              Function
                                        with the desired filename if the
                                        *Open new files from the command-line* 
                                        `file pref <#files-preferences>`_ is set.
+                                       If given, the file's path must exist.
 
-                                       A project can also be opened, but the project filename (\*.geany)
+                                       A `project <#project-management>`_ can also be opened,
+                                       but the project filename (\*.geany)
                                        must be the first non-option argument. Any other
                                        project filenames will be opened as text files.
 ============  =======================  =================================================
