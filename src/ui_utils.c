@@ -1590,10 +1590,55 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 	GtkWidget *image, *button;
 
 	button = gtk_button_new_with_mnemonic(text);
-	gtk_widget_show(button);
-	image = gtk_image_new_from_stock(stock_id, GTK_ICON_SIZE_BUTTON);
+	image = gtk_image_new_from_icon_name(stock_id, GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image(GTK_BUTTON(button), image);
-	/* note: image is shown by gtk */
+	gtk_button_set_always_show_image(GTK_BUTTON(button), TRUE);
+	return button;
+}
+
+
+/** Creates a @c GtkImageMenuItem with a stock image and a custom label.
+ * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
+ * @param label Menu item label, can include mnemonics.
+ * @return @transfer{floating} The new @c GtkImageMenuItem.
+ *
+ *  @since 0.16
+ */
+GEANY_API_SYMBOL
+GtkWidget *ui_button_new_with_icon(const gchar *stock_id, const gchar *text)
+{
+	GtkWidget *image, *button;
+	gchar *underscore_pos = strchr(text, '_');
+
+	// Without mnemonic
+	if (underscore_pos == NULL) {
+		button = gtk_button_new_with_label(text);
+
+	// With mnemonic
+	} else {
+		gchar** texts = (char**)malloc(2 * sizeof(char*));
+		// mnemonic_text: uppercased mnemonic
+		texts[0] = (char*)malloc(2 * sizeof(char));
+		texts[0][0] = '_';
+		texts[0][1] = toupper(*(underscore_pos + 1));
+		texts[0][2] = '\0';
+		printf("mnemonic_text: %s\n", texts[0]);
+		button = gtk_button_new_with_mnemonic(texts[0]);
+		// tooltip: text without mnemonic
+		texts[1] = strdup(text);
+		memmove(texts[1] + (underscore_pos - text),
+				texts[1] + (underscore_pos - text + 1),
+				strlen(texts[1]) - (underscore_pos - text));
+		printf("tooltip_text: %s\n", texts[1]);
+		gtk_widget_set_tooltip_text(button, texts[1]);
+		g_free(texts[0]);
+		g_free(texts[1]);
+		g_free(texts);
+	}
+
+	image = gtk_image_new_from_icon_name(stock_id, GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image(GTK_BUTTON(button), image);
+	gtk_button_set_always_show_image(GTK_BUTTON(button), TRUE);
 	return button;
 }
 
