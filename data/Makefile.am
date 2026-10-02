@@ -116,6 +116,7 @@ filetypes_dist = \
 	filedefs/filetypes.po \
 	filedefs/filetypes.powershell \
 	filedefs/filetypes.prolog \
+	filedefs/filetypes.QML.conf \
 	filedefs/filetypes.r \
 	filedefs/filetypes.raku \
 	filedefs/filetypes.restructuredtext \
