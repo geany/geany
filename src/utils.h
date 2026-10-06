@@ -340,6 +340,8 @@ gchar *utils_get_os_info_string(void);
 
 gchar *utils_utf8_strdown(const gchar *str);
 
+gchar *utils_utf8_strup(const gchar *str);
+
 gboolean utils_utf8_substring_match(const gchar *key, const gchar *haystack);
 
 gchar *utils_replace_placeholders(const gchar *str,
