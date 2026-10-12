@@ -86,6 +86,17 @@ static void on_new_window(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 }
 
 
+/* Since the menubar is hidden, gtk_widget_can_activate_accel() returns FALSE
+ * for all its menu items because they aren't on screen, and their accelerators
+ * don't get activated. Return TRUE from the menubar's can-activate-accel
+ * handler so accelerators of the (visible) global macOS menubar work. */
+static gboolean can_activate_accel(GtkWidget *widget, guint signal_id,
+	G_GNUC_UNUSED gpointer user_data)
+{
+	return TRUE;
+}
+
+
 void osx_ui_init(void)
 {
 	GtkWidget *item, *menu;
@@ -94,6 +105,7 @@ void osx_ui_init(void)
 	item = ui_lookup_widget(main_widgets.window, "menubar1");
 	gtk_widget_hide(item);
 	gtkosx_application_set_menu_bar(osx_app, GTK_MENU_SHELL(item));
+	g_signal_connect(item, "can-activate-accel", G_CALLBACK(can_activate_accel), NULL);
 
 	item = ui_lookup_widget(main_widgets.window, "menu_quit1");
 	gtk_widget_hide(item);
