@@ -2,6 +2,18 @@ Geany - A fast and lightweight IDE
 ----------------------------------
 
 
+Build instructions
+~~~~~~~~~~~~~~~~~~
+
+Use the Dockerfile as a guide to install the dependencies, and to configure the theme.
+
+    git clone git@github.com:aliraeini/geany.git
+    cd geany
+    git remote add geany https://github.com/geany/geany.git
+    git fetch geany master
+    git rebase geany/master
+    ...
+
 About
 -----
 Geany is a small and lightweight integrated development environment.
@@ -11,10 +23,10 @@ as possible from a special Desktop Environment like KDE or GNOME. So it
 is using only the GTK+ toolkit and therefore you need only the
 GTK+ runtime libraries to run Geany.
 
-.. image:: doc/images/main_window.png
+.. image:: doc/images/main_black.png
   :width: 750
   :alt: Screenshot of Geany showing the main user interface
-  :target: doc/images/main_window.png
+  :target: doc/images/main_black.png
 
 
 Features
@@ -54,9 +66,9 @@ Installation from sources
 
 Requirements
 ++++++++++++
-For compiling Geany yourself, you will need the GTK3 libraries and 
-header files. You will also need its dependency libraries and header 
-files, such as Pango, Glib and ATK. All these files are available at 
+For compiling Geany yourself, you will need the GTK3 libraries and
+header files. You will also need its dependency libraries and header
+files, such as Pango, Glib and ATK. All these files are available at
 https://www.gtk.org.
 
 Furthermore you need, of course, a C compiler and the Make tool; a C++

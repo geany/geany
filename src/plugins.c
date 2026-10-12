@@ -274,15 +274,6 @@ static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 }
 
 
-static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
-{
-	const Plugin *pa = a;
-	const Plugin *pb = b;
-
-	return strcmp(pa->info.name, pb->info.name);
-}
-
-
 /** Register a plugin to Geany.
  *
  * The plugin will show up in the plugin manager. The user can interact with
@@ -539,9 +530,9 @@ plugin_load(Plugin *plugin)
 		add_callbacks(plugin, plugin->cbs.callbacks);
 
 	/* remember which plugins are active.
-	 * keep list sorted so tools menu items and plugin preference tabs are
-	 * sorted by plugin name */
-	active_plugin_list = g_list_insert_sorted(active_plugin_list, plugin, cmp_plugin_names);
+	 * preserve the order that plugins are loaded, which affects the order
+	 * of GUI elements, e.g. tabs they add to the sidebar */
+	active_plugin_list = g_list_append(active_plugin_list, plugin);
 	proxied_count_inc(plugin->proxy);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename, plugin->info.name);
