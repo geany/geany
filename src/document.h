@@ -87,7 +87,7 @@ typedef struct GeanyDocument
 	/** The UTF-8 encoded file name.
 	 * Be careful; glibc and GLib file functions expect the locale representation of the
 	 * file name which can be different from this.
-	 * For conversion into locale encoding, you can use @ref utils_get_locale_from_utf8().
+	 * For conversion into locale encoding, you can use @ref utils_get_locale_from_utf8.
 	 * @see real_path. */
 	gchar 			*file_name;
 	/** The encoding of the document, must be a valid string representation of an encoding, can

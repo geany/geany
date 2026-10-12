@@ -487,7 +487,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 /**
  * Logs a new status message *without* setting the status bar.
  *
- * Use @ref ui_set_statusbar() to display text on the statusbar.
+ * Use @ref ui_set_statusbar to display text on the statusbar.
  *
  * @param string Status message to be logged.
  *
@@ -525,7 +525,7 @@ void msgwin_status_add_string(const gchar *string)
 /**
  * Logs a formatted status message *without* setting the status bar.
  *
- * Use @ref ui_set_statusbar() to display text on the statusbar.
+ * Use @ref ui_set_statusbar to display text on the statusbar.
  *
  * @param format @c printf()-style format string.
  * @param ...    Arguments for the @c format string.

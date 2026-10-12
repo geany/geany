@@ -269,7 +269,7 @@ const GeanyEncoding *encodings_get_from_index(gint idx)
 
 /**
  *  Gets the character set name of the specified index e.g. for use with
- *  @ref document_set_encoding().
+ *  @ref document_set_encoding.
  *
  *  @param idx @ref GeanyEncodingIndex to retrieve the corresponding character set.
  *

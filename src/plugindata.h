@@ -124,7 +124,7 @@ PluginInfo;
 
 /** Sets the plugin name and some other basic information about a plugin.
  * This macro is like @ref PLUGIN_SET_INFO() but allows the passed information to be translated
- * by setting up the translation mechanism with @ref main_locale_init().
+ * by setting up the translation mechanism with @ref main_locale_init.
  * You therefore don't need to call it manually in plugin_init().
  *
  * Example:
