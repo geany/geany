@@ -26,11 +26,6 @@
 # include "config.h"
 #endif
 
-/* Need Windows XP for SHGetFolderPathAndSubDirW */
-#define _WIN32_WINNT 0x0501
-/* Needed for SHGFP_TYPE */
-#define _WIN32_IE 0x0500
-
 #include "win32.h"
 
 #ifdef G_OS_WIN32
