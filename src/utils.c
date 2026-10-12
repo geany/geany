@@ -114,6 +114,19 @@ void utils_open_browser(const gchar *uri)
 /* taken from anjuta, to determine the EOL mode of the file */
 gint utils_get_line_endings(const gchar* buffer, gsize size)
 {
+	/* early exit for 0 len files. */
+	if(size==0)
+	{
+		if(file_prefs.default_eol_character >= 0 && file_prefs.default_eol_character < 3)
+		{
+			return file_prefs.default_eol_character;
+		}
+		else
+		{
+			return GEANY_DEFAULT_EOL_CHARACTER;
+		}
+	}
+
 	gsize i;
 	guint cr, lf, crlf, max_mode;
 	gint mode;
