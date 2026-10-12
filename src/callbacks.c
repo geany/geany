@@ -813,6 +813,16 @@ static void on_markers_margin1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer
 }
 
 
+static void on_fold_margin1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
+{
+	if (ignore_callback)
+		return;
+
+	editor_prefs.show_fold_margin = ! editor_prefs.show_fold_margin;
+	ui_toggle_editor_features(GEANY_EDITOR_SHOW_FOLD_MARGIN);
+}
+
+
 static void on_show_line_numbers1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
 	if (ignore_callback)
