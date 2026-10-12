@@ -2190,6 +2190,10 @@ gint search_replace_match(ScintillaObject *sci, const GeanyMatchInfo *match, con
 	GString *str;
 	gint ret = 0;
 	gint i = 0;
+	gboolean up_c = FALSE;
+	gboolean up_u = FALSE;
+	gboolean down_c = FALSE;
+	gboolean down_u = FALSE;
 
 	sci_set_target_start(sci, match->start);
 	sci_set_target_end(sci, match->end);
@@ -2198,20 +2202,91 @@ gint search_replace_match(ScintillaObject *sci, const GeanyMatchInfo *match, con
 		return sci_replace_target(sci, replace_text, FALSE);
 
 	str = g_string_new(replace_text);
+
 	while (str->str[i])
 	{
 		gchar *ptr = &str->str[i];
-		gchar *grp;
+		GString *grp;
+		gchar *tmp;
+		gchar one_char[] = "x\0";
 		gchar c;
 
 		if (ptr[0] != '\\')
 		{
+			if (down_c || (down_u && !up_c))
+			{
+				one_char[0] = ptr[0];
+				tmp = utils_utf8_strdown(one_char);
+				if (tmp)
+				{
+					g_string_erase(str, i, 1);
+					g_string_insert(str , i, tmp);
+					i += strlen(tmp) - 1;
+					g_free(tmp);
+				}
+
+				down_c = FALSE;
+			}
+			else if (up_c || up_u)
+			{
+				one_char[0] = ptr[0];
+				tmp = utils_utf8_strup(one_char);
+				if (tmp)
+				{
+					g_string_erase(str, i, 1);
+					g_string_insert(str , i, tmp);
+					i += strlen(tmp) - 1;
+					g_free(tmp);
+				}
+
+				up_c = FALSE;
+			}
 			i++;
 			continue;
 		}
 		c = ptr[1];
+		/* case transformation escape code */
+		if (c == 'E')
+		{
+			down_u = FALSE;
+			down_c = FALSE;
+			up_u = FALSE;
+			up_c = FALSE;
+			g_string_erase(str, i, 2);
+			continue;
+		}
+		else if (c == 'L')
+		{
+			down_u = TRUE;
+			down_c = FALSE;
+			up_u = FALSE;
+			up_c = FALSE;
+			g_string_erase(str, i, 2);
+			continue;
+		}
+		else if (c == 'U')
+		{
+			up_u = TRUE;
+			down_u = FALSE;
+			down_c = FALSE;
+			up_c = FALSE;
+			g_string_erase(str, i, 2);
+			continue;
+		}
+		else if (c == 'l')
+		{
+			down_c = TRUE;
+			g_string_erase(str, i, 2);
+			continue;
+		}
+		else if (c == 'u')
+		{
+			up_c = TRUE;
+			g_string_erase(str, i, 2);
+			continue;
+		}
 		/* backslash or unnecessary escape */
-		if (c == '\\' || !isdigit(c))
+		else if (c == '\\' || !isdigit(c))
 		{
 			g_string_erase(str, i, 1);
 			i++;
@@ -2220,10 +2295,53 @@ gint search_replace_match(ScintillaObject *sci, const GeanyMatchInfo *match, con
 		/* digit escape */
 		g_string_erase(str, i, 2);
 		/* fix match offsets by subtracting index of whole match start from the string */
-		grp = get_regex_match_string(match->match_text - match->matches[0].start, match, c - '0');
-		g_string_insert(str, i, grp);
-		i += strlen(grp);
-		g_free(grp);
+		grp = g_string_new(get_regex_match_string(match->match_text - match->matches[0].start, match, c - '0'));
+		if (down_u)
+		{
+			tmp = utils_utf8_strdown(grp->str);
+			if (tmp)
+			{
+				g_string_assign(grp, tmp);
+					g_free(tmp);
+			}
+		}
+		else if (up_u)
+		{
+			tmp = utils_utf8_strup(grp->str);
+			if (tmp)
+			{
+				g_string_assign(grp, tmp);
+				g_free(tmp);
+			}
+		}
+		if (down_c)
+		{
+			one_char[0] = grp->str[0];
+			tmp = utils_utf8_strdown(one_char);
+			if (tmp)
+			{
+
+				g_string_erase(grp, 0, 1);
+				g_string_insert(grp , 0, tmp);
+				g_free(tmp);
+			}
+			down_c = FALSE;
+		}
+		else if (up_c)
+		{
+			one_char[0] = grp->str[0];
+			tmp = utils_utf8_strup(one_char);
+			if (tmp)
+			{
+				g_string_erase(grp, 0, 1);
+				g_string_insert(grp , 0, tmp);
+				g_free(tmp);
+			}
+			up_c = FALSE;
+		}
+		g_string_insert(str, i, grp->str);
+		i += grp->len;
+		g_string_free(grp, TRUE);
 	}
 	ret = sci_replace_target(sci, str->str, FALSE);
 	g_string_free(str, TRUE);
