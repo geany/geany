@@ -67,9 +67,9 @@ CFLAGS="\
 	-Wno-deprecated-declarations"
 
 # cross-compilation environment
-ARCH="x86_64"
-MINGW_ARCH="mingw64"
-HOST="x86_64-w64-mingw32"
+ARCH="ucrt-x86_64"
+MINGW_ARCH="ucrt64"
+HOST="x86_64-w64-mingw32ucrt"
 export LDFLAGS="-static-libgcc ${LDFLAGS}"
 export PKG_CONFIG_SYSROOT_DIR="/windows"
 export PKG_CONFIG_PATH="${PKG_CONFIG_SYSROOT_DIR}/${MINGW_ARCH}/lib/pkgconfig/"
