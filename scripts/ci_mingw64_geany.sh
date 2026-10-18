@@ -72,7 +72,7 @@ MINGW_ARCH="mingw64"
 HOST="x86_64-w64-mingw32"
 export LDFLAGS="-static-libgcc ${LDFLAGS}"
 export PKG_CONFIG_SYSROOT_DIR="/windows"
-export PKG_CONFIG_PATH="/windows/${MINGW_ARCH}/lib/pkgconfig/"
+export PKG_CONFIG_PATH="${PKG_CONFIG_SYSROOT_DIR}/${MINGW_ARCH}/lib/pkgconfig/"
 export NOCONFIGURE=1
 export JOBS=${JOBS:-1}
 export lt_cv_deplibs_check_method='pass_all'
@@ -116,7 +116,7 @@ parse_geany_version() {
 
 log_environment() {
 	log "Using environment"
-	CONFIGURE_OPTIONS="--disable-silent-rules --host=${HOST} --prefix=${GEANY_RELEASE_DIR} --with-libiconv-prefix=/windows/mingw64"
+	CONFIGURE_OPTIONS="--disable-silent-rules --host=${HOST} --prefix=${GEANY_RELEASE_DIR} --with-libiconv-prefix=/windows/${MINGW_ARCH}"
 	echo "Geany version        : ${GEANY_VERSION}"
 	echo "Geany GIT revision   : ${GEANY_GIT_REVISION}"
 	echo "PATH                 : ${PATH}"
@@ -216,7 +216,8 @@ create_gtk_bundle() {
 	log "Creating GTK bundle"
 	mkdir ${GTK_BUNDLE_DIR}
 	cd ${GTK_BUNDLE_DIR}
-	bash ${GEANY_BUILD_DIR}/scripts/gtk-bundle-from-msys2.sh -x -3 --mingw64
+	# argument for selecting the mingw arch is named after it, so we can use --${MINGW_ARCH}
+	bash ${GEANY_BUILD_DIR}/scripts/gtk-bundle-from-msys2.sh -x -3 --${MINGW_ARCH}
 }
 
 
@@ -260,7 +261,7 @@ test_installer() {
 
 log_geany_version() {
 	log "Log installed Geany version"
-	mingw-w64-x86_64-wine ${GEANY_INSTALLATION_DIR}/bin/geany.exe --version 2>/dev/null
+	mingw-w64-${ARCH}-wine ${GEANY_INSTALLATION_DIR}/bin/geany.exe --version 2>/dev/null
 	exiftool -FileName -FileType -FileVersion -FileVersionNumber ${GEANY_INSTALLATION_DIR}/bin/geany.exe
 }
 
