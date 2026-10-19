@@ -35,7 +35,8 @@ expat
 fontconfig
 freetype
 fribidi
-gcc-libs
+libgcc
+libstdc++
 gdk-pixbuf2
 gettext-runtime
 glib2

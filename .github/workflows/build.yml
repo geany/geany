@@ -184,8 +184,8 @@ jobs:
       INFRASTRUCTURE_PATH:      ${{ github.workspace }}/.infrastructure
       BUILDER_PATH:             ${{ github.workspace }}/.infrastructure/builders
       DOCKER_REGISTRY:          "ghcr.io"
-      DOCKER_IMAGE_NAME:        "geany-mingw64-ci"
-      DOCKER_IMAGE_TAG:         "ghcr.io/geany/geany-mingw64-ci:latest"
+      DOCKER_IMAGE_NAME:        "geany-mingw64ucrt-ci"
+      DOCKER_IMAGE_TAG:         "ghcr.io/geany/geany-mingw64ucrt-ci:latest"
 
     steps:
       - name: Checkout Geany
