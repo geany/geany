@@ -6,6 +6,7 @@
 // Modified for Nix and Scintilla by Jiri Techet, 2024
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <cstdlib>
 #include <cassert>
 #include <cstring>
 
