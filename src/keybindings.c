@@ -564,10 +564,19 @@ static void init_default_kb(void)
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_GOTO);
 
+#ifdef __APPLE__
+	add_kb(group, GEANY_KEYS_GOTO_BACK, NULL,
+		GDK_KEY_Left, GDK_CONTROL_MASK | GEANY_PRIMARY_MOD_MASK,
+		"nav_back", _("Navigate back a location"), NULL);
+	add_kb(group, GEANY_KEYS_GOTO_FORWARD, NULL,
+		GDK_KEY_Right, GDK_CONTROL_MASK | GEANY_PRIMARY_MOD_MASK,
+		"nav_forward", _("Navigate forward a location"), NULL);
+#else
 	add_kb(group, GEANY_KEYS_GOTO_BACK, NULL,
 		GDK_KEY_Left, GDK_MOD1_MASK, "nav_back", _("Navigate back a location"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_FORWARD, NULL,
 		GDK_KEY_Right, GDK_MOD1_MASK, "nav_forward", _("Navigate forward a location"), NULL);
+#endif
 	add_kb(group, GEANY_KEYS_GOTO_LINE, NULL,
 		GDK_KEY_l, GEANY_PRIMARY_MOD_MASK, "menu_gotoline", _("Go to Line"), "go_to_line1");
 	add_kb(group, GEANY_KEYS_GOTO_MATCHINGBRACE, NULL,

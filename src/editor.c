@@ -4880,6 +4880,25 @@ static void setup_sci_keys(ScintillaObject *sci)
 	sci_assign_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16) | (SCMOD_SHIFT << 16), SCI_PARADOWNEXTEND);
 
 	sci_clear_cmdkey(sci, SCK_BACK | (SCMOD_ALT << 16)); /* clear Alt-Backspace (Undo) */
+
+#ifdef __APPLE__
+	sci_assign_cmdkey(sci, SCK_RIGHT | (SCMOD_CTRL << 16), SCI_LINEEND);
+	sci_assign_cmdkey(sci, SCK_RIGHT | ((SCMOD_CTRL | SCMOD_SHIFT) << 16),
+		SCI_LINEENDEXTEND);
+	sci_assign_cmdkey(sci, SCK_UP | (SCMOD_CTRL << 16), SCI_DOCUMENTSTART);
+	sci_assign_cmdkey(sci, SCK_UP | ((SCMOD_CTRL | SCMOD_SHIFT) << 16),
+		SCI_DOCUMENTSTARTEXTEND);
+	sci_assign_cmdkey(sci, SCK_DOWN | (SCMOD_CTRL << 16), SCI_DOCUMENTEND);
+	sci_assign_cmdkey(sci, SCK_DOWN | ((SCMOD_CTRL | SCMOD_SHIFT) << 16),
+		SCI_DOCUMENTENDEXTEND);
+	sci_assign_cmdkey(sci, SCK_LEFT | (SCMOD_ALT << 16), SCI_WORDLEFT);
+	sci_assign_cmdkey(sci, SCK_LEFT | ((SCMOD_ALT | SCMOD_SHIFT) << 16),
+		SCI_WORDLEFTEXTEND);
+	sci_assign_cmdkey(sci, SCK_RIGHT | (SCMOD_ALT << 16),
+		editor_prefs.use_gtk_word_boundaries ? SCI_WORDRIGHTEND : SCI_WORDRIGHT);
+	sci_assign_cmdkey(sci, SCK_RIGHT | ((SCMOD_ALT | SCMOD_SHIFT) << 16),
+		editor_prefs.use_gtk_word_boundaries ? SCI_WORDRIGHTENDEXTEND : SCI_WORDRIGHTEXTEND);
+#endif
 }
 
 

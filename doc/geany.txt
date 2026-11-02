@@ -3811,12 +3811,16 @@ Go to keybindings
 =============================== ========================= ==================================================
 Action                          Default shortcut          Description
 =============================== ========================= ==================================================
-Navigate forward a location     Alt-Right  (C)            Switches to the next location in the navigation
-                                                          history. See the section called `Code Navigation
+Navigate forward a location     Platform-dependent (C)    Switches to the next location in the navigation
+                                                          history. Defaults to Alt-Right, or
+                                                          Control-Command-Right on macOS. See the section
+                                                          called `Code Navigation
                                                           History`_.
 
-Navigate back a location        Alt-Left  (C)             Switches to the previous location in the
-                                                          navigation history. See the section called
+Navigate back a location        Platform-dependent (C)    Switches to the previous location in the
+                                                          navigation history. Defaults to Alt-Left, or
+                                                          Control-Command-Left on macOS. See the section
+                                                          called
                                                           `Code navigation history`_.
 
 Go to line                      Ctrl-L                    Focuses the Go to Line entry (if visible) or
