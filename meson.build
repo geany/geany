@@ -227,7 +227,14 @@ endforeach
 geany_cflags = def_cflags
 have_gcc4_visibility = cc.has_argument('-fvisibility=hidden')
 geany_cflags += '-DGEANY_PRIVATE'
-if host_machine.system() == 'windows'
+libgeany_link_args = []
+if host_machine.system() == 'windows' and cc.get_id() == 'clang'
+	# Clang rejects adding dllexport on a redeclaration once the function has
+	# been used, and GEANY_API_SYMBOL is only put on definitions, not on the
+	# header declarations. Let the linker export libgeany's symbols instead.
+	geany_cflags += '-DGEANY_EXPORT_SYMBOL='
+	libgeany_link_args += '-Wl,--export-all-symbols'
+elif host_machine.system() == 'windows'
 	geany_cflags += '-DGEANY_EXPORT_SYMBOL=__declspec(dllexport)'
 elif have_gcc4_visibility
 	geany_cflags += '-fvisibility=hidden'
@@ -936,6 +943,7 @@ libgeany = shared_library('geany',
 	osx_src,
 	soversion: '0',
 	c_args: geany_cflags + [ '-DG_LOG_DOMAIN="Geany"' ],
+	link_args: libgeany_link_args,
 	include_directories: [iscintilla],
 	dependencies: [dep_tagmanager, dep_ctags, dep_scintilla] + deps + win_deps + osx_deps,
 	install: true

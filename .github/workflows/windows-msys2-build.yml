@@ -21,34 +21,57 @@ env:
 
 jobs:
   msys2-mingw64:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
+        build-tool: [autotools, meson]
+        arch: [x86_64, arm64]
         include:
-          - build-tool: autotools
-          - build-tool: meson
+          # Windows x64: UCRT64 environment with GCC
+          - arch: x86_64
+            runner: windows-latest
+            msystem: UCRT64
+            pkg-prefix: mingw-w64-ucrt-x86_64
+            compiler-pkg: gcc
+            cc: gcc
+            cxx: g++
+            bundle-abi: --ucrt64
+            # empty to keep the existing cache keys and artifact names
+            suffix: ''
+          # Windows on ARM64: CLANGARM64 environment with Clang (there is no GCC)
+          - arch: arm64
+            runner: windows-11-arm
+            msystem: CLANGARM64
+            pkg-prefix: mingw-w64-clang-aarch64
+            compiler-pkg: clang
+            cc: clang
+            cxx: clang++
+            bundle-abi: --clangarm64
+            suffix: '-arm64'
     defaults:
       run:
         shell: msys2 {0}
     env:
-      CC: sccache gcc
-      CXX: sccache g++
+      CC: sccache ${{ matrix.cc }}
+      CXX: sccache ${{ matrix.cxx }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Setup MSYS2
         uses: msys2/setup-msys2@v2
         with:
-          msystem: UCRT64
+          msystem: ${{ matrix.msystem }}
           update: true
+          # NSIS is not available for ARM64, the x64 one runs fine under
+          # emulation and produces the same (x86) installer either way
           install: |
-            mingw-w64-ucrt-x86_64-gcc
-            mingw-w64-ucrt-x86_64-${{ matrix.build-tool }}
-            ${{ matrix.build-tool == 'meson' && 'mingw-w64-ucrt-x86_64-jq' || '' }}
-            mingw-w64-ucrt-x86_64-sccache
-            mingw-w64-ucrt-x86_64-gtk3
-            mingw-w64-ucrt-x86_64-python-docutils
+            ${{ matrix.pkg-prefix }}-${{ matrix.compiler-pkg }}
+            ${{ matrix.pkg-prefix }}-${{ matrix.build-tool }}
+            ${{ matrix.build-tool == 'meson' && format('{0}-jq', matrix.pkg-prefix) || '' }}
+            ${{ matrix.pkg-prefix }}-sccache
+            ${{ matrix.pkg-prefix }}-gtk3
+            ${{ matrix.pkg-prefix }}-python-docutils
             patch
             rsync
             unzip
@@ -65,20 +88,20 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ${{ github.workspace }}/geany_build/bundle/geany-gtk
-          key: ${{ runner.os }}-${{ github.job }}-bundle-geany-gtk-${{ hashFiles('scripts/gtk-bundle-from-msys2.sh') }}-${{ steps.cache_gtk_bundle_timestamp.outputs.timestamp }}
+          key: ${{ runner.os }}-${{ github.job }}${{ matrix.suffix }}-bundle-geany-gtk-${{ hashFiles('scripts/gtk-bundle-from-msys2.sh') }}-${{ steps.cache_gtk_bundle_timestamp.outputs.timestamp }}
       - name: GTK-Bundle
         if: steps.cache_gtk_bundle.outputs.cache-hit != 'true'
         run: |
           mkdir -p geany_build/bundle/geany-gtk
           cd geany_build/bundle/geany-gtk
-          bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3 --ucrt64
+          bash $(cygpath -u "${GITHUB_WORKSPACE}")/scripts/gtk-bundle-from-msys2.sh -3 ${{ matrix.bundle-abi }}
 
       - name: Configure sccache
         uses: actions/cache@v6
         with:
           path: ${{ env.SCCACHE_DIR }}
-          key: ${{ runner.os }}-${{ github.job }}-${{ matrix.build-tool }}-sccache-${{ github.run_id }}
-          restore-keys: ${{ runner.os }}-${{ github.job }}-${{ matrix.build-tool }}-sccache-
+          key: ${{ runner.os }}-${{ github.job }}${{ matrix.suffix }}-${{ matrix.build-tool }}-sccache-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-${{ github.job }}${{ matrix.suffix }}-${{ matrix.build-tool }}-sccache-
 
       - name: Prepare Build environment
         run: |
@@ -105,6 +128,9 @@ jobs:
         run: |
           mkdir -p ${DESTINATION}/release/geany-orig
           rsync -a --delete ${DESTINATION}/build/geany/ ${DESTINATION}/release/geany-orig
+          # on ARM64, makensis comes from the x64 UCRT64 package (appended so
+          # that the native tools, e.g. strip, still take precedence)
+          command -v makensis >/dev/null || export PATH="${PATH}:/ucrt64/bin"
           python scripts/msys2-geany-release.py ${VERSION}
 
       # Test the resulting installer.  We use cmd.exe as the shell because the
@@ -137,7 +163,7 @@ jobs:
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v7
         with:
-          name: geany-unsigned${{ matrix.build-tool != 'autotools' && format('-{0}', matrix.build-tool) || '' }}
+          name: geany-unsigned${{ matrix.suffix }}${{ matrix.build-tool != 'autotools' && format('-{0}', matrix.build-tool) || '' }}
           path: geany_build/*.exe
           retention-days: 3
           overwrite: true
@@ -149,8 +175,9 @@ jobs:
       - name: SignPath Signing
         id: sign-artifact
         uses: signpath/github-action-submit-signing-request@v2
-        # Only sign artifacts on tags
-        if: matrix.build-tool == 'autotools' && (inputs.sign_artifacts || startsWith(github.ref, 'refs/tags/'))
+        # Only sign artifacts on tags (only x64 for now, as the signing policy
+        # and the release process only know about that installer)
+        if: matrix.build-tool == 'autotools' && matrix.arch == 'x86_64' && (inputs.sign_artifacts || startsWith(github.ref, 'refs/tags/'))
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ vars.SIGNPATH_ORGANIZATION_ID }}'
