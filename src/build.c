@@ -708,6 +708,132 @@ static void clear_all_errors(void)
 }
 
 
+#ifdef G_OS_WIN32
+
+static gchar *command_replace_placeholders(const gchar *src,
+		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
+		gpointer data)
+{
+	/* FIXME: check what a Windows implementation needs to do */
+	return utils_replace_placeholders(src, insert_replacement, data);
+}
+
+#else /* ! G_OS_WIN32 */
+
+/* Replaces %s-style placeholders in a shell-style string.
+ *
+ * This is similar to utils_replace_placeholders(), but works on a shell command, handling
+ * proper quoting of the replacements.
+ *
+ * This functions reads @p src as a shell-style input, understanding quoting (with "" and '')
+ * as well as nested sub-commands (with `` and $(), up to 16 levels).  It makes sure the
+ * placeholder replacements are properly quoted.
+ *
+ * Returns: a UTF-8 string with placeholders replaced. */
+static gchar *command_replace_placeholders(const gchar *src,
+		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
+		gpointer data)
+{
+	GString *stack;
+	struct {
+		gchar quote;
+		gchar terminator;
+	} nesting[16] = {{ 0, 0 }};
+	guint level = 0;
+	const gchar *const base = src;
+
+	if (src == NULL)
+		return NULL;
+
+	stack = g_string_new(NULL);
+	for (; *src; src++)
+	{
+		if (*src == nesting[level].terminator &&
+			! nesting[level].quote)
+		{
+			g_string_append_c(stack, *src);
+			level--;
+			continue;
+		}
+
+		switch (*src)
+		{
+			case '`':
+				g_string_append_c(stack, *src);
+				if (nesting[level].quote != '\'' &&
+					level < G_N_ELEMENTS(nesting))
+				{
+					level ++;
+					nesting[level].quote = 0;
+					nesting[level].terminator = *src;
+				}
+				break;
+
+			case '$':
+				g_string_append_c(stack, *src);
+				if (nesting[level].quote != '\'' &&
+					level < G_N_ELEMENTS(nesting) &&
+					src[1] == '(')
+				{
+					src++;
+					g_string_append_c(stack, *src);
+					level ++;
+					nesting[level].quote = 0;
+					nesting[level].terminator = ')';
+				}
+				break;
+
+			case '"':
+			case '\'':
+				if (! nesting[level].quote)
+					nesting[level].quote = *src;
+				else if (nesting[level].quote == *src)
+					nesting[level].quote = 0;
+				g_string_append_c(stack, *src);
+				break;
+
+			case '%':
+				src++;
+				if (nesting[level].quote) /* close the quote */
+					g_string_append_c(stack, nesting[level].quote);
+				GString *replacement = g_string_new(NULL);
+				if (! insert_replacement(replacement, *src, data))
+				{
+					geany_debug(_("Unknown placeholder \"%%%c\" in \"%s\""), *src, base);
+					/* unknown placeholder, leave it literally */
+					g_string_append_c(replacement, '%');
+					g_string_append_c(replacement, *src);
+				}
+				gchar *quoted = g_shell_quote(replacement->str);
+				g_string_append(stack, quoted);
+				g_free(quoted);
+				g_string_free(replacement, TRUE);
+				if (nesting[level].quote) /* re-open quote */
+					g_string_append_c(stack, nesting[level].quote);
+				break;
+
+			case '\\':
+				/* \ escapes the next character, unless in single-quote strings where
+				 * it has no special meaning (it's not possible to escape a single
+				 * quote inside a single quoted string) */
+				if (nesting[level].quote != '\'')
+				{
+					g_string_append_c(stack, *src);
+					src++;
+				}
+			/* fallthrough */
+			default:
+				g_string_append_c(stack, *src);
+				break;
+		}
+	}
+
+	return g_string_free(stack, FALSE);
+}
+
+#endif /* ! G_OS_WIN32 */
+
+
 /* dir is the UTF-8 working directory to run cmd in. It can be NULL to use the
  * idx document directory */
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
@@ -785,7 +911,8 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
-	cmd_string_utf8 = utils_replace_document_placeholders(doc, cmd->command);
+	cmd_string_utf8 = command_replace_placeholders(cmd->command,
+			utils_generate_document_replacements, doc);
 	cmd_working_dir =  cmd->working_dir;
 	if (EMPTY(cmd_working_dir))
 		cmd_working_dir = "%d";
@@ -1165,7 +1292,8 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, guint cmd, gc
 		full_command = cmdstr;
 
 	dir = utils_replace_document_placeholders(doc, buildcmd->working_dir);
-	subs_command = utils_replace_document_placeholders(doc, full_command);
+	subs_command = command_replace_placeholders(full_command,
+			utils_generate_document_replacements, doc);
 	build_info.grp = grp;
 	build_info.cmd = cmd;
 	build_spawn_cmd(doc, subs_command, dir);

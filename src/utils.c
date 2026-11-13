@@ -2559,7 +2559,7 @@ gchar *utils_replace_placeholders(const gchar *str,
 }
 
 
-static gboolean generate_document_replacements(GString *buffer,
+gboolean utils_generate_document_replacements(GString *buffer,
 		const gchar placeholder, gpointer data)
 {
 	const GeanyDocument *doc = data;
@@ -2653,5 +2653,5 @@ gchar *utils_replace_document_placeholders(const GeanyDocument *doc, const gchar
 {
 	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
 
-	return utils_replace_placeholders(src, generate_document_replacements, (gpointer) doc);
+	return utils_replace_placeholders(src, utils_generate_document_replacements, (gpointer) doc);
 }
