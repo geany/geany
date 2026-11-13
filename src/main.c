@@ -22,7 +22,24 @@
 
 #include "main.h"
 
+#include "main.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#include <stdio.h>
+int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE pInstance, LPSTR pCmdLine, int nCmdShow){
+	if(!GetStdHandle(STD_OUTPUT_HANDLE))
+		if(AttachConsole(ATTACH_PARENT_PROCESS)){
+			freopen("CONOUT$", "wb", stdout);
+			setbuf(stdout, NULL);
+			freopen("CONOUT$", "wb", stderr);
+		}
+
+	return main_lib(__argc, __argv);
+}
+#else
 int main(int argc, char **argv)
 {
 	return main_lib(argc, argv);
 }
+#endif
