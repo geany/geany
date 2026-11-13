@@ -24,6 +24,7 @@
 
 #ifdef HAVE_PLUGINS
 
+#include <gmodule.h>
 #include "keybindings.h"	/* GeanyKeyGroupCallback */
 
 #include "gtkcompat.h"
@@ -69,6 +70,7 @@ gpointer plugin_get_document_data(struct GeanyPlugin *plugin,
 void plugin_set_document_data(struct GeanyPlugin *plugin, struct GeanyDocument *doc,
 	const gchar *key, gpointer data);
 
+G_MODULE_EXPORT
 void plugin_set_document_data_full(struct GeanyPlugin *plugin,
 	struct GeanyDocument *doc, const gchar *key, gpointer data,
 	GDestroyNotify free_func);

@@ -2004,6 +2004,7 @@ PREDEFINED             = "G_GNUC_PRINTF(x,y)=" \
                          GEANY_DEPRECATED_FOR(x)= \
                          HAVE_PLUGINS \
                          GEANY_API_SYMBOL= \
+                         G_MODULE_EXPORT= \
                          GEANY_FUNCTIONS_H
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this

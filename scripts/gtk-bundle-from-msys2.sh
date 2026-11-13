@@ -36,8 +36,6 @@ expat
 fontconfig
 freetype
 fribidi
-libgcc
-libstdc++
 gdk-pixbuf2
 gettext-runtime
 glib2
@@ -59,7 +57,7 @@ librsvg
 libthai
 libtiff
 libwebp
-libwinpthread-git
+libwinpthread
 libxml2
 pango
 pcre2
@@ -68,6 +66,19 @@ shared-mime-info
 xz
 zlib
 zstd
+"
+
+# toolchain runtime packages, depending on the compiler used by the MSYS2 environment
+packages_gcc="
+libgcc
+libstdc++
+"
+
+# the Clang environments use LLVM's runtime instead of GCC's
+# (libunwind is needed by librsvg, which is built with Rust)
+packages_clang="
+libc++
+libunwind
 "
 
 handle_command_line_options() {
@@ -151,22 +162,17 @@ initialize() {
 	gtk="gtk$gtkv"
 	eval "gtk_dependency_pkgs=\${${gtk}_dependency_pkgs}"
 
+	case "$ABI" in
+		"$ABI_CLANGARM64") toolchain_pkgs="${packages_clang}";;
+		*) toolchain_pkgs="${packages_gcc}";;
+	esac
+
 	pkgs="
 ${packages}
+${toolchain_pkgs}
 ${gtk_dependency_pkgs}
 ${gtk}
 "
-
-	if [ "$ABI" = "$ABI_CLANGARM64" ]; then
-		# the Clang environments use LLVM's runtime instead of GCC's
-		# (libunwind is needed by librsvg, which is built with Rust)
-		pkgs=$(echo "$pkgs" | grep -v -x -e 'libgcc' -e 'libstdc++' -e 'libwinpthread-git')
-		pkgs="${pkgs}
-libc++
-libunwind
-libwinpthread
-"
-	fi
 }
 
 _mingw_base_dir() {

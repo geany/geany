@@ -58,6 +58,36 @@ index 0871ca2..49dc278 100644
  GType scnotification_get_type(void) {
  	static gsize type_id = 0;
  	if (g_once_init_enter(&type_id)) {
+diff --git scintilla/include/ScintillaWidget.h scintilla/include/ScintillaWidget.h
+index 1721f65d9..845877afc 100644
+--- scintilla/include/ScintillaWidget.h
++++ scintilla/include/ScintillaWidget.h
+@@ -12,6 +12,8 @@
+ 
+ #if defined(GTK)
+ 
++#include <gmodule.h>
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
+@@ -47,14 +49,14 @@ GtkWidget*	scintilla_object_new			(void);
+ gintptr		scintilla_object_send_message	(ScintillaObject *sci, unsigned int iMessage, guintptr wParam, gintptr lParam);
+ 
+ 
+-GType		scnotification_get_type			(void);
++G_MODULE_EXPORT GType		scnotification_get_type			(void);
+ #define SCINTILLA_TYPE_NOTIFICATION        (scnotification_get_type())
+ 
+ #ifndef G_IR_SCANNING
+ /* The legacy names confuse the g-ir-scanner program */
+ typedef struct _ScintillaClass  ScintillaClass;
+ 
+-GType		scintilla_get_type	(void);
++G_MODULE_EXPORT GType		scintilla_get_type	(void);
+ GtkWidget*	scintilla_new		(void);
+ void		scintilla_set_id	(ScintillaObject *sci, uptr_t id);
+ sptr_t		scintilla_send_message	(ScintillaObject *sci,unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 diff --git scintilla/lexilla/src/Lexilla.cxx scintilla/lexilla/src/Lexilla.cxx
 index cd4b23617..af4a73db4 100644
 --- scintilla/lexilla/src/Lexilla.cxx

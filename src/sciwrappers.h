@@ -21,6 +21,7 @@
 #ifndef GEANY_SCI_WRAPPERS_H
 #define GEANY_SCI_WRAPPERS_H 1
 
+#include <gmodule.h>
 #include "geany.h" /* for GEANY_DEPRECATED */
 #include "gtkcompat.h" /* Needed by ScintillaWidget.h */
 #include "Scintilla.h" /* Needed by ScintillaWidget.h */
@@ -49,6 +50,7 @@ void				sci_delete_marker_at_line	(ScintillaObject *sci, gint line_number, gint 
 gboolean 			sci_is_marker_set_at_line	(ScintillaObject *sci, gint line, gint marker);
 
 gint 				sci_get_col_from_position	(ScintillaObject *sci, gint position);
+G_MODULE_EXPORT
 gint 				sci_get_line_from_position	(ScintillaObject *sci, gint position);
 gint 				sci_get_position_from_line	(ScintillaObject *sci, gint line);
 gint 				sci_get_current_position	(ScintillaObject *sci);
@@ -57,11 +59,13 @@ void 				sci_set_current_position	(ScintillaObject *sci, gint position, gboolean
 gint				sci_get_selection_start		(ScintillaObject *sci);
 gint				sci_get_selection_end		(ScintillaObject *sci);
 void 				sci_replace_sel				(ScintillaObject *sci, const gchar *text);
+G_MODULE_EXPORT
 gint				sci_get_selection_mode		(ScintillaObject *sci);
 void				sci_set_selection_mode		(ScintillaObject *sci, gint mode);
 void 				sci_set_selection_start		(ScintillaObject *sci, gint position);
 void				sci_set_selection_end		(ScintillaObject *sci, gint position);
 
+G_MODULE_EXPORT
 gint				sci_get_length				(ScintillaObject *sci);
 gchar*				sci_get_contents			(ScintillaObject *sci, gint buffer_len);
 gint				sci_get_selected_text_length2(ScintillaObject *sci);

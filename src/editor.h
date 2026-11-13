@@ -22,6 +22,7 @@
 #ifndef GEANY_EDITOR_H
 #define GEANY_EDITOR_H 1
 
+#include <gmodule.h>
 #include "tm_tag.h" /* for TMTag */
 
 #include "gtkcompat.h" /* Needed by ScintillaWidget.h */
@@ -165,26 +166,32 @@ typedef struct GeanyEditor
 GeanyEditor;
 
 
+G_MODULE_EXPORT
 const GeanyIndentPrefs *editor_get_indent_prefs(GeanyEditor *editor);
 
 ScintillaObject *editor_create_widget(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 void editor_indicator_set_on_range(GeanyEditor *editor, gint indic, gint start, gint end);
 
 void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line);
 
+G_MODULE_EXPORT
 void editor_indicator_clear(GeanyEditor *editor, gint indic);
 
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type);
 
 void editor_set_indent_width(GeanyEditor *editor, gint width);
 
+G_MODULE_EXPORT
 gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordchars);
 
 const gchar *editor_get_eol_char_name(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 gint editor_get_eol_char_len(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 const gchar *editor_get_eol_char(GeanyEditor *editor);
 
 void editor_insert_text_block(GeanyEditor *editor, const gchar *text,
@@ -193,10 +200,12 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text,
 
 gint editor_get_eol_char_mode(GeanyEditor *editor);
 
+G_MODULE_EXPORT
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark);
 
 const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name);
 
+G_MODULE_EXPORT
 void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet);
 
 

@@ -27,6 +27,7 @@
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
 
+#include <gmodule.h>
 #include "document.h"
 
 #include "gtkcompat.h"
@@ -35,6 +36,7 @@ G_BEGIN_DECLS
 
 gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 
+G_MODULE_EXPORT
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 
 gboolean dialogs_show_save_as(void);
