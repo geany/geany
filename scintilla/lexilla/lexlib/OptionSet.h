@@ -10,6 +10,8 @@
 #ifndef OPTIONSET_H
 #define OPTIONSET_H
 
+#include <cstdlib>
+
 namespace Lexilla {
 
 template <typename T>

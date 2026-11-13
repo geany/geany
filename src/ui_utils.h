@@ -21,6 +21,7 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+#include <gmodule.h>
 #include "geany.h" /* for GEANY_DEPRECATED */
 #include "document.h"
 
@@ -117,6 +118,7 @@ void ui_add_document_sensitive(GtkWidget *widget);
 
 GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
 
+G_MODULE_EXPORT
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
 void ui_progress_bar_start(const gchar *text);
@@ -127,6 +129,7 @@ void ui_entry_add_clear_icon(GtkEntry *entry);
 
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback);
 
+G_MODULE_EXPORT
 void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 		GCallback callback, GCompareFunc sort_func);
 

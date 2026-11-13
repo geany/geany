@@ -142,9 +142,14 @@ Section "!Program Files" SEC01
 	SetOutPath "$INSTDIR\bin"
 	File "${GEANY_RELEASE_DIR}\bin\Geany.exe"
 	File "${GEANY_RELEASE_DIR}\bin\*Geany*.dll"
-	# non-GTK dependencies
+	# non-GTK dependencies: the C++ runtime is LLVM's for Clang builds (e.g. ARM64)
+	# and GCC's otherwise
+!if /FileExists "${GTK_BUNDLE_DIR}\bin\libc++.dll"
+	File "${GTK_BUNDLE_DIR}\bin\libc++.dll"
+!else
 	File "${GTK_BUNDLE_DIR}\bin\libgcc_s_seh*.dll"
 	File "${GTK_BUNDLE_DIR}\bin\libstdc++-*.dll"
+!endif
 	File "${GTK_BUNDLE_DIR}\bin\libwinpthread*.dll"
 
 	SetOutPath "$INSTDIR\libexec"

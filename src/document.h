@@ -28,6 +28,7 @@
 #ifndef GEANY_DOCUMENT_H
 #define GEANY_DOCUMENT_H 1
 
+#include <gmodule.h>
 #include "editor.h"
 #include "filetypes.h"
 #include "geany.h"
@@ -163,6 +164,7 @@ GeanyDocument;
 	(G_LIKELY((doc)->file_name != NULL) ? ((doc)->file_name) : GEANY_STRING_UNTITLED)
 
 
+G_MODULE_EXPORT
 GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
 GeanyDocument *document_get_current(void);
@@ -175,6 +177,7 @@ GeanyDocument* document_find_by_filename(const gchar *utf8_filename);
 
 GeanyDocument* document_find_by_real_path(const gchar *realname);
 
+G_MODULE_EXPORT
 gboolean document_save_file(GeanyDocument *doc, gboolean force);
 
 GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonly,
@@ -183,14 +186,17 @@ GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonl
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc);
 
+G_MODULE_EXPORT
 gboolean document_remove_page(guint page_num);
 
+G_MODULE_EXPORT
 gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc);
 
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
 void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
+G_MODULE_EXPORT
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
 
 gboolean document_close(GeanyDocument *doc);

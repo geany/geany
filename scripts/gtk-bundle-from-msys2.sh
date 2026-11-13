@@ -6,9 +6,10 @@
 # To be run within a MSYS2 shell. The extracted files will be
 # placed into the current directory.
 
-# only x86_64, i686 is not supported any longer
+# only x86_64 and aarch64, i686 is not supported any longer
 ABI_MINGW64="x86_64"
 ABI_UCRT64="ucrt-x86_64"
+ABI_CLANGARM64="clang-aarch64"
 ABI="$ABI_UCRT64"  # default to UCRT64
 use_cache="no"
 make_zip="no"
@@ -35,8 +36,6 @@ expat
 fontconfig
 freetype
 fribidi
-libgcc
-libstdc++
 gdk-pixbuf2
 gettext-runtime
 glib2
@@ -58,7 +57,7 @@ librsvg
 libthai
 libtiff
 libwebp
-libwinpthread-git
+libwinpthread
 libxml2
 pango
 pcre2
@@ -67,6 +66,19 @@ shared-mime-info
 xz
 zlib
 zstd
+"
+
+# toolchain runtime packages, depending on the compiler used by the MSYS2 environment
+packages_gcc="
+libgcc
+libstdc++
+"
+
+# the Clang environments use LLVM's runtime instead of GCC's
+# (libunwind is needed by librsvg, which is built with Rust)
+packages_clang="
+libc++
+libunwind
 "
 
 handle_command_line_options() {
@@ -96,8 +108,11 @@ handle_command_line_options() {
 		"--mingw64")
 			ABI="$ABI_MINGW64"
 			;;
+		"--clangarm64")
+			ABI="$ABI_CLANGARM64"
+			;;
 		"-h"|"--help")
-			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-3 | -4] [--ucrt64 | --mingw64] [CACHEDIR]"
+			echo "gtk-bundle-from-msys2.sh [-c] [-h] [-n] [-z] [-3 | -4] [--ucrt64 | --mingw64 | --clangarm64] [CACHEDIR]"
 			echo "      -c Use pacman cache. Otherwise pacman will download"
 			echo "         archive files"
 			echo "      -h Show this help screen"
@@ -107,6 +122,7 @@ handle_command_line_options() {
 			echo "      -4 Prefer gtk4"
 			echo "      --ucrt64 Use ABI $ABI_UCRT64"
 			echo "      --mingw64 Use ABI $ABI_MINGW64"
+			echo "      --clangarm64 Use ABI $ABI_CLANGARM64 (Windows on ARM64)"
 			echo "      -x Set when the script is executed in a cross-compilation context (e.g. to use wine)"
 			echo "CACHEDIR Directory where to look for cached packages (default: /var/cache/pacman/pkg)"
 			exit 1
@@ -146,8 +162,14 @@ initialize() {
 	gtk="gtk$gtkv"
 	eval "gtk_dependency_pkgs=\${${gtk}_dependency_pkgs}"
 
+	case "$ABI" in
+		"$ABI_CLANGARM64") toolchain_pkgs="${packages_clang}";;
+		*) toolchain_pkgs="${packages_gcc}";;
+	esac
+
 	pkgs="
 ${packages}
+${toolchain_pkgs}
 ${gtk_dependency_pkgs}
 ${gtk}
 "
@@ -157,6 +179,7 @@ _mingw_base_dir() {
 	case "$ABI" in
 		"$ABI_MINGW64") echo mingw64;;
 		"$ABI_UCRT64") echo ucrt64;;
+		"$ABI_CLANGARM64") echo clangarm64;;
 		*)
 			echo "E: Unknown ABI '$ABI', falling back to '$ABI_UCRT64'" >&2
 			echo ucrt64;;

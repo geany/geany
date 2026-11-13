@@ -26,6 +26,7 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
+#include <gmodule.h>
 #include <string.h>
 #include <time.h>
 
@@ -163,6 +164,7 @@ G_BEGIN_DECLS
 
 gboolean utils_str_equal(const gchar *a, const gchar *b);
 
+G_MODULE_EXPORT
 guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace);
 
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
@@ -211,6 +213,7 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
 
+G_MODULE_EXPORT
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
 gchar *utils_get_real_path(const gchar *file_name);
