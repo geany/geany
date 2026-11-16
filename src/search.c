@@ -50,6 +50,8 @@
 #include <string.h>
 #include <ctype.h>
 
+#include <glib/gstdio.h>
+
 #include <gdk/gdkkeysyms.h>
 
 #define MIN_DLG_BUTTON_SIZE 130
@@ -107,10 +109,18 @@ static struct
 	gboolean replace_match_word_start;
 	gboolean replace_search_backwards;
 	gboolean replace_close_dialog;
+	gboolean rif_regexp;
+	gboolean rif_case_sensitive;
+	gboolean rif_match_whole_word;
+	gboolean rif_recursive;
+	gboolean rif_escape_sequences;
+	gint rif_files_mode;
+	gchar *rif_files;
 }
 settings;
 
 static StashGroup *fif_prefs = NULL;
+static StashGroup *rif_prefs = NULL;
 static StashGroup *find_prefs = NULL;
 static StashGroup *replace_prefs = NULL;
 
@@ -148,6 +158,19 @@ static struct
 }
 fif_dlg = {NULL, NULL, NULL, NULL, NULL, NULL, {0, 0}};
 
+static struct
+{
+	GtkWidget	*dialog;
+	GtkWidget	*dir_combo;
+	GtkWidget	*files_combo;
+	GtkWidget	*search_combo;
+	GtkWidget	*replace_combo;
+	GtkWidget	*encoding_combo;
+	GtkWidget	*files_mode_combo;
+	gint		position[2]; /* x, y */
+}
+rif_dlg = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, {0, 0}};
+
 
 static void search_read_io(GString *string, GIOCondition condition, gpointer data);
 static void search_read_io_stderr(GString *string, GIOCondition condition, gpointer data);
@@ -183,6 +206,9 @@ on_replace_entry_activate(GtkEntry *entry, gpointer user_data);
 static void
 on_find_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
 
+static void
+on_replace_in_files_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
+
 static gboolean
 search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gchar *opts,
 	const gchar *enc);
@@ -212,6 +238,8 @@ static void init_prefs(void)
 	stash_group_add_integer(group, &replace_dlg.position[1], "position_replace_y", -1);
 	stash_group_add_integer(group, &fif_dlg.position[0], "position_fif_x", -1);
 	stash_group_add_integer(group, &fif_dlg.position[1], "position_fif_y", -1);
+	stash_group_add_integer(group, &rif_dlg.position[0], "position_rif_x", -1);
+	stash_group_add_integer(group, &rif_dlg.position[1], "position_rif_y", -1);
 
 	memset(&settings, '\0', sizeof(settings));
 
@@ -236,6 +264,24 @@ static void init_prefs(void)
 		"fif_files", "", "entry_files");
 	stash_group_add_combo_box(group, &settings.fif_files_mode,
 		"fif_files_mode", FILES_MODE_ALL, "combo_files_mode");
+
+	group = stash_group_new("search");
+	rif_prefs = group;
+	configuration_add_pref_group(group, FALSE);
+	stash_group_add_toggle_button(group, &settings.rif_regexp,
+		"rif_regexp", FALSE, "check_regexp");
+	stash_group_add_toggle_button(group, &settings.rif_case_sensitive,
+		"rif_case_sensitive", TRUE, "check_case");
+	stash_group_add_toggle_button(group, &settings.rif_match_whole_word,
+		"rif_match_whole_word", FALSE, "check_wholeword");
+	stash_group_add_toggle_button(group, &settings.rif_recursive,
+		"rif_recursive", FALSE, "check_recursive");
+	stash_group_add_toggle_button(group, &settings.rif_escape_sequences,
+		"rif_escape_sequences", FALSE, "check_escape");
+	stash_group_add_entry(group, &settings.rif_files,
+		"rif_files", "", "entry_files");
+	stash_group_add_combo_box(group, &settings.rif_files_mode,
+		"rif_files_mode", FILES_MODE_ALL, "combo_files_mode");
 
 	group = stash_group_new("search");
 	find_prefs = group;
@@ -293,6 +339,7 @@ void search_finalize(void)
 	FREE_WIDGET(find_dlg.dialog);
 	FREE_WIDGET(replace_dlg.dialog);
 	FREE_WIDGET(fif_dlg.dialog);
+	FREE_WIDGET(rif_dlg.dialog);
 	g_free(search_data.text);
 	g_free(search_data.original_text);
 }
@@ -881,9 +928,9 @@ static GtkWidget *create_fif_file_mode_combo(void)
 
 
 /* updates the sensitivity of the project combo item */
-static void update_fif_file_mode_combo(void)
+static void update_fif_file_mode_combo(GtkWidget *combo)
 {
-	GtkTreeModel *model = gtk_combo_box_get_model(GTK_COMBO_BOX(fif_dlg.files_mode_combo));
+	GtkTreeModel *model = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
 	GtkTreeIter iter;
 
 	/* "1" refers to the second list entry, project  */
@@ -1157,7 +1204,7 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 
 	ui_set_search_entry_background(fif_dlg.search_combo, TRUE);
 	ui_set_search_entry_background(fif_dlg.dir_combo, TRUE);
-	update_fif_file_mode_combo();
+	update_fif_file_mode_combo(fif_dlg.files_mode_combo);
 	update_file_patterns(fif_dlg.files_mode_combo, fif_dlg.files_combo);
 
 	/* set the encoding of the current file */
@@ -1177,6 +1224,298 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 	gtk_widget_show(fif_dlg.dialog);
 	/* bring the dialog back in the foreground in case it is already open but the focus is away */
 	gtk_window_present(GTK_WINDOW(fif_dlg.dialog));
+}
+
+
+static void create_rif_dialog(void)
+{
+	GtkWidget *label_search, *label_replace, *label_files, *label_dir, *label_enc;
+	GtkWidget *search_combo, *replace_combo, *files_mode_combo, *files_combo;
+	GtkWidget *dir_combo, *entry, *enc_combo, *dbox, *sbox, *rbox, *hbox, *file_box, *vbox, *ebox;
+	GtkWidget *check_regexp, *check_case, *check_wholeword, *check_recursive, *check_escape;
+	GtkSizeGroup *size_group;
+
+	rif_dlg.dialog = gtk_dialog_new_with_buttons(
+		_("Replace in Files"), GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(rif_dlg.dialog));
+	gtk_box_set_spacing(GTK_BOX(vbox), 9);
+	gtk_widget_set_name(rif_dlg.dialog, "GeanyDialogSearch");
+
+	gtk_dialog_add_button(GTK_DIALOG(rif_dlg.dialog), GTK_STOCK_FIND_AND_REPLACE,
+		GTK_RESPONSE_ACCEPT);
+	gtk_dialog_set_default_response(GTK_DIALOG(rif_dlg.dialog), GTK_RESPONSE_ACCEPT);
+
+	label_search = gtk_label_new_with_mnemonic(_("_Search for:"));
+	gtk_misc_set_alignment(GTK_MISC(label_search), 0, 0.5);
+
+	search_combo = gtk_combo_box_text_new_with_entry();
+	entry = gtk_bin_get_child(GTK_BIN(search_combo));
+	ui_entry_add_clear_icon(GTK_ENTRY(entry));
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label_search), entry);
+	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
+	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
+	rif_dlg.search_combo = search_combo;
+
+	label_replace = gtk_label_new_with_mnemonic(_("Replace wit_h:"));
+	gtk_misc_set_alignment(GTK_MISC(label_replace), 0, 0.5);
+
+	replace_combo = gtk_combo_box_text_new_with_entry();
+	entry = gtk_bin_get_child(GTK_BIN(replace_combo));
+	ui_entry_add_clear_icon(GTK_ENTRY(entry));
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label_replace), entry);
+	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
+	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
+	rif_dlg.replace_combo = replace_combo;
+
+	sbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_box_pack_start(GTK_BOX(sbox), label_search, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(sbox), search_combo, TRUE, TRUE, 0);
+
+	rbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_box_pack_start(GTK_BOX(rbox), label_replace, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(rbox), replace_combo, TRUE, TRUE, 0);
+
+	/* make labels same width */
+	size_group = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
+	gtk_size_group_add_widget(size_group, label_search);
+	gtk_size_group_add_widget(size_group, label_replace);
+
+	label_files = gtk_label_new_with_mnemonic(_("File _patterns:"));
+	gtk_misc_set_alignment(GTK_MISC(label_files), 0, 0.5);
+
+	files_mode_combo = create_fif_file_mode_combo();
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label_files), files_mode_combo);
+	ui_hookup_widget(rif_dlg.dialog, files_mode_combo, "combo_files_mode");
+	rif_dlg.files_mode_combo = files_mode_combo;
+
+	files_combo = gtk_combo_box_text_new_with_entry();
+	entry = gtk_bin_get_child(GTK_BIN(files_combo));
+	ui_entry_add_clear_icon(GTK_ENTRY(entry));
+	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
+	gtk_widget_set_tooltip_text(entry,
+		_("Space separated list of file patterns (e.g. *.c *.h)"));
+	ui_hookup_widget(rif_dlg.dialog, entry, "entry_files");
+	rif_dlg.files_combo = files_combo;
+
+	g_signal_connect(files_mode_combo, "changed", G_CALLBACK(update_file_patterns), files_combo);
+
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_box_pack_start(GTK_BOX(hbox), label_files, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), files_mode_combo, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), files_combo, TRUE, TRUE, 0);
+	file_box = hbox;
+
+	label_dir = gtk_label_new_with_mnemonic(_("_Directory:"));
+	gtk_misc_set_alignment(GTK_MISC(label_dir), 0, 0.5);
+
+	dir_combo = gtk_combo_box_text_new_with_entry();
+	entry = gtk_bin_get_child(GTK_BIN(dir_combo));
+	ui_entry_add_clear_icon(GTK_ENTRY(entry));
+	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label_dir), entry);
+	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
+	rif_dlg.dir_combo = dir_combo;
+
+	/* tab from files to the dir entry */
+	g_signal_connect(gtk_bin_get_child(GTK_BIN(files_combo)), "key-press-event",
+		G_CALLBACK(on_widget_key_pressed_set_focus), entry);
+
+	dbox = ui_path_box_new(NULL, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(entry));
+	gtk_box_pack_start(GTK_BOX(dbox), label_dir, FALSE, FALSE, 0);
+
+	label_enc = gtk_label_new_with_mnemonic(_("Enc_oding:"));
+	gtk_misc_set_alignment(GTK_MISC(label_enc), 0, 0.5);
+
+	enc_combo = ui_create_encodings_combo_box(FALSE, GEANY_ENCODING_UTF_8);
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label_enc), enc_combo);
+	rif_dlg.encoding_combo = enc_combo;
+
+	ebox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_box_pack_start(GTK_BOX(ebox), label_enc, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(ebox), enc_combo, TRUE, TRUE, 0);
+
+	gtk_size_group_add_widget(size_group, label_files);
+	gtk_size_group_add_widget(size_group, label_dir);
+	gtk_size_group_add_widget(size_group, label_enc);
+	g_object_unref(G_OBJECT(size_group));	/* auto destroy the size group */
+
+	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
+	ui_hookup_widget(rif_dlg.dialog, check_regexp, "check_regexp");
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
+	gtk_widget_set_tooltip_text(check_regexp,
+		_("Use Perl-like regular expressions in the search text"));
+
+	check_case = gtk_check_button_new_with_mnemonic(_("C_ase sensitive"));
+	ui_hookup_widget(rif_dlg.dialog, check_case, "check_case");
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_case), FALSE);
+
+	check_wholeword = gtk_check_button_new_with_mnemonic(_("Match only a _whole word"));
+	ui_hookup_widget(rif_dlg.dialog, check_wholeword, "check_wholeword");
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_wholeword), FALSE);
+
+	check_recursive = gtk_check_button_new_with_mnemonic(_("_Recurse in subfolders"));
+	ui_hookup_widget(rif_dlg.dialog, check_recursive, "check_recursive");
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_recursive), FALSE);
+
+	check_escape = gtk_check_button_new_with_mnemonic(_("Use _escape sequences"));
+	ui_hookup_widget(rif_dlg.dialog, check_escape, "check_escape");
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_escape), FALSE);
+	gtk_widget_set_tooltip_text(check_escape,
+		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
+		  "corresponding control characters"));
+
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_box_pack_start(GTK_BOX(hbox), check_regexp, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), check_case, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), check_escape, TRUE, TRUE, 0);
+
+	gtk_box_pack_start(GTK_BOX(vbox), sbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), rbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), file_box, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), dbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), ebox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, FALSE, 0);
+
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+	gtk_box_pack_start(GTK_BOX(hbox), check_wholeword, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), check_recursive, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, FALSE, 0);
+
+	g_signal_connect(rif_dlg.dialog, "response",
+			G_CALLBACK(on_replace_in_files_dialog_response), NULL);
+	g_signal_connect(rif_dlg.dialog, "delete-event",
+			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+
+#ifdef G_OS_WIN32
+	win32_update_titlebar_theme(rif_dlg.dialog);
+#endif
+}
+
+
+static void update_rif_file_mode_combo(void)
+{
+	GtkTreeModel *model = gtk_combo_box_get_model(GTK_COMBO_BOX(rif_dlg.files_mode_combo));
+	GtkTreeIter iter;
+
+	if (gtk_tree_model_get_iter_from_string(model, &iter, "1"))
+		gtk_list_store_set(GTK_LIST_STORE(model), &iter, 1, app->project != NULL, -1);
+}
+
+
+/**
+ * Shows the Replace in Files dialog.
+ *
+ * @param dir The directory to search in (UTF-8 encoding). May be @c NULL
+ * to determine it the usual way by using the current document's path.
+ *
+ * @since 2.2, plugin API 252
+ */
+GEANY_API_SYMBOL
+void search_show_replace_in_files_dialog(const gchar *dir)
+{
+	search_show_replace_in_files_dialog_full(NULL, dir);
+}
+
+
+void search_show_replace_in_files_dialog_full(const gchar *text, const gchar *dir)
+{
+	GtkWidget *entry;
+	GeanyDocument *doc = document_get_current();
+	gchar *sel = NULL;
+	gchar *cur_dir = NULL;
+	GeanyEncodingIndex enc_idx = GEANY_ENCODING_UTF_8;
+
+	if (rif_dlg.dialog == NULL)
+	{
+		create_rif_dialog();
+		gtk_widget_show_all(rif_dlg.dialog);
+		if (doc && !text)
+			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
+	}
+	/* the dialog was just created, apply the stored preferences */
+	stash_group_display(rif_prefs, rif_dlg.dialog);
+	update_rif_file_mode_combo();
+	update_file_patterns(rif_dlg.files_mode_combo, rif_dlg.files_combo);
+
+	if (!text)
+	{
+		if (doc && ! sel)
+			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
+		text = sel;
+	}
+	entry = gtk_bin_get_child(GTK_BIN(rif_dlg.search_combo));
+	if (text)
+		gtk_entry_set_text(GTK_ENTRY(entry), text);
+	g_free(sel);
+
+	/* add project's base path directory to the dir list, we do this here once
+	 * (in create_rif_dialog() it would fail if a project is opened after dialog creation) */
+	if (app->project != NULL && !EMPTY(app->project->base_path))
+	{
+		ui_combo_box_prepend_text_once(GTK_COMBO_BOX_TEXT(rif_dlg.dir_combo),
+			app->project->base_path);
+	}
+
+	entry = gtk_bin_get_child(GTK_BIN(rif_dlg.dir_combo));
+	if (!EMPTY(dir))
+		cur_dir = g_strdup(dir);	/* custom directory argument passed */
+	else
+	{
+		if (search_prefs.use_current_file_dir)
+		{
+			static gchar *last_cur_dir = NULL;
+			static GeanyDocument *last_doc = NULL;
+
+			/* Only set the directory entry once for the current document */
+			cur_dir = utils_get_current_file_dir_utf8();
+			if (doc == last_doc && cur_dir && utils_str_equal(cur_dir, last_cur_dir))
+			{
+				/* in case the user now wants the current directory, add it to history */
+				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(rif_dlg.dir_combo), cur_dir, 0);
+				SETPTR(cur_dir, NULL);
+			}
+			else
+				SETPTR(last_cur_dir, g_strdup(cur_dir));
+
+			last_doc = doc;
+		}
+		if (!cur_dir && EMPTY(gtk_entry_get_text(GTK_ENTRY(entry))))
+		{
+			/* use default_open_path if no directory could be determined
+			 * (e.g. when no files are open) */
+			if (!cur_dir)
+				cur_dir = g_strdup(utils_get_default_dir_utf8());
+			if (!cur_dir)
+				cur_dir = g_get_current_dir();
+		}
+	}
+	if (cur_dir)
+	{
+		gtk_entry_set_text(GTK_ENTRY(entry), cur_dir);
+		g_free(cur_dir);
+	}
+
+	ui_set_search_entry_background(rif_dlg.search_combo, TRUE);
+	ui_set_search_entry_background(rif_dlg.dir_combo, TRUE);
+
+	/* set the encoding of the current file */
+	if (doc != NULL)
+		enc_idx = encodings_get_idx_from_charset(doc->encoding);
+	ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(rif_dlg.encoding_combo), enc_idx);
+
+	/* put the focus to the directory entry if it is empty */
+	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), ""))
+		gtk_widget_grab_focus(rif_dlg.dir_combo);
+	else
+		gtk_widget_grab_focus(rif_dlg.search_combo);
+
+	/* set dialog window position */
+	set_dialog_position(rif_dlg.dialog, rif_dlg.position);
+
+	gtk_widget_show(rif_dlg.dialog);
+	/* bring the dialog back in the foreground in case it is already open but the focus is away */
+	gtk_window_present(GTK_WINDOW(rif_dlg.dialog));
 }
 
 
@@ -1916,8 +2255,455 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 }
 
 
-static void read_fif_io(gchar *msg, GIOCondition condition, gchar *enc, gint msg_color)
+typedef struct
 {
+	const gchar *replacement;
+	gboolean regex;
+	guint count;
+}
+RifReplaceData;
+
+typedef struct
+{
+	guint files;
+	guint matches;
+	guint skipped;
+	guint errors;
+}
+RifStats;
+
+
+static gboolean rif_replace_eval_cb(const GMatchInfo *match_info, GString *result, gpointer user_data)
+{
+	RifReplaceData *data = user_data;
+	gchar *expanded;
+
+	data->count++;
+
+	if (data->regex)
+		expanded = g_match_info_expand_references(match_info, data->replacement, NULL);
+	else
+		expanded = g_strdup(data->replacement);
+
+	if (expanded != NULL)
+	{
+		g_string_append(result, expanded);
+		g_free(expanded);
+	}
+	return FALSE;
+}
+
+
+static GRegex *rif_compile_regex(const gchar *find, GeanyFindFlags flags, GError **error)
+{
+	GRegex *regex;
+	gchar *pattern;
+	gint rflags = 0;
+
+	if (! (flags & GEANY_FIND_MATCHCASE))
+		rflags |= G_REGEX_CASELESS;
+	if (flags & GEANY_FIND_MULTILINE)
+		rflags |= G_REGEX_MULTILINE;
+
+	if (flags & GEANY_FIND_REGEXP)
+		pattern = g_strdup(find);
+	else
+	{
+		gchar *escaped = g_regex_escape_string(find, -1);
+		const gchar *prefix = "";
+		const gchar *suffix = "";
+		gunichar first = g_utf8_get_char(find);
+		gunichar last = g_utf8_get_char(g_utf8_find_prev_char(find, find + strlen(find)));
+
+		if ((flags & (GEANY_FIND_WHOLEWORD | GEANY_FIND_WORDSTART)) &&
+			(g_unichar_isalnum(first) || first == '_'))
+			prefix = "\\b";
+		if ((flags & GEANY_FIND_WHOLEWORD) &&
+			(g_unichar_isalnum(last) || last == '_'))
+			suffix = "\\b";
+
+		pattern = g_strdup_printf("%s%s%s", prefix, escaped, suffix);
+		g_free(escaped);
+	}
+
+	regex = g_regex_new(pattern, rflags, 0, error);
+	g_free(pattern);
+	return regex;
+}
+
+
+GEANY_EXPORT_SYMBOL
+gchar *search_replace_all_in_text(const gchar *text, const gchar *find, const gchar *replace,
+		GeanyFindFlags flags, guint *match_count)
+{
+	RifReplaceData data;
+	GRegex *regex;
+	GError *error = NULL;
+	gchar *result;
+
+	g_return_val_if_fail(text != NULL, NULL);
+
+	if (match_count)
+		*match_count = 0;
+
+	if (EMPTY(find))
+		return g_strdup(text);
+
+	regex = rif_compile_regex(find, flags, &error);
+	if (regex == NULL)
+	{
+		if (error)
+			g_error_free(error);
+		return g_strdup(text);
+	}
+
+	data.replacement = replace ? replace : "";
+	data.regex = (flags & GEANY_FIND_REGEXP) != 0;
+	data.count = 0;
+
+	result = g_regex_replace_eval(regex, text, -1, 0, 0, rif_replace_eval_cb, &data, NULL);
+	g_regex_unref(regex);
+
+	if (result == NULL)
+		return g_strdup(text);
+
+	if (match_count)
+		*match_count = data.count;
+	return result;
+}
+
+
+static GeanyFindFlags rif_get_flags(void)
+{
+	GeanyFindFlags flags = 0;
+
+	if (settings.rif_case_sensitive)
+		flags |= GEANY_FIND_MATCHCASE;
+	if (settings.rif_match_whole_word)
+		flags |= GEANY_FIND_WHOLEWORD;
+	if (settings.rif_regexp)
+		flags |= GEANY_FIND_REGEXP | GEANY_FIND_MULTILINE;
+
+	return flags;
+}
+
+
+static GSList *rif_get_patterns(void)
+{
+	GSList *patterns = NULL;
+	gchar **items, **item;
+
+	if (settings.rif_files_mode == FILES_MODE_ALL || EMPTY(settings.rif_files))
+		return NULL;
+
+	items = g_strsplit_set(settings.rif_files, " \t", -1);
+	for (item = items; *item != NULL; item++)
+	{
+		if (**item != '\0')
+			patterns = g_slist_prepend(patterns, g_pattern_spec_new(*item));
+	}
+	g_strfreev(items);
+
+	return patterns;
+}
+
+
+static void rif_collect_files(const gchar *locale_dir, gboolean recursive,
+		GSList *patterns, GSList **files)
+{
+	GDir *dir;
+	const gchar *name;
+
+	dir = g_dir_open(locale_dir, 0, NULL);
+	if (dir == NULL)
+		return;
+
+	while ((name = g_dir_read_name(dir)) != NULL)
+	{
+		gchar *full_path = g_build_filename(locale_dir, name, NULL);
+
+		if (g_file_test(full_path, G_FILE_TEST_IS_DIR))
+		{
+			/* do not follow symlinked directories, to avoid infinite loops */
+			if (recursive && !g_file_test(full_path, G_FILE_TEST_IS_SYMLINK))
+				rif_collect_files(full_path, recursive, patterns, files);
+			g_free(full_path);
+		}
+		else if (g_file_test(full_path, G_FILE_TEST_IS_REGULAR))
+		{
+			if (patterns == NULL || pattern_list_match(patterns, name))
+				*files = g_slist_prepend(*files, full_path);
+			else
+				g_free(full_path);
+		}
+		else
+			g_free(full_path);
+	}
+	g_dir_close(dir);
+}
+
+
+static gboolean rif_write_file(const gchar *locale_filename, const gchar *data, gsize length)
+{
+	FILE *fp;
+	gboolean success;
+
+	fp = g_fopen(locale_filename, "wb");
+	if (fp == NULL)
+		return FALSE;
+
+	success = (fwrite(data, 1, length, fp) == length);
+	if (fclose(fp) != 0)
+		success = FALSE;
+
+	return success;
+}
+
+
+static void rif_replace_in_file(const gchar *locale_filename, const gchar *utf8_filename,
+		const gchar *find, const gchar *replace, GeanyFindFlags flags, const gchar *enc,
+		RifStats *stats)
+{
+	gchar *contents = NULL, *utf8_text = NULL, *replaced;
+	gsize length = 0;
+	guint count = 0;
+	GeanyDocument *doc;
+
+	doc = document_find_by_filename(utf8_filename);
+	/* never overwrite a file with unsaved changes in the editor */
+	if (doc != NULL && doc->changed)
+	{
+		stats->skipped++;
+		return;
+	}
+
+	if (!g_file_get_contents(locale_filename, &contents, &length, NULL))
+	{
+		stats->errors++;
+		return;
+	}
+
+	/* skip empty and binary files */
+	if (length == 0 || memchr(contents, '\0', length) != NULL)
+		goto out;
+
+	if (enc != NULL)
+	{
+		utf8_text = g_convert(contents, length, "UTF-8", enc, NULL, NULL, NULL);
+		if (utf8_text == NULL)
+		{
+			stats->errors++;
+			goto out;
+		}
+	}
+	else
+	{
+		if (!g_utf8_validate(contents, length, NULL))
+		{
+			stats->errors++;
+			goto out;
+		}
+		utf8_text = g_strndup(contents, length);
+	}
+
+	replaced = search_replace_all_in_text(utf8_text, find, replace, flags, &count);
+	if (count > 0)
+	{
+		gchar *out_data;
+		gsize out_len;
+		gboolean converted_ok;
+
+		if (enc != NULL)
+		{
+			out_data = g_convert(replaced, -1, enc, "UTF-8", NULL, &out_len, NULL);
+			converted_ok = (out_data != NULL);
+		}
+		else
+		{
+			out_data = g_strdup(replaced);
+			out_len = strlen(replaced);
+			converted_ok = TRUE;
+		}
+
+		if (!converted_ok)
+			stats->errors++;
+		else
+		{
+			if (rif_write_file(locale_filename, out_data, out_len))
+			{
+				stats->files++;
+				stats->matches += count;
+
+				if (doc != NULL)
+					document_reload_force(doc, doc->encoding);
+			}
+			else
+				stats->errors++;
+			g_free(out_data);
+		}
+	}
+	g_free(replaced);
+	g_free(utf8_text);
+
+out:
+	g_free(contents);
+}
+
+
+static gboolean search_replace_in_files(const gchar *utf8_search_text, const gchar *utf8_replace_text,
+		const gchar *utf8_dir, GeanyEncodingIndex enc_idx)
+{
+	GSList *files = NULL, *patterns, *item;
+	RifStats stats = {0, 0, 0, 0};
+	GeanyFindFlags flags = rif_get_flags();
+	const gchar *enc = (enc_idx == GEANY_ENCODING_UTF_8) ? NULL :
+		encodings_get_charset_from_index(enc_idx);
+	gchar *locale_dir;
+
+	if (EMPTY(utf8_search_text) || !utf8_dir)
+		return FALSE;
+
+	locale_dir = utils_get_locale_from_utf8(utf8_dir);
+	if (!g_file_test(locale_dir, G_FILE_TEST_IS_DIR))
+	{
+		g_free(locale_dir);
+		return FALSE;
+	}
+	/* resolve to an absolute path so open documents are matched reliably */
+	{
+		gchar *real_dir = utils_get_real_path(locale_dir);
+
+		if (real_dir != NULL)
+			SETPTR(locale_dir, real_dir);
+	}
+
+	patterns = rif_get_patterns();
+	rif_collect_files(locale_dir, settings.rif_recursive, patterns, &files);
+
+	foreach_slist(item, files)
+	{
+		gchar *utf8_filename = utils_get_utf8_from_locale(item->data);
+
+		rif_replace_in_file(item->data, utf8_filename, utf8_search_text, utf8_replace_text,
+			flags, enc, &stats);
+		g_free(utf8_filename);
+	}
+
+	if (patterns != NULL)
+	{
+		foreach_slist(item, patterns)
+			g_pattern_spec_free(item->data);
+		g_slist_free(patterns);
+	}
+	g_slist_foreach(files, (GFunc) g_free, NULL);
+	g_slist_free(files);
+	g_free(locale_dir);
+
+	if (stats.matches == 0 && stats.errors == 0 && stats.skipped == 0)
+		ui_set_statusbar(FALSE, _("No matches found."));
+	else if (stats.skipped > 0)
+		ui_set_statusbar(FALSE,
+			_("Replaced %u matches in %u files (%u files with unsaved changes were skipped)."),
+			stats.matches, stats.files, stats.skipped);
+	else if (stats.errors > 0)
+		ui_set_statusbar(FALSE,
+			_("Replaced %u matches in %u files (%u files could not be processed)."),
+			stats.matches, stats.files, stats.errors);
+	else
+		ui_set_statusbar(FALSE, _("Replaced %u matches in %u files."),
+			stats.matches, stats.files);
+
+	return TRUE;
+}
+
+
+static void on_replace_in_files_dialog_response(GtkDialog *dialog, gint response,
+		G_GNUC_UNUSED gpointer user_data)
+{
+	GtkWidget *search_combo = rif_dlg.search_combo;
+	GtkWidget *replace_combo = rif_dlg.replace_combo;
+	GtkWidget *dir_combo = rif_dlg.dir_combo;
+	const gchar *search_text =
+		gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(search_combo))));
+	const gchar *replace_text =
+		gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(replace_combo))));
+	const gchar *utf8_dir =
+		gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
+	gchar *locale_dir = utils_get_locale_from_utf8(utf8_dir);
+	GeanyEncodingIndex enc_idx =
+		ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(rif_dlg.encoding_combo));
+
+	gtk_window_get_position(GTK_WINDOW(rif_dlg.dialog),
+		&rif_dlg.position[0], &rif_dlg.position[1]);
+	stash_group_update(rif_prefs, rif_dlg.dialog);
+
+	if (response != GTK_RESPONSE_ACCEPT)
+	{
+		gtk_widget_hide(rif_dlg.dialog);
+		g_free(locale_dir);
+		return;
+	}
+
+	if (!g_file_test(locale_dir, G_FILE_TEST_IS_DIR))
+	{
+		ui_set_statusbar(FALSE, _("Invalid directory for Replace in Files."));
+		ui_set_search_entry_background(dir_combo, FALSE);
+	}
+	else if (EMPTY(search_text))
+	{
+		ui_set_statusbar(FALSE, _("No text to find."));
+		ui_set_search_entry_background(search_combo, FALSE);
+	}
+	else
+	{
+		gchar *find = g_strdup(search_text);
+		gchar *replace = g_strdup(replace_text);
+		GeanyFindFlags flags = rif_get_flags();
+		gboolean valid = TRUE;
+
+		if (flags & GEANY_FIND_REGEXP)
+		{
+			GRegex *regex = rif_compile_regex(find, flags, NULL);
+
+			if (regex == NULL)
+			{
+				ui_set_statusbar(FALSE, _("Bad regular expression."));
+				valid = FALSE;
+			}
+			else
+				g_regex_unref(regex);
+
+			/* regular expressions handle escapes themselves, keep back references */
+			if (valid && settings.rif_escape_sequences &&
+				!utils_str_replace_escape(replace, TRUE))
+				valid = FALSE;
+		}
+		else if (settings.rif_escape_sequences)
+		{
+			if (!utils_str_replace_escape(find, FALSE) ||
+				!utils_str_replace_escape(replace, FALSE))
+				valid = FALSE;
+		}
+
+		if (valid && search_replace_in_files(find, replace, utf8_dir, enc_idx))
+		{
+			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(search_combo), search_text, 0);
+			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(replace_combo), replace_text, 0);
+			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(rif_dlg.files_combo), NULL, 0);
+			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(dir_combo), utf8_dir, 0);
+			gtk_widget_hide(rif_dlg.dialog);
+		}
+		else if (!valid)
+			utils_beep();
+
+		g_free(find);
+		g_free(replace);
+	}
+	g_free(locale_dir);
+}
+
+
+static void read_fif_io(gchar *msg, GIOCondition condition, gchar *enc, gint msg_color){
 	if (condition & (G_IO_IN | G_IO_PRI))
 	{
 		gchar *utf8_msg = NULL;

@@ -108,6 +108,8 @@ void on_replace1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_find_in_files1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
+void on_replace_in_files1_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data);
 
 void on_reload_all(GtkAction *action, gpointer user_data);

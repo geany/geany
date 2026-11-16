@@ -1,5 +1,9 @@
 Geany 2.2.0 (unreleased)
 
+    Search
+    * Add Replace in Files to replace text in all files of a directory,
+      using an internal engine that works the same on all platforms.
+
 
 Geany 2.1 (July 06, 2025)
 

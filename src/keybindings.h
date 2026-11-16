@@ -281,6 +281,8 @@ enum GeanyKeyBindingID
 												 * @since 2.0 (API 243) */
 	GEANY_KEYS_VIEW_TOGGLE_MENUBAR,				/**< Keybinding.
 												 * @since 2.2 (API 251) */
+	GEANY_KEYS_SEARCH_REPLACEINFILES,			/**< Keybinding.
+												 * @since 2.2 (API 252) */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
