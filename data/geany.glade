@@ -648,6 +648,12 @@
     <property name="stock">gtk-find-and-replace</property>
     <property name="icon_size">1</property>
   </object>
+  <object class="GtkImage" id="image_replace_in_files">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-find-and-replace</property>
+    <property name="icon_size">1</property>
+  </object>
   <object class="GtkImage" id="image4073">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -7299,6 +7305,17 @@ Supported placeholders are:
                             <property name="image">image4071</property>
                             <property name="use-stock">False</property>
                             <signal name="activate" handler="on_find_in_files1_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImageMenuItem" id="replace_in_files1">
+                            <property name="label" translatable="yes">Replace in Fi_les...</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="image">image_replace_in_files</property>
+                            <property name="use-stock">False</property>
+                            <signal name="activate" handler="on_replace_in_files1_activate" swapped="no"/>
                           </object>
                         </child>
                         <child>

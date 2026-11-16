@@ -1032,6 +1032,12 @@ void on_find_in_files1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+void on_replace_in_files1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	search_show_replace_in_files_dialog(NULL);
+}
+
+
 void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	static gchar value[16] = "";

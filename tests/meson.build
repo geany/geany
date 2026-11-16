@@ -389,3 +389,4 @@ test('ctags/processing-order', runner,
 test('utils', executable('test_utils', 'test_utils.c', dependencies: test_deps))
 test('sidebar', executable('test_sidebar', 'test_sidebar.c', dependencies: test_deps))
 test('encodings', executable('test_encodings', 'test_encodings.c', dependencies: test_deps))
+test('search', executable('test_search', 'test_search.c', dependencies: test_deps))

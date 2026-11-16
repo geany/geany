@@ -549,6 +549,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_SEARCH_FINDINFILES, NULL, GDK_KEY_f,
 		GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "menu_findinfiles", _("Find in Files"),
 		"find_in_files1");
+	add_kb(group, GEANY_KEYS_SEARCH_REPLACEINFILES, NULL, GDK_KEY_h,
+		GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "menu_replaceinfiles", _("Replace in Files"),
+		"replace_in_files1");
 	add_kb(group, GEANY_KEYS_SEARCH_NEXTMESSAGE, NULL,
 		0, 0, "menu_nextmessage", _("Next Message"), "next_message1");
 	add_kb(group, GEANY_KEYS_SEARCH_PREVIOUSMESSAGE, NULL,
@@ -1573,6 +1576,8 @@ static gboolean cb_func_search_action(guint key_id)
 	{
 		case GEANY_KEYS_SEARCH_FINDINFILES:
 			on_find_in_files1_activate(NULL, NULL); return TRUE;
+		case GEANY_KEYS_SEARCH_REPLACEINFILES:
+			on_replace_in_files1_activate(NULL, NULL); return TRUE;
 		case GEANY_KEYS_SEARCH_NEXTMESSAGE:
 			on_next_message1_activate(NULL, NULL); return TRUE;
 		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:

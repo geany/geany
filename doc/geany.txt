@@ -1216,6 +1216,7 @@ and the editor window's popup menu:
 * Find selection
 * Find usage
 * Find in files
+* Replace in files
 * Replace
 * Go to symbol definition
 * Go to symbol declaration
@@ -1400,6 +1401,33 @@ to filter out filenames.
 SVN Example: ``--exclude=*.svn-base``
 
 The --exclude argument only matches the file name part, not the path.
+
+
+Replace in files
+^^^^^^^^^^^^^^^^
+
+*Replace in Files* replaces all occurrences of a search string in every
+file in a directory. Unlike `Find in files`_, it does not rely on an
+external Grep tool, so it behaves the same on all platforms.
+
+The *Search* and *Replace* fields define the text to find and its
+replacement. The *Files*, *Directory*, *Encoding*, *Recurse in
+subfolders*, and matching options work the same way as in the
+`Find in files`_ dialog. See the section `Matching options`_.
+
+The *Use regular expressions* option allows regular expressions to be
+used in the search string and back references in the replacement text,
+just like in the `Replace`_ dialog -- see the entry for '\\n' in
+`Regular expressions`_.
+
+Before modifying anything, files with unsaved changes are skipped to
+avoid losing data, and binary files are ignored. A summary of the number
+of modified files and replacements is shown in the status bar.
+
+.. note::
+    As replacements are written directly to disk, review your search
+    results with *Find in Files* before using *Replace in Files* when
+    using regular expressions or wide filename patterns.
 
 
 Replace
@@ -1974,7 +2002,8 @@ Hide the Find dialog
     Hide the `Find`_ dialog after clicking Find Next/Previous.
 
 Use the current word under the cursor for Find dialogs
-    Use current word under the cursor when opening the Find, Find in Files or Replace dialog and
+    Use current word under the cursor when opening the Find, Find in Files,
+    Replace or Replace in Files dialog and
     there is no selection. When this option is disabled, the search term last used in the
     appropriate Find dialog is used.
 
@@ -3772,6 +3801,8 @@ Find Next Selection                                       Finds next occurrence 
 Find Previous Selection                                   Finds previous occurrence of selected text.
 
 Replace                         Ctrl-H  (C)               Opens the Replace dialog.
+
+Replace in files                Ctrl-Shift-H              Opens the Replace in files dialog.
 
 Find in files                   Ctrl-Shift-F              Opens the Find in files dialog.
 

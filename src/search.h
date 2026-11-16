@@ -83,6 +83,8 @@ GeanyMatchInfo;
 
 void search_show_find_in_files_dialog(const gchar *dir);
 
+void search_show_replace_in_files_dialog(const gchar *dir);
+
 
 #ifdef GEANY_PRIVATE
 
@@ -119,6 +121,11 @@ void search_show_find_dialog(void);
 void search_show_replace_dialog(void);
 
 void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir);
+
+void search_show_replace_in_files_dialog_full(const gchar *text, const gchar *dir);
+
+gchar *search_replace_all_in_text(const gchar *text, const gchar *find, const gchar *replace,
+		GeanyFindFlags flags, guint *match_count);
 
 gboolean search_show_wrap_dialog(const gchar *search_text);
 
