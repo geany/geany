@@ -2608,6 +2608,8 @@ void ui_init(void)
 	ui_widgets.statusbar = ui_lookup_widget(main_widgets.window, "statusbar");
 	ui_widgets.print_page_setup = ui_lookup_widget(main_widgets.window, "page_setup1");
 
+	ui_notebook_setup(GTK_NOTEBOOK(main_widgets.sidebar_notebook));
+	ui_notebook_setup(GTK_NOTEBOOK(main_widgets.message_window_notebook));
 	main_widgets.progressbar = progress_bar_create();
 
 	/* current word sensitive items */
@@ -3240,4 +3242,66 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 		return TRUE;
 	}
 	return FALSE;
+}
+
+
+static gboolean notebook_tab_bar_scroll_cb(GtkWidget *widget, GdkEventScroll *event,
+	gpointer user_data)
+{
+	GtkNotebook *notebook = GTK_NOTEBOOK(widget);
+	GtkWidget *child = gtk_notebook_get_nth_page(notebook, gtk_notebook_get_current_page(notebook));
+	GtkWidget *event_widget = gtk_get_event_widget((GdkEvent *) event);
+
+	/* ignore scroll events from the content of the page, only the tab bar switches
+	 * tabs (impl. stolen from GTK2 tab scrolling) */
+	if (child == NULL || event_widget == NULL ||
+		event_widget == child || gtk_widget_is_ancestor(event_widget, child))
+		return FALSE;
+
+	switch (event->direction)
+	{
+		case GDK_SCROLL_RIGHT:
+		case GDK_SCROLL_DOWN:
+			gtk_notebook_next_page(notebook);
+			break;
+		case GDK_SCROLL_LEFT:
+		case GDK_SCROLL_UP:
+			gtk_notebook_prev_page(notebook);
+			break;
+		default:
+			return FALSE;
+	}
+	return TRUE;
+}
+
+
+static void notebook_tab_added_cb(GtkNotebook *nb, GtkWidget *child, guint page_num,
+	gpointer user_data)
+{
+	GtkWidget *label = gtk_notebook_get_tab_label(nb, child);
+
+	/* Tab labels which have a window of their own (event boxes for instance) get the
+	 * scroll events instead of the notebook, so they have to select them - GTK then
+	 * propagates the events up to the notebook. Plain labels are windowless and need
+	 * nothing, the event window of the notebook covers the whole tab bar. */
+	if (label != NULL)
+		gtk_widget_add_events(label, GDK_SCROLL_MASK);
+}
+
+
+/* Setup switching tab by scrolling mouse wheel - like GTK2. Applies to the tabs
+ * present at the time of the call as well as to pages added later on. */
+void ui_notebook_setup(GtkNotebook *nb)
+{
+	gint i, n;
+
+	gtk_widget_add_events(GTK_WIDGET(nb), GDK_SCROLL_MASK);
+	g_signal_connect(nb, "scroll-event",
+		G_CALLBACK(notebook_tab_bar_scroll_cb), NULL);
+	g_signal_connect(nb, "page-added",
+		G_CALLBACK(notebook_tab_added_cb), NULL);
+
+	n = gtk_notebook_get_n_pages(nb);
+	for (i = 0; i < n; i++)
+		notebook_tab_added_cb(nb, gtk_notebook_get_nth_page(nb, i), i, NULL);
 }
