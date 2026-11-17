@@ -27,6 +27,7 @@
 #ifndef GEANY_TEMPLATES_H
 #define GEANY_TEMPLATES_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "document.h"
 #include "filetypes.h"
 
@@ -49,6 +50,7 @@ typedef struct GeanyTemplatePrefs
 GeanyTemplatePrefs;
 
 
+GEANY_API_SYMBOL
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
 
 

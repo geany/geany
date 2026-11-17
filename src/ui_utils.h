@@ -21,7 +21,6 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
-#include <gmodule.h>
 #include "geany.h" /* for GEANY_DEPRECATED */
 #include "document.h"
 
@@ -104,52 +103,71 @@ GeanyMainWidgets;
 #define GEANY_STOCK_BUILD "geany-build"
 
 
+GEANY_API_SYMBOL
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
 
+GEANY_API_SYMBOL
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
+GEANY_API_SYMBOL
 void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
 
+GEANY_API_SYMBOL
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 
+GEANY_API_SYMBOL
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
 
+GEANY_API_SYMBOL
 void ui_add_document_sensitive(GtkWidget *widget);
 
+GEANY_API_SYMBOL
 GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
+GEANY_API_SYMBOL
 void ui_progress_bar_start(const gchar *text);
 
+GEANY_API_SYMBOL
 void ui_progress_bar_stop(void);
 
+GEANY_API_SYMBOL
 void ui_entry_add_clear_icon(GtkEntry *entry);
 
+GEANY_API_SYMBOL
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 		GCallback callback, GCompareFunc sort_func);
 
+GEANY_API_SYMBOL
 void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
 
+GEANY_API_SYMBOL
 gboolean ui_is_keyval_enter_or_return(guint keyval);
 
+GEANY_API_SYMBOL
 gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value);
 
+GEANY_API_SYMBOL
 void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 		const gchar *text, gint history_len);
 
+GEANY_API_SYMBOL
 const gchar *ui_lookup_stock_label(const gchar *stock_id);
 
+GEANY_API_SYMBOL
 void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column);
 
 
 #ifndef GEANY_DISABLE_DEPRECATED
+GEANY_API_SYMBOL
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment) GEANY_DEPRECATED;
 
+GEANY_API_SYMBOL
 void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text) GEANY_DEPRECATED_FOR(gtk_widget_set_tooltip_text);
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

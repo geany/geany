@@ -16,6 +16,11 @@
 
 #include "tm_tag.h"
 
+/* see geany.h */
+#ifndef GEANY_API_SYMBOL
+# define GEANY_API_SYMBOL
+#endif
+
 G_BEGIN_DECLS
 
 
@@ -36,12 +41,16 @@ typedef struct TMWorkspace
 } TMWorkspace;
 
 
+GEANY_API_SYMBOL
 void tm_workspace_add_source_file(TMSourceFile *source_file);
 
+GEANY_API_SYMBOL
 void tm_workspace_remove_source_file(TMSourceFile *source_file);
 
+GEANY_API_SYMBOL
 void tm_workspace_add_source_files(GPtrArray *source_files);
 
+GEANY_API_SYMBOL
 void tm_workspace_remove_source_files(GPtrArray *source_files);
 
 

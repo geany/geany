@@ -22,6 +22,7 @@
 #ifndef GEANY_PROJECT_H
 #define GEANY_PROJECT_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include <glib.h>
 #include <glib-object.h>
 
@@ -47,6 +48,7 @@ typedef struct GeanyProject
 GeanyProject;
 
 
+GEANY_API_SYMBOL
 void project_write_config(void);
 
 

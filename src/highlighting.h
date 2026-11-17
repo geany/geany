@@ -22,6 +22,7 @@
 #ifndef GEANY_HIGHLIGHTING_H
 #define GEANY_HIGHLIGHTING_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "filetypes.h"
 
 #include "gtkcompat.h" /* Needed by ScintillaWidget.h */
@@ -45,12 +46,17 @@ typedef struct GeanyLexerStyle
 GeanyLexerStyle;
 
 
+GEANY_API_SYMBOL
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id);
 
+GEANY_API_SYMBOL
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
 
+GEANY_API_SYMBOL
 gboolean highlighting_is_string_style(gint lexer, gint style);
+GEANY_API_SYMBOL
 gboolean highlighting_is_comment_style(gint lexer, gint style);
+GEANY_API_SYMBOL
 gboolean highlighting_is_code_style(gint lexer, gint style);
 
 

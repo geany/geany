@@ -22,7 +22,7 @@
 #ifndef GEANY_EDITOR_H
 #define GEANY_EDITOR_H 1
 
-#include <gmodule.h>
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "tm_tag.h" /* for TMTag */
 
 #include "gtkcompat.h" /* Needed by ScintillaWidget.h */
@@ -148,6 +148,7 @@ GeanyEditorPrefs;
 
 
 #define GEANY_TYPE_EDITOR (editor_get_type())
+GEANY_API_SYMBOL
 GType editor_get_type (void);
 
 /** Editor-owned fields for each document. */
@@ -166,46 +167,54 @@ typedef struct GeanyEditor
 GeanyEditor;
 
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 const GeanyIndentPrefs *editor_get_indent_prefs(GeanyEditor *editor);
 
+GEANY_API_SYMBOL
 ScintillaObject *editor_create_widget(GeanyEditor *editor);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 void editor_indicator_set_on_range(GeanyEditor *editor, gint indic, gint start, gint end);
 
+GEANY_API_SYMBOL
 void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 void editor_indicator_clear(GeanyEditor *editor, gint indic);
 
+GEANY_API_SYMBOL
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type);
 
+GEANY_API_SYMBOL
 void editor_set_indent_width(GeanyEditor *editor, gint width);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordchars);
 
+GEANY_API_SYMBOL
 const gchar *editor_get_eol_char_name(GeanyEditor *editor);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 gint editor_get_eol_char_len(GeanyEditor *editor);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 const gchar *editor_get_eol_char(GeanyEditor *editor);
 
+GEANY_API_SYMBOL
 void editor_insert_text_block(GeanyEditor *editor, const gchar *text,
 	 						  gint insert_pos, gint cursor_index,
 	 						  gint newline_indent_size, gboolean replace_newlines);
 
+GEANY_API_SYMBOL
 gint editor_get_eol_char_mode(GeanyEditor *editor);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark);
 
+GEANY_API_SYMBOL
 const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet);
 
 

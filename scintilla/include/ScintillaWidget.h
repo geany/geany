@@ -12,7 +12,10 @@
 
 #if defined(GTK)
 
-#include <gmodule.h>
+/* see geany.h */
+#ifndef GEANY_API_SYMBOL
+# define GEANY_API_SYMBOL
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,21 +47,28 @@ struct _ScintillaClass {
 	void (* notify) (ScintillaObject *sci, int id, SCNotification *scn);
 };
 
+GEANY_API_SYMBOL
 GType		scintilla_object_get_type		(void);
+GEANY_API_SYMBOL
 GtkWidget*	scintilla_object_new			(void);
+GEANY_API_SYMBOL
 gintptr		scintilla_object_send_message	(ScintillaObject *sci, unsigned int iMessage, guintptr wParam, gintptr lParam);
 
 
-G_MODULE_EXPORT GType		scnotification_get_type			(void);
+GEANY_API_SYMBOL
+GType		scnotification_get_type			(void);
 #define SCINTILLA_TYPE_NOTIFICATION        (scnotification_get_type())
 
 #ifndef G_IR_SCANNING
 /* The legacy names confuse the g-ir-scanner program */
 typedef struct _ScintillaClass  ScintillaClass;
 
-G_MODULE_EXPORT GType		scintilla_get_type	(void);
+GEANY_API_SYMBOL
+GType		scintilla_get_type	(void);
+GEANY_API_SYMBOL
 GtkWidget*	scintilla_new		(void);
 void		scintilla_set_id	(ScintillaObject *sci, uptr_t id);
+GEANY_API_SYMBOL
 sptr_t		scintilla_send_message	(ScintillaObject *sci,unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 void		scintilla_release_resources(void);
 #endif

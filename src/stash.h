@@ -23,6 +23,11 @@
 
 #include "gtkcompat.h"
 
+/* see geany.h */
+#ifndef GEANY_API_SYMBOL
+# define GEANY_API_SYMBOL
+#endif
+
 G_BEGIN_DECLS
 
 /** Opaque type for a group of settings. */
@@ -32,65 +37,87 @@ typedef struct StashGroup StashGroup;
  * stash_group_display() and stash_group_update(). */
 typedef gconstpointer StashWidgetID;
 
+GEANY_API_SYMBOL
 GType stash_group_get_type(void);
 
+GEANY_API_SYMBOL
 StashGroup *stash_group_new(const gchar *name);
 
+GEANY_API_SYMBOL
 void stash_group_add_boolean(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value);
 
+GEANY_API_SYMBOL
 void stash_group_add_double(StashGroup *group, gdouble *setting,
 		const gchar *key_name, gdouble default_value);
 
+GEANY_API_SYMBOL
 void stash_group_add_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value);
 
+GEANY_API_SYMBOL
 void stash_group_add_string(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value);
 
+GEANY_API_SYMBOL
 void stash_group_add_string_vector(StashGroup *group, gchar ***setting,
 		const gchar *key_name, const gchar **default_value);
 
+GEANY_API_SYMBOL
 void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile);
 
+GEANY_API_SYMBOL
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile);
 
+GEANY_API_SYMBOL
 void stash_group_free(StashGroup *group);
 
+GEANY_API_SYMBOL
 gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename);
 
+GEANY_API_SYMBOL
 gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 		GKeyFileFlags flags);
 
 /* *** GTK-related functions *** */
 
+GEANY_API_SYMBOL
 void stash_group_add_toggle_button(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value, StashWidgetID widget_id);
 
+GEANY_API_SYMBOL
 void stash_group_add_radio_buttons(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value,
 		StashWidgetID widget_id, gint enum_id, ...) G_GNUC_NULL_TERMINATED;
 
+GEANY_API_SYMBOL
 void stash_group_add_spin_button_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id);
 
+GEANY_API_SYMBOL
 void stash_group_add_combo_box(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id);
 
+GEANY_API_SYMBOL
 void stash_group_add_combo_box_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id);
 
+GEANY_API_SYMBOL
 void stash_group_add_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id);
 
+GEANY_API_SYMBOL
 void stash_group_add_widget_property(StashGroup *group, gpointer setting,
 		const gchar *key_name, gpointer default_value, StashWidgetID widget_id,
 		const gchar *property_name, GType type);
 
+GEANY_API_SYMBOL
 void stash_group_display(StashGroup *group, GtkWidget *owner);
 
+GEANY_API_SYMBOL
 void stash_group_update(StashGroup *group, GtkWidget *owner);
 
+GEANY_API_SYMBOL
 void stash_group_free_settings(StashGroup *group);
 
 

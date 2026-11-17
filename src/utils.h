@@ -26,7 +26,7 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
-#include <gmodule.h>
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include <string.h>
 #include <time.h>
 
@@ -162,62 +162,86 @@ G_BEGIN_DECLS
 	for (i = 0; i < size; i++)
 
 
+GEANY_API_SYMBOL
 gboolean utils_str_equal(const gchar *a, const gchar *b);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace);
 
+GEANY_API_SYMBOL
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
 
+GEANY_API_SYMBOL
 GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error);
 
+GEANY_API_SYMBOL
 gint utils_write_file(const gchar *filename, const gchar *text);
 
+GEANY_API_SYMBOL
 gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
 
+GEANY_API_SYMBOL
 gchar *utils_get_utf8_from_locale(const gchar *locale_text);
 
+GEANY_API_SYMBOL
 gchar *utils_remove_ext_from_filename(const gchar *filename);
 
+GEANY_API_SYMBOL
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
 
+GEANY_API_SYMBOL
 gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key, const gboolean default_value);
 
+GEANY_API_SYMBOL
 gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key, const gint default_value);
 
+GEANY_API_SYMBOL
 gdouble utils_get_setting_double(GKeyFile *config, const gchar *section, const gchar *key, const gdouble default_value);
 
+GEANY_API_SYMBOL
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value);
 
+GEANY_API_SYMBOL
 gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
 						  gchar **std_err, gint *exit_status, GError **error);
 
+GEANY_API_SYMBOL
 gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error);
 
+GEANY_API_SYMBOL
 gint utils_str_casecmp(const gchar *s1, const gchar *s2);
 
+GEANY_API_SYMBOL
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use);
 
+GEANY_API_SYMBOL
 void utils_open_browser(const gchar *uri);
 
+GEANY_API_SYMBOL
 guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace);
 
+GEANY_API_SYMBOL
 gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
 
+GEANY_API_SYMBOL
 gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
 
+GEANY_API_SYMBOL
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...) G_GNUC_NULL_TERMINATED;
 
+GEANY_API_SYMBOL
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
+GEANY_API_SYMBOL
 gchar *utils_get_real_path(const gchar *file_name);
 
+GEANY_API_SYMBOL
 gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len);
 
 #ifdef GEANY_PRIVATE

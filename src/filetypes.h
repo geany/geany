@@ -22,7 +22,6 @@
 #ifndef GEANY_FILETYPES_H
 #define GEANY_FILETYPES_H 1
 
-#include <gmodule.h>
 #include "geany.h" /* for GEANY() macro */
 #include "tm_parser.h" /* for TMParserType */
 
@@ -192,20 +191,24 @@ GeanyFiletype;
 #define filetypes	((GeanyFiletype **)GEANY(filetypes_array)->pdata)
 
 
+GEANY_API_SYMBOL
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name);
 
+GEANY_API_SYMBOL
 GeanyFiletype *filetypes_index(gint idx);
 
-G_MODULE_EXPORT
+GEANY_API_SYMBOL
 const gchar *filetypes_get_display_name(GeanyFiletype *ft);
 
+GEANY_API_SYMBOL
 const GSList *filetypes_get_sorted_by_name(void);
 
 #define GEANY_TYPE_FILETYPE (filetype_get_type())
 
+GEANY_API_SYMBOL
 GType filetype_get_type (void);
 
 #ifdef GEANY_PRIVATE
