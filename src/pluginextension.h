@@ -28,6 +28,7 @@
 #ifndef GEANY_PLUGIN_EXTENSION_H
 #define GEANY_PLUGIN_EXTENSION_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "document.h"
 
 
@@ -169,13 +170,19 @@ typedef struct
 } PluginExtension;
 
 
+GEANY_API_SYMBOL
 void plugin_extension_register(PluginExtension *extension, const gchar *ext_name,
 	gint priority, gpointer data);
+GEANY_API_SYMBOL
 void plugin_extension_unregister(PluginExtension *extension);
 
+GEANY_API_SYMBOL
 gboolean plugin_extension_autocomplete_provided(GeanyDocument *doc, PluginExtension *ext);
+GEANY_API_SYMBOL
 gboolean plugin_extension_calltips_provided(GeanyDocument *doc, PluginExtension *ext);
+GEANY_API_SYMBOL
 gboolean plugin_extension_goto_provided(GeanyDocument *doc, PluginExtension *ext);
+GEANY_API_SYMBOL
 gboolean plugin_extension_symbol_highlight_provided(GeanyDocument *doc, PluginExtension *ext);
 
 #ifdef GEANY_PRIVATE

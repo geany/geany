@@ -17,6 +17,11 @@
 
 #include "tm_parser.h"
 
+/* see geany.h */
+#ifndef GEANY_API_SYMBOL
+# define GEANY_API_SYMBOL
+#endif
+
 G_BEGIN_DECLS
 
 /* Casts a pointer to a pointer to a TMSourceFile structure */
@@ -38,12 +43,16 @@ typedef struct TMSourceFile
 	gboolean trust_file_scope;
 } TMSourceFile;
 
+GEANY_API_SYMBOL
 GType tm_source_file_get_type(void);
 
+GEANY_API_SYMBOL
 TMSourceFile *tm_source_file_new(const char *file_name, const char *name);
 
+GEANY_API_SYMBOL
 void tm_source_file_free(TMSourceFile *source_file);
 
+GEANY_API_SYMBOL
 gchar *tm_get_real_path(const gchar *file_name)
 #ifndef GEANY_PRIVATE
 G_DEPRECATED_FOR(utils_get_real_path)

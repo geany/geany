@@ -24,6 +24,7 @@
 
 #ifdef HAVE_PLUGINS
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "keybindings.h"	/* GeanyKeyGroupCallback */
 
 #include "gtkcompat.h"
@@ -34,41 +35,55 @@ G_BEGIN_DECLS
 struct GeanyPlugin;
 struct GeanyDocument;
 
+GEANY_API_SYMBOL
 gint geany_api_version(void);
 
+GEANY_API_SYMBOL
 void plugin_add_toolbar_item(struct GeanyPlugin *plugin, GtkToolItem *item);
 
+GEANY_API_SYMBOL
 void plugin_module_make_resident(struct GeanyPlugin *plugin);
 
+GEANY_API_SYMBOL
 void plugin_signal_connect(struct GeanyPlugin *plugin,
 		GObject *object, const gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data);
 
+GEANY_API_SYMBOL
 guint plugin_timeout_add(struct GeanyPlugin *plugin, guint interval, GSourceFunc function,
 		gpointer data);
 
+GEANY_API_SYMBOL
 guint plugin_timeout_add_seconds(struct GeanyPlugin *plugin, guint interval, GSourceFunc function,
 		gpointer data);
 
+GEANY_API_SYMBOL
 guint plugin_idle_add(struct GeanyPlugin *plugin, GSourceFunc function, gpointer data);
 
+GEANY_API_SYMBOL
 struct GeanyKeyGroup *plugin_set_key_group(struct GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);
 
+GEANY_API_SYMBOL
 GeanyKeyGroup *plugin_set_key_group_full(struct GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupFunc cb, gpointer pdata, GDestroyNotify destroy_notify);
 
+GEANY_API_SYMBOL
 void plugin_show_configure(struct GeanyPlugin *plugin);
 
+GEANY_API_SYMBOL
 void plugin_builder_connect_signals(struct GeanyPlugin *plugin,
 	GtkBuilder *builder, gpointer user_data);
 
+GEANY_API_SYMBOL
 gpointer plugin_get_document_data(struct GeanyPlugin *plugin,
 	struct GeanyDocument *doc, const gchar *key);
 
+GEANY_API_SYMBOL
 void plugin_set_document_data(struct GeanyPlugin *plugin, struct GeanyDocument *doc,
 	const gchar *key, gpointer data);
 
+GEANY_API_SYMBOL
 void plugin_set_document_data_full(struct GeanyPlugin *plugin,
 	struct GeanyDocument *doc, const gchar *key, gpointer data,
 	GDestroyNotify free_func);

@@ -22,6 +22,7 @@
 #ifndef GEANY_OBJECT_H
 #define GEANY_OBJECT_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "document.h"
 #include "editor.h"
 #include "filetypes.h"
@@ -94,6 +95,7 @@ struct _GeanyObjectClass
 	GObjectClass parent_class;
 };
 
+GEANY_API_SYMBOL
 GType		geany_object_get_type	(void);
 GObject*	geany_object_new		(void);
 

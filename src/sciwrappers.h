@@ -39,73 +39,126 @@ sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject
 # endif
 #endif
 
+GEANY_API_SYMBOL
 void 				sci_set_text				(ScintillaObject *sci,  const gchar *text);
+GEANY_API_SYMBOL
 gboolean			sci_has_selection			(ScintillaObject *sci);
+GEANY_API_SYMBOL
 void 				sci_end_undo_action			(ScintillaObject *sci);
+GEANY_API_SYMBOL
 void 				sci_start_undo_action		(ScintillaObject *sci);
 
+GEANY_API_SYMBOL
 void				sci_set_marker_at_line		(ScintillaObject *sci, gint line_number, gint marker);
+GEANY_API_SYMBOL
 void				sci_delete_marker_at_line	(ScintillaObject *sci, gint line_number, gint marker);
+GEANY_API_SYMBOL
 gboolean 			sci_is_marker_set_at_line	(ScintillaObject *sci, gint line, gint marker);
 
+GEANY_API_SYMBOL
 gint 				sci_get_col_from_position	(ScintillaObject *sci, gint position);
+GEANY_API_SYMBOL
 gint 				sci_get_line_from_position	(ScintillaObject *sci, gint position);
+GEANY_API_SYMBOL
 gint 				sci_get_position_from_line	(ScintillaObject *sci, gint line);
+GEANY_API_SYMBOL
 gint 				sci_get_current_position	(ScintillaObject *sci);
+GEANY_API_SYMBOL
 void 				sci_set_current_position	(ScintillaObject *sci, gint position, gboolean scroll_to_caret);
 
+GEANY_API_SYMBOL
 gint				sci_get_selection_start		(ScintillaObject *sci);
+GEANY_API_SYMBOL
 gint				sci_get_selection_end		(ScintillaObject *sci);
+GEANY_API_SYMBOL
 void 				sci_replace_sel				(ScintillaObject *sci, const gchar *text);
+GEANY_API_SYMBOL
 gint				sci_get_selection_mode		(ScintillaObject *sci);
+GEANY_API_SYMBOL
 void				sci_set_selection_mode		(ScintillaObject *sci, gint mode);
+GEANY_API_SYMBOL
 void 				sci_set_selection_start		(ScintillaObject *sci, gint position);
+GEANY_API_SYMBOL
 void				sci_set_selection_end		(ScintillaObject *sci, gint position);
 
+GEANY_API_SYMBOL
 gint				sci_get_length				(ScintillaObject *sci);
+GEANY_API_SYMBOL
 gchar*				sci_get_contents			(ScintillaObject *sci, gint buffer_len);
+GEANY_API_SYMBOL
 gint				sci_get_selected_text_length2(ScintillaObject *sci);
+GEANY_API_SYMBOL
 gchar*				sci_get_selection_contents	(ScintillaObject *sci);
+GEANY_API_SYMBOL
 gchar*				sci_get_line				(ScintillaObject *sci, gint line_num);
+GEANY_API_SYMBOL
 gint 				sci_get_line_length			(ScintillaObject *sci, gint line);
+GEANY_API_SYMBOL
 gint				sci_get_line_count			(ScintillaObject *sci);
 
+GEANY_API_SYMBOL
 gint				sci_get_line_end_position	(ScintillaObject *sci, gint line);
 
+GEANY_API_SYMBOL
 gboolean			sci_get_line_is_visible		(ScintillaObject *sci, gint line);
+GEANY_API_SYMBOL
 void				sci_ensure_line_is_visible	(ScintillaObject *sci, gint line);
 
+GEANY_API_SYMBOL
 gint				sci_get_tab_width			(ScintillaObject *sci);
+GEANY_API_SYMBOL
 gchar				sci_get_char_at				(ScintillaObject *sci, gint pos);
 
+GEANY_API_SYMBOL
 void				sci_scroll_caret			(ScintillaObject *sci);
+GEANY_API_SYMBOL
 gint				sci_find_text				(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf);
+GEANY_API_SYMBOL
 void				sci_set_font				(ScintillaObject *sci, gint style, const gchar *font, gint size);
+GEANY_API_SYMBOL
 void				sci_goto_line				(ScintillaObject *sci, gint line, gboolean unfold);
+GEANY_API_SYMBOL
 gint				sci_get_style_at			(ScintillaObject *sci, gint position);
+GEANY_API_SYMBOL
 gchar*				sci_get_contents_range		(ScintillaObject *sci, gint start, gint end);
+GEANY_API_SYMBOL
 void				sci_insert_text				(ScintillaObject *sci, gint pos, const gchar *text);
 
+GEANY_API_SYMBOL
 void				sci_set_target_start		(ScintillaObject *sci, gint start);
+GEANY_API_SYMBOL
 void				sci_set_target_end			(ScintillaObject *sci, gint end);
+GEANY_API_SYMBOL
 gint				sci_replace_target			(ScintillaObject *sci, const gchar *text, gboolean regex);
 
+GEANY_API_SYMBOL
 gint				sci_get_lexer				(ScintillaObject *sci);
+GEANY_API_SYMBOL
 void				sci_send_command			(ScintillaObject *sci, gint cmd);
 
+GEANY_API_SYMBOL
 gint				sci_get_current_line		(ScintillaObject *sci);
 
+GEANY_API_SYMBOL
 void				sci_indicator_set			(ScintillaObject *sci, gint indic);
+GEANY_API_SYMBOL
 void				sci_indicator_clear			(ScintillaObject *sci, gint pos, gint len);
 
+GEANY_API_SYMBOL
 void				sci_set_line_indentation	(ScintillaObject *sci, gint line, gint indent);
+GEANY_API_SYMBOL
 gint				sci_get_line_indentation	(ScintillaObject *sci, gint line);
+GEANY_API_SYMBOL
 gint				sci_find_matching_brace		(ScintillaObject *sci, gint pos);
 
 #ifndef GEANY_DISABLE_DEPRECATED
+GEANY_API_SYMBOL
 void				sci_get_text				(ScintillaObject *sci, gint len, gchar *text) GEANY_DEPRECATED_FOR(sci_get_contents);
+GEANY_API_SYMBOL
 void				sci_get_selected_text		(ScintillaObject *sci, gchar *text) GEANY_DEPRECATED_FOR(sci_get_selection_contents);
+GEANY_API_SYMBOL
 void				sci_get_text_range			(ScintillaObject *sci, gint start, gint end, gchar *text) GEANY_DEPRECATED_FOR(sci_get_contents_range);
+GEANY_API_SYMBOL
 gint				sci_get_selected_text_length(ScintillaObject *sci) GEANY_DEPRECATED_FOR(sci_get_selected_text_length2);
 #endif	/* GEANY_DISABLE_DEPRECATED */
 

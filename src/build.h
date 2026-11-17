@@ -23,6 +23,7 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "document.h"
 #include "filetypes.h"
 
@@ -60,16 +61,21 @@ typedef enum GeanyBuildCmdEntries
 	GEANY_BC_CMDENTRIES_COUNT	/**< Count of entries */
 } GeanyBuildCmdEntries;
 
+GEANY_API_SYMBOL
 void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd);
 
+GEANY_API_SYMBOL
 const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd,
                                          const GeanyBuildCmdEntries field);
 
+GEANY_API_SYMBOL
 void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd);
 
+GEANY_API_SYMBOL
 void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
                          const guint cmd, const GeanyBuildCmdEntries field, const gchar *value);
 
+GEANY_API_SYMBOL
 guint build_get_group_count(const GeanyBuildGroup grp);
 
 

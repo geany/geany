@@ -27,12 +27,14 @@
 #ifndef GEANY_NAVQUEUE_H
 #define GEANY_NAVQUEUE_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "document.h"
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
+GEANY_API_SYMBOL
 gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line);
 
 

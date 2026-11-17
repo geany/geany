@@ -24,6 +24,15 @@
 #ifndef GEANY_H
 #define GEANY_H 1
 
+/* Marks the plugin API functions.  When building Geany, the build system defines it to
+ * export them from libgeany; otherwise (e.g. when building a plugin) it expands to nothing.
+ * This is defined before including other headers because some of them use it.  Headers
+ * that cannot include this one (tagmanager, Scintilla, main, spawn, stash) have the same
+ * fallback definition. */
+#ifndef GEANY_API_SYMBOL
+# define GEANY_API_SYMBOL
+#endif
+
 /* This is included here for compatibility with when GeanyApp used to be
  * defined in this header. Some plugins (ex. GeanyLua) include individual
  * headers instead of geanyplugin.h for some reason so they wouldn't
