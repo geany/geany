@@ -163,7 +163,7 @@ initialize() {
 	eval "gtk_dependency_pkgs=\${${gtk}_dependency_pkgs}"
 
 	case "$ABI" in
-		"$ABI_CLANGARM64") toolchain_pkgs="${packages_clang}";;
+		*clang*) toolchain_pkgs="${packages_clang}";;
 		*) toolchain_pkgs="${packages_gcc}";;
 	esac
 
