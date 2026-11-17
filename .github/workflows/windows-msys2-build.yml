@@ -37,6 +37,7 @@ jobs:
             cc: gcc
             cxx: g++
             bundle-abi: --ucrt64
+            cxx-extra-flags: ''
             # empty to keep the existing cache keys and artifact names
             suffix: ''
           # Windows on ARM64: CLANGARM64 environment with Clang (there is no GCC)
@@ -48,6 +49,9 @@ jobs:
             cc: clang
             cxx: clang++
             bundle-abi: --clangarm64
+            # Lexilla's OptionSet.h uses atoi() without including <cstdlib>,
+            # which LLVM's libc++ (unlike libstdc++) doesn't pull in indirectly
+            cxx-extra-flags: '-include cstdlib'
             suffix: '-arm64'
     defaults:
       run:
@@ -112,6 +116,10 @@ jobs:
           echo "VERSION=$(autom4te --no-cache --language=Autoconf-without-aclocal-m4 --trace AC_INIT:\$2 configure.ac)" >> $GITHUB_ENV
           NOCONFIGURE=1 ./autogen.sh
           export lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}
+          # setting CXXFLAGS replaces configure's default "-g -O2", so keep it
+          if [ -n "${{ matrix.cxx-extra-flags }}" ]; then
+            export CXXFLAGS="-g -O2 ${{ matrix.cxx-extra-flags }}"
+          fi
           mkdir -p _build
           cd _build
           ../configure --prefix=${DESTINATION}/build/geany --disable-silent-rules
@@ -121,6 +129,9 @@ jobs:
         if: matrix.build-tool == 'meson'
         run: |
           echo "VERSION=$(meson introspect --projectinfo meson.build | jq -r .version)" >> $GITHUB_ENV
+          if [ -n "${{ matrix.cxx-extra-flags }}" ]; then
+            export CXXFLAGS="${{ matrix.cxx-extra-flags }}"
+          fi
           meson setup --prefix=${DESTINATION}/build/geany _build .
           meson compile -C _build
           meson install -C _build
