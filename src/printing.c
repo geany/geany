@@ -594,7 +594,7 @@ static void print_external(GeanyDocument *doc)
 	}
 
 	/* replace placeholders in cmdline */
-	cmdline = utils_replace_document_placeholders(doc, printing_prefs.external_print_cmd);
+	cmdline = utils_command_replace_document_placeholders(doc, printing_prefs.external_print_cmd);
 
 	if (dialogs_show_question(
 			_("The file \"%s\" will be printed with the following command:\n\n%s"),
