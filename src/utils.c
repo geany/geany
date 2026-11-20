@@ -2561,7 +2561,8 @@ gchar *utils_replace_placeholders(const gchar *str,
 
 #ifdef G_OS_WIN32
 
-static gchar *utils_command_replace_placeholders(const gchar *src,
+GEANY_EXPORT_SYMBOL
+gchar *utils_command_replace_placeholders(const gchar *src,
 		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
 		gpointer data)
 {
@@ -2581,7 +2582,8 @@ static gchar *utils_command_replace_placeholders(const gchar *src,
  * placeholder replacements are properly quoted.
  *
  * Returns: a UTF-8 string with placeholders replaced. */
-static gchar *utils_command_replace_placeholders(const gchar *src,
+GEANY_EXPORT_SYMBOL
+gchar *utils_command_replace_placeholders(const gchar *src,
 		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
 		gpointer data)
 {
@@ -2644,30 +2646,41 @@ static gchar *utils_command_replace_placeholders(const gchar *src,
 				break;
 
 			case '%':
-				src++;
-				if (nesting[level].quote) /* close the quote */
-					g_string_append_c(stack, nesting[level].quote);
-				GString *replacement = g_string_new(NULL);
-				if (! insert_replacement(replacement, *src, data))
+				if (! src[1])
 				{
-					geany_debug(_("Unknown placeholder \"%%%c\" in \"%s\""), *src, base);
-					/* unknown placeholder, leave it literally */
-					g_string_append_c(replacement, '%');
-					g_string_append_c(replacement, *src);
+					g_string_append_c(stack, *src);
+					break;  /* don't advance which would allow the loop pass past \0 */
 				}
-				gchar *quoted = g_shell_quote(replacement->str);
-				g_string_append(stack, quoted);
-				g_free(quoted);
-				g_string_free(replacement, TRUE);
-				if (nesting[level].quote) /* re-open quote */
-					g_string_append_c(stack, nesting[level].quote);
+				src++;
+				if (*src == '%') /* %% is literal % */
+					g_string_append_c(stack, *src);
+				else
+				{
+					if (nesting[level].quote) /* close the quote */
+						g_string_append_c(stack, nesting[level].quote);
+					GString *replacement = g_string_new(NULL);
+					if (! insert_replacement(replacement, *src, data))
+					{
+						geany_debug(_("Unknown placeholder \"%%%c\" in \"%s\""), *src, base);
+						/* unknown placeholder, leave it literally */
+						g_string_append_c(replacement, '%');
+						g_string_append_c(replacement, *src);
+					}
+					gchar *quoted = g_shell_quote(replacement->str);
+					g_string_append(stack, quoted);
+					g_free(quoted);
+					g_string_free(replacement, TRUE);
+					if (nesting[level].quote) /* re-open quote */
+						g_string_append_c(stack, nesting[level].quote);
+				}
 				break;
 
 			case '\\':
 				/* \ escapes the next character, unless in single-quote strings where
 				 * it has no special meaning (it's not possible to escape a single
-				 * quote inside a single quoted string) */
-				if (nesting[level].quote != '\'')
+				 * quote inside a single quoted string).
+				 * This escaping is for the shell, it does not escape a % placeholder */
+				if (src[1] && src[1] != '%' && nesting[level].quote != '\'')
 				{
 					g_string_append_c(stack, *src);
 					src++;
