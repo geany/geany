@@ -510,6 +510,71 @@ static void test_utils_replace_document_placeholders(void)
 #undef CHECK_DOC_PL
 }
 
+static gboolean replace_command_placeholders(GString *buffer, const gchar placeholder, gpointer data)
+{
+	g_assert_cmpint(GPOINTER_TO_INT(data), ==, 42);
+
+	switch (placeholder)
+	{
+		case 'd': g_string_append(buffer, "/some directory/with spaces"); break;
+		case 'e': g_string_append(buffer, "$(printf '%s\\' \"evil value\");echo \"`hello`\""); break;
+		case 'f': g_string_append(buffer, "tricky'file\\name\""); break;
+		case 'l': g_string_append(buffer, "42"); break;
+		case 'p': g_string_append(buffer, "4.200000"); break;
+		default: return FALSE;
+	}
+
+	return TRUE;
+}
+
+static void test_utils_command_replace_placeholders(void)
+{
+#define CHECK_CMD_DOC_PL(src, result) \
+	G_STMT_START {															\
+		gchar *r = utils_command_replace_placeholders(						\
+				src, replace_command_placeholders, GINT_TO_POINTER(42));	\
+		g_assert_cmpstr(r, ==, result);										\
+		g_free(r);															\
+	} G_STMT_END
+
+	CHECK_CMD_DOC_PL("some thing", "some thing");
+	CHECK_CMD_DOC_PL("some %% thing", "some % thing");
+	/* a trailing % is kept */
+	CHECK_CMD_DOC_PL("some %% thing %", "some % thing %");
+	CHECK_CMD_DOC_PL("some %%f thing %%", "some %f thing %");
+	CHECK_CMD_DOC_PL("some %%f thing %%%", "some %f thing %%");
+	CHECK_CMD_DOC_PL("some %%f thing %%%%", "some %f thing %%");
+	CHECK_CMD_DOC_PL("some %%f thing %%%%%", "some %f thing %%%");
+#ifdef G_OS_WIN32
+	/* FIXME: nothing special is done here ATM */
+#else /* ! G_OS_WIN32 */
+	/* We give a NULL doc, so replacements are empty */
+	CHECK_CMD_DOC_PL("some %d thing %%", "some '/some directory/with spaces' thing %");
+	CHECK_CMD_DOC_PL("some %e thing %%", "some '$(printf '\\''%s\\'\\'' \"evil value\");echo \"`hello`\"' thing %");
+	CHECK_CMD_DOC_PL("some %f thing %%", "some 'tricky'\\''file\\name\"' thing %");
+	CHECK_CMD_DOC_PL("some %l thing %%", "some '42' thing %");
+	CHECK_CMD_DOC_PL("some %p thing %%", "some '4.200000' thing %");
+	/* Unknown placeholder, left as-is */
+	CHECK_CMD_DOC_PL("some %z thing %%", "some '%z' thing %");
+	/* escaping */
+	CHECK_CMD_DOC_PL("some \\'%f thing", "some \\''tricky'\\''file\\name\"' thing");
+	CHECK_CMD_DOC_PL("some \\\\'%f' thing", "some \\\\'''tricky'\\''file\\name\"''' thing");
+	/* \ does not escape % replacement */
+	CHECK_CMD_DOC_PL("some \\%f thing", "some \\'tricky'\\''file\\name\"' thing");
+	CHECK_CMD_DOC_PL("some \\%% thing", "some \\% thing");
+	CHECK_CMD_DOC_PL("some \\\\%f thing", "some \\\\'tricky'\\''file\\name\"' thing");
+	CHECK_CMD_DOC_PL("some \\\\%% thing", "some \\\\% thing");
+	/* quoting */
+	CHECK_CMD_DOC_PL("some '%f' thing", "some '''tricky'\\''file\\name\"''' thing");
+	CHECK_CMD_DOC_PL("some \"%f\" thing", "some \"\"'tricky'\\''file\\name\"'\"\" thing");
+	CHECK_CMD_DOC_PL("some \"`printf '%%s' \"%f\"`\" thing", "some \"`printf '%s' \"\"'tricky'\\''file\\name\"'\"\"`\" thing");
+	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"%f\")\" thing", "some \"$(printf '%s' \"\"'tricky'\\''file\\name\"'\"\")\" thing");
+	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"$(\"%f\")\")\" thing", "some \"$(printf '%s' \"$(\"\"'tricky'\\''file\\name\"'\"\")\")\" thing");
+#endif /* ! G_OS_WIN32 */
+
+#undef CHECK_CMD_DOC_PL
+}
+
 int main(int argc, char **argv)
 {
 	g_test_init(&argc, &argv, NULL);
@@ -523,6 +588,7 @@ int main(int argc, char **argv)
 	UTIL_TEST_ADD("get_initals", test_utils_get_initials);
 	UTIL_TEST_ADD("replace_placeholders", test_utils_replace_placeholders);
 	UTIL_TEST_ADD("replace_document_placeholders", test_utils_replace_document_placeholders);
+	UTIL_TEST_ADD("command_replace_placeholders", test_utils_command_replace_placeholders);
 
 	return g_test_run();
 }

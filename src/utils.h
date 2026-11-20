@@ -348,6 +348,10 @@ gchar *utils_replace_placeholders(const gchar *str,
 
 gchar *utils_replace_document_placeholders(const GeanyDocument *doc, const gchar *src);
 
+gchar *utils_command_replace_placeholders(const gchar *src,
+		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
+		gpointer data);
+
 gchar *utils_command_replace_document_placeholders(const GeanyDocument *doc, const gchar *cmd);
 
 #endif /* GEANY_PRIVATE */
