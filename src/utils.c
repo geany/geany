@@ -2614,7 +2614,7 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 			case '`':
 				g_string_append_c(stack, *src);
 				if (nesting[level].quote != '\'' &&
-					level < G_N_ELEMENTS(nesting))
+					level < G_N_ELEMENTS(nesting) - 1)
 				{
 					level ++;
 					nesting[level].quote = 0;
@@ -2625,7 +2625,7 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 			case '$':
 				g_string_append_c(stack, *src);
 				if (nesting[level].quote != '\'' &&
-					level < G_N_ELEMENTS(nesting) &&
+					level < G_N_ELEMENTS(nesting) - 1 &&
 					src[1] == '(')
 				{
 					src++;
