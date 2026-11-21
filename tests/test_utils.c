@@ -570,6 +570,8 @@ static void test_utils_command_replace_placeholders(void)
 	CHECK_CMD_DOC_PL("some \"`printf '%%s' \"%f\"`\" thing", "some \"`printf '%s' \"\"'tricky'\\''file\\name\"'\"\"`\" thing");
 	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"%f\")\" thing", "some \"$(printf '%s' \"\"'tricky'\\''file\\name\"'\"\")\" thing");
 	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"$(\"%f\")\")\" thing", "some \"$(printf '%s' \"$(\"\"'tricky'\\''file\\name\"'\"\")\")\" thing");
+	/* silly depth, to exercise depth limit, e.g. if building with ASan */
+	CHECK_CMD_DOC_PL("some $($($($($($($($($($($($($($($($($()))))))))))))))))", "some $($($($($($($($($($($($($($($($($()))))))))))))))))");
 #endif /* ! G_OS_WIN32 */
 
 #undef CHECK_CMD_DOC_PL
