@@ -521,6 +521,7 @@ static gboolean replace_command_placeholders(GString *buffer, const gchar placeh
 		case 'f': g_string_append(buffer, "tricky'file\\name\""); break;
 		case 'l': g_string_append(buffer, "42"); break;
 		case 'p': g_string_append(buffer, "4.200000"); break;
+		case 'n': g_string_append(buffer, "foo\nbar"); break;
 		default: return FALSE;
 	}
 
@@ -554,6 +555,7 @@ static void test_utils_command_replace_placeholders(void)
 	CHECK_CMD_DOC_PL("some %f thing %%", "some 'tricky'\\''file\\name\"' thing %");
 	CHECK_CMD_DOC_PL("some %l thing %%", "some '42' thing %");
 	CHECK_CMD_DOC_PL("some %p thing %%", "some '4.200000' thing %");
+	CHECK_CMD_DOC_PL("some %n thing %%", "some 'foo\nbar' thing %");
 	/* Unknown placeholder, left as-is */
 	CHECK_CMD_DOC_PL("some %z thing %%", "some '%z' thing %");
 	/* escaping */
@@ -570,6 +572,21 @@ static void test_utils_command_replace_placeholders(void)
 	CHECK_CMD_DOC_PL("some \"`printf '%%s' \"%f\"`\" thing", "some \"`printf '%s' \"\"'tricky'\\''file\\name\"'\"\"`\" thing");
 	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"%f\")\" thing", "some \"$(printf '%s' \"\"'tricky'\\''file\\name\"'\"\")\" thing");
 	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"$(\"%f\")\")\" thing", "some \"$(printf '%s' \"$(\"\"'tricky'\\''file\\name\"'\"\")\")\" thing");
+	/* comments */
+	CHECK_CMD_DOC_PL("# %n", "# %n");
+	CHECK_CMD_DOC_PL("echo # %e", "echo # %e");
+	CHECK_CMD_DOC_PL("echo # %n", "echo # %n");
+	CHECK_CMD_DOC_PL("echo\t# %n", "echo\t# %n");
+	CHECK_CMD_DOC_PL("echo\n# %n", "echo\n# %n");
+	CHECK_CMD_DOC_PL("echo|# %n", "echo|# %n");
+	CHECK_CMD_DOC_PL("echo&# %n", "echo&# %n");
+	CHECK_CMD_DOC_PL("echo;# %n", "echo;# %n");
+	CHECK_CMD_DOC_PL("echo(# %n", "echo(# %n");
+	CHECK_CMD_DOC_PL("echo)# %n", "echo)# %n");
+	CHECK_CMD_DOC_PL("echo<# %n", "echo<# %n");
+	CHECK_CMD_DOC_PL("echo># %n", "echo># %n");
+	CHECK_CMD_DOC_PL("echo# %n", "echo# 'foo\nbar'");
+	CHECK_CMD_DOC_PL("echo \"$(echo %d # don't see that %e\necho %l)\" %p", "echo \"$(echo '/some directory/with spaces' # don't see that %e\necho '42')\" '4.200000'");
 	/* silly depth, to exercise depth limit, e.g. if building with ASan */
 	CHECK_CMD_DOC_PL("some $($($($($($($($($($($($($($($($($()))))))))))))))))", "some $($($($($($($($($($($($($($($($($()))))))))))))))))");
 #endif /* ! G_OS_WIN32 */

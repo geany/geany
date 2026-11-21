@@ -2611,6 +2611,24 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 
 		switch (*src)
 		{
+			case '#':
+				/* comments, which are pretty unlikely but could trip quote tracking
+				 * and result in issue with embedded newlines in a replacement:
+				 * we skip them and don't perform replacements. */
+				g_string_append_c(stack, *src);
+				if (! nesting[level].quote && (src <= base || strchr("|&;()<> \t\n", src[-1])))
+				{
+					/* we work on src[1] not to risk moving src past \0 in the
+					 * outer loop */
+					for (; src[1]; src++)
+					{
+						if (src[1] == '\n')
+							break;
+						g_string_append_c(stack, src[1]);
+					}
+				}
+				break;
+
 			case '`':
 				g_string_append_c(stack, *src);
 				if (nesting[level].quote != '\'' &&
