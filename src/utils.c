@@ -2678,10 +2678,23 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 			case '\\':
 				/* \ escapes the next character, unless in single-quote strings where
 				 * it has no special meaning (it's not possible to escape a single
-				 * quote inside a single quoted string).
-				 * This escaping is for the shell, it does not escape a % placeholder */
-				if (src[1] && src[1] != '%' && nesting[level].quote != '\'')
+				 * quote inside a single quoted string). */
+				if (src[1] && nesting[level].quote != '\'')
 				{
+					/*
+					 * This escapes a % placeholder as well, because otherwise it could
+					 * result in the backslash escaping the quoting of the placeholder
+					 * replacement, effectively nullifying it.  Better make it obvious
+					 * the template was incorrect by not performing the replacement than
+					 * risk tripping the quote tracking logic. */
+					if (src[1] == '%')
+					{
+						geany_debug(_("'%%' escaped using '\\%%': you should either use "
+						            "`%%%%` if you mean a literal '%%', or double the "
+						            "'\\' if you mean literal '\\' followed by a "
+						            "placeholder (in \"%s\", offset %lu, near \"%s\")"),
+						            base, (gulong) (src - base), src);
+					}
 					g_string_append_c(stack, *src);
 					src++;
 				}
