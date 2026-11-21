@@ -785,7 +785,7 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
-	cmd_string_utf8 = utils_replace_document_placeholders(doc, cmd->command);
+	cmd_string_utf8 = utils_command_replace_document_placeholders(doc, cmd->command);
 	cmd_working_dir =  cmd->working_dir;
 	if (EMPTY(cmd_working_dir))
 		cmd_working_dir = "%d";
@@ -1165,7 +1165,7 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, guint cmd, gc
 		full_command = cmdstr;
 
 	dir = utils_replace_document_placeholders(doc, buildcmd->working_dir);
-	subs_command = utils_replace_document_placeholders(doc, full_command);
+	subs_command = utils_command_replace_document_placeholders(doc, full_command);
 	build_info.grp = grp;
 	build_info.cmd = cmd;
 	build_spawn_cmd(doc, subs_command, dir);
