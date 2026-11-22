@@ -47,6 +47,10 @@ dnl set these variables accordingly. For now its the same as if not specified (0
 	LIBGEANY_CFLAGS="${LIBGEANY_EXPORT_CFLAGS}"
 	LIBGEANY_LDFLAGS="-version-info ${libgeany_current}:${libgeany_revision}:${libgeany_age}"
 
+	dnl Scintilla requires the C++ threads implementation, which on GCC requires
+	dnl linking to libpthread -- using -pthread via gthread-2.0 is not enough.
+	AC_SEARCH_LIBS([pthread_create], [pthread])
+
 	AC_SUBST([LIBGEANY_CFLAGS])
 	AC_SUBST([LIBGEANY_LDFLAGS])
 
