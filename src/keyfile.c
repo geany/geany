@@ -153,7 +153,7 @@ static gchar *get_keyfile_for_payload(ConfigPayload payload)
 					logged = TRUE;
 				}
 				g_free(file);
-				file = g_build_filename(app->configdir, PREFS_FILE, NULL);
+				file = get_keyfile_for_payload(PREFS);
 			}
 			return file;
 		case MAX_PAYLOAD:
