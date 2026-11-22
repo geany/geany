@@ -2630,13 +2630,39 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 				break;
 
 			case '`':
+				/* we don't perform anything inside `` because they are too tricky to
+				 * support safely, and have weird semantics: just skip until the next
+				 * unescaped ` is the right thing to do.  A user wanting placeholder
+				 * expansion should use $() instead */
 				g_string_append_c(stack, *src);
-				if (nesting[level].quote != '\'' &&
-					level < G_N_ELEMENTS(nesting) - 1)
+				if (nesting[level].quote != '\'')
 				{
-					level ++;
-					nesting[level].quote = 0;
-					nesting[level].terminator = *src;
+					/* we work on src[1] not to risk moving src past \0 in the
+					 * outer loop */
+					for (; src[1]; src++)
+					{
+						if (src[1] == '`')
+						{
+							g_string_append_c(stack, src[1]);
+							src++;
+							break;
+						}
+						else if (src[1] == '\\' && src[2])
+						{
+							g_string_append_c(stack, src[1]);
+							src++;
+						}
+						else if (src[1] == '%')
+						{
+							if (src[2] == '%')
+								src++;
+							else
+								geany_debug(_("Placeholders are not supported inside \"``\" "
+								              "(in \"%s\", offset %lu, near \"%s\")"),
+								            base, (gulong) (src + 1 - base), src + 1);
+						}
+						g_string_append_c(stack, src[1]);
+					}
 				}
 				break;
 

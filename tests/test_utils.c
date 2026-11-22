@@ -569,11 +569,15 @@ static void test_utils_command_replace_placeholders(void)
 	/* quoting */
 	CHECK_CMD_DOC_PL("some '%f' thing", "some '''tricky'\\''file\\name\"''' thing");
 	CHECK_CMD_DOC_PL("some \"%f\" thing", "some \"\"'tricky'\\''file\\name\"'\"\" thing");
-	CHECK_CMD_DOC_PL("some \"`printf '%%s' \"%f\"`\" thing", "some \"`printf '%s' \"\"'tricky'\\''file\\name\"'\"\"`\" thing");
 	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"%f\")\" thing", "some \"$(printf '%s' \"\"'tricky'\\''file\\name\"'\"\")\" thing");
 	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"$(\"%f\")\")\" thing", "some \"$(printf '%s' \"$(\"\"'tricky'\\''file\\name\"'\"\")\")\" thing");
 	CHECK_CMD_DOC_PL("echo \"$(echo $((1+1)) %f)\"", "echo \"$(echo $((1+1)) 'tricky'\\''file\\name\"')\"");
 	CHECK_CMD_DOC_PL("echo \"$( (cd /; pwd); echo %f)\"", "echo \"$( (cd /; pwd); echo 'tricky'\\''file\\name\"')\"");
+	/* we don't support expansions in `` because quoting is not enough it there's a ` in
+	 * the replacement.  User must use $(), which provides the same feature with a more
+	 * robust syntax */
+	CHECK_CMD_DOC_PL("some \"`printf '%%s' \"%f\"`\" thing \"%f\"", "some \"`printf '%s' \"%f\"`\" thing \"\"'tricky'\\''file\\name\"'\"\"");
+	CHECK_CMD_DOC_PL("some \"`echo \\\"$(echo %f)\\\"`\"", "some \"`echo \\\"$(echo %f)\\\"`\"");
 	/* comments */
 	CHECK_CMD_DOC_PL("# %n", "# %n");
 	CHECK_CMD_DOC_PL("echo # %e", "echo # %e");
