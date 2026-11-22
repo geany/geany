@@ -909,8 +909,8 @@ Sending text through custom commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can define several custom commands in Geany and send the current
-selection to one of these commands using the *Edit->Format->Send
-Selection to* menu or keybindings. The output of the command will be
+selection to one of these commands using the *Edit->Send Selection to*
+menu or keybindings. The output of the command will be
 used to replace the current selection. This makes it possible to use
 text formatting tools with Geany in a general way.
 
