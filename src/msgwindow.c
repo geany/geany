@@ -1097,16 +1097,30 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 	if (G_UNLIKELY(string == NULL))
 		return;
 
-	if (dir == NULL)
-		utf8_dir = utils_get_utf8_from_locale(build_info.dir);
-	else
+	if(dir)
+	{
 		utf8_dir = g_strdup(dir);
+		ft=filetypes[build_info.file_type_id];
+	}
+	else if(build_info.dir)
+	{
+		utf8_dir = utils_get_utf8_from_locale(build_info.dir);
+		ft=filetypes[build_info.file_type_id];
+	}
+	else if(document_get_current())
+	{
+		//fake a build info from the document.
+		GeanyDocument* doc=document_get_current();
+		gchar* doc_path =g_path_get_dirname(doc->real_path);
+		utf8_dir = utils_get_utf8_from_locale(doc_path);
+		g_free(doc_path);
+		ft = doc->file_type;
+	}
+
 	g_return_if_fail(utf8_dir != NULL);
 
 	trimmed_string = g_strdup(string);
 	g_strchug(trimmed_string); /* remove possible leading whitespace */
-
-	ft = filetypes[build_info.file_type_id];
 
 	/* try parsing with a custom regex */
 	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line))
