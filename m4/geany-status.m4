@@ -27,7 +27,7 @@ EOF
 	# Print a nice top bar
 	# description + ' : ' + value
 	total=`expr $dlen + 3 + $vlen`
-	for i in `seq 1 $total`; do printf '-'; done
+	i=0; while test $i -lt $total; do printf '-'; i=`expr $i + 1`; done
 	echo
 
 	# And print the actual content
