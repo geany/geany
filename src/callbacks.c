@@ -94,6 +94,10 @@ void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	keybindings_send_command(GEANY_KEY_GROUP_FILE, GEANY_KEYS_FILE_NEW);
 }
 
+void on_new_instance1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	utils_start_new_geany_instance(NULL);
+}
 
 /* create a new file and copy file content and properties */
 static void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data)
