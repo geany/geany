@@ -181,6 +181,7 @@ struct OptionsNim {
 
 static const char *const nimWordListDesc[] = {
     "Keywords",
+    "Built-in identifiers",
     nullptr
 };
 
@@ -208,14 +209,15 @@ LexicalClass lexicalClasses[] = {
     6,  "SCE_NIM_STRING",         "literal string",       "String",
     7,  "SCE_NIM_CHARACTER",      "literal string",       "Single quoted string",
     8,  "SCE_NIM_WORD",           "keyword",              "Keyword",
-    9,  "SCE_NIM_TRIPLE",         "literal string",       "Triple quotes",
-    10, "SCE_NIM_TRIPLEDOUBLE",   "literal string",       "Triple double quotes",
-    11, "SCE_NIM_BACKTICKS",      "operator definition",  "Identifiers",
-    12, "SCE_NIM_FUNCNAME",       "identifier",           "Function name definition",
-    13, "SCE_NIM_STRINGEOL",      "error literal string", "String is not closed",
-    14, "SCE_NIM_NUMERROR",       "numeric error",        "Numeric format error",
-    15, "SCE_NIM_OPERATOR",       "operator",             "Operators",
-    16, "SCE_NIM_IDENTIFIER",     "identifier",           "Identifiers",
+    9,  "SCE_NIM_WORD2",          "keyword",              "Built-in identifiers",
+    10, "SCE_NIM_TRIPLE",         "literal string",       "Triple quotes",
+    11, "SCE_NIM_TRIPLEDOUBLE",   "literal string",       "Triple double quotes",
+    12, "SCE_NIM_BACKTICKS",      "operator definition",  "Identifiers",
+    13, "SCE_NIM_FUNCNAME",       "identifier",           "Function name definition",
+    14, "SCE_NIM_STRINGEOL",      "error literal string", "String is not closed",
+    15, "SCE_NIM_NUMERROR",       "numeric error",        "Numeric format error",
+    16, "SCE_NIM_OPERATOR",       "operator",             "Operators",
+    17, "SCE_NIM_IDENTIFIER",     "identifier",           "Identifiers",
 };
 
 }
@@ -223,6 +225,7 @@ LexicalClass lexicalClasses[] = {
 class LexerNim : public DefaultLexer {
     CharacterSet setWord;
     WordList keywords;
+    WordList keywords2;
     OptionsNim options;
     OptionSetNim osNim;
 
@@ -299,6 +302,9 @@ Sci_Position SCI_METHOD LexerNim::WordListSet(int n, const char *wl) {
     switch (n) {
         case 0:
             wordListN = &keywords;
+            break;
+        case 1:
+            wordListN = &keywords2;
             break;
     }
 
@@ -449,20 +455,26 @@ void SCI_METHOD LexerNim::Lex(Sci_PositionU startPos, Sci_Position length,
                     sc.GetCurrent(s, sizeof(s));
                     int style = SCE_NIM_IDENTIFIER;
 
-                    if (keywords.InList(s) && !funcNameExists) {
+                    if (funcNameExists) {
+                        style = SCE_NIM_FUNCNAME;
+                    } else if (keywords.InList(s)) {
                         // Prevent styling keywords if they are sub-identifiers
                         const Sci_Position segStart = styler.GetStartSegment() - 1;
                         if (segStart < 0 || styler.SafeGetCharAt(segStart, '\0') != '.') {
                             style = SCE_NIM_WORD;
                         }
-                    } else if (funcNameExists) {
-                        style = SCE_NIM_FUNCNAME;
+                    } else if (keywords2.InList(s)) {
+                        // Prevent styling keywords if they are sub-identifiers
+                        const Sci_Position segStart = styler.GetStartSegment() - 1;
+                        if (segStart < 0 || styler.SafeGetCharAt(segStart, '\0') != '.') {
+                            style = SCE_NIM_WORD2;
+                        }
                     }
 
                     sc.ChangeState(style);
                     sc.SetState(SCE_NIM_DEFAULT);
 
-                    if (style == SCE_NIM_WORD) {
+                    if (style == SCE_NIM_WORD || style == SCE_NIM_WORD2) {
                         funcNameExists = IsFuncName(s);
                     } else {
                         funcNameExists = false;
