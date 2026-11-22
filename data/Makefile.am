@@ -127,6 +127,7 @@ filetypes_dist = \
 	filedefs/filetypes.sinex \
 	filedefs/filetypes.smalltalk \
 	filedefs/filetypes.sql \
+	filedefs/filetypes.Solidity.conf \
 	filedefs/filetypes.Swift.conf \
 	filedefs/filetypes.SystemVerilog.conf \
 	filedefs/filetypes.TypeScript.conf \
