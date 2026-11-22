@@ -2654,6 +2654,17 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 				}
 				break;
 
+			case '(':  /* sub-shells, or $(()) */
+				g_string_append_c(stack, *src);
+				if (! nesting[level].quote &&
+					level < G_N_ELEMENTS(nesting) - 1)
+				{
+					level ++;
+					nesting[level].quote = 0;
+					nesting[level].terminator = ')';
+				}
+				break;
+
 			case '"':
 			case '\'':
 				if (! nesting[level].quote)
