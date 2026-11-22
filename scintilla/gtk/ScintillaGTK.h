@@ -73,8 +73,10 @@ class ScintillaGTK : public ScintillaBase {
 	gint64 lastWheelMouseTime;
 	gint lastWheelMouseDirection;
 	gint wheelMouseIntensity;
+	gint64 wheelMouseIntensityUpdateTime;
 	gdouble smoothScrollY;
 	gdouble smoothScrollX;
+	gdouble distanceY;
 
 #if GTK_CHECK_VERSION(3,0,0)
 	cairo_rectangle_list_t *rgnUpdate;
