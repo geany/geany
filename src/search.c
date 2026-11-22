@@ -565,10 +565,70 @@ static void create_find_dialog(void)
 }
 
 
+static void move_window_checked(GtkWindow *window, gint x, gint y)
+{
+	GdkDisplay *display;
+
+	if (x < 0 || y < 0)
+		return;
+
+	display = gtk_widget_get_display(GTK_WIDGET(window));
+	if (display)
+	{
+		GdkWindow *const wid_win = gtk_widget_get_window(GTK_WIDGET(window));
+		GdkMonitor *monitor = NULL;
+		GdkRectangle win;
+		GdkRectangle geometry;
+
+		win.x = x;
+		win.y = y;
+		gtk_window_get_size(window, &win.width, &win.height);
+
+		if (wid_win)
+		{
+			monitor = gdk_display_get_monitor_at_window(display, wid_win);
+		}
+		else
+		{
+			/* fallback to the monitor that contains most of the window */
+			const gint n_monitors = gdk_display_get_n_monitors(display);
+			gint monitor_score = 0;
+
+			for (gint i = 0; i < n_monitors; ++i)
+			{
+				GdkMonitor *monitor_i = gdk_display_get_monitor(display, i);
+				GdkRectangle dest;
+				gint score_i;
+
+				gdk_monitor_get_geometry(monitor_i, &geometry);
+				gdk_rectangle_intersect(&win, &geometry, &dest);
+				score_i = dest.width * dest.height;
+				if (score_i > monitor_score)
+				{
+					monitor = monitor_i;
+					monitor_score = score_i;
+					/* if it fits the whole window, no need to search further */
+					if (score_i == win.width * win.height)
+						break;
+				}
+			}
+			if (! monitor)
+				monitor = gdk_display_get_monitor_at_point(display, win.x, win.y);
+		}
+
+		gdk_monitor_get_geometry(monitor, &geometry);
+		x = CLAMP(x, geometry.x, geometry.x + MAX(0, geometry.width - win.width));
+		y = CLAMP(y, geometry.y, geometry.y + MAX(0, geometry.height - win.height));
+	}
+
+	gtk_window_move(window, x, y);
+}
+
+
 static void set_dialog_position(GtkWidget *dialog, gint *position)
 {
 	if (position[0] >= 0)
-		gtk_window_move(GTK_WINDOW(dialog), position[0], position[1]);
+		move_window_checked(GTK_WINDOW(dialog), position[0], position[1]);
 }
 
 
