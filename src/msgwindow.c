@@ -345,6 +345,8 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 	GtkTreeIter iter;
 	const GdkColor *color = get_color(msg_color);
 	gchar *utf8_msg;
+	GtkAdjustment *vadj;
+	gint scroll_y, max_scroll_y, row_height;
 
 	if (! g_utf8_validate(msg, -1, NULL))
 		utf8_msg = utils_get_utf8_from_locale(msg);
@@ -355,12 +357,23 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 	gtk_list_store_set(msgwindow.store_compiler, &iter,
 		COMPILER_COL_COLOR, color, COMPILER_COL_STRING, utf8_msg, -1);
 
-	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
+	vadj = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(msgwindow.tree_compiler));
+	/* current scroll location */
+	scroll_y = gtk_adjustment_get_value(vadj);
+	/* scrollable_distance = natural_height - display_area_height */
+	max_scroll_y = gtk_adjustment_get_upper(vadj) - gtk_adjustment_get_page_size(vadj);
+	/* row_height = natural_height / number_of_rows */
+	row_height = gtk_adjustment_get_upper(vadj) / gtk_tree_model_iter_n_children(
+		GTK_TREE_MODEL(msgwindow.store_compiler), NULL);
+
+	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll &&
+		max_scroll_y - row_height < scroll_y)
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(
 			gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
 
 		gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_compiler), path, NULL, TRUE, 0.5, 0.5);
+
 		gtk_tree_path_free(path);
 	}
 
