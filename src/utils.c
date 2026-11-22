@@ -2712,6 +2712,7 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 				else
 				{
 					GString *replacement = g_string_new(NULL);
+
 					if (! insert_replacement(replacement, *src, data))
 					{
 						geany_debug(_("Unknown placeholder \"%%%c\" in \"%s\""), *src, base);
@@ -2721,9 +2722,11 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 					}
 					else
 					{
+						gchar *quoted;
+
 						if (nesting[level].quote) /* close the quote */
 							g_string_append_c(stack, nesting[level].quote);
-						gchar *quoted = g_shell_quote(replacement->str);
+						quoted = g_shell_quote(replacement->str);
 						g_string_append(stack, quoted);
 						g_free(quoted);
 						if (nesting[level].quote) /* re-open quote */
