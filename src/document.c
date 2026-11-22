@@ -1685,9 +1685,9 @@ static void replace_header_filename(GeanyDocument *doc)
 
 /**
  *  Renames the file in @a doc to @a new_filename. Only the file on disk is actually renamed,
- *  you still have to call @ref document_save_file_as() to change the @a doc object.
+ *  you still have to call @ref document_save_file_as to change the @a doc object.
  *  It also stops monitoring for file changes to prevent receiving too many file change events
- *  while renaming. File monitoring is setup again in @ref document_save_file_as().
+ *  while renaming. File monitoring is setup again in @ref document_save_file_as.
  *
  *  @param doc The current document which should be renamed.
  *  @param new_filename The new filename in UTF-8 encoding.

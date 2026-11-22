@@ -477,7 +477,7 @@ gboolean geany_is_closing_all_documents(void)
 /**
  *  Initialises the gettext translation system.
  *  This is a convenience function to set up gettext for internationalisation support
- *  in external plugins. You should call this function early in @ref plugin_init().
+ *  in external plugins. You should call this function early in @ref plugin_init.
  *  If the macro HAVE_LOCALE_H is defined, @c setlocale(LC_ALL, "") is called.
  *  The codeset for the message translations is set to UTF-8.
  *
