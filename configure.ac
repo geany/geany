@@ -145,6 +145,18 @@ GEANY_CHECK_GTKDOC_HEADER
 # libgeany
 GEANY_LIB_INIT
 
+# *optional* GObject-Introspection support
+m4_ifdef([GOBJECT_INTROSPECTION_CHECK],dnl
+         [GOBJECT_INTROSPECTION_CHECK([1.30.0])],dnl
+         [AC_ARG_ENABLE([introspection],
+                        [AS_HELP_STRING([--enable-introspection=no],
+                                        [Enable introspection for this build (not available)])])
+          AS_IF([test "x$enable_introspection" = xyes],
+                [AC_MSG_ERROR([GObject-Introspection support not built in])],
+                [AC_MSG_NOTICE([GObject-Introspection support not built in])])
+          AM_CONDITIONAL([HAVE_INTROSPECTION], [false])])
+GEANY_STATUS_ADD([Enable GObject-Introspection], [$enable_introspection])
+
 # Output
 AC_CONFIG_FILES([
 		Makefile
