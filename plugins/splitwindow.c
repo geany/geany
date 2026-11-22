@@ -28,7 +28,6 @@
 #include "gtkcompat.h"
 #include <string.h>
 
-
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows."),
 	PACKAGE_VERSION, _("The Geany developer team"))
@@ -44,6 +43,7 @@ enum
 	KB_SPLIT_HORIZONTAL,
 	KB_SPLIT_VERTICAL,
 	KB_SPLIT_UNSPLIT,
+	KB_FOCUS_SPLIT_WINDOW,
 	KB_COUNT
 };
 
@@ -61,6 +61,7 @@ static struct
 	GtkWidget *horizontal;
 	GtkWidget *vertical;
 	GtkWidget *unsplit;
+	GtkWidget *switch_focus;
 }
 menu_items;
 
@@ -192,6 +193,8 @@ static void set_state(enum State id)
 	gtk_widget_set_sensitive(menu_items.vertical,
 		(id != STATE_SPLIT_HORIZONTAL) && (id != STATE_SPLIT_VERTICAL));
 	gtk_widget_set_sensitive(menu_items.unsplit,
+		id != STATE_UNSPLIT);
+	gtk_widget_set_sensitive(menu_items.switch_focus,
 		id != STATE_UNSPLIT);
 
 	plugin_state = id;
@@ -375,6 +378,18 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+static void on_switch_focus( void )
+{
+	GtkWidget *splitted_window = GTK_WIDGET(edit_window.sci);
+	GtkWidget *main_window = GTK_WIDGET(edit_window.editor->sci);
+
+	if (!gtk_widget_has_focus(splitted_window))
+		gtk_widget_grab_focus(splitted_window);
+	else
+		gtk_widget_grab_focus(main_window);
+}
+
+
 static void kb_activate(guint key_id)
 {
 	switch (key_id)
@@ -390,6 +405,10 @@ static void kb_activate(guint key_id)
 		case KB_SPLIT_UNSPLIT:
 			if (plugin_state != STATE_UNSPLIT)
 				on_unsplit(NULL, NULL);
+			break;
+		case KB_FOCUS_SPLIT_WINDOW:
+			if (plugin_state != STATE_UNSPLIT)
+				on_switch_focus();
 			break;
 	}
 }
@@ -422,6 +441,11 @@ void plugin_init(GeanyData *data)
 	g_signal_connect(item, "activate", G_CALLBACK(on_unsplit), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
+	menu_items.switch_focus = item =
+		gtk_menu_item_new_with_mnemonic(_("Switch _Focus"));
+	g_signal_connect(item, "activate", G_CALLBACK(on_switch_focus), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
 	gtk_widget_show_all(menu_items.main);
 
 	set_state(STATE_UNSPLIT);
@@ -433,7 +457,9 @@ void plugin_init(GeanyData *data)
 	keybindings_set_item(key_group, KB_SPLIT_VERTICAL, kb_activate,
 		0, 0, "split_vertical", _("Top and Bottom"), menu_items.vertical);
 	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
-		0, 0, "split_unsplit", _("_Unsplit"), menu_items.unsplit);
+		0, 0, "split_unsplit", _("Unsplit"), menu_items.unsplit);
+	keybindings_set_item(key_group, KB_FOCUS_SPLIT_WINDOW, kb_activate,
+		0, 0, "focus_split_window", _("Switch focus between windows"), menu_items.switch_focus);
 }
 
 
