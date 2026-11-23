@@ -558,6 +558,7 @@ static void test_utils_command_replace_placeholders(void)
 	CHECK_CMD_DOC_PL("some %n thing %%", "some 'foo\nbar' thing %");
 	/* Unknown placeholder, left as-is */
 	CHECK_CMD_DOC_PL("some %z thing %%", "some %z thing %");
+	CHECK_CMD_DOC_PL("some %' thing %l'", "some %' thing ''42'''");
 	/* escaping */
 	CHECK_CMD_DOC_PL("some \\'%f thing", "some \\''tricky'\\''file\\name\"' thing");
 	CHECK_CMD_DOC_PL("some \\\\'%f' thing", "some \\\\'''tricky'\\''file\\name\"''' thing");

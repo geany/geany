@@ -2716,9 +2716,9 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 					if (! insert_replacement(replacement, *src, data))
 					{
 						geany_debug(_("Unknown placeholder \"%%%c\" in \"%s\""), *src, base);
-						/* unknown placeholder, leave it literally */
-						g_string_append_c(stack, '%');
-						g_string_append_c(stack, *src);
+						/* unknown placeholder, leave the % literally, and don't eat the
+						 * specifier in case it participates to quoting or other */
+						g_string_append_c(stack, *--src);
 					}
 					else
 					{
