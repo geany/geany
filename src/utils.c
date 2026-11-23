@@ -2596,7 +2596,7 @@ gchar *utils_command_replace_placeholders(const gchar *src,
 	const gchar *const base = src;
 
 	if (src == NULL)
-		return NULL;
+		return g_strdup("");
 
 	stack = g_string_new(NULL);
 	for (; *src; src++)

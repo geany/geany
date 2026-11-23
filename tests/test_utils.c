@@ -538,6 +538,7 @@ static void test_utils_command_replace_placeholders(void)
 		g_free(r);															\
 	} G_STMT_END
 
+	CHECK_CMD_DOC_PL(NULL, "");
 	CHECK_CMD_DOC_PL("some thing", "some thing");
 	CHECK_CMD_DOC_PL("some %% thing", "some % thing");
 	/* a trailing % is kept */
