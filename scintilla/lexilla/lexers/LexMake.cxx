@@ -57,6 +57,9 @@ const LexicalClass lexicalClasses[] = {
 	3, "SCE_MAKE_IDENTIFIER", "identifier", "Identifiers",
 	4, "SCE_MAKE_OPERATOR", "operator", "Operator",
 	5, "SCE_MAKE_TARGET", "identifier", "Identifiers",
+	6, "", "unused", "",
+	7, "", "unused", "",
+	8, "", "unused", "",
 	9, "SCE_MAKE_IDEOL", "error identifier", "Incomplete identifier reference",
 };
 
@@ -167,8 +170,13 @@ void LexerMakeFile::ColouriseMakeLine(
 		}
 	}
 	int varCount = 0;
+	char previous = 0;
 	while (i < lengthLine) {
-		if (lineBuffer.substr(i, 2) == "$(") {
+		if (lineBuffer[i] == '#' && !bCommand && (varCount == 0) && (previous != '\\')) {
+			styler.ColourTo(startLine + i - 1, state);
+			styler.ColourTo(endPos, SCE_MAKE_COMMENT);
+			return;
+		} else if (lineBuffer.substr(i, 2) == "$(") {
 			styler.ColourTo(startLine + i - 1, state);
 			state = SCE_MAKE_IDENTIFIER;
 			varCount++;
@@ -200,6 +208,7 @@ void LexerMakeFile::ColouriseMakeLine(
 		if (!isspacechar(lineBuffer[i])) {
 			lastNonSpace = i;
 		}
+		previous = lineBuffer[i];
 		i++;
 	}
 	if (state == SCE_MAKE_IDENTIFIER) {

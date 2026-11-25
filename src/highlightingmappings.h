@@ -193,7 +193,8 @@ static const HLStyle highlighting_styles_ASM[] =
 	{ SCE_ASM_CHARACTER,		"character",			FALSE },
 	{ SCE_ASM_STRINGEOL,		"stringeol",			FALSE },
 	{ SCE_ASM_EXTINSTRUCTION,	"extinstruction",		FALSE },
-	{ SCE_ASM_COMMENTDIRECTIVE,	"commentdirective",		FALSE }
+	{ SCE_ASM_COMMENTDIRECTIVE,	"commentdirective",		FALSE },
+	{ SCE_ASM_STRINGBACKQUOTE,	"stringbackquote",		FALSE }
 };
 static const HLKeyword highlighting_keywords_ASM[] =
 {
@@ -1195,7 +1196,10 @@ static const HLStyle highlighting_styles_MARKDOWN[] =
 	{ SCE_MARKDOWN_LINK,		"link",			FALSE },
 	{ SCE_MARKDOWN_CODE,		"code",			FALSE },
 	{ SCE_MARKDOWN_CODE2,		"code",			FALSE },
-	{ SCE_MARKDOWN_CODEBK,		"codebk",		FALSE }
+	{ SCE_MARKDOWN_CODEBK,		"codebk",		FALSE },
+	{ SCE_MARKDOWN_FRONT_MARK,	"front_mark",	FALSE },
+	{ SCE_MARKDOWN_FRONT,		"front",		FALSE },
+	{ SCE_MARKDOWN_FRONT_KEY,	"front_key",	FALSE }
 };
 #define highlighting_keywords_MARKDOWN		EMPTY_KEYWORDS
 #define highlighting_properties_MARKDOWN	EMPTY_PROPERTIES
@@ -1349,7 +1353,8 @@ static const HLStyle highlighting_styles_PASCAL[] =
 	{ SCE_PAS_STRINGEOL,		"stringeol",		FALSE },
 	{ SCE_PAS_CHARACTER,		"character",		FALSE },
 	{ SCE_PAS_OPERATOR,			"operator",			FALSE },
-	{ SCE_PAS_ASM,				"asm",				FALSE }
+	{ SCE_PAS_ASM,				"asm",				FALSE },
+	{ SCE_PAS_MULTILINESTRING,	"multilinestring",	FALSE }
 };
 static const HLKeyword highlighting_keywords_PASCAL[] =
 {

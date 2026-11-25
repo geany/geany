@@ -12,12 +12,31 @@ namespace Scintilla::Internal {
 
 // Functions for classifying characters
 
+template <typename T, typename... Args>
+constexpr bool AnyOf(T t, Args... args) noexcept {
+#if defined(__clang__)
+	static_assert(__is_integral(T) || __is_enum(T));
+#endif
+	return ((t == args) || ...);
+}
+
+// prevent pointer without <type_traits>
+template <typename T, typename... Args>
+constexpr void AnyOf([[maybe_unused]] T *t, [[maybe_unused]] Args... args) noexcept {}
+template <typename T, typename... Args>
+constexpr void AnyOf([[maybe_unused]] const T *t, [[maybe_unused]] Args... args) noexcept {}
+
 /**
  * Check if a character is a space.
  * This is ASCII specific but is safe with chars >= 0x80.
  */
+constexpr int charTab = 0x09;
+constexpr int charCarriageReturn = 0x0D;
+constexpr int charUS = 0x1F;
+constexpr int charDel = 0x7F;
+
 constexpr bool IsASpace(int ch) noexcept {
-    return (ch == ' ') || ((ch >= 0x09) && (ch <= 0x0d));
+    return (ch == ' ') || ((ch >= charTab) && (ch <= charCarriageReturn));
 }
 
 constexpr bool IsSpaceOrTab(int ch) noexcept {
@@ -25,7 +44,7 @@ constexpr bool IsSpaceOrTab(int ch) noexcept {
 }
 
 constexpr bool IsControl(int ch) noexcept {
-	return ((ch >= 0) && (ch <= 0x1F)) || (ch == 0x7F);
+	return ((ch >= 0) && (ch <= charUS)) || (ch == charDel);
 }
 
 constexpr bool IsEOLCharacter(int ch) noexcept {
@@ -44,17 +63,18 @@ constexpr bool IsADigit(int ch) noexcept {
 }
 
 constexpr bool IsADigit(int ch, int base) noexcept {
-	if (base <= 10) {
+	constexpr int digits = 10;
+	if (base <= digits) {
 		return (ch >= '0') && (ch < '0' + base);
-	} else {
-		return ((ch >= '0') && (ch <= '9')) ||
-		       ((ch >= 'A') && (ch < 'A' + base - 10)) ||
-		       ((ch >= 'a') && (ch < 'a' + base - 10));
 	}
+	return ((ch >= '0') && (ch <= '9')) ||
+		    ((ch >= 'A') && (ch < 'A' + base - digits)) ||
+		    ((ch >= 'a') && (ch < 'a' + base - digits));
 }
 
 constexpr bool IsASCII(int ch) noexcept {
-	return (ch >= 0) && (ch < 0x80);
+	constexpr int lastASCII = 0x7F;
+	return (ch >= 0) && (ch <= lastASCII);
 }
 
 constexpr bool IsLowerCase(int ch) noexcept {
@@ -122,16 +142,14 @@ template <typename T>
 constexpr T MakeUpperCase(T ch) noexcept {
 	if (ch < 'a' || ch > 'z')
 		return ch;
-	else
-		return ch - 'a' + 'A';
+	return ch - 'a' + 'A';
 }
 
 template <typename T>
 constexpr T MakeLowerCase(T ch) noexcept {
 	if (ch < 'A' || ch > 'Z')
 		return ch;
-	else
-		return ch - 'A' + 'a';
+	return ch - 'A' + 'a';
 }
 
 int CompareCaseInsensitive(const char *a, const char *b) noexcept;

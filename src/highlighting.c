@@ -1454,7 +1454,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_CHARACTER ||
 				style == SCE_PAS_STRING ||
-				style == SCE_PAS_STRINGEOL);
+				style == SCE_PAS_STRINGEOL ||
+				style == SCE_PAS_MULTILINESTRING);
 
 		case SCLEX_D:
 			return (style == SCE_D_STRING ||
@@ -1735,6 +1736,12 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_NIX_STRING_MULTILINE ||
 				style == SCE_NIX_ESCAPECHAR ||
 				style == SCE_NIX_STRINGEOL);
+
+		case SCLEX_ASM:
+			return (style == SCE_ASM_CHARACTER ||
+				style == SCE_ASM_STRING ||
+				style == SCE_ASM_STRINGEOL ||
+				style == SCE_ASM_STRINGBACKQUOTE);
 
 		case SCLEX_BATCH:
 		case SCLEX_DIFF:
