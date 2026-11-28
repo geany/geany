@@ -510,6 +510,98 @@ static void test_utils_replace_document_placeholders(void)
 #undef CHECK_DOC_PL
 }
 
+static gboolean replace_command_placeholders(GString *buffer, const gchar placeholder, gpointer data)
+{
+	g_assert_cmpint(GPOINTER_TO_INT(data), ==, 42);
+
+	switch (placeholder)
+	{
+		case 'd': g_string_append(buffer, "/some directory/with spaces"); break;
+		case 'e': g_string_append(buffer, "$(printf '%s\\' \"evil value\");echo \"`hello`\""); break;
+		case 'f': g_string_append(buffer, "tricky'file\\name\""); break;
+		case 'l': g_string_append(buffer, "42"); break;
+		case 'p': g_string_append(buffer, "4.200000"); break;
+		case 'n': g_string_append(buffer, "foo\nbar"); break;
+		default: return FALSE;
+	}
+
+	return TRUE;
+}
+
+static void test_utils_command_replace_placeholders(void)
+{
+#define CHECK_CMD_DOC_PL(src, result) \
+	G_STMT_START {															\
+		gchar *r = utils_command_replace_placeholders(						\
+				src, replace_command_placeholders, GINT_TO_POINTER(42));	\
+		g_assert_cmpstr(r, ==, result);										\
+		g_free(r);															\
+	} G_STMT_END
+
+	CHECK_CMD_DOC_PL(NULL, "");
+	CHECK_CMD_DOC_PL("some thing", "some thing");
+	CHECK_CMD_DOC_PL("some %% thing", "some % thing");
+	/* a trailing % is kept */
+	CHECK_CMD_DOC_PL("some %% thing %", "some % thing %");
+	CHECK_CMD_DOC_PL("some %%f thing %%", "some %f thing %");
+	CHECK_CMD_DOC_PL("some %%f thing %%%", "some %f thing %%");
+	CHECK_CMD_DOC_PL("some %%f thing %%%%", "some %f thing %%");
+	CHECK_CMD_DOC_PL("some %%f thing %%%%%", "some %f thing %%%");
+#ifdef G_OS_WIN32
+	/* FIXME: nothing special is done here ATM */
+#else /* ! G_OS_WIN32 */
+	/* basic replacements */
+	CHECK_CMD_DOC_PL("some %d thing %%", "some '/some directory/with spaces' thing %");
+	CHECK_CMD_DOC_PL("some %e thing %%", "some '$(printf '\\''%s\\'\\'' \"evil value\");echo \"`hello`\"' thing %");
+	CHECK_CMD_DOC_PL("some %f thing %%", "some 'tricky'\\''file\\name\"' thing %");
+	CHECK_CMD_DOC_PL("some %l thing %%", "some '42' thing %");
+	CHECK_CMD_DOC_PL("some %p thing %%", "some '4.200000' thing %");
+	CHECK_CMD_DOC_PL("some %n thing %%", "some 'foo\nbar' thing %");
+	/* Unknown placeholder, left as-is */
+	CHECK_CMD_DOC_PL("some %z thing %%", "some %z thing %");
+	CHECK_CMD_DOC_PL("some %' thing %l'", "some %' thing ''42'''");
+	/* escaping */
+	CHECK_CMD_DOC_PL("some \\'%f thing", "some \\''tricky'\\''file\\name\"' thing");
+	CHECK_CMD_DOC_PL("some \\\\'%f' thing", "some \\\\'''tricky'\\''file\\name\"''' thing");
+	/* \ escape % placeholder, not to risk escaping the replacement's quote */
+	CHECK_CMD_DOC_PL("some \\%f thing", "some \\%f thing");
+	CHECK_CMD_DOC_PL("some \\%% thing", "some \\%% thing"); /* tries replacing "% ", which is unknown */
+	CHECK_CMD_DOC_PL("some \\\\%f thing", "some \\\\'tricky'\\''file\\name\"' thing");
+	CHECK_CMD_DOC_PL("some \\\\%% thing", "some \\\\% thing");
+	/* quoting */
+	CHECK_CMD_DOC_PL("some '%f' thing", "some '''tricky'\\''file\\name\"''' thing");
+	CHECK_CMD_DOC_PL("some \"%f\" thing", "some \"\"'tricky'\\''file\\name\"'\"\" thing");
+	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"%f\")\" thing", "some \"$(printf '%s' \"\"'tricky'\\''file\\name\"'\"\")\" thing");
+	CHECK_CMD_DOC_PL("some \"$(printf '%%s' \"$(\"%f\")\")\" thing", "some \"$(printf '%s' \"$(\"\"'tricky'\\''file\\name\"'\"\")\")\" thing");
+	CHECK_CMD_DOC_PL("echo \"$(echo $((1+1)) %f)\"", "echo \"$(echo $((1+1)) 'tricky'\\''file\\name\"')\"");
+	CHECK_CMD_DOC_PL("echo \"$( (cd /; pwd); echo %f)\"", "echo \"$( (cd /; pwd); echo 'tricky'\\''file\\name\"')\"");
+	/* we don't support expansions in `` because quoting is not enough it there's a ` in
+	 * the replacement.  User must use $(), which provides the same feature with a more
+	 * robust syntax */
+	CHECK_CMD_DOC_PL("some \"`printf '%%s' \"%f\"`\" thing \"%f\"", "some \"`printf '%s' \"%f\"`\" thing \"\"'tricky'\\''file\\name\"'\"\"");
+	CHECK_CMD_DOC_PL("some \"`echo \\\"$(echo %f)\\\"`\"", "some \"`echo \\\"$(echo %f)\\\"`\"");
+	/* comments */
+	CHECK_CMD_DOC_PL("# %n", "# %n");
+	CHECK_CMD_DOC_PL("echo # %e", "echo # %e");
+	CHECK_CMD_DOC_PL("echo # %n", "echo # %n");
+	CHECK_CMD_DOC_PL("echo\t# %n", "echo\t# %n");
+	CHECK_CMD_DOC_PL("echo\n# %n", "echo\n# %n");
+	CHECK_CMD_DOC_PL("echo|# %n", "echo|# %n");
+	CHECK_CMD_DOC_PL("echo&# %n", "echo&# %n");
+	CHECK_CMD_DOC_PL("echo;# %n", "echo;# %n");
+	CHECK_CMD_DOC_PL("echo(# %n", "echo(# %n");
+	CHECK_CMD_DOC_PL("echo)# %n", "echo)# %n");
+	CHECK_CMD_DOC_PL("echo<# %n", "echo<# %n");
+	CHECK_CMD_DOC_PL("echo># %n", "echo># %n");
+	CHECK_CMD_DOC_PL("echo# %n", "echo# 'foo\nbar'");
+	CHECK_CMD_DOC_PL("echo \"$(echo %d # don't see that %e\necho %l)\" %p", "echo \"$(echo '/some directory/with spaces' # don't see that %e\necho '42')\" '4.200000'");
+	/* silly depth, to exercise depth limit, e.g. if building with ASan */
+	CHECK_CMD_DOC_PL("some $($($($($($($($($($($($($($($($($()))))))))))))))))", "some $($($($($($($($($($($($($($($($($()))))))))))))))))");
+#endif /* ! G_OS_WIN32 */
+
+#undef CHECK_CMD_DOC_PL
+}
+
 int main(int argc, char **argv)
 {
 	g_test_init(&argc, &argv, NULL);
@@ -523,6 +615,7 @@ int main(int argc, char **argv)
 	UTIL_TEST_ADD("get_initals", test_utils_get_initials);
 	UTIL_TEST_ADD("replace_placeholders", test_utils_replace_placeholders);
 	UTIL_TEST_ADD("replace_document_placeholders", test_utils_replace_document_placeholders);
+	UTIL_TEST_ADD("command_replace_placeholders", test_utils_command_replace_placeholders);
 
 	return g_test_run();
 }

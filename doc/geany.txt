@@ -3361,6 +3361,19 @@ fields is substituted by the items specified below:
    and even checked into and out of version control without having to re-configure the
    build menu.
 
+.. note::
+    Some care is taken to escape replacement values to neutralize shell control
+    characters in them.  As shell syntax is complex, placeholders should only
+    be used in reasonably simple constructs where the internal escapement logic
+    can determine the right thing to do.  Support includes single and
+    double-quoted strings (``'...'`` and ``"..."``) and sub-shells using the
+    ``$(...)`` syntax.  Most other constructs are not explicitly supported and
+    might yield incorrect quoting, potentially exposing the command to
+    arbitrary injections via crafted substitutions values.
+    Commands requiring complex syntax should use a separate script containing
+    the logic, or use shell temporary variables as intermediates, e.g.
+    ``f_value=%f; something "$f_value"``.
+
 Build menu keyboard shortcuts
 `````````````````````````````
 

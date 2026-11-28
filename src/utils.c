@@ -2559,7 +2559,220 @@ gchar *utils_replace_placeholders(const gchar *str,
 }
 
 
-static gboolean generate_document_replacements(GString *buffer,
+#ifdef G_OS_WIN32
+
+GEANY_EXPORT_SYMBOL
+gchar *utils_command_replace_placeholders(const gchar *src,
+		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
+		gpointer data)
+{
+	/* FIXME: check what a Windows implementation needs to do */
+	return utils_replace_placeholders(src, insert_replacement, data);
+}
+
+#else /* ! G_OS_WIN32 */
+
+/* Replaces %s-style placeholders in a shell-style string.
+ *
+ * This is similar to utils_replace_placeholders(), but works on a shell command, handling
+ * proper quoting of the replacements.
+ *
+ * This functions reads @p src as a shell-style input, understanding quoting (with "" and '')
+ * as well as nested sub-commands (with `` and $(), up to 16 levels).  It makes sure the
+ * placeholder replacements are properly quoted.
+ *
+ * Returns: a UTF-8 string with placeholders replaced. */
+GEANY_EXPORT_SYMBOL
+gchar *utils_command_replace_placeholders(const gchar *src,
+		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
+		gpointer data)
+{
+	GString *stack;
+	struct {
+		gchar quote;
+		gchar terminator;
+	} nesting[16] = {{ 0, 0 }};
+	guint level = 0;
+	const gchar *const base = src;
+
+	if (src == NULL)
+		return g_strdup("");
+
+	stack = g_string_new(NULL);
+	for (; *src; src++)
+	{
+		if (*src == nesting[level].terminator &&
+			! nesting[level].quote)
+		{
+			g_string_append_c(stack, *src);
+			level--;
+			continue;
+		}
+
+		switch (*src)
+		{
+			case '#':
+				/* comments, which are pretty unlikely but could trip quote tracking
+				 * and result in issue with embedded newlines in a replacement:
+				 * we skip them and don't perform replacements. */
+				g_string_append_c(stack, *src);
+				if (! nesting[level].quote && (src <= base || strchr("|&;()<> \t\n", src[-1])))
+				{
+					/* we work on src[1] not to risk moving src past \0 in the
+					 * outer loop */
+					for (; src[1]; src++)
+					{
+						if (src[1] == '\n')
+							break;
+						g_string_append_c(stack, src[1]);
+					}
+				}
+				break;
+
+			case '`':
+				/* we don't perform anything inside `` because they are too tricky to
+				 * support safely, and have weird semantics: just skip until the next
+				 * unescaped ` is the right thing to do.  A user wanting placeholder
+				 * expansion should use $() instead */
+				g_string_append_c(stack, *src);
+				if (nesting[level].quote != '\'')
+				{
+					/* we work on src[1] not to risk moving src past \0 in the
+					 * outer loop */
+					for (; src[1]; src++)
+					{
+						if (src[1] == '`')
+						{
+							g_string_append_c(stack, src[1]);
+							src++;
+							break;
+						}
+						else if (src[1] == '\\' && src[2])
+						{
+							g_string_append_c(stack, src[1]);
+							src++;
+						}
+						else if (src[1] == '%')
+						{
+							if (src[2] == '%')
+								src++;
+							else
+								geany_debug(_("Placeholders are not supported inside \"``\" "
+								              "(in \"%s\", offset %lu, near \"%s\")"),
+								            base, (gulong) (src + 1 - base), src + 1);
+						}
+						g_string_append_c(stack, src[1]);
+					}
+				}
+				break;
+
+			case '$':
+				g_string_append_c(stack, *src);
+				if (nesting[level].quote != '\'' &&
+					level < G_N_ELEMENTS(nesting) - 1 &&
+					src[1] == '(')
+				{
+					src++;
+					g_string_append_c(stack, *src);
+					level ++;
+					nesting[level].quote = 0;
+					nesting[level].terminator = ')';
+				}
+				break;
+
+			case '(':  /* sub-shells, or $(()) */
+				g_string_append_c(stack, *src);
+				if (! nesting[level].quote &&
+					level < G_N_ELEMENTS(nesting) - 1)
+				{
+					level ++;
+					nesting[level].quote = 0;
+					nesting[level].terminator = ')';
+				}
+				break;
+
+			case '"':
+			case '\'':
+				if (! nesting[level].quote)
+					nesting[level].quote = *src;
+				else if (nesting[level].quote == *src)
+					nesting[level].quote = 0;
+				g_string_append_c(stack, *src);
+				break;
+
+			case '%':
+				if (! src[1])
+				{
+					g_string_append_c(stack, *src);
+					break;  /* don't advance which would allow the loop pass past \0 */
+				}
+				src++;
+				if (*src == '%') /* %% is literal % */
+					g_string_append_c(stack, *src);
+				else
+				{
+					GString *replacement = g_string_new(NULL);
+
+					if (! insert_replacement(replacement, *src, data))
+					{
+						geany_debug(_("Unknown placeholder \"%%%c\" in \"%s\""), *src, base);
+						/* unknown placeholder, leave the % literally, and don't eat the
+						 * specifier in case it participates to quoting or other */
+						g_string_append_c(stack, *--src);
+					}
+					else
+					{
+						gchar *quoted;
+
+						if (nesting[level].quote) /* close the quote */
+							g_string_append_c(stack, nesting[level].quote);
+						quoted = g_shell_quote(replacement->str);
+						g_string_append(stack, quoted);
+						g_free(quoted);
+						if (nesting[level].quote) /* re-open quote */
+							g_string_append_c(stack, nesting[level].quote);
+					}
+					g_string_free(replacement, TRUE);
+				}
+				break;
+
+			case '\\':
+				/* \ escapes the next character, unless in single-quote strings where
+				 * it has no special meaning (it's not possible to escape a single
+				 * quote inside a single quoted string). */
+				if (src[1] && nesting[level].quote != '\'')
+				{
+					/*
+					 * This escapes a % placeholder as well, because otherwise it could
+					 * result in the backslash escaping the quoting of the placeholder
+					 * replacement, effectively nullifying it.  Better make it obvious
+					 * the template was incorrect by not performing the replacement than
+					 * risk tripping the quote tracking logic. */
+					if (src[1] == '%')
+					{
+						geany_debug(_("'%%' escaped using '\\%%': you should either use "
+						            "`%%%%` if you mean a literal '%%', or double the "
+						            "'\\' if you mean literal '\\' followed by a "
+						            "placeholder (in \"%s\", offset %lu, near \"%s\")"),
+						            base, (gulong) (src - base), src);
+					}
+					g_string_append_c(stack, *src);
+					src++;
+				}
+			/* fallthrough */
+			default:
+				g_string_append_c(stack, *src);
+				break;
+		}
+	}
+
+	return g_string_free(stack, FALSE);
+}
+
+#endif /* ! G_OS_WIN32 */
+
+
+static gboolean utils_generate_document_replacements(GString *buffer,
 		const gchar placeholder, gpointer data)
 {
 	const GeanyDocument *doc = data;
@@ -2653,5 +2866,13 @@ gchar *utils_replace_document_placeholders(const GeanyDocument *doc, const gchar
 {
 	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
 
-	return utils_replace_placeholders(src, generate_document_replacements, (gpointer) doc);
+	return utils_replace_placeholders(src, utils_generate_document_replacements, (gpointer) doc);
+}
+
+
+gchar *utils_command_replace_document_placeholders(const GeanyDocument *doc, const gchar *cmd)
+{
+	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
+
+	return utils_command_replace_placeholders(cmd, utils_generate_document_replacements, (gpointer) doc);
 }
