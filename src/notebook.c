@@ -432,6 +432,32 @@ static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_
 }
 
 
+static void on_move_to_start_activate(GtkMenuItem *menuitem, GeanyDocument *doc)
+{
+	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
+	gint doc_page = document_get_notebook_page(doc);
+	GtkWidget *page = gtk_notebook_get_nth_page(nb, doc_page);
+	gtk_notebook_reorder_child(nb, page, 0);
+}
+
+
+static void on_move_to_end_activate(GtkMenuItem *menuitem, GeanyDocument *doc)
+{
+	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
+	gint doc_page = document_get_notebook_page(doc);
+	GtkWidget *page = gtk_notebook_get_nth_page(nb, doc_page);
+	gtk_notebook_reorder_child(nb, page, -1);
+}
+
+
+static gboolean has_tabs_on_left(GeanyDocument *doc)
+{
+	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
+	gint doc_page = document_get_notebook_page(doc);
+	return doc_page != 0;
+}
+
+
 static gboolean has_tabs_on_right(GeanyDocument *doc)
 {
 	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
@@ -484,6 +510,20 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	/* disable if not on disk */
 	if (doc == NULL || !doc->real_path)
 		gtk_widget_set_sensitive(menu_item, FALSE);
+
+	menu_item = ui_image_menu_item_new(GTK_STOCK_GOTO_FIRST, _("Move to Start"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+		G_CALLBACK(on_move_to_start_activate), doc);
+	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), doc != NULL && has_tabs_on_left(doc));
+
+	menu_item = ui_image_menu_item_new(GTK_STOCK_GOTO_LAST, _("Move to End"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+		G_CALLBACK(on_move_to_end_activate), doc);
+	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), doc != NULL && has_tabs_on_right(doc));
 
 	menu_item = gtk_separator_menu_item_new();
 	gtk_widget_show(menu_item);
