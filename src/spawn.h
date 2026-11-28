@@ -36,12 +36,20 @@
 # define SPAWN_WIFSIGNALED(status) WIFSIGNALED(status)  /**< non-zero if the child exited due to signal */
 #endif
 
+/* see geany.h */
+#ifndef GEANY_API_SYMBOL
+# define GEANY_API_SYMBOL
+#endif
+
 G_BEGIN_DECLS
 
+GEANY_API_SYMBOL
 gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError **error);
 
+GEANY_API_SYMBOL
 gboolean spawn_kill_process(GPid pid, GError **error);
 
+GEANY_API_SYMBOL
 gboolean spawn_async(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, GPid *child_pid, GError **error);
 
@@ -79,6 +87,7 @@ typedef enum
  */
 typedef void (*SpawnReadFunc)(GString *string, GIOCondition condition, gpointer data);
 
+GEANY_API_SYMBOL
 gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *command_line,
 	gchar **argv, gchar **envp, SpawnFlags spawn_flags, GIOFunc stdin_cb, gpointer stdin_data,
 	SpawnReadFunc stdout_cb, gpointer stdout_data, gsize stdout_max_length,
@@ -95,8 +104,10 @@ typedef struct _SpawnWriteData
 	gsize size;         /**< Size of the data. */
 } SpawnWriteData;
 
+GEANY_API_SYMBOL
 gboolean spawn_write_data(GIOChannel *channel, GIOCondition condition, SpawnWriteData *data);
 
+GEANY_API_SYMBOL
 gboolean spawn_sync(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, SpawnWriteData *stdin_data, GString *stdout_data, GString *stderr_data,
 	gint *exit_status, GError **error);

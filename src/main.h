@@ -24,14 +24,23 @@
 
 #include <glib.h>
 
+/* see geany.h */
+#ifndef GEANY_API_SYMBOL
+# define GEANY_API_SYMBOL
+#endif
+
 G_BEGIN_DECLS
 
+GEANY_API_SYMBOL
 void main_reload_configuration(void);
 
+GEANY_API_SYMBOL
 void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
 
+GEANY_API_SYMBOL
 gboolean main_is_realized(void);
 
+GEANY_API_SYMBOL
 gboolean geany_is_closing_all_documents(void);
 
 

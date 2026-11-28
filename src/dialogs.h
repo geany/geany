@@ -27,21 +27,27 @@
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "document.h"
 
 #include "gtkcompat.h"
 
 G_BEGIN_DECLS
 
+GEANY_API_SYMBOL
 gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 
+GEANY_API_SYMBOL
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
 
+GEANY_API_SYMBOL
 gboolean dialogs_show_save_as(void);
 
+GEANY_API_SYMBOL
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 	gdouble *value, gdouble min, gdouble max, gdouble step);
 
+GEANY_API_SYMBOL
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent,
 	const gchar *label_text, const gchar *default_text);
 

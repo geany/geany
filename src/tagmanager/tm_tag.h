@@ -34,6 +34,11 @@
 #include "tm_parser.h"
 #include <glib-object.h>
 
+/* see geany.h */
+#ifndef GEANY_API_SYMBOL
+# define GEANY_API_SYMBOL
+#endif
+
 G_BEGIN_DECLS
 
 /** Use the TM_TAG() macro to cast a pointer to (TMTag *) */
@@ -115,6 +120,7 @@ typedef struct TMTag
 /* The GType for a TMTag */
 #define TM_TYPE_TAG (tm_tag_get_type())
 
+GEANY_API_SYMBOL
 GType tm_tag_get_type(void) G_GNUC_CONST;
 
 #ifdef GEANY_PRIVATE

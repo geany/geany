@@ -21,6 +21,7 @@
 #ifndef GEANY_KEYBINDINGS_H
 #define GEANY_KEYBINDINGS_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "gtkcompat.h"
 
 G_BEGIN_DECLS
@@ -285,21 +286,27 @@ enum GeanyKeyBindingID
 };
 
 
+GEANY_API_SYMBOL
 void keybindings_send_command(guint group_id, guint key_id);
 
+GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		const gchar *name, const gchar *label, GtkWidget *menu_item);
 
+GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_set_item_full(GeanyKeyGroup *group, gsize key_id,
 		guint key, GdkModifierType mod, const gchar *kf_name, const gchar *label,
 		GtkWidget *menu_item, GeanyKeyBindingFunc func, gpointer pdata,
 		GDestroyNotify destroy_notify);
 
+GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
 
+GEANY_API_SYMBOL
 GdkModifierType keybindings_get_modifiers(GdkModifierType mods);
 
+GEANY_API_SYMBOL
 void keybindings_load_keyfile(void);
 
 #ifdef GEANY_PRIVATE

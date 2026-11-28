@@ -35,6 +35,7 @@
 #ifndef GEANY_ENCODINGS_H
 #define GEANY_ENCODINGS_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "gtkcompat.h"
 
 G_BEGIN_DECLS
@@ -125,13 +126,16 @@ typedef enum
 }
 GeanyEncodingIndex;
 
+GEANY_API_SYMBOL
 gchar *encodings_convert_to_utf8(const gchar *buffer, gssize size, gchar **used_encoding);
 
 /* Converts a string from the given charset to UTF-8.
  * If fast is set, no further checks are performed. */
+GEANY_API_SYMBOL
 gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 											  const gchar *charset, gboolean fast);
 
+GEANY_API_SYMBOL
 const gchar* encodings_get_charset_from_index(gint idx);
 
 G_END_DECLS

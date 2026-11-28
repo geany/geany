@@ -22,14 +22,17 @@
 #ifndef GEANY_SYMBOLS_H
 #define GEANY_SYMBOLS_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "document.h"
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
+GEANY_API_SYMBOL
 const gchar *symbols_get_context_separator(gint ft_id);
 
+GEANY_API_SYMBOL
 GdkPixbuf *symbols_get_icon_pixbuf(TMIcon icon);
 
 #ifdef GEANY_PRIVATE

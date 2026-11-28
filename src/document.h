@@ -72,6 +72,7 @@ GeanyFilePrefs;
 
 
 #define GEANY_TYPE_DOCUMENT (document_get_type())
+GEANY_API_SYMBOL
 GType document_get_type (void);
 
 /**
@@ -163,56 +164,80 @@ GeanyDocument;
 	(G_LIKELY((doc)->file_name != NULL) ? ((doc)->file_name) : GEANY_STRING_UNTITLED)
 
 
+GEANY_API_SYMBOL
 GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
+GEANY_API_SYMBOL
 GeanyDocument *document_get_current(void);
 
 GeanyDocument *document_get_from_notebook_child(GtkWidget *page);
 
+GEANY_API_SYMBOL
 GeanyDocument* document_get_from_page(guint page_num);
 
+GEANY_API_SYMBOL
 GeanyDocument* document_find_by_filename(const gchar *utf8_filename);
 
+GEANY_API_SYMBOL
 GeanyDocument* document_find_by_real_path(const gchar *realname);
 
+GEANY_API_SYMBOL
 gboolean document_save_file(GeanyDocument *doc, gboolean force);
 
+GEANY_API_SYMBOL
 GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonly,
 		GeanyFiletype *ft, const gchar *forced_enc);
 
+GEANY_API_SYMBOL
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc);
 
+GEANY_API_SYMBOL
 gboolean document_remove_page(guint page_num);
 
+GEANY_API_SYMBOL
 gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc);
 
+GEANY_API_SYMBOL
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
+GEANY_API_SYMBOL
 void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
+GEANY_API_SYMBOL
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
 
+GEANY_API_SYMBOL
 gboolean document_close(GeanyDocument *doc);
 
+GEANY_API_SYMBOL
 GeanyDocument *document_index(gint idx);
 
+GEANY_API_SYMBOL
 gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname);
 
+GEANY_API_SYMBOL
 void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
 
+GEANY_API_SYMBOL
 const GdkColor *document_get_status_color(GeanyDocument *doc);
 
+GEANY_API_SYMBOL
 gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
 
+GEANY_API_SYMBOL
 gint document_get_notebook_page(GeanyDocument *doc);
 
+GEANY_API_SYMBOL
 gint document_compare_by_display_name(gconstpointer a, gconstpointer b);
 
+GEANY_API_SYMBOL
 gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
 
+GEANY_API_SYMBOL
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
+GEANY_API_SYMBOL
 GeanyDocument *document_find_by_id(guint id);
 
 

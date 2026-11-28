@@ -27,6 +27,7 @@
 #ifndef GEANY_SEARCH_H
 #define GEANY_SEARCH_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include <glib.h>
 
 
@@ -81,6 +82,7 @@ typedef struct GeanyMatchInfo
 }
 GeanyMatchInfo;
 
+GEANY_API_SYMBOL
 void search_show_find_in_files_dialog(const gchar *dir);
 
 

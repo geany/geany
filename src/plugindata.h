@@ -31,6 +31,7 @@
 #ifndef GEANY_PLUGIN_DATA_H
 #define GEANY_PLUGIN_DATA_H 1
 
+#include "geany.h" /* for GEANY_API_SYMBOL */
 #include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
 #include "document.h" /* GeanyDocument */
 #include "editor.h"	/* GeanyEditor, GeanyIndentType */
@@ -305,12 +306,15 @@ struct GeanyPluginFuncs
 	void        (*cleanup)   (GeanyPlugin *plugin, gpointer pdata);
 };
 
+GEANY_API_SYMBOL
 gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,
                                gint min_api_version, gint abi_version);
+GEANY_API_SYMBOL
 gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version,
                                     gint min_api_version, gint abi_version,
                                     gpointer data, GDestroyNotify free_func);
 gpointer geany_plugin_get_data(const GeanyPlugin *plugin);
+GEANY_API_SYMBOL
 void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify free_func);
 
 /** Convenience macro to register a plugin.
@@ -383,6 +387,7 @@ struct GeanyProxyFuncs
 	void		(*unload)    (GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer load_data, gpointer pdata);
 };
 
+GEANY_API_SYMBOL
 gint geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions);
 
 G_END_DECLS
