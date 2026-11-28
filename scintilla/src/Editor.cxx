@@ -1568,40 +1568,66 @@ bool Editor::WrapBlock(Surface *surface, Sci::Line lineToWrap, Sci::Line lineToW
 	// Protect the line layout cache from being accessed from multiple threads simultaneously
 	std::mutex mutexRetrieve;
 
-	std::vector<std::future<void>> futures;
-	for (size_t th = 0; th < threads; th++) {
-		std::future<void> fut = std::async(policy,
-			[=, &surface, &nextIndex, &linesAfterWrap, &mutexRetrieve]() {
-			// llTemporary is reused for non-significant lines, avoiding allocation costs.
-			std::shared_ptr<LineLayout> llTemporary = std::make_shared<LineLayout>(-1, 200);
-			while (true) {
-				const size_t i = nextIndex.fetch_add(1, std::memory_order_acq_rel);
-				if (i >= linesBeingWrapped) {
-					break;
-				}
-				const Sci::Line lineNumber = lineToWrap + i;
-				const Range rangeLine = pdoc->LineRange(lineNumber);
-				const Sci::Position lengthLine = rangeLine.Length();
-				if (lengthLine < lengthToMultiThread) {
-					std::shared_ptr<LineLayout> ll;
-					if (significantLines.LineMayCache(lineNumber)) {
-						std::lock_guard<std::mutex> guard(mutexRetrieve);
-						ll = view.RetrieveLineLayout(lineNumber, *this);
-					} else {
-						ll = llTemporary;
-						ll->ReSet(lineNumber, lengthLine);
-					}
-					view.LayoutLine(*this, surface, vs, ll.get(), wrapWidth, multiThreaded);
-					linesAfterWrap[i] = ll->lines;
-				}
+	if(threads<2){
+		// llTemporary is reused for non-significant lines, avoiding allocation costs.
+		std::shared_ptr<LineLayout> llTemporary = std::make_shared<LineLayout>(-1, 200);
+		while (true) {
+			const size_t i = nextIndex.fetch_add(1, std::memory_order_acq_rel);
+			if (i >= linesBeingWrapped) {
+				break;
 			}
-		});
-		futures.push_back(std::move(fut));
-	}
-	for (const std::future<void> &f : futures) {
-		f.wait();
-	}
-	// End of multiple threads
+			const Sci::Line lineNumber = lineToWrap + i;
+			const Range rangeLine = pdoc->LineRange(lineNumber);
+			const Sci::Position lengthLine = rangeLine.Length();
+			if (lengthLine < lengthToMultiThread) {
+				std::shared_ptr<LineLayout> ll;
+				if (significantLines.LineMayCache(lineNumber)) {
+					std::lock_guard<std::mutex> guard(mutexRetrieve);
+					ll = view.RetrieveLineLayout(lineNumber, *this);
+				} else {
+					ll = llTemporary;
+					ll->ReSet(lineNumber, lengthLine);
+				}
+				view.LayoutLine(*this, surface, vs, ll.get(), wrapWidth, multiThreaded);
+				linesAfterWrap[i] = ll->lines;
+			}
+		}
+	} else { //begin threads
+		const std::launch policy = std::launch::async;
+		std::vector<std::future<void>> futures;
+		for (size_t th = 0; th < threads; th++) {
+			std::future<void> fut = std::async(policy,
+				[=, &surface, &nextIndex, &linesAfterWrap, &mutexRetrieve]() {
+				// llTemporary is reused for non-significant lines, avoiding allocation costs.
+				std::shared_ptr<LineLayout> llTemporary = std::make_shared<LineLayout>(-1, 200);
+				while (true) {
+					const size_t i = nextIndex.fetch_add(1, std::memory_order_acq_rel);
+					if (i >= linesBeingWrapped) {
+						break;
+					}
+					const Sci::Line lineNumber = lineToWrap + i;
+					const Range rangeLine = pdoc->LineRange(lineNumber);
+					const Sci::Position lengthLine = rangeLine.Length();
+					if (lengthLine < lengthToMultiThread) {
+						std::shared_ptr<LineLayout> ll;
+						if (significantLines.LineMayCache(lineNumber)) {
+							std::lock_guard<std::mutex> guard(mutexRetrieve);
+							ll = view.RetrieveLineLayout(lineNumber, *this);
+						} else {
+							ll = llTemporary;
+							ll->ReSet(lineNumber, lengthLine);
+						}
+						view.LayoutLine(*this, surface, vs, ll.get(), wrapWidth, multiThreaded);
+						linesAfterWrap[i] = ll->lines;
+					}
+				}
+			});
+			futures.push_back(std::move(fut));
+		}
+		for (const std::future<void> &f : futures) {
+			f.wait();
+		}
+	}// End of multiple threads
 
 	// Multiply duration by number of threads to produce (near) equivalence to duration if single threaded
 	const double durationShortLines = epWrapping.Duration(true);

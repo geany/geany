@@ -47,7 +47,7 @@ endforeach
 
 # can't use gnome.post_install(gtk_update_icon_cache: true) because it only
 # updates the hicolor icon theme
-gtk_update_icon_cache = find_program('gtk4-update-icon-cache', 'gtk-update-icon-cache')
+gtk_update_icon_cache = find_program('gtk-update-icon-cache', 'gtk4-update-icon-cache')
 foreach dir : [icons_dir, tango_dir]
     path = join_paths(get_option('prefix'), dir)
     if meson.version().version_compare('>=0.57.0')

@@ -26,11 +26,6 @@
 # include "config.h"
 #endif
 
-/* Need Windows XP for SHGetFolderPathAndSubDirW */
-#define _WIN32_WINNT 0x0501
-/* Needed for SHGFP_TYPE */
-#define _WIN32_IE 0x0500
-
 #include "win32.h"
 
 #ifdef G_OS_WIN32
@@ -272,7 +267,23 @@ gchar *win32_get_shortcut_target(const gchar *file_name)
 
 void win32_set_working_directory(const gchar *dir)
 {
+	#ifdef UNICODE
+	int wchars_num = MultiByteToWideChar( CP_UTF8 , 0 , dir , -1, NULL , 0 );
+	if(wchars_num>0){
+		LPWSTR *wDir= g_malloc(sizeof(LPWSTR)*wchars_num);
+		int convertResult = MultiByteToWideChar(CP_UTF8, 0, dir, (int)strlen(dir), (LPWSTR)wDir, 0);
+		if(convertResult>0){
+			SetCurrentDirectory((LPWSTR)wDir);
+		}
+		else{
+			SetCurrentDirectory(L".");/*try local?*/
+		}
+		g_free(wDir);
+	}
+	SetCurrentDirectory(L".");/*try local?*/
+	#else
 	SetCurrentDirectory(dir);
+	#endif
 }
 
 

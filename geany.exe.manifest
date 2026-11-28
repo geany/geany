@@ -2,7 +2,7 @@
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
 	<assemblyIdentity
 		version="2.2.0.0"
-		processorArchitecture="X86"
+		processorArchitecture="amd64"
 		name="Geany"
 		type="win32" />
 	<description>Geany is a fast and lightweight IDE</description>
@@ -17,8 +17,9 @@
 	</trustInfo>
 
 	<asmv3:application xmlns:asmv3="urn:schemas-microsoft-com:asm.v3">
-		<asmv3:windowsSettings xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">
+		<asmv3:windowsSettings xmlns="http://schemas.microsoft.com/SMI/2019/WindowsSettings">
 			<dpiAware>true</dpiAware>
+			<activeCodePage>UTF-8</activeCodePage>
 		</asmv3:windowsSettings>
 	</asmv3:application>
 </assembly>
