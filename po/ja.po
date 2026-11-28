@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the geany package.
 # Tarot Osuji <tarot@sdf.lonestar.org>, 2008.
 # Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2020
+# Lesstep <275432938+rogervokma-stack@users.noreply.github.com>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/geany/geany/issues\n"
 "POT-Creation-Date: 2025-06-09 22:11+0200\n"
-"PO-Revision-Date: 2020-10-13 13:26+0900\n"
-"Last-Translator: Chikahiro Masami <cmasa.z321@gmail.com>\n"
+"PO-Revision-Date: 2026-11-02 12:00+0900\n"
+"Last-Translator: Lesstep <275432938+rogervokma-stack@users.noreply.github.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -240,7 +241,7 @@ msgstr "プロジェクトファイルを開くときに使用するパス"
 
 #: data/geany.glade:1149
 msgid "Extra plugin path:"
-msgstr "プラグインのパス"
+msgstr "追加のプラグインパス:"
 
 #: data/geany.glade:1164
 msgid ""
@@ -309,16 +310,16 @@ msgstr ""
 "ミュレーションがマウスに従ってフォーカスされます。"
 
 #: data/geany.glade:1317
-#, fuzzy
 msgid "Use platform-native file dialogs"
-msgstr "Windowsのダイアログを使用"
+msgstr "プラットフォーム標準のファイルダイアログを使用"
 
 #: data/geany.glade:1321
-#, fuzzy
 msgid ""
 "Defines whether to use the platform-native file dialogs or the GTK default "
 "dialogs"
-msgstr "Windowsのダイアログと、GTKのダイアログのどちらを使うかを指定します。"
+msgstr ""
+"プラットフォーム標準のファイルダイアログと GTK 標準のダイアログのどちらを使用"
+"するかを指定します。"
 
 #: data/geany.glade:1339 data/geany.glade:2006 data/geany.glade:4825
 msgid "<b>Miscellaneous</b>"
@@ -528,15 +529,15 @@ msgstr "タブを閉じた後に最後に使用した文書に切り替える"
 
 #: data/geany.glade:2214
 msgid "Set limit on visible characters in tab label."
-msgstr ""
+msgstr "タブのラベルに表示する文字数の上限を設定します。"
 
 #: data/geany.glade:2215
 msgid "Tab label length:"
-msgstr ""
+msgstr "タブのラベルの長さ:"
 
 #: data/geany.glade:2227
 msgid "Characters to be visible on the tab label of the file."
-msgstr ""
+msgstr "ファイルのタブのラベルに表示する文字数です。"
 
 #: data/geany.glade:2255
 msgid "<b>Editor tabs</b>"
@@ -827,15 +828,16 @@ msgstr ""
 "押すとインデントを解除します"
 
 #: data/geany.glade:3419
-#, fuzzy
 msgid "_Backspace key unindents"
-msgstr "タブキーによるインデント(_K)"
+msgstr "バックスペースキーによるインデント解除(_B)"
 
 #: data/geany.glade:3423
 msgid ""
 "With the cursor in the indentation, pressing backspace unindents instead of "
 "deleting one character"
 msgstr ""
+"カーソルがインデント内にあるとき、バックスペースキーを押すと、1文字を削除する"
+"代わりにインデントを解除します"
 
 #: data/geany.glade:3441
 msgid "<b>Indentation</b>"
@@ -951,7 +953,7 @@ msgstr "開括弧を入力すると閉括弧を補完します"
 
 #: data/geany.glade:3782
 msgid "Curly brackets { }"
-msgstr "波括弧の補完 {}"
+msgstr "波括弧の補完 { }"
 
 #: data/geany.glade:3786
 msgid "Auto-close curly bracket when typing an opening one"
@@ -1016,15 +1018,15 @@ msgid "Marks spaces with dots and tabs with arrows"
 msgstr "空白を点で、タブを矢印で表示します"
 
 #: data/geany.glade:3963
-#, fuzzy
 msgid "Show only non-default line endings"
-msgstr "行末を表示"
+msgstr "既定以外の行末のみ表示"
 
 #: data/geany.glade:3967
 msgid ""
 "Shows line ending characters only when they differ from the file default "
 "line ending character"
 msgstr ""
+"行末文字がファイルの既定の行末文字と異なる場合にのみ、行末文字を表示します"
 
 #: data/geany.glade:3976
 msgid "Show line endings"
@@ -1116,8 +1118,8 @@ msgid ""
 "below) changed to the color set below, (this is recommended if you use "
 "proportional fonts)"
 msgstr ""
-"現在のカーソル位置にある文字の背景色を次の色に設定します。(プロポーショナル"
-"フォントを使用しているときは、この機能を有効にしてください)"
+"指定したカーソル位置（下を参照）より後ろの文字の背景色を、下で設定した色に変"
+"更します（プロポーショナルフォントを使用している場合に推奨）"
 
 #: data/geany.glade:4252
 msgid "Enabled"
@@ -1128,19 +1130,16 @@ msgid "<b>Long line marker</b>"
 msgstr "<b>長い行のマーカー</b>"
 
 #: data/geany.glade:4302
-#, fuzzy
 msgid "Show in markers margin"
-msgstr "行マーカーを表示"
+msgstr "マーカー領域に表示"
 
 #: data/geany.glade:4316
-#, fuzzy
 msgid "Show as underline indicators"
-msgstr "行末文字を表示します"
+msgstr "下線のインジケータで表示"
 
 #: data/geany.glade:4336
-#, fuzzy
 msgid "<b>Change History</b>"
-msgstr "<b>更新日時:</b>"
+msgstr "<b>変更履歴</b>"
 
 #: data/geany.glade:4356
 msgid "Display"
@@ -1272,9 +1271,8 @@ msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "あなたのお気に入りのブラウザのパス(と必要なオプション)を指定"
 
 #: data/geany.glade:4945
-#, fuzzy
 msgid "System default"
-msgstr "システム標準(_Y)"
+msgstr "システム標準"
 
 #: data/geany.glade:5001
 msgid "Grep:"
@@ -1351,39 +1349,36 @@ msgstr "年:"
 
 #: data/geany.glade:5389
 msgid "Date:"
-msgstr "日:"
+msgstr "日付:"
 
 #: data/geany.glade:5404
 msgid "Date & time:"
 msgstr "日時:"
 
 #: data/geany.glade:5419
-#, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. For a list of available "
 "conversion specifiers see https://docs.gtk.org/glib/"
 "method.DateTime.format.html."
 msgstr ""
-"{datetime}の書式を指定してください。ANSI C の strftime 関数で用いられる変換指"
-"定子が使用できます。"
+"{datetime} ワイルドカードの書式を指定します。利用できる変換指定子の一覧は "
+"https://docs.gtk.org/glib/method.DateTime.format.html を参照してください。"
 
 #: data/geany.glade:5435
-#, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"{year}の書式を指定してください。ANSI C の strftime 関数で用いられる変換指定子"
-"が使用できます。"
+"{year} ワイルドカードの書式を指定します。利用できる変換指定子の一覧は "
+"https://docs.gtk.org/glib/method.DateTime.format.html を参照してください。"
 
 #: data/geany.glade:5451
-#, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. For a list of available conversion "
 "specifiers see https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"{date}の書式を指定してください。ANSI C の strftime 関数で用いられる変換指定子"
-"が使用できます。"
+"{date} ワイルドカードの書式を指定します。利用できる変換指定子の一覧は "
+"https://docs.gtk.org/glib/method.DateTime.format.html を参照してください。"
 
 #: data/geany.glade:5478
 msgid "<b>Template data</b>"
@@ -1422,6 +1417,16 @@ msgid ""
 "<tt>%d</tt> if there are no project open.\n"
 "• <tt>%%</tt>: a literal <tt>%</tt> character."
 msgstr ""
+"ファイルを印刷するコマンドです。\n"
+"\n"
+"使用できるプレースホルダは次のとおりです:\n"
+"• <tt>%d</tt>: ファイルがあるディレクトリ。\n"
+"• <tt>%e</tt>: パスと拡張子を除いたファイル名。\n"
+"• <tt>%f</tt>: パスを除いたファイル名。\n"
+"• <tt>%l</tt>: ファイル内の現在の行番号（1 から始まります）。\n"
+"• <tt>%p</tt>: 現在のプロジェクトのディレクトリ。プロジェクトが開かれていない"
+"場合は <tt>%d</tt> と同じです。\n"
+"• <tt>%%</tt>: 文字としての <tt>%</tt>。"
 
 #: data/geany.glade:5714
 msgid "Use an external command for printing"
@@ -1469,14 +1474,14 @@ msgid "Date format:"
 msgstr "日付の書式:"
 
 #: data/geany.glade:5848 src/printing.c:279
-#, fuzzy
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. For a list of available conversion specifiers see "
 "https://docs.gtk.org/glib/method.DateTime.format.html."
 msgstr ""
-"ページのヘッダに付加されるタイムスタンプの書式を指定してください。ANSI C の "
-"strftime 関数で用いられる変換指定子が使用できます。"
+"各ページのヘッダに付加される日付と時刻の書式を指定します。利用できる変換指定"
+"子の一覧は https://docs.gtk.org/glib/method.DateTime.format.html を参照してく"
+"ださい。"
 
 #: data/geany.glade:5883
 msgid "Use native GTK printing"
@@ -1570,8 +1575,8 @@ msgstr "Geanyのキーバインドを上書き"
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
-"VTE がキーボードショートカットを受け取れるようにする(フォーカスコマンドから分"
-"離)"
+"VTE がキーボードショートカットを受け取れるようにします（フォーカスコマンドを"
+"除く）"
 
 #: data/geany.glade:6206
 msgid "Disable menu shortcut key (F10 by default)"
@@ -1729,9 +1734,8 @@ msgid "_Send Selection to Terminal"
 msgstr "選択範囲を端末に送る(_S)"
 
 #: data/geany.glade:6930 src/keybindings.c:509
-#, fuzzy
 msgid "_Join Lines"
-msgstr "行を結合"
+msgstr "行を結合(_J)"
 
 #: data/geany.glade:6939 src/keybindings.c:506
 msgid "_Reflow Lines/Block"
@@ -2027,7 +2031,7 @@ msgstr "新規(_N)..."
 
 #: data/geany.glade:8065
 msgid "New from _Folder..."
-msgstr ""
+msgstr "フォルダから新規作成(_F)..."
 
 #: data/geany.glade:8089
 msgid "_Recent Projects"
@@ -2102,24 +2106,23 @@ msgid "_Donate..."
 msgstr "寄付(_D)..."
 
 #: data/geany.glade:8361
-#, fuzzy
 msgid ""
 "Filter the symbol list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"ワイルドカードでファイルを絞り込みます。複数のパターンを空白で区切ります。"
+"入力した文字列でシンボルリストを絞り込みます。複数のフィルタは空白で区切りま"
+"す。"
 
 #: data/geany.glade:8403 src/sidebar.c:115 src/tagmanager/tm_parser.c:1426
 msgid "Symbols"
 msgstr "シンボル"
 
 #: data/geany.glade:8417
-#, fuzzy
 msgid ""
 "Filter the document list using the entered text. Separate multiple filters "
 "with a space."
 msgstr ""
-"ワイルドカードでファイルを絞り込みます。複数のパターンを空白で区切ります。"
+"入力した文字列で文書リストを絞り込みます。複数のフィルタは空白で区切ります。"
 
 #: data/geany.glade:8461
 msgid "Documents"
@@ -2166,13 +2169,12 @@ msgid "File _patterns:"
 msgstr "ファイルパターン(_P):"
 
 #: data/geany.glade:8848
-#, fuzzy
 msgid ""
 "Space separated list of file patterns used for the Find in Files dialog "
 "(e.g. *.c *.h)"
 msgstr ""
-"ファイルダイアログでファイルを検索するのに使用する、ファイルパターンを空白で"
-"区切ったリスト(例 *.c *.h)"
+"「複数のファイルから検索」ダイアログで使用する、ファイルパターンを空白で区切"
+"ったリスト（例: *.c *.h）"
 
 #: data/geany.glade:8882 src/project.c:232
 msgid ""
@@ -2377,8 +2379,8 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
-"端末に何か入力(Ctrl+C または クリアのために Enter を入力)したために、ファイル"
-"を実行しませんでした。"
+"端末に入力が残っている可能性があるため、ファイルを実行しませんでした（Ctrl+C "
+"か Enter を押してクリアしてください）。"
 
 #: src/build.c:925
 #, c-format
@@ -2397,11 +2399,9 @@ msgid "Compilation finished successfully."
 msgstr "コンパイル完了"
 
 #: src/build.c:1216
-#, fuzzy, c-format
+#, c-format
 msgid "Enter custom text to append to the command \"%s\":"
-msgstr ""
-"ここにカスタムテキストを入力してください。入力されたテキストはコマンドに追加"
-"されます。"
+msgstr "コマンド \"%s\" に追加するカスタムテキストを入力してください:"
 
 #: src/build.c:1303
 msgid "_Next Error"
@@ -2750,14 +2750,14 @@ msgid "Could not open file %s (%s)"
 msgstr "ファイル %s を開けません（%s）"
 
 #: src/document.c:1001
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\" as %s: %s."
-msgstr "URI \"%s\" のオープンに失敗しました: %s"
+msgstr "ファイル \"%s\" を %s として読み込めませんでした: %s。"
 
 #: src/document.c:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load file \"%s\": %s."
-msgstr "URI \"%s\" のオープンに失敗しました: %s"
+msgstr "ファイル \"%s\" を読み込めませんでした: %s。"
 
 #: src/document.c:1014
 #, c-format
@@ -2974,7 +2974,7 @@ msgstr "ギリシャ語"
 
 #: src/encodings.c:86
 msgid "Nordic"
-msgstr "ノルウェー語"
+msgstr "北欧言語"
 
 #: src/encodings.c:87
 msgid "South European"
@@ -3027,7 +3027,7 @@ msgstr "アルメニア語"
 
 #: src/encodings.c:119
 msgid "Georgian"
-msgstr "グルジア語"
+msgstr "ジョージア語"
 
 #: src/encodings.c:120
 msgid "Thai"
@@ -3072,7 +3072,7 @@ msgstr "エンコーディングなし"
 
 #: src/encodings.c:449
 msgid "_West European"
-msgstr "西ヨ－ロッパ(_W)"
+msgstr "西ヨーロッパ(_W)"
 
 #: src/encodings.c:450
 msgid "_East European"
@@ -3096,7 +3096,7 @@ msgstr "Unicode(_U)"
 
 #: src/encodings.c:561
 msgid "West European"
-msgstr "西ヨ－ロッパ"
+msgstr "西ヨーロッパ"
 
 #: src/encodings.c:563
 msgid "East European"
@@ -3116,15 +3116,15 @@ msgstr "中東"
 
 #: src/encodings.c:674
 msgid "Data contains NULs"
-msgstr ""
+msgstr "データに NUL が含まれています"
 
 #: src/encodings.c:816
 msgid "Data contains NULs or the encoding is not supported"
-msgstr ""
+msgstr "データに NUL が含まれているか、エンコーディングに対応していません"
 
 #: src/encodings.c:937
 msgid "Data contains NULs or is not valid UTF-8"
-msgstr ""
+msgstr "データに NUL が含まれているか、有効な UTF-8 ではありません"
 
 #: src/filetypes.c:1240
 msgid "All Source"
@@ -3195,7 +3195,7 @@ msgstr "検索"
 
 #: src/keybindings.c:318
 msgid "Go to"
-msgstr "指定行へ移動"
+msgstr "移動"
 
 #: src/keybindings.c:319
 msgid "View"
@@ -3280,7 +3280,7 @@ msgstr "終了"
 
 #: src/keybindings.c:371
 msgid "New from Folder"
-msgstr ""
+msgstr "フォルダから新規作成"
 
 #: src/keybindings.c:383
 msgid "Undo"
@@ -3762,7 +3762,7 @@ msgstr ""
 #: src/libmain.c:127
 msgid "Don't open files in a running instance, force opening a new instance"
 msgstr ""
-"実行中のインスタンスでファイルを開けません。新しいインスタンスで開きます。"
+"実行中のインスタンスでファイルを開かず、新しいインスタンスで強制的に開きます"
 
 #: src/libmain.c:128
 msgid ""
@@ -3816,7 +3816,7 @@ msgstr "端末サポートを読み込みません"
 
 #: src/libmain.c:142
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr "FILE をダイナミック リンク VTE ライブラリとして使用 "
+msgstr "FILE をダイナミック リンク VTE ライブラリとして使用"
 
 #: src/libmain.c:144
 msgid "Be verbose"
@@ -3842,7 +3842,7 @@ msgstr "バグを https://github.com/geany/geany/issues に報告"
 #: src/libmain.c:603
 #, c-format
 msgid "built on %s with "
-msgstr "%s 以降に次を使用してビルド"
+msgstr "%s に次のライブラリを使用してビルド: "
 
 #: src/libmain.c:696
 msgid "Move it now?"
@@ -3969,8 +3969,8 @@ msgid ""
 "i>\n"
 msgstr ""
 "\n"
-"<i>それらのプラグインは依存しています。非アクティブにするためにそれらを先に無"
-"効にします。</i>\n"
+"<i>他のプラグインがこのプラグインに依存しています。無効化するには、先にそれら"
+"のプラグインを無効にしてください。</i>\n"
 
 #: src/plugins.c:1601
 #, c-format
@@ -4000,9 +4000,8 @@ msgid "Plugins"
 msgstr "プラグイン"
 
 #: src/plugins.c:1895
-#, fuzzy
 msgid "Choose which plugins to load:"
-msgstr "起動時に読み込まれるプラグインを選択:"
+msgstr "読み込むプラグインを選択してください:"
 
 #: src/plugins.c:1989
 #, c-format
@@ -4018,9 +4017,8 @@ msgid "Configure Plugins"
 msgstr "プラグインを設定"
 
 #: src/prefs.c:184
-#, fuzzy
 msgid "Assign Keybinding"
-msgstr "キーバインド"
+msgstr "キーバインドの割り当て"
 
 #: src/prefs.c:191
 #, c-format
@@ -4093,7 +4091,7 @@ msgstr ""
 
 #: src/prefs.c:1892
 msgid "Not configurable on Windows (the system default browser is used)."
-msgstr ""
+msgstr "Windows では設定できません（システム標準のブラウザが使用されます）。"
 
 #: src/printing.c:162
 #, c-format
@@ -4106,12 +4104,12 @@ msgstr "文書の設定"
 
 #: src/printing.c:421
 msgid "Paginating"
-msgstr "ページ数"
+msgstr "ページ分割中"
 
 #: src/printing.c:445
 #, c-format
 msgid "Page %d of %d"
-msgstr "<b>ページ %d / %d</b>"
+msgstr "ページ %d / %d"
 
 #: src/printing.c:501
 #, c-format
@@ -4480,15 +4478,16 @@ msgstr "%u 個が置換されました( %u ファイル中)"
 msgid ""
 "This operation will modify all open files which contain the text to replace."
 msgstr ""
+"この操作により、置換対象のテキストを含むすべての開いているファイルが変更され"
+"ます。"
 
 #: src/search.c:1545
 msgid "Are you sure to replace in the whole session?"
-msgstr ""
+msgstr "セッション全体で置換してもよろしいですか?"
 
 #: src/search.c:1721
-#, fuzzy
 msgid "Invalid directory for Find in Files."
-msgstr "複数のファイルから検索するときに無効なディレクトリ"
+msgstr "「複数のファイルから検索」に指定したディレクトリが無効です。"
 
 #: src/search.c:1726
 msgid "No text to find."
@@ -4641,12 +4640,12 @@ msgstr "出現順に並び替え(_A)"
 
 #: src/symbols.c:2249
 msgid "_Group by Type"
-msgstr ""
+msgstr "種類別にグループ化(_G)"
 
 #: src/templates.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8: %s"
-msgstr "テンプレートファイル \"%s\" を UTF-8 に変換失敗"
+msgstr "テンプレートファイル \"%s\" を UTF-8 に変換できませんでした: %s"
 
 #: src/templates.c:654
 #, c-format
@@ -4902,31 +4901,28 @@ msgid "H_ide Sidebar"
 msgstr "サイドバーを隠す(_I)"
 
 #: src/sidebar.c:1280
-#, fuzzy
 msgid "D_ocuments Only"
-msgstr "文書"
+msgstr "文書のみ(_O)"
 
 #: src/sidebar.c:1281
 msgid "Show _Paths"
 msgstr "パスを表示(_P)"
 
 #: src/sidebar.c:1282
-#, fuzzy
 msgid "Show _Tree"
-msgstr "ツールバーを表示(_T)"
+msgstr "ツリーを表示(_T)"
 
 #: src/sidebar.c:1335 plugins/filebrowser.c:674
 msgid "_Find in Files..."
 msgstr "複数のファイルから検索(_F)..."
 
 #: src/ui_utils.c:62
-#, fuzzy
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mEOL: %M      encoding: "
 "%e      filetype: %f      scope: %S"
 msgstr ""
-"行: %l / %L\t 桁: %c\t 選択: %s\t %w      %t      %m行末: %M      文字: "
-"%e      種類: %f      スコープ: %S"
+"行: %l / %L\t 桁: %c\t 選択: %s\t %w      %t      %m行末: %M      エンコーデ"
+"ィング: %e      ファイルの種類: %f      スコープ: %S"
 
 #. Translators: L = lines
 #: src/ui_utils.c:238
@@ -4969,7 +4965,7 @@ msgstr "MOD"
 
 #: src/ui_utils.c:393
 msgid " (new instance)"
-msgstr "(新規インスタンス)"
+msgstr " (新規インスタンス)"
 
 #: src/ui_utils.c:423
 #, c-format
@@ -5029,13 +5025,12 @@ msgid "Custom Date Format"
 msgstr "任意の日付書式"
 
 #: src/ui_utils.c:715
-#, fuzzy
 msgid ""
 "Custom date format (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"ここに任意の日付と時刻の書式を入力してください。ANSI C の strftime 関数で用い"
-"られる変換指定子が使用できます。"
+"任意の日付書式（https://docs.gtk.org/glib/method.DateTime.format.html を参"
+"照）:"
 
 #: src/ui_utils.c:735
 msgid "Date format string could not be converted (possibly too long)."
@@ -5046,7 +5041,6 @@ msgid "_Set Custom Date Format"
 msgstr "任意の日付書式を設定(_S)"
 
 #: src/ui_utils.c:1973
-#, fuzzy
 msgid "Select Project Base Path"
 msgstr "プロジェクトの基本パスを選択"
 
@@ -5079,13 +5073,12 @@ msgid "Select Browser"
 msgstr "ブラウザを選択"
 
 #: src/utils.c:100
-#, fuzzy
 msgid ""
 "Failed to spawn the configured browser command. Please enter a valid command "
 "or leave it empty in order to spawn the system default browser."
 msgstr ""
-"設定したブラウザ コマンドの実行に失敗しました。コマンドを修正するか別のブラウ"
-"ザを指定してください。"
+"設定されたブラウザのコマンドを実行できませんでした。有効なコマンドを入力する"
+"か、システム標準のブラウザを起動するには空欄のままにしてください。"
 
 #: src/utils.c:365
 msgid "Windows (CRLF)"
@@ -5114,17 +5107,17 @@ msgstr "LF"
 #: src/utils.c:2542
 #, c-format
 msgid "Unknown placeholder \"%%%c\" in \"%s\""
-msgstr ""
+msgstr "不明なプレースホルダ \"%%%c\" が \"%s\" にあります"
 
 #: src/utils.c:2583
-#, fuzzy, c-format
+#, c-format
 msgid "failed to substitute %%%c: document has no path"
-msgstr "%%p を置き換えに失敗, アクティブなプロジェクトがありません"
+msgstr "%%%c の置き換えに失敗しました: 文書にパスがありません"
 
 #: src/utils.c:2593
 #, c-format
 msgid "no project active, %%p is substituted as %%d"
-msgstr ""
+msgstr "アクティブなプロジェクトがないため、%%p は %%d として置き換えられます"
 
 #: src/vte.c:570
 #, c-format
@@ -5144,8 +5137,8 @@ msgid ""
 "Directory not changed because the terminal may contain some input (press "
 "Ctrl+C or Enter to clear it)."
 msgstr ""
-"不正な入力(Ctrl+C を押したか、Enter でクリアした)のため、ディレクトリは変更で"
-"きません。"
+"端末に入力が残っている可能性があるため、ディレクトリは変更されませんでした"
+"（Ctrl+C か Enter を押してクリアしてください）。"
 
 #: src/tagmanager/tm_parser.c:87 src/tagmanager/tm_parser.c:182
 #: src/tagmanager/tm_parser.c:399 src/tagmanager/tm_parser.c:568
@@ -5284,9 +5277,8 @@ msgid "Environment"
 msgstr "環境"
 
 #: src/tagmanager/tm_parser.c:232
-#, fuzzy
 msgid "Part"
-msgstr "パーツ"
+msgstr "部"
 
 #: src/tagmanager/tm_parser.c:233 src/tagmanager/tm_parser.c:340
 #: src/tagmanager/tm_parser.c:607
@@ -5308,15 +5300,15 @@ msgstr "サブサブセクション"
 
 #: src/tagmanager/tm_parser.c:237
 msgid "Bibitem"
-msgstr ""
+msgstr "参考文献項目"
 
 #: src/tagmanager/tm_parser.c:260
 msgid "Articles"
-msgstr "題名"
+msgstr "論文"
 
 #: src/tagmanager/tm_parser.c:261
 msgid "Book Chapters"
-msgstr "章"
+msgstr "書籍の章"
 
 #: src/tagmanager/tm_parser.c:262
 msgid "Books & Conference Proceedings"
@@ -5328,7 +5320,7 @@ msgstr "会議の資料"
 
 #: src/tagmanager/tm_parser.c:264
 msgid "Theses"
-msgstr "これら"
+msgstr "学位論文"
 
 #: src/tagmanager/tm_parser.c:265
 msgid "Strings"
@@ -5432,9 +5424,8 @@ msgid "Functions / Procedures"
 msgstr "関数/手続き"
 
 #: src/tagmanager/tm_parser.c:491
-#, fuzzy
 msgid "Variables / Signals / Ports"
-msgstr "変数/シグナル"
+msgstr "変数/シグナル/ポート"
 
 #: src/tagmanager/tm_parser.c:492
 msgid "Processes / Blocks / Components"
@@ -5445,14 +5436,12 @@ msgid "Type constructors"
 msgstr "型コンストラクタ"
 
 #: src/tagmanager/tm_parser.c:605
-#, fuzzy
 msgid "Title"
-msgstr "untitled"
+msgstr "タイトル"
 
 #: src/tagmanager/tm_parser.c:606
-#, fuzzy
 msgid "Subtitle"
-msgstr "untitled"
+msgstr "サブタイトル"
 
 #: src/tagmanager/tm_parser.c:627
 msgid "Anchors"
@@ -5468,7 +5457,7 @@ msgstr "H2 見出し"
 
 #: src/tagmanager/tm_parser.c:630
 msgid "H3 Headings"
-msgstr "H3 見出し "
+msgstr "H3 見出し"
 
 #: src/tagmanager/tm_parser.c:660
 msgid "Programs"
@@ -5487,60 +5476,52 @@ msgid "Blocks"
 msgstr "ブロック"
 
 #: src/tagmanager/tm_parser.c:752
-#, fuzzy
 msgid "Chapters"
 msgstr "章"
 
 #: src/tagmanager/tm_parser.c:754
-#, fuzzy
 msgid "Subsections"
 msgstr "サブセクション"
 
 #: src/tagmanager/tm_parser.c:755
-#, fuzzy
 msgid "Subsubsections"
 msgstr "サブサブセクション"
 
 #: src/tagmanager/tm_parser.c:756
-#, fuzzy
 msgid "Level 4 sections"
-msgstr "アクションを保存"
+msgstr "レベル 4 のセクション"
 
 #: src/tagmanager/tm_parser.c:757
-#, fuzzy
 msgid "Level 5 sections"
-msgstr "アクションを保存"
+msgstr "レベル 5 のセクション"
 
 #: src/tagmanager/tm_parser.c:790
-#, fuzzy
 msgid "Instances"
-msgstr "継承"
+msgstr "インスタンス"
 
 #: src/tagmanager/tm_parser.c:792
 msgid "Functions / Tasks"
-msgstr "機能/タスク"
+msgstr "関数/タスク"
 
 #: src/tagmanager/tm_parser.c:794
 msgid "Parameters / Constants"
-msgstr ""
+msgstr "パラメータ/定数"
 
 #: src/tagmanager/tm_parser.c:795
-#, fuzzy
 msgid "Ports"
-msgstr "インポート"
+msgstr "ポート"
 
 #: src/tagmanager/tm_parser.c:796
 msgid "Signals"
-msgstr ""
+msgstr "シグナル"
 
 #: src/tagmanager/tm_parser.c:802
 msgid "Structs / Unions / Enums"
-msgstr ""
+msgstr "構造体/共用体/列挙型"
 
 #: src/tagmanager/tm_parser.c:803
-#, fuzzy
 msgid "Typedefs"
-msgstr "型"
+msgstr "Typedef"
 
 #: src/tagmanager/tm_parser.c:858
 msgid "Program"
@@ -5583,9 +5564,8 @@ msgid "Section Level 4"
 msgstr "節 4"
 
 #: src/tagmanager/tm_parser.c:901
-#, fuzzy
 msgid "Section Level 5"
-msgstr "節 1"
+msgstr "節 5"
 
 #: src/tagmanager/tm_parser.c:911
 msgid "Parts"
@@ -5616,32 +5596,28 @@ msgid "Unknowns"
 msgstr "不明"
 
 #: src/tagmanager/tm_parser.c:1127
-#, fuzzy
 msgid "Packages"
 msgstr "パッケージ"
 
 #: src/tagmanager/tm_parser.c:1130
 msgid "Tasks"
-msgstr ""
+msgstr "タスク"
 
 #: src/tagmanager/tm_parser.c:1154
-#, fuzzy
 msgid "Regions"
-msgstr "セクション"
+msgstr "リージョン"
 
 #: src/tagmanager/tm_parser.c:1171
-#, fuzzy
 msgid "Packages / Modules"
-msgstr "パッケージ"
+msgstr "パッケージ/モジュール"
 
 #: src/tagmanager/tm_parser.c:1172
-#, fuzzy
 msgid "Classes / Roles"
-msgstr "クラス"
+msgstr "クラス/ロール"
 
 #: src/tagmanager/tm_parser.c:1173
 msgid "Grammars"
-msgstr ""
+msgstr "文法"
 
 #: src/tagmanager/tm_parser.c:1175
 msgid "Subroutines"
@@ -5649,70 +5625,63 @@ msgstr "サブルーチン"
 
 #: src/tagmanager/tm_parser.c:1176
 msgid "Rules / Tokens"
-msgstr ""
+msgstr "ルール/トークン"
 
 #: src/tagmanager/tm_parser.c:1217
-#, fuzzy
 msgid "Words"
-msgstr "語数:"
+msgstr "単語"
 
 #: src/tagmanager/tm_parser.c:1234
-#, fuzzy
 msgid "Projects"
 msgstr "プロジェクト"
 
 #: src/tagmanager/tm_parser.c:1237
 msgid "Subdirs"
-msgstr ""
+msgstr "サブディレクトリ"
 
 #: src/tagmanager/tm_parser.c:1238
-#, fuzzy
 msgid "Build Targets"
-msgstr "ターゲット"
+msgstr "ビルドターゲット"
 
 #: src/tagmanager/tm_parser.c:1239
-#, fuzzy
 msgid "Custom Targets"
-msgstr "カスタムテキスト"
+msgstr "カスタムターゲット"
 
 #: src/tagmanager/tm_parser.c:1240
 msgid "Benchmark Targets"
-msgstr ""
+msgstr "ベンチマークターゲット"
 
 #: src/tagmanager/tm_parser.c:1241
-#, fuzzy
 msgid "Run Targets"
-msgstr "ターゲット"
+msgstr "実行ターゲット"
 
 #: src/tagmanager/tm_parser.c:1242
 msgid "Tests"
-msgstr ""
+msgstr "テスト"
 
 #: src/tagmanager/tm_parser.c:1255
 msgid "Mixins"
-msgstr ""
+msgstr "ミックスイン"
 
 #: src/tagmanager/tm_parser.c:1259
 msgid "Placeholders"
-msgstr ""
+msgstr "プレースホルダ"
 
 #: src/tagmanager/tm_parser.c:1272
-#, fuzzy
 msgid "Resources"
-msgstr "基本ソース:"
+msgstr "リソース"
 
 #: src/tagmanager/tm_parser.c:1275
-#, fuzzy
 msgid "Variable"
 msgstr "変数"
 
 #: src/tagmanager/tm_parser.c:1276
 msgid "Providers"
-msgstr ""
+msgstr "プロバイダ"
 
 #: src/tagmanager/tm_parser.c:1277
 msgid "Outputs"
-msgstr ""
+msgstr "出力"
 
 #: plugins/classbuilder.c:34
 msgid "Class Builder"
@@ -5968,11 +5937,11 @@ msgstr "エクスポート(_E)"
 
 #: plugins/export.c:753
 msgid "As _HTML..."
-msgstr "_HTML 文書..."
+msgstr "HTML として(_H)..."
 
 #: plugins/export.c:759
 msgid "As _LaTeX..."
-msgstr "_LaTeX 文書..."
+msgstr "LaTeX として(_L)..."
 
 #: plugins/filebrowser.c:49
 msgid "File Browser"
@@ -6106,39 +6075,36 @@ msgid "Instant Save filename could not be generated (%s)."
 msgstr "簡易保存ファイル名が生成できません（%s）"
 
 #: plugins/saveactions.c:439 plugins/saveactions.c:1225
-#, fuzzy
 msgid ""
 "Persistent untitled document directory does not exist or is not writable."
-msgstr "簡易保存ディレクトリが存在しないか書き込めません"
+msgstr "無題の文書の永続保存用ディレクトリが存在しないか、書き込めません。"
 
 #: plugins/saveactions.c:507
-#, fuzzy
 msgid "_Don't save (discard)"
-msgstr "保存しない(_D)"
+msgstr "保存しない（破棄）(_D)"
 
 #: plugins/saveactions.c:529
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document %s is not saved."
-msgstr "ファイル '%s' は保存されていません"
+msgstr "無題の文書 %s は保存されていません。"
 
 #: plugins/saveactions.c:530
-#, fuzzy
 msgid "Do you want to save it?"
-msgstr "再読み込みしますか?"
+msgstr "保存しますか?"
 
 #: plugins/saveactions.c:559 plugins/saveactions.c:605
-#, fuzzy, c-format
+#, c-format
 msgid "Untitled document file %s was deleted"
-msgstr "ファイル %s の印刷は中止されました。"
+msgstr "無題の文書ファイル %s は削除されました"
 
 #: plugins/saveactions.c:622
 msgid "Persistent untitled document directory not found"
-msgstr ""
+msgstr "無題の文書の永続保存用ディレクトリが見つかりません"
 
 #: plugins/saveactions.c:817
 #, c-format
 msgid "Empty untitled document file %s was deleted"
-msgstr ""
+msgstr "空の無題の文書ファイル %s は削除されました"
 
 #: plugins/saveactions.c:875
 #, c-format
@@ -6199,61 +6165,55 @@ msgid "_Directory to save backup files in:"
 msgstr "バックアップを保存するディレクトリ(_D):"
 
 #: plugins/saveactions.c:1442
-#, fuzzy
 msgid ""
 "Date/_Time format for backup files (see https://docs.gtk.org/glib/"
 "method.DateTime.format.html):"
 msgstr ""
-"ここに任意の日付と時刻の書式を入力してください。ANSI C の strftime 関数で用い"
-"られる変換指定子が使用できます。"
+"バックアップファイルの日付と時刻の書式"
+"（https://docs.gtk.org/glib/method.DateTime.format.html を参照）(_T):"
 
 #: plugins/saveactions.c:1455
 msgid "Directory _levels to include in the backup destination:"
 msgstr "バックアップ先に指定するディレクトリのレベル(_L):"
 
 #: plugins/saveactions.c:1482
-#, fuzzy
 msgid "Untitled Document Save"
-msgstr "文書の使い方を検索"
+msgstr "無題の文書の保存"
 
 #: plugins/saveactions.c:1495
-#, fuzzy
 msgid "Instant Save After Creation"
-msgstr "簡易保存"
+msgstr "作成直後の簡易保存"
 
 #: plugins/saveactions.c:1505
 #, c-format
 msgid "_Directory to save files in (leave empty to use the default: %s):"
-msgstr "保存先ディレクトリ(_D)(空欄にすると規定値を使用: %s)"
+msgstr "保存先ディレクトリ（空欄にすると既定値を使用: %s）(_D):"
 
 #: plugins/saveactions.c:1531
 msgid "<i>The plugin will not delete the files created in this directory.</i>"
 msgstr ""
+"<i>このディレクトリに作成されたファイルは、プラグインによって削除されません。"
+"</i>"
 
 #: plugins/saveactions.c:1541
-#, fuzzy
 msgid "Persistent Untitled Documents"
-msgstr "文書を印刷"
+msgstr "無題の文書の永続保存"
 
 #: plugins/saveactions.c:1550
-#, fuzzy
 msgid "_Directory to save persistent untitled documents in:"
-msgstr "バックアップを保存するディレクトリ(_D):"
+msgstr "無題の文書を永続保存するディレクトリ(_D):"
 
 #: plugins/saveactions.c:1575
-#, fuzzy
 msgid "Untitled document save _interval:"
-msgstr "自動保存間隔(_I):"
+msgstr "無題の文書の保存間隔(_I):"
 
 #: plugins/saveactions.c:1587
-#, fuzzy
 msgid "milliseconds"
-msgstr "秒"
+msgstr "ミリ秒"
 
 #: plugins/saveactions.c:1597
-#, fuzzy
 msgid "Default _filetype to use for untitled documents:"
-msgstr "新規ファイルの既定のファイル種類(_F):"
+msgstr "無題の文書で使用する既定のファイルの種類(_F):"
 
 #: plugins/splitwindow.c:33
 msgid "Split Window"
