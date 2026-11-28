@@ -799,6 +799,8 @@ enum class Message {
 	ReleaseLineCharacterIndex = 2712,
 	LineFromIndexPosition = 2713,
 	IndexPositionFromLine = 2714,
+	GetDragDropEnabled = 2818,
+	SetDragDropEnabled = 2819,
 	StartRecord = 3001,
 	StopRecord = 3002,
 	GetLexer = 4002,
@@ -829,6 +831,8 @@ enum class Message {
 	TagsOfStyle = 4031,
 	DescriptionOfStyle = 4032,
 	SetILexer = 4033,
+	SetScaleTechnique = 2820,
+	GetScaleTechnique = 2821,
 	GetBidirectional = 2708,
 	SetBidirectional = 2709,
 };

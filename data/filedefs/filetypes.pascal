@@ -16,7 +16,7 @@ stringeol=string_eol
 character=character
 operator=operator
 asm=number_2
-
+multilinestring=string_2
 
 [keywords]
 # all items must be in one line

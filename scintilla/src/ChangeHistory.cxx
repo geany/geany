@@ -11,6 +11,7 @@
 #include <cassert>
 
 #include <stdexcept>
+#include <utility>
 #include <vector>
 #include <set>
 #include <algorithm>
@@ -237,7 +238,7 @@ void ChangeLog::PopDeletion(Sci::Position position, Sci::Position deleteLength) 
 	EditionSetPop(*editions);
 	const int inserts = changeStack.PopStep();
 	for (int i = 0; i < inserts;) {
-		const ChangeSpan span = changeStack.PopSpan(inserts);
+		const ChangeSpan span = changeStack.PopSpan(inserts-i);
 		if (span.direction == ChangeSpan::Direction::insertion) {
 			assert(span.count == 1);	// Insertions are never compressed
 			insertEdition.FillRange(span.start, span.edition, span.length);

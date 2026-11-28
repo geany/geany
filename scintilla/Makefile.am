@@ -179,6 +179,7 @@ src/RESearch.cxx                       \
 src/RESearch.h                         \
 src/RunStyles.cxx                      \
 src/RunStyles.h                        \
+src/RunThreads.h                       \
 src/ScintillaBase.cxx                  \
 src/ScintillaBase.h                    \
 src/Selection.cxx                      \

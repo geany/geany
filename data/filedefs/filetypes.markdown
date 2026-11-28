@@ -18,6 +18,9 @@ hrule=tag_unknown
 link=keyword_1
 code=attribute_unknown
 codebk=attribute_unknown
+front_mark=other
+front=default
+front_key=type
 
 [settings]
 # default extension used when saving files

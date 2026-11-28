@@ -16,6 +16,7 @@
 #include <string_view>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #include "ILexer.h"
 #include "Scintilla.h"
@@ -82,6 +83,11 @@ constexpr bool isWhiteSpace(char ch) noexcept {
     return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
 }
 
+constexpr bool isOperatorName(char ch) noexcept {
+    // see operator list at https://docs.ruby-lang.org/en/master/syntax/methods_rdoc.html#method-names
+    return AnyOf(ch, '[', '*', '!', '~', '+', '-', '*', '/', '%', '=', '<', '>', '&', '^', '|');
+}
+
 bool isQuestionMarkChar(char chNext, char chNext2) noexcept {
     // followed by a single character or escape sequence that corresponds to a single codepoint
     if (isSafeAlnum(chNext)) {
@@ -89,6 +95,43 @@ bool isQuestionMarkChar(char chNext, char chNext2) noexcept {
     }
     // multibyte character, escape sequence, punctuation
     return !IsASpace(chNext);
+}
+
+Sci_Position GetEscapeSequenceLength(LexAccessor &styler, Sci_Position pos, char &chNext, char chNext2) {
+    // https://docs.ruby-lang.org/en/master/syntax/literals_rdoc.html#escape-sequences
+    Sci_Position width = 1;
+    if (isHighBitChar(chNext)) {
+        styler.MultiByteAccess()->GetCharacterAndWidth(pos, &width);
+    } else {
+        Sci_Position digits = 3; // \xHH, \nnn
+        int base = 16;
+        if (chNext == 'u') {
+            if (chNext2 == '{') {
+                digits = 9; // \u{HHHHHH}
+                width += 1;
+                pos += 1;
+            } else {
+                digits = 5; // \uHHHH
+            }
+        } else if (IsAnOctalDigit(chNext)) {
+            base = 8;
+        } else if (chNext != 'x') {
+            return width;
+        }
+        do {
+            ++pos;
+            chNext2 = styler.SafeGetCharAt(pos);
+            if (!IsADigit(chNext2, base)) {
+                if (chNext2 == '}' && digits == 9) {
+                    ++width;
+                }
+                break;
+            }
+            ++width;
+        } while (width < digits);
+        chNext = chNext2;
+    }
+    return width;
 }
 
 // Options used for LexerRuby
@@ -147,6 +190,14 @@ const LexicalClass lexicalClasses[] = {
 	29, "SCE_RB_WORD_DEMOTED", "keyword", "Keyword demoted",
 	30, "SCE_RB_STDIN", "file", "Standard input stream",
 	31, "SCE_RB_STDOUT", "file", "Standard output stream",
+	32, "", "predefined", "",
+	33, "", "predefined", "",
+	34, "", "predefined", "",
+	35, "", "predefined", "",
+	36, "", "predefined", "",
+	37, "", "predefined", "",
+	38, "", "predefined", "",
+	39, "", "predefined", "",
 	40, "SCE_RB_STDERR", "file", "Standard error stream",
 	41, "SCE_RB_STRING_W", "literal string", "String array",
 	42, "SCE_RB_STRING_I", "literal string", "Symbol array",
@@ -350,7 +401,7 @@ int ClassifyWordRb(Sci_PositionU end, char ch, char chNext, const WordList &keyw
 
 //XXX Identical to Perl, put in common area
 bool isMatch(Accessor &styler, Sci_Position lengthDoc, Sci_Position pos, const char *val) {
-    if ((pos + static_cast<int>(strlen(val))) >= lengthDoc) {
+    if ((pos < 0) || ((pos + static_cast<int>(strlen(val))) >= lengthDoc)) {
         return false;
     }
     while (*val) {
@@ -478,9 +529,9 @@ constexpr bool isInterpolableLiteral(int state) noexcept {
            && state != SCE_RB_CHARACTER;
 }
 
-bool isSingleSpecialVariable(char ch) noexcept {
+constexpr bool isSingleSpecialVariable(char ch) noexcept {
     // https://docs.ruby-lang.org/en/master/globals_rdoc.html
-    return strchr("~*$?!@/\\;,.=:<>\"&`'+", ch) != nullptr;
+    return AnyOf(ch, '~', '*', '$', '?', '!', '@', '/', '\\', ';', ',', '.', '=', ':', '<', '>', '"', '&', '`', '\'', '+');
 }
 
 void InterpolateVariable(LexAccessor &styler, int state, Sci_Position &i, char &ch, char &chNext, char chNext2) {
@@ -923,7 +974,7 @@ void LexerRuby::Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, 
     styler.StartAt(startPos);
     styler.StartSegment(startPos);
 
-    static constexpr int q_states[] = {
+    static constexpr unsigned char q_states[] = {
         SCE_RB_STRING_Q,
         SCE_RB_STRING_QQ,
         SCE_RB_STRING_QR,
@@ -935,6 +986,7 @@ void LexerRuby::Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, 
         SCE_RB_STRING_QS,
     };
     constexpr const char *q_chars = "qQrwWxiIs";
+    constexpr size_t q_charsLen = std::size(q_states);
 
     // In most cases a value of 2 should be ample for the code in the
     // Ruby library, and the code the user is likely to enter.
@@ -971,17 +1023,17 @@ void LexerRuby::Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, 
         [[nodiscard]] bool canExit() const noexcept {
             return inner_string_count > 0;
         }
-        void enter(int &state, const QuoteCls &curr_quote) noexcept {
-            inner_string_types[inner_string_count] = state;
-            state = SCE_RB_DEFAULT;
+        void enter(int &stateToSet, const QuoteCls &curr_quote) noexcept {
+            inner_string_types[inner_string_count] = stateToSet;
+            stateToSet = SCE_RB_DEFAULT;
             inner_expn_brace_counts[inner_string_count] = brace_counts;
             brace_counts = 0;
             inner_quotes[inner_string_count] = curr_quote;
             ++inner_string_count;
         }
-        void exit(int &state, QuoteCls &curr_quote) noexcept {
+        void exit(int &stateToSet, QuoteCls &curr_quote) noexcept {
             --inner_string_count;
-            state = inner_string_types[inner_string_count];
+            stateToSet = inner_string_types[inner_string_count];
             brace_counts = inner_expn_brace_counts[inner_string_count];
             curr_quote = inner_quotes[inner_string_count];
         }
@@ -1103,7 +1155,7 @@ void LexerRuby::Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, 
                 chNext = chNext2;
                 styler.ColourTo(i, SCE_RB_OPERATOR);
 
-                if (!(strchr("\"\'`_-~", chNext2) || isSafeAlphaOrHigh(chNext2))) {
+                if (!(AnyOf(chNext2, '\"', '\'', '`', '-', '~') || isSafeAlphaOrHigh(chNext2))) {
                     // It's definitely not a here-doc,
                     // based on Ruby's lexer/parser in the
                     // heredoc_identifier routine.
@@ -1162,7 +1214,7 @@ void LexerRuby::Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, 
                     chNext = styler.SafeGetCharAt(i+1);
                     styler.ColourTo(i, SCE_RB_SYMBOL);
                     state = SCE_RB_DEFAULT;
-                } else if (strchr("[*!~+-*/%=<>&^|", chNext)) {
+                } else if (isOperatorName(chNext)) {
                     // Do the operator analysis in-line, looking ahead
                     // Based on the table in pickaxe 2nd ed., page 339
                     bool doColoring = true;
@@ -1247,7 +1299,7 @@ void LexerRuby::Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, 
             } else if (ch == '%' && !afterDef) {
                 styler.ColourTo(i - 1, state);
                 bool have_string = false;
-                const char *hit = strchr(q_chars, chNext);
+                const char *hit = static_cast<const char *>(memchr(q_chars, static_cast<unsigned char>(chNext), q_charsLen));
                 if (hit != nullptr && !isSafeWordcharOrHigh(chNext2)) {
                     Quote.New();
                     state = q_states[hit - q_chars];
@@ -1409,34 +1461,30 @@ void LexerRuby::Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, 
             }
         } else if (state == SCE_RB_NUMBER) {
             if (!is_real_number) {
-                if (ch != '\\' || chPrev == '\\') {
+                if (ch != '\\' || isEOLChar(chNext)) {
                     styler.ColourTo(i, state);
                     state = SCE_RB_DEFAULT;
                     preferRE = false;
-                } else if (strchr("\\ntrfvaebs", chNext)) {
-                    // Terminal escape sequence -- handle it next time
-                    // Nothing more to do this time through the loop
-                } else if (chNext == 'C' || chNext == 'M') {
-                    if (chNext2 != '-') {
-                        // \C or \M ends the sequence -- handle it next time
-                    } else {
-                        // Move from abc?\C-x
-                        //               ^
-                        // to
-                        //                 ^
-                        i += 2;
-                        ch = chNext2;
-                        chNext = styler.SafeGetCharAt(i + 1);
-                    }
+                } else if ((chNext == 'C' || chNext == 'M') && chNext2 == '-') {
+                    // Move from abc?\C-x
+                    //               ^
+                    // to
+                    //                 ^
+                    i += 2;
+                    ch = chNext2;
+                    chNext = styler.SafeGetCharAt(i + 1);
                 } else if (chNext == 'c') {
                     // Stay here, \c is a combining sequence
                     advance_char(i, ch, chNext, chNext2); // pass by ref
                 } else {
                     // ?\x, including ?\\ is final.
-                    styler.ColourTo(i + 1, state);
+                    const Sci_Position width = GetEscapeSequenceLength(styler, i + 1, chNext, chNext2);
+                    i += width;
+                    styler.ColourTo(std::min(i, lengthDoc - 1), state);
                     state = SCE_RB_DEFAULT;
                     preferRE = false;
-                    advance_char(i, ch, chNext, chNext2);
+                    ch = chNext;
+                    chNext = styler.SafeGetCharAt(i + 1);
                 }
             } else if (isSafeAlnumOrHigh(ch) || ch == '_' || (ch == '.' && isSafeDigit(chNext))) {
                 // Keep going
@@ -1736,6 +1784,7 @@ std::string getPrevWord(Sci_Position pos, Accessor &styler, int word_state) {
             break;
         }
     }
+    i = std::max<Sci_Position>(i, 0);
     std::string prevWord;
     for (; i <= pos; i++) {
         prevWord.push_back(styler[i]);

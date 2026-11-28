@@ -8,6 +8,7 @@
 #include <cstdint>
 
 #include <stdexcept>
+#include <utility>
 #include <string_view>
 #include <vector>
 #include <optional>
@@ -62,26 +63,18 @@ int DefaultFontSize() noexcept {
 	try {
 		return Platform::DefaultFontSize();
 	} catch (...) {
-		return 10;
+		// Should never happen
+		return Style::sensibleFontSize;
 	}
 }
 
 }
 
 Style::Style(const char *fontName_) noexcept :
-	FontSpecification(fontName_, DefaultFontSize() * FontSizeMultiplier),
-	fore(black),
-	back(white),
-	eolFilled(false),
-	underline(false),
-	caseForce(CaseForce::mixed),
-	visible(true),
-	changeable(true),
-	hotspot(false),
-	invisibleRepresentation{} {
+	FontSpecification(fontName_, DefaultFontSize() * FontSizeMultiplier) {
 }
 
 void Style::Copy(std::shared_ptr<Font> font_, const FontMeasurements &fm_) noexcept {
 	font = std::move(font_);
-	(FontMeasurements &)(*this) = fm_;
+	static_cast<FontMeasurements &>(*this) = fm_;
 }

@@ -12,6 +12,7 @@
 #include <cstdarg>
 
 #include <stdexcept>
+#include <utility>
 #include <string_view>
 #include <vector>
 #include <optional>
@@ -108,7 +109,7 @@ public:
 		return decorationView;
 	}
 
-	void SetCurrentIndicator(int indicator) override;
+	void SetCurrentIndicator(int indicator) noexcept override;
 	int GetCurrentIndicator() const noexcept override { return currentIndicator; }
 
 	void SetCurrentValue(int value) noexcept override;
@@ -180,7 +181,7 @@ void DecorationList<POS>::Delete(int indicator) {
 }
 
 template <typename POS>
-void DecorationList<POS>::SetCurrentIndicator(int indicator) {
+void DecorationList<POS>::SetCurrentIndicator(int indicator) noexcept {
 	currentIndicator = indicator;
 	current = DecorationFromIndicator(indicator);
 	currentValue = 1;

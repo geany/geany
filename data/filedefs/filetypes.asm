@@ -17,6 +17,7 @@ directiveoperand=keyword_3
 character=character
 stringeol=string_eol
 extinstruction=keyword_4
+stringbackquote=backticks
 
 [keywords]
 # all items must be in one line

@@ -20,6 +20,15 @@ using namespace Lexilla;
 
 namespace Lexilla {
 
+bool LexAccessor::Match(Sci_Position pos, std::string_view sv) {
+	for (unsigned int i = 0; i < sv.size(); i++) {
+		if (sv[i] != SafeGetCharAt(pos + i)) {
+			return false;
+		}
+	}
+	return true;
+}
+
 bool LexAccessor::MatchIgnoreCase(Sci_Position pos, const char *s) {
 	assert(s);
 	for (; *s; s++, pos++) {
@@ -57,7 +66,7 @@ void LexAccessor::GetRangeLowered(Sci_PositionU startPos_, Sci_PositionU endPos_
 }
 
 std::string LexAccessor::GetRange(Sci_PositionU startPos_, Sci_PositionU endPos_) const {
-	assert(startPos_ < endPos_);
+	assert(startPos_ <= endPos_);
 	endPos_ = std::min(endPos_, static_cast<Sci_PositionU>(lenDoc));
 	const Sci_PositionU len = endPos_ - startPos_;
 	std::string s(len, '\0');
@@ -66,7 +75,7 @@ std::string LexAccessor::GetRange(Sci_PositionU startPos_, Sci_PositionU endPos_
 }
 
 std::string LexAccessor::GetRangeLowered(Sci_PositionU startPos_, Sci_PositionU endPos_) const {
-	assert(startPos_ < endPos_);
+	assert(startPos_ <= endPos_);
 	endPos_ = std::min(endPos_, static_cast<Sci_PositionU>(lenDoc));
 	const Sci_PositionU len = endPos_ - startPos_;
 	std::string s(len, '\0');
